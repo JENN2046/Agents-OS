@@ -23,6 +23,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The active work queue's current `NOW` item is `Build AGENTS OS Machine Skeleton v0.1`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
+- The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
+- Machine preview output includes `actionable`; blocked previews remain `actionable=false` and `execution_authorized=false`.
 - Machine output is preview/draft by default and requires Nobao review before execution.
 - Task Producer is not implemented yet.
 - `.colameta/` exists.

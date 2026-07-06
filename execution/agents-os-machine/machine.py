@@ -22,6 +22,12 @@ from typing import Any
 
 MACHINE_DIR = Path(__file__).resolve().parent
 WORKSPACE_ROOT = MACHINE_DIR.parents[1]
+REGISTRY_DIR = WORKSPACE_ROOT / "control-plane" / "registry"
+if str(REGISTRY_DIR) not in sys.path:
+    sys.path.insert(0, str(REGISTRY_DIR))
+
+from path_boundary import preflight_target
+
 MANIFEST_PATH = MACHINE_DIR / "machine-manifest.json"
 SCHEMA_PATH = MACHINE_DIR / "queue-item.schema.json"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
@@ -42,12 +48,20 @@ DENIED_SIGNAL_PATTERNS = {
     "provider_call": re.compile(r"\b(call|invoke|use|run)\s+(a\s+)?provider\b|\bprovider_call_authorized\s*=\s*true\b", re.I),
     "service_start": re.compile(r"\b(start|launch|run)\s+(a\s+)?service\b|\bservice_start_authorized\s*=\s*true\b", re.I),
     "executor_run": re.compile(r"\b(run|start|launch)\s+(the\s+)?executor\b|\bexecutor_run_authorized\s*=\s*true\b", re.I),
-    "external_write": re.compile(r"\b(perform|do|make|authorize|execute)\s+(an\s+)?external\s+write\b|\bpush\s+to\s+github\b|\bexternal_write_authorized\s*=\s*true\b", re.I),
+    "external_write": re.compile(
+        r"\b(perform|do|make|authorize|execute)\s+(an\s+)?external\s+write\b"
+        r"|\b(write|post|send|upload|create|update|publish)\s+(to\s+)?(notion|github|email|mail|slack|discord|external)\b"
+        r"|\b(create|update|close|delete)\s+(a\s+)?github\s+(issue|pr|pull request|release)\b"
+        r"|\b(send|write)\s+(an\s+)?email\b"
+        r"|\bexternal_write_authorized\s*=\s*true\b",
+        re.I,
+    ),
+    "database_write": re.compile(r"\b(database|db)\s+write\b|\b(write|update|delete|insert|migrate)\s+(database|db)\b", re.I),
     "memory_write": re.compile(r"\b(write|update|register)\s+(formal\s+)?memory\b|\bmemory_write_authorized\s*=\s*true\b", re.I),
     "runtime_plugin_activation": re.compile(r"\bactivate\s+(plugin|runtime|vcptoolbox|colameta)\b|\bruntime_plugin_activation_authorized\s*=\s*true\b", re.I),
     "state_private": re.compile(r"\bstate-private/", re.I),
     "auth_or_secret_config": re.compile(r"\b(auth|token|cookie|session|credential|secret|provider config|runtime config)\b", re.I),
-    "git_release_boundary": re.compile(r"\b(git push|git tag|release|deploy|publish|history rewrite)\b", re.I),
+    "git_release_boundary": re.compile(r"\b(git push|git tag|force push|release|deploy|publish|history rewrite|npm publish|package publish)\b", re.I),
 }
 
 
@@ -61,6 +75,14 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def resolve_queue_path(queue_path: Path) -> tuple[Path | None, list[dict[str, str]]]:
+    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    findings = preflight_target(candidate, WORKSPACE_ROOT, "MACHINE-QUEUE-PATH")
+    if findings:
+        return None, findings
+    return candidate.resolve(), []
 
 
 def rel(path: Path) -> str:
@@ -239,7 +261,13 @@ def validate_queue_item(item: dict[str, Any], schema: dict[str, Any]) -> list[st
         errors.append(f"invalid lane: {item.get('lane')}")
     if not str(item.get("title", "")).strip():
         errors.append("title must not be empty")
-    ok, failures = has_false_dangerous_flags(item.get("authorization", {}))
+    authorization = item.get("authorization", {})
+    required_false = (
+        schema.get("properties", {})
+        .get("authorization", {})
+        .get("required_false", DANGEROUS_FLAGS)
+    )
+    ok, failures = has_false_flags(authorization, required_false)
     if not ok:
         errors.append(f"dangerous authorization flags not false: {','.join(failures)}")
     review = item.get("review_gate", {})
@@ -254,8 +282,35 @@ def validate_queue_item(item: dict[str, Any], schema: dict[str, Any]) -> list[st
     return errors
 
 
+def has_false_flags(value: dict[str, Any], flags: Any) -> tuple[bool, list[str]]:
+    if not isinstance(flags, list):
+        flags = list(DANGEROUS_FLAGS)
+    failures = [str(flag) for flag in flags if value.get(str(flag)) is not False]
+    return not failures, failures
+
+
 def load_queue(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
-    return parse_queue_markdown(read_text(queue_path), queue_path)
+    resolved, findings = resolve_queue_path(queue_path)
+    if findings or resolved is None:
+        return {
+            "schema_version": "agents-os.machine.normalized-queue.v0.1",
+            "source_path": str(queue_path),
+            "parse_errors": [item["message"] for item in findings],
+            "path_findings": findings,
+            "passed": False,
+            "lanes": {lane: [] for lane in LANES},
+            "blocked_entries": [],
+            "closed_entries": [],
+            "summary": {
+                "now_count": 0,
+                "next_count": 0,
+                "later_count": 0,
+                "blocked_count": 0,
+                "closed_count": 0,
+                "item_count": 0,
+            },
+        }
+    return parse_queue_markdown(read_text(resolved), resolved)
 
 
 def now_item(normalized_queue: dict[str, Any]) -> dict[str, Any]:
@@ -520,6 +575,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
         "dangerous_authorization_failures": failures,
         "blocked": bool(item.get("blocked")),
         "denied_signals": item.get("denied_signals", []),
+        "actionable": not bool(item.get("blocked")),
         "review_gate": review_gate(
             requires_jenn_decision=requires_jenn,
             review_reason="denied signal detected" if requires_jenn else "machine preview must be reviewed before execution",
@@ -559,6 +615,10 @@ def validate_preview(preview: dict[str, Any]) -> list[str]:
         errors.append("write_performed must be false")
     if preview.get("execution_authorized") is not False:
         errors.append("execution_authorized must be false")
+    if preview.get("blocked") and preview.get("actionable") is not False:
+        errors.append("blocked preview must be actionable=false")
+    if not preview.get("blocked") and preview.get("actionable") is not True:
+        errors.append("unblocked preview must be actionable=true")
     ok, failures = has_false_dangerous_flags(preview.get("authorization", {}))
     if not ok:
         errors.append(f"preview dangerous authorization flags not false: {','.join(failures)}")
@@ -668,6 +728,8 @@ def validate_machine(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
             "dangerous_authorization_flags_all_false": preview.get("dangerous_authorization_flags_all_false") if preview else False,
             "requires_nobao_review": preview.get("review_gate", {}).get("requires_nobao_review") if preview else False,
             "execution_authorized": preview.get("execution_authorized") if preview else None,
+            "actionable": preview.get("actionable") if preview else None,
+            "blocked": preview.get("blocked") if preview else None,
         },
         "task_envelope_preview": task_preview_validation,
         "docctl": {

@@ -19,8 +19,10 @@ It can:
 ```text
 inspect Active Work Queue
 normalize queue Markdown into JSON
+preflight queue input paths before reading
 confirm exactly one NOW item
 generate NOW preview JSON
+mark blocked previews as actionable=false
 derive a temporary task-envelope preview
 validate the temporary task envelope
 run docctl status and doctor
@@ -84,9 +86,9 @@ history rewrite, identity, and direction changes.
 ## Validation Summary
 
 ```text
-test-machine: PASS cases=8 failures=0
+test-machine: PASS cases=12 failures=0
 machine inspect-queue: PASS now=1 next=2 later=4 blocked=6 closed=5
-machine preview-now: PASS execution_authorized=false requires_nobao_review=true
+machine preview-now: PASS execution_authorized=false requires_nobao_review=true actionable=true
 machine validate: PASS
 task-envelope preview temporary file cleaned=true
 docctl status: PASS

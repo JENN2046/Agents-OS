@@ -37,6 +37,10 @@ and direction changes.
 
 ## Boundaries
 
+Queue input paths are preflighted before read. Protected paths such as
+`state-private/`, secrets, credentials, tokens, cookies, `.env`, and files
+outside the workspace are blocked before content is read.
+
 The skeleton must keep these capabilities disabled:
 
 ```text
@@ -51,3 +55,11 @@ runtime_plugin_activation_authorized=false
 The Markdown task-envelope preview is generated only as a temporary validation
 artifact and is deleted after validation. The JSON preview output is the
 authoritative machine output.
+
+Blocked previews must remain:
+
+```text
+actionable=false
+execution_authorized=false
+requires_jenn_decision=true
+```
