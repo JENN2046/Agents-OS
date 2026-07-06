@@ -20,7 +20,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `Root Private History Review Or History-Scrub Gate`.
+- The active work queue's current `NOW` item is `No Active Automatic Construction Item`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
@@ -45,6 +45,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - MCP/connector work is defined as boundary/contract first; live connector calls, connector auth mutation, MCP service start, provider calls, and external writes remain blocked.
 - Provider / Host Dispatcher Static Behavior Map v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md`.
 - Provider/host dispatcher work is preserved as static historical evidence only; provider calls, provider execution, host dispatcher execution, provider registry/config mutation, real process spawn, service start, executor run, and external writes remain blocked.
+- Root Private History Review Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md`.
+- Root private-history review found no Notion-domain or common token-shape path-level hits in current HEAD or reachable root Git history for the scanned pattern set; no history scrub is indicated by that scan.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -67,7 +69,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - ColaMeta connector login state was not rechecked.
 - Runner service status was not rechecked.
 - Real ColaMeta executor execution is not authorized.
-- Root private Git history risk has not yet been reviewed or scrubbed for external publication.
+- No active automatic construction route is selected after the current governance sequence.
 - No executor real run was performed.
 - No provider availability was tested.
 - No formal AGENTS OS Memory write was performed.
@@ -77,12 +79,12 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - ColaMeta runtime preview payload with `can_apply=true` exists and remains blocked until a future exact apply gate.
-- Root Git external publication is blocked until private-history review or history-scrub gate.
+- Root Git external publication remains blocked until Jenn chooses a target and a separate exact external-write gate exists.
 - VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
 
 ## Next Actions
 
-1. Implement the Root Private History Review Or History-Scrub Gate before any external push, hosted backup, mirror, or PR from the root workspace repository.
+1. Wait for Jenn to choose the next construction route: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
@@ -99,7 +101,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Provider / Host Dispatcher Static Behavior Map v0.1.
+Last completed task: Root Private History Review Gate v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -128,13 +130,17 @@ provider registry, host dispatcher, file provider manifest store, and controlled
 read-only runner evidence without carrying forward provider calls, provider
 execution, host dispatcher execution, registry/config mutation, real process
 spawn, service start, executor run, or external write authorization.
+The root private-history review gate scanned current HEAD and reachable root Git
+history with count-only/path-only signals. It found no Notion-domain or common
+token-shape path-level hits for the scanned patterns and did not authorize push,
+history rewrite, scrub, external write, or publication.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: Root Private History Review Or History-Scrub Gate.
+Next active route: No Active Automatic Construction Item; wait for Jenn route selection.
 ```
 
 ## Safety Notes

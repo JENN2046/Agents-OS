@@ -11040,3 +11040,142 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
         - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-root-private-history-review-gate-v0.1
+    title: AGENTS OS Root Private History Review Gate v0.1
+    doc_type: review
+    status: accepted
+    scope: no-push local review of root Git history publication risk
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - external publication target changes
+        - git history changes
+        - scan pattern set changes
+        - private-history finding changes
+    security_boundary:
+      - no-push local review only
+      - no external write authorization
+      - no history rewrite authorization
+      - no history scrub authorization
+      - no state-private read
+      - no raw secret/token/cookie/credential content
+      - no private raw memory content
+      - no provider raw response
+      - no raw log content
+      - no private Notion page content
+      - no private Notion page URL output
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-root-private-history-review-gate-v0.1-receipt
+    title: AGENTS OS Root Private History Review Gate v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for no-push root private-history review
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - external write boundary changes
+    security_boundary:
+      - no-push local receipt only
+      - no external write authorization
+      - no history rewrite authorization
+      - no history scrub authorization
+      - no state-private read
+      - no raw secret/token/cookie/credential content
+      - no private raw memory content
+      - no provider raw response
+      - no raw log content
+      - no private Notion page content
+      - no private Notion page URL output
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-root-private-history-review-gate-v0.1-review
+    title: AGENTS OS Root Private History Review Gate v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for no-push root private-history gate
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-root-private-history-review-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - external publication target changes
+    security_boundary:
+      - local review only
+      - no external write authorization
+      - no history rewrite authorization
+      - no history scrub authorization
+      - no state-private read
+      - no raw secret/token/cookie/credential content
+      - no private raw memory content
+      - no provider raw response
+      - no raw log content
+      - no private Notion page content
+      - no private Notion page URL output
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json

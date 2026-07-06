@@ -58,6 +58,8 @@ mcp_gateway_connector_boundary_plan_exists=true
 mcp_gateway_connector_boundary_plan_validation=PASS
 provider_host_dispatcher_static_behavior_map_exists=true
 provider_host_dispatcher_static_behavior_map_validation=PASS
+root_private_history_review_gate_exists=true
+root_private_history_review_gate_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -89,8 +91,13 @@ payloads remain blocked. MCP/connector boundaries are explicit. Provider and
 host dispatcher behavior knowledge is static-only and does not carry forward
 runtime/provider execution authorization.
 
-The current blocker is root private Git history risk before any external Git
-publication, hosted backup, mirror, or PR from the root workspace repository.
+The root private-history review gate has run as a no-push local review. Current
+scans found no Notion-domain or common token-shape path-level hits in current
+HEAD or reachable root Git history. No history scrub is indicated by the current
+scan.
+
+External publication remains blocked until Jenn chooses a target and a separate
+exact external-write gate exists.
 
 ## Queue Decision
 
@@ -103,20 +110,18 @@ runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: Root Private History Review Or History-Scrub Gate
+### NOW-001: No Active Automatic Construction Item
 
-Goal: review root Git history publication risk and decide whether external
-publication needs a no-push private-history review, a history-scrub plan, or a
-local-only policy.
+Goal: hold the queue after closing the current autonomous governance sequence
+and wait for Jenn to choose the next construction route.
 
 Required output:
 
 ```text
-root_private_history_risk_summary
-tracked_sensitive_pattern_scan
-git_history_publication_blocker_map
-history_scrub_option_set
-no_external_push_guard
+route_selection_options
+blocked_without_jenn_direction
+no_auto_runtime_or_provider_guard
+no_auto_memory_or_external_write_guard
 receipt_review_pattern
 ```
 
@@ -151,14 +156,15 @@ connector_external_write_authorized=false
 Acceptance:
 
 ```text
-inspect only safe Git metadata, tracked file paths, and redacted working-tree content where needed
+do not infer a new construction route without Jenn direction
+do not start VCPToolBox, MCP, ColaMeta, live host, or provider services
+do not run executor or host dispatcher routes
+do not perform provider calls
+do not write formal Memory
+do not push or externally write
+do not rewrite history or scrub without a separate exact gate
 do not read state-private
 do not read or print raw secrets/token/cookie/credential/private memory/provider raw response/log content
-do not print private Notion page URLs or private page contents if found
-do not push, tag, release, deploy, publish, or perform external writes
-do not rewrite history, reset hard, clean, bulk delete, or destructively scrub without a separate exact gate
-produce blocker map and option set only
-do not read private state
 docctl status remains PASS
 docctl doctor remains PASS
 ```
@@ -210,6 +216,7 @@ migration_plan_distillation_v0.1: closed for safe summary of historical migratio
 colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local executor inventory and readiness map; real executor, service start, provider calls, Memory writes, and runtime preview apply remain unauthorized
 mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector boundary plan; live connector calls, auth mutation, MCP service start, provider calls, and external writes remain unauthorized
 provider_host_dispatcher_static_behavior_map_v0.1: closed for static provider registry and host dispatcher evidence map; provider calls, provider execution, host dispatcher execution, registry/config mutation, real spawn, service start, executor run, and external writes remain unauthorized
+root_private_history_review_gate_v0.1: closed for no-push root private-history pattern review; no history scrub indicated, but external publication still requires a separate target-specific external-write gate
 ```
 
 ## Machine Input Contract
@@ -246,13 +253,21 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible root private
-history review or history-scrub gate from `NOW-001`.
+The next construction batch should not infer a new route automatically. Jenn can
+choose one of these routes:
 
-Do not read `state-private/`; do not read or print raw secrets, tokens, cookies,
-credentials, private raw memory, provider raw responses, raw logs, private
-Notion page contents, or private page URLs; do not push, tag, release, deploy,
-publish, externally write, rewrite history, reset hard, clean, bulk delete, or
-destructively scrub without a separate exact gate. Keep provider calls, service
+```text
+VCPToolBox Runtime Recovery Or Controlled First-Use
+Formal Memory Loop
+External Git Publication Exact Gate
+Provider Execution Design Gate
+New AGENTS OS construction route
+```
+
+Until Jenn chooses, do not read `state-private/`; do not read or print raw
+secrets, tokens, cookies, credentials, private raw memory, provider raw
+responses, raw logs, private Notion page contents, or private page URLs; do not
+push, tag, release, deploy, publish, externally write, rewrite history, reset
+hard, clean, bulk delete, or destructively scrub. Keep provider calls, service
 starts, executor runs, host dispatcher execution, provider registry/config
 mutation, and VCPToolBox/runtime/plugin activation blocked.
