@@ -16,6 +16,7 @@
     "reviewed_queue_mutation_requires_accepted_nobao_review": true,
     "route_auto_selection_authorized": false,
     "route_choice_queue_proposal_default": "preview_only",
+    "reviewed_route_adoption_default": "preview_only_no_apply",
     "auto_promote_authorized": false
   },
   "failure_handling": {
@@ -67,6 +68,7 @@
   "commands": [
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-queue-proposal --route-choice-preview-json /path/to/route-choice-preview.json --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-preview --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py"
   ]
 }

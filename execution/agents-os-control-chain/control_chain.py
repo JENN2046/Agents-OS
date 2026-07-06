@@ -1098,6 +1098,124 @@ def validate_route_choice_queue_proposal(proposal: dict[str, Any]) -> list[str]:
     return errors
 
 
+def proposed_queue_item_text(item: dict[str, Any]) -> str:
+    body_lines = item.get("body_lines", [])
+    if not isinstance(body_lines, list):
+        body_lines = []
+    return "\n".join([str(item.get("title", "")), *[str(line) for line in body_lines]])
+
+
+def reviewed_route_adoption_preview(
+    proposal: dict[str, Any],
+    review: dict[str, Any],
+    queue_path: Path = DEFAULT_QUEUE,
+) -> dict[str, Any]:
+    errors = validate_route_choice_queue_proposal(proposal)
+    if proposal.get("passed") is not True:
+        errors.append("route choice queue proposal must be passed")
+    errors.extend(validate_queue_review(review, proposal))
+    if is_protected_path(queue_path):
+        errors.append(f"queue path is protected: {queue_path}")
+
+    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    resolved, resolve_error = safe_resolve(candidate)
+    mutation_preview: dict[str, Any] = {}
+    if resolve_error or resolved is None:
+        errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
+    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
+        errors.append(f"queue path is outside workspace: {queue_path}")
+    elif not resolved.exists() or not resolved.is_file():
+        errors.append(f"queue path is not a file: {rel(resolved)}")
+    else:
+        queue_text = resolved.read_text(encoding="utf-8")
+        now_blocks = queue_lane_blocks(queue_text, "NOW")
+        next_blocks = queue_lane_blocks(queue_text, "NEXT")
+        item = proposal.get("proposed_queue_item", {})
+        signals = queue_p3_signals(proposed_queue_item_text(item))
+        if len(now_blocks) != 1:
+            errors.append(f"expected exactly one NOW before route adoption preview, got {len(now_blocks)}")
+        if signals:
+            errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
+        mutation_preview = {
+            "queue_path": rel(resolved),
+            "target_lane": "NEXT",
+            "would_append_next_title": item.get("title"),
+            "would_append_next_body_lines": item.get("body_lines", []),
+            "next_count_before": len(next_blocks),
+            "next_count_after_preview": len(next_blocks) + 1 if not errors else None,
+            "exactly_one_now_before": len(now_blocks) == 1,
+            "would_leave_now_unchanged": True,
+            "would_promote_now": False,
+        }
+
+    result = {
+        "schema_version": "agents-os.queue-manager.reviewed-route-adoption-preview.v0.1",
+        "preview_id": stable_id(
+            "ROUTEADOPTIONPREVIEW",
+            [proposal.get("proposal_id"), review.get("review_status"), queue_path.as_posix()],
+        ),
+        "source_proposal_id": proposal.get("proposal_id"),
+        "source_review_status": review.get("review_status"),
+        "preview_only": True,
+        "queue_mutation_preview_authorized": not errors,
+        "route_adoption_authorized": False,
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "write_performed": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": False,
+        "mutation_preview": mutation_preview,
+        "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
+        "errors": errors,
+    }
+    result_errors = validate_reviewed_route_adoption_preview(result)
+    all_errors = sorted(set(result["errors"] + result_errors))
+    result["passed"] = not all_errors
+    result["errors"] = all_errors
+    return result
+
+
+def validate_reviewed_route_adoption_preview(result: dict[str, Any]) -> list[str]:
+    errors = [
+        f"missing required field: {field}"
+        for field in schema_required("reviewed_route_adoption_preview")
+        if field not in result
+    ]
+    if result.get("schema_version") != "agents-os.queue-manager.reviewed-route-adoption-preview.v0.1":
+        errors.append("reviewed route adoption preview schema_version is invalid")
+    if result.get("preview_only") is not True:
+        errors.append("reviewed route adoption preview must be preview_only")
+    if result.get("requires_nobao_review") is not True:
+        errors.append("reviewed route adoption preview must require Nobao review")
+    for flag in (
+        "route_adoption_authorized",
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "write_performed",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+    ):
+        if result.get(flag) is not False:
+            errors.append(f"reviewed route adoption preview flag must be false: {flag}")
+    mutation_preview = result.get("mutation_preview", {})
+    if result.get("queue_mutation_preview_authorized") is True:
+        if mutation_preview.get("target_lane") != "NEXT":
+            errors.append("route adoption preview must target NEXT")
+        if mutation_preview.get("exactly_one_now_before") is not True:
+            errors.append("route adoption preview requires exactly one NOW before preview")
+        if mutation_preview.get("would_leave_now_unchanged") is not True:
+            errors.append("route adoption preview must leave NOW unchanged")
+        if mutation_preview.get("would_promote_now") is not False:
+            errors.append("route adoption preview must not promote NOW")
+        if not mutation_preview.get("would_append_next_title"):
+            errors.append("route adoption preview must include NEXT append title")
+    return errors
+
+
 def queue_lane_blocks(queue_text: str, lane: str) -> list[dict[str, str]]:
     in_lane = False
     blocks: list[dict[str, str]] = []
@@ -1366,6 +1484,7 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_option_preview: dict[str, Any] | None = None
     route_choice_preview_payload: dict[str, Any] | None = None
     route_choice_proposal: dict[str, Any] | None = None
+    route_adoption_preview: dict[str, Any] | None = None
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
@@ -1407,6 +1526,24 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
             errors.append("route choice queue proposal authorized queue promotion")
         if route_choice_proposal.get("execution_authorized") is not False:
             errors.append("route choice queue proposal authorized execution")
+        route_review = {
+            "schema_version": "agents-os.queue-manager.review.v0.1",
+            "source_proposal_id": route_choice_proposal.get("proposal_id"),
+            "review_status": "accepted",
+            "reviewer": "Nobao",
+            "requires_jenn_decision": False,
+        }
+        route_adoption_preview = reviewed_route_adoption_preview(route_choice_proposal, route_review, DEFAULT_QUEUE)
+        if route_adoption_preview.get("passed") is not True:
+            errors.append("reviewed route adoption preview did not pass")
+        if route_adoption_preview.get("preview_only") is not True:
+            errors.append("reviewed route adoption preview is not preview-only")
+        if route_adoption_preview.get("active_queue_modified") is not False:
+            errors.append("reviewed route adoption preview modified active queue")
+        if route_adoption_preview.get("queue_write_authorized") is not False:
+            errors.append("reviewed route adoption preview authorized queue write")
+        if route_adoption_preview.get("execution_authorized") is not False:
+            errors.append("reviewed route adoption preview authorized execution")
     if local_decision.get("decision") != "route_to_local_executor" or local_decision.get("execution_authorization_scope") != "local_safe_only":
         errors.append("local candidate did not route to local executor")
     if colameta_decision.get("decision") != "route_to_colameta" or colameta_decision.get("execution_authorization_scope") != "none":
@@ -1590,6 +1727,15 @@ old_task: closed
             "route_choice_proposal_execution_authorized": route_choice_proposal.get("execution_authorized")
             if route_choice_proposal
             else None,
+            "reviewed_route_adoption_preview_passed": route_adoption_preview.get("passed")
+            if route_adoption_preview
+            else None,
+            "reviewed_route_adoption_preview_active_queue_modified": route_adoption_preview.get("active_queue_modified")
+            if route_adoption_preview
+            else None,
+            "reviewed_route_adoption_preview_execution_authorized": route_adoption_preview.get("execution_authorized")
+            if route_adoption_preview
+            else None,
         },
         "failure_handling": {
             "category": failure_report.get("category"),
@@ -1643,6 +1789,12 @@ def main() -> int:
     route_choice_queue_parser = subparsers.add_parser("route-choice-queue-proposal")
     route_choice_queue_parser.add_argument("--route-choice-preview-json", required=True)
     route_choice_queue_parser.add_argument("--json", action="store_true")
+
+    route_adoption_parser = subparsers.add_parser("reviewed-route-adoption-preview")
+    route_adoption_parser.add_argument("--proposal-json", required=True)
+    route_adoption_parser.add_argument("--review-json", required=True)
+    route_adoption_parser.add_argument("--queue", required=True)
+    route_adoption_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -1723,6 +1875,24 @@ def main() -> int:
                 f"proposal_only={result['proposal_only']} "
                 f"lane={item.get('lane')} "
                 f"title={item.get('title')}"
+            )
+        return 0 if result["passed"] else 1
+
+    if args.command == "reviewed-route-adoption-preview":
+        result = reviewed_route_adoption_preview(
+            load_json(Path(args.proposal_json)),
+            load_json(Path(args.review_json)),
+            Path(args.queue),
+        )
+        if args.json:
+            print_json(result)
+        else:
+            preview = result.get("mutation_preview", {})
+            print(
+                "Reviewed route adoption preview: "
+                f"authorized={result['queue_mutation_preview_authorized']} "
+                f"modified={result['active_queue_modified']} "
+                f"would_append={preview.get('would_append_next_title')}"
             )
         return 0 if result["passed"] else 1
 

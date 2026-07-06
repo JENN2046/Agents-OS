@@ -50,6 +50,8 @@ control_chain_exists=true
 control_chain_validation=PASS
 control_chain_route_choice_queue_proposal_exists=true
 control_chain_route_choice_queue_proposal_validation=PASS
+control_chain_reviewed_route_adoption_preview_exists=true
+control_chain_reviewed_route_adoption_preview_validation=PASS
 reviewed_queue_mutation_gate_exists=true
 reviewed_queue_mutation_gate_validation=PASS
 failure_handling_stop_loop_exists=true
@@ -117,6 +119,11 @@ Task Producer route-choice preview. This produces review material only; it does
 not write route state, mutate the Active Work Queue, promote to NOW, or
 authorize execution.
 
+The Control Chain can also inspect an accepted Nobao review and produce a
+reviewed route adoption preview. It can show the future `NEXT` append, while
+keeping Active Work Queue mutation, route adoption, queue promotion, and
+execution unauthorized.
+
 The Dashboard now also surfaces the route-selection package as structured
 preview-only options while keeping route auto-selection, queue promotion, and
 execution authorization false.
@@ -147,6 +154,8 @@ promoted, routed, or executed.
 The Control Chain route-choice queue proposal gate adds the next review layer:
 a selected route preview can become a proposed `NEXT` item, but only as
 proposal-only JSON and not as a queue write.
+The reviewed route adoption preview adds the accepted-review layer, but still
+stops before any file write.
 
 ## Queue Decision
 
@@ -261,6 +270,7 @@ task_producer_route_option_intake_v0.1: closed for candidate-only route option i
 task_producer_route_choice_preview_v0.1: closed for preview-only explicit route-choice intake; route state, queue write, queue promotion, and execution remain unauthorized
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 control_chain_route_choice_queue_proposal_v0.1: closed for preview-only route-choice queue proposal; route adoption, queue write, queue promotion, and execution remain unauthorized
+control_chain_reviewed_route_adoption_preview_v0.1: closed for reviewed route adoption preview; active queue write, route adoption, queue promotion, and execution remain unauthorized
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
 dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized

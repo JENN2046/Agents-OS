@@ -1939,6 +1939,180 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-control-chain-reviewed-route-adoption-preview-v0.1
+    title: AGENTS OS Control Chain Reviewed Route Adoption Preview v0.1
+    doc_type: review
+    status: accepted
+    scope: preview-only route adoption from accepted Nobao review into NEXT
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - execution/agents-os-control-chain/control-chain-manifest.json
+      - execution/agents-os-control-chain/README.md
+      - execution/agents-os-task-producer/producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - Control Chain reviewed route adoption preview behavior changes
+        - route choice queue proposal behavior changes
+        - active queue adoption boundary changes
+    security_boundary:
+      - local Control Chain preview only
+      - accepted Nobao review inspection only
+      - no route adoption
+      - no route state write
+      - no route auto-selection
+      - no active queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no plugin activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-control-chain-reviewed-route-adoption-preview-v0.1-receipt
+    title: AGENTS OS Control Chain Reviewed Route Adoption Preview v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for reviewed route adoption preview
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - Control Chain reviewed route adoption preview behavior changes
+    security_boundary:
+      - local receipt only
+      - accepted Nobao review inspection only
+      - no route adoption
+      - no route state write
+      - no route auto-selection
+      - no active queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-control-chain-reviewed-route-adoption-preview-v0.1-review
+    title: AGENTS OS Control Chain Reviewed Route Adoption Preview v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for Control Chain reviewed route adoption preview
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - Control Chain reviewed route adoption preview behavior changes
+        - residual risk changes
+    security_boundary:
+      - local review only
+      - accepted Nobao review inspection only
+      - no route adoption
+      - no route state write
+      - no route auto-selection
+      - no active queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: agents-os-active-work-queue-v0.1-receipt
     title: AGENTS OS active work queue v0.1 Receipt
     doc_type: receipt

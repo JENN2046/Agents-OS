@@ -16,6 +16,7 @@ Task Producer -> Machine Preview -> Commander Decision -> Track Selector
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-queue-proposal --route-choice-preview-json /path/to/route-choice-preview.json --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-preview --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md --json
 ```
 
 ## Authority Model
@@ -28,6 +29,7 @@ ColaMeta Track is readiness/preview only in v0.1.
 Local Executor can only run local_safe_only actions.
 Queue Manager is proposal-only in v0.1.
 Route-choice queue proposal is preview-only and cannot mutate the queue.
+Reviewed route adoption preview can inspect an accepted review but cannot write.
 Failure handling stops for review and never silently retries.
 ```
 

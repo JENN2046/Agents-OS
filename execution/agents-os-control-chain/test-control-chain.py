@@ -292,13 +292,57 @@ old_task: closed
         p3_mutation = chain.reviewed_queue_mutation(p3_proposal, p3_review, p3_path)
         check(p3_mutation["queue_mutation_authorized"] is False, "P3 NEXT target should block mutation", failures)
 
+        route_queue_path = Path(temp_dir) / "route-queue.md"
+        route_queue_text = """# fixture queue
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+"""
+        route_queue_path.write_text(route_queue_text, encoding="utf-8")
+        route_review = {
+            "schema_version": "agents-os.queue-manager.review.v0.1",
+            "source_proposal_id": route_choice_proposal["proposal_id"],
+            "review_status": "accepted",
+            "reviewer": "Nobao",
+            "requires_jenn_decision": False,
+        }
+        adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, route_review, route_queue_path)
+        check(adoption_preview["passed"], f"reviewed route adoption preview should pass: {adoption_preview['errors']}", failures)
+        check(adoption_preview["preview_only"] is True, "reviewed route adoption should be preview-only", failures)
+        check(adoption_preview["queue_mutation_preview_authorized"] is True, "reviewed route adoption preview should be authorized as preview", failures)
+        check(adoption_preview["active_queue_modified"] is False, "reviewed route adoption preview must not mutate queue", failures)
+        check(adoption_preview["write_performed"] is False, "reviewed route adoption preview must not write", failures)
+        check(adoption_preview["queue_write_authorized"] is False, "reviewed route adoption preview must not authorize queue write", failures)
+        check(adoption_preview["execution_authorized"] is False, "reviewed route adoption preview must not authorize execution", failures)
+        check(adoption_preview["mutation_preview"]["target_lane"] == "NEXT", "reviewed route adoption preview should target NEXT", failures)
+        check(adoption_preview["mutation_preview"]["would_promote_now"] is False, "reviewed route adoption preview must not promote NOW", failures)
+        check(route_queue_path.read_text(encoding="utf-8") == route_queue_text, "reviewed route adoption preview should not change fixture queue", failures)
+
+        pending_route_review = dict(route_review, review_status="pending")
+        pending_adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, pending_route_review, route_queue_path)
+        check(pending_adoption_preview["passed"] is False, "pending route adoption review should fail preview", failures)
+        check(pending_adoption_preview["active_queue_modified"] is False, "pending route adoption preview must not mutate queue", failures)
+
     validation = chain.validate_control_chain(run_colameta=False)
     check(validation["passed"], f"control chain validation without ColaMeta should pass: {validation['errors']}", failures)
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=23 failures={len(failures)}")
+        print(f"cases=24 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -309,8 +353,9 @@ old_task: closed
     print("PASS queue proposal-only fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
+    print("PASS reviewed route adoption preview fixture")
     print("PASS route option stop gate fixture")
-    print("cases=23 failures=0")
+    print("cases=24 failures=0")
     return 0
 
 
