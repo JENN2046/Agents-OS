@@ -10,6 +10,7 @@
   "commands": [
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent \"Build local governance task\" --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-route-option --option A --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py"
   ],
@@ -22,7 +23,8 @@
     "external_write_authorized": false,
     "memory_write_authorized": false,
     "runtime_plugin_activation_authorized": false,
-    "plugin_execution_authorized": false
+    "plugin_execution_authorized": false,
+    "route_auto_selection_authorized": false
   },
   "queue_effect_defaults": {
     "queue_write_authorized": false,
@@ -51,6 +53,7 @@
   "denied_capabilities": [
     "Active Work Queue write",
     "NEXT to NOW promotion",
+    "route auto-selection",
     "execution authorization",
     "service start",
     "executor run",

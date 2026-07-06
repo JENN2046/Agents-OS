@@ -33,7 +33,8 @@
         "external_write_authorized",
         "memory_write_authorized",
         "runtime_plugin_activation_authorized",
-        "plugin_execution_authorized"
+        "plugin_execution_authorized",
+        "route_auto_selection_authorized"
       ]
     },
     "queue_effect": {

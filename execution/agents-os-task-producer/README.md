@@ -2,18 +2,20 @@
 
 This directory contains the first local AGENTS OS Task Producer skeleton.
 
-It is a preview-only candidate task producer. It turns explicit intent text or
-allowlisted local review/report documents into candidate task JSON.
+It is a preview-only candidate task producer. It turns explicit intent text,
+allowlisted local review/report documents, or an explicitly named route option
+from the route-selection package into candidate task JSON.
 
 It is not a queue writer, queue promoter, executor, service, provider adapter,
 Memory writer, VCPToolBox starter, ColaMeta runner, plugin activator, or Git
-publisher.
+publisher. It does not select routes.
 
 ## Commands
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent "Build local governance task" --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-route-option --option A --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
 ```
@@ -29,11 +31,14 @@ requires_nobao_review=true
 review_status=pending
 execution_authorized=false
 json_output_authoritative=true
+source_facts.route_selected=false
+authorization.route_auto_selection_authorized=false
 ```
 
 The producer never writes the Active Work Queue and never promotes any item to
-`NOW`. Nobao may review a candidate and separately decide whether a governance
-queue update is safe.
+`NOW`. It also never selects a route. Nobao may review a candidate and
+separately decide whether a governance queue update is safe after Jenn chooses
+a route.
 
 ## Boundaries
 
@@ -49,6 +54,7 @@ external_write_authorized=false
 memory_write_authorized=false
 runtime_plugin_activation_authorized=false
 plugin_execution_authorized=false
+route_auto_selection_authorized=false
 ```
 
 Review/report input paths are preflighted before read. Protected paths such as

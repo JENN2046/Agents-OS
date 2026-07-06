@@ -38,8 +38,16 @@ DEFAULT_REVIEW_SOURCE = (
     / "reports"
     / "2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md"
 )
+DEFAULT_ROUTE_SELECTION_PACKAGE = (
+    WORKSPACE_ROOT
+    / "control-plane"
+    / "registry"
+    / "reports"
+    / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
+)
 
 LANES = ("NOW", "NEXT", "LATER")
+ROUTE_OPTIONS = ("A", "B", "C", "D", "E")
 ALLOWED_REVIEW_SOURCE_ROOTS = (
     WORKSPACE_ROOT / "control-plane" / "registry" / "reports",
     WORKSPACE_ROOT / "control-plane" / "registry" / "reviews",
@@ -55,6 +63,7 @@ DANGEROUS_AUTHORIZATION_FLAGS = (
     "memory_write_authorized",
     "runtime_plugin_activation_authorized",
     "plugin_execution_authorized",
+    "route_auto_selection_authorized",
 )
 
 QUEUE_EFFECT_FLAGS = (
@@ -109,6 +118,12 @@ DENIED_SIGNAL_PATTERNS = {
     "state_private": re.compile(r"\bstate-private/", re.I),
     "auth_or_secret_config": re.compile(r"\b(auth|token|cookie|session|credential|secret|provider config|runtime config)\b", re.I),
     "git_release_boundary": re.compile(r"\b(git push|git tag|force push|release|deploy|publish|history rewrite|npm publish|package publish)\b", re.I),
+    "route_selection_required": re.compile(
+        r"\brequires_jenn_route_choice\s*=\s*true\b"
+        r"|\broute_selection_required\s*=\s*true\b"
+        r"|\bNo Active Automatic Construction Item\b",
+        re.I,
+    ),
 }
 
 NEGATED_SIGNAL_CONTEXT = re.compile(
@@ -127,6 +142,7 @@ JENN_DECISION_SIGNALS = {
     "state_private",
     "auth_or_secret_config",
     "git_release_boundary",
+    "route_selection_required",
 }
 
 REDACTION_PATTERNS = (
@@ -353,6 +369,123 @@ def candidate_from_review_source(
     )
 
 
+def parse_route_options(markdown: str) -> dict[str, dict[str, Any]]:
+    options: dict[str, dict[str, Any]] = {}
+    sections = re.split(r"(?m)^### Option ", markdown)
+    for section in sections[1:]:
+        lines = section.splitlines()
+        if not lines:
+            continue
+        header_match = re.match(r"([A-Z]):\s+(.+?)\s*$", lines[0])
+        if not header_match:
+            continue
+        option_id = header_match.group(1)
+        first_safe_match = re.search(
+            r"First safe package:\s*\n\s*```text\s*\n(.+?)\n```",
+            section,
+            re.S,
+        )
+        must_keep_match = re.search(
+            r"Must keep:\s*\n\s*```text\s*\n(.+?)\n```",
+            section,
+            re.S,
+        )
+        options[option_id] = {
+            "option_id": option_id,
+            "title": compact_text(header_match.group(2), max_chars=120),
+            "first_safe_package": compact_text(first_safe_match.group(1), max_chars=160) if first_safe_match else None,
+            "must_keep": [
+                compact_text(line, max_chars=160)
+                for line in (must_keep_match.group(1).splitlines() if must_keep_match else [])
+                if line.strip()
+            ],
+        }
+    return options
+
+
+def route_option_preflight_failure(
+    *,
+    source: Path,
+    option_id: str,
+    findings: list[dict[str, str]],
+) -> dict[str, Any]:
+    return {
+        "schema_version": "agents-os.task-producer.route-option-preflight.v0.1",
+        "passed": False,
+        "source_path": str(source),
+        "route_option_id": option_id,
+        "findings": findings,
+        "write_performed": False,
+        "queue_write_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+    }
+
+
+def candidate_from_route_option(
+    option_id: str,
+    source: Path = DEFAULT_ROUTE_SELECTION_PACKAGE,
+    proposed_lane: str = "NEXT",
+    candidate_id: str | None = None,
+) -> dict[str, Any]:
+    normalized_option_id = option_id.strip().upper()
+    resolved, findings = resolve_review_source(source)
+    if findings or resolved is None:
+        return route_option_preflight_failure(source=source, option_id=normalized_option_id, findings=findings)
+    if normalized_option_id not in ROUTE_OPTIONS:
+        return route_option_preflight_failure(
+            source=source,
+            option_id=normalized_option_id,
+            findings=[
+                finding(
+                    "TASK-PRODUCER-ROUTE-OPTION",
+                    f"route option must be one of {','.join(ROUTE_OPTIONS)}: {option_id}",
+                )
+            ],
+        )
+    text = resolved.read_text(encoding="utf-8")
+    options = parse_route_options(text)
+    route_option = options.get(normalized_option_id)
+    if route_option is None:
+        return route_option_preflight_failure(
+            source=source,
+            option_id=normalized_option_id,
+            findings=[
+                finding(
+                    "TASK-PRODUCER-ROUTE-OPTION-MISSING",
+                    f"route option {normalized_option_id} not found in {rel(resolved)}",
+                )
+            ],
+        )
+    first_safe_package = route_option.get("first_safe_package") or f"Route option {normalized_option_id}: {route_option['title']}"
+    title = f"Route option {normalized_option_id}: {first_safe_package}"
+    summary = (
+        f"Candidate preview for Jenn-selectable route option {normalized_option_id}: "
+        f"{route_option['title']}. This does not select the route, write the queue, "
+        "authorize execution, start services, call providers, write Memory, or perform external writes."
+    )
+    return build_candidate(
+        source_kind="route_selection_option",
+        title=title,
+        summary=summary,
+        proposed_lane=proposed_lane,
+        source_path=resolved,
+        source_facts={
+            "route_option_id": normalized_option_id,
+            "route_option_title": route_option["title"],
+            "first_safe_package": first_safe_package,
+            "must_keep": route_option.get("must_keep", []),
+            "available_option_count": len(options),
+            "route_selected": False,
+            "route_auto_selection_authorized": False,
+            "queue_promotion_authorized": False,
+            "raw_content_included": False,
+        },
+        signal_text=f"{title}\n{summary}\nrequires_jenn_route_choice=true",
+        candidate_id=candidate_id,
+    )
+
+
 def has_false_flags(value: dict[str, Any], flags: Any) -> tuple[bool, list[str]]:
     if not isinstance(flags, list):
         flags = list(flags)
@@ -480,6 +613,19 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
     else:
         errors.extend(f"review candidate: {error}" for error in validate_candidate(review_candidate, schema))
 
+    route_candidates: dict[str, dict[str, Any]] = {}
+    for option_id in ROUTE_OPTIONS:
+        route_candidate = candidate_from_route_option(option_id)
+        route_candidates[option_id] = route_candidate
+        if route_candidate.get("schema_version") != "agents-os.task-producer.candidate-task.v0.1":
+            errors.append(f"route option {option_id} preflight failed")
+            continue
+        errors.extend(f"route option {option_id}: {error}" for error in validate_candidate(route_candidate, schema))
+        if route_candidate.get("source_facts", {}).get("route_selected") is not False:
+            errors.append(f"route option {option_id} must not mark route_selected true")
+        if route_candidate.get("authorization", {}).get("route_auto_selection_authorized") is not False:
+            errors.append(f"route option {option_id} must not authorize route auto-selection")
+
     protected_result = candidate_from_review_source(Path("state-private/task.md"))
     if protected_result.get("passed") is not False or not protected_result.get("findings"):
         errors.append("protected source path should fail before read")
@@ -522,6 +668,19 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
             "source_path": review_candidate.get("source", {}).get("path"),
             "raw_content_included": review_candidate.get("source", {}).get("raw_content_included"),
         },
+        "route_option_candidates": {
+            option_id: {
+                "present": candidate.get("schema_version") == "agents-os.task-producer.candidate-task.v0.1",
+                "title": candidate.get("title"),
+                "blocked": candidate.get("blocked"),
+                "requires_jenn_decision": candidate.get("review_gate", {}).get("requires_jenn_decision"),
+                "route_selected": candidate.get("source_facts", {}).get("route_selected"),
+                "route_auto_selection_authorized": candidate.get("authorization", {}).get("route_auto_selection_authorized"),
+                "queue_write_authorized": candidate.get("authorization", {}).get("queue_write_authorized"),
+                "execution_authorized": candidate.get("execution_effect", {}).get("execution_authorized"),
+            }
+            for option_id, candidate in route_candidates.items()
+        },
         "protected_source_preflight_failed": protected_result.get("passed") is False,
         "disallowed_source_preflight_failed": disallowed_result.get("passed") is False,
         "docctl": docctl,
@@ -538,6 +697,9 @@ def print_validation_text(result: dict[str, Any]) -> None:
     print(f"Intent candidate blocked: {result['intent_candidate']['blocked']}")
     print(f"Risky candidate blocked: {result['risky_candidate']['blocked']}")
     print(f"Review candidate source: {result['review_candidate']['source_path']}")
+    route_candidates = result.get("route_option_candidates", {})
+    if route_candidates:
+        print(f"Route option candidates: {len(route_candidates)}")
     if result.get("docctl"):
         print(f"Docctl status: {'PASS' if result['docctl']['status']['passed'] else 'FAIL'}")
         print(f"Docctl doctor: {'PASS' if result['docctl']['doctor']['passed'] else 'FAIL'}")
@@ -563,6 +725,13 @@ def main() -> int:
     review_parser.add_argument("--lane", choices=LANES, default="NEXT", help="Proposed lane for the candidate.")
     review_parser.add_argument("--candidate-id", default=None, help="Optional candidate id.")
     review_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
+
+    route_parser = subparsers.add_parser("from-route-option", help="Create candidate task JSON from a Jenn-selectable route option.")
+    route_parser.add_argument("--option", choices=ROUTE_OPTIONS, required=True, help="Route option id.")
+    route_parser.add_argument("--source", default=str(DEFAULT_ROUTE_SELECTION_PACKAGE), help="Route selection package Markdown path.")
+    route_parser.add_argument("--lane", choices=LANES, default="NEXT", help="Proposed lane for the candidate.")
+    route_parser.add_argument("--candidate-id", default=None, help="Optional candidate id.")
+    route_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
 
     validate_parser = subparsers.add_parser("validate", help="Run producer self-validation.")
     validate_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
@@ -604,6 +773,29 @@ def main() -> int:
             print(f"Status: {'PASS' if candidate['passed'] else 'FAIL'}")
             print(f"Source: {candidate['source']['path']}")
             print(f"Requires Nobao review: {candidate['review_gate']['requires_nobao_review']}")
+            print(f"Execution authorized: {candidate['execution_effect']['execution_authorized']}")
+        return 0 if candidate["passed"] else 1
+
+    if args.command == "from-route-option":
+        candidate = candidate_from_route_option(args.option, Path(args.source), args.lane, args.candidate_id)
+        if candidate.get("schema_version") == "agents-os.task-producer.route-option-preflight.v0.1":
+            if args.json:
+                print_json(candidate)
+            else:
+                print("Status: FAIL")
+                for item in candidate.get("findings", []):
+                    print(f"- {item['message']}")
+            return 1
+        errors = validate_candidate(candidate)
+        candidate["passed"] = not errors
+        candidate["errors"] = errors
+        if args.json:
+            print_json(candidate)
+        else:
+            print(f"Candidate: {candidate['candidate_id']} {candidate['title']}")
+            print(f"Status: {'PASS' if candidate['passed'] else 'FAIL'}")
+            print(f"Route selected: {candidate['source_facts']['route_selected']}")
+            print(f"Queue write authorized: {candidate['authorization']['queue_write_authorized']}")
             print(f"Execution authorized: {candidate['execution_effect']['execution_authorized']}")
         return 0 if candidate["passed"] else 1
 

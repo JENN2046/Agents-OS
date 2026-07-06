@@ -42,6 +42,7 @@ def main() -> int:
     check(intent["blocked"] is False, "benign intent should not be blocked", failures)
     check(intent["review_gate"]["requires_nobao_review"] is True, "intent candidate should require Nobao review", failures)
     check(intent["authorization"]["queue_write_authorized"] is False, "intent candidate must not authorize queue write", failures)
+    check(intent["authorization"]["route_auto_selection_authorized"] is False, "intent candidate must not authorize route auto-selection", failures)
     check(intent["execution_effect"]["execution_authorized"] is False, "intent candidate must not authorize execution", failures)
     check(intent["source"]["raw_content_included"] is False, "intent raw content flag should be false", failures)
 
@@ -77,6 +78,26 @@ def main() -> int:
     check(review_candidate["source"]["raw_content_included"] is False, "review source raw body should not be included", failures)
     check(review_candidate["source_facts"]["heading_count"] >= 1, "review candidate should include heading facts", failures)
 
+    for option_id in producer.ROUTE_OPTIONS:
+        route_candidate = producer.candidate_from_route_option(option_id)
+        check(route_candidate.get("schema_version") == "agents-os.task-producer.candidate-task.v0.1", f"route option {option_id} should produce candidate", failures)
+        check(not producer.validate_candidate(route_candidate, schema), f"route option {option_id} candidate should validate", failures)
+        check(route_candidate["source"]["raw_content_included"] is False, f"route option {option_id} raw body should not be included", failures)
+        check(route_candidate["source_facts"]["route_option_id"] == option_id, f"route option {option_id} id should surface", failures)
+        check(route_candidate["source_facts"]["route_selected"] is False, f"route option {option_id} must not select route", failures)
+        check(route_candidate["source_facts"]["route_auto_selection_authorized"] is False, f"route option {option_id} must not authorize auto-selection", failures)
+        check("route_selection_required" in route_candidate["risk_signals"], f"route option {option_id} should require route selection", failures)
+        check(route_candidate["blocked"] is True, f"route option {option_id} should remain blocked pending Jenn route selection", failures)
+        check(route_candidate["actionable_after_review"] is False, f"route option {option_id} should not be actionable after Nobao review alone", failures)
+        check(route_candidate["review_gate"]["requires_jenn_decision"] is True, f"route option {option_id} should require Jenn decision", failures)
+        check(route_candidate["authorization"]["route_auto_selection_authorized"] is False, f"route option {option_id} authorization must keep auto-selection false", failures)
+        check(route_candidate["queue_effect"]["active_queue_modified"] is False, f"route option {option_id} must not modify queue", failures)
+        check(route_candidate["execution_effect"]["execution_authorized"] is False, f"route option {option_id} must not authorize execution", failures)
+
+    bad_route = producer.candidate_from_route_option("Z")
+    check(bad_route.get("passed") is False, "invalid route option should fail preflight", failures)
+    check(bool(bad_route.get("findings")), "invalid route option should include findings", failures)
+
     protected = producer.candidate_from_review_source(Path("state-private/task.md"))
     check(protected.get("passed") is False, "protected source path should fail before read", failures)
     check(bool(protected.get("findings")), "protected source path should include findings", failures)
@@ -91,7 +112,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=14 failures={len(failures)}")
+        print(f"cases=16 failures={len(failures)}")
         return 1
 
     print("PASS manifest boundary fixture")
@@ -100,8 +121,10 @@ def main() -> int:
     print("PASS negated boundary signal fixture")
     print("PASS queue mutation signal fixture")
     print("PASS allowlisted review source fixture")
+    print("PASS route option candidate fixture")
+    print("PASS invalid route option fixture")
     print("PASS protected/disallowed source preflight fixture")
-    print("cases=14 failures=0")
+    print("cases=16 failures=0")
     return 0
 
 

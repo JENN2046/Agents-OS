@@ -42,6 +42,8 @@ machine_skeleton_exists=true
 machine_validation=PASS
 task_producer_exists=true
 task_producer_validation=PASS
+task_producer_route_option_intake_exists=true
+task_producer_route_option_intake_validation=PASS
 control_chain_exists=true
 control_chain_validation=PASS
 reviewed_queue_mutation_gate_exists=true
@@ -92,6 +94,10 @@ queue mutation gate, failure handling stop loop, dashboard / Memory candidate
 layer, a safe `ops/migration/` distillation, a ColaMeta executor
 inventory/readiness map, an MCP gateway / connector boundary plan, and a
 provider / host dispatcher static behavior map.
+
+The Task Producer can now generate blocked candidate previews from route
+options A-E without selecting a route, writing the queue, promoting to NOW, or
+authorizing execution.
 
 The Dashboard now also surfaces the route-selection package as structured
 preview-only options while keeping route auto-selection, queue promotion, and
@@ -224,6 +230,7 @@ current_tracked_notion_url_redaction: closed for current tree
 automation_rulebook_prohibited_first_update: closed for current operating model
 machine_skeleton_v0.1: closed for preview-only control machine baseline; maintain review rule
 task_producer_skeleton_v0.1: closed for preview-only candidate task production baseline; producer output remains candidate-only
+task_producer_route_option_intake_v0.1: closed for candidate-only route option intake; route selection, queue write, queue promotion, and execution remain unauthorized
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized

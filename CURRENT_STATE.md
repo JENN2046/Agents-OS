@@ -29,6 +29,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - AGENTS OS Task Producer Skeleton v0.1 exists at `execution/agents-os-task-producer/`.
 - The Task Producer can create candidate task JSON from explicit intent text and allowlisted review/report Markdown.
 - Task Producer output is candidate-only, includes `requires_nobao_review=true`, and keeps queue write, promotion, execution, provider, service, executor, plugin, external write, and Memory authorization false.
+- Task Producer Route Option Intake v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-option-intake-v0.1.md`.
+- The Task Producer can create blocked candidate previews from route options A-E while keeping `route_selected=false`, `route_auto_selection_authorized=false`, `queue_write_authorized=false`, and `execution_authorized=false`.
 - AGENTS OS Control Chain v0.1 exists at `execution/agents-os-control-chain/`.
 - The Control Chain implements Commander Decision Layer, Track Selector, shared track result, ColaMeta readiness reconciliation, Local Executor local-safe validation action, Queue Manager proposal-only, and reviewed queue mutation gate.
 - Commander is the only authorization source; Track Selector cannot elevate; ColaMeta remains preview/readiness only; reviewed queue mutation requires accepted Nobao review and still does not authorize auto-promote.
@@ -114,7 +116,9 @@ Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
 The task producer skeleton is scoped to local candidate task JSON only and does
-not write the queue or authorize execution.
+not write the queue or authorize execution. It can now generate blocked
+candidate previews from named route options, but route selection still requires
+Jenn.
 The control chain is scoped to commander-first dual-track routing, ColaMeta
 readiness preview, local-safe validation execution, queue proposal-only, and
 reviewed queue mutation with accepted Nobao review.
