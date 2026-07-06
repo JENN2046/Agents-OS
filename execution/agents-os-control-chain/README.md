@@ -22,6 +22,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control
 ```text
 Commander is the only authorization source.
 Track Selector can route but cannot elevate.
+Route-option candidates stop for Jenn decision and cannot be auto-selected.
 ColaMeta Track is readiness/preview only in v0.1.
 Local Executor can only run local_safe_only actions.
 Queue Manager is proposal-only in v0.1.
@@ -41,6 +42,8 @@ write formal Memory
 read state-private
 read or output secrets/tokens/cookies/provider raw response/private memory/raw logs
 mutate Active Work Queue directly
+auto-select a route option
+promote a route option into the queue
 silently retry failed validation
 perform destructive cleanup
 push/tag/deploy/publish

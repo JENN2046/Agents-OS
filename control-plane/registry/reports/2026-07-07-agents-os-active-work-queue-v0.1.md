@@ -99,6 +99,11 @@ The Task Producer can now generate blocked candidate previews from route
 options A-E without selecting a route, writing the queue, promoting to NOW, or
 authorizing execution.
 
+The Control Chain now recognizes those route-option candidates as an explicit
+Jenn-decision stop gate. Commander returns `stop_needs_jenn_decision` and Track
+Selector keeps `track_authorized=false`, so route selection cannot silently turn
+into queue promotion or execution.
+
 The Dashboard now also surfaces the route-selection package as structured
 preview-only options while keeping route auto-selection, queue promotion, and
 execution authorization false.
@@ -120,6 +125,9 @@ new route should start automatically after the current governance sequence.
 The Machine now treats this stop-state as non-actionable and requiring Jenn
 route selection before execution. The next route selection package now preserves
 the route options and exact confirmation templates without selecting any route.
+The Control Chain route-option stop gate keeps the same boundary after Task
+Producer candidate generation: route options can be inspected, but not selected,
+promoted, routed, or executed.
 
 ## Queue Decision
 

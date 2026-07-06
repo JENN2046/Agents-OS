@@ -22,6 +22,16 @@ def load_chain() -> ModuleType:
     return module
 
 
+def load_producer() -> ModuleType:
+    module_path = ROOT.parents[0] / "agents-os-task-producer" / "producer.py"
+    spec = importlib.util.spec_from_file_location("agents_os_task_producer", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load task producer module from {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def check(condition: bool, message: str, failures: list[str]) -> None:
     if not condition:
         failures.append(message)
@@ -45,6 +55,7 @@ def candidate(candidate_id: str, title: str, summary: str, risk_signals: list[st
             "memory_write_authorized": False,
             "runtime_plugin_activation_authorized": False,
             "plugin_execution_authorized": False,
+            "route_auto_selection_authorized": False,
         },
         "execution_effect": {
             "write_performed": False,
@@ -67,6 +78,7 @@ def candidate(candidate_id: str, title: str, summary: str, risk_signals: list[st
 
 def main() -> int:
     chain = load_chain()
+    producer = load_producer()
     failures: list[str] = []
 
     local = candidate("CANDIDATE-LOCAL", "Write governance report", "Write local governance report and run docctl validation.")
@@ -88,6 +100,15 @@ def main() -> int:
     check(provider_decision["decision"] == "stop_needs_jenn_decision", "provider task should stop for Jenn", failures)
     check(provider_decision["execution_authorization_scope"] == "blocked_requires_jenn", "provider task should be blocked_requires_jenn", failures)
 
+    route_candidate = producer.candidate_from_route_option("A")
+    route_decision = chain.build_commander_decision(route_candidate)
+    check(route_decision["decision"] == "stop_needs_jenn_decision", "route option candidate should stop for Jenn", failures)
+    check(route_decision["execution_authorization_scope"] == "blocked_requires_jenn", "route option candidate should be blocked_requires_jenn", failures)
+    check(route_decision["requires_jenn_decision"] is True, "route option candidate should require Jenn decision", failures)
+    check(route_decision["execution_authorized"] is False, "route option candidate should not authorize execution", failures)
+    check("route_selection_required" in route_decision["blocked_capabilities"], "route option should block route selection", failures)
+    check("route_auto_selection" in route_decision["blocked_capabilities"], "route option should block route auto-selection", failures)
+
     invalid_decision = chain.build_commander_decision(invalid)
     check(invalid_decision["decision"] == "reject_as_out_of_scope", "invalid candidate should be rejected", failures)
 
@@ -98,6 +119,10 @@ def main() -> int:
     blocked_preview = chain.build_track_preview(provider_decision)
     check(blocked_preview["selected_track"] == "stop", "provider preview should select stop", failures)
     check(blocked_preview["track_authorized"] is False, "selector must not elevate blocked decision", failures)
+
+    route_preview = chain.build_track_preview(route_decision)
+    check(route_preview["selected_track"] == "stop", "route option preview should select stop", failures)
+    check(route_preview["track_authorized"] is False, "selector must not elevate route option decision", failures)
 
     cola_preview = chain.build_track_preview(colameta_decision)
     check(cola_preview["selected_track"] == "colameta", "ColaMeta preview should select ColaMeta", failures)
@@ -255,7 +280,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=21 failures={len(failures)}")
+        print(f"cases=22 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -265,7 +290,8 @@ old_task: closed
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
     print("PASS reviewed queue mutation fixture")
-    print("cases=21 failures=0")
+    print("PASS route option stop gate fixture")
+    print("cases=22 failures=0")
     return 0
 
 

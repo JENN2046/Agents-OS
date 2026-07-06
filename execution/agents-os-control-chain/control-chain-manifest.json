@@ -14,6 +14,7 @@
     "provider_backed_execution_authorized": false,
     "queue_mutation_default": "proposal_only",
     "reviewed_queue_mutation_requires_accepted_nobao_review": true,
+    "route_auto_selection_authorized": false,
     "auto_promote_authorized": false
   },
   "failure_handling": {
@@ -47,6 +48,9 @@
     "run_validation_command"
   ],
   "forbidden_actions": [
+    "route_auto_selection",
+    "queue_write",
+    "queue_promotion",
     "update_active_queue",
     "provider_call",
     "service_start",

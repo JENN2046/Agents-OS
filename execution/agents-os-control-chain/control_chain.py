@@ -37,6 +37,7 @@ MANIFEST_PATH = CONTROL_DIR / "control-chain-manifest.json"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
 COLAMETA_PREFLIGHT = REGISTRY_DIR / "colameta-executor-preflight.py"
 DOCCTL = REGISTRY_DIR / "docctl.py"
+TASK_PRODUCER = WORKSPACE_ROOT / "execution" / "agents-os-task-producer" / "producer.py"
 
 DECISIONS = (
     "route_to_colameta",
@@ -84,9 +85,14 @@ JENN_SIGNALS = {
     "state_private",
     "auth_or_secret_config",
     "git_release_boundary",
+    "route_selection_required",
+    "route_auto_selection",
 }
 QUEUE_SIGNALS = {"queue_write", "queue_promotion"}
 GLOBAL_BLOCKED_CAPABILITIES = [
+    "route_auto_selection",
+    "queue_write",
+    "queue_promotion",
     "provider_call",
     "service_start",
     "runtime_plugin_activation",
@@ -201,6 +207,7 @@ def validate_candidate_input(candidate: dict[str, Any]) -> list[str]:
             "memory_write_authorized",
             "runtime_plugin_activation_authorized",
             "plugin_execution_authorized",
+            "route_auto_selection_authorized",
         ],
     )
     if authorization_failures:
@@ -253,6 +260,15 @@ def validate_machine_preview(preview: dict[str, Any]) -> list[str]:
     return errors
 
 
+def is_route_option_candidate(candidate: dict[str, Any]) -> bool:
+    source = candidate.get("source", {})
+    source_facts = candidate.get("source_facts", {})
+    return (
+        source.get("kind") == "route_selection_option"
+        or source_facts.get("route_option_id") is not None
+    )
+
+
 def classify_candidate(candidate: dict[str, Any], input_errors: list[str]) -> tuple[str, str, str, bool, str, list[str]]:
     risk_signals = set(str(item) for item in candidate.get("risk_signals", []) if item)
     text = source_text(candidate)
@@ -264,6 +280,15 @@ def classify_candidate(candidate: dict[str, Any], input_errors: list[str]) -> tu
             False,
             "invalid",
             ["candidate_or_machine_input_invalid"],
+        )
+    if is_route_option_candidate(candidate):
+        return (
+            "stop_needs_jenn_decision",
+            "stop",
+            "blocked_requires_jenn",
+            True,
+            "red",
+            sorted(risk_signals | {"route_selection_required", "route_auto_selection"}),
         )
     if risk_signals & JENN_SIGNALS or candidate.get("review_gate", {}).get("requires_jenn_decision") is True:
         return (
@@ -1184,6 +1209,7 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
             "memory_write_authorized": False,
             "runtime_plugin_activation_authorized": False,
             "plugin_execution_authorized": False,
+            "route_auto_selection_authorized": False,
         },
         "execution_effect": {
             "write_performed": False,
@@ -1209,6 +1235,32 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     local_decision = build_commander_decision(local_candidate)
     colameta_decision = build_commander_decision(colameta_candidate)
     provider_decision = build_commander_decision(provider_candidate)
+    route_option_candidate: dict[str, Any] | None = None
+    route_option_decision: dict[str, Any] | None = None
+    route_option_preview: dict[str, Any] | None = None
+    try:
+        producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
+        route_option_candidate = producer.candidate_from_route_option("A")
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"route option candidate import failed: {exc}")
+    if route_option_candidate is not None:
+        if route_option_candidate.get("schema_version") != "agents-os.task-producer.candidate-task.v0.1":
+            errors.append("route option candidate preflight failed")
+        else:
+            route_option_decision = build_commander_decision(route_option_candidate)
+            route_option_preview = build_track_preview(route_option_decision)
+            if route_option_decision.get("decision") != "stop_needs_jenn_decision":
+                errors.append("route option candidate did not stop for Jenn")
+            if route_option_decision.get("execution_authorization_scope") != "blocked_requires_jenn":
+                errors.append("route option candidate did not use blocked_requires_jenn")
+            if route_option_decision.get("requires_jenn_decision") is not True:
+                errors.append("route option candidate did not require Jenn decision")
+            if route_option_decision.get("execution_authorized") is not False:
+                errors.append("route option candidate authorized execution")
+            if "route_selection_required" not in route_option_decision.get("blocked_capabilities", []):
+                errors.append("route option candidate did not block route_selection_required")
+            if route_option_preview.get("track_authorized") is not False:
+                errors.append("route option preview elevated authorization")
     if local_decision.get("decision") != "route_to_local_executor" or local_decision.get("execution_authorization_scope") != "local_safe_only":
         errors.append("local candidate did not route to local executor")
     if colameta_decision.get("decision") != "route_to_colameta" or colameta_decision.get("execution_authorization_scope") != "none":
@@ -1355,10 +1407,25 @@ old_task: closed
             "local_decision": local_decision.get("decision"),
             "colameta_decision": colameta_decision.get("decision"),
             "provider_decision": provider_decision.get("decision"),
+            "route_option_decision": route_option_decision.get("decision") if route_option_decision else None,
         },
         "track_selector": {
             "local_track_authorized": local_preview.get("track_authorized"),
             "blocked_track_authorized": blocked_preview.get("track_authorized"),
+            "route_option_track_authorized": route_option_preview.get("track_authorized") if route_option_preview else None,
+        },
+        "route_option_candidate": {
+            "checked": route_option_candidate is not None,
+            "present": route_option_candidate.get("schema_version") == "agents-os.task-producer.candidate-task.v0.1"
+            if route_option_candidate
+            else False,
+            "decision": route_option_decision.get("decision") if route_option_decision else None,
+            "requires_jenn_decision": route_option_decision.get("requires_jenn_decision") if route_option_decision else None,
+            "execution_authorization_scope": route_option_decision.get("execution_authorization_scope")
+            if route_option_decision
+            else None,
+            "execution_authorized": route_option_decision.get("execution_authorized") if route_option_decision else None,
+            "track_authorized": route_option_preview.get("track_authorized") if route_option_preview else None,
         },
         "local_executor": {
             "validation_passed": local_result.get("validation_passed"),

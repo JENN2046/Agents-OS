@@ -36,6 +36,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Commander is the only authorization source; Track Selector cannot elevate; ColaMeta remains preview/readiness only; reviewed queue mutation requires accepted Nobao review and still does not authorize auto-promote.
 - The Control Chain implements Failure Handling Stop Loop v0.1 for validation failure, scope violation, protected path detection, dirty worktree conflict, unknown action type, P3 signal, and invalid executor output.
 - Failure handling keeps queue promotion, repair execution, silent retry, destructive cleanup, provider call, external write, and Memory write false.
+- Control Chain Route Option Stop Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-option-stop-gate-v0.1.md`.
+- The Control Chain now treats Task Producer route-option candidates as `stop_needs_jenn_decision`, keeps `execution_authorization_scope=blocked_requires_jenn`, and prevents Track Selector authorization.
 - AGENTS OS Dashboard v0.1 exists at `execution/agents-os-dashboard/`.
 - The Dashboard can summarize the Active Work Queue, last CLOSED item, last failure evidence status, docctl validation status, open blockers, and Memory candidates.
 - Dashboard output is preview-only and keeps formal Memory write, private raw Memory read, queue mutation, provider call, service start, executor run, runtime/plugin activation, and external write false.
@@ -156,6 +158,9 @@ output with `blocked=true`, `actionable=false`, and
 `requires_jenn_decision=true`.
 The next route selection package now gives Jenn concrete templates for choosing
 one route without letting Nobao or Machine auto-select it.
+The Control Chain route-option stop gate now carries that same boundary through
+Commander Decision and Track Selector: route-option candidates stop for Jenn and
+cannot be routed to ColaMeta, local executor, queue promotion, or execution.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
