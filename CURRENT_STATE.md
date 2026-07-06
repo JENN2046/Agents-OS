@@ -19,6 +19,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
+- The only current `NOW` item is `Build AGENTS OS Machine Skeleton v0.1`.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -56,11 +58,12 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 ## Next Actions
 
-1. Reconcile Executor readiness with preview-only checks before any real executor run.
-2. Convert the downloaded future implementation plan into a tracked local roadmap or queue.
-3. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
-4. Keep VCPToolBox out of this governance baseline until a separate runtime recovery/startup scope is chosen.
-5. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
+1. Build AGENTS OS Machine Skeleton v0.1 from the active work queue.
+2. After the machine skeleton exists, reconcile Executor readiness with preview-only checks before any real executor run.
+3. Distill `ops/migration/` historical plans into a short surviving task list.
+4. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
+5. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
+6. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
 
 ## Current Handoff
 
@@ -80,7 +83,7 @@ Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: Executor readiness preview/preflight or migration reconciliation, unless Jenn chooses another route.
+Next active route: AGENTS OS Machine Skeleton v0.1 from the active work queue.
 ```
 
 ## Safety Notes

@@ -955,6 +955,134 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-active-work-queue-v0.1
+    title: AGENTS OS active work queue v0.1
+    doc_type: review
+    status: accepted
+    scope: local queue reconciliation that compresses current AGENTS OS routes into NOW/NEXT/LATER/BLOCKED/CLOSED
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+      - control-plane/registry/reports/2026-07-06-agents-os-future-plan-intake-and-reality-freeze-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - current-state facts change
+        - queue priority changes
+        - machine skeleton scope changes
+    security_boundary:
+      - local queue artifact only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no VCPToolBox source or active config changes
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-active-work-queue-v0.1-receipt
+    title: AGENTS OS active work queue v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for active work queue reconciliation
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-active-work-queue-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-active-work-queue-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+    security_boundary:
+      - local receipt only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no VCPToolBox source or active config changes
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-active-work-queue-v0.1-review
+    title: AGENTS OS active work queue v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for active work queue reconciliation
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-active-work-queue-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-active-work-queue-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - queue acceptance changes
+        - residual risk changes
+    security_boundary:
+      - local review only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no VCPToolBox source or active config changes
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: decision-records-guidance
     title: AGENTS OS Decision Records
     doc_type: policy
