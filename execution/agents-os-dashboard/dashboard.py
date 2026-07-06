@@ -25,6 +25,7 @@ WORKSPACE_ROOT = DASHBOARD_DIR.parents[1]
 REGISTRY_DIR = WORKSPACE_ROOT / "control-plane" / "registry"
 MACHINE_PATH = WORKSPACE_ROOT / "execution" / "agents-os-machine" / "machine.py"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
+ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 DOCCTL = REGISTRY_DIR / "docctl.py"
 MANIFEST_PATH = DASHBOARD_DIR / "dashboard-manifest.json"
 SCHEMAS_PATH = DASHBOARD_DIR / "dashboard.schemas.json"
@@ -39,6 +40,8 @@ DANGEROUS_AUTHORIZATION_FLAGS = (
     "private_memory_raw_read_authorized",
     "runtime_plugin_activation_authorized",
     "active_queue_mutation_authorized",
+    "route_auto_selection_authorized",
+    "queue_promotion_authorized",
 )
 
 
@@ -212,6 +215,60 @@ def first_item_title(normalized_queue: dict[str, Any], lane: str) -> str | None:
     return str(items[0].get("title"))
 
 
+def parse_route_options(path: Path = ROUTE_SELECTION_PACKAGE) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    text = path.read_text(encoding="utf-8")
+    options: list[dict[str, Any]] = []
+    sections = re.split(r"(?m)^### Option ", text)
+    for section in sections[1:]:
+        header_match = re.match(r"([A-Z]):\s+(.+?)\s*$", section.splitlines()[0])
+        if not header_match:
+            continue
+        first_safe_match = re.search(
+            r"First safe package:\s*\n\s*```text\s*\n(.+?)\n```",
+            section,
+            re.S,
+        )
+        must_keep_match = re.search(
+            r"Must keep:\s*\n\s*```text\s*\n(.+?)\n```",
+            section,
+            re.S,
+        )
+        options.append(
+            {
+                "option_id": header_match.group(1),
+                "title": header_match.group(2).strip(),
+                "first_safe_package": first_safe_match.group(1).strip() if first_safe_match else None,
+                "must_keep": [
+                    line.strip()
+                    for line in (must_keep_match.group(1).splitlines() if must_keep_match else [])
+                    if line.strip()
+                ],
+            }
+        )
+    return options
+
+
+def route_selection_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
+    now_title = first_item_title(normalized_queue, "NOW")
+    awaiting_selection = now_title == "No Active Automatic Construction Item"
+    options = parse_route_options()
+    return {
+        "schema_version": "agents-os.dashboard.route-selection.v0.1",
+        "status": "awaiting_jenn_selection" if awaiting_selection else "not_active",
+        "package_path": rel(ROUTE_SELECTION_PACKAGE),
+        "package_exists": ROUTE_SELECTION_PACKAGE.exists(),
+        "requires_jenn_decision": awaiting_selection,
+        "route_auto_selection_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "option_count": len(options),
+        "options": options,
+        "raw_content_output": False,
+    }
+
+
 def classify_failure_evidence(path: Path, title: str) -> str:
     lowered = f"{path.name}\n{title}".lower()
     if "failure-handling-stop-loop" in lowered or "failure handling stop loop" in lowered:
@@ -324,6 +381,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     last_failure = last_failure_evidence()
     memory_candidates = build_memory_candidates(normalized_queue, validation)
     now_title = first_item_title(normalized_queue, "NOW")
+    route_selection = route_selection_status(normalized_queue)
     queue_summary = {
         "source_path": normalized_queue.get("source_path"),
         "passed": normalized_queue.get("passed"),
@@ -338,7 +396,10 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     }
     summary = {
         "schema_version": "agents-os.dashboard.summary.v0.1",
-        "dashboard_id": stable_id("DASHBOARD", [queue_summary, validation.get("passed"), last_completed, last_failure]),
+        "dashboard_id": stable_id(
+            "DASHBOARD",
+            [queue_summary, route_selection, validation.get("passed"), last_completed, last_failure],
+        ),
         "preview_only": True,
         "read_only": True,
         "write_performed": False,
@@ -347,6 +408,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "queue": queue_summary,
         "last_completed": last_completed,
         "last_failure": last_failure,
+        "route_selection": route_selection,
         "validation_status": validation,
         "open_blockers": blockers,
         "memory_candidates": memory_candidates,
@@ -394,6 +456,18 @@ def validate_dashboard_summary(summary: dict[str, Any]) -> list[str]:
         errors.append(f"dashboard dangerous authorization flags not false: {','.join(authorization_failures)}")
     if summary.get("queue", {}).get("passed") is not True:
         errors.append("dashboard queue summary did not pass")
+    route_selection = summary.get("route_selection", {})
+    if route_selection.get("route_auto_selection_authorized") is not False:
+        errors.append("dashboard route selection must not authorize route auto-selection")
+    if route_selection.get("queue_promotion_authorized") is not False:
+        errors.append("dashboard route selection must not authorize queue promotion")
+    if route_selection.get("execution_authorized") is not False:
+        errors.append("dashboard route selection must not authorize execution")
+    if route_selection.get("status") == "awaiting_jenn_selection":
+        if route_selection.get("requires_jenn_decision") is not True:
+            errors.append("dashboard route selection stop-state must require Jenn decision")
+        if route_selection.get("option_count", 0) < 1:
+            errors.append("dashboard route selection stop-state should surface options")
     validation = summary.get("validation_status", {})
     if validation.get("checked") is True and validation.get("passed") is not True:
         errors.append("dashboard validation status did not pass")
@@ -434,6 +508,7 @@ def validate_dashboard(run_validations: bool = True) -> dict[str, Any]:
         "errors": errors,
         "summary_passed": summary.get("passed"),
         "now": summary.get("queue", {}).get("now", {}),
+        "route_selection": summary.get("route_selection", {}),
         "last_completed": summary.get("last_completed", {}),
         "last_failure": summary.get("last_failure", {}),
         "validation_status": {
@@ -473,6 +548,7 @@ def main() -> int:
             print("AGENTS OS Dashboard summary")
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['queue']['now']['title']}")
+            print(f"Route selection: {result['route_selection']['status']} options={result['route_selection']['option_count']}")
             print(f"Last completed: {result['last_completed'].get('text')}")
             print(f"Last failure: {result['last_failure'].get('status')}")
             print(f"Memory candidates: {len(result['memory_candidates'])}")
@@ -486,6 +562,7 @@ def main() -> int:
             print("AGENTS OS Dashboard validation")
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['now'].get('title')}")
+            print(f"Route selection: {result['route_selection'].get('status')}")
             print(f"Memory candidates: {result['memory_candidate_count']}")
             if result["errors"]:
                 print("Errors:")

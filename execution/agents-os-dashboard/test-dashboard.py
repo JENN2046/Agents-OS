@@ -41,6 +41,12 @@ def main() -> int:
     check(summary["write_performed"] is False, "dashboard summary should not write", failures)
     check(summary["execution_authorized"] is False, "dashboard should not authorize execution", failures)
     check(summary["queue"]["now"]["title"] == expected_now, "dashboard should surface current NOW", failures)
+    check(summary["route_selection"]["status"] == "awaiting_jenn_selection", "dashboard should surface route selection stop-state", failures)
+    check(summary["route_selection"]["requires_jenn_decision"] is True, "route selection should require Jenn", failures)
+    check(summary["route_selection"]["route_auto_selection_authorized"] is False, "route selection must not authorize auto-selection", failures)
+    check(summary["route_selection"]["queue_promotion_authorized"] is False, "route selection must not authorize queue promotion", failures)
+    check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
+    check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
     check(summary["last_completed"]["status"] == "present", "dashboard should surface last CLOSED item", failures)
     check(summary["open_blockers"], "dashboard should surface open blockers", failures)
     check(summary["validation_status"]["passed"] is True, "dashboard should surface passing validation status", failures)
@@ -73,6 +79,11 @@ def main() -> int:
     broken_candidate = dict(memory_candidates[0])
     broken_candidate["formal_memory_write_authorized"] = True
     check(dashboard.validate_memory_candidate(broken_candidate), "Memory candidate authorizing Memory write should fail", failures)
+
+    broken_route = dict(summary)
+    broken_route["route_selection"] = dict(summary["route_selection"])
+    broken_route["route_selection"]["route_auto_selection_authorized"] = True
+    check(dashboard.validate_dashboard_summary(broken_route), "route auto-selection authorization should fail", failures)
 
     with tempfile.TemporaryDirectory(prefix="agents-os-dashboard-test-", dir=dashboard.WORKSPACE_ROOT) as temp_dir:
         fixture = Path(temp_dir) / "queue.md"
@@ -110,6 +121,7 @@ latest_closed: new
         fixture_summary = dashboard.build_dashboard_summary(fixture, run_validations=False)
         check(fixture_summary["passed"], f"fixture dashboard summary should pass: {fixture_summary['errors']}", failures)
         check(fixture_summary["queue"]["now"]["title"] == "Fixture dashboard task", "fixture NOW should surface", failures)
+        check(fixture_summary["route_selection"]["status"] == "not_active", "fixture route selection should be inactive", failures)
         check(fixture_summary["last_completed"]["text"] == "latest_closed: new", "latest CLOSED should surface", failures)
         check(len(fixture_summary["open_blockers"]) == 2, "fixture blockers should surface", failures)
 
@@ -124,16 +136,17 @@ latest_closed: new
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=12 failures={len(failures)}")
+        print(f"cases=13 failures={len(failures)}")
         return 1
 
     print("PASS current dashboard summary fixture")
     print("PASS validation status fixture")
     print("PASS memory candidate no-write fixture")
+    print("PASS route selection visibility fixture")
     print("PASS manifest authorization fixture")
     print("PASS fixture queue summary fixture")
     print("PASS protected path fixture")
-    print("cases=12 failures=0")
+    print("cases=13 failures=0")
     return 0
 
 

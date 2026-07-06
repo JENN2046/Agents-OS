@@ -37,6 +37,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - AGENTS OS Dashboard v0.1 exists at `execution/agents-os-dashboard/`.
 - The Dashboard can summarize the Active Work Queue, last CLOSED item, last failure evidence status, docctl validation status, open blockers, and Memory candidates.
 - Dashboard output is preview-only and keeps formal Memory write, private raw Memory read, queue mutation, provider call, service start, executor run, runtime/plugin activation, and external write false.
+- Dashboard Route Options Visibility v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-options-visibility-v0.1.md`.
+- Dashboard summary now surfaces the route-selection package as five preview-only options while keeping route auto-selection, queue promotion, and execution authorization false.
 - Migration Plan Distillation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-migration-plan-distillation-v0.1.md`.
 - The migration distillation compresses `ops/migration/` historical material into a surviving local task list without carrying forward historical runtime/provider/executor authorization.
 - ColaMeta Executor Inventory And Readiness Map v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md`.
@@ -120,8 +122,9 @@ Failure handling now classifies known failure categories and stops for review
 without queue promotion, silent retry, destructive cleanup, provider call,
 external write, or Memory write.
 The dashboard now exposes current queue state, latest CLOSED entry, failure
-event status, docctl validation state, open blockers, and Memory candidates
-without writing formal Memory or reading private raw Memory.
+event status, docctl validation state, open blockers, Memory candidates, and
+the current route-selection options without writing formal Memory, reading
+private raw Memory, selecting a route, or promoting the queue.
 The migration distillation safely summarized `ops/migration/` into surviving
 local tasks and closed evidence without treating historical plans as execution
 authorization.

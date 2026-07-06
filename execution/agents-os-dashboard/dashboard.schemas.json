@@ -12,6 +12,7 @@
       "queue",
       "last_completed",
       "last_failure",
+      "route_selection",
       "validation_status",
       "open_blockers",
       "memory_candidates",

@@ -50,6 +50,8 @@ failure_handling_stop_loop_exists=true
 failure_handling_stop_loop_validation=PASS
 dashboard_memory_candidate_layer_exists=true
 dashboard_memory_candidate_layer_validation=PASS
+dashboard_route_options_visibility_exists=true
+dashboard_route_options_visibility_validation=PASS
 migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
 colameta_executor_inventory_readiness_map_exists=true
@@ -90,6 +92,10 @@ queue mutation gate, failure handling stop loop, dashboard / Memory candidate
 layer, a safe `ops/migration/` distillation, a ColaMeta executor
 inventory/readiness map, an MCP gateway / connector boundary plan, and a
 provider / host dispatcher static behavior map.
+
+The Dashboard now also surfaces the route-selection package as structured
+preview-only options while keeping route auto-selection, queue promotion, and
+execution authorization false.
 
 ColaMeta local readiness is clean for summary-only preview, but real executor,
 service startup, provider calls, Memory writes, and applying runtime preview
@@ -222,6 +228,7 @@ control_chain_v0.1: closed for commander-first dual-track skeleton; queue remain
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
 dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized
+dashboard_route_options_visibility_v0.1: closed for preview-only route selection visibility; route auto-selection, queue promotion, and execution remain unauthorized
 migration_plan_distillation_v0.1: closed for safe summary of historical migration material; no historical runtime/provider/executor permission carried forward
 colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local executor inventory and readiness map; real executor, service start, provider calls, Memory writes, and runtime preview apply remain unauthorized
 mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector boundary plan; live connector calls, auth mutation, MCP service start, provider calls, and external writes remain unauthorized

@@ -20,7 +20,9 @@
     "formal_memory_write_authorized": false,
     "private_memory_raw_read_authorized": false,
     "runtime_plugin_activation_authorized": false,
-    "active_queue_mutation_authorized": false
+    "active_queue_mutation_authorized": false,
+    "route_auto_selection_authorized": false,
+    "queue_promotion_authorized": false
   },
   "memory_candidate_defaults": {
     "candidate_only": true,
@@ -38,6 +40,8 @@
     "plugin_activation",
     "external_write",
     "active_queue_mutation",
+    "route_auto_selection",
+    "queue_promotion",
     "formal_memory_write",
     "private_memory_raw_read",
     "state_private_read",
