@@ -162,7 +162,7 @@ Goal: perform a database write.
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=8 failures={len(failures)}")
+        print(f"cases=12 failures={len(failures)}")
         return 1
 
     print("PASS current queue fixture")
