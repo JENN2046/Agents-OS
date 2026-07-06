@@ -47,6 +47,34 @@ def main() -> int:
     check(summary["route_selection"]["queue_promotion_authorized"] is False, "route selection must not authorize queue promotion", failures)
     check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
     check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
+    check(
+        summary["next_user_action"]["status"] == "route_choice_required",
+        "dashboard should surface route choice as next user action",
+        failures,
+    )
+    check(summary["next_user_action"]["decision_owner"] == "Jenn", "next user action owner should be Jenn", failures)
+    check(summary["next_user_action"]["requires_jenn_decision"] is True, "next user action should require Jenn decision", failures)
+    check(
+        summary["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"],
+        "next user action should surface route ids",
+        failures,
+    )
+    check(
+        summary["next_user_action"]["exact_confirmation_templates_available"] is True,
+        "next user action should point to confirmation templates",
+        failures,
+    )
+    check(
+        summary["next_user_action"]["active_queue_mutation_authorized"] is False,
+        "next user action must not authorize active queue mutation",
+        failures,
+    )
+    check(
+        summary["next_user_action"]["queue_promotion_authorized"] is False,
+        "next user action must not authorize queue promotion",
+        failures,
+    )
+    check(summary["next_user_action"]["execution_authorized"] is False, "next user action must not authorize execution", failures)
     check(summary["route_adoption_gate"]["status"] == "waiting_for_jenn_route_choice", "dashboard should surface route adoption gate wait-state", failures)
     check(summary["route_adoption_gate"]["all_required_gates_present"] is True, "dashboard should surface required route adoption gates", failures)
     check(summary["route_adoption_gate"]["future_apply_gate_available"] is True, "dashboard should surface future apply gate availability", failures)
@@ -93,6 +121,11 @@ def main() -> int:
     broken_route["route_selection"]["route_auto_selection_authorized"] = True
     check(dashboard.validate_dashboard_summary(broken_route), "route auto-selection authorization should fail", failures)
 
+    broken_next_user_action = dict(summary)
+    broken_next_user_action["next_user_action"] = dict(summary["next_user_action"])
+    broken_next_user_action["next_user_action"]["queue_promotion_authorized"] = True
+    check(dashboard.validate_dashboard_summary(broken_next_user_action), "next user action queue promotion authorization should fail", failures)
+
     broken_adoption_gate = dict(summary)
     broken_adoption_gate["route_adoption_gate"] = dict(summary["route_adoption_gate"])
     broken_adoption_gate["route_adoption_gate"]["active_queue_mutation_authorized"] = True
@@ -135,6 +168,7 @@ latest_closed: new
         check(fixture_summary["passed"], f"fixture dashboard summary should pass: {fixture_summary['errors']}", failures)
         check(fixture_summary["queue"]["now"]["title"] == "Fixture dashboard task", "fixture NOW should surface", failures)
         check(fixture_summary["route_selection"]["status"] == "not_active", "fixture route selection should be inactive", failures)
+        check(fixture_summary["next_user_action"]["status"] == "none", "fixture next user action should be inactive", failures)
         check(fixture_summary["route_adoption_gate"]["status"] == "not_active", "fixture route adoption gate should be inactive", failures)
         check(fixture_summary["last_completed"]["text"] == "latest_closed: new", "latest CLOSED should surface", failures)
         check(len(fixture_summary["open_blockers"]) == 2, "fixture blockers should surface", failures)
@@ -150,18 +184,19 @@ latest_closed: new
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=14 failures={len(failures)}")
+        print(f"cases=15 failures={len(failures)}")
         return 1
 
     print("PASS current dashboard summary fixture")
     print("PASS validation status fixture")
     print("PASS memory candidate no-write fixture")
     print("PASS route selection visibility fixture")
+    print("PASS next user action fixture")
     print("PASS route adoption gate visibility fixture")
     print("PASS manifest authorization fixture")
     print("PASS fixture queue summary fixture")
     print("PASS protected path fixture")
-    print("cases=14 failures=0")
+    print("cases=15 failures=0")
     return 0
 
 

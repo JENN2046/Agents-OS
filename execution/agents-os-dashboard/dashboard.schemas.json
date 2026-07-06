@@ -13,6 +13,7 @@
       "last_completed",
       "last_failure",
       "route_selection",
+      "next_user_action",
       "route_adoption_gate",
       "validation_status",
       "open_blockers",

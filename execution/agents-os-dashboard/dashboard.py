@@ -272,6 +272,32 @@ def route_selection_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def next_user_action_status(route_selection: dict[str, Any]) -> dict[str, Any]:
+    route_ids = [
+        str(option.get("option_id"))
+        for option in route_selection.get("options", [])
+        if option.get("option_id")
+    ]
+    awaiting_selection = route_selection.get("status") == "awaiting_jenn_selection"
+    return {
+        "schema_version": "agents-os.dashboard.next-user-action.v0.1",
+        "status": "route_choice_required" if awaiting_selection else "none",
+        "decision_owner": "Jenn" if awaiting_selection else None,
+        "requires_jenn_decision": awaiting_selection,
+        "instruction": "choose_one_route_id" if awaiting_selection else None,
+        "accepted_route_ids": route_ids if awaiting_selection else [],
+        "template_source_path": rel(ROUTE_SELECTION_PACKAGE),
+        "exact_confirmation_templates_available": ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
+        "template_section": "Exact Confirmation Text Templates" if awaiting_selection else None,
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+    }
+
+
 def route_adoption_gate_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
     queue_summary = normalized_queue.get("summary", {})
     now_title = first_item_title(normalized_queue, "NOW")
@@ -423,6 +449,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     memory_candidates = build_memory_candidates(normalized_queue, validation)
     now_title = first_item_title(normalized_queue, "NOW")
     route_selection = route_selection_status(normalized_queue)
+    next_user_action = next_user_action_status(route_selection)
     route_adoption_gate = route_adoption_gate_status(normalized_queue)
     queue_summary = {
         "source_path": normalized_queue.get("source_path"),
@@ -440,7 +467,15 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "schema_version": "agents-os.dashboard.summary.v0.1",
         "dashboard_id": stable_id(
             "DASHBOARD",
-            [queue_summary, route_selection, route_adoption_gate, validation.get("passed"), last_completed, last_failure],
+            [
+                queue_summary,
+                route_selection,
+                next_user_action,
+                route_adoption_gate,
+                validation.get("passed"),
+                last_completed,
+                last_failure,
+            ],
         ),
         "preview_only": True,
         "read_only": True,
@@ -451,6 +486,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "last_completed": last_completed,
         "last_failure": last_failure,
         "route_selection": route_selection,
+        "next_user_action": next_user_action,
         "route_adoption_gate": route_adoption_gate,
         "validation_status": validation,
         "open_blockers": blockers,
@@ -511,6 +547,28 @@ def validate_dashboard_summary(summary: dict[str, Any]) -> list[str]:
             errors.append("dashboard route selection stop-state must require Jenn decision")
         if route_selection.get("option_count", 0) < 1:
             errors.append("dashboard route selection stop-state should surface options")
+    next_user_action = summary.get("next_user_action", {})
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+    ):
+        if next_user_action.get(flag) is not False:
+            errors.append(f"dashboard next user action must not authorize {flag}")
+    if route_selection.get("status") == "awaiting_jenn_selection":
+        if next_user_action.get("status") != "route_choice_required":
+            errors.append("dashboard next user action must require route choice during stop-state")
+        if next_user_action.get("decision_owner") != "Jenn":
+            errors.append("dashboard next user action decision owner must be Jenn")
+        if next_user_action.get("requires_jenn_decision") is not True:
+            errors.append("dashboard next user action must require Jenn decision")
+        route_option_ids = [option.get("option_id") for option in route_selection.get("options", [])]
+        if next_user_action.get("accepted_route_ids") != route_option_ids:
+            errors.append("dashboard next user action route ids must match route selection options")
+        if next_user_action.get("exact_confirmation_templates_available") is not True:
+            errors.append("dashboard next user action should point to available confirmation templates")
     route_adoption_gate = summary.get("route_adoption_gate", {})
     for flag in (
         "route_auto_selection_authorized",
@@ -569,6 +627,7 @@ def validate_dashboard(run_validations: bool = True) -> dict[str, Any]:
         "summary_passed": summary.get("passed"),
         "now": summary.get("queue", {}).get("now", {}),
         "route_selection": summary.get("route_selection", {}),
+        "next_user_action": summary.get("next_user_action", {}),
         "route_adoption_gate": summary.get("route_adoption_gate", {}),
         "last_completed": summary.get("last_completed", {}),
         "last_failure": summary.get("last_failure", {}),
@@ -610,6 +669,7 @@ def main() -> int:
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['queue']['now']['title']}")
             print(f"Route selection: {result['route_selection']['status']} options={result['route_selection']['option_count']}")
+            print(f"Next user action: {result['next_user_action']['status']}")
             print(f"Route adoption gate: {result['route_adoption_gate']['status']}")
             print(f"Last completed: {result['last_completed'].get('text')}")
             print(f"Last failure: {result['last_failure'].get('status')}")
@@ -625,6 +685,7 @@ def main() -> int:
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['now'].get('title')}")
             print(f"Route selection: {result['route_selection'].get('status')}")
+            print(f"Next user action: {result['next_user_action'].get('status')}")
             print(f"Route adoption gate: {result['route_adoption_gate'].get('status')}")
             print(f"Memory candidates: {result['memory_candidate_count']}")
             if result["errors"]:

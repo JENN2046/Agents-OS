@@ -64,6 +64,8 @@ dashboard_route_options_visibility_exists=true
 dashboard_route_options_visibility_validation=PASS
 dashboard_route_adoption_gate_readiness_exists=true
 dashboard_route_adoption_gate_readiness_validation=PASS
+dashboard_route_choice_handoff_exists=true
+dashboard_route_choice_handoff_validation=PASS
 migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
 colameta_executor_inventory_readiness_map_exists=true
@@ -174,6 +176,12 @@ The reviewed route adoption apply gate adds the explicit future write gate, but
 the current queue remains in stop-state with no selected route.
 The Dashboard route adoption gate readiness card makes that future gate visible
 without changing queue state.
+
+The Dashboard now also emits a `next_user_action` handoff during the stop-state.
+It points to Jenn as the decision owner, lists accepted route ids A-E, and
+points to the route-selection confirmation template source without printing the
+template body, selecting a route, mutating the queue, promoting an item, or
+authorizing execution.
 
 ## Queue Decision
 
@@ -300,6 +308,7 @@ mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector bounda
 provider_host_dispatcher_static_behavior_map_v0.1: closed for static provider registry and host dispatcher evidence map; provider calls, provider execution, host dispatcher execution, registry/config mutation, real spawn, service start, executor run, and external writes remain unauthorized
 root_private_history_review_gate_v0.1: closed for no-push root private-history pattern review; no history scrub indicated, but external publication still requires a separate target-specific external-write gate
 dashboard_route_adoption_gate_readiness_v0.1: closed for preview-only route adoption gate readiness visibility; active queue mutation, queue promotion, and execution remain unauthorized
+dashboard_route_choice_handoff_v0.1: closed for preview-only next_user_action handoff; Jenn remains the route decision owner, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

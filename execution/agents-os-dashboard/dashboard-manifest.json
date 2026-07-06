@@ -41,6 +41,7 @@
     "external_write",
     "active_queue_mutation",
     "route_auto_selection",
+    "route_decision_on_behalf_of_jenn",
     "queue_promotion",
     "route_adoption_without_explicit_apply_gate",
     "formal_memory_write",
