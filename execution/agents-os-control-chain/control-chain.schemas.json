@@ -66,5 +66,23 @@
       "blocked_reason",
       "errors"
     ]
+  },
+  "reviewed_queue_mutation": {
+    "required": [
+      "schema_version",
+      "mutation_id",
+      "source_proposal_id",
+      "source_review_status",
+      "preview_only",
+      "queue_mutation_authorized",
+      "active_queue_modified",
+      "write_performed",
+      "auto_promote_authorized",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "no_p3_auto_promote_guard",
+      "mutation",
+      "errors"
+    ]
   }
 }

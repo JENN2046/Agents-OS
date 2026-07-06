@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import tempfile
 from types import ModuleType
 
 
@@ -121,13 +122,92 @@ def main() -> int:
     check(proposal["proposal_only"] is True, "queue proposal should be proposal-only", failures)
     check(proposal["active_queue_modified"] is False, "queue proposal should not mutate queue", failures)
 
+    with tempfile.TemporaryDirectory(prefix="agents-os-control-chain-test-", dir=chain.WORKSPACE_ROOT) as temp_dir:
+        queue_path = Path(temp_dir) / "queue.md"
+        queue_path.write_text(
+            """# fixture queue
+
+## NOW
+
+### NOW-001: Completed task
+
+Done.
+
+## NEXT
+
+### NEXT-001: Safe next task
+
+Write local governance report.
+
+### NEXT-002: Later task
+
+Wait.
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        fixture_proposal = chain.queue_update_proposal(local_result, queue_path)
+        review = {
+            "schema_version": "agents-os.queue-manager.review.v0.1",
+            "source_proposal_id": fixture_proposal["proposal_id"],
+            "review_status": "accepted",
+            "reviewer": "Nobao",
+            "requires_jenn_decision": False,
+        }
+        mutation_preview = chain.reviewed_queue_mutation(fixture_proposal, review, queue_path)
+        check(mutation_preview["passed"], f"reviewed queue mutation preview should pass: {mutation_preview['errors']}", failures)
+        check(mutation_preview["preview_only"] is True, "reviewed mutation preview should be preview-only", failures)
+        check(mutation_preview["active_queue_modified"] is False, "reviewed mutation preview should not mutate queue", failures)
+        mutation_apply = chain.reviewed_queue_mutation(fixture_proposal, review, queue_path, apply=True)
+        check(mutation_apply["passed"], f"reviewed queue mutation apply should pass: {mutation_apply['errors']}", failures)
+        check(mutation_apply["active_queue_modified"] is True, "reviewed mutation apply should mutate fixture queue", failures)
+        check("### NOW-001: Safe next task" in queue_path.read_text(encoding="utf-8"), "reviewed mutation should promote safe NEXT", failures)
+
+        pending_review = dict(review, review_status="pending")
+        pending_mutation = chain.reviewed_queue_mutation(fixture_proposal, pending_review, queue_path)
+        check(pending_mutation["queue_mutation_authorized"] is False, "pending review should block mutation", failures)
+
+        p3_path = Path(temp_dir) / "p3-queue.md"
+        p3_path.write_text(
+            """# fixture queue
+
+## NOW
+
+### NOW-001: Completed task
+
+Done.
+
+## NEXT
+
+### NEXT-001: Call provider
+
+Call provider and start service.
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        p3_proposal = chain.queue_update_proposal(local_result, p3_path)
+        p3_review = dict(review, source_proposal_id=p3_proposal["proposal_id"])
+        p3_mutation = chain.reviewed_queue_mutation(p3_proposal, p3_review, p3_path)
+        check(p3_mutation["queue_mutation_authorized"] is False, "P3 NEXT target should block mutation", failures)
+
     validation = chain.validate_control_chain(run_colameta=False)
     check(validation["passed"], f"control chain validation without ColaMeta should pass: {validation['errors']}", failures)
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=11 failures={len(failures)}")
+        print(f"cases=14 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -135,7 +215,8 @@ def main() -> int:
     print("PASS local executor allowed/forbidden fixtures")
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
-    print("cases=11 failures=0")
+    print("PASS reviewed queue mutation fixture")
+    print("cases=14 failures=0")
     return 0
 
 

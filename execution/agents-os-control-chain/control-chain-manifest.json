@@ -12,7 +12,9 @@
     "track_selector_can_elevate": false,
     "colameta_real_execution_authorized": false,
     "provider_backed_execution_authorized": false,
-    "queue_mutation_default": "proposal_only"
+    "queue_mutation_default": "proposal_only",
+    "reviewed_queue_mutation_requires_accepted_nobao_review": true,
+    "auto_promote_authorized": false
   },
   "execution_authorization_scopes": [
     "none",

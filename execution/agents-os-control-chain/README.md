@@ -43,4 +43,5 @@ push/tag/deploy/publish
 ```
 
 Queue updates are produced as proposals first. Reviewed queue mutation and
-limited auto-promote remain later stages.
+limited auto-promote remain separate gates. The reviewed mutation gate requires
+an accepted Nobao review object and never authorizes auto-promote.

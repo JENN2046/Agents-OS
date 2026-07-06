@@ -32,14 +32,15 @@ Commander is the only authorization source.
 Track Selector cannot elevate.
 ColaMeta Track remains readiness/preview only.
 Local Executor only consumes local_safe_only.
-Queue Manager remains proposal-only.
+Queue Manager produces proposal-only output first, then reviewed mutation only
+when an accepted Nobao review object is supplied.
 Provider-backed execution is not in scope.
 ```
 
 ## Validation Summary
 
 ```text
-test-control-chain: PASS cases=11 failures=0
+test-control-chain: PASS cases=14 failures=0
 control_chain validate: PASS
 commander local task -> route_to_local_executor local_safe_only
 commander ColaMeta task -> route_to_colameta none
@@ -49,6 +50,10 @@ local executor run_validation_command -> PASS
 local executor provider_call -> blocked
 ColaMeta readiness -> PASS preview_only=true execution_performed=false provider_call_performed=false
 queue proposal -> proposal_only=true active_queue_modified=false
+reviewed queue mutation preview -> preview_only=true active_queue_modified=false
+reviewed queue mutation fixture apply -> active_queue_modified=true exactly_one_now_after=true
+pending review -> mutation blocked
+P3 NEXT target -> mutation blocked
 ```
 
 ## Files
@@ -75,5 +80,5 @@ ColaMeta readiness reused existing summary-only preflight and did not read
 
 ## Next
 
-Implement `Queue Manager Reviewed Mutation Gate v0.1` so reviewed proposals can
-be applied safely before any limited auto-promote exists.
+Implement failure handling / repair stop loop before any limited auto-promote
+exists.

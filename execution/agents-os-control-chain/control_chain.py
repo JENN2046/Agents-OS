@@ -20,6 +20,7 @@ import re
 import shlex
 import subprocess
 import sys
+import tempfile
 from typing import Any
 
 
@@ -92,6 +93,20 @@ LOCAL_PATTERNS = re.compile(
     r"\b(governance|document|registry|receipt|review|report|current_state|docctl|validation|local file|markdown)\b",
     re.I,
 )
+NEGATED_SIGNAL_CONTEXT = re.compile(
+    r"\b(no|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
+    re.I,
+)
+QUEUE_P3_PATTERNS = {
+    "provider_call": re.compile(r"\b(call|invoke|use|run)\s+(a\s+)?provider\b", re.I),
+    "service_start": re.compile(r"\b(start|launch|run)\s+(a\s+)?service\b", re.I),
+    "executor_run": re.compile(r"\b(run|start|launch)\s+(the\s+)?executor\b", re.I),
+    "external_write": re.compile(r"\b(write|post|send|upload|publish)\s+(to\s+)?(notion|github|email|mail|slack|discord|external)\b", re.I),
+    "memory_write": re.compile(r"\b(write|update|register)\s+(formal\s+)?memory\b", re.I),
+    "runtime_plugin_activation": re.compile(r"\bactivate\s+(plugin|runtime|vcptoolbox|colameta)\b", re.I),
+    "state_private": re.compile(r"\bstate-private/", re.I),
+    "auth_or_secret_config": re.compile(r"\b(auth|token|cookie|session|credential|secret|provider config|runtime config)\b", re.I),
+}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -696,6 +711,224 @@ def validate_queue_proposal(proposal: dict[str, Any]) -> list[str]:
     return errors
 
 
+def queue_lane_blocks(queue_text: str, lane: str) -> list[dict[str, str]]:
+    in_lane = False
+    blocks: list[dict[str, str]] = []
+    current: dict[str, Any] | None = None
+    for line in queue_text.splitlines():
+        if line.strip() == f"## {lane}":
+            in_lane = True
+            continue
+        if in_lane and line.startswith("## "):
+            if current:
+                current["body"] = "\n".join(current["body_lines"]).strip()
+                current.pop("body_lines", None)
+                blocks.append(current)  # type: ignore[arg-type]
+                current = None
+            break
+        if not in_lane:
+            continue
+        match = re.match(r"^###\s+([A-Z]+-\d{3}):\s+(.+?)\s*$", line)
+        if match:
+            if current:
+                current["body"] = "\n".join(current["body_lines"]).strip()
+                current.pop("body_lines", None)
+                blocks.append(current)  # type: ignore[arg-type]
+            current = {"id": match.group(1), "title": match.group(2), "body_lines": []}
+            continue
+        if current is not None:
+            current["body_lines"].append(line)
+    if in_lane and current:
+        current["body"] = "\n".join(current["body_lines"]).strip()
+        current.pop("body_lines", None)
+        blocks.append(current)  # type: ignore[arg-type]
+    return blocks
+
+
+def queue_p3_signals(text: str) -> list[str]:
+    scan_text = "\n".join(
+        line for line in text.splitlines() if not NEGATED_SIGNAL_CONTEXT.search(line)
+    )
+    return sorted(signal for signal, pattern in QUEUE_P3_PATTERNS.items() if pattern.search(scan_text))
+
+
+def validate_queue_review(review: dict[str, Any], proposal: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if review.get("schema_version") != "agents-os.queue-manager.review.v0.1":
+        errors.append("review schema_version is invalid")
+    if review.get("review_status") != "accepted":
+        errors.append("review_status must be accepted")
+    if review.get("reviewer") != "Nobao":
+        errors.append("reviewer must be Nobao")
+    if review.get("source_proposal_id") != proposal.get("proposal_id"):
+        errors.append("review source_proposal_id must match proposal_id")
+    if review.get("requires_jenn_decision") is True:
+        errors.append("review requiring Jenn cannot authorize queue mutation")
+    return errors
+
+
+def replace_lane_section(queue_text: str, lane: str, new_body: str) -> str:
+    lines = queue_text.splitlines()
+    start: int | None = None
+    end = len(lines)
+    for index, line in enumerate(lines):
+        if line.strip() == f"## {lane}":
+            start = index
+            continue
+        if start is not None and index > start and line.startswith("## "):
+            end = index
+            break
+    if start is None:
+        raise ValueError(f"queue lane not found: {lane}")
+    replacement = [f"## {lane}", "", *new_body.strip().splitlines(), ""]
+    return "\n".join(lines[:start] + replacement + lines[end:]).rstrip() + "\n"
+
+
+def append_closed_entry(queue_text: str, entry: str) -> str:
+    lines = queue_text.splitlines()
+    closed_start: int | None = None
+    for index, line in enumerate(lines):
+        if line.strip() == "## CLOSED":
+            closed_start = index
+            break
+    if closed_start is None:
+        return queue_text.rstrip() + f"\n\n## CLOSED\n\n```text\n{entry}\n```\n"
+    fence_indices = [
+        index
+        for index in range(closed_start + 1, len(lines))
+        if lines[index].strip().startswith("```")
+    ]
+    if len(fence_indices) >= 2:
+        insert_at = fence_indices[-1]
+        return "\n".join(lines[:insert_at] + [entry] + lines[insert_at:]).rstrip() + "\n"
+    return queue_text.rstrip() + f"\n{entry}\n"
+
+
+def mutate_queue_text(queue_text: str, proposal: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    now_blocks = queue_lane_blocks(queue_text, "NOW")
+    next_blocks = queue_lane_blocks(queue_text, "NEXT")
+    if len(now_blocks) != 1:
+        raise ValueError(f"expected exactly one NOW before mutation, got {len(now_blocks)}")
+    if not next_blocks:
+        raise ValueError("cannot promote NEXT because no NEXT item exists")
+    promoted = next_blocks[0]
+    old_now = now_blocks[0]
+    promoted_body = f"### NOW-001: {promoted['title']}\n\n{promoted.get('body', '').strip()}".strip()
+    remaining_next = []
+    for block in next_blocks[1:]:
+        remaining_next.append(f"### {block['id']}: {block['title']}\n\n{block.get('body', '').strip()}".strip())
+    next_body = "\n\n".join(remaining_next) if remaining_next else "_No active NEXT items._"
+    updated = replace_lane_section(queue_text, "NOW", promoted_body)
+    updated = replace_lane_section(updated, "NEXT", next_body)
+    closed_entry = (
+        "queue_manager_reviewed_mutation_v0.1: "
+        f"closed NOW \"{old_now['title']}\"; promoted \"{promoted['title']}\"; proposal={proposal.get('proposal_id')}"
+    )
+    updated = append_closed_entry(updated, closed_entry)
+    after_now = queue_lane_blocks(updated, "NOW")
+    return updated, {
+        "closed_now_title": old_now["title"],
+        "promoted_now_title": promoted["title"],
+        "exactly_one_now_after": len(after_now) == 1,
+        "closed_entry": closed_entry,
+    }
+
+
+def reviewed_queue_mutation(
+    proposal: dict[str, Any],
+    review: dict[str, Any],
+    queue_path: Path,
+    *,
+    apply: bool = False,
+) -> dict[str, Any]:
+    errors = validate_queue_proposal(proposal)
+    errors.extend(validate_queue_review(review, proposal))
+    if proposal.get("close_current_now") is not True:
+        errors.append("proposal does not close current NOW")
+    if proposal.get("promote_next_title") in (None, ""):
+        errors.append("proposal does not identify NEXT promotion target")
+    if proposal.get("requires_jenn_decision") is True:
+        errors.append("proposal requiring Jenn cannot mutate queue")
+    if is_protected_path(queue_path):
+        errors.append(f"queue path is protected: {queue_path}")
+
+    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    resolved, resolve_error = safe_resolve(candidate)
+    queue_text = ""
+    mutation: dict[str, Any] = {}
+    if resolve_error or resolved is None:
+        errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
+    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
+        errors.append(f"queue path is outside workspace: {queue_path}")
+    elif not resolved.exists() or not resolved.is_file():
+        errors.append(f"queue path is not a file: {rel(resolved)}")
+    else:
+        queue_text = resolved.read_text(encoding="utf-8")
+        now_blocks = queue_lane_blocks(queue_text, "NOW")
+        next_blocks = queue_lane_blocks(queue_text, "NEXT")
+        if len(now_blocks) != 1:
+            errors.append(f"expected exactly one NOW before mutation, got {len(now_blocks)}")
+        if not next_blocks:
+            errors.append("no NEXT item available to promote")
+        else:
+            target_text = f"{next_blocks[0].get('title', '')}\n{next_blocks[0].get('body', '')}"
+            signals = queue_p3_signals(target_text)
+            if signals:
+                errors.append(f"NEXT promotion target contains P3 signals: {','.join(signals)}")
+            if proposal.get("promote_next_title") != next_blocks[0].get("title"):
+                errors.append("proposal promote_next_title does not match first NEXT item")
+        if not errors:
+            try:
+                updated_text, mutation = mutate_queue_text(queue_text, proposal)
+                mutation["exactly_one_now_before"] = len(now_blocks) == 1
+                mutation["queue_path"] = rel(resolved)
+                if apply:
+                    resolved.write_text(updated_text, encoding="utf-8")
+            except ValueError as exc:
+                errors.append(str(exc))
+
+    result = {
+        "schema_version": "agents-os.queue-manager.reviewed-mutation.v0.1",
+        "mutation_id": stable_id("QUEUEMUTATION", [proposal.get("proposal_id"), review.get("review_status"), apply]),
+        "source_proposal_id": proposal.get("proposal_id"),
+        "source_review_status": review.get("review_status"),
+        "preview_only": not apply,
+        "queue_mutation_authorized": not errors,
+        "active_queue_modified": bool(apply and not errors),
+        "write_performed": bool(apply and not errors),
+        "auto_promote_authorized": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": False,
+        "no_p3_auto_promote_guard": not errors,
+        "mutation": mutation,
+        "errors": errors,
+    }
+    result_errors = validate_reviewed_queue_mutation(result)
+    result["passed"] = not result_errors
+    result["errors"] = sorted(set(result["errors"] + result_errors))
+    return result
+
+
+def validate_reviewed_queue_mutation(result: dict[str, Any]) -> list[str]:
+    errors = [
+        f"missing required field: {field}"
+        for field in schema_required("reviewed_queue_mutation")
+        if field not in result
+    ]
+    if result.get("auto_promote_authorized") is not False:
+        errors.append("reviewed mutation gate must not authorize auto-promote")
+    if result.get("requires_nobao_review") is not True:
+        errors.append("reviewed mutation gate must require Nobao review")
+    if result.get("preview_only") is True and result.get("active_queue_modified") is not False:
+        errors.append("preview mutation must not modify active queue")
+    if result.get("write_performed") is True and result.get("active_queue_modified") is not True:
+        errors.append("write_performed requires active_queue_modified")
+    mutation = result.get("mutation", {})
+    if result.get("queue_mutation_authorized") is True and mutation.get("exactly_one_now_after") is not True:
+        errors.append("authorized mutation must preserve exactly one NOW")
+    return errors
+
+
 def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     errors: list[str] = []
     local_candidate = {
@@ -763,6 +996,95 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     proposal = queue_update_proposal(local_result)
     if proposal.get("active_queue_modified") is not False or proposal.get("proposal_only") is not True:
         errors.append("queue proposal mutated queue")
+    reviewed_preview: dict[str, Any] | None = None
+    reviewed_apply: dict[str, Any] | None = None
+    with tempfile.TemporaryDirectory(prefix="agents-os-queue-gate-", dir=WORKSPACE_ROOT) as temp_dir:
+        queue_fixture = Path(temp_dir) / "queue.md"
+        queue_fixture.write_text(
+            """# fixture queue
+
+## NOW
+
+### NOW-001: Completed task
+
+Done.
+
+## NEXT
+
+### NEXT-001: Safe next task
+
+Write local governance report.
+
+### NEXT-002: Later task
+
+Wait.
+
+## LATER
+
+## BLOCKED
+
+```text
+provider_calls: blocked
+```
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        fixture_proposal = queue_update_proposal(local_result, queue_fixture)
+        review = {
+            "schema_version": "agents-os.queue-manager.review.v0.1",
+            "source_proposal_id": fixture_proposal.get("proposal_id"),
+            "review_status": "accepted",
+            "reviewer": "Nobao",
+            "requires_jenn_decision": False,
+        }
+        reviewed_preview = reviewed_queue_mutation(fixture_proposal, review, queue_fixture)
+        reviewed_apply = reviewed_queue_mutation(fixture_proposal, review, queue_fixture, apply=True)
+        mutated_text = queue_fixture.read_text(encoding="utf-8")
+        if reviewed_preview.get("active_queue_modified") is not False or reviewed_preview.get("preview_only") is not True:
+            errors.append("reviewed queue mutation preview modified queue")
+        if reviewed_apply.get("active_queue_modified") is not True or reviewed_apply.get("write_performed") is not True:
+            errors.append("reviewed queue mutation apply did not mutate fixture queue")
+        if "### NOW-001: Safe next task" not in mutated_text:
+            errors.append("reviewed queue mutation did not promote safe NEXT in fixture")
+        rejected_review = dict(review, review_status="pending")
+        rejected = reviewed_queue_mutation(fixture_proposal, rejected_review, queue_fixture)
+        if rejected.get("queue_mutation_authorized") is not False:
+            errors.append("pending review authorized queue mutation")
+        p3_queue = Path(temp_dir) / "p3-queue.md"
+        p3_queue.write_text(
+            """# fixture queue
+
+## NOW
+
+### NOW-001: Completed task
+
+Done.
+
+## NEXT
+
+### NEXT-001: Call provider
+
+Call provider and start service.
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        p3_proposal = queue_update_proposal(local_result, p3_queue)
+        p3_review = dict(review, source_proposal_id=p3_proposal.get("proposal_id"))
+        p3_mutation = reviewed_queue_mutation(p3_proposal, p3_review, p3_queue)
+        if p3_mutation.get("queue_mutation_authorized") is not False:
+            errors.append("P3 NEXT target authorized queue mutation")
 
     colameta_result: dict[str, Any] | None = None
     if run_colameta:
@@ -791,6 +1113,8 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
         "queue_manager": {
             "proposal_only": proposal.get("proposal_only"),
             "active_queue_modified": proposal.get("active_queue_modified"),
+            "reviewed_preview_passed": reviewed_preview.get("passed") if reviewed_preview else None,
+            "reviewed_apply_fixture_modified": reviewed_apply.get("active_queue_modified") if reviewed_apply else None,
         },
         "colameta": {
             "checked": run_colameta,
@@ -832,6 +1156,13 @@ def main() -> int:
     queue_parser = subparsers.add_parser("queue-proposal")
     queue_parser.add_argument("--track-result-json", required=True)
     queue_parser.add_argument("--json", action="store_true")
+
+    reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
+    reviewed_queue_parser.add_argument("--proposal-json", required=True)
+    reviewed_queue_parser.add_argument("--review-json", required=True)
+    reviewed_queue_parser.add_argument("--queue", required=True)
+    reviewed_queue_parser.add_argument("--apply", action="store_true")
+    reviewed_queue_parser.add_argument("--json", action="store_true")
 
     validate_parser = subparsers.add_parser("validate")
     validate_parser.add_argument("--json", action="store_true")
@@ -884,6 +1215,23 @@ def main() -> int:
             print_json(result)
         else:
             print(f"Queue proposal: proposal_only={result['proposal_only']} close_now={result['close_current_now']}")
+        return 0 if result["passed"] else 1
+
+    if args.command == "queue-reviewed-mutation":
+        result = reviewed_queue_mutation(
+            load_json(Path(args.proposal_json)),
+            load_json(Path(args.review_json)),
+            Path(args.queue),
+            apply=args.apply,
+        )
+        if args.json:
+            print_json(result)
+        else:
+            print(
+                "Reviewed queue mutation: "
+                f"authorized={result['queue_mutation_authorized']} "
+                f"modified={result['active_queue_modified']}"
+            )
         return 0 if result["passed"] else 1
 
     if args.command == "validate":
