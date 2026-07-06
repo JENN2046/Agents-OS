@@ -50,6 +50,8 @@ control_chain_exists=true
 control_chain_validation=PASS
 control_chain_route_choice_queue_proposal_exists=true
 control_chain_route_choice_queue_proposal_validation=PASS
+control_chain_route_choice_handoff_reconciliation_exists=true
+control_chain_route_choice_handoff_reconciliation_validation=PASS
 control_chain_reviewed_route_adoption_preview_exists=true
 control_chain_reviewed_route_adoption_preview_validation=PASS
 control_chain_reviewed_route_adoption_apply_gate_exists=true
@@ -126,6 +128,11 @@ The Control Chain can now create a preview-only `NEXT` queue proposal from a
 Task Producer route-choice preview. This produces review material only; it does
 not write route state, mutate the Active Work Queue, promote to NOW, or
 authorize execution.
+
+The Control Chain can now reconcile the Machine and Dashboard route-choice
+handoffs. It verifies both outputs agree on `route_choice_required`, Jenn as the
+decision owner, accepted route ids A-E, and no route auto-selection, active
+queue mutation, queue promotion, execution, write, or raw content output.
 
 The Control Chain can also inspect an accepted Nobao review and produce a
 reviewed route adoption preview. It can show the future `NEXT` append, while
@@ -301,6 +308,7 @@ task_producer_route_option_intake_v0.1: closed for candidate-only route option i
 task_producer_route_choice_preview_v0.1: closed for preview-only explicit route-choice intake; route state, queue write, queue promotion, and execution remain unauthorized
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 control_chain_route_choice_queue_proposal_v0.1: closed for preview-only route-choice queue proposal; route adoption, queue write, queue promotion, and execution remain unauthorized
+control_chain_route_choice_handoff_reconciliation_v0.1: closed for preview-only Machine/Dashboard route-choice handoff reconciliation; Jenn remains the route decision owner, route auto-selection, active queue mutation, queue promotion, and execution remain unauthorized
 control_chain_reviewed_route_adoption_preview_v0.1: closed for reviewed route adoption preview; active queue write, route adoption, queue promotion, and execution remain unauthorized
 control_chain_reviewed_route_adoption_apply_gate_v0.1: closed for explicit reviewed route adoption apply gate; no real route selected or adopted, queue promotion and execution remain unauthorized
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized

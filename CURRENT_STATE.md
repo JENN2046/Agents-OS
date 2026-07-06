@@ -43,6 +43,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Control Chain now treats Task Producer route-option candidates as `stop_needs_jenn_decision`, keeps `execution_authorization_scope=blocked_requires_jenn`, and prevents Track Selector authorization.
 - Control Chain Route Choice Queue Proposal v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md`.
 - The Control Chain can convert Task Producer route-choice preview JSON into a preview-only `NEXT` queue proposal while keeping `route_adoption_authorized=false`, `active_queue_modified=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
+- Control Chain Route Choice Handoff Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-handoff-reconciliation-v0.1.md`.
+- The Control Chain can reconcile Machine and Dashboard `next_user_action` outputs and confirms both agree on `route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and no route auto-selection, active queue mutation, queue promotion, execution, write, or raw content output.
 - Control Chain Reviewed Route Adoption Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md`.
 - The Control Chain can inspect an accepted Nobao review and produce a preview of appending the selected route to `NEXT` while keeping `active_queue_modified=false`, `write_performed=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - Control Chain Reviewed Route Adoption Apply Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-apply-gate-v0.1.md`.
@@ -188,6 +190,9 @@ cannot be routed to ColaMeta, local executor, queue promotion, or execution.
 The Control Chain route-choice queue proposal gate can produce a reviewable
 `NEXT` proposal from a route-choice preview, but it does not write route state,
 mutate the Active Work Queue, promote the route, or authorize execution.
+The Control Chain route-choice handoff reconciliation now checks that Machine
+and Dashboard agree on Jenn-owned route choice A-E before any route adoption
+path is considered.
 The reviewed route adoption preview now closes the local preview chain from
 future Jenn route-choice text through accepted review to a non-writing `NEXT`
 append preview. It still does not mutate the Active Work Queue or adopt the

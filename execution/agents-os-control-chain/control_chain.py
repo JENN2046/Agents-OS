@@ -38,6 +38,8 @@ DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "202
 COLAMETA_PREFLIGHT = REGISTRY_DIR / "colameta-executor-preflight.py"
 DOCCTL = REGISTRY_DIR / "docctl.py"
 TASK_PRODUCER = WORKSPACE_ROOT / "execution" / "agents-os-task-producer" / "producer.py"
+MACHINE = WORKSPACE_ROOT / "execution" / "agents-os-machine" / "machine.py"
+DASHBOARD = WORKSPACE_ROOT / "execution" / "agents-os-dashboard" / "dashboard.py"
 
 DECISIONS = (
     "route_to_colameta",
@@ -112,6 +114,14 @@ ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES = sorted(
             "route_execution",
         ]
     )
+)
+NEXT_USER_ACTION_FALSE_FLAGS = (
+    "route_auto_selection_authorized",
+    "active_queue_mutation_authorized",
+    "queue_promotion_authorized",
+    "execution_authorized",
+    "write_performed",
+    "raw_content_output",
 )
 REPAIR_POLICY = {
     "validation_failed": {"repair_attempt_allowed": True, "max_repair_attempts": 1},
@@ -460,6 +470,141 @@ def import_module(path: Path, module_name: str) -> Any:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def next_user_action_summary(action: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "status": action.get("status"),
+        "decision_owner": action.get("decision_owner"),
+        "requires_jenn_decision": action.get("requires_jenn_decision"),
+        "accepted_route_ids": action.get("accepted_route_ids", []),
+        "template_source_path": action.get("template_source_path"),
+        "exact_confirmation_templates_available": action.get("exact_confirmation_templates_available"),
+        "route_auto_selection_authorized": action.get("route_auto_selection_authorized"),
+        "active_queue_mutation_authorized": action.get("active_queue_mutation_authorized"),
+        "queue_promotion_authorized": action.get("queue_promotion_authorized"),
+        "execution_authorized": action.get("execution_authorized"),
+        "write_performed": action.get("write_performed"),
+        "raw_content_output": action.get("raw_content_output"),
+    }
+
+
+def validate_next_user_action(prefix: str, action: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    for flag in NEXT_USER_ACTION_FALSE_FLAGS:
+        if action.get(flag) is not False:
+            errors.append(f"{prefix} next_user_action must keep {flag}=false")
+    if action.get("status") == "route_choice_required":
+        if action.get("decision_owner") != "Jenn":
+            errors.append(f"{prefix} next_user_action decision_owner must be Jenn")
+        if action.get("requires_jenn_decision") is not True:
+            errors.append(f"{prefix} next_user_action must require Jenn decision")
+        if not action.get("accepted_route_ids"):
+            errors.append(f"{prefix} next_user_action must include accepted route ids")
+        if action.get("exact_confirmation_templates_available") is not True:
+            errors.append(f"{prefix} next_user_action must point to available confirmation templates")
+    return errors
+
+
+def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
+    errors: list[str] = []
+    source_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    machine_preview: dict[str, Any] = {}
+    dashboard_summary: dict[str, Any] = {}
+
+    try:
+        machine = import_module(MACHINE, "agents_os_machine_for_control_chain")
+        normalized = machine.load_queue(source_queue)
+        if normalized.get("passed") is not True:
+            errors.extend(f"machine queue: {error}" for error in normalized.get("parse_errors", []))
+        else:
+            machine_preview = machine.build_preview(machine.now_item(normalized))
+            errors.extend(f"machine preview: {error}" for error in machine.validate_preview(machine_preview))
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"Machine handoff read failed: {exc}")
+
+    try:
+        dashboard = import_module(DASHBOARD, "agents_os_dashboard_for_control_chain")
+        dashboard_summary = dashboard.build_dashboard_summary(source_queue, run_validations=False)
+        if dashboard_summary.get("passed") is not True:
+            errors.extend(f"dashboard summary: {error}" for error in dashboard_summary.get("errors", []))
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"Dashboard handoff read failed: {exc}")
+
+    machine_action = machine_preview.get("next_user_action", {}) if machine_preview else {}
+    dashboard_action = dashboard_summary.get("next_user_action", {}) if dashboard_summary else {}
+    errors.extend(validate_next_user_action("machine", machine_action))
+    errors.extend(validate_next_user_action("dashboard", dashboard_action))
+
+    comparable_fields = (
+        "status",
+        "decision_owner",
+        "requires_jenn_decision",
+        "accepted_route_ids",
+        "template_source_path",
+        "exact_confirmation_templates_available",
+    )
+    for field in comparable_fields:
+        if machine_action.get(field) != dashboard_action.get(field):
+            errors.append(f"Machine/Dashboard next_user_action mismatch: {field}")
+
+    route_choice_required = (
+        machine_action.get("status") == "route_choice_required"
+        and dashboard_action.get("status") == "route_choice_required"
+    )
+    result = {
+        "schema_version": "agents-os.control-chain.route-choice-handoff-reconciliation.v0.1",
+        "preview_only": True,
+        "read_only": True,
+        "source_queue_path": rel(source_queue),
+        "machine_source_item": machine_preview.get("source_item", {}),
+        "machine_next_user_action": next_user_action_summary(machine_action),
+        "dashboard_next_user_action": next_user_action_summary(dashboard_action),
+        "aligned": not errors,
+        "route_choice_required": route_choice_required,
+        "decision_owner": "Jenn" if route_choice_required and not errors else None,
+        "accepted_route_ids": machine_action.get("accepted_route_ids", []) if route_choice_required else [],
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+        "errors": errors,
+    }
+    result_errors = validate_route_choice_handoff_reconciliation(result)
+    result["passed"] = not result_errors
+    result["errors"] = sorted(set(result["errors"] + result_errors))
+    result["aligned"] = not result["errors"]
+    return result
+
+
+def validate_route_choice_handoff_reconciliation(result: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if result.get("schema_version") != "agents-os.control-chain.route-choice-handoff-reconciliation.v0.1":
+        errors.append("route choice handoff reconciliation schema_version is invalid")
+    if result.get("preview_only") is not True:
+        errors.append("route choice handoff reconciliation must be preview_only")
+    if result.get("read_only") is not True:
+        errors.append("route choice handoff reconciliation must be read_only")
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+        "raw_content_output",
+    ):
+        if result.get(flag) is not False:
+            errors.append(f"route choice handoff reconciliation must keep {flag}=false")
+    if result.get("route_choice_required") is True:
+        if result.get("decision_owner") != "Jenn":
+            errors.append("route choice handoff reconciliation decision owner must be Jenn")
+        if result.get("aligned") is not True:
+            errors.append("route choice handoff reconciliation must be aligned")
+        if result.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
+            errors.append("route choice handoff reconciliation accepted route ids must be A-E")
+    return errors
 
 
 def metadata_for_json(path: Path, list_keys: tuple[str, ...]) -> dict[str, Any]:
@@ -1663,6 +1808,24 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_choice_preview_payload: dict[str, Any] | None = None
     route_choice_proposal: dict[str, Any] | None = None
     route_adoption_preview: dict[str, Any] | None = None
+    route_handoff_reconciliation = route_choice_handoff_reconciliation(DEFAULT_QUEUE)
+    if route_handoff_reconciliation.get("passed") is not True:
+        errors.append("route choice handoff reconciliation did not pass")
+    if route_handoff_reconciliation.get("aligned") is not True:
+        errors.append("route choice handoff reconciliation is not aligned")
+    if route_handoff_reconciliation.get("route_choice_required") is not True:
+        errors.append("route choice handoff reconciliation did not detect route choice requirement")
+    if route_handoff_reconciliation.get("decision_owner") != "Jenn":
+        errors.append("route choice handoff reconciliation did not preserve Jenn decision owner")
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+    ):
+        if route_handoff_reconciliation.get(flag) is not False:
+            errors.append(f"route choice handoff reconciliation authorized {flag}")
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
@@ -1962,6 +2125,16 @@ old_task: closed
             "execution_authorized": route_option_decision.get("execution_authorized") if route_option_decision else None,
             "track_authorized": route_option_preview.get("track_authorized") if route_option_preview else None,
         },
+        "route_choice_handoff": {
+            "passed": route_handoff_reconciliation.get("passed"),
+            "aligned": route_handoff_reconciliation.get("aligned"),
+            "route_choice_required": route_handoff_reconciliation.get("route_choice_required"),
+            "decision_owner": route_handoff_reconciliation.get("decision_owner"),
+            "accepted_route_ids": route_handoff_reconciliation.get("accepted_route_ids"),
+            "active_queue_mutation_authorized": route_handoff_reconciliation.get("active_queue_mutation_authorized"),
+            "queue_promotion_authorized": route_handoff_reconciliation.get("queue_promotion_authorized"),
+            "execution_authorized": route_handoff_reconciliation.get("execution_authorized"),
+        },
         "local_executor": {
             "validation_passed": local_result.get("validation_passed"),
             "forbidden_blocked": forbidden_result.get("validation_passed") is False,
@@ -2063,6 +2236,10 @@ def main() -> int:
     route_adoption_apply_parser.add_argument("--queue", required=True)
     route_adoption_apply_parser.add_argument("--apply", action="store_true")
     route_adoption_apply_parser.add_argument("--json", action="store_true")
+
+    handoff_parser = subparsers.add_parser("route-choice-handoff-reconciliation")
+    handoff_parser.add_argument("--queue", default=str(DEFAULT_QUEUE))
+    handoff_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -2181,6 +2358,18 @@ def main() -> int:
                 f"modified={result['active_queue_modified']} "
                 f"appended={mutation.get('appended_next_title')}"
             )
+        return 0 if result["passed"] else 1
+
+    if args.command == "route-choice-handoff-reconciliation":
+        result = route_choice_handoff_reconciliation(Path(args.queue))
+        if args.json:
+            print_json(result)
+        else:
+            print("AGENTS OS route choice handoff reconciliation")
+            print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+            print(f"Aligned: {result['aligned']}")
+            print(f"Route choice required: {result['route_choice_required']}")
+            print(f"Decision owner: {result['decision_owner']}")
         return 0 if result["passed"] else 1
 
     if args.command == "queue-reviewed-mutation":

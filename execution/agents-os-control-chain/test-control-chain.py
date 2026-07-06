@@ -110,6 +110,16 @@ def main() -> int:
     check("route_selection_required" in route_decision["blocked_capabilities"], "route option should block route selection", failures)
     check("route_auto_selection" in route_decision["blocked_capabilities"], "route option should block route auto-selection", failures)
 
+    route_handoff = chain.route_choice_handoff_reconciliation()
+    check(route_handoff["passed"] is True, f"route choice handoff reconciliation should pass: {route_handoff['errors']}", failures)
+    check(route_handoff["aligned"] is True, "route choice handoff should align Machine and Dashboard", failures)
+    check(route_handoff["route_choice_required"] is True, "route choice handoff should require route choice", failures)
+    check(route_handoff["decision_owner"] == "Jenn", "route choice handoff decision owner should be Jenn", failures)
+    check(route_handoff["accepted_route_ids"] == ["A", "B", "C", "D", "E"], "route choice handoff should carry route ids A-E", failures)
+    check(route_handoff["active_queue_mutation_authorized"] is False, "route choice handoff must not authorize active queue mutation", failures)
+    check(route_handoff["queue_promotion_authorized"] is False, "route choice handoff must not authorize queue promotion", failures)
+    check(route_handoff["execution_authorized"] is False, "route choice handoff must not authorize execution", failures)
+
     invalid_decision = chain.build_commander_decision(invalid)
     check(invalid_decision["decision"] == "reject_as_out_of_scope", "invalid candidate should be rejected", failures)
 
@@ -392,11 +402,13 @@ old_task: closed
 
     validation = chain.validate_control_chain(run_colameta=False)
     check(validation["passed"], f"control chain validation without ColaMeta should pass: {validation['errors']}", failures)
+    check(validation["route_choice_handoff"]["aligned"] is True, "validation should report aligned route handoff", failures)
+    check(validation["route_choice_handoff"]["decision_owner"] == "Jenn", "validation should preserve Jenn as route owner", failures)
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=25 failures={len(failures)}")
+        print(f"cases=26 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -405,12 +417,13 @@ old_task: closed
     print("PASS failure handling stop-loop fixtures")
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
+    print("PASS route choice handoff reconciliation fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=25 failures=0")
+    print("cases=26 failures=0")
     return 0
 
 
