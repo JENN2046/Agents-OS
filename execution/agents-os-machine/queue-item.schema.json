@@ -1,0 +1,56 @@
+{
+  "schema_version": "agents-os.machine.queue-item.schema.v0.1",
+  "description": "Minimal schema for normalized queue items parsed from Active Work Queue Markdown.",
+  "type": "object",
+  "required": [
+    "id",
+    "lane",
+    "title",
+    "body",
+    "authorization",
+    "review_gate"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]+-[0-9]{3}$"
+    },
+    "lane": {
+      "type": "string",
+      "enum": [
+        "NOW",
+        "NEXT",
+        "LATER",
+        "BLOCKED",
+        "CLOSED"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "body": {
+      "type": "string"
+    },
+    "authorization": {
+      "type": "object",
+      "required_false": [
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized"
+      ]
+    },
+    "review_gate": {
+      "type": "object",
+      "required": [
+        "machine_generated",
+        "requires_nobao_review",
+        "review_status",
+        "execution_authorized"
+      ]
+    }
+  }
+}
