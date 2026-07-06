@@ -52,6 +52,8 @@ dashboard_memory_candidate_layer_exists=true
 dashboard_memory_candidate_layer_validation=PASS
 migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
+colameta_executor_inventory_readiness_map_exists=true
+colameta_executor_inventory_readiness_map_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -69,15 +71,16 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is ColaMeta executor readiness reconciliation. The
+The current blocker is MCP gateway and connector boundary definition. The
 workspace now has a preview-only Machine Skeleton, preview-only Task Producer
 Skeleton, Commander-first Control Chain, reviewed queue mutation gate, failure
-handling stop loop, dashboard / Memory candidate layer, and a safe
-`ops/migration/` distillation into surviving work.
+handling stop loop, dashboard / Memory candidate layer, a safe `ops/migration/`
+distillation, and a ColaMeta executor inventory/readiness map.
 
-ColaMeta runner files exist, but the local executor/runner inventory,
-entrypoints, readiness blockers, and prior dry-run/preflight evidence have not
-yet been normalized into one current control-plane map.
+ColaMeta local readiness is clean for summary-only preview, but real executor,
+service startup, provider calls, Memory writes, and applying runtime preview
+payloads remain blocked. Before provider/host dispatcher work, the MCP gateway
+and connector boundary must be made explicit.
 
 ## Queue Decision
 
@@ -85,25 +88,25 @@ Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
 paused. External Git publication is blocked. Provider and plugin activation are
-blocked. Historical migration phases do not carry forward runtime/provider/
+blocked. ColaMeta readiness evidence does not carry forward runtime/provider/
 executor authorization.
 
 ## NOW
 
-### NOW-001: ColaMeta Executor Inventory And Readiness Map
+### NOW-001: MCP Gateway And Connector Boundary Plan
 
-Goal: confirm the current local ColaMeta executor/runner inventory, entrypoints,
-readiness blockers, and existing dry-run/preflight evidence as one reviewable
-control-plane map.
+Goal: define the local MCP gateway and connector boundary for AGENTS OS before
+any provider/host dispatcher mapping or connector-dependent execution.
 
 Required output:
 
 ```text
-colameta_executor_inventory_summary
-runner_entrypoint_map
-readiness_blocker_list
-prior_preflight_and_dry_run_evidence_map
-no_service_start_no_executor_guard
+mcp_gateway_boundary_summary
+connector_auth_boundary
+allowed_readonly_connector_checks
+blocked_connector_operations
+provider_call_separation
+future_gate_sequence
 receipt_review_pattern
 ```
 
@@ -121,23 +124,23 @@ runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
 bulk_move_delete_rename_authorized=false
 private_state_read_authorized=false
-colameta_plan_write_authorized=false
-colameta_state_write_authorized=false
-colameta_memory_content_write_authorized=false
+connector_auth_write_authorized=false
+provider_call_authorized=false
+mcp_service_start_authorized=false
+connector_external_write_authorized=false
 ```
 
 Acceptance:
 
 ```text
-read only local ColaMeta metadata and current governance evidence
-do not read .colameta/memory.md content
-do not modify .colameta/plan.json or .colameta/state.json
-map runner/executor entrypoints without starting service or executor
-map prior preflight/dry-run evidence without replaying execution
-produce a current readiness blocker list
-do not read private state
-do not start runtime/provider/executor work
+read only current governance evidence and connector boundary docs/code references
+do not inspect or modify auth/token/cookie/session files
+do not start MCP or ColaMeta services
+do not perform connector calls that require live auth
 do not perform provider calls
+separate connector metadata checks from provider-backed execution
+produce a future gate sequence before provider/host dispatcher work
+do not read private state
 docctl status remains PASS
 docctl doctor remains PASS
 ```
@@ -145,7 +148,6 @@ docctl doctor remains PASS
 ## NEXT
 
 ```text
-MCP Gateway And Connector Boundary Plan
 Provider / Host Dispatcher Static Behavior Map
 ```
 
@@ -192,6 +194,7 @@ queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation g
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
 dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized
 migration_plan_distillation_v0.1: closed for safe summary of historical migration material; no historical runtime/provider/executor permission carried forward
+colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local executor inventory and readiness map; real executor, service start, provider calls, Memory writes, and runtime preview apply remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -228,10 +231,10 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible ColaMeta
-executor inventory/readiness map from `NOW-001`.
+The next construction batch should implement the smallest possible MCP gateway
+and connector boundary plan from `NOW-001`.
 
-Do not start ColaMeta service, run a real executor, call providers, touch
-auth/provider/runtime configuration, modify `.colameta/plan.json` or
-`.colameta/state.json`, write `.colameta/memory.md`, read private state, or
-activate VCPToolBox/runtime/plugin work.
+Do not start MCP or ColaMeta services, call providers, mutate connector auth,
+read auth/token/cookie/session state, run a real executor, modify
+`.colameta/plan.json` or `.colameta/state.json`, write `.colameta/memory.md`,
+read private state, or activate VCPToolBox/runtime/plugin work.

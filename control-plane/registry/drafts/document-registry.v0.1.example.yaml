@@ -10575,3 +10575,162 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-colameta-executor-inventory-readiness-map-v0.1
+    title: AGENTS OS ColaMeta Executor Inventory And Readiness Map v0.1
+    doc_type: review
+    status: accepted
+    scope: summary-only local inventory and readiness map for the current ColaMeta executor runner surface
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/colameta-executor-preflight.py
+      - execution/agents-os-control-chain/control_chain.py
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - ColaMeta executor readiness changes
+        - ColaMeta preflight boundary changes
+        - runtime preview payload handling changes
+        - queue priority changes
+    security_boundary:
+      - local summary report only
+      - no .colameta/memory.md content read
+      - no .colameta/plan.json modification
+      - no .colameta/state.json modification
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private raw memory
+      - no provider raw response
+      - no raw log content
+      - no service startup
+      - no executor run
+      - no provider call
+      - no runtime preview apply
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-colameta-executor-inventory-readiness-map-v0.1-receipt
+    title: AGENTS OS ColaMeta Executor Inventory And Readiness Map v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for ColaMeta executor inventory and readiness map
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - safety boundary changes
+    security_boundary:
+      - local receipt only
+      - no .colameta/memory.md content read
+      - no .colameta/plan.json modification
+      - no .colameta/state.json modification
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private raw memory
+      - no provider raw response
+      - no raw log content
+      - no service startup
+      - no executor run
+      - no provider call
+      - no runtime preview apply
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-colameta-executor-inventory-readiness-map-v0.1-review
+    title: AGENTS OS ColaMeta Executor Inventory And Readiness Map v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for ColaMeta executor inventory and readiness map
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-colameta-executor-inventory-readiness-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - queue acceptance criteria changes
+    security_boundary:
+      - local review only
+      - no .colameta/memory.md content read
+      - no .colameta/plan.json modification
+      - no .colameta/state.json modification
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private raw memory
+      - no provider raw response
+      - no raw log content
+      - no service startup
+      - no executor run
+      - no provider call
+      - no runtime preview apply
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-colameta-executor-preflight.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
