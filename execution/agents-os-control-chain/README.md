@@ -19,6 +19,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chai
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-preview --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-apply-gate --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue /path/to/queue.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-handoff-reconciliation --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-template-readiness --json
 ```
 
 ## Authority Model
@@ -35,6 +36,8 @@ Reviewed route adoption preview can inspect an accepted review but cannot write.
 Reviewed route adoption apply gate can append to NEXT only with explicit --apply.
 Route-choice handoff reconciliation verifies that Machine and Dashboard agree
 on Jenn-owned route choice without selecting or adopting a route.
+Route-choice template readiness verifies Task Producer template coverage without
+outputting raw templates, selecting a route, or mutating the queue.
 Failure handling stops for review and never silently retries.
 ```
 

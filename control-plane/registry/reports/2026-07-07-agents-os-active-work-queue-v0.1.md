@@ -54,6 +54,8 @@ control_chain_route_choice_queue_proposal_exists=true
 control_chain_route_choice_queue_proposal_validation=PASS
 control_chain_route_choice_handoff_reconciliation_exists=true
 control_chain_route_choice_handoff_reconciliation_validation=PASS
+control_chain_route_choice_template_readiness_exists=true
+control_chain_route_choice_template_readiness_validation=PASS
 control_chain_reviewed_route_adoption_preview_exists=true
 control_chain_reviewed_route_adoption_preview_validation=PASS
 control_chain_reviewed_route_adoption_apply_gate_exists=true
@@ -142,6 +144,12 @@ The Control Chain can now reconcile the Machine and Dashboard route-choice
 handoffs. It verifies both outputs agree on `route_choice_required`, Jenn as the
 decision owner, accepted route ids A-E, and no route auto-selection, active
 queue mutation, queue promotion, execution, write, or raw content output.
+
+The Control Chain now also verifies Task Producer route-choice template
+coverage before the route-choice handoff is considered ready. It checks A-E
+coverage, confirms Template E's placeholder remains blocked, proves a concrete
+option E fixture can parse, and keeps raw template output, route state, queue
+mutation, queue promotion, route auto-selection, and execution false.
 
 The Control Chain can also inspect an accepted Nobao review and produce a
 reviewed route adoption preview. It can show the future `NEXT` append, while
@@ -339,6 +347,7 @@ dashboard_route_choice_handoff_v0.1: closed for preview-only next_user_action ha
 machine_next_user_action_handoff_v0.1: closed for preview-only machine next_user_action handoff; Jenn remains the route decision owner, route auto-selection, active queue mutation, queue promotion, and execution remain unauthorized
 active_work_queue_closed_order_reconciliation_v0.1: closed for aligning Dashboard last_completed with the Active Work Queue CLOSED tail; route selection, active queue promotion, runtime/provider execution, Memory write, and external write remain unauthorized
 task_producer_route_choice_template_coverage_v0.1: closed for preview-only route-choice template coverage; raw template output, route state write, active queue mutation, queue promotion, and execution remain unauthorized
+control_chain_route_choice_template_readiness_v0.1: closed for preview-only Control Chain route-choice template readiness; raw template output, route selection, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

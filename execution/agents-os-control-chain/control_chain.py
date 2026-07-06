@@ -35,6 +35,7 @@ from path_boundary import is_protected_path, is_under_workspace, safe_resolve
 SCHEMAS_PATH = CONTROL_DIR / "control-chain.schemas.json"
 MANIFEST_PATH = CONTROL_DIR / "control-chain-manifest.json"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
+ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 COLAMETA_PREFLIGHT = REGISTRY_DIR / "colameta-executor-preflight.py"
 DOCCTL = REGISTRY_DIR / "docctl.py"
 TASK_PRODUCER = WORKSPACE_ROOT / "execution" / "agents-os-task-producer" / "producer.py"
@@ -122,6 +123,23 @@ NEXT_USER_ACTION_FALSE_FLAGS = (
     "execution_authorized",
     "write_performed",
     "raw_content_output",
+)
+ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS = (
+    "workspace_route_state_modified",
+    "active_queue_modified",
+    "queue_write_authorized",
+    "queue_promotion_authorized",
+    "route_auto_selection_authorized",
+    "execution_authorized",
+    "provider_call_authorized",
+    "service_start_authorized",
+    "executor_run_authorized",
+    "external_write_authorized",
+    "memory_write_authorized",
+    "runtime_plugin_activation_authorized",
+    "plugin_execution_authorized",
+    "raw_template_output",
+    "confirmation_text_included",
 )
 REPAIR_POLICY = {
     "validation_failed": {"repair_attempt_allowed": True, "max_repair_attempts": 1},
@@ -604,6 +622,93 @@ def validate_route_choice_handoff_reconciliation(result: dict[str, Any]) -> list
             errors.append("route choice handoff reconciliation must be aligned")
         if result.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
             errors.append("route choice handoff reconciliation accepted route ids must be A-E")
+    return errors
+
+
+def route_choice_template_readiness(source: Path = ROUTE_SELECTION_PACKAGE) -> dict[str, Any]:
+    errors: list[str] = []
+    coverage: dict[str, Any] = {}
+    try:
+        producer = import_module(TASK_PRODUCER, "agents_os_task_producer_template_readiness_for_control_chain")
+        coverage = producer.route_choice_template_coverage(source)
+        coverage_errors = producer.validate_route_choice_template_coverage(coverage)
+        errors.extend(f"Task Producer template coverage: {error}" for error in coverage_errors)
+        if coverage.get("passed") is not True:
+            errors.extend(f"Task Producer template coverage error: {error}" for error in coverage.get("errors", []))
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"Task Producer route-choice template coverage failed: {exc}")
+
+    false_flag_failures = [
+        flag
+        for flag in ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS
+        if coverage.get(flag) is not False
+    ]
+    if false_flag_failures:
+        errors.append(f"route choice template readiness flags not false: {','.join(false_flag_failures)}")
+
+    result = {
+        "schema_version": "agents-os.control-chain.route-choice-template-readiness.v0.1",
+        "preview_only": True,
+        "read_only": True,
+        "source_path": coverage.get("source_path", rel(source)),
+        "task_producer_coverage_schema": coverage.get("schema_version"),
+        "task_producer_coverage_passed": coverage.get("passed"),
+        "accepted_route_ids": coverage.get("accepted_route_ids", []),
+        "template_count": coverage.get("template_count"),
+        "templates_checked": coverage.get("templates_checked"),
+        "parsed_route_ids": coverage.get("parsed_route_ids", []),
+        "placeholder_goal_blocked": coverage.get("placeholder_goal_blocked"),
+        "concrete_new_route_fixture_passed": coverage.get("concrete_new_route_fixture_passed"),
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "executor_run_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "plugin_execution_authorized": False,
+        "raw_template_output": False,
+        "confirmation_text_included": False,
+        "errors": errors,
+    }
+    validation_errors = validate_route_choice_template_readiness(result)
+    result["errors"] = sorted(set(errors + validation_errors))
+    result["passed"] = not result["errors"]
+    return result
+
+
+def validate_route_choice_template_readiness(result: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if result.get("schema_version") != "agents-os.control-chain.route-choice-template-readiness.v0.1":
+        errors.append("route choice template readiness schema_version is invalid")
+    if result.get("preview_only") is not True:
+        errors.append("route choice template readiness must be preview_only")
+    if result.get("read_only") is not True:
+        errors.append("route choice template readiness must be read_only")
+    if result.get("task_producer_coverage_schema") != "agents-os.task-producer.route-choice-template-coverage.v0.1":
+        errors.append("route choice template readiness must use Task Producer coverage schema")
+    if result.get("task_producer_coverage_passed") is not True:
+        errors.append("Task Producer route choice template coverage must pass")
+    if result.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice template readiness accepted_route_ids must be A-E")
+    if result.get("parsed_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice template readiness parsed_route_ids must be A-E")
+    if result.get("template_count") != 5:
+        errors.append("route choice template readiness template_count must be 5")
+    if result.get("templates_checked") != 5:
+        errors.append("route choice template readiness templates_checked must be 5")
+    if result.get("placeholder_goal_blocked") is not True:
+        errors.append("route choice template readiness must preserve Template E placeholder block")
+    if result.get("concrete_new_route_fixture_passed") is not True:
+        errors.append("route choice template readiness must prove concrete option E fixture")
+    for flag in ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS:
+        if result.get(flag) is not False:
+            errors.append(f"route choice template readiness must keep {flag}=false")
     return errors
 
 
@@ -1809,6 +1914,7 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_choice_proposal: dict[str, Any] | None = None
     route_adoption_preview: dict[str, Any] | None = None
     route_handoff_reconciliation = route_choice_handoff_reconciliation(DEFAULT_QUEUE)
+    route_template_readiness = route_choice_template_readiness(ROUTE_SELECTION_PACKAGE)
     if route_handoff_reconciliation.get("passed") is not True:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
@@ -1826,6 +1932,21 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     ):
         if route_handoff_reconciliation.get(flag) is not False:
             errors.append(f"route choice handoff reconciliation authorized {flag}")
+    if route_template_readiness.get("passed") is not True:
+        errors.append("route choice template readiness did not pass")
+    if route_template_readiness.get("task_producer_coverage_passed") is not True:
+        errors.append("Task Producer route choice template coverage did not pass")
+    if route_template_readiness.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice template readiness accepted route ids are not A-E")
+    if route_template_readiness.get("parsed_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice template readiness did not prove A-E parsing")
+    if route_template_readiness.get("placeholder_goal_blocked") is not True:
+        errors.append("route choice template readiness did not reject Template E placeholder")
+    if route_template_readiness.get("concrete_new_route_fixture_passed") is not True:
+        errors.append("route choice template readiness did not prove concrete option E fixture")
+    for flag in ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS:
+        if route_template_readiness.get(flag) is not False:
+            errors.append(f"route choice template readiness authorized {flag}")
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
@@ -2135,6 +2256,20 @@ old_task: closed
             "queue_promotion_authorized": route_handoff_reconciliation.get("queue_promotion_authorized"),
             "execution_authorized": route_handoff_reconciliation.get("execution_authorized"),
         },
+        "route_choice_template_readiness": {
+            "passed": route_template_readiness.get("passed"),
+            "task_producer_coverage_passed": route_template_readiness.get("task_producer_coverage_passed"),
+            "accepted_route_ids": route_template_readiness.get("accepted_route_ids"),
+            "parsed_route_ids": route_template_readiness.get("parsed_route_ids"),
+            "template_count": route_template_readiness.get("template_count"),
+            "templates_checked": route_template_readiness.get("templates_checked"),
+            "placeholder_goal_blocked": route_template_readiness.get("placeholder_goal_blocked"),
+            "concrete_new_route_fixture_passed": route_template_readiness.get("concrete_new_route_fixture_passed"),
+            "active_queue_modified": route_template_readiness.get("active_queue_modified"),
+            "queue_promotion_authorized": route_template_readiness.get("queue_promotion_authorized"),
+            "execution_authorized": route_template_readiness.get("execution_authorized"),
+            "raw_template_output": route_template_readiness.get("raw_template_output"),
+        },
         "local_executor": {
             "validation_passed": local_result.get("validation_passed"),
             "forbidden_blocked": forbidden_result.get("validation_passed") is False,
@@ -2240,6 +2375,10 @@ def main() -> int:
     handoff_parser = subparsers.add_parser("route-choice-handoff-reconciliation")
     handoff_parser.add_argument("--queue", default=str(DEFAULT_QUEUE))
     handoff_parser.add_argument("--json", action="store_true")
+
+    template_readiness_parser = subparsers.add_parser("route-choice-template-readiness")
+    template_readiness_parser.add_argument("--source", default=str(ROUTE_SELECTION_PACKAGE))
+    template_readiness_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -2370,6 +2509,19 @@ def main() -> int:
             print(f"Aligned: {result['aligned']}")
             print(f"Route choice required: {result['route_choice_required']}")
             print(f"Decision owner: {result['decision_owner']}")
+        return 0 if result["passed"] else 1
+
+    if args.command == "route-choice-template-readiness":
+        result = route_choice_template_readiness(Path(args.source))
+        if args.json:
+            print_json(result)
+        else:
+            print("AGENTS OS route choice template readiness")
+            print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+            print(f"Template count: {result['template_count']}")
+            print(f"Parsed route ids: {','.join(result.get('parsed_route_ids', []))}")
+            print(f"Template E placeholder blocked: {result['placeholder_goal_blocked']}")
+            print(f"Execution authorized: {result['execution_authorized']}")
         return 0 if result["passed"] else 1
 
     if args.command == "queue-reviewed-mutation":
