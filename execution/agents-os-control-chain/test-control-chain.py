@@ -195,6 +195,24 @@ def main() -> int:
     check(proposal["proposal_only"] is True, "queue proposal should be proposal-only", failures)
     check(proposal["active_queue_modified"] is False, "queue proposal should not mutate queue", failures)
 
+    route_choice_preview = producer.route_choice_preview(
+        "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+        "先准备 formal Memory candidate gate v0.1；只做候选和确认模型，不写正式 Memory。"
+    )
+    route_choice_proposal = chain.route_choice_queue_proposal(route_choice_preview)
+    check(route_choice_proposal["passed"] is True, f"route choice proposal should pass: {route_choice_proposal['errors']}", failures)
+    check(route_choice_proposal["proposal_only"] is True, "route choice proposal should be proposal-only", failures)
+    check(route_choice_proposal["preview_only"] is True, "route choice proposal should be preview-only", failures)
+    check(route_choice_proposal["source_route_choice_option_id"] == "B", "route choice proposal should carry selected option B", failures)
+    check(route_choice_proposal["proposed_queue_item"]["lane"] == "NEXT", "route choice proposal should propose NEXT lane", failures)
+    check(route_choice_proposal["active_queue_modified"] is False, "route choice proposal must not mutate active queue", failures)
+    check(route_choice_proposal["queue_write_authorized"] is False, "route choice proposal must not authorize queue write", failures)
+    check(route_choice_proposal["queue_promotion_authorized"] is False, "route choice proposal must not authorize queue promotion", failures)
+    check(route_choice_proposal["execution_authorized"] is False, "route choice proposal must not authorize execution", failures)
+    invalid_route_choice_proposal = chain.route_choice_queue_proposal({"schema_version": "bad"})
+    check(invalid_route_choice_proposal["passed"] is False, "invalid route choice preview should not produce passing proposal", failures)
+    check(bool(invalid_route_choice_proposal["errors"]), "invalid route choice proposal should include errors", failures)
+
     with tempfile.TemporaryDirectory(prefix="agents-os-control-chain-test-", dir=chain.WORKSPACE_ROOT) as temp_dir:
         queue_path = Path(temp_dir) / "queue.md"
         queue_path.write_text(
@@ -280,7 +298,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=22 failures={len(failures)}")
+        print(f"cases=23 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -289,9 +307,10 @@ old_task: closed
     print("PASS failure handling stop-loop fixtures")
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
+    print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS route option stop gate fixture")
-    print("cases=22 failures=0")
+    print("cases=23 failures=0")
     return 0
 
 

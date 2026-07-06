@@ -40,6 +40,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Failure handling keeps queue promotion, repair execution, silent retry, destructive cleanup, provider call, external write, and Memory write false.
 - Control Chain Route Option Stop Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-option-stop-gate-v0.1.md`.
 - The Control Chain now treats Task Producer route-option candidates as `stop_needs_jenn_decision`, keeps `execution_authorization_scope=blocked_requires_jenn`, and prevents Track Selector authorization.
+- Control Chain Route Choice Queue Proposal v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md`.
+- The Control Chain can convert Task Producer route-choice preview JSON into a preview-only `NEXT` queue proposal while keeping `route_adoption_authorized=false`, `active_queue_modified=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - AGENTS OS Dashboard v0.1 exists at `execution/agents-os-dashboard/`.
 - The Dashboard can summarize the Active Work Queue, last CLOSED item, last failure evidence status, docctl validation status, open blockers, and Memory candidates.
 - Dashboard output is preview-only and keeps formal Memory write, private raw Memory read, queue mutation, provider call, service start, executor run, runtime/plugin activation, and external write false.
@@ -166,6 +168,9 @@ Work Queue, or authorizing execution.
 The Control Chain route-option stop gate now carries that same boundary through
 Commander Decision and Track Selector: route-option candidates stop for Jenn and
 cannot be routed to ColaMeta, local executor, queue promotion, or execution.
+The Control Chain route-choice queue proposal gate can produce a reviewable
+`NEXT` proposal from a route-choice preview, but it does not write route state,
+mutate the Active Work Queue, promote the route, or authorize execution.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,

@@ -102,6 +102,17 @@ GLOBAL_BLOCKED_CAPABILITIES = [
     "auth_provider_runtime_config_change",
     "destructive_git_or_filesystem_operation",
 ]
+ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES = sorted(
+    set(
+        GLOBAL_BLOCKED_CAPABILITIES
+        + [
+            "workspace_route_state_write",
+            "active_queue_write",
+            "route_adoption",
+            "route_execution",
+        ]
+    )
+)
 REPAIR_POLICY = {
     "validation_failed": {"repair_attempt_allowed": True, "max_repair_attempts": 1},
     "scope_violation": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
@@ -972,6 +983,121 @@ def validate_queue_proposal(proposal: dict[str, Any]) -> list[str]:
     return errors
 
 
+def validate_route_choice_preview(preview: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if preview.get("schema_version") != "agents-os.task-producer.route-choice-preview.v0.1":
+        errors.append("route choice preview schema_version is invalid")
+    if preview.get("passed") is not True:
+        errors.append("route choice preview must be passed")
+    if preview.get("preview_only") is not True:
+        errors.append("route choice preview must be preview_only")
+    if preview.get("confirmation_text_included") is not False:
+        errors.append("route choice preview must not include raw confirmation text")
+    if preview.get("route_choice_detected") is not True:
+        errors.append("route choice preview must detect a route choice")
+    selected = preview.get("selected_option", {})
+    if not selected.get("option_id") or not selected.get("first_safe_package"):
+        errors.append("route choice preview must include selected option id and first safe package")
+    for flag in (
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "plugin_execution_authorized",
+    ):
+        if preview.get(flag) is not False:
+            errors.append(f"route choice preview flag must be false: {flag}")
+    return errors
+
+
+def route_choice_queue_proposal(preview: dict[str, Any]) -> dict[str, Any]:
+    errors = validate_route_choice_preview(preview)
+    selected = preview.get("selected_option", {}) if isinstance(preview, dict) else {}
+    option_id = selected.get("option_id")
+    first_safe_package = selected.get("first_safe_package")
+    route_title = selected.get("title")
+    must_keep = selected.get("must_keep", [])
+    proposed_queue_item = {
+        "lane": "NEXT",
+        "title": first_safe_package,
+        "body_lines": [
+            f"Route option: {option_id} - {route_title}",
+            "Source: explicit Jenn route-choice preview",
+            "Mode: prepare first safe package only",
+            "Boundary: queue adoption requires separate reviewed mutation gate",
+        ]
+        + [f"Must keep: {item}" for item in must_keep if item],
+    }
+    proposal = {
+        "schema_version": "agents-os.queue-manager.route-choice-proposal.v0.1",
+        "proposal_id": stable_id("ROUTEQUEUEPROPOSAL", [option_id, first_safe_package, must_keep]),
+        "source_route_choice_option_id": option_id,
+        "source_route_choice_preview_schema": preview.get("schema_version"),
+        "proposal_only": True,
+        "preview_only": True,
+        "route_choice_detected": preview.get("route_choice_detected") is True,
+        "route_adoption_authorized": False,
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "write_performed": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": False,
+        "proposed_queue_item": proposed_queue_item,
+        "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
+        "evidence_required": ["route_choice_preview", "queue_proposal_review", "validation_summary"],
+        "errors": errors,
+    }
+    proposal_errors = validate_route_choice_queue_proposal(proposal)
+    all_errors = sorted(set(proposal["errors"] + proposal_errors))
+    proposal["passed"] = not all_errors
+    proposal["errors"] = all_errors
+    return proposal
+
+
+def validate_route_choice_queue_proposal(proposal: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if proposal.get("schema_version") != "agents-os.queue-manager.route-choice-proposal.v0.1":
+        errors.append("route choice queue proposal schema_version is invalid")
+    for flag in (
+        "proposal_only",
+        "preview_only",
+        "route_choice_detected",
+        "requires_nobao_review",
+    ):
+        if proposal.get(flag) is not True:
+            errors.append(f"route choice queue proposal flag must be true: {flag}")
+    for flag in (
+        "route_adoption_authorized",
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "write_performed",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+    ):
+        if proposal.get(flag) is not False:
+            errors.append(f"route choice queue proposal flag must be false: {flag}")
+    item = proposal.get("proposed_queue_item", {})
+    if item.get("lane") != "NEXT":
+        errors.append("route choice queue proposal must propose NEXT lane")
+    if not item.get("title"):
+        errors.append("route choice queue proposal must include proposed item title")
+    if proposal.get("source_route_choice_option_id") not in {"A", "B", "C", "D", "E"}:
+        errors.append(f"invalid route option id: {proposal.get('source_route_choice_option_id')}")
+    return errors
+
+
 def queue_lane_blocks(queue_text: str, lane: str) -> list[dict[str, str]]:
     in_lane = False
     blocks: list[dict[str, str]] = []
@@ -1238,11 +1364,17 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_option_candidate: dict[str, Any] | None = None
     route_option_decision: dict[str, Any] | None = None
     route_option_preview: dict[str, Any] | None = None
+    route_choice_preview_payload: dict[str, Any] | None = None
+    route_choice_proposal: dict[str, Any] | None = None
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
+        route_choice_preview_payload = producer.route_choice_preview(
+            "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+            "先准备 formal Memory candidate gate v0.1；只做候选和确认模型，不写正式 Memory。"
+        )
     except Exception as exc:  # pragma: no cover - surfaced as validation error
-        errors.append(f"route option candidate import failed: {exc}")
+        errors.append(f"Task Producer import failed: {exc}")
     if route_option_candidate is not None:
         if route_option_candidate.get("schema_version") != "agents-os.task-producer.candidate-task.v0.1":
             errors.append("route option candidate preflight failed")
@@ -1261,6 +1393,20 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
                 errors.append("route option candidate did not block route_selection_required")
             if route_option_preview.get("track_authorized") is not False:
                 errors.append("route option preview elevated authorization")
+    if route_choice_preview_payload is not None:
+        route_choice_proposal = route_choice_queue_proposal(route_choice_preview_payload)
+        if route_choice_proposal.get("passed") is not True:
+            errors.append("route choice queue proposal did not pass")
+        if route_choice_proposal.get("proposal_only") is not True:
+            errors.append("route choice queue proposal is not proposal-only")
+        if route_choice_proposal.get("active_queue_modified") is not False:
+            errors.append("route choice queue proposal modified active queue")
+        if route_choice_proposal.get("queue_write_authorized") is not False:
+            errors.append("route choice queue proposal authorized queue write")
+        if route_choice_proposal.get("queue_promotion_authorized") is not False:
+            errors.append("route choice queue proposal authorized queue promotion")
+        if route_choice_proposal.get("execution_authorized") is not False:
+            errors.append("route choice queue proposal authorized execution")
     if local_decision.get("decision") != "route_to_local_executor" or local_decision.get("execution_authorization_scope") != "local_safe_only":
         errors.append("local candidate did not route to local executor")
     if colameta_decision.get("decision") != "route_to_colameta" or colameta_decision.get("execution_authorization_scope") != "none":
@@ -1436,6 +1582,14 @@ old_task: closed
             "active_queue_modified": proposal.get("active_queue_modified"),
             "reviewed_preview_passed": reviewed_preview.get("passed") if reviewed_preview else None,
             "reviewed_apply_fixture_modified": reviewed_apply.get("active_queue_modified") if reviewed_apply else None,
+            "route_choice_proposal_passed": route_choice_proposal.get("passed") if route_choice_proposal else None,
+            "route_choice_proposal_only": route_choice_proposal.get("proposal_only") if route_choice_proposal else None,
+            "route_choice_proposal_active_queue_modified": route_choice_proposal.get("active_queue_modified")
+            if route_choice_proposal
+            else None,
+            "route_choice_proposal_execution_authorized": route_choice_proposal.get("execution_authorized")
+            if route_choice_proposal
+            else None,
         },
         "failure_handling": {
             "category": failure_report.get("category"),
@@ -1485,6 +1639,10 @@ def main() -> int:
     queue_parser = subparsers.add_parser("queue-proposal")
     queue_parser.add_argument("--track-result-json", required=True)
     queue_parser.add_argument("--json", action="store_true")
+
+    route_choice_queue_parser = subparsers.add_parser("route-choice-queue-proposal")
+    route_choice_queue_parser.add_argument("--route-choice-preview-json", required=True)
+    route_choice_queue_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -1552,6 +1710,20 @@ def main() -> int:
             print_json(result)
         else:
             print(f"Queue proposal: proposal_only={result['proposal_only']} close_now={result['close_current_now']}")
+        return 0 if result["passed"] else 1
+
+    if args.command == "route-choice-queue-proposal":
+        result = route_choice_queue_proposal(load_json(Path(args.route_choice_preview_json)))
+        if args.json:
+            print_json(result)
+        else:
+            item = result.get("proposed_queue_item", {})
+            print(
+                "Route choice queue proposal: "
+                f"proposal_only={result['proposal_only']} "
+                f"lane={item.get('lane')} "
+                f"title={item.get('title')}"
+            )
         return 0 if result["passed"] else 1
 
     if args.command == "queue-reviewed-mutation":

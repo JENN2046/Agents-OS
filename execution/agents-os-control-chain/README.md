@@ -15,6 +15,7 @@ Task Producer -> Machine Preview -> Commander Decision -> Track Selector
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-queue-proposal --route-choice-preview-json /path/to/route-choice-preview.json --json
 ```
 
 ## Authority Model
@@ -26,6 +27,7 @@ Route-option candidates stop for Jenn decision and cannot be auto-selected.
 ColaMeta Track is readiness/preview only in v0.1.
 Local Executor can only run local_safe_only actions.
 Queue Manager is proposal-only in v0.1.
+Route-choice queue proposal is preview-only and cannot mutate the queue.
 Failure handling stops for review and never silently retries.
 ```
 
@@ -43,6 +45,7 @@ read state-private
 read or output secrets/tokens/cookies/provider raw response/private memory/raw logs
 mutate Active Work Queue directly
 auto-select a route option
+adopt a selected route into workspace state
 promote a route option into the queue
 silently retry failed validation
 perform destructive cleanup
