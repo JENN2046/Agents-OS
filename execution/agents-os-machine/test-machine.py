@@ -144,6 +144,36 @@ Do not call provider. Do not start service. Do not run executor.
     check(negated_preview["blocked"] is False, "negated boundary statements should not block preview", failures)
     check(negated_preview["actionable"] is True, "negated boundary preview should remain actionable", failures)
 
+    route_selection_queue = machine.parse_queue_markdown(
+        """# fixture
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Goal: hold the queue after closing the current autonomous governance sequence.
+
+```text
+requires_jenn_route_choice=true
+```
+""",
+        Path("fixture-route-selection-stop.md"),
+    )
+    check(route_selection_queue["passed"], "route selection fixture structure should parse", failures)
+    route_selection_preview = machine.build_preview(machine.now_item(route_selection_queue))
+    check(route_selection_preview["blocked"] is True, "route selection stop-state should be blocked", failures)
+    check(route_selection_preview["actionable"] is False, "route selection stop-state should be actionable=false", failures)
+    check(
+        route_selection_preview["review_gate"]["requires_jenn_decision"] is True,
+        "route selection stop-state should require Jenn decision",
+        failures,
+    )
+    check(
+        "route_selection_required" in route_selection_preview["denied_signals"],
+        "route selection signal should be recorded",
+        failures,
+    )
+
     external_queue = machine.parse_queue_markdown(
         """# fixture
 
@@ -186,7 +216,7 @@ Goal: perform a database write.
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=13 failures={len(failures)}")
+        print(f"cases=14 failures={len(failures)}")
         return 1
 
     print("PASS current queue fixture")
@@ -196,8 +226,9 @@ Goal: perform a database write.
     print("PASS multiple NOW fixture")
     print("PASS P3 signal fixture")
     print("PASS negated boundary signal fixture")
+    print("PASS route selection stop-state fixture")
     print("PASS task-envelope temporary validation fixture")
-    print("cases=13 failures=0")
+    print("cases=14 failures=0")
     return 0
 
 

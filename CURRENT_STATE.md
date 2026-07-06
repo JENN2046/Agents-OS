@@ -49,6 +49,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Root private-history review found no Notion-domain or common token-shape path-level hits in current HEAD or reachable root Git history for the scanned pattern set; no history scrub is indicated by that scan.
 - Route Selection Checkpoint v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-checkpoint-v0.1.md`.
 - Route selection is intentionally stopped for Jenn decision; no VCPToolBox runtime, provider, executor, Memory, external Git, or new construction route is automatically selected.
+- Machine Route Selection Stop Guard v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-selection-stop-guard-v0.1.md`.
+- Machine preview now treats `No Active Automatic Construction Item` as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -140,6 +142,9 @@ The route-selection checkpoint records the current stop-state: Jenn can choose
 VCPToolBox recovery, Formal Memory loop, external Git publication exact gate,
 provider execution design gate, or a new AGENTS OS construction route; Nobao
 should not silently select one.
+The Machine route-selection stop guard now enforces this stop-state in preview
+output with `blocked=true`, `actionable=false`, and
+`requires_jenn_decision=true`.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,

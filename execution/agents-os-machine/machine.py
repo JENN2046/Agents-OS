@@ -64,6 +64,14 @@ DENIED_SIGNAL_PATTERNS = {
     "git_release_boundary": re.compile(r"\b(git push|git tag|force push|release|deploy|publish|history rewrite|npm publish|package publish)\b", re.I),
 }
 
+ROUTE_SELECTION_REQUIRED = re.compile(
+    r"\bNo Active Automatic Construction Item\b"
+    r"|\brequires_jenn_route_choice\s*=\s*true\b"
+    r"|\bno_active_route_selected\s*=\s*true\b"
+    r"|\bdo not infer a new construction route without Jenn direction\b",
+    re.I,
+)
+
 NEGATED_SIGNAL_CONTEXT = re.compile(
     r"\b(no|do not|does not|cannot|can't|must not|must remain false|blocked actions?|blocked until|keep .*blocked|forbidden|denied)\b",
     re.I,
@@ -138,8 +146,18 @@ def parse_item_heading(line: str) -> tuple[str, str] | None:
 
 def normalize_item(lane: str, item_id: str, title: str, body_lines: list[str]) -> dict[str, Any]:
     body = "\n".join(body_lines).strip()
-    denied_signals = find_denied_signals("\n".join([title, body]))
+    item_text = "\n".join([title, body])
+    denied_signals = find_denied_signals(item_text)
+    route_selection_required = bool(ROUTE_SELECTION_REQUIRED.search(item_text))
+    if route_selection_required:
+        denied_signals.append("route_selection_required")
+    denied_signals = sorted(set(denied_signals))
     requires_jenn = bool(denied_signals)
+    review_reason = "machine preview must be reviewed before execution"
+    if route_selection_required:
+        review_reason = "route selection required by queue stop-state"
+    elif requires_jenn:
+        review_reason = "denied signal detected"
     return {
         "id": item_id,
         "lane": lane,
@@ -150,7 +168,7 @@ def normalize_item(lane: str, item_id: str, title: str, body_lines: list[str]) -
         "authorization": dangerous_authorization_defaults(),
         "review_gate": review_gate(
             requires_jenn_decision=requires_jenn,
-            review_reason="denied signal detected" if requires_jenn else None,
+            review_reason=review_reason,
         ),
     }
 
@@ -566,7 +584,8 @@ Preview generated; execution_authorized=false.
 def build_preview(item: dict[str, Any]) -> dict[str, Any]:
     authorization = dangerous_authorization_defaults()
     ok, failures = has_false_dangerous_flags(authorization)
-    requires_jenn = bool(item.get("denied_signals"))
+    requires_jenn = bool(item.get("review_gate", {}).get("requires_jenn_decision"))
+    review_reason = item.get("review_gate", {}).get("review_reason")
     return {
         "schema_version": "agents-os.machine.preview.v0.1",
         "preview_only": True,
@@ -586,7 +605,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
         "actionable": not bool(item.get("blocked")),
         "review_gate": review_gate(
             requires_jenn_decision=requires_jenn,
-            review_reason="denied signal detected" if requires_jenn else "machine preview must be reviewed before execution",
+            review_reason=review_reason or "machine preview must be reviewed before execution",
         ),
         "execution_authorized": False,
         "task_envelope_markdown": task_envelope_markdown(item),

@@ -34,6 +34,7 @@
     "colameta_executor_activation",
     "vcptoolbox_activation",
     "plugin_activation",
+    "route_auto_selection",
     "external_write",
     "formal_memory_write",
     "state_private_read",
