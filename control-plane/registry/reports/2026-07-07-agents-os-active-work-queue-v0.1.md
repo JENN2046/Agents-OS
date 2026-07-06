@@ -56,6 +56,8 @@ control_chain_route_choice_handoff_reconciliation_exists=true
 control_chain_route_choice_handoff_reconciliation_validation=PASS
 control_chain_route_choice_template_readiness_exists=true
 control_chain_route_choice_template_readiness_validation=PASS
+control_chain_route_choice_end_to_end_readiness_exists=true
+control_chain_route_choice_end_to_end_readiness_validation=PASS
 control_chain_reviewed_route_adoption_preview_exists=true
 control_chain_reviewed_route_adoption_preview_validation=PASS
 control_chain_reviewed_route_adoption_apply_gate_exists=true
@@ -150,6 +152,12 @@ coverage before the route-choice handoff is considered ready. It checks A-E
 coverage, confirms Template E's placeholder remains blocked, proves a concrete
 option E fixture can parse, and keeps raw template output, route state, queue
 mutation, queue promotion, route auto-selection, and execution false.
+
+The Control Chain now also verifies the complete A-E fixture path from
+route-choice preview through proposal, accepted review, reviewed adoption
+preview, and apply-gate preview. This proves readiness without selecting a real
+route, writing the real Active Work Queue, promoting NOW, outputting raw
+confirmation/template text, or authorizing execution.
 
 The Control Chain can also inspect an accepted Nobao review and produce a
 reviewed route adoption preview. It can show the future `NEXT` append, while
@@ -348,6 +356,7 @@ machine_next_user_action_handoff_v0.1: closed for preview-only machine next_user
 active_work_queue_closed_order_reconciliation_v0.1: closed for aligning Dashboard last_completed with the Active Work Queue CLOSED tail; route selection, active queue promotion, runtime/provider execution, Memory write, and external write remain unauthorized
 task_producer_route_choice_template_coverage_v0.1: closed for preview-only route-choice template coverage; raw template output, route state write, active queue mutation, queue promotion, and execution remain unauthorized
 control_chain_route_choice_template_readiness_v0.1: closed for preview-only Control Chain route-choice template readiness; raw template output, route selection, active queue mutation, queue promotion, and execution remain unauthorized
+control_chain_route_choice_end_to_end_readiness_v0.1: closed for preview-only A-E route-choice end-to-end readiness; raw confirmation/template output, route selection, real queue write, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

@@ -147,6 +147,35 @@ def main() -> int:
     check(route_template_readiness["raw_template_output"] is False, "route choice template readiness must not output raw templates", failures)
     check(route_template_readiness["execution_authorized"] is False, "route choice template readiness must not authorize execution", failures)
 
+    route_e2e_readiness = chain.route_choice_end_to_end_readiness()
+    check(
+        route_e2e_readiness["passed"] is True,
+        f"route choice end-to-end readiness should pass: {route_e2e_readiness['errors']}",
+        failures,
+    )
+    check(
+        route_e2e_readiness["checked_route_ids"] == ["A", "B", "C", "D", "E"],
+        "route choice end-to-end readiness should check route ids A-E",
+        failures,
+    )
+    check(
+        route_e2e_readiness["passed_route_ids"] == ["A", "B", "C", "D", "E"],
+        "route choice end-to-end readiness should pass route ids A-E",
+        failures,
+    )
+    check(route_e2e_readiness["route_count"] == 5, "route choice end-to-end readiness should cover five routes", failures)
+    for stage, count in route_e2e_readiness["stage_counts"].items():
+        check(count == 5, f"route choice end-to-end readiness stage {stage} should pass all five routes", failures)
+    check(route_e2e_readiness["temporary_fixture_cleaned"] is True, "route choice end-to-end readiness should clean fixture", failures)
+    check(route_e2e_readiness["fixture_queue_unchanged"] is True, "route choice end-to-end readiness fixture should stay unchanged", failures)
+    check(route_e2e_readiness["active_queue_modified"] is False, "route choice end-to-end readiness must not modify active queue", failures)
+    check(route_e2e_readiness["real_queue_write_performed"] is False, "route choice end-to-end readiness must not write real queue", failures)
+    check(route_e2e_readiness["route_selected"] is False, "route choice end-to-end readiness must not select a route", failures)
+    check(route_e2e_readiness["route_adoption_authorized"] is False, "route choice end-to-end readiness must not authorize route adoption", failures)
+    check(route_e2e_readiness["execution_authorized"] is False, "route choice end-to-end readiness must not authorize execution", failures)
+    check(route_e2e_readiness["raw_confirmation_text_output"] is False, "route choice end-to-end readiness must not output raw confirmation text", failures)
+    check(route_e2e_readiness["raw_template_output"] is False, "route choice end-to-end readiness must not output raw template", failures)
+
     invalid_decision = chain.build_commander_decision(invalid)
     check(invalid_decision["decision"] == "reject_as_out_of_scope", "invalid candidate should be rejected", failures)
 
@@ -441,11 +470,26 @@ old_task: closed
         "validation should keep template readiness execution unauthorized",
         failures,
     )
+    check(
+        validation["route_choice_end_to_end_readiness"]["passed_route_ids"] == ["A", "B", "C", "D", "E"],
+        "validation should report A-E end-to-end readiness",
+        failures,
+    )
+    check(
+        validation["route_choice_end_to_end_readiness"]["real_queue_write_performed"] is False,
+        "validation should keep end-to-end readiness real queue writes false",
+        failures,
+    )
+    check(
+        validation["route_choice_end_to_end_readiness"]["execution_authorized"] is False,
+        "validation should keep end-to-end readiness execution unauthorized",
+        failures,
+    )
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=27 failures={len(failures)}")
+        print(f"cases=28 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -456,12 +500,13 @@ old_task: closed
     print("PASS queue proposal-only fixture")
     print("PASS route choice handoff reconciliation fixture")
     print("PASS route choice template readiness fixture")
+    print("PASS route choice end-to-end readiness fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=27 failures=0")
+    print("cases=28 failures=0")
     return 0
 
 

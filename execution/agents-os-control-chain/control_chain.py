@@ -141,6 +141,25 @@ ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS = (
     "raw_template_output",
     "confirmation_text_included",
 )
+ROUTE_CHOICE_E2E_FALSE_FLAGS = (
+    "active_queue_modified",
+    "real_queue_write_performed",
+    "queue_write_authorized",
+    "queue_promotion_authorized",
+    "route_selected",
+    "route_auto_selection_authorized",
+    "route_adoption_authorized",
+    "execution_authorized",
+    "provider_call_authorized",
+    "service_start_authorized",
+    "executor_run_authorized",
+    "external_write_authorized",
+    "memory_write_authorized",
+    "runtime_plugin_activation_authorized",
+    "plugin_execution_authorized",
+    "raw_confirmation_text_output",
+    "raw_template_output",
+)
 REPAIR_POLICY = {
     "validation_failed": {"repair_attempt_allowed": True, "max_repair_attempts": 1},
     "scope_violation": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
@@ -709,6 +728,283 @@ def validate_route_choice_template_readiness(result: dict[str, Any]) -> list[str
     for flag in ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS:
         if result.get(flag) is not False:
             errors.append(f"route choice template readiness must keep {flag}=false")
+    return errors
+
+
+def route_choice_confirmation_fixture(producer: Any, option_id: str) -> str:
+    titles_by_option = {value: key for key, value in producer.ROUTE_CHOICE_TITLES.items()}
+    title = titles_by_option[option_id]
+    if option_id == "E":
+        return (
+            f"确认选择 AGENTS OS 下一路线：{title}。\n"
+            "路线目标是：端到端预览链路 fixture 验证。"
+        )
+    return (
+        f"确认选择 AGENTS OS 下一路线：{title}。\n"
+        "这是端到端预览 fixture；不写真实队列、不推广 NOW、不执行。"
+    )
+
+
+def route_choice_fixture_queue_text() -> str:
+    return """# route choice readiness fixture queue
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+"""
+
+
+def accepted_nobao_review_for(proposal: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": "agents-os.queue-manager.review.v0.1",
+        "source_proposal_id": proposal.get("proposal_id"),
+        "review_status": "accepted",
+        "reviewer": "Nobao",
+        "requires_jenn_decision": False,
+    }
+
+
+def route_choice_end_to_end_readiness(source: Path = ROUTE_SELECTION_PACKAGE) -> dict[str, Any]:
+    errors: list[str] = []
+    route_results: list[dict[str, Any]] = []
+    route_ids: list[str] = []
+    temporary_fixture_write_performed = False
+    temporary_fixture_cleaned = False
+    fixture_queue_unchanged = True
+    temp_dir_path: Path | None = None
+
+    try:
+        producer = import_module(TASK_PRODUCER, "agents_os_task_producer_e2e_readiness_for_control_chain")
+        route_ids = list(producer.ROUTE_OPTIONS)
+        initial_queue_text = route_choice_fixture_queue_text()
+        with tempfile.TemporaryDirectory(prefix="agents-os-route-choice-e2e-", dir=WORKSPACE_ROOT) as temp_dir:
+            temp_dir_path = Path(temp_dir)
+            fixture_queue = temp_dir_path / "route-choice-readiness-queue.md"
+            fixture_queue.write_text(initial_queue_text, encoding="utf-8")
+            temporary_fixture_write_performed = True
+            initial_hash = hashlib.sha256(initial_queue_text.encode("utf-8")).hexdigest()
+
+            for option_id in route_ids:
+                stage_errors: list[str] = []
+                confirmation_text = route_choice_confirmation_fixture(producer, option_id)
+                preview = producer.route_choice_preview(confirmation_text, source)
+                preview_errors = validate_route_choice_preview(preview)
+                stage_errors.extend(f"preview: {error}" for error in preview_errors)
+
+                proposal = route_choice_queue_proposal(preview)
+                stage_errors.extend(f"proposal: {error}" for error in proposal.get("errors", []))
+
+                review = accepted_nobao_review_for(proposal)
+                adoption_preview = reviewed_route_adoption_preview(proposal, review, fixture_queue)
+                stage_errors.extend(f"adoption preview: {error}" for error in adoption_preview.get("errors", []))
+
+                apply_preview = reviewed_route_adoption_apply_gate(proposal, review, fixture_queue, apply=False)
+                stage_errors.extend(f"apply gate preview: {error}" for error in apply_preview.get("errors", []))
+
+                current_hash = hashlib.sha256(fixture_queue.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+                route_queue_unchanged = current_hash == initial_hash
+                if not route_queue_unchanged:
+                    stage_errors.append("fixture queue changed during preview")
+                    fixture_queue_unchanged = False
+
+                false_flag_failures: list[str] = []
+                false_flag_failures.extend(f"preview.{flag}" for flag in producer.route_choice_preview_false_flags(preview))
+                for label, value, flags in (
+                    (
+                        "proposal",
+                        proposal,
+                        (
+                            "route_adoption_authorized",
+                            "workspace_route_state_modified",
+                            "active_queue_modified",
+                            "write_performed",
+                            "queue_write_authorized",
+                            "queue_promotion_authorized",
+                            "execution_authorized",
+                        ),
+                    ),
+                    (
+                        "adoption_preview",
+                        adoption_preview,
+                        (
+                            "route_adoption_authorized",
+                            "workspace_route_state_modified",
+                            "active_queue_modified",
+                            "write_performed",
+                            "queue_write_authorized",
+                            "queue_promotion_authorized",
+                            "execution_authorized",
+                        ),
+                    ),
+                    (
+                        "apply_gate_preview",
+                        apply_preview,
+                        (
+                            "route_adoption_authorized",
+                            "workspace_route_state_modified",
+                            "active_queue_modified",
+                            "write_performed",
+                            "queue_write_authorized",
+                            "queue_promotion_authorized",
+                            "execution_authorized",
+                        ),
+                    ),
+                ):
+                    false_flag_failures.extend(f"{label}.{flag}" for flag in flags if value.get(flag) is not False)
+                if false_flag_failures:
+                    stage_errors.append(f"false flags failed: {','.join(false_flag_failures)}")
+
+                selected = preview.get("selected_option", {})
+                route_result = {
+                    "option_id": option_id,
+                    "selected_option_id": selected.get("option_id"),
+                    "route_goal_present": bool(selected.get("route_goal")),
+                    "route_choice_preview_passed": preview.get("passed") is True and not preview_errors,
+                    "route_choice_queue_proposal_passed": proposal.get("passed") is True,
+                    "reviewed_route_adoption_preview_passed": adoption_preview.get("passed") is True,
+                    "reviewed_route_adoption_apply_preview_passed": apply_preview.get("passed") is True,
+                    "queue_adoption_preview_authorized": apply_preview.get("queue_adoption_authorized") is True,
+                    "route_adoption_authorized": apply_preview.get("route_adoption_authorized"),
+                    "proposed_next_title": proposal.get("proposed_queue_item", {}).get("title"),
+                    "fixture_queue_unchanged": route_queue_unchanged,
+                    "confirmation_text_included": preview.get("confirmation_text_included"),
+                    "raw_confirmation_text_output": False,
+                    "raw_template_output": False,
+                    "false_flag_failures": false_flag_failures,
+                    "errors": sorted(set(stage_errors)),
+                    "passed": not stage_errors,
+                }
+                if not route_result["passed"]:
+                    errors.append(f"route {option_id} end-to-end readiness failed")
+                route_results.append(route_result)
+        temporary_fixture_cleaned = temp_dir_path is not None and not temp_dir_path.exists()
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"route choice end-to-end readiness failed: {exc}")
+
+    stage_counts = {
+        "route_choice_preview_passed": sum(1 for item in route_results if item.get("route_choice_preview_passed") is True),
+        "route_choice_queue_proposal_passed": sum(1 for item in route_results if item.get("route_choice_queue_proposal_passed") is True),
+        "reviewed_route_adoption_preview_passed": sum(1 for item in route_results if item.get("reviewed_route_adoption_preview_passed") is True),
+        "reviewed_route_adoption_apply_preview_passed": sum(1 for item in route_results if item.get("reviewed_route_adoption_apply_preview_passed") is True),
+        "queue_adoption_preview_authorized": sum(1 for item in route_results if item.get("queue_adoption_preview_authorized") is True),
+    }
+    passed_route_ids = [item["option_id"] for item in route_results if item.get("passed") is True]
+    result = {
+        "schema_version": "agents-os.control-chain.route-choice-end-to-end-readiness.v0.1",
+        "preview_only": True,
+        "fixture_only": True,
+        "source_path": rel(source),
+        "active_queue_path": rel(DEFAULT_QUEUE),
+        "accepted_route_ids": route_ids,
+        "checked_route_ids": route_ids,
+        "passed_route_ids": passed_route_ids,
+        "route_count": len(route_results),
+        "stage_counts": stage_counts,
+        "route_results": route_results,
+        "temporary_fixture_write_performed": temporary_fixture_write_performed,
+        "temporary_fixture_cleaned": temporary_fixture_cleaned,
+        "fixture_queue_unchanged": fixture_queue_unchanged,
+        "active_queue_modified": False,
+        "real_queue_write_performed": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_selected": False,
+        "route_auto_selection_authorized": False,
+        "route_adoption_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "executor_run_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "plugin_execution_authorized": False,
+        "raw_confirmation_text_output": False,
+        "raw_template_output": False,
+        "errors": errors,
+    }
+    validation_errors = validate_route_choice_end_to_end_readiness(result)
+    result["errors"] = sorted(set(errors + validation_errors))
+    result["passed"] = not result["errors"]
+    return result
+
+
+def validate_route_choice_end_to_end_readiness(result: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if result.get("schema_version") != "agents-os.control-chain.route-choice-end-to-end-readiness.v0.1":
+        errors.append("route choice end-to-end readiness schema_version is invalid")
+    if result.get("preview_only") is not True:
+        errors.append("route choice end-to-end readiness must be preview_only")
+    if result.get("fixture_only") is not True:
+        errors.append("route choice end-to-end readiness must be fixture_only")
+    if result.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice end-to-end readiness accepted_route_ids must be A-E")
+    if result.get("checked_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice end-to-end readiness checked_route_ids must be A-E")
+    if result.get("passed_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice end-to-end readiness passed_route_ids must be A-E")
+    if result.get("route_count") != 5:
+        errors.append("route choice end-to-end readiness route_count must be 5")
+    if result.get("temporary_fixture_write_performed") is not True:
+        errors.append("route choice end-to-end readiness must record temporary fixture write")
+    if result.get("temporary_fixture_cleaned") is not True:
+        errors.append("route choice end-to-end readiness must clean temporary fixture")
+    if result.get("fixture_queue_unchanged") is not True:
+        errors.append("route choice end-to-end readiness fixture queue must remain unchanged")
+    for flag in ROUTE_CHOICE_E2E_FALSE_FLAGS:
+        if result.get(flag) is not False:
+            errors.append(f"route choice end-to-end readiness must keep {flag}=false")
+    stage_counts = result.get("stage_counts", {})
+    for stage in (
+        "route_choice_preview_passed",
+        "route_choice_queue_proposal_passed",
+        "reviewed_route_adoption_preview_passed",
+        "reviewed_route_adoption_apply_preview_passed",
+        "queue_adoption_preview_authorized",
+    ):
+        if stage_counts.get(stage) != 5:
+            errors.append(f"route choice end-to-end readiness {stage} count must be 5")
+    for item in result.get("route_results", []):
+        option_id = item.get("option_id")
+        if item.get("selected_option_id") != option_id:
+            errors.append(f"route {option_id} selected_option_id mismatch")
+        if item.get("passed") is not True:
+            errors.append(f"route {option_id} did not pass readiness")
+        if item.get("fixture_queue_unchanged") is not True:
+            errors.append(f"route {option_id} changed fixture queue")
+        if item.get("confirmation_text_included") is not False:
+            errors.append(f"route {option_id} included raw confirmation text")
+        if item.get("raw_confirmation_text_output") is not False:
+            errors.append(f"route {option_id} output raw confirmation text")
+        if item.get("raw_template_output") is not False:
+            errors.append(f"route {option_id} output raw template")
+        if item.get("false_flag_failures"):
+            errors.append(f"route {option_id} has false flag failures")
+        for stage in (
+            "route_choice_preview_passed",
+            "route_choice_queue_proposal_passed",
+            "reviewed_route_adoption_preview_passed",
+            "reviewed_route_adoption_apply_preview_passed",
+            "queue_adoption_preview_authorized",
+        ):
+            if item.get(stage) is not True:
+                errors.append(f"route {option_id} {stage} must be true")
+        if item.get("route_adoption_authorized") is not False:
+            errors.append(f"route {option_id} must not authorize route adoption in preview")
+        if option_id == "E" and item.get("route_goal_present") is not True:
+            errors.append("route E fixture must include concrete route goal")
     return errors
 
 
@@ -1915,6 +2211,7 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_adoption_preview: dict[str, Any] | None = None
     route_handoff_reconciliation = route_choice_handoff_reconciliation(DEFAULT_QUEUE)
     route_template_readiness = route_choice_template_readiness(ROUTE_SELECTION_PACKAGE)
+    route_e2e_readiness = route_choice_end_to_end_readiness(ROUTE_SELECTION_PACKAGE)
     if route_handoff_reconciliation.get("passed") is not True:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
@@ -1947,6 +2244,17 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     for flag in ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS:
         if route_template_readiness.get(flag) is not False:
             errors.append(f"route choice template readiness authorized {flag}")
+    if route_e2e_readiness.get("passed") is not True:
+        errors.append("route choice end-to-end readiness did not pass")
+    if route_e2e_readiness.get("passed_route_ids") != ["A", "B", "C", "D", "E"]:
+        errors.append("route choice end-to-end readiness did not pass A-E")
+    if route_e2e_readiness.get("temporary_fixture_cleaned") is not True:
+        errors.append("route choice end-to-end readiness did not clean temporary fixture")
+    if route_e2e_readiness.get("fixture_queue_unchanged") is not True:
+        errors.append("route choice end-to-end readiness changed fixture queue")
+    for flag in ROUTE_CHOICE_E2E_FALSE_FLAGS:
+        if route_e2e_readiness.get(flag) is not False:
+            errors.append(f"route choice end-to-end readiness authorized {flag}")
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
@@ -2270,6 +2578,22 @@ old_task: closed
             "execution_authorized": route_template_readiness.get("execution_authorized"),
             "raw_template_output": route_template_readiness.get("raw_template_output"),
         },
+        "route_choice_end_to_end_readiness": {
+            "passed": route_e2e_readiness.get("passed"),
+            "checked_route_ids": route_e2e_readiness.get("checked_route_ids"),
+            "passed_route_ids": route_e2e_readiness.get("passed_route_ids"),
+            "route_count": route_e2e_readiness.get("route_count"),
+            "stage_counts": route_e2e_readiness.get("stage_counts"),
+            "temporary_fixture_cleaned": route_e2e_readiness.get("temporary_fixture_cleaned"),
+            "fixture_queue_unchanged": route_e2e_readiness.get("fixture_queue_unchanged"),
+            "active_queue_modified": route_e2e_readiness.get("active_queue_modified"),
+            "real_queue_write_performed": route_e2e_readiness.get("real_queue_write_performed"),
+            "route_selected": route_e2e_readiness.get("route_selected"),
+            "route_adoption_authorized": route_e2e_readiness.get("route_adoption_authorized"),
+            "execution_authorized": route_e2e_readiness.get("execution_authorized"),
+            "raw_confirmation_text_output": route_e2e_readiness.get("raw_confirmation_text_output"),
+            "raw_template_output": route_e2e_readiness.get("raw_template_output"),
+        },
         "local_executor": {
             "validation_passed": local_result.get("validation_passed"),
             "forbidden_blocked": forbidden_result.get("validation_passed") is False,
@@ -2379,6 +2703,10 @@ def main() -> int:
     template_readiness_parser = subparsers.add_parser("route-choice-template-readiness")
     template_readiness_parser.add_argument("--source", default=str(ROUTE_SELECTION_PACKAGE))
     template_readiness_parser.add_argument("--json", action="store_true")
+
+    e2e_readiness_parser = subparsers.add_parser("route-choice-end-to-end-readiness")
+    e2e_readiness_parser.add_argument("--source", default=str(ROUTE_SELECTION_PACKAGE))
+    e2e_readiness_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -2521,6 +2849,20 @@ def main() -> int:
             print(f"Template count: {result['template_count']}")
             print(f"Parsed route ids: {','.join(result.get('parsed_route_ids', []))}")
             print(f"Template E placeholder blocked: {result['placeholder_goal_blocked']}")
+            print(f"Execution authorized: {result['execution_authorized']}")
+        return 0 if result["passed"] else 1
+
+    if args.command == "route-choice-end-to-end-readiness":
+        result = route_choice_end_to_end_readiness(Path(args.source))
+        if args.json:
+            print_json(result)
+        else:
+            print("AGENTS OS route choice end-to-end readiness")
+            print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+            print(f"Checked route ids: {','.join(result.get('checked_route_ids', []))}")
+            print(f"Passed route ids: {','.join(result.get('passed_route_ids', []))}")
+            print(f"Temporary fixture cleaned: {result['temporary_fixture_cleaned']}")
+            print(f"Active queue modified: {result['active_queue_modified']}")
             print(f"Execution authorized: {result['execution_authorized']}")
         return 0 if result["passed"] else 1
 
