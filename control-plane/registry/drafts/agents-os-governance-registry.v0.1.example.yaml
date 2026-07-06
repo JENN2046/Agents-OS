@@ -1,0 +1,787 @@
+schema_version: agents-os.governance-registry.v0.1-draft
+status: draft_example_not_active
+date: 2026-06-30
+scope: local AGENTS OS control-plane governance
+notes:
+  - "This example is not active authority data."
+  - "It must not store secret values, private memory raw text, or provider raw responses."
+  - "It does not authorize external writes, runtime execution, provider calls, or formal Memory registration."
+
+objects:
+  - id: life-core
+    name: Life Core Policy Modules
+    type: policy_module
+    status: active
+    path: control-plane/policies/life-core/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: AGENTS OS local governance principles, permission model, evidence rules, and boundaries.
+    authority: local active reference, under Jenn authority and P3 hard stop
+    green_zone:
+      - read modules
+      - update receipts
+      - fix small local documentation drift with receipt
+    yellow_zone:
+      - add draft policy module
+      - change workflow language
+      - adjust router rules with review
+    red_zone:
+      - bypass Jenn
+      - weaken P3 hard stop
+      - mark memory or identity changes as formal without confirmation
+    inputs:
+      - Jenn current request
+      - local AGENTS.md
+      - policy module files
+    outputs:
+      - local policy guidance
+      - router inputs
+    depends_on:
+      - AGENTS.md
+    evidence:
+      - receipt
+      - review when boundary changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+    last_receipt: control-plane/policies/life-core/receipts/
+    last_review: control-plane/policies/life-core/reviews/
+
+  - id: policy-router
+    name: Life Core Policy Router
+    type: router
+    status: active
+    path: control-plane/policies/life-core/policy-router.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: read-only local action classification
+    authority: advisory router, not self-authorization
+    green_zone:
+      - route local action descriptions
+      - run fixture tests
+    yellow_zone:
+      - change matching rules with receipt and review
+      - add new fixture cases
+    red_zone:
+      - execute routed task
+      - grant external write authority
+      - grant secret or private-memory access
+    inputs:
+      - action text
+      - control-plane/policies/life-core/policy-router.rules.json
+      - control-plane/policies/life-core/policy-index.json
+    outputs:
+      - decision
+      - permission_level
+      - required_evidence
+      - denied_boundaries
+    depends_on:
+      - life-core
+    evidence:
+      - validation_summary
+      - receipt for rule changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+    last_receipt: control-plane/policies/life-core/receipts/
+    last_review: control-plane/policies/life-core/reviews/
+
+  - id: task-envelope-system
+    name: Task Envelope System
+    type: task_envelope
+    status: active
+    path: control-plane/task-envelope/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: local pre-action clarity, boundary selection, evidence planning, and result recording
+    authority: local process helper, not final authority
+    green_zone:
+      - fill local task envelope
+      - validate a filled envelope
+      - generate local receipt
+    yellow_zone:
+      - change template fields
+      - change validation rules
+      - add automation gates
+    red_zone:
+      - execute task contents automatically without separate authorization
+      - store secrets
+      - write external systems
+      - register formal memory
+    inputs:
+      - task envelope markdown
+      - control-plane/task-envelope/validation-rules.json
+      - policy-router output
+    outputs:
+      - validation result
+      - gate result
+      - local receipt
+    depends_on:
+      - life-core
+      - policy-router
+    evidence:
+      - task receipt
+      - review for boundary changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/test-task-envelope-loop.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/validate-task-envelope.py control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+    last_receipt: control-plane/task-envelope/receipts/
+    last_review: control-plane/task-envelope/reviews/
+
+  - id: workspace-registry
+    name: Workspace Registry
+    type: registry
+    status: active
+    path: control-plane/registry/WORKSPACE_REGISTRY.yaml
+    owner:
+      human: Jenn
+      agent_steward: Project Agent
+    scope: workspace layers, repository metadata, and active authority registry facts
+    authority: active local registry data, not remote action authorization
+    green_zone:
+      - read registry metadata
+      - update documentation around examples or drafts
+    yellow_zone:
+      - propose new registry entries
+      - draft changes to layer or repository metadata
+    red_zone:
+      - record secret values
+      - authorize remote actions
+      - expand permissions without review
+      - modify active authority data without explicit task scope
+    inputs:
+      - workspace inventory
+      - extension manifests
+      - governance decisions
+    outputs:
+      - machine-readable registry data
+      - example material
+    depends_on:
+      - AGENTS.md
+    evidence:
+      - receipt
+      - review for permission changes
+    validation:
+      notes:
+        - YAML syntax check before active changes.
+    last_receipt: control-plane/registry/receipts/
+    last_review: control-plane/registry/reviews/
+
+  - id: governance-golden-paths
+    name: AGENTS OS Golden Paths
+    type: golden_path
+    status: active
+    path: control-plane/registry/GOLDEN_PATHS.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: standard local routes for common governance work
+    authority: active local guidance, not external or runtime authorization
+    green_zone:
+      - read active guidance
+      - use as local route reference
+    yellow_zone:
+      - revise routes
+      - add new routes
+      - change active guidance with receipt and review
+    red_zone:
+      - use as permission to bypass P3
+      - use as permission for external writes or runtime execution
+      - use as permission to bypass Jenn confirmation
+    inputs:
+      - progressive-workflow
+      - task-envelope system
+      - governance registry draft
+    outputs:
+      - standard route draft
+    depends_on:
+      - life-core
+      - task-envelope-system
+    evidence:
+      - receipt
+      - review before promotion
+    validation:
+      notes:
+        - Confirm draft status and stop conditions are present.
+    last_receipt: control-plane/registry/receipts/2026-06-30-a3c-governance-active-promotion.md
+    last_review: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+
+  - id: governance-decision-record-template
+    name: AGENTS OS Decision Record Template
+    type: decision_record
+    status: active
+    path: control-plane/registry/templates/decision-record-template-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: template for recording why governance decisions changed
+    authority: active local template, not final decision authority
+    green_zone:
+      - read template
+      - use as default template for local governance decisions
+    yellow_zone:
+      - adjust required sections
+      - change template with receipt and review
+    red_zone:
+      - use decision records to bypass Jenn
+      - make P3 changes without current authorization
+      - record secrets or private raw memory
+    inputs:
+      - governance decisions
+      - receipts
+      - reviews
+    outputs:
+      - decision record draft
+    depends_on:
+      - governance-golden-paths
+    evidence:
+      - receipt
+      - review before active use
+    validation:
+      notes:
+        - Confirm template includes context, decision, risk, validation, and review conditions.
+    last_receipt: control-plane/registry/receipts/2026-06-30-a3c-governance-active-promotion.md
+    last_review: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+
+  - id: governance-scorecard
+    name: AGENTS OS Governance Scorecard
+    type: scorecard
+    status: active
+    path: control-plane/registry/SCORECARD.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: basic health checks for registered governance objects
+    authority: active local check guidance, not authorization
+    green_zone:
+      - read scorecard guidance
+      - run local scorecard validator
+    yellow_zone:
+      - add scorecard rules
+      - change scorecard rules with receipt and review
+    red_zone:
+      - treat scorecard result as final authority
+      - use scorecard to grant external write or runtime permission
+      - ignore secret or P3 failures
+    inputs:
+      - governance registry objects
+    outputs:
+      - pass/warn/fail findings
+    depends_on:
+      - governance-golden-paths
+      - workspace-registry
+    evidence:
+      - scorecard result
+      - receipt for rule changes
+    validation:
+      notes:
+        - Confirm rules catch missing id, status, red_zone, validation, and secret markers.
+    last_receipt: control-plane/registry/receipts/2026-06-30-a3c-governance-active-promotion.md
+    last_review: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+
+  - id: governance-registry-scorecard-validator
+    name: Governance Registry Scorecard Validator
+    type: validator
+    status: active
+    path: control-plane/registry/validate-governance-registry.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: local structure and boundary checks for Governance Registry YAML
+    authority: read-only local checker, not authorization
+    green_zone:
+      - validate local registry YAML
+      - run local fixture tests
+    yellow_zone:
+      - change scorecard rules with receipt and review
+      - add new fixture cases
+    red_zone:
+      - execute registry objects
+      - grant external write authority
+      - grant runtime or provider permission
+      - ignore secret-like findings
+    inputs:
+      - governance registry YAML
+    outputs:
+      - pass/warn/fail findings
+      - validation summary
+    depends_on:
+      - governance-scorecard
+      - workspace-registry
+    evidence:
+      - validation_summary
+      - receipt for rule changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-governance-registry-validator.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-governance-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-validator-path-boundary-helper-refactor.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-validator-path-boundary-helper-refactor.review.md
+
+  - id: decision-governance-control-plane-layer
+    name: Governance Control-Plane Layer Decision
+    type: decision_record
+    status: accepted
+    path: control-plane/registry/decisions/2026-06-30-governance-control-plane-layer.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: accepted local decision for using Golden Paths, Decision Records, Scorecard, validators, receipts, and reviews as a local governance control-plane layer
+    authority: accepted local governance decision, not external or runtime authorization
+    green_zone:
+      - read accepted decision
+      - use as context for local governance work
+    yellow_zone:
+      - supersede decision with new decision record and Jenn confirmation
+      - revise related active guidance with receipt and review
+    red_zone:
+      - treat this decision as external authorization
+      - use this decision to bypass Jenn
+      - use this decision to weaken P3
+      - use this decision to authorize external writes or runtime execution
+    inputs:
+      - governance registry draft/example
+      - golden paths active guidance
+      - decision record active template
+      - governance scorecard active guidance
+      - scorecard validator result
+    outputs:
+      - accepted decision record
+    depends_on:
+      - governance-decision-record-template
+      - governance-registry-scorecard-validator
+    evidence:
+      - receipt
+      - review
+      - scorecard result
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-governance-registry.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-governance-registry-validator.py
+    last_receipt: control-plane/registry/receipts/2026-06-30-a3c-governance-active-promotion.md
+    last_review: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+
+  - id: documentation-governance
+    name: AGENTS OS Documentation Governance
+    type: boundary_doc
+    status: draft
+    path: control-plane/registry/drafts/agents-os-documentation-governance-v0.1-draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: draft governance for future large-scale AGENTS OS documentation lifecycle, ownership, indexing, freshness, canonical sources, and safety boundaries
+    authority: draft guidance only, not active authority
+    green_zone:
+      - read draft
+      - use as context for local documentation governance planning
+    yellow_zone:
+      - revise draft
+      - run small documentation governance pilot
+      - prepare document scorecard validator
+    red_zone:
+      - treat draft as active
+      - bulk move or rename documents without Jenn confirmation
+      - scan sensitive directories
+      - record secrets, private memory raw text, or provider raw responses
+      - authorize external writes or runtime execution
+    inputs:
+      - active Golden Paths
+      - active Decision Records guidance
+      - active Scorecard guidance
+      - documentation governance research
+    outputs:
+      - documentation governance draft
+      - document-object metadata example
+    depends_on:
+      - governance-golden-paths
+      - governance-decision-record-template
+      - governance-scorecard
+    evidence:
+      - receipt
+      - review
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-document-registry-validator.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-governance-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-validator-path-boundary-helper-refactor.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-validator-path-boundary-helper-refactor.review.md
+
+  - id: document-registry-example
+    name: Document Registry Example
+    type: registry
+    status: example
+    path: control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: draft/example machine-readable document records for the control-plane/registry documentation governance pilot
+    authority: example only, not active authority data
+    green_zone:
+      - read example registry
+      - use as local fixture for the document registry validator
+    yellow_zone:
+      - revise example fields with receipt and review
+      - add pilot records under control-plane/registry
+    red_zone:
+      - treat example as active authority data
+      - list sensitive paths such as state-private, .env, secrets, private memory raw text, or provider raw responses
+      - scan the full workspace
+      - authorize external writes or runtime execution
+    inputs:
+      - control-plane/registry documentation paths
+      - documentation governance draft
+      - documentation scorecard draft
+    outputs:
+      - document registry example YAML
+    depends_on:
+      - documentation-governance
+      - documentation-scorecard
+    evidence:
+      - receipt
+      - review
+      - document scorecard result
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.review.md
+
+  - id: documentation-scorecard
+    name: AGENTS OS Documentation Scorecard
+    type: scorecard
+    status: draft
+    path: control-plane/registry/drafts/documentation-scorecard-v0.1-draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: draft health-check rules for document registry records and listed documentation paths
+    authority: draft check guidance only, not active authority
+    green_zone:
+      - read draft scorecard
+      - use as context for local document registry fixture tests
+    yellow_zone:
+      - change scorecard rules with receipt and review
+      - expand pilot checks after Jenn review
+    red_zone:
+      - treat draft scorecard as final authority
+      - use scorecard to grant external write, runtime, provider, or Memory permission
+      - ignore secret-like or protected-path failures
+    inputs:
+      - document registry records
+      - documentation governance draft
+    outputs:
+      - PASS/WARN/FAIL rule definitions
+    depends_on:
+      - documentation-governance
+    evidence:
+      - validation summary
+      - receipt for rule changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-document-registry-validator.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.review.md
+
+  - id: document-registry-validator
+    name: Document Registry Validator
+    type: validator
+    status: active
+    path: control-plane/registry/validate-document-registry.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: local read-only structure, boundary, path, status, freshness, and secret-like checks for Document Registry YAML
+    authority: read-only local checker, not authorization
+    green_zone:
+      - validate local document registry YAML
+      - run local fixture tests
+    yellow_zone:
+      - change documentation scorecard rules with receipt and review
+      - add new fixture cases
+    red_zone:
+      - execute registered documents
+      - scan the full workspace
+      - create database or vector indexes
+      - read sensitive paths
+      - grant external write, runtime, provider, or Memory authority
+      - ignore secret-like findings
+    inputs:
+      - document registry YAML
+      - paths explicitly listed by document registry records
+    outputs:
+      - pass/warn/fail findings
+      - validation summary
+    depends_on:
+      - document-registry-example
+      - documentation-scorecard
+    evidence:
+      - validation_summary
+      - receipt for rule changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-document-registry-validator.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-documentation-governance-implementation-v0.1.1.review.md
+
+  - id: task-envelope-document-registry-pilot
+    name: Task Envelope Document Registry Pilot
+    type: registry
+    status: example
+    path: control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: Documentation Governance Pilot 2 for task-envelope docs, examples, validator, loop runner, receipts, and reviews
+    authority: example only, not active authority data
+    green_zone:
+      - validate the pilot document registry
+      - use the result as local evidence for documentation governance expansion
+    yellow_zone:
+      - revise pilot records with receipt and review
+      - expand documentation governance to one adjacent directory after review
+    red_zone:
+      - treat pilot registry as active workspace authority
+      - scan the full workspace
+      - list or read state-private, secrets, private memory raw text, or provider raw responses
+      - create database/vector index without Jenn confirmation
+      - authorize external writes or runtime execution
+    inputs:
+      - control-plane/task-envelope README
+      - task-envelope template, validator, loop runner, tests, examples, receipts, and reviews
+      - document-registry-validator
+    outputs:
+      - task-envelope document registry example YAML
+      - pilot receipt
+      - pilot review
+    depends_on:
+      - task-envelope-system
+      - document-registry-validator
+    evidence:
+      - document scorecard result
+      - receipt
+      - review
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+    last_receipt: control-plane/task-envelope/receipts/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.md
+    last_review: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+
+  - id: life-core-document-registry-pilot
+    name: Life Core Document Registry Pilot
+    type: registry
+    status: example
+    path: control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: Documentation Governance Pilot 3 for life-core policy modules, router, rules, fixtures, tests, receipts, and reviews
+    authority: example only, not active authority data
+    green_zone:
+      - validate the pilot document registry
+      - use the result as local evidence for documentation governance expansion
+    yellow_zone:
+      - revise pilot records with receipt and review
+      - prepare federated document registry design after review
+    red_zone:
+      - treat pilot registry as active workspace authority
+      - scan the full workspace
+      - list or read state-private, secrets, private memory raw text, or provider raw responses
+      - create database/vector index without Jenn confirmation
+      - authorize external writes or runtime execution
+      - change life-core policy authority without separate review
+    inputs:
+      - control-plane/policies/life-core README
+      - life-core policy modules, policy index, router, rules, fixtures, tests, receipts, and reviews
+      - document-registry-validator
+    outputs:
+      - life-core document registry example YAML
+      - pilot receipt
+      - pilot review
+    depends_on:
+      - life-core
+      - policy-router
+      - document-registry-validator
+    evidence:
+      - document scorecard result
+      - policy-router test result
+      - receipt
+      - review
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/validate-document-registry-coverage.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+    last_receipt: control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core-fix.md
+    last_review: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core-fix.review.md
+
+  - id: federated-document-registry-draft
+    name: Federated Document Registry Draft
+    type: boundary_doc
+    status: draft
+    path: control-plane/registry/drafts/federated-document-registry-v0.1-draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: Step 4 draft design for registry-of-registries over directory-owned Document Registries
+    authority: draft guidance only, not active authority
+    green_zone:
+      - read draft
+      - use as context for local federation planning
+    yellow_zone:
+      - revise federation schema with receipt and review
+      - add directory registry pilots after local validation
+    red_zone:
+      - treat draft as active workspace authority
+      - scan the full workspace
+      - create database/vector/search index without Jenn confirmation
+      - authorize external writes or runtime execution
+    inputs:
+      - three directory Document Registry pilots
+      - document-registry-validator
+      - Step 4 documentation governance plan
+    outputs:
+      - federation draft guidance
+    depends_on:
+      - documentation-governance
+      - document-registry-validator
+    evidence:
+      - receipt
+      - review
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-validator-path-boundary-helper-refactor.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-validator-path-boundary-helper-refactor.review.md
+
+  - id: federated-document-registry-example
+    name: Federated Document Registry Example
+    type: registry
+    status: example
+    path: control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: Step 4 example registry-of-registries for three directory-owned Document Registry pilots
+    authority: example only, not active authority data
+    green_zone:
+      - validate the federation example
+      - use as local evidence for federation design
+    yellow_zone:
+      - revise listed registries with receipt and review
+      - add a new directory registry after its own pilot passes
+    red_zone:
+      - treat example as active workspace authority
+      - scan the full workspace
+      - list or read state-private, secrets, private memory raw text, or provider raw responses
+      - create database/vector/search index without Jenn confirmation
+      - authorize external writes or runtime execution
+    inputs:
+      - control-plane/registry document registry
+      - control-plane/task-envelope document registry
+      - control-plane/policies/life-core document registry
+    outputs:
+      - federated document registry example YAML
+    depends_on:
+      - federated-document-registry-draft
+      - document-registry-validator
+    evidence:
+      - federation validation result
+      - receipt
+      - review
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-federated-document-registry-step-4-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-federated-document-registry-step-4-v0.1.review.md
+
+  - id: docctl-doctor
+    name: docctl doctor
+    type: validator
+    status: active
+    path: control-plane/registry/docctl.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: read-only document governance doctor over explicitly listed registry federation entries
+    authority: read-only local checker, not authorization
+    green_zone:
+      - run read-only doctor over listed document registries
+      - report unregistered source files
+      - run known local registry validators
+    yellow_zone:
+      - change finding semantics with receipt and review
+      - add automatic repair proposal
+    red_zone:
+      - modify registry files automatically
+      - execute arbitrary registry validation commands
+      - scan the full workspace
+      - read protected paths
+      - create database/vector/search index
+      - grant external write, runtime, provider, or Memory authority
+    inputs:
+      - federated document registry YAML
+      - listed document registries
+      - known local registry validators
+    outputs:
+      - doctor findings
+      - validator run summary
+    depends_on:
+      - federated-document-registry-validator
+      - document-registry-validator
+    evidence:
+      - receipt
+      - review
+      - fixture tests
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-doctor.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-docctl-doctor-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-docctl-doctor-v0.1.review.md
+
+  - id: federated-document-registry-validator
+    name: Federated Document Registry Validator
+    type: validator
+    status: active
+    path: control-plane/registry/validate-federated-document-registry.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    scope: local read-only checker for Federated Document Registry YAML and explicitly listed directory registries
+    authority: read-only local checker, not authorization
+    green_zone:
+      - validate federation YAML
+      - run local fixture tests
+    yellow_zone:
+      - change federation validation rules with receipt and review
+      - add new fixture cases
+    red_zone:
+      - execute registered directory tasks
+      - scan the full workspace
+      - create database/vector/search index
+      - read sensitive paths
+      - grant external write, runtime, provider, or Memory authority
+    inputs:
+      - federated document registry YAML
+      - explicitly listed directory document registries
+    outputs:
+      - pass/warn/fail findings
+      - validation summary
+    depends_on:
+      - federated-document-registry-example
+      - document-registry-validator
+    evidence:
+      - validation_summary
+      - receipt for rule changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-federated-document-registry-validator.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-federated-document-registry-step-4-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-federated-document-registry-step-4-v0.1.review.md

@@ -1,0 +1,175 @@
+workspace:
+  name: AGENTS_OS_Workspace
+  owner: JENN2046
+  canonical_root: /home/jenn/AGENTS_OS_Workspace
+  windows_reference_root: "A:\\AGENTS_OS_Workspace"
+  authority_path: control-plane/registry/WORKSPACE_REGISTRY.yaml
+  purpose: "Control plane and engineering workspace for AGENTS OS, VCP runtime, Jenn extensions, governance, execution, domain apps, memory systems, labs, archive, and private state."
+  default_branch_policy: "Do not modify main directly."
+  remote_action_authorization: false
+  registry_notes:
+    - "Repository URLs are metadata only."
+    - "This registry does not authorize fetch, pull, clone, push, release, deploy, validation execution, or permission expansion."
+
+layers:
+  - id: control_plane
+    path: control-plane/
+    role: control_plane
+    may_contain:
+      - contracts
+      - registry
+      - runbooks
+      - prompts
+      - architecture docs
+    must_not_contain:
+      - real secrets
+      - runtime cache
+      - domain databases
+
+  - id: runtime
+    path: runtime/
+    role: upstream_tracking_runtime_core
+    may_contain:
+      - VCPToolBox
+      - minimal loader patches
+      - bridge plugins
+    must_not_contain:
+      - private memory
+      - photo-studio data
+      - large Jenn plugin packs
+
+  - id: governance
+    path: governance/
+    role: policy_safety_approval
+    may_contain:
+      - codex-router
+      - Bounded-High-Autonomy
+      - policy packs
+      - approval gates
+
+  - id: execution
+    path: execution/
+    role: codex_harness_and_runners
+    may_contain:
+      - work harness
+      - checkpoints
+      - receipts
+      - execution profiles
+    default_enabled: false
+
+  - id: extensions
+    path: extensions/
+    role: jenn_userland_extensions
+    may_contain:
+      - plugin packs
+      - agent packs
+      - admin extensions
+      - bridge plugins
+    requires_manifest: true
+
+  - id: domains
+    path: domains/
+    role: domain_apps
+    may_contain:
+      - Photo_Studio_OS
+      - other business systems
+
+  - id: labs
+    path: labs/
+    role: experimental_projects
+    may_contain:
+      - agent-image-lab
+      - exploratory systems
+      - not-yet-stabilized prototypes
+
+  - id: memory
+    path: memory/
+    role: memory_systems
+    may_contain:
+      - codex-memory
+      - memory protocols
+      - memory test fixtures
+
+  - id: state_private
+    path: state-private/
+    role: private_state_memory_audit
+    private: true
+    may_contain:
+      - MEMORY.md
+      - AGENTS.override.md
+      - .agent_board
+      - local audit ledger
+      - private data
+    must_not_push_publicly: true
+
+  - id: ops
+    path: ops/
+    role: validation_and_reports
+    may_contain:
+      - validation
+      - reports
+      - receipts
+      - dry-runs
+      - maintenance
+
+  - id: archive
+    path: archive/
+    role: historical_reference
+    read_only_by_default: true
+    may_contain:
+      - superseded material
+      - deprecated material
+      - migration snapshots
+
+repositories:
+  - name: VCPToolBox
+    layer: runtime
+    url: https://github.com/JENN2046/VCPToolBox
+    upstream: https://github.com/lioensky/VCPToolBox
+    policy: upstream_tracking_with_minimal_patches
+    url_role: metadata_only
+
+  - name: codex-router
+    layer: governance
+    url: https://github.com/JENN2046/codex-router
+    policy: external_governance_runtime
+    url_role: metadata_only
+
+  - name: Bounded-High-Autonomy
+    layer: governance
+    url: https://github.com/JENN2046/Bounded-High-Autonomy
+    policy: autonomy_boundary_layer
+    url_role: metadata_only
+
+  - name: agent-image-lab
+    layer: labs
+    url: https://github.com/JENN2046/agent-image-lab
+    policy: external_lab_system
+    url_role: metadata_only
+
+  - name: Photo_Studio_OS
+    layer: domains
+    url: https://github.com/JENN2046/Photo_Studio_OS
+    policy: external_domain_system
+    url_role: metadata_only
+
+  - name: Jenn-VCP-Extensions
+    layer: extensions
+    url: https://github.com/JENN2046/Jenn-VCP-Extensions
+    policy: extension_userland
+    url_role: metadata_only
+
+security:
+  default_forbidden:
+    - push
+    - release
+    - deploy
+    - print_secret_values
+    - read_real_env_files
+    - modify_main_directly
+    - destructive_delete
+  registry_authorizes:
+    remote_actions: false
+    validation_execution: false
+    executable_bit_changes: false
+    permission_expansion: false

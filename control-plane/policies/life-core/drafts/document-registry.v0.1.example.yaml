@@ -1,0 +1,928 @@
+schema_version: agents-os.document-registry.v0.1-draft
+status: draft_example_not_active
+date: 2026-07-01
+scope: control-plane/policies/life-core documentation governance pilot
+notes:
+  - "This is a document registry example for Documentation Governance Pilot 3."
+  - "It is not active authority data."
+  - "Markdown/JSON/Python files remain the source of truth; future databases may only be rebuildable caches."
+  - "This registry must not list sensitive source paths such as state-private, .env files, secrets, private memory raw text, or provider raw responses."
+  - "This registry does not authorize bulk moves, external writes, runtime execution, provider calls, or formal Memory registration."
+  - "`source_of_truth` means local canonical file for this pilot; upstream Notion source is recorded separately as `upstream_source`."
+
+document_types:
+  - index
+  - overview
+  - tutorial
+  - how_to
+  - runbook
+  - reference
+  - explanation
+  - decision_record
+  - policy
+  - registry
+  - contract
+  - schema
+  - template
+  - example
+  - receipt
+  - review
+  - incident_review
+  - archive_note
+
+statuses:
+  - draft
+  - review_needed
+  - active
+  - accepted
+  - superseded
+  - deprecated
+  - archived
+  - example
+  - blocked
+
+documents:
+  - id: life-core-readme
+    title: Life Core README
+    doc_type: index
+    status: active
+    scope: life-core policy directory entrypoint and local operating guide
+    canonical_path: control-plane/policies/life-core/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+      - control-plane/policies/life-core/policy-index.json
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - life-core policy boundary changes
+        - policy-router behavior changes
+        - document registry pilot expansion
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-local-mirror
+    title: Life Core Local Mirror
+    doc_type: reference
+    status: active
+    scope: local operational mirror of AGENTS OS life core
+    canonical_path: control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+    upstream_source:
+      name: "Notion AGENTS OS life core v0.1"
+      page: "https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396"
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/agents-os-life-core-v0.1.reading-ledger.md
+      - control-plane/policies/life-core/policy-index.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - upstream life-core changes
+        - Jenn correction
+        - policy module conflict
+    security_boundary:
+      - local mirror only
+      - no secret values
+      - upstream Notion remains upstream knowledge source
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-reading-ledger
+    title: Life Core Reading Ledger
+    doc_type: reference
+    status: active
+    scope: record of Notion reading batches and coverage notes
+    canonical_path: control-plane/policies/life-core/agents-os-life-core-v0.1.reading-ledger.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/agents-os-life-core-v0.1.reading-ledger.md
+    upstream_source:
+      name: "Notion AGENTS OS life core v0.1"
+      page: "https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396"
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - upstream reading coverage changes
+    security_boundary:
+      - reading coverage only
+      - no private raw memory
+      - no provider raw response
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-root-principles
+    title: Root Principles Policy Module
+    doc_type: policy
+    status: active
+    scope: root principles and authority ordering
+    canonical_path: control-plane/policies/life-core/root-principles.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/root-principles.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-index.json
+      - control-plane/policies/life-core/house-rules.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - authority model changes
+        - Jenn correction
+    security_boundary:
+      - does not bypass Jenn
+      - does not weaken P3
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-house-rules
+    title: House Rules Policy Module
+    doc_type: policy
+    status: active
+    scope: local behavior boundaries and house rules
+    canonical_path: control-plane/policies/life-core/house-rules.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/house-rules.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/root-principles.md
+      - control-plane/policies/life-core/permission-levels.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - behavior boundary changes
+        - Jenn correction
+    security_boundary:
+      - no permission bypass
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-memory-rules
+    title: Memory Rules Policy Module
+    doc_type: policy
+    status: active
+    scope: memory governance and formal memory boundaries
+    canonical_path: control-plane/policies/life-core/memory-rules.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/memory-rules.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/activation-package.md
+      - control-plane/policies/life-core/evidence-levels.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - memory rule changes
+        - formal Memory boundary changes
+    security_boundary:
+      - no private raw memory
+      - no formal Memory registration by this registry
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-members-and-rooms
+    title: Members And Rooms Policy Module
+    doc_type: policy
+    status: active
+    scope: member, room, and residency governance
+    canonical_path: control-plane/policies/life-core/members-and-rooms.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/members-and-rooms.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/a2a-relations.md
+      - control-plane/policies/life-core/activation-package.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - residency or room boundary changes
+    security_boundary:
+      - no identity or relation activation without Jenn confirmation
+      - no formal Memory registration
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-a2a-relations
+    title: A2A Relations Policy Module
+    doc_type: policy
+    status: active
+    scope: agent-to-agent relationship governance
+    canonical_path: control-plane/policies/life-core/a2a-relations.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/a2a-relations.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/members-and-rooms.md
+      - control-plane/policies/life-core/memory-rules.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - relationship governance changes
+        - formal Memory relation discussion
+    security_boundary:
+      - pending formal memory registration remains pending
+      - no relationship activation by this registry
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-permission-levels
+    title: Permission Levels Policy Module
+    doc_type: policy
+    status: active
+    scope: A0-A4 permission model and routing boundaries
+    canonical_path: control-plane/policies/life-core/permission-levels.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/permission-levels.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/policy-router.rules.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-rule-tightening.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - permission model changes
+        - router false positive or false negative
+    security_boundary:
+      - no permission escalation
+      - no P3 bypass
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-standing-authorization
+    title: Standing Authorization Policy Module
+    doc_type: policy
+    status: active
+    scope: limited standing authorization pilot for home maintenance
+    canonical_path: control-plane/policies/life-core/standing-authorization.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/standing-authorization.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/permission-levels.md
+      - control-plane/policies/life-core/evidence-levels.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - standing authorization expiry
+        - permission boundary changes
+    security_boundary:
+      - no external write authorization by document registry
+      - no runtime/provider permission
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-activation-package
+    title: Activation Package Policy Module
+    doc_type: policy
+    status: active
+    scope: activation package gates for higher-risk changes
+    canonical_path: control-plane/policies/life-core/activation-package.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/activation-package.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/permission-levels.md
+      - control-plane/policies/life-core/memory-rules.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - activation gate changes
+        - Jenn confirmation route changes
+    security_boundary:
+      - no unconfirmed activation
+      - no Memory activation by this registry
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-evidence-levels
+    title: Evidence Levels Policy Module
+    doc_type: policy
+    status: active
+    scope: evidence and receipt/review requirements
+    canonical_path: control-plane/policies/life-core/evidence-levels.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/evidence-levels.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/receipts/
+      - control-plane/policies/life-core/reviews/
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - evidence requirements change
+    security_boundary:
+      - evidence does not grant authority
+      - no secret evidence content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-runtime-boundaries
+    title: Runtime Boundaries Policy Module
+    doc_type: policy
+    status: active
+    scope: runtime, provider, and dual-foundation boundaries
+    canonical_path: control-plane/policies/life-core/runtime-boundaries.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/runtime-boundaries.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/permission-levels.md
+      - control-plane/policies/life-core/policy-router.rules.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-guard-hardening.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - runtime/provider boundary changes
+        - external write guard changes
+    security_boundary:
+      - no runtime execution
+      - no provider calls
+      - no external writes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-cockpit-cards
+    title: Cockpit Cards Policy Module
+    doc_type: policy
+    status: active
+    scope: interface and cockpit-card policy
+    canonical_path: control-plane/policies/life-core/cockpit-cards.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/cockpit-cards.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/presence-and-sensing.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - interface policy changes
+    security_boundary:
+      - interface policy only
+      - no runtime execution
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-growth-rules
+    title: Growth Rules Policy Module
+    doc_type: policy
+    status: active
+    scope: growth and improvement policy
+    canonical_path: control-plane/policies/life-core/growth-rules.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/growth-rules.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/progressive-workflow.md
+      - control-plane/policies/life-core/loops-and-pilot.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - growth policy changes
+    security_boundary:
+      - no permission escalation
+      - no unreviewed identity changes
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-presence-and-sensing
+    title: Presence And Sensing Policy Module
+    doc_type: policy
+    status: active
+    scope: presence and sensing policy without runtime patching
+    canonical_path: control-plane/policies/life-core/presence-and-sensing.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/presence-and-sensing.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/runtime-boundaries.md
+      - control-plane/policies/life-core/cockpit-cards.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - sensing or runtime boundary changes
+    security_boundary:
+      - no runtime patch
+      - no provider call
+      - no browser login state action
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-loops-and-pilot
+    title: Loops And Pilot Policy Module
+    doc_type: policy
+    status: active
+    scope: A2 loop and pilot boundary policy
+    canonical_path: control-plane/policies/life-core/loops-and-pilot.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/loops-and-pilot.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/evidence-levels.md
+      - control-plane/policies/life-core/progressive-workflow.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - loop/pilot boundary changes
+    security_boundary:
+      - pilot does not mean production
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-progressive-workflow
+    title: Progressive Workflow Policy Module
+    doc_type: how_to
+    status: active
+    scope: gradual green/yellow/red work process
+    canonical_path: control-plane/policies/life-core/progressive-workflow.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/progressive-workflow.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/permission-levels.md
+      - control-plane/policies/life-core/evidence-levels.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-progressive-workflow-stage-classification.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - workflow stage classification changes
+        - Jenn correction
+    security_boundary:
+      - yellow remains draft/review path
+      - red zone remains hard stop
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-policy-index
+    title: Life Core Policy Index
+    doc_type: registry
+    status: active
+    scope: machine-readable local policy module and router index
+    canonical_path: control-plane/policies/life-core/policy-index.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/policy-index.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/policy-router.rules.json
+      - control-plane/policies/life-core/policy-router.fixtures.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - policy module list changes
+        - router metadata changes
+    security_boundary:
+      - registry metadata only
+      - no secret values
+      - no permission escalation
+    validation:
+      commands:
+        - python3 -m json.tool control-plane/policies/life-core/policy-index.json
+
+  - id: life-core-policy-router-doc
+    title: Life Core Policy Router Documentation
+    doc_type: reference
+    status: active
+    scope: policy-router usage, output fields, limits, and fixtures
+    canonical_path: control-plane/policies/life-core/policy-router.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/policy-router.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/test-policy-router.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-rule-tightening.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - router behavior or output field changes
+    security_boundary:
+      - documentation only
+      - router does not authorize actions by itself
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-policy-router-script
+    title: Life Core Policy Router Script
+    doc_type: reference
+    status: active
+    scope: local read-only action classification helper
+    canonical_path: control-plane/policies/life-core/policy-router.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/policy-router.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.rules.json
+      - control-plane/policies/life-core/policy-router.fixtures.json
+      - control-plane/policies/life-core/test-policy-router.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-guard-hardening.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - router rule interpretation changes
+        - false positive or false negative
+    security_boundary:
+      - read-only local helper
+      - does not execute routed action
+      - does not grant authority
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-policy-router-rules
+    title: Life Core Policy Router Rules
+    doc_type: schema
+    status: active
+    scope: transparent keyword rules used by the local policy router
+    canonical_path: control-plane/policies/life-core/policy-router.rules.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/policy-router.rules.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/policy-router.fixtures.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-guard-hardening.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - router rule changes
+        - guard hardening changes
+    security_boundary:
+      - no secret values
+      - no runtime/provider permission
+    validation:
+      commands:
+        - python3 -m json.tool control-plane/policies/life-core/policy-router.rules.json
+
+  - id: life-core-policy-router-fixtures
+    title: Life Core Policy Router Fixtures
+    doc_type: example
+    status: active
+    scope: active local regression fixture set for policy-router behavior
+    canonical_path: control-plane/policies/life-core/policy-router.fixtures.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/policy-router.fixtures.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/test-policy-router.py
+      - control-plane/policies/life-core/policy-router.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-guard-hardening.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - fixture coverage changes
+        - router behavior changes
+    security_boundary:
+      - active test fixture set only
+      - not active policy authority
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-policy-router-tests
+    title: Life Core Policy Router Tests
+    doc_type: reference
+    status: active
+    scope: local fixture test runner for policy-router behavior
+    canonical_path: control-plane/policies/life-core/test-policy-router.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/test-policy-router.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-router.py
+      - control-plane/policies/life-core/policy-router.fixtures.json
+    last_reviewed: 2026-06-30
+    review_by: control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router-guard-hardening.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - router test changes
+        - fixture changes
+    security_boundary:
+      - local fixture tests only
+      - no external write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/test-policy-router.py
+
+  - id: life-core-document-registry-coverage-checker
+    title: Life Core Document Registry Coverage Checker
+    doc_type: reference
+    status: active
+    scope: local read-only coverage check between policy-index modules and the life-core Document Registry pilot
+    canonical_path: control-plane/policies/life-core/validate-document-registry-coverage.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/validate-document-registry-coverage.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/policy-index.json
+      - control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core-fix.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - policy-index module list changes
+        - document registry coverage rule changes
+    security_boundary:
+      - read-only local checker
+      - no full workspace scan
+      - no authority grant
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/validate-document-registry-coverage.py
+
+  - id: life-core-receipts-directory
+    title: Life Core Receipts Directory
+    doc_type: receipt
+    status: active
+    scope: local receipt collection for life-core policy work
+    canonical_path: control-plane/policies/life-core/receipts/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/receipts/
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/receipts/2026-06-30-a2-life-core-module-split.md
+      - control-plane/policies/life-core/receipts/2026-06-30-a2-policy-router.md
+      - control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - receipt retention/indexing rules change
+    security_boundary:
+      - local evidence only
+      - no secrets
+      - not active authority by itself
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-reviews-directory
+    title: Life Core Reviews Directory
+    doc_type: review
+    status: active
+    scope: local review collection for life-core policy work
+    canonical_path: control-plane/policies/life-core/reviews/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/reviews/
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/reviews/2026-06-30-a2-life-core-module-split.review.md
+      - control-plane/policies/life-core/reviews/2026-06-30-a2-policy-router.review.md
+      - control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - review format/indexing rules change
+    security_boundary:
+      - local review evidence only
+      - no secrets
+      - not active authority by itself
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-document-governance-pilot-3-registry
+    title: Documentation Governance Pilot 3 Registry
+    doc_type: registry
+    status: example
+    scope: document registry example for the life-core policy directory
+    canonical_path: control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/validate-document-registry.py
+      - control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core.md
+      - control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - document registry validator changes
+        - life-core policy module list changes
+    security_boundary:
+      - example only
+      - not active authority data
+      - no full workspace scan
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-document-governance-pilot-3-receipt
+    title: Documentation Governance Pilot 3 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: evidence for life-core document registry pilot
+    canonical_path: control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+      - control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+      - control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core-fix.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - pilot result is superseded
+    security_boundary:
+      - local evidence only
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-document-governance-pilot-3-review
+    title: Documentation Governance Pilot 3 Review
+    doc_type: review
+    status: accepted
+    scope: review for life-core document registry pilot
+    canonical_path: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+      - control-plane/policies/life-core/receipts/2026-07-01-yellow-documentation-governance-pilot-3-life-core.md
+      - control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core-fix.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/policies/life-core/reviews/2026-07-01-yellow-documentation-governance-pilot-3-life-core.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - pilot result is superseded
+    security_boundary:
+      - local review only
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml

@@ -1,0 +1,83 @@
+# >>> ColaMeta local state >>>
+.colameta/state.json
+.colameta/todolist.json
+.colameta/decisions.json
+.colameta/memory.md
+.colameta/runtime/**
+.colameta/logs/**
+.colameta/reports/**
+.colameta/audits/**
+.colameta/plan-patches/**
+.colameta/tmp/**
+.colameta/local/**
+.colameta/executor-session.json
+.colameta/executor-sessions/**
+.colameta/settings.json
+.colameta/runner-settings.json
+.colameta/*.lock
+.colameta/**/*.lock
+# <<< ColaMeta local state <<<
+
+# >>> AGENTS OS private/runtime boundaries >>>
+state-private/
+runtime/*
+!runtime/README.md
+governance/codex-router/
+memory/codex-memory/
+archive/*
+!archive/README.md
+# <<< AGENTS OS private/runtime boundaries <<<
+
+# >>> dependency/build/cache outputs >>>
+node_modules/
+**/node_modules/
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+dist/
+build/
+target/
+.cache/
+**/.cache/
+.npm/
+.pnpm-store/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+# <<< dependency/build/cache outputs <<<
+
+# >>> logs/databases/local generated state >>>
+logs/
+log/
+*.log
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pid
+*.sock
+# <<< logs/databases/local generated state <<<
+
+# >>> secret/auth/provider boundaries >>>
+.env
+.env.*
+config.env
+**/config.env
+secrets/
+secret/
+credentials/
+tokens/
+cookies/
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+credentials.json
+token.json
+# <<< secret/auth/provider boundaries <<<

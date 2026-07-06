@@ -1,0 +1,128 @@
+schema_version: agents-os.federated-document-registry.v0.1-draft
+status: draft_example_not_active
+date: 2026-07-01
+scope: AGENTS OS local documentation governance federation pilot
+notes:
+  - "This is a federated document registry example, not active authority data."
+  - "It lists directory-owned document registries; it does not replace those registries."
+  - "It does not scan the full workspace."
+  - "It does not create a database, vector index, search index, runtime call, provider call, external write, or formal Memory registration."
+  - "Databases/search/vector indexes may only be future rebuildable caches after Jenn confirmation."
+
+registries:
+  - id: registry-document-registry
+    title: Registry Directory Document Registry
+    status: pilot
+    directory_root: control-plane/registry
+    registry_path: control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    validator: control-plane/registry/validate-document-registry.py
+    expected_document_count: 213
+    authority: example only, not active workspace authority
+    scope: control-plane/registry documentation governance pilot and Step 4 federation material
+    known_external_scope:
+      - path: control-plane/registry/WORKSPACE_REGISTRY.yaml
+        classification: known_external_scope
+        reason: active governance registry handled outside the draft Document Registry
+        governing_system: AGENTS OS active workspace registry
+        review_trigger:
+          - WORKSPACE_REGISTRY.yaml authority changes
+          - Document Registry active authority boundary changes
+    archive_notes:
+      - path: control-plane/registry/archive-notes/2026-07-01-grouped-historical-document-governance-backlog.md
+        classification: historical_archive
+        safe_use: historical context only; not active policy, registry data, task instructions, or authorization
+        replacement:
+          - control-plane/registry/README.md
+          - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+          - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        review_trigger:
+          - archived file list changes
+          - replacement route changes
+          - archive governance rule changes
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-document-governance-baseline-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-document-governance-baseline-v0.1.review.md
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no full workspace scan
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-document-registry
+    title: Task Envelope Document Registry
+    status: pilot
+    directory_root: control-plane/task-envelope
+    registry_path: control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    validator: control-plane/registry/validate-document-registry.py
+    expected_document_count: 12
+    authority: example only, not active workspace authority
+    scope: Documentation Governance Pilot 2 for task-envelope docs
+    archive_notes:
+      - path: control-plane/registry/archive-notes/2026-07-01-grouped-historical-document-governance-backlog.md
+        classification: historical_archive
+        safe_use: historical context only; not active policy, registry data, task instructions, or authorization
+        replacement:
+          - control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+          - control-plane/task-envelope/README.md
+        review_trigger:
+          - archived file list changes
+          - replacement route changes
+          - archive governance rule changes
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-document-governance-baseline-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-document-governance-baseline-v0.1.review.md
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no full workspace scan
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: life-core-document-registry
+    title: Life Core Document Registry
+    status: pilot
+    directory_root: control-plane/policies/life-core
+    registry_path: control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    validator: control-plane/registry/validate-document-registry.py
+    coverage_checker: control-plane/policies/life-core/validate-document-registry-coverage.py
+    expected_document_count: 30
+    authority: example only, not active workspace authority
+    scope: Documentation Governance Pilot 3 for life-core policy docs
+    archive_notes:
+      - path: control-plane/registry/archive-notes/2026-07-01-grouped-historical-document-governance-backlog.md
+        classification: historical_archive
+        safe_use: historical context only; not active policy, registry data, task instructions, or authorization
+        replacement:
+          - control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+          - control-plane/policies/life-core/README.md
+        review_trigger:
+          - archived file list changes
+          - replacement route changes
+          - archive governance rule changes
+    last_receipt: control-plane/registry/receipts/2026-07-01-yellow-document-governance-baseline-v0.1.md
+    last_review: control-plane/registry/reviews/2026-07-01-yellow-document-governance-baseline-v0.1.review.md
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no full workspace scan
+      - no external write authorization
+      - no life-core authority change
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/policies/life-core/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/policies/life-core/validate-document-registry-coverage.py

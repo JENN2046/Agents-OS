@@ -1,0 +1,146 @@
+{
+  "schema_version": "life-core.policy-index.v0.1",
+  "snapshot_date": "2026-06-30",
+  "source_page": "https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396",
+  "local_scope": "control-plane/policies/life-core",
+  "source_mirror": "agents-os-life-core-v0.1.local-mirror.md",
+  "reading_ledger": "agents-os-life-core-v0.1.reading-ledger.md",
+  "authority_boundary": {
+    "upstream_source": "Notion AGENTS OS life core v0.1",
+    "local_role": "control-plane policy mirror",
+    "not_authorized_by_this_index": [
+      "secret_access",
+      "private_raw_memory_access",
+      "provider_calls",
+      "runtime_execution",
+      "external_writes",
+      "production_deploy",
+      "release",
+      "package_publish",
+      "database_write",
+      "browser_login_state_change",
+      "permission_escalation",
+      "formal_memory_registration"
+    ]
+  },
+  "modules": [
+    {
+      "policy_id": "life-core.root-principles.v0.1",
+      "file": "root-principles.md",
+      "status": "current_root_principle",
+      "permission_class": "A0_A2_policy_reference"
+    },
+    {
+      "policy_id": "life-core.house-rules.v0.1",
+      "file": "house-rules.md",
+      "status": "current_behavior_boundary",
+      "permission_class": "A0_A2_policy_reference"
+    },
+    {
+      "policy_id": "life-core.memory-rules.v0.1",
+      "file": "memory-rules.md",
+      "status": "current_memory_governance",
+      "permission_class": "A0_policy_reference_A2_receipts"
+    },
+    {
+      "policy_id": "life-core.members-and-rooms.v0.1",
+      "file": "members-and-rooms.md",
+      "status": "current_residency_governance",
+      "permission_class": "A0_A2_L0_to_L2_only"
+    },
+    {
+      "policy_id": "life-core.a2a-relations.v0.1",
+      "file": "a2a-relations.md",
+      "status": "pending_formal_memory_registration",
+      "permission_class": "A0_policy_reference"
+    },
+    {
+      "policy_id": "life-core.permission-levels.v0.2",
+      "file": "permission-levels.md",
+      "status": "current_permission_model",
+      "permission_class": "routing_policy"
+    },
+    {
+      "policy_id": "life-core.standing-authorization.home-maintenance.v0.1",
+      "file": "standing-authorization.md",
+      "status": "review_passed_active_pilot_until_2026-07-07",
+      "permission_class": "A2_limited_A3a_scope_reference"
+    },
+    {
+      "policy_id": "life-core.activation-package.v0.1",
+      "file": "activation-package.md",
+      "status": "current_activation_boundary",
+      "permission_class": "A3c_and_boundary_gate"
+    },
+    {
+      "policy_id": "life-core.evidence-levels.v0.1",
+      "file": "evidence-levels.md",
+      "status": "review_passed_active_reference",
+      "permission_class": "evidence_routing"
+    },
+    {
+      "policy_id": "life-core.runtime-boundaries.v0.1",
+      "file": "runtime-boundaries.md",
+      "status": "current_dual_foundation_boundary",
+      "permission_class": "runtime_planning_only"
+    },
+    {
+      "policy_id": "life-core.cockpit-cards.v0.1",
+      "file": "cockpit-cards.md",
+      "status": "current_interface_policy",
+      "permission_class": "interface_policy_reference"
+    },
+    {
+      "policy_id": "life-core.growth-rules.v0.1",
+      "file": "growth-rules.md",
+      "status": "current_growth_policy",
+      "permission_class": "growth_policy_reference"
+    },
+    {
+      "policy_id": "life-core.presence-and-sensing.v0.1",
+      "file": "presence-and-sensing.md",
+      "status": "presence_formal_sensing_pending_patch",
+      "permission_class": "presence_policy_reference_no_runtime"
+    },
+    {
+      "policy_id": "life-core.loops-and-pilot.v0.1",
+      "file": "loops-and-pilot.md",
+      "status": "current_a2_loop_boundary",
+      "permission_class": "A2_loop_reference"
+    },
+    {
+      "policy_id": "life-core.progressive-workflow.v0.1",
+      "file": "progressive-workflow.md",
+      "status": "local_first_version",
+      "permission_class": "construction_workflow_reference"
+    }
+  ],
+  "a2_loop": {
+    "loop_id": "a2-life-core-module-split-2026-06-30",
+    "classification": "A2_home_maintenance",
+    "receipt": "receipts/2026-06-30-a2-life-core-module-split.md",
+    "review": "reviews/2026-06-30-a2-life-core-module-split.review.md",
+    "formal_memory_registration": "not_performed"
+  },
+  "router": {
+    "router_id": "life-core.policy-router.v0.1",
+    "status": "local_read_only_router",
+    "script": "policy-router.py",
+    "rules": "policy-router.rules.json",
+    "fixtures": "policy-router.fixtures.json",
+    "test": "test-policy-router.py",
+    "doc": "policy-router.md",
+    "decisions": [
+      "allowed",
+      "blocked",
+      "needs_activation",
+      "proposal_only",
+      "needs_classification"
+    ],
+    "receipt": "receipts/2026-06-30-a2-policy-router.md",
+    "review": "reviews/2026-06-30-a2-policy-router.review.md",
+    "latest_validation_receipt": "receipts/2026-06-30-a2-progressive-workflow-stage-classification.md",
+    "latest_validation_review": "reviews/2026-06-30-a2-progressive-workflow-stage-classification.review.md",
+    "formal_memory_registration": "not_performed"
+  }
+}

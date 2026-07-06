@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "jenn.agents-os.extension.v1",
+  "id": "jenn.example-extension",
+  "name": "Jenn Example Extension",
+  "type": [
+    "vcp-plugin-pack",
+    "admin-extension"
+  ],
+  "owner": "JENN2046",
+  "sourceRepo": "https://github.com/JENN2046/example",
+  "entrypoints": {
+    "plugins": [
+      "vcp/plugins"
+    ],
+    "agents": [
+      "agents"
+    ],
+    "agentOverrides": [
+      "agent-overrides"
+    ],
+    "adminExtensions": [
+      "admin"
+    ],
+    "policies": [
+      "policies"
+    ],
+    "schemas": [
+      "schemas"
+    ]
+  },
+  "permissions": {
+    "readFiles": true,
+    "writeFiles": false,
+    "shell": false,
+    "network": false,
+    "gitCommit": false,
+    "gitPush": false,
+    "release": false,
+    "deploy": false
+  },
+  "requiresApprovalFor": [
+    "writeFiles",
+    "shell",
+    "network",
+    "gitCommit",
+    "gitPush",
+    "release",
+    "deploy"
+  ],
+  "secretPolicy": {
+    "mayReadEnvFiles": false,
+    "mayPrintSecretValues": false,
+    "allowedTemplates": [
+      "*.example",
+      "*.template"
+    ]
+  },
+  "runtime": {
+    "defaultMode": "read_only",
+    "allowedProfiles": [
+      "read_only"
+    ],
+    "blockedProfiles": [
+      "release",
+      "deploy"
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "jenn.agents-os.extension.v1",
+  "title": "Jenn Extension Manifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "type",
+    "entrypoints",
+    "permissions",
+    "secretPolicy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "owner": {
+      "type": "string"
+    },
+    "sourceRepo": {
+      "type": "string"
+    },
+    "entrypoints": {
+      "type": "object"
+    },
+    "permissions": {
+      "type": "object"
+    },
+    "requiresApprovalFor": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "secretPolicy": {
+      "type": "object"
+    },
+    "runtime": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

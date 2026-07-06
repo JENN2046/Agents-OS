@@ -1,0 +1,24 @@
+# Example-only protected-path patterns.
+# Paths below preserve historical/unverified or policy example values from the
+# Windows reference tree. Do not treat them as active protections until a later
+# registry/security decision batch reviews them.
+protected_paths:
+  - path: state-private/**
+    reason: private memory and runtime state
+    default_action: do_not_commit_publicly
+
+  - path: runtime/VCPToolBox/Plugin.js
+    reason: VCP plugin runtime core
+    default_action: manual_review
+
+  - path: runtime/VCPToolBox/adminServer.js
+    reason: AdminPanel and runtime API control surface
+    default_action: manual_review
+
+  - path: runtime/VCPToolBox/AdminPanel-Vue/**
+    reason: frontend build and route surface
+    default_action: manual_review
+
+  - path: extensions/**/jenn-extension.manifest.json
+    reason: extension permission declaration
+    default_action: validate_schema

@@ -1,0 +1,632 @@
+{
+  "schema_version": "life-core.policy-router.rules.v0.6",
+  "source_index": "policy-index.json",
+  "default_modules": [
+    "permission-levels.md",
+    "evidence-levels.md"
+  ],
+  "default_decision": {
+    "decision": "needs_classification",
+    "permission_level": "unknown",
+    "confidence": "low",
+    "reason": "No local life-core router rule matched. Use manual Review before execution.",
+    "evidence": [
+      "manual_review_note"
+    ],
+    "denied_boundaries": [
+      "self_authorization"
+    ],
+    "next_steps": [
+      "Classify the action manually with permission-levels.md.",
+      "If any boundary is unclear, stop and ask Jenn or prepare a Review note."
+    ]
+  },
+  "rules": [
+    {
+      "id": "hard.secret-private-provider-raw",
+      "priority": 1000,
+      "decision": "proposal_only",
+      "permission_level": "A4",
+      "confidence": "high",
+      "terms_any": [
+        ".env",
+        "secret",
+        "secrets",
+        "credential",
+        "credentials",
+        "token",
+        "tokens",
+        "cookie",
+        "cookies",
+        "id_rsa",
+        "id_ed25519",
+        "private raw memory",
+        "private memory",
+        "raw memory",
+        "memory raw text",
+        "private memory raw text",
+        "provider raw response",
+        "provider response",
+        "raw response",
+        "model response",
+        "llm response",
+        "api response",
+        "state-private",
+        "密钥",
+        "凭证",
+        "令牌",
+        "私密记忆",
+        "私密记忆原文",
+        "原始响应"
+      ],
+      "modules": [
+        "house-rules.md",
+        "memory-rules.md",
+        "permission-levels.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Secret, private raw memory, and provider raw response access is forbidden for execution and may only be handled as proposal or refusal.",
+      "evidence": [
+        "proposal_log_only"
+      ],
+      "denied_boundaries": [
+        "secret_access",
+        "private_raw_memory_access",
+        "provider_raw_response_access"
+      ],
+      "next_steps": [
+        "Do not read, print, summarize, copy, or commit the protected content.",
+        "Produce only a boundary report or safe proposal."
+      ]
+    },
+    {
+      "id": "p3a.destructive-release-production",
+      "priority": 900,
+      "decision": "needs_activation",
+      "permission_level": "A3c_or_P3a",
+      "confidence": "high",
+      "terms_any": [
+        "force push",
+        "git tag",
+        "git reset --hard",
+        "git clean -fd",
+        "history rewrite",
+        "deploy",
+        "deployment",
+        "production",
+        "release",
+        "package publish",
+        "publish package",
+        "database write",
+        "delete",
+        "bulk delete",
+        "move all",
+        "rename all",
+        "overwrite",
+        "部署",
+        "发布",
+        "生产",
+        "数据库写入",
+        "批量删除",
+        "覆盖"
+      ],
+      "modules": [
+        "permission-levels.md",
+        "activation-package.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Destructive, production, release, publish, database, or history-changing work needs explicit current authorization and a higher gate.",
+      "evidence": [
+        "preflight_report",
+        "activation_package",
+        "full_receipt"
+      ],
+      "denied_boundaries": [
+        "destructive_action",
+        "production_or_release",
+        "history_rewrite"
+      ],
+      "next_steps": [
+        "Stop before execution.",
+        "Prepare a concrete preflight report and Activation package if Jenn asks for it."
+      ]
+    },
+    {
+      "id": "runtime.provider-plugin-probe",
+      "priority": 850,
+      "decision": "blocked",
+      "permission_level": "not_authorized_by_life_core",
+      "confidence": "high",
+      "terms_any": [
+        "vcptoolbox",
+        "vcp toolbox",
+        "plugin call",
+        "provider call",
+        "api call",
+        "capability map",
+        "real probe",
+        "runtime execution",
+        "call provider",
+        "call plugin",
+        "调用插件",
+        "调用 provider",
+        "调用api",
+        "能力地图",
+        "真实探测",
+        "运行时执行"
+      ],
+      "modules": [
+        "runtime-boundaries.md",
+        "permission-levels.md",
+        "activation-package.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Life-core currently allows runtime target planning only; real probe, plugin call, provider call, and runtime execution are not authorized by these pages.",
+      "evidence": [
+        "planning_note_only"
+      ],
+      "denied_boundaries": [
+        "runtime_execution",
+        "provider_calls",
+        "plugin_calls",
+        "capability_map"
+      ],
+      "next_steps": [
+        "Do not execute runtime/provider/plugin calls.",
+        "Prepare a planning note or Activation proposal only."
+      ]
+    },
+    {
+      "id": "external-write-money-browser",
+      "priority": 830,
+      "decision": "needs_activation",
+      "permission_level": "A3c_or_P3a",
+      "confidence": "high",
+      "terms_any": [
+        "external write",
+        "notion write",
+        "write notion",
+        "notion page",
+        "create notion",
+        "update notion",
+        "github issue",
+        "github pr",
+        "github pull request",
+        "pull request",
+        "create issue",
+        "update issue",
+        "write github",
+        "create github",
+        "update github",
+        "post github",
+        "remote branch",
+        "git push",
+        "push to github",
+        "push github",
+        "send email",
+        "post to",
+        "slack",
+        "discord",
+        "browser login",
+        "login state",
+        "money",
+        "payment",
+        "paid",
+        "outbound communication",
+        "外部写入",
+        "写入 notion",
+        "notion 写入",
+        "创建 notion",
+        "更新 notion",
+        "发邮件",
+        "发到",
+        "登录状态",
+        "付款",
+        "付费",
+        "对外沟通"
+      ],
+      "modules": [
+        "permission-levels.md",
+        "activation-package.md",
+        "evidence-levels.md"
+      ],
+      "reason": "External writes, outbound communication, money, paid provider use, or browser login-state work needs a higher gate before execution.",
+      "evidence": [
+        "preflight_report",
+        "activation_package",
+        "receipt"
+      ],
+      "denied_boundaries": [
+        "external_writes",
+        "money_or_paid_provider",
+        "browser_login_state_change"
+      ],
+      "next_steps": [
+        "Stop before execution.",
+        "Prepare an Activation package with exact targets, duration, budget, forbidden actions, and receipts."
+      ]
+    },
+    {
+      "id": "memory-identity-relation-life-core-change",
+      "priority": 760,
+      "decision": "needs_activation",
+      "permission_level": "review_memory_gate",
+      "confidence": "medium",
+      "terms_any": [
+        "formal memory",
+        "memory registration",
+        "register memory",
+        "identity change",
+        "autonomy boundary",
+        "relation change",
+        "relationship rewrite",
+        "house rule change",
+        "life core change",
+        "正式记忆",
+        "注册记忆",
+        "身份修改",
+        "自主边界",
+        "关系修改",
+        "重写关系",
+        "家规修改",
+        "生命内核修改"
+      ],
+      "modules": [
+        "memory-rules.md",
+        "members-and-rooms.md",
+        "a2a-relations.md",
+        "house-rules.md",
+        "root-principles.md",
+        "permission-levels.md",
+        "activation-package.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Identity, formal memory, relation, house-rule, or life-core changes require Review/Memory gates and may need Jenn confirmation before becoming official.",
+      "evidence": [
+        "proposal",
+        "review",
+        "memory_gate",
+        "receipt"
+      ],
+      "denied_boundaries": [
+        "unconfirmed_memory",
+        "identity_or_relation_rewrite"
+      ],
+      "next_steps": [
+        "Prepare a proposal and Review note.",
+        "Do not claim official Memory until the Memory path is completed."
+      ]
+    },
+    {
+      "id": "presence-sensing",
+      "priority": 720,
+      "decision": "needs_activation",
+      "permission_level": "presence_authorization_required",
+      "confidence": "medium",
+      "terms_any": [
+        "presence",
+        "sensing",
+        "continuous listening",
+        "continuous watching",
+        "phone",
+        "headphone",
+        "camera",
+        "microphone",
+        "real-world environment",
+        "在场",
+        "感知",
+        "连续监听",
+        "连续观看",
+        "手机",
+        "耳机",
+        "摄像头",
+        "麦克风",
+        "现实环境"
+      ],
+      "modules": [
+        "presence-and-sensing.md",
+        "permission-levels.md",
+        "activation-package.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Presence is not monitoring. S3/S4/S5 need explicit authorization formats, and S6 is proposal-only.",
+      "evidence": [
+        "presence_level",
+        "consent_basis",
+        "retention_rule",
+        "receipt"
+      ],
+      "denied_boundaries": [
+        "continuous_sensing_without_authorization",
+        "third_party_privacy"
+      ],
+      "next_steps": [
+        "Identify the sensing level S0-S6.",
+        "Do not implement device sensing without explicit authorization."
+      ]
+    },
+    {
+      "id": "yellow.stage-draft-plan",
+      "priority": 500,
+      "decision": "needs_classification",
+      "permission_level": "yellow_zone_draft",
+      "confidence": "medium",
+      "terms_none": [
+        "call provider",
+        "provider call",
+        "plugin call",
+        "api call",
+        "real probe",
+        "runtime execution",
+        "write github",
+        "write notion",
+        "external write",
+        "formal memory",
+        "正式记忆",
+        "secret",
+        "secrets",
+        ".env",
+        "state-private"
+      ],
+      "terms_all_any": [
+        [
+          "external tool",
+          "tool integration",
+          "runtime capability",
+          "provider integration",
+          "memory candidate",
+          "agent room",
+          "workflow",
+          "rule change",
+          "permission change",
+          "外部工具",
+          "工具接入",
+          "运行时能力",
+          "provider 接入",
+          "记忆候选",
+          "agent 房间",
+          "做事流程",
+          "规则修改",
+          "权限调整"
+        ],
+        [
+          "plan",
+          "draft",
+          "proposal",
+          "prepare",
+          "design",
+          "outline",
+          "草案",
+          "方案",
+          "预案",
+          "准备",
+          "设计",
+          "规划"
+        ]
+      ],
+      "modules": [
+        "progressive-workflow.md",
+        "permission-levels.md",
+        "evidence-levels.md"
+      ],
+      "reason": "This looks like a yellow-zone draft or planning action. It can be prepared locally, but should not be treated as official or executed externally.",
+      "evidence": [
+        "draft_note",
+        "receipt",
+        "review_if_boundary_changes"
+      ],
+      "denied_boundaries": [
+        "external_writes",
+        "runtime_execution",
+        "formal_memory_registration",
+        "permission_escalation"
+      ],
+      "next_steps": [
+        "Prepare a local draft or plan only.",
+        "Do not execute external, runtime, provider, or formal-memory actions.",
+        "Leave a receipt if the draft changes local policy or workflow files."
+      ]
+    },
+    {
+      "id": "green.local-test",
+      "priority": 450,
+      "decision": "allowed",
+      "permission_level": "A2",
+      "confidence": "medium",
+      "terms_none": [
+        "provider",
+        "plugin",
+        "api",
+        "runtime",
+        "external",
+        "notion",
+        "github",
+        ".env",
+        "secret",
+        "secrets",
+        "state-private",
+        "private memory"
+      ],
+      "terms_any": [
+        "run local tests",
+        "local tests",
+        "local test",
+        "fixture test",
+        "fixture tests",
+        "test-policy-router",
+        "本地测试",
+        "跑测试",
+        "测试样例"
+      ],
+      "modules": [
+        "progressive-workflow.md",
+        "permission-levels.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Running existing local tests is green-zone/A2 work when it does not touch runtime, providers, external systems, secrets, or private memory.",
+      "evidence": [
+        "validation_summary"
+      ],
+      "denied_boundaries": [
+        "secret_access",
+        "external_writes",
+        "runtime_execution",
+        "provider_calls"
+      ],
+      "next_steps": [
+        "Run only local tests in the safe scope.",
+        "Summarize the validation result."
+      ]
+    },
+    {
+      "id": "a2.control-plane-policy-housekeeping",
+      "priority": 400,
+      "decision": "allowed",
+      "permission_level": "A2",
+      "confidence": "medium",
+      "terms_none": [
+        "read-only",
+        "readonly",
+        "without edit",
+        "without edits",
+        "without change",
+        "without changes",
+        "no edit",
+        "no edits",
+        "no change",
+        "no changes",
+        "only explain",
+        "only review",
+        "只读",
+        "不修改",
+        "不写入",
+        "不落盘",
+        "只解释",
+        "只复核"
+      ],
+      "terms_all_any": [
+        [
+          "control-plane",
+          "control plane",
+          "life-core",
+          "policy",
+          "policies",
+          "policy-index",
+          "policy-router",
+          "router",
+          "module",
+          "modules",
+          "index",
+          "readme",
+          "receipt",
+          "review file",
+          "local mirror",
+          "documentation",
+          "docs",
+          "策略",
+          "模块",
+          "索引",
+          "路由器",
+          "文档",
+          "本地镜像",
+          "收据",
+          "复核文件"
+        ],
+        [
+          "organize",
+          "split",
+          "update",
+          "add",
+          "create",
+          "write",
+          "edit",
+          "patch",
+          "refactor",
+          "tighten",
+          "fix",
+          "record",
+          "generate",
+          "整理",
+          "拆分",
+          "更新",
+          "新增",
+          "创建",
+          "写入",
+          "修改",
+          "修补",
+          "收紧",
+          "修复",
+          "补",
+          "补充",
+          "落盘",
+          "记录"
+        ]
+      ],
+      "modules": [
+        "permission-levels.md",
+        "standing-authorization.md",
+        "evidence-levels.md",
+        "loops-and-pilot.md"
+      ],
+      "reason": "Local control-plane policy housekeeping can be A2 when scoped, reversible, non-secret, and evidenced.",
+      "evidence": [
+        "receipt",
+        "validation_summary"
+      ],
+      "denied_boundaries": [
+        "secret_access",
+        "external_writes",
+        "runtime_execution",
+        "formal_memory_registration"
+      ],
+      "next_steps": [
+        "Keep the scope inside control-plane policy files.",
+        "Leave a receipt and validation summary."
+      ]
+    },
+    {
+      "id": "a0.read-only-review-planning",
+      "priority": 200,
+      "decision": "allowed",
+      "permission_level": "A0",
+      "confidence": "medium",
+      "terms_any": [
+        "read",
+        "inspect",
+        "review",
+        "explain",
+        "plan",
+        "compare",
+        "survey",
+        "list",
+        "look at",
+        "阅读",
+        "查看",
+        "复核",
+        "解释",
+        "计划",
+        "对照",
+        "摸底",
+        "列出"
+      ],
+      "modules": [
+        "permission-levels.md",
+        "house-rules.md",
+        "evidence-levels.md"
+      ],
+      "reason": "Read-only review and planning is A0 when it avoids secrets, private memory, unauthorized accounts, and provider raw response.",
+      "evidence": [
+        "short_log_or_summary"
+      ],
+      "denied_boundaries": [
+        "secret_access",
+        "private_raw_memory_access",
+        "provider_raw_response_access"
+      ],
+      "next_steps": [
+        "Stay read-only.",
+        "Do not inspect protected paths or sensitive contents."
+      ]
+    }
+  ]
+}

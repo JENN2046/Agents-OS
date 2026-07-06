@@ -1,0 +1,136 @@
+{
+  "schema_version": "agents-os.task-envelope.validation-rules.v0.1",
+  "description": "Local text checks for AGENTS OS task envelope markdown files.",
+  "required_text": [
+    "## 1. 事情本身",
+    "事情名称：",
+    "一句话说明：",
+    "为什么现在要做：",
+    "谁来做：",
+    "## 2. 现在处在哪个阶段",
+    "阶段说明：",
+    "## 3. 颜色区判断",
+    "本次判断：",
+    "为什么这样判断：",
+    "## 4. policy-router 预检",
+    "行动描述：",
+    "预检结果：",
+    "decision:",
+    "permission:",
+    "需要的证据:",
+    "不能碰的边界:",
+    "## 5. 能不能自动做",
+    "自动推进判断：",
+    "允许做的范围：",
+    "不能做的范围：",
+    "## 6. 做事步骤",
+    "计划步骤：",
+    "停止条件：",
+    "## 7. 留痕要求",
+    "收据位置：",
+    "复核位置：",
+    "## 8. 验收",
+    "怎么知道这件事做完了：",
+    "怎么验证：",
+    "还剩什么风险：",
+    "## 9. 最终状态",
+    "结果说明：",
+    "## 10. 大白话复述"
+  ],
+  "required_any_groups": [
+    {
+      "id": "stage_selected",
+      "description": "At least one stage checkbox should be selected.",
+      "any_of": [
+        "[x] 只是看一眼 / 解释",
+        "[x] 写本地草案",
+        "[x] 整理本地文档或结构",
+        "[x] 改本地规则或流程",
+        "[x] 跑已有本地测试",
+        "[x] 新增本地测试样例",
+        "[x] 准备外部工具或运行时方案",
+        "[x] 改外部工具或运行时配置",
+        "[x] 真实调用外部工具 / provider / plugin",
+        "[x] 写入外部平台，比如 Notion、GitHub、邮件",
+        "[x] 影响正式记忆、身份、关系、家规、生命内核",
+        "[x] 碰到密钥、私密记忆、provider 原始响应"
+      ]
+    },
+    {
+      "id": "color_zone_selected",
+      "description": "At least one color zone should be selected.",
+      "any_of": [
+        "[x] 绿色区",
+        "[x] 黄色区",
+        "[x] 红色区"
+      ]
+    },
+    {
+      "id": "automation_decision_selected",
+      "description": "At least one automation decision should be selected.",
+      "any_of": [
+        "[x] 可以自动做",
+        "[x] 只能做本地草案",
+        "[x] 需要复核后再继续",
+        "[x] 需要 Jenn 明确确认",
+        "[x] 不能做，只能写预案"
+      ]
+    },
+    {
+      "id": "evidence_selected",
+      "description": "At least one evidence option should be selected.",
+      "any_of": [
+        "[x] 一句话说明",
+        "[x] 收据",
+        "[x] 本地复核",
+        "[x] Jenn 确认记录",
+        "[x] 记忆候选",
+        "[x] 正式记忆流程",
+        "[x] 只写边界预案，不执行"
+      ]
+    },
+    {
+      "id": "final_status_selected",
+      "description": "At least one final status should be selected.",
+      "any_of": [
+        "[x] 未开始",
+        "[x] 进行中",
+        "[x] 已完成",
+        "[x] 已暂停",
+        "[x] 被红线挡住",
+        "[x] 需要 Jenn"
+      ]
+    }
+  ],
+  "warning_if_missing": [
+    {
+      "id": "plain_language_summary",
+      "description": "Plain-language recap should name what can and cannot be done.",
+      "terms": [
+        "我能做：",
+        "我不能碰：",
+        "做完会留下："
+      ]
+    },
+    {
+      "id": "red_line_statement",
+      "description": "A filled envelope should say what red lines were not touched.",
+      "terms": [
+        "外部写入",
+        "密钥",
+        "私密记忆"
+      ]
+    }
+  ],
+  "forbidden_text": [
+    "BEGIN PRIVATE KEY",
+    "BEGIN RSA PRIVATE KEY",
+    "BEGIN OPENSSH PRIVATE KEY"
+  ],
+  "forbidden_patterns": [
+    {
+      "id": "openai_like_secret_key",
+      "pattern": "(?<![A-Za-z0-9_])sk-[A-Za-z0-9_-]{20,}"
+    }
+  ]
+}

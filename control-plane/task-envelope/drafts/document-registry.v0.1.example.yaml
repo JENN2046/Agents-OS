@@ -1,0 +1,404 @@
+schema_version: agents-os.document-registry.v0.1-draft
+status: draft_example_not_active
+date: 2026-07-01
+scope: control-plane/task-envelope documentation governance pilot
+notes:
+  - "This is a document registry example for Documentation Governance Pilot 2."
+  - "It is not active authority data."
+  - "Markdown/YAML/JSON/Python files remain the source of truth; future databases may only be rebuildable caches."
+  - "This registry must not list sensitive source paths such as state-private, .env files, secrets, private memory raw text, or provider raw responses."
+  - "This registry does not authorize bulk moves, external writes, runtime execution, provider calls, or formal Memory registration."
+
+document_types:
+  - index
+  - overview
+  - tutorial
+  - how_to
+  - runbook
+  - reference
+  - explanation
+  - decision_record
+  - policy
+  - registry
+  - contract
+  - schema
+  - template
+  - example
+  - receipt
+  - review
+  - incident_review
+  - archive_note
+
+statuses:
+  - draft
+  - review_needed
+  - active
+  - accepted
+  - superseded
+  - deprecated
+  - archived
+  - example
+  - blocked
+
+documents:
+  - id: task-envelope-readme
+    title: Task Envelope README
+    doc_type: index
+    status: active
+    scope: task-envelope directory entrypoint and operating guide
+    canonical_path: control-plane/task-envelope/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/agents-os-task-envelope-v0.1.md
+      - control-plane/task-envelope/validation-rules.json
+      - control-plane/task-envelope/validate-task-envelope.py
+      - control-plane/task-envelope/run-task-envelope-loop.py
+      - control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - task-envelope boundary changes
+        - loop runner behavior changes
+        - document registry pilot expansion
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-document-registry-example
+    title: Task Envelope Document Registry v0.1 Example
+    doc_type: registry
+    status: example
+    scope: draft example registry for task-envelope documentation governance, not active authority data
+    canonical_path: control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+      - control-plane/registry/reviews/2026-07-01-yellow-docctl-doctor-backlog-classification.review.md
+      - control-plane/registry/receipts/2026-07-01-yellow-docctl-doctor-should-register-backlog.md
+      - control-plane/registry/reviews/2026-07-01-yellow-docctl-doctor-should-register-backlog.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/registry/reviews/2026-07-01-yellow-docctl-doctor-should-register-backlog.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - task-envelope document registry changes
+        - federated expected count changes
+    security_boundary:
+      - example only
+      - not active authority data
+      - no protected paths
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-template
+    title: Task Envelope v0.1 Template
+    doc_type: template
+    status: active
+    scope: local task envelope template
+    canonical_path: control-plane/task-envelope/agents-os-task-envelope-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/agents-os-task-envelope-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+      - control-plane/task-envelope/validate-task-envelope.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - template field changes
+        - validator rule changes
+        - Jenn correction
+    security_boundary:
+      - template only
+      - no secrets
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/validate-task-envelope.py control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+
+  - id: task-envelope-validation-rules
+    title: Task Envelope Validation Rules
+    doc_type: schema
+    status: active
+    scope: machine-readable local validation rules for task envelopes
+    canonical_path: control-plane/task-envelope/validation-rules.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/validation-rules.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/validate-task-envelope.py
+      - control-plane/task-envelope/test-task-envelope-loop.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-validator-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validator false positive or false negative
+        - task envelope template changes
+    security_boundary:
+      - no secret values
+      - no task execution authority
+    validation:
+      commands:
+        - python3 -m json.tool control-plane/task-envelope/validation-rules.json
+
+  - id: task-envelope-validator
+    title: Task Envelope Validator
+    doc_type: reference
+    status: active
+    scope: local read-only checker for task envelope markdown
+    canonical_path: control-plane/task-envelope/validate-task-envelope.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/validate-task-envelope.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/validation-rules.json
+      - control-plane/task-envelope/test-task-envelope-loop.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-validator-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validator rule changes
+        - task envelope false positive or false negative
+    security_boundary:
+      - read-only local checker
+      - no task execution
+      - no external write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/validate-task-envelope.py control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+
+  - id: task-envelope-loop-runner
+    title: Task Envelope Loop Runner
+    doc_type: reference
+    status: active
+    scope: local preflight loop connecting task envelope, policy-router, validator, gate result, and receipt
+    canonical_path: control-plane/task-envelope/run-task-envelope-loop.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/run-task-envelope-loop.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/test-task-envelope-loop.py
+      - control-plane/policies/life-core/policy-router.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-loop-runner-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - gate behavior changes
+        - receipt format changes
+        - policy-router output changes
+    security_boundary:
+      - local preflight only
+      - does not execute task contents
+      - no runtime/provider/plugin call
+      - no formal Memory registration
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/test-task-envelope-loop.py
+
+  - id: task-envelope-loop-tests
+    title: Task Envelope Loop Tests
+    doc_type: reference
+    status: active
+    scope: local fixture tests for task-envelope loop behavior
+    canonical_path: control-plane/task-envelope/test-task-envelope-loop.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/test-task-envelope-loop.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/run-task-envelope-loop.py
+      - control-plane/task-envelope/validate-task-envelope.py
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-loop-runner-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - loop runner changes
+        - validator changes
+    security_boundary:
+      - local fixture tests only
+      - no external write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/test-task-envelope-loop.py
+
+  - id: task-envelope-example-local-loop
+    title: Example Local Task Envelope Loop
+    doc_type: example
+    status: example
+    scope: filled real example for the local task-envelope loop
+    canonical_path: control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/agents-os-task-envelope-v0.1.md
+      - control-plane/task-envelope/receipts/2026-06-30-a2-example-task-envelope-loop.md
+      - control-plane/task-envelope/reviews/2026-06-30-a2-example-task-envelope-loop.review.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/task-envelope/reviews/2026-06-30-a2-example-task-envelope-loop.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - task envelope template changes
+    security_boundary:
+      - example only
+      - not active authority
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/task-envelope/validate-task-envelope.py control-plane/task-envelope/examples/2026-06-30-example-local-task-envelope-loop.md
+
+  - id: task-envelope-receipts-directory
+    title: Task Envelope Receipts Directory
+    doc_type: receipt
+    status: active
+    scope: local receipt collection for task-envelope work
+    canonical_path: control-plane/task-envelope/receipts/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/receipts/
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/receipts/2026-06-30-a2-task-envelope-loop-runner-v0.1.md
+      - control-plane/task-envelope/receipts/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - receipt retention/indexing rules change
+    security_boundary:
+      - local evidence only
+      - no secrets
+      - not active authority by itself
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-reviews-directory
+    title: Task Envelope Reviews Directory
+    doc_type: review
+    status: active
+    scope: local review collection for task-envelope work
+    canonical_path: control-plane/task-envelope/reviews/
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/reviews/
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/reviews/2026-06-30-a2-task-envelope-loop-runner-v0.1.review.md
+      - control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - review format/indexing rules change
+    security_boundary:
+      - local review evidence only
+      - no secrets
+      - not active authority by itself
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-document-governance-pilot-2-receipt
+    title: Documentation Governance Pilot 2 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: evidence for task-envelope document registry pilot
+    canonical_path: control-plane/task-envelope/receipts/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/receipts/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+      - control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - pilot result is superseded
+    security_boundary:
+      - local evidence only
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+
+  - id: task-envelope-document-governance-pilot-2-review
+    title: Documentation Governance Pilot 2 Review
+    doc_type: review
+    status: accepted
+    scope: review for task-envelope document registry pilot
+    canonical_path: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml
+      - control-plane/task-envelope/receipts/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.md
+    last_reviewed: 2026-07-01
+    review_by: control-plane/task-envelope/reviews/2026-07-01-yellow-documentation-governance-pilot-2-task-envelope.review.md
+    freshness:
+      level: ordinary
+      review_trigger:
+        - pilot result is superseded
+    security_boundary:
+      - local review only
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/task-envelope/drafts/document-registry.v0.1.example.yaml

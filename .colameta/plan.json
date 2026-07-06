@@ -1,0 +1,504 @@
+{
+  "authority_status": "draft_only_not_active_runner_plan",
+  "boundary_note": "This draft maps the AGENTS OS Document Governance 9.5 plan into ColaMeta Runner plan shape. It is not applied to .colameta/plan.json and does not authorize executor run, commit, push, runtime/provider calls, formal Memory registration, external writes, or WORKSPACE_REGISTRY.yaml changes.",
+  "commit_policy": {
+    "after_acceptance_pass": true,
+    "enabled": false,
+    "include_runner_runtime_files": false,
+    "mode": "manual_gate",
+    "require_clean_scope": true,
+    "require_commit_before_continue": false,
+    "require_confirm": true
+  },
+  "default_acceptance_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m compileall -q control-plane/registry",
+      "continue_on_failure": false,
+      "timeout_seconds": 600
+    }
+  ],
+  "logs_dir": "/home/jenn/AGENTS_OS_Workspace/.colameta/logs",
+  "model_execution": {
+    "mode": "manual",
+    "model_command": null,
+    "prompt_input_mode": "stdin",
+    "provider": "codex",
+    "stream_output": true,
+    "timeout_seconds": 1800
+  },
+  "plan_version": "document-governance-9.5-colameta-draft.v0.1",
+  "project_name": "AGENTS_OS_Workspace",
+  "project_root": "/home/jenn/AGENTS_OS_Workspace",
+  "review_policy": {
+    "after_versions": [
+      "dg95.0",
+      "dg95.1",
+      "dg95.2",
+      "dg95.3",
+      "dg95.4",
+      "dg95.5",
+      "dg95.6"
+    ],
+    "enabled": true,
+    "mode": "manual_gate"
+  },
+  "rules_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/rules.md",
+  "runner_policy": {
+    "auto_continue_on_pass": false,
+    "max_fix_attempts_per_version": 3,
+    "require_clean_worktree": false,
+    "stop_on_acceptance_failure": true,
+    "stop_on_scope_violation": true
+  },
+  "runtime_dir": "/home/jenn/AGENTS_OS_Workspace/.colameta/runtime",
+  "source_plan": "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+  "state_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/state.json",
+  "versions": [
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-doctor.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-0-baseline-freeze.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-0-baseline-freeze.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-doctor.py",
+        "control-plane/registry/VALIDATOR_BOUNDARY_REVIEW_CHECKLIST.md"
+      ],
+      "description": "Freeze the current document-governance baseline and make the docctl doctor read-only contract explicit before stricter rules are added.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L2",
+        "notes": "Local documentation and validator hardening only. No executor run is authorized by this draft.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "Baseline summary is recorded with concrete counts.",
+        "docctl doctor remains read-only.",
+        "P3/protected paths remain blocked.",
+        "No .colameta runner state is initialized by this stage."
+      ],
+      "name": "Stage 0: Baseline Freeze And Read-Only Contract",
+      "out_of_scope": [
+        "Do not start ColaMeta runtime.",
+        "Do not apply this draft to .colameta/plan.json.",
+        "Do not modify WORKSPACE_REGISTRY.yaml.",
+        "Do not run executor workflows."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-0.md",
+      "version": "dg95.0"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-document-registry-validator.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/validate-document-registry.py",
+        "control-plane/registry/test-document-registry-validator.py",
+        "control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-1-schema-lifecycle.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-1-schema-lifecycle.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/validate-document-registry.py",
+        "control-plane/registry/test-document-registry-validator.py",
+        "control-plane/registry/drafts/document-registry.v0.1.example.yaml"
+      ],
+      "description": "Make registry fields, lifecycle statuses, transition rules, and migration behavior stricter before scoring is implemented.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Validator and tests are in scope; active authority changes are not.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "Allowed lifecycle statuses match the current registry status set.",
+        "Legacy gaps warn during migration.",
+        "New missing required metadata fails after rule adoption.",
+        "Fixtures cover valid and invalid lifecycle transitions."
+      ],
+      "name": "Stage 1: Registry Schema And Lifecycle Hardening",
+      "out_of_scope": [
+        "Do not implement scoring.",
+        "Do not auto-promote draft/example/archive records.",
+        "Do not change active workspace authority."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-1.md",
+      "version": "dg95.1"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-intake.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-doctor.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-intake.py",
+        "control-plane/registry/README.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-2-docctl-intake.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-2-docctl-intake.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-doctor.py",
+        "control-plane/registry/path_boundary.py"
+      ],
+      "description": "Add a dry-run intake route so new document files receive an explicit route before they become backlog.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Read-only/dry-run command only.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "intake is dry-run only.",
+        "protected/P3 paths return blocked before content reading.",
+        "ignored_by_rule and future_backlog include required explanations.",
+        "No registry file is modified by intake."
+      ],
+      "name": "Stage 2: docctl intake",
+      "out_of_scope": [
+        "Do not write registry entries from intake.",
+        "Do not move or delete files.",
+        "Do not print sensitive file contents."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-2.md",
+      "version": "dg95.2"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-federated-document-registry-validator.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+        "control-plane/registry/validate-federated-document-registry.py",
+        "control-plane/registry/test-federated-document-registry-validator.py",
+        "control-plane/registry/archive-notes/2026-07-01-grouped-historical-document-governance-backlog.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-3-exception-governance.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-3-exception-governance.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+        "control-plane/registry/validate-federated-document-registry.py",
+        "control-plane/registry/test-federated-document-registry-validator.py",
+        "control-plane/registry/archive-notes/2026-07-01-grouped-historical-document-governance-backlog.md"
+      ],
+      "description": "Make known_external_scope and archive_note entries reviewable so they cannot hide ordinary backlog.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Federated registry and fixtures only.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "known_external_scope requires reason and review trigger.",
+        "archive_note requires safe use and replacement or no-replacement reason.",
+        "protected/P3 exception paths fail.",
+        "Ordinary current documents cannot be hidden as exceptions."
+      ],
+      "name": "Stage 3: Exception Governance For known/archive",
+      "out_of_scope": [
+        "Do not expand known_external_scope automatically.",
+        "Do not promote archives to active documents.",
+        "Do not bulk move historical material."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-3.md",
+      "version": "dg95.3"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-impact.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-impact.py",
+        "control-plane/registry/README.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-4-docctl-impact.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-4-docctl-impact.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+        "control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+        "control-plane/registry/GOLDEN_PATHS.md"
+      ],
+      "description": "Add a read-only impact view that lists which registry documents are affected by changed paths.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Read-only graph and tests only.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "impact output is read-only.",
+        "changed registry and evidence paths list affected documents.",
+        "protected/P3 changed paths are blocked.",
+        "JSON output is available for future scoring."
+      ],
+      "name": "Stage 4: docctl impact",
+      "out_of_scope": [
+        "Do not write impact reports automatically.",
+        "Do not scan outside declared governance scope.",
+        "Do not infer active authority from impact relationships."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-4.md",
+      "version": "dg95.4"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-score.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-score.py",
+        "control-plane/registry/SCORECARD.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-5-docctl-score.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-5-docctl-score.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/SCORECARD.md",
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/validate-document-registry.py",
+        "control-plane/registry/validate-federated-document-registry.py"
+      ],
+      "description": "Add a versioned score after schema, lifecycle, intake, exception, and impact rules are stable.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Scoring must measure governance health, not replace judgment.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "Hard gates block 9.5.",
+        "blocking_warn and advisory_warn are separated.",
+        "Every deduction is explained.",
+        "Adversarial fixtures lower or block the score."
+      ],
+      "name": "Stage 5: docctl score",
+      "out_of_scope": [
+        "Do not treat score as Jenn confirmation.",
+        "Do not hide warnings to increase the score.",
+        "Do not write repair changes from score."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-5.md",
+      "version": "dg95.5"
+    },
+    {
+      "acceptance_commands": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/test-docctl-trend.py",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor",
+          "continue_on_failure": false,
+          "timeout_seconds": 600
+        }
+      ],
+      "allow_no_changes": false,
+      "allowed_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/test-docctl-trend.py",
+        "control-plane/registry/README.md",
+        "control-plane/registry/receipts/2026-07-02-yellow-document-governance-9.5-stage-6-docctl-trend.md",
+        "control-plane/registry/reviews/2026-07-02-yellow-document-governance-9.5-stage-6-docctl-trend.review.md"
+      ],
+      "context_files": [
+        "control-plane/registry/docctl.py",
+        "control-plane/registry/drafts/2026-07-01-document-governance-9.5-plan.md",
+        "control-plane/registry/receipts",
+        "control-plane/registry/reviews"
+      ],
+      "description": "Add a read-only trend view over existing local snapshots so baseline drift becomes visible over time.",
+      "enabled": true,
+      "execution": {
+        "capability_level": "L3",
+        "notes": "Trend reads existing snapshots only; snapshot writing remains separate.",
+        "provider": "codex"
+      },
+      "forbidden_files": [
+        ".env*",
+        "**/.env*",
+        "state-private/**",
+        "runtime/**",
+        ".colameta/memory.md",
+        ".colameta/runtime/**",
+        ".colameta/logs/**",
+        "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+        "secrets/**"
+      ],
+      "manual_acceptance": [
+        "trend reads existing snapshots only.",
+        "snapshot writing is not part of trend.",
+        "known/archive growth is visible.",
+        "four-week no-regression view is possible once enough snapshots exist."
+      ],
+      "name": "Stage 6: docctl trend",
+      "out_of_scope": [
+        "Do not create snapshots from trend.",
+        "Do not write external dashboards.",
+        "Do not start services or background monitors."
+      ],
+      "prompt_file": "/home/jenn/AGENTS_OS_Workspace/.colameta/prompts/dg95-stage-6.md",
+      "version": "dg95.6"
+    }
+  ]
+}

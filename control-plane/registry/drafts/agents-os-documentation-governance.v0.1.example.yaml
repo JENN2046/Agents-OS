@@ -1,0 +1,94 @@
+schema_version: agents-os.documentation-governance.v0.1-draft
+status: draft_example_not_active
+date: 2026-06-30
+scope: local AGENTS OS documentation governance
+notes:
+  - "This is a document-object example, not active registry data."
+  - "It must not store secret values, private memory raw text, or provider raw responses."
+  - "It does not authorize bulk moves, external writes, runtime execution, provider calls, or formal Memory registration."
+
+document_types:
+  - index
+  - overview
+  - tutorial
+  - how_to
+  - runbook
+  - reference
+  - explanation
+  - decision_record
+  - policy
+  - registry
+  - contract
+  - schema
+  - template
+  - example
+  - receipt
+  - review
+  - incident_review
+  - archive_note
+
+statuses:
+  - draft
+  - review_needed
+  - active
+  - accepted
+  - superseded
+  - deprecated
+  - archived
+  - example
+  - blocked
+
+documents:
+  - id: registry-readme
+    title: Registry README
+    doc_type: index
+    status: active
+    scope: control-plane registry directory entrypoint
+    canonical_path: control-plane/registry/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/GOLDEN_PATHS.md
+      - control-plane/registry/SCORECARD.md
+      - control-plane/registry/DECISION_RECORDS.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+    security_boundary:
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-governance-registry.py
+
+  - id: documentation-governance-draft
+    title: AGENTS OS Documentation Governance v0.1 Draft
+    doc_type: policy
+    status: draft
+    scope: future large-scale AGENTS OS documentation governance
+    canonical_path: control-plane/registry/drafts/agents-os-documentation-governance-v0.1-draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/drafts/agents-os-documentation-governance-v0.1-draft.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/GOLDEN_PATHS.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/SCORECARD.md
+    last_reviewed: 2026-06-30
+    review_by: control-plane/registry/reviews/2026-06-30-yellow-documentation-governance-draft.review.md
+    security_boundary:
+      - draft only
+      - no bulk moves
+      - no secret scanning
+      - no state-private access
+    validation:
+      notes:
+        - Draft reviewed through local receipt/review and registry scorecard.

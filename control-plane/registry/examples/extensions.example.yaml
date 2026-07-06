@@ -1,0 +1,23 @@
+# Example-only registry entries.
+# Paths below preserve historical/unverified source values from the Windows
+# reference tree. Do not normalize them until an extension-asset migration
+# decision batch reconciles the current target layout.
+extensions:
+  - id: jenn.photo-studio
+    name: Jenn Photo Studio Extension
+    path: extensions/Jenn-VCP-Extensions/admin-extensions/photo-studio-console
+    default_mode: read_only
+    requires_manifest: true
+    permissions:
+      readFiles: true
+      writeFiles: false
+      shell: false
+      gitPush: false
+      release: false
+      deploy: false
+
+  - id: jenn.codex-router
+    name: Codex Router Bridge
+    path: extensions/Jenn-VCP-Extensions/bridge-plugins/CodexRouterBridge
+    default_mode: audit
+    requires_manifest: true

@@ -1,0 +1,250 @@
+{
+  "schema_version": "life-core.policy-router.fixtures.v0.1",
+  "cases": [
+    {
+      "id": "a0.explain-with-policy-module-terms",
+      "action": "explain AGENTS OS permission levels from local life-core modules",
+      "expected_decision": "allowed",
+      "expected_permission_level": "A0",
+      "must_match_rules": [
+        "a0.read-only-review-planning"
+      ],
+      "must_not_match_rules": [
+        "a2.control-plane-policy-housekeeping"
+      ]
+    },
+    {
+      "id": "a0.review-without-edits",
+      "action": "review local life-core policy modules without edits",
+      "expected_decision": "allowed",
+      "expected_permission_level": "A0",
+      "must_match_rules": [
+        "a0.read-only-review-planning"
+      ],
+      "must_not_match_rules": [
+        "a2.control-plane-policy-housekeeping"
+      ]
+    },
+    {
+      "id": "a2.organize-policy-modules",
+      "action": "organize local life-core policy modules and receipt",
+      "expected_decision": "allowed",
+      "expected_permission_level": "A2",
+      "must_match_rules": [
+        "a2.control-plane-policy-housekeeping"
+      ],
+      "must_include_evidence": [
+        "receipt",
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "external_writes",
+        "runtime_execution"
+      ]
+    },
+    {
+      "id": "a2.update-router-index",
+      "action": "update policy-index.json for life-core router fixture tests",
+      "expected_decision": "allowed",
+      "expected_permission_level": "A2",
+      "must_match_rules": [
+        "a2.control-plane-policy-housekeeping"
+      ]
+    },
+    {
+      "id": "blocked.runtime-probe",
+      "action": "run VCPToolBox real probe and provider call",
+      "expected_decision": "blocked",
+      "expected_permission_level": "not_authorized_by_life_core",
+      "must_match_rules": [
+        "runtime.provider-plugin-probe"
+      ],
+      "must_include_evidence": [
+        "planning_note_only"
+      ],
+      "must_not_include_evidence": [
+        "receipt",
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "runtime_execution",
+        "provider_calls"
+      ]
+    },
+    {
+      "id": "needs-activation.notion-write",
+      "action": "write Notion page with router result",
+      "expected_decision": "needs_activation",
+      "expected_permission_level": "A3c_or_P3a",
+      "must_match_rules": [
+        "external-write-money-browser"
+      ],
+      "must_include_evidence": [
+        "preflight_report",
+        "activation_package",
+        "receipt"
+      ],
+      "must_not_include_evidence": [
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "external_writes"
+      ]
+    },
+    {
+      "id": "needs-activation.github-issue-write",
+      "action": "write GitHub issue with router result",
+      "expected_decision": "needs_activation",
+      "expected_permission_level": "A3c_or_P3a",
+      "must_match_rules": [
+        "external-write-money-browser"
+      ],
+      "must_include_evidence": [
+        "preflight_report",
+        "activation_package"
+      ],
+      "must_not_include_evidence": [
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "external_writes"
+      ]
+    },
+    {
+      "id": "proposal.secret-private",
+      "action": "read state-private secrets",
+      "expected_decision": "proposal_only",
+      "expected_permission_level": "A4",
+      "must_match_rules": [
+        "hard.secret-private-provider-raw"
+      ],
+      "must_include_evidence": [
+        "proposal_log_only"
+      ],
+      "must_not_include_evidence": [
+        "short_log_or_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "secret_access",
+        "private_raw_memory_access"
+      ]
+    },
+    {
+      "id": "proposal.provider-response",
+      "action": "copy provider response into receipt",
+      "expected_decision": "proposal_only",
+      "expected_permission_level": "A4",
+      "must_match_rules": [
+        "hard.secret-private-provider-raw"
+      ],
+      "must_include_evidence": [
+        "proposal_log_only"
+      ],
+      "must_include_denied_boundaries": [
+        "provider_raw_response_access"
+      ]
+    },
+    {
+      "id": "needs-activation.formal-memory-relation",
+      "action": "register formal memory for a new Agent-to-Agent relation",
+      "expected_decision": "needs_activation",
+      "expected_permission_level": "review_memory_gate",
+      "must_match_rules": [
+        "memory-identity-relation-life-core-change"
+      ]
+    },
+    {
+      "id": "proposal.private-memory-raw-text",
+      "action": "read private memory raw text",
+      "expected_decision": "proposal_only",
+      "expected_permission_level": "A4",
+      "must_match_rules": [
+        "hard.secret-private-provider-raw"
+      ],
+      "must_include_evidence": [
+        "proposal_log_only"
+      ],
+      "must_include_denied_boundaries": [
+        "private_raw_memory_access"
+      ]
+    },
+    {
+      "id": "green.run-local-tests",
+      "action": "run local tests",
+      "expected_decision": "allowed",
+      "expected_permission_level": "A2",
+      "must_match_rules": [
+        "green.local-test"
+      ],
+      "must_include_evidence": [
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "runtime_execution",
+        "provider_calls"
+      ]
+    },
+    {
+      "id": "yellow.external-tool-plan",
+      "action": "prepare external tool integration plan",
+      "expected_decision": "needs_classification",
+      "expected_permission_level": "yellow_zone_draft",
+      "must_match_rules": [
+        "yellow.stage-draft-plan"
+      ],
+      "must_include_evidence": [
+        "draft_note",
+        "receipt"
+      ],
+      "must_include_denied_boundaries": [
+        "external_writes",
+        "runtime_execution"
+      ]
+    },
+    {
+      "id": "needs-activation.identity-boundary-change",
+      "action": "identity change for Agent boundary",
+      "expected_decision": "needs_activation",
+      "expected_permission_level": "review_memory_gate",
+      "must_match_rules": [
+        "memory-identity-relation-life-core-change"
+      ]
+    },
+    {
+      "id": "needs-classification.unknown",
+      "action": "rebalance council weather",
+      "expected_decision": "needs_classification",
+      "expected_permission_level": "unknown",
+      "must_match_rules": []
+    },
+    {
+      "id": "higher-priority.delete-policy-modules",
+      "action": "delete local policy modules",
+      "expected_decision": "needs_activation",
+      "expected_permission_level": "A3c_or_P3a",
+      "must_match_rules": [
+        "p3a.destructive-release-production"
+      ]
+    },
+    {
+      "id": "strict-rank-over-priority",
+      "action": "read state-private secrets and update policy router",
+      "expected_decision": "proposal_only",
+      "expected_permission_level": "A4",
+      "must_match_rules": [
+        "hard.secret-private-provider-raw",
+        "a2.control-plane-policy-housekeeping"
+      ],
+      "must_include_evidence": [
+        "proposal_log_only"
+      ],
+      "must_not_include_evidence": [
+        "validation_summary"
+      ],
+      "must_include_denied_boundaries": [
+        "secret_access",
+        "private_raw_memory_access"
+      ]
+    }
+  ]
+}
