@@ -6,7 +6,8 @@ It reads the Active Work Queue through the Machine parser, runs local docctl
 status checks, summarizes open blockers and last closed work, and emits Memory
 candidates as drafts only. When the queue is stopped at route selection, it
 also surfaces the local route-selection package as preview-only options for
-Jenn.
+Jenn. It also surfaces the reviewed route adoption gate readiness without
+selecting or applying a route.
 
 It is not a Memory writer, executor, service, provider adapter, ColaMeta runner,
 VCPToolBox starter, queue mutator, or task producer.
@@ -33,6 +34,10 @@ route_selection.status=awaiting_jenn_selection|not_active
 route_selection.route_auto_selection_authorized=false
 route_selection.queue_promotion_authorized=false
 route_selection.execution_authorized=false
+route_adoption_gate.status=waiting_for_jenn_route_choice|not_active
+route_adoption_gate.active_queue_mutation_authorized=false
+route_adoption_gate.queue_promotion_authorized=false
+route_adoption_gate.execution_authorized=false
 ```
 
 Memory candidates are candidate-only records. They may be reviewed later, but

@@ -62,6 +62,8 @@ dashboard_memory_candidate_layer_exists=true
 dashboard_memory_candidate_layer_validation=PASS
 dashboard_route_options_visibility_exists=true
 dashboard_route_options_visibility_validation=PASS
+dashboard_route_adoption_gate_readiness_exists=true
+dashboard_route_adoption_gate_readiness_validation=PASS
 migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
 colameta_executor_inventory_readiness_map_exists=true
@@ -135,6 +137,11 @@ The Dashboard now also surfaces the route-selection package as structured
 preview-only options while keeping route auto-selection, queue promotion, and
 execution authorization false.
 
+The Dashboard now also surfaces route adoption gate readiness. It reports that
+the proposal, preview, and apply gate evidence exist, while keeping
+`can_apply_now=false`, Active Work Queue mutation, queue promotion, and
+execution unauthorized.
+
 ColaMeta local readiness is clean for summary-only preview, but real executor,
 service startup, provider calls, Memory writes, and applying runtime preview
 payloads remain blocked. MCP/connector boundaries are explicit. Provider and
@@ -165,6 +172,8 @@ The reviewed route adoption preview adds the accepted-review layer, but still
 stops before any file write.
 The reviewed route adoption apply gate adds the explicit future write gate, but
 the current queue remains in stop-state with no selected route.
+The Dashboard route adoption gate readiness card makes that future gate visible
+without changing queue state.
 
 ## Queue Decision
 
@@ -290,6 +299,7 @@ colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local ex
 mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector boundary plan; live connector calls, auth mutation, MCP service start, provider calls, and external writes remain unauthorized
 provider_host_dispatcher_static_behavior_map_v0.1: closed for static provider registry and host dispatcher evidence map; provider calls, provider execution, host dispatcher execution, registry/config mutation, real spawn, service start, executor run, and external writes remain unauthorized
 root_private_history_review_gate_v0.1: closed for no-push root private-history pattern review; no history scrub indicated, but external publication still requires a separate target-specific external-write gate
+dashboard_route_adoption_gate_readiness_v0.1: closed for preview-only route adoption gate readiness visibility; active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

@@ -42,6 +42,7 @@
     "active_queue_mutation",
     "route_auto_selection",
     "queue_promotion",
+    "route_adoption_without_explicit_apply_gate",
     "formal_memory_write",
     "private_memory_raw_read",
     "state_private_read",

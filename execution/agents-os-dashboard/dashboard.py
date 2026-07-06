@@ -26,6 +26,9 @@ REGISTRY_DIR = WORKSPACE_ROOT / "control-plane" / "registry"
 MACHINE_PATH = WORKSPACE_ROOT / "execution" / "agents-os-machine" / "machine.py"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
 ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
+ROUTE_CHOICE_QUEUE_PROPOSAL_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md"
+ROUTE_ADOPTION_PREVIEW_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md"
+ROUTE_ADOPTION_APPLY_GATE_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-reviewed-route-adoption-apply-gate-v0.1.md"
 DOCCTL = REGISTRY_DIR / "docctl.py"
 MANIFEST_PATH = DASHBOARD_DIR / "dashboard-manifest.json"
 SCHEMAS_PATH = DASHBOARD_DIR / "dashboard.schemas.json"
@@ -269,6 +272,44 @@ def route_selection_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def route_adoption_gate_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
+    queue_summary = normalized_queue.get("summary", {})
+    now_title = first_item_title(normalized_queue, "NOW")
+    awaiting_selection = now_title == "No Active Automatic Construction Item"
+    required_gates = {
+        "route_choice_queue_proposal": {
+            "path": rel(ROUTE_CHOICE_QUEUE_PROPOSAL_REPORT),
+            "exists": ROUTE_CHOICE_QUEUE_PROPOSAL_REPORT.exists(),
+        },
+        "reviewed_route_adoption_preview": {
+            "path": rel(ROUTE_ADOPTION_PREVIEW_REPORT),
+            "exists": ROUTE_ADOPTION_PREVIEW_REPORT.exists(),
+        },
+        "reviewed_route_adoption_apply_gate": {
+            "path": rel(ROUTE_ADOPTION_APPLY_GATE_REPORT),
+            "exists": ROUTE_ADOPTION_APPLY_GATE_REPORT.exists(),
+        },
+    }
+    all_gates_present = all(gate["exists"] for gate in required_gates.values())
+    can_apply_now = False
+    return {
+        "schema_version": "agents-os.dashboard.route-adoption-gate.v0.1",
+        "status": "waiting_for_jenn_route_choice" if awaiting_selection else "not_active",
+        "required_gates": required_gates,
+        "all_required_gates_present": all_gates_present,
+        "future_apply_gate_available": all_gates_present,
+        "can_apply_now": can_apply_now,
+        "current_next_count": queue_summary.get("next_count"),
+        "requires_jenn_decision": awaiting_selection,
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+    }
+
+
 def classify_failure_evidence(path: Path, title: str) -> str:
     lowered = f"{path.name}\n{title}".lower()
     if "failure-handling-stop-loop" in lowered or "failure handling stop loop" in lowered:
@@ -382,6 +423,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     memory_candidates = build_memory_candidates(normalized_queue, validation)
     now_title = first_item_title(normalized_queue, "NOW")
     route_selection = route_selection_status(normalized_queue)
+    route_adoption_gate = route_adoption_gate_status(normalized_queue)
     queue_summary = {
         "source_path": normalized_queue.get("source_path"),
         "passed": normalized_queue.get("passed"),
@@ -398,7 +440,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "schema_version": "agents-os.dashboard.summary.v0.1",
         "dashboard_id": stable_id(
             "DASHBOARD",
-            [queue_summary, route_selection, validation.get("passed"), last_completed, last_failure],
+            [queue_summary, route_selection, route_adoption_gate, validation.get("passed"), last_completed, last_failure],
         ),
         "preview_only": True,
         "read_only": True,
@@ -409,6 +451,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "last_completed": last_completed,
         "last_failure": last_failure,
         "route_selection": route_selection,
+        "route_adoption_gate": route_adoption_gate,
         "validation_status": validation,
         "open_blockers": blockers,
         "memory_candidates": memory_candidates,
@@ -468,6 +511,23 @@ def validate_dashboard_summary(summary: dict[str, Any]) -> list[str]:
             errors.append("dashboard route selection stop-state must require Jenn decision")
         if route_selection.get("option_count", 0) < 1:
             errors.append("dashboard route selection stop-state should surface options")
+    route_adoption_gate = summary.get("route_adoption_gate", {})
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+    ):
+        if route_adoption_gate.get(flag) is not False:
+            errors.append(f"dashboard route adoption gate must not authorize {flag}")
+    if route_adoption_gate.get("status") == "waiting_for_jenn_route_choice":
+        if route_adoption_gate.get("requires_jenn_decision") is not True:
+            errors.append("dashboard route adoption gate wait-state must require Jenn decision")
+        if route_adoption_gate.get("can_apply_now") is not False:
+            errors.append("dashboard route adoption gate must not be directly applicable before Jenn route choice")
+        if route_adoption_gate.get("all_required_gates_present") is not True:
+            errors.append("dashboard route adoption gate should surface all required gates")
     validation = summary.get("validation_status", {})
     if validation.get("checked") is True and validation.get("passed") is not True:
         errors.append("dashboard validation status did not pass")
@@ -509,6 +569,7 @@ def validate_dashboard(run_validations: bool = True) -> dict[str, Any]:
         "summary_passed": summary.get("passed"),
         "now": summary.get("queue", {}).get("now", {}),
         "route_selection": summary.get("route_selection", {}),
+        "route_adoption_gate": summary.get("route_adoption_gate", {}),
         "last_completed": summary.get("last_completed", {}),
         "last_failure": summary.get("last_failure", {}),
         "validation_status": {
@@ -549,6 +610,7 @@ def main() -> int:
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['queue']['now']['title']}")
             print(f"Route selection: {result['route_selection']['status']} options={result['route_selection']['option_count']}")
+            print(f"Route adoption gate: {result['route_adoption_gate']['status']}")
             print(f"Last completed: {result['last_completed'].get('text')}")
             print(f"Last failure: {result['last_failure'].get('status')}")
             print(f"Memory candidates: {len(result['memory_candidates'])}")
@@ -563,6 +625,7 @@ def main() -> int:
             print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
             print(f"NOW: {result['now'].get('title')}")
             print(f"Route selection: {result['route_selection'].get('status')}")
+            print(f"Route adoption gate: {result['route_adoption_gate'].get('status')}")
             print(f"Memory candidates: {result['memory_candidate_count']}")
             if result["errors"]:
                 print("Errors:")
