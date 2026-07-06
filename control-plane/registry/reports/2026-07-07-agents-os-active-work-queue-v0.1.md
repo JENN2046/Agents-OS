@@ -46,6 +46,8 @@ task_producer_route_option_intake_exists=true
 task_producer_route_option_intake_validation=PASS
 task_producer_route_choice_preview_exists=true
 task_producer_route_choice_preview_validation=PASS
+task_producer_route_choice_template_coverage_exists=true
+task_producer_route_choice_template_coverage_validation=PASS
 control_chain_exists=true
 control_chain_validation=PASS
 control_chain_route_choice_queue_proposal_exists=true
@@ -120,6 +122,11 @@ authorizing execution.
 The Task Producer can also preview explicit Jenn route-choice confirmation text
 without writing workspace route state, mutating the Active Work Queue, promoting
 to NOW, or authorizing execution.
+
+The Task Producer can now verify route-choice template coverage across A-E
+without outputting raw template text. Templates A-D parse as preview-only route
+choices, Template E's placeholder goal is rejected, and a concrete-goal fixture
+proves option E can parse after Jenn supplies a real target.
 
 The Control Chain now recognizes those route-option candidates as an explicit
 Jenn-decision stop gate. Commander returns `stop_needs_jenn_decision` and Track
@@ -331,6 +338,7 @@ dashboard_route_adoption_gate_readiness_v0.1: closed for preview-only route adop
 dashboard_route_choice_handoff_v0.1: closed for preview-only next_user_action handoff; Jenn remains the route decision owner, active queue mutation, queue promotion, and execution remain unauthorized
 machine_next_user_action_handoff_v0.1: closed for preview-only machine next_user_action handoff; Jenn remains the route decision owner, route auto-selection, active queue mutation, queue promotion, and execution remain unauthorized
 active_work_queue_closed_order_reconciliation_v0.1: closed for aligning Dashboard last_completed with the Active Work Queue CLOSED tail; route selection, active queue promotion, runtime/provider execution, Memory write, and external write remain unauthorized
+task_producer_route_choice_template_coverage_v0.1: closed for preview-only route-choice template coverage; raw template output, route state write, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

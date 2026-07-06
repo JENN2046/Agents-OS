@@ -122,6 +122,25 @@ def main() -> int:
     check(placeholder_route_choice.get("passed") is False, "new route placeholder goal should fail", failures)
     check(bool(placeholder_route_choice.get("findings")), "new route placeholder goal should include findings", failures)
 
+    template_coverage = producer.route_choice_template_coverage()
+    check(template_coverage["passed"] is True, f"route choice template coverage should pass: {template_coverage['errors']}", failures)
+    check(not producer.validate_route_choice_template_coverage(template_coverage), "route choice template coverage should validate", failures)
+    check(template_coverage["template_count"] == 5, "route choice template coverage should find five templates", failures)
+    check(template_coverage["templates_checked"] == 5, "route choice template coverage should check five templates", failures)
+    check(template_coverage["parsed_route_ids"] == ["A", "B", "C", "D", "E"], "route choice template coverage should prove A-E", failures)
+    check(template_coverage["placeholder_goal_blocked"] is True, "Template E placeholder goal should be blocked", failures)
+    check(template_coverage["concrete_new_route_fixture_passed"] is True, "concrete new route fixture should pass", failures)
+    check(template_coverage["raw_template_output"] is False, "route choice template coverage must not output raw templates", failures)
+    check(template_coverage["active_queue_modified"] is False, "route choice template coverage must not modify queue", failures)
+    check(template_coverage["execution_authorized"] is False, "route choice template coverage must not authorize execution", failures)
+    broken_template_coverage = dict(template_coverage)
+    broken_template_coverage["raw_template_output"] = True
+    check(
+        producer.validate_route_choice_template_coverage(broken_template_coverage),
+        "route choice template coverage with raw output should fail",
+        failures,
+    )
+
     protected = producer.candidate_from_review_source(Path("state-private/task.md"))
     check(protected.get("passed") is False, "protected source path should fail before read", failures)
     check(bool(protected.get("findings")), "protected source path should include findings", failures)
@@ -136,7 +155,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=18 failures={len(failures)}")
+        print(f"cases=19 failures={len(failures)}")
         return 1
 
     print("PASS manifest boundary fixture")
@@ -149,8 +168,9 @@ def main() -> int:
     print("PASS invalid route option fixture")
     print("PASS route choice preview fixture")
     print("PASS invalid route choice preview fixture")
+    print("PASS route choice template coverage fixture")
     print("PASS protected/disallowed source preflight fixture")
-    print("cases=18 failures=0")
+    print("cases=19 failures=0")
     return 0
 
 

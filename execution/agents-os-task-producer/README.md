@@ -6,7 +6,8 @@ It is a preview-only candidate task producer. It turns explicit intent text,
 allowlisted local review/report documents, or an explicitly named route option
 from the route-selection package into candidate task JSON.
 It can also preview an explicit Jenn route-choice confirmation text without
-writing route state or the Active Work Queue.
+writing route state or the Active Work Queue. It can check route-choice
+template coverage without outputting raw template text.
 
 It is not a queue writer, queue promoter, executor, service, provider adapter,
 Memory writer, VCPToolBox starter, ColaMeta runner, plugin activator, or Git
@@ -19,6 +20,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py 
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-route-option --option A --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-template-coverage --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
 ```
@@ -55,6 +57,11 @@ route_auto_selection_authorized=false
 execution_authorized=false
 confirmation_text_included=false
 ```
+
+`route-choice-template-coverage` checks the package templates A-E. Templates
+A-D must parse as preview-only route choices, Template E's placeholder goal must
+be rejected, and an internal concrete-goal fixture must prove option E can parse
+after Jenn supplies a concrete target. It does not output template bodies.
 
 ## Boundaries
 

@@ -36,6 +36,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Task Producer can create blocked candidate previews from route options A-E while keeping `route_selected=false`, `route_auto_selection_authorized=false`, `queue_write_authorized=false`, and `execution_authorized=false`.
 - Task Producer Route Choice Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md`.
 - The Task Producer can parse explicit Jenn route-choice confirmation text into preview-only JSON while keeping `workspace_route_state_modified=false`, `active_queue_modified=false`, and `execution_authorized=false`.
+- Task Producer Route Choice Template Coverage v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-template-coverage-v0.1.md`.
+- The Task Producer can verify route-choice templates A-E without outputting raw template text: A-D parse as preview-only route choices, Template E placeholder text is rejected, and an internal concrete-goal fixture proves option E can parse after Jenn supplies a concrete target.
 - AGENTS OS Control Chain v0.1 exists at `execution/agents-os-control-chain/`.
 - The Control Chain implements Commander Decision Layer, Track Selector, shared track result, ColaMeta readiness reconciliation, Local Executor local-safe validation action, Queue Manager proposal-only, and reviewed queue mutation gate.
 - Commander is the only authorization source; Track Selector cannot elevate; ColaMeta remains preview/readiness only; reviewed queue mutation requires accepted Nobao review and still does not authorize auto-promote.
@@ -186,6 +188,10 @@ one route without letting Nobao or Machine auto-select it.
 The Task Producer route-choice preview can parse a future explicit Jenn route
 choice into preview-only JSON without writing route state, mutating the Active
 Work Queue, or authorizing execution.
+The Task Producer route-choice template coverage gate now verifies all five
+route-choice templates without printing template bodies. It keeps the package
+non-self-executing by rejecting Template E's placeholder goal while proving
+option E can parse after Jenn supplies a concrete target.
 The Control Chain route-option stop gate now carries that same boundary through
 Commander Decision and Track Selector: route-option candidates stop for Jenn and
 cannot be routed to ColaMeta, local executor, queue promotion, or execution.

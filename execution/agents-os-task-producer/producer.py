@@ -633,6 +633,191 @@ def route_choice_preview(
     }
 
 
+def parse_route_choice_templates(markdown: str) -> dict[str, str]:
+    templates: dict[str, str] = {}
+    for match in re.finditer(r"(?ms)^### Template ([A-Z])\s+```text\s*\n(.+?)\n```", markdown):
+        templates[match.group(1)] = match.group(2).strip()
+    return templates
+
+
+def route_choice_preview_false_flags(preview: dict[str, Any]) -> list[str]:
+    flags = [
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "plugin_execution_authorized",
+    ]
+    return [flag for flag in flags if preview.get(flag) is not False]
+
+
+def route_choice_template_coverage(source: Path = DEFAULT_ROUTE_SELECTION_PACKAGE) -> dict[str, Any]:
+    resolved, findings = resolve_review_source(source)
+    if findings or resolved is None:
+        return {
+            "schema_version": "agents-os.task-producer.route-choice-template-coverage.v0.1",
+            "passed": False,
+            "preview_only": True,
+            "read_only": True,
+            "source_path": str(source),
+            "accepted_route_ids": list(ROUTE_OPTIONS),
+            "template_count": 0,
+            "templates_checked": 0,
+            "template_results": [],
+            "parsed_route_ids": [],
+            "placeholder_goal_blocked": False,
+            "concrete_new_route_fixture_checked": False,
+            "concrete_new_route_fixture_passed": False,
+            "workspace_route_state_modified": False,
+            "active_queue_modified": False,
+            "queue_write_authorized": False,
+            "queue_promotion_authorized": False,
+            "route_auto_selection_authorized": False,
+            "execution_authorized": False,
+            "provider_call_authorized": False,
+            "service_start_authorized": False,
+            "executor_run_authorized": False,
+            "external_write_authorized": False,
+            "memory_write_authorized": False,
+            "runtime_plugin_activation_authorized": False,
+            "plugin_execution_authorized": False,
+            "raw_template_output": False,
+            "confirmation_text_included": False,
+            "errors": [item["message"] for item in findings],
+            "findings": findings,
+        }
+
+    text = resolved.read_text(encoding="utf-8")
+    templates = parse_route_choice_templates(text)
+    errors: list[str] = []
+    results: list[dict[str, Any]] = []
+    parsed_route_ids: list[str] = []
+    placeholder_goal_blocked = False
+
+    for option_id in ROUTE_OPTIONS:
+        template = templates.get(option_id)
+        if template is None:
+            errors.append(f"route choice template {option_id} is missing")
+            results.append(
+                {
+                    "option_id": option_id,
+                    "template_present": False,
+                    "expected_outcome": "missing",
+                    "passed": False,
+                    "raw_template_included": False,
+                }
+            )
+            continue
+
+        preview = route_choice_preview(template, resolved)
+        preview_errors = validate_route_choice_preview(preview)
+        false_flag_failures = route_choice_preview_false_flags(preview) if preview.get("passed") is True else []
+        finding_rule_ids = [
+            str(item.get("rule_id"))
+            for item in preview.get("findings", [])
+            if item.get("rule_id")
+        ]
+        if option_id == "E":
+            expected_ok = (
+                preview.get("passed") is False
+                and "TASK-PRODUCER-ROUTE-CHOICE-GOAL" in finding_rule_ids
+            )
+            placeholder_goal_blocked = expected_ok
+            if not expected_ok:
+                errors.append("Template E placeholder goal must be rejected")
+        else:
+            expected_ok = (
+                preview.get("passed") is True
+                and not preview_errors
+                and preview.get("selected_option", {}).get("option_id") == option_id
+                and not false_flag_failures
+            )
+            if not expected_ok:
+                errors.append(f"Template {option_id} must parse as route option {option_id}")
+            if preview.get("selected_option", {}).get("option_id") == option_id:
+                parsed_route_ids.append(option_id)
+
+        results.append(
+            {
+                "option_id": option_id,
+                "template_present": True,
+                "expected_outcome": "parse_preview" if option_id != "E" else "placeholder_goal_rejected",
+                "passed": expected_ok,
+                "selected_option_id": preview.get("selected_option", {}).get("option_id"),
+                "finding_rule_ids": finding_rule_ids,
+                "preview_errors": preview_errors,
+                "false_flag_failures": false_flag_failures,
+                "input_character_count": len(template),
+                "raw_template_included": False,
+            }
+        )
+
+    concrete_new_route_fixture = (
+        "确认选择 AGENTS OS 下一路线：New AGENTS OS Construction Route。\n"
+        "路线目标是：Build a local AGENTS OS queue intake hardening feature。\n"
+        "先准备 new construction route intake v0.1；不得自动扩大到 provider/runtime/Memory/external write。"
+    )
+    concrete_preview = route_choice_preview(concrete_new_route_fixture, resolved)
+    concrete_preview_errors = validate_route_choice_preview(concrete_preview)
+    concrete_false_flag_failures = route_choice_preview_false_flags(concrete_preview)
+    concrete_new_route_fixture_passed = (
+        concrete_preview.get("passed") is True
+        and not concrete_preview_errors
+        and concrete_preview.get("selected_option", {}).get("option_id") == "E"
+        and not concrete_false_flag_failures
+    )
+    if not concrete_new_route_fixture_passed:
+        errors.append("Concrete new route fixture must parse as option E without side effects")
+    else:
+        parsed_route_ids.append("E")
+
+    result = {
+        "schema_version": "agents-os.task-producer.route-choice-template-coverage.v0.1",
+        "passed": False,
+        "preview_only": True,
+        "read_only": True,
+        "source_path": rel(resolved),
+        "accepted_route_ids": list(ROUTE_OPTIONS),
+        "template_count": len(templates),
+        "templates_checked": len(results),
+        "template_results": results,
+        "parsed_route_ids": sorted(set(parsed_route_ids)),
+        "placeholder_goal_blocked": placeholder_goal_blocked,
+        "concrete_new_route_fixture_checked": True,
+        "concrete_new_route_fixture_passed": concrete_new_route_fixture_passed,
+        "concrete_new_route_fixture_selected_option_id": concrete_preview.get("selected_option", {}).get("option_id"),
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "executor_run_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "plugin_execution_authorized": False,
+        "raw_template_output": False,
+        "confirmation_text_included": False,
+        "errors": errors,
+        "findings": [],
+    }
+    validation_errors = validate_route_choice_template_coverage(result)
+    result["errors"] = sorted(set(errors + validation_errors))
+    result["passed"] = not result["errors"]
+    return result
+
+
 def has_false_flags(value: dict[str, Any], flags: Any) -> tuple[bool, list[str]]:
     if not isinstance(flags, list):
         flags = list(flags)
@@ -726,6 +911,55 @@ def validate_route_choice_preview(preview: dict[str, Any]) -> list[str]:
             errors.append("route choice preview must require Nobao review")
         if review.get("execution_authorized") is not False:
             errors.append("route choice preview review gate must not authorize execution")
+    return errors
+
+
+def validate_route_choice_template_coverage(coverage: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if coverage.get("schema_version") != "agents-os.task-producer.route-choice-template-coverage.v0.1":
+        errors.append("route choice template coverage schema_version is invalid")
+    if coverage.get("preview_only") is not True:
+        errors.append("route choice template coverage must be preview_only")
+    if coverage.get("read_only") is not True:
+        errors.append("route choice template coverage must be read_only")
+    if coverage.get("accepted_route_ids") != list(ROUTE_OPTIONS):
+        errors.append("route choice template coverage accepted_route_ids must be A-E")
+    if coverage.get("template_count") != len(ROUTE_OPTIONS):
+        errors.append("route choice template coverage must find five templates")
+    if coverage.get("templates_checked") != len(ROUTE_OPTIONS):
+        errors.append("route choice template coverage must check five templates")
+    if coverage.get("parsed_route_ids") != list(ROUTE_OPTIONS):
+        errors.append("route choice template coverage must prove A-E parse coverage")
+    if coverage.get("placeholder_goal_blocked") is not True:
+        errors.append("route choice template coverage must reject Template E placeholder goal")
+    if coverage.get("concrete_new_route_fixture_checked") is not True:
+        errors.append("route choice template coverage must check concrete new-route fixture")
+    if coverage.get("concrete_new_route_fixture_passed") is not True:
+        errors.append("route choice template coverage concrete new-route fixture must pass")
+    for flag in (
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "plugin_execution_authorized",
+        "raw_template_output",
+        "confirmation_text_included",
+    ):
+        if coverage.get(flag) is not False:
+            errors.append(f"route choice template coverage must keep {flag}=false")
+    for item in coverage.get("template_results", []):
+        if item.get("raw_template_included") is not False:
+            errors.append(f"route choice template {item.get('option_id')} must not include raw template")
+        if item.get("passed") is not True:
+            errors.append(f"route choice template {item.get('option_id')} coverage did not pass")
     return errors
 
 
@@ -833,6 +1067,11 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
     )
     if placeholder_route_choice.get("passed") is not False or not placeholder_route_choice.get("findings"):
         errors.append("new construction route choice with placeholder goal should fail")
+    route_template_coverage = route_choice_template_coverage()
+    errors.extend(
+        f"route choice template coverage: {error}"
+        for error in validate_route_choice_template_coverage(route_template_coverage)
+    )
 
     protected_result = candidate_from_review_source(Path("state-private/task.md"))
     if protected_result.get("passed") is not False or not protected_result.get("findings"):
@@ -899,6 +1138,17 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
             "invalid_without_marker_failed": bad_route_choice.get("passed") is False,
             "placeholder_goal_failed": placeholder_route_choice.get("passed") is False,
         },
+        "route_choice_template_coverage": {
+            "present": route_template_coverage.get("passed") is True,
+            "template_count": route_template_coverage.get("template_count"),
+            "templates_checked": route_template_coverage.get("templates_checked"),
+            "parsed_route_ids": route_template_coverage.get("parsed_route_ids"),
+            "placeholder_goal_blocked": route_template_coverage.get("placeholder_goal_blocked"),
+            "concrete_new_route_fixture_passed": route_template_coverage.get("concrete_new_route_fixture_passed"),
+            "workspace_route_state_modified": route_template_coverage.get("workspace_route_state_modified"),
+            "active_queue_modified": route_template_coverage.get("active_queue_modified"),
+            "execution_authorized": route_template_coverage.get("execution_authorized"),
+        },
         "protected_source_preflight_failed": protected_result.get("passed") is False,
         "disallowed_source_preflight_failed": disallowed_result.get("passed") is False,
         "docctl": docctl,
@@ -921,6 +1171,9 @@ def print_validation_text(result: dict[str, Any]) -> None:
     route_choice = result.get("route_choice_preview", {})
     if route_choice:
         print(f"Route choice preview: {'PASS' if route_choice.get('present') else 'FAIL'}")
+    template_coverage = result.get("route_choice_template_coverage", {})
+    if template_coverage:
+        print(f"Route choice template coverage: {'PASS' if template_coverage.get('present') else 'FAIL'}")
     if result.get("docctl"):
         print(f"Docctl status: {'PASS' if result['docctl']['status']['passed'] else 'FAIL'}")
         print(f"Docctl doctor: {'PASS' if result['docctl']['doctor']['passed'] else 'FAIL'}")
@@ -961,6 +1214,13 @@ def main() -> int:
     route_choice_parser.add_argument("--confirmation-text", required=True, help="Jenn route choice confirmation text.")
     route_choice_parser.add_argument("--source", default=str(DEFAULT_ROUTE_SELECTION_PACKAGE), help="Route selection package Markdown path.")
     route_choice_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
+
+    template_coverage_parser = subparsers.add_parser(
+        "route-choice-template-coverage",
+        help="Preview route-choice template coverage without writing queue or execution state.",
+    )
+    template_coverage_parser.add_argument("--source", default=str(DEFAULT_ROUTE_SELECTION_PACKAGE), help="Route selection package Markdown path.")
+    template_coverage_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
 
     validate_parser = subparsers.add_parser("validate", help="Run producer self-validation.")
     validate_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
@@ -1048,6 +1308,20 @@ def main() -> int:
             for error in errors:
                 print(f"- {error}")
         return 0 if preview["passed"] else 1
+
+    if args.command == "route-choice-template-coverage":
+        coverage = route_choice_template_coverage(Path(args.source))
+        if args.json:
+            print_json(coverage)
+        else:
+            print(f"Status: {'PASS' if coverage['passed'] else 'FAIL'}")
+            print(f"Templates checked: {coverage['templates_checked']}")
+            print(f"Parsed route ids: {','.join(coverage.get('parsed_route_ids', []))}")
+            print(f"Template E placeholder blocked: {coverage['placeholder_goal_blocked']}")
+            print(f"Execution authorized: {coverage['execution_authorized']}")
+            for error in coverage.get("errors", []):
+                print(f"- {error}")
+        return 0 if coverage["passed"] else 1
 
     if args.command == "validate":
         result = validate_producer()
