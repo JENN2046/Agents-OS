@@ -47,6 +47,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Provider/host dispatcher work is preserved as static historical evidence only; provider calls, provider execution, host dispatcher execution, provider registry/config mutation, real process spawn, service start, executor run, and external writes remain blocked.
 - Root Private History Review Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md`.
 - Root private-history review found no Notion-domain or common token-shape path-level hits in current HEAD or reachable root Git history for the scanned pattern set; no history scrub is indicated by that scan.
+- Route Selection Checkpoint v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-checkpoint-v0.1.md`.
+- Route selection is intentionally stopped for Jenn decision; no VCPToolBox runtime, provider, executor, Memory, external Git, or new construction route is automatically selected.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -101,7 +103,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Root Private History Review Gate v0.1.
+Last completed task: Route Selection Checkpoint v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -134,6 +136,10 @@ The root private-history review gate scanned current HEAD and reachable root Git
 history with count-only/path-only signals. It found no Notion-domain or common
 token-shape path-level hits for the scanned patterns and did not authorize push,
 history rewrite, scrub, external write, or publication.
+The route-selection checkpoint records the current stop-state: Jenn can choose
+VCPToolBox recovery, Formal Memory loop, external Git publication exact gate,
+provider execution design gate, or a new AGENTS OS construction route; Nobao
+should not silently select one.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,

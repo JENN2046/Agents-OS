@@ -60,6 +60,8 @@ provider_host_dispatcher_static_behavior_map_exists=true
 provider_host_dispatcher_static_behavior_map_validation=PASS
 root_private_history_review_gate_exists=true
 root_private_history_review_gate_validation=PASS
+route_selection_checkpoint_exists=true
+route_selection_checkpoint_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -97,7 +99,8 @@ HEAD or reachable root Git history. No history scrub is indicated by the current
 scan.
 
 External publication remains blocked until Jenn chooses a target and a separate
-exact external-write gate exists.
+exact external-write gate exists. The route-selection checkpoint records that no
+new route should start automatically after the current governance sequence.
 
 ## Queue Decision
 
@@ -263,6 +266,10 @@ External Git Publication Exact Gate
 Provider Execution Design Gate
 New AGENTS OS construction route
 ```
+
+This route-selection checkpoint is now recorded as the active stop-state
+artifact. It does not choose any route and does not authorize runtime,
+provider, Memory, or external-write work.
 
 Until Jenn chooses, do not read `state-private/`; do not read or print raw
 secrets, tokens, cookies, credentials, private raw memory, provider raw
