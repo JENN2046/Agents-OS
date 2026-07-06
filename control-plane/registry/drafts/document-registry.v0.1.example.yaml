@@ -269,6 +269,385 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
 
+  - id: execution-readme
+    title: Execution README
+    doc_type: index
+    status: active
+    scope: execution directory local boundary and contents guide
+    canonical_path: execution/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-machine/README.md
+      - execution/agents-os-task-producer/README.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - execution directory boundary changes
+        - execution harness category changes
+    security_boundary:
+      - directory guide only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-task-producer-skeleton-readme
+    title: AGENTS OS Task Producer Skeleton README
+    doc_type: overview
+    status: active
+    scope: local entrypoint and boundary guide for the preview-only Task Producer Skeleton
+    canonical_path: execution/agents-os-task-producer/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-task-producer/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/producer-manifest.json
+      - execution/agents-os-task-producer/candidate-task.schema.json
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - producer command surface changes
+        - producer output rule changes
+        - dangerous authorization boundary changes
+    security_boundary:
+      - local preview-only guide
+      - no queue write authorization
+      - no execution authorization
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+
+  - id: agents-os-task-producer-skeleton-manifest
+    title: AGENTS OS Task Producer Skeleton manifest
+    doc_type: contract
+    status: active
+    scope: preview-only producer identity, denied capabilities, and validation command contract
+    canonical_path: execution/agents-os-task-producer/producer-manifest.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-task-producer/producer-manifest.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - denied capability changes
+        - review gate default changes
+        - validation command changes
+    security_boundary:
+      - local manifest only
+      - dangerous authorization defaults must remain false
+      - queue effect defaults must remain false
+      - execution effect defaults must remain false
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+
+  - id: agents-os-task-producer-candidate-task-schema
+    title: AGENTS OS Task Producer candidate task schema
+    doc_type: schema
+    status: active
+    scope: minimal candidate task schema for Task Producer Skeleton v0.1
+    canonical_path: execution/agents-os-task-producer/candidate-task.schema.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-task-producer/candidate-task.schema.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - candidate output shape changes
+        - dangerous authorization field changes
+        - queue effect or execution effect field changes
+    security_boundary:
+      - local schema only
+      - no queue write authorization
+      - no execution authorization
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent "Build local governance task" --json
+
+  - id: agents-os-task-producer-skeleton-cli
+    title: AGENTS OS Task Producer Skeleton CLI
+    doc_type: reference
+    status: active
+    scope: preview-only local producer CLI for candidate task generation and validation
+    canonical_path: execution/agents-os-task-producer/producer.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-task-producer/producer.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer-manifest.json
+      - execution/agents-os-task-producer/candidate-task.schema.json
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/docctl.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - producer source preflight changes
+        - candidate output shape changes
+        - dangerous authorization behavior changes
+        - risk signal detection changes
+    security_boundary:
+      - preview-only local CLI
+      - no Active Work Queue mutation
+      - no NEXT to NOW promotion
+      - no service start
+      - no executor run
+      - no provider call
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - no source raw body in review/report output
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent "Build local governance task" --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+
+  - id: agents-os-task-producer-skeleton-tests
+    title: AGENTS OS Task Producer Skeleton tests
+    doc_type: reference
+    status: active
+    scope: local fixture tests for preview-only Task Producer Skeleton behavior
+    canonical_path: execution/agents-os-task-producer/test-producer.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-task-producer/test-producer.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/producer-manifest.json
+      - execution/agents-os-task-producer/candidate-task.schema.json
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - producer output behavior changes
+        - source preflight fixture changes
+        - dangerous authorization fixture changes
+    security_boundary:
+      - local fixture tests only
+      - no queue write authorization
+      - no service start
+      - no executor run
+      - no provider call
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+
+  - id: agents-os-task-producer-skeleton-v0.1
+    title: AGENTS OS Task Producer Skeleton v0.1
+    doc_type: review
+    status: accepted
+    scope: local implementation report for preview-only AGENTS OS Task Producer Skeleton
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/README.md
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - producer implementation changes
+        - validation result changes
+        - residual risk changes
+    security_boundary:
+      - local report only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-task-producer-skeleton-v0.1-receipt
+    title: AGENTS OS Task Producer Skeleton v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for Task Producer Skeleton v0.1 implementation
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+    security_boundary:
+      - local receipt only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-task-producer-skeleton-v0.1-review
+    title: AGENTS OS Task Producer Skeleton v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for Task Producer Skeleton v0.1 implementation
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-skeleton-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - producer acceptance criteria changes
+    security_boundary:
+      - local review only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: agents-os-vcptoolbox-private-runtime-cold-audit-v0.1-receipt
     title: AGENTS OS VCPToolBox Private Runtime Cold Audit v0.1 Receipt
     doc_type: receipt

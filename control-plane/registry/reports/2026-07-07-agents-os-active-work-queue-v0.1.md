@@ -40,7 +40,8 @@ docctl_doctor=PASS
 docctl_score=100
 machine_skeleton_exists=true
 machine_validation=PASS
-task_producer_exists=false
+task_producer_exists=true
+task_producer_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -58,10 +59,9 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is task production. The workspace now has a preview-only
-Machine Skeleton that can consume a queue item, but it does not yet have a
-standard local Task Producer that turns Jenn/Nobao intent or review findings
-into candidate queue items.
+The current blocker is executor readiness. The workspace now has a preview-only
+Machine Skeleton and a preview-only Task Producer Skeleton, but it has not yet
+reconciled ColaMeta runner inputs into an executor readiness preview.
 
 ## Queue Decision
 
@@ -73,20 +73,20 @@ blocked.
 
 ## NOW
 
-### NOW-001: Build AGENTS OS Task Producer Skeleton v0.1
+### NOW-001: ColaMeta Executor Readiness Reconciliation
 
-Goal: create a minimal local Task Producer that can turn Jenn/Nobao intent or
-review findings into candidate queue items without modifying the Active Work
-Queue or authorizing execution.
+Goal: reconcile `.colameta/plan.json`, prompt file presence, prior dry-run
+evidence, and empty todo/decision state into a preview-only executor readiness
+item.
 
 Required output:
 
 ```text
-producer_manifest
-candidate_task_schema
-from_intent_preview
-from_review_allowlisted_preview
-candidate_task_validation
+colameta_plan_summary
+prompt_file_summary
+runner_state_metadata_summary
+executor_readiness_preview
+blocked_capability_summary
 receipt_review_pattern
 ```
 
@@ -94,7 +94,6 @@ Initial mode:
 
 ```text
 read_only_or_local_preview=true
-queue_write_authorized=false
 execution_authorized=false
 provider_call_authorized=false
 service_start_authorized=false
@@ -107,12 +106,16 @@ runtime_plugin_activation_authorized=false
 Acceptance:
 
 ```text
-producer can create candidate task JSON from explicit intent text
-producer can create candidate task JSON from allowlisted review/report files
-producer cannot modify Active Work Queue
-producer cannot promote NEXT to NOW
-producer cannot authorize execution
-producer cannot run providers, services, executors, plugins, external writes, or Memory writes
+read only .colameta plan/prompt metadata needed for readiness
+do not read .colameta/memory.md content; metadata only if needed
+do not modify .colameta/plan.json
+do not modify .colameta/state.json
+do not write .colameta/memory.md
+do not run executor
+do not start service
+do not call provider
+do not activate plugins/runtime
+do not perform external writes or formal Memory writes
 machine can preview the new NOW item
 docctl status remains PASS
 docctl doctor remains PASS
@@ -120,16 +123,7 @@ docctl doctor remains PASS
 
 ## NEXT
 
-### NEXT-001: ColaMeta Executor Readiness Reconciliation
-
-Use after the machine skeleton exists.
-
-Purpose: reconcile `.colameta/plan.json`, prompt files, prior dry-run evidence,
-and empty todo/decision state into a preview-only executor readiness item.
-
-Blocked actions: real executor run, provider call, service start, Memory write.
-
-### NEXT-002: Migration Plan Distillation Batch
+### NEXT-001: Migration Plan Distillation Batch
 
 Use after the machine can consume queue items.
 
@@ -179,6 +173,7 @@ root_git_baseline: closed for local baseline
 current_tracked_notion_url_redaction: closed for current tree
 automation_rulebook_prohibited_first_update: closed for current operating model
 machine_skeleton_v0.1: closed for preview-only control machine baseline; maintain review rule
+task_producer_skeleton_v0.1: closed for preview-only candidate task production baseline; producer output remains candidate-only
 ```
 
 ## Machine Input Contract
@@ -215,9 +210,9 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should build the smallest possible AGENTS OS Task
-Producer Skeleton v0.1 from `NOW-001`.
+The next construction batch should run the smallest possible preview-only
+ColaMeta Executor Readiness Reconciliation from `NOW-001`.
 
 Do not start with ColaMeta executor, VCPToolBox runtime, external Git, Memory, or
-provider integration. The producer must only output candidate tasks and queue
-transition proposals that require Nobao review.
+provider integration. The readiness result must only summarize local metadata
+and blocked capabilities.

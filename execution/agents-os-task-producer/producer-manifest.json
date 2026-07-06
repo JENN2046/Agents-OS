@@ -1,0 +1,64 @@
+{
+  "schema_version": "agents-os.task-producer.manifest.v0.1",
+  "component_id": "agents-os-task-producer-skeleton-v0.1",
+  "role": "preview-only candidate task producer",
+  "default_mode": "preview_only_candidate_task_producer",
+  "allowed_source_roots": [
+    "control-plane/registry/reports",
+    "control-plane/registry/reviews"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent \"Build local governance task\" --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py"
+  ],
+  "dangerous_authorization_defaults": {
+    "queue_write_authorized": false,
+    "execution_authorized": false,
+    "provider_call_authorized": false,
+    "service_start_authorized": false,
+    "executor_run_authorized": false,
+    "external_write_authorized": false,
+    "memory_write_authorized": false,
+    "runtime_plugin_activation_authorized": false,
+    "plugin_execution_authorized": false
+  },
+  "queue_effect_defaults": {
+    "queue_write_authorized": false,
+    "active_queue_modified": false,
+    "promotion_authorized": false
+  },
+  "execution_effect_defaults": {
+    "write_performed": false,
+    "execution_authorized": false,
+    "service_started": false,
+    "executor_run_performed": false,
+    "provider_call_performed": false,
+    "external_write_performed": false,
+    "memory_write_performed": false,
+    "runtime_plugin_activation_performed": false,
+    "plugin_execution_performed": false
+  },
+  "review_gate_defaults": {
+    "producer_generated": true,
+    "status": "candidate_preview",
+    "requires_nobao_review": true,
+    "requires_jenn_decision": false,
+    "review_status": "pending",
+    "execution_authorized": false
+  },
+  "denied_capabilities": [
+    "Active Work Queue write",
+    "NEXT to NOW promotion",
+    "execution authorization",
+    "service start",
+    "executor run",
+    "provider call",
+    "runtime/plugin activation",
+    "external write",
+    "formal Memory write",
+    "state-private read",
+    "auth/token/cookie/session/provider/runtime config read or write"
+  ]
+}

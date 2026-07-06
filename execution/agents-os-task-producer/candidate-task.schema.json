@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "agents-os.task-producer.candidate-task.schema.v0.1",
+  "title": "AGENTS OS Task Producer candidate task schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "producer_generated",
+    "status",
+    "proposed_lane",
+    "title",
+    "summary",
+    "source",
+    "source_facts",
+    "risk_signals",
+    "blocked",
+    "actionable_after_review",
+    "authorization",
+    "queue_effect",
+    "execution_effect",
+    "review_gate",
+    "json_output_authoritative"
+  ],
+  "properties": {
+    "authorization": {
+      "required_false": [
+        "queue_write_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "plugin_execution_authorized"
+      ]
+    },
+    "queue_effect": {
+      "required_false": [
+        "queue_write_authorized",
+        "active_queue_modified",
+        "promotion_authorized"
+      ]
+    },
+    "execution_effect": {
+      "required_false": [
+        "write_performed",
+        "execution_authorized",
+        "service_started",
+        "executor_run_performed",
+        "provider_call_performed",
+        "external_write_performed",
+        "memory_write_performed",
+        "runtime_plugin_activation_performed",
+        "plugin_execution_performed"
+      ]
+    }
+  }
+}

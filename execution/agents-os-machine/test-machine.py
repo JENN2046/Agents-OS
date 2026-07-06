@@ -50,7 +50,15 @@ def main() -> int:
     preview = machine.build_preview(machine.now_item(current))
     check(preview["preview_only"] is True, "preview_only should be true", failures)
     check(preview["execution_authorized"] is False, "preview execution should not be authorized", failures)
-    check(preview["actionable"] is True, "unblocked preview should be actionable", failures)
+    if preview["blocked"]:
+        check(preview["actionable"] is False, "blocked current preview should be actionable=false", failures)
+        check(
+            preview["review_gate"]["requires_jenn_decision"] is True,
+            "blocked current preview should require Jenn decision",
+            failures,
+        )
+    else:
+        check(preview["actionable"] is True, "unblocked preview should be actionable", failures)
     check(preview["review_gate"]["requires_nobao_review"] is True, "preview should require Nobao review", failures)
     ok, failed_flags = machine.has_false_dangerous_flags(preview["authorization"])
     check(ok, f"preview dangerous flags should be false: {failed_flags}", failures)

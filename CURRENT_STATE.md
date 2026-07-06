@@ -20,13 +20,15 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `Build AGENTS OS Task Producer Skeleton v0.1`.
+- The active work queue's current `NOW` item is `ColaMeta Executor Readiness Reconciliation`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
 - Machine preview output includes `actionable`; blocked previews remain `actionable=false` and `execution_authorized=false`.
 - Machine output is preview/draft by default and requires Nobao review before execution.
-- Task Producer is not implemented yet and is now the active queue item.
+- AGENTS OS Task Producer Skeleton v0.1 exists at `execution/agents-os-task-producer/`.
+- The Task Producer can create candidate task JSON from explicit intent text and allowlisted review/report Markdown.
+- Task Producer output is candidate-only, includes `requires_nobao_review=true`, and keeps queue write, promotion, execution, provider, service, executor, plugin, external write, and Memory authorization false.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -64,9 +66,9 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 ## Next Actions
 
-1. Build AGENTS OS Task Producer Skeleton v0.1 as a preview-only candidate-task producer.
+1. Run ColaMeta Executor Readiness Reconciliation as a preview-only local metadata check.
 2. Keep Machine preview/review as the consumer-side gate for any produced candidate task.
-3. After Task Producer exists, reconcile Executor readiness with preview-only checks before any real executor run.
+3. Keep real executor run blocked until readiness passes and Jenn chooses that boundary.
 4. Distill `ops/migration/` historical plans into a short surviving task list.
 5. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
 6. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
@@ -80,17 +82,19 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: AGENTS OS Machine queue transition to Task Producer.
+Last completed task: AGENTS OS Task Producer Skeleton v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
+The task producer skeleton is scoped to local candidate task JSON only and does
+not write the queue or authorize execution.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: AGENTS OS Task Producer Skeleton v0.1.
+Next active route: ColaMeta Executor Readiness Reconciliation, preview-only.
 ```
 
 ## Safety Notes
