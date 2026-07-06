@@ -50,6 +50,8 @@ failure_handling_stop_loop_exists=true
 failure_handling_stop_loop_validation=PASS
 dashboard_memory_candidate_layer_exists=true
 dashboard_memory_candidate_layer_validation=PASS
+migration_plan_distillation_exists=true
+migration_plan_distillation_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -67,11 +69,15 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is migration distillation. The workspace now has a
-preview-only Machine Skeleton, preview-only Task Producer Skeleton,
-Commander-first Control Chain, reviewed queue mutation gate, failure handling
-stop loop, and dashboard / Memory candidate layer. It has not yet compressed
-`ops/migration/` historical plans into a short surviving task list.
+The current blocker is ColaMeta executor readiness reconciliation. The
+workspace now has a preview-only Machine Skeleton, preview-only Task Producer
+Skeleton, Commander-first Control Chain, reviewed queue mutation gate, failure
+handling stop loop, dashboard / Memory candidate layer, and a safe
+`ops/migration/` distillation into surviving work.
+
+ColaMeta runner files exist, but the local executor/runner inventory,
+entrypoints, readiness blockers, and prior dry-run/preflight evidence have not
+yet been normalized into one current control-plane map.
 
 ## Queue Decision
 
@@ -79,23 +85,25 @@ Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
 paused. External Git publication is blocked. Provider and plugin activation are
-blocked.
+blocked. Historical migration phases do not carry forward runtime/provider/
+executor authorization.
 
 ## NOW
 
-### NOW-001: Migration Plan Distillation Batch
+### NOW-001: ColaMeta Executor Inventory And Readiness Map
 
-Goal: compress `ops/migration/` historical plans into a short list of surviving
-local construction tasks and closed evidence.
+Goal: confirm the current local ColaMeta executor/runner inventory, entrypoints,
+readiness blockers, and existing dry-run/preflight evidence as one reviewable
+control-plane map.
 
 Required output:
 
 ```text
-migration_inventory_summary
-surviving_task_list
-closed_evidence_list
-discarded_or_archived_context_list
-no_bulk_move_delete_rename_guard
+colameta_executor_inventory_summary
+runner_entrypoint_map
+readiness_blocker_list
+prior_preflight_and_dry_run_evidence_map
+no_service_start_no_executor_guard
 receipt_review_pattern
 ```
 
@@ -113,24 +121,33 @@ runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
 bulk_move_delete_rename_authorized=false
 private_state_read_authorized=false
+colameta_plan_write_authorized=false
+colameta_state_write_authorized=false
+colameta_memory_content_write_authorized=false
 ```
 
 Acceptance:
 
 ```text
-read only historical migration plan/report/receipt/review filenames and safe summaries
-produce a short surviving local task list
-separate closed evidence from still-actionable work
-do not bulk move/delete/rename
+read only local ColaMeta metadata and current governance evidence
+do not read .colameta/memory.md content
+do not modify .colameta/plan.json or .colameta/state.json
+map runner/executor entrypoints without starting service or executor
+map prior preflight/dry-run evidence without replaying execution
+produce a current readiness blocker list
 do not read private state
 do not start runtime/provider/executor work
+do not perform provider calls
 docctl status remains PASS
 docctl doctor remains PASS
 ```
 
 ## NEXT
 
-_No active NEXT items._
+```text
+MCP Gateway And Connector Boundary Plan
+Provider / Host Dispatcher Static Behavior Map
+```
 
 ## LATER
 
@@ -144,11 +161,7 @@ from the root workspace repository.
 Keep paused until Jenn chooses runtime work again. Any restart must begin from
 the existing cold audit and first-start boundary reports.
 
-### LATER-003: AGENTS OS MCP Gateway And Connector Work
-
-Only after the local machine has a queue contract and preview path.
-
-### LATER-004: Formal Memory Loop
+### LATER-003: Formal Memory Loop
 
 Only after Jenn explicitly chooses a Memory entry point. Do not infer formal
 Memory writes from ordinary governance receipts.
@@ -178,6 +191,7 @@ control_chain_v0.1: closed for commander-first dual-track skeleton; queue remain
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
 dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized
+migration_plan_distillation_v0.1: closed for safe summary of historical migration material; no historical runtime/provider/executor permission carried forward
 ```
 
 ## Machine Input Contract
@@ -214,9 +228,10 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible migration
-plan distillation batch from `NOW-001`.
+The next construction batch should implement the smallest possible ColaMeta
+executor inventory/readiness map from `NOW-001`.
 
-Do not start with ColaMeta executor, VCPToolBox runtime, external Git, Memory, or
-provider integration. The migration pass may summarize safe historical files,
-but it must not bulk move/delete/rename or read private state.
+Do not start ColaMeta service, run a real executor, call providers, touch
+auth/provider/runtime configuration, modify `.colameta/plan.json` or
+`.colameta/state.json`, write `.colameta/memory.md`, read private state, or
+activate VCPToolBox/runtime/plugin work.

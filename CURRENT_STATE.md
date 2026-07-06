@@ -20,7 +20,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `Migration Plan Distillation Batch`.
+- The active work queue's current `NOW` item is `ColaMeta Executor Inventory And Readiness Map`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
@@ -37,6 +37,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - AGENTS OS Dashboard v0.1 exists at `execution/agents-os-dashboard/`.
 - The Dashboard can summarize the Active Work Queue, last CLOSED item, last failure evidence status, docctl validation status, open blockers, and Memory candidates.
 - Dashboard output is preview-only and keeps formal Memory write, private raw Memory read, queue mutation, provider call, service start, executor run, runtime/plugin activation, and external write false.
+- Migration Plan Distillation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-migration-plan-distillation-v0.1.md`.
+- The migration distillation compresses `ops/migration/` historical material into a surviving local task list without carrying forward historical runtime/provider/executor authorization.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -69,18 +71,18 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Executor inventory is still not confirmed.
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - Root Git external publication is blocked until private-history review or history-scrub gate.
-- Migration reconciliation is still incomplete.
 - VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
 
 ## Next Actions
 
-1. Distill `ops/migration/` historical plans into a short surviving local task list.
+1. Implement the ColaMeta Executor Inventory And Readiness Map without service start, executor run, provider call, or `.colameta` runtime state mutation.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
-4. Distill `ops/migration/` historical plans into a short surviving task list.
-5. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
-6. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
-7. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
+4. Prepare MCP Gateway And Connector Boundary Plan after the ColaMeta inventory map.
+5. Prepare Provider / Host Dispatcher Static Behavior Map after the connector boundary plan.
+6. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
+7. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
+8. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
 
 ## Current Handoff
 
@@ -90,7 +92,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Dashboard And Memory Candidate Layer v0.1.
+Last completed task: Migration Plan Distillation v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -105,13 +107,16 @@ external write, or Memory write.
 The dashboard now exposes current queue state, latest CLOSED entry, failure
 event status, docctl validation state, open blockers, and Memory candidates
 without writing formal Memory or reading private raw Memory.
+The migration distillation safely summarized `ops/migration/` into surviving
+local tasks and closed evidence without treating historical plans as execution
+authorization.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: Migration Plan Distillation Batch.
+Next active route: ColaMeta Executor Inventory And Readiness Map.
 ```
 
 ## Safety Notes
