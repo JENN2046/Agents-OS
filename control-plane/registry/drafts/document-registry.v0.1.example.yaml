@@ -10884,3 +10884,159 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
         - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-provider-host-dispatcher-static-behavior-map-v0.1
+    title: AGENTS OS Provider / Host Dispatcher Static Behavior Map v0.1
+    doc_type: review
+    status: accepted
+    scope: static provider registry and host dispatcher behavior evidence map
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+      - ops/migration/inventory/phase-10-host-dispatcher-provider-behavior-evidence-2026-06-29.md
+      - ops/migration/inventory/phase-10-provider-registry-selection-behavior-evidence-2026-06-29.md
+      - ops/migration/inventory/phase-10-provider-registry-mutation-query-behavior-evidence-2026-06-29.md
+      - ops/migration/inventory/phase-10-provider-registry-remote-auth-security-behavior-evidence-2026-06-29.md
+      - ops/migration/inventory/phase-11-file-provider-manifest-store-persistence-evidence-2026-06-29.md
+      - ops/migration/inventory/phase-11-provider-execution-runner-controlled-readonly-evidence-2026-06-29.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - provider registry behavior evidence changes
+        - host dispatcher behavior evidence changes
+        - provider execution boundary changes
+    security_boundary:
+      - static governance map only
+      - no auth/token/cookie/session inspection
+      - no provider registry mutation
+      - no provider/runtime config mutation
+      - no provider call
+      - no provider execution
+      - no host dispatcher execution
+      - no real process spawn
+      - no service start
+      - no executor run
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-provider-host-dispatcher-static-behavior-map-v0.1-receipt
+    title: AGENTS OS Provider / Host Dispatcher Static Behavior Map v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for provider/host dispatcher static behavior map
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - safety boundary changes
+    security_boundary:
+      - local receipt only
+      - no auth/token/cookie/session inspection
+      - no provider registry mutation
+      - no provider/runtime config mutation
+      - no provider call
+      - no provider execution
+      - no host dispatcher execution
+      - no real process spawn
+      - no service start
+      - no executor run
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json
+
+  - id: agents-os-provider-host-dispatcher-static-behavior-map-v0.1-review
+    title: AGENTS OS Provider / Host Dispatcher Static Behavior Map v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for provider/host dispatcher static behavior map
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-provider-host-dispatcher-static-behavior-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - provider execution boundary changes
+    security_boundary:
+      - local review only
+      - no auth/token/cookie/session inspection
+      - no provider registry mutation
+      - no provider/runtime config mutation
+      - no provider call
+      - no provider execution
+      - no host dispatcher execution
+      - no real process spawn
+      - no service start
+      - no executor run
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py preview-now --json

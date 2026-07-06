@@ -56,6 +56,8 @@ colameta_executor_inventory_readiness_map_exists=true
 colameta_executor_inventory_readiness_map_validation=PASS
 mcp_gateway_connector_boundary_plan_exists=true
 mcp_gateway_connector_boundary_plan_validation=PASS
+provider_host_dispatcher_static_behavior_map_exists=true
+provider_host_dispatcher_static_behavior_map_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -73,18 +75,22 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is provider / host dispatcher static behavior mapping. The
-workspace now has a preview-only Machine Skeleton, preview-only Task Producer
-Skeleton, Commander-first Control Chain, reviewed queue mutation gate, failure
-handling stop loop, dashboard / Memory candidate layer, a safe `ops/migration/`
-distillation, a ColaMeta executor inventory/readiness map, and an MCP gateway /
-connector boundary plan.
+The provider / host dispatcher static behavior mapping has been preserved as a
+static control-plane map. The workspace now has a preview-only Machine Skeleton,
+preview-only Task Producer Skeleton, Commander-first Control Chain, reviewed
+queue mutation gate, failure handling stop loop, dashboard / Memory candidate
+layer, a safe `ops/migration/` distillation, a ColaMeta executor
+inventory/readiness map, an MCP gateway / connector boundary plan, and a
+provider / host dispatcher static behavior map.
 
 ColaMeta local readiness is clean for summary-only preview, but real executor,
 service startup, provider calls, Memory writes, and applying runtime preview
-payloads remain blocked. MCP/connector boundaries are explicit. The next useful
-step is to preserve historical provider registry and host dispatcher knowledge
-as a static map before any runtime gate.
+payloads remain blocked. MCP/connector boundaries are explicit. Provider and
+host dispatcher behavior knowledge is static-only and does not carry forward
+runtime/provider execution authorization.
+
+The current blocker is root private Git history risk before any external Git
+publication, hosted backup, mirror, or PR from the root workspace repository.
 
 ## Queue Decision
 
@@ -97,21 +103,20 @@ runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: Provider / Host Dispatcher Static Behavior Map
+### NOW-001: Root Private History Review Or History-Scrub Gate
 
-Goal: preserve the useful historical provider registry and host dispatcher
-knowledge as a static control-plane map before any provider/runtime execution
-gate.
+Goal: review root Git history publication risk and decide whether external
+publication needs a no-push private-history review, a history-scrub plan, or a
+local-only policy.
 
 Required output:
 
 ```text
-provider_host_static_surface_summary
-provider_registry_behavior_evidence_map
-host_dispatcher_boundary_map
-provider_execution_separation
-forbidden_auth_provider_execution_guard
-future_provider_execution_gate_sequence
+root_private_history_risk_summary
+tracked_sensitive_pattern_scan
+git_history_publication_blocker_map
+history_scrub_option_set
+no_external_push_guard
 receipt_review_pattern
 ```
 
@@ -124,11 +129,15 @@ provider_call_authorized=false
 service_start_authorized=false
 executor_run_authorized=false
 external_write_authorized=false
+git_push_authorized=false
+history_rewrite_authorized=false
+tag_release_deploy_publish_authorized=false
 memory_write_authorized=false
 runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
 bulk_move_delete_rename_authorized=false
 private_state_read_authorized=false
+secret_raw_read_authorized=false
 provider_registry_write_authorized=false
 provider_runtime_config_write_authorized=false
 host_dispatcher_execution_authorized=false
@@ -142,14 +151,13 @@ connector_external_write_authorized=false
 Acceptance:
 
 ```text
-read only historical provider/host dispatcher plans, evidence, receipts, reviews, and current governance references
-do not inspect or modify auth/token/cookie/session files
-do not start MCP, ColaMeta, live host, or provider services
-do not execute host dispatcher routes
-do not perform provider calls
-do not mutate provider registry or provider/runtime configuration
-separate provider plan/selection/static registry behavior from provider execution
-produce a future provider execution gate sequence
+inspect only safe Git metadata, tracked file paths, and redacted working-tree content where needed
+do not read state-private
+do not read or print raw secrets/token/cookie/credential/private memory/provider raw response/log content
+do not print private Notion page URLs or private page contents if found
+do not push, tag, release, deploy, publish, or perform external writes
+do not rewrite history, reset hard, clean, bulk delete, or destructively scrub without a separate exact gate
+produce blocker map and option set only
 do not read private state
 docctl status remains PASS
 docctl doctor remains PASS
@@ -158,22 +166,17 @@ docctl doctor remains PASS
 ## NEXT
 
 ```text
-Root Private History Review Or History-Scrub Gate
+No active NEXT items.
 ```
 
 ## LATER
 
-### LATER-001: Root Private History Review Or History-Scrub Gate
-
-Only needed before any external Git publication, hosted backup, mirror, or PR
-from the root workspace repository.
-
-### LATER-002: VCPToolBox Runtime Recovery Or Controlled First-Use
+### LATER-001: VCPToolBox Runtime Recovery Or Controlled First-Use
 
 Keep paused until Jenn chooses runtime work again. Any restart must begin from
 the existing cold audit and first-start boundary reports.
 
-### LATER-003: Formal Memory Loop
+### LATER-002: Formal Memory Loop
 
 Only after Jenn explicitly chooses a Memory entry point. Do not infer formal
 Memory writes from ordinary governance receipts.
@@ -206,6 +209,7 @@ dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility 
 migration_plan_distillation_v0.1: closed for safe summary of historical migration material; no historical runtime/provider/executor permission carried forward
 colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local executor inventory and readiness map; real executor, service start, provider calls, Memory writes, and runtime preview apply remain unauthorized
 mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector boundary plan; live connector calls, auth mutation, MCP service start, provider calls, and external writes remain unauthorized
+provider_host_dispatcher_static_behavior_map_v0.1: closed for static provider registry and host dispatcher evidence map; provider calls, provider execution, host dispatcher execution, registry/config mutation, real spawn, service start, executor run, and external writes remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -242,11 +246,13 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible provider /
-host dispatcher static behavior map from `NOW-001`.
+The next construction batch should implement the smallest possible root private
+history review or history-scrub gate from `NOW-001`.
 
-Do not start MCP, ColaMeta, live host, or provider services; do not execute host
-dispatcher routes; do not call providers; do not mutate connector auth,
-provider registry, provider/runtime configuration, `.colameta/plan.json`, or
-`.colameta/state.json`; do not write `.colameta/memory.md`; do not read private
-state; and do not activate VCPToolBox/runtime/plugin work.
+Do not read `state-private/`; do not read or print raw secrets, tokens, cookies,
+credentials, private raw memory, provider raw responses, raw logs, private
+Notion page contents, or private page URLs; do not push, tag, release, deploy,
+publish, externally write, rewrite history, reset hard, clean, bulk delete, or
+destructively scrub without a separate exact gate. Keep provider calls, service
+starts, executor runs, host dispatcher execution, provider registry/config
+mutation, and VCPToolBox/runtime/plugin activation blocked.
