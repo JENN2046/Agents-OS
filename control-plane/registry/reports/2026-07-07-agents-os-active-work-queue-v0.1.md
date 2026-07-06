@@ -44,6 +44,8 @@ task_producer_exists=true
 task_producer_validation=PASS
 task_producer_route_option_intake_exists=true
 task_producer_route_option_intake_validation=PASS
+task_producer_route_choice_preview_exists=true
+task_producer_route_choice_preview_validation=PASS
 control_chain_exists=true
 control_chain_validation=PASS
 reviewed_queue_mutation_gate_exists=true
@@ -99,6 +101,10 @@ The Task Producer can now generate blocked candidate previews from route
 options A-E without selecting a route, writing the queue, promoting to NOW, or
 authorizing execution.
 
+The Task Producer can also preview explicit Jenn route-choice confirmation text
+without writing workspace route state, mutating the Active Work Queue, promoting
+to NOW, or authorizing execution.
+
 The Control Chain now recognizes those route-option candidates as an explicit
 Jenn-decision stop gate. Commander returns `stop_needs_jenn_decision` and Track
 Selector keeps `track_authorized=false`, so route selection cannot silently turn
@@ -125,6 +131,9 @@ new route should start automatically after the current governance sequence.
 The Machine now treats this stop-state as non-actionable and requiring Jenn
 route selection before execution. The next route selection package now preserves
 the route options and exact confirmation templates without selecting any route.
+The Task Producer route-choice preview can parse a future explicit Jenn
+selection text, but it still does not adopt the route into workspace state or
+mutate the queue.
 The Control Chain route-option stop gate keeps the same boundary after Task
 Producer candidate generation: route options can be inspected, but not selected,
 promoted, routed, or executed.
@@ -239,6 +248,7 @@ automation_rulebook_prohibited_first_update: closed for current operating model
 machine_skeleton_v0.1: closed for preview-only control machine baseline; maintain review rule
 task_producer_skeleton_v0.1: closed for preview-only candidate task production baseline; producer output remains candidate-only
 task_producer_route_option_intake_v0.1: closed for candidate-only route option intake; route selection, queue write, queue promotion, and execution remain unauthorized
+task_producer_route_choice_preview_v0.1: closed for preview-only explicit route-choice intake; route state, queue write, queue promotion, and execution remain unauthorized
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized

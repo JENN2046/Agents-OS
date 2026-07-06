@@ -11587,6 +11587,179 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-task-producer-route-choice-preview-v0.1
+    title: AGENTS OS Task Producer Route Choice Preview v0.1
+    doc_type: review
+    status: accepted
+    scope: preview-only route choice confirmation text intake
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - execution/agents-os-task-producer/producer-manifest.json
+      - execution/agents-os-task-producer/README.md
+      - control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - Task Producer route choice behavior changes
+        - route-selection package changes
+        - queue adoption boundary changes
+    security_boundary:
+      - local preview-only route choice parsing
+      - no route state write
+      - no raw confirmation text output
+      - no route auto-selection
+      - no queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no plugin activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-task-producer-route-choice-preview-v0.1-receipt
+    title: AGENTS OS Task Producer Route Choice Preview v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for Task Producer route-choice preview
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - Task Producer route choice behavior changes
+    security_boundary:
+      - local receipt only
+      - no route state write
+      - no raw confirmation text output
+      - no route auto-selection
+      - no queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-task-producer-route-choice-preview-v0.1-review
+    title: AGENTS OS Task Producer Route Choice Preview v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for Task Producer route-choice preview
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - execution/agents-os-task-producer/producer.py
+      - execution/agents-os-task-producer/test-producer.py
+      - control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-route-choice-preview-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - Task Producer route choice behavior changes
+        - residual risk changes
+    security_boundary:
+      - local review only
+      - no route state write
+      - no raw confirmation text output
+      - no route auto-selection
+      - no queue write
+      - no queue promotion
+      - no VCPToolBox runtime activation
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: agents-os-dashboard-route-options-visibility-v0.1-receipt
     title: AGENTS OS Dashboard Route Options Visibility v0.1 Receipt
     doc_type: receipt

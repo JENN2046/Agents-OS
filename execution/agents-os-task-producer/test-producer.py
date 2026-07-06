@@ -98,6 +98,30 @@ def main() -> int:
     check(bad_route.get("passed") is False, "invalid route option should fail preflight", failures)
     check(bool(bad_route.get("findings")), "invalid route option should include findings", failures)
 
+    route_choice = producer.route_choice_preview(
+        "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+        "先准备 formal Memory candidate gate v0.1；只做候选和确认模型，不写正式 Memory。"
+    )
+    check(route_choice["passed"] is True, "route choice preview should pass for exact route text", failures)
+    check(not producer.validate_route_choice_preview(route_choice), "route choice preview should validate", failures)
+    check(route_choice["selected_option"]["option_id"] == "B", "route choice preview should resolve option B", failures)
+    check(route_choice["confirmation_text_included"] is False, "route choice preview must not include raw text", failures)
+    check(route_choice["workspace_route_state_modified"] is False, "route choice preview must not modify route state", failures)
+    check(route_choice["active_queue_modified"] is False, "route choice preview must not modify queue", failures)
+    check(route_choice["queue_promotion_authorized"] is False, "route choice preview must not authorize queue promotion", failures)
+    check(route_choice["execution_authorized"] is False, "route choice preview must not authorize execution", failures)
+    check(route_choice["review_gate"]["requires_nobao_review"] is True, "route choice preview should require Nobao review", failures)
+
+    bad_route_choice = producer.route_choice_preview("继续做。")
+    check(bad_route_choice.get("passed") is False, "route choice without marker should fail", failures)
+    check(bool(bad_route_choice.get("findings")), "route choice without marker should include findings", failures)
+    placeholder_route_choice = producer.route_choice_preview(
+        "确认选择 AGENTS OS 下一路线：New AGENTS OS Construction Route。\n"
+        "路线目标是：<Jenn 填写目标>。"
+    )
+    check(placeholder_route_choice.get("passed") is False, "new route placeholder goal should fail", failures)
+    check(bool(placeholder_route_choice.get("findings")), "new route placeholder goal should include findings", failures)
+
     protected = producer.candidate_from_review_source(Path("state-private/task.md"))
     check(protected.get("passed") is False, "protected source path should fail before read", failures)
     check(bool(protected.get("findings")), "protected source path should include findings", failures)
@@ -112,7 +136,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=16 failures={len(failures)}")
+        print(f"cases=18 failures={len(failures)}")
         return 1
 
     print("PASS manifest boundary fixture")
@@ -123,8 +147,10 @@ def main() -> int:
     print("PASS allowlisted review source fixture")
     print("PASS route option candidate fixture")
     print("PASS invalid route option fixture")
+    print("PASS route choice preview fixture")
+    print("PASS invalid route choice preview fixture")
     print("PASS protected/disallowed source preflight fixture")
-    print("cases=16 failures=0")
+    print("cases=18 failures=0")
     return 0
 
 

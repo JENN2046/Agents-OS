@@ -5,6 +5,8 @@ This directory contains the first local AGENTS OS Task Producer skeleton.
 It is a preview-only candidate task producer. It turns explicit intent text,
 allowlisted local review/report documents, or an explicitly named route option
 from the route-selection package into candidate task JSON.
+It can also preview an explicit Jenn route-choice confirmation text without
+writing route state or the Active Work Queue.
 
 It is not a queue writer, queue promoter, executor, service, provider adapter,
 Memory writer, VCPToolBox starter, ColaMeta runner, plugin activator, or Git
@@ -16,6 +18,7 @@ publisher. It does not select routes.
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent "Build local governance task" --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-route-option --option A --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py
 ```
@@ -39,6 +42,19 @@ The producer never writes the Active Work Queue and never promotes any item to
 `NOW`. It also never selects a route. Nobao may review a candidate and
 separately decide whether a governance queue update is safe after Jenn chooses
 a route.
+
+`route-choice-preview` parses a Jenn confirmation text and reports the matched
+route option as preview-only JSON. It keeps:
+
+```text
+workspace_route_state_modified=false
+active_queue_modified=false
+queue_write_authorized=false
+queue_promotion_authorized=false
+route_auto_selection_authorized=false
+execution_authorized=false
+confirmation_text_included=false
+```
 
 ## Boundaries
 

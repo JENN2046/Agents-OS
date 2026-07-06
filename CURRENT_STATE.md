@@ -31,6 +31,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Task Producer output is candidate-only, includes `requires_nobao_review=true`, and keeps queue write, promotion, execution, provider, service, executor, plugin, external write, and Memory authorization false.
 - Task Producer Route Option Intake v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-option-intake-v0.1.md`.
 - The Task Producer can create blocked candidate previews from route options A-E while keeping `route_selected=false`, `route_auto_selection_authorized=false`, `queue_write_authorized=false`, and `execution_authorized=false`.
+- Task Producer Route Choice Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-task-producer-route-choice-preview-v0.1.md`.
+- The Task Producer can parse explicit Jenn route-choice confirmation text into preview-only JSON while keeping `workspace_route_state_modified=false`, `active_queue_modified=false`, and `execution_authorized=false`.
 - AGENTS OS Control Chain v0.1 exists at `execution/agents-os-control-chain/`.
 - The Control Chain implements Commander Decision Layer, Track Selector, shared track result, ColaMeta readiness reconciliation, Local Executor local-safe validation action, Queue Manager proposal-only, and reviewed queue mutation gate.
 - Commander is the only authorization source; Track Selector cannot elevate; ColaMeta remains preview/readiness only; reviewed queue mutation requires accepted Nobao review and still does not authorize auto-promote.
@@ -158,6 +160,9 @@ output with `blocked=true`, `actionable=false`, and
 `requires_jenn_decision=true`.
 The next route selection package now gives Jenn concrete templates for choosing
 one route without letting Nobao or Machine auto-select it.
+The Task Producer route-choice preview can parse a future explicit Jenn route
+choice into preview-only JSON without writing route state, mutating the Active
+Work Queue, or authorizing execution.
 The Control Chain route-option stop gate now carries that same boundary through
 Commander Decision and Track Selector: route-option candidates stop for Jenn and
 cannot be routed to ColaMeta, local executor, queue promotion, or execution.

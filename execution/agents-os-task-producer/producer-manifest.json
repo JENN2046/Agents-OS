@@ -11,6 +11,7 @@
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-intent --intent \"Build local governance task\" --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-review --source control-plane/registry/reports/2026-07-07-agents-os-machine-to-task-producer-queue-transition-v0.1.md --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py from-route-option --option A --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py route-choice-preview --confirmation-text \"确认选择 AGENTS OS 下一路线：Formal Memory Loop。\" --json",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/producer.py validate",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-task-producer/test-producer.py"
   ],

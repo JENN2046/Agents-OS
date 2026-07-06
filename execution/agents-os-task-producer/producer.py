@@ -48,6 +48,13 @@ DEFAULT_ROUTE_SELECTION_PACKAGE = (
 
 LANES = ("NOW", "NEXT", "LATER")
 ROUTE_OPTIONS = ("A", "B", "C", "D", "E")
+ROUTE_CHOICE_TITLES = {
+    "VCPToolBox Runtime Recovery Or Controlled First-Use": "A",
+    "Formal Memory Loop": "B",
+    "External Git Publication Exact Gate": "C",
+    "Provider Execution Design Gate": "D",
+    "New AGENTS OS Construction Route": "E",
+}
 ALLOWED_REVIEW_SOURCE_ROOTS = (
     WORKSPACE_ROOT / "control-plane" / "registry" / "reports",
     WORKSPACE_ROOT / "control-plane" / "registry" / "reviews",
@@ -422,6 +429,32 @@ def route_option_preflight_failure(
     }
 
 
+def route_choice_preview_failure(
+    *,
+    source: Path,
+    confirmation_text: str,
+    findings: list[dict[str, str]],
+) -> dict[str, Any]:
+    return {
+        "schema_version": "agents-os.task-producer.route-choice-preview.v0.1",
+        "passed": False,
+        "preview_only": True,
+        "producer_generated": True,
+        "status": "route_choice_preview",
+        "source_path": str(source),
+        "confirmation_text_included": False,
+        "input_character_count": len(confirmation_text),
+        "route_choice_detected": False,
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+        "findings": findings,
+    }
+
+
 def candidate_from_route_option(
     option_id: str,
     source: Path = DEFAULT_ROUTE_SELECTION_PACKAGE,
@@ -486,6 +519,120 @@ def candidate_from_route_option(
     )
 
 
+def route_choice_preview(
+    confirmation_text: str,
+    source: Path = DEFAULT_ROUTE_SELECTION_PACKAGE,
+) -> dict[str, Any]:
+    resolved, findings = resolve_review_source(source)
+    if findings or resolved is None:
+        return route_choice_preview_failure(source=source, confirmation_text=confirmation_text, findings=findings)
+    text = resolved.read_text(encoding="utf-8")
+    options = parse_route_options(text)
+    marker = "确认选择 AGENTS OS 下一路线："
+    if marker not in confirmation_text:
+        return route_choice_preview_failure(
+            source=source,
+            confirmation_text=confirmation_text,
+            findings=[
+                finding(
+                    "TASK-PRODUCER-ROUTE-CHOICE-MARKER",
+                    "confirmation text must include the AGENTS OS next route selection marker",
+                )
+            ],
+        )
+    matched_option_id: str | None = None
+    matched_title: str | None = None
+    for title, option_id in ROUTE_CHOICE_TITLES.items():
+        if title in confirmation_text:
+            matched_option_id = option_id
+            matched_title = title
+            break
+    if matched_option_id is None or matched_title is None:
+        return route_choice_preview_failure(
+            source=source,
+            confirmation_text=confirmation_text,
+            findings=[
+                finding(
+                    "TASK-PRODUCER-ROUTE-CHOICE-OPTION",
+                    "confirmation text must name one known route option title",
+                )
+            ],
+        )
+    route_option = options.get(matched_option_id)
+    if route_option is None:
+        return route_choice_preview_failure(
+            source=source,
+            confirmation_text=confirmation_text,
+            findings=[
+                finding(
+                    "TASK-PRODUCER-ROUTE-CHOICE-PACKAGE",
+                    f"route option {matched_option_id} was not found in {rel(resolved)}",
+                )
+            ],
+        )
+    route_goal: str | None = None
+    if matched_option_id == "E":
+        goal_match = re.search(r"路线目标是：(.+?)(?:。|\n|$)", confirmation_text)
+        route_goal = compact_text(goal_match.group(1), max_chars=160) if goal_match else None
+        if not route_goal or "<Jenn 填写目标>" in route_goal:
+            return route_choice_preview_failure(
+                source=source,
+                confirmation_text=confirmation_text,
+                findings=[
+                    finding(
+                        "TASK-PRODUCER-ROUTE-CHOICE-GOAL",
+                        "new construction route choice must include a concrete route goal",
+                    )
+                ],
+            )
+    return {
+        "schema_version": "agents-os.task-producer.route-choice-preview.v0.1",
+        "passed": True,
+        "preview_only": True,
+        "producer_generated": True,
+        "status": "route_choice_preview",
+        "source": {
+            "kind": "explicit_jenn_route_choice_text",
+            "path": rel(resolved),
+            "raw_content_included": False,
+        },
+        "confirmation_text_included": False,
+        "input_character_count": len(confirmation_text),
+        "route_choice_marker_present": True,
+        "selected_option": {
+            "option_id": matched_option_id,
+            "title": route_option["title"],
+            "first_safe_package": route_option.get("first_safe_package"),
+            "must_keep": route_option.get("must_keep", []),
+            "route_goal": route_goal,
+        },
+        "route_choice_detected": True,
+        "route_selection_confirmed_by_input": True,
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "executor_run_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "plugin_execution_authorized": False,
+        "review_gate": {
+            "requires_nobao_review": True,
+            "requires_jenn_decision": False,
+            "review_status": "pending",
+            "execution_authorized": False,
+            "review_reason": "route choice parsed from explicit Jenn confirmation text; queue adoption remains separate",
+        },
+        "json_output_authoritative": True,
+        "findings": [],
+    }
+
+
 def has_false_flags(value: dict[str, Any], flags: Any) -> tuple[bool, list[str]]:
     if not isinstance(flags, list):
         flags = list(flags)
@@ -537,6 +684,48 @@ def validate_candidate(candidate: dict[str, Any], schema: dict[str, Any] | None 
         errors.append("P3-like risk signals must require Jenn decision")
     if candidate.get("blocked") and candidate.get("execution_effect", {}).get("execution_authorized") is not False:
         errors.append("blocked candidate must not authorize execution")
+    return errors
+
+
+def validate_route_choice_preview(preview: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if preview.get("schema_version") != "agents-os.task-producer.route-choice-preview.v0.1":
+        errors.append("route choice preview schema_version is invalid")
+    if preview.get("preview_only") is not True:
+        errors.append("route choice preview must be preview_only")
+    if preview.get("producer_generated") is not True:
+        errors.append("route choice preview must be producer_generated")
+    if preview.get("status") != "route_choice_preview":
+        errors.append("route choice preview status must be route_choice_preview")
+    if preview.get("confirmation_text_included") is not False:
+        errors.append("route choice preview must not include raw confirmation text")
+    source = preview.get("source", {})
+    if preview.get("passed") is True and source.get("raw_content_included") is not False:
+        errors.append("route choice preview source.raw_content_included must be false")
+    required_false = [
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "execution_authorized",
+    ]
+    ok, failures = has_false_flags(preview, required_false)
+    if not ok:
+        errors.append(f"route choice preview flags not false: {','.join(failures)}")
+    if preview.get("passed") is True:
+        if preview.get("route_choice_detected") is not True:
+            errors.append("passed route choice preview must detect route choice")
+        if preview.get("route_selection_confirmed_by_input") is not True:
+            errors.append("passed route choice preview must confirm input selection")
+        selected_option = preview.get("selected_option", {})
+        if selected_option.get("option_id") not in ROUTE_OPTIONS:
+            errors.append(f"route choice preview selected option is invalid: {selected_option.get('option_id')}")
+        review = preview.get("review_gate", {})
+        if review.get("requires_nobao_review") is not True:
+            errors.append("route choice preview must require Nobao review")
+        if review.get("execution_authorized") is not False:
+            errors.append("route choice preview review gate must not authorize execution")
     return errors
 
 
@@ -626,6 +815,25 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
         if route_candidate.get("authorization", {}).get("route_auto_selection_authorized") is not False:
             errors.append(f"route option {option_id} must not authorize route auto-selection")
 
+    route_choice = route_choice_preview(
+        "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+        "先准备 formal Memory candidate gate v0.1；只做候选和确认模型，不写正式 Memory。"
+    )
+    errors.extend(f"route choice preview: {error}" for error in validate_route_choice_preview(route_choice))
+    if route_choice.get("selected_option", {}).get("option_id") != "B":
+        errors.append("route choice preview should select option B from explicit input")
+    if route_choice.get("workspace_route_state_modified") is not False:
+        errors.append("route choice preview must not modify workspace route state")
+    bad_route_choice = route_choice_preview("继续做。")
+    if bad_route_choice.get("passed") is not False or not bad_route_choice.get("findings"):
+        errors.append("route choice preview without marker should fail")
+    placeholder_route_choice = route_choice_preview(
+        "确认选择 AGENTS OS 下一路线：New AGENTS OS Construction Route。\n"
+        "路线目标是：<Jenn 填写目标>。"
+    )
+    if placeholder_route_choice.get("passed") is not False or not placeholder_route_choice.get("findings"):
+        errors.append("new construction route choice with placeholder goal should fail")
+
     protected_result = candidate_from_review_source(Path("state-private/task.md"))
     if protected_result.get("passed") is not False or not protected_result.get("findings"):
         errors.append("protected source path should fail before read")
@@ -681,6 +889,16 @@ def validate_producer(run_docctl: bool = True) -> dict[str, Any]:
             }
             for option_id, candidate in route_candidates.items()
         },
+        "route_choice_preview": {
+            "present": route_choice.get("passed") is True,
+            "selected_option_id": route_choice.get("selected_option", {}).get("option_id"),
+            "route_choice_detected": route_choice.get("route_choice_detected"),
+            "workspace_route_state_modified": route_choice.get("workspace_route_state_modified"),
+            "active_queue_modified": route_choice.get("active_queue_modified"),
+            "execution_authorized": route_choice.get("execution_authorized"),
+            "invalid_without_marker_failed": bad_route_choice.get("passed") is False,
+            "placeholder_goal_failed": placeholder_route_choice.get("passed") is False,
+        },
         "protected_source_preflight_failed": protected_result.get("passed") is False,
         "disallowed_source_preflight_failed": disallowed_result.get("passed") is False,
         "docctl": docctl,
@@ -700,6 +918,9 @@ def print_validation_text(result: dict[str, Any]) -> None:
     route_candidates = result.get("route_option_candidates", {})
     if route_candidates:
         print(f"Route option candidates: {len(route_candidates)}")
+    route_choice = result.get("route_choice_preview", {})
+    if route_choice:
+        print(f"Route choice preview: {'PASS' if route_choice.get('present') else 'FAIL'}")
     if result.get("docctl"):
         print(f"Docctl status: {'PASS' if result['docctl']['status']['passed'] else 'FAIL'}")
         print(f"Docctl doctor: {'PASS' if result['docctl']['doctor']['passed'] else 'FAIL'}")
@@ -732,6 +953,14 @@ def main() -> int:
     route_parser.add_argument("--lane", choices=LANES, default="NEXT", help="Proposed lane for the candidate.")
     route_parser.add_argument("--candidate-id", default=None, help="Optional candidate id.")
     route_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
+
+    route_choice_parser = subparsers.add_parser(
+        "route-choice-preview",
+        help="Preview an explicit Jenn route choice without writing queue or execution state.",
+    )
+    route_choice_parser.add_argument("--confirmation-text", required=True, help="Jenn route choice confirmation text.")
+    route_choice_parser.add_argument("--source", default=str(DEFAULT_ROUTE_SELECTION_PACKAGE), help="Route selection package Markdown path.")
+    route_choice_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
 
     validate_parser = subparsers.add_parser("validate", help="Run producer self-validation.")
     validate_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
@@ -798,6 +1027,27 @@ def main() -> int:
             print(f"Queue write authorized: {candidate['authorization']['queue_write_authorized']}")
             print(f"Execution authorized: {candidate['execution_effect']['execution_authorized']}")
         return 0 if candidate["passed"] else 1
+
+    if args.command == "route-choice-preview":
+        preview = route_choice_preview(args.confirmation_text, Path(args.source))
+        errors = validate_route_choice_preview(preview)
+        preview["passed"] = bool(preview.get("passed")) and not errors
+        preview["errors"] = errors
+        if args.json:
+            print_json(preview)
+        else:
+            print(f"Status: {'PASS' if preview['passed'] else 'FAIL'}")
+            if preview["passed"]:
+                selected = preview["selected_option"]
+                print(f"Selected option: {selected['option_id']} {selected['title']}")
+            print(f"Workspace route state modified: {preview['workspace_route_state_modified']}")
+            print(f"Active queue modified: {preview['active_queue_modified']}")
+            print(f"Execution authorized: {preview['execution_authorized']}")
+            for item in preview.get("findings", []):
+                print(f"- {item['message']}")
+            for error in errors:
+                print(f"- {error}")
+        return 0 if preview["passed"] else 1
 
     if args.command == "validate":
         result = validate_producer()

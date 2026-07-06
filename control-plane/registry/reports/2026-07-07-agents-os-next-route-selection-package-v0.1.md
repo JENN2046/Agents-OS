@@ -257,6 +257,7 @@ NOW remains No Active Automatic Construction Item
 Machine preview remains blocked/actionable=false
 Nobao does not promote any route to NOW
 Task Producer may produce candidates only after explicit route intent
+Task Producer may preview explicit Jenn route-choice text without writing queue state
 Control Chain may not treat this package as Commander authorization
 ```
 
