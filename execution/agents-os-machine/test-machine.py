@@ -127,6 +127,23 @@ Goal: call provider and start service.
     check(p3_preview["review_gate"]["requires_jenn_decision"] is True, "P3 signal should require Jenn", failures)
     check(p3_preview["execution_authorized"] is False, "P3 signal should not authorize execution", failures)
 
+    negated_queue = machine.parse_queue_markdown(
+        """# fixture
+
+## NOW
+
+### NOW-001: Local no-provider task
+
+Goal: do local documentation only.
+Do not call provider. Do not start service. Do not run executor.
+""",
+        Path("fixture-negated-signals.md"),
+    )
+    check(negated_queue["passed"], "negated signal fixture structure should parse", failures)
+    negated_preview = machine.build_preview(machine.now_item(negated_queue))
+    check(negated_preview["blocked"] is False, "negated boundary statements should not block preview", failures)
+    check(negated_preview["actionable"] is True, "negated boundary preview should remain actionable", failures)
+
     external_queue = machine.parse_queue_markdown(
         """# fixture
 
@@ -169,7 +186,7 @@ Goal: perform a database write.
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=12 failures={len(failures)}")
+        print(f"cases=13 failures={len(failures)}")
         return 1
 
     print("PASS current queue fixture")
@@ -178,8 +195,9 @@ Goal: perform a database write.
     print("PASS no NOW fixture")
     print("PASS multiple NOW fixture")
     print("PASS P3 signal fixture")
+    print("PASS negated boundary signal fixture")
     print("PASS task-envelope temporary validation fixture")
-    print("cases=12 failures=0")
+    print("cases=13 failures=0")
     return 0
 
 

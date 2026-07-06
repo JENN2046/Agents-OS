@@ -54,6 +54,11 @@ def main() -> int:
     check(risky["review_gate"]["requires_jenn_decision"] is True, "P3-like risk should require Jenn", failures)
     check(risky["execution_effect"]["provider_call_performed"] is False, "risky candidate must not perform provider call", failures)
 
+    negated = producer.candidate_from_intent("Do not call provider. Do not start service. Build local docs only.")
+    check(not producer.validate_candidate(negated, schema), "negated boundary candidate should validate", failures)
+    check(negated["blocked"] is False, "negated boundary statements should not block candidate", failures)
+    check(not negated["risk_signals"], "negated boundary statements should not produce risk signals", failures)
+
     queue_signal = producer.candidate_from_intent("Promote NEXT-001 to NOW and update the Active Work Queue.")
     check(not producer.validate_candidate(queue_signal, schema), "queue-signal candidate should validate", failures)
     check(queue_signal["blocked"] is True, "queue-signal candidate should be blocked", failures)
@@ -86,16 +91,17 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=13 failures={len(failures)}")
+        print(f"cases=14 failures={len(failures)}")
         return 1
 
     print("PASS manifest boundary fixture")
     print("PASS intent candidate fixture")
     print("PASS risky candidate fixture")
+    print("PASS negated boundary signal fixture")
     print("PASS queue mutation signal fixture")
     print("PASS allowlisted review source fixture")
     print("PASS protected/disallowed source preflight fixture")
-    print("cases=13 failures=0")
+    print("cases=14 failures=0")
     return 0
 
 

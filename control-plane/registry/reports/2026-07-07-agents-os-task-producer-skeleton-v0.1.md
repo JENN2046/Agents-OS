@@ -87,12 +87,12 @@ history rewrite, identity, and direction changes.
 ## Validation Summary
 
 ```text
-test-producer: PASS cases=13 failures=0
+test-producer: PASS cases=14 failures=0
 from-intent preview: PASS blocked=false requires_nobao_review=true execution_authorized=false queue_write=false
 from-review preview: PASS source_raw_content_included=false requires_nobao_review=true execution_authorized=false
 producer validate: PASS
 machine inspect-queue: PASS now=1
-machine preview-now: PASS source_item=ColaMeta Executor Readiness Reconciliation execution_authorized=false
+machine preview-now: PASS source_item=ColaMeta Executor Readiness Reconciliation actionable=true execution_authorized=false
 docctl status: PASS
 docctl doctor: PASS
 ```

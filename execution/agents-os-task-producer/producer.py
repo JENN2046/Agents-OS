@@ -111,6 +111,11 @@ DENIED_SIGNAL_PATTERNS = {
     "git_release_boundary": re.compile(r"\b(git push|git tag|force push|release|deploy|publish|history rewrite|npm publish|package publish)\b", re.I),
 }
 
+NEGATED_SIGNAL_CONTEXT = re.compile(
+    r"\b(no|do not|does not|cannot|can't|must not|must remain false|blocked actions?|blocked until|keep .*blocked|forbidden|denied)\b",
+    re.I,
+)
+
 JENN_DECISION_SIGNALS = {
     "provider_call",
     "service_start",
@@ -203,9 +208,12 @@ def extract_headings(markdown: str, limit: int = 6) -> list[str]:
 
 
 def find_denied_signals(text: str) -> list[str]:
+    scan_text = "\n".join(
+        line for line in text.splitlines() if not NEGATED_SIGNAL_CONTEXT.search(line)
+    )
     hits: list[str] = []
     for signal_id, pattern in DENIED_SIGNAL_PATTERNS.items():
-        if pattern.search(text):
+        if pattern.search(scan_text):
             hits.append(signal_id)
     return sorted(set(hits))
 

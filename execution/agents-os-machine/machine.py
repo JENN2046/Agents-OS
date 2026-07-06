@@ -64,6 +64,11 @@ DENIED_SIGNAL_PATTERNS = {
     "git_release_boundary": re.compile(r"\b(git push|git tag|force push|release|deploy|publish|history rewrite|npm publish|package publish)\b", re.I),
 }
 
+NEGATED_SIGNAL_CONTEXT = re.compile(
+    r"\b(no|do not|does not|cannot|can't|must not|must remain false|blocked actions?|blocked until|keep .*blocked|forbidden|denied)\b",
+    re.I,
+)
+
 
 def load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
@@ -114,9 +119,12 @@ def has_false_dangerous_flags(value: dict[str, Any]) -> tuple[bool, list[str]]:
 
 
 def find_denied_signals(text: str) -> list[str]:
+    scan_text = "\n".join(
+        line for line in text.splitlines() if not NEGATED_SIGNAL_CONTEXT.search(line)
+    )
     hits: list[str] = []
     for signal_id, pattern in DENIED_SIGNAL_PATTERNS.items():
-        if pattern.search(text):
+        if pattern.search(scan_text):
             hits.append(signal_id)
     return sorted(set(hits))
 
