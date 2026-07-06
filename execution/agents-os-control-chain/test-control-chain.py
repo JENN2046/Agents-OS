@@ -176,6 +176,33 @@ def main() -> int:
     check(route_e2e_readiness["raw_confirmation_text_output"] is False, "route choice end-to-end readiness must not output raw confirmation text", failures)
     check(route_e2e_readiness["raw_template_output"] is False, "route choice end-to-end readiness must not output raw template", failures)
 
+    route_adoption_bundle = chain.route_choice_adoption_bundle_preview(
+        "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+        "这是 adoption bundle fixture；不写真实队列、不执行。",
+        fixture_only=True,
+    )
+    check(
+        route_adoption_bundle["passed"] is True,
+        f"route choice adoption bundle preview should pass: {route_adoption_bundle['errors']}",
+        failures,
+    )
+    check(route_adoption_bundle["selected_route_id"] == "B", "route adoption bundle should select route B fixture", failures)
+    check(route_adoption_bundle["queue_proposal_passed"] is True, "route adoption bundle should pass queue proposal", failures)
+    check(route_adoption_bundle["review_object_generated"] is True, "route adoption bundle should generate review object", failures)
+    check(route_adoption_bundle["reviewed_route_adoption_preview_passed"] is True, "route adoption bundle should pass adoption preview", failures)
+    check(route_adoption_bundle["reviewed_route_adoption_apply_preview_passed"] is True, "route adoption bundle should pass apply-gate preview", failures)
+    check(route_adoption_bundle["can_apply_with_separate_apply_gate"] is True, "route adoption bundle should identify separate apply gate", failures)
+    check(route_adoption_bundle["real_queue_write_performed"] is False, "route adoption bundle must not write real queue", failures)
+    check(route_adoption_bundle["active_queue_modified"] is False, "route adoption bundle must not mutate active queue", failures)
+    check(route_adoption_bundle["route_adoption_authorized"] is False, "route adoption bundle must not authorize route adoption", failures)
+    check(route_adoption_bundle["execution_authorized"] is False, "route adoption bundle must not authorize execution", failures)
+    check(route_adoption_bundle["raw_confirmation_text_output"] is False, "route adoption bundle must not output raw confirmation text", failures)
+    check(route_adoption_bundle["raw_template_output"] is False, "route adoption bundle must not output raw template", failures)
+    invalid_route_adoption_bundle = chain.route_choice_adoption_bundle_preview("继续做。", fixture_only=True)
+    check(invalid_route_adoption_bundle["passed"] is False, "invalid route adoption bundle should fail", failures)
+    check(invalid_route_adoption_bundle["real_queue_write_performed"] is False, "invalid route adoption bundle must not write real queue", failures)
+    check(invalid_route_adoption_bundle["execution_authorized"] is False, "invalid route adoption bundle must not authorize execution", failures)
+
     invalid_decision = chain.build_commander_decision(invalid)
     check(invalid_decision["decision"] == "reject_as_out_of_scope", "invalid candidate should be rejected", failures)
 
@@ -485,11 +512,36 @@ old_task: closed
         "validation should keep end-to-end readiness execution unauthorized",
         failures,
     )
+    check(
+        validation["route_choice_adoption_bundle_preview"]["selected_route_id"] == "B",
+        "validation should report route adoption bundle fixture B",
+        failures,
+    )
+    check(
+        validation["route_choice_adoption_bundle_preview"]["can_apply_with_separate_apply_gate"] is True,
+        "validation should report route adoption bundle separate apply gate readiness",
+        failures,
+    )
+    check(
+        validation["route_choice_adoption_bundle_preview"]["real_queue_write_performed"] is False,
+        "validation should keep route adoption bundle real queue writes false",
+        failures,
+    )
+    check(
+        validation["route_choice_adoption_bundle_preview"]["route_adoption_authorized"] is False,
+        "validation should keep route adoption bundle route adoption unauthorized",
+        failures,
+    )
+    check(
+        validation["route_choice_adoption_bundle_preview"]["execution_authorized"] is False,
+        "validation should keep route adoption bundle execution unauthorized",
+        failures,
+    )
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=28 failures={len(failures)}")
+        print(f"cases=29 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -501,12 +553,13 @@ old_task: closed
     print("PASS route choice handoff reconciliation fixture")
     print("PASS route choice template readiness fixture")
     print("PASS route choice end-to-end readiness fixture")
+    print("PASS route choice adoption bundle preview fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=28 failures=0")
+    print("cases=29 failures=0")
     return 0
 
 

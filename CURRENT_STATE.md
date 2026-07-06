@@ -53,6 +53,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Control Chain now verifies Task Producer route-choice template coverage A-E without outputting raw template text, selecting a route, mutating route state, mutating the Active Work Queue, promoting a queue item, or authorizing execution.
 - Control Chain Route Choice End-to-End Readiness v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-end-to-end-readiness-v0.1.md`.
 - The Control Chain now verifies A-E route-choice fixture flow through Task Producer preview, route-choice queue proposal, accepted Nobao review, reviewed route adoption preview, and apply-gate preview while keeping the real Active Work Queue unchanged and route selection, route adoption, queue promotion, execution, raw confirmation text output, and raw template output unauthorized.
+- Control Chain Route Choice Adoption Bundle Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md`.
+- The Control Chain can package future explicit Jenn route-choice text into a route preview, queue proposal, accepted Nobao review object, reviewed route adoption preview, and apply-gate preview while keeping raw confirmation/template output, real queue write, route adoption, queue promotion, and execution unauthorized.
 - Control Chain Reviewed Route Adoption Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md`.
 - The Control Chain can inspect an accepted Nobao review and produce a preview of appending the selected route to `NEXT` while keeping `active_queue_modified=false`, `write_performed=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - Control Chain Reviewed Route Adoption Apply Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-apply-gate-v0.1.md`.
@@ -214,6 +216,12 @@ A-E fixture chain from route-choice preview to apply-gate preview. It uses only
 temporary fixture queues and keeps the real Active Work Queue, route selection,
 route adoption, queue promotion, raw confirmation/template output, and
 execution untouched.
+The Control Chain route-choice adoption bundle preview now collapses the future
+post-choice handoff into one reviewable object: route-choice preview, queue
+proposal, accepted Nobao review object, reviewed adoption preview, and
+apply-gate preview. It still does not output raw confirmation/template text,
+write the real Active Work Queue, adopt a route, promote the queue, or authorize
+execution.
 The Active Work Queue closed-order reconciliation records the current latest
 closed governance event at the `CLOSED` tail so Dashboard `last_completed`
 continues to represent the queue's latest local closure.

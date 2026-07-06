@@ -58,6 +58,8 @@ control_chain_route_choice_template_readiness_exists=true
 control_chain_route_choice_template_readiness_validation=PASS
 control_chain_route_choice_end_to_end_readiness_exists=true
 control_chain_route_choice_end_to_end_readiness_validation=PASS
+control_chain_route_choice_adoption_bundle_preview_exists=true
+control_chain_route_choice_adoption_bundle_preview_validation=PASS
 control_chain_reviewed_route_adoption_preview_exists=true
 control_chain_reviewed_route_adoption_preview_validation=PASS
 control_chain_reviewed_route_adoption_apply_gate_exists=true
@@ -158,6 +160,12 @@ route-choice preview through proposal, accepted review, reviewed adoption
 preview, and apply-gate preview. This proves readiness without selecting a real
 route, writing the real Active Work Queue, promoting NOW, outputting raw
 confirmation/template text, or authorizing execution.
+
+The Control Chain can now package future explicit Jenn route-choice text into
+one reviewable adoption bundle preview. The bundle reaches route-choice preview,
+queue proposal, accepted Nobao review object, reviewed adoption preview, and
+apply-gate preview, while keeping raw confirmation/template output, real queue
+write, route adoption, queue promotion, and execution unauthorized.
 
 The Control Chain can also inspect an accepted Nobao review and produce a
 reviewed route adoption preview. It can show the future `NEXT` append, while
@@ -357,6 +365,7 @@ active_work_queue_closed_order_reconciliation_v0.1: closed for aligning Dashboar
 task_producer_route_choice_template_coverage_v0.1: closed for preview-only route-choice template coverage; raw template output, route state write, active queue mutation, queue promotion, and execution remain unauthorized
 control_chain_route_choice_template_readiness_v0.1: closed for preview-only Control Chain route-choice template readiness; raw template output, route selection, active queue mutation, queue promotion, and execution remain unauthorized
 control_chain_route_choice_end_to_end_readiness_v0.1: closed for preview-only A-E route-choice end-to-end readiness; raw confirmation/template output, route selection, real queue write, queue promotion, and execution remain unauthorized
+control_chain_route_choice_adoption_bundle_preview_v0.1: closed for preview-only route-choice adoption bundle packaging; raw confirmation/template output, real queue write, route adoption, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

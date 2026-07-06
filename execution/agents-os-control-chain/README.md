@@ -21,6 +21,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chai
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-handoff-reconciliation --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-template-readiness --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-end-to-end-readiness --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-adoption-bundle-preview --confirmation-text "确认选择 AGENTS OS 下一路线：Formal Memory Loop。" --json
 ```
 
 ## Authority Model
@@ -42,6 +43,9 @@ outputting raw templates, selecting a route, or mutating the queue.
 Route-choice end-to-end readiness verifies A-E fixture flow through preview,
 proposal, reviewed adoption preview, and apply-gate preview without selecting a
 route, mutating the real queue, or executing.
+Route-choice adoption bundle preview packages future explicit Jenn route-choice
+text into route preview, queue proposal, Nobao review, adoption preview, and
+apply-gate preview without applying it or mutating the real queue.
 Failure handling stops for review and never silently retries.
 ```
 

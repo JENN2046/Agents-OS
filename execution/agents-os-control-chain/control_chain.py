@@ -1008,6 +1008,145 @@ def validate_route_choice_end_to_end_readiness(result: dict[str, Any]) -> list[s
     return errors
 
 
+def route_choice_adoption_bundle_preview(
+    confirmation_text: str,
+    queue_path: Path = DEFAULT_QUEUE,
+    source: Path = ROUTE_SELECTION_PACKAGE,
+    *,
+    fixture_only: bool = False,
+) -> dict[str, Any]:
+    errors: list[str] = []
+    producer = import_module(TASK_PRODUCER, "agents_os_task_producer_adoption_bundle_for_control_chain")
+
+    route_preview = producer.route_choice_preview(confirmation_text, source)
+    route_preview_errors = validate_route_choice_preview(route_preview)
+    errors.extend(f"route choice preview: {error}" for error in route_preview_errors)
+
+    proposal = route_choice_queue_proposal(route_preview)
+    errors.extend(f"route choice proposal: {error}" for error in proposal.get("errors", []))
+
+    review = accepted_nobao_review_for(proposal)
+    adoption_preview = reviewed_route_adoption_preview(proposal, review, queue_path)
+    errors.extend(f"reviewed route adoption preview: {error}" for error in adoption_preview.get("errors", []))
+
+    apply_preview = reviewed_route_adoption_apply_gate(proposal, review, queue_path, apply=False)
+    errors.extend(f"reviewed route adoption apply preview: {error}" for error in apply_preview.get("errors", []))
+
+    selected = route_preview.get("selected_option", {}) if isinstance(route_preview, dict) else {}
+    item = proposal.get("proposed_queue_item", {}) if isinstance(proposal, dict) else {}
+    result = {
+        "schema_version": "agents-os.control-chain.route-choice-adoption-bundle-preview.v0.1",
+        "preview_only": True,
+        "fixture_only": fixture_only,
+        "source_path": rel(source),
+        "queue_path": rel(queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path),
+        "input_character_count": len(confirmation_text),
+        "confirmation_text_included": False,
+        "raw_confirmation_text_output": False,
+        "raw_template_output": False,
+        "route_choice_preview_passed": route_preview.get("passed") is True and not route_preview_errors,
+        "route_choice_detected": route_preview.get("route_choice_detected") is True,
+        "selected_route_id": selected.get("option_id"),
+        "selected_route_title": selected.get("title"),
+        "selected_first_safe_package": selected.get("first_safe_package"),
+        "route_goal_present": bool(selected.get("route_goal")),
+        "queue_proposal_passed": proposal.get("passed") is True,
+        "proposal_id": proposal.get("proposal_id"),
+        "proposed_next_title": item.get("title"),
+        "review_object_generated": True,
+        "review_status": review.get("review_status"),
+        "reviewer": review.get("reviewer"),
+        "review_requires_jenn_decision": review.get("requires_jenn_decision"),
+        "reviewed_route_adoption_preview_passed": adoption_preview.get("passed") is True,
+        "reviewed_route_adoption_apply_preview_passed": apply_preview.get("passed") is True,
+        "can_apply_with_separate_apply_gate": apply_preview.get("queue_adoption_authorized") is True,
+        "real_queue_write_performed": False,
+        "workspace_route_state_modified": False,
+        "active_queue_modified": False,
+        "write_performed": False,
+        "queue_write_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "route_adoption_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "executor_run_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "plugin_execution_authorized": False,
+        "next_required_gate": "reviewed-route-adoption-apply-gate with explicit apply authorization after Jenn route choice review",
+        "errors": sorted(set(errors)),
+    }
+    validation_errors = validate_route_choice_adoption_bundle_preview(result)
+    result["errors"] = sorted(set(result["errors"] + validation_errors))
+    result["passed"] = not result["errors"]
+    return result
+
+
+def validate_route_choice_adoption_bundle_preview(result: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if result.get("schema_version") != "agents-os.control-chain.route-choice-adoption-bundle-preview.v0.1":
+        errors.append("route choice adoption bundle preview schema_version is invalid")
+    if result.get("preview_only") is not True:
+        errors.append("route choice adoption bundle preview must be preview_only")
+    if result.get("confirmation_text_included") is not False:
+        errors.append("route choice adoption bundle preview must not include confirmation text")
+    if result.get("raw_confirmation_text_output") is not False:
+        errors.append("route choice adoption bundle preview must not output raw confirmation text")
+    if result.get("raw_template_output") is not False:
+        errors.append("route choice adoption bundle preview must not output raw template text")
+    for flag in (
+        "real_queue_write_performed",
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "write_performed",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "route_adoption_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "executor_run_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "plugin_execution_authorized",
+    ):
+        if result.get(flag) is not False:
+            errors.append(f"route choice adoption bundle preview must keep {flag}=false")
+    if not result.get("errors"):
+        if result.get("route_choice_preview_passed") is not True:
+            errors.append("route choice adoption bundle preview requires passing route choice preview")
+        if result.get("route_choice_detected") is not True:
+            errors.append("route choice adoption bundle preview must detect route choice")
+        if result.get("selected_route_id") not in ["A", "B", "C", "D", "E"]:
+            errors.append("route choice adoption bundle preview selected_route_id must be A-E")
+        if not result.get("selected_first_safe_package"):
+            errors.append("route choice adoption bundle preview must include first safe package")
+        if result.get("queue_proposal_passed") is not True:
+            errors.append("route choice adoption bundle preview requires passing queue proposal")
+        if not result.get("proposed_next_title"):
+            errors.append("route choice adoption bundle preview must include proposed NEXT title")
+        if result.get("review_object_generated") is not True:
+            errors.append("route choice adoption bundle preview must generate review object")
+        if result.get("review_status") != "accepted":
+            errors.append("route choice adoption bundle preview review_status must be accepted")
+        if result.get("reviewer") != "Nobao":
+            errors.append("route choice adoption bundle preview reviewer must be Nobao")
+        if result.get("review_requires_jenn_decision") is not False:
+            errors.append("route choice adoption bundle preview review must not require Jenn decision")
+        if result.get("reviewed_route_adoption_preview_passed") is not True:
+            errors.append("route choice adoption bundle preview requires passing adoption preview")
+        if result.get("reviewed_route_adoption_apply_preview_passed") is not True:
+            errors.append("route choice adoption bundle preview requires passing apply-gate preview")
+        if result.get("can_apply_with_separate_apply_gate") is not True:
+            errors.append("route choice adoption bundle preview must identify separate apply gate availability")
+    return errors
+
+
 def metadata_for_json(path: Path, list_keys: tuple[str, ...]) -> dict[str, Any]:
     resolved, error = safe_resolve(path)
     if error or resolved is None or not resolved.exists() or not resolved.is_file():
@@ -2212,6 +2351,13 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     route_handoff_reconciliation = route_choice_handoff_reconciliation(DEFAULT_QUEUE)
     route_template_readiness = route_choice_template_readiness(ROUTE_SELECTION_PACKAGE)
     route_e2e_readiness = route_choice_end_to_end_readiness(ROUTE_SELECTION_PACKAGE)
+    route_adoption_bundle_preview = route_choice_adoption_bundle_preview(
+        "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+        "这是 validation fixture；不写真实队列、不推广 NOW、不执行。",
+        DEFAULT_QUEUE,
+        ROUTE_SELECTION_PACKAGE,
+        fixture_only=True,
+    )
     if route_handoff_reconciliation.get("passed") is not True:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
@@ -2255,6 +2401,26 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     for flag in ROUTE_CHOICE_E2E_FALSE_FLAGS:
         if route_e2e_readiness.get(flag) is not False:
             errors.append(f"route choice end-to-end readiness authorized {flag}")
+    if route_adoption_bundle_preview.get("passed") is not True:
+        errors.append("route choice adoption bundle preview did not pass")
+    if route_adoption_bundle_preview.get("selected_route_id") != "B":
+        errors.append("route choice adoption bundle preview fixture did not select route B")
+    if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not True:
+        errors.append("route choice adoption bundle preview did not reach separate apply gate readiness")
+    for flag in (
+        "real_queue_write_performed",
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "write_performed",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_adoption_authorized",
+        "execution_authorized",
+        "raw_confirmation_text_output",
+        "raw_template_output",
+    ):
+        if route_adoption_bundle_preview.get(flag) is not False:
+            errors.append(f"route choice adoption bundle preview authorized {flag}")
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")
@@ -2594,6 +2760,23 @@ old_task: closed
             "raw_confirmation_text_output": route_e2e_readiness.get("raw_confirmation_text_output"),
             "raw_template_output": route_e2e_readiness.get("raw_template_output"),
         },
+        "route_choice_adoption_bundle_preview": {
+            "passed": route_adoption_bundle_preview.get("passed"),
+            "fixture_only": route_adoption_bundle_preview.get("fixture_only"),
+            "selected_route_id": route_adoption_bundle_preview.get("selected_route_id"),
+            "proposed_next_title": route_adoption_bundle_preview.get("proposed_next_title"),
+            "queue_proposal_passed": route_adoption_bundle_preview.get("queue_proposal_passed"),
+            "review_object_generated": route_adoption_bundle_preview.get("review_object_generated"),
+            "reviewed_route_adoption_preview_passed": route_adoption_bundle_preview.get("reviewed_route_adoption_preview_passed"),
+            "reviewed_route_adoption_apply_preview_passed": route_adoption_bundle_preview.get("reviewed_route_adoption_apply_preview_passed"),
+            "can_apply_with_separate_apply_gate": route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate"),
+            "real_queue_write_performed": route_adoption_bundle_preview.get("real_queue_write_performed"),
+            "active_queue_modified": route_adoption_bundle_preview.get("active_queue_modified"),
+            "route_adoption_authorized": route_adoption_bundle_preview.get("route_adoption_authorized"),
+            "execution_authorized": route_adoption_bundle_preview.get("execution_authorized"),
+            "raw_confirmation_text_output": route_adoption_bundle_preview.get("raw_confirmation_text_output"),
+            "raw_template_output": route_adoption_bundle_preview.get("raw_template_output"),
+        },
         "local_executor": {
             "validation_passed": local_result.get("validation_passed"),
             "forbidden_blocked": forbidden_result.get("validation_passed") is False,
@@ -2682,6 +2865,12 @@ def main() -> int:
     route_choice_queue_parser = subparsers.add_parser("route-choice-queue-proposal")
     route_choice_queue_parser.add_argument("--route-choice-preview-json", required=True)
     route_choice_queue_parser.add_argument("--json", action="store_true")
+
+    route_adoption_bundle_parser = subparsers.add_parser("route-choice-adoption-bundle-preview")
+    route_adoption_bundle_parser.add_argument("--confirmation-text", required=True)
+    route_adoption_bundle_parser.add_argument("--source", default=str(ROUTE_SELECTION_PACKAGE))
+    route_adoption_bundle_parser.add_argument("--queue", default=str(DEFAULT_QUEUE))
+    route_adoption_bundle_parser.add_argument("--json", action="store_true")
 
     route_adoption_parser = subparsers.add_parser("reviewed-route-adoption-preview")
     route_adoption_parser.add_argument("--proposal-json", required=True)
@@ -2788,6 +2977,24 @@ def main() -> int:
                 f"lane={item.get('lane')} "
                 f"title={item.get('title')}"
             )
+        return 0 if result["passed"] else 1
+
+    if args.command == "route-choice-adoption-bundle-preview":
+        result = route_choice_adoption_bundle_preview(
+            args.confirmation_text,
+            Path(args.queue),
+            Path(args.source),
+        )
+        if args.json:
+            print_json(result)
+        else:
+            print("Route choice adoption bundle preview")
+            print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+            print(f"Selected route: {result.get('selected_route_id')}")
+            print(f"Proposed NEXT: {result.get('proposed_next_title')}")
+            print(f"Separate apply gate ready: {result.get('can_apply_with_separate_apply_gate')}")
+            print(f"Active queue modified: {result.get('active_queue_modified')}")
+            print(f"Execution authorized: {result.get('execution_authorized')}")
         return 0 if result["passed"] else 1
 
     if args.command == "reviewed-route-adoption-preview":
