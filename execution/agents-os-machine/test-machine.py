@@ -59,6 +59,24 @@ def main() -> int:
         )
     else:
         check(preview["actionable"] is True, "unblocked preview should be actionable", failures)
+    if "route_selection_required" in preview["denied_signals"]:
+        check(
+            preview["next_user_action"]["status"] == "route_choice_required",
+            "route selection current preview should surface next user action",
+            failures,
+        )
+        check(preview["next_user_action"]["decision_owner"] == "Jenn", "next user action owner should be Jenn", failures)
+        check(
+            preview["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"],
+            "next user action should surface accepted route ids",
+            failures,
+        )
+        check(
+            preview["next_user_action"]["active_queue_mutation_authorized"] is False,
+            "next user action must not authorize active queue mutation",
+            failures,
+        )
+        check(preview["next_user_action"]["execution_authorized"] is False, "next user action must not authorize execution", failures)
     check(preview["review_gate"]["requires_nobao_review"] is True, "preview should require Nobao review", failures)
     ok, failed_flags = machine.has_false_dangerous_flags(preview["authorization"])
     check(ok, f"preview dangerous flags should be false: {failed_flags}", failures)
@@ -72,6 +90,11 @@ def main() -> int:
     broken_preview["authorization"] = dict(preview["authorization"])
     broken_preview["authorization"]["provider_call_authorized"] = True
     check(machine.validate_preview(broken_preview), "preview with dangerous true should fail", failures)
+
+    broken_next_action = dict(preview)
+    broken_next_action["next_user_action"] = dict(preview["next_user_action"])
+    broken_next_action["next_user_action"]["queue_promotion_authorized"] = True
+    check(machine.validate_preview(broken_next_action), "preview with next user action queue promotion should fail", failures)
 
     schema = json.loads((ROOT / "queue-item.schema.json").read_text(encoding="utf-8"))
     schema_item = dict(machine.now_item(current))
@@ -126,6 +149,7 @@ Goal: call provider and start service.
     check(p3_preview["actionable"] is False, "P3 signal preview should be actionable=false", failures)
     check(p3_preview["review_gate"]["requires_jenn_decision"] is True, "P3 signal should require Jenn", failures)
     check(p3_preview["execution_authorized"] is False, "P3 signal should not authorize execution", failures)
+    check(p3_preview["next_user_action"]["status"] == "none", "P3-only signal should not become route choice handoff", failures)
 
     negated_queue = machine.parse_queue_markdown(
         """# fixture
@@ -173,6 +197,26 @@ requires_jenn_route_choice=true
         "route selection signal should be recorded",
         failures,
     )
+    check(
+        route_selection_preview["next_user_action"]["status"] == "route_choice_required",
+        "route selection stop-state should surface route choice handoff",
+        failures,
+    )
+    check(
+        route_selection_preview["next_user_action"]["decision_owner"] == "Jenn",
+        "route selection handoff owner should be Jenn",
+        failures,
+    )
+    check(
+        route_selection_preview["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"],
+        "route selection handoff should include accepted route ids",
+        failures,
+    )
+    check(
+        route_selection_preview["next_user_action"]["queue_promotion_authorized"] is False,
+        "route selection handoff must not authorize queue promotion",
+        failures,
+    )
 
     external_queue = machine.parse_queue_markdown(
         """# fixture
@@ -216,7 +260,7 @@ Goal: perform a database write.
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=14 failures={len(failures)}")
+        print(f"cases=15 failures={len(failures)}")
         return 1
 
     print("PASS current queue fixture")
@@ -227,8 +271,9 @@ Goal: perform a database write.
     print("PASS P3 signal fixture")
     print("PASS negated boundary signal fixture")
     print("PASS route selection stop-state fixture")
+    print("PASS next user action fixture")
     print("PASS task-envelope temporary validation fixture")
-    print("cases=14 failures=0")
+    print("cases=15 failures=0")
     return 0
 
 

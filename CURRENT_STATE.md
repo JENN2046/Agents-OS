@@ -25,6 +25,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
 - Machine preview output includes `actionable`; blocked previews remain `actionable=false` and `execution_authorized=false`.
+- Machine preview output now includes `next_user_action` for the route-selection stop-state: `status=route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and no route auto-selection, active queue mutation, queue promotion, execution, write, or raw content output.
 - Machine output is preview/draft by default and requires Nobao review before execution.
 - AGENTS OS Task Producer Skeleton v0.1 exists at `execution/agents-os-task-producer/`.
 - The Task Producer can create candidate task JSON from explicit intent text and allowlisted review/report Markdown.
@@ -69,6 +70,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Route selection is intentionally stopped for Jenn decision; no VCPToolBox runtime, provider, executor, Memory, external Git, or new construction route is automatically selected.
 - Machine Route Selection Stop Guard v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-selection-stop-guard-v0.1.md`.
 - Machine preview now treats `No Active Automatic Construction Item` as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`.
+- Machine Next User Action Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-next-user-action-handoff-v0.1.md`.
 - Next Route Selection Package v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`.
 - The route selection package lists five Jenn-selectable routes without promoting or executing any route: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
 - `.colameta/` exists.
@@ -171,7 +173,10 @@ provider execution design gate, or a new AGENTS OS construction route; Nobao
 should not silently select one.
 The Machine route-selection stop guard now enforces this stop-state in preview
 output with `blocked=true`, `actionable=false`, and
-`requires_jenn_decision=true`.
+`requires_jenn_decision=true`. Machine preview now also emits
+`next_user_action.status=route_choice_required`, `decision_owner=Jenn`, and
+accepted route ids A-E without selecting, adopting, promoting, or executing a
+route.
 The next route selection package now gives Jenn concrete templates for choosing
 one route without letting Nobao or Machine auto-select it.
 The Task Producer route-choice preview can parse a future explicit Jenn route

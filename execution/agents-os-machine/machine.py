@@ -31,6 +31,7 @@ from path_boundary import preflight_target
 MANIFEST_PATH = MACHINE_DIR / "machine-manifest.json"
 SCHEMA_PATH = MACHINE_DIR / "queue-item.schema.json"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
+ROUTE_SELECTION_PACKAGE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 TASK_ENVELOPE_VALIDATOR = WORKSPACE_ROOT / "control-plane" / "task-envelope" / "validate-task-envelope.py"
 DOCCTL = WORKSPACE_ROOT / "control-plane" / "registry" / "docctl.py"
 
@@ -135,6 +136,34 @@ def find_denied_signals(text: str) -> list[str]:
         if pattern.search(scan_text):
             hits.append(signal_id)
     return sorted(set(hits))
+
+
+def parse_route_option_ids(path: Path = ROUTE_SELECTION_PACKAGE) -> list[str]:
+    if not path.exists():
+        return []
+    text = path.read_text(encoding="utf-8")
+    return re.findall(r"(?m)^### Option ([A-Z]):\s+", text)
+
+
+def next_user_action_for_item(item: dict[str, Any]) -> dict[str, Any]:
+    route_choice_required = "route_selection_required" in item.get("denied_signals", [])
+    route_ids = parse_route_option_ids() if route_choice_required else []
+    return {
+        "schema_version": "agents-os.machine.next-user-action.v0.1",
+        "status": "route_choice_required" if route_choice_required else "none",
+        "decision_owner": "Jenn" if route_choice_required else None,
+        "requires_jenn_decision": route_choice_required,
+        "instruction": "choose_one_route_id" if route_choice_required else None,
+        "accepted_route_ids": route_ids,
+        "template_source_path": rel(ROUTE_SELECTION_PACKAGE),
+        "exact_confirmation_templates_available": ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+    }
 
 
 def parse_item_heading(line: str) -> tuple[str, str] | None:
@@ -586,6 +615,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
     ok, failures = has_false_dangerous_flags(authorization)
     requires_jenn = bool(item.get("review_gate", {}).get("requires_jenn_decision"))
     review_reason = item.get("review_gate", {}).get("review_reason")
+    next_user_action = next_user_action_for_item(item)
     return {
         "schema_version": "agents-os.machine.preview.v0.1",
         "preview_only": True,
@@ -603,6 +633,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
         "blocked": bool(item.get("blocked")),
         "denied_signals": item.get("denied_signals", []),
         "actionable": not bool(item.get("blocked")),
+        "next_user_action": next_user_action,
         "review_gate": review_gate(
             requires_jenn_decision=requires_jenn,
             review_reason=review_reason or "machine preview must be reviewed before execution",
@@ -658,6 +689,30 @@ def validate_preview(preview: dict[str, Any]) -> list[str]:
         errors.append("preview review_gate.execution_authorized must be false")
     if preview.get("blocked") and review.get("requires_jenn_decision") is not True:
         errors.append("blocked preview must require Jenn decision")
+    next_user_action = preview.get("next_user_action", {})
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+    ):
+        if next_user_action.get(flag) is not False:
+            errors.append(f"preview next user action must not authorize {flag}")
+    route_choice_required = "route_selection_required" in preview.get("denied_signals", [])
+    if route_choice_required:
+        if next_user_action.get("status") != "route_choice_required":
+            errors.append("route selection preview must surface route_choice_required next user action")
+        if next_user_action.get("decision_owner") != "Jenn":
+            errors.append("route selection preview next user action owner must be Jenn")
+        if next_user_action.get("requires_jenn_decision") is not True:
+            errors.append("route selection preview next user action must require Jenn decision")
+        if not next_user_action.get("accepted_route_ids"):
+            errors.append("route selection preview should surface accepted route ids")
+        if next_user_action.get("exact_confirmation_templates_available") is not True:
+            errors.append("route selection preview should point to available confirmation templates")
+    elif next_user_action.get("status") != "none":
+        errors.append("non-route preview next user action must be none")
     return errors
 
 
@@ -757,6 +812,8 @@ def validate_machine(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
             "execution_authorized": preview.get("execution_authorized") if preview else None,
             "actionable": preview.get("actionable") if preview else None,
             "blocked": preview.get("blocked") if preview else None,
+            "next_user_action_status": preview.get("next_user_action", {}).get("status") if preview else None,
+            "next_user_action_owner": preview.get("next_user_action", {}).get("decision_owner") if preview else None,
         },
         "task_envelope_preview": task_preview_validation,
         "docctl": {
@@ -837,6 +894,7 @@ def main() -> int:
             print(f"Preview: {preview['source_item']['id']} {preview['source_item']['title']}")
             print(f"Status: {'PASS' if preview['passed'] else 'FAIL'}")
             print(f"Requires Nobao review: {preview['review_gate']['requires_nobao_review']}")
+            print(f"Next user action: {preview['next_user_action']['status']}")
             print(f"Execution authorized: {preview['execution_authorized']}")
         return 0 if preview["passed"] else 1
 

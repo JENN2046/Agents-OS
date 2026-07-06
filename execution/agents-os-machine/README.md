@@ -56,6 +56,21 @@ The Markdown task-envelope preview is generated only as a temporary validation
 artifact and is deleted after validation. The JSON preview output is the
 authoritative machine output.
 
+When the current `NOW` item is `No Active Automatic Construction Item`, the
+machine preview also emits a `next_user_action` handoff:
+
+```text
+next_user_action.status=route_choice_required
+next_user_action.decision_owner=Jenn
+next_user_action.accepted_route_ids=A,B,C,D,E
+next_user_action.route_auto_selection_authorized=false
+next_user_action.active_queue_mutation_authorized=false
+next_user_action.queue_promotion_authorized=false
+next_user_action.execution_authorized=false
+next_user_action.write_performed=false
+next_user_action.raw_content_output=false
+```
+
 Blocked previews must remain:
 
 ```text

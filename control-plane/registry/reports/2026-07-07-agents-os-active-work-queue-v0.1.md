@@ -80,6 +80,8 @@ route_selection_checkpoint_exists=true
 route_selection_checkpoint_validation=PASS
 machine_route_selection_stop_guard_exists=true
 machine_route_selection_stop_guard_validation=PASS
+machine_next_user_action_handoff_exists=true
+machine_next_user_action_handoff_validation=PASS
 next_route_selection_package_exists=true
 next_route_selection_package_validation=PASS
 colameta_plan_exists=true
@@ -159,8 +161,11 @@ External publication remains blocked until Jenn chooses a target and a separate
 exact external-write gate exists. The route-selection checkpoint records that no
 new route should start automatically after the current governance sequence.
 The Machine now treats this stop-state as non-actionable and requiring Jenn
-route selection before execution. The next route selection package now preserves
-the route options and exact confirmation templates without selecting any route.
+route selection before execution. Machine preview now also carries a
+`next_user_action` handoff with Jenn as decision owner, accepted route ids A-E,
+and no route auto-selection, active queue mutation, queue promotion, execution,
+write, or raw content output. The next route selection package now preserves the
+route options and exact confirmation templates without selecting any route.
 The Task Producer route-choice preview can parse a future explicit Jenn
 selection text, but it still does not adopt the route into workspace state or
 mutate the queue.
@@ -309,6 +314,7 @@ provider_host_dispatcher_static_behavior_map_v0.1: closed for static provider re
 root_private_history_review_gate_v0.1: closed for no-push root private-history pattern review; no history scrub indicated, but external publication still requires a separate target-specific external-write gate
 dashboard_route_adoption_gate_readiness_v0.1: closed for preview-only route adoption gate readiness visibility; active queue mutation, queue promotion, and execution remain unauthorized
 dashboard_route_choice_handoff_v0.1: closed for preview-only next_user_action handoff; Jenn remains the route decision owner, active queue mutation, queue promotion, and execution remain unauthorized
+machine_next_user_action_handoff_v0.1: closed for preview-only machine next_user_action handoff; Jenn remains the route decision owner, route auto-selection, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract
