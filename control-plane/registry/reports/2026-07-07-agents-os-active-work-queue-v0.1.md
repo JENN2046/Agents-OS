@@ -54,6 +54,8 @@ migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
 colameta_executor_inventory_readiness_map_exists=true
 colameta_executor_inventory_readiness_map_validation=PASS
+mcp_gateway_connector_boundary_plan_exists=true
+mcp_gateway_connector_boundary_plan_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -71,16 +73,18 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is MCP gateway and connector boundary definition. The
+The current blocker is provider / host dispatcher static behavior mapping. The
 workspace now has a preview-only Machine Skeleton, preview-only Task Producer
 Skeleton, Commander-first Control Chain, reviewed queue mutation gate, failure
 handling stop loop, dashboard / Memory candidate layer, a safe `ops/migration/`
-distillation, and a ColaMeta executor inventory/readiness map.
+distillation, a ColaMeta executor inventory/readiness map, and an MCP gateway /
+connector boundary plan.
 
 ColaMeta local readiness is clean for summary-only preview, but real executor,
 service startup, provider calls, Memory writes, and applying runtime preview
-payloads remain blocked. Before provider/host dispatcher work, the MCP gateway
-and connector boundary must be made explicit.
+payloads remain blocked. MCP/connector boundaries are explicit. The next useful
+step is to preserve historical provider registry and host dispatcher knowledge
+as a static map before any runtime gate.
 
 ## Queue Decision
 
@@ -88,25 +92,26 @@ Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
 paused. External Git publication is blocked. Provider and plugin activation are
-blocked. ColaMeta readiness evidence does not carry forward runtime/provider/
-executor authorization.
+blocked. ColaMeta readiness and MCP boundary evidence do not carry forward
+runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: MCP Gateway And Connector Boundary Plan
+### NOW-001: Provider / Host Dispatcher Static Behavior Map
 
-Goal: define the local MCP gateway and connector boundary for AGENTS OS before
-any provider/host dispatcher mapping or connector-dependent execution.
+Goal: preserve the useful historical provider registry and host dispatcher
+knowledge as a static control-plane map before any provider/runtime execution
+gate.
 
 Required output:
 
 ```text
-mcp_gateway_boundary_summary
-connector_auth_boundary
-allowed_readonly_connector_checks
-blocked_connector_operations
-provider_call_separation
-future_gate_sequence
+provider_host_static_surface_summary
+provider_registry_behavior_evidence_map
+host_dispatcher_boundary_map
+provider_execution_separation
+forbidden_auth_provider_execution_guard
+future_provider_execution_gate_sequence
 receipt_review_pattern
 ```
 
@@ -124,6 +129,10 @@ runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
 bulk_move_delete_rename_authorized=false
 private_state_read_authorized=false
+provider_registry_write_authorized=false
+provider_runtime_config_write_authorized=false
+host_dispatcher_execution_authorized=false
+live_host_start_authorized=false
 connector_auth_write_authorized=false
 provider_call_authorized=false
 mcp_service_start_authorized=false
@@ -133,13 +142,14 @@ connector_external_write_authorized=false
 Acceptance:
 
 ```text
-read only current governance evidence and connector boundary docs/code references
+read only historical provider/host dispatcher plans, evidence, receipts, reviews, and current governance references
 do not inspect or modify auth/token/cookie/session files
-do not start MCP or ColaMeta services
-do not perform connector calls that require live auth
+do not start MCP, ColaMeta, live host, or provider services
+do not execute host dispatcher routes
 do not perform provider calls
-separate connector metadata checks from provider-backed execution
-produce a future gate sequence before provider/host dispatcher work
+do not mutate provider registry or provider/runtime configuration
+separate provider plan/selection/static registry behavior from provider execution
+produce a future provider execution gate sequence
 do not read private state
 docctl status remains PASS
 docctl doctor remains PASS
@@ -148,7 +158,7 @@ docctl doctor remains PASS
 ## NEXT
 
 ```text
-Provider / Host Dispatcher Static Behavior Map
+Root Private History Review Or History-Scrub Gate
 ```
 
 ## LATER
@@ -195,6 +205,7 @@ failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baselin
 dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized
 migration_plan_distillation_v0.1: closed for safe summary of historical migration material; no historical runtime/provider/executor permission carried forward
 colameta_executor_inventory_readiness_map_v0.1: closed for summary-only local executor inventory and readiness map; real executor, service start, provider calls, Memory writes, and runtime preview apply remain unauthorized
+mcp_gateway_connector_boundary_plan_v0.1: closed for static MCP/connector boundary plan; live connector calls, auth mutation, MCP service start, provider calls, and external writes remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -231,10 +242,11 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible MCP gateway
-and connector boundary plan from `NOW-001`.
+The next construction batch should implement the smallest possible provider /
+host dispatcher static behavior map from `NOW-001`.
 
-Do not start MCP or ColaMeta services, call providers, mutate connector auth,
-read auth/token/cookie/session state, run a real executor, modify
-`.colameta/plan.json` or `.colameta/state.json`, write `.colameta/memory.md`,
-read private state, or activate VCPToolBox/runtime/plugin work.
+Do not start MCP, ColaMeta, live host, or provider services; do not execute host
+dispatcher routes; do not call providers; do not mutate connector auth,
+provider registry, provider/runtime configuration, `.colameta/plan.json`, or
+`.colameta/state.json`; do not write `.colameta/memory.md`; do not read private
+state; and do not activate VCPToolBox/runtime/plugin work.

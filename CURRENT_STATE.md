@@ -20,7 +20,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `ColaMeta Executor Inventory And Readiness Map`.
+- The active work queue's current `NOW` item is `Provider / Host Dispatcher Static Behavior Map`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
@@ -41,6 +41,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The migration distillation compresses `ops/migration/` historical material into a surviving local task list without carrying forward historical runtime/provider/executor authorization.
 - ColaMeta Executor Inventory And Readiness Map v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md`.
 - ColaMeta local readiness is confirmed only for summary-only preview: preflight PASS, 7 plan versions, 7 prompt files, docctl clean, memory size 0 bytes, and control-chain ColaMeta readiness PASS.
+- MCP Gateway And Connector Boundary Plan v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-mcp-gateway-connector-boundary-plan-v0.1.md`.
+- MCP/connector work is defined as boundary/contract first; live connector calls, connector auth mutation, MCP service start, provider calls, and external writes remain blocked.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -63,7 +65,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - ColaMeta connector login state was not rechecked.
 - Runner service status was not rechecked.
 - Real ColaMeta executor execution is not authorized.
-- MCP gateway and connector boundary is not yet defined.
+- Provider / host dispatcher static behavior map is not yet defined.
 - No executor real run was performed.
 - No provider availability was tested.
 - No formal AGENTS OS Memory write was performed.
@@ -73,16 +75,16 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - ColaMeta runtime preview payload with `can_apply=true` exists and remains blocked until a future exact apply gate.
-- MCP gateway and connector boundary is still not defined.
+- Provider / host dispatcher static behavior map is still not defined.
 - Root Git external publication is blocked until private-history review or history-scrub gate.
 - VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
 
 ## Next Actions
 
-1. Implement the MCP Gateway And Connector Boundary Plan without auth mutation, service start, connector live auth call, or provider call.
+1. Implement the Provider / Host Dispatcher Static Behavior Map without auth inspection/mutation, provider call, live host start, dispatcher execution, or provider registry/runtime config mutation.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
-4. Prepare Provider / Host Dispatcher Static Behavior Map after the connector boundary plan.
+4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
 5. Keep `.colameta/runtime/plan-previews/FPi0EWQs4DiqMdNsPpPHzc0Bhp13yDXh.json` as inert preview payload until a separate exact apply gate exists.
 6. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
 7. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
@@ -96,7 +98,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: ColaMeta Executor Inventory And Readiness Map v0.1.
+Last completed task: MCP Gateway And Connector Boundary Plan v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -117,13 +119,16 @@ authorization.
 The ColaMeta executor inventory/readiness map confirmed the current local
 preview-only readiness surface and kept service start, real executor run,
 provider call, Memory write, external write, and runtime preview apply blocked.
+The MCP gateway and connector boundary plan separated local contract/static
+planning from live connector calls, connector auth, MCP service start, provider
+calls, host dispatcher execution, and external writes.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: MCP Gateway And Connector Boundary Plan.
+Next active route: Provider / Host Dispatcher Static Behavior Map.
 ```
 
 ## Safety Notes
