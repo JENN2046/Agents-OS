@@ -107,6 +107,29 @@
       "errors"
     ]
   },
+  "reviewed_route_adoption_apply_gate": {
+    "required": [
+      "schema_version",
+      "adoption_id",
+      "source_proposal_id",
+      "source_review_status",
+      "preview_only",
+      "queue_adoption_authorized",
+      "route_adoption_authorized",
+      "workspace_route_state_modified",
+      "active_queue_modified",
+      "write_performed",
+      "queue_write_authorized",
+      "queue_promotion_authorized",
+      "execution_authorized",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "no_p3_route_adoption_guard",
+      "mutation",
+      "blocked_capabilities",
+      "errors"
+    ]
+  },
   "failure_report": {
     "required": [
       "schema_version",

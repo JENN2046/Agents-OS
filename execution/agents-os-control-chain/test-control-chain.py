@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 from types import ModuleType
@@ -336,13 +337,66 @@ old_task: closed
         check(pending_adoption_preview["passed"] is False, "pending route adoption review should fail preview", failures)
         check(pending_adoption_preview["active_queue_modified"] is False, "pending route adoption preview must not mutate queue", failures)
 
+        route_apply_queue_path = Path(temp_dir) / "route-apply-queue.md"
+        route_apply_queue_text = """# fixture queue
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+"""
+        route_apply_queue_path.write_text(route_apply_queue_text, encoding="utf-8")
+        adoption_apply_preview = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, route_review, route_apply_queue_path)
+        check(adoption_apply_preview["passed"], f"reviewed route adoption apply preview should pass: {adoption_apply_preview['errors']}", failures)
+        check(adoption_apply_preview["preview_only"] is True, "route adoption apply preview should be preview-only", failures)
+        check(adoption_apply_preview["active_queue_modified"] is False, "route adoption apply preview must not mutate queue", failures)
+        check(adoption_apply_preview["queue_write_authorized"] is False, "route adoption apply preview must not authorize queue write", failures)
+        check(route_apply_queue_path.read_text(encoding="utf-8") == route_apply_queue_text, "route adoption apply preview should not change queue", failures)
+        adoption_apply = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, route_review, route_apply_queue_path, apply=True)
+        route_apply_text = route_apply_queue_path.read_text(encoding="utf-8")
+        check(adoption_apply["passed"], f"reviewed route adoption apply should pass: {adoption_apply['errors']}", failures)
+        check(adoption_apply["active_queue_modified"] is True, "route adoption apply should mutate fixture queue", failures)
+        check(adoption_apply["queue_write_authorized"] is True, "route adoption apply should authorize explicit queue write", failures)
+        check(adoption_apply["queue_promotion_authorized"] is False, "route adoption apply must not authorize queue promotion", failures)
+        check(adoption_apply["execution_authorized"] is False, "route adoption apply must not authorize execution", failures)
+        check("### NOW-001: No Active Automatic Construction Item" in route_apply_text, "route adoption apply must leave NOW unchanged", failures)
+        check("### NEXT-001: AGENTS OS formal Memory candidate gate v0.1" in route_apply_text, "route adoption apply should append selected route to NEXT", failures)
+        duplicate_route_apply = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, route_review, route_apply_queue_path)
+        check(duplicate_route_apply["passed"] is False, "duplicate route adoption should fail", failures)
+        check(duplicate_route_apply["queue_adoption_authorized"] is False, "duplicate route adoption should be blocked", failures)
+        pending_route_apply = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, pending_route_review, route_apply_queue_path)
+        check(pending_route_apply["passed"] is False, "pending route adoption apply should fail", failures)
+        check(pending_route_apply["queue_adoption_authorized"] is False, "pending route adoption apply should be blocked", failures)
+        p3_route_proposal = json.loads(json.dumps(route_choice_proposal))
+        p3_route_proposal["proposal_id"] = chain.stable_id("ROUTEQUEUEPROPOSALP3", ["provider", "service"])
+        p3_route_proposal["proposed_queue_item"] = {
+            "lane": "NEXT",
+            "title": "Call provider",
+            "body_lines": ["Call provider and start service."],
+        }
+        p3_route_review = dict(route_review, source_proposal_id=p3_route_proposal["proposal_id"])
+        p3_route_apply = chain.reviewed_route_adoption_apply_gate(p3_route_proposal, p3_route_review, route_apply_queue_path)
+        check(p3_route_apply["passed"] is False, "P3 route adoption should fail", failures)
+        check(p3_route_apply["queue_adoption_authorized"] is False, "P3 route adoption should be blocked", failures)
+
     validation = chain.validate_control_chain(run_colameta=False)
     check(validation["passed"], f"control chain validation without ColaMeta should pass: {validation['errors']}", failures)
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=24 failures={len(failures)}")
+        print(f"cases=25 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -354,8 +408,9 @@ old_task: closed
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
+    print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=24 failures=0")
+    print("cases=25 failures=0")
     return 0
 
 

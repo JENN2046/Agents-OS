@@ -1216,6 +1216,184 @@ def validate_reviewed_route_adoption_preview(result: dict[str, Any]) -> list[str
     return errors
 
 
+def format_next_block(item_id: str, title: str, body_lines: list[Any]) -> str:
+    body = "\n".join(str(line).strip() for line in body_lines if str(line).strip()).strip()
+    return f"### {item_id}: {title}\n\n{body}".strip()
+
+
+def append_route_adoption_to_queue_text(queue_text: str, proposal: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    now_blocks = queue_lane_blocks(queue_text, "NOW")
+    next_blocks = queue_lane_blocks(queue_text, "NEXT")
+    if len(now_blocks) != 1:
+        raise ValueError(f"expected exactly one NOW before route adoption, got {len(now_blocks)}")
+    old_now = now_blocks[0]
+    item = proposal.get("proposed_queue_item", {})
+    title = str(item.get("title", "")).strip()
+    body_lines = item.get("body_lines", [])
+    if not isinstance(body_lines, list):
+        body_lines = []
+    next_indexes = []
+    for block in next_blocks:
+        try:
+            next_indexes.append(int(str(block.get("id", "NEXT-000")).split("-", 1)[1]))
+        except (IndexError, ValueError):
+            next_indexes.append(0)
+    new_next_id = f"NEXT-{max(next_indexes, default=0) + 1:03d}"
+    next_body_blocks = [
+        format_next_block(str(block["id"]), str(block["title"]), [block.get("body", "")])
+        for block in next_blocks
+    ]
+    next_body_blocks.append(format_next_block(new_next_id, title, body_lines))
+    updated = replace_lane_section(queue_text, "NEXT", "\n\n".join(next_body_blocks))
+    closed_entry = (
+        "control_chain_reviewed_route_adoption_apply_gate_v0.1: "
+        f"appended \"{title}\" to NEXT as {new_next_id}; proposal={proposal.get('proposal_id')}"
+    )
+    updated = append_closed_entry(updated, closed_entry)
+    after_now = queue_lane_blocks(updated, "NOW")
+    after_next = queue_lane_blocks(updated, "NEXT")
+    return updated, {
+        "queue_path": None,
+        "target_lane": "NEXT",
+        "appended_next_id": new_next_id,
+        "appended_next_title": title,
+        "next_count_before": len(next_blocks),
+        "next_count_after": len(after_next),
+        "exactly_one_now_before": len(now_blocks) == 1,
+        "exactly_one_now_after": len(after_now) == 1,
+        "left_now_unchanged": after_now[0].get("title") == old_now.get("title") if after_now else False,
+        "promoted_now": False,
+        "closed_entry": closed_entry,
+    }
+
+
+def reviewed_route_adoption_apply_gate(
+    proposal: dict[str, Any],
+    review: dict[str, Any],
+    queue_path: Path,
+    *,
+    apply: bool = False,
+) -> dict[str, Any]:
+    errors = validate_route_choice_queue_proposal(proposal)
+    if proposal.get("passed") is not True:
+        errors.append("route choice queue proposal must be passed")
+    errors.extend(validate_queue_review(review, proposal))
+    if proposal.get("requires_jenn_decision") is True:
+        errors.append("proposal requiring Jenn cannot adopt route")
+    if is_protected_path(queue_path):
+        errors.append(f"queue path is protected: {queue_path}")
+
+    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    resolved, resolve_error = safe_resolve(candidate)
+    mutation: dict[str, Any] = {}
+    if resolve_error or resolved is None:
+        errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
+    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
+        errors.append(f"queue path is outside workspace: {queue_path}")
+    elif not resolved.exists() or not resolved.is_file():
+        errors.append(f"queue path is not a file: {rel(resolved)}")
+    else:
+        queue_text = resolved.read_text(encoding="utf-8")
+        now_blocks = queue_lane_blocks(queue_text, "NOW")
+        next_blocks = queue_lane_blocks(queue_text, "NEXT")
+        item = proposal.get("proposed_queue_item", {})
+        signals = queue_p3_signals(proposed_queue_item_text(item))
+        if len(now_blocks) != 1:
+            errors.append(f"expected exactly one NOW before route adoption, got {len(now_blocks)}")
+        if signals:
+            errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
+        proposed_title = str(item.get("title", "")).strip()
+        if any(block.get("title") == proposed_title for block in next_blocks):
+            errors.append("proposed route queue item already exists in NEXT")
+        if not errors:
+            try:
+                updated_text, mutation = append_route_adoption_to_queue_text(queue_text, proposal)
+                mutation["queue_path"] = rel(resolved)
+                if apply:
+                    resolved.write_text(updated_text, encoding="utf-8")
+            except ValueError as exc:
+                errors.append(str(exc))
+
+    can_apply = bool(apply and not errors)
+    result = {
+        "schema_version": "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1",
+        "adoption_id": stable_id("ROUTEADOPTIONAPPLY", [proposal.get("proposal_id"), review.get("review_status"), apply]),
+        "source_proposal_id": proposal.get("proposal_id"),
+        "source_review_status": review.get("review_status"),
+        "preview_only": not apply,
+        "queue_adoption_authorized": not errors,
+        "route_adoption_authorized": can_apply,
+        "workspace_route_state_modified": can_apply,
+        "active_queue_modified": can_apply,
+        "write_performed": can_apply,
+        "queue_write_authorized": can_apply,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": False,
+        "no_p3_route_adoption_guard": not errors,
+        "mutation": mutation,
+        "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
+        "errors": errors,
+    }
+    result_errors = validate_reviewed_route_adoption_apply_gate(result)
+    all_errors = sorted(set(result["errors"] + result_errors))
+    result["passed"] = not all_errors
+    result["errors"] = all_errors
+    return result
+
+
+def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[str]:
+    errors = [
+        f"missing required field: {field}"
+        for field in schema_required("reviewed_route_adoption_apply_gate")
+        if field not in result
+    ]
+    if result.get("schema_version") != "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1":
+        errors.append("reviewed route adoption apply gate schema_version is invalid")
+    if result.get("requires_nobao_review") is not True:
+        errors.append("reviewed route adoption apply gate must require Nobao review")
+    for flag in ("queue_promotion_authorized", "execution_authorized"):
+        if result.get(flag) is not False:
+            errors.append(f"reviewed route adoption apply gate flag must be false: {flag}")
+    if result.get("preview_only") is True:
+        for flag in (
+            "route_adoption_authorized",
+            "workspace_route_state_modified",
+            "active_queue_modified",
+            "write_performed",
+            "queue_write_authorized",
+        ):
+            if result.get(flag) is not False:
+                errors.append(f"preview route adoption apply gate flag must be false: {flag}")
+    if result.get("write_performed") is True:
+        for flag in (
+            "route_adoption_authorized",
+            "workspace_route_state_modified",
+            "active_queue_modified",
+            "queue_write_authorized",
+        ):
+            if result.get(flag) is not True:
+                errors.append(f"write_performed requires true flag: {flag}")
+    mutation = result.get("mutation", {})
+    if result.get("queue_adoption_authorized") is True:
+        if mutation.get("target_lane") != "NEXT":
+            errors.append("route adoption apply gate must target NEXT")
+        if mutation.get("exactly_one_now_before") is not True:
+            errors.append("route adoption apply gate requires exactly one NOW before adoption")
+        if mutation.get("exactly_one_now_after") is not True:
+            errors.append("route adoption apply gate must preserve exactly one NOW after adoption")
+        if mutation.get("left_now_unchanged") is not True:
+            errors.append("route adoption apply gate must leave NOW unchanged")
+        if mutation.get("promoted_now") is not False:
+            errors.append("route adoption apply gate must not promote NOW")
+        if not mutation.get("appended_next_title"):
+            errors.append("route adoption apply gate must include appended NEXT title")
+        if result.get("no_p3_route_adoption_guard") is not True:
+            errors.append("route adoption apply gate must keep no-P3 guard true when authorized")
+    return errors
+
+
 def queue_lane_blocks(queue_text: str, lane: str) -> list[dict[str, str]]:
     in_lane = False
     blocks: list[dict[str, str]] = []
@@ -1587,6 +1765,8 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
         errors.append("queue proposal mutated queue")
     reviewed_preview: dict[str, Any] | None = None
     reviewed_apply: dict[str, Any] | None = None
+    route_adoption_apply_preview: dict[str, Any] | None = None
+    route_adoption_apply: dict[str, Any] | None = None
     with tempfile.TemporaryDirectory(prefix="agents-os-queue-gate-", dir=WORKSPACE_ROOT) as temp_dir:
         queue_fixture = Path(temp_dir) / "queue.md"
         queue_fixture.write_text(
@@ -1674,6 +1854,78 @@ old_task: closed
         p3_mutation = reviewed_queue_mutation(p3_proposal, p3_review, p3_queue)
         if p3_mutation.get("queue_mutation_authorized") is not False:
             errors.append("P3 NEXT target authorized queue mutation")
+        route_apply_queue = Path(temp_dir) / "route-adoption-queue.md"
+        route_apply_queue_text = """# fixture queue
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+"""
+        route_apply_queue.write_text(route_apply_queue_text, encoding="utf-8")
+        route_apply_review = {
+            "schema_version": "agents-os.queue-manager.review.v0.1",
+            "source_proposal_id": route_choice_proposal.get("proposal_id") if route_choice_proposal else None,
+            "review_status": "accepted",
+            "reviewer": "Nobao",
+            "requires_jenn_decision": False,
+        }
+        if route_choice_proposal:
+            route_adoption_apply_preview = reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_apply_review,
+                route_apply_queue,
+            )
+            route_adoption_apply = reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_apply_review,
+                route_apply_queue,
+                apply=True,
+            )
+            route_apply_text = route_apply_queue.read_text(encoding="utf-8")
+            if route_adoption_apply_preview.get("active_queue_modified") is not False:
+                errors.append("route adoption apply preview modified queue")
+            if route_adoption_apply_preview.get("queue_write_authorized") is not False:
+                errors.append("route adoption apply preview authorized queue write")
+            if route_adoption_apply.get("active_queue_modified") is not True:
+                errors.append("route adoption apply gate did not mutate fixture queue")
+            if route_adoption_apply.get("queue_promotion_authorized") is not False:
+                errors.append("route adoption apply gate authorized queue promotion")
+            if route_adoption_apply.get("execution_authorized") is not False:
+                errors.append("route adoption apply gate authorized execution")
+            if "### NOW-001: No Active Automatic Construction Item" not in route_apply_text:
+                errors.append("route adoption apply gate changed NOW in fixture")
+            if "### NEXT-001: AGENTS OS formal Memory candidate gate v0.1" not in route_apply_text:
+                errors.append("route adoption apply gate did not append route to NEXT in fixture")
+            duplicate_apply = reviewed_route_adoption_apply_gate(route_choice_proposal, route_apply_review, route_apply_queue)
+            if duplicate_apply.get("passed") is not False:
+                errors.append("duplicate route adoption passed")
+            if duplicate_apply.get("queue_adoption_authorized") is not False:
+                errors.append("duplicate route adoption authorized")
+            p3_route_proposal = json.loads(json.dumps(route_choice_proposal))
+            p3_route_proposal["proposal_id"] = stable_id("ROUTEQUEUEPROPOSALP3", ["provider", "service"])
+            p3_route_proposal["proposed_queue_item"] = {
+                "lane": "NEXT",
+                "title": "Call provider",
+                "body_lines": ["Call provider and start service."],
+            }
+            p3_route_review = dict(route_apply_review, source_proposal_id=p3_route_proposal["proposal_id"])
+            p3_route_apply = reviewed_route_adoption_apply_gate(p3_route_proposal, p3_route_review, route_apply_queue)
+            if p3_route_apply.get("passed") is not False:
+                errors.append("P3 route adoption passed")
+            if p3_route_apply.get("queue_adoption_authorized") is not False:
+                errors.append("P3 route adoption authorized")
 
     colameta_result: dict[str, Any] | None = None
     if run_colameta:
@@ -1736,6 +1988,15 @@ old_task: closed
             "reviewed_route_adoption_preview_execution_authorized": route_adoption_preview.get("execution_authorized")
             if route_adoption_preview
             else None,
+            "reviewed_route_adoption_apply_preview_passed": route_adoption_apply_preview.get("passed")
+            if route_adoption_apply_preview
+            else None,
+            "reviewed_route_adoption_apply_fixture_modified": route_adoption_apply.get("active_queue_modified")
+            if route_adoption_apply
+            else None,
+            "reviewed_route_adoption_apply_execution_authorized": route_adoption_apply.get("execution_authorized")
+            if route_adoption_apply
+            else None,
         },
         "failure_handling": {
             "category": failure_report.get("category"),
@@ -1795,6 +2056,13 @@ def main() -> int:
     route_adoption_parser.add_argument("--review-json", required=True)
     route_adoption_parser.add_argument("--queue", required=True)
     route_adoption_parser.add_argument("--json", action="store_true")
+
+    route_adoption_apply_parser = subparsers.add_parser("reviewed-route-adoption-apply-gate")
+    route_adoption_apply_parser.add_argument("--proposal-json", required=True)
+    route_adoption_apply_parser.add_argument("--review-json", required=True)
+    route_adoption_apply_parser.add_argument("--queue", required=True)
+    route_adoption_apply_parser.add_argument("--apply", action="store_true")
+    route_adoption_apply_parser.add_argument("--json", action="store_true")
 
     reviewed_queue_parser = subparsers.add_parser("queue-reviewed-mutation")
     reviewed_queue_parser.add_argument("--proposal-json", required=True)
@@ -1893,6 +2161,25 @@ def main() -> int:
                 f"authorized={result['queue_mutation_preview_authorized']} "
                 f"modified={result['active_queue_modified']} "
                 f"would_append={preview.get('would_append_next_title')}"
+            )
+        return 0 if result["passed"] else 1
+
+    if args.command == "reviewed-route-adoption-apply-gate":
+        result = reviewed_route_adoption_apply_gate(
+            load_json(Path(args.proposal_json)),
+            load_json(Path(args.review_json)),
+            Path(args.queue),
+            apply=args.apply,
+        )
+        if args.json:
+            print_json(result)
+        else:
+            mutation = result.get("mutation", {})
+            print(
+                "Reviewed route adoption apply gate: "
+                f"authorized={result['queue_adoption_authorized']} "
+                f"modified={result['active_queue_modified']} "
+                f"appended={mutation.get('appended_next_title')}"
             )
         return 0 if result["passed"] else 1
 

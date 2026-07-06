@@ -44,6 +44,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Control Chain can convert Task Producer route-choice preview JSON into a preview-only `NEXT` queue proposal while keeping `route_adoption_authorized=false`, `active_queue_modified=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - Control Chain Reviewed Route Adoption Preview v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md`.
 - The Control Chain can inspect an accepted Nobao review and produce a preview of appending the selected route to `NEXT` while keeping `active_queue_modified=false`, `write_performed=false`, `queue_write_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
+- Control Chain Reviewed Route Adoption Apply Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-control-chain-reviewed-route-adoption-apply-gate-v0.1.md`.
+- The Control Chain can apply a reviewed route adoption into a supplied queue path only with explicit `--apply`, accepted Nobao review, safe queue path, no duplicate `NEXT` item, and no P3 route signals; validation used temporary fixtures only and did not modify the real Active Work Queue.
 - AGENTS OS Dashboard v0.1 exists at `execution/agents-os-dashboard/`.
 - The Dashboard can summarize the Active Work Queue, last CLOSED item, last failure evidence status, docctl validation status, open blockers, and Memory candidates.
 - Dashboard output is preview-only and keeps formal Memory write, private raw Memory read, queue mutation, provider call, service start, executor run, runtime/plugin activation, and external write false.
@@ -177,6 +179,9 @@ The reviewed route adoption preview now closes the local preview chain from
 future Jenn route-choice text through accepted review to a non-writing `NEXT`
 append preview. It still does not mutate the Active Work Queue or adopt the
 route.
+The reviewed route adoption apply gate now provides the explicit future write
+gate for a reviewed route, but no real route has been selected or adopted in the
+Active Work Queue.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
