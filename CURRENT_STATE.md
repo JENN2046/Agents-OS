@@ -68,6 +68,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Dashboard summary now surfaces route adoption gate readiness as read-only metadata: all required gates present, future apply gate available, `can_apply_now=false`, `active_queue_mutation_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - Dashboard Route Choice Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-choice-handoff-v0.1.md`.
 - Dashboard summary now surfaces `next_user_action.status=route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and the route-selection template source path while keeping route auto-selection, active queue mutation, queue promotion, execution, and write flags false.
+- Dashboard Route Choice Adoption Bundle Visibility v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-choice-adoption-bundle-visibility-v0.1.md`.
+- Dashboard summary now surfaces the route-choice adoption bundle preview evidence as read-only readiness metadata while keeping `can_apply_now=false`, route adoption, active queue mutation, queue promotion, raw confirmation/template output, and execution unauthorized.
 - Migration Plan Distillation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-migration-plan-distillation-v0.1.md`.
 - The migration distillation compresses `ops/migration/` historical material into a surviving local task list without carrying forward historical runtime/provider/executor authorization.
 - ColaMeta Executor Inventory And Readiness Map v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md`.
@@ -161,6 +163,10 @@ The dashboard also exposes route adoption gate readiness without selecting a
 route or applying the gate. It now also exposes a `next_user_action` handoff so
 the stop-state tells Jenn exactly that a route choice A-E is needed, while still
 not selecting, adopting, promoting, or executing any route.
+The dashboard now also exposes route-choice adoption bundle readiness. It shows
+that the bundle preview evidence exists, but keeps `can_apply_now=false`, route
+adoption, queue mutation, queue promotion, raw confirmation/template output, and
+execution unauthorized.
 The migration distillation safely summarized `ops/migration/` into surviving
 local tasks and closed evidence without treating historical plans as execution
 authorization.

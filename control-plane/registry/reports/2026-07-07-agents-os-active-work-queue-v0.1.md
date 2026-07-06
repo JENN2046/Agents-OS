@@ -76,6 +76,8 @@ dashboard_route_adoption_gate_readiness_exists=true
 dashboard_route_adoption_gate_readiness_validation=PASS
 dashboard_route_choice_handoff_exists=true
 dashboard_route_choice_handoff_validation=PASS
+dashboard_route_choice_adoption_bundle_visibility_exists=true
+dashboard_route_choice_adoption_bundle_visibility_validation=PASS
 migration_plan_distillation_exists=true
 migration_plan_distillation_validation=PASS
 colameta_executor_inventory_readiness_map_exists=true
@@ -185,6 +187,11 @@ The Dashboard now also surfaces route adoption gate readiness. It reports that
 the proposal, preview, and apply gate evidence exist, while keeping
 `can_apply_now=false`, Active Work Queue mutation, queue promotion, and
 execution unauthorized.
+
+The Dashboard now also surfaces route-choice adoption bundle readiness. It
+reports that the bundle preview evidence exists and remains a non-applying
+preview surface, while keeping raw confirmation/template output, route adoption,
+Active Work Queue mutation, queue promotion, and execution unauthorized.
 
 ColaMeta local readiness is clean for summary-only preview, but real executor,
 service startup, provider calls, Memory writes, and applying runtime preview
@@ -366,6 +373,7 @@ task_producer_route_choice_template_coverage_v0.1: closed for preview-only route
 control_chain_route_choice_template_readiness_v0.1: closed for preview-only Control Chain route-choice template readiness; raw template output, route selection, active queue mutation, queue promotion, and execution remain unauthorized
 control_chain_route_choice_end_to_end_readiness_v0.1: closed for preview-only A-E route-choice end-to-end readiness; raw confirmation/template output, route selection, real queue write, queue promotion, and execution remain unauthorized
 control_chain_route_choice_adoption_bundle_preview_v0.1: closed for preview-only route-choice adoption bundle packaging; raw confirmation/template output, real queue write, route adoption, queue promotion, and execution remain unauthorized
+dashboard_route_choice_adoption_bundle_visibility_v0.1: closed for preview-only route-choice adoption bundle visibility; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

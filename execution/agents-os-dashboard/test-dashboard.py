@@ -83,6 +83,21 @@ def main() -> int:
     check(summary["route_adoption_gate"]["active_queue_mutation_authorized"] is False, "route adoption gate must not authorize active queue mutation", failures)
     check(summary["route_adoption_gate"]["queue_promotion_authorized"] is False, "route adoption gate must not authorize queue promotion", failures)
     check(summary["route_adoption_gate"]["execution_authorized"] is False, "route adoption gate must not authorize execution", failures)
+    check(
+        summary["route_choice_adoption_bundle"]["status"] == "waiting_for_jenn_route_choice",
+        "dashboard should surface route choice adoption bundle wait-state",
+        failures,
+    )
+    check(summary["route_choice_adoption_bundle"]["bundle_preview_available"] is True, "route adoption bundle preview should be available", failures)
+    check(summary["route_choice_adoption_bundle"]["can_apply_now"] is False, "route adoption bundle must not apply before Jenn route choice", failures)
+    check(summary["route_choice_adoption_bundle"]["requires_jenn_decision"] is True, "route adoption bundle should require Jenn", failures)
+    check(summary["route_choice_adoption_bundle"]["preview_only"] is True, "route adoption bundle should be preview_only", failures)
+    check(summary["route_choice_adoption_bundle"]["read_only"] is True, "route adoption bundle should be read_only", failures)
+    check(summary["route_choice_adoption_bundle"]["active_queue_mutation_authorized"] is False, "route adoption bundle must not authorize active queue mutation", failures)
+    check(summary["route_choice_adoption_bundle"]["route_adoption_authorized"] is False, "route adoption bundle must not authorize route adoption", failures)
+    check(summary["route_choice_adoption_bundle"]["execution_authorized"] is False, "route adoption bundle must not authorize execution", failures)
+    check(summary["route_choice_adoption_bundle"]["raw_confirmation_text_output"] is False, "route adoption bundle must not output raw confirmation text", failures)
+    check(summary["route_choice_adoption_bundle"]["raw_template_output"] is False, "route adoption bundle must not output raw template", failures)
     check(summary["last_completed"]["status"] == "present", "dashboard should surface last CLOSED item", failures)
     check(summary["open_blockers"], "dashboard should surface open blockers", failures)
     check(summary["validation_status"]["passed"] is True, "dashboard should surface passing validation status", failures)
@@ -131,6 +146,11 @@ def main() -> int:
     broken_adoption_gate["route_adoption_gate"]["active_queue_mutation_authorized"] = True
     check(dashboard.validate_dashboard_summary(broken_adoption_gate), "route adoption active queue mutation authorization should fail", failures)
 
+    broken_adoption_bundle = dict(summary)
+    broken_adoption_bundle["route_choice_adoption_bundle"] = dict(summary["route_choice_adoption_bundle"])
+    broken_adoption_bundle["route_choice_adoption_bundle"]["route_adoption_authorized"] = True
+    check(dashboard.validate_dashboard_summary(broken_adoption_bundle), "route adoption bundle route adoption authorization should fail", failures)
+
     with tempfile.TemporaryDirectory(prefix="agents-os-dashboard-test-", dir=dashboard.WORKSPACE_ROOT) as temp_dir:
         fixture = Path(temp_dir) / "queue.md"
         fixture.write_text(
@@ -170,6 +190,7 @@ latest_closed: new
         check(fixture_summary["route_selection"]["status"] == "not_active", "fixture route selection should be inactive", failures)
         check(fixture_summary["next_user_action"]["status"] == "none", "fixture next user action should be inactive", failures)
         check(fixture_summary["route_adoption_gate"]["status"] == "not_active", "fixture route adoption gate should be inactive", failures)
+        check(fixture_summary["route_choice_adoption_bundle"]["status"] == "not_active", "fixture route adoption bundle should be inactive", failures)
         check(fixture_summary["last_completed"]["text"] == "latest_closed: new", "latest CLOSED should surface", failures)
         check(len(fixture_summary["open_blockers"]) == 2, "fixture blockers should surface", failures)
 
@@ -184,7 +205,7 @@ latest_closed: new
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=15 failures={len(failures)}")
+        print(f"cases=16 failures={len(failures)}")
         return 1
 
     print("PASS current dashboard summary fixture")
@@ -193,10 +214,11 @@ latest_closed: new
     print("PASS route selection visibility fixture")
     print("PASS next user action fixture")
     print("PASS route adoption gate visibility fixture")
+    print("PASS route adoption bundle visibility fixture")
     print("PASS manifest authorization fixture")
     print("PASS fixture queue summary fixture")
     print("PASS protected path fixture")
-    print("cases=15 failures=0")
+    print("cases=16 failures=0")
     return 0
 
 

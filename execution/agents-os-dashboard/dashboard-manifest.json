@@ -44,6 +44,7 @@
     "route_decision_on_behalf_of_jenn",
     "queue_promotion",
     "route_adoption_without_explicit_apply_gate",
+    "route_adoption_bundle_apply_without_jenn_choice",
     "formal_memory_write",
     "private_memory_raw_read",
     "state_private_read",

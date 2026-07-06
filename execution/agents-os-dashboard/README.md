@@ -7,9 +7,11 @@ status checks, summarizes open blockers and last closed work, and emits Memory
 candidates as drafts only. When the queue is stopped at route selection, it
 also surfaces the local route-selection package as preview-only options for
 Jenn. It also surfaces the reviewed route adoption gate readiness without
-selecting or applying a route. During that stop-state, it also emits a
-`next_user_action` handoff that points Jenn to the route-choice confirmation
-templates without printing the template body or selecting a route.
+selecting or applying a route. It also surfaces the route-choice adoption
+bundle preview evidence without using it to adopt a route. During that
+stop-state, it also emits a `next_user_action` handoff that points Jenn to the
+route-choice confirmation templates without printing the template body or
+selecting a route.
 
 It is not a Memory writer, executor, service, provider adapter, ColaMeta runner,
 VCPToolBox starter, queue mutator, or task producer.
@@ -45,6 +47,14 @@ route_adoption_gate.status=waiting_for_jenn_route_choice|not_active
 route_adoption_gate.active_queue_mutation_authorized=false
 route_adoption_gate.queue_promotion_authorized=false
 route_adoption_gate.execution_authorized=false
+route_choice_adoption_bundle.status=waiting_for_jenn_route_choice|not_active
+route_choice_adoption_bundle.bundle_preview_available=true|false
+route_choice_adoption_bundle.can_apply_now=false
+route_choice_adoption_bundle.active_queue_mutation_authorized=false
+route_choice_adoption_bundle.route_adoption_authorized=false
+route_choice_adoption_bundle.execution_authorized=false
+route_choice_adoption_bundle.raw_confirmation_text_output=false
+route_choice_adoption_bundle.raw_template_output=false
 ```
 
 Memory candidates are candidate-only records. They may be reviewed later, but

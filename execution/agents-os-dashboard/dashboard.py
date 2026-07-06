@@ -27,6 +27,7 @@ MACHINE_PATH = WORKSPACE_ROOT / "execution" / "agents-os-machine" / "machine.py"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
 ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 ROUTE_CHOICE_QUEUE_PROPOSAL_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md"
+ROUTE_ADOPTION_BUNDLE_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md"
 ROUTE_ADOPTION_PREVIEW_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-reviewed-route-adoption-preview-v0.1.md"
 ROUTE_ADOPTION_APPLY_GATE_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-reviewed-route-adoption-apply-gate-v0.1.md"
 DOCCTL = REGISTRY_DIR / "docctl.py"
@@ -336,6 +337,33 @@ def route_adoption_gate_status(normalized_queue: dict[str, Any]) -> dict[str, An
     }
 
 
+def route_choice_adoption_bundle_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
+    now_title = first_item_title(normalized_queue, "NOW")
+    awaiting_selection = now_title == "No Active Automatic Construction Item"
+    bundle_available = ROUTE_ADOPTION_BUNDLE_REPORT.exists()
+    return {
+        "schema_version": "agents-os.dashboard.route-choice-adoption-bundle.v0.1",
+        "status": "waiting_for_jenn_route_choice" if awaiting_selection else "not_active",
+        "bundle_preview_path": rel(ROUTE_ADOPTION_BUNDLE_REPORT),
+        "bundle_preview_exists": bundle_available,
+        "bundle_preview_available": bundle_available,
+        "requires_jenn_decision": awaiting_selection,
+        "can_apply_now": False,
+        "preview_only": True,
+        "read_only": True,
+        "confirmation_text_included": False,
+        "raw_confirmation_text_output": False,
+        "raw_template_output": False,
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "route_adoption_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+    }
+
+
 def classify_failure_evidence(path: Path, title: str) -> str:
     lowered = f"{path.name}\n{title}".lower()
     if "failure-handling-stop-loop" in lowered or "failure handling stop loop" in lowered:
@@ -451,6 +479,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     route_selection = route_selection_status(normalized_queue)
     next_user_action = next_user_action_status(route_selection)
     route_adoption_gate = route_adoption_gate_status(normalized_queue)
+    route_choice_adoption_bundle = route_choice_adoption_bundle_status(normalized_queue)
     queue_summary = {
         "source_path": normalized_queue.get("source_path"),
         "passed": normalized_queue.get("passed"),
@@ -472,6 +501,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
                 route_selection,
                 next_user_action,
                 route_adoption_gate,
+                route_choice_adoption_bundle,
                 validation.get("passed"),
                 last_completed,
                 last_failure,
@@ -488,6 +518,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "route_selection": route_selection,
         "next_user_action": next_user_action,
         "route_adoption_gate": route_adoption_gate,
+        "route_choice_adoption_bundle": route_choice_adoption_bundle,
         "validation_status": validation,
         "open_blockers": blockers,
         "memory_candidates": memory_candidates,
@@ -586,6 +617,32 @@ def validate_dashboard_summary(summary: dict[str, Any]) -> list[str]:
             errors.append("dashboard route adoption gate must not be directly applicable before Jenn route choice")
         if route_adoption_gate.get("all_required_gates_present") is not True:
             errors.append("dashboard route adoption gate should surface all required gates")
+    route_choice_adoption_bundle = summary.get("route_choice_adoption_bundle", {})
+    for flag in (
+        "route_auto_selection_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "route_adoption_authorized",
+        "execution_authorized",
+        "write_performed",
+        "confirmation_text_included",
+        "raw_confirmation_text_output",
+        "raw_template_output",
+        "raw_content_output",
+    ):
+        if route_choice_adoption_bundle.get(flag) is not False:
+            errors.append(f"dashboard route choice adoption bundle must not authorize {flag}")
+    if route_choice_adoption_bundle.get("status") == "waiting_for_jenn_route_choice":
+        if route_choice_adoption_bundle.get("requires_jenn_decision") is not True:
+            errors.append("dashboard route choice adoption bundle wait-state must require Jenn decision")
+        if route_choice_adoption_bundle.get("bundle_preview_available") is not True:
+            errors.append("dashboard route choice adoption bundle should surface available bundle preview")
+        if route_choice_adoption_bundle.get("can_apply_now") is not False:
+            errors.append("dashboard route choice adoption bundle must not apply before Jenn route choice")
+    if route_choice_adoption_bundle.get("preview_only") is not True:
+        errors.append("dashboard route choice adoption bundle must be preview_only")
+    if route_choice_adoption_bundle.get("read_only") is not True:
+        errors.append("dashboard route choice adoption bundle must be read_only")
     validation = summary.get("validation_status", {})
     if validation.get("checked") is True and validation.get("passed") is not True:
         errors.append("dashboard validation status did not pass")
@@ -629,6 +686,7 @@ def validate_dashboard(run_validations: bool = True) -> dict[str, Any]:
         "route_selection": summary.get("route_selection", {}),
         "next_user_action": summary.get("next_user_action", {}),
         "route_adoption_gate": summary.get("route_adoption_gate", {}),
+        "route_choice_adoption_bundle": summary.get("route_choice_adoption_bundle", {}),
         "last_completed": summary.get("last_completed", {}),
         "last_failure": summary.get("last_failure", {}),
         "validation_status": {
@@ -671,6 +729,7 @@ def main() -> int:
             print(f"Route selection: {result['route_selection']['status']} options={result['route_selection']['option_count']}")
             print(f"Next user action: {result['next_user_action']['status']}")
             print(f"Route adoption gate: {result['route_adoption_gate']['status']}")
+            print(f"Route adoption bundle: {result['route_choice_adoption_bundle']['status']}")
             print(f"Last completed: {result['last_completed'].get('text')}")
             print(f"Last failure: {result['last_failure'].get('status')}")
             print(f"Memory candidates: {len(result['memory_candidates'])}")
@@ -687,6 +746,7 @@ def main() -> int:
             print(f"Route selection: {result['route_selection'].get('status')}")
             print(f"Next user action: {result['next_user_action'].get('status')}")
             print(f"Route adoption gate: {result['route_adoption_gate'].get('status')}")
+            print(f"Route adoption bundle: {result['route_choice_adoption_bundle'].get('status')}")
             print(f"Memory candidates: {result['memory_candidate_count']}")
             if result["errors"]:
                 print("Errors:")

@@ -15,6 +15,7 @@
       "route_selection",
       "next_user_action",
       "route_adoption_gate",
+      "route_choice_adoption_bundle",
       "validation_status",
       "open_blockers",
       "memory_candidates",
