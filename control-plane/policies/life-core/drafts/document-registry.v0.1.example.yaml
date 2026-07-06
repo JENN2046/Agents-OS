@@ -88,7 +88,7 @@ documents:
     source_of_truth: control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
     upstream_source:
       name: "Notion AGENTS OS life core v0.1"
-      page: "https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396"
+      page: "[private Notion page URL redacted in Git copy]"
     supersedes: []
     superseded_by: null
     related:
@@ -122,7 +122,7 @@ documents:
     source_of_truth: control-plane/policies/life-core/agents-os-life-core-v0.1.reading-ledger.md
     upstream_source:
       name: "Notion AGENTS OS life core v0.1"
-      page: "https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396"
+      page: "[private Notion page URL redacted in Git copy]"
     supersedes: []
     superseded_by: null
     related:

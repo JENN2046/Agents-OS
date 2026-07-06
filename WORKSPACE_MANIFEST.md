@@ -58,3 +58,11 @@ raw logs that may contain sensitive content
 `runtime/VCPToolBox` is a private local runtime body under separate boundary
 review. Do not treat it as ready for provider/plugin/autonomous use without the
 current VCPToolBox first-use posture checks.
+
+## Git Outbound Boundary
+
+The root Git repository is private-local by default. Its local history has
+contained private Notion page URLs and working synthesis material. External
+push, remote publication, mirror, backup-to-hosted-Git, or PR creation from this
+root repo requires a separate private-history review or history-scrub gate with
+Jenn's current authorization.

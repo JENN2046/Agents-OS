@@ -17,6 +17,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The root `.gitignore` excludes private state, runtime source checkouts, caches, logs, dependency/build outputs, secrets/auth/provider files, and nested/private runtime repos from the baseline.
 - Root automation rules use a prohibited-first model: default local safe work proceeds automatically; P3/prohibited behavior stops.
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
+- Current tracked Git files have Notion page URLs redacted in the Git copy.
+- The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -48,6 +50,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 - Executor inventory is still not confirmed.
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
+- Root Git external publication is blocked until private-history review or history-scrub gate.
 - Migration reconciliation is still incomplete.
 - VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
 
@@ -57,6 +60,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 2. Convert the downloaded future implementation plan into a tracked local roadmap or queue.
 3. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
 4. Keep VCPToolBox out of this governance baseline until a separate runtime recovery/startup scope is chosen.
+5. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
 
 ## Current Handoff
 
@@ -74,6 +78,7 @@ Do not use git add . for future broad updates unless the workspace is known clea
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
+Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
 Next active route: Executor readiness preview/preflight or migration reconciliation, unless Jenn chooses another route.
 ```

@@ -621,6 +621,9 @@ documents:
     security_boundary:
       - historical draft only
       - not active authority
+      - private-local-only
+      - current tracked Git files have Notion page URLs redacted
+      - no external push until private-history review or history-scrub gate
       - no secrets
       - no private memory raw text
       - no provider raw response
@@ -674,6 +677,110 @@ documents:
       - no executor run
       - no provider call
       - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+
+  - id: agents-os-private-history-and-codex-runner-wording-fix-v0.1-receipt
+    title: AGENTS OS Private History And Codex Runner Wording Fix Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for private Git history boundary and Codex runner wording fix
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - AGENTS.md
+      - governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md
+      - README.md
+      - WORKSPACE_MANIFEST.md
+      - CURRENT_STATE.md
+      - labs/agents-os-reading-notes-draft.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - root Git outbound policy changes
+        - private-history review changes
+        - history-scrub planning changes
+        - Codex runner boundary wording changes
+        - reading notes private-link handling changes
+    security_boundary:
+      - local evidence only
+      - no Git history rewrite
+      - no remote add
+      - no push
+      - no state-private content read
+      - no VCPToolBox source or active config changes
+      - no secrets/token/cookie/credential content
+      - no private raw memory
+      - no provider raw response
+      - no raw log content
+      - no service startup
+      - no executor run
+      - no provider calls
+      - no deploy/release/publish/tag
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+
+  - id: agents-os-private-history-and-codex-runner-wording-fix-v0.1-review
+    title: AGENTS OS Private History And Codex Runner Wording Fix Review
+    doc_type: review
+    status: accepted
+    scope: local review for private Git history boundary and Codex runner wording fix
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - AGENTS.md
+      - governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md
+      - README.md
+      - WORKSPACE_MANIFEST.md
+      - CURRENT_STATE.md
+      - labs/agents-os-reading-notes-draft.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-private-history-and-codex-runner-wording-fix-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - root Git outbound policy changes
+        - private-history review changes
+        - history-scrub planning changes
+        - Codex runner boundary wording changes
+        - reading notes private-link handling changes
+    security_boundary:
+      - local review only
+      - no Git history rewrite
+      - no remote add
+      - no push
+      - no state-private content read
+      - no VCPToolBox source or active config changes
+      - no secrets/token/cookie/credential content
+      - no private raw memory
+      - no provider raw response
+      - no raw log content
+      - no service startup
+      - no executor run
+      - no provider calls
+      - no deploy/release/publish/tag
     validation:
       commands:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml

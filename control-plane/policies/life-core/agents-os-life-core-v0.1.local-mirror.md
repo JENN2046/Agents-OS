@@ -2,7 +2,7 @@
 
 Status: operational mirror from full Notion reading
 Snapshot date: 2026-06-30
-Upstream source: https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396
+Upstream source: [private Notion page URL redacted in Git copy]
 Local scope: `control-plane/policies/life-core/`
 
 This file is a local control-plane mirror. It preserves the working meaning of

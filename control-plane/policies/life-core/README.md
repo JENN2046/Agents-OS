@@ -3,7 +3,7 @@
 Status: local operational mirror / reading captured
 Snapshot date: 2026-06-30
 Source: Notion `AGENTS OS｜生命内核 v0.1`
-Source page: https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396
+Source page: [private Notion page URL redacted in Git copy]
 
 This directory stores the local policy-facing mirror of the AGENTS OS life core.
 It is meant for local `control-plane` work: governance, permissions, memory,

@@ -3,6 +3,7 @@
 Status: historical draft / working synthesis
 Created: 2026-06-27
 Scope: read-only synthesis from Notion AGENTS OS pages. This document is not a replacement for the Notion source of truth.
+Git boundary: private-local-only. Notion page URLs are redacted in this Git copy.
 
 Update 2026-06-30: the full-read local operational mirror has been moved into
 `control-plane/policies/life-core/`. This file remains a historical working
@@ -10,6 +11,11 @@ draft and should not be treated as the current complete reading baseline.
 
 Update 2026-07-06: this draft was moved under `labs/` so it is no longer a
 root-level floating fact source. It is useful background, not active authority.
+
+Update 2026-07-07: Notion page URLs were redacted from current tracked Git
+files. Local Git history may still contain earlier private URLs; do not push
+this root repository externally without a private-history review or history-scrub
+gate.
 
 ## 0. Purpose
 
@@ -29,39 +35,39 @@ Theme: root principles, governance, memory, authorization, presence, and deliver
 ### Sources Read Or Sampled
 
 - AGENTS OS｜双地基定位 v0.1
-  https://app.notion.com/p/37aee4ca933c81de9f90fe75222e0a9a
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS 家规 v0.1
-  https://app.notion.com/p/376ee4ca933c81a997b9e02d76c3f5b7
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS 权限与授权设计 v0.2｜正式版整理稿
-  https://app.notion.com/p/378ee4ca933c816e8b07cb54f0731542
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS 专属记忆规则 v0.1
-  https://app.notion.com/p/376ee4ca933c8199ae76c1cf35267e3e
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS Cockpit v0.1
-  https://app.notion.com/p/376ee4ca933c81e7abb0d80e54b7c6d3
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS x VCP 复用矩阵 v0.1
-  https://app.notion.com/p/376ee4ca933c81f49df4c080f8b08a37
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS｜行动留证分级表 v0.1
-  https://app.notion.com/p/379ee4ca933c81c296cae9c8572d1da2
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS 终局想象｜跨设备共同生活形态 v0.1
-  https://app.notion.com/p/37cee4ca933c81e3afe7e348e02a96d0
+  [private Notion page URL redacted in Git copy]
 - Agent-to-Agent 关系生活协议 v0.1
-  https://app.notion.com/p/37eee4ca933c81c0918ceec95546e5ca
+  [private Notion page URL redacted in Git copy]
 - Agent 入住流程 v0.1
-  https://app.notion.com/p/376ee4ca933c815ba4a6e95ef7c30c8a
+  [private Notion page URL redacted in Git copy]
 - Agent 房间维护规则 v0.1
-  https://app.notion.com/p/376ee4ca933c81b49a5edd33d7866f71
+  [private Notion page URL redacted in Git copy]
 - Activation Package v0.1
-  https://app.notion.com/p/376ee4ca933c8115b257d3ee372492fa
+  [private Notion page URL redacted in Git copy]
 - 共同体正式记忆索引 v0.1
-  https://app.notion.com/p/376ee4ca933c81b19271eca37d662705
+  [private Notion page URL redacted in Git copy]
 - Presence Permission formal memory registration
-  https://app.notion.com/p/37eee4ca933c81fbb109c78d4fc6c429
+  [private Notion page URL redacted in Git copy]
 - Agent 房间｜Memory Agent v0.1
-  https://app.notion.com/p/376ee4ca933c817ca6c8fc1f25fd491d
+  [private Notion page URL redacted in Git copy]
 - Agent 房间｜Review Agent v0.1
-  https://app.notion.com/p/376ee4ca933c81959764c9b2bf3d93d2
+  [private Notion page URL redacted in Git copy]
 - Agent 房间｜Project Agent v0.1
-  https://app.notion.com/p/376ee4ca933c819faa97db1f1906e71b
+  [private Notion page URL redacted in Git copy]
 
 Note: AGENTS OS｜生命内核 v0.1 is very large. It was not fully fetched in one pass because the output exceeded context. Its root principles were cross-checked through repeated references in child and governance pages.
 
@@ -245,23 +251,23 @@ Theme: Presence Permission, Agent growth, and VCPToolBox/VCPChat interface/runti
 ### Sources Read
 
 - Presence Permission｜在场权限 v0.1
-  https://app.notion.com/p/37eee4ca933c81aa808cefcf1c16f191
+  [private Notion page URL redacted in Git copy]
 - Patch｜Presence Permission 在场权限 v0.1.1
-  https://app.notion.com/p/37eee4ca933c81319216deef76164365
+  [private Notion page URL redacted in Git copy]
 - Agent 成长机制 v0.1
-  https://app.notion.com/p/376ee4ca933c8141af78f2fc68f1715d
+  [private Notion page URL redacted in Git copy]
 - VCPToolBox 在 AGENTS OS 这个家里的位置 v0.2
-  https://app.notion.com/p/376ee4ca933c8190ba5ddaf5686a299f
+  [private Notion page URL redacted in Git copy]
 - VCPToolBox 能力接入边界 v0.1
-  https://app.notion.com/p/376ee4ca933c814ebae4d60ef9031c16
+  [private Notion page URL redacted in Git copy]
 - VCPChat 位置定义 v0.1
-  https://app.notion.com/p/376ee4ca933c8111a3d3cd80dc9c9fbd
+  [private Notion page URL redacted in Git copy]
 - VCPChat 能力审查 v0.1
-  https://app.notion.com/p/376ee4ca933c818e8bf7d57a0eb16a74
+  [private Notion page URL redacted in Git copy]
 - VCPToolBox A0 只读实验目标调整 v0.1
-  https://app.notion.com/p/37bee4ca933c810186cfc2bdc1ab5dd3
+  [private Notion page URL redacted in Git copy]
 - VCPToolBox 只读能力接入实验设计 v0.1
-  https://app.notion.com/p/377ee4ca933c810f9336d23f4a09d78b
+  [private Notion page URL redacted in Git copy]
 
 ## 14. Presence Permission Update
 
@@ -433,37 +439,37 @@ Theme: evidence layer, first real loop, Standing Authorization, and Pilot 001.
 ### Sources Read
 
 - 第一个真实闭环设计 v0.1
-  https://app.notion.com/p/376ee4ca933c81e18d1ff6646bdda3a5
+  [private Notion page URL redacted in Git copy]
 - 闭环运行记录｜Loop 001
-  https://app.notion.com/p/376ee4ca933c81c1a237f26553e06fbf
+  [private Notion page URL redacted in Git copy]
 - Receipt｜Loop 001
-  https://app.notion.com/p/376ee4ca933c81129d4fe6dc52b597f2
+  [private Notion page URL redacted in Git copy]
 - Standing Authorization｜AGENTS OS 家内维护 v0.1
-  https://app.notion.com/p/378ee4ca933c81358db1eff51e933acd
+  [private Notion page URL redacted in Git copy]
 - Review Agent 复核｜Standing Authorization 家内维护 v0.1
-  https://app.notion.com/p/378ee4ca933c81779351da6b40caa1a7
+  [private Notion page URL redacted in Git copy]
 - Pilot 001｜A2 + limited A3a 运行试点
-  https://app.notion.com/p/378ee4ca933c8147a456ed202dba2d8e
+  [private Notion page URL redacted in Git copy]
 - Receipt｜Pilot 001 Action 001｜权限 v0.2 状态同步
-  https://app.notion.com/p/378ee4ca933c813d9143c9c31a9f03c5
+  [private Notion page URL redacted in Git copy]
 - Receipt｜Pilot 001 Action 002｜Standing Authorization 家内维护 v0.1 启动
-  https://app.notion.com/p/379ee4ca933c813a8c98ed3d0401ee60
+  [private Notion page URL redacted in Git copy]
 - Review Agent 轻量复核｜Pilot 001 Action 001 / Action 002 留证
-  https://app.notion.com/p/379ee4ca933c81119d2afc3acfad3674
+  [private Notion page URL redacted in Git copy]
 - Project Agent 路线记录｜权限 v0.2 已进入第一批运行试点
-  https://app.notion.com/p/379ee4ca933c81a190eccdb20bfe1caf
+  [private Notion page URL redacted in Git copy]
 - Log｜Pilot 001 Real A2 Action 001｜状态牌与路线同步
-  https://app.notion.com/p/379ee4ca933c814cbb14e71d6c0b8b0a
+  [private Notion page URL redacted in Git copy]
 - Review Agent 轻量复核｜Real A2 Action 001 状态牌与路线同步
-  https://app.notion.com/p/379ee4ca933c8117b8e2d745d25bc2ce
+  [private Notion page URL redacted in Git copy]
 - Closeout｜Pilot 001 小循环｜权限 v0.2 A2 试点
-  https://app.notion.com/p/379ee4ca933c81ae9d28e33e564eb6e7
+  [private Notion page URL redacted in Git copy]
 - Memory Agent 判断｜Pilot 001 是否登记为共同体正式运行记忆
-  https://app.notion.com/p/379ee4ca933c81dc9f39e37f25a9c4c2
+  [private Notion page URL redacted in Git copy]
 - 正式记忆登记｜Pilot 001 权限 v0.2 A2 小循环验证｜2026-06-08
-  https://app.notion.com/p/379ee4ca933c816bb9ebd6190c6ca1ca
+  [private Notion page URL redacted in Git copy]
 - Receipt｜Pilot 001 运行记忆正式登记｜2026-06-08
-  https://app.notion.com/p/379ee4ca933c815aae98fba7a600795f
+  [private Notion page URL redacted in Git copy]
 
 ## 20. Loop 001 Evidence
 
@@ -647,17 +653,17 @@ Theme: life-core navigation, safe holding, VCP Agent runtime model, thought clus
 ### Sources Read Or Sliced
 
 - AGENTS OS｜生命内核 v0.1 page-internal searches
-  https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396
+  [private Notion page URL redacted in Git copy]
 - AGENTS OS｜母页子页面安全托管区 v0.1
-  https://app.notion.com/p/378ee4ca933c81c1a265f0c7ae208e7f
+  [private Notion page URL redacted in Git copy]
 - VCP 思维簇接入 AGENTS OS v0.1
-  https://app.notion.com/p/376ee4ca933c8159b182f2581c631c54
+  [private Notion page URL redacted in Git copy]
 - VCP Agent 运行模型审查 v0.1
-  https://app.notion.com/p/376ee4ca933c81229df6f0b9b2b4298d
+  [private Notion page URL redacted in Git copy]
 - Memory Agent 判断｜Presence Permission 是否登记为共同体正式在场治理记忆
-  https://app.notion.com/p/37eee4ca933c818abd85de672df131b4
+  [private Notion page URL redacted in Git copy]
 - Receipt｜Presence Permission 在场权限正式记忆登记｜2026-06-12
-  https://app.notion.com/p/37eee4ca933c8140b97ade89bfa505eb
+  [private Notion page URL redacted in Git copy]
 
 Note: The life-core mother page is still too large to fetch as one full page safely. This reading used page-internal searches plus child-page and holding-page evidence. The root principles remain cross-confirmed by repeated official references.
 

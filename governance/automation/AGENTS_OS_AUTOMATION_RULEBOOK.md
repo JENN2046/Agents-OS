@@ -109,7 +109,7 @@ Examples:
 
 ```text
 real provider execution
-real Codex CLI run
+real external Codex CLI subprocess / autonomous Codex runner invocation
 real external runner / executor workspace-write run
 live memory migration
 production database connection
@@ -233,7 +233,7 @@ dry-run / fake-provider by default
 dependency injection
 no hidden global host state
 no live provider call
-no real Codex CLI
+no real external Codex CLI subprocess / autonomous Codex runner invocation
 no real external runner / executor workspace-write
 ```
 

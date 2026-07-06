@@ -37,3 +37,8 @@ This workspace has a local Git baseline on `main`.
 
 Use precise staging. Do not use `git add .` unless the workspace is known clean
 and the ignored private/runtime boundaries have been checked.
+
+External push is blocked by default for the root workspace repository. Local Git
+history has contained private Notion page URLs and working synthesis material.
+Do not add a remote or push this repository outside Jenn's local machine unless
+Jenn explicitly authorizes a private-history review or history-scrub gate.

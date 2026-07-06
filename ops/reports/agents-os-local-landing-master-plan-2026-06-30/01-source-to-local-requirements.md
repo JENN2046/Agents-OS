@@ -19,7 +19,7 @@ Source:
 
 ```text
 AGENTS OS | Life Core v0.1
-https://app.notion.com/p/376ee4ca933c8150baaad57ae9c19396
+[private Notion page URL redacted in Git copy]
 ```
 
 Local requirement:

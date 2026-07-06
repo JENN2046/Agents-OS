@@ -173,7 +173,7 @@ modifying .env, secrets, credentials, tokens, cookies, or provider / auth config
 reading or changing active runtime configuration that may contain secrets or provider authority
 unauthorized paid provider call
 real provider execution
-real Codex CLI execution
+real external Codex CLI subprocess / autonomous Codex runner invocation
 real external runner / executor workspace-write execution
 public MCP tool or schema expansion
 production database connection or write
@@ -364,6 +364,8 @@ You may push on your own when:
 the current task is not read-only
 the target remote and branch are clear
 the remote has been inspected and is an approved non-production delivery remote
+the AGENTS_OS_Workspace root repository is not being pushed externally while private-local-only history is present
+the repository history does not contain private-only links, source maps, raw private notes, secrets, credentials, tokens, cookies, private raw memory, provider raw response, or raw logs unless Jenn has given current explicit authorization for an approved private remote and reviewed the exact risk
 the branch is a task / feature branch, not main, master, production, release, protected, shared long-running, or production-facing
 the diff is scoped and contains no unrelated user work
 it is not a force push
@@ -420,6 +422,7 @@ Delivery safety additions:
 ```text
 A remote named origin is not automatically safe.
 Inspect remotes and branch state before push.
+For this AGENTS_OS_Workspace root repo, external push is blocked by default because local history may contain private project links and working synthesis material. Future external publishing requires a separate private-history review or history-scrub gate with Jenn's current authorization.
 Do not push if the diff includes unrelated changes, cache, logs, runtime state, secrets, or private-state content.
 Do not commit generated artifacts unless they are intentional reviewed project artifacts.
 Prefer precise staging; avoid git add . unless the repo is known clean and all changes are intentional.
@@ -556,6 +559,7 @@ memory read/write governance
 raw-output or secret-boundary changes
 provider execution gates
 external runner / executor workspace-write gates
+external Codex CLI subprocess / autonomous Codex runner gates
 CI / workflow changes
 state-sync / ledger / receipt logic
 release / deploy / cutover / readiness-adjacent work
