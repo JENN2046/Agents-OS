@@ -47,6 +47,15 @@ DECISIONS = (
 )
 TRACKS = ("colameta", "local_executor", "stop")
 AUTHORIZATION_SCOPES = ("none", "local_safe_only", "blocked_requires_jenn")
+FAILURE_CATEGORIES = (
+    "validation_failed",
+    "scope_violation",
+    "protected_path_detected",
+    "dirty_worktree_conflict",
+    "unknown_action_type",
+    "p3_signal_detected",
+    "executor_output_invalid",
+)
 LOCAL_SAFE_ACTIONS = (
     "write_governance_doc",
     "write_receipt_review_report",
@@ -87,6 +96,15 @@ GLOBAL_BLOCKED_CAPABILITIES = [
     "auth_provider_runtime_config_change",
     "destructive_git_or_filesystem_operation",
 ]
+REPAIR_POLICY = {
+    "validation_failed": {"repair_attempt_allowed": True, "max_repair_attempts": 1},
+    "scope_violation": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+    "protected_path_detected": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+    "dirty_worktree_conflict": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+    "unknown_action_type": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+    "p3_signal_detected": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+    "executor_output_invalid": {"repair_attempt_allowed": False, "max_repair_attempts": 0},
+}
 
 COLAMETA_PATTERNS = re.compile(r"\b(colameta|executor readiness|plan reconciliation|runner metadata|prompt files?)\b", re.I)
 LOCAL_PATTERNS = re.compile(
@@ -106,6 +124,18 @@ QUEUE_P3_PATTERNS = {
     "runtime_plugin_activation": re.compile(r"\bactivate\s+(plugin|runtime|vcptoolbox|colameta)\b", re.I),
     "state_private": re.compile(r"\bstate-private/", re.I),
     "auth_or_secret_config": re.compile(r"\b(auth|token|cookie|session|credential|secret|provider config|runtime config)\b", re.I),
+}
+FAILURE_PATTERNS = {
+    "protected_path_detected": re.compile(r"\b(protected path|state-private/|secrets?/|tokens?/|cookies?|credentials?)\b", re.I),
+    "dirty_worktree_conflict": re.compile(r"\bdirty (tracked )?worktree|uncommitted changes?|would overwrite\b", re.I),
+    "scope_violation": re.compile(r"\boutside workspace|scope violation|out of scope|target path is outside\b", re.I),
+    "unknown_action_type": re.compile(r"\b(action_type is not allowed|unknown action|unsupported action)\b", re.I),
+    "p3_signal_detected": re.compile(
+        r"\b(provider_call|provider call|service_start|service start|runtime_plugin_activation|external_write|formal_memory_write|auth_provider_runtime_config_change|destructive_git_or_filesystem_operation|force push|deploy|publish|release)\b",
+        re.I,
+    ),
+    "executor_output_invalid": re.compile(r"\b(missing required field|invalid schema|schema_version is invalid|executor output invalid)\b", re.I),
+    "validation_failed": re.compile(r"\b(validation command failed|returncode|validation failed|did not pass)\b", re.I),
 }
 
 
@@ -658,6 +688,212 @@ def validate_track_result(result: dict[str, Any]) -> list[str]:
     return errors
 
 
+def source_identifier(source_payload: dict[str, Any]) -> str | None:
+    for key in (
+        "track_result_id",
+        "mutation_id",
+        "proposal_id",
+        "track_preview_id",
+        "decision_id",
+        "candidate_id",
+    ):
+        value = source_payload.get(key)
+        if value not in (None, ""):
+            return str(value)
+    return None
+
+
+def failure_source_kind(source_payload: dict[str, Any], context: dict[str, Any] | None = None) -> str:
+    if context and context.get("source_kind"):
+        return str(context["source_kind"])
+    schema_version = source_payload.get("schema_version")
+    if schema_version:
+        return str(schema_version)
+    return "unknown"
+
+
+def failure_scan_text(
+    source_payload: dict[str, Any],
+    context: dict[str, Any] | None,
+    validation_errors: list[str],
+) -> str:
+    text_parts = [
+        failure_source_kind(source_payload, context),
+        str(source_identifier(source_payload) or ""),
+        "\n".join(str(error) for error in source_payload.get("errors", []) if error),
+        "\n".join(validation_errors),
+        str(source_payload.get("selected_track", "")),
+        str(source_payload.get("action_type", "")),
+    ]
+    if context:
+        text_parts.extend(
+            str(context.get(key, ""))
+            for key in ("error", "reason", "category_hint", "source_kind")
+        )
+    return "\n".join(text_parts)
+
+
+def track_result_schema_errors(source_payload: dict[str, Any]) -> list[str]:
+    if source_payload.get("schema_version") != "agents-os.control-chain.track-result.v0.1":
+        return []
+    return validate_track_result(source_payload)
+
+
+def classify_failure(source_payload: dict[str, Any], context: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Classify a failed control-chain output without retrying or repairing."""
+    validation_errors = track_result_schema_errors(source_payload)
+    scan_text = failure_scan_text(source_payload, context, validation_errors)
+    hinted = str((context or {}).get("category_hint", ""))
+
+    category = "validation_failed"
+    if hinted in FAILURE_CATEGORIES:
+        category = hinted
+    elif validation_errors:
+        category = "executor_output_invalid"
+    elif FAILURE_PATTERNS["protected_path_detected"].search(scan_text):
+        category = "protected_path_detected"
+    elif FAILURE_PATTERNS["dirty_worktree_conflict"].search(scan_text):
+        category = "dirty_worktree_conflict"
+    elif FAILURE_PATTERNS["scope_violation"].search(scan_text):
+        category = "scope_violation"
+    elif FAILURE_PATTERNS["p3_signal_detected"].search(scan_text):
+        category = "p3_signal_detected"
+    elif FAILURE_PATTERNS["unknown_action_type"].search(scan_text):
+        category = "unknown_action_type"
+    elif FAILURE_PATTERNS["executor_output_invalid"].search(scan_text):
+        category = "executor_output_invalid"
+    elif (
+        source_payload.get("validation_passed") is False
+        or source_payload.get("passed") is False
+        or FAILURE_PATTERNS["validation_failed"].search(scan_text)
+    ):
+        category = "validation_failed"
+
+    policy = REPAIR_POLICY[category]
+    severity = "red" if category in {"protected_path_detected", "p3_signal_detected"} else "yellow"
+    requires_jenn = category in {"protected_path_detected", "p3_signal_detected"}
+    return {
+        "category": category,
+        "severity": severity,
+        "repair_attempt_allowed": policy["repair_attempt_allowed"],
+        "max_repair_attempts": policy["max_repair_attempts"],
+        "requires_jenn_decision": requires_jenn,
+        "classification_errors": validation_errors,
+    }
+
+
+def build_failure_report(source_payload: dict[str, Any], context: dict[str, Any] | None = None) -> dict[str, Any]:
+    classification = classify_failure(source_payload, context)
+    source_id = source_identifier(source_payload)
+    failure = {
+        "schema_version": "agents-os.failure.report.v0.1",
+        "failure_id": stable_id(
+            "FAILURE",
+            [
+                failure_source_kind(source_payload, context),
+                source_id,
+                classification["category"],
+                source_payload.get("errors", []),
+            ],
+        ),
+        "source_kind": failure_source_kind(source_payload, context),
+        "source_id": source_id,
+        "category": classification["category"],
+        "severity": classification["severity"],
+        "repair_attempt_allowed": classification["repair_attempt_allowed"],
+        "max_repair_attempts": classification["max_repair_attempts"],
+        "repair_attempts_performed": 0,
+        "queue_promotion_allowed": False,
+        "silent_retry_authorized": False,
+        "destructive_cleanup_authorized": False,
+        "provider_call_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": classification["requires_jenn_decision"],
+        "evidence_required": ["failure_report", "review", "validation_summary"],
+        "source_errors": [str(error) for error in source_payload.get("errors", []) if error],
+        "classification_errors": classification["classification_errors"],
+        "raw_content_output": False,
+    }
+    errors = validate_failure_report(failure)
+    failure["passed"] = not errors
+    failure["errors"] = errors
+    return failure
+
+
+def validate_failure_report(report: dict[str, Any]) -> list[str]:
+    errors = [f"missing required field: {field}" for field in schema_required("failure_report") if field not in report]
+    category = report.get("category")
+    if category not in FAILURE_CATEGORIES:
+        errors.append(f"invalid failure category: {category}")
+    if report.get("queue_promotion_allowed") is not False:
+        errors.append("failure report must not allow queue promotion")
+    if report.get("silent_retry_authorized") is not False:
+        errors.append("failure report must not authorize silent retry")
+    if report.get("destructive_cleanup_authorized") is not False:
+        errors.append("failure report must not authorize destructive cleanup")
+    for flag in ("provider_call_authorized", "external_write_authorized", "memory_write_authorized"):
+        if report.get(flag) is not False:
+            errors.append(f"failure report must not authorize {flag}")
+    if report.get("requires_nobao_review") is not True:
+        errors.append("failure report must require Nobao review")
+    if category in REPAIR_POLICY:
+        policy = REPAIR_POLICY[category]
+        if report.get("repair_attempt_allowed") is not policy["repair_attempt_allowed"]:
+            errors.append("failure report repair policy does not match category")
+        if report.get("max_repair_attempts") != policy["max_repair_attempts"]:
+            errors.append("failure report max repair attempts does not match category")
+    if report.get("repair_attempts_performed") != 0:
+        errors.append("failure report must not perform repair attempts")
+    return errors
+
+
+def build_stop_loop_result(failure_report: dict[str, Any]) -> dict[str, Any]:
+    errors = validate_failure_report(failure_report)
+    result = {
+        "schema_version": "agents-os.stop-loop.result.v0.1",
+        "stop_loop_id": stable_id("STOPLOOP", [failure_report.get("failure_id"), failure_report.get("category")]),
+        "source_failure_id": failure_report.get("failure_id"),
+        "status": "stopped_for_review",
+        "queue_promoted": False,
+        "repair_attempt_performed": False,
+        "silent_retry_performed": False,
+        "destructive_cleanup_performed": False,
+        "provider_call_performed": False,
+        "external_write_performed": False,
+        "memory_write_performed": False,
+        "requires_nobao_review": True,
+        "requires_jenn_decision": failure_report.get("requires_jenn_decision") is True,
+        "evidence_required": ["failure_report", "review", "validation_summary"],
+        "errors": errors,
+    }
+    result_errors = validate_stop_loop_result(result)
+    result["passed"] = not result_errors
+    result["errors"] = sorted(set(result["errors"] + result_errors))
+    return result
+
+
+def validate_stop_loop_result(result: dict[str, Any]) -> list[str]:
+    errors = [f"missing required field: {field}" for field in schema_required("stop_loop_result") if field not in result]
+    if result.get("status") != "stopped_for_review":
+        errors.append("stop loop must stop for review")
+    for flag in (
+        "queue_promoted",
+        "repair_attempt_performed",
+        "silent_retry_performed",
+        "destructive_cleanup_performed",
+        "provider_call_performed",
+        "external_write_performed",
+        "memory_write_performed",
+    ):
+        if result.get(flag) is not False:
+            errors.append(f"stop loop forbidden effect performed: {flag}")
+    if result.get("requires_nobao_review") is not True:
+        errors.append("stop loop must require Nobao review")
+    return errors
+
+
 def first_next_title(queue_text: str) -> str | None:
     in_next = False
     for line in queue_text.splitlines():
@@ -993,6 +1229,24 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     forbidden_result = local_executor_run(local_preview, "provider_call")
     if forbidden_result.get("validation_passed") is not False:
         errors.append("forbidden local executor action was not blocked")
+    failing_result = local_executor_run(
+        local_preview,
+        "run_validation_command",
+        command="python3 execution/agents-os-control-chain/does-not-exist.py",
+    )
+    failure_report = build_failure_report(failing_result)
+    stop_loop = build_stop_loop_result(failure_report)
+    failure_queue_proposal = queue_update_proposal(failing_result)
+    if failure_report.get("category") != "validation_failed":
+        errors.append("validation failure was not classified as validation_failed")
+    if failure_report.get("silent_retry_authorized") is not False:
+        errors.append("failure report authorized silent retry")
+    if stop_loop.get("status") != "stopped_for_review":
+        errors.append("stop loop did not stop for review")
+    if stop_loop.get("queue_promoted") is not False:
+        errors.append("stop loop promoted queue on failure")
+    if failure_queue_proposal.get("close_current_now") is not False:
+        errors.append("queue proposal closed NOW on failed validation")
     proposal = queue_update_proposal(local_result)
     if proposal.get("active_queue_modified") is not False or proposal.get("proposal_only") is not True:
         errors.append("queue proposal mutated queue")
@@ -1116,6 +1370,14 @@ old_task: closed
             "reviewed_preview_passed": reviewed_preview.get("passed") if reviewed_preview else None,
             "reviewed_apply_fixture_modified": reviewed_apply.get("active_queue_modified") if reviewed_apply else None,
         },
+        "failure_handling": {
+            "category": failure_report.get("category"),
+            "repair_attempt_allowed": failure_report.get("repair_attempt_allowed"),
+            "silent_retry_authorized": failure_report.get("silent_retry_authorized"),
+            "stop_status": stop_loop.get("status"),
+            "queue_promoted": stop_loop.get("queue_promoted"),
+            "failed_queue_close_now": failure_queue_proposal.get("close_current_now"),
+        },
         "colameta": {
             "checked": run_colameta,
             "passed": colameta_result.get("passed") if colameta_result else None,
@@ -1148,7 +1410,7 @@ def main() -> int:
     local_parser = subparsers.add_parser("local-exec")
     local_parser.add_argument("--track-preview-json", required=True)
     local_parser.add_argument("--action-type", required=True)
-    local_parser.add_argument("--command")
+    local_parser.add_argument("--command", dest="validation_command")
     local_parser.add_argument("--target-path")
     local_parser.add_argument("--content")
     local_parser.add_argument("--json", action="store_true")
@@ -1163,6 +1425,14 @@ def main() -> int:
     reviewed_queue_parser.add_argument("--queue", required=True)
     reviewed_queue_parser.add_argument("--apply", action="store_true")
     reviewed_queue_parser.add_argument("--json", action="store_true")
+
+    failure_parser = subparsers.add_parser("failure-report")
+    failure_parser.add_argument("--source-json", required=True)
+    failure_parser.add_argument("--json", action="store_true")
+
+    stop_loop_parser = subparsers.add_parser("stop-loop")
+    stop_loop_parser.add_argument("--failure-report-json", required=True)
+    stop_loop_parser.add_argument("--json", action="store_true")
 
     validate_parser = subparsers.add_parser("validate")
     validate_parser.add_argument("--json", action="store_true")
@@ -1201,7 +1471,7 @@ def main() -> int:
             args.action_type,
             target_path=Path(args.target_path) if args.target_path else None,
             content=args.content,
-            command=args.command,
+            command=args.validation_command,
         )
         if args.json:
             print_json(result)
@@ -1234,6 +1504,30 @@ def main() -> int:
             )
         return 0 if result["passed"] else 1
 
+    if args.command == "failure-report":
+        result = build_failure_report(load_json(Path(args.source_json)))
+        if args.json:
+            print_json(result)
+        else:
+            print(
+                "Failure report: "
+                f"category={result['category']} "
+                f"silent_retry_authorized={result['silent_retry_authorized']}"
+            )
+        return 0 if result["passed"] else 1
+
+    if args.command == "stop-loop":
+        result = build_stop_loop_result(load_json(Path(args.failure_report_json)))
+        if args.json:
+            print_json(result)
+        else:
+            print(
+                "Stop loop: "
+                f"status={result['status']} "
+                f"queue_promoted={result['queue_promoted']}"
+            )
+        return 0 if result["passed"] else 1
+
     if args.command == "validate":
         result = validate_control_chain()
         if args.json:
@@ -1245,6 +1539,7 @@ def main() -> int:
             print(f"Track selector: {result['track_selector']}")
             print(f"Local executor: {result['local_executor']}")
             print(f"Queue manager: {result['queue_manager']}")
+            print(f"Failure handling: {result['failure_handling']}")
             print(f"ColaMeta: {result['colameta']}")
             if result["errors"]:
                 print("Errors:")

@@ -46,6 +46,8 @@ control_chain_exists=true
 control_chain_validation=PASS
 reviewed_queue_mutation_gate_exists=true
 reviewed_queue_mutation_gate_validation=PASS
+failure_handling_stop_loop_exists=true
+failure_handling_stop_loop_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -63,11 +65,11 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is failure handling. The workspace now has a
-preview-only Machine Skeleton, preview-only Task Producer Skeleton, and
-Commander-first Control Chain with ColaMeta readiness, queue proposal-only, and
-reviewed queue mutation gate. It cannot yet classify failures into a reliable
-stop/report path before limited Green auto-promote.
+The current blocker is state visibility. The workspace now has a preview-only
+Machine Skeleton, preview-only Task Producer Skeleton, Commander-first Control
+Chain, reviewed queue mutation gate, and failure handling stop loop. It cannot
+yet show current queue status, last completed task, last failure, validation
+status, open blockers, and Memory candidates through one local dashboard layer.
 
 ## Queue Decision
 
@@ -79,20 +81,18 @@ blocked.
 
 ## NOW
 
-### NOW-001: Failure Handling And Repair Stop Loop
+### NOW-001: Dashboard And Memory Candidate Layer
 
-Goal: classify validation failure, scope violation, protected path, dirty
-worktree conflict, unknown action type, P3 signal, and invalid executor output
-into a reliable stop/report path.
+Goal: expose current queue, last completed task, last failure, validation
+status, open blockers, and Memory candidates without writing formal Memory.
 
 Required output:
 
 ```text
-failure_classifier
-failure_report_schema
-stop_loop_result
-no_silent_retry_guard
-repair_attempt_policy
+dashboard_summary_schema
+dashboard_cli_or_report_preview
+memory_candidate_schema
+no_formal_memory_write_guard
 receipt_review_pattern
 ```
 
@@ -108,35 +108,27 @@ external_write_authorized=false
 memory_write_authorized=false
 runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
-silent_retry_authorized=false
+formal_memory_write_authorized=false
+private_memory_raw_read_authorized=false
 ```
 
 Acceptance:
 
 ```text
-classify known failure categories
-write local failure report/review/receipt evidence
-do not silently retry
-do not perform destructive cleanup
-do not call provider
-do not perform external write
-do not promote queue on validation failure
+read current queue summary without protected/private reads
+surface last completed task from CLOSED
+surface last failure if evidence exists, otherwise report none
+surface validation status from local validation commands
+surface open blockers from BLOCKED
+produce candidate Memory entries only
+do not write formal Memory
 docctl status remains PASS
 docctl doctor remains PASS
 ```
 
 ## NEXT
 
-### NEXT-001: Dashboard And Memory Candidate Layer
-
-Use after failure handling exists.
-
-Purpose: expose current queue, last completed task, last failure, validation
-status, open blockers, and memory candidates without writing formal Memory.
-
-Blocked actions: formal Memory write, private raw memory read.
-
-### NEXT-002: Migration Plan Distillation Batch
+### NEXT-001: Migration Plan Distillation Batch
 
 Use after the machine can consume queue items.
 
@@ -189,6 +181,7 @@ machine_skeleton_v0.1: closed for preview-only control machine baseline; maintai
 task_producer_skeleton_v0.1: closed for preview-only candidate task production baseline; producer output remains candidate-only
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
+failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
 ```
 
 ## Machine Input Contract
@@ -225,9 +218,9 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible failure
-handling / repair stop loop from `NOW-001`.
+The next construction batch should implement the smallest possible dashboard
+and Memory candidate layer from `NOW-001`.
 
 Do not start with ColaMeta executor, VCPToolBox runtime, external Git, Memory, or
-provider integration. Failure handling must stop safely with local evidence and
-must not silently retry or mutate the queue on failed validation.
+provider integration. The dashboard may expose Memory candidates, but it must
+not write formal Memory or read private raw Memory.

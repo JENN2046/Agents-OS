@@ -1,6 +1,6 @@
 # AGENTS OS Current State
 
-Date: 2026-07-06
+Date: 2026-07-07
 Status: active reality snapshot
 Owner: Jenn
 Agent steward: Nobao
@@ -20,7 +20,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `Failure Handling And Repair Stop Loop`.
+- The active work queue's current `NOW` item is `Dashboard And Memory Candidate Layer`.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
@@ -32,6 +32,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - AGENTS OS Control Chain v0.1 exists at `execution/agents-os-control-chain/`.
 - The Control Chain implements Commander Decision Layer, Track Selector, shared track result, ColaMeta readiness reconciliation, Local Executor local-safe validation action, Queue Manager proposal-only, and reviewed queue mutation gate.
 - Commander is the only authorization source; Track Selector cannot elevate; ColaMeta remains preview/readiness only; reviewed queue mutation requires accepted Nobao review and still does not authorize auto-promote.
+- The Control Chain implements Failure Handling Stop Loop v0.1 for validation failure, scope violation, protected path detection, dirty worktree conflict, unknown action type, P3 signal, and invalid executor output.
+- Failure handling keeps queue promotion, repair execution, silent retry, destructive cleanup, provider call, external write, and Memory write false.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -64,13 +66,14 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Executor inventory is still not confirmed.
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - Root Git external publication is blocked until private-history review or history-scrub gate.
+- Dashboard / Memory candidate layer is not implemented yet.
 - Migration reconciliation is still incomplete.
 - VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
 
 ## Next Actions
 
-1. Add failure report / stop loop before any limited auto-promote.
-2. Add dashboard / memory candidate layer after failure handling exists.
+1. Add dashboard / Memory candidate layer without formal Memory write.
+2. Keep failure handling stop loop as the default route for failed validation or blocked actions.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Distill `ops/migration/` historical plans into a short surviving task list.
 5. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
@@ -85,7 +88,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Queue Manager Reviewed Mutation Gate v0.1.
+Last completed task: Failure Handling Stop Loop v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -94,13 +97,16 @@ not write the queue or authorize execution.
 The control chain is scoped to commander-first dual-track routing, ColaMeta
 readiness preview, local-safe validation execution, queue proposal-only, and
 reviewed queue mutation with accepted Nobao review.
+Failure handling now classifies known failure categories and stops for review
+without queue promotion, silent retry, destructive cleanup, provider call,
+external write, or Memory write.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: Failure Handling And Repair Stop Loop.
+Next active route: Dashboard And Memory Candidate Layer.
 ```
 
 ## Safety Notes

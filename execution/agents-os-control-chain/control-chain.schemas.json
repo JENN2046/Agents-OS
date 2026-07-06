@@ -84,5 +84,49 @@
       "mutation",
       "errors"
     ]
+  },
+  "failure_report": {
+    "required": [
+      "schema_version",
+      "failure_id",
+      "source_kind",
+      "source_id",
+      "category",
+      "severity",
+      "repair_attempt_allowed",
+      "max_repair_attempts",
+      "repair_attempts_performed",
+      "queue_promotion_allowed",
+      "silent_retry_authorized",
+      "destructive_cleanup_authorized",
+      "provider_call_authorized",
+      "external_write_authorized",
+      "memory_write_authorized",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "evidence_required",
+      "source_errors",
+      "classification_errors",
+      "raw_content_output"
+    ]
+  },
+  "stop_loop_result": {
+    "required": [
+      "schema_version",
+      "stop_loop_id",
+      "source_failure_id",
+      "status",
+      "queue_promoted",
+      "repair_attempt_performed",
+      "silent_retry_performed",
+      "destructive_cleanup_performed",
+      "provider_call_performed",
+      "external_write_performed",
+      "memory_write_performed",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "evidence_required",
+      "errors"
+    ]
   }
 }

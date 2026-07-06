@@ -7,6 +7,7 @@ It connects:
 ```text
 Task Producer -> Machine Preview -> Commander Decision -> Track Selector
 -> ColaMeta Track / Local Executor Track -> Track Result -> Queue Proposal
+-> Failure Report / Stop Loop
 ```
 
 ## Commands
@@ -24,6 +25,7 @@ Track Selector can route but cannot elevate.
 ColaMeta Track is readiness/preview only in v0.1.
 Local Executor can only run local_safe_only actions.
 Queue Manager is proposal-only in v0.1.
+Failure handling stops for review and never silently retries.
 ```
 
 ## Boundaries
@@ -39,9 +41,17 @@ write formal Memory
 read state-private
 read or output secrets/tokens/cookies/provider raw response/private memory/raw logs
 mutate Active Work Queue directly
+silently retry failed validation
+perform destructive cleanup
 push/tag/deploy/publish
 ```
 
 Queue updates are produced as proposals first. Reviewed queue mutation and
 limited auto-promote remain separate gates. The reviewed mutation gate requires
 an accepted Nobao review object and never authorizes auto-promote.
+
+Failure handling classifies validation failure, scope violation, protected
+path detection, dirty worktree conflict, unknown action type, P3 signal, and
+invalid executor output into a local failure report. The stop loop keeps queue
+promotion, repair execution, provider calls, external writes, and formal Memory
+writes false.

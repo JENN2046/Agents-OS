@@ -23,6 +23,7 @@ shared track_result.json contract
 ColaMeta readiness reconciliation
 Local Executor local-safe validation action
 Queue Manager proposal-only output
+Failure Report / Stop Loop output
 ```
 
 ## Authority Model
@@ -34,13 +35,15 @@ ColaMeta Track remains readiness/preview only.
 Local Executor only consumes local_safe_only.
 Queue Manager produces proposal-only output first, then reviewed mutation only
 when an accepted Nobao review object is supplied.
+Failure handling produces a local report and stop-loop result before any queue
+promotion can happen on failure.
 Provider-backed execution is not in scope.
 ```
 
 ## Validation Summary
 
 ```text
-test-control-chain: PASS cases=14 failures=0
+test-control-chain: PASS cases=21 failures=0
 control_chain validate: PASS
 commander local task -> route_to_local_executor local_safe_only
 commander ColaMeta task -> route_to_colameta none
@@ -48,6 +51,15 @@ commander provider task -> stop_needs_jenn_decision blocked_requires_jenn
 track selector blocked task -> track_authorized=false
 local executor run_validation_command -> PASS
 local executor provider_call -> blocked
+failure classifier validation_failed -> repair_attempt_allowed=true max_repair_attempts=1
+failure classifier protected_path_detected -> queue_promotion_allowed=false
+failure classifier dirty_worktree_conflict -> queue_promotion_allowed=false
+failure classifier scope_violation -> queue_promotion_allowed=false
+failure classifier unknown_action_type -> queue_promotion_allowed=false
+failure classifier p3_signal_detected -> requires_jenn_decision=true
+failure classifier executor_output_invalid -> queue_promotion_allowed=false
+stop loop -> stopped_for_review queue_promoted=false silent_retry_performed=false
+failed track result queue proposal -> close_current_now=false promote_next_title=null
 ColaMeta readiness -> PASS preview_only=true execution_performed=false provider_call_performed=false
 queue proposal -> proposal_only=true active_queue_modified=false
 reviewed queue mutation preview -> preview_only=true active_queue_modified=false
@@ -80,5 +92,5 @@ ColaMeta readiness reused existing summary-only preflight and did not read
 
 ## Next
 
-Implement failure handling / repair stop loop before any limited auto-promote
-exists.
+Use the Active Work Queue's next item: dashboard and Memory candidate layer.
+Formal Memory writing remains blocked until Jenn chooses a Memory entry point.

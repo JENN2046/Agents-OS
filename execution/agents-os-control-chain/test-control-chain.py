@@ -111,6 +111,54 @@ def main() -> int:
     forbidden_result = chain.local_executor_run(local_preview, "provider_call")
     check(forbidden_result["validation_passed"] is False, "provider_call should be blocked", failures)
 
+    failing_result = chain.local_executor_run(
+        local_preview,
+        "run_validation_command",
+        command="python3 execution/agents-os-control-chain/does-not-exist.py",
+    )
+    failure_report = chain.build_failure_report(failing_result)
+    check(failure_report["category"] == "validation_failed", "failed validation should classify as validation_failed", failures)
+    check(failure_report["repair_attempt_allowed"] is True, "validation_failed should allow one future repair attempt", failures)
+    check(failure_report["max_repair_attempts"] == 1, "validation_failed max repair attempts should be 1", failures)
+    check(failure_report["silent_retry_authorized"] is False, "failure report must not authorize silent retry", failures)
+    check(failure_report["queue_promotion_allowed"] is False, "failure report must not allow queue promotion", failures)
+
+    stop_loop = chain.build_stop_loop_result(failure_report)
+    check(stop_loop["status"] == "stopped_for_review", "stop loop should stop for review", failures)
+    check(stop_loop["queue_promoted"] is False, "stop loop must not promote queue", failures)
+    check(stop_loop["silent_retry_performed"] is False, "stop loop must not silently retry", failures)
+
+    failed_proposal = chain.queue_update_proposal(failing_result)
+    check(failed_proposal["close_current_now"] is False, "failed track result should not close NOW", failures)
+    check(failed_proposal["promote_next_title"] is None, "failed track result should not promote NEXT", failures)
+
+    def failed_fixture(track_id: str, error: str) -> dict:
+        return dict(
+            local_result,
+            track_result_id=track_id,
+            validation_passed=False,
+            passed=False,
+            errors=[error],
+        )
+
+    category_fixtures = [
+        (failed_fixture("TRACKRESULT-PROTECTED", "target path is protected: state-private/foo"), "protected_path_detected"),
+        (failed_fixture("TRACKRESULT-DIRTY", "dirty tracked worktree before local executor action"), "dirty_worktree_conflict"),
+        (failed_fixture("TRACKRESULT-SCOPE", "target path is outside workspace: /tmp/foo"), "scope_violation"),
+        (failed_fixture("TRACKRESULT-UNKNOWN", "action_type is not allowed: make_coffee"), "unknown_action_type"),
+        (failed_fixture("TRACKRESULT-P3", "provider_call requested by action"), "p3_signal_detected"),
+        ({"schema_version": "agents-os.control-chain.track-result.v0.1", "track_result_id": "TRACKRESULT-BROKEN"}, "executor_output_invalid"),
+    ]
+    for fixture, expected_category in category_fixtures:
+        report = chain.build_failure_report(fixture)
+        check(report["category"] == expected_category, f"expected {expected_category}, got {report['category']}", failures)
+        check(report["silent_retry_authorized"] is False, f"{expected_category} should not authorize silent retry", failures)
+        check(report["queue_promotion_allowed"] is False, f"{expected_category} should not allow queue promotion", failures)
+    p3_report = chain.build_failure_report(category_fixtures[4][0])
+    p3_stop = chain.build_stop_loop_result(p3_report)
+    check(p3_report["requires_jenn_decision"] is True, "P3 failure should require Jenn decision", failures)
+    check(p3_stop["provider_call_performed"] is False, "P3 stop loop must not perform provider call", failures)
+
     cola_result = chain.colameta_readiness(cola_preview)
     check(cola_result["passed"], f"ColaMeta readiness should pass: {cola_result['errors']}", failures)
     check(cola_result["preview_only"] is True, "ColaMeta readiness should be preview-only", failures)
@@ -207,16 +255,17 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=14 failures={len(failures)}")
+        print(f"cases=21 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
     print("PASS selector no-elevation fixtures")
     print("PASS local executor allowed/forbidden fixtures")
+    print("PASS failure handling stop-loop fixtures")
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
     print("PASS reviewed queue mutation fixture")
-    print("cases=14 failures=0")
+    print("cases=21 failures=0")
     return 0
 
 

@@ -16,6 +16,25 @@
     "reviewed_queue_mutation_requires_accepted_nobao_review": true,
     "auto_promote_authorized": false
   },
+  "failure_handling": {
+    "failure_categories": [
+      "validation_failed",
+      "scope_violation",
+      "protected_path_detected",
+      "dirty_worktree_conflict",
+      "unknown_action_type",
+      "p3_signal_detected",
+      "executor_output_invalid"
+    ],
+    "queue_promotion_on_failure": false,
+    "silent_retry_authorized": false,
+    "destructive_cleanup_authorized": false,
+    "provider_call_authorized": false,
+    "external_write_authorized": false,
+    "max_green_repair_attempts": 1,
+    "repair_attempts_performed_in_v0_1": 0,
+    "requires_nobao_review": true
+  },
   "execution_authorization_scopes": [
     "none",
     "local_safe_only",
