@@ -21,6 +21,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
 - The active work queue's current `NOW` item is `No Active Automatic Construction Item`.
+- Active Work Queue Closed Order Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-closed-order-reconciliation-v0.1.md`.
+- The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records this closed-order reconciliation without selecting or executing a route.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
@@ -193,6 +195,9 @@ mutate the Active Work Queue, promote the route, or authorize execution.
 The Control Chain route-choice handoff reconciliation now checks that Machine
 and Dashboard agree on Jenn-owned route choice A-E before any route adoption
 path is considered.
+The Active Work Queue closed-order reconciliation records the current latest
+closed governance event at the `CLOSED` tail so Dashboard `last_completed`
+continues to represent the queue's latest local closure.
 The reviewed route adoption preview now closes the local preview chain from
 future Jenn route-choice text through accepted review to a non-writing `NEXT`
 append preview. It still does not mutate the Active Work Queue or adopt the

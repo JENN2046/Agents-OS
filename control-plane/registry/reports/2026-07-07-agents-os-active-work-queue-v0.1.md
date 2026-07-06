@@ -86,6 +86,8 @@ machine_next_user_action_handoff_exists=true
 machine_next_user_action_handoff_validation=PASS
 next_route_selection_package_exists=true
 next_route_selection_package_validation=PASS
+active_work_queue_closed_order_reconciliation_exists=true
+active_work_queue_closed_order_reconciliation_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -194,6 +196,11 @@ It points to Jenn as the decision owner, lists accepted route ids A-E, and
 points to the route-selection confirmation template source without printing the
 template body, selecting a route, mutating the queue, promoting an item, or
 authorizing execution.
+
+The Active Work Queue closed-order reconciliation now records the latest local
+governance closure at the `CLOSED` tail. This keeps Dashboard `last_completed`
+aligned with the queue's current local evidence tail without selecting,
+adopting, promoting, or executing a route.
 
 ## Queue Decision
 
@@ -323,6 +330,7 @@ root_private_history_review_gate_v0.1: closed for no-push root private-history p
 dashboard_route_adoption_gate_readiness_v0.1: closed for preview-only route adoption gate readiness visibility; active queue mutation, queue promotion, and execution remain unauthorized
 dashboard_route_choice_handoff_v0.1: closed for preview-only next_user_action handoff; Jenn remains the route decision owner, active queue mutation, queue promotion, and execution remain unauthorized
 machine_next_user_action_handoff_v0.1: closed for preview-only machine next_user_action handoff; Jenn remains the route decision owner, route auto-selection, active queue mutation, queue promotion, and execution remain unauthorized
+active_work_queue_closed_order_reconciliation_v0.1: closed for aligning Dashboard last_completed with the Active Work Queue CLOSED tail; route selection, active queue promotion, runtime/provider execution, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
