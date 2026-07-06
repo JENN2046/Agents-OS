@@ -48,6 +48,8 @@ reviewed_queue_mutation_gate_exists=true
 reviewed_queue_mutation_gate_validation=PASS
 failure_handling_stop_loop_exists=true
 failure_handling_stop_loop_validation=PASS
+dashboard_memory_candidate_layer_exists=true
+dashboard_memory_candidate_layer_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -65,11 +67,11 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is state visibility. The workspace now has a preview-only
-Machine Skeleton, preview-only Task Producer Skeleton, Commander-first Control
-Chain, reviewed queue mutation gate, and failure handling stop loop. It cannot
-yet show current queue status, last completed task, last failure, validation
-status, open blockers, and Memory candidates through one local dashboard layer.
+The current blocker is migration distillation. The workspace now has a
+preview-only Machine Skeleton, preview-only Task Producer Skeleton,
+Commander-first Control Chain, reviewed queue mutation gate, failure handling
+stop loop, and dashboard / Memory candidate layer. It has not yet compressed
+`ops/migration/` historical plans into a short surviving task list.
 
 ## Queue Decision
 
@@ -81,18 +83,19 @@ blocked.
 
 ## NOW
 
-### NOW-001: Dashboard And Memory Candidate Layer
+### NOW-001: Migration Plan Distillation Batch
 
-Goal: expose current queue, last completed task, last failure, validation
-status, open blockers, and Memory candidates without writing formal Memory.
+Goal: compress `ops/migration/` historical plans into a short list of surviving
+local construction tasks and closed evidence.
 
 Required output:
 
 ```text
-dashboard_summary_schema
-dashboard_cli_or_report_preview
-memory_candidate_schema
-no_formal_memory_write_guard
+migration_inventory_summary
+surviving_task_list
+closed_evidence_list
+discarded_or_archived_context_list
+no_bulk_move_delete_rename_guard
 receipt_review_pattern
 ```
 
@@ -108,34 +111,26 @@ external_write_authorized=false
 memory_write_authorized=false
 runtime_plugin_activation_authorized=false
 auto_promote_authorized=false
-formal_memory_write_authorized=false
-private_memory_raw_read_authorized=false
+bulk_move_delete_rename_authorized=false
+private_state_read_authorized=false
 ```
 
 Acceptance:
 
 ```text
-read current queue summary without protected/private reads
-surface last completed task from CLOSED
-surface last failure if evidence exists, otherwise report none
-surface validation status from local validation commands
-surface open blockers from BLOCKED
-produce candidate Memory entries only
-do not write formal Memory
+read only historical migration plan/report/receipt/review filenames and safe summaries
+produce a short surviving local task list
+separate closed evidence from still-actionable work
+do not bulk move/delete/rename
+do not read private state
+do not start runtime/provider/executor work
 docctl status remains PASS
 docctl doctor remains PASS
 ```
 
 ## NEXT
 
-### NEXT-001: Migration Plan Distillation Batch
-
-Use after the machine can consume queue items.
-
-Purpose: compress `ops/migration/` historical plans into a short list of
-surviving local construction tasks and closed evidence.
-
-Blocked actions: bulk move/delete/rename, external write, private-state read.
+_No active NEXT items._
 
 ## LATER
 
@@ -182,6 +177,7 @@ task_producer_skeleton_v0.1: closed for preview-only candidate task production b
 control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 queue_manager_reviewed_mutation_gate_v0.1: closed for accepted-review mutation gate; auto-promote remains unauthorized
 failure_handling_stop_loop_v0.1: closed for failure report and stop-loop baseline; real repair execution remains unauthorized
+dashboard_memory_candidate_layer_v0.1: closed for preview-only state visibility and Memory candidate baseline; formal Memory write remains unauthorized
 ```
 
 ## Machine Input Contract
@@ -218,9 +214,9 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should implement the smallest possible dashboard
-and Memory candidate layer from `NOW-001`.
+The next construction batch should implement the smallest possible migration
+plan distillation batch from `NOW-001`.
 
 Do not start with ColaMeta executor, VCPToolBox runtime, external Git, Memory, or
-provider integration. The dashboard may expose Memory candidates, but it must
-not write formal Memory or read private raw Memory.
+provider integration. The migration pass may summarize safe historical files,
+but it must not bulk move/delete/rename or read private state.

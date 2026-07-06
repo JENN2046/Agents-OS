@@ -1,0 +1,54 @@
+{
+  "schema_version": "agents-os.dashboard-manifest.v0.1",
+  "dashboard_id": "agents-os-dashboard",
+  "dashboard_name": "AGENTS OS Dashboard",
+  "version": "0.1",
+  "status": "preview_only",
+  "workspace_root": "/home/jenn/AGENTS_OS_Workspace",
+  "queue_source": "control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md",
+  "default_mode": "summary_preview",
+  "allowed_modes": [
+    "summary",
+    "validate"
+  ],
+  "authorization_defaults": {
+    "provider_call_authorized": false,
+    "service_start_authorized": false,
+    "executor_run_authorized": false,
+    "external_write_authorized": false,
+    "memory_write_authorized": false,
+    "formal_memory_write_authorized": false,
+    "private_memory_raw_read_authorized": false,
+    "runtime_plugin_activation_authorized": false,
+    "active_queue_mutation_authorized": false
+  },
+  "memory_candidate_defaults": {
+    "candidate_only": true,
+    "formal_memory_write_authorized": false,
+    "memory_write_performed": false,
+    "private_memory_raw_read": false,
+    "requires_jenn_confirmation": true
+  },
+  "denied_capabilities": [
+    "provider_call",
+    "service_start",
+    "executor_real_run",
+    "colameta_executor_activation",
+    "vcptoolbox_activation",
+    "plugin_activation",
+    "external_write",
+    "active_queue_mutation",
+    "formal_memory_write",
+    "private_memory_raw_read",
+    "state_private_read",
+    "auth_token_cookie_session_provider_config_read_write",
+    "git_push_tag_release_deploy_history_rewrite"
+  ],
+  "validation_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py summary --json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate",
+    "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status",
+    "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor"
+  ]
+}

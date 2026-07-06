@@ -1,0 +1,40 @@
+{
+  "schema_version": "agents-os.dashboard.schemas.v0.1",
+  "dashboard_summary": {
+    "required": [
+      "schema_version",
+      "dashboard_id",
+      "preview_only",
+      "read_only",
+      "write_performed",
+      "execution_authorized",
+      "authorization",
+      "queue",
+      "last_completed",
+      "last_failure",
+      "validation_status",
+      "open_blockers",
+      "memory_candidates",
+      "formal_memory_write_authorized",
+      "private_memory_raw_read_authorized",
+      "errors"
+    ]
+  },
+  "memory_candidate": {
+    "required": [
+      "schema_version",
+      "candidate_id",
+      "candidate_only",
+      "source",
+      "title",
+      "candidate_text",
+      "rationale",
+      "stability",
+      "formal_memory_write_authorized",
+      "memory_write_performed",
+      "private_memory_raw_read",
+      "requires_jenn_confirmation",
+      "recommended_action"
+    ]
+  }
+}

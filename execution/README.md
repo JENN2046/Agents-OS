@@ -11,6 +11,7 @@ Allowed:
 - provider adapters
 - bridge implementations
 - preview-only local control-machine and task-producer skeletons
+- preview-only local dashboard summaries and Memory candidates
 
 Denied:
 - top-level governance rules

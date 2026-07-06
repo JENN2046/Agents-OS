@@ -844,8 +844,9 @@ documents:
     related:
       - execution/agents-os-machine/README.md
       - execution/agents-os-task-producer/README.md
+      - execution/agents-os-dashboard/README.md
     last_reviewed: 2026-07-07
-    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-task-producer-skeleton-v0.1.review.md
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
     freshness:
       level: important
       review_trigger:
@@ -2019,6 +2020,341 @@ documents:
       commands:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-dashboard-readme
+    title: AGENTS OS Dashboard README
+    doc_type: overview
+    status: active
+    scope: local entrypoint and boundary guide for the preview-only Dashboard
+    canonical_path: execution/agents-os-dashboard/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-dashboard/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/dashboard-manifest.json
+      - execution/agents-os-dashboard/dashboard.schemas.json
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - dashboard command surface changes
+        - dashboard output contract changes
+        - Memory candidate boundary changes
+    security_boundary:
+      - local preview-only guide
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
+
+  - id: agents-os-dashboard-manifest
+    title: AGENTS OS Dashboard manifest
+    doc_type: contract
+    status: active
+    scope: preview-only dashboard identity, denied capabilities, and validation command contract
+    canonical_path: execution/agents-os-dashboard/dashboard-manifest.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-dashboard/dashboard-manifest.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/test-dashboard.py
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - denied capability changes
+        - Memory candidate defaults change
+        - validation command changes
+    security_boundary:
+      - local manifest only
+      - dangerous authorization defaults must remain false
+      - Memory candidates must remain candidate-only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
+
+  - id: agents-os-dashboard-schemas
+    title: AGENTS OS Dashboard schemas
+    doc_type: schema
+    status: active
+    scope: minimal dashboard summary and Memory candidate contracts
+    canonical_path: execution/agents-os-dashboard/dashboard.schemas.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-dashboard/dashboard.schemas.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/test-dashboard.py
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - dashboard summary output changes
+        - Memory candidate output changes
+        - no-write guard changes
+    security_boundary:
+      - local schema only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+
+  - id: agents-os-dashboard-cli
+    title: AGENTS OS Dashboard CLI
+    doc_type: reference
+    status: active
+    scope: preview-only dashboard CLI for queue status, validation status, blocker, failure, and Memory candidate summaries
+    canonical_path: execution/agents-os-dashboard/dashboard.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-dashboard/dashboard.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard-manifest.json
+      - execution/agents-os-dashboard/dashboard.schemas.json
+      - execution/agents-os-dashboard/test-dashboard.py
+      - execution/agents-os-machine/machine.py
+      - control-plane/registry/docctl.py
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - dashboard parsing behavior changes
+        - validation summary behavior changes
+        - last failure evidence behavior changes
+        - Memory candidate generation changes
+    security_boundary:
+      - preview-only local CLI
+      - no Active Work Queue mutation
+      - no service start
+      - no executor run
+      - no provider call
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py summary --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
+
+  - id: agents-os-dashboard-tests
+    title: AGENTS OS Dashboard tests
+    doc_type: reference
+    status: active
+    scope: local fixture tests for dashboard summary and Memory candidate no-write behavior
+    canonical_path: execution/agents-os-dashboard/test-dashboard.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-dashboard/test-dashboard.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/dashboard.schemas.json
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - dashboard output fixture changes
+        - Memory candidate guard changes
+        - protected path fixture changes
+    security_boundary:
+      - local fixture tests only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+
+  - id: agents-os-dashboard-memory-candidate-layer-v0.1
+    title: AGENTS OS Dashboard And Memory Candidate Layer v0.1
+    doc_type: review
+    status: accepted
+    scope: local implementation report for preview-only dashboard and Memory candidate layer
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/test-dashboard.py
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - dashboard implementation changes
+        - validation result changes
+        - residual risk changes
+    security_boundary:
+      - local report only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-dashboard-memory-candidate-layer-v0.1-receipt
+    title: AGENTS OS Dashboard And Memory Candidate Layer v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for dashboard and Memory candidate layer implementation
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+    security_boundary:
+      - local receipt only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-dashboard-memory-candidate-layer-v0.1-review
+    title: AGENTS OS Dashboard And Memory Candidate Layer v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for dashboard and Memory candidate layer implementation
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/test-dashboard.py
+      - control-plane/registry/reports/2026-07-07-agents-os-dashboard-memory-candidate-layer-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-dashboard-memory-candidate-layer-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - dashboard acceptance criteria changes
+    security_boundary:
+      - local review only
+      - no provider call
+      - no service start
+      - no executor run
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no private raw Memory read
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 

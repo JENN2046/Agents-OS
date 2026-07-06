@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Fixture tests for AGENTS OS Dashboard v0.1."""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+from types import ModuleType
+
+
+ROOT = Path(__file__).resolve().parent
+
+
+def load_dashboard() -> ModuleType:
+    module_path = ROOT / "dashboard.py"
+    spec = importlib.util.spec_from_file_location("agents_os_dashboard", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load dashboard module from {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def check(condition: bool, message: str, failures: list[str]) -> None:
+    if not condition:
+        failures.append(message)
+
+
+def main() -> int:
+    dashboard = load_dashboard()
+    failures: list[str] = []
+
+    summary = dashboard.build_dashboard_summary(run_validations=True)
+    machine = dashboard.load_machine()
+    expected_now = machine.now_item(machine.load_queue())["title"]
+    check(summary["passed"], f"current dashboard summary should pass: {summary['errors']}", failures)
+    check(summary["preview_only"] is True, "dashboard summary should be preview_only", failures)
+    check(summary["read_only"] is True, "dashboard summary should be read_only", failures)
+    check(summary["write_performed"] is False, "dashboard summary should not write", failures)
+    check(summary["execution_authorized"] is False, "dashboard should not authorize execution", failures)
+    check(summary["queue"]["now"]["title"] == expected_now, "dashboard should surface current NOW", failures)
+    check(summary["last_completed"]["status"] == "present", "dashboard should surface last CLOSED item", failures)
+    check(summary["open_blockers"], "dashboard should surface open blockers", failures)
+    check(summary["validation_status"]["passed"] is True, "dashboard should surface passing validation status", failures)
+    check(summary["formal_memory_write_authorized"] is False, "dashboard must not authorize formal Memory write", failures)
+    check(summary["private_memory_raw_read_authorized"] is False, "dashboard must not authorize private raw Memory read", failures)
+
+    memory_candidates = summary["memory_candidates"]
+    check(memory_candidates, "dashboard should produce Memory candidates", failures)
+    for candidate in memory_candidates:
+        check(candidate["candidate_only"] is True, "Memory candidate should be candidate_only", failures)
+        check(candidate["formal_memory_write_authorized"] is False, "Memory candidate must not authorize Memory write", failures)
+        check(candidate["memory_write_performed"] is False, "Memory candidate must not perform Memory write", failures)
+        check(candidate["private_memory_raw_read"] is False, "Memory candidate must not read private raw Memory", failures)
+        check(candidate["requires_jenn_confirmation"] is True, "Memory candidate should require Jenn confirmation", failures)
+
+    no_validation = dashboard.build_dashboard_summary(run_validations=False)
+    check(no_validation["passed"], f"summary without validation should still pass: {no_validation['errors']}", failures)
+    check(no_validation["validation_status"]["checked"] is False, "no-validation summary should mark validation unchecked", failures)
+
+    manifest = json.loads((ROOT / "dashboard-manifest.json").read_text(encoding="utf-8"))
+    check(not dashboard.validate_manifest(manifest), "dashboard manifest should validate", failures)
+    manifest["authorization_defaults"]["provider_call_authorized"] = True
+    check(dashboard.validate_manifest(manifest), "manifest with dangerous true should fail", failures)
+
+    broken = dict(summary)
+    broken["authorization"] = dict(summary["authorization"])
+    broken["authorization"]["provider_call_authorized"] = True
+    check(dashboard.validate_dashboard_summary(broken), "summary with dangerous authorization should fail", failures)
+
+    broken_candidate = dict(memory_candidates[0])
+    broken_candidate["formal_memory_write_authorized"] = True
+    check(dashboard.validate_memory_candidate(broken_candidate), "Memory candidate authorizing Memory write should fail", failures)
+
+    with tempfile.TemporaryDirectory(prefix="agents-os-dashboard-test-", dir=dashboard.WORKSPACE_ROOT) as temp_dir:
+        fixture = Path(temp_dir) / "queue.md"
+        fixture.write_text(
+            """# fixture queue
+
+## NOW
+
+### NOW-001: Fixture dashboard task
+
+Goal: show state.
+
+## NEXT
+
+### NEXT-001: Fixture next
+
+Wait.
+
+## BLOCKED
+
+```text
+provider_calls: blocked
+formal_memory_write: blocked
+```
+
+## CLOSED
+
+```text
+first_closed: old
+latest_closed: new
+```
+""",
+            encoding="utf-8",
+        )
+        fixture_summary = dashboard.build_dashboard_summary(fixture, run_validations=False)
+        check(fixture_summary["passed"], f"fixture dashboard summary should pass: {fixture_summary['errors']}", failures)
+        check(fixture_summary["queue"]["now"]["title"] == "Fixture dashboard task", "fixture NOW should surface", failures)
+        check(fixture_summary["last_completed"]["text"] == "latest_closed: new", "latest CLOSED should surface", failures)
+        check(len(fixture_summary["open_blockers"]) == 2, "fixture blockers should surface", failures)
+
+    protected_summary = dashboard.build_dashboard_summary(Path("state-private/queue.md"), run_validations=False)
+    check(not protected_summary["passed"], "protected queue path should fail before read", failures)
+
+    validation = dashboard.validate_dashboard(run_validations=False)
+    check(validation["passed"], f"dashboard validation without docctl should pass: {validation['errors']}", failures)
+    check(validation["formal_memory_write_authorized"] is False, "validation should keep Memory write unauthorized", failures)
+    check(validation["private_memory_raw_read_authorized"] is False, "validation should keep private Memory read unauthorized", failures)
+
+    if failures:
+        for failure in failures:
+            print(f"FAIL {failure}")
+        print(f"cases=12 failures={len(failures)}")
+        return 1
+
+    print("PASS current dashboard summary fixture")
+    print("PASS validation status fixture")
+    print("PASS memory candidate no-write fixture")
+    print("PASS manifest authorization fixture")
+    print("PASS fixture queue summary fixture")
+    print("PASS protected path fixture")
+    print("cases=12 failures=0")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
