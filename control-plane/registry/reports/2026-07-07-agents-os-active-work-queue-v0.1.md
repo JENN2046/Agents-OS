@@ -94,6 +94,8 @@ machine_route_selection_stop_guard_exists=true
 machine_route_selection_stop_guard_validation=PASS
 machine_next_user_action_handoff_exists=true
 machine_next_user_action_handoff_validation=PASS
+machine_route_choice_adoption_bundle_readiness_exists=true
+machine_route_choice_adoption_bundle_readiness_validation=PASS
 next_route_selection_package_exists=true
 next_route_selection_package_validation=PASS
 active_work_queue_closed_order_reconciliation_exists=true
@@ -211,8 +213,13 @@ The Machine now treats this stop-state as non-actionable and requiring Jenn
 route selection before execution. Machine preview now also carries a
 `next_user_action` handoff with Jenn as decision owner, accepted route ids A-E,
 and no route auto-selection, active queue mutation, queue promotion, execution,
-write, or raw content output. The next route selection package now preserves the
-route options and exact confirmation templates without selecting any route.
+write, or raw content output.
+Machine preview now also surfaces route-choice adoption bundle readiness. It
+reports that the bundle preview evidence exists and keeps `can_apply_now=false`,
+route adoption, active queue mutation, queue promotion, raw confirmation/template
+output, and execution unauthorized. The next route selection package now
+preserves the route options and exact confirmation templates without selecting
+any route.
 The Task Producer route-choice preview can parse a future explicit Jenn
 selection text, but it still does not adopt the route into workspace state or
 mutate the queue.
@@ -374,6 +381,7 @@ control_chain_route_choice_template_readiness_v0.1: closed for preview-only Cont
 control_chain_route_choice_end_to_end_readiness_v0.1: closed for preview-only A-E route-choice end-to-end readiness; raw confirmation/template output, route selection, real queue write, queue promotion, and execution remain unauthorized
 control_chain_route_choice_adoption_bundle_preview_v0.1: closed for preview-only route-choice adoption bundle packaging; raw confirmation/template output, real queue write, route adoption, queue promotion, and execution remain unauthorized
 dashboard_route_choice_adoption_bundle_visibility_v0.1: closed for preview-only route-choice adoption bundle visibility; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
+machine_route_choice_adoption_bundle_readiness_v0.1: closed for preview-only Machine route-choice adoption bundle readiness; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
 ```
 
 ## Machine Input Contract

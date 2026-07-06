@@ -32,6 +32,7 @@ MANIFEST_PATH = MACHINE_DIR / "machine-manifest.json"
 SCHEMA_PATH = MACHINE_DIR / "queue-item.schema.json"
 DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
 ROUTE_SELECTION_PACKAGE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
+ROUTE_ADOPTION_BUNDLE_PREVIEW = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md"
 TASK_ENVELOPE_VALIDATOR = WORKSPACE_ROOT / "control-plane" / "task-envelope" / "validate-task-envelope.py"
 DOCCTL = WORKSPACE_ROOT / "control-plane" / "registry" / "docctl.py"
 
@@ -162,6 +163,32 @@ def next_user_action_for_item(item: dict[str, Any]) -> dict[str, Any]:
         "queue_promotion_authorized": False,
         "execution_authorized": False,
         "write_performed": False,
+        "raw_content_output": False,
+    }
+
+
+def route_choice_adoption_bundle_readiness_for_item(item: dict[str, Any]) -> dict[str, Any]:
+    route_choice_required = "route_selection_required" in item.get("denied_signals", [])
+    bundle_exists = ROUTE_ADOPTION_BUNDLE_PREVIEW.exists()
+    return {
+        "schema_version": "agents-os.machine.route-choice-adoption-bundle-readiness.v0.1",
+        "status": "waiting_for_jenn_route_choice" if route_choice_required else "not_active",
+        "decision_owner": "Jenn" if route_choice_required else None,
+        "requires_jenn_decision": route_choice_required,
+        "bundle_preview_path": rel(ROUTE_ADOPTION_BUNDLE_PREVIEW),
+        "bundle_preview_exists": bundle_exists,
+        "bundle_preview_available": bundle_exists,
+        "can_apply_now": False,
+        "preview_only": True,
+        "read_only": True,
+        "route_auto_selection_authorized": False,
+        "route_adoption_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_confirmation_text_output": False,
+        "raw_template_output": False,
         "raw_content_output": False,
     }
 
@@ -616,6 +643,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
     requires_jenn = bool(item.get("review_gate", {}).get("requires_jenn_decision"))
     review_reason = item.get("review_gate", {}).get("review_reason")
     next_user_action = next_user_action_for_item(item)
+    route_choice_readiness = route_choice_adoption_bundle_readiness_for_item(item)
     return {
         "schema_version": "agents-os.machine.preview.v0.1",
         "preview_only": True,
@@ -634,6 +662,7 @@ def build_preview(item: dict[str, Any]) -> dict[str, Any]:
         "denied_signals": item.get("denied_signals", []),
         "actionable": not bool(item.get("blocked")),
         "next_user_action": next_user_action,
+        "route_choice_adoption_bundle_readiness": route_choice_readiness,
         "review_gate": review_gate(
             requires_jenn_decision=requires_jenn,
             review_reason=review_reason or "machine preview must be reviewed before execution",
@@ -713,6 +742,36 @@ def validate_preview(preview: dict[str, Any]) -> list[str]:
             errors.append("route selection preview should point to available confirmation templates")
     elif next_user_action.get("status") != "none":
         errors.append("non-route preview next user action must be none")
+    route_choice_readiness = preview.get("route_choice_adoption_bundle_readiness", {})
+    for flag in (
+        "can_apply_now",
+        "route_auto_selection_authorized",
+        "route_adoption_authorized",
+        "active_queue_mutation_authorized",
+        "queue_promotion_authorized",
+        "execution_authorized",
+        "write_performed",
+        "raw_confirmation_text_output",
+        "raw_template_output",
+        "raw_content_output",
+    ):
+        if route_choice_readiness.get(flag) is not False:
+            errors.append(f"preview route choice adoption bundle readiness must not authorize {flag}")
+    if route_choice_readiness.get("preview_only") is not True:
+        errors.append("preview route choice adoption bundle readiness must be preview_only")
+    if route_choice_readiness.get("read_only") is not True:
+        errors.append("preview route choice adoption bundle readiness must be read_only")
+    if route_choice_required:
+        if route_choice_readiness.get("status") != "waiting_for_jenn_route_choice":
+            errors.append("route selection preview must surface waiting_for_jenn_route_choice bundle readiness")
+        if route_choice_readiness.get("decision_owner") != "Jenn":
+            errors.append("route selection bundle readiness owner must be Jenn")
+        if route_choice_readiness.get("requires_jenn_decision") is not True:
+            errors.append("route selection bundle readiness must require Jenn decision")
+        if route_choice_readiness.get("bundle_preview_available") is not True:
+            errors.append("route selection bundle readiness should point to available bundle preview evidence")
+    elif route_choice_readiness.get("status") != "not_active":
+        errors.append("non-route preview route choice adoption bundle readiness must be not_active")
     return errors
 
 
@@ -814,6 +873,8 @@ def validate_machine(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
             "blocked": preview.get("blocked") if preview else None,
             "next_user_action_status": preview.get("next_user_action", {}).get("status") if preview else None,
             "next_user_action_owner": preview.get("next_user_action", {}).get("decision_owner") if preview else None,
+            "route_choice_adoption_bundle_readiness_status": preview.get("route_choice_adoption_bundle_readiness", {}).get("status") if preview else None,
+            "route_choice_adoption_bundle_can_apply_now": preview.get("route_choice_adoption_bundle_readiness", {}).get("can_apply_now") if preview else None,
         },
         "task_envelope_preview": task_preview_validation,
         "docctl": {
@@ -895,6 +956,7 @@ def main() -> int:
             print(f"Status: {'PASS' if preview['passed'] else 'FAIL'}")
             print(f"Requires Nobao review: {preview['review_gate']['requires_nobao_review']}")
             print(f"Next user action: {preview['next_user_action']['status']}")
+            print(f"Route choice adoption bundle readiness: {preview['route_choice_adoption_bundle_readiness']['status']}")
             print(f"Execution authorized: {preview['execution_authorized']}")
         return 0 if preview["passed"] else 1
 

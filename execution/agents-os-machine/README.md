@@ -71,6 +71,26 @@ next_user_action.write_performed=false
 next_user_action.raw_content_output=false
 ```
 
+The same stop-state also emits
+`route_choice_adoption_bundle_readiness` so Machine can see that the local
+Control Chain adoption bundle preview exists, while still refusing to apply it:
+
+```text
+route_choice_adoption_bundle_readiness.status=waiting_for_jenn_route_choice
+route_choice_adoption_bundle_readiness.decision_owner=Jenn
+route_choice_adoption_bundle_readiness.bundle_preview_available=true
+route_choice_adoption_bundle_readiness.can_apply_now=false
+route_choice_adoption_bundle_readiness.route_auto_selection_authorized=false
+route_choice_adoption_bundle_readiness.route_adoption_authorized=false
+route_choice_adoption_bundle_readiness.active_queue_mutation_authorized=false
+route_choice_adoption_bundle_readiness.queue_promotion_authorized=false
+route_choice_adoption_bundle_readiness.execution_authorized=false
+route_choice_adoption_bundle_readiness.write_performed=false
+route_choice_adoption_bundle_readiness.raw_confirmation_text_output=false
+route_choice_adoption_bundle_readiness.raw_template_output=false
+route_choice_adoption_bundle_readiness.raw_content_output=false
+```
+
 Blocked previews must remain:
 
 ```text

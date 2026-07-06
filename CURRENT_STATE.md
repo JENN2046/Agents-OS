@@ -28,6 +28,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
 - Machine preview output includes `actionable`; blocked previews remain `actionable=false` and `execution_authorized=false`.
 - Machine preview output now includes `next_user_action` for the route-selection stop-state: `status=route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and no route auto-selection, active queue mutation, queue promotion, execution, write, or raw content output.
+- Machine Route Choice Adoption Bundle Readiness v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-choice-adoption-bundle-readiness-v0.1.md`.
+- Machine preview output now includes `route_choice_adoption_bundle_readiness` for the route-selection stop-state: bundle preview evidence available, `can_apply_now=false`, and no route adoption, active queue mutation, queue promotion, raw confirmation/template output, execution, or write.
 - Machine output is preview/draft by default and requires Nobao review before execution.
 - AGENTS OS Task Producer Skeleton v0.1 exists at `execution/agents-os-task-producer/`.
 - The Task Producer can create candidate task JSON from explicit intent text and allowlisted review/report Markdown.
@@ -195,6 +197,10 @@ output with `blocked=true`, `actionable=false`, and
 `next_user_action.status=route_choice_required`, `decision_owner=Jenn`, and
 accepted route ids A-E without selecting, adopting, promoting, or executing a
 route.
+Machine preview now also exposes route-choice adoption bundle readiness. It
+shows that the bundle preview evidence exists, but keeps `can_apply_now=false`,
+route adoption, queue mutation, queue promotion, raw confirmation/template
+output, and execution unauthorized.
 The next route selection package now gives Jenn concrete templates for choosing
 one route without letting Nobao or Machine auto-select it.
 The Task Producer route-choice preview can parse a future explicit Jenn route

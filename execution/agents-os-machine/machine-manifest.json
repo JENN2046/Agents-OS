@@ -36,6 +36,8 @@
     "plugin_activation",
     "route_auto_selection",
     "route_decision_on_behalf_of_jenn",
+    "route_choice_adoption_bundle_apply_without_jenn_choice",
+    "route_adoption",
     "active_queue_mutation",
     "queue_promotion",
     "external_write",

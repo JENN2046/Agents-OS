@@ -77,6 +77,20 @@ def main() -> int:
             failures,
         )
         check(preview["next_user_action"]["execution_authorized"] is False, "next user action must not authorize execution", failures)
+        readiness = preview["route_choice_adoption_bundle_readiness"]
+        check(
+            readiness["status"] == "waiting_for_jenn_route_choice",
+            "route selection current preview should surface bundle readiness",
+            failures,
+        )
+        check(readiness["decision_owner"] == "Jenn", "route bundle readiness owner should be Jenn", failures)
+        check(readiness["bundle_preview_available"] is True, "route bundle preview evidence should be available", failures)
+        check(readiness["can_apply_now"] is False, "route bundle readiness must not allow apply now", failures)
+        check(
+            readiness["route_adoption_authorized"] is False,
+            "route bundle readiness must not authorize route adoption",
+            failures,
+        )
     check(preview["review_gate"]["requires_nobao_review"] is True, "preview should require Nobao review", failures)
     ok, failed_flags = machine.has_false_dangerous_flags(preview["authorization"])
     check(ok, f"preview dangerous flags should be false: {failed_flags}", failures)
@@ -95,6 +109,11 @@ def main() -> int:
     broken_next_action["next_user_action"] = dict(preview["next_user_action"])
     broken_next_action["next_user_action"]["queue_promotion_authorized"] = True
     check(machine.validate_preview(broken_next_action), "preview with next user action queue promotion should fail", failures)
+
+    broken_route_readiness = dict(preview)
+    broken_route_readiness["route_choice_adoption_bundle_readiness"] = dict(preview["route_choice_adoption_bundle_readiness"])
+    broken_route_readiness["route_choice_adoption_bundle_readiness"]["route_adoption_authorized"] = True
+    check(machine.validate_preview(broken_route_readiness), "preview with route adoption readiness authorization should fail", failures)
 
     schema = json.loads((ROOT / "queue-item.schema.json").read_text(encoding="utf-8"))
     schema_item = dict(machine.now_item(current))
@@ -167,6 +186,11 @@ Do not call provider. Do not start service. Do not run executor.
     negated_preview = machine.build_preview(machine.now_item(negated_queue))
     check(negated_preview["blocked"] is False, "negated boundary statements should not block preview", failures)
     check(negated_preview["actionable"] is True, "negated boundary preview should remain actionable", failures)
+    check(
+        negated_preview["route_choice_adoption_bundle_readiness"]["status"] == "not_active",
+        "non-route preview bundle readiness should be not_active",
+        failures,
+    )
 
     route_selection_queue = machine.parse_queue_markdown(
         """# fixture
@@ -217,6 +241,21 @@ requires_jenn_route_choice=true
         "route selection handoff must not authorize queue promotion",
         failures,
     )
+    check(
+        route_selection_preview["route_choice_adoption_bundle_readiness"]["status"] == "waiting_for_jenn_route_choice",
+        "route selection stop-state should surface bundle readiness",
+        failures,
+    )
+    check(
+        route_selection_preview["route_choice_adoption_bundle_readiness"]["bundle_preview_available"] is True,
+        "route selection bundle readiness should confirm bundle preview evidence",
+        failures,
+    )
+    check(
+        route_selection_preview["route_choice_adoption_bundle_readiness"]["can_apply_now"] is False,
+        "route selection bundle readiness must keep can_apply_now=false",
+        failures,
+    )
 
     external_queue = machine.parse_queue_markdown(
         """# fixture
@@ -260,7 +299,7 @@ Goal: perform a database write.
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=15 failures={len(failures)}")
+        print(f"cases=16 failures={len(failures)}")
         return 1
 
     print("PASS current queue fixture")
@@ -272,8 +311,9 @@ Goal: perform a database write.
     print("PASS negated boundary signal fixture")
     print("PASS route selection stop-state fixture")
     print("PASS next user action fixture")
+    print("PASS route choice adoption bundle readiness fixture")
     print("PASS task-envelope temporary validation fixture")
-    print("cases=15 failures=0")
+    print("cases=16 failures=0")
     return 0
 
 
