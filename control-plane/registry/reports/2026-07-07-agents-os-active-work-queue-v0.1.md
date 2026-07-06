@@ -64,6 +64,8 @@ route_selection_checkpoint_exists=true
 route_selection_checkpoint_validation=PASS
 machine_route_selection_stop_guard_exists=true
 machine_route_selection_stop_guard_validation=PASS
+next_route_selection_package_exists=true
+next_route_selection_package_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -104,7 +106,8 @@ External publication remains blocked until Jenn chooses a target and a separate
 exact external-write gate exists. The route-selection checkpoint records that no
 new route should start automatically after the current governance sequence.
 The Machine now treats this stop-state as non-actionable and requiring Jenn
-route selection before execution.
+route selection before execution. The next route selection package now preserves
+the route options and exact confirmation templates without selecting any route.
 
 ## Queue Decision
 
@@ -276,6 +279,11 @@ artifact. It does not choose any route and does not authorize runtime,
 provider, Memory, or external-write work. Machine preview must report this
 stop-state as `blocked=true`, `actionable=false`, and
 `requires_jenn_decision=true`.
+
+Jenn can use
+`control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`
+as the route selection packet. It is evidence only and does not grant execution
+authority until Jenn sends a current explicit route selection.
 
 Until Jenn chooses, do not read `state-private/`; do not read or print raw
 secrets, tokens, cookies, credentials, private raw memory, provider raw

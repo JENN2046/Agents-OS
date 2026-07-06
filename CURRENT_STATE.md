@@ -51,6 +51,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Route selection is intentionally stopped for Jenn decision; no VCPToolBox runtime, provider, executor, Memory, external Git, or new construction route is automatically selected.
 - Machine Route Selection Stop Guard v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-selection-stop-guard-v0.1.md`.
 - Machine preview now treats `No Active Automatic Construction Item` as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`.
+- Next Route Selection Package v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`.
+- The route selection package lists five Jenn-selectable routes without promoting or executing any route: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -88,7 +90,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 ## Next Actions
 
-1. Wait for Jenn to choose the next construction route: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
+1. Wait for Jenn to choose one route from `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
@@ -145,6 +147,8 @@ should not silently select one.
 The Machine route-selection stop guard now enforces this stop-state in preview
 output with `blocked=true`, `actionable=false`, and
 `requires_jenn_decision=true`.
+The next route selection package now gives Jenn concrete templates for choosing
+one route without letting Nobao or Machine auto-select it.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
