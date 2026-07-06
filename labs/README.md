@@ -7,6 +7,7 @@ Allowed:
 - agent-image-lab
 - prototypes
 - research projects
+- historical reading notes and working syntheses that are not active authority
 
 Denied:
 - production-only private state

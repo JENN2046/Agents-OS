@@ -509,6 +509,225 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-root-readme
+    title: AGENTS OS Workspace README
+    doc_type: overview
+    status: active
+    scope: lightweight root orientation for AGENTS OS workspace
+    canonical_path: README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - AGENTS.md
+      - CURRENT_STATE.md
+      - WORKSPACE_MANIFEST.md
+      - control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+      - control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    last_reviewed: 2026-07-06
+    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - workspace entrypoint changes
+        - current state changes
+        - validation command changes
+        - prohibited behavior boundary changes
+    security_boundary:
+      - local overview only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no auth/token/cookie/session content
+      - no service start
+      - no executor run
+      - no provider call
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-workspace-manifest
+    title: AGENTS OS Workspace Manifest
+    doc_type: overview
+    status: active
+    scope: lightweight directory map and safe-entry notes for AGENTS OS workspace
+    canonical_path: WORKSPACE_MANIFEST.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: WORKSPACE_MANIFEST.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - README.md
+      - AGENTS.md
+      - CURRENT_STATE.md
+      - control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+      - control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    last_reviewed: 2026-07-06
+    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - directory map changes
+        - safe-entry file changes
+        - denied-by-default boundary changes
+        - runtime posture changes
+    security_boundary:
+      - local overview only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no auth/token/cookie/session content
+      - no service start
+      - no executor run
+      - no provider call
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-reading-notes-draft
+    title: AGENTS OS Reading Notes Draft
+    doc_type: reference
+    status: draft
+    scope: historical working synthesis from AGENTS OS reading, not active authority
+    canonical_path: labs/agents-os-reading-notes-draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: labs/agents-os-reading-notes-draft.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - labs/README.md
+      - control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+      - control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+      - control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    last_reviewed: 2026-07-06
+    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    freshness:
+      level: historical
+      review_trigger:
+        - labs draft promotion
+        - life-core source mirror changes
+        - roadmap absorption changes
+    security_boundary:
+      - historical draft only
+      - not active authority
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no auth/token/cookie/session content
+      - no service start
+      - no executor run
+      - no provider call
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-governance-friction-fix-v0.1-receipt
+    title: AGENTS OS Governance Friction Fix Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for post-baseline governance friction fixes
+    canonical_path: control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - AGENTS.md
+      - governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md
+      - CURRENT_STATE.md
+      - README.md
+      - WORKSPACE_MANIFEST.md
+      - labs/agents-os-reading-notes-draft.md
+      - control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    last_reviewed: 2026-07-06
+    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - governance friction fix changes
+        - workspace-write boundary wording changes
+        - root orientation changes
+        - labs draft classification changes
+    security_boundary:
+      - local evidence only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no VCPToolBox source or active config changes
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+
+  - id: agents-os-governance-friction-fix-v0.1-review
+    title: AGENTS OS Governance Friction Fix Review
+    doc_type: review
+    status: accepted
+    scope: local review for post-baseline governance friction fixes
+    canonical_path: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - AGENTS.md
+      - governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md
+      - CURRENT_STATE.md
+      - README.md
+      - WORKSPACE_MANIFEST.md
+      - labs/agents-os-reading-notes-draft.md
+      - control-plane/registry/receipts/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.md
+    last_reviewed: 2026-07-06
+    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-governance-friction-fix-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - governance friction fix changes
+        - workspace-write boundary wording changes
+        - root orientation changes
+        - labs draft classification changes
+    security_boundary:
+      - local review only
+      - no secrets
+      - no private memory raw text
+      - no provider raw response
+      - no state-private read
+      - no VCPToolBox source or active config changes
+      - no service start
+      - no executor run
+      - no provider call
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+
   - id: agents-os-future-plan-intake-and-reality-freeze-v0.1
     title: AGENTS OS future plan intake and reality freeze v0.1
     doc_type: review

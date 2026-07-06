@@ -12,10 +12,11 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Workspace root `AGENTS.md` exists and is the local operating contract.
 - The workspace root has a local Git baseline after the 2026-07-06 governance baseline batch.
 - `_ROOT_POLICY.md`, `_DIRECTORY_PRINCIPLES.md`, and `_MIGRATION_MAP.md` exist.
-- Root `README.md` and `WORKSPACE_MANIFEST.md` are not currently present.
+- Root `README.md` and `WORKSPACE_MANIFEST.md` exist as lightweight orientation documents.
 - `CURRENT_STATE.md` exists as the active reality snapshot and restart handoff.
 - The root `.gitignore` excludes private state, runtime source checkouts, caches, logs, dependency/build outputs, secrets/auth/provider files, and nested/private runtime repos from the baseline.
 - Root automation rules use a prohibited-first model: default local safe work proceeds automatically; P3/prohibited behavior stops.
+- The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - `.colameta/` exists.
 - `.colameta/plan.json` exists and has 7 versions.
 - `.colameta/prompts/` has 7 prompt files.
@@ -57,23 +58,24 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 3. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
 4. Keep VCPToolBox out of this governance baseline until a separate runtime recovery/startup scope is chosen.
 
-## Restart Handoff
+## Current Handoff
 
-Jenn is restarting the computer after the 2026-07-06 plan intake and reality
-freeze.
+This handoff records the state after the 2026-07-06 plan intake, Git baseline,
+and governance friction fix.
 
 Resume here:
 
 ```text
-Next completed task: AGENTS OS Git Baseline.
+Last completed task: AGENTS OS Git Baseline and governance friction fix.
 Mode: Yellow Work Batch.
 The baseline was scoped to lightweight control-plane/governance files and a
 prohibited-first automation rule update.
-Do not use git add . for the initial baseline.
-Track only the lightweight control-plane/governance files.
+Do not use git add . for future broad updates unless the workspace is known clean.
+Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Run docctl status/doctor after any governance edits.
+Next active route: Executor readiness preview/preflight or migration reconciliation, unless Jenn chooses another route.
 ```
 
 ## Safety Notes

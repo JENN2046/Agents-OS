@@ -110,7 +110,7 @@ Examples:
 ```text
 real provider execution
 real Codex CLI run
-real workspace-write run
+real external runner / executor workspace-write run
 live memory migration
 production database connection
 CI secret change
@@ -234,11 +234,11 @@ dependency injection
 no hidden global host state
 no live provider call
 no real Codex CLI
-no real workspace-write
+no real external runner / executor workspace-write
 ```
 
 Development can proceed automatically for dry-run and fake-provider paths.
-Real execution, provider calls, and workspace-write runs are Red.
+Real execution, provider calls, and external runner / executor workspace-write runs are Red.
 
 ### G5 Memory Governance Update
 

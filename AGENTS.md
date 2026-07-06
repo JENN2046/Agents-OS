@@ -174,7 +174,7 @@ reading or changing active runtime configuration that may contain secrets or pro
 unauthorized paid provider call
 real provider execution
 real Codex CLI execution
-real workspace-write execution
+real external runner / executor workspace-write execution
 public MCP tool or schema expansion
 production database connection or write
 live memory import / export / migration
@@ -329,7 +329,7 @@ Current task source priority:
 ```text
 1. Jenn's current explicit request.
 2. The task directly indicated by the current taskbook, PR, issue, branch, commit, file path, or conversation context.
-3. Confirmed construction routes in CURRENT_STATE.md, ROADMAP.md, WORKSPACE_MANIFEST.md, governance / runbooks / receipts.
+3. Confirmed construction routes in CURRENT_STATE.md, README.md, WORKSPACE_MANIFEST.md, ROADMAP.md, governance / runbooks / receipts.
 4. The current repository's directory structure, test results, error output, and existing project conventions.
 ```
 
@@ -555,7 +555,7 @@ public contract changes
 memory read/write governance
 raw-output or secret-boundary changes
 provider execution gates
-workspace-write gates
+external runner / executor workspace-write gates
 CI / workflow changes
 state-sync / ledger / receipt logic
 release / deploy / cutover / readiness-adjacent work
