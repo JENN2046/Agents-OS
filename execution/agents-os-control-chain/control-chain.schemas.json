@@ -1,0 +1,70 @@
+{
+  "schema_version": "agents-os.control-chain.schemas.v0.1",
+  "commander_decision": {
+    "required": [
+      "schema_version",
+      "decision_id",
+      "source_candidate_id",
+      "source_machine_preview_id",
+      "decision",
+      "recommended_track",
+      "risk_level",
+      "execution_authorization_scope",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "reason",
+      "blocked_capabilities",
+      "validation_required",
+      "evidence_required",
+      "execution_authorized"
+    ]
+  },
+  "track_preview": {
+    "required": [
+      "schema_version",
+      "track_preview_id",
+      "source_decision_id",
+      "selected_track",
+      "preview_only",
+      "track_authorized",
+      "execution_authorization_scope",
+      "required_inputs",
+      "expected_outputs",
+      "validation_commands",
+      "blocked_capabilities",
+      "errors"
+    ]
+  },
+  "track_result": {
+    "required": [
+      "schema_version",
+      "track_result_id",
+      "selected_track",
+      "source_decision_id",
+      "source_track_preview_id",
+      "preview_only",
+      "write_performed",
+      "execution_performed",
+      "validation_passed",
+      "evidence_paths",
+      "blocked_capabilities",
+      "errors"
+    ]
+  },
+  "queue_proposal": {
+    "required": [
+      "schema_version",
+      "proposal_id",
+      "source_track_result_id",
+      "proposal_only",
+      "active_queue_modified",
+      "write_performed",
+      "close_current_now",
+      "promote_next_title",
+      "requires_nobao_review",
+      "requires_jenn_decision",
+      "blocked_reason",
+      "errors"
+    ]
+  }
+}

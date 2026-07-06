@@ -269,6 +269,311 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
 
+  - id: agents-os-control-chain-readme
+    title: AGENTS OS Control Chain README
+    doc_type: overview
+    status: active
+    scope: local entrypoint and authority model guide for the commander-first control chain
+    canonical_path: execution/agents-os-control-chain/README.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-control-chain/README.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/control-chain-manifest.json
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - control chain authority model changes
+        - track routing behavior changes
+    security_boundary:
+      - local guide only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+
+  - id: agents-os-control-chain-manifest
+    title: AGENTS OS Control Chain manifest
+    doc_type: contract
+    status: active
+    scope: control chain tracks, authorization model, local-safe actions, and forbidden actions
+    canonical_path: execution/agents-os-control-chain/control-chain-manifest.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-control-chain/control-chain-manifest.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - authorization model changes
+        - local-safe action list changes
+        - forbidden action list changes
+    security_boundary:
+      - manifest only
+      - commander is only authorization source
+      - track selector cannot elevate
+      - provider-backed execution not authorized
+      - queue mutation default is proposal-only
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+
+  - id: agents-os-control-chain-schemas
+    title: AGENTS OS Control Chain schemas
+    doc_type: schema
+    status: active
+    scope: minimal commander decision, track preview, track result, and queue proposal contracts
+    canonical_path: execution/agents-os-control-chain/control-chain.schemas.json
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-control-chain/control-chain.schemas.json
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - commander decision output changes
+        - track preview/result output changes
+        - queue proposal output changes
+    security_boundary:
+      - schema only
+      - no execution authorization
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+
+  - id: agents-os-control-chain-cli
+    title: AGENTS OS Control Chain CLI
+    doc_type: reference
+    status: active
+    scope: commander-first dual-track control chain implementation
+    canonical_path: execution/agents-os-control-chain/control_chain.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-control-chain/control_chain.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control-chain-manifest.json
+      - execution/agents-os-control-chain/control-chain.schemas.json
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/colameta-executor-preflight.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - commander routing changes
+        - track selector behavior changes
+        - local executor action changes
+        - queue manager behavior changes
+    security_boundary:
+      - commander-first control chain only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - queue manager proposal-only
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+
+  - id: agents-os-control-chain-tests
+    title: AGENTS OS Control Chain tests
+    doc_type: reference
+    status: active
+    scope: local fixture tests for commander-first dual-track behavior
+    canonical_path: execution/agents-os-control-chain/test-control-chain.py
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: execution/agents-os-control-chain/test-control-chain.py
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - routing fixture changes
+        - safety fixture changes
+        - queue proposal fixture changes
+    security_boundary:
+      - local fixture tests only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write
+      - no formal Memory write
+      - no state-private read
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+
+  - id: agents-os-control-chain-v0.1
+    title: AGENTS OS Control Chain v0.1
+    doc_type: review
+    status: accepted
+    scope: local implementation report for commander-first dual-track control chain
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - control chain implementation changes
+        - validation result changes
+        - residual risk changes
+    security_boundary:
+      - local report only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-control-chain-v0.1-receipt
+    title: AGENTS OS Control Chain v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local evidence for Control Chain v0.1 implementation
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+    security_boundary:
+      - local receipt only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-control-chain-v0.1-review
+    title: AGENTS OS Control Chain v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for Control Chain v0.1 implementation
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - control-plane/registry/reports/2026-07-07-agents-os-control-chain-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-control-chain-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-control-chain-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - control chain acceptance criteria changes
+    security_boundary:
+      - local review only
+      - no provider call
+      - no service start
+      - no runtime/plugin activation
+      - no external write authorization
+      - no formal Memory write
+      - no state-private read
+      - no secrets
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: execution-readme
     title: Execution README
     doc_type: index

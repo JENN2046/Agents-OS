@@ -1,0 +1,43 @@
+{
+  "schema_version": "agents-os.control-chain.manifest.v0.1",
+  "component_id": "agents-os-control-chain-v0.1",
+  "role": "commander-first dual-track control chain",
+  "default_mode": "preview_first_no_provider",
+  "tracks": [
+    "colameta",
+    "local_executor"
+  ],
+  "authorization_model": {
+    "commander_is_only_authorization_source": true,
+    "track_selector_can_elevate": false,
+    "colameta_real_execution_authorized": false,
+    "provider_backed_execution_authorized": false,
+    "queue_mutation_default": "proposal_only"
+  },
+  "execution_authorization_scopes": [
+    "none",
+    "local_safe_only",
+    "blocked_requires_jenn"
+  ],
+  "local_safe_actions": [
+    "write_governance_doc",
+    "write_receipt_review_report",
+    "update_current_state",
+    "run_validation_command"
+  ],
+  "forbidden_actions": [
+    "update_active_queue",
+    "provider_call",
+    "service_start",
+    "runtime_plugin_activation",
+    "external_write",
+    "formal_memory_write",
+    "state_private_read",
+    "auth_provider_runtime_config_change",
+    "destructive_git_or_filesystem_operation"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py"
+  ]
+}

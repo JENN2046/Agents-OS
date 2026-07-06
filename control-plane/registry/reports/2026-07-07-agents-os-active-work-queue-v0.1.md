@@ -42,6 +42,8 @@ machine_skeleton_exists=true
 machine_validation=PASS
 task_producer_exists=true
 task_producer_validation=PASS
+control_chain_exists=true
+control_chain_validation=PASS
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -59,9 +61,10 @@ vcptoolbox_runtime_source=present_but_paused
 The governance layer is no longer the main blocker. It can validate itself,
 track local evidence, preserve a Git baseline, and explain hard boundaries.
 
-The current blocker is executor readiness. The workspace now has a preview-only
-Machine Skeleton and a preview-only Task Producer Skeleton, but it has not yet
-reconciled ColaMeta runner inputs into an executor readiness preview.
+The current blocker is reviewed queue mutation. The workspace now has a
+preview-only Machine Skeleton, preview-only Task Producer Skeleton, and
+Commander-first Control Chain with ColaMeta readiness and queue proposal-only.
+It cannot yet apply a reviewed queue mutation or limited Green auto-promote.
 
 ## Queue Decision
 
@@ -73,20 +76,20 @@ blocked.
 
 ## NOW
 
-### NOW-001: ColaMeta Executor Readiness Reconciliation
+### NOW-001: Queue Manager Reviewed Mutation Gate v0.1
 
-Goal: reconcile `.colameta/plan.json`, prompt file presence, prior dry-run
-evidence, and empty todo/decision state into a preview-only executor readiness
-item.
+Goal: turn Queue Manager proposal-only output into a reviewed local queue
+mutation path while preserving exactly one `NOW` and preventing unauthorized
+auto-promote.
 
 Required output:
 
 ```text
-colameta_plan_summary
-prompt_file_summary
-runner_state_metadata_summary
-executor_readiness_preview
-blocked_capability_summary
+queue_update_proposal_validation
+reviewed_queue_mutation_preview
+exactly_one_now_guard
+no_p3_auto_promote_guard
+local_evidence_summary
 receipt_review_pattern
 ```
 
@@ -101,29 +104,44 @@ executor_run_authorized=false
 external_write_authorized=false
 memory_write_authorized=false
 runtime_plugin_activation_authorized=false
+auto_promote_authorized=false
 ```
 
 Acceptance:
 
 ```text
-read only .colameta plan/prompt metadata needed for readiness
-do not read .colameta/memory.md content; metadata only if needed
-do not modify .colameta/plan.json
-do not modify .colameta/state.json
-do not write .colameta/memory.md
-do not run executor
-do not start service
-do not call provider
-do not activate plugins/runtime
-do not perform external writes or formal Memory writes
-machine can preview the new NOW item
+consume queue_update_proposal.json
+require Nobao review accepted before mutation
+preserve exactly one NOW
+do not auto-promote P3/provider/service/runtime/plugin/external write/Memory/state-private/secret-related tasks
+leave receipt/review/report evidence
 docctl status remains PASS
 docctl doctor remains PASS
 ```
 
 ## NEXT
 
-### NEXT-001: Migration Plan Distillation Batch
+### NEXT-001: Failure Handling And Repair Stop Loop
+
+Use after reviewed queue mutation exists.
+
+Purpose: classify validation failure, scope violation, protected path, dirty
+worktree conflict, unknown action type, P3 signal, and invalid executor output
+into a stop/report path.
+
+Blocked actions: silent retry loop, destructive cleanup, provider call, external
+write.
+
+### NEXT-002: Dashboard And Memory Candidate Layer
+
+Use after failure handling exists.
+
+Purpose: expose current queue, last completed task, last failure, validation
+status, open blockers, and memory candidates without writing formal Memory.
+
+Blocked actions: formal Memory write, private raw memory read.
+
+### NEXT-003: Migration Plan Distillation Batch
 
 Use after the machine can consume queue items.
 
@@ -158,7 +176,7 @@ Memory writes from ordinary governance receipts.
 ```text
 root_external_push: blocked until private-history review or history-scrub gate
 provider_calls: blocked until explicit provider boundary
-real_executor_run: blocked until machine skeleton and executor readiness pass
+real_executor_run: blocked until reviewed executor gate after readiness
 vcptoolbox_autonomous_or_provider_use: blocked until controlled runtime gate
 state_private_reads: blocked by default
 formal_memory_write: blocked until explicit Memory entry point
@@ -174,6 +192,7 @@ current_tracked_notion_url_redaction: closed for current tree
 automation_rulebook_prohibited_first_update: closed for current operating model
 machine_skeleton_v0.1: closed for preview-only control machine baseline; maintain review rule
 task_producer_skeleton_v0.1: closed for preview-only candidate task production baseline; producer output remains candidate-only
+control_chain_v0.1: closed for commander-first dual-track skeleton; queue remains proposal-only
 ```
 
 ## Machine Input Contract
@@ -210,9 +229,9 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should run the smallest possible preview-only
-ColaMeta Executor Readiness Reconciliation from `NOW-001`.
+The next construction batch should implement the smallest possible reviewed
+Queue Manager mutation gate from `NOW-001`.
 
 Do not start with ColaMeta executor, VCPToolBox runtime, external Git, Memory, or
-provider integration. The readiness result must only summarize local metadata
-and blocked capabilities.
+provider integration. Queue mutation must require accepted review and preserve
+the one-`NOW` invariant.
