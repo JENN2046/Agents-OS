@@ -117,7 +117,9 @@ vcptoolbox_localhost_usability_smoke_gate_exists=true
 vcptoolbox_localhost_usability_smoke_gate_validation=PASS
 vcptoolbox_controlled_local_use_handoff_gate_exists=true
 vcptoolbox_controlled_local_use_handoff_gate_validation=PASS
-active_now=AGENTS_OS_VCPToolBox_next_branch_decision_checkpoint_v0.1
+vcptoolbox_runtime_integration_contract_exists=true
+vcptoolbox_runtime_integration_contract_validation=PASS
+active_now=No_Active_Automatic_Construction_Item
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -289,6 +291,11 @@ shape without starting services. It keeps the current recovery at no-provider,
 plugins-disabled local use and requires Jenn to choose a branch before active
 config real-local-use, selective plugin restore, or provider-backed use.
 
+The VCPToolBox runtime integration contract accepts VCPToolBox as an AGENTS OS
+local runtime substrate plus maintainable rollback surface. Full product
+deployment, full plugin restore, and provider-backed operation are no longer
+default goals; they are future branch-specific decisions only.
+
 The Dashboard now also emits a `next_user_action` handoff during the stop-state.
 It points to Jenn as the decision owner, lists accepted route ids A-E, and
 points to the route-selection confirmation template source without printing the
@@ -305,24 +312,25 @@ adopting, promoting, or executing a route.
 Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
-active only under controlled localhost/no-provider/plugins-disabled gates.
-VCPToolBox provider use, plugin activation, runtime config mutation, and
-external Git publication remain blocked. ColaMeta readiness and MCP boundary
-evidence do not carry forward runtime/provider/executor authorization.
+closed at the runtime integration contract layer unless Jenn chooses a future
+branch. VCPToolBox provider use, plugin activation, runtime config mutation,
+service start, and external Git publication remain blocked. ColaMeta readiness
+and MCP boundary evidence do not carry forward runtime/provider/executor
+authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS VCPToolBox next branch decision checkpoint v0.1
+### NOW-001: No Active Automatic Construction Item
 
-Route option: A - VCPToolBox Runtime Recovery Or Controlled First-Use
-Source: controlled local-use handoff gate result
-Mode: decision checkpoint after local recovery handoff
-Boundary: do not re-enable plugins, call providers, modify active config, or start a long-running service until Jenn chooses a branch
+Source: VCPToolBox runtime integration contract result
+Mode: stopped after local runtime substrate contract
+Boundary: Jenn branch choice or new route choice is required before expanding VCPToolBox or starting a new construction route
 Must keep: localhost_only=true
 Must keep: provider_call_authorized=false
 Must keep: plugin_activation_authorized=false
 Must keep: plugin_execution_authorized=false
-Must keep: enabled_plugin_manifests=0 unless Jenn explicitly chooses re-enable gate
+Must keep: enabled_plugin_manifests=0 unless Jenn explicitly chooses a re-enable gate
+Must keep: service_start_authorized=false
 Must keep: core_file_edit_authorized=false
 Must keep: external_write_authorized=false
 Must keep: secret_raw_read_authorized=false
@@ -400,6 +408,7 @@ vcptoolbox_controlled_recovery_restart_v0.1: closed with limit after localhost-o
 vcptoolbox_main_no_plugin_startup_gate_v0.1: closed after disabling plugin manifests and confirming main server localhost startup under no-plugin/no-provider boundary; provider call, plugin execution, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_localhost_usability_smoke_gate_v0.1: closed after main plus AdminPanel localhost smoke passed with plugins disabled; provider call, plugin execution, runtime config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_controlled_local_use_handoff_gate_v0.1: closed after recording the safe local run shape and next expansion branches; service start, provider call, plugin restore, active config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
+vcptoolbox_runtime_integration_contract_v0.1: closed after narrowing VCPToolBox to AGENTS OS runtime substrate plus maintainable rollback; full product deployment, full plugin restore, provider-backed use, service start, provider call, plugin restore, active config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -436,14 +445,16 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-Route A has been selected by Jenn and remains active. The controlled recovery
-restart package, main no-plugin/no-provider startup gate, and localhost
-usability smoke gate, and controlled local-use handoff gate have completed.
+Route A has been selected by Jenn and has been closed at the VCPToolBox runtime
+integration contract layer. The controlled recovery restart package, main
+no-plugin/no-provider startup gate, localhost usability smoke gate, controlled
+local-use handoff gate, and runtime integration contract have completed.
 
-The next construction batch should prepare or execute the next safe local gate:
+The next construction batch should wait for Jenn to choose a new AGENTS OS route
+or a specific VCPToolBox expansion branch:
 
 ```text
-AGENTS OS VCPToolBox next branch decision checkpoint v0.1
+No Active Automatic Construction Item
 ```
 
 The batch must remain local and bounded:
@@ -455,6 +466,7 @@ admin_panel_localhost_observation=PASS
 main_no_plugin_startup_observation=PASS
 localhost_usability_smoke=PASS
 controlled_local_use_handoff=PASS
+runtime_integration_contract=PASS
 service_start_authorized=false
 provider_call_authorized=false
 plugin_activation_authorized=false
@@ -471,6 +483,7 @@ external_write_authorized=false
 
 Do not infer permission to activate plugins, call providers, modify
 auth/provider/runtime configuration, write formal Memory, or perform external
-writes from the local-use handoff. Jenn should choose the next branch:
-no-provider utility mode, active config real-local-use, selective plugin
-restore, or explicit provider-backed use.
+writes from the local-use handoff or the runtime integration contract. Jenn can
+choose a next AGENTS OS route or one VCPToolBox branch: no-provider utility
+mode, active config real-local-use, selective plugin restore, or explicit
+provider-backed use.
