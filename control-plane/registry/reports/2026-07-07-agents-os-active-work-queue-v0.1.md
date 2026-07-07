@@ -102,6 +102,10 @@ next_route_selection_package_exists=true
 next_route_selection_package_validation=PASS
 active_work_queue_closed_order_reconciliation_exists=true
 active_work_queue_closed_order_reconciliation_validation=PASS
+route_a_selection_activation_exists=true
+route_a_selection_activation_validation=PASS
+selected_route=A
+active_now=AGENTS_OS_VCPToolBox_controlled_recovery_restart_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -209,23 +213,26 @@ HEAD or reachable root Git history. No history scrub is indicated by the current
 scan.
 
 External publication remains blocked until Jenn chooses a target and a separate
-exact external-write gate exists. The route-selection checkpoint records that no
-new route should start automatically after the current governance sequence.
-The Machine now treats this stop-state as non-actionable and requiring Jenn
-route selection before execution. Machine preview now also carries a
-`next_user_action` handoff with Jenn as decision owner, accepted route ids A-E,
-and no route auto-selection, active queue mutation, queue promotion, execution,
-write, or raw content output.
-Machine preview now also surfaces route-choice adoption bundle readiness. It
-reports that the bundle preview evidence exists and keeps `can_apply_now=false`,
-route adoption, active queue mutation, queue promotion, raw confirmation/template
-output, and execution unauthorized. The next route selection package now
-preserves the route options and exact confirmation templates without selecting
-any route.
-The route-selection pause handoff records the current resume point for Jenn:
-`No Active Automatic Construction Item`, route choices A-E, and no route
-selection, adoption, queue promotion, execution, provider, runtime, Memory, or
-external-write authorization.
+exact external-write gate exists.
+
+Jenn has now selected route A. The Control Chain route-choice preview,
+reviewed route adoption apply gate, and reviewed queue mutation gate moved
+`AGENTS OS VCPToolBox controlled recovery restart v0.1` into `NOW`. The
+previous `No Active Automatic Construction Item` stop-state is closed.
+
+Machine preview now treats the selected route A `NOW` item as actionable while
+still keeping `execution_authorized=false`. Its `next_user_action` is `none`
+because the route choice is complete.
+
+Dashboard now reports route selection, route adoption gate, and route-choice
+adoption bundle as `not_active` after route A selection. It still surfaces the
+route-selection package as reference metadata, and keeps queue promotion,
+route auto-selection, route adoption, execution, raw confirmation/template
+output, and provider/runtime work unauthorized.
+
+The route-selection pause handoff remains historical evidence for the prior
+stop-state. It is superseded by the route A selection activation as current
+queue state.
 The Task Producer route-choice preview can parse a future explicit Jenn
 selection text, but it still does not adopt the route into workspace state or
 mutate the queue.
@@ -237,8 +244,9 @@ a selected route preview can become a proposed `NEXT` item, but only as
 proposal-only JSON and not as a queue write.
 The reviewed route adoption preview adds the accepted-review layer, but still
 stops before any file write.
-The reviewed route adoption apply gate adds the explicit future write gate, but
-the current queue remains in stop-state with no selected route.
+The reviewed route adoption apply gate has now been used for the explicit
+route A selection and appended the selected package to `NEXT`; the reviewed
+queue mutation gate then promoted it to `NOW`. Execution remains unauthorized.
 The Dashboard route adoption gate readiness card makes that future gate visible
 without changing queue state.
 
@@ -258,76 +266,29 @@ adopting, promoting, or executing a route.
 Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
-paused. External Git publication is blocked. Provider and plugin activation are
-blocked. ColaMeta readiness and MCP boundary evidence do not carry forward
-runtime/provider/executor authorization.
+active only as a controlled recovery restart planning route. VCPToolBox service
+start, provider use, plugin activation, runtime config mutation, and external
+Git publication remain blocked. ColaMeta readiness and MCP boundary evidence do
+not carry forward runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: No Active Automatic Construction Item
+### NOW-001: AGENTS OS VCPToolBox controlled recovery restart v0.1
 
-Goal: hold the queue after closing the current autonomous governance sequence
-and wait for Jenn to choose the next construction route.
-
-Required output:
-
-```text
-route_selection_options
-blocked_without_jenn_direction
-no_auto_runtime_or_provider_guard
-no_auto_memory_or_external_write_guard
-receipt_review_pattern
-```
-
-Initial mode:
-
-```text
-read_only_or_local_preview=true
-execution_authorized=false
-provider_call_authorized=false
-service_start_authorized=false
-executor_run_authorized=false
-external_write_authorized=false
-git_push_authorized=false
-history_rewrite_authorized=false
-tag_release_deploy_publish_authorized=false
-memory_write_authorized=false
-runtime_plugin_activation_authorized=false
-auto_promote_authorized=false
-bulk_move_delete_rename_authorized=false
-private_state_read_authorized=false
-secret_raw_read_authorized=false
-provider_registry_write_authorized=false
-provider_runtime_config_write_authorized=false
-host_dispatcher_execution_authorized=false
-live_host_start_authorized=false
-connector_auth_write_authorized=false
-provider_call_authorized=false
-mcp_service_start_authorized=false
-connector_external_write_authorized=false
-```
-
-Acceptance:
-
-```text
-do not infer a new construction route without Jenn direction
-do not start VCPToolBox, MCP, ColaMeta, live host, or provider services
-do not run executor or host dispatcher routes
-do not perform provider calls
-do not write formal Memory
-do not push or externally write
-do not rewrite history or scrub without a separate exact gate
-do not read state-private
-do not read or print raw secrets/token/cookie/credential/private memory/provider raw response/log content
-docctl status remains PASS
-docctl doctor remains PASS
-```
+Route option: A - VCPToolBox Runtime Recovery Or Controlled First-Use
+Source: explicit Jenn route-choice preview
+Mode: prepare first safe package only
+Boundary: queue adoption requires separate reviewed mutation gate
+Must keep: localhost_only=true
+Must keep: provider_call_authorized=false
+Must keep: plugin_activation_authorized=false
+Must keep: external_write_authorized=false
+Must keep: secret_raw_read_authorized=false
+Must keep: runtime_config_value_output_authorized=false
 
 ## NEXT
 
-```text
-No active NEXT items.
-```
+_No active NEXT items._
 
 ## LATER
 
@@ -389,6 +350,9 @@ control_chain_route_choice_adoption_bundle_preview_v0.1: closed for preview-only
 dashboard_route_choice_adoption_bundle_visibility_v0.1: closed for preview-only route-choice adoption bundle visibility; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
 machine_route_choice_adoption_bundle_readiness_v0.1: closed for preview-only Machine route-choice adoption bundle readiness; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
 route_selection_pause_handoff_v0.1: closed for route-selection pause handoff; Jenn route choice remains required, and route selection, adoption, queue promotion, execution, provider, runtime, Memory, and external writes remain unauthorized
+control_chain_reviewed_route_adoption_apply_gate_v0.1: appended "AGENTS OS VCPToolBox controlled recovery restart v0.1" to NEXT as NEXT-001; proposal=ROUTEQUEUEPROPOSAL-083357F0B6
+queue_manager_reviewed_mutation_v0.1: closed NOW "No Active Automatic Construction Item"; promoted "AGENTS OS VCPToolBox controlled recovery restart v0.1"; proposal=QUEUEPROPOSAL-11ED25D0B5
+route_a_selection_activation_v0.1: closed for Jenn-selected route A activation into NOW; VCPToolBox controlled recovery restart package is active, while VCPToolBox service start, provider call, plugin activation, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -425,32 +389,31 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-The next construction batch should not infer a new route automatically. Jenn can
-choose one of these routes:
+Route A has been selected by Jenn and is active in `NOW`.
+
+The next construction batch should prepare the first safe local package:
 
 ```text
-VCPToolBox Runtime Recovery Or Controlled First-Use
-Formal Memory Loop
-External Git Publication Exact Gate
-Provider Execution Design Gate
-New AGENTS OS construction route
+AGENTS OS VCPToolBox controlled recovery restart v0.1
 ```
 
-This route-selection checkpoint is now recorded as the active stop-state
-artifact. It does not choose any route and does not authorize runtime,
-provider, Memory, or external-write work. Machine preview must report this
-stop-state as `blocked=true`, `actionable=false`, and
-`requires_jenn_decision=true`.
+The batch must remain local and bounded:
 
-Jenn can use
-`control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`
-as the route selection packet. It is evidence only and does not grant execution
-authority until Jenn sends a current explicit route selection.
+```text
+localhost_only=true
+execution_authorized=false until package review completes
+service_start_authorized=false until a scoped first-start package allows it
+provider_call_authorized=false
+plugin_activation_authorized=false
+plugin_execution_authorized=false
+runtime_config_value_output_authorized=false
+secret_raw_read_authorized=false
+state_private_read_authorized=false
+formal_memory_write_authorized=false
+external_write_authorized=false
+```
 
-Until Jenn chooses, do not read `state-private/`; do not read or print raw
-secrets, tokens, cookies, credentials, private raw memory, provider raw
-responses, raw logs, private Notion page contents, or private page URLs; do not
-push, tag, release, deploy, publish, externally write, rewrite history, reset
-hard, clean, bulk delete, or destructively scrub. Keep provider calls, service
-starts, executor runs, host dispatcher execution, provider registry/config
-mutation, and VCPToolBox/runtime/plugin activation blocked.
+Do not infer permission to start VCPToolBox, activate plugins, call providers,
+modify auth/provider/runtime configuration, write formal Memory, or perform
+external writes from this queue activation. The active route only authorizes
+preparing the controlled recovery restart package.

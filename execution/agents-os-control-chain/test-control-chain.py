@@ -110,7 +110,30 @@ def main() -> int:
     check("route_selection_required" in route_decision["blocked_capabilities"], "route option should block route selection", failures)
     check("route_auto_selection" in route_decision["blocked_capabilities"], "route option should block route auto-selection", failures)
 
-    route_handoff = chain.route_choice_handoff_reconciliation()
+    with tempfile.TemporaryDirectory(prefix="agents-os-route-handoff-test-", dir=chain.WORKSPACE_ROOT) as handoff_temp_dir:
+        handoff_queue_path = Path(handoff_temp_dir) / "route-handoff-queue.md"
+        handoff_queue_path.write_text(
+            """# route handoff fixture
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        route_handoff = chain.route_choice_handoff_reconciliation(handoff_queue_path)
     check(route_handoff["passed"] is True, f"route choice handoff reconciliation should pass: {route_handoff['errors']}", failures)
     check(route_handoff["aligned"] is True, "route choice handoff should align Machine and Dashboard", failures)
     check(route_handoff["route_choice_required"] is True, "route choice handoff should require route choice", failures)
@@ -119,6 +142,32 @@ def main() -> int:
     check(route_handoff["active_queue_mutation_authorized"] is False, "route choice handoff must not authorize active queue mutation", failures)
     check(route_handoff["queue_promotion_authorized"] is False, "route choice handoff must not authorize queue promotion", failures)
     check(route_handoff["execution_authorized"] is False, "route choice handoff must not authorize execution", failures)
+
+    closed_append_text = """# append closed fixture
+
+## NOW
+
+### NOW-001: Current
+
+Done.
+
+## CLOSED
+
+```text
+old_task: closed
+```
+
+## Immediate Construction Instruction
+
+```text
+route A
+```
+"""
+    closed_appended = chain.append_closed_entry(closed_append_text, "new_task: closed")
+    closed_section = closed_appended.split("## Immediate Construction Instruction", 1)[0]
+    immediate_section = closed_appended.split("## Immediate Construction Instruction", 1)[1]
+    check("new_task: closed" in closed_section, "append_closed_entry should insert under CLOSED section", failures)
+    check("new_task: closed" not in immediate_section, "append_closed_entry must not insert into later fenced sections", failures)
 
     route_template_readiness = chain.route_choice_template_readiness()
     check(
@@ -486,7 +535,7 @@ old_task: closed
     validation = chain.validate_control_chain(run_colameta=False)
     check(validation["passed"], f"control chain validation without ColaMeta should pass: {validation['errors']}", failures)
     check(validation["route_choice_handoff"]["aligned"] is True, "validation should report aligned route handoff", failures)
-    check(validation["route_choice_handoff"]["decision_owner"] == "Jenn", "validation should preserve Jenn as route owner", failures)
+    check(validation["route_choice_handoff"]["execution_authorized"] is False, "validation should keep route handoff execution unauthorized", failures)
     check(
         validation["route_choice_template_readiness"]["parsed_route_ids"] == ["A", "B", "C", "D", "E"],
         "validation should report A-E template readiness",
@@ -541,7 +590,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=29 failures={len(failures)}")
+        print(f"cases=30 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -551,6 +600,7 @@ old_task: closed
     print("PASS ColaMeta readiness fixture")
     print("PASS queue proposal-only fixture")
     print("PASS route choice handoff reconciliation fixture")
+    print("PASS CLOSED append boundary fixture")
     print("PASS route choice template readiness fixture")
     print("PASS route choice end-to-end readiness fixture")
     print("PASS route choice adoption bundle preview fixture")
@@ -559,7 +609,7 @@ old_task: closed
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=29 failures=0")
+    print("cases=30 failures=0")
     return 0
 
 

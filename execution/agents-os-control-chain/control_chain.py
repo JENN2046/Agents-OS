@@ -2161,15 +2161,20 @@ def append_closed_entry(queue_text: str, entry: str) -> str:
             break
     if closed_start is None:
         return queue_text.rstrip() + f"\n\n## CLOSED\n\n```text\n{entry}\n```\n"
+    closed_end = len(lines)
+    for index in range(closed_start + 1, len(lines)):
+        if lines[index].startswith("## "):
+            closed_end = index
+            break
     fence_indices = [
         index
-        for index in range(closed_start + 1, len(lines))
+        for index in range(closed_start + 1, closed_end)
         if lines[index].strip().startswith("```")
     ]
     if len(fence_indices) >= 2:
         insert_at = fence_indices[-1]
         return "\n".join(lines[:insert_at] + [entry] + lines[insert_at:]).rstrip() + "\n"
-    return queue_text.rstrip() + f"\n{entry}\n"
+    return "\n".join(lines[:closed_end] + [entry] + lines[closed_end:]).rstrip() + "\n"
 
 
 def mutate_queue_text(queue_text: str, proposal: dict[str, Any]) -> tuple[str, dict[str, Any]]:
@@ -2362,10 +2367,16 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
         errors.append("route choice handoff reconciliation is not aligned")
-    if route_handoff_reconciliation.get("route_choice_required") is not True:
-        errors.append("route choice handoff reconciliation did not detect route choice requirement")
-    if route_handoff_reconciliation.get("decision_owner") != "Jenn":
-        errors.append("route choice handoff reconciliation did not preserve Jenn decision owner")
+    if route_handoff_reconciliation.get("route_choice_required") is True:
+        if route_handoff_reconciliation.get("decision_owner") != "Jenn":
+            errors.append("route choice handoff reconciliation did not preserve Jenn decision owner")
+        if route_handoff_reconciliation.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
+            errors.append("route choice handoff reconciliation did not preserve route choices A-E")
+    else:
+        if route_handoff_reconciliation.get("decision_owner") is not None:
+            errors.append("inactive route choice handoff should not preserve a decision owner")
+        if route_handoff_reconciliation.get("accepted_route_ids") not in ([], None):
+            errors.append("inactive route choice handoff should not preserve accepted route ids")
     for flag in (
         "route_auto_selection_authorized",
         "active_queue_mutation_authorized",

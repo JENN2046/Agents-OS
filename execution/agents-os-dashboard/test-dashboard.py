@@ -41,29 +41,17 @@ def main() -> int:
     check(summary["write_performed"] is False, "dashboard summary should not write", failures)
     check(summary["execution_authorized"] is False, "dashboard should not authorize execution", failures)
     check(summary["queue"]["now"]["title"] == expected_now, "dashboard should surface current NOW", failures)
-    check(summary["route_selection"]["status"] == "awaiting_jenn_selection", "dashboard should surface route selection stop-state", failures)
-    check(summary["route_selection"]["requires_jenn_decision"] is True, "route selection should require Jenn", failures)
+    check(summary["route_selection"]["status"] == "not_active", "dashboard route selection should be inactive after route A selection", failures)
+    check(summary["route_selection"]["requires_jenn_decision"] is False, "route selection should not require Jenn after route A selection", failures)
     check(summary["route_selection"]["route_auto_selection_authorized"] is False, "route selection must not authorize auto-selection", failures)
     check(summary["route_selection"]["queue_promotion_authorized"] is False, "route selection must not authorize queue promotion", failures)
     check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
     check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
-    check(
-        summary["next_user_action"]["status"] == "route_choice_required",
-        "dashboard should surface route choice as next user action",
-        failures,
-    )
-    check(summary["next_user_action"]["decision_owner"] == "Jenn", "next user action owner should be Jenn", failures)
-    check(summary["next_user_action"]["requires_jenn_decision"] is True, "next user action should require Jenn decision", failures)
-    check(
-        summary["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"],
-        "next user action should surface route ids",
-        failures,
-    )
-    check(
-        summary["next_user_action"]["exact_confirmation_templates_available"] is True,
-        "next user action should point to confirmation templates",
-        failures,
-    )
+    check(summary["next_user_action"]["status"] == "none", "dashboard should clear route choice next user action after route A selection", failures)
+    check(summary["next_user_action"]["decision_owner"] is None, "next user action owner should clear after route A selection", failures)
+    check(summary["next_user_action"]["requires_jenn_decision"] is False, "next user action should not require Jenn after route A selection", failures)
+    check(summary["next_user_action"]["accepted_route_ids"] == [], "next user action should clear route ids after route A selection", failures)
+    check(summary["next_user_action"]["exact_confirmation_templates_available"] is False, "next user action should not surface confirmation templates after route A selection", failures)
     check(
         summary["next_user_action"]["active_queue_mutation_authorized"] is False,
         "next user action must not authorize active queue mutation",
@@ -75,22 +63,22 @@ def main() -> int:
         failures,
     )
     check(summary["next_user_action"]["execution_authorized"] is False, "next user action must not authorize execution", failures)
-    check(summary["route_adoption_gate"]["status"] == "waiting_for_jenn_route_choice", "dashboard should surface route adoption gate wait-state", failures)
+    check(summary["route_adoption_gate"]["status"] == "not_active", "dashboard route adoption gate should be inactive after route A selection", failures)
     check(summary["route_adoption_gate"]["all_required_gates_present"] is True, "dashboard should surface required route adoption gates", failures)
     check(summary["route_adoption_gate"]["future_apply_gate_available"] is True, "dashboard should surface future apply gate availability", failures)
     check(summary["route_adoption_gate"]["can_apply_now"] is False, "route adoption gate must not apply before Jenn route choice", failures)
-    check(summary["route_adoption_gate"]["requires_jenn_decision"] is True, "route adoption gate should require Jenn", failures)
+    check(summary["route_adoption_gate"]["requires_jenn_decision"] is False, "route adoption gate should not require Jenn after route A selection", failures)
     check(summary["route_adoption_gate"]["active_queue_mutation_authorized"] is False, "route adoption gate must not authorize active queue mutation", failures)
     check(summary["route_adoption_gate"]["queue_promotion_authorized"] is False, "route adoption gate must not authorize queue promotion", failures)
     check(summary["route_adoption_gate"]["execution_authorized"] is False, "route adoption gate must not authorize execution", failures)
     check(
-        summary["route_choice_adoption_bundle"]["status"] == "waiting_for_jenn_route_choice",
-        "dashboard should surface route choice adoption bundle wait-state",
+        summary["route_choice_adoption_bundle"]["status"] == "not_active",
+        "dashboard route choice adoption bundle should be inactive after route A selection",
         failures,
     )
     check(summary["route_choice_adoption_bundle"]["bundle_preview_available"] is True, "route adoption bundle preview should be available", failures)
-    check(summary["route_choice_adoption_bundle"]["can_apply_now"] is False, "route adoption bundle must not apply before Jenn route choice", failures)
-    check(summary["route_choice_adoption_bundle"]["requires_jenn_decision"] is True, "route adoption bundle should require Jenn", failures)
+    check(summary["route_choice_adoption_bundle"]["can_apply_now"] is False, "route adoption bundle must not apply after route A selection", failures)
+    check(summary["route_choice_adoption_bundle"]["requires_jenn_decision"] is False, "route adoption bundle should not require Jenn after route A selection", failures)
     check(summary["route_choice_adoption_bundle"]["preview_only"] is True, "route adoption bundle should be preview_only", failures)
     check(summary["route_choice_adoption_bundle"]["read_only"] is True, "route adoption bundle should be read_only", failures)
     check(summary["route_choice_adoption_bundle"]["active_queue_mutation_authorized"] is False, "route adoption bundle must not authorize active queue mutation", failures)
@@ -151,6 +139,48 @@ def main() -> int:
     broken_adoption_bundle["route_choice_adoption_bundle"]["route_adoption_authorized"] = True
     check(dashboard.validate_dashboard_summary(broken_adoption_bundle), "route adoption bundle route adoption authorization should fail", failures)
 
+    with tempfile.TemporaryDirectory(prefix="agents-os-dashboard-route-stop-test-", dir=dashboard.WORKSPACE_ROOT) as route_temp_dir:
+        route_fixture = Path(route_temp_dir) / "route-stop-queue.md"
+        route_fixture.write_text(
+            """# route stop fixture
+
+## NOW
+
+### NOW-001: No Active Automatic Construction Item
+
+Waiting for Jenn route selection.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        route_fixture_summary = dashboard.build_dashboard_summary(route_fixture, run_validations=False)
+        check(route_fixture_summary["passed"], f"route stop fixture should pass: {route_fixture_summary['errors']}", failures)
+        check(route_fixture_summary["route_selection"]["status"] == "awaiting_jenn_selection", "route stop fixture should require route selection", failures)
+        check(route_fixture_summary["route_selection"]["requires_jenn_decision"] is True, "route stop fixture route selection should require Jenn", failures)
+        check(route_fixture_summary["next_user_action"]["status"] == "route_choice_required", "route stop fixture should surface route choice next action", failures)
+        check(route_fixture_summary["next_user_action"]["decision_owner"] == "Jenn", "route stop fixture next action owner should be Jenn", failures)
+        check(
+            route_fixture_summary["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"],
+            "route stop fixture should surface route choices A-E",
+            failures,
+        )
+        check(
+            route_fixture_summary["next_user_action"]["exact_confirmation_templates_available"] is True,
+            "route stop fixture should surface available confirmation templates",
+            failures,
+        )
+        check(route_fixture_summary["route_adoption_gate"]["status"] == "waiting_for_jenn_route_choice", "route stop fixture adoption gate should wait", failures)
+        check(route_fixture_summary["route_choice_adoption_bundle"]["status"] == "waiting_for_jenn_route_choice", "route stop fixture adoption bundle should wait", failures)
+
     with tempfile.TemporaryDirectory(prefix="agents-os-dashboard-test-", dir=dashboard.WORKSPACE_ROOT) as temp_dir:
         fixture = Path(temp_dir) / "queue.md"
         fixture.write_text(
@@ -205,7 +235,7 @@ latest_closed: new
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=16 failures={len(failures)}")
+        print(f"cases=17 failures={len(failures)}")
         return 1
 
     print("PASS current dashboard summary fixture")
@@ -216,9 +246,10 @@ latest_closed: new
     print("PASS route adoption gate visibility fixture")
     print("PASS route adoption bundle visibility fixture")
     print("PASS manifest authorization fixture")
+    print("PASS route selection wait-state fixture")
     print("PASS fixture queue summary fixture")
     print("PASS protected path fixture")
-    print("cases=16 failures=0")
+    print("cases=17 failures=0")
     return 0
 
 

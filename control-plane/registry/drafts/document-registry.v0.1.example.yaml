@@ -14333,6 +14333,179 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-route-a-selection-activation-v0.1
+    title: AGENTS OS Route A Selection Activation v0.1
+    doc_type: review
+    status: accepted
+    scope: local activation of Jenn-selected route A into the Active Work Queue
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-control-chain/test-control-chain.py
+      - execution/agents-os-dashboard/dashboard.py
+      - execution/agents-os-dashboard/test-dashboard.py
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - active route changes
+        - active queue route A state changes
+        - Control Chain reviewed route adoption behavior changes
+        - Dashboard route-selected state behavior changes
+    security_boundary:
+      - local route activation evidence only
+      - route A selected by Jenn
+      - no VCPToolBox service start
+      - no plugin activation
+      - no plugin execution
+      - no provider call
+      - no host dispatcher execution
+      - no executor run
+      - no auth/token/cookie/session change
+      - no provider/runtime config change
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no active runtime config value output
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-route-a-selection-activation-v0.1-receipt
+    title: AGENTS OS Route A Selection Activation v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for route A selection activation
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-dashboard/dashboard.py
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - route A activation result changes
+    security_boundary:
+      - local receipt only
+      - no VCPToolBox service start
+      - no plugin activation
+      - no provider call
+      - no executor run
+      - no auth/token/cookie/session change
+      - no provider/runtime config change
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no active runtime config value output
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-route-a-selection-activation-v0.1-review
+    title: AGENTS OS Route A Selection Activation v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for route A selection activation
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.md
+      - execution/agents-os-control-chain/control_chain.py
+      - execution/agents-os-dashboard/dashboard.py
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-route-a-selection-activation-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - route A activation residual risk changes
+        - controlled VCPToolBox recovery boundary changes
+    security_boundary:
+      - local review only
+      - no VCPToolBox service start
+      - no plugin activation
+      - no provider call
+      - no executor run
+      - no auth/token/cookie/session change
+      - no provider/runtime config change
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no active runtime config value output
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/test-dashboard.py
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: agents-os-next-route-selection-package-v0.1
     title: AGENTS OS Next Route Selection Package v0.1
     doc_type: review

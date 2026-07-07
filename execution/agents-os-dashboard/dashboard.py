@@ -288,7 +288,7 @@ def next_user_action_status(route_selection: dict[str, Any]) -> dict[str, Any]:
         "instruction": "choose_one_route_id" if awaiting_selection else None,
         "accepted_route_ids": route_ids if awaiting_selection else [],
         "template_source_path": rel(ROUTE_SELECTION_PACKAGE),
-        "exact_confirmation_templates_available": ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
+        "exact_confirmation_templates_available": awaiting_selection and ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
         "template_section": "Exact Confirmation Text Templates" if awaiting_selection else None,
         "route_auto_selection_authorized": False,
         "active_queue_mutation_authorized": False,

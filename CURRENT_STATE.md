@@ -20,18 +20,22 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `No Active Automatic Construction Item`.
+- The active work queue's current `NOW` item is `AGENTS OS VCPToolBox controlled recovery restart v0.1`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
-- The pause handoff records the current resume point: Jenn chooses A-E later; no route is selected, adopted, promoted, or executed.
+- The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
+- Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
+- Jenn selected route A: `VCPToolBox Runtime Recovery Or Controlled First-Use`.
+- The Control Chain reviewed route adoption apply gate and reviewed queue mutation gate moved `AGENTS OS VCPToolBox controlled recovery restart v0.1` into `NOW`.
+- Route A activation did not start VCPToolBox, activate plugins, call providers, write formal Memory, or perform external writes.
 - Active Work Queue Closed Order Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-closed-order-reconciliation-v0.1.md`.
-- The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records this closed-order reconciliation without selecting or executing a route.
+- The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records the route A selection activation without starting runtime/provider work.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
 - The Machine can inspect the active queue, generate a `NOW` preview, validate a temporary task-envelope preview, and run `docctl status` / `docctl doctor`.
 - The Machine preflights queue input paths before reading; protected paths and outside-workspace paths are blocked.
 - Machine preview output includes `actionable`; blocked previews remain `actionable=false` and `execution_authorized=false`.
-- Machine preview output now includes `next_user_action` for the route-selection stop-state: `status=route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and no route auto-selection, active queue mutation, queue promotion, execution, write, or raw content output.
+- Machine preview output now includes `next_user_action`; in the current route A state it reports `status=none` while keeping execution, write, and dangerous authorization false.
 - Machine Route Choice Adoption Bundle Readiness v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-choice-adoption-bundle-readiness-v0.1.md`.
-- Machine preview output now includes `route_choice_adoption_bundle_readiness` for the route-selection stop-state: bundle preview evidence available, `can_apply_now=false`, and no route adoption, active queue mutation, queue promotion, raw confirmation/template output, execution, or write.
+- Machine preview output now includes `route_choice_adoption_bundle_readiness`; in the current route A state it reports `status=not_active`, `can_apply_now=false`, and no route adoption, active queue mutation, queue promotion, raw confirmation/template output, execution, or write.
 - Machine output is preview/draft by default and requires Nobao review before execution.
 - AGENTS OS Task Producer Skeleton v0.1 exists at `execution/agents-os-task-producer/`.
 - The Task Producer can create candidate task JSON from explicit intent text and allowlisted review/report Markdown.
@@ -71,7 +75,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Dashboard Route Adoption Gate Readiness v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-adoption-gate-readiness-v0.1.md`.
 - Dashboard summary now surfaces route adoption gate readiness as read-only metadata: all required gates present, future apply gate available, `can_apply_now=false`, `active_queue_mutation_authorized=false`, `queue_promotion_authorized=false`, and `execution_authorized=false`.
 - Dashboard Route Choice Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-choice-handoff-v0.1.md`.
-- Dashboard summary now surfaces `next_user_action.status=route_choice_required`, `decision_owner=Jenn`, accepted route ids A-E, and the route-selection template source path while keeping route auto-selection, active queue mutation, queue promotion, execution, and write flags false.
+- Dashboard summary now surfaces `next_user_action.status=none` for the current route A state while keeping route auto-selection, active queue mutation, queue promotion, execution, and write flags false.
 - Dashboard Route Choice Adoption Bundle Visibility v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-choice-adoption-bundle-visibility-v0.1.md`.
 - Dashboard summary now surfaces the route-choice adoption bundle preview evidence as read-only readiness metadata while keeping `can_apply_now=false`, route adoption, active queue mutation, queue promotion, raw confirmation/template output, and execution unauthorized.
 - Migration Plan Distillation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-migration-plan-distillation-v0.1.md`.
@@ -85,9 +89,9 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Root Private History Review Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md`.
 - Root private-history review found no Notion-domain or common token-shape path-level hits in current HEAD or reachable root Git history for the scanned pattern set; no history scrub is indicated by that scan.
 - Route Selection Checkpoint v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-checkpoint-v0.1.md`.
-- Route selection is intentionally stopped for Jenn decision; no VCPToolBox runtime, provider, executor, Memory, external Git, or new construction route is automatically selected.
+- Route selection checkpoint remains historical evidence; route A is now selected by Jenn, but no VCPToolBox runtime, provider, executor, Memory, external Git, or plugin execution has been performed.
 - Machine Route Selection Stop Guard v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-selection-stop-guard-v0.1.md`.
-- Machine preview now treats `No Active Automatic Construction Item` as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`.
+- Machine preview still treats `No Active Automatic Construction Item` fixtures as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`; the current queue is no longer in that stop-state.
 - Machine Next User Action Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-next-user-action-handoff-v0.1.md`.
 - Next Route Selection Package v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`.
 - The route selection package lists five Jenn-selectable routes without promoting or executing any route: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
@@ -113,28 +117,28 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - ColaMeta connector login state was not rechecked.
 - Runner service status was not rechecked.
 - Real ColaMeta executor execution is not authorized.
-- No active automatic construction route is selected after the current governance sequence.
+- Route A is selected and active in the local queue.
 - No executor real run was performed.
 - No provider availability was tested.
 - No formal AGENTS OS Memory write was performed.
-- VCPToolBox runtime readiness was not rechecked in this snapshot.
+- VCPToolBox runtime readiness after route A activation was not rechecked in this snapshot.
 
 ## Current Blockers
 
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - ColaMeta runtime preview payload with `can_apply=true` exists and remains blocked until a future exact apply gate.
 - Root Git external publication remains blocked until Jenn chooses a target and a separate exact external-write gate exists.
-- VCPToolBox has prior build/startup generated state that needs separate review before any source delivery or cleanup.
+- VCPToolBox has prior build/startup generated state that needs separate review before controlled recovery restart work.
 
 ## Next Actions
 
-1. Wait for Jenn to choose one route from `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route. Resume from `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
+1. Prepare `AGENTS OS VCPToolBox controlled recovery restart v0.1` as the active route A package, preserving localhost-only, no-provider, no-plugin-activation, no-secret-read, and no-runtime-config-value-output boundaries.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
 5. Keep `.colameta/runtime/plan-previews/FPi0EWQs4DiqMdNsPpPHzc0Bhp13yDXh.json` as inert preview payload until a separate exact apply gate exists.
 6. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
-7. Keep VCPToolBox paused until a separate runtime recovery/startup scope is chosen.
+7. Keep VCPToolBox service start blocked until the controlled recovery restart package explicitly scopes a localhost-only observation step.
 8. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
 
 ## Current Handoff
@@ -145,14 +149,13 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Route Selection Pause Handoff v0.1.
+Last completed task: Route A Selection Activation v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
 The task producer skeleton is scoped to local candidate task JSON only and does
 not write the queue or authorize execution. It can now generate blocked
-candidate previews from named route options, but route selection still requires
-Jenn.
+candidate previews from named route options; Jenn has now selected route A.
 The control chain is scoped to commander-first dual-track routing, ColaMeta
 readiness preview, local-safe validation execution, queue proposal-only, and
 reviewed queue mutation with accepted Nobao review.
@@ -161,12 +164,11 @@ without queue promotion, silent retry, destructive cleanup, provider call,
 external write, or Memory write.
 The dashboard now exposes current queue state, latest CLOSED entry, failure
 event status, docctl validation state, open blockers, Memory candidates, and
-the current route-selection options without writing formal Memory, reading
-private raw Memory, selecting a route, or promoting the queue.
-The dashboard also exposes route adoption gate readiness without selecting a
-route or applying the gate. It now also exposes a `next_user_action` handoff so
-the stop-state tells Jenn exactly that a route choice A-E is needed, while still
-not selecting, adopting, promoting, or executing any route.
+the route-selection reference options without writing formal Memory, reading
+private raw Memory, selecting another route, or authorizing execution.
+The dashboard also exposes route adoption gate readiness. In the current route
+A state, route selection, route adoption gate, route-choice adoption bundle, and
+next user action are `not_active` / `none`.
 The dashboard now also exposes route-choice adoption bundle readiness. It shows
 that the bundle preview evidence exists, but keeps `can_apply_now=false`, route
 adoption, queue mutation, queue promotion, raw confirmation/template output, and
@@ -189,28 +191,21 @@ The root private-history review gate scanned current HEAD and reachable root Git
 history with count-only/path-only signals. It found no Notion-domain or common
 token-shape path-level hits for the scanned patterns and did not authorize push,
 history rewrite, scrub, external write, or publication.
-The route-selection checkpoint records the current stop-state: Jenn can choose
-VCPToolBox recovery, Formal Memory loop, external Git publication exact gate,
-provider execution design gate, or a new AGENTS OS construction route; Nobao
-should not silently select one.
-The Machine route-selection stop guard now enforces this stop-state in preview
-output with `blocked=true`, `actionable=false`, and
-`requires_jenn_decision=true`. Machine preview now also emits
-`next_user_action.status=route_choice_required`, `decision_owner=Jenn`, and
-accepted route ids A-E without selecting, adopting, promoting, or executing a
-route.
-Machine preview now also exposes route-choice adoption bundle readiness. It
-shows that the bundle preview evidence exists, but keeps `can_apply_now=false`,
+The route-selection checkpoint and pause handoff remain historical evidence for
+the prior stop-state. Jenn has now chosen route A, and the selected package has
+been promoted into `NOW`.
+The Machine route-selection stop guard still protects any future `No Active
+Automatic Construction Item` fixture, but current Machine preview is actionable
+for the route A package while keeping `execution_authorized=false`.
+Machine preview also exposes route-choice adoption bundle readiness as
+`not_active` for the current route A state and keeps `can_apply_now=false`,
 route adoption, queue mutation, queue promotion, raw confirmation/template
 output, and execution unauthorized.
-The route-selection pause handoff records this as an intentional pause before
-Jenn chooses A-E. It is a resume marker only and does not select, adopt,
-promote, or execute any route.
-The next route selection package now gives Jenn concrete templates for choosing
-one route without letting Nobao or Machine auto-select it.
-The Task Producer route-choice preview can parse a future explicit Jenn route
-choice into preview-only JSON without writing route state, mutating the Active
-Work Queue, or authorizing execution.
+The next route selection package remains a reference packet, not an active
+decision request.
+The Task Producer route-choice preview parsed Jenn's route A choice as
+preview-only JSON; the subsequent queue write happened only through reviewed
+Control Chain gates.
 The Task Producer route-choice template coverage gate now verifies all five
 route-choice templates without printing template bodies. It keeps the package
 non-self-executing by rejecting Template E's placeholder goal while proving
@@ -242,20 +237,17 @@ execution.
 The Active Work Queue closed-order reconciliation records the current latest
 closed governance event at the `CLOSED` tail so Dashboard `last_completed`
 continues to represent the queue's latest local closure.
-The reviewed route adoption preview now closes the local preview chain from
-future Jenn route-choice text through accepted review to a non-writing `NEXT`
-append preview. It still does not mutate the Active Work Queue or adopt the
-route.
-The reviewed route adoption apply gate now provides the explicit future write
-gate for a reviewed route, but no real route has been selected or adopted in the
-Active Work Queue.
+The reviewed route adoption preview closes the local preview chain from Jenn
+route-choice text through accepted review to a non-writing `NEXT` append
+preview. The reviewed route adoption apply gate was then used for route A, and
+the reviewed queue mutation gate promoted the selected package to `NOW`.
 Do not use git add . for future broad updates unless the workspace is known clean.
 Track lightweight control-plane/governance files intentionally.
 Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: No Active Automatic Construction Item; wait for Jenn route selection.
+Next active route: AGENTS OS VCPToolBox controlled recovery restart v0.1.
 ```
 
 ## Safety Notes
