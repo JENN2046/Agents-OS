@@ -19,11 +19,13 @@ write, provider prompt, or deployment plan.
 - No `state-private/` content was read.
 - No secrets, tokens, cookies, credentials, provider raw responses, private raw
   memory, active runtime config values, or raw logs were read or output.
-- No service was started.
+- Only bounded localhost service observations recorded in this queue were
+  performed; no long-running service was left active.
 - No executor was run.
 - No provider call was performed.
-- No VCPToolBox source, active config, plugin manifest, or runtime state was
-  modified.
+- VCPToolBox plugin manifests were modified only by Jenn-authorized disabling;
+  no VCPToolBox core source, active config, provider/runtime config, or runtime
+  state file was modified by this governance batch.
 - No external write, push, tag, release, deploy, publish, history rewrite, bulk
   move, delete, rename, or overwrite was performed.
 - `.colameta/memory.md` content was not written and remains outside formal
@@ -107,7 +109,11 @@ route_a_selection_activation_validation=PASS
 selected_route=A
 vcptoolbox_controlled_recovery_restart_exists=true
 vcptoolbox_controlled_recovery_restart_validation=PASS
-active_now=AGENTS_OS_VCPToolBox_main_no_plugin_no_provider_startup_gate_v0.1
+vcptoolbox_main_no_plugin_startup_gate_exists=true
+vcptoolbox_main_no_plugin_startup_gate_validation=PASS
+vcptoolbox_enabled_plugin_manifests=0
+vcptoolbox_blocked_plugin_manifests=83
+active_now=AGENTS_OS_VCPToolBox_localhost_usability_smoke_gate_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -258,6 +264,14 @@ AdminPanel listened on localhost, local HTTP checks passed or redirected as
 expected, the process stopped, and ports were released. Main `server.js` was
 not started because it enters plugin load/service/static/prewarm paths.
 
+Jenn then authorized direct plugin disabling. The main no-plugin/no-provider
+startup gate disabled all enabled plugin manifests, confirmed enabled manifests
+are now 0 and blocked manifests are 83, used the current Node v22.23.1 binary,
+started main `server.js` on localhost with dummy environment values, observed
+expected unauthenticated local responses, stopped the process, and released the
+ports. No provider call, plugin execution, core-file edit, raw log output, or
+active config value output was performed.
+
 The Dashboard now also emits a `next_user_action` handoff during the stop-state.
 It points to Jenn as the decision owner, lists accepted route ids A-E, and
 points to the route-selection confirmation template source without printing the
@@ -274,24 +288,25 @@ adopting, promoting, or executing a route.
 Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
-active only under controlled localhost/no-provider/no-plugin gates. VCPToolBox
-provider use, plugin activation, runtime config mutation, and external Git
-publication remain blocked. ColaMeta readiness and MCP boundary evidence do not
-carry forward runtime/provider/executor authorization.
+active only under controlled localhost/no-provider/plugins-disabled gates.
+VCPToolBox provider use, plugin activation, runtime config mutation, and
+external Git publication remain blocked. ColaMeta readiness and MCP boundary
+evidence do not carry forward runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1
+### NOW-001: AGENTS OS VCPToolBox localhost usability smoke gate v0.1
 
 Route option: A - VCPToolBox Runtime Recovery Or Controlled First-Use
-Source: controlled recovery restart result
-Mode: prepare or execute a main-service startup gate without plugin/provider activation
-Boundary: direct `server.js` startup remains blocked unless plugin/service/prewarm paths are disabled by a reviewed no-core-drift strategy
+Source: main no-plugin/no-provider startup gate result
+Mode: localhost-only usability smoke with plugins disabled and providers blocked
+Boundary: verify local UI/login/admin surface only; do not re-enable plugins or call providers
 Must keep: localhost_only=true
 Must keep: provider_call_authorized=false
 Must keep: plugin_activation_authorized=false
-Must keep: main_server_direct_start_authorized=false
-Must keep: core_file_edit_authorized=false unless separately reviewed
+Must keep: plugin_execution_authorized=false
+Must keep: enabled_plugin_manifests=0 unless Jenn explicitly chooses re-enable gate
+Must keep: core_file_edit_authorized=false
 Must keep: external_write_authorized=false
 Must keep: secret_raw_read_authorized=false
 Must keep: runtime_config_value_output_authorized=false
@@ -364,6 +379,7 @@ control_chain_reviewed_route_adoption_apply_gate_v0.1: appended "AGENTS OS VCPTo
 queue_manager_reviewed_mutation_v0.1: closed NOW "No Active Automatic Construction Item"; promoted "AGENTS OS VCPToolBox controlled recovery restart v0.1"; proposal=QUEUEPROPOSAL-11ED25D0B5
 route_a_selection_activation_v0.1: closed for Jenn-selected route A activation into NOW; VCPToolBox controlled recovery restart package is active, while VCPToolBox service start, provider call, plugin activation, Memory write, and external write remain unauthorized
 vcptoolbox_controlled_recovery_restart_v0.1: closed with limit after localhost-only AdminPanel recovery observation; AdminPanel native/runtime check passed, main server direct start, plugin activation, provider call, core-file edit, Memory write, and external write remain unauthorized
+vcptoolbox_main_no_plugin_startup_gate_v0.1: closed after disabling plugin manifests and confirming main server localhost startup under no-plugin/no-provider boundary; provider call, plugin execution, core-file edit, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -401,12 +417,12 @@ secrets/auth/provider/runtime config reads or writes
 ## Immediate Construction Instruction
 
 Route A has been selected by Jenn and remains active. The controlled recovery
-restart package has completed with limit.
+restart package and main no-plugin/no-provider startup gate have completed.
 
 The next construction batch should prepare or execute the next safe local gate:
 
 ```text
-AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1
+AGENTS OS VCPToolBox localhost usability smoke gate v0.1
 ```
 
 The batch must remain local and bounded:
@@ -415,12 +431,13 @@ The batch must remain local and bounded:
 localhost_only=true
 execution_authorized=false until package review completes
 admin_panel_localhost_observation=PASS
-main_server_direct_start_authorized=false
-service_start_authorized=false until a reviewed no-plugin/no-provider strategy exists
+main_no_plugin_startup_observation=PASS
+service_start_authorized=true only for timeboxed localhost usability smoke
 provider_call_authorized=false
 plugin_activation_authorized=false
 plugin_execution_authorized=false
-core_file_edit_authorized=false unless separately reviewed
+enabled_plugin_manifests=0
+core_file_edit_authorized=false
 runtime_config_value_output_authorized=false
 secret_raw_read_authorized=false
 state_private_read_authorized=false
@@ -428,8 +445,7 @@ formal_memory_write_authorized=false
 external_write_authorized=false
 ```
 
-Do not infer permission to run direct `server.js`, activate plugins, call
-providers, modify auth/provider/runtime configuration, write formal Memory, or
-perform external writes from the AdminPanel recovery result. The active route
-only authorizes a no-plugin/no-provider main startup gate that avoids core-file
-drift unless separately reviewed.
+Do not infer permission to activate plugins, call providers, modify
+auth/provider/runtime configuration, write formal Memory, or perform external
+writes from the main no-plugin startup result. The active route only authorizes
+bounded localhost usability smoke while plugins remain disabled.
