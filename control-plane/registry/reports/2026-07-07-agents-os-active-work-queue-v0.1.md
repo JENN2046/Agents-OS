@@ -105,7 +105,9 @@ active_work_queue_closed_order_reconciliation_validation=PASS
 route_a_selection_activation_exists=true
 route_a_selection_activation_validation=PASS
 selected_route=A
-active_now=AGENTS_OS_VCPToolBox_controlled_recovery_restart_v0.1
+vcptoolbox_controlled_recovery_restart_exists=true
+vcptoolbox_controlled_recovery_restart_validation=PASS
+active_now=AGENTS_OS_VCPToolBox_main_no_plugin_no_provider_startup_gate_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -115,7 +117,7 @@ colameta_memory_size_bytes=0
 ops_migration_files=262
 ops_migration_plans=80
 ops_migration_receipts=128
-vcptoolbox_runtime_source=present_but_paused
+vcptoolbox_runtime_source=present_controlled_recovery
 ```
 
 ## Current Diagnosis
@@ -250,6 +252,12 @@ queue mutation gate then promoted it to `NOW`. Execution remains unauthorized.
 The Dashboard route adoption gate readiness card makes that future gate visible
 without changing queue state.
 
+The VCPToolBox controlled recovery restart package has now been executed with a
+bounded AdminPanel localhost observation. Native addon checks passed,
+AdminPanel listened on localhost, local HTTP checks passed or redirected as
+expected, the process stopped, and ports were released. Main `server.js` was
+not started because it enters plugin load/service/static/prewarm paths.
+
 The Dashboard now also emits a `next_user_action` handoff during the stop-state.
 It points to Jenn as the decision owner, lists accepted route ids A-E, and
 points to the route-selection confirmation template source without printing the
@@ -266,22 +274,24 @@ adopting, promoting, or executing a route.
 Only one item may occupy `NOW`.
 
 Historical plans and receipts are source material, not live tasks. VCPToolBox is
-active only as a controlled recovery restart planning route. VCPToolBox service
-start, provider use, plugin activation, runtime config mutation, and external
-Git publication remain blocked. ColaMeta readiness and MCP boundary evidence do
-not carry forward runtime/provider/executor authorization.
+active only under controlled localhost/no-provider/no-plugin gates. VCPToolBox
+provider use, plugin activation, runtime config mutation, and external Git
+publication remain blocked. ColaMeta readiness and MCP boundary evidence do not
+carry forward runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS VCPToolBox controlled recovery restart v0.1
+### NOW-001: AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1
 
 Route option: A - VCPToolBox Runtime Recovery Or Controlled First-Use
-Source: explicit Jenn route-choice preview
-Mode: prepare first safe package only
-Boundary: queue adoption requires separate reviewed mutation gate
+Source: controlled recovery restart result
+Mode: prepare or execute a main-service startup gate without plugin/provider activation
+Boundary: direct `server.js` startup remains blocked unless plugin/service/prewarm paths are disabled by a reviewed no-core-drift strategy
 Must keep: localhost_only=true
 Must keep: provider_call_authorized=false
 Must keep: plugin_activation_authorized=false
+Must keep: main_server_direct_start_authorized=false
+Must keep: core_file_edit_authorized=false unless separately reviewed
 Must keep: external_write_authorized=false
 Must keep: secret_raw_read_authorized=false
 Must keep: runtime_config_value_output_authorized=false
@@ -353,6 +363,7 @@ route_selection_pause_handoff_v0.1: closed for route-selection pause handoff; Je
 control_chain_reviewed_route_adoption_apply_gate_v0.1: appended "AGENTS OS VCPToolBox controlled recovery restart v0.1" to NEXT as NEXT-001; proposal=ROUTEQUEUEPROPOSAL-083357F0B6
 queue_manager_reviewed_mutation_v0.1: closed NOW "No Active Automatic Construction Item"; promoted "AGENTS OS VCPToolBox controlled recovery restart v0.1"; proposal=QUEUEPROPOSAL-11ED25D0B5
 route_a_selection_activation_v0.1: closed for Jenn-selected route A activation into NOW; VCPToolBox controlled recovery restart package is active, while VCPToolBox service start, provider call, plugin activation, Memory write, and external write remain unauthorized
+vcptoolbox_controlled_recovery_restart_v0.1: closed with limit after localhost-only AdminPanel recovery observation; AdminPanel native/runtime check passed, main server direct start, plugin activation, provider call, core-file edit, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -389,12 +400,13 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-Route A has been selected by Jenn and is active in `NOW`.
+Route A has been selected by Jenn and remains active. The controlled recovery
+restart package has completed with limit.
 
-The next construction batch should prepare the first safe local package:
+The next construction batch should prepare or execute the next safe local gate:
 
 ```text
-AGENTS OS VCPToolBox controlled recovery restart v0.1
+AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1
 ```
 
 The batch must remain local and bounded:
@@ -402,10 +414,13 @@ The batch must remain local and bounded:
 ```text
 localhost_only=true
 execution_authorized=false until package review completes
-service_start_authorized=false until a scoped first-start package allows it
+admin_panel_localhost_observation=PASS
+main_server_direct_start_authorized=false
+service_start_authorized=false until a reviewed no-plugin/no-provider strategy exists
 provider_call_authorized=false
 plugin_activation_authorized=false
 plugin_execution_authorized=false
+core_file_edit_authorized=false unless separately reviewed
 runtime_config_value_output_authorized=false
 secret_raw_read_authorized=false
 state_private_read_authorized=false
@@ -413,7 +428,8 @@ formal_memory_write_authorized=false
 external_write_authorized=false
 ```
 
-Do not infer permission to start VCPToolBox, activate plugins, call providers,
-modify auth/provider/runtime configuration, write formal Memory, or perform
-external writes from this queue activation. The active route only authorizes
-preparing the controlled recovery restart package.
+Do not infer permission to run direct `server.js`, activate plugins, call
+providers, modify auth/provider/runtime configuration, write formal Memory, or
+perform external writes from the AdminPanel recovery result. The active route
+only authorizes a no-plugin/no-provider main startup gate that avoids core-file
+drift unless separately reviewed.

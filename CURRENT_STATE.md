@@ -20,13 +20,16 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `AGENTS OS VCPToolBox controlled recovery restart v0.1`.
+- The active work queue's current `NOW` item is `AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
 - Jenn selected route A: `VCPToolBox Runtime Recovery Or Controlled First-Use`.
 - The Control Chain reviewed route adoption apply gate and reviewed queue mutation gate moved `AGENTS OS VCPToolBox controlled recovery restart v0.1` into `NOW`.
 - Route A activation did not start VCPToolBox, activate plugins, call providers, write formal Memory, or perform external writes.
+- VCPToolBox Controlled Recovery Restart v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-controlled-recovery-restart-v0.1.md`.
+- The controlled recovery restart completed with limit: AdminPanel localhost observation passed, native addon checks passed, the AdminPanel process stopped cleanly, and main `server.js` was not started.
+- VCPToolBox main service remains unverified because direct `server.js` startup enters plugin load/service/static/prewarm paths.
 - Active Work Queue Closed Order Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-closed-order-reconciliation-v0.1.md`.
 - The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records the route A selection activation without starting runtime/provider work.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
@@ -89,7 +92,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Root Private History Review Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md`.
 - Root private-history review found no Notion-domain or common token-shape path-level hits in current HEAD or reachable root Git history for the scanned pattern set; no history scrub is indicated by that scan.
 - Route Selection Checkpoint v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-checkpoint-v0.1.md`.
-- Route selection checkpoint remains historical evidence; route A is now selected by Jenn, but no VCPToolBox runtime, provider, executor, Memory, external Git, or plugin execution has been performed.
+- Route selection checkpoint remains historical evidence; route A is now selected by Jenn. A bounded AdminPanel localhost observation has been performed, but no main VCPToolBox service, provider, executor, Memory, external Git, or plugin execution has been performed.
 - Machine Route Selection Stop Guard v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-route-selection-stop-guard-v0.1.md`.
 - Machine preview still treats `No Active Automatic Construction Item` fixtures as `blocked=true`, `actionable=false`, `requires_jenn_decision=true`, and `execution_authorized=false`; the current queue is no longer in that stop-state.
 - Machine Next User Action Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-machine-next-user-action-handoff-v0.1.md`.
@@ -121,24 +124,25 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - No executor real run was performed.
 - No provider availability was tested.
 - No formal AGENTS OS Memory write was performed.
-- VCPToolBox runtime readiness after route A activation was not rechecked in this snapshot.
+- VCPToolBox AdminPanel localhost recovery has been rechecked; main service readiness remains unverified.
 
 ## Current Blockers
 
 - `.colameta/memory.md`, `.colameta/todolist.json`, and `.colameta/decisions.json` are effectively empty.
 - ColaMeta runtime preview payload with `can_apply=true` exists and remains blocked until a future exact apply gate.
 - Root Git external publication remains blocked until Jenn chooses a target and a separate exact external-write gate exists.
-- VCPToolBox has prior build/startup generated state that needs separate review before controlled recovery restart work.
+- VCPToolBox has prior build/startup generated state that remains present and was not reverted or overwritten.
+- VCPToolBox direct main `server.js` startup remains blocked until a no-plugin/no-provider startup strategy exists.
 
 ## Next Actions
 
-1. Prepare `AGENTS OS VCPToolBox controlled recovery restart v0.1` as the active route A package, preserving localhost-only, no-provider, no-plugin-activation, no-secret-read, and no-runtime-config-value-output boundaries.
+1. Prepare or execute `AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1`, preserving localhost-only, no-provider, no-plugin-activation, no-core-file-edit unless separately reviewed, no-secret-read, and no-runtime-config-value-output boundaries.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
 5. Keep `.colameta/runtime/plan-previews/FPi0EWQs4DiqMdNsPpPHzc0Bhp13yDXh.json` as inert preview payload until a separate exact apply gate exists.
 6. Continue keeping `docctl status` and `docctl doctor` clean after each governance update.
-7. Keep VCPToolBox service start blocked until the controlled recovery restart package explicitly scopes a localhost-only observation step.
+7. Keep direct VCPToolBox `server.js` startup blocked until the main no-plugin/no-provider gate has a reviewed strategy that avoids core-file drift or receives explicit source-edit approval.
 8. If Jenn wants any remote/PR/public backup for the root repo, run private-history review or history-scrub planning first.
 
 ## Current Handoff
@@ -149,7 +153,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Route A Selection Activation v0.1.
+Last completed task: VCPToolBox Controlled Recovery Restart v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -193,7 +197,11 @@ token-shape path-level hits for the scanned patterns and did not authorize push,
 history rewrite, scrub, external write, or publication.
 The route-selection checkpoint and pause handoff remain historical evidence for
 the prior stop-state. Jenn has now chosen route A, and the selected package has
-been promoted into `NOW`.
+been promoted through `NOW`.
+The VCPToolBox controlled recovery restart package completed with limit:
+AdminPanel localhost observation passed, native checks passed, no raw log or
+active config value was output, and the process was stopped cleanly.
+The current active item is now the main no-plugin/no-provider startup gate.
 The Machine route-selection stop guard still protects any future `No Active
 Automatic Construction Item` fixture, but current Machine preview is actionable
 for the route A package while keeping `execution_authorized=false`.
@@ -247,7 +255,7 @@ Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: AGENTS OS VCPToolBox controlled recovery restart v0.1.
+Next active route: AGENTS OS VCPToolBox main no-plugin/no-provider startup gate v0.1.
 ```
 
 ## Safety Notes
