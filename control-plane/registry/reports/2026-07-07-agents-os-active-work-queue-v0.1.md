@@ -96,6 +96,8 @@ machine_next_user_action_handoff_exists=true
 machine_next_user_action_handoff_validation=PASS
 machine_route_choice_adoption_bundle_readiness_exists=true
 machine_route_choice_adoption_bundle_readiness_validation=PASS
+route_selection_pause_handoff_exists=true
+route_selection_pause_handoff_validation=PASS
 next_route_selection_package_exists=true
 next_route_selection_package_validation=PASS
 active_work_queue_closed_order_reconciliation_exists=true
@@ -220,6 +222,10 @@ route adoption, active queue mutation, queue promotion, raw confirmation/templat
 output, and execution unauthorized. The next route selection package now
 preserves the route options and exact confirmation templates without selecting
 any route.
+The route-selection pause handoff records the current resume point for Jenn:
+`No Active Automatic Construction Item`, route choices A-E, and no route
+selection, adoption, queue promotion, execution, provider, runtime, Memory, or
+external-write authorization.
 The Task Producer route-choice preview can parse a future explicit Jenn
 selection text, but it still does not adopt the route into workspace state or
 mutate the queue.
@@ -382,6 +388,7 @@ control_chain_route_choice_end_to_end_readiness_v0.1: closed for preview-only A-
 control_chain_route_choice_adoption_bundle_preview_v0.1: closed for preview-only route-choice adoption bundle packaging; raw confirmation/template output, real queue write, route adoption, queue promotion, and execution remain unauthorized
 dashboard_route_choice_adoption_bundle_visibility_v0.1: closed for preview-only route-choice adoption bundle visibility; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
 machine_route_choice_adoption_bundle_readiness_v0.1: closed for preview-only Machine route-choice adoption bundle readiness; raw confirmation/template output, route adoption, active queue mutation, queue promotion, and execution remain unauthorized
+route_selection_pause_handoff_v0.1: closed for route-selection pause handoff; Jenn route choice remains required, and route selection, adoption, queue promotion, execution, provider, runtime, Memory, and external writes remain unauthorized
 ```
 
 ## Machine Input Contract

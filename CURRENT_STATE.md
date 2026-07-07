@@ -21,6 +21,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
 - The active work queue's current `NOW` item is `No Active Automatic Construction Item`.
+- Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
+- The pause handoff records the current resume point: Jenn chooses A-E later; no route is selected, adopted, promoted, or executed.
 - Active Work Queue Closed Order Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-closed-order-reconciliation-v0.1.md`.
 - The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records this closed-order reconciliation without selecting or executing a route.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
@@ -126,7 +128,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 
 ## Next Actions
 
-1. Wait for Jenn to choose one route from `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route.
+1. Wait for Jenn to choose one route from `control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md`: VCPToolBox recovery, Formal Memory loop, external Git publication exact gate, provider execution design gate, or a new AGENTS OS construction route. Resume from `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
@@ -143,7 +145,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: Route Selection Checkpoint v0.1.
+Last completed task: Route Selection Pause Handoff v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -201,6 +203,9 @@ Machine preview now also exposes route-choice adoption bundle readiness. It
 shows that the bundle preview evidence exists, but keeps `can_apply_now=false`,
 route adoption, queue mutation, queue promotion, raw confirmation/template
 output, and execution unauthorized.
+The route-selection pause handoff records this as an intentional pause before
+Jenn chooses A-E. It is a resume marker only and does not select, adopt,
+promote, or execute any route.
 The next route selection package now gives Jenn concrete templates for choosing
 one route without letting Nobao or Machine auto-select it.
 The Task Producer route-choice preview can parse a future explicit Jenn route
