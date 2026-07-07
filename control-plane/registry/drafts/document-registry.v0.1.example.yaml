@@ -14822,6 +14822,164 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
+  - id: agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1
+    title: AGENTS OS VCPToolBox Localhost Usability Smoke Gate v0.1
+    doc_type: review
+    status: accepted
+    scope: localhost-only VCPToolBox main plus AdminPanel usability smoke with plugins disabled
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-main-no-plugin-startup-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - VCPToolBox localhost smoke behavior changes
+        - AdminPanel routing or auth behavior changes
+        - plugin manifest enabled or blocked counts change
+        - runtime checkout dirty state changes
+    security_boundary:
+      - localhost-only main and AdminPanel observation
+      - plugin manifests disabled
+      - no plugin execution
+      - no provider call
+      - no external HTTP check
+      - no auth/token/cookie/session configuration change
+      - no cookie content output
+      - no provider/runtime config change
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no core file edit
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1-receipt
+    title: AGENTS OS VCPToolBox Localhost Usability Smoke Gate v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for VCPToolBox localhost usability smoke gate
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - VCPToolBox localhost smoke receipt changes
+    security_boundary:
+      - local receipt only
+      - plugin manifests disabled
+      - no plugin execution
+      - no provider call
+      - no external HTTP check
+      - no auth/token/cookie/session configuration change
+      - no cookie content output
+      - no provider/runtime config change
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no core file edit
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1-review
+    title: AGENTS OS VCPToolBox Localhost Usability Smoke Gate v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: review for VCPToolBox localhost usability smoke gate
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - VCPToolBox localhost smoke residual risk changes
+        - plugin manifest enabled or blocked counts change
+    security_boundary:
+      - local review only
+      - plugin manifests disabled
+      - no plugin execution
+      - no provider call
+      - no external HTTP check
+      - no auth/token/cookie/session configuration change
+      - no cookie content output
+      - no provider/runtime config change
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no core file edit
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate --json
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
   - id: agents-os-next-route-selection-package-v0.1
     title: AGENTS OS Next Route Selection Package v0.1
     doc_type: review

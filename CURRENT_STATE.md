@@ -20,7 +20,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
 - The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `AGENTS OS VCPToolBox localhost usability smoke gate v0.1`.
+- The active work queue's current `NOW` item is `AGENTS OS VCPToolBox controlled local-use handoff gate v0.1`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
@@ -32,6 +32,8 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - VCPToolBox Main No-Plugin Startup Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-main-no-plugin-startup-gate-v0.1.md`.
 - Jenn authorized direct plugin disabling; VCPToolBox currently has 0 enabled plugin manifests and 83 blocked plugin manifests.
 - VCPToolBox main `server.js` localhost startup passed under the no-plugin/no-provider boundary with Node v22.23.1, dummy environment values, no core-file edit, no provider call, and no raw log or active config value output.
+- VCPToolBox Localhost Usability Smoke Gate v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-localhost-usability-smoke-gate-v0.1.md`.
+- VCPToolBox main plus independent AdminPanel localhost smoke passed: ports 18740 and 18741 listened, login verification and authenticated check paths returned 200, AdminPanel static entry returned 200, plugin manifests stayed disabled, and both processes stopped cleanly.
 - Active Work Queue Closed Order Reconciliation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-closed-order-reconciliation-v0.1.md`.
 - The Dashboard `last_completed` surface is backed by the Active Work Queue `CLOSED` tail; the current tail records the route A selection activation without starting runtime/provider work.
 - AGENTS OS Machine Skeleton v0.1 exists at `execution/agents-os-machine/`.
@@ -127,7 +129,7 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - No provider availability was tested.
 - No formal AGENTS OS Memory write was performed.
 - VCPToolBox AdminPanel localhost recovery has been rechecked.
-- VCPToolBox main localhost startup is verified only in no-plugin/no-provider mode.
+- VCPToolBox main plus AdminPanel localhost usability smoke is verified only in no-plugin/no-provider mode with dummy environment values.
 
 ## Current Blockers
 
@@ -135,11 +137,11 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - ColaMeta runtime preview payload with `can_apply=true` exists and remains blocked until a future exact apply gate.
 - Root Git external publication remains blocked until Jenn chooses a target and a separate exact external-write gate exists.
 - VCPToolBox has prior build/startup generated state that remains present and was not reverted or overwritten.
-- VCPToolBox normal provider-backed or plugin-backed use remains unverified.
+- VCPToolBox normal provider-backed or plugin-backed use remains unverified and unauthorized.
 
 ## Next Actions
 
-1. Execute `AGENTS OS VCPToolBox localhost usability smoke gate v0.1`, preserving localhost-only, no-provider, plugins-disabled, no-core-file-edit, no-secret-read, and no-runtime-config-value-output boundaries.
+1. Prepare `AGENTS OS VCPToolBox controlled local-use handoff gate v0.1`, preserving localhost-only, no-provider, plugins-disabled, no-core-file-edit, no-secret-read, no-cookie-output, and no-runtime-config-value-output boundaries.
 2. Keep dashboard / Memory candidate output preview-only without formal Memory write.
 3. Keep real ColaMeta executor run and provider-backed execution blocked.
 4. Keep MCP/connector work boundary-only until a separate exact connector smoke or MCP contract gate is chosen.
@@ -156,7 +158,7 @@ and governance friction fix.
 Resume here:
 
 ```text
-Last completed task: VCPToolBox Main No-Plugin Startup Gate v0.1.
+Last completed task: VCPToolBox Localhost Usability Smoke Gate v0.1.
 Mode: Yellow Work Batch.
 The machine skeleton is scoped to local preview-only queue consumption and
 task-envelope preview validation.
@@ -209,7 +211,12 @@ manifests directly under Jenn's instruction, confirmed enabled manifests are
 now 0, started main `server.js` on localhost with Node v22.23.1 and dummy
 environment values, observed local unauthenticated responses, and stopped the
 process cleanly. Provider-backed and plugin-backed use remain unverified.
-The current active item is now the localhost usability smoke gate.
+The VCPToolBox localhost usability smoke gate then started both main
+`server.js` and independent `adminServer.js` on localhost, verified login
+verification and authenticated check paths, verified the AdminPanel static
+entry, and stopped both processes cleanly. Provider-backed and plugin-backed
+use remain unverified and unauthorized.
+The current active item is now the controlled local-use handoff gate.
 The Machine route-selection stop guard still protects any future `No Active
 Automatic Construction Item` fixture, but current Machine preview is actionable
 for the route A package while keeping `execution_authorized=false`.
@@ -263,11 +270,11 @@ Keep state-private, secrets, runtime source checkouts, runtime caches, logs,
 node_modules, build outputs, and .colameta runtime state out of Git.
 Do not externally push the root Git history without private-history review or history-scrub gate.
 Run docctl status/doctor after any governance edits.
-Next active route: AGENTS OS VCPToolBox localhost usability smoke gate v0.1.
+Next active route: AGENTS OS VCPToolBox controlled local-use handoff gate v0.1.
 ```
 
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
 - This snapshot did not read secrets, tokens, cookies, provider raw responses, or private raw memory.
-- This snapshot started VCPToolBox main `server.js` only as a timeboxed localhost observation after plugins were disabled, then stopped it. It did not run executor, call providers, modify auth/provider/runtime configuration, push, deploy, publish, tag, or perform destructive cleanup.
+- This snapshot started VCPToolBox main `server.js` and independent `adminServer.js` only as timeboxed localhost observations after plugins were disabled, then stopped them. It did not run executor, call providers, modify auth/provider/runtime configuration, output cookies, push, deploy, publish, tag, or perform destructive cleanup.
