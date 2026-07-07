@@ -115,7 +115,9 @@ vcptoolbox_enabled_plugin_manifests=0
 vcptoolbox_blocked_plugin_manifests=83
 vcptoolbox_localhost_usability_smoke_gate_exists=true
 vcptoolbox_localhost_usability_smoke_gate_validation=PASS
-active_now=AGENTS_OS_VCPToolBox_controlled_local_use_handoff_gate_v0.1
+vcptoolbox_controlled_local_use_handoff_gate_exists=true
+vcptoolbox_controlled_local_use_handoff_gate_validation=PASS
+active_now=AGENTS_OS_VCPToolBox_next_branch_decision_checkpoint_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -282,6 +284,11 @@ resolved to localhost 18741, both processes stopped, and ports were released.
 No provider route, plugin route, runtime config route, raw log route, or
 external HTTP route was called.
 
+The VCPToolBox controlled local-use handoff gate recorded the safe local run
+shape without starting services. It keeps the current recovery at no-provider,
+plugins-disabled local use and requires Jenn to choose a branch before active
+config real-local-use, selective plugin restore, or provider-backed use.
+
 The Dashboard now also emits a `next_user_action` handoff during the stop-state.
 It points to Jenn as the decision owner, lists accepted route ids A-E, and
 points to the route-selection confirmation template source without printing the
@@ -305,12 +312,12 @@ evidence do not carry forward runtime/provider/executor authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS VCPToolBox controlled local-use handoff gate v0.1
+### NOW-001: AGENTS OS VCPToolBox next branch decision checkpoint v0.1
 
 Route option: A - VCPToolBox Runtime Recovery Or Controlled First-Use
-Source: localhost usability smoke gate result
-Mode: package the safe local run shape and next branch decision
-Boundary: handoff only; do not re-enable plugins, call providers, or start a long-running service
+Source: controlled local-use handoff gate result
+Mode: decision checkpoint after local recovery handoff
+Boundary: do not re-enable plugins, call providers, modify active config, or start a long-running service until Jenn chooses a branch
 Must keep: localhost_only=true
 Must keep: provider_call_authorized=false
 Must keep: plugin_activation_authorized=false
@@ -392,6 +399,7 @@ route_a_selection_activation_v0.1: closed for Jenn-selected route A activation i
 vcptoolbox_controlled_recovery_restart_v0.1: closed with limit after localhost-only AdminPanel recovery observation; AdminPanel native/runtime check passed, main server direct start, plugin activation, provider call, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_main_no_plugin_startup_gate_v0.1: closed after disabling plugin manifests and confirming main server localhost startup under no-plugin/no-provider boundary; provider call, plugin execution, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_localhost_usability_smoke_gate_v0.1: closed after main plus AdminPanel localhost smoke passed with plugins disabled; provider call, plugin execution, runtime config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
+vcptoolbox_controlled_local_use_handoff_gate_v0.1: closed after recording the safe local run shape and next expansion branches; service start, provider call, plugin restore, active config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
 ```
 
 ## Machine Input Contract
@@ -430,12 +438,12 @@ secrets/auth/provider/runtime config reads or writes
 
 Route A has been selected by Jenn and remains active. The controlled recovery
 restart package, main no-plugin/no-provider startup gate, and localhost
-usability smoke gate have completed.
+usability smoke gate, and controlled local-use handoff gate have completed.
 
 The next construction batch should prepare or execute the next safe local gate:
 
 ```text
-AGENTS OS VCPToolBox controlled local-use handoff gate v0.1
+AGENTS OS VCPToolBox next branch decision checkpoint v0.1
 ```
 
 The batch must remain local and bounded:
@@ -446,7 +454,8 @@ execution_authorized=false except local handoff documentation
 admin_panel_localhost_observation=PASS
 main_no_plugin_startup_observation=PASS
 localhost_usability_smoke=PASS
-service_start_authorized=false unless repeating a timeboxed localhost check
+controlled_local_use_handoff=PASS
+service_start_authorized=false
 provider_call_authorized=false
 plugin_activation_authorized=false
 plugin_execution_authorized=false
@@ -462,5 +471,6 @@ external_write_authorized=false
 
 Do not infer permission to activate plugins, call providers, modify
 auth/provider/runtime configuration, write formal Memory, or perform external
-writes from the main no-plugin startup result. The active route only authorizes
-controlled local-use handoff while plugins remain disabled.
+writes from the local-use handoff. Jenn should choose the next branch:
+no-provider utility mode, active config real-local-use, selective plugin
+restore, or explicit provider-backed use.
