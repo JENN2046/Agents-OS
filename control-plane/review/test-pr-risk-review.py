@@ -232,7 +232,9 @@ def main() -> int:
     denied_secret_files = review.classify_paths(
         [
             "credentials.json",
+            "application_default_credentials.json",
             "token.json",
+            "prod-token.json",
             "secret.yaml",
             "config.env",
             ".envrc",
@@ -246,11 +248,16 @@ def main() -> int:
     )
     check(denied_secret_files["path_input_valid"] is False, "secret-like filenames should be invalid", failures)
     check(
-        denied_secret_files["invalid_path_count"] == 10,
+        denied_secret_files["invalid_path_count"] == 12,
         "all secret-like filename fixtures should be rejected",
         failures,
     )
     check(denied_secret_files["risk_surface_count"] == 0, "secret-like filenames should not be content-scanned", failures)
+    check(
+        all(item.get("path") == "[redacted]" for item in denied_secret_files["invalid_paths"]),
+        "invalid protected paths should be redacted",
+        failures,
+    )
 
     denied_secret_dirs = review.classify_paths(
         ["secret/foo.py", "tokens/session.py", "cookies/session.py"],

@@ -233,6 +233,13 @@ DENIED_FILE_SUFFIXES = {
     ".pfx",
 }
 
+DENIED_SECRET_DATA_SUFFIXES = {
+    ".json",
+    ".toml",
+    ".yaml",
+    ".yml",
+}
+
 SECRET_FILENAME_TERMS = {
     "api_key",
     "apikey",
@@ -256,7 +263,7 @@ ALLOWED_TEMPLATE_SUFFIXES = {
 
 
 def invalid_path(reason: str, path: str) -> dict[str, str]:
-    return {"path": path, "reason": reason}
+    return {"path": "[redacted]", "reason": reason}
 
 
 def is_allowed_template_filename(name: str) -> bool:
@@ -288,7 +295,9 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("environment secret paths are not allowed", path)
     if any(lowered_name.endswith(suffix) for suffix in DENIED_FILE_SUFFIXES):
         return None, invalid_path("key or certificate paths are not allowed", path)
-    if candidate_path.stem.lower() in DENIED_FILENAME_STEMS:
+    lowered_stem = candidate_path.stem.lower()
+    secret_name_hit = lowered_stem in DENIED_FILENAME_STEMS or any(term in lowered_stem for term in SECRET_FILENAME_TERMS)
+    if secret_name_hit and candidate_path.suffix.lower() in DENIED_SECRET_DATA_SUFFIXES:
         return None, invalid_path("secret-like filenames are not allowed", path)
     return str(candidate_path), None
 
