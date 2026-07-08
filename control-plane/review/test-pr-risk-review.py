@@ -270,11 +270,46 @@ def main() -> int:
         failures,
     )
 
+    denied_secret_dir_variants = review.classify_paths(
+        ["prod-secrets/config.yaml", "tokens-backup/session.yaml", "customer_credentials/data.py"],
+        include_content=True,
+    )
+    check(
+        denied_secret_dir_variants["path_input_valid"] is False,
+        "secret-like directory components should be invalid",
+        failures,
+    )
+    check(
+        denied_secret_dir_variants["invalid_path_count"] == 3,
+        "all secret-like directory component fixtures should be rejected",
+        failures,
+    )
+    check(
+        denied_secret_dir_variants["risk_surface_count"] == 0,
+        "secret-like directories should not be content-scanned",
+        failures,
+    )
+
     allowed_templates = review.classify_paths(
         ["config.env.example", ".env.example", "private.pem.template"],
         include_content=False,
     )
     check(allowed_templates["path_input_valid"] is True, "template filenames should remain valid", failures)
+
+    legitimate_secret_handling_code = review.classify_paths(
+        ["ops/validation/validate-no-secrets.sh", "control-plane/review/token_redaction.py"],
+        include_content=False,
+    )
+    check(
+        legitimate_secret_handling_code["path_input_valid"] is True,
+        "legitimate secret-handling code paths should stay valid",
+        failures,
+    )
+    check(
+        "redaction_secret_handling" in surface_ids(legitimate_secret_handling_code),
+        "legitimate secret-handling code paths should classify as redaction risk",
+        failures,
+    )
 
     symlink_probe = ROOT / "__pr_risk_review_symlink_probe.py"
     symlink_target: Path | None = None
@@ -305,7 +340,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=16 failures={len(failures)}")
+        print(f"cases=18 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -322,9 +357,11 @@ def main() -> int:
     print("PASS secret-like filename rejection fixture")
     print("PASS protected secret directory rejection fixture")
     print("PASS private path class rejection fixture")
+    print("PASS secret-like directory component rejection fixture")
     print("PASS allowed template filename fixture")
+    print("PASS legitimate secret-handling path fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=16 failures=0")
+    print("cases=18 failures=0")
     return 0
 
 

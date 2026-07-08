@@ -244,6 +244,11 @@ SECRET_FILENAME_TERMS = {
     "token",
 }
 
+DENIED_FILENAME_STEMS = SECRET_FILENAME_TERMS | {
+    "cookie",
+    "cookies",
+}
+
 ALLOWED_TEMPLATE_SUFFIXES = {
     ".example",
     ".template",
@@ -271,7 +276,10 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
     if ".." in candidate_path.parts:
         return None, invalid_path("parent traversal is not allowed", path)
     lowered_parts = [part.lower() for part in candidate_path.parts]
+    lowered_dir_parts = lowered_parts[:-1]
     if any(part in DENIED_PATH_PARTS for part in lowered_parts):
+        return None, invalid_path("private or credential paths are not allowed", path)
+    if any(term in part for part in lowered_dir_parts for term in SECRET_FILENAME_TERMS):
         return None, invalid_path("private or credential paths are not allowed", path)
     lowered_name = candidate_path.name.lower()
     if is_allowed_template_filename(lowered_name):
@@ -280,7 +288,7 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("environment secret paths are not allowed", path)
     if any(lowered_name.endswith(suffix) for suffix in DENIED_FILE_SUFFIXES):
         return None, invalid_path("key or certificate paths are not allowed", path)
-    if any(term in lowered_name for term in SECRET_FILENAME_TERMS):
+    if candidate_path.stem.lower() in DENIED_FILENAME_STEMS:
         return None, invalid_path("secret-like filenames are not allowed", path)
     return str(candidate_path), None
 
