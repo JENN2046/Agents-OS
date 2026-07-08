@@ -1,0 +1,629 @@
+#!/usr/bin/env python3
+"""Classify PR risk surfaces before opening a pull request.
+
+This is a read-only helper. It does not write files, call providers, push, or
+open PRs. It turns changed paths into a proof checklist so gate-like PRs do not
+depend on reviewer memory.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from pathlib import PurePosixPath
+import re
+import subprocess
+import sys
+from typing import Any
+
+
+WORKSPACE_ROOT = Path(__file__).resolve().parents[2]
+
+RISK_SURFACES: dict[str, dict[str, Any]] = {
+    "runtime_provenance_package_file_set": {
+        "label": "runtime provenance / package file set",
+        "path_patterns": [
+            r"(^|/)runtime/",
+            r"(^|/)execution/.*runtime",
+            r"(^|/)execution/.*/package\.json$",
+            r"(^|/)execution/.*/package-lock\.json$",
+            r"(^|/)src/generated/",
+            r"(^|/)schemas/appserver/",
+        ],
+        "content_patterns": [
+            r"\bpackage\b",
+            r"\binstalled\b",
+            r"\bruntime\b",
+            r"\bhash\b",
+            r"\bfingerprint\b",
+        ],
+        "proof_obligations": [
+            "expected file set equals actual installable/runtime file set",
+            "extra installed-only runtime files are rejected",
+            "shared files hash-match or content-match",
+            "dirty or unavailable source evidence blocks ready status",
+        ],
+        "negative_cases": [
+            "missing expected runtime file",
+            "extra installed-only runtime file",
+            "content mismatch",
+            "stale metadata with matching expected files",
+        ],
+    },
+    "readiness_gate": {
+        "label": "readiness gate",
+        "path_patterns": [
+            r"gate",
+            r"preflight",
+            r"readiness",
+            r"validator",
+            r"validate-.*\.(py|sh)$",
+            r"docctl\.py$",
+        ],
+        "content_patterns": [
+            r"\bready\b",
+            r"\bpassed\b",
+            r"\bvalidated\b",
+            r"\bpreflight\b",
+            r"\bgate\b",
+        ],
+        "proof_obligations": [
+            "all positive statuses have explicit evidence",
+            "fallback branches have their own blockers and tests",
+            "unavailable evidence fails closed",
+        ],
+        "negative_cases": [
+            "unavailable evidence",
+            "stale but superficially matching metadata",
+            "fallback path without proof",
+        ],
+    },
+    "public_endpoint_oauth_auth_routing": {
+        "label": "public endpoint / OAuth / auth routing",
+        "path_patterns": [
+            r"auth",
+            r"oauth",
+            r"endpoint",
+            r"public",
+            r"proxy",
+            r"gateway",
+        ],
+        "content_patterns": [
+            r"\boauth\b",
+            r"\bauthorization\b",
+            r"\bpublic url\b",
+            r"\bendpoint\b",
+            r"\bproxy\b",
+            r"\bloopback\b",
+            r"\bmulticast\b",
+        ],
+        "proof_obligations": [
+            "canonical public URL and connected peer/DNS evidence match",
+            "self-reference spellings are normalized and rejected",
+            "private, loopback, multicast, and split-horizon targets are blocked",
+        ],
+        "negative_cases": [
+            "equivalent but differently spelled self-reference",
+            "non-public address class",
+            "proxy/environment interference",
+            "oversized candidate list",
+        ],
+    },
+    "redaction_secret_handling": {
+        "label": "redaction / secret handling",
+        "path_patterns": [
+            r"redact",
+            r"secret",
+            r"token",
+            r"credential",
+            r"cookie",
+            r"\.env",
+        ],
+        "content_patterns": [
+            r"\bredact",
+            r"\bsecret\b",
+            r"\btoken\b",
+            r"\bcredential\b",
+            r"\bcookie\b",
+            r"\bapi[_-]?key\b",
+            r"\bpassword\b",
+        ],
+        "proof_obligations": [
+            "secret-like values are redacted before printing or returning errors",
+            "early returns preserve redaction",
+            "private-state and credential paths remain blocked",
+        ],
+        "negative_cases": [
+            "secret-like value reaches stderr/stdout",
+            "redaction skipped on early return",
+            "private-state path included in output",
+        ],
+    },
+    "status_enum_operator_contract": {
+        "label": "status enum / operator contract",
+        "path_patterns": [
+            r"docctl\.py$",
+            r"status",
+            r"state",
+            r"contract",
+            r"schema",
+        ],
+        "content_patterns": [
+            r"\bstatus\b",
+            r"\bstate\b",
+            r"\bready\b",
+            r"\bblocked\b",
+            r"\bmatch\b",
+            r"\bverified\b",
+        ],
+        "proof_obligations": [
+            "status fields are treated as public operator contract",
+            "negative cases assert behavior and status value",
+            "positive status cannot be emitted with absent evidence",
+        ],
+        "negative_cases": [
+            "failure behavior with success-like status",
+            "blocked state missing from output",
+            "ambiguous status on unavailable evidence",
+        ],
+    },
+}
+
+CONTENT_SCAN_SUFFIXES = {
+    ".json",
+    ".js",
+    ".jsx",
+    ".py",
+    ".sh",
+    ".toml",
+    ".ts",
+    ".tsx",
+    ".yaml",
+    ".yml",
+}
+
+DENIED_PATH_PARTS = {
+    "browser profile",
+    "browser profiles",
+    "browser-profile",
+    "browser-profiles",
+    "browser_profile",
+    "browser_profiles",
+    ".credentials",
+    ".secrets",
+    "cookie",
+    "cookies",
+    "credentials",
+    "private memory",
+    "private memory raw text",
+    "private-memory",
+    "private-memory-raw-text",
+    "private_memory",
+    "private_memory_raw_text",
+    "provider raw response",
+    "provider raw responses",
+    "provider-raw-response",
+    "provider-raw-responses",
+    "provider_raw_response",
+    "provider_raw_responses",
+    "raw logs",
+    "raw-logs",
+    "raw_logs",
+    "secret",
+    "secrets",
+    "state-private",
+    "state_private",
+    "token",
+    "tokens",
+}
+
+DENIED_FILENAMES = {
+    ".env",
+    "config.env",
+    "credentials.json",
+    "id_ed25519",
+    "id_rsa",
+    "token.json",
+}
+
+DENIED_FILE_SUFFIXES = {
+    ".key",
+    ".p12",
+    ".pem",
+    ".pfx",
+}
+
+SECRET_FILENAME_TERMS = {
+    "api_key",
+    "apikey",
+    "credential",
+    "credentials",
+    "password",
+    "secret",
+    "secrets",
+    "token",
+}
+
+DENIED_FILENAME_STEMS = SECRET_FILENAME_TERMS | {
+    "cookie",
+    "cookies",
+}
+
+DENIED_DIRECTORY_TERMS = SECRET_FILENAME_TERMS | {
+    "cookie",
+    "cookies",
+}
+
+ALLOWED_TEMPLATE_SUFFIXES = {
+    ".example",
+    ".template",
+}
+
+SECRET_HANDLING_CODE_TERMS = {
+    "redact",
+    "redaction",
+    "validate-no-secrets",
+}
+
+SECRET_HANDLING_CODE_SUFFIXES = {
+    ".js",
+    ".jsx",
+    ".py",
+    ".sh",
+    ".ts",
+    ".tsx",
+}
+
+
+def invalid_path(reason: str, path: str) -> dict[str, str]:
+    return {"path": "[redacted]", "reason": reason}
+
+
+def is_allowed_template_filename(name: str) -> bool:
+    return any(name.endswith(suffix) for suffix in ALLOWED_TEMPLATE_SUFFIXES)
+
+
+def is_denied_env_path_part(part: str) -> bool:
+    return part.startswith(".env") or part == "config.env" or part.startswith("config.env.")
+
+
+def is_secret_handling_code_filename(name: str) -> bool:
+    path = PurePosixPath(name)
+    stem = path.stem.lower()
+    if path.suffix.lower() not in SECRET_HANDLING_CODE_SUFFIXES:
+        return False
+    return any(term in stem for term in SECRET_HANDLING_CODE_TERMS)
+
+
+def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None]:
+    raw = path
+    if not raw:
+        return None, invalid_path("empty path", path)
+    if raw != raw.strip():
+        return None, invalid_path("paths with leading or trailing whitespace are not allowed", path)
+    if "\\" in raw:
+        return None, invalid_path("literal backslash paths are not allowed", path)
+    normalized = raw
+    if re.match(r"^[A-Za-z]:/", normalized):
+        return None, invalid_path("absolute paths are not allowed", path)
+    candidate_path = PurePosixPath(normalized)
+    if candidate_path.is_absolute():
+        return None, invalid_path("absolute paths are not allowed", path)
+    if ".." in candidate_path.parts:
+        return None, invalid_path("parent traversal is not allowed", path)
+    lowered_parts = [part.lower() for part in candidate_path.parts]
+    lowered_dir_parts = lowered_parts[:-1]
+    if any(part in DENIED_PATH_PARTS for part in lowered_parts):
+        return None, invalid_path("private or credential paths are not allowed", path)
+    if any(is_denied_env_path_part(part) for part in lowered_dir_parts):
+        return None, invalid_path("environment secret paths are not allowed", path)
+    if any(term in part for part in lowered_dir_parts for term in DENIED_DIRECTORY_TERMS):
+        return None, invalid_path("private or credential paths are not allowed", path)
+    lowered_name = candidate_path.name.lower()
+    if is_allowed_template_filename(lowered_name):
+        return str(candidate_path), None
+    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env") or lowered_name.startswith("config.env."):
+        return None, invalid_path("environment secret paths are not allowed", path)
+    if any(lowered_name.endswith(suffix) for suffix in DENIED_FILE_SUFFIXES):
+        return None, invalid_path("key or certificate paths are not allowed", path)
+    lowered_stem = candidate_path.stem.lower()
+    secret_name_hit = lowered_stem in DENIED_FILENAME_STEMS or any(term in lowered_stem for term in SECRET_FILENAME_TERMS)
+    if secret_name_hit and not is_secret_handling_code_filename(lowered_name):
+        return None, invalid_path("secret-like filenames are not allowed", path)
+    return str(candidate_path), None
+
+
+def split_changed_paths(paths: list[str]) -> tuple[list[str], list[dict[str, str]]]:
+    valid_paths: list[str] = []
+    invalid_paths: list[dict[str, str]] = []
+    for path in paths:
+        normalized, invalid = normalize_changed_path(path)
+        if invalid is not None:
+            invalid_paths.append(invalid)
+            continue
+        if normalized is not None:
+            valid_paths.append(normalized)
+    return sorted(set(valid_paths)), invalid_paths
+
+
+def git_error(stage: str, returncode: int) -> dict[str, Any]:
+    return {"stage": stage, "returncode": returncode}
+
+
+def validate_base_ref(base: str) -> tuple[str | None, dict[str, Any] | None]:
+    if not base or base.startswith("-") or any(char.isspace() for char in base):
+        return None, git_error("base_ref_validation", 2)
+    completed = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", f"{base}^{{commit}}"],
+        cwd=WORKSPACE_ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return None, git_error("base_ref_validation", completed.returncode)
+    return base, None
+
+
+def run_git_changed_paths(base: str) -> dict[str, Any]:
+    base, base_error = validate_base_ref(base)
+    if base_error is not None or base is None:
+        return {
+            "paths": [],
+            "git_discovery_valid": False,
+            "git_error_count": 1,
+            "git_errors": [base_error],
+        }
+    commands = [
+        ("branch_diff", ["git", "diff", "--name-only", "-z", f"{base}...HEAD"], True),
+        ("working_diff", ["git", "diff", "--name-only", "-z"], False),
+        ("staged_diff", ["git", "diff", "--name-only", "--cached", "-z"], False),
+        ("untracked", ["git", "ls-files", "-z", "--others", "--exclude-standard"], False),
+    ]
+    paths: list[str] = []
+    errors: list[dict[str, Any]] = []
+    for stage, command, required in commands:
+        completed = subprocess.run(
+            command,
+            cwd=WORKSPACE_ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if completed.returncode == 0:
+            paths.extend(path for path in completed.stdout.split("\0") if path)
+            continue
+        if required:
+            errors.append(git_error(stage, completed.returncode))
+    return {
+        "paths": sorted(set(paths)),
+        "git_discovery_valid": not errors,
+        "git_error_count": len(errors),
+        "git_errors": errors,
+    }
+
+
+def path_has_symlink_part(path: Path, root: Path) -> bool:
+    try:
+        relative_parts = path.relative_to(root).parts
+    except ValueError:
+        return True
+    cursor = root
+    for part in relative_parts:
+        cursor = cursor / part
+        if cursor.is_symlink():
+            return True
+    return False
+
+
+def decode_bounded(data: bytes) -> str:
+    return data.decode("utf-8", errors="ignore")
+
+
+def read_worktree_text(path: str, max_bytes: int) -> str:
+    normalized, invalid = normalize_changed_path(path)
+    if invalid is not None or normalized is None:
+        return ""
+    candidate = WORKSPACE_ROOT / normalized
+    workspace_root = WORKSPACE_ROOT.resolve()
+    if not candidate.is_file():
+        return ""
+    if path_has_symlink_part(candidate, WORKSPACE_ROOT):
+        return ""
+    try:
+        resolved_relative = candidate.resolve().relative_to(workspace_root)
+    except (OSError, ValueError):
+        return ""
+    _, resolved_invalid = normalize_changed_path(resolved_relative.as_posix())
+    if resolved_invalid is not None:
+        return ""
+    try:
+        with candidate.open("rb") as handle:
+            return decode_bounded(handle.read(max_bytes))
+    except OSError:
+        return ""
+
+
+def read_git_blob_text(path: str, revision: str, max_bytes: int) -> str:
+    blob = f"{revision}:{path}" if revision else f":{path}"
+    try:
+        process = subprocess.Popen(
+            ["git", "show", blob],
+            cwd=WORKSPACE_ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+    except OSError:
+        return ""
+    if process.stdout is None:
+        return ""
+    try:
+        data = process.stdout.read(max_bytes)
+    finally:
+        process.kill()
+        process.wait()
+    return decode_bounded(data)
+
+
+def read_changed_text(path: str, max_bytes: int = 20000) -> str:
+    normalized, invalid = normalize_changed_path(path)
+    if invalid is not None or normalized is None:
+        return ""
+    if PurePosixPath(normalized).suffix.lower() not in CONTENT_SCAN_SUFFIXES:
+        return ""
+    chunks = [
+        read_worktree_text(normalized, max_bytes),
+        read_git_blob_text(normalized, "HEAD", max_bytes),
+        read_git_blob_text(normalized, "", max_bytes),
+    ]
+    unique_chunks = [chunk for index, chunk in enumerate(chunks) if chunk and chunk not in chunks[:index]]
+    return "\n".join(unique_chunks)
+
+
+def matches_any(patterns: list[str], value: str) -> bool:
+    return any(re.search(pattern, value, re.I) for pattern in patterns)
+
+
+def classify_paths(paths: list[str], *, include_content: bool = True) -> dict[str, Any]:
+    paths, invalid_paths = split_changed_paths(paths)
+    surfaces: dict[str, dict[str, Any]] = {}
+    for path in paths:
+        path_text = path.replace("\\", "/")
+        content = read_changed_text(path) if include_content else ""
+        for surface_id, rule in RISK_SURFACES.items():
+            path_hit = matches_any(rule["path_patterns"], path_text)
+            content_hit = bool(content) and matches_any(rule["content_patterns"], content)
+            if not path_hit and not content_hit:
+                continue
+            surface = surfaces.setdefault(
+                surface_id,
+                {
+                    "surface_id": surface_id,
+                    "label": rule["label"],
+                    "matched_paths": [],
+                    "match_reasons": [],
+                    "proof_obligations": rule["proof_obligations"],
+                    "negative_cases": rule["negative_cases"],
+                },
+            )
+            if path not in surface["matched_paths"]:
+                surface["matched_paths"].append(path)
+            reason = "path" if path_hit else "content"
+            if reason not in surface["match_reasons"]:
+                surface["match_reasons"].append(reason)
+
+    risk_surfaces = sorted(surfaces.values(), key=lambda item: item["surface_id"])
+    return {
+        "schema_version": "agents-os.pr-risk-review.v0.1",
+        "read_only": True,
+        "write_performed": False,
+        "git_discovery_valid": True,
+        "git_error_count": 0,
+        "git_errors": [],
+        "path_input_valid": not invalid_paths,
+        "invalid_path_count": len(invalid_paths),
+        "invalid_paths": invalid_paths,
+        "changed_path_count": len(paths),
+        "changed_paths": paths,
+        "risk_surface_count": len(risk_surfaces),
+        "risk_surfaces": risk_surfaces,
+        "proof_matrix_required": bool(risk_surfaces),
+        "required_pr_body_sections": required_pr_body_sections(bool(risk_surfaces)),
+        "review_rule": "Ask whether any unproven state can still make the gate report ready.",
+    }
+
+
+def required_pr_body_sections(required: bool) -> list[str]:
+    if not required:
+        return []
+    return [
+        "Risk surface",
+        "Invariant",
+        "Evidence required",
+        "Negative cases",
+        "Status fields tested",
+    ]
+
+
+def format_text(result: dict[str, Any]) -> str:
+    lines = [
+        "PR risk review",
+        f"Changed paths: {result['changed_path_count']}",
+        f"Risk surfaces: {result['risk_surface_count']}",
+        f"Proof matrix required: {result['proof_matrix_required']}",
+    ]
+    if not result["git_discovery_valid"]:
+        lines.append("Git discovery valid: False")
+        lines.append("Git errors:")
+        for error in result["git_errors"]:
+            lines.append(f"- {error['stage']}: exit {error['returncode']}")
+        return "\n".join(lines)
+    if not result["path_input_valid"]:
+        lines.append("Path input valid: False")
+        lines.append("Invalid paths:")
+        for invalid in result["invalid_paths"]:
+            lines.append(f"- {invalid['path']}: {invalid['reason']}")
+        return "\n".join(lines)
+    if not result["risk_surfaces"]:
+        lines.append("Risk surface: none")
+        return "\n".join(lines)
+
+    for surface in result["risk_surfaces"]:
+        lines.append("")
+        lines.append(f"- {surface['label']} ({surface['surface_id']})")
+        lines.append(f"  matched_paths: {', '.join(surface['matched_paths'][:8])}")
+        lines.append("  proof_obligations:")
+        for obligation in surface["proof_obligations"]:
+            lines.append(f"    - {obligation}")
+        lines.append("  negative_cases:")
+        for negative in surface["negative_cases"]:
+            lines.append(f"    - {negative}")
+
+    lines.append("")
+    lines.append("Required PR body sections:")
+    for section in result["required_pr_body_sections"]:
+        lines.append(f"- {section}")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Review changed paths for PR gate risk surfaces.")
+    parser.add_argument("--base", default="main", help="Base ref for git changed path discovery.")
+    parser.add_argument("--paths", nargs="*", help="Explicit changed paths; skips git discovery.")
+    parser.add_argument("--json", action="store_true", help="Emit JSON.")
+    parser.add_argument("--strict", action="store_true", help="Return 1 when a proof matrix is required.")
+    args = parser.parse_args()
+
+    git_result = {
+        "git_discovery_valid": True,
+        "git_error_count": 0,
+        "git_errors": [],
+    }
+    if args.paths is not None:
+        paths = sorted(set(args.paths))
+    else:
+        git_result = run_git_changed_paths(args.base)
+        paths = git_result["paths"]
+    result = classify_paths(paths)
+    result.update(
+        {
+            "git_discovery_valid": git_result["git_discovery_valid"],
+            "git_error_count": git_result["git_error_count"],
+            "git_errors": git_result["git_errors"],
+        }
+    )
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    else:
+        print(format_text(result))
+    if not result["git_discovery_valid"]:
+        return 2
+    if not result["path_input_valid"]:
+        return 2
+    return 1 if args.strict and result["proof_matrix_required"] else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
