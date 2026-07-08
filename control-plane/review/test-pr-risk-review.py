@@ -173,10 +173,43 @@ def main() -> int:
         failures.append("CLI traversal JSON should parse")
     check(traversal_payload.get("path_input_valid") is False, "parent traversal path should be invalid", failures)
 
+    denied_private = review.classify_paths(
+        ["state-private/probe.py", "Credentials/helper.py", ".ENV.local"],
+        include_content=True,
+    )
+    check(denied_private["path_input_valid"] is False, "private and credential paths should be invalid", failures)
+    check(denied_private["invalid_path_count"] == 3, "all private path fixtures should be rejected", failures)
+    check(denied_private["risk_surface_count"] == 0, "private paths should not be content-scanned", failures)
+
+    cli_missing_base = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "pr-risk-review.py"),
+            "--base",
+            "refs/heads/__missing_pr_risk_review_base__",
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    check(cli_missing_base.returncode == 2, "CLI should fail when branch diff discovery fails", failures)
+    try:
+        missing_base_payload = json.loads(cli_missing_base.stdout)
+    except json.JSONDecodeError:
+        missing_base_payload = {}
+        failures.append("CLI missing base JSON should parse")
+    check(
+        missing_base_payload.get("git_discovery_valid") is False,
+        "missing base should mark git discovery invalid",
+        failures,
+    )
+    check(missing_base_payload.get("git_error_count") == 1, "missing base should report one git error", failures)
+
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=8 failures={len(failures)}")
+        print(f"cases=10 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -187,7 +220,9 @@ def main() -> int:
     print("PASS CLI strict fixture")
     print("PASS CLI absolute path rejection fixture")
     print("PASS CLI parent traversal rejection fixture")
-    print("cases=8 failures=0")
+    print("PASS private path rejection fixture")
+    print("PASS git discovery failure fixture")
+    print("cases=10 failures=0")
     return 0
 
 

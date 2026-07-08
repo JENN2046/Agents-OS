@@ -182,6 +182,19 @@ CONTENT_SCAN_SUFFIXES = {
     ".yml",
 }
 
+DENIED_PATH_PARTS = {
+    ".credentials",
+    ".secrets",
+    "credentials",
+    "secrets",
+    "state-private",
+    "state_private",
+}
+
+DENIED_FILENAMES = {
+    ".env",
+}
+
 
 def invalid_path(reason: str, path: str) -> dict[str, str]:
     return {"path": path, "reason": reason}
@@ -199,6 +212,12 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("absolute paths are not allowed", path)
     if ".." in candidate_path.parts:
         return None, invalid_path("parent traversal is not allowed", path)
+    lowered_parts = [part.lower() for part in candidate_path.parts]
+    if any(part in DENIED_PATH_PARTS for part in lowered_parts):
+        return None, invalid_path("private or credential paths are not allowed", path)
+    lowered_name = candidate_path.name.lower()
+    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env."):
+        return None, invalid_path("environment secret paths are not allowed", path)
     return str(candidate_path), None
 
 
@@ -215,15 +234,20 @@ def split_changed_paths(paths: list[str]) -> tuple[list[str], list[dict[str, str
     return sorted(set(valid_paths)), invalid_paths
 
 
-def run_git_changed_paths(base: str) -> list[str]:
+def git_error(stage: str, returncode: int) -> dict[str, Any]:
+    return {"stage": stage, "returncode": returncode}
+
+
+def run_git_changed_paths(base: str) -> dict[str, Any]:
     commands = [
-        ["git", "diff", "--name-only", f"{base}...HEAD"],
-        ["git", "diff", "--name-only"],
-        ["git", "diff", "--name-only", "--cached"],
-        ["git", "ls-files", "--others", "--exclude-standard"],
+        ("branch_diff", ["git", "diff", "--name-only", f"{base}...HEAD"], True),
+        ("working_diff", ["git", "diff", "--name-only"], False),
+        ("staged_diff", ["git", "diff", "--name-only", "--cached"], False),
+        ("untracked", ["git", "ls-files", "--others", "--exclude-standard"], False),
     ]
     paths: list[str] = []
-    for command in commands:
+    errors: list[dict[str, Any]] = []
+    for stage, command, required in commands:
         completed = subprocess.run(
             command,
             cwd=WORKSPACE_ROOT,
@@ -234,7 +258,15 @@ def run_git_changed_paths(base: str) -> list[str]:
         )
         if completed.returncode == 0:
             paths.extend(line.strip() for line in completed.stdout.splitlines() if line.strip())
-    return sorted(set(paths))
+            continue
+        if required:
+            errors.append(git_error(stage, completed.returncode))
+    return {
+        "paths": sorted(set(paths)),
+        "git_discovery_valid": not errors,
+        "git_error_count": len(errors),
+        "git_errors": errors,
+    }
 
 
 def read_changed_text(path: str, max_bytes: int = 20000) -> str:
@@ -293,6 +325,9 @@ def classify_paths(paths: list[str], *, include_content: bool = True) -> dict[st
         "schema_version": "agents-os.pr-risk-review.v0.1",
         "read_only": True,
         "write_performed": False,
+        "git_discovery_valid": True,
+        "git_error_count": 0,
+        "git_errors": [],
         "path_input_valid": not invalid_paths,
         "invalid_path_count": len(invalid_paths),
         "invalid_paths": invalid_paths,
@@ -325,6 +360,12 @@ def format_text(result: dict[str, Any]) -> str:
         f"Risk surfaces: {result['risk_surface_count']}",
         f"Proof matrix required: {result['proof_matrix_required']}",
     ]
+    if not result["git_discovery_valid"]:
+        lines.append("Git discovery valid: False")
+        lines.append("Git errors:")
+        for error in result["git_errors"]:
+            lines.append(f"- {error['stage']}: exit {error['returncode']}")
+        return "\n".join(lines)
     if not result["path_input_valid"]:
         lines.append("Path input valid: False")
         lines.append("Invalid paths:")
@@ -361,12 +402,30 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true", help="Return 1 when a proof matrix is required.")
     args = parser.parse_args()
 
-    paths = sorted(set(args.paths if args.paths is not None else run_git_changed_paths(args.base)))
+    git_result = {
+        "git_discovery_valid": True,
+        "git_error_count": 0,
+        "git_errors": [],
+    }
+    if args.paths is not None:
+        paths = sorted(set(args.paths))
+    else:
+        git_result = run_git_changed_paths(args.base)
+        paths = git_result["paths"]
     result = classify_paths(paths)
+    result.update(
+        {
+            "git_discovery_valid": git_result["git_discovery_valid"],
+            "git_error_count": git_result["git_error_count"],
+            "git_errors": git_result["git_errors"],
+        }
+    )
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
         print(format_text(result))
+    if not result["git_discovery_valid"]:
+        return 2
     if not result["path_input_valid"]:
         return 2
     return 1 if args.strict and result["proof_matrix_required"] else 0
