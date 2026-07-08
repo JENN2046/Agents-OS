@@ -284,7 +284,7 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
     lowered_name = candidate_path.name.lower()
     if is_allowed_template_filename(lowered_name):
         return str(candidate_path), None
-    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env.") or lowered_name.startswith("config.env."):
+    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env") or lowered_name.startswith("config.env."):
         return None, invalid_path("environment secret paths are not allowed", path)
     if any(lowered_name.endswith(suffix) for suffix in DENIED_FILE_SUFFIXES):
         return None, invalid_path("key or certificate paths are not allowed", path)

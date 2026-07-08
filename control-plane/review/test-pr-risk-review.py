@@ -230,12 +230,23 @@ def main() -> int:
         option_base_output.unlink(missing_ok=True)
 
     denied_secret_files = review.classify_paths(
-        ["credentials.json", "token.json", "secret.yaml", "config.env", "private.pem", "deploy.key", "id_rsa", "id_ed25519"],
+        [
+            "credentials.json",
+            "token.json",
+            "secret.yaml",
+            "config.env",
+            ".envrc",
+            ".envlocal",
+            "private.pem",
+            "deploy.key",
+            "id_rsa",
+            "id_ed25519",
+        ],
         include_content=True,
     )
     check(denied_secret_files["path_input_valid"] is False, "secret-like filenames should be invalid", failures)
     check(
-        denied_secret_files["invalid_path_count"] == 8,
+        denied_secret_files["invalid_path_count"] == 10,
         "all secret-like filename fixtures should be rejected",
         failures,
     )
