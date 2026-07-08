@@ -148,6 +148,42 @@ export function assertSnapshotBoundWorkerPlan(value: unknown): asserts value is 
   }
 }
 
+export function assertSnapshotBoundWorkerPlanPathBoundary(projectRoot: string, plan: SnapshotBoundWorkerPlan): void {
+  assertSnapshotBoundWorkerPlan(plan);
+  const snapshotsRoot = path.resolve(projectRoot, "data", "snapshots");
+  const snapshotRoot = path.resolve(plan.snapshotRoot);
+  const workerCwd = path.resolve(plan.workerCwd);
+  const expectedManifestPath = path.join(snapshotRoot, "_snapshot", "manifest.json");
+  if (!isPathInsideRoot(snapshotsRoot, snapshotRoot)) {
+    throw new Error("live snapshot root must stay under project data/snapshots");
+  }
+  if (workerCwd !== snapshotRoot) {
+    throw new Error("live Worker cwd must match the snapshot root");
+  }
+  if (path.resolve(plan.manifestPath) !== expectedManifestPath) {
+    throw new Error("live Worker manifest path must match the snapshot root manifest");
+  }
+  if (plan.snapshotId !== path.basename(snapshotRoot)) {
+    throw new Error("live Worker snapshot id must match the snapshot root");
+  }
+}
+
+export function assertSnapshotBoundWorkerPlanLiveBoundary(
+  projectRoot: string,
+  plan: SnapshotBoundWorkerPlan,
+  manifest: SnapshotManifest,
+): void {
+  assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
+  assertSnapshotManifest(manifest);
+  const snapshotRoot = path.resolve(plan.snapshotRoot);
+  if (path.resolve(manifest.snapshotRoot) !== snapshotRoot || path.resolve(manifest.workerCwd) !== snapshotRoot) {
+    throw new Error("live Worker manifest must match the plan snapshot root");
+  }
+  if (path.basename(manifest.snapshotRoot) !== plan.snapshotId) {
+    throw new Error("live Worker manifest snapshot id must match the plan");
+  }
+}
+
 function assertSnapshotManifest(value: SnapshotManifest): void {
   if (
     value.snapshotVersion !== 1 ||
@@ -159,6 +195,11 @@ function assertSnapshotManifest(value: SnapshotManifest): void {
   ) {
     throw new Error("snapshot manifest boundary is not valid for Worker pilot prep");
   }
+}
+
+function isPathInsideRoot(root: string, candidate: string): boolean {
+  const relative = path.relative(path.resolve(root), path.resolve(candidate));
+  return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
 }
 
 function isSandboxPolicy(value: unknown): value is SnapshotBoundWorkerPlan["sandboxPolicy"] {

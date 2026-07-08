@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import type { Stats } from "node:fs";
+import { copyFile, lstat, mkdir, readdir, readFile, realpath, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 export const defaultSnapshotAllowlist = [
@@ -125,11 +126,14 @@ export async function exportSafeRepoSnapshot(options: SnapshotExportOptions): Pr
     }
 
     const sourcePath = resolveInsideRoot(sourceRoot, relativeEntry);
-    let sourceStat;
-    try {
-      sourceStat = await stat(sourcePath);
-    } catch {
-      excludedFiles.push({ relativePath: relativeEntry, reason: "allowlist_entry_missing", matched: [] });
+    const sourceStat = await readSafeSourceStat(sourceRoot, sourcePath, relativeEntry, excludedFiles);
+    if (!sourceStat) {
+      if (!excludedFiles.some((file) => file.relativePath === relativeEntry)) {
+        excludedFiles.push({ relativePath: relativeEntry, reason: "allowlist_entry_missing", matched: [] });
+      }
+      continue;
+    }
+    if (sourceStat.isSymbolicLink()) {
       continue;
     }
 
@@ -182,6 +186,33 @@ export function assertWorkerCwdIsSnapshot(workerCwd: string, snapshotRoot: strin
   }
 }
 
+async function readSafeSourceStat(
+  sourceRoot: string,
+  sourcePath: string,
+  relativePath: string,
+  excludedFiles: SnapshotExclusion[],
+): Promise<Stats | undefined> {
+  let sourceStat: Stats;
+  try {
+    sourceStat = await lstat(sourcePath);
+  } catch {
+    return undefined;
+  }
+
+  if (sourceStat.isSymbolicLink()) {
+    excludedFiles.push({ relativePath, reason: "symlink_not_allowed", matched: [] });
+    return sourceStat;
+  }
+
+  const [realSourceRoot, realSourcePath] = await Promise.all([realpath(sourceRoot), realpath(sourcePath)]);
+  const relativeRealPath = path.relative(realSourceRoot, realSourcePath);
+  if (relativeRealPath.startsWith("..") || path.isAbsolute(relativeRealPath)) {
+    excludedFiles.push({ relativePath, reason: "source_path_escapes_source_root", matched: [] });
+    return undefined;
+  }
+  return sourceStat;
+}
+
 async function copyDirectory(
   sourceRoot: string,
   snapshotRoot: string,
@@ -197,12 +228,27 @@ async function copyDirectory(
   }
 
   const sourceDir = resolveInsideRoot(sourceRoot, relativeDir);
+  const sourceStat = await readSafeSourceStat(sourceRoot, sourceDir, relativeDir, excludedFiles);
+  if (!sourceStat) {
+    return;
+  }
+  if (sourceStat.isSymbolicLink()) {
+    return;
+  }
+  if (!sourceStat.isDirectory()) {
+    excludedFiles.push({ relativePath: relativeDir, reason: "not_regular_file_or_directory", matched: [] });
+    return;
+  }
   const entries = await readdir(sourceDir, { withFileTypes: true });
   for (const entry of entries) {
     const relativePath = toPosixPath(path.join(relativeDir, entry.name));
     const exclusion = classifyPath(relativePath);
     if (exclusion) {
       excludedFiles.push(exclusion);
+      continue;
+    }
+    if (entry.isSymbolicLink()) {
+      excludedFiles.push({ relativePath, reason: "symlink_not_allowed", matched: [] });
       continue;
     }
     if (entry.isDirectory()) {
@@ -230,7 +276,17 @@ async function copyAllowedFile(
   }
 
   const sourcePath = resolveInsideRoot(sourceRoot, relativePath);
-  const sourceStat = await stat(sourcePath);
+  const sourceStat = await readSafeSourceStat(sourceRoot, sourcePath, relativePath, excludedFiles);
+  if (!sourceStat) {
+    return;
+  }
+  if (sourceStat.isSymbolicLink()) {
+    return;
+  }
+  if (!sourceStat.isFile()) {
+    excludedFiles.push({ relativePath, reason: "not_regular_file_or_directory", matched: [] });
+    return;
+  }
   if (sourceStat.size > maxFileBytes) {
     excludedFiles.push({ relativePath, reason: "file_too_large", matched: [`>${maxFileBytes}`] });
     return;

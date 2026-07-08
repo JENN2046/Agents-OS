@@ -12,7 +12,7 @@ import { createPromotionApprovalReceipt } from "../bridge/promotion_approval.js"
 import { defaultSnapshotAllowlist, exportSafeRepoSnapshot } from "../bridge/repo_snapshot.js";
 import { createSnapshotReviewerLivePrompt, type SnapshotWorkerLiveEvidence } from "../bridge/snapshot_reviewer_live.js";
 import { createSnapshotWorkerLivePrompt } from "../bridge/snapshot_worker_live.js";
-import { createSnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
+import { assertSnapshotBoundWorkerPlanLiveBoundary, createSnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
 import type { ServerNotification } from "../generated/appserver/ServerNotification";
 import type { ServerRequest } from "../generated/appserver/ServerRequest";
 import type { Turn } from "../generated/appserver/v2/Turn";
@@ -166,6 +166,7 @@ async function main(): Promise<void> {
     annex,
     annexRef: annexPath,
   });
+  assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, snapshot.manifest);
   const planPath = await planStore.write(plan);
 
   const tracker: TurnTracker = { completedTurns: new Map(), agentTextByTurn: new Map() };

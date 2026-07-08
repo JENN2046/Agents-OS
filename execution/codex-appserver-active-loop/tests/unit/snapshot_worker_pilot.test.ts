@@ -1,7 +1,12 @@
 import { mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { createSnapshotBoundWorkerPlan, validateSnapshotBoundWorkerPlan } from "../../src/bridge/snapshot_worker_pilot.js";
+import {
+  assertSnapshotBoundWorkerPlanLiveBoundary,
+  assertSnapshotBoundWorkerPlanPathBoundary,
+  createSnapshotBoundWorkerPlan,
+  validateSnapshotBoundWorkerPlan,
+} from "../../src/bridge/snapshot_worker_pilot.js";
 import type { SnapshotManifest } from "../../src/bridge/repo_snapshot.js";
 import type { PromptAnnex } from "../../src/bridge/prompt_annex.js";
 import { createFileSnapshotWorkerPlanStore } from "../../src/stores/snapshot_worker_plan_store.js";
@@ -61,6 +66,35 @@ describe("snapshot-bound Worker pilot prep", () => {
       annexRef: "annex.json",
     });
     expect(validateSnapshotBoundWorkerPlan({ ...plan, prompt: "raw prompt" })).toBe(false);
+  });
+
+  it("revalidates live plan paths before starting managed sessions", () => {
+    const projectRoot = "A:/repo";
+    const plan = createSnapshotBoundWorkerPlan({
+      planId: "cea-016-worker-plan-live",
+      manifest: sampleManifest(),
+      manifestPath: "A:/repo/data/snapshots/cea-011-safe-snapshot-20260707080426/_snapshot/manifest.json",
+      annex: sampleAnnex(),
+      annexRef: "annex.json",
+    });
+
+    expect(() => assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan)).not.toThrow();
+    expect(() => assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, sampleManifest())).not.toThrow();
+    expect(() =>
+      assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, {
+        ...plan,
+        snapshotRoot: "A:/repo",
+        workerCwd: "A:/repo",
+        manifestPath: "A:/repo/_snapshot/manifest.json",
+      }),
+    ).toThrow("data/snapshots");
+    expect(() =>
+      assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, {
+        ...sampleManifest(),
+        snapshotRoot: "A:/repo/data/snapshots/different",
+        workerCwd: "A:/repo/data/snapshots/different",
+      }),
+    ).toThrow("manifest must match");
   });
 
   it("writes and reads Worker prep plans safely", async () => {

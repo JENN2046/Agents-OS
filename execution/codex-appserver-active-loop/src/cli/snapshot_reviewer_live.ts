@@ -5,7 +5,13 @@ import { createStdioTransport } from "../appserver/transport_stdio.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
 import { assertPromptAnnex, type PromptAnnex } from "../bridge/prompt_annex.js";
 import { createSnapshotReviewerLivePrompt, type SnapshotWorkerLiveEvidence } from "../bridge/snapshot_reviewer_live.js";
-import { assertSnapshotBoundWorkerPlan, type SnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
+import {
+  assertSnapshotBoundWorkerPlan,
+  assertSnapshotBoundWorkerPlanLiveBoundary,
+  assertSnapshotBoundWorkerPlanPathBoundary,
+  type SnapshotBoundWorkerPlan,
+} from "../bridge/snapshot_worker_pilot.js";
+import type { SnapshotManifest } from "../bridge/repo_snapshot.js";
 import { reviewerDecisionSchema, validateStructuredLoopOutput, type ReviewerDecision } from "../bridge/event_contracts.js";
 import type { ServerNotification } from "../generated/appserver/ServerNotification";
 import type { ServerRequest } from "../generated/appserver/ServerRequest";
@@ -59,6 +65,9 @@ async function main(): Promise<void> {
   }
   const plan = JSON.parse(await readFile(planPath, "utf8")) as SnapshotBoundWorkerPlan;
   assertSnapshotBoundWorkerPlan(plan);
+  assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
+  const manifest = JSON.parse(await readFile(plan.manifestPath, "utf8")) as SnapshotManifest;
+  assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, manifest);
   const annex = JSON.parse(await readFile(plan.annexRef, "utf8")) as PromptAnnex;
   assertPromptAnnex(annex);
   const workerEvidence = JSON.parse(

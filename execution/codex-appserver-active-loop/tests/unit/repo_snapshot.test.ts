@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { assertWorkerCwdIsSnapshot, exportSafeRepoSnapshot } from "../../src/bridge/repo_snapshot.js";
@@ -65,6 +65,37 @@ describe("safe repo snapshot exporter", () => {
   it("requires managed Worker cwd to be the snapshot root", () => {
     assertWorkerCwdIsSnapshot("A:/snapshot", "A:/snapshot");
     expect(() => assertWorkerCwdIsSnapshot("A:/repo", "A:/snapshot")).toThrow("snapshot path");
+  });
+
+  it("rejects symlinked allowlist entries and nested symlinks", async () => {
+    const sourceRoot = path.join(tmpRoot, `symlink-source-${Date.now()}`);
+    const outsideRoot = path.join(tmpRoot, `symlink-outside-${Date.now()}`);
+    const snapshotRoot = path.join(tmpRoot, `symlink-snapshot-${Date.now()}`);
+    await rm(sourceRoot, { force: true, recursive: true });
+    await rm(outsideRoot, { force: true, recursive: true });
+    await rm(snapshotRoot, { force: true, recursive: true });
+    await mkdir(path.join(sourceRoot, "src"), { recursive: true });
+    await mkdir(outsideRoot, { recursive: true });
+    await writeFile(path.join(outsideRoot, "private.txt"), "private\n", "utf8");
+    await writeFile(path.join(sourceRoot, "src/real.ts"), "export const ok = true;\n", "utf8");
+    await symlink(path.join(outsideRoot, "private.txt"), path.join(sourceRoot, "README.md"));
+    await symlink(path.join(outsideRoot, "private.txt"), path.join(sourceRoot, "src/link.ts"));
+
+    const result = await exportSafeRepoSnapshot({
+      sourceRoot,
+      snapshotRoot,
+      allowlist: ["README.md", "src"],
+    });
+
+    expect(result.manifest.includedFiles.map((file) => file.relativePath)).toEqual(["src/real.ts"]);
+    expect(result.manifest.excludedFiles).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ relativePath: "README.md", reason: "symlink_not_allowed" }),
+        expect.objectContaining({ relativePath: "src/link.ts", reason: "symlink_not_allowed" }),
+      ]),
+    );
+    await expect(readFile(path.join(snapshotRoot, "README.md"), "utf8")).rejects.toThrow();
+    await expect(readFile(path.join(snapshotRoot, "src/link.ts"), "utf8")).rejects.toThrow();
   });
 
   it("rejects allowlist path escapes", async () => {

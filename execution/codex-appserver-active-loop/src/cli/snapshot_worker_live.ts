@@ -1,11 +1,17 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
 import { createSnapshotWorkerLivePrompt } from "../bridge/snapshot_worker_live.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
 import { assertPromptAnnex, type PromptAnnex } from "../bridge/prompt_annex.js";
-import { assertSnapshotBoundWorkerPlan, type SnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
+import {
+  assertSnapshotBoundWorkerPlan,
+  assertSnapshotBoundWorkerPlanLiveBoundary,
+  assertSnapshotBoundWorkerPlanPathBoundary,
+  type SnapshotBoundWorkerPlan,
+} from "../bridge/snapshot_worker_pilot.js";
+import type { SnapshotManifest } from "../bridge/repo_snapshot.js";
 import { validateStructuredLoopOutput, workerDoneSchema, type WorkerDone } from "../bridge/event_contracts.js";
 import type { ServerNotification } from "../generated/appserver/ServerNotification";
 import type { ServerRequest } from "../generated/appserver/ServerRequest";
@@ -50,18 +56,17 @@ async function main(): Promise<void> {
   const events = createFileEventStore(path.join(projectRoot, "data", "events"));
   const reportPath = path.join(projectRoot, "data", "reports", "cea-016_live_snapshot_worker_run.json");
   const receiptPath = path.join(projectRoot, "data", "receipts", "2026-07-07-cea-016-live-snapshot-worker-run.receipt.md");
-  const prepReport = JSON.parse(
-    await import("node:fs/promises").then((fs) =>
-      fs.readFile(path.join(projectRoot, "data", "reports", "cea-016_snapshot_bound_worker_prep.json"), "utf8"),
-    ),
-  ) as Cea016PrepReport;
+  const prepReport = JSON.parse(await readFile(path.join(projectRoot, "data", "reports", "cea-016_snapshot_bound_worker_prep.json"), "utf8")) as Cea016PrepReport;
   const planPath = typeof prepReport.pilot?.plan_path === "string" ? prepReport.pilot.plan_path : "";
   if (!planPath) {
     throw new Error("CEA-016 prep plan path is missing");
   }
-  const plan = JSON.parse(await import("node:fs/promises").then((fs) => fs.readFile(planPath, "utf8"))) as SnapshotBoundWorkerPlan;
+  const plan = JSON.parse(await readFile(planPath, "utf8")) as SnapshotBoundWorkerPlan;
   assertSnapshotBoundWorkerPlan(plan);
-  const annex = JSON.parse(await import("node:fs/promises").then((fs) => fs.readFile(plan.annexRef, "utf8"))) as PromptAnnex;
+  assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
+  const manifest = JSON.parse(await readFile(plan.manifestPath, "utf8")) as SnapshotManifest;
+  assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, manifest);
+  const annex = JSON.parse(await readFile(plan.annexRef, "utf8")) as PromptAnnex;
   assertPromptAnnex(annex);
   const prompt = createSnapshotWorkerLivePrompt({ plan, annex });
   const tracker: TurnTracker = { completedTurns: new Map(), agentTextByTurn: new Map() };
