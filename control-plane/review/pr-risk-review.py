@@ -195,6 +195,17 @@ DENIED_FILENAMES = {
     ".env",
 }
 
+SECRET_FILENAME_TERMS = {
+    "api_key",
+    "apikey",
+    "credential",
+    "credentials",
+    "password",
+    "secret",
+    "secrets",
+    "token",
+}
+
 
 def invalid_path(reason: str, path: str) -> dict[str, str]:
     return {"path": path, "reason": reason}
@@ -218,6 +229,8 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
     lowered_name = candidate_path.name.lower()
     if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env."):
         return None, invalid_path("environment secret paths are not allowed", path)
+    if any(term in lowered_name for term in SECRET_FILENAME_TERMS):
+        return None, invalid_path("secret-like filenames are not allowed", path)
     return str(candidate_path), None
 
 
@@ -238,7 +251,30 @@ def git_error(stage: str, returncode: int) -> dict[str, Any]:
     return {"stage": stage, "returncode": returncode}
 
 
+def validate_base_ref(base: str) -> tuple[str | None, dict[str, Any] | None]:
+    if not base or base.startswith("-") or any(char.isspace() for char in base):
+        return None, git_error("base_ref_validation", 2)
+    completed = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", f"{base}^{{commit}}"],
+        cwd=WORKSPACE_ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return None, git_error("base_ref_validation", completed.returncode)
+    return base, None
+
+
 def run_git_changed_paths(base: str) -> dict[str, Any]:
+    base, base_error = validate_base_ref(base)
+    if base_error is not None or base is None:
+        return {
+            "paths": [],
+            "git_discovery_valid": False,
+            "git_error_count": 1,
+            "git_errors": [base_error],
+        }
     commands = [
         ("branch_diff", ["git", "diff", "--name-only", f"{base}...HEAD"], True),
         ("working_diff", ["git", "diff", "--name-only"], False),
@@ -275,6 +311,8 @@ def read_changed_text(path: str, max_bytes: int = 20000) -> str:
         return ""
     candidate = WORKSPACE_ROOT / normalized
     if not candidate.is_file():
+        return ""
+    if candidate.is_symlink():
         return ""
     if candidate.suffix.lower() not in CONTENT_SCAN_SUFFIXES:
         return ""

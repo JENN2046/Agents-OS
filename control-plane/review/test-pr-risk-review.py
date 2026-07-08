@@ -206,10 +206,74 @@ def main() -> int:
     )
     check(missing_base_payload.get("git_error_count") == 1, "missing base should report one git error", failures)
 
+    option_base_output = Path("/tmp/pr-risk-review-should-not-write")
+    option_base_output.unlink(missing_ok=True)
+    try:
+        cli_option_base = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "pr-risk-review.py"),
+                "--base=--output=/tmp/pr-risk-review-should-not-write",
+                "--json",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        check(cli_option_base.returncode == 2, "CLI should reject option-style base refs", failures)
+        check(
+            not option_base_output.exists(),
+            "option-style base ref should not create files through git diff",
+            failures,
+        )
+    finally:
+        option_base_output.unlink(missing_ok=True)
+
+    denied_secret_files = review.classify_paths(
+        ["credentials.json", "token.json", "secret.yaml"],
+        include_content=True,
+    )
+    check(denied_secret_files["path_input_valid"] is False, "secret-like filenames should be invalid", failures)
+    check(
+        denied_secret_files["invalid_path_count"] == 3,
+        "all secret-like filename fixtures should be rejected",
+        failures,
+    )
+    check(denied_secret_files["risk_surface_count"] == 0, "secret-like filenames should not be content-scanned", failures)
+
+    symlink_probe = ROOT / "__pr_risk_review_symlink_probe.py"
+    state_private_dir = ROOT.parents[1] / "state-private"
+    state_private_probe = state_private_dir / "__pr_risk_review_secret_probe.py"
+    try:
+        state_private_dir.mkdir(exist_ok=True)
+        state_private_probe.write_text('password = "should-not-be-read"\n', encoding="utf-8")
+        if symlink_probe.exists() or symlink_probe.is_symlink():
+            symlink_probe.unlink()
+        symlink_probe.symlink_to(state_private_probe)
+        symlink_result = review.classify_paths(
+            ["control-plane/review/__pr_risk_review_symlink_probe.py"],
+            include_content=True,
+        )
+        check(
+            symlink_result["risk_surface_count"] == 0,
+            "symlinked files should not be content-scanned",
+            failures,
+        )
+    except (OSError, NotImplementedError) as exc:
+        failures.append(f"symlink fixture could not run: {exc}")
+    finally:
+        if symlink_probe.exists() or symlink_probe.is_symlink():
+            symlink_probe.unlink()
+        state_private_probe.unlink(missing_ok=True)
+        try:
+            state_private_dir.rmdir()
+        except OSError:
+            pass
+
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=10 failures={len(failures)}")
+        print(f"cases=13 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -222,7 +286,10 @@ def main() -> int:
     print("PASS CLI parent traversal rejection fixture")
     print("PASS private path rejection fixture")
     print("PASS git discovery failure fixture")
-    print("cases=10 failures=0")
+    print("PASS option-style base rejection fixture")
+    print("PASS secret-like filename rejection fixture")
+    print("PASS symlink content-scan rejection fixture")
+    print("cases=13 failures=0")
     return 0
 
 
