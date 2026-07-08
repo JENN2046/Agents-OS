@@ -1053,8 +1053,12 @@ def format_impact_text(result: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def score(federated_registry: Path = DEFAULT_FEDERATED_REGISTRY) -> dict[str, Any]:
-    doctor_result = doctor(federated_registry)
+def score(
+    federated_registry: Path = DEFAULT_FEDERATED_REGISTRY,
+    doctor_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    doctor_reused = doctor_result is not None
+    doctor_result = doctor_result if doctor_result is not None else doctor(federated_registry)
     summary = doctor_result.get("summary", {})
     fail_count = int(summary.get("fail", 0))
     warn_count = int(summary.get("warn", 0))
@@ -1101,6 +1105,7 @@ def score(federated_registry: Path = DEFAULT_FEDERATED_REGISTRY) -> dict[str, An
         "deductions": deductions,
         "doctor_summary": summary,
         "doctor_passed": bool(doctor_result.get("passed")),
+        "doctor_result_reused": doctor_reused,
         "warnings": {
             "score_is_read_only": True,
             "doctor_is_source": True,
@@ -1182,12 +1187,14 @@ def load_trend_snapshots(snapshot_dir: Path) -> tuple[list[dict[str, Any]], list
 def trend(
     federated_registry: Path = DEFAULT_FEDERATED_REGISTRY,
     snapshot_dir: Path = DEFAULT_TREND_SNAPSHOT_DIR,
+    doctor_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    doctor_reused = doctor_result is not None
     findings: list[dict[str, str]] = []
     resolved_snapshot_dir, snapshot_findings = resolve_snapshot_dir(snapshot_dir)
     findings.extend(snapshot_findings)
 
-    current_doctor = doctor(federated_registry)
+    current_doctor = doctor_result if doctor_result is not None else doctor(federated_registry)
     snapshots: list[dict[str, Any]] = []
     if resolved_snapshot_dir is not None:
         snapshots, load_findings = load_trend_snapshots(resolved_snapshot_dir)
@@ -1212,6 +1219,7 @@ def trend(
         "snapshot_dir": workspace_display(resolved_snapshot_dir) if resolved_snapshot_dir else str(snapshot_dir),
         "snapshots_found": len(snapshots),
         "current_doctor_summary": current_summary,
+        "doctor_result_reused": doctor_reused,
         "latest_snapshot": latest_snapshot,
         "no_regression_from_latest": no_regression,
         "known_archive_current": {
@@ -1331,8 +1339,8 @@ def build_snapshot_payload(
 ) -> dict[str, Any]:
     created_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     doctor_result = doctor(federated_registry)
-    score_result = score(federated_registry)
-    trend_result = trend(federated_registry, snapshot_dir)
+    score_result = score(federated_registry, doctor_result=doctor_result)
+    trend_result = trend(federated_registry, snapshot_dir, doctor_result=doctor_result)
 
     doctor_summary = doctor_result.get("summary", {})
     score_summary = {
@@ -1364,6 +1372,11 @@ def build_snapshot_payload(
             "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py score",
             "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py trend",
         ],
+        "docctl_index": {
+            "doctor_invocations": 1,
+            "doctor_reused_by": ["score", "trend"],
+            "persistent_cache_write_performed": False,
+        },
         "write_scope": {
             "snapshot_dir": workspace_display(
                 snapshot_dir if snapshot_dir.is_absolute() else WORKSPACE_ROOT / snapshot_dir
@@ -1591,8 +1604,12 @@ def plan_fix_proposal_for_finding(
     )
 
 
-def plan_fix(federated_registry: Path = DEFAULT_FEDERATED_REGISTRY) -> dict[str, Any]:
-    doctor_result = doctor(federated_registry)
+def plan_fix(
+    federated_registry: Path = DEFAULT_FEDERATED_REGISTRY,
+    doctor_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    doctor_reused = doctor_result is not None
+    doctor_result = doctor_result if doctor_result is not None else doctor(federated_registry)
     target = str(federated_registry)
     registry_paths = {
         item.get("registry_id", ""): item.get("registry_path", "")
@@ -1645,6 +1662,7 @@ def plan_fix(federated_registry: Path = DEFAULT_FEDERATED_REGISTRY) -> dict[str,
         "proposals": proposals,
         "doctor_passed": bool(doctor_result.get("passed")),
         "doctor_summary": doctor_result.get("summary", {}),
+        "doctor_result_reused": doctor_reused,
         "findings": doctor_result.get("findings", []),
         "warnings": {
             "plan_fix_is_dry_run": True,
@@ -1859,9 +1877,9 @@ def status(
     snapshot_dir: Path = DEFAULT_TREND_SNAPSHOT_DIR,
 ) -> dict[str, Any]:
     doctor_result = doctor(federated_registry)
-    score_result = score(federated_registry)
-    trend_result = trend(federated_registry, snapshot_dir)
-    plan_fix_result = plan_fix(federated_registry)
+    score_result = score(federated_registry, doctor_result=doctor_result)
+    trend_result = trend(federated_registry, snapshot_dir, doctor_result=doctor_result)
+    plan_fix_result = plan_fix(federated_registry, doctor_result=doctor_result)
     latest_snapshot = trend_result.get("latest_snapshot") or {}
     proposal_categories = [
         str(proposal.get("category"))
@@ -1916,6 +1934,12 @@ def status(
             "proposal_categories": proposal_categories,
         },
         "component_findings": component_findings,
+        "docctl_index": {
+            "doctor_invocations": 1,
+            "doctor_reused_by": ["score", "trend", "plan_fix"],
+            "persistent_cache_write_performed": False,
+            "read_only_index": True,
+        },
         "next_recommended_action": next_action,
         "warnings": {
             "status_is_read_only": True,
@@ -1939,6 +1963,7 @@ def format_status_text(result: dict[str, Any]) -> str:
     score_summary = result.get("score", {})
     trend_summary = result.get("trend", {})
     plan_summary = result.get("plan_fix", {})
+    docctl_index = result.get("docctl_index", {})
     lines = [
         "docctl status",
         f"Status: {'PASS' if result['passed'] else 'FAIL'}",
@@ -1968,6 +1993,11 @@ def format_status_text(result: dict[str, Any]) -> str:
             "Plan fix: "
             f"status={plan_summary.get('plan_status')} "
             f"proposals={plan_summary.get('proposal_count')}"
+        ),
+        (
+            "Index: "
+            f"doctor_invocations={docctl_index.get('doctor_invocations')} "
+            f"reused_by={','.join(docctl_index.get('doctor_reused_by', []))}"
         ),
         f"Next: {result['next_recommended_action']}",
     ]
