@@ -239,6 +239,10 @@ def main() -> int:
             "application_default_credentials.json",
             "token.json",
             "prod-token.json",
+            "prod-token.py",
+            "api_key.txt",
+            "cookies.txt",
+            "secret_redaction.json",
             "secret.yaml",
             "config.env",
             ".envrc",
@@ -252,7 +256,7 @@ def main() -> int:
     )
     check(denied_secret_files["path_input_valid"] is False, "secret-like filenames should be invalid", failures)
     check(
-        denied_secret_files["invalid_path_count"] == 12,
+        denied_secret_files["invalid_path_count"] == 16,
         "all secret-like filename fixtures should be rejected",
         failures,
     )

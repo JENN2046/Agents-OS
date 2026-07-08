@@ -233,13 +233,6 @@ DENIED_FILE_SUFFIXES = {
     ".pfx",
 }
 
-DENIED_SECRET_DATA_SUFFIXES = {
-    ".json",
-    ".toml",
-    ".yaml",
-    ".yml",
-}
-
 SECRET_FILENAME_TERMS = {
     "api_key",
     "apikey",
@@ -266,6 +259,21 @@ ALLOWED_TEMPLATE_SUFFIXES = {
     ".template",
 }
 
+SECRET_HANDLING_CODE_TERMS = {
+    "redact",
+    "redaction",
+    "validate-no-secrets",
+}
+
+SECRET_HANDLING_CODE_SUFFIXES = {
+    ".js",
+    ".jsx",
+    ".py",
+    ".sh",
+    ".ts",
+    ".tsx",
+}
+
 
 def invalid_path(reason: str, path: str) -> dict[str, str]:
     return {"path": "[redacted]", "reason": reason}
@@ -277,6 +285,14 @@ def is_allowed_template_filename(name: str) -> bool:
 
 def is_denied_env_path_part(part: str) -> bool:
     return part.startswith(".env") or part == "config.env" or part.startswith("config.env.")
+
+
+def is_secret_handling_code_filename(name: str) -> bool:
+    path = PurePosixPath(name)
+    stem = path.stem.lower()
+    if path.suffix.lower() not in SECRET_HANDLING_CODE_SUFFIXES:
+        return False
+    return any(term in stem for term in SECRET_HANDLING_CODE_TERMS)
 
 
 def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None]:
@@ -308,7 +324,7 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("key or certificate paths are not allowed", path)
     lowered_stem = candidate_path.stem.lower()
     secret_name_hit = lowered_stem in DENIED_FILENAME_STEMS or any(term in lowered_stem for term in SECRET_FILENAME_TERMS)
-    if secret_name_hit and candidate_path.suffix.lower() in DENIED_SECRET_DATA_SUFFIXES:
+    if secret_name_hit and not is_secret_handling_code_filename(lowered_name):
         return None, invalid_path("secret-like filenames are not allowed", path)
     return str(candidate_path), None
 
