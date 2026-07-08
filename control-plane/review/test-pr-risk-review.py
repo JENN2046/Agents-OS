@@ -371,6 +371,31 @@ def main() -> int:
         )
 
     original_workspace_root = review.WORKSPACE_ROOT
+    with tempfile.TemporaryDirectory() as temp_repo:
+        temp_root = Path(temp_repo)
+        subprocess.run(["git", "init"], cwd=temp_root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=temp_root, check=True)
+        subprocess.run(["git", "config", "user.name", "PR Risk Test"], cwd=temp_root, check=True)
+        probe = temp_root / "probe.py"
+        probe.write_text("# safe base\n", encoding="utf-8")
+        subprocess.run(["git", "add", "probe.py"], cwd=temp_root, check=True)
+        subprocess.run(["git", "commit", "-m", "fixture"], cwd=temp_root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        probe.write_text('password = "staged-risk"\n', encoding="utf-8")
+        subprocess.run(["git", "add", "probe.py"], cwd=temp_root, check=True)
+        probe.write_text("# safe worktree\n", encoding="utf-8")
+        try:
+            review.WORKSPACE_ROOT = temp_root
+            staged_discovery = review.run_git_changed_paths("HEAD")
+            staged_result = review.classify_paths(staged_discovery["paths"], include_content=True)
+        finally:
+            review.WORKSPACE_ROOT = original_workspace_root
+        check(
+            "redaction_secret_handling" in surface_ids(staged_result),
+            "staged blob content should be scanned even when worktree content is safe",
+            failures,
+        )
+
+    original_workspace_root = review.WORKSPACE_ROOT
     with tempfile.TemporaryDirectory() as temp_workspace:
         temp_root = Path(temp_workspace)
         private_dir = temp_root / "state-private"
@@ -420,7 +445,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=19 failures={len(failures)}")
+        print(f"cases=20 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -441,8 +466,9 @@ def main() -> int:
     print("PASS allowed template filename fixture")
     print("PASS legitimate secret-handling path fixture")
     print("PASS NUL-separated git path discovery fixture")
+    print("PASS staged blob content fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=19 failures=0")
+    print("cases=20 failures=0")
     return 0
 
 

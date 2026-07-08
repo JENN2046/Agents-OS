@@ -397,17 +397,19 @@ def path_has_symlink_part(path: Path, root: Path) -> bool:
     return False
 
 
-def read_changed_text(path: str, max_bytes: int = 20000) -> str:
+def decode_bounded(data: bytes) -> str:
+    return data.decode("utf-8", errors="ignore")
+
+
+def read_worktree_text(path: str, max_bytes: int) -> str:
     normalized, invalid = normalize_changed_path(path)
     if invalid is not None or normalized is None:
         return ""
     candidate = WORKSPACE_ROOT / normalized
+    workspace_root = WORKSPACE_ROOT.resolve()
     if not candidate.is_file():
         return ""
-    workspace_root = WORKSPACE_ROOT.resolve()
     if path_has_symlink_part(candidate, WORKSPACE_ROOT):
-        return ""
-    if candidate.suffix.lower() not in CONTENT_SCAN_SUFFIXES:
         return ""
     try:
         resolved_relative = candidate.resolve().relative_to(workspace_root)
@@ -417,9 +419,46 @@ def read_changed_text(path: str, max_bytes: int = 20000) -> str:
     if resolved_invalid is not None:
         return ""
     try:
-        return candidate.read_text(encoding="utf-8", errors="ignore")[:max_bytes]
+        with candidate.open("rb") as handle:
+            return decode_bounded(handle.read(max_bytes))
     except OSError:
         return ""
+
+
+def read_git_blob_text(path: str, revision: str, max_bytes: int) -> str:
+    blob = f"{revision}:{path}" if revision else f":{path}"
+    try:
+        process = subprocess.Popen(
+            ["git", "show", blob],
+            cwd=WORKSPACE_ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+    except OSError:
+        return ""
+    if process.stdout is None:
+        return ""
+    try:
+        data = process.stdout.read(max_bytes)
+    finally:
+        process.kill()
+        process.wait()
+    return decode_bounded(data)
+
+
+def read_changed_text(path: str, max_bytes: int = 20000) -> str:
+    normalized, invalid = normalize_changed_path(path)
+    if invalid is not None or normalized is None:
+        return ""
+    if PurePosixPath(normalized).suffix.lower() not in CONTENT_SCAN_SUFFIXES:
+        return ""
+    chunks = [
+        read_worktree_text(normalized, max_bytes),
+        read_git_blob_text(normalized, "HEAD", max_bytes),
+        read_git_blob_text(normalized, "", max_bytes),
+    ]
+    unique_chunks = [chunk for index, chunk in enumerate(chunks) if chunk and chunk not in chunks[:index]]
+    return "\n".join(unique_chunks)
 
 
 def matches_any(patterns: list[str], value: str) -> bool:
