@@ -329,6 +329,35 @@ def main() -> int:
         failures,
     )
 
+    original_workspace_root = review.WORKSPACE_ROOT
+    with tempfile.TemporaryDirectory() as temp_repo:
+        temp_root = Path(temp_repo)
+        subprocess.run(["git", "init"], cwd=temp_root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=temp_root, check=True)
+        subprocess.run(["git", "config", "user.name", "PR Risk Test"], cwd=temp_root, check=True)
+        (temp_root / "README.md").write_text("fixture\n", encoding="utf-8")
+        subprocess.run(["git", "add", "README.md"], cwd=temp_root, check=True)
+        subprocess.run(["git", "commit", "-m", "fixture"], cwd=temp_root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        quoted_path_dir = temp_root / "state-private"
+        quoted_path_dir.mkdir()
+        (quoted_path_dir / "foo\nbar.py").write_text("# should not be scanned\n", encoding="utf-8")
+        try:
+            review.WORKSPACE_ROOT = temp_root
+            git_discovery = review.run_git_changed_paths("HEAD")
+            discovered = review.classify_paths(git_discovery["paths"], include_content=True)
+        finally:
+            review.WORKSPACE_ROOT = original_workspace_root
+        check(
+            discovered["path_input_valid"] is False,
+            "git discovery should reject protected paths with escaped characters",
+            failures,
+        )
+        check(
+            discovered["invalid_path_count"] >= 1,
+            "git discovery should report protected escaped path as invalid",
+            failures,
+        )
+
     symlink_probe = ROOT / "__pr_risk_review_symlink_probe.py"
     symlink_target: Path | None = None
     try:
@@ -358,7 +387,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=18 failures={len(failures)}")
+        print(f"cases=19 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -378,8 +407,9 @@ def main() -> int:
     print("PASS secret-like directory component rejection fixture")
     print("PASS allowed template filename fixture")
     print("PASS legitimate secret-handling path fixture")
+    print("PASS NUL-separated git path discovery fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=18 failures=0")
+    print("cases=19 failures=0")
     return 0
 
 

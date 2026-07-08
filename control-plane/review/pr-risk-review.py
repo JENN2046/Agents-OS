@@ -344,10 +344,10 @@ def run_git_changed_paths(base: str) -> dict[str, Any]:
             "git_errors": [base_error],
         }
     commands = [
-        ("branch_diff", ["git", "diff", "--name-only", f"{base}...HEAD"], True),
-        ("working_diff", ["git", "diff", "--name-only"], False),
-        ("staged_diff", ["git", "diff", "--name-only", "--cached"], False),
-        ("untracked", ["git", "ls-files", "--others", "--exclude-standard"], False),
+        ("branch_diff", ["git", "diff", "--name-only", "-z", f"{base}...HEAD"], True),
+        ("working_diff", ["git", "diff", "--name-only", "-z"], False),
+        ("staged_diff", ["git", "diff", "--name-only", "--cached", "-z"], False),
+        ("untracked", ["git", "ls-files", "-z", "--others", "--exclude-standard"], False),
     ]
     paths: list[str] = []
     errors: list[dict[str, Any]] = []
@@ -361,7 +361,7 @@ def run_git_changed_paths(base: str) -> dict[str, Any]:
             check=False,
         )
         if completed.returncode == 0:
-            paths.extend(line.strip() for line in completed.stdout.splitlines() if line.strip())
+            paths.extend(path for path in completed.stdout.split("\0") if path)
             continue
         if required:
             errors.append(git_error(stage, completed.returncode))
