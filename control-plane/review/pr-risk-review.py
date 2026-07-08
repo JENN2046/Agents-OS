@@ -175,6 +175,7 @@ CONTENT_SCAN_SUFFIXES = {
     ".js",
     ".jsx",
     ".py",
+    ".sh",
     ".toml",
     ".ts",
     ".tsx",
@@ -296,9 +297,11 @@ def is_secret_handling_code_filename(name: str) -> bool:
 
 
 def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None]:
-    raw = path.strip()
+    raw = path
     if not raw:
         return None, invalid_path("empty path", path)
+    if raw != raw.strip():
+        return None, invalid_path("paths with leading or trailing whitespace are not allowed", path)
     normalized = raw.replace("\\", "/")
     if re.match(r"^[A-Za-z]:/", normalized):
         return None, invalid_path("absolute paths are not allowed", path)

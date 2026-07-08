@@ -361,6 +361,7 @@ def main() -> int:
         quoted_path_dir = temp_root / "state-private"
         quoted_path_dir.mkdir()
         (quoted_path_dir / "foo\nbar.py").write_text("# should not be scanned\n", encoding="utf-8")
+        (temp_root / "probe.py ").write_text('password = "should-not-be-scanned-under-trimmed-name"\n', encoding="utf-8")
         try:
             review.WORKSPACE_ROOT = temp_root
             git_discovery = review.run_git_changed_paths("HEAD")
@@ -373,8 +374,8 @@ def main() -> int:
             failures,
         )
         check(
-            discovered["invalid_path_count"] >= 1,
-            "git discovery should report protected escaped path as invalid",
+            discovered["invalid_path_count"] >= 2,
+            "git discovery should report protected escaped paths and whitespace paths as invalid",
             failures,
         )
 
@@ -400,6 +401,26 @@ def main() -> int:
         check(
             "redaction_secret_handling" in surface_ids(staged_result),
             "staged blob content should be scanned even when worktree content is safe",
+            failures,
+        )
+
+    original_workspace_root = review.WORKSPACE_ROOT
+    with tempfile.TemporaryDirectory() as temp_workspace:
+        temp_root = Path(temp_workspace)
+        shell_path = temp_root / "ops" / "validation" / "check-workspace.sh"
+        shell_path.parent.mkdir(parents=True)
+        shell_path.write_text('password="content-risk"\n', encoding="utf-8")
+        try:
+            review.WORKSPACE_ROOT = temp_root
+            shell_content_result = review.classify_paths(
+                ["ops/validation/check-workspace.sh"],
+                include_content=True,
+            )
+        finally:
+            review.WORKSPACE_ROOT = original_workspace_root
+        check(
+            "redaction_secret_handling" in surface_ids(shell_content_result),
+            "shell script content should be scanned for redaction risk",
             failures,
         )
 
@@ -453,7 +474,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=20 failures={len(failures)}")
+        print(f"cases=21 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -475,8 +496,9 @@ def main() -> int:
     print("PASS legitimate secret-handling path fixture")
     print("PASS NUL-separated git path discovery fixture")
     print("PASS staged blob content fixture")
+    print("PASS shell script content-scan fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=20 failures=0")
+    print("cases=21 failures=0")
     return 0
 
 
