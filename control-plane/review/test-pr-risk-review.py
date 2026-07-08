@@ -61,7 +61,11 @@ def main() -> int:
     )
 
     gate = review.classify_paths(
-        ["control-plane/registry/docctl.py", "control-plane/registry/validate-document-registry.py"],
+        [
+            "control-plane/registry/docctl.py",
+            "control-plane/registry/validate-document-registry.py",
+            "ops/validation/validate-workspace.sh",
+        ],
         include_content=False,
     )
     check("readiness_gate" in surface_ids(gate), "validator/docctl paths should trigger readiness gate surface", failures)

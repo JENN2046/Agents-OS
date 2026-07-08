@@ -58,7 +58,7 @@ RISK_SURFACES: dict[str, dict[str, Any]] = {
             r"preflight",
             r"readiness",
             r"validator",
-            r"validate-.*\.py$",
+            r"validate-.*\.(py|sh)$",
             r"docctl\.py$",
         ],
         "content_patterns": [
