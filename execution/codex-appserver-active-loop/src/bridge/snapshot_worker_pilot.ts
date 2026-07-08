@@ -1,3 +1,4 @@
+import { lstatSync, realpathSync } from "node:fs";
 import path from "node:path";
 import { assertWorkerCwdIsSnapshot, type SnapshotManifest } from "./repo_snapshot.js";
 import { assertPromptAnnex, type PromptAnnex } from "./prompt_annex.js";
@@ -166,6 +167,23 @@ export function assertSnapshotBoundWorkerPlanPathBoundary(projectRoot: string, p
   if (plan.snapshotId !== path.basename(snapshotRoot)) {
     throw new Error("live Worker snapshot id must match the snapshot root");
   }
+
+  assertNoSymlinkInExistingPath(snapshotsRoot);
+  assertNoSymlinkInExistingPath(snapshotRoot);
+  assertNoSymlinkInExistingPath(plan.manifestPath);
+  const realSnapshotsRoot = realpathSync(snapshotsRoot);
+  const realSnapshotRoot = realpathSync(snapshotRoot);
+  const realWorkerCwd = realpathSync(workerCwd);
+  const realManifestPath = realpathSync(plan.manifestPath);
+  if (!isPathInsideRoot(realSnapshotsRoot, realSnapshotRoot)) {
+    throw new Error("live snapshot root must stay under project data/snapshots");
+  }
+  if (realWorkerCwd !== realSnapshotRoot) {
+    throw new Error("live Worker cwd must match the snapshot root");
+  }
+  if (realManifestPath !== path.join(realSnapshotRoot, "_snapshot", "manifest.json")) {
+    throw new Error("live Worker manifest path must match the snapshot root manifest");
+  }
 }
 
 export function assertSnapshotBoundWorkerPlanLiveBoundary(
@@ -176,7 +194,10 @@ export function assertSnapshotBoundWorkerPlanLiveBoundary(
   assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
   assertSnapshotManifest(manifest);
   const snapshotRoot = path.resolve(plan.snapshotRoot);
-  if (path.resolve(manifest.snapshotRoot) !== snapshotRoot || path.resolve(manifest.workerCwd) !== snapshotRoot) {
+  const realSnapshotRoot = realpathSync(snapshotRoot);
+  const realManifestSnapshotRoot = realpathSync(manifest.snapshotRoot);
+  const realManifestWorkerCwd = realpathSync(manifest.workerCwd);
+  if (realManifestSnapshotRoot !== realSnapshotRoot || realManifestWorkerCwd !== realSnapshotRoot) {
     throw new Error("live Worker manifest must match the plan snapshot root");
   }
   if (path.basename(manifest.snapshotRoot) !== plan.snapshotId) {
@@ -200,6 +221,20 @@ function assertSnapshotManifest(value: SnapshotManifest): void {
 function isPathInsideRoot(root: string, candidate: string): boolean {
   const relative = path.relative(path.resolve(root), path.resolve(candidate));
   return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+function assertNoSymlinkInExistingPath(targetPath: string): void {
+  const resolvedTarget = path.resolve(targetPath);
+  const parsed = path.parse(resolvedTarget);
+  const segments = path.relative(parsed.root, resolvedTarget).split(path.sep).filter(Boolean);
+  let currentPath = parsed.root;
+  for (const segment of segments) {
+    currentPath = path.join(currentPath, segment);
+    const stat = lstatSync(currentPath);
+    if (stat.isSymbolicLink()) {
+      throw new Error("live snapshot paths must not contain symlinks");
+    }
+  }
 }
 
 function isSandboxPolicy(value: unknown): value is SnapshotBoundWorkerPlan["sandboxPolicy"] {

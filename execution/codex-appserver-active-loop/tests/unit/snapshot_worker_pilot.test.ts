@@ -1,4 +1,4 @@
-import { mkdir, rm } from "node:fs/promises";
+import { mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -68,33 +68,65 @@ describe("snapshot-bound Worker pilot prep", () => {
     expect(validateSnapshotBoundWorkerPlan({ ...plan, prompt: "raw prompt" })).toBe(false);
   });
 
-  it("revalidates live plan paths before starting managed sessions", () => {
-    const projectRoot = "A:/repo";
+  it("revalidates live plan paths before starting managed sessions", async () => {
+    const projectRoot = path.join(tmpRoot, `live-${Date.now()}`);
+    const snapshotId = "cea-011-safe-snapshot-20260707080426";
+    const snapshotRoot = path.join(projectRoot, "data", "snapshots", snapshotId);
+    const manifestPath = path.join(snapshotRoot, "_snapshot", "manifest.json");
+    const manifest = sampleManifest(snapshotRoot);
+    await rm(projectRoot, { force: true, recursive: true });
+    await mkdir(path.dirname(manifestPath), { recursive: true });
+    await writeFile(manifestPath, "{}\n", "utf8");
     const plan = createSnapshotBoundWorkerPlan({
       planId: "cea-016-worker-plan-live",
-      manifest: sampleManifest(),
-      manifestPath: "A:/repo/data/snapshots/cea-011-safe-snapshot-20260707080426/_snapshot/manifest.json",
-      annex: sampleAnnex(),
+      manifest,
+      manifestPath,
+      annex: sampleAnnex(snapshotId),
       annexRef: "annex.json",
     });
 
     expect(() => assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan)).not.toThrow();
-    expect(() => assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, sampleManifest())).not.toThrow();
+    expect(() => assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, manifest)).not.toThrow();
     expect(() =>
       assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, {
         ...plan,
-        snapshotRoot: "A:/repo",
-        workerCwd: "A:/repo",
-        manifestPath: "A:/repo/_snapshot/manifest.json",
+        snapshotRoot: projectRoot,
+        workerCwd: projectRoot,
+        manifestPath: path.join(projectRoot, "_snapshot", "manifest.json"),
       }),
     ).toThrow("data/snapshots");
+    const differentSnapshotRoot = path.join(projectRoot, "data", "snapshots", "different");
+    await mkdir(differentSnapshotRoot, { recursive: true });
     expect(() =>
       assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, {
-        ...sampleManifest(),
-        snapshotRoot: "A:/repo/data/snapshots/different",
-        workerCwd: "A:/repo/data/snapshots/different",
+        ...manifest,
+        snapshotRoot: differentSnapshotRoot,
+        workerCwd: differentSnapshotRoot,
       }),
     ).toThrow("manifest must match");
+  });
+
+  it("rejects symlinked live snapshot roots", async () => {
+    const projectRoot = path.join(tmpRoot, `live-symlink-${Date.now()}`);
+    const snapshotId = "cea-011-safe-snapshot-symlink";
+    const snapshotRoot = path.join(projectRoot, "data", "snapshots", snapshotId);
+    const outsideRoot = path.join(tmpRoot, `live-real-repo-${Date.now()}`);
+    const manifestPath = path.join(snapshotRoot, "_snapshot", "manifest.json");
+    await rm(projectRoot, { force: true, recursive: true });
+    await rm(outsideRoot, { force: true, recursive: true });
+    await mkdir(path.join(projectRoot, "data", "snapshots"), { recursive: true });
+    await mkdir(outsideRoot, { recursive: true });
+    await symlink(outsideRoot, snapshotRoot);
+    const manifest = sampleManifest(snapshotRoot);
+    const plan = createSnapshotBoundWorkerPlan({
+      planId: "cea-016-worker-plan-live-symlink",
+      manifest,
+      manifestPath,
+      annex: sampleAnnex(snapshotId),
+      annexRef: "annex.json",
+    });
+
+    expect(() => assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan)).toThrow("symlinks");
   });
 
   it("writes and reads Worker prep plans safely", async () => {
@@ -117,13 +149,13 @@ describe("snapshot-bound Worker pilot prep", () => {
   });
 });
 
-function sampleManifest(): SnapshotManifest {
+function sampleManifest(snapshotRoot = "A:/repo/data/snapshots/cea-011-safe-snapshot-20260707080426"): SnapshotManifest {
   return {
     snapshotVersion: 1,
     createdAt: "2026-07-07T00:00:00.000Z",
     sourceRoot: "A:/repo",
-    snapshotRoot: "A:/repo/data/snapshots/cea-011-safe-snapshot-20260707080426",
-    workerCwd: "A:/repo/data/snapshots/cea-011-safe-snapshot-20260707080426",
+    snapshotRoot,
+    workerCwd: snapshotRoot,
     allowlist: ["src"],
     includedFiles: [],
     excludedFiles: [],
@@ -136,7 +168,7 @@ function sampleManifest(): SnapshotManifest {
   };
 }
 
-function sampleAnnex(): PromptAnnex {
+function sampleAnnex(snapshotId = "cea-011-safe-snapshot-20260707080426"): PromptAnnex {
   return {
     annexVersion: 1,
     annexId: "cea-015-annex",
@@ -151,7 +183,7 @@ function sampleAnnex(): PromptAnnex {
     rawContentIncluded: false,
     summary: "Approved context packet.",
     artifactRefs: ["docs/CONTEXT_PROMOTION_GATE.md"],
-    snapshotIds: ["cea-011-safe-snapshot-20260707080426"],
+    snapshotIds: [snapshotId],
     entrySummaries: [],
     constraints: ["Use snapshot cwd only."],
     boundary: {

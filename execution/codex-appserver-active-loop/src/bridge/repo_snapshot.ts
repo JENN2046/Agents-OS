@@ -108,14 +108,13 @@ export async function exportSafeRepoSnapshot(options: SnapshotExportOptions): Pr
   const sourceRoot = path.resolve(options.sourceRoot);
   const snapshotRoot = path.resolve(options.snapshotRoot);
   assertSnapshotRootOutsideSourceTraversal(sourceRoot, snapshotRoot);
+  await prepareSafeSnapshotDestination(snapshotRoot);
 
   const allowlist = options.allowlist ?? defaultSnapshotAllowlist;
   const now = options.now ?? (() => new Date());
   const maxFileBytes = options.maxFileBytes ?? 512 * 1024;
   const includedFiles: SnapshotFileEntry[] = [];
   const excludedFiles: SnapshotExclusion[] = [];
-
-  await mkdir(snapshotRoot, { recursive: true });
 
   for (const entry of allowlist) {
     const relativeEntry = normalizeRelativePath(entry);
@@ -167,9 +166,11 @@ export async function exportSafeRepoSnapshot(options: SnapshotExportOptions): Pr
   };
 
   const metaDir = path.join(snapshotRoot, "_snapshot");
-  await mkdir(metaDir, { recursive: true });
+  await prepareSafeDestinationDirectory(snapshotRoot, metaDir);
   const manifestPath = path.join(metaDir, "manifest.json");
   const exclusionReportPath = path.join(metaDir, "exclusions.json");
+  await assertSafeDestinationFile(snapshotRoot, manifestPath);
+  await assertSafeDestinationFile(snapshotRoot, exclusionReportPath);
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   await writeFile(
     exclusionReportPath,
@@ -211,6 +212,16 @@ async function readSafeSourceStat(
     return undefined;
   }
   return sourceStat;
+}
+
+async function prepareSafeSnapshotDestination(snapshotRoot: string): Promise<void> {
+  await assertNoSymlinkInExistingPath(snapshotRoot);
+  await mkdir(snapshotRoot, { recursive: true });
+  await assertNoSymlinkInExistingPath(snapshotRoot);
+  const realSnapshotRoot = await realpath(snapshotRoot);
+  if (realSnapshotRoot !== snapshotRoot) {
+    throw new Error("snapshot destination root must resolve to the requested path");
+  }
 }
 
 async function copyDirectory(
@@ -300,13 +311,59 @@ async function copyAllowedFile(
   }
 
   const targetPath = resolveInsideRoot(snapshotRoot, relativePath);
-  await mkdir(path.dirname(targetPath), { recursive: true });
+  await prepareSafeDestinationDirectory(snapshotRoot, path.dirname(targetPath));
+  await assertSafeDestinationFile(snapshotRoot, targetPath);
   await copyFile(sourcePath, targetPath);
   includedFiles.push({
     relativePath,
     bytes: sourceStat.size,
     sha256: createHash("sha256").update(content).digest("hex").toUpperCase(),
   });
+}
+
+async function prepareSafeDestinationDirectory(snapshotRoot: string, targetDir: string): Promise<void> {
+  assertDestinationPathInsideSnapshot(snapshotRoot, targetDir);
+  await assertNoSymlinkInExistingPath(targetDir);
+  await mkdir(targetDir, { recursive: true });
+  await assertNoSymlinkInExistingPath(targetDir);
+  const [realSnapshotRoot, realTargetDir] = await Promise.all([realpath(snapshotRoot), realpath(targetDir)]);
+  const relativeRealPath = path.relative(realSnapshotRoot, realTargetDir);
+  if (relativeRealPath.startsWith("..") || path.isAbsolute(relativeRealPath)) {
+    throw new Error("snapshot destination path must stay inside snapshot root");
+  }
+}
+
+async function assertSafeDestinationFile(snapshotRoot: string, targetPath: string): Promise<void> {
+  assertDestinationPathInsideSnapshot(snapshotRoot, targetPath);
+  await assertNoSymlinkInExistingPath(targetPath);
+}
+
+async function assertNoSymlinkInExistingPath(targetPath: string): Promise<void> {
+  const resolvedTarget = path.resolve(targetPath);
+  const parsed = path.parse(resolvedTarget);
+  const segments = path.relative(parsed.root, resolvedTarget).split(path.sep).filter(Boolean);
+  let currentPath = parsed.root;
+  for (const segment of segments) {
+    currentPath = path.join(currentPath, segment);
+    try {
+      const stat = await lstat(currentPath);
+      if (stat.isSymbolicLink()) {
+        throw new Error("snapshot destination paths must not contain symlinks");
+      }
+    } catch (error) {
+      if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+        return;
+      }
+      throw error;
+    }
+  }
+}
+
+function assertDestinationPathInsideSnapshot(snapshotRoot: string, targetPath: string): void {
+  const relative = path.relative(path.resolve(snapshotRoot), path.resolve(targetPath));
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error("snapshot destination path escapes snapshot root");
+  }
 }
 
 function classifyPath(relativePath: string): SnapshotExclusion | undefined {

@@ -98,6 +98,51 @@ describe("safe repo snapshot exporter", () => {
     await expect(readFile(path.join(snapshotRoot, "src/link.ts"), "utf8")).rejects.toThrow();
   });
 
+  it("rejects symlinked snapshot destinations before writing", async () => {
+    const sourceRoot = path.join(tmpRoot, `dest-source-${Date.now()}`);
+    const outsideRoot = path.join(tmpRoot, `dest-outside-${Date.now()}`);
+    const snapshotRoot = path.join(tmpRoot, `dest-snapshot-${Date.now()}`);
+    await rm(sourceRoot, { force: true, recursive: true });
+    await rm(outsideRoot, { force: true, recursive: true });
+    await rm(snapshotRoot, { force: true, recursive: true });
+    await mkdir(sourceRoot, { recursive: true });
+    await mkdir(outsideRoot, { recursive: true });
+    await writeFile(path.join(sourceRoot, "README.md"), "safe\n", "utf8");
+    await symlink(outsideRoot, snapshotRoot);
+
+    await expect(
+      exportSafeRepoSnapshot({
+        sourceRoot,
+        snapshotRoot,
+        allowlist: ["README.md"],
+      }),
+    ).rejects.toThrow("destination");
+    await expect(readFile(path.join(outsideRoot, "README.md"), "utf8")).rejects.toThrow();
+  });
+
+  it("rejects symlinked destination subdirectories before copying files", async () => {
+    const sourceRoot = path.join(tmpRoot, `dest-nested-source-${Date.now()}`);
+    const outsideRoot = path.join(tmpRoot, `dest-nested-outside-${Date.now()}`);
+    const snapshotRoot = path.join(tmpRoot, `dest-nested-snapshot-${Date.now()}`);
+    await rm(sourceRoot, { force: true, recursive: true });
+    await rm(outsideRoot, { force: true, recursive: true });
+    await rm(snapshotRoot, { force: true, recursive: true });
+    await mkdir(path.join(sourceRoot, "src"), { recursive: true });
+    await mkdir(outsideRoot, { recursive: true });
+    await mkdir(snapshotRoot, { recursive: true });
+    await writeFile(path.join(sourceRoot, "src/real.ts"), "export const ok = true;\n", "utf8");
+    await symlink(outsideRoot, path.join(snapshotRoot, "src"));
+
+    await expect(
+      exportSafeRepoSnapshot({
+        sourceRoot,
+        snapshotRoot,
+        allowlist: ["src"],
+      }),
+    ).rejects.toThrow("destination");
+    await expect(readFile(path.join(outsideRoot, "real.ts"), "utf8")).rejects.toThrow();
+  });
+
   it("rejects allowlist path escapes", async () => {
     const sourceRoot = path.join(tmpRoot, `escape-source-${Date.now()}`);
     await mkdir(sourceRoot, { recursive: true });
