@@ -2,6 +2,7 @@ import { mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  assertLiveArtifactPathBoundary,
   assertSnapshotBoundWorkerPlanLiveBoundary,
   assertSnapshotBoundWorkerPlanPathBoundary,
   createSnapshotBoundWorkerPlan,
@@ -127,6 +128,26 @@ describe("snapshot-bound Worker pilot prep", () => {
     });
 
     expect(() => assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan)).toThrow("symlinks");
+  });
+
+  it("validates live artifact paths before reading them", async () => {
+    const projectRoot = path.join(tmpRoot, `artifact-${Date.now()}`);
+    const planRoot = path.join(projectRoot, "data", "worker-pilots");
+    const outsideRoot = path.join(tmpRoot, `artifact-outside-${Date.now()}`);
+    await rm(projectRoot, { force: true, recursive: true });
+    await rm(outsideRoot, { force: true, recursive: true });
+    await mkdir(planRoot, { recursive: true });
+    await mkdir(outsideRoot, { recursive: true });
+    const planPath = path.join(planRoot, "safe.worker-plan.json");
+    const outsidePath = path.join(outsideRoot, "private.worker-plan.json");
+    const linkedPath = path.join(planRoot, "linked.worker-plan.json");
+    await writeFile(planPath, "{}\n", "utf8");
+    await writeFile(outsidePath, "{}\n", "utf8");
+    await symlink(outsidePath, linkedPath);
+
+    expect(assertLiveArtifactPathBoundary(projectRoot, planPath, "data/worker-pilots", "plan")).toBe(planPath);
+    expect(() => assertLiveArtifactPathBoundary(projectRoot, outsidePath, "data/worker-pilots", "plan")).toThrow("worker-pilots");
+    expect(() => assertLiveArtifactPathBoundary(projectRoot, linkedPath, "data/worker-pilots", "plan")).toThrow("symlinks");
   });
 
   it("writes and reads Worker prep plans safely", async () => {

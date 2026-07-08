@@ -7,6 +7,7 @@ import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/
 import { assertPromptAnnex, type PromptAnnex } from "../bridge/prompt_annex.js";
 import {
   assertSnapshotBoundWorkerPlan,
+  assertLiveArtifactPathBoundary,
   assertSnapshotBoundWorkerPlanLiveBoundary,
   assertSnapshotBoundWorkerPlanPathBoundary,
   type SnapshotBoundWorkerPlan,
@@ -61,14 +62,16 @@ async function main(): Promise<void> {
   if (!planPath) {
     throw new Error("CEA-016 prep plan path is missing");
   }
-  const plan = JSON.parse(await readFile(planPath, "utf8")) as SnapshotBoundWorkerPlan;
+  const verifiedPlanPath = assertLiveArtifactPathBoundary(projectRoot, planPath, "data/worker-pilots", "CEA-016 prep plan path");
+  const plan = JSON.parse(await readFile(verifiedPlanPath, "utf8")) as SnapshotBoundWorkerPlan;
   assertSnapshotBoundWorkerPlan(plan);
   assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
   const manifest = JSON.parse(await readFile(plan.manifestPath, "utf8")) as SnapshotManifest;
   assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, manifest);
   const verifiedSnapshotRoot = path.resolve(plan.snapshotRoot);
   const verifiedWorkerCwd = path.resolve(plan.workerCwd);
-  const annex = JSON.parse(await readFile(plan.annexRef, "utf8")) as PromptAnnex;
+  const verifiedAnnexRef = assertLiveArtifactPathBoundary(projectRoot, plan.annexRef, "data/prompt-annexes", "Worker plan annex ref");
+  const annex = JSON.parse(await readFile(verifiedAnnexRef, "utf8")) as PromptAnnex;
   assertPromptAnnex(annex);
   const prompt = createSnapshotWorkerLivePrompt({ plan, annex });
   const tracker: TurnTracker = { completedTurns: new Map(), agentTextByTurn: new Map() };
@@ -208,7 +211,7 @@ async function main(): Promise<void> {
       worker_thread_id: workerThreadId,
       worker_turn_id: workerTurnId,
       prep_plan_id: plan.planId,
-      prep_plan_path: planPath,
+      prep_plan_path: verifiedPlanPath,
       snapshot_id: plan.snapshotId,
       worker_cwd: verifiedWorkerCwd,
       app_server_process_cwd: verifiedSnapshotRoot,
@@ -239,7 +242,7 @@ async function main(): Promise<void> {
       worker_thread_id: workerThreadId ?? null,
       worker_turn_id: workerTurnId ?? null,
       prep_plan_id: plan.planId,
-      prep_plan_path: planPath,
+      prep_plan_path: verifiedPlanPath,
       snapshot_id: plan.snapshotId,
       worker_cwd: verifiedWorkerCwd,
       app_server_process_cwd: verifiedSnapshotRoot,

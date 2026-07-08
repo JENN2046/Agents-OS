@@ -186,6 +186,27 @@ export function assertSnapshotBoundWorkerPlanPathBoundary(projectRoot: string, p
   }
 }
 
+export function assertLiveArtifactPathBoundary(
+  projectRoot: string,
+  artifactPath: string,
+  allowedRelativeRoot: string,
+  label: string,
+): string {
+  const allowedRoot = path.resolve(projectRoot, allowedRelativeRoot);
+  const resolvedArtifactPath = path.resolve(artifactPath);
+  if (!isPathInsideRootOrEqual(allowedRoot, resolvedArtifactPath)) {
+    throw new Error(`${label} must stay under ${allowedRelativeRoot}`);
+  }
+  assertNoSymlinkInExistingPath(allowedRoot);
+  assertNoSymlinkInExistingPath(resolvedArtifactPath);
+  const realAllowedRoot = realpathSync(allowedRoot);
+  const realArtifactPath = realpathSync(resolvedArtifactPath);
+  if (!isPathInsideRootOrEqual(realAllowedRoot, realArtifactPath)) {
+    throw new Error(`${label} must stay under ${allowedRelativeRoot}`);
+  }
+  return resolvedArtifactPath;
+}
+
 export function assertSnapshotBoundWorkerPlanLiveBoundary(
   projectRoot: string,
   plan: SnapshotBoundWorkerPlan,
@@ -221,6 +242,11 @@ function assertSnapshotManifest(value: SnapshotManifest): void {
 function isPathInsideRoot(root: string, candidate: string): boolean {
   const relative = path.relative(path.resolve(root), path.resolve(candidate));
   return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+function isPathInsideRootOrEqual(root: string, candidate: string): boolean {
+  const relative = path.relative(path.resolve(root), path.resolve(candidate));
+  return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }
 
 function assertNoSymlinkInExistingPath(targetPath: string): void {
