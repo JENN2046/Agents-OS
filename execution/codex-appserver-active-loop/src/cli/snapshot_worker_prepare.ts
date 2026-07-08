@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
 import { createSnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
 import type { SnapshotManifest } from "../bridge/repo_snapshot.js";
 import type { PromptAnnex } from "../bridge/prompt_annex.js";
@@ -36,16 +37,20 @@ async function main(): Promise<void> {
   if (!manifestPath || !annexPath) {
     throw new Error("CEA-011 manifest path or CEA-015 annex path is missing");
   }
+  const verifiedManifestPath = assertProjectArtifactPathBoundary(projectRoot, manifestPath, "data/snapshots", "CEA-011 snapshot manifest");
+  assertAllowedArtifactFilename(verifiedManifestPath, ["manifest.json"], "CEA-011 snapshot manifest");
+  const verifiedAnnexPath = assertProjectArtifactPathBoundary(projectRoot, annexPath, "data/prompt-annexes", "CEA-015 prompt annex");
+  assertPromptAnnexFilename(verifiedAnnexPath);
 
-  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as SnapshotManifest;
-  const annex = JSON.parse(await readFile(annexPath, "utf8")) as PromptAnnex;
+  const manifest = JSON.parse(await readFile(verifiedManifestPath, "utf8")) as SnapshotManifest;
+  const annex = JSON.parse(await readFile(verifiedAnnexPath, "utf8")) as PromptAnnex;
   const store = createFileSnapshotWorkerPlanStore(path.join(projectRoot, "data", "worker-pilots"));
   const plan = createSnapshotBoundWorkerPlan({
     planId,
     manifest,
-    manifestPath,
+    manifestPath: verifiedManifestPath,
     annex,
-    annexRef: annexPath,
+    annexRef: verifiedAnnexPath,
   });
   const planPath = await store.write(plan);
 
@@ -97,6 +102,13 @@ async function main(): Promise<void> {
     `auto_injection: ${pilot.auto_injection}`,
   ]);
   console.log(JSON.stringify(report, null, 2));
+}
+
+function assertPromptAnnexFilename(annexPath: string): void {
+  const filename = path.basename(annexPath);
+  if (!filename.endsWith(".prompt-annex.json")) {
+    throw new Error(`CEA-015 prompt annex filename is not allowed: ${filename}`);
+  }
 }
 
 void main().catch((error) => {
