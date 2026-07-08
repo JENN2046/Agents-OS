@@ -210,14 +210,13 @@ def main() -> int:
     )
     check(missing_base_payload.get("git_error_count") == 1, "missing base should report one git error", failures)
 
-    option_base_output = Path("/tmp/pr-risk-review-should-not-write")
-    option_base_output.unlink(missing_ok=True)
-    try:
+    with tempfile.TemporaryDirectory() as option_base_dir:
+        option_base_output = Path(option_base_dir) / "should-not-write"
         cli_option_base = subprocess.run(
             [
                 sys.executable,
                 str(ROOT / "pr-risk-review.py"),
-                "--base=--output=/tmp/pr-risk-review-should-not-write",
+                f"--base=--output={option_base_output}",
                 "--json",
             ],
             capture_output=True,
@@ -230,8 +229,6 @@ def main() -> int:
             "option-style base ref should not create files through git diff",
             failures,
         )
-    finally:
-        option_base_output.unlink(missing_ok=True)
 
     denied_secret_files = review.classify_paths(
         [
