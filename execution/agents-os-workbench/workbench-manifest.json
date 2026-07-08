@@ -15,6 +15,7 @@
     "loop",
     "goal",
     "audit",
+    "select-next-step",
     "route-choice-preview",
     "route-choice-apply-gate",
     "queue-promotion-apply-gate",
@@ -44,6 +45,9 @@
     "continue_loop",
     "completion_promotion_apply_gate",
     "completion_audit",
+    "next_step_selector",
+    "fast_validation",
+    "targeted_validation",
     "goal_session",
     "route_choice_preview",
     "route_choice_apply_gate",
@@ -74,7 +78,10 @@
     "route_auto_selection"
   ],
   "validation_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level targeted",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/test-workbench.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/test-workbench.py --full",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate",
     "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py audit"
   ]

@@ -19,8 +19,10 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 import tempfile
+import time
 from typing import Any
 
 
@@ -35,6 +37,103 @@ DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "202
 DEFAULT_ROUTE_SELECTION_PACKAGE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 DEFAULT_VALIDATION_COMMAND = "PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status"
 DEFAULT_RECORD_ROOT = WORKBENCH_DIR / "records"
+CODEX_ACTIVE_LOOP_ROOT = WORKSPACE_ROOT / "execution" / "codex-appserver-active-loop"
+VALIDATION_LEVELS = ("fast", "targeted", "full")
+
+
+def workspace_relative(path: Path) -> str:
+    try:
+        return str(path.relative_to(WORKSPACE_ROOT))
+    except ValueError:
+        return str(path)
+
+
+VALIDATION_INPUT_PATHS = (
+    MANIFEST_PATH,
+    WORKBENCH_DIR / "workbench.py",
+    WORKBENCH_DIR / "test-workbench.py",
+    CODEX_ACTIVE_LOOP_ROOT / "BOUNDARY.md",
+    CODEX_ACTIVE_LOOP_ROOT / "WORKBENCH_INTEGRATION.md",
+    CODEX_ACTIVE_LOOP_ROOT / "schemas" / "agents-os" / "active-loop-receipt.v0.1.schema.json",
+)
+
+
+def validation_input_hash(paths: tuple[Path, ...] = VALIDATION_INPUT_PATHS) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(paths, key=lambda item: workspace_relative(item)):
+        digest.update(workspace_relative(path).encode("utf-8"))
+        digest.update(b"\0")
+        if path.is_file():
+            digest.update(path.read_bytes())
+        else:
+            digest.update(b"<missing>")
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def validation_commands_for_level(level: str) -> list[str]:
+    try:
+        commands = load_json(MANIFEST_PATH).get("validation_commands", [])
+    except Exception:
+        commands = []
+    if level == "fast":
+        return [command for command in commands if "--level fast" in command or "test-workbench.py" in command and "--full" not in command]
+    if level == "targeted":
+        return [command for command in commands if "--level targeted" in command]
+    if level == "full":
+        return [command for command in commands if "workbench.py validate" in command and "--level" not in command or "--full" in command or "workbench.py audit" in command]
+    return []
+
+
+def validation_eligibility(level: str) -> dict[str, bool]:
+    return {
+        "ordinary_progress_eligible": level in {"fast", "targeted", "full"},
+        "boundary_eligible": level in {"targeted", "full"},
+        "external_write_eligible": level == "full",
+        "release_eligible": level == "full",
+        "full_validation_required_before_external_write": level != "full",
+    }
+
+
+def attach_validation_metadata(
+    result: dict[str, Any],
+    level: str,
+    started_at: float,
+    *,
+    required_level: str | None = None,
+) -> dict[str, Any]:
+    required = required_level or level
+    result["level"] = level
+    result["validation_level"] = level
+    result["required_level"] = required
+    result["actual_level"] = level
+    result["duration_seconds"] = round(time.monotonic() - started_at, 3)
+    result["input_hash"] = validation_input_hash()
+    result["validation_commands"] = validation_commands_for_level(level)
+    result["eligibility"] = validation_eligibility(level)
+    result.update(validation_eligibility(level))
+    return result
+
+
+def apply_docctl_release_gate(result: dict[str, Any], docctl_probe: dict[str, Any]) -> dict[str, Any]:
+    blocked = docctl_probe.get("passed") is not True
+    result["docctl_release_gate"] = {
+        "required_before_external_write": True,
+        "passed": not blocked,
+        "blocked": blocked,
+        "probe_returncode": docctl_probe.get("returncode"),
+        "probe_command": docctl_probe.get("command"),
+        "raw_output_included": False,
+    }
+    result["release_blocked_by_docctl"] = blocked
+    if blocked:
+        result["external_write_eligible"] = False
+        result["release_eligible"] = False
+        eligibility = dict(result.get("eligibility", {}))
+        eligibility["external_write_eligible"] = False
+        eligibility["release_eligible"] = False
+        result["eligibility"] = eligibility
+    return result
 
 NEGATED_SIGNAL_CONTEXT = re.compile(
     r"\b(no|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
@@ -153,6 +252,32 @@ def summarize_next_user_action(action: dict[str, Any]) -> dict[str, Any]:
         "write_performed": action.get("write_performed"),
         "raw_content_output": action.get("raw_content_output"),
     }
+
+
+def normalized_task_title(value: str) -> str:
+    lowered = re.sub(r"\bv\d+(?:\.\d+)*\b", " ", value.lower())
+    lowered = re.sub(r"[^a-z0-9]+", " ", lowered)
+    stop_words = {"a", "an", "and", "for", "gate", "the", "to", "v"}
+    return " ".join(token for token in lowered.split() if token and token not in stop_words)
+
+
+def title_is_repeat(candidate_title: str, existing_titles: list[str]) -> bool:
+    candidate = normalized_task_title(candidate_title)
+    if not candidate:
+        return True
+    candidate_tokens = set(candidate.split())
+    for title in existing_titles:
+        existing = normalized_task_title(title)
+        if not existing:
+            continue
+        if candidate == existing:
+            return True
+        existing_tokens = set(existing.split())
+        if candidate_tokens and candidate_tokens.issubset(existing_tokens):
+            return True
+        if existing_tokens and existing_tokens.issubset(candidate_tokens) and len(existing_tokens) >= 4:
+            return True
+    return False
 
 
 def validate_next_user_action_summary(prefix: str, action: dict[str, Any]) -> list[str]:
@@ -2330,6 +2455,297 @@ def validate_status(result: dict[str, Any]) -> list[str]:
     return errors
 
 
+def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any]:
+    title_lc = now_title.lower()
+    if "active-loop" in title_lc or "codex appserver" in title_lc or "codex-appserver" in title_lc or "message bus" in title_lc:
+        title = "AGENTS OS active-loop receipt contract review v0.1"
+        goal_delta = "turn the imported Codex-to-Codex loop into a receipt-contract reviewed execution component"
+        state_delta = "imported-component -> receipt-contract-ready-for-workbench-review"
+        why_next = (
+            "The active-loop source is now imported and boundary-checked; the next useful step is to review "
+            "the task-packet and receipt contract before any managed run can be considered."
+        )
+        completion = [
+            "receipt schema is present and validated by fast checks",
+            "task-packet entry boundary is reviewable",
+            "raw observer payload remains outside default records export",
+            "workbench remains the authority boundary",
+        ]
+        validation = [
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = [
+            "task packet would require authority outside workbench gate",
+            "receipt would include raw broad payloads by default",
+            "component would need a managed run before contract review",
+        ]
+    elif "external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc:
+        title = "AGENTS OS external Git post-push verification receipt v0.1"
+        goal_delta = "turn a pushed external Git action into a verified receipt with local leftovers classified"
+        state_delta = "published-but-unverified -> remote-verified-and-local-scope-known"
+        why_next = (
+            "Route C has moved from target and pre-push gates into a published remote branch; "
+            "the next useful step is to verify remote state, record what was published, "
+            "and classify local leftovers before any further external Git work."
+        )
+        completion = [
+            "remote main commit matches the intended local commit",
+            "published file scope is recorded",
+            "remaining local-only files are classified",
+            "external-write boundary returns to blocked after receipt",
+        ]
+        validation = [
+            "git ls-remote origin refs/heads/main",
+            "git status --short --branch --untracked-files=all",
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = [
+            "remote main does not match local HEAD",
+            "unexpected file was published",
+            "restricted private material appears in published scope",
+        ]
+    elif "memory" in title_lc:
+        title = "AGENTS OS Memory candidate review receipt v0.1"
+        goal_delta = "turn Memory intent into reviewed candidate facts without performing a formal Memory write"
+        state_delta = "memory-intent -> reviewable-memory-candidate"
+        why_next = "Memory work must move through candidate review before any formal Memory write is possible."
+        completion = [
+            "candidate facts are listed without raw private Memory",
+            "write authorization remains false",
+            "Jenn confirmation text is prepared if needed",
+        ]
+        validation = [
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = ["candidate requires private raw Memory", "formal Memory write would be needed"]
+    elif "provider" in title_lc:
+        title = "AGENTS OS provider fake-run boundary receipt v0.1"
+        goal_delta = "turn provider execution intent into a fake-run boundary proof before live calls"
+        state_delta = "provider-intent -> fake-provider-boundary-verified"
+        why_next = "Provider execution design must prove fake-provider boundaries before any live provider call."
+        completion = [
+            "fake-provider path is described",
+            "live provider call remains unauthorized",
+            "cost/network/access controls are listed",
+        ]
+        validation = [
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = ["live provider call would be required", "private access material would be read"]
+    else:
+        title = "AGENTS OS next evidence review v0.1"
+        goal_delta = "turn the current NOW item into evidence for a close, promote, or continue decision"
+        state_delta = "current-now-open -> evidence-reviewed-decision-ready"
+        why_next = "The current NOW item needs a distinct evidence review before promotion or closure."
+        completion = [
+            "current evidence is summarized",
+            "missing proof is listed",
+            "next boundary is explicit",
+        ]
+        validation = [
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = ["review would repeat current NOW", "dangerous authority would be needed"]
+
+    return {
+        "title": title,
+        "substantive_progress": True,
+        "goal_delta": goal_delta,
+        "state_delta": state_delta,
+        "why_next": why_next,
+        "completion_criteria": completion,
+        "validation": validation,
+        "stop_conditions": stops,
+        "blocked_authority": [
+            "provider_call",
+            "service_start",
+            "runtime_plugin_activation",
+            "external_write_without_exact_gate",
+            "formal_memory_write_without_exact_gate",
+            "state_private_read",
+            "private_access_material_read",
+            "history_rewrite",
+            "force_push",
+        ],
+        "body_lines": [
+            f"Why next: {why_next}",
+            "Completion criteria:",
+            *[f"- {item}" for item in completion],
+            "Validation:",
+            *[f"- {item}" for item in validation],
+            "Stop conditions:",
+            *[f"- {item}" for item in stops],
+            "Boundary: no provider, Memory, runtime/plugin, private-state, or external-write authority is granted by this candidate.",
+        ],
+    }
+
+
+def build_next_step_selector(
+    queue_path: Path = DEFAULT_QUEUE,
+    record_root: Path = DEFAULT_RECORD_ROOT,
+) -> dict[str, Any]:
+    """Select a non-repeating NEXT candidate without mutating the queue."""
+    errors: list[str] = []
+    live_queue = build_live_queue_state(queue_path)
+    if live_queue.get("passed") is not True:
+        errors.extend(f"live queue: {error}" for error in live_queue.get("errors", []))
+
+    resolved_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    queue_text = ""
+    now_blocks: list[dict[str, str]] = []
+    next_blocks: list[dict[str, str]] = []
+    later_blocks: list[dict[str, str]] = []
+    try:
+        queue_text = resolved_queue.read_text(encoding="utf-8")
+        now_blocks = queue_lane_blocks(queue_text, "NOW")
+        next_blocks = queue_lane_blocks(queue_text, "NEXT")
+        later_blocks = queue_lane_blocks(queue_text, "LATER")
+    except OSError as exc:
+        errors.append(f"queue read failed: {exc}")
+
+    now_title = str((now_blocks[0] if now_blocks else live_queue.get("now", {})).get("title", "")).strip()
+    existing_titles = [str(block.get("title", "")) for block in [*now_blocks, *next_blocks, *later_blocks]]
+    latest_status = build_status(record_root, queue_path)
+    if latest_status.get("passed") is not True:
+        errors.extend(f"status: {error}" for error in latest_status.get("errors", []))
+
+    candidate: dict[str, Any] | None = None
+    selector_state = "candidate_ready"
+    if live_queue.get("next_step", {}).get("status") in {"route_choice_required", "jenn_decision_required"}:
+        selector_state = "blocked_by_jenn_boundary"
+    elif not now_title:
+        selector_state = "blocked_missing_now"
+        errors.append("selector requires a current NOW title")
+    elif not errors:
+        candidate = selector_candidate_for_now(now_title, queue_text)
+        candidate["candidate_id"] = stable_id("NEXTSELECT", [rel(resolved_queue), now_title, candidate.get("title")])
+        repeat = title_is_repeat(str(candidate.get("title", "")), existing_titles)
+        candidate["not_repeat_of_now"] = not title_is_repeat(str(candidate.get("title", "")), [now_title])
+        candidate["not_repeat_of_queue"] = not repeat
+        candidate["p3_signals"] = queue_p3_signals(proposed_queue_item_text(candidate))
+        if repeat:
+            selector_state = "blocked_repeat_detected"
+            errors.append("selector candidate repeats an existing NOW/NEXT/LATER item")
+        if candidate["p3_signals"]:
+            selector_state = "blocked_p3_signals"
+            errors.append(f"selector candidate contains P3 signals: {','.join(candidate['p3_signals'])}")
+
+    validation_plan = {
+        "level": "fast",
+        "normal_progression": [
+            "lightweight checks",
+            "selector duplicate and P3 checks",
+            "affected-file validation",
+            "queue sanity",
+            "record",
+        ],
+        "boundary_before_external_write": [
+            "targeted registry validation",
+            "relevant tests",
+        ],
+        "external_write_or_publication": [
+            "full docctl",
+            "full workbench tests",
+            "full audit",
+        ],
+        "full_validation_required_before_external_write": True,
+    }
+    result = {
+        "schema_version": "agents-os.workbench.next-step-selector.v0.1",
+        "mode": "next_step_selector_preview",
+        "read_only": True,
+        "preview_only": True,
+        "write_performed": False,
+        "active_queue_modified": False,
+        "queue_promotion_authorized": False,
+        "route_auto_selection_authorized": False,
+        "execution_authorized": False,
+        "provider_call_authorized": False,
+        "service_start_authorized": False,
+        "external_write_authorized": False,
+        "memory_write_authorized": False,
+        "runtime_plugin_activation_authorized": False,
+        "raw_queue_body_output": False,
+        "source": {
+            "queue_path": rel(resolved_queue),
+            "record_root": rel(record_root if record_root.is_absolute() else WORKSPACE_ROOT / record_root),
+            "current_now_title": now_title,
+            "live_queue_next_step": live_queue.get("next_step", {}).get("status"),
+            "existing_title_count": len([title for title in existing_titles if title]),
+            "latest_record_next_step": latest_status.get("next_step", {}).get("status"),
+        },
+        "selector_state": selector_state,
+        "candidate_present": candidate is not None and selector_state == "candidate_ready",
+        "candidate": candidate or {},
+        "validation_plan": validation_plan,
+        "errors": sorted(set(errors)),
+    }
+    validation_errors = validate_next_step_selector(result)
+    result["errors"] = sorted(set(result["errors"] + validation_errors))
+    result["passed"] = not result["errors"]
+    return result
+
+
+def validate_next_step_selector(result: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if result.get("schema_version") != "agents-os.workbench.next-step-selector.v0.1":
+        errors.append("next-step selector schema_version is invalid")
+    for flag in ("read_only", "preview_only"):
+        if result.get(flag) is not True:
+            errors.append(f"next-step selector must keep {flag}=true")
+    for flag in (
+        "write_performed",
+        "active_queue_modified",
+        "queue_promotion_authorized",
+        "route_auto_selection_authorized",
+        "execution_authorized",
+        "provider_call_authorized",
+        "service_start_authorized",
+        "external_write_authorized",
+        "memory_write_authorized",
+        "runtime_plugin_activation_authorized",
+        "raw_queue_body_output",
+    ):
+        if result.get(flag) is not False:
+            errors.append(f"next-step selector must keep {flag}=false")
+    if result.get("candidate_present") is True:
+        candidate = result.get("candidate", {})
+        if not candidate.get("title"):
+            errors.append("next-step selector candidate must include title")
+        if candidate.get("not_repeat_of_now") is not True:
+            errors.append("next-step selector candidate must not repeat NOW")
+        if candidate.get("not_repeat_of_queue") is not True:
+            errors.append("next-step selector candidate must not repeat queue")
+        if candidate.get("p3_signals"):
+            errors.append("next-step selector candidate must not contain P3 signals")
+        for key in (
+            "substantive_progress",
+            "goal_delta",
+            "state_delta",
+            "why_next",
+            "completion_criteria",
+            "validation",
+            "stop_conditions",
+            "blocked_authority",
+        ):
+            if not candidate.get(key):
+                errors.append(f"next-step selector candidate must include {key}")
+        if candidate.get("substantive_progress") is not True:
+            errors.append("next-step selector candidate must prove substantive progress")
+        if len(candidate.get("completion_criteria", [])) < 2:
+            errors.append("next-step selector candidate must include at least two completion criteria")
+        if len(candidate.get("validation", [])) < 1:
+            errors.append("next-step selector candidate must include validation")
+        if len(candidate.get("stop_conditions", [])) < 1:
+            errors.append("next-step selector candidate must include stop conditions")
+    plan = result.get("validation_plan", {})
+    if plan.get("level") != "fast":
+        errors.append("next-step selector validation plan must default to fast")
+    if plan.get("full_validation_required_before_external_write") is not True:
+        errors.append("next-step selector must require full validation before external write")
+    return errors
+
+
 RUN_STOP_STATUSES = {
     "route_choice_required",
     "jenn_decision_required",
@@ -3361,6 +3777,8 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
         errors.append("manifest allowed_modes must include loop")
     if "audit" not in manifest.get("allowed_modes", []):
         errors.append("manifest allowed_modes must include audit")
+    if "select-next-step" not in manifest.get("allowed_modes", []):
+        errors.append("manifest allowed_modes must include select-next-step")
     if "route-choice-preview" not in manifest.get("allowed_modes", []):
         errors.append("manifest allowed_modes must include route-choice-preview")
     if "route-choice-apply-gate" not in manifest.get("allowed_modes", []):
@@ -3387,6 +3805,12 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
         errors.append("manifest loop_stages must include completion_promotion_apply_gate")
     if "completion_audit" not in manifest.get("loop_stages", []):
         errors.append("manifest loop_stages must include completion_audit")
+    if "next_step_selector" not in manifest.get("loop_stages", []):
+        errors.append("manifest loop_stages must include next_step_selector")
+    if "fast_validation" not in manifest.get("loop_stages", []):
+        errors.append("manifest loop_stages must include fast_validation")
+    if "targeted_validation" not in manifest.get("loop_stages", []):
+        errors.append("manifest loop_stages must include targeted_validation")
     defaults = manifest.get("dangerous_authorization_defaults", {})
     failures = false_flag_failures(defaults)
     if failures:
@@ -3395,7 +3819,11 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
 
 
 def validate_workbench() -> dict[str, Any]:
+    started_at = time.monotonic()
     errors = validate_manifest(load_json(MANIFEST_PATH))
+    fast_validation = validate_workbench_fast()
+    if fast_validation.get("passed") is not True:
+        errors.extend(f"fast validation: {error}" for error in fast_validation.get("errors", []))
 
     stopped_cycle: dict[str, Any] = {}
     safe_cycle: dict[str, Any] = {}
@@ -3437,6 +3865,8 @@ def validate_workbench() -> dict[str, Any]:
     continue_loop_queue_promoted_second = False
     route_promotion_queue_contains_promoted_now = False
     temp_cleaned = False
+    fixture_validation_command = "python3 --version"
+    docctl_probe: dict[str, Any] = {}
     with tempfile.TemporaryDirectory(prefix="agents-os-workbench-test-", dir=WORKSPACE_ROOT) as temp_dir:
         queue_path = Path(temp_dir) / "queue.md"
         queue_path.write_text(fixture_queue_text(), encoding="utf-8")
@@ -3451,16 +3881,19 @@ def validate_workbench() -> dict[str, Any]:
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
         )
         safe_cycle = build_cycle(
             "Write local governance report and run docctl validation.",
             queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
         )
         provider_cycle = build_cycle(
             "Call provider and start service.",
             queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
         )
         intake_review = accepted_nobao_review_for_intake(safe_cycle.get("stages", {}).get("intake_proposal", {}))
         intake_preview = reviewed_intake_apply_gate(
@@ -3488,18 +3921,21 @@ def validate_workbench() -> dict[str, Any]:
         stopped_advance = build_advance(
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
         stopped_run = build_run(
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
         stopped_goal = build_goal_session(
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
@@ -3508,6 +3944,7 @@ def validate_workbench() -> dict[str, Any]:
         safe_advance = build_advance(
             "Write local governance report and run docctl validation.",
             advance_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
@@ -3609,6 +4046,7 @@ def validate_workbench() -> dict[str, Any]:
         advance_with_intake = build_advance(
             "Write local governance report and run docctl validation.",
             advance_apply_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             apply_intake=True,
             allowed_queue_root=Path(temp_dir),
@@ -3618,6 +4056,7 @@ def validate_workbench() -> dict[str, Any]:
         run_with_intake = build_run(
             "Write local governance report and run docctl validation.",
             run_apply_queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             apply_intake=True,
             allowed_queue_root=Path(temp_dir),
@@ -3655,6 +4094,7 @@ def validate_workbench() -> dict[str, Any]:
         provider_advance = build_advance(
             "Call provider and start service.",
             queue_path,
+            validation_command=fixture_validation_command,
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
@@ -3664,6 +4104,7 @@ def validate_workbench() -> dict[str, Any]:
             "Write local governance report and run docctl validation.",
             p3_queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
         )
         p3_proposal = dict(p3_cycle.get("stages", {}).get("intake_proposal", {}))
         p3_item = dict(p3_proposal.get("proposed_queue_item", {}))
@@ -3683,6 +4124,7 @@ def validate_workbench() -> dict[str, Any]:
             "Write local governance report and run docctl validation.",
             queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
             write_record=True,
             record_path=record_path,
             allowed_record_root=record_path.parent,
@@ -3691,6 +4133,7 @@ def validate_workbench() -> dict[str, Any]:
             "Write local governance report and run docctl validation.",
             queue_path,
             run_local_validation=True,
+            validation_command=fixture_validation_command,
             write_record=True,
             record_path=Path(temp_dir) / "outside-record.json",
             allowed_record_root=record_path.parent,
@@ -3703,6 +4146,14 @@ def validate_workbench() -> dict[str, Any]:
                 == recorded_cycle.get("stages", {}).get("record", {}).get("record_id")
             )
     temp_cleaned = "temp_dir" in locals() and not Path(temp_dir).exists()
+    docctl_probe = run_validation_probe(
+        [
+            sys.executable,
+            "control-plane/registry/docctl.py",
+            "status",
+        ],
+        timeout_seconds=600,
+    )
 
     if safe_cycle.get("passed") is not True:
         errors.extend(f"safe cycle: {error}" for error in safe_cycle.get("errors", []))
@@ -4001,10 +4452,20 @@ def validate_workbench() -> dict[str, Any]:
     if not temp_cleaned:
         errors.append("temporary workbench fixture directory was not cleaned")
 
-    return {
+    result = {
         "schema_version": "agents-os.workbench.validation.v0.1",
+        "level": "full",
+        "mode": "full_validation",
         "passed": not errors,
         "errors": errors,
+        "fast_validation": {
+            "passed": fast_validation.get("passed"),
+            "selector_state": fast_validation.get("next_step_selector", {}).get("selector_state"),
+            "selector_candidate_title": fast_validation.get("next_step_selector", {}).get("candidate_title"),
+            "selected_checks": fast_validation.get("selected_checks", []),
+            "skipped_full_checks": fast_validation.get("skipped_full_checks", []),
+        },
+        "docctl_probe": docctl_probe,
         "stopped_cycle": {
             "passed": stopped_cycle.get("passed"),
             "next_step": stopped_cycle.get("stages", {}).get("next_step", {}),
@@ -4148,6 +4609,10 @@ def validate_workbench() -> dict[str, Any]:
         },
         "temporary_fixture_cleaned": temp_cleaned,
     }
+    return apply_docctl_release_gate(
+        attach_validation_metadata(result, "full", started_at, required_level="full"),
+        docctl_probe,
+    )
 
 
 def audit_item(requirement_id: str, description: str, passed: bool, evidence: dict[str, Any]) -> dict[str, Any]:
@@ -4159,12 +4624,335 @@ def audit_item(requirement_id: str, description: str, passed: bool, evidence: di
     }
 
 
-def build_completion_audit(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
+def run_validation_probe(command: list[str], timeout_seconds: int = 30) -> dict[str, Any]:
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=WORKSPACE_ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout_seconds,
+            check=False,
+        )
+        return {
+            "command": " ".join(command),
+            "returncode": completed.returncode,
+            "passed": completed.returncode == 0,
+            "stdout_character_count": len(completed.stdout),
+            "stderr_character_count": len(completed.stderr),
+            "raw_output_included": False,
+        }
+    except subprocess.TimeoutExpired:
+        return {
+            "command": " ".join(command),
+            "returncode": None,
+            "passed": False,
+            "timeout_seconds": timeout_seconds,
+            "raw_output_included": False,
+            "error": "timeout",
+        }
+
+
+def validate_codex_active_loop_import() -> dict[str, Any]:
+    required_files = [
+        CODEX_ACTIVE_LOOP_ROOT / "README.md",
+        CODEX_ACTIVE_LOOP_ROOT / "BOUNDARY.md",
+        CODEX_ACTIVE_LOOP_ROOT / "WORKBENCH_INTEGRATION.md",
+        CODEX_ACTIVE_LOOP_ROOT / "schemas" / "agents-os" / "active-loop-receipt.v0.1.schema.json",
+        CODEX_ACTIVE_LOOP_ROOT / "package.json",
+        CODEX_ACTIVE_LOOP_ROOT / "package-lock.json",
+        CODEX_ACTIVE_LOOP_ROOT / "tsconfig.json",
+        CODEX_ACTIVE_LOOP_ROOT / "vitest.config.ts",
+    ]
+    required_dirs = [
+        CODEX_ACTIVE_LOOP_ROOT / "src",
+        CODEX_ACTIVE_LOOP_ROOT / "schemas",
+        CODEX_ACTIVE_LOOP_ROOT / "tests",
+        CODEX_ACTIVE_LOOP_ROOT / "docs",
+        CODEX_ACTIVE_LOOP_ROOT / "data" / "synthetic-workspace",
+    ]
+    forbidden_paths = [
+        CODEX_ACTIVE_LOOP_ROOT / "archive",
+    ]
+    ignored_runtime_paths = [
+        CODEX_ACTIVE_LOOP_ROOT / "node_modules",
+        CODEX_ACTIVE_LOOP_ROOT / "dist",
+        CODEX_ACTIVE_LOOP_ROOT / "data" / "message-logs",
+        CODEX_ACTIVE_LOOP_ROOT / "data" / "observer",
+        CODEX_ACTIVE_LOOP_ROOT / "data" / "reports",
+        CODEX_ACTIVE_LOOP_ROOT / "data" / "receipts",
+    ]
+    errors: list[str] = []
+    missing_required = [rel(path) for path in [*required_files, *required_dirs] if not path.exists()]
+    if missing_required:
+        errors.append(f"codex active-loop missing required import paths: {', '.join(missing_required)}")
+    present_forbidden = [rel(path) for path in forbidden_paths if path.exists()]
+    if present_forbidden:
+        errors.append(f"codex active-loop forbidden import paths present: {', '.join(present_forbidden)}")
+    present_runtime_paths = [path for path in ignored_runtime_paths if path.exists()]
+    unignored_runtime_paths: list[str] = []
+    for path in present_runtime_paths:
+        check_ignore = subprocess.run(
+            ["git", "check-ignore", "-q", str(path)],
+            cwd=WORKSPACE_ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if check_ignore.returncode != 0:
+            unignored_runtime_paths.append(rel(path))
+    if unignored_runtime_paths:
+        errors.append(f"codex active-loop runtime paths must be gitignored: {', '.join(unignored_runtime_paths)}")
+
+    package_name = None
+    try:
+        package_name = load_json(CODEX_ACTIVE_LOOP_ROOT / "package.json").get("name")
+    except Exception as exc:
+        errors.append(f"codex active-loop package.json is not readable JSON: {exc}")
+    if package_name != "codex-appserver-active-loop":
+        errors.append("codex active-loop package name must be codex-appserver-active-loop")
+
+    receipt_schema: dict[str, Any] = {}
+    try:
+        receipt_schema = load_json(CODEX_ACTIVE_LOOP_ROOT / "schemas" / "agents-os" / "active-loop-receipt.v0.1.schema.json")
+    except Exception as exc:
+        errors.append(f"codex active-loop receipt schema is not readable JSON: {exc}")
+    if receipt_schema.get("title") != "AGENTS OS Codex Active Loop Receipt v0.1":
+        errors.append("codex active-loop receipt schema title is invalid")
+    receipt_required = set(receipt_schema.get("required", []))
+    for key in ("schema_version", "task_id", "run_id", "roles_used", "message_count", "review_decision", "validation", "boundaries"):
+        if key not in receipt_required:
+            errors.append(f"codex active-loop receipt schema must require {key}")
+
+    boundary_text = ""
+    try:
+        boundary_text = (CODEX_ACTIVE_LOOP_ROOT / "BOUNDARY.md").read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"codex active-loop BOUNDARY.md is not readable: {exc}")
+    for phrase in (
+        "does not grant authority",
+        "AGENTS.md interpretation authority",
+        "Jenn gate bypass",
+        "provider gate bypass",
+        "Memory gate bypass",
+        "external-write gate bypass",
+    ):
+        if phrase not in boundary_text:
+            errors.append(f"codex active-loop boundary must mention: {phrase}")
+
+    return {
+        "schema_version": "agents-os.workbench.codex-active-loop-import.v0.1",
+        "passed": not errors,
+        "errors": errors,
+        "component_root": rel(CODEX_ACTIVE_LOOP_ROOT),
+        "required_path_count": len(required_files) + len(required_dirs),
+        "missing_required": missing_required,
+        "forbidden_path_count": len(present_forbidden),
+        "forbidden_paths_present": present_forbidden,
+        "ignored_runtime_path_count": len(present_runtime_paths),
+        "unignored_runtime_paths_present": unignored_runtime_paths,
+        "package_name": package_name,
+        "source_import_clean": not present_forbidden and not unignored_runtime_paths,
+    }
+
+
+def validate_workbench_fast() -> dict[str, Any]:
+    started_at = time.monotonic()
+    errors = validate_manifest(load_json(MANIFEST_PATH))
+    codex_active_loop_import = validate_codex_active_loop_import()
+    if codex_active_loop_import.get("passed") is not True:
+        errors.extend(f"codex active-loop import: {error}" for error in codex_active_loop_import.get("errors", []))
+    selector: dict[str, Any] = {}
+    duplicate_selector: dict[str, Any] = {}
+    safe_cycle: dict[str, Any] = {}
+    live_status: dict[str, Any] = {}
+    py_compile = run_validation_probe(
+        [
+            sys.executable,
+            "-m",
+            "py_compile",
+            str(WORKBENCH_DIR / "workbench.py"),
+            str(WORKBENCH_DIR / "test-workbench.py"),
+        ],
+        timeout_seconds=15,
+    )
+    if py_compile.get("passed") is not True:
+        errors.append("fast validation py_compile failed")
+    temp_cleaned = False
+    with tempfile.TemporaryDirectory(prefix="agents-os-workbench-fast-", dir=WORKSPACE_ROOT) as temp_dir:
+        queue_path = Path(temp_dir) / "queue.md"
+        queue_path.write_text(fixture_queue_text("AGENTS OS external Git publication target gate v0.1"), encoding="utf-8")
+        duplicate_queue_path = Path(temp_dir) / "duplicate-queue.md"
+        duplicate_queue_path.write_text(
+            fixture_queue_text("AGENTS OS external Git post-push verification receipt v0.1"),
+            encoding="utf-8",
+        )
+        record_root = Path(temp_dir) / "records"
+        record_root.mkdir()
+        live_status = build_live_queue_state(queue_path)
+        selector = build_next_step_selector(queue_path, record_root)
+        duplicate_selector = build_next_step_selector(duplicate_queue_path, record_root)
+        safe_cycle = build_cycle(
+            "Write local governance report and run fast validation.",
+            queue_path,
+            run_local_validation=True,
+            validation_command="python3 --version",
+        )
+        if live_status.get("passed") is not True:
+            errors.extend(f"fast live queue: {error}" for error in live_status.get("errors", []))
+        if selector.get("passed") is not True or selector.get("candidate_present") is not True:
+            errors.extend(f"fast selector: {error}" for error in selector.get("errors", []))
+        if selector.get("candidate", {}).get("not_repeat_of_now") is not True:
+            errors.append("fast selector must prove candidate is not NOW repeat")
+        if selector.get("candidate", {}).get("substantive_progress") is not True:
+            errors.append("fast selector must prove substantive progress")
+        if not selector.get("candidate", {}).get("goal_delta"):
+            errors.append("fast selector must describe goal delta")
+        if duplicate_selector.get("selector_state") != "blocked_repeat_detected":
+            errors.append("fast selector must block same-title queue repeats")
+        if safe_cycle.get("passed") is not True:
+            errors.extend(f"fast safe cycle: {error}" for error in safe_cycle.get("errors", []))
+    temp_cleaned = not Path(temp_dir).exists()
+    if not temp_cleaned:
+        errors.append("fast validation temporary fixture directory was not cleaned")
+
+    result = {
+        "schema_version": "agents-os.workbench.validation.v0.1",
+        "level": "fast",
+        "mode": "fast_validation",
+        "passed": not errors,
+        "errors": errors,
+        "selected_checks": [
+            "manifest",
+            "py_compile",
+            "live_queue_state",
+            "next_step_selector",
+            "duplicate_selector_guard",
+            "codex_active_loop_import_boundary",
+            "local_safe_cycle_with_python_version",
+            "temporary_fixture_cleanup",
+        ],
+        "skipped_full_checks": [
+            "docctl status",
+            "full fixture suite",
+            "completion audit",
+        ],
+        "full_validation_required_before_external_write": True,
+        "codex_active_loop_import": codex_active_loop_import,
+        "py_compile": py_compile,
+        "live_queue": {
+            "passed": live_status.get("passed"),
+            "next_step": live_status.get("next_step", {}),
+        },
+        "next_step_selector": {
+            "passed": selector.get("passed"),
+            "selector_state": selector.get("selector_state"),
+            "candidate_title": selector.get("candidate", {}).get("title"),
+            "not_repeat_of_now": selector.get("candidate", {}).get("not_repeat_of_now"),
+            "not_repeat_of_queue": selector.get("candidate", {}).get("not_repeat_of_queue"),
+            "substantive_progress": selector.get("candidate", {}).get("substantive_progress"),
+            "goal_delta": selector.get("candidate", {}).get("goal_delta"),
+        },
+        "duplicate_selector": {
+            "passed": duplicate_selector.get("passed"),
+            "selector_state": duplicate_selector.get("selector_state"),
+        },
+        "safe_cycle": {
+            "passed": safe_cycle.get("passed"),
+            "local_validation_performed": safe_cycle.get("stages", {}).get("local_validation", {}).get("performed"),
+            "local_validation_passed": safe_cycle.get("stages", {}).get("local_validation", {}).get("passed"),
+        },
+        "temporary_fixture_cleaned": temp_cleaned,
+    }
+    return attach_validation_metadata(result, "fast", started_at, required_level="fast")
+
+
+def validate_workbench_targeted() -> dict[str, Any]:
+    started_at = time.monotonic()
+    fast = validate_workbench_fast()
+    errors = list(fast.get("errors", []))
+    probes = [
+        run_validation_probe(
+            [
+                sys.executable,
+                "control-plane/registry/validate-document-registry.py",
+                "control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+            ],
+            timeout_seconds=60,
+        ),
+        run_validation_probe(
+            [
+                sys.executable,
+                "control-plane/registry/validate-federated-document-registry.py",
+                "control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml",
+            ],
+            timeout_seconds=60,
+        ),
+    ]
+    for probe in probes:
+        if probe.get("passed") is not True:
+            errors.append(f"targeted validation failed: {probe.get('command')}")
+    result = {
+        "schema_version": "agents-os.workbench.validation.v0.1",
+        "level": "targeted",
+        "mode": "targeted_validation",
+        "passed": not errors,
+        "errors": errors,
+        "fast_validation": fast,
+        "targeted_probes": probes,
+        "selected_checks": [
+            *fast.get("selected_checks", []),
+            "document registry validator",
+            "federated document registry validator",
+        ],
+        "skipped_full_checks": [
+            "docctl status",
+            "full fixture suite",
+            "completion audit",
+        ],
+        "full_validation_required_before_external_write": True,
+    }
+    return attach_validation_metadata(result, "targeted", started_at, required_level="targeted")
+
+
+def validate_workbench_by_level(level: str = "full") -> dict[str, Any]:
+    if level == "fast":
+        return validate_workbench_fast()
+    if level == "targeted":
+        return validate_workbench_targeted()
+    if level == "full":
+        result = validate_workbench()
+        result["level"] = "full"
+        result["mode"] = "full_validation"
+        result["selected_checks"] = [
+            "manifest",
+            "full fixture suite",
+            "route choice gates",
+            "queue promotion gates",
+            "continue loop",
+            "docctl-backed validation",
+        ]
+        return result
+    return {
+        "schema_version": "agents-os.workbench.validation.v0.1",
+        "level": level,
+        "mode": "invalid_validation_level",
+        "passed": False,
+        "errors": [f"unknown validation level: {level}"],
+    }
+
+
+def build_completion_audit(
+    record_root: Path = DEFAULT_RECORD_ROOT,
+    queue_path: Path = DEFAULT_QUEUE,
+    validation_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Audit whether the workbench satisfies the requested objective."""
     errors: list[str] = []
     manifest = load_json(MANIFEST_PATH)
     manifest_errors = validate_manifest(manifest)
-    validation = validate_workbench()
+    validation = validation_result if validation_result is not None else validate_workbench_by_level("full")
     status = build_status(record_root, queue_path)
     if manifest_errors:
         errors.extend(f"manifest: {error}" for error in manifest_errors)
@@ -4247,12 +5035,14 @@ def build_completion_audit(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: 
         audit_item(
             "record_to_next_step",
             "Status and goal summaries expose the next boundary without raw objective or record output.",
-            status.get("latest_goal_session", {}).get("present") is True
-            and bool(status.get("next_step", {}).get("status"))
+            bool(status.get("next_step", {}).get("status"))
+            and validation.get("status", {}).get("safe_goal_session_count", 0) >= 1
+            and validation.get("status", {}).get("safe_next_step") == "review_queue_proposal"
             and status.get("raw_content_output") is False,
             {
                 "status_next_step": status.get("next_step", {}),
                 "latest_goal_session": status.get("latest_goal_session", {}),
+                "fixture_status": validation.get("status", {}),
             },
         ),
         audit_item(
@@ -4285,12 +5075,16 @@ def build_completion_audit(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: 
             "Provider, external write, runtime/plugin, formal Memory, route auto-selection, and unauthorized queue mutation remain blocked by default.",
             not false_flag_failures(manifest.get("dangerous_authorization_defaults", {}))
             and validation.get("provider_advance", {}).get("local_safe_execution_performed") is False
-            and status.get("latest_effects", {}).get("execution_authorized") is False
-            and status.get("latest_effects", {}).get("provider_call_authorized") is False
-            and status.get("latest_effects", {}).get("memory_write_authorized") is False,
+            and status.get("live_queue", {}).get("next_step", {}).get("execution_authorized") is False
+            and status.get("latest_effects", {}).get("execution_authorized") is not True
+            and status.get("latest_effects", {}).get("provider_call_authorized") is not True
+            and status.get("latest_effects", {}).get("memory_write_authorized") is not True
+            and status.get("latest_effects", {}).get("external_write_authorized") is not True
+            and status.get("latest_effects", {}).get("runtime_plugin_activation_authorized") is not True,
             {
                 "dangerous_authorization_defaults": manifest.get("dangerous_authorization_defaults", {}),
                 "provider_advance": validation.get("provider_advance", {}),
+                "live_queue_next_step": status.get("live_queue", {}).get("next_step", {}),
                 "latest_effects": status.get("latest_effects", {}),
             },
         ),
@@ -4298,10 +5092,11 @@ def build_completion_audit(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: 
             "verification_surface",
             "The workbench has executable validation commands and the fixture suite covers CLI surfaces.",
             "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/test-workbench.py" in validation_commands
+            and "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/test-workbench.py --full" in validation_commands
             and "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate" in validation_commands,
             {
                 "validation_commands": validation_commands,
-                "test_case_count": 18,
+                "test_case_count": 20,
             },
         ),
     ]
@@ -4313,6 +5108,11 @@ def build_completion_audit(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: 
         "write_performed": False,
         "manifest_passed": not manifest_errors,
         "validation_passed": validation.get("passed") is True,
+        "validation_evidence_supplied": validation_result is not None,
+        "validation_level": validation.get("level"),
+        "validation_duration_seconds": validation.get("duration_seconds"),
+        "docctl_release_gate": validation.get("docctl_release_gate", {}),
+        "release_blocked_by_docctl": validation.get("release_blocked_by_docctl"),
         "status_passed": status.get("passed") is True,
         "requirements": requirements,
         "requirement_count": len(requirements),
@@ -4336,8 +5136,26 @@ def print_json(value: Any) -> None:
 
 
 def print_validation_text(result: dict[str, Any]) -> None:
+    if result.get("level") in {"fast", "targeted"}:
+        print("AGENTS OS Workbench validation")
+        print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+        print(f"Level: {result.get('level')}")
+        print(f"Mode: {result.get('mode')}")
+        print(f"Selected checks: {', '.join(result.get('selected_checks', []))}")
+        print(f"Skipped full checks: {', '.join(result.get('skipped_full_checks', []))}")
+        print(f"Full validation before external write: {result.get('full_validation_required_before_external_write')}")
+        selector = result.get("next_step_selector") or result.get("fast_validation", {}).get("next_step_selector", {})
+        if selector:
+            print(f"Selector state: {selector.get('selector_state')}")
+            print(f"Selector candidate: {selector.get('candidate_title')}")
+        for error in result.get("errors", []):
+            print(f"- {error}")
+        return
     print("AGENTS OS Workbench validation")
     print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+    print(f"Level: {result.get('level', 'full')}")
+    print(f"Fast validation passed: {result.get('fast_validation', {}).get('passed')}")
+    print(f"Fast selector state: {result.get('fast_validation', {}).get('selector_state')}")
     print(f"Stopped cycle next step: {result['stopped_cycle']['next_step'].get('status')}")
     print(f"Safe cycle decision: {result['safe_cycle']['decision']}")
     print(f"Safe cycle validation performed: {result['safe_cycle']['local_validation_performed']}")
@@ -4461,7 +5279,13 @@ def main() -> int:
     queue_promotion_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
 
     validate_parser = subparsers.add_parser("validate", help="Run workbench self-validation.")
+    validate_parser.add_argument("--level", choices=VALIDATION_LEVELS, default="full", help="Validation level: fast, targeted, or full.")
     validate_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
+
+    selector_parser = subparsers.add_parser("select-next-step", help="Preview the next non-repeating NEXT candidate.")
+    selector_parser.add_argument("--queue", default=str(DEFAULT_QUEUE), help="Active Work Queue Markdown path.")
+    selector_parser.add_argument("--record-root", default=str(DEFAULT_RECORD_ROOT), help="Record root to inspect.")
+    selector_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
 
     audit_parser = subparsers.add_parser("audit", help="Audit workbench completion against the objective chain.")
     audit_parser.add_argument("--record-root", default=str(DEFAULT_RECORD_ROOT), help="Record root to inspect.")
@@ -4543,6 +5367,23 @@ def main() -> int:
             print(f"Latest goal state: {result['latest_goal_session'].get('goal_state')}")
             print(f"Route choice options ready: {result['route_choice_readiness'].get('option_count')}")
             print(f"Next step: {result['next_step'].get('status')}")
+            for error in result.get("errors", []):
+                print(f"- {error}")
+        return 0 if result["passed"] else 1
+
+    if args.command == "select-next-step":
+        result = build_next_step_selector(Path(args.queue), Path(args.record_root))
+        if args.json:
+            print_json(result)
+        else:
+            print("AGENTS OS Workbench next-step selector")
+            print(f"Status: {'PASS' if result['passed'] else 'FAIL'}")
+            print(f"Selector state: {result.get('selector_state')}")
+            print(f"Current NOW: {result['source'].get('current_now_title')}")
+            print(f"Candidate present: {result.get('candidate_present')}")
+            print(f"Candidate: {result.get('candidate', {}).get('title')}")
+            print(f"Fast validation required: {result.get('validation_plan', {}).get('level')}")
+            print(f"Full validation before external write: {result.get('validation_plan', {}).get('full_validation_required_before_external_write')}")
             for error in result.get("errors", []):
                 print(f"- {error}")
         return 0 if result["passed"] else 1
@@ -4720,7 +5561,7 @@ def main() -> int:
         return 0 if result["passed"] else 1
 
     if args.command == "validate":
-        result = validate_workbench()
+        result = validate_workbench_by_level(args.level)
         if args.json:
             print_json(result)
         else:
