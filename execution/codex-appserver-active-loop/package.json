@@ -30,7 +30,8 @@
     "phase0": "tsx src/cli/phase0_reality_calibration.ts",
     "snapshot": "tsx src/cli/export_repo_snapshot.ts",
     "smoke": "tsx src/cli/run_mvp.ts",
-    "validate": "npm run build && npm run test && npm run smoke"
+    "validate": "npm run build && npm run test",
+    "validate:live": "npm run validate && npm run smoke"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

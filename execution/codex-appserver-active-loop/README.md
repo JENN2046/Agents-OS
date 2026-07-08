@@ -98,7 +98,9 @@ Required scripts:
 - `npm run snapshot`
 - `npm run smoke`
 - `npm run validate`
+- `npm run validate:live`
 - `npm run worker:live`
 - `npm run worker:prepare`
 
 `npm run smoke` runs the real App Server synthetic Worker/Reviewer loop. It does not authorize real repository review.
+`npm run validate` runs build and unit tests only. `npm run validate:live` is the explicit live gate that also runs smoke.

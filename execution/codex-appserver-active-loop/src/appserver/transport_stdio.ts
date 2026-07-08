@@ -28,12 +28,20 @@ export interface StdioTransport {
 type Listener = (...args: unknown[]) => void;
 
 export function createStdioTransport(options: StdioTransportOptions): StdioTransport {
+  const defaults = defaultAppServerCommand();
   return new NodeStdioTransport({
-    command: options.command ?? "cmd.exe",
-    args: options.args ?? ["/d", "/s", "/c", "codex app-server --stdio"],
+    command: options.command ?? defaults.command,
+    args: options.args ?? defaults.args,
     cwd: options.cwd,
     timeoutMs: options.timeoutMs,
   });
+}
+
+export function defaultAppServerCommand(platform: NodeJS.Platform = process.platform): Pick<Required<StdioTransportOptions>, "command" | "args"> {
+  if (platform === "win32") {
+    return { command: "cmd.exe", args: ["/d", "/s", "/c", "codex app-server --stdio"] };
+  }
+  return { command: "codex", args: ["app-server", "--stdio"] };
 }
 
 class NodeStdioTransport implements StdioTransport {
