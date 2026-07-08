@@ -1,0 +1,12 @@
+node_modules/
+dist/
+data/*
+!data/synthetic-workspace/
+!data/synthetic-workspace/**
+data/tmp/
+data/review-packages/
+data/snapshots/
+*.log
+.env
+.env.*
+config.env

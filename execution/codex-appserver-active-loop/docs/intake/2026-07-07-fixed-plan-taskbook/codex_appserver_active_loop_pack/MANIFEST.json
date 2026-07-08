@@ -1,0 +1,29 @@
+{
+  "package": "Codex App Server Active Event Loop｜修复后落地包",
+  "generated_at": "2026-07-07T00:00:00-07:00",
+  "primary_execution_file": "03_CODEX_EXECUTION_TASKBOOK.md",
+  "handoff_prompt": "09_CODEX_HANDOFF_PROMPT.md",
+  "files": [
+    "README.md",
+    "00_EXECUTIVE_DECISION.md",
+    "01_MASTER_PLAN.md",
+    "02_PHASE_PLANS.md",
+    "03_CODEX_EXECUTION_TASKBOOK.md",
+    "04_ACCEPTANCE_CRITERIA.md",
+    "05_SECURITY_BOUNDARIES.md",
+    "06_EVENT_CONTRACT.md",
+    "07_SELF_REVIEW.md",
+    "08_ROUNDTABLE_REVIEW.md",
+    "09_CODEX_HANDOFF_PROMPT.md",
+    "10_SOURCE_NOTES.md"
+  ],
+  "boundaries": {
+    "workspace_agents_api": "NOT_USED",
+    "responses_api": "NOT_USED",
+    "browser_automation": "NOT_USED",
+    "websocket": "NOT_USED_IN_MVP",
+    "stdio": "REQUIRED",
+    "synthetic_workspace": "REQUIRED_FOR_MVP",
+    "read_only_restricted": "REQUIRED_FOR_MANAGED_SESSIONS"
+  }
+}

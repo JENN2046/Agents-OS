@@ -20,7 +20,7 @@ chooses otherwise.
 ```text
 control-plane/  protocols, contracts, schemas, validators, policies, task envelopes
 governance/     safety, authorization, automation rules, hard gates
-execution/      future harnesses, workers, provider adapters, sandbox launchers
+execution/      harnesses, workers, provider adapters, bridges, local communication runtimes
 runtime/        upstream-trackable runtime cores; high caution
 extensions/     Jenn-owned external capabilities
 domains/        business/domain systems with real-world boundaries

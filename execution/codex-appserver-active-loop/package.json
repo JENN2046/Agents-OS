@@ -1,0 +1,41 @@
+{
+  "name": "codex-appserver-active-loop",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local MVP scaffold for a Codex App Server active Worker/Reviewer loop.",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run",
+    "context:pilot": "tsx src/cli/context_ledger_pilot.ts",
+    "context:promote": "tsx src/cli/context_promotion_pilot.ts",
+    "context:approve": "tsx src/cli/promotion_approval_pilot.ts",
+    "context:annex": "tsx src/cli/prompt_annex_pilot.ts",
+    "worker:prepare": "tsx src/cli/snapshot_worker_prepare.ts",
+    "worker:live": "tsx src/cli/snapshot_worker_live.ts",
+    "reviewer:live": "tsx src/cli/snapshot_reviewer_live.ts",
+    "safe-review:e2e": "tsx src/cli/e2e_safe_review_loop.ts",
+    "safe-review:verify": "tsx src/cli/e2e_safe_review_verify.ts",
+    "phase8:schema-gate": "tsx src/cli/phase8_schema_gate.ts",
+    "review-package:publish": "tsx src/cli/snapshot_review_package_publish.ts",
+    "commander:closeout": "tsx src/cli/commander_closeout_readiness_matrix.ts",
+    "channel:smoke": "tsx src/cli/codex_channel_smoke.ts",
+    "channel:multiturn": "tsx src/cli/codex_channel_multiturn_smoke.ts",
+    "channel:multirole": "tsx src/cli/codex_channel_multirole_smoke.ts",
+    "channel:observe": "tsx src/cli/codex_channel_observer.ts",
+    "phase0": "tsx src/cli/phase0_reality_calibration.ts",
+    "snapshot": "tsx src/cli/export_repo_snapshot.ts",
+    "smoke": "tsx src/cli/run_mvp.ts",
+    "validate": "npm run build && npm run test && npm run smoke"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
