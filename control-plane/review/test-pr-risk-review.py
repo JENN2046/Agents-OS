@@ -249,6 +249,27 @@ def main() -> int:
     check(denied_secret_dirs["invalid_path_count"] == 3, "all secret directory fixtures should be rejected", failures)
     check(denied_secret_dirs["risk_surface_count"] == 0, "secret directories should not be content-scanned", failures)
 
+    denied_private_classes = review.classify_paths(
+        [
+            "browser profiles/profile.json",
+            "provider raw response/response.json",
+            "private memory raw text/memory.py",
+            "raw logs/run.log",
+        ],
+        include_content=True,
+    )
+    check(denied_private_classes["path_input_valid"] is False, "private path classes should be invalid", failures)
+    check(
+        denied_private_classes["invalid_path_count"] == 4,
+        "all private path class fixtures should be rejected",
+        failures,
+    )
+    check(
+        denied_private_classes["risk_surface_count"] == 0,
+        "private path classes should not be content-scanned",
+        failures,
+    )
+
     allowed_templates = review.classify_paths(
         ["config.env.example", ".env.example", "private.pem.template"],
         include_content=False,
@@ -256,14 +277,14 @@ def main() -> int:
     check(allowed_templates["path_input_valid"] is True, "template filenames should remain valid", failures)
 
     symlink_probe = ROOT / "__pr_risk_review_symlink_probe.py"
-    state_private_dir = ROOT.parents[1] / "state-private"
-    state_private_probe = state_private_dir / "__pr_risk_review_secret_probe.py"
+    symlink_target: Path | None = None
     try:
-        state_private_dir.mkdir(exist_ok=True)
-        state_private_probe.write_text('password = "should-not-be-read"\n', encoding="utf-8")
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as handle:
+            handle.write('password = "should-not-be-read"\n')
+            symlink_target = Path(handle.name)
         if symlink_probe.exists() or symlink_probe.is_symlink():
             symlink_probe.unlink()
-        symlink_probe.symlink_to(state_private_probe)
+        symlink_probe.symlink_to(symlink_target)
         symlink_result = review.classify_paths(
             ["control-plane/review/__pr_risk_review_symlink_probe.py"],
             include_content=True,
@@ -278,16 +299,13 @@ def main() -> int:
     finally:
         if symlink_probe.exists() or symlink_probe.is_symlink():
             symlink_probe.unlink()
-        state_private_probe.unlink(missing_ok=True)
-        try:
-            state_private_dir.rmdir()
-        except OSError:
-            pass
+        if symlink_target is not None:
+            symlink_target.unlink(missing_ok=True)
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=15 failures={len(failures)}")
+        print(f"cases=16 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -303,9 +321,10 @@ def main() -> int:
     print("PASS option-style base rejection fixture")
     print("PASS secret-like filename rejection fixture")
     print("PASS protected secret directory rejection fixture")
+    print("PASS private path class rejection fixture")
     print("PASS allowed template filename fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=15 failures=0")
+    print("cases=16 failures=0")
     return 0
 
 
