@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 from types import ModuleType
 
 
@@ -125,10 +126,57 @@ def main() -> int:
     )
     check(cli_strict.returncode == 1, "CLI strict mode should fail when proof matrix is required", failures)
 
+    with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as handle:
+        handle.write('password = "should-not-be-read"\n')
+        outside_path = handle.name
+    try:
+        cli_absolute = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "pr-risk-review.py"),
+                "--paths",
+                outside_path,
+                "--json",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    finally:
+        Path(outside_path).unlink(missing_ok=True)
+    check(cli_absolute.returncode == 2, "CLI should reject absolute paths", failures)
+    try:
+        absolute_payload = json.loads(cli_absolute.stdout)
+    except json.JSONDecodeError:
+        absolute_payload = {}
+        failures.append("CLI absolute path JSON should parse")
+    check(absolute_payload.get("path_input_valid") is False, "absolute path should be invalid", failures)
+    check(absolute_payload.get("risk_surface_count") == 0, "absolute path should not be content-scanned", failures)
+
+    cli_traversal = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "pr-risk-review.py"),
+            "--paths",
+            "../outside.py",
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    check(cli_traversal.returncode == 2, "CLI should reject parent traversal paths", failures)
+    try:
+        traversal_payload = json.loads(cli_traversal.stdout)
+    except json.JSONDecodeError:
+        traversal_payload = {}
+        failures.append("CLI traversal JSON should parse")
+    check(traversal_payload.get("path_input_valid") is False, "parent traversal path should be invalid", failures)
+
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=6 failures={len(failures)}")
+        print(f"cases=8 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -137,7 +185,9 @@ def main() -> int:
     print("PASS docs-only no-risk fixture")
     print("PASS CLI JSON fixture")
     print("PASS CLI strict fixture")
-    print("cases=6 failures=0")
+    print("PASS CLI absolute path rejection fixture")
+    print("PASS CLI parent traversal rejection fixture")
+    print("cases=8 failures=0")
     return 0
 
 
