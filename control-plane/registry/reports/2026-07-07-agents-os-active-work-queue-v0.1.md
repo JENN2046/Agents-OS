@@ -320,22 +320,22 @@ authorization.
 
 ## NOW
 
-### NOW-001: No Active Automatic Construction Item
+### NOW-001: AGENTS OS external Git publication target gate v0.1
 
-Source: VCPToolBox runtime integration contract result
-Mode: stopped after local runtime substrate contract
-Boundary: Jenn branch choice or new route choice is required before expanding VCPToolBox or starting a new construction route
-Must keep: localhost_only=true
-Must keep: provider_call_authorized=false
-Must keep: plugin_activation_authorized=false
-Must keep: plugin_execution_authorized=false
-Must keep: enabled_plugin_manifests=0 unless Jenn explicitly chooses a re-enable gate
-Must keep: service_start_authorized=false
-Must keep: core_file_edit_authorized=false
-Must keep: external_write_authorized=false
+Route option: C - External Git Publication Exact Gate
+Source: explicit Jenn route-choice preview
+Mode: prepare first safe package only
+Boundary: queue adoption requires separate reviewed mutation gate
+Must keep: git_push_authorized=false until exact target gate
+Must keep: force_push_authorized=false
+Must keep: tag_release_deploy_publish_authorized=false
+Must keep: history_rewrite_authorized=false unless separate scrub gate
 Must keep: secret_raw_read_authorized=false
-Must keep: cookie_content_output_authorized=false
-Must keep: runtime_config_value_output_authorized=false
+Must keep: external_write_authorized=false until exact target gate
+Target repository: https://github.com/JENN2046/Agents-OS
+Target state: private empty repository, read-only metadata verified
+Next boundary: exact pre-push command gate required before any external write
+Exact pre-push command gate: prepared, no-write, Jenn execution authorization required
 
 ## NEXT
 
@@ -409,6 +409,10 @@ vcptoolbox_main_no_plugin_startup_gate_v0.1: closed after disabling plugin manif
 vcptoolbox_localhost_usability_smoke_gate_v0.1: closed after main plus AdminPanel localhost smoke passed with plugins disabled; provider call, plugin execution, runtime config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_controlled_local_use_handoff_gate_v0.1: closed after recording the safe local run shape and next expansion branches; service start, provider call, plugin restore, active config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
 vcptoolbox_runtime_integration_contract_v0.1: closed after narrowing VCPToolBox to AGENTS OS runtime substrate plus maintainable rollback; full product deployment, full plugin restore, provider-backed use, service start, provider call, plugin restore, active config value output, cookie output, core-file edit, Memory write, and external write remain unauthorized
+control_chain_reviewed_route_adoption_apply_gate_v0.1: appended "AGENTS OS external Git publication target gate v0.1" to NEXT as NEXT-001; proposal=ROUTEQUEUEPROPOSAL-DBCDA61737
+queue_manager_reviewed_mutation_v0.1: closed NOW "No Active Automatic Construction Item"; promoted "AGENTS OS external Git publication target gate v0.1"; proposal=QUEUEPROMOTIONPROPOSAL-B1EA4B5E96
+external_git_publication_target_gate_v0.1: accepted target JENN2046/Agents-OS as private empty repo; no remote added, no push, no external write; next boundary is exact pre-push command gate
+external_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan for git@github.com:JENN2046/Agents-OS.git; no remote add, no commit, no push; default publish scope excludes AGENTS.md, Zone.Identifier files, and workbench JSON run records
 ```
 
 ## Machine Input Contract

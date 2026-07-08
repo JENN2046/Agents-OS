@@ -89,6 +89,25 @@ Scope: `/home/jenn/AGENTS_OS_Workspace`
 - Dashboard summary now surfaces `next_user_action.status=none` for the current route A state while keeping route auto-selection, active queue mutation, queue promotion, execution, and write flags false.
 - Dashboard Route Choice Adoption Bundle Visibility v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-dashboard-route-choice-adoption-bundle-visibility-v0.1.md`.
 - Dashboard summary now surfaces the route-choice adoption bundle preview evidence as read-only readiness metadata while keeping `can_apply_now=false`, route adoption, active queue mutation, queue promotion, raw confirmation/template output, and execution unauthorized.
+- AGENTS OS Workbench Loop v0.1 exists at `execution/agents-os-workbench/`.
+- The Workbench composes Task Producer, Machine, Control Chain, and Dashboard into one preview-first cycle: idea, task, queue, intake proposal, judgment, track preview, local validation, queue proposal, dashboard, record, record write, and next step.
+- Workbench validation confirms the current stopped queue reports `route_choice_required`, exposes accepted route ids A-E and the route-choice template source without raw template output, a fixture local-safe task can run validation and produce proposal-only queue output, provider/service intent stops for Jenn decision without local validation, and each cycle emits a replayable record preview.
+- Workbench now emits a candidate-to-`NEXT` intake proposal for each task candidate. Safe fixture queues report `can_apply_after_review=true`; the current real stopped queue reports `can_apply_after_review=false` because Jenn route choice is still required.
+- Workbench now has a reviewed candidate-to-`NEXT` intake apply gate. It can append a safe candidate into a supplied queue's `NEXT` lane only with accepted Nobao review, explicit apply mode, safe queue path boundary, duplicate check, and no P3 signals; validation used temporary fixtures only and did not modify the real Active Work Queue.
+- Workbench now has an `advance` command for one bounded local-safe step: it runs authorized local validation when the queue and commander allow it, writes both a replayable cycle record and a complete advance record, exposes explicit execution/verification/record/next-step stages, and stops without local execution when the current real queue remains `route_choice_required`.
+- Workbench now has a read-only `status` command that scans local advance and goal-session records, ignores other JSON records, surfaces the latest execution/verification/record/effects summary plus latest goal state, and emits the latest `next_step` without raw record, raw objective output, or writes. When the next step is `route_choice_required`, `status` also emits route-choice readiness: A-E option ids, titles, first safe packages, template coverage, and the next preview command shape while keeping raw confirmation/template output false. The default records directory now contains real stopped advance and goal-session records for the current queue; real `status` reports `route_choice_required`, accepted route ids A-E, the route-choice template source path, latest goal state, and false route auto-selection / queue mutation / execution flags.
+- Workbench `status` now also reads the supplied live queue path and emits `live_queue.next_step` plus `status_reconciliation`. This lets the workbench distinguish historical record boundaries from current queue reality: after a reviewed route adoption and reviewed queue promotion in a temporary fixture, status reports `live_queue.next_step.status=queue_ready_for_run` and flags that the latest stored record boundary may be stale, without raw queue output or writes.
+- Workbench now has a `run` command for automatic-until-boundary operation. It performs bounded local-safe advance steps, writes records, and stops at route choice, queue proposal review, Jenn decision, validation failure, or other protected boundaries. Real `run` on the current stopped queue performs one step, writes/refreshes the stopped record, keeps local-safe execution and verification unperformed, and stops at `route_choice_required`.
+- Workbench now has a queue-driven `continue` command. It reads the supplied live queue, stops without inventing a task if the current queue is still at a boundary, and when `live_queue.next_step.status=queue_ready_for_run` it derives the internal task intent from the current `NOW` item without raw queue-body output, then calls the automatic-until-boundary run path. Fixture validation chains Route B confirmation, route adoption into `NEXT`, reviewed queue promotion into `NOW`, and `continue`; the continue run performs one local-safe validation, writes one record, and stops at `review_queue_proposal`.
+- Workbench `continue` now has an explicit `--apply-completion-promotion` option. After a queue-driven continue run passes local validation, writes a record, and stops at `review_queue_proposal`, this option applies the reviewed close-`NOW`/promote-`NEXT` gate under the allowed queue root. Fixture validation proves a safe queue can run current `NOW`, write the run record, close it, promote `Safe follow-up task` to `NOW`, and return `completion_promotion_applied_continue_ready` without authorizing execution, provider, external write, runtime/plugin, or Memory actions.
+- Workbench now has a bounded queue-driven `loop` command. It repeats current-`NOW` continue cycles up to a max cycle count, optionally applying reviewed completion promotion when `NEXT` is available, and stops at the live queue boundary, missing `NEXT`, failure, or max cycles. Fixture validation proves a queue with `NOW` plus two `NEXT` items can run two local-safe validations, write two records, apply two reviewed completion promotions, and leave the second safe follow-up as `NOW` while keeping execution/provider/external/runtime/plugin/Memory authorization false.
+- Workbench now has an `audit` command that maps the requested objective chain to machine-readable requirements and evidence: idea-to-task, task-to-queue, live queue judgment, local execution, verification, record writing, next-step status, route boundary flow, multi-turn loop, dangerous-boundary defaults, and validation surface. The audit treats the real Active Work Queue's current `route_choice_required` state as a handled boundary, not a completion failure, while confirming execution and writes remain unauthorized at that boundary.
+- Workbench now has a `goal` command for `/goal`-shaped long-running objectives. It wraps the automatic-until-boundary `run` path, writes a local goal-session record, reports `goal_state`, and emits the same `next_step` boundary without raw objective output, route auto-selection, queue promotion, execution authorization, provider calls, service starts, external writes, runtime/plugin activation, or formal Memory writes. Real `goal` for the active AGENTS OS objective writes `goalsession-cb48f5b182.json`, records one stopped run step, and waits at `route_choice_required`.
+- Workbench now has a `route-choice-preview` command for exact Jenn route confirmation text. It wraps the Control Chain route-choice adoption bundle preview, identifies the selected route and first safe package, prepares the proposal/review/apply-preview readiness, and stops before any route adoption, Active Work Queue write, queue promotion, execution, raw confirmation text output, or raw template output.
+- Workbench now has a `route-choice-apply-gate` command for reviewed route adoption. In preview mode it proves the selected first safe package can be appended to a supplied queue's `NEXT` lane; in explicit `--apply` mode it can write only to an allowed queue root after the route-choice proposal, Nobao review, exactly-one-NOW check, duplicate check, and no-P3 guard pass. Fixture validation applies Route B to a temporary queue only; the real Active Work Queue remains unchanged.
+- Workbench now has a `queue-promotion-apply-gate` command for reviewed `NEXT` to `NOW` promotion. In preview mode it proves the first `NEXT` item can be promoted through the Control Chain reviewed queue mutation gate; in explicit `--apply` mode it can write only to an allowed queue root after accepted Nobao review, exactly-one-NOW checks, first-NEXT target matching, and no-P3 guards pass. Fixture validation chains Route B adoption into `NEXT` and then promotes it to `NOW` in a temporary queue only; the real Active Work Queue remains unchanged.
+- Workbench now has an explicit local JSON record write gate: default cycles do not write, `--write-record` can write only under `execution/agents-os-workbench/records/`, and blocked/outside record paths fail without writing.
+- Workbench output keeps Active Work Queue mutation, queue promotion, route auto-selection, provider call, service start, runtime/plugin activation, external write, and formal Memory write unauthorized; record writes do not authorize queue mutation or execution.
 - Migration Plan Distillation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-migration-plan-distillation-v0.1.md`.
 - The migration distillation compresses `ops/migration/` historical material into a surviving local task list without carrying forward historical runtime/provider/executor authorization.
 - ColaMeta Executor Inventory And Readiness Map v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-colameta-executor-inventory-readiness-map-v0.1.md`.
@@ -270,6 +289,44 @@ proposal, accepted Nobao review object, reviewed adoption preview, and
 apply-gate preview. It still does not output raw confirmation/template text,
 write the real Active Work Queue, adopt a route, promote the queue, or authorize
 execution.
+The Workbench loop now ties the idea-to-next-step chain together locally:
+candidate intake proposal, reviewed candidate-to-`NEXT` apply gate, bounded
+`advance` command, local-safe execution via validation command, verification,
+queue proposal, dashboard summary, replayable cycle record, complete advance
+record, explicit record write gate, read-only advance/goal status recovery,
+goal-session entrypoint, and next-step output. The `run` command now wraps this as
+automatic-until-boundary behavior:
+on local-safe fixtures it executes validation once and stops at queue proposal
+review; on the current real stopped queue it performs one recorded step and
+stops at `route_choice_required` without local execution or queue write. CLI
+smoke confirms the advance record file uses
+`agents-os.workbench.advance.v0.1` and includes the final `passed=true` result;
+CLI `status` on the default records directory now reports the latest advance
+record `advancerecord-f592087326.json` and the latest goal session
+`goalsession-cb48f5b182.json` with `goal_state=waiting_at_boundary`,
+`next_step.status=route_choice_required`, accepted route ids A-E, the
+route-choice template source path, route-choice readiness for options A-E,
+local-safe execution not performed, verification not performed, no raw
+objective or raw template output, and all dangerous authorization false.
+The `goal` command accepts a long-running `/goal`-shaped objective, invokes the
+same automatic-until-boundary path, writes a local
+`agents-os.workbench.goal-session.v0.1` record, and reports `goal_state` plus
+the current `next_step` without raw objective output.
+The `route-choice-preview` command accepts a future exact Jenn route
+confirmation text and turns it into a Workbench-level
+`agents-os.workbench.route-choice-preview.v0.1` preview. Fixture and validation
+coverage prove Route B preview reaches the separate apply-gate readiness while
+keeping active queue mutation, queue promotion, route adoption, execution, raw
+confirmation text output, and raw template output false.
+The `route-choice-apply-gate` command adds the reviewed mutation boundary after
+that preview. Fixture and CLI coverage prove Route B can append
+`AGENTS OS formal Memory candidate gate v0.1` to a temporary queue's `NEXT` lane
+with `--apply`, while preserving NOW, avoiding queue promotion, and keeping
+execution/provider/service/runtime/external/Memory authorization false. The real
+Active Work Queue has not been route-adopted.
+The intake apply gate has only been validated against temporary fixture queues;
+the real stopped queue still requires Jenn route choice before any active queue
+write or local execution.
 The Active Work Queue closed-order reconciliation records the current latest
 closed governance event at the `CLOSED` tail so Dashboard `last_completed`
 continues to represent the queue's latest local closure.

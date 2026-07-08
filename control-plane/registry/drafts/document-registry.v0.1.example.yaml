@@ -267,6 +267,275 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-exact-pre-push-command-gate-v0.1
+    title: AGENTS OS External Git Exact Pre-Push Command Gate v0.1
+    doc_type: explanation
+    status: accepted
+    scope: no-write exact command gate before first external Git push
+    canonical_path: control-plane/registry/reports/2026-07-08-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-08-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-08-agents-os-external-git-publication-target-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - external Git publication request
+        - staged file set changes
+        - target remote changes
+        - branch changes
+        - validation result changes
+    security_boundary:
+      - local report only
+      - no external write authorization
+      - no Git remote add authorization
+      - no Git commit authorization
+      - no Git push authorization
+      - no force push authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-exact-pre-push-command-gate-v0.1-receipt
+    title: AGENTS OS External Git Exact Pre-Push Command Gate v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for no-write exact pre-push command gate
+    canonical_path: control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - receipt facts change
+        - validation result changes
+        - command gate boundary changes
+    security_boundary:
+      - local receipt only
+      - no external write authorization
+      - no Git remote add authorization
+      - no Git commit authorization
+      - no Git push authorization
+      - no force push authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-exact-pre-push-command-gate-v0.1-review
+    title: AGENTS OS External Git Exact Pre-Push Command Gate v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for no-write exact pre-push command gate
+    canonical_path: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-exact-pre-push-command-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - external Git publication request
+    security_boundary:
+      - local review only
+      - no external write authorization
+      - no Git remote add authorization
+      - no Git commit authorization
+      - no Git push authorization
+      - no force push authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-publication-target-gate-v0.1
+    title: AGENTS OS External Git Publication Target Gate v0.1
+    doc_type: explanation
+    status: accepted
+    scope: target-specific no-push gate for Route C external Git publication
+    canonical_path: control-plane/registry/reports/2026-07-08-agents-os-external-git-publication-target-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-08-agents-os-external-git-publication-target-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-root-private-history-review-gate-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-next-route-selection-package-v0.1.md
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - target repository changes
+        - remote or branch changes
+        - external Git publication request
+        - working tree publication scope changes
+    security_boundary:
+      - local report only
+      - no external write authorization
+      - no Git push authorization
+      - no remote add authorization
+      - no commit authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no secrets/token/cookie/credential content
+      - no state-private read
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-publication-target-gate-v0.1-receipt
+    title: AGENTS OS External Git Publication Target Gate v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for Route C target-specific no-push Git publication gate
+    canonical_path: control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-external-git-publication-target-gate-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - receipt facts change
+        - validation result changes
+        - target gate boundary changes
+    security_boundary:
+      - local receipt only
+      - no external write authorization
+      - no Git push authorization
+      - no remote add authorization
+      - no commit authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no secrets/token/cookie/credential content
+      - no state-private read
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-external-git-publication-target-gate-v0.1-review
+    title: AGENTS OS External Git Publication Target Gate v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for Route C target-specific no-push Git publication gate
+    canonical_path: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-external-git-publication-target-gate-v0.1.md
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-external-git-publication-target-gate-v0.1.review.md
+    freshness:
+      level: critical
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - external Git publication request
+    security_boundary:
+      - local review only
+      - no external write authorization
+      - no Git push authorization
+      - no remote add authorization
+      - no commit authorization
+      - no tag release deploy publish authorization
+      - no history rewrite authorization
+      - no secrets/token/cookie/credential content
+      - no state-private read
+      - no formal Memory write
+      - no provider call
+      - no service start
+      - no executor run
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
 
   - id: agents-os-failure-handling-stop-loop-v0.1
@@ -2912,6 +3181,155 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-body-understanding-v0.1
+    title: AGENTS OS VCPToolBox Body Understanding v0.1
+    doc_type: review
+    status: accepted
+    scope: local source-level understanding report framing VCPToolBox as AGENTS OS runtime body
+    canonical_path: control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-body-understanding-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-body-understanding-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - runtime/VCPToolBox/AGENTS.md
+      - runtime/VCPToolBox/server.js
+      - runtime/VCPToolBox/Plugin.js
+      - runtime/VCPToolBox/KnowledgeBaseManager.js
+      - runtime/VCPToolBox/WebSocketServer.js
+      - runtime/VCPToolBox/Agent
+      - control-plane/registry/reports/2026-07-06-agents-os-vcptoolbox-private-runtime-cold-audit-v0.1.md
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-runtime-integration-contract-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - VCPToolBox runtime-body framing changes
+        - Agent layer understanding changes
+        - memory surface governance changes
+        - plugin manifest enabled or blocked counts change
+        - provider/plugin boundary changes
+        - AdminPanel operational boundary changes
+    security_boundary:
+      - local understanding report only
+      - no service start
+      - no plugin enablement
+      - no plugin execution
+      - no executor run
+      - no provider call
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private memory raw text
+      - no provider raw response
+      - no VCPToolBox source/config/runtime-state modification
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-body-understanding-v0.1-receipt
+    title: AGENTS OS VCPToolBox Body Understanding v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for the VCPToolBox body understanding report
+    canonical_path: control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-body-understanding-v0.1.md
+      - control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - validation result changes
+        - changed file list changes
+        - VCPToolBox body understanding receipt changes
+    security_boundary:
+      - local receipt only
+      - no service start
+      - no plugin enablement
+      - no plugin execution
+      - no executor run
+      - no provider call
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private memory raw text
+      - no provider raw response
+      - no VCPToolBox source/config/runtime-state modification
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-body-understanding-v0.1-review
+    title: AGENTS OS VCPToolBox Body Understanding v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for the VCPToolBox body understanding report
+    canonical_path: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-07-agents-os-vcptoolbox-body-understanding-v0.1.md
+      - control-plane/registry/receipts/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.md
+    last_reviewed: 2026-07-07
+    review_by: control-plane/registry/reviews/2026-07-07-yellow-agents-os-vcptoolbox-body-understanding-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - VCPToolBox body understanding residual risk changes
+        - next runtime activation route changes
+    security_boundary:
+      - local review only
+      - no service start
+      - no plugin enablement
+      - no plugin execution
+      - no executor run
+      - no provider call
+      - no active config value output
+      - no raw log output
+      - no formal Memory write
+      - no external write authorization
+      - no Git publication authorization
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no private memory raw text
+      - no provider raw response
+      - no VCPToolBox source/config/runtime-state modification
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
 
   - id: agents-os-control-chain-reviewed-route-adoption-preview-v0.1-receipt
@@ -15889,4 +16307,143 @@ documents:
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-documentation-reality-map-v0.1
+    title: AGENTS OS VCPToolBox Documentation Reality Map v0.1
+    doc_type: explanation
+    status: accepted
+    scope: local classification map for VCPToolBox documentation and dailynote knowledge surfaces
+    canonical_path: control-plane/registry/reports/2026-07-08-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reports/2026-07-08-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - runtime/VCPToolBox/README.md
+      - runtime/VCPToolBox/VCP.md
+      - runtime/VCPToolBox/docs/TECHNICAL_LITE.md
+      - runtime/VCPToolBox/docs/DOCUMENTATION_INDEX.md
+      - runtime/VCPToolBox/docs/vcp白皮书V3.md
+      - runtime/VCPToolBox/dailynote
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - VCPToolBox documentation changes
+        - VCPToolBox dailynote classification changes
+        - VCPToolBox memory integration route changes
+        - private memory boundary changes
+    security_boundary:
+      - local report only
+      - no VCPToolBox runtime activation
+      - no plugin enablement
+      - no provider call
+      - no AdminPanel operation
+      - no active config read
+      - no formal Memory write
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no unrestricted private memory raw text
+      - no external write authorization
+      - no Git publication authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-documentation-reality-map-v0.1-receipt
+    title: AGENTS OS VCPToolBox Documentation Reality Map v0.1 Receipt
+    doc_type: receipt
+    status: accepted
+    scope: local receipt for VCPToolBox documentation reality map
+    canonical_path: control-plane/registry/receipts/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/receipts/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+      - control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - receipt facts change
+        - validation result changes
+        - report boundary changes
+    security_boundary:
+      - local receipt only
+      - no VCPToolBox runtime activation
+      - no plugin enablement
+      - no provider call
+      - no AdminPanel operation
+      - no active config read
+      - no formal Memory write
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no unrestricted private memory raw text
+      - no external write authorization
+      - no Git publication authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcptoolbox-documentation-reality-map-v0.1-review
+    title: AGENTS OS VCPToolBox Documentation Reality Map v0.1 Review
+    doc_type: review
+    status: accepted
+    scope: local review for VCPToolBox documentation reality map
+    canonical_path: control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - control-plane/registry/reports/2026-07-08-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+      - control-plane/registry/receipts/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.md
+    last_reviewed: 2026-07-08
+    review_by: control-plane/registry/reviews/2026-07-08-yellow-agents-os-vcptoolbox-documentation-reality-map-v0.1.review.md
+    freshness:
+      level: important
+      review_trigger:
+        - review result changes
+        - residual risk changes
+        - private memory boundary changes
+    security_boundary:
+      - local review only
+      - no VCPToolBox runtime activation
+      - no plugin enablement
+      - no provider call
+      - no AdminPanel operation
+      - no active config read
+      - no formal Memory write
+      - no state-private read
+      - no secrets/token/cookie/credential content
+      - no provider raw response
+      - no raw log content
+      - no unrestricted private memory raw text
+      - no external write authorization
+      - no Git publication authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
