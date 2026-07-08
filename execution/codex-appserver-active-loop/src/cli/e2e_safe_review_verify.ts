@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
 import { verifyE2eSafeReviewEvidence } from "../bridge/e2e_safe_review_verify.js";
 import { safeJoin } from "../stores/safe_path.js";
 
@@ -15,13 +16,16 @@ async function main(): Promise<void> {
 
   const cea018Report = (await readJson(cea018ReportPath)) as Record<string, unknown>;
   const artifacts = isRecord(cea018Report.artifacts) ? cea018Report.artifacts : {};
+  const verifiedArtifacts = Object.fromEntries(
+    Object.entries(artifacts).map(([name, value]) => [name, resolveCea018ArtifactPath(projectRoot, name, value)]),
+  );
   const artifactExists = Object.fromEntries(
-    Object.entries(artifacts).map(([name, value]) => [name, typeof value === "string" && existsSync(value)]),
+    Object.entries(verifiedArtifacts).map(([name, value]) => [name, typeof value === "string" && existsSync(value)]),
   );
 
-  const manifestPath = typeof artifacts.snapshot_manifest === "string" ? artifacts.snapshot_manifest : "";
-  const exclusionPath = typeof artifacts.snapshot_exclusions === "string" ? artifacts.snapshot_exclusions : "";
-  const eventsPath = typeof artifacts.events === "string" ? artifacts.events : "";
+  const manifestPath = verifiedArtifacts.snapshot_manifest ?? "";
+  const exclusionPath = verifiedArtifacts.snapshot_exclusions ?? "";
+  const eventsPath = verifiedArtifacts.events ?? "";
   const manifest = manifestPath ? ((await readJson(manifestPath)) as Record<string, unknown>) : {};
   const exclusions = exclusionPath ? ((await readJson(exclusionPath)) as Record<string, unknown>) : {};
   const events = eventsPath ? await readJsonl(eventsPath) : [];
@@ -60,7 +64,7 @@ async function main(): Promise<void> {
     counts: verification.counts,
     artifacts: {
       cea018_report: cea018ReportPath,
-      cea018_receipt: typeof artifacts.receipt === "string" ? artifacts.receipt : null,
+      cea018_receipt: verifiedArtifacts.receipt ?? null,
       cea018_events: eventsPath || null,
       cea018_snapshot_manifest: manifestPath || null,
       cea018_snapshot_exclusions: exclusionPath || null,
@@ -108,6 +112,77 @@ function countBy(values: readonly string[]): Record<string, number> {
     counts[value] = (counts[value] ?? 0) + 1;
   }
   return counts;
+}
+
+function resolveCea018ArtifactPath(projectRoot: string, name: string, value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  try {
+    const allowedRoot = cea018ArtifactRoot(name);
+    if (!allowedRoot) return null;
+    const artifactPath = assertProjectArtifactPathBoundary(projectRoot, value, allowedRoot, `CEA-018 ${name}`);
+    assertCea018ArtifactFilename(name, artifactPath);
+    return artifactPath;
+  } catch {
+    return null;
+  }
+}
+
+function cea018ArtifactRoot(name: string): string | null {
+  switch (name) {
+    case "snapshot_manifest":
+    case "snapshot_exclusions":
+      return "data/snapshots";
+    case "events":
+      return "data/events";
+    case "ledger":
+      return "data/context-ledger";
+    case "packet":
+      return "data/context-packets";
+    case "approval":
+      return "data/context-approvals";
+    case "annex":
+      return "data/prompt-annexes";
+    case "plan":
+      return "data/worker-pilots";
+    case "report":
+      return "data/reports";
+    case "receipt":
+      return "data/receipts";
+    default:
+      return null;
+  }
+}
+
+function assertCea018ArtifactFilename(name: string, artifactPath: string): void {
+  if (name === "snapshot_manifest") {
+    assertAllowedArtifactFilename(artifactPath, ["manifest.json"], "CEA-018 snapshot_manifest");
+    return;
+  }
+  if (name === "snapshot_exclusions") {
+    assertAllowedArtifactFilename(artifactPath, ["exclusions.json"], "CEA-018 snapshot_exclusions");
+    return;
+  }
+  if (name === "report") {
+    assertAllowedArtifactFilename(artifactPath, ["cea-018_e2e_safe_review_loop.json"], "CEA-018 report");
+    return;
+  }
+  if (name === "receipt") {
+    assertAllowedArtifactFilename(artifactPath, ["2026-07-07-cea-018-e2e-safe-review-loop.receipt.md"], "CEA-018 receipt");
+    return;
+  }
+  const basename = path.basename(artifactPath);
+  const expectedSuffixByName: Record<string, string> = {
+    events: ".events.jsonl",
+    ledger: ".context.jsonl",
+    packet: ".context-packet.json",
+    approval: ".approval.json",
+    annex: ".prompt-annex.json",
+    plan: ".worker-plan.json",
+  };
+  const expectedSuffix = expectedSuffixByName[name];
+  if (!expectedSuffix || !basename.endsWith(expectedSuffix)) {
+    throw new Error(`CEA-018 ${name} filename is not allowed: ${basename}`);
+  }
 }
 
 async function writeJson(filePath: string, value: unknown): Promise<void> {

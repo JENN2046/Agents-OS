@@ -8,6 +8,7 @@ import {
   isAllowedSnapshotReviewPackageEntry,
   type SnapshotReviewPackageArtifact,
 } from "../bridge/snapshot_review_package.js";
+import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
 import { safeJoin } from "../stores/safe_path.js";
 
 const execFileAsync = promisify(execFile);
@@ -36,7 +37,7 @@ async function main(): Promise<void> {
 
   const copied: CopiedPackageArtifact[] = [];
   for (const item of plan.artifacts) {
-    const sourcePath = resolveProjectArtifact(projectRoot, item.sourcePath);
+    const sourcePath = resolvePackageSourceArtifact(projectRoot, item);
     const content = await readFile(sourcePath);
     const target = safeJoin(contentDir, item.entryPath);
     await mkdir(path.dirname(target), { recursive: true });
@@ -206,14 +207,30 @@ async function writeReceipt(
   await writeFile(target, lines.join("\n"), "utf8");
 }
 
-function resolveProjectArtifact(projectRoot: string, sourcePath: string): string {
-  const resolvedRoot = path.resolve(projectRoot);
-  const resolvedSource = path.resolve(sourcePath);
-  const relative = path.relative(resolvedRoot, resolvedSource);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    throw new Error(`package source artifact escapes project root: ${sourcePath}`);
+function resolvePackageSourceArtifact(projectRoot: string, item: SnapshotReviewPackageArtifact): string {
+  const allowedRoot = packageSourceRootForItem(item);
+  const sourcePath = assertProjectArtifactPathBoundary(projectRoot, item.sourcePath, allowedRoot, `${item.taskId} ${item.label}`);
+  assertAllowedArtifactFilename(sourcePath, [expectedSourceFilenameForItem(item)], `${item.taskId} ${item.label}`);
+  return sourcePath;
+}
+
+function packageSourceRootForItem(item: SnapshotReviewPackageArtifact): string {
+  if (item.taskId === "CEA-018" && (item.label === "snapshot_manifest" || item.label === "snapshot_exclusions")) {
+    return "data/snapshots";
   }
-  return resolvedSource;
+  if (item.kind === "report") {
+    return "data/reports";
+  }
+  if (item.kind === "receipt") {
+    return "data/receipts";
+  }
+  throw new Error(`unsupported package source artifact kind: ${item.kind}`);
+}
+
+function expectedSourceFilenameForItem(item: SnapshotReviewPackageArtifact): string {
+  if (item.label === "snapshot_manifest") return "manifest.json";
+  if (item.label === "snapshot_exclusions") return "exclusions.json";
+  return path.basename(item.entryPath);
 }
 
 async function createZipFromContent(contentDir: string, zipPath: string): Promise<void> {
