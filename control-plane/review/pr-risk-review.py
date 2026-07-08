@@ -256,6 +256,11 @@ DENIED_FILENAME_STEMS = SECRET_FILENAME_TERMS | {
     "cookies",
 }
 
+DENIED_DIRECTORY_TERMS = SECRET_FILENAME_TERMS | {
+    "cookie",
+    "cookies",
+}
+
 ALLOWED_TEMPLATE_SUFFIXES = {
     ".example",
     ".template",
@@ -292,7 +297,7 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("private or credential paths are not allowed", path)
     if any(is_denied_env_path_part(part) for part in lowered_dir_parts):
         return None, invalid_path("environment secret paths are not allowed", path)
-    if any(term in part for part in lowered_dir_parts for term in SECRET_FILENAME_TERMS):
+    if any(term in part for part in lowered_dir_parts for term in DENIED_DIRECTORY_TERMS):
         return None, invalid_path("private or credential paths are not allowed", path)
     lowered_name = candidate_path.name.lower()
     if is_allowed_template_filename(lowered_name):
@@ -379,6 +384,19 @@ def run_git_changed_paths(base: str) -> dict[str, Any]:
     }
 
 
+def path_has_symlink_part(path: Path, root: Path) -> bool:
+    try:
+        relative_parts = path.relative_to(root).parts
+    except ValueError:
+        return True
+    cursor = root
+    for part in relative_parts:
+        cursor = cursor / part
+        if cursor.is_symlink():
+            return True
+    return False
+
+
 def read_changed_text(path: str, max_bytes: int = 20000) -> str:
     normalized, invalid = normalize_changed_path(path)
     if invalid is not None or normalized is None:
@@ -386,13 +404,17 @@ def read_changed_text(path: str, max_bytes: int = 20000) -> str:
     candidate = WORKSPACE_ROOT / normalized
     if not candidate.is_file():
         return ""
-    if candidate.is_symlink():
+    workspace_root = WORKSPACE_ROOT.resolve()
+    if path_has_symlink_part(candidate, WORKSPACE_ROOT):
         return ""
     if candidate.suffix.lower() not in CONTENT_SCAN_SUFFIXES:
         return ""
     try:
-        candidate.resolve().relative_to(WORKSPACE_ROOT.resolve())
+        resolved_relative = candidate.resolve().relative_to(workspace_root)
     except (OSError, ValueError):
+        return ""
+    _, resolved_invalid = normalize_changed_path(resolved_relative.as_posix())
+    if resolved_invalid is not None:
         return ""
     try:
         return candidate.read_text(encoding="utf-8", errors="ignore")[:max_bytes]

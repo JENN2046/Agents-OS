@@ -296,7 +296,12 @@ def main() -> int:
     )
 
     denied_secret_dir_variants = review.classify_paths(
-        ["prod-secrets/config.yaml", "tokens-backup/session.yaml", "customer_credentials/data.py"],
+        [
+            "prod-secrets/config.yaml",
+            "tokens-backup/session.yaml",
+            "customer_credentials/data.py",
+            "cookies-backup/session.yaml",
+        ],
         include_content=True,
     )
     check(
@@ -305,7 +310,7 @@ def main() -> int:
         failures,
     )
     check(
-        denied_secret_dir_variants["invalid_path_count"] == 3,
+        denied_secret_dir_variants["invalid_path_count"] == 4,
         "all secret-like directory component fixtures should be rejected",
         failures,
     )
@@ -362,6 +367,27 @@ def main() -> int:
         check(
             discovered["invalid_path_count"] >= 1,
             "git discovery should report protected escaped path as invalid",
+            failures,
+        )
+
+    original_workspace_root = review.WORKSPACE_ROOT
+    with tempfile.TemporaryDirectory() as temp_workspace:
+        temp_root = Path(temp_workspace)
+        private_dir = temp_root / "state-private"
+        private_dir.mkdir()
+        (private_dir / "probe.py").write_text('password = "should-not-be-read"\n', encoding="utf-8")
+        (temp_root / "review-link").symlink_to(private_dir, target_is_directory=True)
+        try:
+            review.WORKSPACE_ROOT = temp_root
+            symlinked_dir_result = review.classify_paths(
+                ["review-link/probe.py"],
+                include_content=True,
+            )
+        finally:
+            review.WORKSPACE_ROOT = original_workspace_root
+        check(
+            symlinked_dir_result["risk_surface_count"] == 0,
+            "files under symlinked directories should not be content-scanned",
             failures,
         )
 
