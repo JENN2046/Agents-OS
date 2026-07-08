@@ -302,7 +302,9 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
         return None, invalid_path("empty path", path)
     if raw != raw.strip():
         return None, invalid_path("paths with leading or trailing whitespace are not allowed", path)
-    normalized = raw.replace("\\", "/")
+    if "\\" in raw:
+        return None, invalid_path("literal backslash paths are not allowed", path)
+    normalized = raw
     if re.match(r"^[A-Za-z]:/", normalized):
         return None, invalid_path("absolute paths are not allowed", path)
     candidate_path = PurePosixPath(normalized)

@@ -359,6 +359,7 @@ def main() -> int:
         quoted_path_dir.mkdir()
         (quoted_path_dir / "foo\nbar.py").write_text("# should not be scanned\n", encoding="utf-8")
         (temp_root / "probe.py ").write_text('password = "should-not-be-scanned-under-trimmed-name"\n', encoding="utf-8")
+        (temp_root / "safe\\file.py").write_text('password = "should-not-be-scanned-under-rewritten-name"\n', encoding="utf-8")
         try:
             review.WORKSPACE_ROOT = temp_root
             git_discovery = review.run_git_changed_paths("HEAD")
@@ -371,8 +372,8 @@ def main() -> int:
             failures,
         )
         check(
-            discovered["invalid_path_count"] >= 2,
-            "git discovery should report protected escaped paths and whitespace paths as invalid",
+            discovered["invalid_path_count"] >= 3,
+            "git discovery should report protected escaped, whitespace, and backslash paths as invalid",
             failures,
         )
 
