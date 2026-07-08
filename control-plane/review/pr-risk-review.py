@@ -270,6 +270,10 @@ def is_allowed_template_filename(name: str) -> bool:
     return any(name.endswith(suffix) for suffix in ALLOWED_TEMPLATE_SUFFIXES)
 
 
+def is_denied_env_path_part(part: str) -> bool:
+    return part.startswith(".env") or part == "config.env" or part.startswith("config.env.")
+
+
 def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None]:
     raw = path.strip()
     if not raw:
@@ -286,6 +290,8 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
     lowered_dir_parts = lowered_parts[:-1]
     if any(part in DENIED_PATH_PARTS for part in lowered_parts):
         return None, invalid_path("private or credential paths are not allowed", path)
+    if any(is_denied_env_path_part(part) for part in lowered_dir_parts):
+        return None, invalid_path("environment secret paths are not allowed", path)
     if any(term in part for part in lowered_dir_parts for term in SECRET_FILENAME_TERMS):
         return None, invalid_path("private or credential paths are not allowed", path)
     lowered_name = candidate_path.name.lower()

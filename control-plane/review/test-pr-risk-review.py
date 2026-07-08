@@ -260,11 +260,18 @@ def main() -> int:
     )
 
     denied_secret_dirs = review.classify_paths(
-        ["secret/foo.py", "tokens/session.py", "cookies/session.py"],
+        [
+            "secret/foo.py",
+            "tokens/session.py",
+            "cookies/session.py",
+            ".env/settings.py",
+            ".env.local/config.json",
+            "config.env/settings.py",
+        ],
         include_content=True,
     )
-    check(denied_secret_dirs["path_input_valid"] is False, "secret directories should be invalid", failures)
-    check(denied_secret_dirs["invalid_path_count"] == 3, "all secret directory fixtures should be rejected", failures)
+    check(denied_secret_dirs["path_input_valid"] is False, "secret and env directories should be invalid", failures)
+    check(denied_secret_dirs["invalid_path_count"] == 6, "all secret directory fixtures should be rejected", failures)
     check(denied_secret_dirs["risk_surface_count"] == 0, "secret directories should not be content-scanned", failures)
 
     denied_private_classes = review.classify_paths(
