@@ -68,6 +68,8 @@ async function main(): Promise<void> {
   assertSnapshotBoundWorkerPlanPathBoundary(projectRoot, plan);
   const manifest = JSON.parse(await readFile(plan.manifestPath, "utf8")) as SnapshotManifest;
   assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, manifest);
+  const verifiedSnapshotRoot = path.resolve(plan.snapshotRoot);
+  const verifiedWorkerCwd = path.resolve(plan.workerCwd);
   const annex = JSON.parse(await readFile(plan.annexRef, "utf8")) as PromptAnnex;
   assertPromptAnnex(annex);
   const workerEvidence = JSON.parse(
@@ -89,7 +91,7 @@ async function main(): Promise<void> {
     eventWrites.push(appendEvent(type, payload));
   };
 
-  const transport = createStdioTransport({ cwd: plan.snapshotRoot, timeoutMs: REQUEST_TIMEOUT_MS });
+  const transport = createStdioTransport({ cwd: verifiedSnapshotRoot, timeoutMs: REQUEST_TIMEOUT_MS });
   const client = createAppServerClient(transport, {
     requestTimeoutMs: REQUEST_TIMEOUT_MS,
     clientInfo: {
@@ -138,7 +140,7 @@ async function main(): Promise<void> {
     await client.start();
     await appendEvent("APP_SERVER_MESSAGE", {
       method: "app-server/start",
-      appServerProcessCwd: plan.snapshotRoot,
+      appServerProcessCwd: verifiedSnapshotRoot,
     });
     const initialized = await client.initialize();
     await appendEvent("APP_SERVER_MESSAGE", {
@@ -151,7 +153,7 @@ async function main(): Promise<void> {
     client.sendInitialized();
 
     const thread = await client.threadStart({
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandbox: "read-only",
       ephemeral: true,
@@ -168,13 +170,13 @@ async function main(): Promise<void> {
       method: "thread/start/result",
       role: "Reviewer",
       threadId: reviewerThreadId,
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
     });
 
     const turnStart = await client.turnStart({
       threadId: reviewerThreadId,
       input: [{ type: "text", text: prompt, text_elements: [] }],
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandboxPolicy: plan.sandboxPolicy,
       summary: "none",
@@ -185,7 +187,7 @@ async function main(): Promise<void> {
       method: "turn/start/result",
       threadId: reviewerThreadId,
       turnId: reviewerTurnId,
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       outputSchema: "REVIEWER_DECISION",
     });
 
@@ -214,8 +216,8 @@ async function main(): Promise<void> {
       prep_plan_id: plan.planId,
       prep_plan_path: planPath,
       snapshot_id: plan.snapshotId,
-      reviewer_cwd: plan.workerCwd,
-      app_server_process_cwd: plan.snapshotRoot,
+      reviewer_cwd: verifiedWorkerCwd,
+      app_server_process_cwd: verifiedSnapshotRoot,
       annex_id: annex.annexId,
       output: reviewerDecision,
       artifacts: {
@@ -247,8 +249,8 @@ async function main(): Promise<void> {
       prep_plan_id: plan.planId,
       prep_plan_path: planPath,
       snapshot_id: plan.snapshotId,
-      reviewer_cwd: plan.workerCwd,
-      app_server_process_cwd: plan.snapshotRoot,
+      reviewer_cwd: verifiedWorkerCwd,
+      app_server_process_cwd: verifiedSnapshotRoot,
       annex_id: annex.annexId,
       stopped_reason: failure,
       artifacts: {

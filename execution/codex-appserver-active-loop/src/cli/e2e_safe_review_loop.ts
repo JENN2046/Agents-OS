@@ -167,10 +167,12 @@ async function main(): Promise<void> {
     annexRef: annexPath,
   });
   assertSnapshotBoundWorkerPlanLiveBoundary(projectRoot, plan, snapshot.manifest);
+  const verifiedSnapshotRoot = path.resolve(plan.snapshotRoot);
+  const verifiedWorkerCwd = path.resolve(plan.workerCwd);
   const planPath = await planStore.write(plan);
 
   const tracker: TurnTracker = { completedTurns: new Map(), agentTextByTurn: new Map() };
-  const transport = createStdioTransport({ cwd: plan.snapshotRoot, timeoutMs: REQUEST_TIMEOUT_MS });
+  const transport = createStdioTransport({ cwd: verifiedSnapshotRoot, timeoutMs: REQUEST_TIMEOUT_MS });
   const client = createAppServerClient(transport, {
     requestTimeoutMs: REQUEST_TIMEOUT_MS,
     clientInfo: {
@@ -217,7 +219,7 @@ async function main(): Promise<void> {
 
   try {
     await client.start();
-    await appendEvent("APP_SERVER_MESSAGE", { method: "app-server/start", appServerProcessCwd: plan.snapshotRoot });
+    await appendEvent("APP_SERVER_MESSAGE", { method: "app-server/start", appServerProcessCwd: verifiedSnapshotRoot });
     const initialized = await client.initialize();
     await appendEvent("APP_SERVER_MESSAGE", {
       method: "initialize/result",
@@ -229,26 +231,26 @@ async function main(): Promise<void> {
     client.sendInitialized();
 
     const workerThread = await client.threadStart({
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandbox: "read-only",
       ephemeral: true,
       baseInstructions: "CEA-018 snapshot-bound Worker. Stay inside snapshot cwd. Return only schema JSON.",
     });
     workerThreadId = workerThread.thread.id;
-    await appendEvent("APP_SERVER_MESSAGE", { method: "thread/start/result", role: "Worker", threadId: workerThreadId, cwd: plan.workerCwd });
+    await appendEvent("APP_SERVER_MESSAGE", { method: "thread/start/result", role: "Worker", threadId: workerThreadId, cwd: verifiedWorkerCwd });
 
     const workerTurn = await client.turnStart({
       threadId: workerThreadId,
       input: [{ type: "text", text: createSnapshotWorkerLivePrompt({ plan, annex }), text_elements: [] }],
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandboxPolicy: plan.sandboxPolicy,
       summary: "none",
       outputSchema: workerDoneSchema,
     });
     workerTurnId = workerTurn.turn.id;
-    await appendEvent("APP_SERVER_MESSAGE", { method: "turn/start/result", role: "Worker", turnId: workerTurnId, cwd: plan.workerCwd });
+    await appendEvent("APP_SERVER_MESSAGE", { method: "turn/start/result", role: "Worker", turnId: workerTurnId, cwd: verifiedWorkerCwd });
     const workerCompleted = await waitForCompletedTurn(tracker, workerTurn.turn, TURN_TIMEOUT_MS);
     if (stopReason) throw new Error(stopReason);
     const workerDone = parseStructured<WorkerDone>(workerCompleted, "DONE", tracker.agentTextByTurn.get(workerCompleted.id));
@@ -260,8 +262,8 @@ async function main(): Promise<void> {
       worker_thread_id: workerThreadId,
       worker_turn_id: workerTurnId,
       snapshot_id: plan.snapshotId,
-      worker_cwd: plan.workerCwd,
-      app_server_process_cwd: plan.snapshotRoot,
+      worker_cwd: verifiedWorkerCwd,
+      app_server_process_cwd: verifiedSnapshotRoot,
       annex_id: annex.annexId,
       output: workerDone,
       boundary_flags: {
@@ -281,26 +283,26 @@ async function main(): Promise<void> {
     };
 
     const reviewerThread = await client.threadStart({
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandbox: "read-only",
       ephemeral: true,
       baseInstructions: "CEA-018 snapshot-bound Reviewer. Review supplied Worker DONE evidence only. Return schema JSON.",
     });
     reviewerThreadId = reviewerThread.thread.id;
-    await appendEvent("APP_SERVER_MESSAGE", { method: "thread/start/result", role: "Reviewer", threadId: reviewerThreadId, cwd: plan.workerCwd });
+    await appendEvent("APP_SERVER_MESSAGE", { method: "thread/start/result", role: "Reviewer", threadId: reviewerThreadId, cwd: verifiedWorkerCwd });
 
     const reviewerTurn = await client.turnStart({
       threadId: reviewerThreadId,
       input: [{ type: "text", text: createSnapshotReviewerLivePrompt({ plan, annex, workerEvidence }), text_elements: [] }],
-      cwd: plan.workerCwd,
+      cwd: verifiedWorkerCwd,
       approvalPolicy: "never",
       sandboxPolicy: plan.sandboxPolicy,
       summary: "none",
       outputSchema: reviewerDecisionSchema,
     });
     reviewerTurnId = reviewerTurn.turn.id;
-    await appendEvent("APP_SERVER_MESSAGE", { method: "turn/start/result", role: "Reviewer", turnId: reviewerTurnId, cwd: plan.workerCwd });
+    await appendEvent("APP_SERVER_MESSAGE", { method: "turn/start/result", role: "Reviewer", turnId: reviewerTurnId, cwd: verifiedWorkerCwd });
     const reviewerCompleted = await waitForCompletedTurn(tracker, reviewerTurn.turn, TURN_TIMEOUT_MS);
     if (stopReason) throw new Error(stopReason);
     const reviewerDecision = parseStructured<ReviewerDecision>(reviewerCompleted, "REVIEWER_DECISION", tracker.agentTextByTurn.get(reviewerCompleted.id));
@@ -312,10 +314,10 @@ async function main(): Promise<void> {
     });
 
     const boundarySummary = createE2eSafeReviewBoundarySummary({
-      snapshotRoot: plan.snapshotRoot,
-      appServerProcessCwd: plan.snapshotRoot,
-      workerCwd: plan.workerCwd,
-      reviewerCwd: plan.workerCwd,
+      snapshotRoot: verifiedSnapshotRoot,
+      appServerProcessCwd: verifiedSnapshotRoot,
+      workerCwd: verifiedWorkerCwd,
+      reviewerCwd: verifiedWorkerCwd,
       workerDone,
       reviewerDecision,
       policyDecisionCount: policyDecisions.length,
