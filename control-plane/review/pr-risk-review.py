@@ -185,14 +185,31 @@ CONTENT_SCAN_SUFFIXES = {
 DENIED_PATH_PARTS = {
     ".credentials",
     ".secrets",
+    "cookie",
+    "cookies",
     "credentials",
+    "secret",
     "secrets",
     "state-private",
     "state_private",
+    "token",
+    "tokens",
 }
 
 DENIED_FILENAMES = {
     ".env",
+    "config.env",
+    "credentials.json",
+    "id_ed25519",
+    "id_rsa",
+    "token.json",
+}
+
+DENIED_FILE_SUFFIXES = {
+    ".key",
+    ".p12",
+    ".pem",
+    ".pfx",
 }
 
 SECRET_FILENAME_TERMS = {
@@ -206,9 +223,18 @@ SECRET_FILENAME_TERMS = {
     "token",
 }
 
+ALLOWED_TEMPLATE_SUFFIXES = {
+    ".example",
+    ".template",
+}
+
 
 def invalid_path(reason: str, path: str) -> dict[str, str]:
     return {"path": path, "reason": reason}
+
+
+def is_allowed_template_filename(name: str) -> bool:
+    return any(name.endswith(suffix) for suffix in ALLOWED_TEMPLATE_SUFFIXES)
 
 
 def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None]:
@@ -227,8 +253,12 @@ def normalize_changed_path(path: str) -> tuple[str | None, dict[str, str] | None
     if any(part in DENIED_PATH_PARTS for part in lowered_parts):
         return None, invalid_path("private or credential paths are not allowed", path)
     lowered_name = candidate_path.name.lower()
-    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env."):
+    if is_allowed_template_filename(lowered_name):
+        return str(candidate_path), None
+    if lowered_name in DENIED_FILENAMES or lowered_name.startswith(".env.") or lowered_name.startswith("config.env."):
         return None, invalid_path("environment secret paths are not allowed", path)
+    if any(lowered_name.endswith(suffix) for suffix in DENIED_FILE_SUFFIXES):
+        return None, invalid_path("key or certificate paths are not allowed", path)
     if any(term in lowered_name for term in SECRET_FILENAME_TERMS):
         return None, invalid_path("secret-like filenames are not allowed", path)
     return str(candidate_path), None

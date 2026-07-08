@@ -230,16 +230,30 @@ def main() -> int:
         option_base_output.unlink(missing_ok=True)
 
     denied_secret_files = review.classify_paths(
-        ["credentials.json", "token.json", "secret.yaml"],
+        ["credentials.json", "token.json", "secret.yaml", "config.env", "private.pem", "deploy.key", "id_rsa", "id_ed25519"],
         include_content=True,
     )
     check(denied_secret_files["path_input_valid"] is False, "secret-like filenames should be invalid", failures)
     check(
-        denied_secret_files["invalid_path_count"] == 3,
+        denied_secret_files["invalid_path_count"] == 8,
         "all secret-like filename fixtures should be rejected",
         failures,
     )
     check(denied_secret_files["risk_surface_count"] == 0, "secret-like filenames should not be content-scanned", failures)
+
+    denied_secret_dirs = review.classify_paths(
+        ["secret/foo.py", "tokens/session.py", "cookies/session.py"],
+        include_content=True,
+    )
+    check(denied_secret_dirs["path_input_valid"] is False, "secret directories should be invalid", failures)
+    check(denied_secret_dirs["invalid_path_count"] == 3, "all secret directory fixtures should be rejected", failures)
+    check(denied_secret_dirs["risk_surface_count"] == 0, "secret directories should not be content-scanned", failures)
+
+    allowed_templates = review.classify_paths(
+        ["config.env.example", ".env.example", "private.pem.template"],
+        include_content=False,
+    )
+    check(allowed_templates["path_input_valid"] is True, "template filenames should remain valid", failures)
 
     symlink_probe = ROOT / "__pr_risk_review_symlink_probe.py"
     state_private_dir = ROOT.parents[1] / "state-private"
@@ -273,7 +287,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=13 failures={len(failures)}")
+        print(f"cases=15 failures={len(failures)}")
         return 1
 
     print("PASS runtime provenance risk fixture")
@@ -288,8 +302,10 @@ def main() -> int:
     print("PASS git discovery failure fixture")
     print("PASS option-style base rejection fixture")
     print("PASS secret-like filename rejection fixture")
+    print("PASS protected secret directory rejection fixture")
+    print("PASS allowed template filename fixture")
     print("PASS symlink content-scan rejection fixture")
-    print("cases=13 failures=0")
+    print("cases=15 failures=0")
     return 0
 
 
