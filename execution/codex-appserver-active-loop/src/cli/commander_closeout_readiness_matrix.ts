@@ -74,8 +74,9 @@ async function readEvidenceItem(
   receiptRelativePath: string,
 ): Promise<CommanderEvidenceItem> {
   const reportPath = path.join(projectRoot, reportRelativePath);
-  const receiptPath = path.join(projectRoot, receiptRelativePath);
   const report = (await readJson(reportPath)) as Record<string, unknown>;
+  const receiptFromReport = getReportArtifactPath(report, "receipt");
+  const receiptPath = receiptFromReport ?? path.join(projectRoot, receiptRelativePath);
   return {
     taskId: fallbackTaskId,
     title: typeof report.title === "string" ? report.title : fallbackTaskId,
@@ -87,6 +88,13 @@ async function readEvidenceItem(
     phase8Decision: typeof report.phase8_decision === "string" ? report.phase8_decision : undefined,
     readableRootSupported: typeof report.readable_root_supported === "boolean" ? report.readable_root_supported : undefined,
   };
+}
+
+function getReportArtifactPath(report: Record<string, unknown>, key: string): string | undefined {
+  const artifacts = report.artifacts;
+  if (!artifacts || typeof artifacts !== "object") return undefined;
+  const value = (artifacts as Record<string, unknown>)[key];
+  return typeof value === "string" ? value : undefined;
 }
 
 async function existsFile(filePath: string): Promise<boolean> {

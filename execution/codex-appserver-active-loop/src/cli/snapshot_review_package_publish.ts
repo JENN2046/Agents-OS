@@ -218,33 +218,40 @@ function resolveProjectArtifact(projectRoot: string, sourcePath: string): string
 
 async function createZipFromContent(contentDir: string, zipPath: string): Promise<void> {
   await mkdir(path.dirname(zipPath), { recursive: true });
-  const command = [
-    "$ErrorActionPreference='Stop'",
-    "Compress-Archive -Path (Join-Path $env:CEA021_CONTENT '*') -DestinationPath $env:CEA021_ZIP -Force",
-  ].join("; ");
-  await execPowerShell(command, { CEA021_CONTENT: contentDir, CEA021_ZIP: zipPath });
+  const command =
+    "& { param([string]$ContentDir, [string]$ZipPath); $ErrorActionPreference='Stop'; Compress-Archive -Path (Join-Path $ContentDir '*') -DestinationPath $ZipPath -Force }";
+  await execPowerShell(command, [await toPowerShellPath(contentDir), await toPowerShellPath(zipPath)]);
 }
 
 async function listZipEntries(zipPath: string): Promise<readonly string[]> {
-  const command = [
-    "$ErrorActionPreference='Stop'",
-    "Add-Type -AssemblyName System.IO.Compression.FileSystem",
-    "$zip=[System.IO.Compression.ZipFile]::OpenRead($env:CEA021_ZIP)",
-    "try { $zip.Entries | ForEach-Object { $_.FullName } | ConvertTo-Json -Compress } finally { $zip.Dispose() }",
-  ].join("; ");
-  const { stdout } = await execPowerShell(command, { CEA021_ZIP: zipPath });
+  const command =
+    "& { param([string]$ZipPath); $ErrorActionPreference='Stop'; Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead($ZipPath); try { $zip.Entries | ForEach-Object { $_.FullName } | ConvertTo-Json -Compress } finally { $zip.Dispose() } }";
+  const { stdout } = await execPowerShell(command, [await toPowerShellPath(zipPath)]);
   const trimmed = stdout.trim();
   if (!trimmed) return [];
   const parsed = JSON.parse(trimmed) as unknown;
   return Array.isArray(parsed) ? parsed.filter((entry): entry is string => typeof entry === "string") : typeof parsed === "string" ? [parsed] : [];
 }
 
-async function execPowerShell(command: string, env: Record<string, string>): Promise<{ stdout: string; stderr: string }> {
-  return execFileAsync("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", command], {
-    env: { ...process.env, ...env },
+async function execPowerShell(command: string, args: readonly string[]): Promise<{ stdout: string; stderr: string }> {
+  return execFileAsync("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", command, ...args], {
     windowsHide: true,
     maxBuffer: 10 * 1024 * 1024,
   });
+}
+
+async function toPowerShellPath(filePath: string): Promise<string> {
+  if (process.platform !== "linux") return filePath;
+  try {
+    const { stdout } = await execFileAsync("wslpath", ["-w", filePath], {
+      windowsHide: true,
+      maxBuffer: 1024 * 1024,
+    });
+    const converted = stdout.trim();
+    return converted.length > 0 ? converted : filePath;
+  } catch {
+    return filePath;
+  }
 }
 
 function sha256(content: Buffer | string): string {
