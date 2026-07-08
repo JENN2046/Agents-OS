@@ -43,7 +43,7 @@ def remove_path(path: Path) -> None:
         shutil.rmtree(path)
 
 
-def make_fixture(docctl: ModuleType, *, count: int = 1, extra: bool = False) -> Path:
+def make_fixture(docctl: ModuleType, *, count: int = 4, extra: bool = False) -> Path:
     fixture_root = ROOT / ".tmp-docctl-plan-fix-fixture"
     remove_path(fixture_root)
     rel = fixture_root.relative_to(docctl.WORKSPACE_ROOT).as_posix()
@@ -67,6 +67,78 @@ def make_fixture(docctl: ModuleType, *, count: int = 1, extra: bool = False) -> 
               human: Jenn
               agent_steward: Nobao
             source_of_truth: {rel}/README.md
+            supersedes: []
+            superseded_by: null
+            related: []
+            last_reviewed: 2026-07-02
+            review_by: {rel}/reviews/fixture.review.md
+            freshness:
+              level: ordinary
+              review_trigger:
+                - fixture changes
+            security_boundary:
+              - no secrets
+            validation:
+              notes:
+                - fixture
+          - id: fixture-document-registry
+            title: Fixture Document Registry
+            doc_type: registry
+            status: active
+            scope: fixture
+            canonical_path: {rel}/drafts/document-registry.yaml
+            owner:
+              human: Jenn
+              agent_steward: Nobao
+            source_of_truth: {rel}/drafts/document-registry.yaml
+            supersedes: []
+            superseded_by: null
+            related: []
+            last_reviewed: 2026-07-02
+            review_by: {rel}/reviews/fixture.review.md
+            freshness:
+              level: ordinary
+              review_trigger:
+                - fixture changes
+            security_boundary:
+              - no secrets
+            validation:
+              notes:
+                - fixture
+          - id: fixture-federated-registry
+            title: Fixture Federated Registry
+            doc_type: registry
+            status: active
+            scope: fixture
+            canonical_path: {rel}/federated.yaml
+            owner:
+              human: Jenn
+              agent_steward: Nobao
+            source_of_truth: {rel}/federated.yaml
+            supersedes: []
+            superseded_by: null
+            related: []
+            last_reviewed: 2026-07-02
+            review_by: {rel}/reviews/fixture.review.md
+            freshness:
+              level: ordinary
+              review_trigger:
+                - fixture changes
+            security_boundary:
+              - no secrets
+            validation:
+              notes:
+                - fixture
+          - id: fixture-review
+            title: Fixture Review
+            doc_type: review
+            status: active
+            scope: fixture
+            canonical_path: {rel}/reviews/fixture.review.md
+            owner:
+              human: Jenn
+              agent_steward: Nobao
+            source_of_truth: {rel}/reviews/fixture.review.md
             supersedes: []
             superseded_by: null
             related: []
@@ -124,7 +196,8 @@ def main() -> int:
     remove_path(fixture_root)
 
     try:
-        current = docctl.plan_fix()
+        clean_fixture = make_fixture(docctl)
+        current = docctl.plan_fix(clean_fixture)
         check(current["passed"], "current plan-fix should pass", failures)
         check(current["dry_run"] is True, "plan-fix should be dry-run", failures)
         check(current["write_performed"] is False, "plan-fix should not write", failures)
@@ -164,6 +237,7 @@ def main() -> int:
                 sys.executable,
                 str(ROOT / "docctl.py"),
                 "plan-fix",
+                str(make_fixture(docctl)),
                 "--json",
             ],
             capture_output=True,
