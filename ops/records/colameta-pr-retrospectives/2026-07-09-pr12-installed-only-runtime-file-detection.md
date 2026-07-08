@@ -138,7 +138,7 @@ explicit blockers, statuses, and regression tests.
 
 PR #12 added the installed-only runtime file blocker, exposed the new status
 fields, added regression coverage, updated operator documentation, pushed a
-branch, opened a draft PR, and passed local plus GitHub CI.
+branch, opened a draft PR, and passed GitHub CI.
 
 The larger value is the review discipline: future gate work should begin with
 the proof matrix above before code is considered ready.
