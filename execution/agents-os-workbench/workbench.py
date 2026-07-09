@@ -280,6 +280,19 @@ def title_is_repeat(candidate_title: str, existing_titles: list[str]) -> bool:
     return False
 
 
+def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
+    return bool(pattern.search(line)) and not NEGATED_SIGNAL_CONTEXT.search(line)
+
+
+def external_git_has_post_push_evidence(queue_text: str) -> bool:
+    patterns = (
+        re.compile(r"\b(pushed|push completed|branch pushed|remote branch|published remote branch)\b", re.I),
+        re.compile(r"\b(PR|pull request)\s*#?\d+\b", re.I),
+        re.compile(r"\bopened\s+(a\s+)?(draft\s+)?(PR|pull request)\b", re.I),
+    )
+    return any(line_has_non_negated_signal(line, pattern) for line in queue_text.splitlines() for pattern in patterns)
+
+
 def validate_next_user_action_summary(prefix: str, action: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if action.get("status") == "route_choice_required":
@@ -2479,7 +2492,7 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "receipt would include raw broad payloads by default",
             "component would need a managed run before contract review",
         ]
-    elif "external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc:
+    elif ("external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc) and external_git_has_post_push_evidence(queue_text):
         title = "AGENTS OS external Git post-push verification receipt v0.1"
         goal_delta = "turn a pushed external Git action into a verified receipt with local leftovers classified"
         state_delta = "published-but-unverified -> remote-verified-and-local-scope-known"
@@ -2503,6 +2516,30 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "remote main does not match local HEAD",
             "unexpected file was published",
             "restricted private material appears in published scope",
+        ]
+    elif "external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc:
+        title = "AGENTS OS external Git exact pre-push command gate v0.1"
+        goal_delta = "turn publication intent into an exact, reviewable command plan before any external Git write"
+        state_delta = "target-selected-no-push -> exact-command-gate-ready"
+        why_next = (
+            "The queue has an external Git target but no non-negated push or PR evidence; "
+            "the next useful step is the exact pre-push command gate, not post-push verification."
+        )
+        completion = [
+            "tracked and untracked publication scope is listed",
+            "exact external Git command plan is listed for Jenn approval",
+            "excluded files and private boundaries are explicit",
+            "external-write authority remains false until the separate execution gate",
+        ]
+        validation = [
+            "git status --short --branch --untracked-files=all",
+            "git diff --name-status origin/main...HEAD",
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = [
+            "scope includes unclassified private or generated files",
+            "plan must not include force push, tag, release, deploy, or history rewrite",
+            "Jenn gate is missing before external write",
         ]
     elif "memory" in title_lc:
         title = "AGENTS OS Memory candidate review receipt v0.1"
@@ -4785,7 +4822,7 @@ def validate_workbench_fast() -> dict[str, Any]:
         queue_path.write_text(fixture_queue_text("AGENTS OS external Git publication target gate v0.1"), encoding="utf-8")
         duplicate_queue_path = Path(temp_dir) / "duplicate-queue.md"
         duplicate_queue_path.write_text(
-            fixture_queue_text("AGENTS OS external Git post-push verification receipt v0.1"),
+            fixture_queue_text("AGENTS OS external Git exact pre-push command gate v0.1"),
             encoding="utf-8",
         )
         record_root = Path(temp_dir) / "records"

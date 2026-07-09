@@ -154,8 +154,8 @@ def main() -> int:
             check(selector["passed"] is True, f"next-step selector should pass: {selector['errors']}", failures)
             check(selector["candidate_present"] is True, "next-step selector should emit a candidate", failures)
             check(
-                selector.get("candidate", {}).get("title") == "AGENTS OS external Git post-push verification receipt v0.1",
-                "next-step selector should choose external Git receipt after publication target",
+                selector.get("candidate", {}).get("title") == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector should keep publication target at exact pre-push gate without push evidence",
                 failures,
             )
             check(
@@ -164,10 +164,23 @@ def main() -> int:
                 failures,
             )
             check(selector["validation_plan"]["level"] == "fast", "selector should default to fast validation", failures)
+            post_push_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
+            post_push_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+                + "\nclosed evidence: branch pushed to origin and draft PR #5 opened.\n",
+                encoding="utf-8",
+            )
+            post_push_selector = workbench.build_next_step_selector(post_push_queue_path, record_root)
+            check(
+                post_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git post-push verification receipt v0.1",
+                "next-step selector should choose post-push receipt only after push evidence",
+                failures,
+            )
 
             duplicate_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
             duplicate_queue_path.write_text(
-                workbench.fixture_queue_text("AGENTS OS external Git post-push verification receipt v0.1"),
+                workbench.fixture_queue_text("AGENTS OS external Git exact pre-push command gate v0.1"),
                 encoding="utf-8",
             )
             duplicate_selector = workbench.build_next_step_selector(duplicate_queue_path, record_root)
@@ -621,8 +634,8 @@ def main() -> int:
         check(selector["candidate_present"] is True, "next-step selector should emit a candidate", failures)
         selector_candidate = selector.get("candidate", {})
         check(
-            selector_candidate.get("title") == "AGENTS OS external Git post-push verification receipt v0.1",
-            "next-step selector should choose external Git receipt after publication target",
+            selector_candidate.get("title") == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector should keep publication target at exact pre-push gate without push evidence",
             failures,
         )
         check(selector_candidate.get("not_repeat_of_now") is True, "selector candidate must not repeat NOW", failures)
@@ -646,6 +659,19 @@ def main() -> int:
             failures,
         )
         check(selector["write_performed"] is False, "selector must be read-only", failures)
+        post_push_selector_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
+        post_push_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+            + "\nclosed evidence: branch pushed to origin and draft PR #5 opened.\n",
+            encoding="utf-8",
+        )
+        post_push_selector = workbench.build_next_step_selector(post_push_selector_queue_path, advance_record_root)
+        check(
+            post_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git post-push verification receipt v0.1",
+            "next-step selector should choose post-push receipt only after push evidence",
+            failures,
+        )
         active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"
         active_loop_selector_queue_path.write_text(
             workbench.fixture_queue_text("AGENTS OS codex-appserver active-loop import gate v0.1"),
@@ -675,7 +701,7 @@ def main() -> int:
         )
         duplicate_selector_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
         duplicate_selector_queue_path.write_text(
-            workbench.fixture_queue_text("AGENTS OS external Git post-push verification receipt v0.1"),
+            workbench.fixture_queue_text("AGENTS OS external Git exact pre-push command gate v0.1"),
             encoding="utf-8",
         )
         duplicate_selector = workbench.build_next_step_selector(duplicate_selector_queue_path, advance_record_root)
