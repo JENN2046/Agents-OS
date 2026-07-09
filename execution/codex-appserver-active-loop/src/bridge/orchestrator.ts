@@ -190,8 +190,8 @@ class ActiveLoopOrchestrator {
     if (turn.status === "completed") {
       return turn;
     }
-    if (turn.status === "failed") {
-      throw new Error(formatTurnFailure(turn));
+    if (turn.status !== "inProgress") {
+      throw new Error(formatTurnTerminalState(turn));
     }
     throw new Error(`turn did not complete before parsing structured output: ${turn.id}`);
   }
@@ -248,8 +248,8 @@ function expectAlreadyCompletedTurn(turn: Turn): Promise<Turn> {
   if (turn.status === "completed") {
     return Promise.resolve(turn);
   }
-  if (turn.status === "failed") {
-    return Promise.reject(new Error(formatTurnFailure(turn)));
+  if (turn.status !== "inProgress") {
+    return Promise.reject(new Error(formatTurnTerminalState(turn)));
   }
   return Promise.reject(new Error(`turn completion waiter is required for non-completed turn: ${turn.id}`));
 }
@@ -276,8 +276,8 @@ function waitForCompletedTurn(completedTurns: Map<string, Turn>, initialTurn: Tu
   if (initialTurn.status === "completed") {
     return Promise.resolve(initialTurn);
   }
-  if (initialTurn.status === "failed") {
-    return Promise.reject(new Error(formatTurnFailure(initialTurn)));
+  if (initialTurn.status !== "inProgress") {
+    return Promise.reject(new Error(formatTurnTerminalState(initialTurn)));
   }
 
   const existing = completedTurns.get(initialTurn.id);
@@ -291,8 +291,8 @@ function waitForCompletedTurn(completedTurns: Map<string, Turn>, initialTurn: Tu
       const completed = completedTurns.get(initialTurn.id);
       if (completed) {
         clearInterval(timer);
-        if (completed.status === "failed") {
-          reject(new Error(formatTurnFailure(completed)));
+        if (completed.status !== "completed") {
+          reject(new Error(formatTurnTerminalState(completed)));
           return;
         }
         resolve(completed);
@@ -309,4 +309,11 @@ function waitForCompletedTurn(completedTurns: Map<string, Turn>, initialTurn: Tu
 function formatTurnFailure(turn: Turn): string {
   const message = turn.error?.message ?? "unknown turn failure";
   return `turn failed: ${turn.id}: ${message}`;
+}
+
+function formatTurnTerminalState(turn: Turn): string {
+  if (turn.status === "failed") {
+    return formatTurnFailure(turn);
+  }
+  return `turn ended without completion: ${turn.id}: status=${turn.status}`;
 }

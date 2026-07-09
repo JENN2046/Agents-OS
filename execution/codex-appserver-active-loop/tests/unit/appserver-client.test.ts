@@ -226,6 +226,49 @@ describe("AppServerClient", () => {
     expect(transport.sent).toHaveLength(1);
   });
 
+  it("does not reactivate a turn when completion arrives before turn/start resolves", async () => {
+    const transport = new FakeTransport();
+    const client = createAppServerClient(transport, { requestTimeoutMs: 50 });
+    await client.start();
+
+    const turnStart = client.turnStart({ threadId: "t1", input: [] });
+    transport.emitMessage(
+      createNotification("turn/completed", {
+        threadId: "t1",
+        turn: {
+          id: "turn-1",
+          items: [],
+          itemsView: { type: "all" },
+          status: "completed",
+          error: null,
+          startedAt: null,
+          completedAt: null,
+          durationMs: null,
+        },
+      }),
+    );
+    transport.emitMessage(
+      createSuccess("appserver-1", {
+        turn: {
+          id: "turn-1",
+          items: [],
+          itemsView: { type: "all" },
+          status: "inProgress",
+          error: null,
+          startedAt: null,
+          completedAt: null,
+          durationMs: null,
+        },
+      }),
+    );
+    await turnStart;
+
+    await expect(client.turnSteer({ threadId: "t1", expectedTurnId: "turn-1", input: [] })).rejects.toThrow(
+      "known active turn id",
+    );
+    expect(transport.sent).toHaveLength(1);
+  });
+
   it("does not expose forbidden App Server methods on the client surface", () => {
     const transport = new FakeTransport();
     const client = createAppServerClient(transport, { requestTimeoutMs: 50 });

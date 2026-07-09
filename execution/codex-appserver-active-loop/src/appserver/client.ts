@@ -85,6 +85,7 @@ class JsonRpcAppServerClient implements AppServerClient {
   readonly #requestHandlers = new Set<ServerRequestHandler>();
   readonly #notificationHandlers = new Set<ServerNotificationHandler>();
   readonly #activeTurnByThread = new Map<string, string>();
+  readonly #completedTurnIds = new Set<string>();
   #unsubscribers: Array<() => void> = [];
 
   constructor(transport: StdioTransport, options: AppServerClientOptions) {
@@ -134,7 +135,7 @@ class JsonRpcAppServerClient implements AppServerClient {
 
   async turnStart(params: TurnStartParams): Promise<TurnStartResponse> {
     const response = await this.#request<TurnStartResponse>("turn/start", params);
-    if (response.turn.status === "inProgress") {
+    if (response.turn.status === "inProgress" && !this.#completedTurnIds.has(response.turn.id)) {
       this.#activeTurnByThread.set(params.threadId, response.turn.id);
     } else {
       this.#activeTurnByThread.delete(params.threadId);
@@ -234,6 +235,7 @@ class JsonRpcAppServerClient implements AppServerClient {
     if (notification.method !== "turn/completed") {
       return;
     }
+    this.#completedTurnIds.add(notification.params.turn.id);
     const activeTurnId = this.#activeTurnByThread.get(notification.params.threadId);
     if (activeTurnId === notification.params.turn.id) {
       this.#activeTurnByThread.delete(notification.params.threadId);

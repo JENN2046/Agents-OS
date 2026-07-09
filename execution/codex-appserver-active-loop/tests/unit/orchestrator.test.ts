@@ -24,6 +24,7 @@ class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart
   nextThread = 0;
   completeTurnsInStart = true;
   notifyCompletedTurns = false;
+  initialTurnStatus = "inProgress";
   outputs: unknown[] = [
     {
       type: "NEED_REVIEWER",
@@ -57,7 +58,7 @@ class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart
   async turnStart(params: TurnStartParams) {
     this.turnStarts.push(params);
     const output = this.outputs.shift();
-    const turn = this.completeTurnsInStart ? makeTurn(JSON.stringify(output)) : makeTurn("", { status: "inProgress" });
+    const turn = this.completeTurnsInStart ? makeTurn(JSON.stringify(output)) : makeTurn("", { status: this.initialTurnStatus });
     this.startedTurns.push(turn);
     if (!this.completeTurnsInStart && this.notifyCompletedTurns) {
       const completed = makeTurn(JSON.stringify(output), { id: turn.id });
@@ -182,6 +183,31 @@ describe("ActiveLoopOrchestrator", () => {
     expect(result.finalState).toBe("DONE");
     expect(client.notificationHandlers.size).toBe(1);
     expect(client.startedTurns).toHaveLength(3);
+  });
+
+  it("rejects interrupted initial turns without waiting for completion timeout", async () => {
+    const root = path.join(process.cwd(), "data", "tmp", `orchestrator-interrupted-${Date.now()}`);
+    await rm(root, { force: true, recursive: true });
+    await mkdir(root, { recursive: true });
+
+    const client = new FakeLoopClient();
+    client.completeTurnsInStart = false;
+    client.initialTurnStatus = "interrupted";
+    const stores = {
+      jobs: createFileJobStore(path.join(root, "jobs")),
+      events: createFileEventStore(path.join(root, "events")),
+      receipts: createFileReceiptStore(path.join(root, "receipts")),
+    };
+    const orchestrator = createActiveLoopOrchestrator({
+      client,
+      stores,
+      plan: { jobId: "job-cea-006-interrupted", syntheticWorkspaceRoot },
+      now: () => new Date("2026-07-07T00:00:00.000Z"),
+      turnCompletionTimeoutMs: 60_000,
+    });
+
+    await expect(orchestrator.runWorkerReviewerLoop()).rejects.toThrow("status=interrupted");
+    expect(client.startedTurns).toHaveLength(1);
   });
 });
 
