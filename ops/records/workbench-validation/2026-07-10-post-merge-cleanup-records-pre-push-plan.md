@@ -49,7 +49,20 @@ git add -- \
 git diff --cached --check
 python3 execution/agents-os-workbench/workbench.py validate --level fast --json
 python3 execution/agents-os-workbench/workbench.py select-next-step --json
-python3 execution/agents-os-workbench/workbench.py validate --level full --json
+PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py status --json
+python3 execution/agents-os-workbench/workbench.py validate --level full --json > /tmp/agents-os-post-merge-cleanup-full-validation.json
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+payload = json.loads(Path("/tmp/agents-os-post-merge-cleanup-full-validation.json").read_text(encoding="utf-8"))
+if payload.get("passed") is not True:
+    raise SystemExit("full validation did not pass")
+if payload.get("eligibility", {}).get("external_write_eligible") is not True:
+    raise SystemExit("full validation did not grant external_write_eligible=true")
+if payload.get("docctl_release_gate", {}).get("blocked") is True:
+    raise SystemExit("docctl release gate is blocked")
+PY
 git commit -m "docs: record post-merge cleanup"
 git push -u origin pr/post-merge-cleanup-records
 gh pr create \

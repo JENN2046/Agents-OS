@@ -492,7 +492,7 @@ accepted:
 ```text
 AGENTS OS post-merge cleanup records PR review tracking gate v0.1
 PR=https://github.com/JENN2046/Agents-OS/pull/6
-head=34adcdd3b257a68fff6e91a952bb808a74e61bb9
+head=check current PR #6 headRefOid before acting
 ```
 
 The batch must remain local and bounded:
