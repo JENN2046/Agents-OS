@@ -1,4 +1,5 @@
 import type { AppServerClient } from "../appserver/client.js";
+import type { ServerNotification } from "../generated/appserver/ServerNotification";
 import type { ThreadStartResponse } from "../generated/appserver/v2/ThreadStartResponse";
 import type { Turn } from "../generated/appserver/v2/Turn";
 import type { TurnStartResponse } from "../generated/appserver/v2/TurnStartResponse";
@@ -31,12 +32,17 @@ export interface ActiveLoopStores {
   readonly receipts: ReceiptStore;
 }
 
+type ActiveLoopClient = Pick<AppServerClient, "threadStart" | "turnStart" | "turnSteer"> & Partial<Pick<AppServerClient, "onNotification">>;
+type TurnCompletionWaiter = (turn: Turn) => Promise<Turn>;
+
 export interface ActiveLoopOrchestratorOptions {
-  readonly client: Pick<AppServerClient, "threadStart" | "turnStart" | "turnSteer">;
+  readonly client: ActiveLoopClient;
   readonly stores: ActiveLoopStores;
   readonly plan: OrchestratorPlan;
   readonly initialState?: ActiveLoopState;
   readonly now?: () => Date;
+  readonly waitForTurnCompletion?: TurnCompletionWaiter;
+  readonly turnCompletionTimeoutMs?: number;
 }
 
 export interface ActiveLoopResult {
@@ -62,6 +68,7 @@ class ActiveLoopOrchestrator {
   readonly #stores: ActiveLoopStores;
   readonly #plan: OrchestratorPlan;
   readonly #now: () => Date;
+  readonly #waitForTurnCompletion: TurnCompletionWaiter;
   readonly #createdAt: string;
   #state: ActiveLoopState;
 
@@ -70,6 +77,8 @@ class ActiveLoopOrchestrator {
     this.#stores = options.stores;
     this.#plan = options.plan;
     this.#now = options.now ?? (() => new Date());
+    this.#waitForTurnCompletion =
+      options.waitForTurnCompletion ?? createNotificationTurnCompletionWaiter(options.client, options.turnCompletionTimeoutMs ?? 180_000);
     this.#state = options.initialState ?? "SYNTHETIC_WORKSPACE_READY";
     this.#createdAt = this.#now().toISOString();
   }
@@ -94,7 +103,8 @@ class ActiveLoopOrchestrator {
       }),
     );
     await this.#transition("WORKER_RUNNING", "worker turn started");
-    const workerNeedReviewer = parseStructuredTurnOutput(workerNeedReviewerTurn.turn, "NEED_REVIEWER");
+    const workerNeedReviewerCompleted = await this.#completedTurn(workerNeedReviewerTurn);
+    const workerNeedReviewer = parseStructuredTurnOutput(workerNeedReviewerCompleted, "NEED_REVIEWER");
     await this.#transition("NEED_REVIEWER", "worker emitted NEED_REVIEWER");
 
     const reviewerThread = await this.#client.threadStart({
@@ -114,7 +124,8 @@ class ActiveLoopOrchestrator {
       }),
     );
     await this.#transition("REVIEWER_RUNNING", "reviewer turn started");
-    const reviewerDecision = parseStructuredTurnOutput(reviewerDecisionTurn.turn, "REVIEWER_DECISION");
+    const reviewerDecisionCompleted = await this.#completedTurn(reviewerDecisionTurn);
+    const reviewerDecision = parseStructuredTurnOutput(reviewerDecisionCompleted, "REVIEWER_DECISION");
     await this.#transition("REVIEW_RECEIVED", "reviewer emitted REVIEWER_DECISION");
 
     const workerDoneTurn = await this.#client.turnStart(
@@ -126,7 +137,8 @@ class ActiveLoopOrchestrator {
       }),
     );
     await this.#transition("CODEX_RESUMED", "worker resumed with reviewer decision");
-    const workerDone = parseStructuredTurnOutput(workerDoneTurn.turn, "DONE");
+    const workerDoneCompleted = await this.#completedTurn(workerDoneTurn);
+    const workerDone = parseStructuredTurnOutput(workerDoneCompleted, "DONE");
 
     const receiptPath = await this.#stores.receipts.write({
       jobId: this.#plan.jobId,
@@ -171,6 +183,17 @@ class ActiveLoopOrchestrator {
       throw new Error(result.error ?? "invalid state transition");
     }
     await this.#writeJob();
+  }
+
+  async #completedTurn(response: TurnStartResponse): Promise<Turn> {
+    const turn = await this.#waitForTurnCompletion(response.turn);
+    if (turn.status === "completed") {
+      return turn;
+    }
+    if (turn.status === "failed") {
+      throw new Error(formatTurnFailure(turn));
+    }
+    throw new Error(`turn did not complete before parsing structured output: ${turn.id}`);
   }
 
   async #appendEvent(event: LoopEvent): Promise<void> {
@@ -219,4 +242,71 @@ export function parseStructuredTurnOutput<T extends "NEED_REVIEWER" | "REVIEWER_
 
 function getThreadId(response: ThreadStartResponse): string {
   return response.thread.id;
+}
+
+function expectAlreadyCompletedTurn(turn: Turn): Promise<Turn> {
+  if (turn.status === "completed") {
+    return Promise.resolve(turn);
+  }
+  if (turn.status === "failed") {
+    return Promise.reject(new Error(formatTurnFailure(turn)));
+  }
+  return Promise.reject(new Error(`turn completion waiter is required for non-completed turn: ${turn.id}`));
+}
+
+function createNotificationTurnCompletionWaiter(client: ActiveLoopClient, timeoutMs: number): TurnCompletionWaiter {
+  if (typeof client.onNotification !== "function") {
+    return expectAlreadyCompletedTurn;
+  }
+
+  const completedTurns = new Map<string, Turn>();
+  client.onNotification((notification) => {
+    trackTurnCompletion(completedTurns, notification);
+  });
+  return (turn) => waitForCompletedTurn(completedTurns, turn, timeoutMs);
+}
+
+function trackTurnCompletion(completedTurns: Map<string, Turn>, notification: ServerNotification): void {
+  if (notification.method === "turn/completed") {
+    completedTurns.set(notification.params.turn.id, notification.params.turn);
+  }
+}
+
+function waitForCompletedTurn(completedTurns: Map<string, Turn>, initialTurn: Turn, timeoutMs: number): Promise<Turn> {
+  if (initialTurn.status === "completed") {
+    return Promise.resolve(initialTurn);
+  }
+  if (initialTurn.status === "failed") {
+    return Promise.reject(new Error(formatTurnFailure(initialTurn)));
+  }
+
+  const existing = completedTurns.get(initialTurn.id);
+  if (existing) {
+    return existing.status === "failed" ? Promise.reject(new Error(formatTurnFailure(existing))) : Promise.resolve(existing);
+  }
+
+  return new Promise((resolve, reject) => {
+    const startedAt = Date.now();
+    const timer = setInterval(() => {
+      const completed = completedTurns.get(initialTurn.id);
+      if (completed) {
+        clearInterval(timer);
+        if (completed.status === "failed") {
+          reject(new Error(formatTurnFailure(completed)));
+          return;
+        }
+        resolve(completed);
+        return;
+      }
+      if (Date.now() - startedAt > timeoutMs) {
+        clearInterval(timer);
+        reject(new Error(`timed out waiting for turn completion: ${initialTurn.id}`));
+      }
+    }, 250);
+  });
+}
+
+function formatTurnFailure(turn: Turn): string {
+  const message = turn.error?.message ?? "unknown turn failure";
+  return `turn failed: ${turn.id}: ${message}`;
 }

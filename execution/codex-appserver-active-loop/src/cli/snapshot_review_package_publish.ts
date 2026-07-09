@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import {
@@ -12,6 +12,8 @@ import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from
 import { safeJoin } from "../stores/safe_path.js";
 
 const execFileAsync = promisify(execFile);
+
+type ZipCreationTool = "ZIP_CLI" | "PYTHON_ZIPFILE" | "POWERSHELL_COMPRESS_ARCHIVE";
 
 interface CopiedPackageArtifact extends SnapshotReviewPackageArtifact {
   readonly bytes: number;
@@ -80,7 +82,7 @@ async function main(): Promise<void> {
   };
   await writeJson(path.join(contentDir, "MANIFEST.json"), packageManifest);
 
-  await createZipFromContent(contentDir, zipPath);
+  const zipCreationTool = await createZipFromContent(contentDir, zipPath);
   const zipEntries = await listZipEntries(zipPath);
   const forbiddenZipEntries = zipEntries.filter((entry) => !isAllowedSnapshotReviewPackageEntry(entry));
   const zipBytes = (await stat(zipPath)).size;
@@ -131,7 +133,7 @@ async function main(): Promise<void> {
       snapshot_source_files_copied: "NO",
       secrets_read: "NOT_USED",
       command_exec_api: "NOT_USED",
-      local_zip_tool: "POWERSHELL_COMPRESS_ARCHIVE",
+      local_zip_tool: zipCreationTool,
       commit_push_deploy_release_tag: "NOT_USED",
     },
     artifacts: {
@@ -233,21 +235,115 @@ function expectedSourceFilenameForItem(item: SnapshotReviewPackageArtifact): str
   return path.basename(item.entryPath);
 }
 
-async function createZipFromContent(contentDir: string, zipPath: string): Promise<void> {
+async function createZipFromContent(contentDir: string, zipPath: string): Promise<ZipCreationTool> {
   await mkdir(path.dirname(zipPath), { recursive: true });
+  await rm(zipPath, { force: true });
+  const relativeFiles = await collectRelativeFiles(contentDir);
+  if (relativeFiles.length === 0) {
+    throw new Error("snapshot review package content directory contains no files");
+  }
+  if (await commandAvailable("zip")) {
+    await execFileAsync("zip", ["-q", zipPath, ...relativeFiles], {
+      cwd: contentDir,
+      windowsHide: true,
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    return "ZIP_CLI";
+  }
+  if (await commandAvailable("python3")) {
+    await createZipWithPython(contentDir, zipPath, relativeFiles);
+    return "PYTHON_ZIPFILE";
+  }
+
   const command =
     "& { param([string]$ContentDir, [string]$ZipPath); $ErrorActionPreference='Stop'; Compress-Archive -Path (Join-Path $ContentDir '*') -DestinationPath $ZipPath -Force }";
   await execPowerShell(command, [await toPowerShellPath(contentDir), await toPowerShellPath(zipPath)]);
+  return "POWERSHELL_COMPRESS_ARCHIVE";
 }
 
 async function listZipEntries(zipPath: string): Promise<readonly string[]> {
+  if (await commandAvailable("unzip")) {
+    const { stdout } = await execFileAsync("unzip", ["-Z1", zipPath], {
+      windowsHide: true,
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    return parseLineSeparatedZipEntries(stdout);
+  }
+  if (await commandAvailable("python3")) {
+    const script = [
+      "import json, sys, zipfile",
+      "with zipfile.ZipFile(sys.argv[1], 'r') as archive:",
+      "    print(json.dumps(archive.namelist(), separators=(',', ':')))",
+    ].join("\n");
+    const { stdout } = await execFileAsync("python3", ["-c", script, zipPath], {
+      windowsHide: true,
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    return parseJsonZipEntries(stdout);
+  }
   const command =
     "& { param([string]$ZipPath); $ErrorActionPreference='Stop'; Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead($ZipPath); try { $zip.Entries | ForEach-Object { $_.FullName } | ConvertTo-Json -Compress } finally { $zip.Dispose() } }";
   const { stdout } = await execPowerShell(command, [await toPowerShellPath(zipPath)]);
+  return parseJsonZipEntries(stdout);
+}
+
+async function collectRelativeFiles(root: string, current = root): Promise<string[]> {
+  const entries = await readdir(current, { withFileTypes: true });
+  const files: string[] = [];
+  for (const entry of entries) {
+    const entryPath = path.join(current, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await collectRelativeFiles(root, entryPath)));
+      continue;
+    }
+    if (entry.isFile()) {
+      files.push(toZipEntry(path.relative(root, entryPath)));
+    }
+  }
+  return files.sort((left, right) => left.localeCompare(right));
+}
+
+async function createZipWithPython(contentDir: string, zipPath: string, relativeFiles: readonly string[]): Promise<void> {
+  const script = [
+    "import sys, zipfile",
+    "root = sys.argv[1]",
+    "out = sys.argv[2]",
+    "files = sys.argv[3:]",
+    "with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED) as archive:",
+    "    for name in files:",
+    "        archive.write(__import__('os').path.join(root, *name.split('/')), name)",
+  ].join("\n");
+  await execFileAsync("python3", ["-c", script, contentDir, zipPath, ...relativeFiles], {
+    windowsHide: true,
+    maxBuffer: 10 * 1024 * 1024,
+  });
+}
+
+function parseLineSeparatedZipEntries(stdout: string): readonly string[] {
+  return stdout
+    .split(/\r?\n/)
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0);
+}
+
+function parseJsonZipEntries(stdout: string): readonly string[] {
   const trimmed = stdout.trim();
   if (!trimmed) return [];
   const parsed = JSON.parse(trimmed) as unknown;
   return Array.isArray(parsed) ? parsed.filter((entry): entry is string => typeof entry === "string") : typeof parsed === "string" ? [parsed] : [];
+}
+
+async function commandAvailable(command: string): Promise<boolean> {
+  const locator = process.platform === "win32" ? "where.exe" : "which";
+  try {
+    await execFileAsync(locator, [command], {
+      windowsHide: true,
+      maxBuffer: 1024 * 1024,
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function execPowerShell(command: string, args: readonly string[]): Promise<{ stdout: string; stderr: string }> {
@@ -273,6 +369,10 @@ async function toPowerShellPath(filePath: string): Promise<string> {
 
 function sha256(content: Buffer | string): string {
   return createHash("sha256").update(content).digest("hex").toUpperCase();
+}
+
+function toZipEntry(filePath: string): string {
+  return filePath.split(path.sep).join("/");
 }
 
 function formatDateForReceipt(date: Date): string {

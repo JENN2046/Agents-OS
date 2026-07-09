@@ -12,13 +12,18 @@ import { createFileReceiptStore } from "../../src/stores/receipt_store.js";
 import type { Turn } from "../../src/generated/appserver/v2/Turn.js";
 import type { ThreadStartParams } from "../../src/generated/appserver/v2/ThreadStartParams.js";
 import type { TurnStartParams } from "../../src/generated/appserver/v2/TurnStartParams.js";
+import type { ServerNotification } from "../../src/generated/appserver/ServerNotification.js";
 
 const syntheticWorkspaceRoot = path.join(process.cwd(), "data", "synthetic-workspace");
 
 class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart" | "turnSteer"> {
   threadStarts: ThreadStartParams[] = [];
   turnStarts: TurnStartParams[] = [];
+  startedTurns: Turn[] = [];
+  notificationHandlers = new Set<(notification: ServerNotification) => void>();
   nextThread = 0;
+  completeTurnsInStart = true;
+  notifyCompletedTurns = false;
   outputs: unknown[] = [
     {
       type: "NEED_REVIEWER",
@@ -52,11 +57,30 @@ class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart
   async turnStart(params: TurnStartParams) {
     this.turnStarts.push(params);
     const output = this.outputs.shift();
-    return { turn: makeTurn(JSON.stringify(output)) };
+    const turn = this.completeTurnsInStart ? makeTurn(JSON.stringify(output)) : makeTurn("", { status: "inProgress" });
+    this.startedTurns.push(turn);
+    if (!this.completeTurnsInStart && this.notifyCompletedTurns) {
+      const completed = makeTurn(JSON.stringify(output), { id: turn.id });
+      queueMicrotask(() => {
+        this.emitNotification({ method: "turn/completed", params: { threadId: params.threadId, turn: completed } } as ServerNotification);
+      });
+    }
+    return { turn };
   }
 
   async turnSteer() {
     return { turnId: "unused" };
+  }
+
+  onNotification(handler: (notification: ServerNotification) => void): () => void {
+    this.notificationHandlers.add(handler);
+    return () => this.notificationHandlers.delete(handler);
+  }
+
+  emitNotification(notification: ServerNotification): void {
+    for (const handler of this.notificationHandlers) {
+      handler(notification);
+    }
   }
 }
 
@@ -99,14 +123,74 @@ describe("ActiveLoopOrchestrator", () => {
     expect(() => parseStructuredTurnOutput(makeTurn("{ nope"), "NEED_REVIEWER")).toThrow("malformed structured output");
     expect(() => parseStructuredTurnOutput(makeTurn(JSON.stringify({ type: "DONE", summary: "early", evidence: [] })), "NEED_REVIEWER")).toThrow("invalid structured output");
   });
+
+  it("waits for turn completion before parsing structured output", async () => {
+    const root = path.join(process.cwd(), "data", "tmp", `orchestrator-wait-${Date.now()}`);
+    await rm(root, { force: true, recursive: true });
+    await mkdir(root, { recursive: true });
+
+    const client = new FakeLoopClient();
+    client.completeTurnsInStart = false;
+    const completedOutputs = [...client.outputs];
+    const waitedTurnIds: string[] = [];
+    const stores = {
+      jobs: createFileJobStore(path.join(root, "jobs")),
+      events: createFileEventStore(path.join(root, "events")),
+      receipts: createFileReceiptStore(path.join(root, "receipts")),
+    };
+    const orchestrator = createActiveLoopOrchestrator({
+      client,
+      stores,
+      plan: { jobId: "job-cea-006-wait", syntheticWorkspaceRoot },
+      now: () => new Date("2026-07-07T00:00:00.000Z"),
+      waitForTurnCompletion: async (turn) => {
+        waitedTurnIds.push(turn.id);
+        return makeTurn(JSON.stringify(completedOutputs.shift()), { id: turn.id });
+      },
+    });
+
+    const result = await orchestrator.runWorkerReviewerLoop();
+
+    expect(result.finalState).toBe("DONE");
+    expect(waitedTurnIds).toEqual(client.startedTurns.map((turn) => turn.id));
+    expect(waitedTurnIds).toHaveLength(3);
+  });
+
+  it("uses App Server turn/completed notifications when no explicit waiter is supplied", async () => {
+    const root = path.join(process.cwd(), "data", "tmp", `orchestrator-notify-${Date.now()}`);
+    await rm(root, { force: true, recursive: true });
+    await mkdir(root, { recursive: true });
+
+    const client = new FakeLoopClient();
+    client.completeTurnsInStart = false;
+    client.notifyCompletedTurns = true;
+    const stores = {
+      jobs: createFileJobStore(path.join(root, "jobs")),
+      events: createFileEventStore(path.join(root, "events")),
+      receipts: createFileReceiptStore(path.join(root, "receipts")),
+    };
+    const orchestrator = createActiveLoopOrchestrator({
+      client,
+      stores,
+      plan: { jobId: "job-cea-006-notify", syntheticWorkspaceRoot },
+      now: () => new Date("2026-07-07T00:00:00.000Z"),
+      turnCompletionTimeoutMs: 1_000,
+    });
+
+    const result = await orchestrator.runWorkerReviewerLoop();
+
+    expect(result.finalState).toBe("DONE");
+    expect(client.notificationHandlers.size).toBe(1);
+    expect(client.startedTurns).toHaveLength(3);
+  });
 });
 
-function makeTurn(text: string): Turn {
+function makeTurn(text: string, options: { readonly id?: string; readonly status?: string } = {}): Turn {
   return {
-    id: "turn-1",
-    items: [{ type: "agentMessage", id: "item-1", text, phase: null, memoryCitation: null }],
+    id: options.id ?? `turn-${Math.random().toString(16).slice(2)}`,
+    items: text.length > 0 ? [{ type: "agentMessage", id: "item-1", text, phase: null, memoryCitation: null }] : [],
     itemsView: { type: "all" },
-    status: "completed",
+    status: options.status ?? "completed",
     error: null,
     startedAt: null,
     completedAt: null,
