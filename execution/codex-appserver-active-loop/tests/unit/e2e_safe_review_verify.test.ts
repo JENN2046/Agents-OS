@@ -13,11 +13,15 @@ describe("E2E evidence verification gate", () => {
     const input = validInput();
     const result = verifyE2eSafeReviewEvidence({
       ...input,
-      includedPaths: [...input.includedPaths, ".git/config"],
+      includedPaths: [...input.includedPaths, ".git/config", "credentials.json", "token.json", ".ssh/id_rsa", "private-secret.txt"],
     });
 
     expect(result.result).toBe("FAIL");
     expect(result.failures.join("\n")).toContain("forbidden_paths_not_included");
+    expect(result.failures.join("\n")).toContain("credentials.json");
+    expect(result.failures.join("\n")).toContain("token.json");
+    expect(result.failures.join("\n")).toContain(".ssh/id_rsa");
+    expect(result.failures.join("\n")).toContain("private-secret.txt");
   });
 
   it("requires every CEA-018 artifact to be declared and present", () => {

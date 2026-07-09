@@ -1,4 +1,5 @@
 import { validateStructuredLoopOutput } from "./event_contracts.js";
+import { snapshotDeniedDirectoryNames, snapshotDeniedPathTerms } from "./repo_snapshot.js";
 
 export interface E2eEvidenceVerificationInput {
   readonly report: unknown;
@@ -27,8 +28,6 @@ export interface E2eEvidenceVerificationResult {
     readonly eventMethods: number;
   };
 }
-
-const forbiddenIncludedPathTerms = [".git", "node_modules", "dist", "state-private", ".env", "config.env", "secrets"] as const;
 
 export const requiredCea018ArtifactKeys = [
   "snapshot_manifest",
@@ -91,10 +90,7 @@ export function verifyE2eSafeReviewEvidence(input: E2eEvidenceVerificationInput)
   const missingArtifacts = requiredCea018ArtifactKeys.filter((name) => input.artifactExists[name] !== true);
   add("artifacts_exist", missingArtifacts.length === 0, missingArtifacts.length === 0 ? "all artifacts exist" : `missing=${missingArtifacts.join(",")}`);
 
-  const forbiddenIncluded = input.includedPaths.filter((relativePath) => {
-    const lower = relativePath.toLowerCase();
-    return forbiddenIncludedPathTerms.some((term) => lower.includes(term));
-  });
+  const forbiddenIncluded = input.includedPaths.filter((relativePath) => isSnapshotDeniedPath(relativePath));
   add("forbidden_paths_not_included", forbiddenIncluded.length === 0, forbiddenIncluded.length === 0 ? "none" : forbiddenIncluded.join(","));
 
   add("snapshot_manifest_counts_match", countsMatch(counts.snapshot_included_files, input.includedPaths.length), `included=${input.includedPaths.length}`);
@@ -129,6 +125,17 @@ function hasNoForbiddenSideEffects(flags: Readonly<Record<string, unknown>>): bo
     flags.file_write === "NOT_USED" &&
     flags.secrets_read === "NOT_USED" &&
     flags.commit_push_deploy_release_tag === "NOT_USED"
+  );
+}
+
+function isSnapshotDeniedPath(relativePath: string): boolean {
+  const normalized = relativePath.replaceAll("\\", "/").toLowerCase();
+  return (
+    snapshotDeniedPathTerms.some((term) => normalized.includes(term.toLowerCase())) ||
+    snapshotDeniedDirectoryNames.some((directoryName) => {
+      const denied = directoryName.toLowerCase();
+      return normalized === denied || normalized.startsWith(`${denied}/`) || normalized.includes(`/${denied}/`);
+    })
   );
 }
 
