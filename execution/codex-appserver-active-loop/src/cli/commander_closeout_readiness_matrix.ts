@@ -24,11 +24,12 @@ async function main(): Promise<void> {
   const completedAt = new Date().toISOString();
   const reportPath = path.join(projectRoot, "data", "reports", "cea-022_commander_closeout_readiness_matrix.json");
   const receiptPath = path.join(projectRoot, "data", "receipts", `${formatDateForReceipt(new Date(completedAt))}-cea-022-commander-closeout-readiness-matrix.receipt.md`);
-  const evidence = await Promise.all(
+  const evidenceItems = await Promise.all(
     expectedEvidence.map(async ([fallbackTaskId, reportRelativePath, receiptRelativePath]) => {
       return readEvidenceItem(projectRoot, fallbackTaskId, reportRelativePath, receiptRelativePath);
     }),
   );
+  const evidence = evidenceItems.filter((item): item is CommanderEvidenceItem => Boolean(item));
   const matrix = createCommanderReadinessMatrix(evidence);
   const report = {
     task_id: "CEA-022",
@@ -73,9 +74,12 @@ async function readEvidenceItem(
   fallbackTaskId: string,
   reportRelativePath: string,
   receiptRelativePath: string,
-): Promise<CommanderEvidenceItem> {
+): Promise<CommanderEvidenceItem | undefined> {
   const reportPath = path.join(projectRoot, reportRelativePath);
-  const report = (await readJson(reportPath)) as Record<string, unknown>;
+  const report = await readJsonIfPresent(reportPath);
+  if (!report) {
+    return undefined;
+  }
   const receiptFromReport = getReportArtifactPath(report, "receipt");
   const receiptResolution = resolveCommanderEvidenceReceiptPath({
     projectRoot,
@@ -114,6 +118,22 @@ async function existsFile(filePath: string): Promise<boolean> {
 
 async function readJson(filePath: string): Promise<unknown> {
   return JSON.parse(await readFile(filePath, "utf8")) as unknown;
+}
+
+async function readJsonIfPresent(filePath: string): Promise<Record<string, unknown> | undefined> {
+  try {
+    const value = await readJson(filePath);
+    return typeof value === "object" && value !== null && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  } catch (error) {
+    if (isMissingFileError(error)) {
+      return undefined;
+    }
+    throw error;
+  }
+}
+
+function isMissingFileError(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && (error as { readonly code?: unknown }).code === "ENOENT";
 }
 
 async function writeJson(filePath: string, value: unknown): Promise<void> {

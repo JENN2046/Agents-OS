@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
-import { verifyE2eSafeReviewEvidence } from "../bridge/e2e_safe_review_verify.js";
+import { requiredCea018ArtifactKeys, verifyE2eSafeReviewEvidence } from "../bridge/e2e_safe_review_verify.js";
 import { safeJoin } from "../stores/safe_path.js";
 
 async function main(): Promise<void> {
@@ -17,7 +17,7 @@ async function main(): Promise<void> {
   const cea018Report = (await readJson(cea018ReportPath)) as Record<string, unknown>;
   const artifacts = isRecord(cea018Report.artifacts) ? cea018Report.artifacts : {};
   const verifiedArtifacts = Object.fromEntries(
-    Object.entries(artifacts).map(([name, value]) => [name, resolveCea018ArtifactPath(projectRoot, name, value)]),
+    requiredCea018ArtifactKeys.map((name) => [name, resolveCea018ArtifactPath(projectRoot, name, artifacts[name])]),
   );
   const artifactExists = Object.fromEntries(
     Object.entries(verifiedArtifacts).map(([name, value]) => [name, typeof value === "string" && existsSync(value)]),

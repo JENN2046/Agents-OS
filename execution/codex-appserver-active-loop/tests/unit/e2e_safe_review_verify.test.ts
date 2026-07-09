@@ -19,6 +19,21 @@ describe("E2E evidence verification gate", () => {
     expect(result.result).toBe("FAIL");
     expect(result.failures.join("\n")).toContain("forbidden_paths_not_included");
   });
+
+  it("requires every CEA-018 artifact to be declared and present", () => {
+    const input = validInput();
+    const result = verifyE2eSafeReviewEvidence({
+      ...input,
+      artifactExists: {
+        ...input.artifactExists,
+        receipt: false,
+      },
+    });
+
+    expect(result.result).toBe("FAIL");
+    expect(result.failures.join("\n")).toContain("artifacts_exist");
+    expect(result.failures.join("\n")).toContain("receipt");
+  });
 });
 
 function validInput(): Parameters<typeof verifyE2eSafeReviewEvidence>[0] {
@@ -64,6 +79,11 @@ function validInput(): Parameters<typeof verifyE2eSafeReviewEvidence>[0] {
       events: true,
       snapshot_manifest: true,
       snapshot_exclusions: true,
+      ledger: true,
+      packet: true,
+      approval: true,
+      annex: true,
+      plan: true,
     },
     includedPaths: ["src/index.ts", "docs/README.md"],
     excludedPaths: ["docs/.gitkeep"],

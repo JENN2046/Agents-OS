@@ -30,6 +30,19 @@ export interface E2eEvidenceVerificationResult {
 
 const forbiddenIncludedPathTerms = [".git", "node_modules", "dist", "state-private", ".env", "config.env", "secrets"] as const;
 
+export const requiredCea018ArtifactKeys = [
+  "snapshot_manifest",
+  "snapshot_exclusions",
+  "ledger",
+  "packet",
+  "approval",
+  "annex",
+  "plan",
+  "events",
+  "report",
+  "receipt",
+] as const;
+
 export function verifyE2eSafeReviewEvidence(input: E2eEvidenceVerificationInput): E2eEvidenceVerificationResult {
   const checks: E2eEvidenceCheck[] = [];
   const add = (name: string, passed: boolean, detail: string): void => {
@@ -75,9 +88,7 @@ export function verifyE2eSafeReviewEvidence(input: E2eEvidenceVerificationInput)
   const policyDecisions = Array.isArray(report.policy_decisions) ? report.policy_decisions : [];
   add("policy_decisions_zero", policyDecisionCount === 0 && policyDecisions.length === 0, `count=${String(policyDecisionCount)} array=${policyDecisions.length}`);
 
-  const missingArtifacts = Object.entries(input.artifactExists)
-    .filter(([, exists]) => !exists)
-    .map(([name]) => name);
+  const missingArtifacts = requiredCea018ArtifactKeys.filter((name) => input.artifactExists[name] !== true);
   add("artifacts_exist", missingArtifacts.length === 0, missingArtifacts.length === 0 ? "all artifacts exist" : `missing=${missingArtifacts.join(",")}`);
 
   const forbiddenIncluded = input.includedPaths.filter((relativePath) => {
@@ -104,7 +115,7 @@ export function verifyE2eSafeReviewEvidence(input: E2eEvidenceVerificationInput)
     checks,
     failures,
     counts: {
-      artifacts: Object.keys(input.artifactExists).length,
+      artifacts: requiredCea018ArtifactKeys.length,
       includedPaths: input.includedPaths.length,
       excludedPaths: input.excludedPaths.length,
       eventMethods: Object.keys(input.eventMethodCounts).length,
