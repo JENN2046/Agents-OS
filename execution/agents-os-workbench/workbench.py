@@ -286,7 +286,8 @@ def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
 
 def external_git_has_post_push_evidence(queue_text: str) -> bool:
     patterns = (
-        re.compile(r"\b(pushed|push completed|branch pushed|remote branch|published remote branch)\b", re.I),
+        re.compile(r"\b(pushed|push completed|branch pushed|published remote branch)\b", re.I),
+        re.compile(r"\bremote branch\s+(exists|created|published|available|verified)\b", re.I),
         re.compile(r"\b(PR|pull request)\s*#?\d+\b", re.I),
         re.compile(r"\bopened\s+(a\s+)?(draft\s+)?(PR|pull request)\b", re.I),
     )

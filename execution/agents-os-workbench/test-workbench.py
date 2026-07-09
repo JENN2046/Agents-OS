@@ -177,6 +177,19 @@ def main() -> int:
                 "next-step selector should choose post-push receipt only after push evidence",
                 failures,
             )
+            remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
+            remote_branch_plan_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+                + "\npre-push plan field: remote branch: pr/workbench-next-step-fast-validation\n",
+                encoding="utf-8",
+            )
+            remote_branch_plan_selector = workbench.build_next_step_selector(remote_branch_plan_queue_path, record_root)
+            check(
+                remote_branch_plan_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must not treat remote branch target fields as post-push evidence",
+                failures,
+            )
 
             duplicate_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
             duplicate_queue_path.write_text(
@@ -670,6 +683,22 @@ def main() -> int:
             post_push_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git post-push verification receipt v0.1",
             "next-step selector should choose post-push receipt only after push evidence",
+            failures,
+        )
+        remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
+        remote_branch_plan_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+            + "\npre-push plan field: remote branch: pr/workbench-next-step-fast-validation\n",
+            encoding="utf-8",
+        )
+        remote_branch_plan_selector = workbench.build_next_step_selector(
+            remote_branch_plan_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            remote_branch_plan_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must not treat remote branch target fields as post-push evidence",
             failures,
         )
         active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"
