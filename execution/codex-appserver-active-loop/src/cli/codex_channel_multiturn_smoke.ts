@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
-import { assertChannelPolicyOpen } from "../bridge/channel_policy_stop.js";
+import { assertChannelPolicyOpen, classifyChannelFailureResult } from "../bridge/channel_policy_stop.js";
 import { createMessageBus, type MessageBusAuditEvent } from "../bridge/message_bus.js";
 import { createMessageRouter, type CodexMessageDelivery } from "../bridge/message_router.js";
 import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
@@ -286,7 +286,7 @@ async function main(): Promise<void> {
     const messageEventLog = await readMessageEventsIfPresent(messageEvents, jobId);
     const maxRoundExceededBlocks = verifyMaxRoundExceededBlocks();
     const report = createReport({
-      result: "BLOCK",
+      result: classifyChannelFailureResult(stopReason),
       jobId,
       conversationId: CONVERSATION_ID,
       workerThreadId: workerThreadId ?? null,
@@ -715,7 +715,7 @@ async function readMessageEventsIfPresent(
 }
 
 function createReport(input: {
-  readonly result: "PASS" | "BLOCK";
+  readonly result: "PASS" | "BLOCK" | "FAIL";
   readonly jobId: string;
   readonly conversationId: string;
   readonly workerThreadId: string | null;
