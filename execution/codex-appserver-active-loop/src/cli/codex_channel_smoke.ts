@@ -4,6 +4,7 @@ import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
 import { createMessageBus, type MessageBusAuditEvent } from "../bridge/message_bus.js";
 import { createMessageRouter, type CodexMessageDelivery } from "../bridge/message_router.js";
+import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
 import { createReadOnlySyntheticSandboxPolicy, validateStructuredLoopOutput, workerDoneSchema, type WorkerDone } from "../bridge/event_contracts.js";
 import { createThreadRegistry } from "../bridge/thread_registry.js";
@@ -445,20 +446,30 @@ function trackNotification(tracker: TurnTracker, notification: ServerNotificatio
 
 function waitForCompletedTurn(tracker: TurnTracker, initialTurn: Turn, timeoutMs: number): Promise<Turn> {
   if (initialTurn.status === "completed") return Promise.resolve(initialTurn);
-  if (initialTurn.status === "failed") return Promise.reject(new Error(formatTurnFailure(initialTurn)));
+  try {
+    rejectLiveTerminalNonCompletedTurn(initialTurn, "channel smoke turn");
+  } catch (error) {
+    return Promise.reject(error);
+  }
   const existing = tracker.completedTurns.get(initialTurn.id);
-  if (existing) return existing.status === "failed" ? Promise.reject(new Error(formatTurnFailure(existing))) : Promise.resolve(existing);
+  if (existing) {
+    try {
+      return Promise.resolve(assertLiveTurnCompleted(existing, "channel smoke turn"));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
   return new Promise((resolve, reject) => {
     const startedAt = Date.now();
     const timer = setInterval(() => {
       const completed = tracker.completedTurns.get(initialTurn.id);
       if (completed) {
         clearInterval(timer);
-        if (completed.status === "failed") {
-          reject(new Error(formatTurnFailure(completed)));
-          return;
+        try {
+          resolve(assertLiveTurnCompleted(completed, "channel smoke turn"));
+        } catch (error) {
+          reject(error);
         }
-        resolve(completed);
         return;
       }
       if (Date.now() - startedAt > timeoutMs) {
@@ -512,10 +523,6 @@ function summarizeNotification(notification: ServerNotification): unknown {
 
 function summarizeServerRequest(request: ServerRequest): unknown {
   return { method: request.method, id: request.id };
-}
-
-function formatTurnFailure(turn: Turn): string {
-  return `turn failed: ${turn.id}${turn.error ? ` ${JSON.stringify(turn.error)}` : ""}`;
 }
 
 function getThreadId(response: ThreadStartResponse): string {

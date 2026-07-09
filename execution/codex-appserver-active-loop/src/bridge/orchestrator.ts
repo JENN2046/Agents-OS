@@ -282,7 +282,10 @@ function waitForCompletedTurn(completedTurns: Map<string, Turn>, initialTurn: Tu
 
   const existing = completedTurns.get(initialTurn.id);
   if (existing) {
-    return existing.status === "failed" ? Promise.reject(new Error(formatTurnFailure(existing))) : Promise.resolve(existing);
+    if (existing.status !== "completed") {
+      return Promise.reject(new Error(formatTurnTerminalState(existing)));
+    }
+    return Promise.resolve(existing);
   }
 
   return new Promise((resolve, reject) => {

@@ -25,6 +25,7 @@ class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart
   completeTurnsInStart = true;
   notifyCompletedTurns = false;
   initialTurnStatus = "inProgress";
+  completionNotificationStatus = "completed";
   outputs: unknown[] = [
     {
       type: "NEED_REVIEWER",
@@ -61,7 +62,7 @@ class FakeLoopClient implements Pick<AppServerClient, "threadStart" | "turnStart
     const turn = this.completeTurnsInStart ? makeTurn(JSON.stringify(output)) : makeTurn("", { status: this.initialTurnStatus });
     this.startedTurns.push(turn);
     if (!this.completeTurnsInStart && this.notifyCompletedTurns) {
-      const completed = makeTurn(JSON.stringify(output), { id: turn.id });
+      const completed = makeTurn(JSON.stringify(output), { id: turn.id, status: this.completionNotificationStatus });
       queueMicrotask(() => {
         this.emitNotification({ method: "turn/completed", params: { threadId: params.threadId, turn: completed } } as ServerNotification);
       });
@@ -204,6 +205,32 @@ describe("ActiveLoopOrchestrator", () => {
       plan: { jobId: "job-cea-006-interrupted", syntheticWorkspaceRoot },
       now: () => new Date("2026-07-07T00:00:00.000Z"),
       turnCompletionTimeoutMs: 60_000,
+    });
+
+    await expect(orchestrator.runWorkerReviewerLoop()).rejects.toThrow("status=interrupted");
+    expect(client.startedTurns).toHaveLength(1);
+  });
+
+  it("rejects interrupted turn/completed notifications before parsing output", async () => {
+    const root = path.join(process.cwd(), "data", "tmp", `orchestrator-interrupted-notify-${Date.now()}`);
+    await rm(root, { force: true, recursive: true });
+    await mkdir(root, { recursive: true });
+
+    const client = new FakeLoopClient();
+    client.completeTurnsInStart = false;
+    client.notifyCompletedTurns = true;
+    client.completionNotificationStatus = "interrupted";
+    const stores = {
+      jobs: createFileJobStore(path.join(root, "jobs")),
+      events: createFileEventStore(path.join(root, "events")),
+      receipts: createFileReceiptStore(path.join(root, "receipts")),
+    };
+    const orchestrator = createActiveLoopOrchestrator({
+      client,
+      stores,
+      plan: { jobId: "job-cea-006-interrupted-notify", syntheticWorkspaceRoot },
+      now: () => new Date("2026-07-07T00:00:00.000Z"),
+      turnCompletionTimeoutMs: 1_000,
     });
 
     await expect(orchestrator.runWorkerReviewerLoop()).rejects.toThrow("status=interrupted");

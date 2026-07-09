@@ -12,6 +12,7 @@ import {
   type WorkerDone,
   type WorkerNeedReviewer,
 } from "../bridge/event_contracts.js";
+import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
 import { reviewerDecisionPrompt, workerDonePrompt, workerNeedReviewerPrompt } from "../bridge/prompts.js";
 import { transitionState, type ActiveLoopState } from "../bridge/state_machine.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
@@ -378,13 +379,19 @@ function waitForCompletedTurn(tracker: TurnTracker, initialTurn: Turn, timeoutMs
   if (initialTurn.status === "completed") {
     return Promise.resolve(initialTurn);
   }
-  if (initialTurn.status === "failed") {
-    return Promise.reject(new Error(formatTurnFailure(initialTurn)));
+  try {
+    rejectLiveTerminalNonCompletedTurn(initialTurn, "smoke turn");
+  } catch (error) {
+    return Promise.reject(error);
   }
 
   const existing = tracker.completedTurns.get(initialTurn.id);
   if (existing) {
-    return existing.status === "failed" ? Promise.reject(new Error(formatTurnFailure(existing))) : Promise.resolve(existing);
+    try {
+      return Promise.resolve(assertLiveTurnCompleted(existing, "smoke turn"));
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   return new Promise((resolve, reject) => {
@@ -393,11 +400,11 @@ function waitForCompletedTurn(tracker: TurnTracker, initialTurn: Turn, timeoutMs
       const completed = tracker.completedTurns.get(initialTurn.id);
       if (completed) {
         clearInterval(timer);
-        if (completed.status === "failed") {
-          reject(new Error(formatTurnFailure(completed)));
-          return;
+        try {
+          resolve(assertLiveTurnCompleted(completed, "smoke turn"));
+        } catch (error) {
+          reject(error);
         }
-        resolve(completed);
         return;
       }
       if (Date.now() - startedAt > timeoutMs) {
@@ -478,10 +485,6 @@ function summarizeServerRequest(request: ServerRequest): unknown {
     method: request.method,
     id: request.id,
   };
-}
-
-function formatTurnFailure(turn: Turn): string {
-  return `turn failed: ${turn.id}${turn.error ? ` ${JSON.stringify(turn.error)}` : ""}`;
 }
 
 function getThreadId(response: ThreadStartResponse): string {
