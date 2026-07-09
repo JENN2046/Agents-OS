@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { statSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
@@ -20,15 +20,15 @@ async function main(): Promise<void> {
     requiredCea018ArtifactKeys.map((name) => [name, resolveCea018ArtifactPath(projectRoot, name, artifacts[name])]),
   );
   const artifactExists = Object.fromEntries(
-    Object.entries(verifiedArtifacts).map(([name, value]) => [name, typeof value === "string" && existsSync(value)]),
+    Object.entries(verifiedArtifacts).map(([name, value]) => [name, typeof value === "string" && isFile(value)]),
   );
 
   const manifestPath = verifiedArtifacts.snapshot_manifest ?? "";
   const exclusionPath = verifiedArtifacts.snapshot_exclusions ?? "";
   const eventsPath = verifiedArtifacts.events ?? "";
-  const manifest = manifestPath ? ((await readJson(manifestPath)) as Record<string, unknown>) : {};
-  const exclusions = exclusionPath ? ((await readJson(exclusionPath)) as Record<string, unknown>) : {};
-  const events = eventsPath ? await readJsonl(eventsPath) : [];
+  const manifest = manifestPath && artifactExists.snapshot_manifest ? ((await readJson(manifestPath)) as Record<string, unknown>) : {};
+  const exclusions = exclusionPath && artifactExists.snapshot_exclusions ? ((await readJson(exclusionPath)) as Record<string, unknown>) : {};
+  const events = eventsPath && artifactExists.events ? await readJsonl(eventsPath) : [];
 
   const includedPaths = extractRelativePaths(manifest.includedFiles);
   const excludedPaths = extractRelativePaths(isRecord(exclusions) ? exclusions.excludedFiles : undefined);
@@ -124,6 +124,14 @@ function resolveCea018ArtifactPath(projectRoot: string, name: string, value: unk
     return artifactPath;
   } catch {
     return null;
+  }
+}
+
+function isFile(filePath: string): boolean {
+  try {
+    return statSync(filePath).isFile();
+  } catch {
+    return false;
   }
 }
 

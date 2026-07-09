@@ -1,4 +1,5 @@
 import path from "node:path";
+import { mkdir } from "node:fs/promises";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
 import {
@@ -98,8 +99,9 @@ async function main(): Promise<void> {
     }
   };
 
+  await mkdir(syntheticWorkspaceRoot, { recursive: true });
   const transport = createStdioTransport({
-    cwd: projectRoot,
+    cwd: syntheticWorkspaceRoot,
     timeoutMs: REQUEST_TIMEOUT_MS,
   });
   const client = createAppServerClient(transport, {
@@ -158,7 +160,8 @@ async function main(): Promise<void> {
 
   try {
     await client.start();
-    await transition("APP_SERVER_STARTED", "real codex app-server --stdio started");
+    await appendEvent("APP_SERVER_MESSAGE", { method: "app-server/start", cwd: syntheticWorkspaceRoot });
+    await transition("APP_SERVER_STARTED", "real codex app-server --stdio started in synthetic workspace");
 
     const initializeResponse = await client.initialize();
     await appendEvent("APP_SERVER_MESSAGE", {
