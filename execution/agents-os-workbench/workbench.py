@@ -112,6 +112,13 @@ def attach_validation_metadata(
     result["validation_commands"] = validation_commands_for_level(level)
     result["eligibility"] = validation_eligibility(level)
     result.update(validation_eligibility(level))
+    if result.get("passed") is not True:
+        result["external_write_eligible"] = False
+        result["release_eligible"] = False
+        eligibility = dict(result.get("eligibility", {}))
+        eligibility["external_write_eligible"] = False
+        eligibility["release_eligible"] = False
+        result["eligibility"] = eligibility
     return result
 
 
@@ -306,8 +313,14 @@ def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
     return bool(pattern.search(line)) and not NEGATED_SIGNAL_CONTEXT.search(line)
 
 
+def external_git_match_is_negated(line: str, match: re.Match[str]) -> bool:
+    prefix = line[: match.start()]
+    clause_prefix = re.split(r"[.;:]", prefix)[-1]
+    return bool(EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(clause_prefix))
+
+
 def external_git_line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
-    return bool(pattern.search(line)) and not EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(line)
+    return any(not external_git_match_is_negated(line, match) for match in pattern.finditer(line))
 
 
 def external_git_has_post_push_evidence(queue_text: str) -> bool:
@@ -334,11 +347,11 @@ def external_git_published_branch_ref(queue_text: str) -> str | None:
     )
     non_branch_words = {"and", "as", "branch", "created", "draft", "opened", "origin", "pr", "published", "remote", "to", "verified"}
     for line in queue_text.splitlines():
-        if EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(line):
-            continue
         for pattern in patterns:
             match = pattern.search(line)
             if not match:
+                continue
+            if external_git_match_is_negated(line, match):
                 continue
             branch = match.group("branch").strip(".,;:)")
             if branch.lower() in non_branch_words:

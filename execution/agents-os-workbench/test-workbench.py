@@ -193,6 +193,25 @@ def main() -> int:
                 "post-push selector should verify the published branch ref",
                 failures,
             )
+            post_push_with_safety_note_queue_path = Path(temp_dir) / "post-push-safety-note-selector-queue.md"
+            post_push_with_safety_note_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: pushed branch pr/workbench-next-step-fast-validation; no tags, no release.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_with_safety_note_selector = workbench.build_next_step_selector(
+                post_push_with_safety_note_queue_path,
+                record_root,
+            )
+            check(
+                post_push_with_safety_note_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git post-push verification receipt v0.1",
+                "next-step selector should accept pushed-branch evidence with unrelated safety negation",
+                failures,
+            )
             remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
             remote_branch_plan_queue_path.write_text(
                 fixture_queue_with_now_lines(
@@ -333,6 +352,22 @@ def main() -> int:
             check(
                 "docctl status" in fast_validation["skipped_full_checks"],
                 "fast validation should skip full docctl status",
+                failures,
+            )
+            failed_full_metadata = workbench.attach_validation_metadata(
+                {"passed": False, "errors": ["fixture failure"]},
+                "full",
+                workbench.time.monotonic(),
+                required_level="full",
+            )
+            check(
+                failed_full_metadata["external_write_eligible"] is False,
+                "failed full validation must not be external-write eligible",
+                failures,
+            )
+            check(
+                failed_full_metadata["release_eligible"] is False,
+                "failed full validation must not be release eligible",
                 failures,
             )
 
@@ -776,6 +811,25 @@ def main() -> int:
             "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
             in post_push_selector.get("candidate", {}).get("validation", []),
             "post-push selector should verify the published branch ref",
+            failures,
+        )
+        post_push_with_safety_note_selector_queue_path = Path(temp_dir) / "post-push-safety-note-selector-queue.md"
+        post_push_with_safety_note_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: pushed branch pr/workbench-next-step-fast-validation; no tags, no release.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_with_safety_note_selector = workbench.build_next_step_selector(
+            post_push_with_safety_note_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            post_push_with_safety_note_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git post-push verification receipt v0.1",
+            "next-step selector should accept pushed-branch evidence with unrelated safety negation",
             failures,
         )
         remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
@@ -1830,6 +1884,22 @@ def main() -> int:
     check(
         fast_validation["full_validation_required_before_external_write"] is True,
         "fast validation must require full validation before external write",
+        failures,
+    )
+    failed_full_metadata = workbench.attach_validation_metadata(
+        {"passed": False, "errors": ["fixture failure"]},
+        "full",
+        workbench.time.monotonic(),
+        required_level="full",
+    )
+    check(
+        failed_full_metadata["external_write_eligible"] is False,
+        "failed full validation must not be external-write eligible",
+        failures,
+    )
+    check(
+        failed_full_metadata["release_eligible"] is False,
+        "failed full validation must not be release eligible",
         failures,
     )
 
