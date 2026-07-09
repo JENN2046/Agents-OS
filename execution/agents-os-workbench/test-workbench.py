@@ -30,6 +30,13 @@ def check(condition: bool, message: str, failures: list[str]) -> None:
         failures.append(message)
 
 
+def fixture_queue_with_now_lines(workbench: ModuleType, title: str, *lines: str) -> str:
+    return workbench.fixture_queue_text(title).replace(
+        "Run local validation and prepare proposal-only queue output.",
+        "\n".join(["Run local validation and prepare proposal-only queue output.", *lines]),
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fixture tests for AGENTS OS Workbench v0.1.")
     parser.add_argument("--full", action="store_true", help="Run full validation and completion audit checks.")
@@ -166,8 +173,11 @@ def main() -> int:
             check(selector["validation_plan"]["level"] == "fast", "selector should default to fast validation", failures)
             post_push_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
             post_push_queue_path.write_text(
-                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-                + "\nclosed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.\n",
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.",
+                ),
                 encoding="utf-8",
             )
             post_push_selector = workbench.build_next_step_selector(post_push_queue_path, record_root)
@@ -185,8 +195,11 @@ def main() -> int:
             )
             remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
             remote_branch_plan_queue_path.write_text(
-                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-                + "\npre-push plan field: remote branch: pr/workbench-next-step-fast-validation\n",
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "pre-push plan field: remote branch: pr/workbench-next-step-fast-validation",
+                ),
                 encoding="utf-8",
             )
             remote_branch_plan_selector = workbench.build_next_step_selector(remote_branch_plan_queue_path, record_root)
@@ -198,8 +211,11 @@ def main() -> int:
             )
             not_pushed_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
             not_pushed_queue_path.write_text(
-                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-                + "\npre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation\n",
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "pre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation",
+                ),
                 encoding="utf-8",
             )
             not_pushed_selector = workbench.build_next_step_selector(not_pushed_queue_path, record_root)
@@ -207,6 +223,36 @@ def main() -> int:
                 not_pushed_selector.get("candidate", {}).get("title")
                 == "AGENTS OS external Git exact pre-push command gate v0.1",
                 "next-step selector must keep negated push notes in the pre-push path",
+                failures,
+            )
+            unrelated_post_push_queue_path = Path(temp_dir) / "unrelated-post-push-selector-queue.md"
+            unrelated_post_push_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    "old_task: closed\nunrelated: remote branch created pr/old-work and PR #12 opened",
+                ),
+                encoding="utf-8",
+            )
+            unrelated_post_push_selector = workbench.build_next_step_selector(unrelated_post_push_queue_path, record_root)
+            check(
+                unrelated_post_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must ignore unrelated CLOSED post-push evidence",
+                failures,
+            )
+            closed_pre_push_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
+            closed_pre_push_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+                ),
+                encoding="utf-8",
+            )
+            closed_pre_push_selector = workbench.build_next_step_selector(closed_pre_push_queue_path, record_root)
+            check(
+                closed_pre_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git command execution authorization gate v0.1",
+                "next-step selector must not repeat a CLOSED exact pre-push command gate",
                 failures,
             )
 
@@ -693,8 +739,11 @@ def main() -> int:
         check(selector["write_performed"] is False, "selector must be read-only", failures)
         post_push_selector_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
         post_push_selector_queue_path.write_text(
-            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-            + "\nclosed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.\n",
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.",
+            ),
             encoding="utf-8",
         )
         post_push_selector = workbench.build_next_step_selector(post_push_selector_queue_path, advance_record_root)
@@ -712,8 +761,11 @@ def main() -> int:
         )
         remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
         remote_branch_plan_selector_queue_path.write_text(
-            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-            + "\npre-push plan field: remote branch: pr/workbench-next-step-fast-validation\n",
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "pre-push plan field: remote branch: pr/workbench-next-step-fast-validation",
+            ),
             encoding="utf-8",
         )
         remote_branch_plan_selector = workbench.build_next_step_selector(
@@ -728,8 +780,11 @@ def main() -> int:
         )
         not_pushed_selector_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
         not_pushed_selector_queue_path.write_text(
-            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-            + "\npre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation\n",
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "pre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation",
+            ),
             encoding="utf-8",
         )
         not_pushed_selector = workbench.build_next_step_selector(
@@ -740,6 +795,42 @@ def main() -> int:
             not_pushed_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git exact pre-push command gate v0.1",
             "next-step selector must keep negated push notes in the pre-push path",
+            failures,
+        )
+        unrelated_post_push_selector_queue_path = Path(temp_dir) / "unrelated-post-push-selector-queue.md"
+        unrelated_post_push_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                "old_task: closed\nunrelated: remote branch created pr/old-work and PR #12 opened",
+            ),
+            encoding="utf-8",
+        )
+        unrelated_post_push_selector = workbench.build_next_step_selector(
+            unrelated_post_push_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            unrelated_post_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must ignore unrelated CLOSED post-push evidence",
+            failures,
+        )
+        closed_pre_push_selector_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
+        closed_pre_push_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+            ),
+            encoding="utf-8",
+        )
+        closed_pre_push_selector = workbench.build_next_step_selector(
+            closed_pre_push_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            closed_pre_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git command execution authorization gate v0.1",
+            "next-step selector must not repeat a CLOSED exact pre-push command gate",
             failures,
         )
         active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"

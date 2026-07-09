@@ -257,7 +257,7 @@ def summarize_next_user_action(action: dict[str, Any]) -> dict[str, Any]:
 def normalized_task_title(value: str) -> str:
     lowered = re.sub(r"\bv\d+(?:\.\d+)*\b", " ", value.lower())
     lowered = re.sub(r"[^a-z0-9]+", " ", lowered)
-    stop_words = {"a", "an", "and", "for", "gate", "the", "to", "v"}
+    stop_words = {"a", "agents", "an", "and", "closed", "for", "gate", "now", "os", "the", "to", "v"}
     return " ".join(token for token in lowered.split() if token and token not in stop_words)
 
 
@@ -278,6 +278,25 @@ def title_is_repeat(candidate_title: str, existing_titles: list[str]) -> bool:
         if existing_tokens and existing_tokens.issubset(candidate_tokens) and len(existing_tokens) >= 4:
             return True
     return False
+
+
+def queue_closed_titles(queue_text: str) -> list[str]:
+    in_closed = False
+    titles: list[str] = []
+    for line in queue_text.splitlines():
+        stripped = line.strip()
+        if stripped == "## CLOSED":
+            in_closed = True
+            continue
+        if in_closed and line.startswith("## "):
+            break
+        if not in_closed or not stripped or stripped.startswith("```"):
+            continue
+        titles.append(stripped)
+        if ":" in stripped:
+            titles.append(stripped.split(":", 1)[0])
+        titles.extend(re.findall(r'"([^"]+)"', stripped))
+    return titles
 
 
 def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
@@ -2492,8 +2511,14 @@ def validate_status(result: dict[str, Any]) -> list[str]:
     return errors
 
 
-def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any]:
+def selector_candidate_for_now(
+    now_title: str,
+    evidence_text: str,
+    *,
+    completed_titles: list[str] | None = None,
+) -> dict[str, Any]:
     title_lc = now_title.lower()
+    completed = completed_titles or []
     if "active-loop" in title_lc or "codex appserver" in title_lc or "codex-appserver" in title_lc or "message bus" in title_lc:
         title = "AGENTS OS active-loop receipt contract review v0.1"
         goal_delta = "turn the imported Codex-to-Codex loop into a receipt-contract reviewed execution component"
@@ -2516,8 +2541,8 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "receipt would include raw broad payloads by default",
             "component would need a managed run before contract review",
         ]
-    elif ("external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc) and external_git_has_post_push_evidence(queue_text):
-        published_ref = external_git_published_branch_ref(queue_text)
+    elif ("external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc) and external_git_has_post_push_evidence(evidence_text):
+        published_ref = external_git_published_branch_ref(evidence_text)
         title = "AGENTS OS external Git post-push verification receipt v0.1"
         goal_delta = "turn a pushed external Git action into a verified receipt with local leftovers classified"
         state_delta = "published-but-unverified -> remote-verified-and-local-scope-known"
@@ -2541,6 +2566,34 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "published remote ref does not match local HEAD or declared PR evidence",
             "unexpected file was published",
             "restricted private material appears in published scope",
+        ]
+    elif (
+        "external git" in title_lc
+        or "publication" in title_lc
+        or "pre-push" in title_lc
+    ) and title_is_repeat("AGENTS OS external Git exact pre-push command gate v0.1", completed):
+        title = "AGENTS OS external Git command execution authorization gate v0.1"
+        goal_delta = "turn an accepted no-write command plan into a Jenn-authorized external Git execution boundary"
+        state_delta = "pre-push-plan-accepted -> external-write-execution-gate-ready"
+        why_next = (
+            "The exact pre-push command gate is already closed, but the current evidence still says no push happened; "
+            "the next useful step is a separate Jenn authorization boundary for executing the accepted command plan."
+        )
+        completion = [
+            "accepted command plan is referenced without repeating the pre-push planning task",
+            "tracked and untracked scope is rechecked before execution",
+            "Jenn external-write authorization remains required",
+            "plan must not include force push, tag, release, deploy, or history rewrite",
+        ]
+        validation = [
+            "git status --short --branch --untracked-files=all",
+            "git diff --name-status origin/main...HEAD",
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = [
+            "accepted command plan is missing or stale",
+            "scope changed since the accepted no-write command gate",
+            "Jenn external-write execution authorization is missing",
         ]
     elif "external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc:
         title = "AGENTS OS external Git exact pre-push command gate v0.1"
@@ -2657,16 +2710,23 @@ def build_next_step_selector(
     now_blocks: list[dict[str, str]] = []
     next_blocks: list[dict[str, str]] = []
     later_blocks: list[dict[str, str]] = []
+    closed_titles: list[str] = []
     try:
         queue_text = resolved_queue.read_text(encoding="utf-8")
         now_blocks = queue_lane_blocks(queue_text, "NOW")
         next_blocks = queue_lane_blocks(queue_text, "NEXT")
         later_blocks = queue_lane_blocks(queue_text, "LATER")
+        closed_titles = queue_closed_titles(queue_text)
     except OSError as exc:
         errors.append(f"queue read failed: {exc}")
 
-    now_title = str((now_blocks[0] if now_blocks else live_queue.get("now", {})).get("title", "")).strip()
+    now_block = now_blocks[0] if now_blocks else live_queue.get("now", {})
+    now_title = str(now_block.get("title", "")).strip()
+    now_evidence_text = "\n".join(
+        part for part in (str(now_block.get("title", "")), str(now_block.get("body", ""))) if part
+    )
     existing_titles = [str(block.get("title", "")) for block in [*now_blocks, *next_blocks, *later_blocks]]
+    existing_titles.extend(closed_titles)
     latest_status = build_status(record_root, queue_path)
     if latest_status.get("passed") is not True:
         errors.extend(f"status: {error}" for error in latest_status.get("errors", []))
@@ -2679,7 +2739,7 @@ def build_next_step_selector(
         selector_state = "blocked_missing_now"
         errors.append("selector requires a current NOW title")
     elif not errors:
-        candidate = selector_candidate_for_now(now_title, queue_text)
+        candidate = selector_candidate_for_now(now_title, now_evidence_text, completed_titles=closed_titles)
         candidate["candidate_id"] = stable_id("NEXTSELECT", [rel(resolved_queue), now_title, candidate.get("title")])
         repeat = title_is_repeat(str(candidate.get("title", "")), existing_titles)
         candidate["not_repeat_of_now"] = not title_is_repeat(str(candidate.get("title", "")), [now_title])
@@ -2732,8 +2792,10 @@ def build_next_step_selector(
             "queue_path": rel(resolved_queue),
             "record_root": rel(record_root if record_root.is_absolute() else WORKSPACE_ROOT / record_root),
             "current_now_title": now_title,
+            "current_now_evidence_scoped": True,
             "live_queue_next_step": live_queue.get("next_step", {}).get("status"),
             "existing_title_count": len([title for title in existing_titles if title]),
+            "closed_title_count": len([title for title in closed_titles if title]),
             "latest_record_next_step": latest_status.get("next_step", {}).get("status"),
         },
         "selector_state": selector_state,
