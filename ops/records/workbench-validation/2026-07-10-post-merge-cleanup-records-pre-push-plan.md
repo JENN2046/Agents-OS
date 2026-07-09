@@ -37,6 +37,7 @@ execution/agents-os-workbench/records/cyclerecord-1a4d885bab.json
 ## Exact Command Plan
 
 ```bash
+set -euo pipefail
 git switch -c pr/post-merge-cleanup-records
 git add -- \
   control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md \
