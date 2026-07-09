@@ -331,6 +331,25 @@ def main() -> int:
                 "next-step selector must not repeat a CLOSED exact pre-push command gate",
                 failures,
             )
+            post_push_receipt_now_queue_path = Path(temp_dir) / "post-push-receipt-now-selector-queue.md"
+            post_push_receipt_now_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git post-push verification receipt v0.1",
+                    "published remote ref verified by git ls-remote; local leftovers classified.",
+                ).replace(
+                    "old_task: closed",
+                    "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+                ),
+                encoding="utf-8",
+            )
+            post_push_receipt_now_selector = workbench.build_next_step_selector(post_push_receipt_now_queue_path, record_root)
+            check(
+                post_push_receipt_now_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git PR review tracking gate v0.1",
+                "next-step selector must not rewind a post-push receipt NOW to execution authorization",
+                failures,
+            )
 
             duplicate_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
             duplicate_queue_path.write_text(
@@ -1002,6 +1021,28 @@ def main() -> int:
             closed_pre_push_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git command execution authorization gate v0.1",
             "next-step selector must not repeat a CLOSED exact pre-push command gate",
+            failures,
+        )
+        post_push_receipt_now_selector_queue_path = Path(temp_dir) / "post-push-receipt-now-selector-queue.md"
+        post_push_receipt_now_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git post-push verification receipt v0.1",
+                "published remote ref verified by git ls-remote; local leftovers classified.",
+            ).replace(
+                "old_task: closed",
+                "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+            ),
+            encoding="utf-8",
+        )
+        post_push_receipt_now_selector = workbench.build_next_step_selector(
+            post_push_receipt_now_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            post_push_receipt_now_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git PR review tracking gate v0.1",
+            "next-step selector must not rewind a post-push receipt NOW to execution authorization",
             failures,
         )
         active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"

@@ -2563,6 +2563,30 @@ def selector_candidate_for_now(
             "receipt would include raw broad payloads by default",
             "component would need a managed run before contract review",
         ]
+    elif "external git post-push verification receipt" in title_lc:
+        title = "AGENTS OS external Git PR review tracking gate v0.1"
+        goal_delta = "turn a verified post-push receipt into review-tracked merge readiness without new external writes"
+        state_delta = "remote-verified-and-local-scope-known -> pr-review-tracking-ready"
+        why_next = (
+            "The current external Git item is already in post-push verification; the next useful step is to track "
+            "review state and merge readiness without rewinding to command execution."
+        )
+        completion = [
+            "current PR or remote review target is identified",
+            "unresolved review comments are classified as actionable or non-actionable",
+            "local branch remains aligned with the reviewed head",
+            "merge or further external write remains separately gated",
+        ]
+        validation = [
+            "gh pr view --json state,isDraft,mergeable,reviewDecision,headRefOid",
+            "git status --short --branch --untracked-files=all",
+            "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
+        ]
+        stops = [
+            "PR or reviewed remote target cannot be identified",
+            "new unresolved actionable review appears",
+            "local head differs from reviewed head",
+        ]
     elif ("external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc) and external_git_has_post_push_evidence(evidence_text):
         published_ref = external_git_published_branch_ref(evidence_text)
         title = "AGENTS OS external Git post-push verification receipt v0.1"
