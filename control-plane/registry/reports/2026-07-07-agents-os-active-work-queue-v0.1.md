@@ -348,7 +348,7 @@ Must keep: memory_write_authorized=false
 PR: https://github.com/JENN2046/Agents-OS/pull/6
 Branch target: pr/post-merge-cleanup-records
 Evidence: PR opened receipt recorded at ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pr-opened.md
-Publish scope:
+Recorded PR file scope:
 - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
 - ops/records/workbench-validation/2026-07-09-next-evidence-review.md
 - ops/records/workbench-validation/2026-07-09-post-merge-queue-reconciliation.md
