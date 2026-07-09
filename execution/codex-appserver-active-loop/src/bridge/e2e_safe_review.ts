@@ -15,7 +15,7 @@ export interface E2eSafeReviewBoundarySummary {
   readonly workerCwdSnapshot: true;
   readonly reviewerCwdSnapshot: true;
   readonly workerOutputDone: true;
-  readonly reviewerDecisionContinue: boolean;
+  readonly reviewerDecisionContinue: true;
   readonly policyDecisionCount: number;
   readonly directRealRepo: "BLOCKED";
   readonly managedWorkerStarted: "STARTED";
@@ -38,15 +38,25 @@ export function createE2eSafeReviewBoundarySummary(input: E2eSafeReviewBoundaryI
   if (input.reviewerDecision.type !== "REVIEWER_DECISION") {
     throw new Error("E2E Reviewer output must be REVIEWER_DECISION");
   }
+  assertReviewerDecisionAllowsContinuation(input.reviewerDecision);
   return {
     appServerProcessCwdSnapshot: true,
     workerCwdSnapshot: true,
     reviewerCwdSnapshot: true,
     workerOutputDone: true,
-    reviewerDecisionContinue: input.reviewerDecision.decision === "continue",
+    reviewerDecisionContinue: true,
     policyDecisionCount: input.policyDecisionCount,
     directRealRepo: "BLOCKED",
     managedWorkerStarted: "STARTED",
     managedReviewerStarted: "STARTED",
   };
+}
+
+export function assertReviewerDecisionAllowsContinuation(reviewerDecision: ReviewerDecision): void {
+  if (reviewerDecision.type !== "REVIEWER_DECISION") {
+    throw new Error("E2E Reviewer output must be REVIEWER_DECISION");
+  }
+  if (reviewerDecision.decision !== "continue") {
+    throw new Error(`E2E Reviewer decision must be continue before PASS: ${reviewerDecision.decision}`);
+  }
 }

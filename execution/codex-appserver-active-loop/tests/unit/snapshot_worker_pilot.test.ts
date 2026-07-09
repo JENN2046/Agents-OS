@@ -5,6 +5,7 @@ import {
   assertLiveArtifactPathBoundary,
   assertSnapshotBoundWorkerPlanLiveBoundary,
   assertSnapshotBoundWorkerPlanPathBoundary,
+  assertSnapshotManifestMatchesManifestPath,
   createSnapshotBoundWorkerPlan,
   validateSnapshotBoundWorkerPlan,
 } from "../../src/bridge/snapshot_worker_pilot.js";
@@ -105,6 +106,20 @@ describe("snapshot-bound Worker pilot prep", () => {
         workerCwd: differentSnapshotRoot,
       }),
     ).toThrow("manifest must match");
+  });
+
+  it("requires prep manifests to match their snapshot path", async () => {
+    const projectRoot = path.join(tmpRoot, `prep-manifest-${Date.now()}`);
+    const snapshotId = "cea-011-safe-snapshot-20260707080426";
+    const snapshotRoot = path.join(projectRoot, "data", "snapshots", snapshotId);
+    const manifestPath = path.join(snapshotRoot, "_snapshot", "manifest.json");
+    await rm(projectRoot, { force: true, recursive: true });
+    await mkdir(path.dirname(manifestPath), { recursive: true });
+    await writeFile(manifestPath, "{}\n", "utf8");
+
+    expect(() => assertSnapshotManifestMatchesManifestPath(manifestPath, sampleManifest(snapshotRoot))).not.toThrow();
+    expect(() => assertSnapshotManifestMatchesManifestPath(path.join(snapshotRoot, "manifest.json"), sampleManifest(snapshotRoot))).toThrow("_snapshot/manifest.json");
+    expect(() => assertSnapshotManifestMatchesManifestPath(manifestPath, sampleManifest(projectRoot))).toThrow("match its snapshot path");
   });
 
   it("rejects symlinked live snapshot roots", async () => {

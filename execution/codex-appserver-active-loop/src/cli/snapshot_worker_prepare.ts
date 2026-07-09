@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { assertAllowedArtifactFilename, assertProjectArtifactPathBoundary } from "../bridge/artifact_path_boundary.js";
-import { createSnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
+import { assertSnapshotManifestMatchesManifestPath, createSnapshotBoundWorkerPlan } from "../bridge/snapshot_worker_pilot.js";
 import type { SnapshotManifest } from "../bridge/repo_snapshot.js";
 import type { PromptAnnex } from "../bridge/prompt_annex.js";
 import { createFileSnapshotWorkerPlanStore } from "../stores/snapshot_worker_plan_store.js";
@@ -43,6 +43,7 @@ async function main(): Promise<void> {
   assertPromptAnnexFilename(verifiedAnnexPath);
 
   const manifest = JSON.parse(await readFile(verifiedManifestPath, "utf8")) as SnapshotManifest;
+  assertSnapshotManifestMatchesManifestPath(verifiedManifestPath, manifest);
   const annex = JSON.parse(await readFile(verifiedAnnexPath, "utf8")) as PromptAnnex;
   const store = createFileSnapshotWorkerPlanStore(path.join(projectRoot, "data", "worker-pilots"));
   const plan = createSnapshotBoundWorkerPlan({

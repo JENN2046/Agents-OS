@@ -1,5 +1,6 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { resolveCommanderEvidenceReceiptPath } from "../bridge/commander_evidence_receipts.js";
 import { createCommanderReadinessMatrix, type CommanderEvidenceItem } from "../bridge/commander_readiness_matrix.js";
 import { safeJoin } from "../stores/safe_path.js";
 
@@ -76,14 +77,19 @@ async function readEvidenceItem(
   const reportPath = path.join(projectRoot, reportRelativePath);
   const report = (await readJson(reportPath)) as Record<string, unknown>;
   const receiptFromReport = getReportArtifactPath(report, "receipt");
-  const receiptPath = receiptFromReport ?? path.join(projectRoot, receiptRelativePath);
+  const receiptResolution = resolveCommanderEvidenceReceiptPath({
+    projectRoot,
+    taskId: fallbackTaskId,
+    reportReceiptPath: receiptFromReport,
+    expectedReceiptRelativePath: receiptRelativePath,
+  });
   return {
     taskId: fallbackTaskId,
     title: typeof report.title === "string" ? report.title : fallbackTaskId,
     result: typeof report.result === "string" ? report.result : "UNKNOWN",
     reportPath,
-    receiptPath,
-    receiptExists: await existsFile(receiptPath),
+    receiptPath: receiptResolution.receiptPath,
+    receiptExists: receiptResolution.boundaryValid && (await existsFile(receiptResolution.receiptPath)),
     gateStatus: typeof report.gate_status === "string" ? report.gate_status : undefined,
     phase8Decision: typeof report.phase8_decision === "string" ? report.phase8_decision : undefined,
     readableRootSupported: typeof report.readable_root_supported === "boolean" ? report.readable_root_supported : undefined,

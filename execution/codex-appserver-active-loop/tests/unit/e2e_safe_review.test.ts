@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createE2eSafeReviewBoundarySummary } from "../../src/bridge/e2e_safe_review.js";
+import { assertReviewerDecisionAllowsContinuation, createE2eSafeReviewBoundarySummary } from "../../src/bridge/e2e_safe_review.js";
 
 describe("E2E safe review boundary summary", () => {
   it("accepts only snapshot-bound Worker and Reviewer cwd", () => {
@@ -46,5 +46,18 @@ describe("E2E safe review boundary summary", () => {
         policyDecisionCount: 0,
       }),
     ).toThrow("Worker cwd");
+  });
+
+  it("rejects Reviewer block decisions before PASS", () => {
+    expect(() =>
+      assertReviewerDecisionAllowsContinuation({
+        type: "REVIEWER_DECISION",
+        decision: "block",
+        reason: "missing evidence",
+        next_instruction: "stop",
+        constraints: [],
+        evidence_used: [],
+      }),
+    ).toThrow("must be continue");
   });
 });

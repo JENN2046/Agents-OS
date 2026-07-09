@@ -196,6 +196,20 @@ export function assertLiveArtifactPathBoundary(
   return assertProjectArtifactPathBoundary(projectRoot, artifactPath, allowedRelativeRoot, label);
 }
 
+export function assertSnapshotManifestMatchesManifestPath(manifestPath: string, manifest: SnapshotManifest): void {
+  const resolvedManifestPath = path.resolve(manifestPath);
+  if (path.basename(resolvedManifestPath) !== "manifest.json" || path.basename(path.dirname(resolvedManifestPath)) !== "_snapshot") {
+    throw new Error("Worker prep manifest path must be a snapshot _snapshot/manifest.json file");
+  }
+  const expectedSnapshotRoot = path.dirname(path.dirname(resolvedManifestPath));
+  if (path.resolve(manifest.snapshotRoot) !== expectedSnapshotRoot || path.resolve(manifest.workerCwd) !== expectedSnapshotRoot) {
+    throw new Error("Worker prep manifest must match its snapshot path");
+  }
+  if (path.basename(manifest.snapshotRoot) !== path.basename(expectedSnapshotRoot)) {
+    throw new Error("Worker prep manifest snapshot id must match its snapshot path");
+  }
+}
+
 export function assertSnapshotBoundWorkerPlanLiveBoundary(
   projectRoot: string,
   plan: SnapshotBoundWorkerPlan,
