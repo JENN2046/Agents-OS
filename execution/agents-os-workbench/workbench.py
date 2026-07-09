@@ -136,6 +136,10 @@ def apply_docctl_release_gate(result: dict[str, Any], docctl_probe: dict[str, An
     return result
 
 NEGATED_SIGNAL_CONTEXT = re.compile(
+    r"\b(no|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
+    re.I,
+)
+EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT = re.compile(
     r"\b(no|not|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
     re.I,
 )
@@ -292,7 +296,6 @@ def queue_closed_titles(queue_text: str) -> list[str]:
             break
         if not in_closed or not stripped or stripped.startswith("```"):
             continue
-        titles.append(stripped)
         if ":" in stripped:
             titles.append(stripped.split(":", 1)[0])
         titles.extend(re.findall(r'"([^"]+)"', stripped))
@@ -303,6 +306,10 @@ def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
     return bool(pattern.search(line)) and not NEGATED_SIGNAL_CONTEXT.search(line)
 
 
+def external_git_line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
+    return bool(pattern.search(line)) and not EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(line)
+
+
 def external_git_has_post_push_evidence(queue_text: str) -> bool:
     patterns = (
         re.compile(r"\b(pushed|push completed|branch pushed|published remote branch)\b", re.I),
@@ -310,7 +317,11 @@ def external_git_has_post_push_evidence(queue_text: str) -> bool:
         re.compile(r"\b(PR|pull request)\s*#?\d+\b", re.I),
         re.compile(r"\bopened\s+(a\s+)?(draft\s+)?(PR|pull request)\b", re.I),
     )
-    return any(line_has_non_negated_signal(line, pattern) for line in queue_text.splitlines() for pattern in patterns)
+    return any(
+        external_git_line_has_non_negated_signal(line, pattern)
+        for line in queue_text.splitlines()
+        for pattern in patterns
+    )
 
 
 def external_git_published_branch_ref(queue_text: str) -> str | None:
@@ -323,7 +334,7 @@ def external_git_published_branch_ref(queue_text: str) -> str | None:
     )
     non_branch_words = {"and", "as", "branch", "created", "draft", "opened", "origin", "pr", "published", "remote", "to", "verified"}
     for line in queue_text.splitlines():
-        if NEGATED_SIGNAL_CONTEXT.search(line):
+        if EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(line):
             continue
         for pattern in patterns:
             match = pattern.search(line)

@@ -240,6 +240,25 @@ def main() -> int:
                 "next-step selector must ignore unrelated CLOSED post-push evidence",
                 failures,
             )
+            closed_next_boundary_queue_path = Path(temp_dir) / "closed-next-boundary-selector-queue.md"
+            closed_next_boundary_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    (
+                        "old_task: closed\n"
+                        "external_git_publication_target_gate_v0.1: accepted target; "
+                        "next boundary is exact pre-push command gate"
+                    ),
+                ),
+                encoding="utf-8",
+            )
+            closed_next_boundary_selector = workbench.build_next_step_selector(closed_next_boundary_queue_path, record_root)
+            check(
+                closed_next_boundary_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must not treat CLOSED receipt prose as a completed pre-push gate",
+                failures,
+            )
             closed_pre_push_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
             closed_pre_push_queue_path.write_text(
                 workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
@@ -813,6 +832,28 @@ def main() -> int:
             unrelated_post_push_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git exact pre-push command gate v0.1",
             "next-step selector must ignore unrelated CLOSED post-push evidence",
+            failures,
+        )
+        closed_next_boundary_selector_queue_path = Path(temp_dir) / "closed-next-boundary-selector-queue.md"
+        closed_next_boundary_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                (
+                    "old_task: closed\n"
+                    "external_git_publication_target_gate_v0.1: accepted target; "
+                    "next boundary is exact pre-push command gate"
+                ),
+            ),
+            encoding="utf-8",
+        )
+        closed_next_boundary_selector = workbench.build_next_step_selector(
+            closed_next_boundary_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            closed_next_boundary_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must not treat CLOSED receipt prose as a completed pre-push gate",
             failures,
         )
         closed_pre_push_selector_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
@@ -1704,6 +1745,24 @@ def main() -> int:
         )
         check(blocked_p3_intake["passed"] is False, "P3 intake apply should fail", failures)
         check(blocked_p3_intake["write_performed"] is False, "P3 intake apply must not write", failures)
+        check(
+            "git_release_boundary" in workbench.queue_p3_signals("Publish report to GitHub release, not as force push"),
+            "P3 scanner must not let unrelated not hide release boundary signals",
+            failures,
+        )
+        p3_not_proposal = dict(p3_cycle["stages"]["intake_proposal"])
+        p3_not_proposal["proposed_queue_item"] = dict(p3_not_proposal["proposed_queue_item"])
+        p3_not_proposal["proposed_queue_item"]["title"] = "Publish report to GitHub release, not as force push"
+        p3_not_review = workbench.accepted_nobao_review_for_intake(p3_not_proposal)
+        blocked_p3_not_intake = workbench.reviewed_intake_apply_gate(
+            p3_not_proposal,
+            p3_not_review,
+            p3_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(blocked_p3_not_intake["passed"] is False, "P3 intake with unrelated not should fail", failures)
+        check(blocked_p3_not_intake["write_performed"] is False, "P3 intake with unrelated not must not write", failures)
 
         record_path = Path(temp_dir) / "records" / "safe-cycle-record.json"
         record_path.parent.mkdir()
