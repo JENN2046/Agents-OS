@@ -43,4 +43,22 @@ describe("Commander evidence receipt boundaries", () => {
       }),
     ).toEqual({ receiptPath: expectedPath, boundaryValid: false });
   });
+
+  it("accepts dated CEA-021 receipt paths declared by the report", async () => {
+    const projectRoot = path.join(tmpRoot, `cea-021-${Date.now()}`);
+    const expectedRelative = "data/receipts/2026-07-08-cea-021-snapshot-review-package-publisher.receipt.md";
+    const reportedPath = path.join(projectRoot, "data", "receipts", "2026-07-09-cea-021-snapshot-review-package-publisher.receipt.md");
+    await rm(projectRoot, { force: true, recursive: true });
+    await mkdir(path.dirname(reportedPath), { recursive: true });
+    await writeFile(reportedPath, "ok\n", "utf8");
+
+    expect(
+      resolveCommanderEvidenceReceiptPath({
+        projectRoot,
+        taskId: "CEA-021",
+        reportReceiptPath: reportedPath,
+        expectedReceiptRelativePath: expectedRelative,
+      }),
+    ).toEqual({ receiptPath: reportedPath, boundaryValid: true });
+  });
 });

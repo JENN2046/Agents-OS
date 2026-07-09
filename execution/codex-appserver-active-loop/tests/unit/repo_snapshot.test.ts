@@ -143,6 +143,26 @@ describe("safe repo snapshot exporter", () => {
     await expect(readFile(path.join(outsideRoot, "real.ts"), "utf8")).rejects.toThrow();
   });
 
+  it("rejects non-empty snapshot destinations before copying files", async () => {
+    const sourceRoot = path.join(tmpRoot, `nonempty-source-${Date.now()}`);
+    const snapshotRoot = path.join(tmpRoot, `nonempty-snapshot-${Date.now()}`);
+    await rm(sourceRoot, { force: true, recursive: true });
+    await rm(snapshotRoot, { force: true, recursive: true });
+    await mkdir(sourceRoot, { recursive: true });
+    await mkdir(snapshotRoot, { recursive: true });
+    await writeFile(path.join(sourceRoot, "README.md"), "safe\n", "utf8");
+    await writeFile(path.join(snapshotRoot, "stale.txt"), "stale\n", "utf8");
+
+    await expect(
+      exportSafeRepoSnapshot({
+        sourceRoot,
+        snapshotRoot,
+        allowlist: ["README.md"],
+      }),
+    ).rejects.toThrow("must be empty");
+    await expect(readFile(path.join(snapshotRoot, "README.md"), "utf8")).rejects.toThrow();
+  });
+
   it("rejects allowlist path escapes", async () => {
     const sourceRoot = path.join(tmpRoot, `escape-source-${Date.now()}`);
     await mkdir(sourceRoot, { recursive: true });

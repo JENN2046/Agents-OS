@@ -222,6 +222,14 @@ async function prepareSafeSnapshotDestination(snapshotRoot: string): Promise<voi
   if (realSnapshotRoot !== snapshotRoot) {
     throw new Error("snapshot destination root must resolve to the requested path");
   }
+  await assertSnapshotDestinationEmpty(snapshotRoot);
+}
+
+async function assertSnapshotDestinationEmpty(snapshotRoot: string): Promise<void> {
+  const entries = await readdir(snapshotRoot);
+  if (entries.length > 0) {
+    throw new Error("snapshot destination root must be empty before export");
+  }
 }
 
 async function copyDirectory(
