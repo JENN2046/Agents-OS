@@ -40,7 +40,6 @@ export interface AppServerClientOptions {
 }
 
 export interface AppServerClient {
-  readonly transport: StdioTransport;
   readonly forbiddenMethods: readonly string[];
   start(): Promise<void>;
   stop(): Promise<void>;
@@ -78,8 +77,8 @@ export function createAppServerClient(
 }
 
 class JsonRpcAppServerClient implements AppServerClient {
-  readonly transport: StdioTransport;
   readonly forbiddenMethods = forbiddenClientMethods;
+  readonly #transport: StdioTransport;
   readonly #options: AppServerClientOptions;
   readonly #nextId = createIdGenerator("appserver");
   readonly #pending = new Map<JsonRpcId, PendingRequest>();
@@ -89,17 +88,17 @@ class JsonRpcAppServerClient implements AppServerClient {
   #unsubscribers: Array<() => void> = [];
 
   constructor(transport: StdioTransport, options: AppServerClientOptions) {
-    this.transport = transport;
+    this.#transport = transport;
     this.#options = options;
   }
 
   async start(): Promise<void> {
     this.#unsubscribers.push(
-      this.transport.on("message", (message) => this.#handleMessage(message)),
-      this.transport.on("exit", () => this.#rejectAllPending(new Error("app-server transport exited"))),
-      this.transport.on("protocolError", (error) => this.#rejectAllPending(error)),
+      this.#transport.on("message", (message) => this.#handleMessage(message)),
+      this.#transport.on("exit", () => this.#rejectAllPending(new Error("app-server transport exited"))),
+      this.#transport.on("protocolError", (error) => this.#rejectAllPending(error)),
     );
-    await this.transport.start();
+    await this.#transport.start();
   }
 
   async stop(): Promise<void> {
@@ -107,7 +106,7 @@ class JsonRpcAppServerClient implements AppServerClient {
     for (const unsubscribe of this.#unsubscribers.splice(0)) {
       unsubscribe();
     }
-    await this.transport.stop();
+    await this.#transport.stop();
   }
 
   initialize(): Promise<InitializeResponse> {
@@ -126,7 +125,7 @@ class JsonRpcAppServerClient implements AppServerClient {
   }
 
   sendInitialized(): void {
-    this.transport.send(createNotification("initialized"));
+    this.#transport.send(createNotification("initialized"));
   }
 
   threadStart(params: ThreadStartParams): Promise<ThreadStartResponse> {
@@ -135,7 +134,11 @@ class JsonRpcAppServerClient implements AppServerClient {
 
   async turnStart(params: TurnStartParams): Promise<TurnStartResponse> {
     const response = await this.#request<TurnStartResponse>("turn/start", params);
-    this.#activeTurnByThread.set(params.threadId, response.turn.id);
+    if (response.turn.status === "inProgress") {
+      this.#activeTurnByThread.set(params.threadId, response.turn.id);
+    } else {
+      this.#activeTurnByThread.delete(params.threadId);
+    }
     return response;
   }
 
@@ -158,11 +161,11 @@ class JsonRpcAppServerClient implements AppServerClient {
   }
 
   respondToServerRequest(id: JsonRpcId, result: unknown): void {
-    this.transport.send(createSuccess(id, result));
+    this.#transport.send(createSuccess(id, result));
   }
 
   respondToServerRequestError(id: JsonRpcId, code: number, message: string, data?: unknown): void {
-    this.transport.send(createFailure(id, code, message, data));
+    this.#transport.send(createFailure(id, code, message, data));
   }
 
   onServerRequest(handler: ServerRequestHandler): () => void {
@@ -189,7 +192,7 @@ class JsonRpcAppServerClient implements AppServerClient {
       }, this.#options.requestTimeoutMs);
       this.#pending.set(id, { resolve: resolve as (value: unknown) => void, reject, timer });
     });
-    this.transport.send(request);
+    this.#transport.send(request);
     return promise;
   }
 
@@ -220,9 +223,20 @@ class JsonRpcAppServerClient implements AppServerClient {
     }
 
     if (isNotification(message)) {
+      this.#trackNotification(message as ServerNotification);
       for (const handler of this.#notificationHandlers) {
         handler(message as ServerNotification);
       }
+    }
+  }
+
+  #trackNotification(notification: ServerNotification): void {
+    if (notification.method !== "turn/completed") {
+      return;
+    }
+    const activeTurnId = this.#activeTurnByThread.get(notification.params.threadId);
+    if (activeTurnId === notification.params.turn.id) {
+      this.#activeTurnByThread.delete(notification.params.threadId);
     }
   }
 

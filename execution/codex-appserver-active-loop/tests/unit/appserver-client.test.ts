@@ -125,7 +125,7 @@ describe("AppServerClient", () => {
           id: "turn-1",
           items: [],
           itemsView: { type: "all" },
-          status: "running",
+          status: "inProgress",
           error: null,
           startedAt: null,
           completedAt: null,
@@ -139,6 +139,91 @@ describe("AppServerClient", () => {
     expect(transport.sent.at(-1)).toMatchObject({ method: "turn/steer" });
     transport.emitMessage(createSuccess("appserver-2", { turnId: "turn-1" }));
     await expect(steer).resolves.toEqual({ turnId: "turn-1" });
+  });
+
+  it("does not expose the raw send-capable transport through the client", () => {
+    const transport = new FakeTransport();
+    const client = createAppServerClient(transport, { requestTimeoutMs: 50 });
+
+    expect("transport" in client).toBe(false);
+    expect((client as { readonly transport?: unknown }).transport).toBeUndefined();
+  });
+
+  it("does not treat an already-completed turn as steerable", async () => {
+    const transport = new FakeTransport();
+    const client = createAppServerClient(transport, { requestTimeoutMs: 50 });
+    await client.start();
+
+    const turnStart = client.turnStart({ threadId: "t1", input: [] });
+    transport.emitMessage(
+      createSuccess("appserver-1", {
+        turn: {
+          id: "turn-1",
+          items: [],
+          itemsView: { type: "all" },
+          status: "completed",
+          error: null,
+          startedAt: null,
+          completedAt: null,
+          durationMs: null,
+        },
+      }),
+    );
+    await turnStart;
+
+    await expect(client.turnSteer({ threadId: "t1", expectedTurnId: "turn-1", input: [] })).rejects.toThrow(
+      "known active turn id",
+    );
+    expect(transport.sent).toHaveLength(1);
+  });
+
+  it("clears active turns when turn/completed arrives", async () => {
+    const transport = new FakeTransport();
+    const client = createAppServerClient(transport, { requestTimeoutMs: 50 });
+    const onNotification = vi.fn();
+    client.onNotification(onNotification);
+    await client.start();
+
+    const turnStart = client.turnStart({ threadId: "t1", input: [] });
+    transport.emitMessage(
+      createSuccess("appserver-1", {
+        turn: {
+          id: "turn-1",
+          items: [],
+          itemsView: { type: "all" },
+          status: "inProgress",
+          error: null,
+          startedAt: null,
+          completedAt: null,
+          durationMs: null,
+        },
+      }),
+    );
+    await turnStart;
+
+    transport.emitMessage(
+      createNotification("turn/completed", {
+        threadId: "t1",
+        turn: {
+          id: "turn-1",
+          items: [],
+          itemsView: { type: "all" },
+          status: "completed",
+          error: null,
+          startedAt: null,
+          completedAt: null,
+          durationMs: null,
+        },
+      }),
+    );
+
+    await expect(client.turnSteer({ threadId: "t1", expectedTurnId: "turn-1", input: [] })).rejects.toThrow(
+      "known active turn id",
+    );
+    expect(onNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ method: "turn/completed", params: expect.objectContaining({ threadId: "t1" }) }),
+    );
+    expect(transport.sent).toHaveLength(1);
   });
 
   it("does not expose forbidden App Server methods on the client surface", () => {
