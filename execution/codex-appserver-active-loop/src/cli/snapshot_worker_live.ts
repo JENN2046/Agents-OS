@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
+import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
 import { createSnapshotWorkerLivePrompt } from "../bridge/snapshot_worker_live.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
 import { assertPromptAnnex, type PromptAnnex } from "../bridge/prompt_annex.js";
@@ -283,12 +284,18 @@ function waitForCompletedTurn(tracker: TurnTracker, initialTurn: Turn, timeoutMs
   if (initialTurn.status === "completed") {
     return Promise.resolve(initialTurn);
   }
-  if (initialTurn.status === "failed") {
-    return Promise.reject(new Error(formatTurnFailure(initialTurn)));
+  try {
+    rejectLiveTerminalNonCompletedTurn(initialTurn, "Worker live turn");
+  } catch (error) {
+    return Promise.reject(error);
   }
   const existing = tracker.completedTurns.get(initialTurn.id);
   if (existing) {
-    return existing.status === "failed" ? Promise.reject(new Error(formatTurnFailure(existing))) : Promise.resolve(existing);
+    try {
+      return Promise.resolve(assertLiveTurnCompleted(existing, "Worker live turn"));
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
   return new Promise((resolve, reject) => {
     const startedAt = Date.now();
@@ -296,11 +303,11 @@ function waitForCompletedTurn(tracker: TurnTracker, initialTurn: Turn, timeoutMs
       const completed = tracker.completedTurns.get(initialTurn.id);
       if (completed) {
         clearInterval(timer);
-        if (completed.status === "failed") {
-          reject(new Error(formatTurnFailure(completed)));
-          return;
+        try {
+          resolve(assertLiveTurnCompleted(completed, "Worker live turn"));
+        } catch (error) {
+          reject(error);
         }
-        resolve(completed);
         return;
       }
       if (Date.now() - startedAt > timeoutMs) {
@@ -354,10 +361,6 @@ function summarizeNotification(notification: ServerNotification): unknown {
 
 function summarizeServerRequest(request: ServerRequest): unknown {
   return { method: request.method, id: request.id };
-}
-
-function formatTurnFailure(turn: Turn): string {
-  return `turn failed: ${turn.id}${turn.error ? ` ${JSON.stringify(turn.error)}` : ""}`;
 }
 
 async function writeJson(filePath: string, value: unknown): Promise<void> {
