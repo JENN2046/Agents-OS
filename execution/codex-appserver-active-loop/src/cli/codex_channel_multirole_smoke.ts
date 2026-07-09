@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
+import { assertChannelPolicyOpen } from "../bridge/channel_policy_stop.js";
 import { createMessageBus, type MessageBusAuditEvent } from "../bridge/message_bus.js";
 import { createMessageRouter, type CodexMessageDelivery } from "../bridge/message_router.js";
 import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
@@ -178,6 +179,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerToReviewerPrompt(),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-to-reviewer-message-emitted", message: workerToReviewer });
     const workerReviewerDelivery = router.routeMessage(workerToReviewer);
     deliveries.push(workerReviewerDelivery);
@@ -189,6 +191,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createReviewerReplyPrompt(workerToReviewer),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/reviewer-to-worker-reply-emitted", reply: reviewerToWorker });
     const reviewerWorkerDelivery = router.routeReply(reviewerToWorker);
     deliveries.push(reviewerWorkerDelivery);
@@ -201,6 +204,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerToVerifierPrompt(workerToReviewer, reviewerToWorker),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-to-verifier-message-emitted", message: workerToVerifier });
     const workerVerifierDelivery = router.routeMessage(workerToVerifier);
     deliveries.push(workerVerifierDelivery);
@@ -212,6 +216,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createVerifierReplyPrompt(workerToVerifier),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/verifier-to-worker-reply-emitted", reply: verifierToWorker });
     const verifierWorkerDelivery = router.routeReply(verifierToWorker);
     deliveries.push(verifierWorkerDelivery);
@@ -224,12 +229,10 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerDonePrompt({ workerToReviewer, reviewerToWorker, workerToVerifier, verifierToWorker }),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-done-after-verifier", output: workerDone });
     bus.markConversationDone(CONVERSATION_ID);
     await flushMessageAuditEvents();
-    if (stopReason) {
-      throw new Error(stopReason);
-    }
 
     registry.markStatus(workerThreadId, "COMPLETED");
     registry.markStatus(reviewerThreadId, "COMPLETED");

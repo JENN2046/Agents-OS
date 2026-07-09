@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
+import { assertChannelPolicyOpen } from "../bridge/channel_policy_stop.js";
 import { createMessageBus, type MessageBusAuditEvent } from "../bridge/message_bus.js";
 import { createMessageRouter, type CodexMessageDelivery } from "../bridge/message_router.js";
 import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
@@ -173,6 +174,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerMessagePrompt(1),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/round-1-worker-message-emitted", message: round1WorkerMessage });
     const round1MessageDelivery = router.routeMessage(round1WorkerMessage);
     deliveries.push(round1MessageDelivery);
@@ -184,6 +186,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createReviewerReplyPrompt(1, round1WorkerMessage),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/round-1-reviewer-reply-emitted", reply: round1ReviewerReply });
     const round1ReplyDelivery = router.routeReply(round1ReviewerReply);
     deliveries.push(round1ReplyDelivery);
@@ -196,6 +199,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerMessagePrompt(2, round1WorkerMessage, round1ReviewerReply),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/round-2-worker-message-emitted", message: round2WorkerMessage });
     const round2MessageDelivery = router.routeMessage(round2WorkerMessage);
     deliveries.push(round2MessageDelivery);
@@ -207,6 +211,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createReviewerReplyPrompt(2, round2WorkerMessage),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/round-2-reviewer-reply-emitted", reply: round2ReviewerReply });
     const round2ReplyDelivery = router.routeReply(round2ReviewerReply);
     deliveries.push(round2ReplyDelivery);
@@ -224,12 +229,10 @@ async function main(): Promise<void> {
         round2ReviewerReply,
       }),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-done-after-round-2", output: workerDone });
     bus.markConversationDone(CONVERSATION_ID);
     await flushMessageAuditEvents();
-    if (stopReason) {
-      throw new Error(stopReason);
-    }
 
     registry.markStatus(workerThreadId, "COMPLETED");
     registry.markStatus(reviewerThreadId, "COMPLETED");

@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
+import { assertChannelPolicyOpen } from "../bridge/channel_policy_stop.js";
 import { createMessageBus, type MessageBusAuditEvent } from "../bridge/message_bus.js";
 import { createMessageRouter, type CodexMessageDelivery } from "../bridge/message_router.js";
 import { assertLiveTurnCompleted, rejectLiveTerminalNonCompletedTurn } from "../bridge/live_turn_completion.js";
@@ -168,6 +169,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerMessagePrompt({ conversationId, correlationId, workerMessageId }),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-message-emitted", message: workerMessage });
     const messageDelivery = router.routeMessage(workerMessage);
     deliveries.push(messageDelivery);
@@ -179,6 +181,7 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createReviewerReplyPrompt({ workerMessage, reviewerReplyId }),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/reviewer-reply-emitted", reply: reviewerReply });
     const replyDelivery = router.routeReply(reviewerReply);
     deliveries.push(replyDelivery);
@@ -190,12 +193,10 @@ async function main(): Promise<void> {
       cwd: syntheticWorkspaceRoot,
       prompt: createWorkerResumePrompt({ workerMessage, reviewerReply }),
     });
+    assertChannelPolicyOpen(stopReason);
     await appendEvent("APP_SERVER_MESSAGE", { method: "codex-channel/worker-done-after-reply", output: workerDone });
     await messageEvents.append(jobId, createMessageEvent("WORKER_RESUMED", new Date().toISOString(), workerMessage, reviewerReply));
     await messageEvents.append(jobId, createMessageEvent("CHANNEL_DONE", new Date().toISOString(), workerMessage, reviewerReply));
-    if (stopReason) {
-      throw new Error(stopReason);
-    }
 
     registry.markStatus(workerThreadId, "COMPLETED");
     registry.markStatus(reviewerThreadId, "COMPLETED");
