@@ -315,7 +315,7 @@ def line_has_non_negated_signal(line: str, pattern: re.Pattern[str]) -> bool:
 
 def external_git_match_is_negated(line: str, match: re.Match[str]) -> bool:
     prefix = line[: match.start()]
-    clause_prefix = re.split(r"[.;:]", prefix)[-1]
+    clause_prefix = re.split(r"[,.;:]", prefix)[-1]
     return bool(EXTERNAL_GIT_NEGATED_SIGNAL_CONTEXT.search(clause_prefix))
 
 
