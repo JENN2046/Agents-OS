@@ -65,6 +65,11 @@ Allowed:
   NEXT item only under explicit apply mode, accepted Nobao review, allowed
   queue root, exactly-one-NOW checks, and no-P3 guards, without execution,
   provider, external-write, runtime/plugin, or Memory authorization
+- Codex App Server active-loop communication runtimes that are entered only
+  through an explicit workbench/control-plane task packet, run under read-only
+  or snapshot-bound authority, route Worker/Reviewer/Verifier messages, and
+  emit review receipts without interpreting AGENTS.md, granting authority, or
+  bypassing Jenn/provider/Memory/external-write gates
 
 Denied:
 - top-level governance rules

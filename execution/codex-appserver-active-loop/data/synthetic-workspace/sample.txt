@@ -1,0 +1,3 @@
+Synthetic sample note.
+
+The Worker may inspect this file during MVP smoke and ask the Reviewer for an architecture decision.

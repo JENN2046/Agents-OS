@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agents-os.codex-active-loop.receipt.v0.1",
+  "title": "AGENTS OS Codex Active Loop Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "run_id",
+    "source",
+    "roles_used",
+    "message_count",
+    "review_decision",
+    "validation",
+    "boundaries",
+    "artifacts",
+    "raw_payload_included"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "agents-os.codex-active-loop.receipt.v0.1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workspace_kind", "workspace_ref"],
+      "properties": {
+        "workspace_kind": {
+          "enum": ["synthetic", "snapshot"]
+        },
+        "workspace_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot_id": {
+          "type": "string"
+        },
+        "task_packet_hash": {
+          "type": "string"
+        }
+      }
+    },
+    "roles_used": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["Worker", "Reviewer", "Verifier", "Observer"]
+      }
+    },
+    "message_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "review_decision": {
+      "enum": ["accepted", "changes_requested", "blocked", "inconclusive", "not_run"]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["performed", "passed"],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "command_ref": {
+          "type": "string"
+        },
+        "stdout_character_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stderr_character_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_call_authorized",
+        "memory_write_authorized",
+        "external_write_authorized",
+        "queue_mutation_authorized",
+        "runtime_plugin_activation_authorized",
+        "raw_private_state_authorized"
+      ],
+      "properties": {
+        "provider_call_authorized": {
+          "const": false
+        },
+        "memory_write_authorized": {
+          "const": false
+        },
+        "external_write_authorized": {
+          "const": false
+        },
+        "queue_mutation_authorized": {
+          "const": false
+        },
+        "runtime_plugin_activation_authorized": {
+          "const": false
+        },
+        "raw_private_state_authorized": {
+          "const": false
+        },
+        "stopped_boundary": {
+          "type": "string"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "ref"],
+        "properties": {
+          "kind": {
+            "enum": ["receipt", "report", "observer_summary", "message_log_ref", "validation_ref"]
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "character_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "raw_payload_included": {
+      "const": false
+    }
+  }
+}
