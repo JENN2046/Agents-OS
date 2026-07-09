@@ -49,6 +49,7 @@ git add -- \
 git diff --cached --check
 python3 execution/agents-os-workbench/workbench.py validate --level fast --json
 python3 execution/agents-os-workbench/workbench.py select-next-step --json
+python3 execution/agents-os-workbench/workbench.py validate --level full --json
 git commit -m "docs: record post-merge cleanup"
 git push -u origin pr/post-merge-cleanup-records
 gh pr create \

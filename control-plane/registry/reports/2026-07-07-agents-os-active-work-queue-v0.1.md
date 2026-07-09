@@ -481,16 +481,18 @@ secrets/auth/provider/runtime config reads or writes
 
 ## Immediate Construction Instruction
 
-Route A has been selected by Jenn and has been closed at the VCPToolBox runtime
-integration contract layer. The controlled recovery restart package, main
-no-plugin/no-provider startup gate, localhost usability smoke gate, controlled
-local-use handoff gate, and runtime integration contract have completed.
+Route A has been selected by Jenn and closed at the VCPToolBox runtime
+integration contract layer. PR #6 is now the active review-tracking item for
+the post-merge cleanup records docs-only PR.
 
-The next construction batch should wait for Jenn to choose a new AGENTS OS route
-or a specific VCPToolBox expansion branch:
+The next construction batch should track PR #6 review and merge readiness
+without performing a new external write unless a fresh exact command gate is
+accepted:
 
 ```text
-No Active Automatic Construction Item
+AGENTS OS post-merge cleanup records PR review tracking gate v0.1
+PR=https://github.com/JENN2046/Agents-OS/pull/6
+head=34adcdd3b257a68fff6e91a952bb808a74e61bb9
 ```
 
 The batch must remain local and bounded:
