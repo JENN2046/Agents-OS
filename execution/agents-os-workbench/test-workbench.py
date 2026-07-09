@@ -167,7 +167,7 @@ def main() -> int:
             post_push_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
             post_push_queue_path.write_text(
                 workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-                + "\nclosed evidence: branch pushed to origin and draft PR #5 opened.\n",
+                + "\nclosed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.\n",
                 encoding="utf-8",
             )
             post_push_selector = workbench.build_next_step_selector(post_push_queue_path, record_root)
@@ -175,6 +175,12 @@ def main() -> int:
                 post_push_selector.get("candidate", {}).get("title")
                 == "AGENTS OS external Git post-push verification receipt v0.1",
                 "next-step selector should choose post-push receipt only after push evidence",
+                failures,
+            )
+            check(
+                "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+                in post_push_selector.get("candidate", {}).get("validation", []),
+                "post-push selector should verify the published branch ref",
                 failures,
             )
             remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
@@ -188,6 +194,19 @@ def main() -> int:
                 remote_branch_plan_selector.get("candidate", {}).get("title")
                 == "AGENTS OS external Git exact pre-push command gate v0.1",
                 "next-step selector must not treat remote branch target fields as post-push evidence",
+                failures,
+            )
+            not_pushed_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
+            not_pushed_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+                + "\npre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation\n",
+                encoding="utf-8",
+            )
+            not_pushed_selector = workbench.build_next_step_selector(not_pushed_queue_path, record_root)
+            check(
+                not_pushed_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must keep negated push notes in the pre-push path",
                 failures,
             )
 
@@ -675,7 +694,7 @@ def main() -> int:
         post_push_selector_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
         post_push_selector_queue_path.write_text(
             workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
-            + "\nclosed evidence: branch pushed to origin and draft PR #5 opened.\n",
+            + "\nclosed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.\n",
             encoding="utf-8",
         )
         post_push_selector = workbench.build_next_step_selector(post_push_selector_queue_path, advance_record_root)
@@ -683,6 +702,12 @@ def main() -> int:
             post_push_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git post-push verification receipt v0.1",
             "next-step selector should choose post-push receipt only after push evidence",
+            failures,
+        )
+        check(
+            "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+            in post_push_selector.get("candidate", {}).get("validation", []),
+            "post-push selector should verify the published branch ref",
             failures,
         )
         remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
@@ -699,6 +724,22 @@ def main() -> int:
             remote_branch_plan_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git exact pre-push command gate v0.1",
             "next-step selector must not treat remote branch target fields as post-push evidence",
+            failures,
+        )
+        not_pushed_selector_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
+        not_pushed_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1")
+            + "\npre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation\n",
+            encoding="utf-8",
+        )
+        not_pushed_selector = workbench.build_next_step_selector(
+            not_pushed_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            not_pushed_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must keep negated push notes in the pre-push path",
             failures,
         )
         active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"

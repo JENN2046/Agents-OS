@@ -136,7 +136,7 @@ def apply_docctl_release_gate(result: dict[str, Any], docctl_probe: dict[str, An
     return result
 
 NEGATED_SIGNAL_CONTEXT = re.compile(
-    r"\b(no|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
+    r"\b(no|not|do not|does not|cannot|can't|must not|blocked actions?|blocked until|forbidden|denied)\b",
     re.I,
 )
 QUEUE_P3_PATTERNS = {
@@ -292,6 +292,29 @@ def external_git_has_post_push_evidence(queue_text: str) -> bool:
         re.compile(r"\bopened\s+(a\s+)?(draft\s+)?(PR|pull request)\b", re.I),
     )
     return any(line_has_non_negated_signal(line, pattern) for line in queue_text.splitlines() for pattern in patterns)
+
+
+def external_git_published_branch_ref(queue_text: str) -> str | None:
+    branch_name = r"(?P<branch>[A-Za-z0-9][A-Za-z0-9._/-]*)"
+    patterns = (
+        re.compile(rf"\bremote branch\s+(?:exists|created|published|available|verified)\s*:?\s*(?:origin/|refs/heads/)?{branch_name}\b", re.I),
+        re.compile(rf"\bpublished remote branch\s*:?\s*(?:origin/|refs/heads/)?{branch_name}\b", re.I),
+        re.compile(rf"\bbranch pushed\s+(?:to\s+origin\s+)?(?:as\s+)?(?:origin/|refs/heads/)?{branch_name}\b", re.I),
+        re.compile(rf"\bpushed\s+(?:branch\s+)?(?:to\s+origin\s+)?(?:as\s+)?(?:origin/|refs/heads/)?{branch_name}\b", re.I),
+    )
+    non_branch_words = {"and", "as", "branch", "created", "draft", "opened", "origin", "pr", "published", "remote", "to", "verified"}
+    for line in queue_text.splitlines():
+        if NEGATED_SIGNAL_CONTEXT.search(line):
+            continue
+        for pattern in patterns:
+            match = pattern.search(line)
+            if not match:
+                continue
+            branch = match.group("branch").strip(".,;:)")
+            if branch.lower() in non_branch_words:
+                continue
+            return f"refs/heads/{branch.removeprefix('refs/heads/').removeprefix('origin/')}"
+    return None
 
 
 def validate_next_user_action_summary(prefix: str, action: dict[str, Any]) -> list[str]:
@@ -2494,6 +2517,7 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "component would need a managed run before contract review",
         ]
     elif ("external git" in title_lc or "publication" in title_lc or "pre-push" in title_lc) and external_git_has_post_push_evidence(queue_text):
+        published_ref = external_git_published_branch_ref(queue_text)
         title = "AGENTS OS external Git post-push verification receipt v0.1"
         goal_delta = "turn a pushed external Git action into a verified receipt with local leftovers classified"
         state_delta = "published-but-unverified -> remote-verified-and-local-scope-known"
@@ -2503,18 +2527,18 @@ def selector_candidate_for_now(now_title: str, queue_text: str) -> dict[str, Any
             "and classify local leftovers before any further external Git work."
         )
         completion = [
-            "remote main commit matches the intended local commit",
+            "published remote ref matches the intended local commit or declared PR evidence",
             "published file scope is recorded",
             "remaining local-only files are classified",
             "external-write boundary returns to blocked after receipt",
         ]
         validation = [
-            "git ls-remote origin refs/heads/main",
+            f"git ls-remote origin {published_ref}" if published_ref else "identify and verify the declared pushed branch or PR ref",
             "git status --short --branch --untracked-files=all",
             "PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-workbench/workbench.py validate --level fast",
         ]
         stops = [
-            "remote main does not match local HEAD",
+            "published remote ref does not match local HEAD or declared PR evidence",
             "unexpected file was published",
             "restricted private material appears in published scope",
         ]
