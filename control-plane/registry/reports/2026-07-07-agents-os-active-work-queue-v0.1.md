@@ -130,7 +130,10 @@ remote_pr_refs_untouched=5
 next_split_pr_selected=true
 next_split_pr_branch=pr/post-merge-cleanup-records
 post_merge_cleanup_records_pre_push_plan_exists=true
-active_now=AGENTS_OS_post_merge_cleanup_records_docs_only_PR_execution_authorization_gate_v0.1
+post_merge_cleanup_records_pr6_opened=true
+post_merge_cleanup_records_pr6_url=https://github.com/JENN2046/Agents-OS/pull/6
+post_merge_cleanup_records_pr6_initial_head=b56de533234314e3b6eedea03c973ee0672db6eb
+active_now=AGENTS_OS_post_merge_cleanup_records_PR_review_tracking_gate_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -331,10 +334,10 @@ authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS post-merge cleanup records docs-only PR execution authorization gate v0.1
+### NOW-001: AGENTS OS post-merge cleanup records PR review tracking gate v0.1
 
-Source: accepted no-write pre-push command plan
-Mode: Jenn external-write execution authorization required
+Source: PR #6 opened from accepted docs-only execution plan
+Mode: track review readiness without additional external write
 Must keep: external_write_authorized=false
 Must keep: remote_branch_delete_authorized=false
 Must keep: force_push_authorized=false
@@ -342,8 +345,9 @@ Must keep: tag_release_deploy_publish_authorized=false
 Must keep: history_rewrite_authorized=false
 Must keep: provider_call_authorized=false
 Must keep: memory_write_authorized=false
+PR: https://github.com/JENN2046/Agents-OS/pull/6
 Branch target: pr/post-merge-cleanup-records
-Evidence: exact command plan recorded at ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pre-push-plan.md
+Evidence: PR opened receipt recorded at ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pr-opened.md
 Publish scope:
 - control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
 - ops/records/workbench-validation/2026-07-09-next-evidence-review.md
@@ -352,10 +356,11 @@ Publish scope:
 - ops/records/workbench-validation/2026-07-09-stale-local-pr-workspace-cleanup-plan.md
 - ops/records/workbench-validation/2026-07-10-next-split-pr-selection.md
 - ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pre-push-plan.md
+- ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pr-opened.md
 Excluded local-only evidence:
 - execution/agents-os-workbench/records/advancerecord-5cfcb5526a.json
 - execution/agents-os-workbench/records/cyclerecord-1a4d885bab.json
-Completion target: Jenn explicitly authorizes or rejects the exact branch, commit, push, and draft PR command plan
+Completion target: PR #6 review state is tracked to ready-for-review or merge gate; any new commit/push requires a fresh exact command boundary
 
 ## NEXT
 
@@ -439,6 +444,7 @@ stale_local_pr_workspace_cleanup_gate_v0.1: closed after exact local cleanup com
 stale_local_pr_workspace_cleanup_command_authorization_gate_v0.1: closed after Jenn authorized and local cleanup executed; removed 5 stale local PR worktrees and deleted 5 merged local PR branches with `git branch -d`; remote refs were not touched; no external write, force push, tag, release, deploy, or history rewrite was performed
 post_cleanup_next_split_pr_selection_gate_v0.1: closed after selecting docs-only post-merge cleanup records PR; branch target pr/post-merge-cleanup-records; default publish scope excludes workbench JSON run records; no commit, push, PR creation, or external write was performed
 post_merge_cleanup_records_docs_only_pr_pre_push_plan_gate_v0.1: closed after exact no-write command plan was recorded for branch pr/post-merge-cleanup-records; publish scope excludes workbench JSON run records; no branch creation, staging, commit, push, PR creation, or external write was performed
+post_merge_cleanup_records_docs_only_pr_execution_authorization_gate_v0.1: closed after Jenn authorized and draft PR #6 was opened; PR=https://github.com/JENN2046/Agents-OS/pull/6; initial_head=b56de533234314e3b6eedea03c973ee0672db6eb; follow-up receipt update keeps PR tracking current; no force push, tag, release, deploy, remote branch deletion, or history rewrite was performed
 ```
 
 ## Machine Input Contract
