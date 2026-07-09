@@ -119,7 +119,18 @@ vcptoolbox_controlled_local_use_handoff_gate_exists=true
 vcptoolbox_controlled_local_use_handoff_gate_validation=PASS
 vcptoolbox_runtime_integration_contract_exists=true
 vcptoolbox_runtime_integration_contract_validation=PASS
-active_now=No_Active_Automatic_Construction_Item
+external_git_pr5_merged=true
+external_git_pr5_url=https://github.com/JENN2046/Agents-OS/pull/5
+external_git_pr5_merge_commit=36d45aa9030119a9877344d49bd01c345b46da9a
+post_merge_evidence_review_validation=PASS
+post_merge_evidence_review_advance_id=ADVANCE-D108921D8D
+stale_local_pr_workspaces_removed=5
+stale_local_pr_branches_removed=5
+remote_pr_refs_untouched=5
+next_split_pr_selected=true
+next_split_pr_branch=pr/post-merge-cleanup-records
+post_merge_cleanup_records_pre_push_plan_exists=true
+active_now=AGENTS_OS_post_merge_cleanup_records_docs_only_PR_execution_authorization_gate_v0.1
 colameta_plan_exists=true
 colameta_plan_versions=7
 colameta_prompt_files=7
@@ -320,22 +331,31 @@ authorization.
 
 ## NOW
 
-### NOW-001: AGENTS OS external Git publication target gate v0.1
+### NOW-001: AGENTS OS post-merge cleanup records docs-only PR execution authorization gate v0.1
 
-Route option: C - External Git Publication Exact Gate
-Source: explicit Jenn route-choice preview
-Mode: prepare first safe package only
-Boundary: queue adoption requires separate reviewed mutation gate
-Must keep: git_push_authorized=false until exact target gate
+Source: accepted no-write pre-push command plan
+Mode: Jenn external-write execution authorization required
+Must keep: external_write_authorized=false
+Must keep: remote_branch_delete_authorized=false
 Must keep: force_push_authorized=false
 Must keep: tag_release_deploy_publish_authorized=false
-Must keep: history_rewrite_authorized=false unless separate scrub gate
-Must keep: secret_raw_read_authorized=false
-Must keep: external_write_authorized=false until exact target gate
-Target repository: https://github.com/JENN2046/Agents-OS
-Target state: private empty repository, read-only metadata verified
-Next boundary: exact pre-push command gate required before any external write
-Exact pre-push command gate: prepared, no-write, Jenn execution authorization required
+Must keep: history_rewrite_authorized=false
+Must keep: provider_call_authorized=false
+Must keep: memory_write_authorized=false
+Branch target: pr/post-merge-cleanup-records
+Evidence: exact command plan recorded at ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pre-push-plan.md
+Publish scope:
+- control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+- ops/records/workbench-validation/2026-07-09-next-evidence-review.md
+- ops/records/workbench-validation/2026-07-09-post-merge-queue-reconciliation.md
+- ops/records/workbench-validation/2026-07-09-stale-local-pr-workspace-cleanup-execution.md
+- ops/records/workbench-validation/2026-07-09-stale-local-pr-workspace-cleanup-plan.md
+- ops/records/workbench-validation/2026-07-10-next-split-pr-selection.md
+- ops/records/workbench-validation/2026-07-10-post-merge-cleanup-records-pre-push-plan.md
+Excluded local-only evidence:
+- execution/agents-os-workbench/records/advancerecord-5cfcb5526a.json
+- execution/agents-os-workbench/records/cyclerecord-1a4d885bab.json
+Completion target: Jenn explicitly authorizes or rejects the exact branch, commit, push, and draft PR command plan
 
 ## NEXT
 
@@ -413,6 +433,12 @@ control_chain_reviewed_route_adoption_apply_gate_v0.1: appended "AGENTS OS exter
 queue_manager_reviewed_mutation_v0.1: closed NOW "No Active Automatic Construction Item"; promoted "AGENTS OS external Git publication target gate v0.1"; proposal=QUEUEPROMOTIONPROPOSAL-B1EA4B5E96
 external_git_publication_target_gate_v0.1: accepted target JENN2046/Agents-OS as private empty repo; no remote added, no push, no external write; next boundary is exact pre-push command gate
 external_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan for git@github.com:JENN2046/Agents-OS.git; no remote add, no commit, no push; default publish scope excludes AGENTS.md, Zone.Identifier files, and workbench JSON run records
+external_git_post_merge_reconciliation_v0.1: closed NOW "AGENTS OS external Git publication target gate v0.1" after PR #5 merged into origin/main; PR=https://github.com/JENN2046/Agents-OS/pull/5; merge_commit=36d45aa9030119a9877344d49bd01c345b46da9a; external write, release, deploy, tag, force push, and history rewrite remain unauthorized
+post_merge_queue_reconciliation_and_route_selection_gate_v0.1: closed after local evidence review passed; advance_id=ADVANCE-D108921D8D; selector candidate was non-repeating; open GitHub PR list was empty; next useful gate is stale local PR workspace cleanup planning without external write or local deletion
+stale_local_pr_workspace_cleanup_gate_v0.1: closed after exact local cleanup command plan was recorded; 5 local PR branches verified merged into main; 5 stale local PR worktrees identified; no worktree or branch was removed
+stale_local_pr_workspace_cleanup_command_authorization_gate_v0.1: closed after Jenn authorized and local cleanup executed; removed 5 stale local PR worktrees and deleted 5 merged local PR branches with `git branch -d`; remote refs were not touched; no external write, force push, tag, release, deploy, or history rewrite was performed
+post_cleanup_next_split_pr_selection_gate_v0.1: closed after selecting docs-only post-merge cleanup records PR; branch target pr/post-merge-cleanup-records; default publish scope excludes workbench JSON run records; no commit, push, PR creation, or external write was performed
+post_merge_cleanup_records_docs_only_pr_pre_push_plan_gate_v0.1: closed after exact no-write command plan was recorded for branch pr/post-merge-cleanup-records; publish scope excludes workbench JSON run records; no branch creation, staging, commit, push, PR creation, or external write was performed
 ```
 
 ## Machine Input Contract
