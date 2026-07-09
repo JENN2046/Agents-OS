@@ -48,7 +48,7 @@ export const snapshotDeniedDirectoryNames = [
   "data/snapshots",
 ] as const;
 
-const deniedExtensions = [".pem", ".key", ".p12", ".pfx"] as const;
+export const snapshotDeniedExtensions = [".pem", ".key", ".p12", ".pfx"] as const;
 
 const sensitiveContentPatterns = [
   /\bBearer\s+[A-Za-z0-9._~+/=-]+/i,
@@ -392,7 +392,7 @@ function classifyPath(relativePath: string): SnapshotExclusion | undefined {
     }
   }
 
-  for (const extension of deniedExtensions) {
+  for (const extension of snapshotDeniedExtensions) {
     if (lower.endsWith(extension)) {
       matched.push(extension);
     }

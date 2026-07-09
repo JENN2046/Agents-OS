@@ -1,5 +1,5 @@
 import { validateStructuredLoopOutput } from "./event_contracts.js";
-import { snapshotDeniedDirectoryNames, snapshotDeniedPathTerms } from "./repo_snapshot.js";
+import { snapshotDeniedDirectoryNames, snapshotDeniedExtensions, snapshotDeniedPathTerms } from "./repo_snapshot.js";
 
 export interface E2eEvidenceVerificationInput {
   readonly report: unknown;
@@ -132,6 +132,7 @@ function isSnapshotDeniedPath(relativePath: string): boolean {
   const normalized = relativePath.replaceAll("\\", "/").toLowerCase();
   return (
     snapshotDeniedPathTerms.some((term) => normalized.includes(term.toLowerCase())) ||
+    snapshotDeniedExtensions.some((extension) => normalized.endsWith(extension.toLowerCase())) ||
     snapshotDeniedDirectoryNames.some((directoryName) => {
       const denied = directoryName.toLowerCase();
       return normalized === denied || normalized.startsWith(`${denied}/`) || normalized.includes(`/${denied}/`);
