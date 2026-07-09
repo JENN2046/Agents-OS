@@ -33,5 +33,14 @@ describe("Commander evidence receipt boundaries", () => {
         expectedReceiptRelativePath: expectedRelative,
       }),
     ).toEqual({ receiptPath: expectedPath, boundaryValid: false });
+
+    expect(
+      resolveCommanderEvidenceReceiptPath({
+        projectRoot,
+        taskId: "CEA-018",
+        reportReceiptPath: undefined,
+        expectedReceiptRelativePath: expectedRelative,
+      }),
+    ).toEqual({ receiptPath: expectedPath, boundaryValid: false });
   });
 });

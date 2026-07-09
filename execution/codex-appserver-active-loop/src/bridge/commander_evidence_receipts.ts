@@ -14,7 +14,7 @@ export function resolveCommanderEvidenceReceiptPath(input: {
 }): CommanderReceiptResolution {
   const expectedReceiptPath = path.resolve(input.projectRoot, input.expectedReceiptRelativePath);
   if (!input.reportReceiptPath) {
-    return { receiptPath: expectedReceiptPath, boundaryValid: true };
+    return { receiptPath: expectedReceiptPath, boundaryValid: false };
   }
 
   try {

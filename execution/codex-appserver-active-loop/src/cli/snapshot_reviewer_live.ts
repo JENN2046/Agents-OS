@@ -4,7 +4,11 @@ import { createAppServerClient } from "../appserver/client.js";
 import { createStdioTransport } from "../appserver/transport_stdio.js";
 import { createServerRequestResponsePlan, type PolicyDecision } from "../bridge/policy_gate.js";
 import { assertPromptAnnex, type PromptAnnex } from "../bridge/prompt_annex.js";
-import { createSnapshotReviewerLivePrompt, type SnapshotWorkerLiveEvidence } from "../bridge/snapshot_reviewer_live.js";
+import {
+  assertSnapshotReviewerDecisionAllowsContinuation,
+  createSnapshotReviewerLivePrompt,
+  type SnapshotWorkerLiveEvidence,
+} from "../bridge/snapshot_reviewer_live.js";
 import {
   assertSnapshotBoundWorkerPlan,
   assertLiveArtifactPathBoundary,
@@ -199,6 +203,7 @@ async function main(): Promise<void> {
       throw new Error(stopReason);
     }
     const reviewerDecision = parseReviewerDecision(completedTurn, tracker.agentTextByTurn.get(completedTurn.id));
+    assertSnapshotReviewerDecisionAllowsContinuation(reviewerDecision);
     await appendEvent("APP_SERVER_MESSAGE", {
       method: "structured-output/parsed",
       expectedType: "REVIEWER_DECISION",

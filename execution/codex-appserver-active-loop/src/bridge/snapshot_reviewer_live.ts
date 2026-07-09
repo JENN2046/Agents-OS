@@ -1,4 +1,4 @@
-import { validateStructuredLoopOutput, type WorkerDone } from "./event_contracts.js";
+import { validateStructuredLoopOutput, type ReviewerDecision, type WorkerDone } from "./event_contracts.js";
 import { assertPromptAnnex, type PromptAnnex } from "./prompt_annex.js";
 import { assertSnapshotBoundWorkerPlan, type SnapshotBoundWorkerPlan } from "./snapshot_worker_pilot.js";
 
@@ -141,6 +141,15 @@ export function assertSnapshotWorkerLiveEvidence(value: unknown): asserts value 
   }
   if (!isRecord(value.boundary_flags)) {
     throw new Error("Worker live evidence is missing boundary flags");
+  }
+}
+
+export function assertSnapshotReviewerDecisionAllowsContinuation(reviewerDecision: ReviewerDecision): void {
+  if (reviewerDecision.type !== "REVIEWER_DECISION") {
+    throw new Error("Reviewer live output must be REVIEWER_DECISION");
+  }
+  if (reviewerDecision.decision !== "continue") {
+    throw new Error(`Reviewer live decision must be continue before PASS: ${reviewerDecision.decision}`);
   }
 }
 

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createSnapshotReviewerLivePrompt, type SnapshotWorkerLiveEvidence } from "../../src/bridge/snapshot_reviewer_live.js";
+import {
+  assertSnapshotReviewerDecisionAllowsContinuation,
+  createSnapshotReviewerLivePrompt,
+  type SnapshotWorkerLiveEvidence,
+} from "../../src/bridge/snapshot_reviewer_live.js";
 import type { PromptAnnex } from "../../src/bridge/prompt_annex.js";
 import type { SnapshotBoundWorkerPlan } from "../../src/bridge/snapshot_worker_pilot.js";
 
@@ -39,6 +43,19 @@ describe("snapshot Reviewer live prompt", () => {
         },
       }),
     ).toThrow("command_exec=NOT_USED");
+  });
+
+  it("rejects non-continuing Reviewer decisions before PASS", () => {
+    expect(() =>
+      assertSnapshotReviewerDecisionAllowsContinuation({
+        type: "REVIEWER_DECISION",
+        decision: "request_human_gate",
+        reason: "boundary evidence needs human review",
+        next_instruction: "stop",
+        constraints: [],
+        evidence_used: [],
+      }),
+    ).toThrow("must be continue");
   });
 });
 
