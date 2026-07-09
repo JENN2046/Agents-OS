@@ -348,15 +348,13 @@ def external_git_published_branch_ref(queue_text: str) -> str | None:
     non_branch_words = {"and", "as", "branch", "created", "draft", "opened", "origin", "pr", "published", "remote", "to", "verified"}
     for line in queue_text.splitlines():
         for pattern in patterns:
-            match = pattern.search(line)
-            if not match:
-                continue
-            if external_git_match_is_negated(line, match):
-                continue
-            branch = match.group("branch").strip(".,;:)")
-            if branch.lower() in non_branch_words:
-                continue
-            return f"refs/heads/{branch.removeprefix('refs/heads/').removeprefix('origin/')}"
+            for match in pattern.finditer(line):
+                if external_git_match_is_negated(line, match):
+                    continue
+                branch = match.group("branch").strip(".,;:)")
+                if branch.lower() in non_branch_words:
+                    continue
+                return f"refs/heads/{branch.removeprefix('refs/heads/').removeprefix('origin/')}"
     return None
 
 

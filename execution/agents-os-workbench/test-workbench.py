@@ -231,6 +231,25 @@ def main() -> int:
                 "next-step selector should accept pushed-branch evidence after comma-separated safety negation",
                 failures,
             )
+            post_push_after_stale_negation_queue_path = Path(temp_dir) / "post-push-stale-negation-selector-queue.md"
+            post_push_after_stale_negation_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: branch not pushed yet; pushed branch pr/workbench-next-step-fast-validation.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_after_stale_negation_selector = workbench.build_next_step_selector(
+                post_push_after_stale_negation_queue_path,
+                record_root,
+            )
+            check(
+                "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+                in post_push_after_stale_negation_selector.get("candidate", {}).get("validation", []),
+                "post-push selector should extract branch ref after stale negated push note",
+                failures,
+            )
             remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
             remote_branch_plan_queue_path.write_text(
                 fixture_queue_with_now_lines(
@@ -868,6 +887,25 @@ def main() -> int:
             post_push_after_comma_safety_note_selector.get("candidate", {}).get("title")
             == "AGENTS OS external Git post-push verification receipt v0.1",
             "next-step selector should accept pushed-branch evidence after comma-separated safety negation",
+            failures,
+        )
+        post_push_after_stale_negation_selector_queue_path = Path(temp_dir) / "post-push-stale-negation-selector-queue.md"
+        post_push_after_stale_negation_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: branch not pushed yet; pushed branch pr/workbench-next-step-fast-validation.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_after_stale_negation_selector = workbench.build_next_step_selector(
+            post_push_after_stale_negation_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+            in post_push_after_stale_negation_selector.get("candidate", {}).get("validation", []),
+            "post-push selector should extract branch ref after stale negated push note",
             failures,
         )
         remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
