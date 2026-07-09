@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { assertReviewerDecisionAllowsContinuation, createE2eSafeReviewBoundarySummary } from "../../src/bridge/e2e_safe_review.js";
+import type { Turn } from "../../src/generated/appserver/v2/Turn.js";
+import {
+  assertReviewerDecisionAllowsContinuation,
+  assertSafeReviewTurnCompleted,
+  createE2eSafeReviewBoundarySummary,
+  rejectSafeReviewTerminalNonCompletedTurn,
+} from "../../src/bridge/e2e_safe_review.js";
 
 describe("E2E safe review boundary summary", () => {
   it("accepts only snapshot-bound Worker and Reviewer cwd", () => {
@@ -60,4 +66,31 @@ describe("E2E safe review boundary summary", () => {
       }),
     ).toThrow("must be continue");
   });
+
+  it("rejects interrupted turns before safe-review output parsing", () => {
+    expect(() => assertSafeReviewTurnCompleted(makeTurn("interrupted"))).toThrow("status=interrupted");
+    expect(() => rejectSafeReviewTerminalNonCompletedTurn(makeTurn("interrupted"))).toThrow("status=interrupted");
+  });
+
+  it("allows only in-progress turns to keep waiting", () => {
+    expect(() => rejectSafeReviewTerminalNonCompletedTurn(makeTurn("inProgress"))).not.toThrow();
+    expect(() => assertSafeReviewTurnCompleted(makeTurn("inProgress"))).toThrow("status=inProgress");
+  });
+
+  it("keeps failed turn errors explicit", () => {
+    expect(() => assertSafeReviewTurnCompleted(makeTurn("failed", "worker failed"))).toThrow("worker failed");
+  });
 });
+
+function makeTurn(status: string, message: string | null = null): Turn {
+  return {
+    id: "turn-1",
+    items: [],
+    itemsView: { type: "all" },
+    status,
+    error: message ? { message, codexErrorInfo: null, additionalDetails: null } : null,
+    startedAt: null,
+    completedAt: null,
+    durationMs: null,
+  } as unknown as Turn;
+}

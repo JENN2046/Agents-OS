@@ -1,3 +1,4 @@
+import type { Turn } from "../generated/appserver/v2/Turn";
 import type { ReviewerDecision, WorkerDone } from "./event_contracts.js";
 
 export interface E2eSafeReviewBoundaryInput {
@@ -59,4 +60,25 @@ export function assertReviewerDecisionAllowsContinuation(reviewerDecision: Revie
   if (reviewerDecision.decision !== "continue") {
     throw new Error(`E2E Reviewer decision must be continue before PASS: ${reviewerDecision.decision}`);
   }
+}
+
+export function assertSafeReviewTurnCompleted(turn: Turn): Turn {
+  if (turn.status === "completed") {
+    return turn;
+  }
+  if (turn.status === "failed") {
+    throw new Error(formatTurnFailure(turn));
+  }
+  throw new Error(`safe-review turn ended without completion: ${turn.id}: status=${turn.status}`);
+}
+
+export function rejectSafeReviewTerminalNonCompletedTurn(turn: Turn): void {
+  if (turn.status !== "inProgress") {
+    assertSafeReviewTurnCompleted(turn);
+  }
+}
+
+function formatTurnFailure(turn: Turn): string {
+  const message = turn.error?.message ?? "unknown turn failure";
+  return `turn failed: ${turn.id}: ${message}`;
 }
