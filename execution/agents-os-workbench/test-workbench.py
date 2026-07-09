@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 from pathlib import Path
@@ -29,9 +30,420 @@ def check(condition: bool, message: str, failures: list[str]) -> None:
         failures.append(message)
 
 
+def fixture_queue_with_now_lines(workbench: ModuleType, title: str, *lines: str) -> str:
+    return workbench.fixture_queue_text(title).replace(
+        "Run local validation and prepare proposal-only queue output.",
+        "\n".join(["Run local validation and prepare proposal-only queue output.", *lines]),
+    )
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Fixture tests for AGENTS OS Workbench v0.1.")
+    parser.add_argument("--full", action="store_true", help="Run full validation and completion audit checks.")
+    args = parser.parse_args()
+
     workbench = load_workbench()
     failures: list[str] = []
+
+    if not args.full:
+        with tempfile.TemporaryDirectory(prefix="agents-os-workbench-fast-test-", dir=workbench.WORKSPACE_ROOT) as temp_dir:
+            record_root = Path(temp_dir) / "records"
+            record_root.mkdir()
+            route_queue_path = Path(temp_dir) / "route-stop-queue.md"
+            route_queue_path.write_text(workbench.fixture_route_stop_queue_text(), encoding="utf-8")
+            current_cycle = workbench.build_cycle(
+                "Build AGENTS OS into a local automatic workbench.",
+                route_queue_path,
+                run_local_validation=True,
+                validation_command="python3 --version",
+            )
+            check(current_cycle["passed"] is True, f"current cycle should pass: {current_cycle['errors']}", failures)
+            check(
+                current_cycle["stages"]["next_step"]["status"] == "route_choice_required",
+                "current stopped queue should require route choice",
+                failures,
+            )
+            check(
+                current_cycle["stages"]["local_validation"]["performed"] is False,
+                "route-stopped cycle should not run local validation",
+                failures,
+            )
+            check(current_cycle["execution_authorized"] is False, "route-stopped cycle must not authorize execution", failures)
+
+            queue_path = Path(temp_dir) / "queue.md"
+            queue_path.write_text(workbench.fixture_queue_text(), encoding="utf-8")
+            safe_cycle = workbench.build_cycle(
+                "Write local governance report and run fast validation.",
+                queue_path,
+                run_local_validation=True,
+                validation_command="python3 --version",
+            )
+            check(safe_cycle["passed"] is True, f"safe cycle should pass: {safe_cycle['errors']}", failures)
+            check(
+                safe_cycle["stages"]["judgment"]["decision"] == "route_to_local_executor",
+                "safe cycle should route to local executor",
+                failures,
+            )
+            check(
+                safe_cycle["stages"]["local_validation"]["performed"] is True,
+                "safe cycle should run lightweight local validation",
+                failures,
+            )
+            check(
+                safe_cycle["stages"]["intake_proposal"]["can_apply_after_review"] is True,
+                "safe cycle should produce reviewable intake",
+                failures,
+            )
+            check(
+                safe_cycle["stages"]["queue_proposal"]["active_queue_modified"] is False,
+                "safe cycle must not mutate queue during preview",
+                failures,
+            )
+
+            provider_cycle = workbench.build_cycle(
+                "Call provider and start service.",
+                queue_path,
+                run_local_validation=True,
+                validation_command="python3 --version",
+            )
+            check(provider_cycle["passed"] is True, f"provider cycle should pass as stopped output: {provider_cycle['errors']}", failures)
+            check(
+                provider_cycle["stages"]["judgment"]["decision"] == "stop_needs_jenn_decision",
+                "provider cycle should stop for Jenn decision",
+                failures,
+            )
+            check(
+                provider_cycle["stages"]["local_validation"]["performed"] is False,
+                "provider cycle should not run local validation",
+                failures,
+            )
+            check(
+                provider_cycle["stages"]["record"]["effect_summary"]["provider_call_authorized"] is False,
+                "provider cycle must not authorize provider call",
+                failures,
+            )
+
+            record_path = record_root / "cycle-record.json"
+            recorded_cycle = workbench.build_cycle(
+                "Write local governance report and run fast validation.",
+                queue_path,
+                run_local_validation=True,
+                validation_command="python3 --version",
+                write_record=True,
+                record_path=record_path,
+                allowed_record_root=record_root,
+            )
+            check(recorded_cycle["passed"] is True, f"recorded cycle should pass: {recorded_cycle['errors']}", failures)
+            check(recorded_cycle["record_write_performed"] is True, "recorded cycle should write inside allowed root", failures)
+            check(record_path.exists(), "record file should exist under allowed root", failures)
+            blocked_record_cycle = workbench.build_cycle(
+                "Write local governance report and run fast validation.",
+                queue_path,
+                run_local_validation=True,
+                validation_command="python3 --version",
+                write_record=True,
+                record_path=Path(temp_dir) / "outside-record.json",
+                allowed_record_root=record_root,
+            )
+            check(blocked_record_cycle["passed"] is False, "blocked record cycle should fail outside record root", failures)
+            check(
+                blocked_record_cycle["stages"]["record_write"]["write_performed"] is False,
+                "blocked record cycle must not write outside allowed root",
+                failures,
+            )
+
+            selector_queue_path = Path(temp_dir) / "selector-queue.md"
+            selector_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1"),
+                encoding="utf-8",
+            )
+            selector = workbench.build_next_step_selector(selector_queue_path, record_root)
+            check(selector["passed"] is True, f"next-step selector should pass: {selector['errors']}", failures)
+            check(selector["candidate_present"] is True, "next-step selector should emit a candidate", failures)
+            check(
+                selector.get("candidate", {}).get("title") == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector should keep publication target at exact pre-push gate without push evidence",
+                failures,
+            )
+            check(
+                selector.get("candidate", {}).get("substantive_progress") is True,
+                "selector candidate must prove substantive progress",
+                failures,
+            )
+            check(selector["validation_plan"]["level"] == "fast", "selector should default to fast validation", failures)
+            post_push_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
+            post_push_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_selector = workbench.build_next_step_selector(post_push_queue_path, record_root)
+            check(
+                post_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git post-push verification receipt v0.1",
+                "next-step selector should choose post-push receipt only after push evidence",
+                failures,
+            )
+            check(
+                "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+                in post_push_selector.get("candidate", {}).get("validation", []),
+                "post-push selector should verify the published branch ref",
+                failures,
+            )
+            post_push_with_safety_note_queue_path = Path(temp_dir) / "post-push-safety-note-selector-queue.md"
+            post_push_with_safety_note_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: pushed branch pr/workbench-next-step-fast-validation; no tags, no release.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_with_safety_note_selector = workbench.build_next_step_selector(
+                post_push_with_safety_note_queue_path,
+                record_root,
+            )
+            check(
+                post_push_with_safety_note_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git post-push verification receipt v0.1",
+                "next-step selector should accept pushed-branch evidence with unrelated safety negation",
+                failures,
+            )
+            post_push_after_comma_safety_note_queue_path = Path(temp_dir) / "post-push-comma-safety-note-selector-queue.md"
+            post_push_after_comma_safety_note_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: no tags, no release, pushed branch pr/workbench-next-step-fast-validation.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_after_comma_safety_note_selector = workbench.build_next_step_selector(
+                post_push_after_comma_safety_note_queue_path,
+                record_root,
+            )
+            check(
+                post_push_after_comma_safety_note_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git post-push verification receipt v0.1",
+                "next-step selector should accept pushed-branch evidence after comma-separated safety negation",
+                failures,
+            )
+            post_push_after_stale_negation_queue_path = Path(temp_dir) / "post-push-stale-negation-selector-queue.md"
+            post_push_after_stale_negation_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "closed evidence: branch not pushed yet; pushed branch pr/workbench-next-step-fast-validation.",
+                ),
+                encoding="utf-8",
+            )
+            post_push_after_stale_negation_selector = workbench.build_next_step_selector(
+                post_push_after_stale_negation_queue_path,
+                record_root,
+            )
+            check(
+                "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+                in post_push_after_stale_negation_selector.get("candidate", {}).get("validation", []),
+                "post-push selector should extract branch ref after stale negated push note",
+                failures,
+            )
+            remote_branch_plan_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
+            remote_branch_plan_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "pre-push plan field: remote branch: pr/workbench-next-step-fast-validation",
+                ),
+                encoding="utf-8",
+            )
+            remote_branch_plan_selector = workbench.build_next_step_selector(remote_branch_plan_queue_path, record_root)
+            check(
+                remote_branch_plan_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must not treat remote branch target fields as post-push evidence",
+                failures,
+            )
+            not_pushed_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
+            not_pushed_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git publication target gate v0.1",
+                    "pre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation",
+                ),
+                encoding="utf-8",
+            )
+            not_pushed_selector = workbench.build_next_step_selector(not_pushed_queue_path, record_root)
+            check(
+                not_pushed_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must keep negated push notes in the pre-push path",
+                failures,
+            )
+            unrelated_post_push_queue_path = Path(temp_dir) / "unrelated-post-push-selector-queue.md"
+            unrelated_post_push_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    "old_task: closed\nunrelated: remote branch created pr/old-work and PR #12 opened",
+                ),
+                encoding="utf-8",
+            )
+            unrelated_post_push_selector = workbench.build_next_step_selector(unrelated_post_push_queue_path, record_root)
+            check(
+                unrelated_post_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must ignore unrelated CLOSED post-push evidence",
+                failures,
+            )
+            closed_next_boundary_queue_path = Path(temp_dir) / "closed-next-boundary-selector-queue.md"
+            closed_next_boundary_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    (
+                        "old_task: closed\n"
+                        "external_git_publication_target_gate_v0.1: accepted target; "
+                        "next boundary is exact pre-push command gate"
+                    ),
+                ),
+                encoding="utf-8",
+            )
+            closed_next_boundary_selector = workbench.build_next_step_selector(closed_next_boundary_queue_path, record_root)
+            check(
+                closed_next_boundary_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git exact pre-push command gate v0.1",
+                "next-step selector must not treat CLOSED receipt prose as a completed pre-push gate",
+                failures,
+            )
+            closed_pre_push_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
+            closed_pre_push_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                    "old_task: closed",
+                    "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+                ),
+                encoding="utf-8",
+            )
+            closed_pre_push_selector = workbench.build_next_step_selector(closed_pre_push_queue_path, record_root)
+            check(
+                closed_pre_push_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git command execution authorization gate v0.1",
+                "next-step selector must not repeat a CLOSED exact pre-push command gate",
+                failures,
+            )
+            post_push_receipt_now_queue_path = Path(temp_dir) / "post-push-receipt-now-selector-queue.md"
+            post_push_receipt_now_queue_path.write_text(
+                fixture_queue_with_now_lines(
+                    workbench,
+                    "AGENTS OS external Git post-push verification receipt v0.1",
+                    "published remote ref verified by git ls-remote; local leftovers classified.",
+                ).replace(
+                    "old_task: closed",
+                    "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+                ),
+                encoding="utf-8",
+            )
+            post_push_receipt_now_selector = workbench.build_next_step_selector(post_push_receipt_now_queue_path, record_root)
+            check(
+                post_push_receipt_now_selector.get("candidate", {}).get("title")
+                == "AGENTS OS external Git PR review tracking gate v0.1",
+                "next-step selector must not rewind a post-push receipt NOW to execution authorization",
+                failures,
+            )
+
+            duplicate_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
+            duplicate_queue_path.write_text(
+                workbench.fixture_queue_text("AGENTS OS external Git exact pre-push command gate v0.1"),
+                encoding="utf-8",
+            )
+            duplicate_selector = workbench.build_next_step_selector(duplicate_queue_path, record_root)
+            check(
+                duplicate_selector["selector_state"] == "blocked_repeat_detected",
+                "next-step selector should block same-semantic repeat",
+                failures,
+            )
+            cli_selector = subprocess.run(
+                [
+                    "python3",
+                    str(ROOT / "workbench.py"),
+                    "select-next-step",
+                    "--queue",
+                    str(selector_queue_path),
+                    "--record-root",
+                    str(record_root),
+                    "--json",
+                ],
+                cwd=workbench.WORKSPACE_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            check(cli_selector.returncode == 0, f"CLI select-next-step should pass: {cli_selector.stderr}", failures)
+            if cli_selector.stdout:
+                cli_selector_payload = json.loads(cli_selector.stdout)
+                check(
+                    cli_selector_payload.get("candidate", {}).get("substantive_progress") is True,
+                    "CLI select-next-step should prove substantive progress",
+                    failures,
+                )
+            else:
+                failures.append("CLI select-next-step should emit JSON")
+
+            fast_validation = workbench.validate_workbench_by_level("fast")
+            check(
+                fast_validation["passed"] is True,
+                f"workbench fast validation should pass: {fast_validation['errors']}",
+                failures,
+            )
+            check(fast_validation["actual_level"] == "fast", "fast validation should report actual level", failures)
+            check(
+                fast_validation["ordinary_progress_eligible"] is True,
+                "fast validation should be eligible for ordinary progress",
+                failures,
+            )
+            check(
+                fast_validation["external_write_eligible"] is False,
+                "fast validation must not be eligible for external write",
+                failures,
+            )
+            check(
+                "docctl status" in fast_validation["skipped_full_checks"],
+                "fast validation should skip full docctl status",
+                failures,
+            )
+            failed_full_metadata = workbench.attach_validation_metadata(
+                {"passed": False, "errors": ["fixture failure"]},
+                "full",
+                workbench.time.monotonic(),
+                required_level="full",
+            )
+            check(
+                failed_full_metadata["external_write_eligible"] is False,
+                "failed full validation must not be external-write eligible",
+                failures,
+            )
+            check(
+                failed_full_metadata["release_eligible"] is False,
+                "failed full validation must not be release eligible",
+                failures,
+            )
+
+        if failures:
+            for failure in failures:
+                print(f"FAIL {failure}")
+            print(f"cases=10 failures={len(failures)} mode=fast")
+            return 1
+
+        print("PASS current stopped queue cycle")
+        print("PASS local-safe workbench cycle")
+        print("PASS provider stop cycle")
+        print("PASS workbench record write gate fixtures")
+        print("PASS workbench next-step selector fast fixtures")
+        print("PASS workbench duplicate selector guard")
+        print("PASS workbench CLI selector")
+        print("PASS workbench fast validation")
+        print("cases=10 failures=0 mode=fast")
+        return 0
 
     with tempfile.TemporaryDirectory(prefix="agents-os-workbench-route-stop-", dir=workbench.WORKSPACE_ROOT) as route_stop_dir:
         current_queue_path = Path(route_stop_dir) / "route-stop-queue.md"
@@ -400,6 +812,309 @@ def main() -> int:
             )
         else:
             failures.append("CLI status should emit JSON")
+
+        selector_queue_path = Path(temp_dir) / "selector-queue.md"
+        selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1"),
+            encoding="utf-8",
+        )
+        selector = workbench.build_next_step_selector(selector_queue_path, advance_record_root)
+        check(selector["passed"] is True, f"next-step selector should pass: {selector['errors']}", failures)
+        check(selector["candidate_present"] is True, "next-step selector should emit a candidate", failures)
+        selector_candidate = selector.get("candidate", {})
+        check(
+            selector_candidate.get("title") == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector should keep publication target at exact pre-push gate without push evidence",
+            failures,
+        )
+        check(selector_candidate.get("not_repeat_of_now") is True, "selector candidate must not repeat NOW", failures)
+        check(selector_candidate.get("not_repeat_of_queue") is True, "selector candidate must not repeat queue", failures)
+        check(
+            selector_candidate.get("substantive_progress") is True,
+            "selector candidate must prove substantive progress",
+            failures,
+        )
+        check(bool(selector_candidate.get("goal_delta")), "selector candidate must describe goal delta", failures)
+        check(bool(selector_candidate.get("state_delta")), "selector candidate must describe state delta", failures)
+        check(
+            len(selector_candidate.get("completion_criteria", [])) >= 2,
+            "selector candidate must include completion criteria",
+            failures,
+        )
+        check(selector["validation_plan"]["level"] == "fast", "selector should default to fast validation", failures)
+        check(
+            selector["validation_plan"]["full_validation_required_before_external_write"] is True,
+            "selector must require full validation before external write",
+            failures,
+        )
+        check(selector["write_performed"] is False, "selector must be read-only", failures)
+        post_push_selector_queue_path = Path(temp_dir) / "post-push-selector-queue.md"
+        post_push_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: remote branch created pr/workbench-next-step-fast-validation and draft PR #5 opened.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_selector = workbench.build_next_step_selector(post_push_selector_queue_path, advance_record_root)
+        check(
+            post_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git post-push verification receipt v0.1",
+            "next-step selector should choose post-push receipt only after push evidence",
+            failures,
+        )
+        check(
+            "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+            in post_push_selector.get("candidate", {}).get("validation", []),
+            "post-push selector should verify the published branch ref",
+            failures,
+        )
+        post_push_with_safety_note_selector_queue_path = Path(temp_dir) / "post-push-safety-note-selector-queue.md"
+        post_push_with_safety_note_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: pushed branch pr/workbench-next-step-fast-validation; no tags, no release.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_with_safety_note_selector = workbench.build_next_step_selector(
+            post_push_with_safety_note_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            post_push_with_safety_note_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git post-push verification receipt v0.1",
+            "next-step selector should accept pushed-branch evidence with unrelated safety negation",
+            failures,
+        )
+        post_push_after_comma_safety_note_selector_queue_path = Path(temp_dir) / "post-push-comma-safety-note-selector-queue.md"
+        post_push_after_comma_safety_note_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: no tags, no release, pushed branch pr/workbench-next-step-fast-validation.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_after_comma_safety_note_selector = workbench.build_next_step_selector(
+            post_push_after_comma_safety_note_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            post_push_after_comma_safety_note_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git post-push verification receipt v0.1",
+            "next-step selector should accept pushed-branch evidence after comma-separated safety negation",
+            failures,
+        )
+        post_push_after_stale_negation_selector_queue_path = Path(temp_dir) / "post-push-stale-negation-selector-queue.md"
+        post_push_after_stale_negation_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "closed evidence: branch not pushed yet; pushed branch pr/workbench-next-step-fast-validation.",
+            ),
+            encoding="utf-8",
+        )
+        post_push_after_stale_negation_selector = workbench.build_next_step_selector(
+            post_push_after_stale_negation_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            "git ls-remote origin refs/heads/pr/workbench-next-step-fast-validation"
+            in post_push_after_stale_negation_selector.get("candidate", {}).get("validation", []),
+            "post-push selector should extract branch ref after stale negated push note",
+            failures,
+        )
+        remote_branch_plan_selector_queue_path = Path(temp_dir) / "remote-branch-plan-selector-queue.md"
+        remote_branch_plan_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "pre-push plan field: remote branch: pr/workbench-next-step-fast-validation",
+            ),
+            encoding="utf-8",
+        )
+        remote_branch_plan_selector = workbench.build_next_step_selector(
+            remote_branch_plan_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            remote_branch_plan_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must not treat remote branch target fields as post-push evidence",
+            failures,
+        )
+        not_pushed_selector_queue_path = Path(temp_dir) / "not-pushed-selector-queue.md"
+        not_pushed_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git publication target gate v0.1",
+                "pre-push state: branch not pushed yet; remote branch: pr/workbench-next-step-fast-validation",
+            ),
+            encoding="utf-8",
+        )
+        not_pushed_selector = workbench.build_next_step_selector(
+            not_pushed_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            not_pushed_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must keep negated push notes in the pre-push path",
+            failures,
+        )
+        unrelated_post_push_selector_queue_path = Path(temp_dir) / "unrelated-post-push-selector-queue.md"
+        unrelated_post_push_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                "old_task: closed\nunrelated: remote branch created pr/old-work and PR #12 opened",
+            ),
+            encoding="utf-8",
+        )
+        unrelated_post_push_selector = workbench.build_next_step_selector(
+            unrelated_post_push_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            unrelated_post_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must ignore unrelated CLOSED post-push evidence",
+            failures,
+        )
+        closed_next_boundary_selector_queue_path = Path(temp_dir) / "closed-next-boundary-selector-queue.md"
+        closed_next_boundary_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                (
+                    "old_task: closed\n"
+                    "external_git_publication_target_gate_v0.1: accepted target; "
+                    "next boundary is exact pre-push command gate"
+                ),
+            ),
+            encoding="utf-8",
+        )
+        closed_next_boundary_selector = workbench.build_next_step_selector(
+            closed_next_boundary_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            closed_next_boundary_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git exact pre-push command gate v0.1",
+            "next-step selector must not treat CLOSED receipt prose as a completed pre-push gate",
+            failures,
+        )
+        closed_pre_push_selector_queue_path = Path(temp_dir) / "closed-pre-push-selector-queue.md"
+        closed_pre_push_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git publication target gate v0.1").replace(
+                "old_task: closed",
+                "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+            ),
+            encoding="utf-8",
+        )
+        closed_pre_push_selector = workbench.build_next_step_selector(
+            closed_pre_push_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            closed_pre_push_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git command execution authorization gate v0.1",
+            "next-step selector must not repeat a CLOSED exact pre-push command gate",
+            failures,
+        )
+        post_push_receipt_now_selector_queue_path = Path(temp_dir) / "post-push-receipt-now-selector-queue.md"
+        post_push_receipt_now_selector_queue_path.write_text(
+            fixture_queue_with_now_lines(
+                workbench,
+                "AGENTS OS external Git post-push verification receipt v0.1",
+                "published remote ref verified by git ls-remote; local leftovers classified.",
+            ).replace(
+                "old_task: closed",
+                "old_task: closed\nexternal_git_exact_pre_push_command_gate_v0.1: accepted no-write command plan; no push",
+            ),
+            encoding="utf-8",
+        )
+        post_push_receipt_now_selector = workbench.build_next_step_selector(
+            post_push_receipt_now_selector_queue_path,
+            advance_record_root,
+        )
+        check(
+            post_push_receipt_now_selector.get("candidate", {}).get("title")
+            == "AGENTS OS external Git PR review tracking gate v0.1",
+            "next-step selector must not rewind a post-push receipt NOW to execution authorization",
+            failures,
+        )
+        active_loop_selector_queue_path = Path(temp_dir) / "active-loop-selector-queue.md"
+        active_loop_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS codex-appserver active-loop import gate v0.1"),
+            encoding="utf-8",
+        )
+        active_loop_selector = workbench.build_next_step_selector(active_loop_selector_queue_path, advance_record_root)
+        check(
+            active_loop_selector["passed"] is True,
+            f"active-loop selector should pass: {active_loop_selector['errors']}",
+            failures,
+        )
+        active_loop_candidate = active_loop_selector.get("candidate", {})
+        check(
+            active_loop_candidate.get("title") == "AGENTS OS active-loop receipt contract review v0.1",
+            "active-loop selector should choose receipt contract review",
+            failures,
+        )
+        check(
+            active_loop_candidate.get("substantive_progress") is True,
+            "active-loop selector candidate must prove substantive progress",
+            failures,
+        )
+        check(
+            active_loop_candidate.get("not_repeat_of_queue") is True,
+            "active-loop selector candidate must not repeat queue",
+            failures,
+        )
+        duplicate_selector_queue_path = Path(temp_dir) / "duplicate-selector-queue.md"
+        duplicate_selector_queue_path.write_text(
+            workbench.fixture_queue_text("AGENTS OS external Git exact pre-push command gate v0.1"),
+            encoding="utf-8",
+        )
+        duplicate_selector = workbench.build_next_step_selector(duplicate_selector_queue_path, advance_record_root)
+        check(
+            duplicate_selector["selector_state"] == "blocked_repeat_detected",
+            "next-step selector should block same-semantic repeat",
+            failures,
+        )
+        check(duplicate_selector["passed"] is False, "duplicate selector should fail closed", failures)
+        cli_selector = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "select-next-step",
+                "--queue",
+                str(selector_queue_path),
+                "--record-root",
+                str(advance_record_root),
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(cli_selector.returncode == 0, f"CLI select-next-step should pass: {cli_selector.stderr}", failures)
+        if cli_selector.stdout:
+            cli_selector_payload = json.loads(cli_selector.stdout)
+            check(
+                cli_selector_payload.get("schema_version") == "agents-os.workbench.next-step-selector.v0.1",
+                "CLI select-next-step should emit selector schema",
+                failures,
+            )
+            check(
+                cli_selector_payload.get("candidate", {}).get("substantive_progress") is True,
+                "CLI select-next-step should prove substantive progress",
+                failures,
+            )
+        else:
+            failures.append("CLI select-next-step should emit JSON")
 
         provider_cycle = workbench.build_cycle(
             "Call provider and start service.",
@@ -1201,6 +1916,24 @@ def main() -> int:
         )
         check(blocked_p3_intake["passed"] is False, "P3 intake apply should fail", failures)
         check(blocked_p3_intake["write_performed"] is False, "P3 intake apply must not write", failures)
+        check(
+            "git_release_boundary" in workbench.queue_p3_signals("Publish report to GitHub release, not as force push"),
+            "P3 scanner must not let unrelated not hide release boundary signals",
+            failures,
+        )
+        p3_not_proposal = dict(p3_cycle["stages"]["intake_proposal"])
+        p3_not_proposal["proposed_queue_item"] = dict(p3_not_proposal["proposed_queue_item"])
+        p3_not_proposal["proposed_queue_item"]["title"] = "Publish report to GitHub release, not as force push"
+        p3_not_review = workbench.accepted_nobao_review_for_intake(p3_not_proposal)
+        blocked_p3_not_intake = workbench.reviewed_intake_apply_gate(
+            p3_not_proposal,
+            p3_not_review,
+            p3_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(blocked_p3_not_intake["passed"] is False, "P3 intake with unrelated not should fail", failures)
+        check(blocked_p3_not_intake["write_performed"] is False, "P3 intake with unrelated not must not write", failures)
 
         record_path = Path(temp_dir) / "records" / "safe-cycle-record.json"
         record_path.parent.mkdir()
@@ -1243,37 +1976,100 @@ def main() -> int:
             failures,
         )
 
-    validation = workbench.validate_workbench()
-    check(validation["passed"] is True, f"workbench validation should pass: {validation['errors']}", failures)
-    check(validation["temporary_fixture_cleaned"] is True, "workbench validation should clean temporary fixture", failures)
+    fast_validation = workbench.validate_workbench_by_level("fast")
     check(
-        validation["safe_advance"]["record_write_performed"] is True,
-        "workbench validation should cover safe advance record write",
+        fast_validation["passed"] is True,
+        f"workbench fast validation should pass: {fast_validation['errors']}",
+        failures,
+    )
+    check(fast_validation["level"] == "fast", "workbench fast validation should report fast level", failures)
+    check(
+        fast_validation["next_step_selector"]["substantive_progress"] is True,
+        "fast validation should cover substantive selector progress",
         failures,
     )
     check(
-        validation["safe_advance"]["local_safe_execution_performed"] is True,
-        "workbench validation should cover safe advance execution",
-        failures,
-    )
-    audit = workbench.build_completion_audit()
-    check(audit["passed"] is True, f"workbench audit should pass: {audit['errors']}", failures)
-    check(audit["failed_requirement_ids"] == [], "workbench audit should have no failed requirements", failures)
-    check(
-        audit["real_queue_boundary"]["handled"] is True,
-        "workbench audit should treat the real queue boundary as handled",
+        fast_validation["codex_active_loop_import"]["passed"] is True,
+        f"fast validation should cover codex active-loop import boundary: {fast_validation['codex_active_loop_import']['errors']}",
         failures,
     )
     check(
-        audit["real_queue_boundary"]["execution_authorized"] is False,
-        "workbench audit must not authorize execution at the real queue boundary",
+        "docctl status" in fast_validation["skipped_full_checks"],
+        "fast validation should skip full docctl status",
         failures,
     )
+    check(
+        fast_validation["full_validation_required_before_external_write"] is True,
+        "fast validation must require full validation before external write",
+        failures,
+    )
+    failed_full_metadata = workbench.attach_validation_metadata(
+        {"passed": False, "errors": ["fixture failure"]},
+        "full",
+        workbench.time.monotonic(),
+        required_level="full",
+    )
+    check(
+        failed_full_metadata["external_write_eligible"] is False,
+        "failed full validation must not be external-write eligible",
+        failures,
+    )
+    check(
+        failed_full_metadata["release_eligible"] is False,
+        "failed full validation must not be release eligible",
+        failures,
+    )
+
+    validation: dict[str, object] = {}
+    audit: dict[str, object] = {}
+    if args.full:
+        validation = workbench.validate_workbench()
+        check(validation["passed"] is True, f"workbench validation should pass: {validation['errors']}", failures)
+        check(validation["temporary_fixture_cleaned"] is True, "workbench validation should clean temporary fixture", failures)
+        check(
+            validation["docctl_release_gate"]["required_before_external_write"] is True,
+            "workbench validation should keep docctl as external-write release gate",
+            failures,
+        )
+        if validation["docctl_release_gate"]["passed"] is not True:
+            check(
+                validation["external_write_eligible"] is False,
+                "docctl release gate failure must block external-write eligibility",
+                failures,
+            )
+            check(
+                validation["release_eligible"] is False,
+                "docctl release gate failure must block release eligibility",
+                failures,
+            )
+        check(
+            validation["safe_advance"]["record_write_performed"] is True,
+            "workbench validation should cover safe advance record write",
+            failures,
+        )
+        check(
+            validation["safe_advance"]["local_safe_execution_performed"] is True,
+            "workbench validation should cover safe advance execution",
+            failures,
+        )
+        audit = workbench.build_completion_audit(validation_result=validation)
+        check(audit["passed"] is True, f"workbench audit should pass: {audit['errors']}", failures)
+        check(audit["failed_requirement_ids"] == [], "workbench audit should have no failed requirements", failures)
+        check(
+            audit["real_queue_boundary"]["handled"] is True,
+            "workbench audit should treat the real queue boundary as handled",
+            failures,
+        )
+        check(
+            audit["real_queue_boundary"]["execution_authorized"] is False,
+            "workbench audit must not authorize execution at the real queue boundary",
+            failures,
+        )
 
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=18 failures={len(failures)}")
+        print(f"cases={20 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -1292,9 +2088,12 @@ def main() -> int:
     print("PASS workbench queue promotion apply gate fixtures")
     print("PASS workbench continue current fixtures")
     print("PASS workbench continue loop fixtures")
-    print("PASS workbench validation")
-    print("PASS workbench completion audit")
-    print("cases=18 failures=0")
+    print("PASS workbench next-step selector fixtures")
+    print("PASS workbench fast validation")
+    if args.full:
+        print("PASS workbench validation")
+        print("PASS workbench completion audit")
+    print(f"cases={20 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 
