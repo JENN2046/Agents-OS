@@ -1,0 +1,418 @@
+review_id: agents-os-scheduling-time-capacity-package-v0.1-r1-final-review
+review_version: 1
+created_at: 2026-07-13T13:46:07+08:00
+updated_at: 2026-07-13T16:14:57+08:00
+owner: Jenn
+agent_steward: Nobao
+status: complete_pending_Jenn_freeze_decision
+result: PASS_NO_BLOCKER_OR_MAJOR_READY_FOR_JENN_FREEZE_DECISION
+decision_surface: Jenn_freeze_amend_or_reject_complete_atomic_bundle
+acceptance_effect: none
+implementation_authorized: false
+runtime_activation_authorized: false
+database_change_authorized: false
+provider_or_executor_call_authorized: false
+
+acceptance_unit:
+  id: R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE
+  members:
+    - v0_1_acceptance_subject Sections 3-9
+    - pending_parent_amendment_subject Section 2.1 pending R1 amendment overlay
+  partial_freeze_permitted: false
+  accepted_by_this_review: false
+
+hash_contract:
+  contract_id: RAW_UTF8_LF_BYTES_V1
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  excluded_bytes: []
+  required_file_properties:
+    regular_file: true
+    symlink: false
+    encoding: UTF-8
+    byte_order_mark: forbidden
+    line_endings: LF_only
+  byte_count_semantics: exact_file_size_in_bytes
+  lf_count_semantics: count_of_0x0a_bytes
+  subject_embeds_its_own_digest: false
+  review_artifact_self_digest: intentionally_omitted_to_avoid_self_reference
+  reproduction_command: >-
+    sha256sum --
+    control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+
+subjects:
+  - role: v0_1_acceptance_subject
+    path: control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    sha256: 4ef959a8dd5de2a6837d65debd19e00342168bc86542726c8f6b7635c991a5cf
+    byte_count: 325697
+    lf_count: 6479
+    included_in_v0_1_acceptance: true
+  - role: pending_parent_amendment_subject
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    byte_count: 271643
+    lf_count: 6614
+    included_in_v0_1_acceptance: pending_R1_amendment_only
+  - role: supplemental_split_integrity_subject
+    path: control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    sha256: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    byte_count: 38144
+    lf_count: 772
+    included_in_v0_1_acceptance: false
+    contract_status: preserved_design_draft_not_proposed_for_acceptance
+    preservation: semantic_contract_reconstruction
+
+required_fix_coverage:
+  dependency_assurance_bound_to_schedule_and_time_path: confirmed_round_4
+  resource_unconstrained_forecast_separated_from_capacity: confirmed_round_4
+  host_acceptance_start_and_run_attempts_resolved: confirmed_round_4
+  fairness_virtual_service_origin_resolved: confirmed_round_4
+  derived_result_currentness_contract_resolved: confirmed_round_4
+  zero_duration_and_timing_observation_policy_resolved: confirmed_round_4
+  benchmark_required_parameters_marked_provisional: confirmed_round_4
+  resource_scheduling_v0_2_split: confirmed_round_4
+  parent_calendar_deadline_run_attempts_synchronized_as_pending_amendment: confirmed_round_4
+  task_done_release_boundary_resolved: confirmed_round_4
+  capacity_release_receipt_test_resolved: confirmed_round_4
+  late_positive_run_attempts_correction_resolved: confirmed_round_4
+  fairness_backlog_and_epoch_recovery_resolved: confirmed_round_4
+  actual_soft_miss_currentness_resolved: confirmed_round_4
+  late_positive_successor_collision_resolved: confirmed_round_4
+  one_fairness_entry_per_lineage_resolved: confirmed_round_4
+  time_driven_head_band_replay_resolved: confirmed_round_4
+  lineage_floor_derivation_resolved: confirmed_round_4
+  atomic_acceptance_bundle_resolved: confirmed_round_4
+  forecast_constraint_owner_partition_resolved: confirmed_round_4
+  multi_envelope_late_positive_budget_correction_resolved: confirmed_round_4
+  lineage_head_change_and_trigger_normalization_resolved: confirmed_round_4
+  boundary_batch_endpoint_episode_reduction_resolved: confirmed_round_4
+  compound_assignment_floor_transition_resolved: confirmed_round_4
+  admission_rejection_backoff_reason_set_resolved: confirmed_round_4
+  complete_ordering_input_sets_resolved: confirmed_round_4
+  started_dynamic_revocation_wording_resolved: confirmed_round_4
+  durable_run_attempts_budget_authority_binding_resolved: confirmed_round_5
+  run_attempts_correction_fingerprint_resolved: confirmed_round_5
+  forecast_semantic_fingerprint_storage_identity_separation_resolved: confirmed_round_5
+  commitment_snapshot_run_specific_reverse_binding_removed: confirmed_round_6
+  commitment_allocate_or_reuse_wording_normalized: confirmed_round_10
+  effectful_validation_parent_candidate_preservation_resolved: confirmed_round_10
+  subject_lifecycle_status_stable_for_post_review_handoff: confirmed_round_10
+  parent_r1_replacements_contained_by_atomic_overlay: confirmed_round_10
+  run_purpose_phase_correct_commitment_provenance_resolved: confirmed_round_10
+  commitment_reuse_atomicity_tests_resolved: confirmed_round_10
+
+review_rounds:
+  - round: 1
+    subject_hashes:
+      v0_1_acceptance_subject: ed23292404218e6d3f246ca717eea344d2de220e4fb7ab8baa30f6c255d4fb40
+      pending_parent_amendment_subject: 006f9a85b4d4e3f956eb80d41d13c1d19a7d3ca9cbbd4e52331aed5a68144c2c
+      supplemental_split_integrity_subject: 279b190be06e697b6b4a5b6bfcf8c6c95b806f882cdf1b1013805a4c67d5f7d9
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/critical_path_review
+        reviewer_role: independent_contract_correctness_reviewer
+        hash_verification: passed
+        result: not_ready
+      - reviewer_id: /root/scheduling_industry
+        reviewer_role: independent_scheduling_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+    v0_1_blockers:
+      - id: TASK_DONE_FORECAST_WITHOUT_RELEASE_BOUNDARY
+        disposition: r1_revision_required
+      - id: PARENT_DEADLINE_CANONICAL_RENAME_INCOMPLETE
+        disposition: r1_revision_required
+    v0_1_majors:
+      - id: ACTIVE_DURATION_OBSERVATION_CURRENTNESS_INCOMPLETE
+        disposition: r1_revision_required
+      - id: REJECTED_START_CAPACITY_RELEASE_TEST_CONTRADICTS_RECEIPT_RULE
+        disposition: r1_revision_required
+      - id: LATE_POSITIVE_EXECUTION_AFTER_RUN_ATTEMPTS_RELEASED_UNDEFINED
+        disposition: r1_revision_required
+      - id: FAIRNESS_BACKLOG_EPISODE_REDUCER_UNDEFINED
+        disposition: r1_revision_required
+      - id: FAIRNESS_SERVICE_EPOCH_INITIALIZATION_UNDEFINED
+        disposition: r1_revision_required
+    supplemental_v0_2_deferred_findings:
+      acceptance_effect_on_v0_1: none
+      reason: v0_2_is_excluded_and_not_proposed_for_acceptance
+      blocker_ids:
+        - STABILITY_OBJECTIVE_BASELINE_UNDEFINED
+      major_ids:
+        - RESOURCE_COUPLED_PARTIAL_CLOSURE_UNDEFINED
+        - ACTIVE_AUTHORITY_TIME_BOUNDS_MISSING_FROM_VALID_UNTIL
+        - SOLVER_JOB_RECOVERY_FENCE_UNDEFINED
+        - PINNED_ACTIVE_CALENDAR_EXCEPTION_CONFLICT
+        - EXTERNAL_INFEASIBLE_UNSAT_PROOF_UNDEFINED
+      action_this_round: preserve_as_deferred_known_gaps_without_expanding_v0_2
+  - round: 2
+    subject_hashes:
+      v0_1_acceptance_subject: c1a0e2fbc15191015beab500a71ec21c6a1960fc545956a589deeec6f7cbc5e1
+      pending_parent_amendment_subject: 4251da8b688b4c86e591be17382f710499ff157260d2702fe099dbc9fc5a13fe
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_final_time_review
+        reviewer_role: time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_scheduling_review
+        reviewer_role: scheduling_fairness_and_recovery_reviewer
+        hash_verification: passed
+        result: pass_with_blocking_amendments
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: changes_required
+    v0_1_blockers:
+      - id: LATE_POSITIVE_EXECUTION_COLLIDES_WITH_SUCCESSOR_RUN
+        disposition: r1_revision_required
+      - id: TIME_DRIVEN_SERVICE_BAND_CHANGE_NOT_REPLAYABLE
+        disposition: r1_revision_required
+      - id: MULTIPLE_WORK_REQUESTS_BUY_MULTIPLE_FAIRNESS_ENTRIES
+        disposition: r1_revision_required
+    v0_1_majors:
+      - id: ACTUAL_SOFT_MISS_CANNOT_BE_CURRENT
+        disposition: r1_revision_required
+      - id: LINEAGE_PASS_FLOOR_DERIVATION_UNDEFINED
+        disposition: r1_revision_required
+  - round: 3
+    subject_hashes:
+      v0_1_acceptance_subject: 065e20d6bdb35838866bc5eeecf0e02df0aa1d837b8779db44335488cd2b4059
+      pending_parent_amendment_subject: a724dbf5483532939ad60dd2eae8b3ef3ec61a5a58c366eee84ed1114348cdb5
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: changes_required
+    prior_round_findings_recheck: passed_except_new_closure_findings
+    v0_1_blockers:
+      - id: FORECAST_CONSTRAINT_OWNER_PARTITION_UNDEFINED
+        disposition: r1_revision_required
+      - id: SELECTIVE_ACCEPTANCE_CONFLICTS_WITH_ATOMIC_PARENT_OVERLAY
+        disposition: r1_revision_required
+      - id: LATE_POSITIVE_MULTI_ENVELOPE_BUDGET_CORRECTION_INCOMPLETE
+        disposition: r1_revision_required
+    v0_1_majors:
+      - id: LINEAGE_HEAD_EVENT_CHANGE_TRIGGER_NORMALIZATION_INCOMPLETE
+        disposition: r1_revision_required
+      - id: BOUNDARY_BATCH_INTERMEDIATE_EMPTY_CORRUPTS_BACKLOG_EPISODE
+        disposition: r1_revision_required
+      - id: WORK_REQUEST_REVISION_LINEAGE_FLOOR_TRANSITION_UNDEFINED
+        disposition: r1_revision_required
+      - id: ADMISSION_REJECTION_BACKOFF_REASON_REDUCTION_UNDEFINED
+        disposition: r1_revision_required
+      - id: APPLICABLE_ORDERING_INPUT_SET_UNDEFINED
+        disposition: r1_revision_required
+    v0_1_minors:
+      - id: STARTED_CURRENT_NON_CALENDAR_GENERATIONS_WORDING_AMBIGUOUS
+        disposition: r1_revision_required
+  - round: 4
+    subject_hashes:
+      v0_1_acceptance_subject: 5ba274ef0f8e01fe4ea603ec7e069931b97d2589a2511c6afad4059a64b70bd4
+      pending_parent_amendment_subject: 590287b40e79f4d9c469d09f0e186b249bd13bb560cd27fff7f3abb714134dd0
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: changes_required
+    prior_round_findings_recheck: passed_except_new_closure_findings
+    v0_1_blockers:
+      - id: LATE_POSITIVE_EXPECTED_BUDGET_SET_NOT_DURABLY_BOUND_TO_ORIGINAL_RUN
+        disposition: r1_revision_required
+    v0_1_majors:
+      - id: RUN_ATTEMPTS_CORRECTION_FINGERPRINT_INCOMPLETE
+        disposition: r1_revision_required
+      - id: FORECAST_OWNER_PARTITION_FINGERPRINT_MIXES_OBSERVATION_IDENTITY
+        disposition: r1_revision_required
+    v0_1_minors:
+      - id: ATOMIC_ACCEPTANCE_STATUS_MIRRORS_INCOMPLETE
+        disposition: update_after_final_pass_before_Jenn_decision
+  - round: 5
+    subject_hashes:
+      v0_1_acceptance_subject: 4f512f79e6fc7fdf06e7f692df73999795e71ad3ddaae69b509c6ac677467cfc
+      pending_parent_amendment_subject: 369f289bf0a2cd17c8268f8e2354881da172947f87e6d8717619ab1ea1a886fc
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: changes_required
+    prior_round_findings_recheck: passed
+    v0_1_blockers:
+      - id: RUN_ATTEMPTS_BINDING_REVERSE_LINK_CONFLICTS_WITH_IMMUTABLE_REUSABLE_COMMITMENT
+        disposition: r1_revision_required
+  - round: 6
+    subject_hashes:
+      v0_1_acceptance_subject: 4c09086d4630693fc106d6efa70f8a4746dd8293a0c2f08b216f65ed8b6cc1f2
+      pending_parent_amendment_subject: db1090023217d8e417a332831ad506e84d6d001402fc86aaf5926832744103fc
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required_and_subject_drift
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed_before_subject_change
+        result: pass_no_blocker_or_major_on_locked_round_6_subject
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: subject_changed_during_review
+        result: review_invalidated_subject_drift
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed_before_subject_change
+        result: changes_required
+    v0_1_majors:
+      - id: ADMISSION_TEST_REQUIRES_CREATING_REUSABLE_IMMUTABLE_COMMITMENT
+        disposition: r1_revision_required
+    invalidation:
+      changed_subject: v0_1_acceptance_subject
+      reason: Nobao_applied_the_required_wording_fix_after_the_consistency_finding
+      no_round_6_pass_claimed_for_current_bytes: true
+  - round: 7
+    subject_hashes:
+      v0_1_acceptance_subject: 2dcdddf38ac49e6c3320a2bb63c1e9fa39754dbda28655c18f54f7159a256e56
+      pending_parent_amendment_subject: db1090023217d8e417a332831ad506e84d6d001402fc86aaf5926832744103fc
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+    v0_1_majors:
+      - id: PARENT_CREATE_RUN_STILL_REQUIRES_NEW_COMMITMENT_SNAPSHOT
+        disposition: r1_revision_required
+  - round: 8
+    subject_hashes:
+      v0_1_acceptance_subject: 2dcdddf38ac49e6c3320a2bb63c1e9fa39754dbda28655c18f54f7159a256e56
+      pending_parent_amendment_subject: d0b7ef0622966549ea13248c34ef33c07e82fa4dcaf151e51ee9549ebe37bfc8
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: pass_no_blocker_or_major
+    v0_1_majors:
+      - id: PARENT_CREATE_RUN_REJECTS_EFFECTFUL_VALIDATION_CANDIDATE
+        disposition: r1_revision_required
+      - id: PARENT_ATOMIC_ADMISSION_STILL_ALWAYS_CREATES_COMMITMENT
+        disposition: r1_revision_required
+  - round: 9
+    subject_hashes:
+      v0_1_acceptance_subject: 4ef959a8dd5de2a6837d65debd19e00342168bc86542726c8f6b7635c991a5cf
+      pending_parent_amendment_subject: 7422d38027193f4e896189cd8dab02510dd2b706c70096fc3032668af7ea5efd
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: changes_required
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed
+        result: changes_required
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed
+        result: changes_required
+    v0_1_blockers:
+      - id: PARENT_R1_SEMANTICS_OUTSIDE_ATOMIC_ACCEPTANCE_UNIT
+        disposition: r1_revision_required
+    v0_1_majors:
+      - id: PARENT_RUN_PROVENANCE_FORCES_EXECUTION_ADMISSION_ON_EFFECTFUL_VALIDATION
+        disposition: r1_revision_required
+      - id: PARENT_TEST_TREATS_REUSED_COMMITMENT_AS_NEW_TRANSACTION_RECORD
+        disposition: r1_revision_required
+  - round: 10
+    subject_hashes:
+      v0_1_acceptance_subject: 4ef959a8dd5de2a6837d65debd19e00342168bc86542726c8f6b7635c991a5cf
+      pending_parent_amendment_subject: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      supplemental_split_integrity_subject: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    result: PASS_NO_BLOCKER_OR_MAJOR
+    reviewers:
+      - reviewer_id: /root/r1_round3_time
+        reviewer_role: independent_time_dependency_and_currentness_reviewer
+        hash_verification: passed_at_start_and_end
+        result: PASS_NO_BLOCKER_OR_MAJOR
+      - reviewer_id: /root/r1_round3_scheduling
+        reviewer_role: independent_scheduling_fairness_budget_and_recovery_reviewer
+        hash_verification: passed_at_start_and_end
+        result: PASS_NO_BLOCKER_OR_MAJOR
+      - reviewer_id: /root/r1_final_consistency_review
+        reviewer_role: independent_adversarial_cross_contract_consistency_reviewer
+        hash_verification: passed_at_start_and_end
+        result: PASS_NO_BLOCKER_OR_MAJOR
+    blocker_count: 0
+    major_count: 0
+    subject_drift: false
+
+local_validation:
+  utf8_lf_no_bom_no_symlink: passed
+  markdown_fence_balance: passed
+  yaml_contract_blocks_parse: passed
+  result_semantics_envelope_check: passed
+  stale_v0_1_term_scan: passed
+  trailing_whitespace_check: passed
+  registry_validation: passed_384_of_384_zero_warnings
+  federated_registry_validation: passed_3_of_3
+  docctl_status: passed_score_100_zero_warnings
+  docctl_doctor: passed_zero_unregistered_zero_warnings
+
+final_boundaries:
+  package_accepted: false
+  parent_amendment_effective: false
+  v0_2_proposed_for_acceptance: false
+  implementation_started: false
+  runtime_activated: false
+  next_authority: Jenn

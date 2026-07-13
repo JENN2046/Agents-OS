@@ -1,0 +1,92 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-r1-scheduling-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: 2026-07-13T20:11:24+08:00
+effective_at: 2026-07-13T20:11:24+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: FREEZE
+  decision_source: explicit_current_conversation_instruction
+
+acceptance_unit:
+  acceptance_unit_id: R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE
+  atomic: true
+  partial_freeze_permitted: false
+  result: ACCEPTED_FROZEN
+
+accepted_subjects:
+  - role: v0_1_contract_subject
+    path: control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    sha256: 4ef959a8dd5de2a6837d65debd19e00342168bc86542726c8f6b7635c991a5cf
+    byte_count: 325697
+    lf_count: 6479
+    accepted_scope: Sections 3-9
+  - role: parent_architecture_overlay_subject
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    byte_count: 271643
+    lf_count: 6614
+    accepted_scope: Section 2.1 pending R1 amendment overlay
+    effect: overlay_is_effective_as_part_of_the_atomic_bundle
+
+excluded_subjects:
+  - role: resource_constrained_scheduling_v0_2
+    path: control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    sha256: a9f54a652018a131843a3563c021c016b32a3e96a953a952592841355ca4a64a
+    exclusion: EXCLUDED_NOT_ACCEPTED_NOT_FROZEN
+
+review_basis:
+  path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+  sha256: d988d5a60c07892fa59de957fdda5ba232892d48e209e3b6190cf54c4585bb9d
+  result: PASS_NO_BLOCKER_OR_MAJOR_READY_FOR_JENN_FREEZE_DECISION
+  final_round: 10
+  blocker_count: 0
+  major_count: 0
+
+effects:
+  package_accepted: true
+  package_frozen: true
+  parent_overlay_effective: true
+  reviewed_subject_bytes_unchanged: required
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_or_executor_call_authorized: false
+  service_start_authorized: false
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  subject_self_digest: false
+  reproduction_command: >-
+    sha256sum --
+    control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subjects_to_materialize_status: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_new_review_plus_new_Jenn_decision
+  derived_registry_and_status_projection_updates: permitted
+
+remaining_implementation_gates:
+  - GoalSpec_SuccessCriterion_GoalPlanMembership
+  - actor_identity_delegation_authenticated_command_context
+  - resident_single_leader_enforcement
+  - N_API_ledger_thread_and_SQLite_connection_ownership
+  - TaskPermit_signing_key_revocation_and_host_authentication
+  - Outbox_claim_lease_retry_dead_letter
+  - Validation_Requirement_current_decision_reducer

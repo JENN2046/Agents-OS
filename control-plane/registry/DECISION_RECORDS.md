@@ -71,8 +71,48 @@ Decision Record 不能用来绕过：
 - runtime/provider/plugin 执行确认。
 - 正式 Memory 注册流程。
 
-## 已接受的第一条 Decision Record
+## 已接受的 Decision Records
 
 ```text
 control-plane/registry/decisions/2026-06-30-governance-control-plane-layer.md
+control-plane/registry/decisions/2026-07-03-three-lane-execution-model-v0.1.md
+control-plane/registry/decisions/2026-07-05-agents-os-root-agents-engineering-absorption-v0.1.md
+control-plane/registry/decisions/2026-07-05-agents-os-automation-uplift-v0.1.md
+control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+```
+
+其中，当前 AGENTS OS 未来运行方式的综合入口是：
+
+```text
+control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+```
+
+该综合决议在 2026-07-13 接受并冻结 `Task Scheduling Architecture Boundary v0.1`。由该边界展开出的
+完整 v0.1 合同包已完成 R1 收口并通过 hash-bound 独立终审，随后由 Jenn 以独立不可变记录正式原子冻结：
+
+```text
+control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+```
+
+接受单位是不可拆分的 `R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE`：草案 Sections 3-9 加父架构 Section 2.1 R1
+overlay，禁止 partial freeze。冻结记录绑定两份受审 subject 的精确 SHA-256；受审文件不因冻结而修改。
+父架构 Section 2.1 overlay 已随整包生效。Resource-constrained Scheduling v0.2 仍是独立保存的设计草案，
+仍有待未来单独解决的已知缺口，不包含在整包接受语义中：
+
+```text
+control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+```
+
+本次冻结只接受架构语义，不授权实现、Rust runtime 建设、数据库变更、服务启动、provider/executor 调用或
+runtime activation。
+
+VCP 高权限、设备身份、TaskPermit 和 host enforcement 的专项依据是：
+
+```text
+control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
 ```

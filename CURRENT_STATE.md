@@ -6,6 +6,75 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Newer Architecture Handoff (2026-07-12, amended 2026-07-13)
+
+This file remains the 2026-07-07 operational snapshot. The newer accepted
+architecture decisions are recorded separately and take priority over older
+route or architecture recommendations in this snapshot:
+
+```text
+control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+```
+
+The accepted resident architecture now fixes these facts:
+
+```text
+VCPToolBox = backend and resident home
+VCPChat = desktop main frontend and governed desktop execution host
+VCPMobile = mobile frontend and constrained device capability node
+Nobao = unique resident global coordinator
+AGENTSOSResident.GlobalTaskLedger = canonical global task ledger
+Goal / Task / Run / Validation / Event = frozen core object set
+Goal lifecycle / outcome split and task-count plan progress = frozen
+Task State Transition Contract v0.4-final = frozen
+Layered required Validation set composition and authority = frozen
+ValidationRequirement / Validation attempt relationship = frozen
+Required Validation set commitment-boundary freeze rule = frozen
+Frozen Validation Set Extension Contract = frozen
+Requirement Waiver Contract = frozen
+Required Validation Revalidation and Evidence Reuse Contract = frozen
+ArtifactRef boundary; Artifact is not a sixth core object in v0.1 = frozen
+GoalHealthProjection + Critical Work Frontier + HARD_BLOCKER v0.1 = frozen
+Goal Health RISK v0.1 reason-code registry = frozen
+RISK v0.1 Validation remediation gap = corrected
+Goal Health EVIDENCE_GAP v0.1 reason-code registry = frozen
+Goal and Task Budget v0.1 = frozen
+Goal and Task Deadline v0.1 = frozen
+Task Priority v0.1 = frozen
+Task Dependency v0.1 = frozen: same-Goal non-shared endpoints + ALL_OF + PINNED_DONE_EVENT
+Task Scheduling Architecture Boundary v0.1 = frozen: rolling planning + current-fact event-driven selection + atomic execution admission
+normal scheduling v0.1 = NON_PREEMPTIVE
+SchedulePlanProjection / TimeCriticalPathProjection = derived read-only, no execution authority
+Scheduling, Time, and Capacity v0.1 package = ACCEPTED_FROZEN as R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE
+Resource-constrained Scheduling v0.2 = separate PRESERVED_DESIGN_DRAFT_NOT_PROPOSED_FOR_ACCEPTANCE, excluded from v0.1
+Task state is reducer-derived; direct set_state is forbidden
+one Task = at most one nonterminal execution Run in v0.1
+UNKNOWN forces BLOCKED; BLOCKED cannot be hidden by PAUSED
+Current State + Event + Inbox + Outbox = atomic persistence direction
+VCPToolBox JavaScript hybridservice + Rust N-API core = accepted implementation boundary
+default Rust sidecar = rejected
+implementation = not started
+```
+
+The Task Scheduling Architecture Boundary remains frozen. Jenn accepted and
+atomically froze the complete v0.1 Scheduling, Time, and Capacity package at
+`control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md`
+after hash-bound independent final review passed with no blocker or major. The review record is
+`control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml`.
+The immutable freeze record is
+`control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml`, and the accepted
+projection is
+`control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md`.
+The only acceptance unit is `R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE`: main Sections 3-9 plus parent Section 2.1. Partial
+freeze is forbidden, and the parent R1 amendment overlay is now effective as part of that atomic bundle. The
+reviewed subject files remain byte-identical; their historical filenames or embedded pre-freeze lifecycle metadata
+do not override Jenn's hash-bound freeze record. Resource-constrained Scheduling v0.2 remains at
+`control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md`; it is a preserved
+design draft with deferred known gaps, is not proposed for acceptance, and is explicitly excluded from v0.1
+acceptance. Architecture acceptance does not authorize implementation, database work, service startup, provider or
+executor calls, or runtime activation.
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.

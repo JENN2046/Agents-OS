@@ -1689,11 +1689,13 @@ documents:
     superseded_by: null
     related:
       - AGENTS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
       - control-plane/registry/reports/2026-07-06-agents-os-future-plan-intake-and-reality-freeze-v0.1.md
       - control-plane/registry/receipts/2026-07-06-yellow-agents-os-future-plan-intake-and-reality-freeze-v0.1.md
       - control-plane/registry/reviews/2026-07-06-yellow-agents-os-future-plan-intake-and-reality-freeze-v0.1.review.md
-    last_reviewed: 2026-07-06
-    review_by: control-plane/registry/reviews/2026-07-06-yellow-agents-os-future-plan-intake-and-reality-freeze-v0.1.review.md
+    last_reviewed: 2026-07-12
+    review_by: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
     freshness:
       level: critical
       review_trigger:
@@ -4640,8 +4642,10 @@ documents:
     related:
       - control-plane/registry/templates/decision-record-template-v0.1.md
       - control-plane/registry/decisions/2026-06-30-governance-control-plane-layer.md
-    last_reviewed: 2026-06-30
-    review_by: control-plane/registry/reviews/2026-06-30-a3c-governance-active-promotion.review.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    last_reviewed: 2026-07-12
+    review_by: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
     freshness:
       level: important
       review_trigger:
@@ -16444,6 +16448,335 @@ documents:
       - no Git publication authorization
     validation:
       commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-vcp-high-privilege-architecture-v0.1
+    title: AGENTS OS VCP High-Privilege Architecture v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: accepted architecture for preserving high VCP capability while minimizing standing authority
+    canonical_path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
+      - ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
+      - ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+      - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    last_reviewed: 2026-07-12
+    review_by: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    freshness:
+      level: critical
+      review_trigger:
+        - VCP execution-host trust boundary changes
+        - TaskPermit or device identity contract changes
+        - host enforcement behavior changes
+        - Jenn changes the high-capability posture
+    security_boundary:
+      - local architecture decision only
+      - no runtime source modification authorization
+      - no plugin activation authorization
+      - no provider call authorization
+      - no active config read authorization
+      - no permission expansion authorization
+      - no state-private read
+      - no secret/token/cookie/credential values
+      - no provider raw response
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-resident-operating-architecture-v0.1
+    title: AGENTS OS Resident Operating Architecture v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: accepted comprehensive architecture for resident topology, agent hierarchy, canonical ledger, domain objects, Task Dependency v0.1, Task Scheduling Architecture Boundary v0.1, persistence, and Rust boundary; Section 2.1 R1 overlay is effective through Jenn's atomic freeze decision
+    canonical_path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - runtime/VCPToolBox/Plugin.js
+      - runtime/VCPToolBox/server.js
+      - runtime/VCPToolBox/rust-vexus-lite/Cargo.toml
+      - ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
+      - ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
+      - ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    freshness:
+      level: critical
+      review_trigger:
+        - resident topology changes
+        - canonical ledger ownership changes
+        - Goal Task Run Validation Event contract changes
+        - Task Dependency, commitment assurance, or dependency fence contract changes
+        - Task scheduling architecture, admission, or projection authority changes
+        - Duration, Calendar, Capacity, or time critical-path contract acceptance
+        - persistence or Rust implementation boundary changes
+        - Jenn resolves an item listed as undecided
+    security_boundary:
+      - local architecture decision only
+      - implementation not started
+      - no runtime source modification authorization
+      - no service startup authorization
+      - no database creation or migration authorization
+      - no plugin activation authorization
+      - no provider or executor call authorization
+      - no active config read authorization
+      - no permission expansion authorization
+      - no state-private read
+      - no secret/token/cookie/credential values
+      - no provider raw response
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-scheduling-time-capacity-contracts-v0.1-draft
+    title: AGENTS OS Scheduling, Time, and Capacity Contracts v0.1
+    doc_type: contract
+    status: accepted
+    scope: exact hash-bound R1 v0.1 scheduling work-request, enforcement, Duration, Calendar, Capacity, ordering, admission, and time-path subject accepted by Jenn as part of the complete atomic bundle; Resource Scheduling v0.2 is separate and excluded
+    canonical_path: control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+      - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    freshness:
+      level: critical
+      review_trigger:
+        - any accepted subject byte or accepted scope changes
+        - the freeze decision is superseded or corrected
+        - scheduling enforcement profile or cutover semantics change
+        - Duration, Calendar, Capacity, selection, admission, or host Fact semantics change
+        - TimeCriticalPathProjection completion semantics or currentness changes
+        - Resource-constrained Scheduling v0.2 is proposed for separate acceptance
+        - runtime or SQLite implementation begins
+    security_boundary:
+      - exact reviewed subject accepted through an independent immutable freeze record
+      - filename and embedded pre-freeze lifecycle metadata are retained for byte identity
+      - partial freeze is forbidden
+      - architecture acceptance does not grant implementation authority
+      - no runtime source modification authorization
+      - no service startup authorization
+      - no database creation or migration authorization
+      - no provider or executor call authorization
+      - no active config read authorization
+      - no state-private read
+      - no secret/token/cookie/credential values
+      - no provider raw response
+      - no external write authorization
+    lifecycle_transition:
+      from: review_needed
+      to: accepted
+      reason: Jenn froze the complete hash-bound R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-resource-constrained-scheduling-v0.2-draft
+    title: AGENTS OS Resource-constrained Scheduling v0.2
+    doc_type: contract
+    status: draft
+    scope: separate semantic-contract reconstruction of the resource-constrained scheduling v0.2 design draft; preserved with deferred known gaps, not proposed for acceptance, and excluded from v0.1
+    canonical_path: control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    freshness:
+      level: critical
+      review_trigger:
+        - accepted v0.1 prerequisite semantics change
+        - Jenn proposes v0.2 for separate acceptance
+        - solver, objective, Capacity forecast, or dependency-assurance semantics change
+        - implementation or solver activation is proposed
+    security_boundary:
+      - local non-accepted architecture draft only
+      - excluded from v0.1 acceptance
+      - no runtime or solver activation authorization
+      - no database creation or migration authorization
+      - no provider, executor, or host call authorization
+      - no active config or private-state read authorization
+      - no external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-scheduling-time-capacity-package-v0.1-r1-review
+    title: AGENTS OS Scheduling Time Capacity Package v0.1 R1 Review
+    doc_type: review
+    status: active
+    scope: completed reproducible raw-byte SHA-256 and independent final-review record with PASS_NO_BLOCKER_OR_MAJOR used as the review basis for Jenn's immutable atomic freeze decision
+    canonical_path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    freshness:
+      level: critical
+      review_trigger:
+        - any hashed subject byte changes
+        - reviewer result or review method changes
+        - the immutable freeze decision is superseded or corrected
+    security_boundary:
+      - local low-disclosure review evidence only
+      - no secret, raw private memory, provider response, or raw log
+      - no runtime implementation or activation authorization
+      - no database, provider, executor, host, or external write authorization
+    validation:
+      commands:
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-r1-scheduling-freeze-decision-v0.1
+    title: AGENTS OS R1 Scheduling Freeze Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn decision accepting and freezing the complete R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE against exact reviewed hashes while excluding Resource-constrained Scheduling v0.2 and granting no implementation or runtime authority
+    canonical_path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+      - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    freshness:
+      level: critical
+      review_trigger:
+        - never edit this immutable record
+        - any correction requires a new superseding decision record
+        - any accepted subject byte or scope change requires a new review and Jenn decision
+    security_boundary:
+      - local immutable architecture acceptance record
+      - partial freeze is forbidden
+      - Resource-constrained Scheduling v0.2 is excluded
+      - no implementation or runtime activation authorization
+      - no database, service, provider, executor, host, permission, or external-write authorization
+      - no state-private read
+      - no secret/token/cookie/credential values
+    validation:
+      commands:
+        - sha256sum control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+        - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
+
+  - id: agents-os-scheduling-time-capacity-v0.1-accepted-materialization
+    title: AGENTS OS Scheduling, Time, and Capacity v0.1 Accepted Materialization
+    doc_type: reference
+    status: accepted
+    scope: clean derived acceptance projection that references the immutable freeze record and exact reviewed subject hashes without modifying or restating the frozen contract bytes
+    canonical_path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    owner:
+      human: Jenn
+      agent_steward: Nobao
+    source_of_truth: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related:
+      - CURRENT_STATE.md
+      - control-plane/registry/DECISION_RECORDS.md
+      - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
+      - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
+      - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+    last_reviewed: 2026-07-13
+    review_by: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    freshness:
+      level: critical
+      review_trigger:
+        - immutable freeze record is superseded
+        - accepted subject path, hash, or scope changes
+        - materialization diverges from the immutable freeze record
+    security_boundary:
+      - derived local acceptance projection only
+      - immutable freeze record and exact reviewed bytes remain authoritative
+      - Resource-constrained Scheduling v0.2 is excluded
+      - no implementation or runtime activation authorization
+      - no database, service, provider, executor, host, permission, or external-write authorization
+      - no state-private read
+      - no secret/token/cookie/credential values
+    validation:
+      commands:
+        - sha256sum control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-document-registry.py control-plane/registry/drafts/document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-federated-document-registry.py control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
         - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/docctl.py doctor
