@@ -16468,9 +16468,6 @@ documents:
       - CURRENT_STATE.md
       - control-plane/registry/DECISION_RECORDS.md
       - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
-      - ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
-      - ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
-      - ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
       - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
       - control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
       - control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
@@ -16519,12 +16516,6 @@ documents:
       - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
       - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
       - control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
-      - runtime/VCPToolBox/Plugin.js
-      - runtime/VCPToolBox/server.js
-      - runtime/VCPToolBox/rust-vexus-lite/Cargo.toml
-      - ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
-      - ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
-      - ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
     last_reviewed: 2026-07-13
     review_by: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
     freshness:
