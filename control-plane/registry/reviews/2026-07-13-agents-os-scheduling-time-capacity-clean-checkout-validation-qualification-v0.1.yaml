@@ -1,0 +1,75 @@
+schema_version: agents-os.validation-evidence-qualification.v0.1
+record_id: agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1
+record_type: ValidationEvidenceQualification
+status: active_correction
+immutable: true
+created_at: 2026-07-13T21:13:16+08:00
+owner: Jenn
+agent_steward: Nobao
+
+qualifies_review_artifact:
+  path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-scheduling-time-capacity-package-v0.1.review.yaml
+  sha256: d988d5a60c07892fa59de957fdda5ba232892d48e209e3b6190cf54c4585bb9d
+  fields:
+    - local_validation.registry_validation
+    - local_validation.docctl_status
+    - local_validation.docctl_doctor
+
+original_claim_context:
+  environment: populated_local_workspace_before_freeze_materialization_registration
+  registry_document_count: 384
+  runtime_checkout_present: true
+  claim_was_observed_in_that_environment: true
+  claim_is_reproducible_from_committed_tree_alone: false
+
+required_interpretation:
+  semantic_contract_review_result: PASS_NO_BLOCKER_OR_MAJOR
+  committed_tree_repository_validation: PARTIAL_WITH_PREEXISTING_BROKEN_REFERENCES
+  zero_warning_claim_scope: populated_local_workspace_only
+  forbidden_inference: clean_checkout_passed_with_zero_warnings_or_failures
+  companion_record_required_when_citing_review_basis: true
+
+clean_checkout_comparison_before_this_correction_record:
+  base:
+    git_ref: e19f5b8
+    registry:
+      checked_documents: 379
+      pass: 362
+      warn: 17
+      fail: 0
+    docctl_doctor:
+      documents: 421
+      fail: 48
+      warn: 0
+    docctl_score: 60
+  reviewed_pr_head:
+    git_ref: f7480ebeebeda407459c65a00c7f104723acad54
+    registry:
+      checked_documents: 386
+      pass: 369
+      warn: 17
+      fail: 0
+    docctl_doctor:
+      documents: 428
+      fail: 48
+      warn: 0
+    docctl_score: 60
+  regression_assessment:
+    additional_registry_warnings_from_new_documents: 0
+    additional_docctl_failures_from_new_documents: 0
+    baseline_broken_reference_debt_remains: true
+
+acceptance_effect:
+  architecture_semantics_changed: false
+  accepted_subject_hashes_changed: false
+  freeze_decision_replaced_or_superseded: false
+  acceptance_evidence_strength: QUALIFIED
+  repository_validation_evidence: PARTIAL
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_original_hash_bound_review_artifact: forbidden
+  edit_freeze_decision_record: forbidden
+  correction_method: create_a_new_superseding_qualification_record
