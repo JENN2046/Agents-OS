@@ -442,10 +442,23 @@ Jenn 有全局 kill switch
 
 ## 14. 关联证据
 
+以下三份 reality map 是作出本决议时使用的本地工作区证据，但不属于本次 Git 提交或 PR 的发布范围。
+这些路径只保留证据身份，不表示 clean checkout 可以读取；需要复核其内容时，必须经过单独的证据纳入与
+审查流程，不能从本决议推断其已发布或可用。
+
+```yaml
+local_external_evidence:
+  availability: INTENTIONALLY_EXTERNAL_UNAVAILABLE_IN_GIT
+  publication_status: EXCLUDED_FROM_THIS_PR
+  paths:
+    - ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
+    - ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
+    - ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
+```
+
+当前 Git 提交内可以直接复核的关联依据是：
+
 ```text
-ops/reports/vcptoolbox-runtime-reality-map-2026-07-12.md
-ops/reports/vcpchat-runtime-reality-map-2026-07-12.md
-ops/reports/vcpmobile-runtime-reality-map-2026-07-12.md
 governance/SECURITY_BOUNDARIES.md
 control-plane/registry/decisions/2026-07-03-three-lane-execution-model-v0.1.md
 control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
