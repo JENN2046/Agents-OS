@@ -65,6 +65,26 @@ Result: PASS_NO_BLOCKER_OR_MAJOR_READY_FOR_JENN_FREEZE_DECISION
 Final round: 10
 ```
 
+## Validation Evidence Qualification
+
+The review artifact's `384/384`, score `100`, and zero-warning validation fields
+describe the populated local workspace used before freeze materialization was
+registered. They are not evidence that the committed tree passes the same checks
+in a clean checkout.
+
+The mandatory companion qualification is:
+
+```text
+Path: control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
+SHA-256: d3babe879a88597c80201a1bc6998ea6b690f9568caf0b1c300edff3b40645a8
+Committed-tree repository validation: PARTIAL_WITH_PREEXISTING_BROKEN_REFERENCES
+Acceptance evidence strength: QUALIFIED
+```
+
+The semantic contract review remains `PASS_NO_BLOCKER_OR_MAJOR`, but no audit
+may cite the original local validation fields as a clean-checkout zero-warning
+result. This qualification does not grant implementation or runtime authority.
+
 ## Authority Not Granted
 
 This acceptance freezes architecture semantics only. It does not authorize:

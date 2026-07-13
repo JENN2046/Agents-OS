@@ -66,6 +66,11 @@ The immutable freeze record is
 `control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml`, and the accepted
 projection is
 `control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md`.
+The review artifact's local zero-warning validation is qualified by
+`control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml`:
+it applies only to the populated pre-freeze workspace, while committed-tree repository validation remains
+`PARTIAL_WITH_PREEXISTING_BROKEN_REFERENCES`. The semantic contract review remains PASS, but clean-checkout evidence
+must not be described as zero-warning or zero-failure.
 The only acceptance unit is `R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE`: main Sections 3-9 plus parent Section 2.1. Partial
 freeze is forbidden, and the parent R1 amendment overlay is now effective as part of that atomic bundle. The
 reviewed subject files remain byte-identical; their historical filenames or embedded pre-freeze lifecycle metadata

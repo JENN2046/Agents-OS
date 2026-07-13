@@ -97,6 +97,7 @@ control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-archite
 control-plane/registry/drafts/2026-07-13-agents-os-scheduling-time-capacity-contracts-v0.1.draft.md
 control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
 control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
 ```
 
 接受单位是不可拆分的 `R1_V0_1_ATOMIC_ACCEPTANCE_BUNDLE`：草案 Sections 3-9 加父架构 Section 2.1 R1
@@ -107,6 +108,10 @@ overlay，禁止 partial freeze。冻结记录绑定两份受审 subject 的精�
 ```text
 control-plane/registry/drafts/2026-07-13-agents-os-resource-constrained-scheduling-v0.2.draft.md
 ```
+
+原 R1 review 中的 `384/384`、score `100` 和 zero-warning 字段只代表冻结前完整本地 workspace，不能作为
+clean committed tree 的零警告证据。独立 qualification record 将 committed-tree repository validation 标为
+`PARTIAL_WITH_PREEXISTING_BROKEN_REFERENCES`；这不改变语义终审结论，但降低并限定了可引用的验证证据强度。
 
 本次冻结只接受架构语义，不授权实现、Rust runtime 建设、数据库变更、服务启动、provider/executor 调用或
 runtime activation。
