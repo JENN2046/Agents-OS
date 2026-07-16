@@ -1,0 +1,1399 @@
+{
+  "schema_version": "agents-os.f4-r7-complete-effective-m0a-witness.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R7_ATOMIC_BUNDLE",
+  "authorization_totality_vectors": [
+    {
+      "id": "all-three-negatives",
+      "mode": "EXACT",
+      "negatives": [
+        "JENN_SCOPE_MISMATCH",
+        "JENN_DECISION_EXPIRED",
+        "JENN_DECISION_REVOKED"
+      ],
+      "unavailable": true,
+      "expected": [
+        "REQUIREMENT",
+        "REJECTED",
+        "JENN_DECISION_REVOKED"
+      ]
+    },
+    {
+      "id": "scope-plus-expired",
+      "mode": "EXACT",
+      "negatives": [
+        "JENN_SCOPE_MISMATCH",
+        "JENN_DECISION_EXPIRED"
+      ],
+      "unavailable": false,
+      "expected": [
+        "REQUIREMENT",
+        "REJECTED",
+        "JENN_SCOPE_MISMATCH"
+      ]
+    },
+    {
+      "id": "expired-plus-unavailable",
+      "mode": "EXACT",
+      "negatives": [
+        "JENN_DECISION_EXPIRED"
+      ],
+      "unavailable": true,
+      "expected": [
+        "REQUIREMENT",
+        "REJECTED",
+        "JENN_DECISION_EXPIRED"
+      ]
+    },
+    {
+      "id": "missing",
+      "mode": "EXACT",
+      "negatives": [
+        "JENN_DECISION_MISSING"
+      ],
+      "unavailable": false,
+      "expected": [
+        "REQUIREMENT",
+        "REJECTED",
+        "JENN_DECISION_MISSING"
+      ]
+    },
+    {
+      "id": "unavailable-only",
+      "mode": "EXACT",
+      "negatives": [],
+      "unavailable": true,
+      "expected": [
+        "NO_REQUIREMENT_OBJECT",
+        null,
+        "MODE_INPUT_UNAVAILABLE"
+      ]
+    },
+    {
+      "id": "current",
+      "mode": "EXACT",
+      "negatives": [],
+      "unavailable": false,
+      "expected": [
+        "REQUIREMENT",
+        "CURRENT",
+        "JENN_DECISION_CURRENT"
+      ]
+    },
+    {
+      "id": "prohibited",
+      "mode": "PROHIBITED",
+      "negatives": [],
+      "unavailable": false,
+      "expected": [
+        "REQUIREMENT",
+        "REJECTED",
+        "PROHIBITED"
+      ]
+    },
+    {
+      "id": "no-separate",
+      "mode": "NO_SEPARATE",
+      "negatives": [],
+      "unavailable": false,
+      "expected": [
+        "REQUIREMENT",
+        "NOT_APPLICABLE",
+        "NO_SEPARATE_REQUIRED"
+      ]
+    }
+  ],
+  "eligibility_totality_vectors": [
+    {
+      "id": "integrity-dominates-all",
+      "args": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "expected": [
+        "INELIGIBLE",
+        "INTEGRITY_FAILURE"
+      ]
+    },
+    {
+      "id": "F2-history-before-F4",
+      "args": [
+        false,
+        true,
+        true,
+        false,
+        true,
+        true
+      ],
+      "expected": [
+        "INELIGIBLE",
+        "F2_COMPROMISE_HISTORY_PRESENT"
+      ]
+    },
+    {
+      "id": "F4-history-over-unavailable",
+      "args": [
+        false,
+        false,
+        true,
+        false,
+        true,
+        true
+      ],
+      "expected": [
+        "INELIGIBLE",
+        "F4_COMPROMISE_HISTORY_PRESENT"
+      ]
+    },
+    {
+      "id": "nonactive-over-unavailable",
+      "args": [
+        false,
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "expected": [
+        "INELIGIBLE",
+        "CURRENT_F2_ACTOR_NOT_ACTIVE"
+      ]
+    },
+    {
+      "id": "history-unavailable",
+      "args": [
+        false,
+        false,
+        false,
+        false,
+        true,
+        true
+      ],
+      "expected": [
+        "INDETERMINATE",
+        "HISTORY_UNAVAILABLE"
+      ]
+    },
+    {
+      "id": "current-unavailable",
+      "args": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ],
+      "expected": [
+        "INDETERMINATE",
+        "CURRENT_F2_INPUT_UNAVAILABLE"
+      ]
+    },
+    {
+      "id": "eligible",
+      "args": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "expected": [
+        "ELIGIBLE",
+        "NEVER_COMPROMISED_AND_ALL_CURRENT"
+      ]
+    }
+  ],
+  "Jenn_field_presence_matrix": {
+    "null_rows": [
+      "NO_SEPARATE_REQUIRED",
+      "PROHIBITED",
+      "JENN_DECISION_MISSING"
+    ],
+    "non_null_rows": [
+      "JENN_DECISION_CURRENT",
+      "JENN_DECISION_REVOKED",
+      "JENN_SCOPE_MISMATCH",
+      "JENN_DECISION_EXPIRED"
+    ],
+    "field_count": 7
+  },
+  "disposition_ordered_field_names": [
+    "interface_version",
+    "observation_id",
+    "observation_attempt",
+    "acceptance_ref",
+    "acceptance_fingerprint",
+    "invocation_identity_fingerprint",
+    "observed_host_id",
+    "observed_host_identity_revision",
+    "observed_host_authentication_epoch",
+    "rechecked_task_fence_generation",
+    "rechecked_host_fence_generation",
+    "rechecked_effect_fence_generation",
+    "rechecked_execution_epoch",
+    "rechecked_secret_handle_set_fingerprint",
+    "rechecked_permit_attestation_fingerprint",
+    "rechecked_human_presence_binding_fingerprint",
+    "final_handoff_authority_assessment_ref",
+    "final_handoff_authority_assessment_fingerprint",
+    "secret_handles_current",
+    "permit_attestation_current",
+    "human_presence_current",
+    "final_handoff_authority_current",
+    "disposition",
+    "reason",
+    "observed_at_utc_ms",
+    "observation_event_sequence",
+    "host_observation_attestation_ref",
+    "host_observation_attestation_fingerprint"
+  ],
+  "disposition_preceding_field_count": 28,
+  "nodes": [
+    {
+      "ordinal": 1,
+      "kind": "R1BaseIntegrityV0_1R7",
+      "depends_on_ordinals": [],
+      "object": {
+        "R1_fixture_file_sha256": "e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75",
+        "R1_fixture_canonical_sha256": "c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2",
+        "R1_validator_result": "PASS",
+        "ordered_R1_node_sha256": [
+          "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083",
+          "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51",
+          "a44c131c2f683fdb00f0d6f633d3dea011aabaa039f7358a04c8242af504df7a",
+          "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1",
+          "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca",
+          "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495",
+          "b50031771d409c77b619fab71800b12bf670b0dbe690d067544b3780bb7da4ac",
+          "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d",
+          "02fff91511fd50da3e3e699dad4f8c6918e17366513e1aa3ba621a8bc1e894a2",
+          "58d4aa2b417b69afded453102b819b49b25d74ac1bf2b6a95ee5d9101a3afcac",
+          "ce4f54b01a02aeffd8aab0dbf8f4e869d6b9337e37ccfabe3882ffd590d2d828",
+          "c5afb94462805a9b4bbbfa963581626a36d15280f36629a28f957ce23f3463de",
+          "223ee57b78c6a9c6b74f025cc178cfa2b32a73450f2ea3eb91470b670a321bcf",
+          "17a72636d1bb1d65283892cfeedf4d0cde1984efdc102d9961691fc73d5de7c2"
+        ]
+      },
+      "node_fingerprint": "64b9ac0298cf0cfbcf1f09e5ee0c82ad17351972a6bd6a994b8c35721b4de3e2"
+    },
+    {
+      "ordinal": 2,
+      "kind": "EffectAuthorizationRequirementResolutionV0_1R7",
+      "depends_on_ordinals": [
+        1
+      ],
+      "object": {
+        "interface_version": "agents-os.effect-authorization-requirement-resolution.v0.1-r7",
+        "outcome": "REQUIREMENT_RESOLVED",
+        "reason": "RESOLVED",
+        "requirement_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309"
+      },
+      "node_fingerprint": "460d45a2d0f3cb930003ce09a18c3dd3529a7cf6117f9732c73f354f52fad4ee"
+    },
+    {
+      "ordinal": 3,
+      "kind": "EffectAuthorizationRequirementV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        2
+      ],
+      "object": {
+        "interface_version": "agents-os.effect-authorization-requirement.v0.1-r7",
+        "mode": "NO_SEPARATE_JENN_AUTHORIZATION_REQUIRED",
+        "requirement_basis_ref": "basis:policy-pbl:m0",
+        "requirement_basis_fingerprint": "9563dd848761ee9263b82df08f577d8e38ad5fef18a58bfc5938e4820603988e",
+        "policy_bundle_revision": 1,
+        "policy_bundle_fingerprint": "0987c871a3cdecb928ef099636d0e64fdf275605960c7a4ba8447ba035de139b",
+        "prohibited_behavior_list_revision": 1,
+        "prohibited_behavior_list_fingerprint": "3fcf6b0dd1dbd2576dea8597583a6b8466ed4aa0d57749d532a8d2069438fc12",
+        "exact_effect_scope_fingerprint": "d421bb1b8beb4ae89fa9ea8c346ea503f0040edf050e45b0c42b056c1ff96704",
+        "Jenn_decision_ref": null,
+        "Jenn_decision_fingerprint": null,
+        "Jenn_actor_identity_ref": null,
+        "issued_at_utc_ms": null,
+        "expires_at_utc_ms": null,
+        "revocation_event_sequence": null,
+        "exact_Jenn_scope_fingerprint": null,
+        "currentness_result": "NOT_APPLICABLE",
+        "currentness_reason": "NO_SEPARATE_REQUIRED",
+        "canonical_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309"
+      },
+      "node_fingerprint": "d78fc795286860ee5ff3f06cd30470c8ada8e96e32a875ea9d228bacf0afbcb1"
+    },
+    {
+      "ordinal": 4,
+      "kind": "F2ExecutionHostPrincipalBindingExtensionV0_1R7",
+      "depends_on_ordinals": [
+        1
+      ],
+      "object": {
+        "interface_version": "agents-os.f2-execution-host-principal-binding-extension.v0.1-r7",
+        "host_actor_id": "actor:execution-host:m0",
+        "host_actor_identity_revision": 1,
+        "host_actor_identity_ref": "actor-revision:execution-host:m0:1",
+        "host_actor_identity_fingerprint": "7f666e55529fd5e1c1cb4cb3fa0ff4bd18c631d0f1335ae71c1c4533ca7be727",
+        "host_actor_identity_assessment_ref": "assessment:host-actor:m0",
+        "host_actor_identity_assessment_fingerprint": "fa68737058d07d9a9882e7a0e86d5c528a7aeeaf11fe1ffaee45766688358284",
+        "host_actor_class": "EXECUTION_HOST",
+        "host_process_principal_id": "principal:host-process:m0",
+        "host_process_principal_revision": 1,
+        "host_process_principal_ref": "principal-revision:host-process:m0:1",
+        "host_process_principal_fingerprint": "46812356d2aef71ab466cc843c48864ce4a09911fad346923ddbf3c6f748a4e6",
+        "host_process_principal_assessment_ref": "assessment:host-principal:m0",
+        "host_process_principal_assessment_fingerprint": "5ad1181a3fc894a616a8a335fa57b2476516a2ed8f65a8b4950e5898b73f0723",
+        "host_process_principal_class": "HOST_PROCESS",
+        "host_process_binding_ref": "binding:host:m0",
+        "host_process_binding_revision": 1,
+        "host_process_binding_fingerprint": "61aedc9178160aa06c0b158e842a8833e304fbb618b279071159175b4c75cc6d",
+        "host_process_binding_assessment_ref": "assessment:host-binding:m0",
+        "host_process_binding_assessment_fingerprint": "5408d9976591a00365a4b1a1fe7051515490c04e388ea3e3c41f7ddd5507ded5",
+        "provisioning_action_ref": "action:host-provision:m0",
+        "provisioning_action_fingerprint": "8e7c146d518f592bb8bbb5db7dc8583dd4d9d55d8b6425a2b0ef85c942d40843",
+        "provisioning_basis_ref": "basis:accepted-host-provision:m0",
+        "provisioning_basis_fingerprint": "8cd69f3750ea9c793422f576bf114ccda2a909a1a0f379cf228ec00f6d232e52",
+        "canonical_fingerprint": "d010b68c385fff2a0160b1c6b3ae597fa4be5a5e1d975814cd00cb84b09a7baa"
+      },
+      "node_fingerprint": "31a2cfee3ed04d5cedd3bac44f55bbe34303fa6b3e1d2e025d4d9066dd5787ef"
+    },
+    {
+      "ordinal": 5,
+      "kind": "F4HostEffectTrustEligibilityAssessmentV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        4
+      ],
+      "object": {
+        "interface_version": "agents-os.f4-host-effect-trust-eligibility.v0.1-r7",
+        "host_actor_identity_ref": "actor-revision:execution-host:m0:1",
+        "host_actor_identity_fingerprint": "7f666e55529fd5e1c1cb4cb3fa0ff4bd18c631d0f1335ae71c1c4533ca7be727",
+        "current_F2_actor_assessment_ref": "assessment:host-actor:m0",
+        "current_F2_actor_assessment_fingerprint": "fa68737058d07d9a9882e7a0e86d5c528a7aeeaf11fe1ffaee45766688358284",
+        "F2_compromise_history_head_ref": "history:f2:no-compromise:m0",
+        "F2_compromise_history_head_fingerprint": "5843b2290612105210e0c3dcbf5bffddef51666c2dcf1deedb3481a010174619",
+        "F4_host_trust_head_ref": "history:f4:no-compromise:m0",
+        "F4_host_trust_head_fingerprint": "22f15562620fa423aca0ba7bd2f77b9b758524a743163731ceeb14f82273e9b8",
+        "result": "ELIGIBLE",
+        "reason": "NEVER_COMPROMISED_AND_ALL_CURRENT",
+        "assessment_fingerprint": "72ea0f953047d058870b52cd35bd120324ded9978f99546a210e541d69cc2942"
+      },
+      "node_fingerprint": "3c076daad00b21b8ed1db5d896d6606b8574d2ea5d13d6bf6964aef2328189de"
+    },
+    {
+      "ordinal": 6,
+      "kind": "F4HostTrustRevisionV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        4,
+        5
+      ],
+      "object": {
+        "interface_version": "agents-os.f4-host-trust-revision.v0.1-r7",
+        "host_id": "actor:execution-host:m0",
+        "host_trust_revision": 1,
+        "expected_previous_host_trust_revision": null,
+        "previous_host_trust_ref": null,
+        "previous_host_trust_fingerprint": null,
+        "host_actor_id": "actor:execution-host:m0",
+        "host_actor_identity_revision": 1,
+        "host_actor_identity_ref": "actor-revision:execution-host:m0:1",
+        "host_actor_identity_fingerprint": "7f666e55529fd5e1c1cb4cb3fa0ff4bd18c631d0f1335ae71c1c4533ca7be727",
+        "host_actor_identity_assessment_ref": "assessment:host-actor:m0",
+        "host_actor_identity_assessment_fingerprint": "fa68737058d07d9a9882e7a0e86d5c528a7aeeaf11fe1ffaee45766688358284",
+        "host_process_principal_id": "principal:host-process:m0",
+        "host_process_principal_revision": 1,
+        "host_process_principal_ref": "principal-revision:host-process:m0:1",
+        "host_process_principal_fingerprint": "46812356d2aef71ab466cc843c48864ce4a09911fad346923ddbf3c6f748a4e6",
+        "host_process_principal_assessment_ref": "assessment:host-principal:m0",
+        "host_process_principal_assessment_fingerprint": "5ad1181a3fc894a616a8a335fa57b2476516a2ed8f65a8b4950e5898b73f0723",
+        "host_process_binding_ref": "binding:host:m0",
+        "host_process_binding_revision": 1,
+        "host_process_binding_fingerprint": "61aedc9178160aa06c0b158e842a8833e304fbb618b279071159175b4c75cc6d",
+        "host_process_binding_assessment_ref": "assessment:host-binding:m0",
+        "host_process_binding_assessment_fingerprint": "5408d9976591a00365a4b1a1fe7051515490c04e388ea3e3c41f7ddd5507ded5",
+        "provisioning_action_ref": "action:host-provision:m0",
+        "provisioning_action_fingerprint": "8e7c146d518f592bb8bbb5db7dc8583dd4d9d55d8b6425a2b0ef85c942d40843",
+        "provisioning_basis_ref": "basis:accepted-host-provision:m0",
+        "provisioning_basis_fingerprint": "8cd69f3750ea9c793422f576bf114ccda2a909a1a0f379cf228ec00f6d232e52",
+        "transition_kind": "CREATE",
+        "transition_action_ref": "action:host-trust-create:m0",
+        "transition_action_fingerprint": "d347c2cc686640c1bdaae7a8a81b1a50ba36d7043264e5c7a0b6f71cab8a96ba",
+        "transition_authority_basis_ref": "basis:host-trust-create:m0",
+        "transition_authority_basis_fingerprint": "55e40e9d5aa1e9f3f3864aee3aff7155aad87ff9799c9c7a4973a2788ea7232d",
+        "authenticator_profile_ref": "auth-profile:m0",
+        "authenticator_profile_revision": 1,
+        "authenticator_profile_fingerprint": "e68d4e2749234bb92ac8941e9fa25b1f92f1f5c07018574a7e93c9e20b720647",
+        "credential_binding_ref": "credential-handle:m0",
+        "credential_binding_fingerprint": "6507125d4e174cc5ab6c881cea3ed1623d9c7b5bd284770f9bb46b811d175a5b",
+        "lifecycle_state": "ACTIVE",
+        "validity_start_utc_ms": 1000,
+        "validity_end_utc_ms": null,
+        "issued_event_sequence": 40,
+        "canonical_fingerprint": "d4d25772ed4921ca95e66e13ade96471bfd815cee7bb9cdf7b4a6b7aaa46831c"
+      },
+      "node_fingerprint": "0b43d94beb938bd7b6cb010b81ba4db7a57c677fc6f70ca3586f27809d38e59b"
+    },
+    {
+      "ordinal": 7,
+      "kind": "HostAuthenticationAssessmentV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "object": {
+        "interface_version": "agents-os.host-authentication-assessment.v0.1-r7",
+        "host_trust_ref": "host-trust:m0:1",
+        "host_trust_fingerprint": "d4d25772ed4921ca95e66e13ade96471bfd815cee7bb9cdf7b4a6b7aaa46831c",
+        "host_actor_identity_ref": "actor-revision:execution-host:m0:1",
+        "host_actor_identity_fingerprint": "7f666e55529fd5e1c1cb4cb3fa0ff4bd18c631d0f1335ae71c1c4533ca7be727",
+        "host_actor_identity_assessment_ref": "assessment:host-actor:m0",
+        "host_actor_identity_assessment_fingerprint": "fa68737058d07d9a9882e7a0e86d5c528a7aeeaf11fe1ffaee45766688358284",
+        "host_process_principal_ref": "principal-revision:host-process:m0:1",
+        "host_process_principal_fingerprint": "46812356d2aef71ab466cc843c48864ce4a09911fad346923ddbf3c6f748a4e6",
+        "host_process_principal_assessment_ref": "assessment:host-principal:m0",
+        "host_process_principal_assessment_fingerprint": "5ad1181a3fc894a616a8a335fa57b2476516a2ed8f65a8b4950e5898b73f0723",
+        "host_process_binding_ref": "binding:host:m0",
+        "host_process_binding_fingerprint": "61aedc9178160aa06c0b158e842a8833e304fbb618b279071159175b4c75cc6d",
+        "host_process_binding_assessment_ref": "assessment:host-binding:m0",
+        "host_process_binding_assessment_fingerprint": "5408d9976591a00365a4b1a1fe7051515490c04e388ea3e3c41f7ddd5507ded5",
+        "effect_trust_eligibility_assessment_ref": "assessment:effect-trust:m0",
+        "effect_trust_eligibility_assessment_fingerprint": "72ea0f953047d058870b52cd35bd120324ded9978f99546a210e541d69cc2942",
+        "authenticator_profile_ref": "auth-profile:m0-a:synthetic",
+        "authenticator_profile_fingerprint": "8506ba41b693a82af5c27124b83c87c3ec9436fcb59afd5843ab62c4718236d2",
+        "challenge_ref": "challenge:m0-a:f4:001",
+        "challenge_fingerprint": "23d06757cf25e4a9055ca8ac542bd834c1804c0a473fe6167232ab440bb1f241",
+        "verifier_identity_ref": "verifier:m0-a:synthetic",
+        "verifier_profile_ref": "verifier-profile:m0-a:synthetic",
+        "verification_evidence_ref": "verification-evidence:m0-a:f4:001",
+        "verification_evidence_fingerprint": "840349368168827f96c2739bac364a31e0f67a66905ec4e9bee7419124c47e33",
+        "host_authentication_epoch": 1,
+        "trusted_time_utc_ms": 1500,
+        "valid_until_utc_ms": 5000,
+        "host_revocation_event_sequence": 40,
+        "result": "AUTHENTICATED",
+        "reason": "MATCH",
+        "assessment_fingerprint": "65e7d710a4da2b3d5289b778d6fe58a21380f6a3879049d845f3575d64048e62"
+      },
+      "node_fingerprint": "c310e3d0efd554c3af96562d72c6eb63f6afba723dc7fd4ae05a4c31de9607a4"
+    },
+    {
+      "ordinal": 8,
+      "kind": "CapabilityGrantV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        3
+      ],
+      "object": {
+        "interface_version": "agents-os.capability-grant.v0.1-r7",
+        "capability_definition_ref": "capability-definition:synthetic-noop:m0",
+        "capability_definition_fingerprint": "b17476428c989df069ec99614e7d7f7beafc8f23f6131452de1f4f7ea11559bb",
+        "capability_revision": 1,
+        "operation_registry_revision": 1,
+        "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+        "operation_set": [
+          "SYNTHETIC_NOOP"
+        ],
+        "constraint_fingerprint": "198bb72d5b6066f56c82eb58adb8e3bb26aabc202d2e9cb359ca2d184c780f03",
+        "source_authority_bindings": [
+          {
+            "role": "F1_TASK",
+            "source_ref": "source:f1_task",
+            "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+            "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+          },
+          {
+            "role": "F2_RESPONSIBILITY",
+            "source_ref": "source:f2_responsibility",
+            "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+            "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+          },
+          {
+            "role": "F3_COMMAND",
+            "source_ref": "source:f3_command",
+            "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+            "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+          },
+          {
+            "role": "POLICY",
+            "source_ref": "source:policy",
+            "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+            "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+          },
+          {
+            "role": "PROHIBITED_BEHAVIOR_LIST",
+            "source_ref": "source:prohibited_behavior_list",
+            "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+            "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+          }
+        ],
+        "source_authority_set_fingerprint": "48c5579a856588eaae382f4adfb92e3eb1f50cbc98737ce2233241d8f449458f",
+        "derived_subset_proof_ref": "proof:cap-subset:m0",
+        "derived_subset_proof_fingerprint": "9ca73809ffa09b80065f493405976d10896045f27cb6760275737ba685414a21",
+        "canonical_fingerprint": "c548e7775f3d14a06226422bcf900ac8cadc2d14351195c7876b8c280ff23c47"
+      },
+      "node_fingerprint": "636e9ffda27dcc7e9f52ed02c6be0304196edaecb2f2a02ef70bdc8c40570255"
+    },
+    {
+      "ordinal": 9,
+      "kind": "ResourceGrantV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        3
+      ],
+      "object": {
+        "interface_version": "agents-os.resource-grant.v0.1-r7",
+        "resource_definition_ref": "resource-definition:synthetic:m0",
+        "resource_definition_fingerprint": "c6484f57f0970ff22786968a73741d431575f8d0278aef8fc67054d15e4b53b5",
+        "resource_kind": "SYNTHETIC_M0_RESOURCE",
+        "resource_ref": "resource:m0-a:synthetic:001",
+        "resource_subject_fingerprint": "db6e4b00d44495fba86e3430cfd7dd08e473fd94afb7ebf4a3042950d3493a94",
+        "operation_registry_revision": 1,
+        "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+        "operation_set": [
+          "SYNTHETIC_NOOP"
+        ],
+        "selector_constraint_fingerprint": "66b8126029948da2391830d4a967c47cc62b581d3feaf156062216618cd598e7",
+        "source_scope_bindings": [
+          {
+            "role": "F1_TASK",
+            "source_ref": "source:f1_task",
+            "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+            "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+          },
+          {
+            "role": "F2_RESPONSIBILITY",
+            "source_ref": "source:f2_responsibility",
+            "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+            "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+          },
+          {
+            "role": "F3_COMMAND",
+            "source_ref": "source:f3_command",
+            "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+            "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+          },
+          {
+            "role": "POLICY",
+            "source_ref": "source:policy",
+            "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+            "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+          },
+          {
+            "role": "PROHIBITED_BEHAVIOR_LIST",
+            "source_ref": "source:prohibited_behavior_list",
+            "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+            "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+          }
+        ],
+        "source_scope_set_fingerprint": "3d01fe206235b38f5fc54fb3a942a809fb7654335cb8e0ba29b8c941a74f4f17",
+        "containment_assessment_ref": "assessment:containment:m0",
+        "containment_assessment_fingerprint": "9be07db6662b2817041a4e49c715902d85afeba1f4774278d06780e33b84a016",
+        "canonical_fingerprint": "084ac97cafa3a9154ea3e4395754f45aa85015cd003cec1fa10b44b8a14096d8"
+      },
+      "node_fingerprint": "0d0307a999bbc9ce93fbac186dba1f0bab9e308c917e32f63469633d8540d4c0"
+    },
+    {
+      "ordinal": 10,
+      "kind": "EffectScopeV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        3,
+        8,
+        9
+      ],
+      "object": {
+        "capability_grants": [
+          {
+            "interface_version": "agents-os.capability-grant.v0.1-r7",
+            "capability_definition_ref": "capability-definition:synthetic-noop:m0",
+            "capability_definition_fingerprint": "b17476428c989df069ec99614e7d7f7beafc8f23f6131452de1f4f7ea11559bb",
+            "capability_revision": 1,
+            "operation_registry_revision": 1,
+            "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+            "operation_set": [
+              "SYNTHETIC_NOOP"
+            ],
+            "constraint_fingerprint": "198bb72d5b6066f56c82eb58adb8e3bb26aabc202d2e9cb359ca2d184c780f03",
+            "source_authority_bindings": [
+              {
+                "role": "F1_TASK",
+                "source_ref": "source:f1_task",
+                "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+                "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+              },
+              {
+                "role": "F2_RESPONSIBILITY",
+                "source_ref": "source:f2_responsibility",
+                "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+                "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+              },
+              {
+                "role": "F3_COMMAND",
+                "source_ref": "source:f3_command",
+                "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+                "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+              },
+              {
+                "role": "POLICY",
+                "source_ref": "source:policy",
+                "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+                "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+              },
+              {
+                "role": "PROHIBITED_BEHAVIOR_LIST",
+                "source_ref": "source:prohibited_behavior_list",
+                "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+                "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+              }
+            ],
+            "source_authority_set_fingerprint": "48c5579a856588eaae382f4adfb92e3eb1f50cbc98737ce2233241d8f449458f",
+            "derived_subset_proof_ref": "proof:cap-subset:m0",
+            "derived_subset_proof_fingerprint": "9ca73809ffa09b80065f493405976d10896045f27cb6760275737ba685414a21",
+            "canonical_fingerprint": "c548e7775f3d14a06226422bcf900ac8cadc2d14351195c7876b8c280ff23c47"
+          }
+        ],
+        "resource_grants": [
+          {
+            "interface_version": "agents-os.resource-grant.v0.1-r7",
+            "resource_definition_ref": "resource-definition:synthetic:m0",
+            "resource_definition_fingerprint": "c6484f57f0970ff22786968a73741d431575f8d0278aef8fc67054d15e4b53b5",
+            "resource_kind": "SYNTHETIC_M0_RESOURCE",
+            "resource_ref": "resource:m0-a:synthetic:001",
+            "resource_subject_fingerprint": "db6e4b00d44495fba86e3430cfd7dd08e473fd94afb7ebf4a3042950d3493a94",
+            "operation_registry_revision": 1,
+            "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+            "operation_set": [
+              "SYNTHETIC_NOOP"
+            ],
+            "selector_constraint_fingerprint": "66b8126029948da2391830d4a967c47cc62b581d3feaf156062216618cd598e7",
+            "source_scope_bindings": [
+              {
+                "role": "F1_TASK",
+                "source_ref": "source:f1_task",
+                "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+                "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+              },
+              {
+                "role": "F2_RESPONSIBILITY",
+                "source_ref": "source:f2_responsibility",
+                "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+                "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+              },
+              {
+                "role": "F3_COMMAND",
+                "source_ref": "source:f3_command",
+                "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+                "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+              },
+              {
+                "role": "POLICY",
+                "source_ref": "source:policy",
+                "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+                "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+              },
+              {
+                "role": "PROHIBITED_BEHAVIOR_LIST",
+                "source_ref": "source:prohibited_behavior_list",
+                "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+                "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+              }
+            ],
+            "source_scope_set_fingerprint": "3d01fe206235b38f5fc54fb3a942a809fb7654335cb8e0ba29b8c941a74f4f17",
+            "containment_assessment_ref": "assessment:containment:m0",
+            "containment_assessment_fingerprint": "9be07db6662b2817041a4e49c715902d85afeba1f4774278d06780e33b84a016",
+            "canonical_fingerprint": "084ac97cafa3a9154ea3e4395754f45aa85015cd003cec1fa10b44b8a14096d8"
+          }
+        ],
+        "secret_handle_bindings": [],
+        "capability_set_fingerprint": "e6fffbc4056cd4983a94b7305883ff83e9b87d4969baae4f4633503643bb8b33",
+        "resource_set_fingerprint": "d750e8d4b2debd748d523d65d2ba592dcad7580807e192ad5d1f66f97eddad81",
+        "secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+        "effect_intent_binding": {
+          "interface_version": "agents-os.effect-intent-binding.v0.1-r7",
+          "effect_intent_id": "effect-intent:m0-a:f4:001",
+          "operation_kind": "SYNTHETIC_NOOP",
+          "target_resource_refs": [
+            "resource:m0-a:synthetic:001"
+          ],
+          "payload_fingerprint": "9cb8a5cdbc88af6521d96a7a895ffb0c7f9b8fa1cc642ce23d3ced516cc143ff",
+          "capability_set_fingerprint": "e6fffbc4056cd4983a94b7305883ff83e9b87d4969baae4f4633503643bb8b33",
+          "resource_set_fingerprint": "d750e8d4b2debd748d523d65d2ba592dcad7580807e192ad5d1f66f97eddad81",
+          "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+          "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+          "idempotency_key": "idempotency:m0-a:f4:001",
+          "side_effect_audit_label": "GREEN",
+          "external_effect_requested": true,
+          "raw_payload_present": false,
+          "canonical_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd"
+        },
+        "human_presence_binding": {
+          "mode": "NOT_REQUIRED",
+          "presence_event_ref": null,
+          "presence_event_fingerprint": null,
+          "present_actor_id": null,
+          "present_actor_identity_revision": null,
+          "authorized_scope_fingerprint": null,
+          "observer_host_id": null,
+          "observed_at_utc_ms": null,
+          "valid_until_utc_ms": null,
+          "revocation_event_sequence": null,
+          "currentness_result": "NOT_APPLICABLE",
+          "canonical_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0"
+        },
+        "effect_authorization_requirement": {
+          "interface_version": "agents-os.effect-authorization-requirement.v0.1-r7",
+          "mode": "NO_SEPARATE_JENN_AUTHORIZATION_REQUIRED",
+          "requirement_basis_ref": "basis:policy-pbl:m0",
+          "requirement_basis_fingerprint": "9563dd848761ee9263b82df08f577d8e38ad5fef18a58bfc5938e4820603988e",
+          "policy_bundle_revision": 1,
+          "policy_bundle_fingerprint": "0987c871a3cdecb928ef099636d0e64fdf275605960c7a4ba8447ba035de139b",
+          "prohibited_behavior_list_revision": 1,
+          "prohibited_behavior_list_fingerprint": "3fcf6b0dd1dbd2576dea8597583a6b8466ed4aa0d57749d532a8d2069438fc12",
+          "exact_effect_scope_fingerprint": "d421bb1b8beb4ae89fa9ea8c346ea503f0040edf050e45b0c42b056c1ff96704",
+          "Jenn_decision_ref": null,
+          "Jenn_decision_fingerprint": null,
+          "Jenn_actor_identity_ref": null,
+          "issued_at_utc_ms": null,
+          "expires_at_utc_ms": null,
+          "revocation_event_sequence": null,
+          "exact_Jenn_scope_fingerprint": null,
+          "currentness_result": "NOT_APPLICABLE",
+          "currentness_reason": "NO_SEPARATE_REQUIRED",
+          "canonical_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309"
+        }
+      },
+      "node_fingerprint": "c3440182e4655768d145cb48152d9ea88286dedb7603d197a65e101b102e1cd7"
+    },
+    {
+      "ordinal": 11,
+      "kind": "TaskPermitV0_1R7AndIssuanceFact",
+      "depends_on_ordinals": [
+        1,
+        7,
+        10
+      ],
+      "object": {
+        "permit": {
+          "interface_version": "agents-os.task-permit.v0.1-r7",
+          "F4_contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R7_ATOMIC_BUNDLE",
+          "permit_id": "dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "permit_revision": 1,
+          "issuance_event_sequence": 70,
+          "task_authority_binding": {
+            "interface_version": "agents-os.f4-task-authority-binding.v0.1",
+            "task_id": "task:m0-a:f4:001",
+            "task_lifecycle_generation": 1,
+            "task_completion_epoch": 0,
+            "task_state_revision": 1,
+            "task_state_fingerprint": "2992e1bb33a0e01503fa2894b36b51ee4075083a7e7033229ab98526d7c08996",
+            "goal_id": "goal:m0-a:f4:001",
+            "goal_spec_revision": 1,
+            "goal_spec_fingerprint": "b0a2ad6f890aad9b7d97c8d465850bbdbd9d868bdef914f6b8dd8226dadedd8b",
+            "goal_plan_membership_revision": 1,
+            "goal_plan_membership_fingerprint": "7a95ce52765d89a3a6645e2802a3c4f4ff137eb623529cb15317d0932bb39575",
+            "task_commitment_snapshot_id": "commitment:m0-a:f4:001",
+            "task_commitment_snapshot_fingerprint": "3c7ddcf581159b36f5afc91714f2dfdc8181ea1979c8de89a8daf3e802f9a03f",
+            "dependency_closure_snapshot_id": "dependencies:m0-a:f4:001",
+            "dependency_closure_fingerprint": "f5a6a94ae2cde3835f155e9925aec6381aa8279ca40636e3836715d9799a5bc8",
+            "task_completion_refs": [],
+            "completion_assurance_versions": [],
+            "previous_execution_epoch": 0,
+            "execution_epoch_head_fingerprint": "c706dc202a17b398c174164a569299460de4303afaf96aa2b830f0fb09501378",
+            "currentness_event_sequence": 10,
+            "canonical_fingerprint": "3e77280fefccd965a95f6dfdce0bbab3b65a3f2bf06f43be66e41d296accf5fb"
+          },
+          "actor_authority_binding": {
+            "interface_version": "agents-os.f4-actor-authority-binding.v0.1",
+            "actor_id": "actor:m0-a:synthetic",
+            "actor_identity_revision": 1,
+            "actor_identity_assessment_ref": "fixture:f2-actor-assessment",
+            "actor_identity_assessment_fingerprint": "70bb3ea7cc466e932718cdc7e468e003fb10e0df73f57fe588953905e3184b7f",
+            "principal_id": "principal:m0-a:synthetic",
+            "principal_binding_revision": 1,
+            "principal_binding_assessment_ref": "fixture:f2-principal-assessment",
+            "principal_binding_assessment_fingerprint": "bf0123b189acae7a509b2cb7a72723c10f502e8d1ca13dbcafb506f7fabfe9cd",
+            "authentication_assessment_ref": "fixture:f2-authentication-assessment",
+            "authentication_assessment_fingerprint": "d6e617b48acc681038e7c424f4162bf9f14a00e8130f8ce5457fb10b2993073d",
+            "authentication_result": "AUTHENTICATED",
+            "responsibility_source_kind": "ASSIGNMENT",
+            "responsibility_source_ref": "assignment:m0-a:f4:001",
+            "responsibility_source_fingerprint": "f38094a612019f18c3c3e6e451f58f043a4bfbd68c88f7839f96df058a5d70ac",
+            "delegation_chain_fingerprint": null,
+            "bound_resource_ref": "resource:m0-a:synthetic:001",
+            "action_ref": "action:m0-a:f4:001",
+            "action_fingerprint": "ff15060c5bd43173f64beeb1a5a0fcd774eba53db1fc1727e62cc998c1962e3e",
+            "prohibited_behavior_list_revision": 1,
+            "prohibited_boundary_evidence_ref": "fixture:f2-prohibited-boundary",
+            "prohibited_boundary_evidence_fingerprint": "1fb14e8f30c937523b972ea6cd4211d47c09958a8c7a273bdf110d379985ada6",
+            "authority_event_sequence": 20,
+            "canonical_fingerprint": "9924bf71d3d80ac6f2e09dcd65ecf5221ad8401e38992940212fa649e263fc60"
+          },
+          "resident_command_binding": {
+            "interface_version": "agents-os.f4-resident-command-binding.v0.1",
+            "resident_identity_ref": "resident:m0-a:synthetic",
+            "resident_identity_revision": 1,
+            "resident_incarnation_id": "resident-incarnation:m0-a:001",
+            "resident_epoch": 1,
+            "resident_continuity_assessment_ref": "fixture:f3-continuity",
+            "resident_continuity_assessment_fingerprint": "7daea9c7bbb0b2680ff23f22c318f29fc041e16de112d24afe6376d31047d53e",
+            "resident_continuity_result": "CONTINUOUS",
+            "command_id": "command:m0-a:effect-intent:001",
+            "command_fingerprint": "c8d1c904617b543ccaec40737f5ed939a8547da8a954575e092dc23c0ddd7775",
+            "command_type_id": "command-type:m0-a:synthetic-effect-intent",
+            "command_type_version": 1,
+            "command_definition_fingerprint": "cf757b8b86fa866d4e2bd781cfae6af3a23686b899b733e739e27754f08e00a6",
+            "command_envelope_ref": "fixture:f3-command-envelope",
+            "command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+            "authenticated_context_ref": "fixture:f3-authenticated-context",
+            "authenticated_context_fingerprint": "1e29154e1735ee6afdf5b02acf5a56bd8df0c8420b54a693d0385b163ff34c40",
+            "authenticated_action_ref": "fixture:f3-authenticated-action",
+            "authenticated_action_fingerprint": "55df79f228246d8ce08aee851872726151bf685f0bcb2fcf529fdf29a404e512",
+            "F3_contract_version": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+            "writer_event_sequence": 30,
+            "canonical_fingerprint": "1be2cd1e2eb9d105ab126a8734c76f6baec10b0046d93c6ae0acc7106bf1d750"
+          },
+          "host_trust_ref": "host-trust:m0:1",
+          "host_trust_fingerprint": "d4d25772ed4921ca95e66e13ade96471bfd815cee7bb9cdf7b4a6b7aaa46831c",
+          "host_authenticator_profile_ref": "auth-profile:m0",
+          "host_authenticator_profile_fingerprint": "e68d4e2749234bb92ac8941e9fa25b1f92f1f5c07018574a7e93c9e20b720647",
+          "host_authentication_assessment_ref": "assessment:host-auth:m0",
+          "host_authentication_assessment_fingerprint": "65e7d710a4da2b3d5289b778d6fe58a21380f6a3879049d845f3575d64048e62",
+          "host_authentication_epoch": 1,
+          "issuer_resident_identity_ref": "resident:m0-a:synthetic",
+          "issuer_resident_epoch": 1,
+          "policy_bundle_revision": 1,
+          "policy_bundle_fingerprint": "0987c871a3cdecb928ef099636d0e64fdf275605960c7a4ba8447ba035de139b",
+          "prohibited_behavior_list_revision": 1,
+          "prohibited_boundary_evidence_ref": "fixture:f4-prohibited-boundary",
+          "prohibited_boundary_evidence_fingerprint": "dea8198f4cab447ddcea8f4ff47201ffd03a148a3c057853d893dab5dc2db795",
+          "capability_grants": [
+            {
+              "interface_version": "agents-os.capability-grant.v0.1-r7",
+              "capability_definition_ref": "capability-definition:synthetic-noop:m0",
+              "capability_definition_fingerprint": "b17476428c989df069ec99614e7d7f7beafc8f23f6131452de1f4f7ea11559bb",
+              "capability_revision": 1,
+              "operation_registry_revision": 1,
+              "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+              "operation_set": [
+                "SYNTHETIC_NOOP"
+              ],
+              "constraint_fingerprint": "198bb72d5b6066f56c82eb58adb8e3bb26aabc202d2e9cb359ca2d184c780f03",
+              "source_authority_bindings": [
+                {
+                  "role": "F1_TASK",
+                  "source_ref": "source:f1_task",
+                  "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+                  "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+                },
+                {
+                  "role": "F2_RESPONSIBILITY",
+                  "source_ref": "source:f2_responsibility",
+                  "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+                  "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+                },
+                {
+                  "role": "F3_COMMAND",
+                  "source_ref": "source:f3_command",
+                  "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+                  "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+                },
+                {
+                  "role": "POLICY",
+                  "source_ref": "source:policy",
+                  "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+                  "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+                },
+                {
+                  "role": "PROHIBITED_BEHAVIOR_LIST",
+                  "source_ref": "source:prohibited_behavior_list",
+                  "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+                  "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+                }
+              ],
+              "source_authority_set_fingerprint": "48c5579a856588eaae382f4adfb92e3eb1f50cbc98737ce2233241d8f449458f",
+              "derived_subset_proof_ref": "proof:cap-subset:m0",
+              "derived_subset_proof_fingerprint": "9ca73809ffa09b80065f493405976d10896045f27cb6760275737ba685414a21",
+              "canonical_fingerprint": "c548e7775f3d14a06226422bcf900ac8cadc2d14351195c7876b8c280ff23c47"
+            }
+          ],
+          "resource_grants": [
+            {
+              "interface_version": "agents-os.resource-grant.v0.1-r7",
+              "resource_definition_ref": "resource-definition:synthetic:m0",
+              "resource_definition_fingerprint": "c6484f57f0970ff22786968a73741d431575f8d0278aef8fc67054d15e4b53b5",
+              "resource_kind": "SYNTHETIC_M0_RESOURCE",
+              "resource_ref": "resource:m0-a:synthetic:001",
+              "resource_subject_fingerprint": "db6e4b00d44495fba86e3430cfd7dd08e473fd94afb7ebf4a3042950d3493a94",
+              "operation_registry_revision": 1,
+              "operation_registry_fingerprint": "f3fda5b44c492e9efe9dd3723d3ae407e86b213927b3eae1e22d75377ad8f6af",
+              "operation_set": [
+                "SYNTHETIC_NOOP"
+              ],
+              "selector_constraint_fingerprint": "66b8126029948da2391830d4a967c47cc62b581d3feaf156062216618cd598e7",
+              "source_scope_bindings": [
+                {
+                  "role": "F1_TASK",
+                  "source_ref": "source:f1_task",
+                  "source_fingerprint": "758296b68b38ac787237f25e81b5efcd76793927ac32f1de39bdc1c00e460e4f",
+                  "canonical_fingerprint": "f4e7c2f370dc214e320f639af43fb196c7e808663dd214b93a7e592db92d1c08"
+                },
+                {
+                  "role": "F2_RESPONSIBILITY",
+                  "source_ref": "source:f2_responsibility",
+                  "source_fingerprint": "afc6a767854030a341e61feacad70cfc297047f5348b14d3381da71aae8cd1a5",
+                  "canonical_fingerprint": "089cadfa7abbe033997a90f387f06cfe66250775c2f6cb715ff2e54e6501e2a5"
+                },
+                {
+                  "role": "F3_COMMAND",
+                  "source_ref": "source:f3_command",
+                  "source_fingerprint": "6abe9982266f1311da4d5baecf3e220da1f88b5c037d152a2e7e6ace00adccd1",
+                  "canonical_fingerprint": "ff3432134e22d46e30afd51153b2cdd78fde4957ff50b90aa56628c2a39e94e2"
+                },
+                {
+                  "role": "POLICY",
+                  "source_ref": "source:policy",
+                  "source_fingerprint": "17c4592d1d52191b55166e98b0e9f8941dc134912b611d4eff97f682b595cc0c",
+                  "canonical_fingerprint": "4d6408383144c5ace9ce27e45f724e3bd6a9e5b2f396c39066370c8d1d2d4746"
+                },
+                {
+                  "role": "PROHIBITED_BEHAVIOR_LIST",
+                  "source_ref": "source:prohibited_behavior_list",
+                  "source_fingerprint": "642d2dd5ea445878b9a4129984d1652d66a94b9f553cc7b3cd9a2964a96eefef",
+                  "canonical_fingerprint": "a4a42ce2a517e1619e7610e6647b5349f8d2f9e1e31807a660022ce937f534c0"
+                }
+              ],
+              "source_scope_set_fingerprint": "3d01fe206235b38f5fc54fb3a942a809fb7654335cb8e0ba29b8c941a74f4f17",
+              "containment_assessment_ref": "assessment:containment:m0",
+              "containment_assessment_fingerprint": "9be07db6662b2817041a4e49c715902d85afeba1f4774278d06780e33b84a016",
+              "canonical_fingerprint": "084ac97cafa3a9154ea3e4395754f45aa85015cd003cec1fa10b44b8a14096d8"
+            }
+          ],
+          "effect_intent_binding": {
+            "interface_version": "agents-os.effect-intent-binding.v0.1-r7",
+            "effect_intent_id": "effect-intent:m0-a:f4:001",
+            "operation_kind": "SYNTHETIC_NOOP",
+            "target_resource_refs": [
+              "resource:m0-a:synthetic:001"
+            ],
+            "payload_fingerprint": "9cb8a5cdbc88af6521d96a7a895ffb0c7f9b8fa1cc642ce23d3ced516cc143ff",
+            "capability_set_fingerprint": "e6fffbc4056cd4983a94b7305883ff83e9b87d4969baae4f4633503643bb8b33",
+            "resource_set_fingerprint": "d750e8d4b2debd748d523d65d2ba592dcad7580807e192ad5d1f66f97eddad81",
+            "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+            "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "side_effect_audit_label": "GREEN",
+            "external_effect_requested": true,
+            "raw_payload_present": false,
+            "canonical_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd"
+          },
+          "execution_epoch": 1,
+          "host_fence_generation": 1,
+          "effect_fence_generation": 1,
+          "task_fence_generation": 1,
+          "issued_at_utc_ms": 2000,
+          "not_before_utc_ms": 2000,
+          "expires_at_utc_ms": 10000,
+          "start_authority_commit_before_utc_ms": 5000,
+          "max_invocations": 1,
+          "idempotency_key": "idempotency:m0-a:f4:001",
+          "requires_human_presence": false,
+          "human_presence_binding": {
+            "mode": "NOT_REQUIRED",
+            "presence_event_ref": null,
+            "presence_event_fingerprint": null,
+            "present_actor_id": null,
+            "present_actor_identity_revision": null,
+            "authorized_scope_fingerprint": null,
+            "observer_host_id": null,
+            "observed_at_utc_ms": null,
+            "valid_until_utc_ms": null,
+            "revocation_event_sequence": null,
+            "currentness_result": "NOT_APPLICABLE",
+            "canonical_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0"
+          },
+          "effect_authorization_requirement": {
+            "interface_version": "agents-os.effect-authorization-requirement.v0.1-r7",
+            "mode": "NO_SEPARATE_JENN_AUTHORIZATION_REQUIRED",
+            "requirement_basis_ref": "basis:policy-pbl:m0",
+            "requirement_basis_fingerprint": "9563dd848761ee9263b82df08f577d8e38ad5fef18a58bfc5938e4820603988e",
+            "policy_bundle_revision": 1,
+            "policy_bundle_fingerprint": "0987c871a3cdecb928ef099636d0e64fdf275605960c7a4ba8447ba035de139b",
+            "prohibited_behavior_list_revision": 1,
+            "prohibited_behavior_list_fingerprint": "3fcf6b0dd1dbd2576dea8597583a6b8466ed4aa0d57749d532a8d2069438fc12",
+            "exact_effect_scope_fingerprint": "d421bb1b8beb4ae89fa9ea8c346ea503f0040edf050e45b0c42b056c1ff96704",
+            "Jenn_decision_ref": null,
+            "Jenn_decision_fingerprint": null,
+            "Jenn_actor_identity_ref": null,
+            "issued_at_utc_ms": null,
+            "expires_at_utc_ms": null,
+            "revocation_event_sequence": null,
+            "exact_Jenn_scope_fingerprint": null,
+            "currentness_result": "NOT_APPLICABLE",
+            "currentness_reason": "NO_SEPARATE_REQUIRED",
+            "canonical_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309"
+          },
+          "secret_handle_bindings": [],
+          "permit_attestation_profile_ref": "attestation-profile:m0-a:synthetic",
+          "permit_attestation_profile_fingerprint": "7404d873b25006a1ec4fa6a6e3005f122a558a9c6bf7302cd1dd3eecde76aaeb",
+          "permit_attestation_evidence_ref": "attestation-evidence:m0-a:f4:001",
+          "permit_attestation_evidence_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+          "canonical_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5"
+        },
+        "issuance_fact": {
+          "permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+          "issuance_command_envelope_ref": "fixture:f3-command-envelope",
+          "issuance_command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+          "issuance_event_sequence": 70,
+          "fact_fingerprint": "49b2eb7345be6d67685ddb25eb8f58ebe65369508217fe2d822e549f923cd4f1"
+        }
+      },
+      "node_fingerprint": "2e34952952509cbde939f36104be92011ecab510c00a8436c8fc49e830c90f5e"
+    },
+    {
+      "ordinal": 12,
+      "kind": "TaskPermitCurrentnessAssessmentV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        11
+      ],
+      "object": {
+        "interface_version": "agents-os.task-permit-currentness-assessment.v0.1-r7",
+        "permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+        "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+        "lifecycle_state": "ISSUED",
+        "trusted_time_utc_ms": 2100,
+        "task_binding_current": "PASS",
+        "actor_binding_current": "PASS",
+        "resident_command_binding_current": "PASS",
+        "host_trust_current": "PASS",
+        "host_authentication_current": "PASS",
+        "policy_current": "PASS",
+        "prohibited_boundary_current": "PASS",
+        "capability_grants_current": "PASS",
+        "resource_grants_current": "PASS",
+        "secret_handle_bindings_current": "NOT_APPLICABLE",
+        "permit_attestation_current": "PASS",
+        "human_presence_current": "NOT_APPLICABLE",
+        "effect_authorization_requirement_current": "NOT_APPLICABLE",
+        "time_window_current": "PASS",
+        "invocation_available": "PASS",
+        "execution_epoch_current": "PASS",
+        "host_fence_current": "PASS",
+        "effect_fence_current": "PASS",
+        "task_fence_current": "PASS",
+        "result": "VALID",
+        "reason": "ALL_CURRENT",
+        "assessment_event_sequence": 80,
+        "assessment_fingerprint": "450ec80af6a5d7d81336925ca6c6a065786090f3a51d39b85b1e86554b9ab08f"
+      },
+      "node_fingerprint": "25b8505c34286c6cd56fa923b6f43d5ea0669f2552fc4d51c96837231f73474a"
+    },
+    {
+      "ordinal": 13,
+      "kind": "HostLocalAdmissionV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        7,
+        11,
+        12
+      ],
+      "object": {
+        "invocation_identity": {
+          "permit_id": "dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+          "invocation_ordinal": 1,
+          "idempotency_key": "idempotency:m0-a:f4:001",
+          "execution_epoch": 1,
+          "host_id": "actor:execution-host:m0",
+          "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+          "canonical_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1"
+        },
+        "request": {
+          "interface_version": "agents-os.host-local-admission-request.v0.1",
+          "invocation_identity": {
+            "permit_id": "dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+            "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+            "invocation_ordinal": 1,
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "execution_epoch": 1,
+            "host_id": "actor:execution-host:m0",
+            "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+            "canonical_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1"
+          },
+          "task_permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "task_permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+          "effect_intent_ref": "fixture:effect-intent",
+          "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+          "resident_command_envelope_ref": "fixture:f3-command-envelope",
+          "resident_command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+          "target_host_id": "actor:execution-host:m0",
+          "target_host_identity_revision": 1,
+          "requested_at_utc_ms": 2200,
+          "request_event_sequence": 81,
+          "canonical_fingerprint": "c2b5548f1f962db5b8eeb043560fe176b10b9812f412c0f30a77dbdaf5245895"
+        },
+        "decision": {
+          "interface_version": "agents-os.host-local-admission-decision.v0.1",
+          "invocation_identity_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1",
+          "request_ref": "fixture:admission-request",
+          "request_fingerprint": "c2b5548f1f962db5b8eeb043560fe176b10b9812f412c0f30a77dbdaf5245895",
+          "permit_currentness_assessment_ref": "fixture:permit-currentness",
+          "permit_currentness_assessment_fingerprint": "450ec80af6a5d7d81336925ca6c6a065786090f3a51d39b85b1e86554b9ab08f",
+          "host_authentication_assessment_ref": "fixture:host-authentication",
+          "host_authentication_assessment_fingerprint": "65e7d710a4da2b3d5289b778d6fe58a21380f6a3879049d845f3575d64048e62",
+          "fence_state_ref": "fixture:fence-heads",
+          "fence_state_fingerprint": "198a8c3aecc56204802f5deeddf72c78e823115ef0152fd37110137fa14c59e9",
+          "current_watermark_event_sequence": 80,
+          "request_integrity": "PASS",
+          "permit_currentness": "PASS",
+          "host_authentication": "PASS",
+          "host_ownership": "PASS",
+          "task_fence_match": "PASS",
+          "host_fence_match": "PASS",
+          "effect_fence_match": "PASS",
+          "execution_epoch_match": "PASS",
+          "capability_subset": "PASS",
+          "resource_subset": "PASS",
+          "secret_handle_scope": "NOT_APPLICABLE",
+          "permit_attestation": "PASS",
+          "human_presence": "NOT_APPLICABLE",
+          "effect_intent_exact_match": "PASS",
+          "idempotency_identity_match": "PASS",
+          "invocation_slot_available": "PASS",
+          "prohibited_boundary": "PASS",
+          "effect_authorization_requirement_current": "NOT_APPLICABLE",
+          "decision": "ADMITTED",
+          "reason": "ALL_CHECKS_PASS",
+          "decided_at_utc_ms": 2200,
+          "decision_fingerprint": "4bf6decdfd6318a9f8715574e2aa41c86ded486a1d03a2750dd10c280e4952f9"
+        }
+      },
+      "node_fingerprint": "25bcaeef0f9dffd7b7c73303d6b4e4782a01cf17b2b21b50f12b97acf924b98c"
+    },
+    {
+      "ordinal": 14,
+      "kind": "FinalHandoffAuthorityAssessmentV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        3,
+        7,
+        11
+      ],
+      "object": {
+        "interface_version": "agents-os.final-handoff-authority-assessment.v0.1-r7",
+        "permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+        "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+        "task_authority_currentness_ref": "assessment:task:m0",
+        "task_authority_currentness_fingerprint": "42949ec4ffb99681b593e6e6ad9383fa7f3f3cb251a72b2a9e877b7d8b181e47",
+        "actor_principal_binding_currentness_ref": "assessment:actor-binding:m0",
+        "actor_principal_binding_currentness_fingerprint": "9ed7a2f755e8cccaf283fbd3340d9cd9872566329c962bdc693a41b344b20c19",
+        "responsibility_delegation_currentness_ref": "assessment:responsibility:m0",
+        "responsibility_delegation_currentness_fingerprint": "6c227f38714d6ce30e73b23d6cf36d0664418b1706c4c4b4b8f0a5cc541cf819",
+        "resident_command_continuity_ref": "assessment:resident:m0",
+        "resident_command_continuity_fingerprint": "8459916248992228b7d4931092c42b8915fafce05e1e23672dbf192bc2df9ecc",
+        "Host_F2_trust_currentness_ref": "assessment:host-f2:m0",
+        "Host_F2_trust_currentness_fingerprint": "9c645e7b8848b527450af4316f87d355a4fd4250fa58d5ffec7ea2ffc4c63418",
+        "policy_bundle_revision": 1,
+        "policy_bundle_fingerprint": "0987c871a3cdecb928ef099636d0e64fdf275605960c7a4ba8447ba035de139b",
+        "prohibited_behavior_list_revision": 1,
+        "prohibited_behavior_list_fingerprint": "3fcf6b0dd1dbd2576dea8597583a6b8466ed4aa0d57749d532a8d2069438fc12",
+        "effect_authorization_requirement_ref": "requirement:m0",
+        "effect_authorization_requirement_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309",
+        "trusted_time_utc_ms": 2400,
+        "watermark_event_sequence": 90,
+        "result": "CURRENT",
+        "reason": "ALL_AUTHORITY_CURRENT",
+        "assessment_fingerprint": "507d31e25e9ebf9eca2b155da075c87cb8fc2734de5964fbcecb8460be0bce8c"
+      },
+      "node_fingerprint": "cb725a4da30790b8a80d42d8e76062c4d0672a6c951c4f0dbb4aa0aa6eb14e33"
+    },
+    {
+      "ordinal": 15,
+      "kind": "HostWorkAcceptanceFactV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        13
+      ],
+      "object": {
+        "acceptance": {
+          "interface_version": "agents-os.host-work-acceptance-fact.v0.1-r7",
+          "acceptance_id": "360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+          "invocation_identity": {
+            "permit_id": "dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+            "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+            "invocation_ordinal": 1,
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "execution_epoch": 1,
+            "host_id": "actor:execution-host:m0",
+            "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+            "canonical_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1"
+          },
+          "admission_request_ref": "fixture:admission-request",
+          "admission_request_fingerprint": "c2b5548f1f962db5b8eeb043560fe176b10b9812f412c0f30a77dbdaf5245895",
+          "admission_decision_ref": "fixture:admission-decision",
+          "admission_decision_fingerprint": "4bf6decdfd6318a9f8715574e2aa41c86ded486a1d03a2750dd10c280e4952f9",
+          "permit_currentness_assessment_ref": "fixture:permit-currentness",
+          "permit_currentness_assessment_fingerprint": "450ec80af6a5d7d81336925ca6c6a065786090f3a51d39b85b1e86554b9ab08f",
+          "host_authentication_assessment_ref": "fixture:host-authentication",
+          "host_authentication_assessment_fingerprint": "65e7d710a4da2b3d5289b778d6fe58a21380f6a3879049d845f3575d64048e62",
+          "accepted_host_id": "actor:execution-host:m0",
+          "accepted_host_identity_revision": 1,
+          "accepted_host_authentication_epoch": 1,
+          "accepted_task_fence_generation": 1,
+          "accepted_host_fence_generation": 1,
+          "accepted_effect_fence_generation": 1,
+          "accepted_execution_epoch": 1,
+          "accepted_watermark_event_sequence": 84,
+          "accepted_at_utc_ms": 2300,
+          "start_authority_expires_at_utc_ms": 5000,
+          "host_acceptance_attestation_ref": "attestation:host-acceptance:m0-a:001",
+          "host_acceptance_attestation_fingerprint": "03611a8a6fe3fbc2c09a8861429809bbd75b2ed40cbcae5d201f09008a52b3a0",
+          "fact_fingerprint": "80221e922bc69cddd777c0dd6ef6213db54a468e816b0bb6a4e4cc256d21d6e5"
+        },
+        "activation_transition": {
+          "permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+          "transition_kind": "ACTIVATE",
+          "expected_previous_state": "ISSUED",
+          "resulting_state": "ACTIVE",
+          "reason": "HOST_ACCEPTANCE",
+          "transition_action_ref": "acceptance:360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+          "transition_action_fingerprint": "80221e922bc69cddd777c0dd6ef6213db54a468e816b0bb6a4e4cc256d21d6e5",
+          "event_sequence": 84,
+          "fact_fingerprint": "2b7d11451edf95542eb12852868dab76a04569a8496f3f1fd6af9ab08c5c37d7"
+        }
+      },
+      "node_fingerprint": "d11b03ae7f161ecbcb5fcf7b4e657bde8581b650c7aebb276021e9784e66d9ac"
+    },
+    {
+      "ordinal": 16,
+      "kind": "HostWorkStartDispositionFactV0_1R6EffectiveR7",
+      "depends_on_ordinals": [
+        1,
+        14,
+        15
+      ],
+      "object": {
+        "interface_version": "agents-os.host-work-start-disposition-fact.v0.1-r6",
+        "observation_id": "observation:m0:r7",
+        "observation_attempt": 1,
+        "acceptance_ref": "acceptance:m0:r7",
+        "acceptance_fingerprint": "80221e922bc69cddd777c0dd6ef6213db54a468e816b0bb6a4e4cc256d21d6e5",
+        "invocation_identity_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1",
+        "observed_host_id": "actor:execution-host:m0",
+        "observed_host_identity_revision": 1,
+        "observed_host_authentication_epoch": 1,
+        "rechecked_task_fence_generation": 1,
+        "rechecked_host_fence_generation": 1,
+        "rechecked_effect_fence_generation": 1,
+        "rechecked_execution_epoch": 1,
+        "rechecked_secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+        "rechecked_permit_attestation_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+        "rechecked_human_presence_binding_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0",
+        "final_handoff_authority_assessment_ref": "assessment:final:m0",
+        "final_handoff_authority_assessment_fingerprint": "507d31e25e9ebf9eca2b155da075c87cb8fc2734de5964fbcecb8460be0bce8c",
+        "secret_handles_current": "NOT_APPLICABLE",
+        "permit_attestation_current": "PASS",
+        "human_presence_current": "NOT_APPLICABLE",
+        "final_handoff_authority_current": "PASS",
+        "disposition": "START_AUTHORITY_CURRENT",
+        "reason": "ALL_RECHECKS_PASS",
+        "observed_at_utc_ms": 2400,
+        "observation_event_sequence": 91,
+        "host_observation_attestation_ref": "attestation:host-observation:m0",
+        "host_observation_attestation_fingerprint": "59c1e32c7a47fcbff16b342ff183b8c3c87da04ba8eb1efd95e6780a4a87e994",
+        "fact_fingerprint": "1040b07a900bc3f134769e3f1a5787cb189954f6c9ecd1962fa2c03abfef090c"
+      },
+      "node_fingerprint": "c0aeee31d161694144f34be080b02b0a3e25d5864e606ece4078038556817355"
+    },
+    {
+      "ordinal": 17,
+      "kind": "F4AcceptedEffectHandoffV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        3,
+        14,
+        16
+      ],
+      "object": {
+        "interface_version": "agents-os.f4-accepted-effect-handoff.v0.1-r7",
+        "handoff_id": "c18210d18e36e3c672314bb8aa254d972bb17760cb5284afe56f64dc2b568c29",
+        "acceptance_ref": "acceptance:360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+        "acceptance_fingerprint": "80221e922bc69cddd777c0dd6ef6213db54a468e816b0bb6a4e4cc256d21d6e5",
+        "start_disposition_ref": "observation:e1dc5fe9bc56db0658a8468e77596e8a37d16fe5ea723f74d31e34e2b6177b06",
+        "start_disposition_fingerprint": "1040b07a900bc3f134769e3f1a5787cb189954f6c9ecd1962fa2c03abfef090c",
+        "invocation_identity": {
+          "permit_id": "dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+          "permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+          "invocation_ordinal": 1,
+          "idempotency_key": "idempotency:m0-a:f4:001",
+          "execution_epoch": 1,
+          "host_id": "actor:execution-host:m0",
+          "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+          "canonical_fingerprint": "67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1"
+        },
+        "task_permit_ref": "permit:dbc94b05cfab7854dde0a6027db67fe768f12012a70092418ec11bc37b9ead71",
+        "task_permit_fingerprint": "e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5",
+        "effect_intent_ref": "fixture:effect-intent",
+        "effect_intent_fingerprint": "0d68294257f00ab6acd0581226aa0085ea1511d9f0ef757eb22606f0d6dab8cd",
+        "owner_host_id": "actor:execution-host:m0",
+        "owner_host_identity_revision": 1,
+        "owner_host_authentication_epoch": 1,
+        "execution_epoch": 1,
+        "task_fence_generation": 1,
+        "host_fence_generation": 1,
+        "effect_fence_generation": 1,
+        "start_authority_expires_at_utc_ms": 5000,
+        "capability_set_fingerprint": "e6fffbc4056cd4983a94b7305883ff83e9b87d4969baae4f4633503643bb8b33",
+        "resource_set_fingerprint": "d750e8d4b2debd748d523d65d2ba592dcad7580807e192ad5d1f66f97eddad81",
+        "secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+        "permit_attestation_evidence_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+        "human_presence_binding_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0",
+        "effect_authorization_requirement_fingerprint": "746c42808975413c40c2ac616d134436e73f0f9c57bf0f9c011ad200d72b1309",
+        "final_handoff_authority_assessment_fingerprint": "507d31e25e9ebf9eca2b155da075c87cb8fc2734de5964fbcecb8460be0bce8c",
+        "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+        "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+        "handoff_event_sequence": 91,
+        "canonical_fingerprint": "2458570920f8c14ae476ef884efc409217679858a86f1154b7ef32435c01321b"
+      },
+      "node_fingerprint": "9b509fc6e74d5349dba14216987e448d6a0bf9be8e352358d3df787731280f12"
+    },
+    {
+      "ordinal": 18,
+      "kind": "F5BoundaryZeroEffectStubV0_1R7",
+      "depends_on_ordinals": [
+        1,
+        17
+      ],
+      "object": {
+        "interface_version": "agents-os.f5-boundary-zero-effect-stub.v0.1-r7",
+        "handoff_fingerprint": "2458570920f8c14ae476ef884efc409217679858a86f1154b7ef32435c01321b",
+        "claim_state": "NOT_CLAIMED",
+        "physical_effect_crossed": false,
+        "terminal_outcome": "NOT_EXECUTED",
+        "external_effect_count": 0,
+        "provider_call_count": 0,
+        "raw_secret_count": 0
+      },
+      "node_fingerprint": "db996f36210bf1b48179d7221f034ef9cc70349e5fb83b1240121dd0bab5d17e"
+    }
+  ],
+  "assertions": {
+    "complete_effective_object_count": 17,
+    "base_node_count": 1,
+    "acceptance_count": 1,
+    "accepted_handoff_count": 1,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  }
+}

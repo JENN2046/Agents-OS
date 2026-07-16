@@ -1,0 +1,16 @@
+schema_version: agents-os.review-finding-disposition.v0.1
+disposition_id: agents-os-f4-r7-independent-review-disposition-v0.1
+date: 2026-07-16
+review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r7-full-atomic-independent-review.yaml
+review_sha256: 2269974576054ef7ed6def87e649876c3e874fef17b61525cbb10735829f3025
+review_result: BLOCK
+requires_R8: true
+dispositions:
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B01, disposition: ACCEPTED_FOR_R8_EXACT_SCHEMA_AND_FINGERPRINT_PROFILE}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B02, disposition: ACCEPTED_FOR_R8_DERIVED_ID_AND_REF_CHAIN_RECOMPUTATION}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B03, disposition: ACCEPTED_FOR_R8_EXACT_HOST_AUTHENTICATOR_PROFILE_BINDING}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B04, disposition: ACCEPTED_FOR_R8_TOTAL_AUTHORIZATION_INPUT_VALIDATION}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B05, disposition: ACCEPTED_FOR_R8_FINAL_HANDOFF_TOTAL_REDUCER}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B06, disposition: ACCEPTED_FOR_R8_ELIGIBILITY_PRESENCE_AND_WATERMARK_PROFILE}
+  - {finding_id: F4-R7-FULL-ATOMIC-IR-B07, disposition: ACCEPTED_FOR_R8_EXPLICIT_HOST_ACTOR_AND_TRUST_REVISIONS}
+non_authorization: {F4_accepted: false, F4_frozen: false, F5_started: false, implementation_authorized: false, runtime_activation_authorized: false, provider_host_database_or_effect_execution_authorized: false, commit_push_merge_authorized: false}

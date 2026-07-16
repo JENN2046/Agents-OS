@@ -1,0 +1,80 @@
+schema_version: agents-os.review-findings-disposition.v0.1
+record_id: agents-os-f4-r2-independent-review-disposition-v0.1
+record_type: ReviewFindingsDisposition
+status: active
+date: 2026-07-16
+
+subjects:
+  precedence:
+    - R3_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+  fixed_R1_R2_subject_count: 6
+  fixed_subjects:
+    - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      bytes_modified: false
+    - path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      bytes_modified: false
+    - path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      bytes_modified: false
+    - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+      sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      bytes_modified: false
+    - path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+      sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      bytes_modified: false
+    - path: control-plane/registry/validate-f4-r2-result-reason-totality.py
+      sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      bytes_modified: false
+
+review:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml
+  sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8
+  result: BLOCK
+  blocker_count: 2
+  major_count: 0
+  minor_count: 0
+  requires_R3: true
+
+disposition:
+  method: NEW_ATOMIC_R3_NARROW_AMENDMENT
+  review_bytes_modified: false
+  R1_R2_acceptance_ready: false
+  every_finding_accepted_for_correction: true
+  R3_start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-start-decision-v0.1.yaml
+  R3_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md
+
+finding_status:
+  F4-R2-FULL-ATOMIC-IR-B01: ACCEPTED_FOR_R3_PRESTART_HOST_REASON_CLOSURE
+  F4-R2-FULL-ATOMIC-IR-B02: ACCEPTED_FOR_R3_START_DISPOSITION_TOTALITY_CLOSURE
+
+required_R3_evidence:
+  - exact_PRESTART_Host_rejected_reason_and_precedence
+  - PRESTART_in_window_and_PRESTART_plus_unavailable_vectors
+  - total_result_lattice_for_HostWorkStartDispositionFactV0_1
+  - exact_mapping_for_all_start_disposition_recheck_predicates
+  - exact_start_disposition_rejected_reason_precedence
+  - mixed_negative_unavailable_and_multiple_negative_start_vectors
+  - changed_result_and_reason_negative_mutations
+  - deterministic_offline_R3_validator
+
+next_gate: HASH_BOUND_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW_OF_F4_R1_PLUS_R2_PLUS_R3
+
+boundaries:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  commit_performed: false
+  push_performed: false

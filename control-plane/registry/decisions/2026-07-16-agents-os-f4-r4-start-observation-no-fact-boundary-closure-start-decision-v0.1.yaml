@@ -1,0 +1,29 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r4-start-observation-no-fact-boundary-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R4
+  purpose: close F4-R3-FULL-ATOMIC-IR-B01 without changing prior subject bytes
+  allowed:
+    - define acceptance-reference resolution before observation identity derivation
+    - define non-persisted no-fact outcomes for unresolved acceptance references
+    - remove ACCEPTANCE_MISSING from the canonical start-disposition fact reducer
+    - add deterministic offline fixtures and validation
+    - prepare a fresh full atomic hash-bound independent review package
+  forbidden:
+    - partial acceptance
+    - implementation or database work
+    - Host, Resident, service, runtime, provider, or effect execution
+    - production authentication
+    - F5 or F6 start
+    - commit, push, or merge by this decision
+inputs:
+  blocking_review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-full-atomic-independent-review.yaml
+  blocking_review_sha256: 0d8914f751991eaa53cd3478668b5a6d047d5327e5dd80b593e935d2d73bbd4a
+completion_gate:
+  required: fresh_full_atomic_hash_bound_independent_review
+  acceptance_authority: Jenn_only

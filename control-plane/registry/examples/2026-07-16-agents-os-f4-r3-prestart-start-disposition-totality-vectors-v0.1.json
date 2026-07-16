@@ -1,0 +1,39 @@
+{
+  "interface_version": "agents-os.f4-r3-prestart-start-disposition-totality-vectors.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE",
+  "host_prestart": {
+    "cases": [
+      {"id": "prestart-in-window", "lifecycle": "PRESTART", "unavailable": [], "expected": ["REJECTED", "PRESTART"]},
+      {"id": "prestart-plus-verifier-unavailable", "lifecycle": "PRESTART", "unavailable": ["VERIFIER_UNAVAILABLE"], "expected": ["REJECTED", "PRESTART"]},
+      {"id": "active-all-positive", "lifecycle": "ACTIVE", "unavailable": [], "expected": ["AUTHENTICATED", "MATCH"]}
+    ]
+  },
+  "start_disposition": {
+    "base_checks": {
+      "integrity_current": "PASS",
+      "acceptance_current": "PASS",
+      "expiry_current": "PASS",
+      "host_identity_current": "PASS",
+      "host_authentication_current": "PASS",
+      "task_fence_match": "PASS",
+      "host_fence_match": "PASS",
+      "effect_fence_match": "PASS",
+      "execution_epoch_match": "PASS",
+      "secret_handles_current": "NOT_APPLICABLE",
+      "permit_attestation_current": "PASS",
+      "human_presence_current": "NOT_APPLICABLE"
+    },
+    "cases": [
+      {"id": "secret-handle-negative", "overrides": {"secret_handles_current": "REJECTED"}, "expected": ["NOT_STARTED", "SECRET_HANDLE_STALE"]},
+      {"id": "attestation-negative", "overrides": {"permit_attestation_current": "REJECTED"}, "expected": ["NOT_STARTED", "ATTESTATION_STALE"]},
+      {"id": "human-presence-negative", "overrides": {"human_presence_current": "REJECTED"}, "expected": ["NOT_STARTED", "HUMAN_PRESENCE_STALE"]},
+      {"id": "secret-negative-plus-attestation-unavailable", "overrides": {"secret_handles_current": "REJECTED", "permit_attestation_current": "INDETERMINATE"}, "expected": ["NOT_STARTED", "SECRET_HANDLE_STALE"]},
+      {"id": "host-fence-expiry-multiple-negative", "overrides": {"host_authentication_current": "REJECTED", "host_fence_match": "REJECTED", "expiry_current": "REJECTED"}, "expected": ["NOT_STARTED", "HOST_UNAUTHENTICATED"]},
+      {"id": "fence-plus-epoch-negative", "overrides": {"effect_fence_match": "REJECTED", "execution_epoch_match": "REJECTED"}, "expected": ["NOT_STARTED", "FENCED"]},
+      {"id": "unavailable-only", "overrides": {"permit_attestation_current": "INDETERMINATE"}, "expected": ["INDETERMINATE", "OBSERVATION_UNAVAILABLE"]},
+      {"id": "integrity-negative-plus-unavailable", "overrides": {"integrity_current": "REJECTED", "permit_attestation_current": "INDETERMINATE"}, "expected": ["NOT_STARTED", "INTEGRITY_FAILURE"]},
+      {"id": "acceptance-missing-plus-host-negative", "overrides": {"acceptance_current": "REJECTED", "host_identity_current": "REJECTED"}, "expected": ["NOT_STARTED", "ACCEPTANCE_MISSING"]},
+      {"id": "all-rechecks-pass", "overrides": {}, "expected": ["START_AUTHORITY_CURRENT", "ALL_RECHECKS_PASS"]}
+    ]
+  }
+}

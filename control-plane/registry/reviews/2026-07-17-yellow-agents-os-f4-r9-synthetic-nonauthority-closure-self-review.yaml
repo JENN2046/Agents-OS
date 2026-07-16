@@ -1,0 +1,81 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f4-r9-synthetic-nonauthority-closure-self-review-v0.1
+date: 2026-07-17
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE
+reviewer: Nobao_subject_author
+independent: false
+result: PASS_FOR_INDEPENDENT_REVIEW_ONLY
+
+effective_boundary:
+  F4_consumes_owner_authority_receipts: true
+  F4_recomputes_F1_F2_F3_authority: false
+  Actor_or_Task_permission_level_classification: false
+  F4_created_authority_projection: false
+  PBL_is_veto_only: true
+  scope_operation: complete_tuple_intersection_only
+  synthetic_fixture_is_authority: false
+  positive_operational_handoff_proved: false
+
+closure_matrix:
+  F4-R8-FULL-ATOMIC-IR-B01: canonical_synthetic_exact_scope_resolves_one_registry_bound_complete_tuple
+  F4-R8-FULL-ATOMIC-IR-B02: owner_issued_atom_sets_and_Host_Policy_conditional_Jenn_narrowing_sets_are_hash_bound_and_intersected_without_union_or_Cartesian_expansion
+  F4-R8-FULL-ATOMIC-IR-B03: ten_canonical_writer_currentness_observations_and_one_basis_bound_same_transaction_snapshot_fail_closed
+  F4-R8-FULL-ATOMIC-IR-B04: F4_consumes_owner_receipts_only_and_contains_no_native_F1_F2_F3_subject_assessment_or_reducer
+  F4-R8-FULL-ATOMIC-IR-B05: exact_Jenn_decision_and_exact_Jenn_scope_are_independent_conditional_inputs_and_both_are_missing_in_the_synthetic_witness
+  F4-R8-FULL-ATOMIC-IR-B06: independent_validator_derives_all_effective_synthetic_fail_closed_results_and_rejects_fully_resigned_negative_mutations
+
+external_boundary_closure:
+  second_permission_system_removed: true
+  F4_side_authority_atom_minting_removed: true
+  owner_result_role_route_matrix_closed: true
+  delegation_requirement_owner_derived: true
+  prospective_F3_requirement_unaccepted_and_nonruntime: true
+  operation_and_resource_vocabularies_registry_bound: true
+  registry_constraint_receipt_PBL_policy_narrowing_currentness_observed: true
+  required_input_set_basis_hash_bound: true
+  final_transaction_exactly_bound: true
+  synthetic_namespace_environment_fingerprint_and_recovery_isolation: true
+
+evidence_separation:
+  fixture_builder_imported_by_validator: false
+  validator_builds_expected_fixture: false
+  deterministic_builder_rebuild_matches_fixture: true
+  boundary_audit_independent_of_author_run: true
+  boundary_audit_result: PASS_NO_BLOCKER
+
+R9_validator:
+  result: PASS_NO_BLOCKER
+  registered_normative_schema_count: 14
+  registered_wrapper_schema_count: 5
+  schema_occurrences_verified: 103
+  normative_fingerprints_verified: 53
+  symbols_verified: 24
+  dag_nodes_verified: 24
+  receipt_count: 3
+  narrowing_receipt_count: 2
+  currentness_observation_count: 10
+  intersection_tuple_count: 1
+  negative_mutations_rejected: 37
+  accepted_handoff_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+  fixture_file_sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+
+limitations:
+  author_review_is_independent: false
+  fixture_profile: SYNTHETIC_TEST_NONAUTHORITY_ONLY
+  upstream_receipt_interfaces_accepted_by_owners: false
+  prospective_F3_interface_accepted: false
+  production_currentness_or_authentication_proved: false
+  positive_TaskPermit_or_handoff_proved: false
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_push_merge_performed: false
+
+next_gate: fresh_full_atomic_hash_bound_independent_review_of_all_twenty_nine_R1_through_R9_subjects

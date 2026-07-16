@@ -1,0 +1,40 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f4-r5-cross-phase-authority-closure-self-review-v0.1
+date: 2026-07-16
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R5_ATOMIC_BUNDLE
+reviewer: Nobao_subject_author
+independent: false
+result: PASS_FOR_INDEPENDENT_REVIEW_ONLY
+closure_matrix:
+  F4-R1-IR-B01: color_and_P3_labels_are_non_authoritative; one_policy_PBL_derived_requirement_is_normative
+  F4-R1-IR-B02: F4_Host_trust_is_exact_F2_EXECUTION_HOST_HOST_PROCESS_Binding_extension
+  F4-R1-IR-B03: final_transaction_rechecks_complete_permit_bound_authority_without_waiting_for_propagation
+  F4-R1-IR-B04: physical_boundary_requires_fresh_complete_currentness_and_one_time_claim
+  F4-R1-IR-B05: already_closed_by_R2_R3
+  F4-R1-IR-B06: grants_bind_current_definitions_operation_registry_source_authority_and_containment
+  F4-R1-IR-M01: witness_only_evidence_role_explicit
+  F4-R1-IR-M02: max_invocations_and_ordinal_are_literal_one
+  F4-R1-IR-M03: already_closed_by_R4_no_fact_preflight
+focused_validator:
+  result: PASS
+  total_case_count: 28
+  authorization_cases: 5
+  host_cases: 5
+  handoff_cases: 5
+  effect_boundary_cases: 6
+  grant_cases: 4
+  invocation_cases: 3
+  negative_mutations_rejected: 4
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+limitations:
+  author_review_is_independent: false
+  validator_is_full_contract_proof: false
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+next_gate: fresh_full_atomic_hash_bound_independent_review_of_all_fifteen_subjects

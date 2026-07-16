@@ -1,0 +1,22 @@
+schema_version: agents-os.review-finding-disposition.v0.1
+disposition_id: agents-os-f4-r3-independent-review-disposition-v0.1
+date: 2026-07-16
+review:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-full-atomic-independent-review.yaml
+  sha256: 0d8914f751991eaa53cd3478668b5a6d047d5327e5dd80b593e935d2d73bbd4a
+  result: BLOCK
+finding_dispositions:
+  - finding_id: F4-R3-FULL-ATOMIC-IR-B01
+    disposition: ACCEPTED_FOR_R4_CORRECTION
+    correction_boundary: >-
+      Remove acceptance absence from the canonical start-disposition fact
+      reducer and define an explicit non-persisted no-fact resolution boundary
+      before observation identity can be derived.
+requires_R4: true
+non_authorization:
+  F4_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  commit_created: false
+  push_performed: false

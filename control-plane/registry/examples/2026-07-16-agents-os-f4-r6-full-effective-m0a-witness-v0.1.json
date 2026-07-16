@@ -1,0 +1,405 @@
+{
+  "schema_version": "agents-os.f4-r6-full-effective-m0a-witness.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R6_ATOMIC_BUNDLE",
+  "base_R1_fixture_file_sha256": "e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75",
+  "base_R1_fixture_canonical_sha256": "c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2",
+  "base_R1_node_count": 14,
+  "effective_schema_coverage": [
+    "EffectAuthorizationRequirementResolutionV0_1R6",
+    "EffectAuthorizationRequirementV0_1R6",
+    "F2ExecutionHostPrincipalBindingExtensionV0_1R6",
+    "F4HostEffectTrustEligibilityAssessmentV0_1R6",
+    "F4HostTrustRevisionV0_1R6",
+    "HostAuthenticationAssessmentV0_1R6",
+    "CapabilityGrantV0_1R6",
+    "ResourceGrantV0_1R6",
+    "TaskPermitV0_1R6Effective",
+    "FinalHandoffAuthorityAssessmentV0_1R6",
+    "HostWorkAcceptanceFactV0_1R6Effective",
+    "HostWorkStartDispositionFactV0_1R6",
+    "F4AcceptedEffectHandoffV0_1R6",
+    "F5BoundaryZeroEffectStubV0_1R6"
+  ],
+  "nodes": [
+    {
+      "ordinal": 1,
+      "kind": "EffectAuthorizationRequirementResolutionV0_1R6",
+      "depends_on_ordinals": [],
+      "value": {
+        "outcome": "REQUIREMENT_RESOLVED",
+        "reason": "RESOLVED"
+      },
+      "node_fingerprint": "1fd5ab2e3a214c6ae362cc4719f760ddf0f8ce3469151c2140808f2dfa605fc7"
+    },
+    {
+      "ordinal": 2,
+      "kind": "EffectAuthorizationRequirementV0_1R6",
+      "depends_on_ordinals": [
+        1
+      ],
+      "value": {
+        "mode": "NO_SEPARATE_JENN_AUTHORIZATION_REQUIRED",
+        "requirement_basis_ref": "policy:m0",
+        "requirement_basis_fingerprint": "54570a501127b8106b823b995c9c2664e62f1c3a6a239d3e68f9bbb110f9e624",
+        "policy_bundle_revision": 1,
+        "policy_bundle_fingerprint": "82a27cb6cae5945d9b29127d052e2028d93a97f806e46d5513d34a6cbcb4b549",
+        "prohibited_behavior_list_revision": 1,
+        "prohibited_behavior_list_fingerprint": "48f106e66c1c0e493041eda1188481c4e8f130a3aeb165e5d39c481702814d60",
+        "exact_effect_scope_fingerprint": "ba84d86d06953624e83c5923f6a930fc23830eb583866bffdc3695cfcf265a3e",
+        "Jenn_decision_ref": null,
+        "Jenn_decision_fingerprint": null,
+        "Jenn_actor_identity_ref": null,
+        "issued_at_utc_ms": null,
+        "expires_at_utc_ms": null,
+        "revocation_event_sequence": null,
+        "currentness_result": "NOT_APPLICABLE",
+        "currentness_reason": "NO_SEPARATE_REQUIRED",
+        "canonical_fingerprint": "f3753c82a3576330fb952f2d101adbd8402095e012119c137326841c0207a894"
+      },
+      "node_fingerprint": "586bf718fc63ee4ec9e6ecba185757bed2c467a086cc7588c3f23354e1bfcfdc"
+    },
+    {
+      "ordinal": 3,
+      "kind": "F2ExecutionHostPrincipalBindingExtensionV0_1R6",
+      "depends_on_ordinals": [],
+      "value": {
+        "host_id": "actor:execution-host:m0",
+        "host_actor_id": "actor:execution-host:m0",
+        "host_actor_identity_revision": 1,
+        "host_actor_class": "EXECUTION_HOST",
+        "host_process_principal_id": "principal:host-process:m0",
+        "host_process_principal_revision": 1,
+        "host_process_principal_class": "HOST_PROCESS",
+        "host_process_binding_revision": 1,
+        "binding_actor_matches": true,
+        "provisioning_action_ref": "action:host-provision:m0",
+        "provisioning_basis_ref": "basis:accepted-host-provisioning:m0",
+        "all_F2_assessments": "ACTIVE",
+        "canonical_fingerprint": "728bf7b29a58c76a92398624489ff133e47ed81d4a9dd8cb1589d41d47ea70c1"
+      },
+      "node_fingerprint": "f20102278bce78fcfb4ab0cceda208008054922693a6e8e699c2f9429682e725"
+    },
+    {
+      "ordinal": 4,
+      "kind": "F4HostEffectTrustEligibilityAssessmentV0_1R6",
+      "depends_on_ordinals": [
+        3
+      ],
+      "value": {
+        "host_actor_identity_ref": "actor:execution-host:m0",
+        "host_actor_identity_fingerprint": "28853c359fb0dc9001d7df29beab9cf560880b60bf49451e8193f8b25f2bfcfb",
+        "current_F2_actor_assessment_ref": "assessment:host-actor:m0",
+        "current_F2_actor_assessment_fingerprint": "d9fd37802569ee051f582be8b8ed55f302c3bda100463ad7c225865271204b4c",
+        "F2_compromise_history_head_ref": "history:f2:none:m0",
+        "F2_compromise_history_head_fingerprint": "532a10ce36cdb64f244be49818b41cbdbcc39585b4a72f6592fea5b4142efeba",
+        "F4_host_trust_head_ref": "history:f4:none:m0",
+        "F4_host_trust_head_fingerprint": "cd752bbc93ab42d2e7f18a7dee2fc7df145188e1cfa5a4faa87a4fa359ed4325",
+        "result": "ELIGIBLE",
+        "reason": "NEVER_COMPROMISED_AND_ALL_CURRENT",
+        "assessment_fingerprint": "da0b64ba38e50ee04f1c470a81a9c3b41e80bbd8e1794fa24903ff13e0eaa4e0"
+      },
+      "node_fingerprint": "6265298c3e148959c1c7aecced30a9688672baf161608ccd2368105f7c5ebbdc"
+    },
+    {
+      "ordinal": 5,
+      "kind": "F4HostTrustRevisionV0_1R6",
+      "depends_on_ordinals": [
+        3,
+        4
+      ],
+      "value": {
+        "host_id": "actor:execution-host:m0",
+        "host_trust_revision": 1,
+        "expected_previous_host_trust_revision": null,
+        "host_F2_extension_fingerprint": "728bf7b29a58c76a92398624489ff133e47ed81d4a9dd8cb1589d41d47ea70c1",
+        "effect_trust_eligibility_fingerprint": "da0b64ba38e50ee04f1c470a81a9c3b41e80bbd8e1794fa24903ff13e0eaa4e0",
+        "transition_kind": "CREATE",
+        "lifecycle_state": "ACTIVE",
+        "authenticator_profile_fingerprint": "fe1fee86f172f835411e6601e303626b1a17214d58f52c952df87590d80b8cd5",
+        "credential_binding_fingerprint": "8d926165dbbae74c3ba566c2dc2ac68b1bec6621e91092f1e839970fbbc0e7d2",
+        "canonical_fingerprint": "18a1a56b19235dd9f8417dfad79c6f71429872fca2900c91e54b3628aad95cc6"
+      },
+      "node_fingerprint": "5419f266f0ac15f4040142ee12e236f2395811cd5607d589c5829f387b8f429f"
+    },
+    {
+      "ordinal": 6,
+      "kind": "HostAuthenticationAssessmentV0_1R6",
+      "depends_on_ordinals": [
+        5
+      ],
+      "value": {
+        "host_trust_fingerprint": "18a1a56b19235dd9f8417dfad79c6f71429872fca2900c91e54b3628aad95cc6",
+        "F2_extension_fingerprint": "728bf7b29a58c76a92398624489ff133e47ed81d4a9dd8cb1589d41d47ea70c1",
+        "eligibility_assessment_fingerprint": "da0b64ba38e50ee04f1c470a81a9c3b41e80bbd8e1794fa24903ff13e0eaa4e0",
+        "host_authentication_epoch": 1,
+        "result": "AUTHENTICATED",
+        "reason": "MATCH",
+        "assessment_fingerprint": "623aaeb58961de9ba657a1a77f9d1862ffe457a8a24b6aeb4ba27a3f4e92bfaf"
+      },
+      "node_fingerprint": "e44beb5633e1f4930863ffb7f68531eb98137409f9f376a3d11ba9049d2a296d"
+    },
+    {
+      "ordinal": 7,
+      "kind": "CapabilityGrantV0_1R6",
+      "depends_on_ordinals": [
+        2
+      ],
+      "value": {
+        "capability_definition_ref": "capability:m0",
+        "capability_definition_fingerprint": "450dc3f18ab6a1ebce915547449dc6c3866055a2c7f1ebc01a66a9a4f7da1351",
+        "operation_registry_revision": 1,
+        "operation_registry_fingerprint": "654dc2f6f011f1224f7806d9f46712850e94eab2ef8449ca0325c77d4ed48ba3",
+        "operation_set": [
+          "WRITE_SYNTHETIC_LEDGER"
+        ],
+        "source_authority_bindings": [
+          {
+            "role": "F1_TASK",
+            "source_ref": "source:f1_task",
+            "source_fingerprint": "89349046ca330f0ef62e1ad9d932e3a2e46930c8700f05d2f48e56be42bda21b",
+            "canonical_fingerprint": "c564882587b50fb0ed2cee3938fd578a979feafcb84c0ce7302230d537ea87bf"
+          },
+          {
+            "role": "F2_RESPONSIBILITY",
+            "source_ref": "source:f2_responsibility",
+            "source_fingerprint": "538c43d60d8695e5b771375c76f2ff9cf15c1d7954cae6ba532918c683906e4a",
+            "canonical_fingerprint": "bef5e38feca82696cdb9fe43bf7254bc0160d93bd7bdd0ba3da3143762427854"
+          },
+          {
+            "role": "F3_COMMAND",
+            "source_ref": "source:f3_command",
+            "source_fingerprint": "491cf6b7a889347975287a556712960ee63621723733411fff8f34d60530c585",
+            "canonical_fingerprint": "4e314cb89a58c34c94c2765218fba59a2e8c9d03ddbb0f6a4785f17ef3a2fa8e"
+          },
+          {
+            "role": "POLICY",
+            "source_ref": "source:policy",
+            "source_fingerprint": "6f55f8e7a769da260a689db5e5c9ad93e3657b15d5f176f4e38e2a27e4f5233b",
+            "canonical_fingerprint": "b493afa4d5a24876d61a402cc9a5b9a0b15a73d3a49eb2921854924510bb1f2d"
+          },
+          {
+            "role": "PROHIBITED_BEHAVIOR_LIST",
+            "source_ref": "source:prohibited_behavior_list",
+            "source_fingerprint": "60347040c6a911cbbd9e2f7e1947b1c7344fbe657a5edfc3eadc1258dc71cd39",
+            "canonical_fingerprint": "12f5d9c5b0c91ef3c8aa4308db8cfe90835325b05a1393064a07f30f7e3058eb"
+          }
+        ],
+        "source_authority_set_fingerprint": "77bb6f19abd267c38a6dca186f7e3c19bb2c52457a36190f37fc9b00184f9676",
+        "derived_subset_proof_fingerprint": "e31e3b24f2fcefaf7c6b60e8ecacdf281e268a9a54029dd46e6bcf765871d2d2",
+        "canonical_fingerprint": "9f5175434cb74ce37187af05f2be8e9a357c7efaa4c51e39413f9c4c6f10f761"
+      },
+      "node_fingerprint": "c7808548cc20129a08da5da7581cda05b76d76ec64f17ffeefbdac9114f7b0d4"
+    },
+    {
+      "ordinal": 8,
+      "kind": "ResourceGrantV0_1R6",
+      "depends_on_ordinals": [
+        2
+      ],
+      "value": {
+        "resource_definition_ref": "resource:m0",
+        "resource_definition_fingerprint": "c35c65c028fb5808f902b228ce375f327668838319902abf7b8a0890db5a46c8",
+        "resource_kind": "SYNTHETIC_M0_RESOURCE",
+        "resource_ref": "resource:m0:ledger",
+        "resource_subject_fingerprint": "24be721e075744cef58613ba49e7517b40173e086812726ec02afd32a1bb7f81",
+        "operation_registry_revision": 1,
+        "operation_registry_fingerprint": "654dc2f6f011f1224f7806d9f46712850e94eab2ef8449ca0325c77d4ed48ba3",
+        "operation_set": [
+          "WRITE_SYNTHETIC_LEDGER"
+        ],
+        "source_scope_bindings": [
+          {
+            "role": "F1_TASK",
+            "source_ref": "source:f1_task",
+            "source_fingerprint": "89349046ca330f0ef62e1ad9d932e3a2e46930c8700f05d2f48e56be42bda21b",
+            "canonical_fingerprint": "c564882587b50fb0ed2cee3938fd578a979feafcb84c0ce7302230d537ea87bf"
+          },
+          {
+            "role": "F2_RESPONSIBILITY",
+            "source_ref": "source:f2_responsibility",
+            "source_fingerprint": "538c43d60d8695e5b771375c76f2ff9cf15c1d7954cae6ba532918c683906e4a",
+            "canonical_fingerprint": "bef5e38feca82696cdb9fe43bf7254bc0160d93bd7bdd0ba3da3143762427854"
+          },
+          {
+            "role": "F3_COMMAND",
+            "source_ref": "source:f3_command",
+            "source_fingerprint": "491cf6b7a889347975287a556712960ee63621723733411fff8f34d60530c585",
+            "canonical_fingerprint": "4e314cb89a58c34c94c2765218fba59a2e8c9d03ddbb0f6a4785f17ef3a2fa8e"
+          },
+          {
+            "role": "POLICY",
+            "source_ref": "source:policy",
+            "source_fingerprint": "6f55f8e7a769da260a689db5e5c9ad93e3657b15d5f176f4e38e2a27e4f5233b",
+            "canonical_fingerprint": "b493afa4d5a24876d61a402cc9a5b9a0b15a73d3a49eb2921854924510bb1f2d"
+          },
+          {
+            "role": "PROHIBITED_BEHAVIOR_LIST",
+            "source_ref": "source:prohibited_behavior_list",
+            "source_fingerprint": "60347040c6a911cbbd9e2f7e1947b1c7344fbe657a5edfc3eadc1258dc71cd39",
+            "canonical_fingerprint": "12f5d9c5b0c91ef3c8aa4308db8cfe90835325b05a1393064a07f30f7e3058eb"
+          }
+        ],
+        "source_scope_set_fingerprint": "a9c9ca361ff67c75f7c40fff8a217f431e6de2896384f5c2f150c1076d3b03fa",
+        "containment_assessment_fingerprint": "2e70dd9d0fb9d6f7c76172eb704b8cdc5a52d1a745034e1874da544b654bf555",
+        "canonical_fingerprint": "6d824bb9c5b0c1814aafe1b121679cc18f1486a33ef93ac41257285edf7c4c1f"
+      },
+      "node_fingerprint": "1e0bfc7314ef06539467e2cd4a13e13ba4f74609afdb59531c313465093182ac"
+    },
+    {
+      "ordinal": 9,
+      "kind": "TaskPermitV0_1R6Effective",
+      "depends_on_ordinals": [
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "value": {
+        "base_R1_permit_node_fingerprint": "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d",
+        "F4_contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R6_ATOMIC_BUNDLE",
+        "host_trust_fingerprint": "18a1a56b19235dd9f8417dfad79c6f71429872fca2900c91e54b3628aad95cc6",
+        "host_authentication_assessment_fingerprint": "623aaeb58961de9ba657a1a77f9d1862ffe457a8a24b6aeb4ba27a3f4e92bfaf",
+        "effect_authorization_requirement_fingerprint": "f3753c82a3576330fb952f2d101adbd8402095e012119c137326841c0207a894",
+        "capability_set_fingerprint": "636b4cc4a3da80a6b49c7da10d1324c5ce7aa36b61bb8aa1117aee471e290b00",
+        "resource_set_fingerprint": "9cde2f4aa3333e298b3b680f9afcb81e30b402127cc2600979898944fcc11662",
+        "max_invocations": 1,
+        "idempotency_key": "idempotency:m0:r6",
+        "canonical_fingerprint": "d4045ace1d82273e048c82db3609a87f352f00659cb81d55882153b535277cb6"
+      },
+      "node_fingerprint": "181d23906d17f07afe8d94caae13325c4189a5d29d6034029448aa92a96d782e"
+    },
+    {
+      "ordinal": 10,
+      "kind": "FinalHandoffAuthorityAssessmentV0_1R6",
+      "depends_on_ordinals": [
+        9
+      ],
+      "value": {
+        "permit_fingerprint": "d4045ace1d82273e048c82db3609a87f352f00659cb81d55882153b535277cb6",
+        "task_authority": "CURRENT",
+        "actor_principal_binding": "CURRENT",
+        "responsibility_delegation": "CURRENT",
+        "resident_command_continuity": "CURRENT",
+        "Host_F2_trust": "CURRENT",
+        "policy_PBL": "CURRENT",
+        "effect_authorization_requirement_fingerprint": "f3753c82a3576330fb952f2d101adbd8402095e012119c137326841c0207a894",
+        "trusted_time_utc_ms": 3000,
+        "watermark_event_sequence": 100,
+        "result": "CURRENT",
+        "reason": "ALL_AUTHORITY_CURRENT",
+        "assessment_fingerprint": "09f0d873fae1f754515ea98df35ea098ac8a9b1c62ddf1d64dbc0297e78184a0"
+      },
+      "node_fingerprint": "50f63504803aaa4f8c6d672b37058bf0c8bfe6f141808033e0df8db49fc23583"
+    },
+    {
+      "ordinal": 11,
+      "kind": "HostWorkAcceptanceFactV0_1R6Effective",
+      "depends_on_ordinals": [
+        9
+      ],
+      "value": {
+        "permit_fingerprint": "d4045ace1d82273e048c82db3609a87f352f00659cb81d55882153b535277cb6",
+        "invocation_ordinal": 1,
+        "idempotency_key": "idempotency:m0:r6",
+        "owner_host_id": "actor:execution-host:m0",
+        "acceptance_fingerprint": "0e67fca504613824b8ff99f9822e4490ea852996c291d4e1bf01126fd8e29968"
+      },
+      "node_fingerprint": "06e410e92ea84fcd96976dff367ad14c5a1b176af4d81ae89950f7c591de5122"
+    },
+    {
+      "ordinal": 12,
+      "kind": "HostWorkStartDispositionFactV0_1R6",
+      "depends_on_ordinals": [
+        10,
+        11
+      ],
+      "value": {
+        "ordered_field_values": [
+          "observation:m0:r6",
+          1,
+          "acceptance:m0:r6",
+          "0e67fca504613824b8ff99f9822e4490ea852996c291d4e1bf01126fd8e29968",
+          "ea58679d640d5ff65646c312e3463e3a7e45c1c54f663d2d58b5cd47d1788157",
+          "actor:execution-host:m0",
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          "4e129a00bf1a4239f972de973694a55e484eaacc8a3f8142775ee80836e964fd",
+          "c0d89a842bbdeef258892d2aad3436dc248d22ed58cd60172217138c2521d43b",
+          "151e23c5748ddf80e5cdd86a0bacef255973579a04cc57542ed5dd74b20da27f",
+          "assessment:final:m0",
+          "09f0d873fae1f754515ea98df35ea098ac8a9b1c62ddf1d64dbc0297e78184a0",
+          "NOT_APPLICABLE",
+          "PASS",
+          "NOT_APPLICABLE",
+          "PASS",
+          "START_AUTHORITY_CURRENT",
+          "ALL_RECHECKS_PASS",
+          3000,
+          101,
+          "attestation:host-observation:m0",
+          "e0b1a2a60b1d13636ec63658950375f6a67eeee512abc4a2b57668723517e0aa"
+        ],
+        "final_handoff_authority_assessment_fingerprint": "09f0d873fae1f754515ea98df35ea098ac8a9b1c62ddf1d64dbc0297e78184a0",
+        "disposition": "START_AUTHORITY_CURRENT",
+        "reason": "ALL_RECHECKS_PASS",
+        "fact_fingerprint": "3d53190f942a4c704634c037f3ef362dd6b2f7cb0b5e475dae638bb8621ef243"
+      },
+      "node_fingerprint": "af1eefcce26efcc8924b15bea31a15f42a0ea11481cf16ef11d756f3a4cdfd6a"
+    },
+    {
+      "ordinal": 13,
+      "kind": "F4AcceptedEffectHandoffV0_1R6",
+      "depends_on_ordinals": [
+        2,
+        10,
+        12
+      ],
+      "value": {
+        "base_R1_handoff_node_fingerprint": "223ee57b78c6a9c6b74f025cc178cfa2b32a73450f2ea3eb91470b670a321bcf",
+        "permit_fingerprint": "d4045ace1d82273e048c82db3609a87f352f00659cb81d55882153b535277cb6",
+        "acceptance_fingerprint": "0e67fca504613824b8ff99f9822e4490ea852996c291d4e1bf01126fd8e29968",
+        "start_disposition_fingerprint": "3d53190f942a4c704634c037f3ef362dd6b2f7cb0b5e475dae638bb8621ef243",
+        "human_presence_binding_fingerprint": "151e23c5748ddf80e5cdd86a0bacef255973579a04cc57542ed5dd74b20da27f",
+        "effect_authorization_requirement_fingerprint": "f3753c82a3576330fb952f2d101adbd8402095e012119c137326841c0207a894",
+        "final_handoff_authority_assessment_fingerprint": "09f0d873fae1f754515ea98df35ea098ac8a9b1c62ddf1d64dbc0297e78184a0",
+        "start_authority_expires_at_utc_ms": 5000,
+        "canonical_fingerprint": "dd255bc2031d6a9af3065557ef8d4f6e2e24b9a8998c22ece74f9c8bf0ed4b07"
+      },
+      "node_fingerprint": "9320385e0e3af27f753370e2529903bf2af19a46223a125529dc2c4611b99914"
+    },
+    {
+      "ordinal": 14,
+      "kind": "F5BoundaryZeroEffectStubV0_1R6",
+      "depends_on_ordinals": [
+        13
+      ],
+      "value": {
+        "handoff_fingerprint": "dd255bc2031d6a9af3065557ef8d4f6e2e24b9a8998c22ece74f9c8bf0ed4b07",
+        "one_time_claim": "NOT_CLAIMED",
+        "physical_effect_crossed": false,
+        "terminal_outcome": "NOT_EXECUTED",
+        "external_effect_count": 0,
+        "provider_call_count": 0,
+        "raw_secret_count": 0
+      },
+      "node_fingerprint": "b4732bdac6ef6304b62a69675eccc7ee484a627a60cc2f955a7263269df45e2a"
+    }
+  ],
+  "assertions": {
+    "authorization_objects": 1,
+    "Host_F2_extension_count": 1,
+    "permit_count": 1,
+    "acceptance_count": 1,
+    "start_disposition_count": 1,
+    "accepted_handoff_count": 1,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  }
+}

@@ -1,0 +1,337 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r8-full-atomic-independent-review-2026-07-16
+reviewed_at: 2026-07-16T21:34:07+08:00
+reviewer:
+  identity: Codex GPT-5 independent review agent f4_r8_fresh_independent_review
+  independence_basis:
+    - not_the_F4_R8_author_run
+    - reviewed_fixed_manifest_bound_subject_bytes
+    - did_not_modify_any_subject_fixture_builder_validator_decision_or_manifest
+    - author_self_review_hash_verified_without_reading_its_content_or_conclusion
+    - prior_reviews_used_as_lineage_only
+    - did_not_execute_runtime_provider_host_database_or_external_effects
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R8_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  manifest:
+    path: control-plane/registry/reports/2026-07-16-agents-os-f4-r8-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 9c6930c2cc845b3d38fb12697d6403951720c2d21d62750fbf6e00f4eac4b613
+  declared_input_count: 43
+  verified_input_count: 43
+  hash_mismatches: []
+  subject_count: 25
+  subjects_fully_read: 25
+  authority_input_count: 13
+  authority_inputs_fully_read: 13
+  lineage_input_count: 5
+  author_self_review_content_read: false
+  forbidden_inputs_accessed: false
+
+result: BLOCK
+requires_R9: true
+
+finding_counts:
+  blocker: 6
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 0
+
+integrity_and_reproduction:
+  manifest_hash: PASS
+  all_43_input_hashes: PASS
+  all_25_subject_bytes_read_unchanged: PASS
+  all_13_authority_inputs_read_unchanged: PASS
+  deterministic_builder_reproduction:
+    result: PASS
+    command: python3 control-plane/registry/build-f4-r8-complete-effective-m0a.py
+    stdout_sha256: 49577e6acdddd321902ab9c7b9c6f3578c175ea66224cb919ba137ab985ad021
+    fixed_fixture_sha256: 49577e6acdddd321902ab9c7b9c6f3578c175ea66224cb919ba137ab985ad021
+    byte_identical: true
+    fixed_fixture_was_not_overwritten: true
+  validator_independence:
+    result: PASS
+    validator_imports_or_executes_builder: false
+    validator_compares_to_internal_expected_fixture: false
+  validators:
+    passed: 8
+    failed: 0
+    R1: PASS
+    R2: PASS
+    R3: PASS
+    R4: PASS
+    R5: PASS
+    R6: PASS
+    R7: PASS
+    R8: PASS
+  R8_validator_summary:
+    effective_schema_count: 27
+    effective_schema_object_count: 93
+    node_count: 19
+    node_hashes_verified: 19
+    direct_base_dependencies_verified: 18
+    authorization_legal_rows: 7
+    mixed_Jenn_presence_masks_rejected: 126
+    eligibility_rows: 7
+    eligibility_precedence_combinations_checked: 64
+    final_authority_observation_count: 13
+    final_authority_vectors: 28
+    resigned_mutations_rejected: 19
+    acceptance_count: 1
+    accepted_handoff_count: 1
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+    fixture_canonical_sha256: 91d45e556430895e801604ecb2e62dc2244ac7b6d0f1d13e0923353b7a5a378e
+  independent_derived_values:
+    permit_id: e13c069b585c98325590921432a5129faaecc9aba99b8524d60ff6e816b97742
+    invocation_fingerprint: ba083095c2250a80c717fb8c929a1416d3fe51fa11cc09fa66a80af6fb95ce3c
+    acceptance_id: 59fd5d7d3a72bc6f967de0342eabcc754afbd42f091c899760a611785c63e577
+    observation_id: cddf907dbc95bd6021e696b86e98907b6774a53b8d8e6a168cf54c13f4a7f445
+    handoff_id: 419640d4591d696aedefa43133853f70b5788edba7f1d8a9dc90e3f0ad9ed68b
+    host_actor_identity_revision: 3
+    host_trust_revision: 7
+
+findings:
+  - id: F4-R8-FULL-ATOMIC-IR-B01
+    severity: BLOCKER
+    title: exact effect scope fingerprint has no canonical derivation or resolvable object
+    categories:
+      - authority_expansion
+      - prohibited_boundary_bypass
+      - circular_proof
+    evidence:
+      contract:
+        - R8 Section 5 makes exact_effect_scope_fingerprint decisive for the authorization requirement.
+        - R8 Section 2 explicitly classifies EffectScopeV0_1R8 as a non-normative evidence wrapper and provides no canonical EffectScope schema or digest formula.
+      builder:
+        - build-f4-r8-complete-effective-m0a.py derives effect_scope_fp with label("effect-scope:synthetic-noop"), not from the emitted capability, resource, effect-intent, host, presence, secret-handle, payload, or result-contract bytes.
+      validator:
+        - validate-f4-r8-complete-effective-m0a.py checks exact Jenn scope equality only inside a present exact-Jenn row.
+        - It never derives exact_effect_scope_fingerprint from TaskPermitV0_1R8 or EffectIntentBindingV0_1R8 and never resolves it to a normative object.
+      independently_resigned_counterexample:
+        mutation: replace the builder's effect-scope label digest with 64 zeroes and rebuild every descendant object, ID, reference, fingerprint, inventory entry, and DAG node.
+        result: validator accepted the rebuilt fixture with PASS.
+        consequence: a policy/PBL-derived authorization mode can be bound to bytes unrelated to the effect scope that the permit and handoff actually carry.
+    required_correction:
+      - Define one normative fingerprinted EffectScope schema or one exact canonical formula over every authority-relevant effect field.
+      - Bind the same derived scope fingerprint into the authorization requirement, permit, capability/resource proofs, final authority recheck, and handoff.
+      - Require the scope ref/fingerprint to resolve to the emitted object and add a fully resigned mismatched-scope mutation.
+
+  - id: F4-R8-FULL-ATOMIC-IR-B02
+    severity: BLOCKER
+    title: capability and resource proofs remain opaque assertions rather than recomputable containment proofs
+    categories:
+      - authority_expansion
+      - circular_proof
+      - M0_constructibility
+    evidence:
+      contract:
+        - R8 Section 8 requires current definitions, operation-registry membership, exact source projections, computed intersection, and exact resource containment.
+      fixture:
+        - The 27-schema/93-object inventory contains no CapabilityDefinition, ResourceDefinition, OperationRegistry, capability source-projection, or resource source-projection object.
+        - capability_definition_fingerprint, resource_definition_fingerprint, operation_registry_fingerprint, constraint_fingerprint, and selector_constraint_fingerprint are opaque synthetic label hashes.
+        - CapabilitySubsetProofV0_1R8 and ResourceContainmentAssessmentV0_1R8 assert PASS and repeat the requested operation, but no emitted source projection contains an operation or resource scope from which the intersection or containment can be recomputed.
+      validator:
+        - The validator checks that asserted operation/intersection arrays equal [SYNTHETIC_NOOP] and that source fingerprints equal upstream object fingerprints.
+        - It does not compute an operation intersection or resource containment from source-projection bytes because no such bytes exist.
+      independently_resigned_counterexample:
+        mutation: replace all operation-registry, capability-definition, resource-definition, constraint, and selector label digests with 64 zeroes, rebuild the complete fixture, and validate it.
+        result: validator accepted the rebuilt fixture with PASS.
+        consequence: possession of source object fingerprints is treated as proof that every source grants the asserted operation, although those objects expose no such grant.
+    required_correction:
+      - Materialize or hash-bind fixed accepted Definition and OperationRegistry objects.
+      - Define one typed source-projection object per required role with its exact operation/resource scope and watermark.
+      - Compute the intersection and containment from those projection objects; do not accept caller- or fixture-supplied PASS as the proof.
+      - Require proof refs and every projection ref/fingerprint to resolve, then add arbitrary-operation and opaque-proof resigned mutations.
+
+  - id: F4-R8-FULL-ATOMIC-IR-B03
+    severity: BLOCKER
+    title: final handoff CURRENT is supported by unresolved time, integrity, and fence labels
+    categories:
+      - revocation_bypass
+      - fail_open_currentness
+      - M0_constructibility
+    evidence:
+      contract:
+        - R5/R8 require a complete same-watermark re-read immediately before disposition/handoff, including trusted time and all three current fence heads.
+        - R8 Section 3 requires fingerprint references in assessments and the handoff chain to resolve to exact emitted objects.
+      fixture:
+        - FinalHandoffAuthorityAssessmentV0_1R8 marks CANONICAL_INTEGRITY, TRUSTED_TIME, TASK_FENCE, HOST_FENCE, and EFFECT_FENCE PASS using opaque assessment/fence refs and label hashes.
+        - No F4FenceStateV0_1, trusted-time evidence object, or canonical-integrity assessment appears in the 93-object inventory.
+        - HostLocalAdmissionDecisionV0_1R8 likewise uses fixture:fence-heads and an opaque fingerprint without a resolvable fence-state object.
+      validator:
+        - validate_identity_and_reference_chain resolves only eight of the thirteen final observation fingerprints.
+        - It does not resolve CANONICAL_INTEGRITY, TRUSTED_TIME, TASK_FENCE, HOST_FENCE, or EFFECT_FENCE and does not compare the final fence evidence to permit, acceptance, disposition, and current heads.
+      independently_resigned_counterexample:
+        mutation: change all five opaque final evidence digests to 64 zeroes and rebuild/re-sign the entire fixture.
+        result: validator accepted the rebuilt fixture with PASS.
+        consequence: a stale, revoked, quarantined, or unavailable final boundary can be represented as CURRENT by an ungrounded PASS label.
+    required_correction:
+      - Materialize exact current Task/Host/effect F4FenceState objects, trusted-time evidence, and canonical-integrity evidence at the final watermark.
+      - Require all thirteen evidence refs/fingerprints to resolve and compare their generations, epoch, time, quarantine, and event sequences to the permit, acceptance, disposition, and handoff.
+      - Make the final assessment DAG depend on the resolved acceptance and every current evidence node.
+
+  - id: F4-R8-FULL-ATOMIC-IR-B04
+    severity: BLOCKER
+    title: effect-trust eligibility can accept synthetic compromise-absence and current-F2 evidence
+    categories:
+      - identity_spoofing
+      - host_authentication_bypass
+      - compromise_bypass
+      - fail_open_currentness
+    evidence:
+      contract:
+        - R8 Section 6 says synthetic or last-known no-compromise heads cannot replace an absence proof.
+        - A recovered same-lineage F2 Actor with compromise history must remain F4-ineligible.
+      fixture:
+        - The ELIGIBLE row's F2/F4 compromise history ABSENT evidence is only a stable ref plus an arbitrary label fingerprint.
+        - The current F2 Actor assessment ref/fingerprint, Host-trust predecessor, provisioning action/basis, transition action/basis, and Host revocation head do not resolve to materialized evidence objects.
+        - The F2ExecutionHostPrincipalBindingExtension repeats F2-looking refs/fingerprints but is not the frozen F2 Actor, Principal, Binding, assessment, or absence-proof object.
+      validator:
+        - Eligibility validation enforces pair nullability and result precedence but never verifies the content, completeness, subject lineage, or watermark of the claimed absence proofs.
+        - Host AUTHENTICATED/MATCH therefore rests on ungrounded ELIGIBLE evidence even though the local ref/fingerprint labels are internally consistent.
+      counterexample:
+        construction: any arbitrary 64-hex value can occupy both ABSENT evidence fingerprints and the current-F2 assessment fingerprints while the reducer still emits ELIGIBLE, provided the wrapper is re-signed.
+        consequence: a compromised-and-recovered Host Actor can be presented as never compromised without a complete-history proof.
+    required_correction:
+      - Define and materialize canonical compromise-history presence/absence evidence with actor lineage, complete history basis, watermark, and canonical writer.
+      - Resolve the current frozen-F2 Actor/Principal/Binding assessments and the F4 Host-trust transition predecessor/action/basis.
+      - Require Host authentication to bind those exact resolved objects and reject arbitrary or non-complete absence evidence.
+
+  - id: F4-R8-FULL-ATOMIC-IR-B05
+    severity: BLOCKER
+    title: authorization negative precedence and revocation currentness are not enforced by the review subjects
+    categories:
+      - revocation_bypass
+      - fail_open_currentness
+      - internal_contradiction
+    evidence:
+      contract:
+        - R7/R8 fix present-decision negative precedence as revoked, scope mismatch, then expired.
+        - The revocation_event_sequence is the exact current revocation-head sequence; zero is the no-prior-revocation state.
+      validator:
+        - JENN_DECISION_CURRENT checks only revocation_event_sequence <= evaluation_watermark_event_sequence, so a positive prior revocation remains CURRENT.
+        - JENN_SCOPE_MISMATCH checks only unequal scopes and does not reject a concurrently visible revocation that must select JENN_DECISION_REVOKED.
+        - The fixed authorization vectors contain one negative at a time and do not exercise the required concurrent-negative precedence.
+      independently_resigned_counterexamples:
+        - mutation: set the CURRENT row revocation_event_sequence to 89 at watermark 90 and recompute its F4_FP and paired resolution fingerprint
+          result: full validator PASS
+        - mutation: set the SCOPE_MISMATCH row revocation_event_sequence equal to watermark 90 and recompute its F4_FP and paired resolution fingerprint
+          result: full validator PASS with lower-priority JENN_SCOPE_MISMATCH
+        - Both mutations preserve field inventory, interface, canonical domain, hashes, and all non-target evidence.
+    required_correction:
+      - Define the exact revocation observation tuple, including how absence and a visible revocation fact are distinguished.
+      - Enforce CURRENT only when the current revocation observation proves no revocation through the evaluation watermark.
+      - Evaluate all simultaneous negative predicates and select the fixed first reason.
+      - Add cross-product resigned vectors for revoked plus scope mismatch plus expiry, each combined with unavailable evidence.
+
+  - id: F4-R8-FULL-ATOMIC-IR-B06
+    severity: BLOCKER
+    title: the R8 semantic validator fingerprints but does not apply the effective currentness, admission, start, or expiry reducers
+    categories:
+      - authority_expansion
+      - prohibited_boundary_bypass
+      - fail_open_currentness
+      - downstream_boundary_leak
+      - internal_contradiction
+    evidence:
+      effective_contract:
+        - R2 requires any proven currentness negative to emit REJECTED and dominate unavailable evidence.
+        - R2 requires prohibited_boundary REJECTED to emit admission REJECTED / PROHIBITED.
+        - R3/R5 require final_handoff_authority_current REJECTED to emit NOT_STARTED / AUTHORITY_STALE.
+        - R1 requires a start recheck at or after start_authority_expires_at_utc_ms to emit NOT_STARTED / EXPIRED and forbids a handoff.
+      validator:
+        - validate_identity_and_reference_chain checks only the fixed positive result/reason strings for currentness, admission, and disposition.
+        - It does not derive those outputs from their normalized check fields.
+        - It does not compare observed_at_utc_ms to start_authority_expires_at_utc_ms or require the acceptance and handoff expiry to be strictly in the future at disposition.
+      fully_cascaded_resigned_counterexamples:
+        - mutation: TaskPermitCurrentnessAssessment.task_binding_current = REJECTED while result/reason remain VALID / ALL_CURRENT
+          cascade: builder recomputed currentness, decision, acceptance, disposition, handoff, inventory, IDs, refs, fingerprints, and DAG nodes
+          result: full validator PASS
+        - mutation: HostLocalAdmissionDecision.prohibited_boundary = REJECTED while decision/reason remain ADMITTED / ALL_CHECKS_PASS
+          cascade: all descendants and graph nodes re-signed
+          result: full validator PASS
+        - mutation: HostWorkStartDisposition.final_handoff_authority_current = REJECTED while disposition/reason remain START_AUTHORITY_CURRENT / ALL_RECHECKS_PASS
+          cascade: disposition and handoff re-signed
+          result: full validator PASS
+        - mutation: acceptance and handoff start_authority_expires_at_utc_ms = 2400 while disposition observed_at_utc_ms = 2400
+          cascade: acceptance ID chain, observation ID, handoff, refs, fingerprints, and graph nodes re-signed
+          result: full validator PASS and a stale handoff remains emitted
+    required_correction:
+      - Implement the complete effective R2 TaskPermit currentness reducer over every check and lifecycle/time predicate.
+      - Implement the complete effective R2 admission reducer and fixed reason precedence.
+      - Implement the complete effective R3/R5 start-disposition reducer, including final authority, Host authentication, fence, epoch, secret, attestation, presence, and expiry predicates.
+      - Enforce all permit, acceptance, disposition, and handoff time inequalities and reject handoff emission at or after expiry.
+      - Add the four fully cascaded mutations above and combined negative/unavailable precedence cases to the fixed validator suite.
+
+required_review_questions:
+  all_43_hashes_match_and_all_25_subjects_are_fully_read_unchanged: PASS
+  R8_builder_and_validator_are_independent_and_rebuild_matches_fixed_fixture: PASS
+  exact_schema_inventory_field_order_interface_and_F4_FP_domain_are_unique_for_all_93_objects: PASS
+  every_permit_invocation_acceptance_observation_handoff_ID_ref_and_fingerprint_edge_recomputes: PASS
+  HostTrust_HostAuth_permit_profiles_and_explicit_Actor3_HostTrust7_revision_spaces_match: PASS
+  authorization_accepts_only_7_legal_rows_and_rejects_126_mixed_masks_unknown_and_impossible_tuples: BLOCK_F4-R8-FULL-ATOMIC-IR-B05
+  eligibility_7_rows_presence_watermark_and_64_precedence_combinations_are_total: BLOCK_F4-R8-FULL-ATOMIC-IR-B04
+  final_authority_exact_13_codes_and_28_vectors_are_total_with_integrity_stale_unavailable_precedence: BLOCK_F4-R8-FULL-ATOMIC-IR-B03_B06
+  capability_resource_sources_proofs_policy_PBL_and_causal_watermarks_resolve_exactly: BLOCK_F4-R8-FULL-ATOMIC-IR-B01_B02
+  eight_validators_PASS_19_resigned_mutations_reject_and_zero_effect_assertions_hold: PASS
+  no_F5_F6_implementation_runtime_provider_database_effect_authority_leaks: PASS
+
+required_adversarial_checks:
+  wrong_interface_style_or_wrapper_fingerprint_domain_rejects_after_resigning_parents: PASS
+  changed_permit_or_invocation_cascades_all_acceptance_observation_handoff_IDs_and_refs: PASS
+  profile_ref_only_fingerprint_only_and_dual_mismatch_cannot_emit_MATCH: PASS
+  Actor_revision_and_Host_trust_revision_cannot_be_swapped_or_equalized_implicitly: PASS
+  every_mixed_Jenn_mask_unknown_mode_missing_plus_present_and_prohibited_permit_reference_rejects: BLOCK_F4-R8-FULL-ATOMIC-IR-B05
+  integrity_plus_stale_plus_unavailable_selects_integrity_and_stale_plus_unavailable_selects_stale: PASS
+  unavailable_eligibility_cannot_reuse_last_known_or_synthetic_absence_head: BLOCK_F4-R8-FULL-ATOMIC-IR-B04
+  missing_duplicate_extra_source_role_or_opaque_subset_containment_proof_rejects: BLOCK_F4-R8-FULL-ATOMIC-IR-B02
+  evidence_watermark_after_permit_event_or_revocation_after_evaluation_watermark_rejects: BLOCK_F4-R8-FULL-ATOMIC-IR-B03_B05_B06
+  old_fields_old_values_missing_base_edge_or_nonzero_effect_count_rejects: PASS
+
+safety_and_ambiguity_counts:
+  identity_spoofing_count: 1
+  authority_expansion_count: 3
+  host_authentication_bypass_count: 1
+  revocation_or_compromise_bypass_count: 4
+  fail_open_currentness_count: 4
+  dual_writer_count: 0
+  circular_proof_count: 1
+  crash_or_replay_ambiguity_count: 0
+  downstream_boundary_leak_count: 1
+  M0_constructibility_blocker_count: 4
+  internal_contradiction_count: 2
+
+scope_judgment:
+  proof_DAG_structural_hashes: PASS
+  constructive_M0_effect_chain: BLOCK
+  F4_F5_seam_text_direction: ACCEPTABLE_BUT_FINAL_CURRENTNESS_EVIDENCE_NOT_CLOSED
+  implementation_or_runtime_authority_leak: false
+  real_effect_executed: false
+
+final_disposition:
+  F4_R8_fresh_independent_review_result: BLOCK
+  F4_acceptance_ready: false
+  F4_freeze_ready: false
+  requires_R9: true
+  partial_acceptance: forbidden
+  recommended_next_action:
+    - create_narrow_R9_amendment_for_the_six_blockers
+    - preserve_R1_through_R8_subjects_and_this_review_immutable
+    - rebuild_one_complete_effective_zero_effect_fixture_with_resolvable_scope_proof_history_and_final_currentness_edges
+    - extend_the_independent_semantic_validator_with_the_resigned_counterexamples
+    - run_a_fresh_full_atomic_hash_bound_independent_review
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+  commit_push_merge_performed: false

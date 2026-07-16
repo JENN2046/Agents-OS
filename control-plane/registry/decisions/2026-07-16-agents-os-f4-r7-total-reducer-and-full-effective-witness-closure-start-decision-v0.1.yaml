@@ -1,0 +1,22 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r7-total-reducer-and-full-effective-witness-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R7
+  allowed:
+    - close only the four R6 independent-review blockers
+    - publish complete concurrent precedence and exact field-presence matrices
+    - correct and independently count the disposition ordered fingerprint inputs
+    - emit complete effective objects rather than deltas and prove removed fields absent
+    - create new offline fixture validator manifest report and fresh independent review
+  forbidden:
+    - modify R1-R6 or prior review bytes
+    - accept or freeze F4 automatically
+    - start F5/F6 or implementation/runtime/database/service/Host/provider/authentication/effect work
+    - commit push merge release deploy publish
+completion_gate: {required: fresh_full_atomic_hash_bound_independent_review_of_R1_through_R7, acceptance_authority: Jenn_only}
+

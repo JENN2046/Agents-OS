@@ -1,0 +1,156 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f4-r3-atomic-independent-review-package-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 9
+  precedence: [R3_explicit_replacements, R2_other_explicit_replacements, R1_all_other_clauses]
+  subjects:
+    - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md, sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3}
+    - {revision: R1, role: M0_A_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json, sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75}
+    - {revision: R1, role: M0_A_validator, path: control-plane/registry/validate-f4-m0a-witness.py, sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa}
+    - {revision: R2, role: totality_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md, sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705}
+    - {revision: R2, role: totality_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json, sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad}
+    - {revision: R2, role: totality_validator, path: control-plane/registry/validate-f4-r2-result-reason-totality.py, sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941}
+    - {revision: R3, role: PRESTART_and_start_disposition_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md, sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939}
+    - {revision: R3, role: PRESTART_and_start_disposition_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json, sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4}
+    - {revision: R3, role: PRESTART_and_start_disposition_validator, path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py, sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71}
+  - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: accepted_F1_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml, sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2}
+  - {role: frozen_F2_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml, sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1}
+  - {role: frozen_F2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml, sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1}
+  - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff}
+  - {role: immutable_F4_start_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml, sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8}
+
+review_and_amendment_lineage:
+  - {role: prior_R1_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54}
+  - {role: prior_R1_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml, sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0, result: BLOCK, may_substitute_for_current_review: false}
+  - {role: R1_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml, sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf}
+  - {role: immutable_R2_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml, sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b}
+  - {role: prior_R2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.manifest.yaml, sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24}
+  - {role: prior_R2_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml, sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8, result: BLOCK, may_substitute_for_current_review: false}
+  - {role: R2_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r2-independent-review-disposition-v0.1.yaml, sha256: 0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b}
+  - {role: immutable_R3_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-start-decision-v0.1.yaml, sha256: 37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e}
+  - {role: R3_author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-self-review.yaml, sha256: 82cbe3d749e9380aabd4c711188165d37bb2947d095d60c9ec5b5966ae15ffd5, may_substitute_for_independent_judgment: false}
+
+required_review_questions:
+  - all_31_inputs_recompute_and_all_nine_subjects_are_read_atomically
+  - R3_R2_R1_precedence_is_unambiguous_and_prior_subjects_are_fixed
+  - both_R2_blockers_are_fully_closed_without_regression
+  - PRESTART_is_a_closed_rejected_reason_independent_of_time
+  - all_14_Host_reasons_and_every_Host_lifecycle_predicate_are_total
+  - Host_negative_dominates_concurrent_unavailable_evidence
+  - all_12_start_recheck_observations_have_exact_reason_mapping
+  - start_disposition_negative_dominates_unavailable
+  - start_disposition_multiple_negative_precedence_is_unique
+  - start_disposition_success_and_indeterminate_pairings_are_closed
+  - start_disposition_fingerprint_first_fact_and_replay_are_unique
+  - I19_R2_and_I20_R3_are_disjoint_complete_and_consistent
+  - R1_validator_reproduces_exact_counts
+  - R2_validator_reproduces_23_cases_and_three_mutations
+  - R3_validator_reproduces_13_cases_and_three_mutations
+  - all_19_permit_and_18_admission_check_mappings_remain_total
+  - 69_adversarial_decisions_and_64_effective_invariants_pass
+  - F1_F2_F3_authority_and_identity_bindings_are_preserved
+  - no_Host_authentication_revocation_or_compromise_bypass
+  - no_fail_open_currentness_or_authority_expansion
+  - one_Rust_writer_and_advisory_JavaScript_boundary_remain_closed
+  - Task_Host_effect_fences_remain_monotonic
+  - crash_replay_lost_reply_and_unknown_outcome_paths_remain_unambiguous
+  - proof_DAG_and_M0_A_remain_acyclic_and_constructible
+  - F5_F6_and_implementation_ownership_do_not_leak
+  - no_internal_contradiction_unmapped_reason_or_M0_impossibility_remains
+
+required_adversarial_checks:
+  - PRESTART_in_window
+  - PRESTART_plus_verifier_unavailable
+  - PRESTART_changed_expected_reason_rejected
+  - start_secret_handle_negative
+  - start_attestation_negative
+  - start_human_presence_negative
+  - start_secret_negative_plus_attestation_unavailable
+  - start_host_fence_expiry_multiple_negative
+  - start_fence_plus_epoch_negative
+  - start_unavailable_without_negative
+  - start_integrity_negative_plus_unavailable
+  - start_acceptance_missing_plus_Host_negative
+  - start_all_rechecks_pass
+  - start_changed_expected_result_rejected
+  - start_changed_expected_reason_rejected
+  - R2_task_negative_plus_policy_unavailable
+  - R2_Host_revoked_plus_verifier_unavailable
+  - R2_prohibited_plus_Host_negative
+  - R2_all_five_added_permit_reasons
+  - R2_stale_fence_plus_epoch_currentness
+  - R2_permit_negative_plus_Host_unavailable_admission
+  - R2_admission_prohibited_plus_invalid_request
+  - R2_admission_integrity_plus_prohibited
+  - unknown_field_enum_or_invalid_NOT_APPLICABLE
+  - changed_bytes_under_same_observation_identity
+  - successful_handoff_does_not_prove_physical_effect
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  target_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-full-atomic-independent-review.yaml
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report: [reviewer_identity_and_independence, manifest_path_and_sha256, all_31_input_hashes, all_nine_subject_reads_and_unchanged_hashes, three_validator_exact_outputs, all_26_question_results, all_26_adversarial_results, Host_14_reason_and_lifecycle_coverage, permit_19_mapping, admission_18_mapping, start_12_mapping, adversarial_69_of_69, invariants_64_of_64, blocker_major_minor_counts, mandatory_risk_counts, requires_R4]
+  no_finding_rule: PASS_NO_BLOCKER requires 31/31 hashes, nine complete subject reads, all three validators, 26/26 questions, 26/26 adversarial checks, 69/69 decisions, 64/64 invariants, complete reason mappings, and zero blocker, major, or unresolved ambiguity.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_content_or_conclusion_may_be_read: false
+  prior_reviews_may_be_used_as_finding_lineage_only: true
+  prior_reviews_may_substitute_for_fresh_judgment: false
+  presentation_report_may_be_used_as_authority: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  forbidden_inputs_accessed: false_required
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  F4_acceptance_ready: false
+  authority_after_pass: Jenn_only
+  automatic_acceptance: forbidden
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

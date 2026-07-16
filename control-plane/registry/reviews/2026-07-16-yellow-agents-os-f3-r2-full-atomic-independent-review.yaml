@@ -1,0 +1,714 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f3-r2-full-atomic-independent-review
+review_type: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+date: "2026-07-16"
+reviewed_at: "2026-07-16T13:46:34+08:00"
+status: complete
+
+reviewer:
+  identity: Codex_f3_r2_fresh_full_atomic_independent_reviewer
+  independence_basis: >-
+    A separate reviewer agent that did not author either fixed F3 subject
+    started from the canonical R2 manifest, recomputed the manifest and every
+    bound input digest, and performed a fresh line-complete review of R1 and R2
+    under R2-explicit-replacements-over-R1 precedence. The prior R1 independent
+    review was read only as finding lineage after the fresh subject read. The R2
+    author self-review content and conclusion were not read or relied upon; only
+    its entire-file digest was verified.
+  author_of_R1: false
+  author_of_R2: false
+  author_self_review_conclusion_read: false
+  author_self_review_relied_upon: false
+  prior_R1_review_used_as_lineage_only: true
+  prior_R1_review_substituted_for_fresh_judgment: false
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f3-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_sha256: f8aabb05463f95ae72727330515822765b35586a8a9f35fbbca7346289330fee
+  observed_sha256: f8aabb05463f95ae72727330515822765b35586a8a9f35fbbca7346289330fee
+  self_digest_verified: true
+  byte_scope: entire_regular_file
+  canonicalization: none
+  every_input_hash_verified: true
+  input_count_expected: 17
+  input_count_verified: 17
+  presentation_report_read_or_relied_upon: false
+
+verified_inputs:
+  - role: R1_review_subject
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    expected_sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    observed_sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    verified: true
+  - role: R2_review_subject
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+    expected_sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+    observed_sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+    verified: true
+  - role: workspace_governance
+    path: AGENTS.md
+    expected_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    observed_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    verified: true
+  - role: accepted_resident_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    expected_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    observed_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    verified: true
+  - role: accepted_home_direction_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    expected_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    observed_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    verified: true
+  - role: foundational_direction_acceptance
+    path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    expected_sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    observed_sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    verified: true
+  - role: phase_4_start_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    expected_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    observed_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    verified: true
+  - role: construction_readiness_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    expected_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    observed_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    verified: true
+  - role: frozen_F2_acceptance_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    observed_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    verified: true
+  - role: frozen_F2_atomic_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    expected_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    observed_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    verified: true
+  - role: non_authoritative_F2_effective_reading_surface
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    expected_sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    observed_sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    verified: true
+    authority: false
+  - role: immutable_F3_start_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1.yaml
+    expected_sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+    observed_sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+    verified: true
+  - role: prior_R1_review_package_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r1-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 40b07f20be1bd3d25dee62cf2a54dd6a0d8d9246b6d7774f98632ed27c35a2a6
+    observed_sha256: 40b07f20be1bd3d25dee62cf2a54dd6a0d8d9246b6d7774f98632ed27c35a2a6
+    verified: true
+  - role: prior_R1_fresh_full_atomic_independent_review
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r1-full-atomic-independent-review.yaml
+    expected_sha256: 0be7f9e81bdd224e7d1beb83c06d1c8f3afae0ff802bdd5e8f701ff988a07c2e
+    observed_sha256: 0be7f9e81bdd224e7d1beb83c06d1c8f3afae0ff802bdd5e8f701ff988a07c2e
+    verified: true
+    used_as_finding_lineage_only: true
+  - role: R1_findings_disposition
+    path: control-plane/registry/reviews/2026-07-16-agents-os-f3-r1-independent-review-disposition-v0.1.yaml
+    expected_sha256: 0e68702177124b6f0fb999e79cded787a86f20a46e40f7ae702448038a18e3c5
+    observed_sha256: 0e68702177124b6f0fb999e79cded787a86f20a46e40f7ae702448038a18e3c5
+    verified: true
+  - role: immutable_R2_start_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-r2-six-finding-contract-closure-start-decision-v0.1.yaml
+    expected_sha256: be5ad86729daf38419d2c377d273be2824c32f7145b536fdf16f30ba22844b9e
+    observed_sha256: be5ad86729daf38419d2c377d273be2824c32f7145b536fdf16f30ba22844b9e
+    verified: true
+  - role: R2_author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r2-six-finding-contract-closure-self-review.yaml
+    expected_sha256: 11e07cde8433886cee4259c255568d898cccd586ecf0c299008be86b409d3f7e
+    observed_sha256: 11e07cde8433886cee4259c255568d898cccd586ecf0c299008be86b409d3f7e
+    verified: true
+    content_or_conclusion_read: false
+    conclusion_relied_upon: false
+
+subjects:
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+  complete_atomic_subject_reviewed: true
+  partial_review: false
+  both_subject_hashes_and_bytes_reviewed_unchanged: true
+  R1:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    observed_sha256_after_complete_read: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    byte_count: 41728
+    line_count: 1050
+    complete_subject_reviewed: true
+    bytes_reviewed_unchanged: true
+    modified_by_review: false
+  R2:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+    sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+    observed_sha256_after_complete_read: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+    byte_count: 46548
+    line_count: 1172
+    complete_subject_reviewed: true
+    bytes_reviewed_unchanged: true
+    modified_by_review: false
+
+result: BLOCK
+summary:
+  blocker_count: 0
+  major_count: 3
+  minor_count: 0
+  minor_findings_blocking: false
+  unresolved_contract_ambiguity_count: 3
+  requires_R3: true
+  ready_for_Jenn_atomic_acceptance_decision: false
+  rationale: >-
+    Atomic scope, hashes, live dual-writer exclusion, F2 AUTHENTICATED exactness,
+    total Actor-continuity reduction, acyclic intake references, and downstream
+    non-authorization pass. Three correctable major contract defects remain:
+    non-READY submissions have contradictory no-intake versus persisted-terminal
+    semantics; an explicitly authorized older-ledger restore has no total rule
+    reconciling ledger-contiguous epochs with retained duplicate-epoch witness
+    history; and the synthetic issuance surface cannot instantiate the closed
+    Command registry or manifest vocabulary from fixed normative values.
+
+requires_R3: true
+
+prior_R1_major_recheck:
+  - id: F3-R1-FULL-ATOMIC-IR-M01
+    result: NOT_CLOSED_WITHOUT_REGRESSION
+    current_finding_ids: [F3-R2-FULL-ATOMIC-IR-M01]
+    assessment: >-
+      R2 correctly persists ordinary REJECTED and gate-derived INDETERMINATE
+      dispositions, but it also enumerates lifecycle-not-READY and continuity
+      failure results without resolving R1's prohibition on any non-READY
+      canonical intake. The original replay requirement is therefore not closed
+      for that declared gate class.
+  - id: F3-R1-FULL-ATOMIC-IR-M02
+    result: CLOSED
+    assessment: >-
+      R2 uses exactly AuthenticationAssessmentV0_1R15.assessment = AUTHENTICATED
+      and confines VERIFIED to the frozen principal-control proof interface.
+  - id: F3-R1-FULL-ATOMIC-IR-M03
+    result: CLOSED
+    assessment: >-
+      The replacement reducer is precedence-ordered over all eight frozen Actor
+      assessment values and has an unknown-input INDETERMINATE fallback; a Jenn
+      decision cannot turn a non-ACTIVE Actor assessment into CONTINUOUS.
+  - id: F3-R1-FULL-ATOMIC-IR-M04
+    result: NOT_CLOSED_FOR_EXPLICIT_RESTORE
+    current_finding_ids: [F3-R2-FULL-ATOMIC-IR-M02]
+    assessment: >-
+      The external monotonic generation closes ordinary coherent-ledger rollback
+      and both crash windows, but the matching Jenn restore branch does not
+      reconcile restored-ledger N+1 with already retained witness commits for
+      that same authority_epoch value.
+  - id: F3-R1-FULL-ATOMIC-IR-M05
+    result: CLOSED
+    assessment: >-
+      Intake, gate-result, and replay-entry schemas, fingerprint domains,
+      disposition shapes, and independent intake/replay references are defined
+      without the R1 content-address cycle.
+  - id: F3-R1-FULL-ATOMIC-IR-M06
+    result: NOT_CLOSED_NORMATIVELY
+    current_finding_ids: [F3-R2-FULL-ATOMIC-IR-M03]
+    assessment: >-
+      Issuance-before-activation is now the right graph, but the added issuance
+      type omits required closed CommandTypeDefinition values and the final
+      manifest relies on an unenumerated closed_subject_kind vocabulary, so no
+      unique exact fixture can yet pass its own digest/schema gates.
+
+mandatory_counts:
+  identity_spoofing: 0
+  dual_writer: 0
+  circular_proof: 0
+  authority_expansion: 0
+  fail_open_currentness: 0
+  replay_ambiguity: 1
+  downstream_boundary_leak: 0
+  M0_impossibility: 1
+  internal_contradiction: 2
+
+mandatory_count_basis:
+  identity_spoofing: >-
+    Identity remains bound to canonical identity facts and Jenn decisions;
+    incarnation, process, model, session, prompt, and provider are non-evidence.
+  dual_writer: >-
+    The OS lock plus current witness/epoch/generation checks leave no construction
+    in which two live incarnations can both write.
+  circular_proof: >-
+    Independent intake/replay/gate refs and forward-only envelope/action/result
+    edges remove the identified fingerprint cycles.
+  authority_expansion: >-
+    No actor, effect, provider, runtime, database, service, F4, F5, or F6
+    authority is actually granted by the bundle; the missing registry closure is
+    counted as an M0/schema defect, not a proven grant.
+  fail_open_currentness: >-
+    The ordinary rollback path and ordinary Command currentness paths deny
+    safely. The explicit-restore defect is a contradictory/undefined branch,
+    not a demonstrated unapproved READY path, and is counted under internal
+    contradiction.
+  replay_ambiguity: F3-R2-FULL-ATOMIC-IR-M01
+  downstream_boundary_leak: >-
+    F4 permits/hosts/fences, F5 Outbox operations, and F6 Validation currentness
+    remain excluded and reserved methods perform no partial operation.
+  M0_impossibility: F3-R2-FULL-ATOMIC-IR-M03
+  internal_contradiction: >-
+    F3-R2-FULL-ATOMIC-IR-M01 and F3-R2-FULL-ATOMIC-IR-M02 each admit mutually
+    incompatible effective readings.
+
+required_question_checks:
+  - id: atomic_R1_R2_scope_complete_and_precedence_unambiguous
+    result: BLOCK
+    evidence: R2 Section 1; R1 Sections 8-9; R2 Sections 2.3 and 2.7; R2 Sections 5.3-5.5
+    assessment: >-
+      Both subjects were reviewed atomically and the top-level precedence is
+      explicit, but two R2 branches conflict with unchanged R1 or other R2 rules
+      without naming the necessary replacement/exception.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M01, F3-R2-FULL-ATOMIC-IR-M02]
+  - id: all_six_R1_independent_findings_resolved_without_regression
+    result: BLOCK
+    evidence: R2 Sections 2-6 and prior_R1_major_recheck above
+    assessment: >-
+      M02, M03, and M05 close. M01, M04, and M06 remain incomplete on the exact
+      non-READY replay, explicit-restore, and normatively closed synthetic paths.
+    finding_ids:
+      - F3-R2-FULL-ATOMIC-IR-M01
+      - F3-R2-FULL-ATOMIC-IR-M02
+      - F3-R2-FULL-ATOMIC-IR-M03
+  - id: no_identity_spoofing_or_process_model_session_equals_identity_error
+    result: PASS
+    evidence: R1 Sections 4, 6, and 15 as replaced by R2 Section 4
+    assessment: >-
+      Resident identity is a stable canonical fact graph; process, incarnation,
+      lock, model, session, prompt, and provider changes neither prove nor write it.
+  - id: dual_writer_lock_epoch_witness_and_stale_owner_paths_fail_closed
+    result: BLOCK
+    evidence: R1 Sections 7.1 and 7.3; R2 Sections 5.1-5.5
+    assessment: >-
+      Live dual-start and ordinary stale-ledger paths fail closed, but the exact
+      accepted-restore branch has no closed epoch-lineage rule after an older
+      ledger is combined with retained newer witness commits.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M02]
+  - id: authority_witness_reservation_commit_abandon_and_restore_reducers_total
+    result: BLOCK
+    evidence: R2 Sections 5.2-5.5
+    assessment: >-
+      Reservation and both crash-window reducers are total. The matching Jenn
+      restore reducer is not total over the required retained witness history.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M02]
+  - id: one_thread_one_authoritative_connection_semantics_constructible
+    result: PASS
+    evidence: R1 Sections 7.3, 9, and 13 as replaced by R2 Section 2.7
+    assessment: >-
+      Exactly one Rust ledger thread owns the sole read-write connection; reads,
+      writes, and intake serialize through it, and JavaScript/read pools have no
+      alternate ledger path.
+  - id: identity_continuity_reducer_total_over_all_frozen_F2_Actor_results
+    result: PASS
+    evidence: R2 Section 4 and frozen F2 ActorIdentityAssessmentV0_1R16
+    assessment: >-
+      All eight values and an unknown enum value map deterministically, with only
+      ACTIVE able to continue toward CONTINUOUS.
+  - id: Jenn_continuity_or_restore_decision_cannot_override_F2_currentness
+    result: PASS
+    evidence: R2 Sections 4 and 5.5
+    assessment: >-
+      Jenn decisions bind identity/restore lineage but cannot rewrite F2 Actor
+      assessment, fabricate lost facts, or bypass recovery/currentness checks.
+  - id: N_API_boundary_closed_versioned_and_non_escalating
+    result: PASS
+    evidence: R1 Section 9 and R2 Sections 1-2
+    assessment: >-
+      The five methods remain closed and versioned, unknown frames reject before
+      ledger use, and reserved downstream methods return CONTRACT_NOT_ACTIVE
+      without mutation.
+  - id: Command_assertion_context_envelope_intake_replay_action_DAG_acyclic
+    result: PASS
+    evidence: R1 Sections 11-14 and R2 Sections 2.2-2.6
+    assessment: >-
+      Assertion binds the precomputed Command fingerprint; independent intake,
+      replay, and gate refs precede context/envelope fingerprints; action and
+      result edges remain forward-only.
+  - id: rejected_indeterminate_committed_and_changed_byte_replay_unambiguous
+    result: BLOCK
+    evidence: R1 Sections 8-9 and R2 Sections 2.3, 2.4, and 2.7
+    assessment: >-
+      Terminal shapes and normal replay are exact, but lifecycle/continuity
+      failure can either be outside all intake under unchanged R1 or persisted as
+      REJECTED/INDETERMINATE under R2, changing later same-ID behavior.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M01]
+  - id: global_command_id_specialization_preserves_accepted_architecture_minimum
+    result: PASS
+    evidence: accepted Resident Architecture Section 14 and R2 Section 2.1
+    assessment: >-
+      A global namespace narrows the accepted (source, command_id) minimum;
+      changing the claimed Binding/source cannot evade first-disposition replay
+      or changed-fingerprint conflict.
+  - id: exact_F2_AUTHENTICATED_action_ref_and_activation_ack_preserved
+    result: PASS
+    evidence: R2 Section 3; R1 Sections 13.3 and 14; frozen F2 R2/R4/R15
+    assessment: >-
+      AUTHENTICATED is exact, VERIFIED is excluded, and frozen action/ack field
+      sets, order, domains, COMMITTED state, and activation mode remain intact.
+  - id: currentness_revocation_Command_and_recovery_share_fail_closed_order
+    result: PASS
+    evidence: R1 Sections 12-13 and 16; R2 Sections 2.7, 3, and 5.4
+    assessment: >-
+      Ordinary Command gates and mutation share one writer watermark; revocation
+      before commit denies, commit before revocation remains historical, and
+      integrity uncertainty writes no new domain result.
+  - id: Temporary_Worker_and_WORKER_ASSIGNMENT_HANDSHAKE_rules_closed
+    result: PASS
+    evidence: R1 Sections 12 and 14; frozen F2 R18
+    assessment: >-
+      Ordinary Worker use requires the exact ACTIVE Task/Run responsibility
+      binding; activation has null responsibility fields and binds the exact
+      handshake mode.
+  - id: constructive_synthetic_issuance_pending_Delegation_and_activation_trace
+    result: BLOCK
+    evidence: R1 Section 10.1; R2 Sections 6.1 and 6.6
+    assessment: >-
+      Issuance now correctly precedes activation semantically, but the only new
+      issuance type lacks mandatory registry digest fields and the summarizing
+      manifest lacks the promised closed subject-kind enum, so the exact trace
+      cannot be uniquely instantiated and verified.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M03]
+  - id: F4_F5_F6_implementation_runtime_database_auth_provider_service_not_imported
+    result: PASS
+    evidence: R1 Sections 3, 9, 17, 21-22 and R2 Sections 1, 5, 6, and 8
+    assessment: >-
+      The bundle is semantic only and imports no permit/host/fence, Outbox,
+      Validation, implementation, runtime, database, production auth, service,
+      provider, effect, or public API authority.
+  - id: no_internal_contradiction_or_missing_normative_schema
+    result: BLOCK
+    evidence: R1 Sections 8-10; R2 Sections 2.3, 2.7, 5.3-5.5, 6.1, and 6.6
+    assessment: >-
+      Two contradictory effective branches and one incomplete closed synthetic
+      registry/manifest surface remain.
+    finding_ids:
+      - F3-R2-FULL-ATOMIC-IR-M01
+      - F3-R2-FULL-ATOMIC-IR-M02
+      - F3-R2-FULL-ATOMIC-IR-M03
+
+adversarial_checks:
+  - id: two_live_writers_each_satisfying_a_different_authority_half
+    result: PASS
+    evidence: R1 Sections 7.1 and 7.3; R2 Sections 5.1 and 5.4
+    assessment: >-
+      Neither the lock nor witness/epoch half alone authorizes a write, and only
+      the lock holder can mutate the witness or ledger transaction.
+  - id: coherent_old_ledger_restore_against_newer_committed_witness
+    result: PASS
+    evidence: R2 Section 5.4
+    assessment: >-
+      Without an exact matching Jenn restore decision, a committed witness ahead
+      of the restored ledger is detected as rollback and intake stays closed.
+  - id: crash_after_witness_reservation_before_epoch_commit
+    result: PASS
+    evidence: R2 Sections 5.2 and 5.4
+    assessment: >-
+      The reserved generation is durably abandoned when no ledger epoch binds it
+      and is never reused; a later generation may target the same next epoch.
+  - id: crash_after_epoch_commit_before_witness_finalize
+    result: PASS
+    evidence: R2 Section 5.4
+    assessment: >-
+      The exact matching pending reservation is finalized, no second epoch is
+      created for it, and a new incarnation must advance again before READY.
+  - id: duplicate_forked_or_reused_witness_generation
+    result: PASS
+    evidence: R2 Sections 5.1, 5.2, and 5.4
+    assessment: >-
+      Generations never decrease/repeat; duplicate, forked, corrupt, truncated,
+      or reused journal state is INDETERMINATE.
+  - id: Jenn_restore_decision_for_different_backup_or_witness_state
+    result: PASS
+    evidence: R2 Section 5.5
+    assessment: >-
+      Backup digest and observed committed witness generation/fingerprint are
+      exact; stale, reused, broad, different-backup, or mismatched decisions reject.
+  - id: model_or_session_continuity_without_canonical_identity_evidence
+    result: PASS
+    evidence: R1 Sections 6 and 15; R2 Section 4
+    assessment: >-
+      Model/session continuity is neither identity evidence nor a continuity writer.
+  - id: every_frozen_Actor_assessment_value_and_unknown_enum
+    result: PASS
+    evidence: R2 Section 4
+    assessment: >-
+      NOT_YET_ACTIVE, ACTIVE, SUSPENDED, COMPROMISED, RETIRED, EXPIRED,
+      SUPERSEDED, INDETERMINATE, and unknown input each have one fail-closed path.
+  - id: JavaScript_direct_SQL_or_read_pool_as_second_authority_path
+    result: PASS
+    evidence: R1 Sections 7.3 and 9
+    assessment: >-
+      JavaScript direct SQL, independent reads, another writer thread, and a
+      second connection are explicitly forbidden.
+  - id: unknown_N_API_method_schema_or_field_reaches_reducer
+    result: PASS
+    evidence: R1 Section 9 and R2 Section 2.1
+    assessment: >-
+      Unknown method/version/schema/digest/enum/field rejects before ledger use
+      and before a canonical Command identity exists.
+  - id: caller_supplied_context_envelope_intake_Event_action_or_generation
+    result: PASS
+    evidence: R1 Section 11.2 and R2 Sections 2 and 5
+    assessment: >-
+      Every listed value is Rust-derived from current canonical evidence; caller
+      supply is an unknown field and rejects.
+  - id: authentication_assertion_Command_fingerprint_cycle
+    result: PASS
+    evidence: R1 Sections 11.1-11.2 and R2 Section 3
+    assessment: >-
+      The assertion is outside the Command fingerprint and binds the already
+      computed exact canonical Command fingerprint.
+  - id: intake_ref_content_address_cycle
+    result: PASS
+    evidence: R2 Sections 2.2 and 2.6
+    assessment: >-
+      Intake and replay refs derive only from namespace and command_id; envelope
+      and completed intake fingerprints cannot point backward into themselves.
+  - id: rejected_command_retried_after_gate_change
+    result: BLOCK
+    evidence: R1 Sections 8-9 and R2 Sections 2.3 and 2.7
+    counterexample: >-
+      Decode Command X while READY, then let lifecycle become DRAINING before the
+      writer transaction. Unchanged R1 requires no canonical intake, while R2's
+      lifecycle-negative gate plus no-entry REJECTED branch persists X. After
+      READY returns, identical X either has no entry and may evaluate again or
+      must replay the first rejection.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M01]
+  - id: same_command_id_changed_source_or_payload
+    result: PASS
+    evidence: R2 Sections 2.1 and 2.7
+    assessment: >-
+      Source claims participate in the Command fingerprint and global command_id
+      lookup; any changed fingerprint returns PROTOCOL_CONFLICT without replacement.
+  - id: lost_response_causes_second_mutation
+    result: PASS
+    evidence: R2 Section 2.7 and R1 Section 16.3
+    assessment: >-
+      Identical COMMITTED replay returns the first envelope/result and appends no
+      Event or reducer mutation.
+  - id: revocation_and_Command_use_different_currentness_watermarks
+    result: PASS
+    evidence: R1 Section 12 and R2 Sections 2.3 and 2.7
+    assessment: >-
+      Gate evidence, target/reducer preconditions, and commit share the one
+      authoritative transaction watermark.
+  - id: synthetic_activation_before_constructive_issuance
+    result: PASS
+    evidence: R2 Sections 6.3-6.5
+    assessment: >-
+      The activation target cannot exist before the issuance transaction and a
+      pre-issuance ACK rejects with no envelope/action/Event.
+  - id: pending_Delegation_used_as_its_own_activation_responsibility
+    result: PASS
+    evidence: R1 Section 14 and R2 Sections 6.4-6.5
+    assessment: >-
+      ACK responsibility mode is NONE_ACTIVATION_PURPOSE_ONLY and every source,
+      scope, and chain field is null.
+  - id: synthetic_fixture_depends_on_real_secret_provider_host_runtime_or_effect
+    result: PASS
+    evidence: R2 Sections 6.2-6.6
+    assessment: >-
+      The fixture is fixed synthetic evidence and explicitly rejects real
+      credentials, providers, hosts, runtime, private Memory, or effects.
+  - id: F3_envelope_or_issuance_treated_as_F4_TaskPermit_or_host_admission
+    result: PASS
+    evidence: R1 Sections 3 and 17; R2 Sections 1 and 6.5
+    assessment: >-
+      Envelope, action, issuance, and activation remain ledger evidence only;
+      they create no TaskPermit, host admission, fence, or effect authority.
+  - id: reserved_Outbox_or_reconcile_method_performs_partial_operation
+    result: PASS
+    evidence: R1 Section 9 and invariant F3-I19
+    assessment: >-
+      Reserved methods return CONTRACT_NOT_ACTIVE and perform no partial operation.
+
+additional_adversarial_checks:
+  - id: exact_matching_Jenn_restore_after_multiple_newer_committed_epochs
+    result: BLOCK
+    evidence: R2 Sections 5.2-5.5
+    counterexample: >-
+      Witness history retains committed epochs 7, 8, and 9. Restore exact backup
+      at epoch 6 under a matching decision and reserve generation 10. Choosing
+      restored-ledger epoch 7 obeys N+1 but duplicates retained epoch 7; choosing
+      epoch 10 avoids duplication but skips restored-ledger predecessors.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M02]
+  - id: non_READY_after_decode_before_writer_transaction
+    result: BLOCK
+    evidence: R1 Sections 8-9 and R2 Sections 2.3 and 2.7
+    counterexample: >-
+      The same canonical bytes can have either no canonical intake record or a
+      durable terminal record depending on which effective clause an
+      implementation follows.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M01]
+  - id: two_complete_synthetic_registry_materializations_from_displayed_R2_values
+    result: BLOCK
+    evidence: R1 Section 10.1 and R2 Sections 6.1 and 6.6
+    counterexample: >-
+      Two implementations choose different payload/reducer digests and different
+      closed_subject_kind literals while preserving every displayed R2 value;
+      both cannot have the same CommandTypeDefinition or genesis-manifest
+      fingerprint.
+    finding_ids: [F3-R2-FULL-ATOMIC-IR-M03]
+
+findings:
+  - id: F3-R2-FULL-ATOMIC-IR-M01
+    severity: MAJOR
+    title: Non-READY submissions have contradictory no-intake and persisted-terminal semantics
+    section: R1 Sections 8 and 9; R2 Sections 2.3 and 2.7
+    evidence: >-
+      Unreplaced R1 says there is no canonical Command intake outside READY and
+      execute_command is available only in READY. R2 nevertheless makes
+      RESIDENT_LIFECYCLE_NOT_READY, RESIDENT_READINESS_INDETERMINATE,
+      IDENTITY_CONTINUITY_DISCONTINUOUS, and IDENTITY_CONTINUITY_INDETERMINATE
+      closed gate results, then requires every no-entry REJECTED or gate-derived
+      INDETERMINATE result to commit an intake record and replay entry. R2 names
+      only R1 Sections 13.1, 13.2, and 13.4 as replacements, not Sections 8 or 9.
+    counterexample: >-
+      Command X is decoded while the Resident appears READY, but the ledger-thread
+      recheck sees DRAINING or DISCONTINUOUS. Following R1 writes no intake.
+      Following R2 commits a terminal rejection/indeterminate entry. When READY
+      and CONTINUOUS return, identical X either has no entry and is reevaluated or
+      must replay the first terminal result. Both implementations can cite fixed
+      effective clauses.
+    impact: >-
+      One command_id has no unique first-disposition or retry rule across a
+      declared currentness race. This reopens persisted rejection semantics and
+      prevents deterministic recovery/replay from the fixed bytes.
+    required_correction: >-
+      In R3, explicitly replace the relevant R1 lifecycle/N-API clauses or define
+      a closed pre-intake response class that is never persisted. State exactly
+      which readiness/continuity failures may open a write transaction, which
+      create terminal replay entries, and what identical retry does after READY
+      returns. Preserve the rule that no domain mutation or envelope is created.
+    categories: [replay_ambiguity, internal_contradiction]
+    prior_lineage: [F3-R1-FULL-ATOMIC-IR-M01]
+
+  - id: F3-R2-FULL-ATOMIC-IR-M02
+    severity: MAJOR
+    title: Explicit older-ledger restore has no total authority-epoch lineage reducer
+    section: R2 Sections 5.2, 5.3, 5.4, and 5.5
+    evidence: >-
+      R2 requires authority_epoch to advance exactly by one in the ledger and
+      forbids skipping, retains every COMMITTED witness entry outside backup and
+      restore, and makes duplicate/forked epoch state INDETERMINATE. Its explicit
+      restore branch then tells an older restored ledger to commit its next
+      ledger epoch under a new witness generation. The decision contains a
+      new_restore_lineage_id, but no epoch/witness identity rule scopes duplicate
+      detection by that lineage or defines a different numeric successor rule.
+    counterexample: >-
+      The witness has immutable commits for epochs 7, 8, and 9; an exact Jenn
+      decision restores a bound backup at epoch 6. A new reservation at generation
+      10 must either commit epoch 7, satisfying restored-ledger contiguity while
+      duplicating a retained committed epoch, or commit a globally new epoch,
+      violating the no-skip N+1 rule. The fixed reducer supplies no third result.
+    impact: >-
+      A matching authorized restore can either remain permanently INDETERMINATE
+      or require an implementation-specific exception to duplicate/fork/no-skip
+      invariants. The restore and authority-currentness graph is not uniquely
+      constructible even though ordinary rollback detection is sound.
+    required_correction: >-
+      R3 must define the canonical restore lineage and ordering key. Either bind
+      lineage_id into epoch and witness identity and explicitly scope duplicate
+      rules, or advance from an external global epoch high-watermark with an
+      explicit restore-only predecessor/gap rule. Define exact checks for all
+      retained pre-restore commits and the single value that becomes current.
+    categories: [internal_contradiction, authority_restore_ambiguity]
+    prior_lineage: [F3-R1-FULL-ATOMIC-IR-M04]
+
+  - id: F3-R2-FULL-ATOMIC-IR-M03
+    severity: MAJOR
+    title: Synthetic issuance registry and genesis manifest are not normatively closed
+    section: R1 Section 10.1; R2 Sections 6.1 and 6.6
+    evidence: >-
+      R1 CommandTypeDefinitionV0_1 requires interface_version,
+      payload_schema_sha256, reducer_sha256, and canonical_fingerprint in
+      addition to the other displayed fields, and rejects missing/digest-mismatched
+      definitions. R2's sole DelegationIssuanceCommandTypeV0_1R2 omits those
+      required values, so it cannot produce the exact registered definition that
+      the issuance Command must pass. Separately, the final genesis manifest
+      declares closed_subject_kind and says one closed enum is used, but provides
+      no enum members or exact kind-to-object mapping.
+    counterexample: >-
+      Two fixture builders use the same displayed command and genesis values but
+      choose different payload-schema/reducer digests and different subject-kind
+      literals. They derive different registry and manifest fingerprints, while
+      neither choice violates an enumerated R2 value. Conversely, strict R1
+      decoding rejects both partial type records for missing mandatory fields.
+    impact: >-
+      The pending Delegation issuance cannot pass one exact closed registry gate,
+      and the completed fixture cannot be validated against one exact manifest
+      vocabulary. The M06 constructive witness remains non-unique and the
+      no-missing-normative-schema gate fails.
+    required_correction: >-
+      R3 must provide one complete CommandTypeDefinitionV0_1 instance for
+      DELEGATION_ISSUANCE, including exact interface, payload and reducer refs and
+      digests, ownership binding, registry revision, and fingerprint rule/value.
+      It must also enumerate closed_subject_kind and the exact topological
+      membership/mapping for every required genesis, issuance, activation,
+      restart, replay, and dual-start evidence leaf.
+    categories: [M0_impossibility, missing_normative_schema]
+    prior_lineage: [F3-R1-FULL-ATOMIC-IR-M06]
+
+review_boundaries_and_non_findings:
+  - >-
+    Concrete OS lock, durable-journal, filesystem, fsync, SQLite, Rust, and N-API
+    implementation choices remain future implementation profiles and were not
+    treated as missing contract semantics when the required behavior was closed.
+  - >-
+    The accepted architecture does not require N-API to resist a fully controlled
+    same-process or same-OS-user attacker; this excluded threat model is not a
+    finding.
+  - >-
+    F4 TaskPermit/host/fence, F5 delivery/retry/reconciliation, and F6 Validation
+    detail are correctly deferred and their absence is not a finding.
+  - >-
+    No implementation or runtime tests are required for this contract review.
+    All findings are demonstrable from fixed contract bytes and frozen authority
+    inputs.
+
+review_execution:
+  web_used: false
+  runtime_source_read: false
+  runtime_source_modified: false
+  implementation_tests_run: false
+  contract_review_only: true
+  state_private_accessed: false
+  secrets_or_env_accessed: false
+  private_raw_memory_accessed: false
+  raw_logs_accessed: false
+  provider_raw_response_accessed: false
+  author_self_review_content_accessed: false
+  R1_subject_modified: false
+  R2_subject_modified: false
+  manifest_modified: false
+  existing_file_modified_by_review: false
+  queue_registry_or_CURRENT_STATE_modified: false
+  commit_created: false
+  push_performed: false
+
+non_authorization:
+  independent_review_result_created: true
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false
+
+next_required_action: >-
+  Create one narrow immutable R3 amendment that resolves
+  F3-R2-FULL-ATOMIC-IR-M01 through M03 without editing R1 or R2, then prepare a
+  new hash-bound fresh full atomic independent review. Only Jenn may later accept
+  and freeze the resulting atomic unit.

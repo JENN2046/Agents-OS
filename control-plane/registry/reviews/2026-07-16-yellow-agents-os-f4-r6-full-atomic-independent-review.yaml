@@ -1,0 +1,209 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+
+review:
+  id: agents-os-f4-r6-full-atomic-independent-review-v0.1
+  date: 2026-07-16
+  reviewer_identity: Codex_F4_R6_fresh_independent_review_agent
+  independence_basis:
+    - not_the_F4_R6_author_run
+    - reviewed_fixed_manifest_bound_subject_bytes
+    - did_not_modify_any_subject
+    - author_self_review_content_not_read
+    - prior_review_content_not_used_as_authority
+    - no_runtime_provider_database_host_or_effect_execution
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R6_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 18
+  declared_input_count: 36
+  manifest_path: control-plane/registry/reports/2026-07-16-agents-os-f4-r6-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_expected: 2dd67e8be8bb5393ff300eccd505bbd259845a727a8eedab5954462181817668
+  manifest_sha256_actual: 2dd67e8be8bb5393ff300eccd505bbd259845a727a8eedab5954462181817668
+
+result: BLOCK
+requires_R7: true
+
+integrity:
+  manifest_hash: PASS
+  declared_inputs_hashes:
+    verified: 36
+    expected: 36
+    mismatches: 0
+    result: PASS
+  subjects:
+    completely_read: 18
+    expected: 18
+    unchanged_after_review: true
+    result: PASS
+  author_self_review:
+    hash_verified: true
+    content_read: false
+  prior_review:
+    hash_verified: true
+    content_used_as_authority: false
+
+validator_reproduction:
+  result: PASS
+  validators_passed: 6
+  validators_expected: 6
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  commands:
+    - command: python3 control-plane/registry/validate-f4-m0a-witness.py
+      result: PASS
+      evidence: {node_count: 14, edge_count: 36, node_hashes_verified: 14, schema_fingerprints_verified: 22, terminal_outcome: NOT_EXECUTED}
+    - command: python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+      result: PASS
+      evidence: {total_case_count: 23, negative_mutations_rejected: 3}
+    - command: python3 control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+      result: PASS
+      evidence: {total_case_count: 13, negative_mutations_rejected: 3}
+    - command: python3 control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+      result: PASS
+      evidence: {total_case_count: 9, negative_mutations_rejected: 3}
+    - command: python3 control-plane/registry/validate-f4-r5-cross-phase-authority-closure.py
+      result: PASS
+      evidence: {total_case_count: 28, negative_mutations_rejected: 4}
+    - command: python3 control-plane/registry/validate-f4-r6-full-effective-m0a.py
+      result: PASS
+      evidence: {base_R1_node_count: 14, effective_node_count: 14, effective_schema_count: 14, node_hashes_verified: 14, terminal_outcome: NOT_EXECUTED}
+  independent_in_memory_mutations:
+    changed_overlay_node_rejected: true
+    changed_effect_count_rejected: true
+    missing_source_role_rejected: true
+    duplicate_source_role_rejected: true
+  limitation: exact_fixture_equality_and_hash_consistency_do_not_prove_that_the_hard_coded_effective_model_matches_the_normative_contract
+
+findings_summary:
+  blocker: 4
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 2
+
+findings:
+  - id: F4-R6-FULL-ATOMIC-IR-B01
+    severity: BLOCKER
+    title: effect_authorization_matrix_is_not_a_unique_total_reducer
+    evidence:
+      - R6_section_2_assigns_distinct_rejected_reasons_to_scope_mismatch_expiry_and_revocation_but_does_not_define_precedence_when_more_than_one_is_true
+      - a_present_Jenn_decision_can_be_scope_mismatched_expired_and_revoked_at_the_same_watermark
+      - the_scope_mismatch_row_says_decision_identity_fields_non_null_and_time_revocation_as_observed_instead_of_freezing_the_nullability_of_each_Jenn_field
+      - the_later_no_object_rule_does_not_resolve_concurrent_proven_negative_reason_selection_after_all_evidence_is_reproducible
+    impact: two_conforming_writers_can_emit_different_currentness_reason_and_canonical_fingerprint_for_the_same_exact_mode_and_evidence
+    required_correction:
+      - freeze_one_negative_over_unavailable_lattice_and_one_exact_rejected_reason_precedence_or_make_the_negative_predicates_normatively_mutually_exclusive
+      - enumerate_the_exact_null_or_non_null_requirement_for_every_Jenn_field_in_every_legal_row
+      - add_concurrent_scope_mismatch_expired_revoked_vectors_and_reject_every_noncanonical_pair
+
+  - id: F4-R6-FULL-ATOMIC-IR-B02
+    severity: BLOCKER
+    title: F4_effect_trust_eligibility_result_and_reason_are_not_unique
+    evidence:
+      - R6_correctly_preserves_frozen_F2_RECOVER_and_defines_a_separate_F4_eligibility_assessment
+      - the_schema_has_F2_COMPROMISE_HISTORY_PRESENT_F4_COMPROMISE_HISTORY_PRESENT_unavailable_and_integrity_reasons_but_defines_no_complete_result_mapping_or_reason_precedence
+      - F2_and_F4_compromise_history_can_both_be_present
+      - a_proven_compromise_history_can_coexist_with_an_unavailable_current_input_or_with_an_integrity_conflict
+    impact: the_same_reproducible_history_tuple_can_receive_different_reason_or_even_INELIGIBLE_versus_INDETERMINATE_results_and_therefore_different_assessment_fingerprints
+    required_correction:
+      - preserve_the_F2_actor_status_exactly_as_F2_derives_it
+      - define_a_total_F4_only_lattice_with_exact_check_to_reason_mapping_and_fixed_precedence
+      - state_whether_proven_history_and_integrity_dominate_unavailability_and_add_all_concurrent_cases
+
+  - id: F4-R6-FULL-ATOMIC-IR-B03
+    severity: BLOCKER
+    title: R6_disposition_witness_omits_interface_version_from_the_declared_fingerprint_formula
+    evidence:
+      - the_R6_schema_has_28_fields_before_fact_fingerprint_including_interface_version_as_the_first_field
+      - R6_section_4_defines_the_digest_as_the_domain_separator_plus_every_preceding_field_value_in_printed_order
+      - the_R6_fixture_ordered_field_values_contains_only_27_values_and_starts_with_observation_id
+      - the_R6_validator_disp_values_repeats_the_same_omission_and_therefore_PASS_only_proves_fixture_validator_agreement
+    impact: the_constructive_disposition_fingerprint_does_not_materialize_the_normative_R6_formula_and_the_handoff_binds_that_nonconforming_fingerprint
+    required_correction:
+      - include_the_literal_interface_version_as_the_first_preceding_field_value_after_the_domain_separator
+      - recompute_disposition_handoff_node_and_fixture_fingerprints
+      - add_an_independent_field_count_and_exact_order_assertion
+
+  - id: F4-R6-FULL-ATOMIC-IR-B04
+    severity: BLOCKER
+    title: full_effective_M0_overlay_is_a_delta_summary_not_a_full_effective_materialization
+    evidence:
+      - TaskPermitV0_1R6Effective_contains_a_base_R1_outer_node_fingerprint_and_a_small_subset_of_replacement_fields_not_the_complete_effective_TaskPermit_field_list
+      - F4AcceptedEffectHandoffV0_1R6_contains_a_base_R1_outer_node_fingerprint_and_only_a_small_subset_of_the_complete_resulting_handoff_fields
+      - F4HostTrustRevision_HostAuthentication_FinalHandoffAuthorityAssessment_and_HostWorkAcceptance_nodes_are_also_summaries_that_omit_normatively_required_effective_fields
+      - no_canonical_merge_or_reconstruction_algorithm_turns_the_R1_outer_node_hash_and_the_delta_into_one_complete_effective_object
+      - replaced_R1_Host_Jenn_grant_permit_disposition_and_handoff_objects_are_therefore_not_proven_absent_from_the_effective_output
+      - contrary_to_R6_section_6_not_every_overlay_node_fingerprint_binds_the_base_R1_fixture_file_and_canonical_digests
+    impact: the_witness_cannot_prove_full_effective_constructibility_or_that_all_R5_R6_replacements_are_materialized_without_resurrecting_replaced_R1_objects
+    required_correction:
+      - materialize_each_complete_effective_schema_with_all_fields_in_normative_order_and_no_replaced_R1_fields
+      - alternatively_freeze_and_validate_a_canonical_full_reconstruction_algorithm_but_still_emit_and_hash_the_complete_reconstructed_objects
+      - bind_the_R1_file_and_canonical_digests_through_an_explicit_base_node_that_every_overlay_branch_depends_on
+      - validate_the_absence_of_old_HostIdentity_JennAuthorizationBinding_bare_source_arrays_and_old_disposition_handoff_fields
+
+required_review_questions:
+  all_36_hashes_match_and_all_18_subjects_are_fully_read_unchanged: PASS
+  authorization_resolution_and_mode_currentness_nullability_are_total: BLOCK_F4-R6-FULL-ATOMIC-IR-B01
+  every_old_Jenn_binding_downstream_reference_is_replaced: BLOCK_F4-R6-FULL-ATOMIC-IR-B04
+  frozen_F2_RECOVER_is_preserved_and_F4_eligibility_is_separate: BLOCK_F4-R6-FULL-ATOMIC-IR-B02
+  complete_disposition_field_order_formula_and_handoff_binding_are_unique: BLOCK_F4-R6-FULL-ATOMIC-IR-B03_AND_B04
+  source_entries_role_coverage_ordering_and_two_set_formulas_are_canonical: PASS
+  full_effective_R6_M0_materializes_every_replacement_without_R1_object_resurrection: BLOCK_F4-R6-FULL-ATOMIC-IR-B04
+  all_six_validators_reproduce_PASS_and_zero_effect: PASS
+  all_prior_closed_findings_remain_closed: BLOCK_EFFECTIVE_WITNESS_DOES_NOT_PROVE_THIS
+  no_F5_F6_implementation_runtime_provider_database_effect_authority_leaks: PASS
+
+required_adversarial_checks:
+  unavailable_policy_PBL_or_basis_creates_no_requirement_object: PASS
+  prohibited_has_only_REJECTED_PROHIBITED_with_null_Jenn_fields: PASS
+  exact_Jenn_missing_scope_expired_revoked_and_unavailable_are_unique: BLOCK_F4-R6-FULL-ATOMIC-IR-B01
+  recovered_F2_Actor_is_not_relabelled_but_same_lineage_is_F4_ineligible: PASS
+  disposition_or_handoff_missing_final_assessment_fingerprint_rejects: PASS
+  reordered_duplicate_missing_or_extra_source_role_rejects: PASS
+  full_M0_changed_overlay_node_or_effect_count_rejects: PASS
+
+closure_assessment:
+  total_authorization_resolution: BLOCK
+  F2_RECOVER_preservation: PASS
+  separate_F4_effect_trust_eligibility_uniqueness: BLOCK
+  complete_disposition_and_handoff_integration: BLOCK
+  canonical_source_entries_and_two_set_formulas: PASS
+  full_effective_zero_effect_R6_M0: BLOCK
+  proof_DAG: BLOCK_FULL_EFFECTIVE_GRAPH_NOT_MATERIALIZED
+  zero_effect: PASS
+
+category_counts:
+  identity_spoofing: 0
+  authority_expansion_or_ambiguous_authorization: 1
+  revocation_or_compromise_ambiguity: 1
+  fail_open_currentness: 0
+  dual_writer: 0
+  circular_proof: 0
+  crash_or_replay_fingerprint_ambiguity: 1
+  M0_effective_constructibility: 1
+  downstream_authority_leak: 0
+  internal_contradiction: 2
+
+final_disposition:
+  F4_R6_fresh_full_atomic_independent_review: BLOCK
+  Jenn_acceptance_ready: false
+  F4_accepted: false
+  F4_frozen: false
+  requires_R7: true
+  next_action:
+    - create_narrow_F4_R7_amendment_for_the_four_exact_blockers
+    - preserve_all_R1_R6_subjects_and_reviews_immutable
+    - replace_the_R6_effective_fixture_and_validator_only_through_new_R7_subjects
+    - run_a_new_fresh_full_atomic_hash_bound_independent_review
+
+non_authorization:
+  partial_acceptance: forbidden
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+  commit_push_merge_performed: false

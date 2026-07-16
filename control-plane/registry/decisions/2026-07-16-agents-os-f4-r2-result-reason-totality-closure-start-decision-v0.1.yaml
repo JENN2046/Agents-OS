@@ -1,0 +1,107 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-16T18:17:04+08:00
+effective_at: 2026-07-16T18:17:04+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_F4_R2_NARROW_CONTRACT_CORRECTION
+  decision_sources:
+    - exact_current_conversation_instruction_start_F4
+    - exact_current_conversation_instruction_allow_automatic_progression
+    - immutable_F4_start_decision_authorized_findings_dispositions_and_narrow_amendments
+
+amendment_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE
+  fixed_subjects:
+    R1_contract:
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      modify_bytes: forbidden
+    R1_fixture:
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      modify_bytes: forbidden
+    R1_validator:
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      modify_bytes: forbidden
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml
+    sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+    result: BLOCK
+    blocker_count: 1
+    major_count: 0
+    minor_count: 0
+    requires_R2: true
+
+required_scope:
+  - F4_R1_IR_B01_mixed_negative_and_unavailable_result_precedence
+  - exact_reason_precedence_for_HostAuthenticationAssessment
+  - exact_reason_precedence_and_complete_reason_coverage_for_TaskPermitCurrentnessAssessment
+  - exact_reason_precedence_for_HostLocalAdmissionDecision
+  - corrected_normative_invariants_I19_and_I20
+  - deterministic_mixed_and_multiple_failure_vectors
+  - author_self_review
+  - new_hash_bound_fresh_full_atomic_independent_review_surface
+
+design_constraints:
+  amendment_must_be_narrow: true
+  R1_subject_bytes_immutable: true
+  F1_F2_F3_accepted_or_frozen_bytes_immutable: true
+  atomic_acceptance_only: true
+  partial_acceptance: forbidden
+  all_non_success_results_fail_closed: true
+  one_singleton_writer: preserved
+  F5_F6_ownership: preserved
+  synthetic_evidence_only: true
+
+excluded_scope:
+  - F5_Outbox_delivery_retry_dead_letter_or_reconciliation
+  - F6_Validation_current_decision_or_Task_completion_eligibility
+  - Rust_or_JavaScript_implementation
+  - database_schema_creation_migration_or_live_access
+  - runtime_Resident_or_service_activation
+  - production_authentication_crypto_keys_credentials_or_enrollment
+  - provider_host_executor_or_external_effect_execution
+  - public_API_or_MCP_expansion
+
+hard_boundaries:
+  modify_F4_R1_fixed_subjects: forbidden
+  modify_F4_R1_independent_review: forbidden
+  modify_F1_F2_F3_accepted_or_frozen_subjects: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_host_or_effect_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  F5_or_F6_start: forbidden
+  F4_acceptance_or_freeze: Jenn_only
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+
+completion_effect:
+  F4_started: true
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+
+next_gate:
+  name: F4_R2_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

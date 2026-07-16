@@ -1,0 +1,25 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r6-five-finding-materialization-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R6
+  allowed:
+    - close the five exact R5 independent-review blockers
+    - preserve frozen F2 RECOVER while defining separate F4 effect-trust eligibility
+    - publish total authorization resolution and exact downstream replacement
+    - publish complete effective disposition and handoff fingerprint integration
+    - publish canonical source-set formulas and role coverage
+    - add a full zero-effect effective R6 M0 witness and validator
+    - prepare a fresh full atomic independent review package
+  forbidden:
+    - change R1-R5 or prior review bytes
+    - reopen unrelated findings
+    - accept or freeze F4 automatically
+    - start F5/F6 or implement Rust, N-API, database, runtime, service, Host, provider, authentication, credential, key, or physical effect
+    - commit, push, merge, release, deploy, or publish
+completion_gate: {required: fresh_full_atomic_hash_bound_independent_review_of_R1_through_R6, acceptance_authority: Jenn_only}
+

@@ -1,0 +1,134 @@
+schema_version: agents-os.contract-unit-start-decision.v0.1
+record_id: agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1
+record_type: ContractUnitStartDecision
+status: active
+immutable: true
+created_at: 2026-07-16T17:20:53+08:00
+effective_at: 2026-07-16T17:20:53+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: 启动 F4
+
+contract_unit:
+  id: F4
+  name: TaskPermit / Host Authentication / Fence Effect Admission
+  mode: ATOMIC_CONTRACT_CLOSURE
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+  implementation_profile_included: false
+
+prerequisites:
+  phase_4_start:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  construction_readiness:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  F1_acceptance:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  F2_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+  F3_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+
+direction_inputs:
+  workspace_governance:
+    path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  accepted_home_roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  accepted_home_roadmap_decision:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  accepted_resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  accepted_high_privilege_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+
+authorized_scope:
+  - canonical_TaskPermit_schema_and_identity
+  - permit_issuance_verification_revocation_expiry_and_consumption_semantics
+  - exact_binding_to_current_F1_Task_and_commitment_authority
+  - exact_binding_to_current_F2_Actor_Delegation_Authentication_and_action_assurance
+  - exact_binding_to_current_F3_Command_Resident_continuity_and_writer_epoch
+  - authenticated_host_identity_and_host_enforcement_admission
+  - execution_epoch_host_fence_and_effect_fence_currentness
+  - effect_intent_to_host_work_acceptance_without_effect_execution
+  - fail_closed_unknown_unavailable_revoked_stale_or_ambiguous_paths
+  - deterministic_replay_idempotency_consumption_and_unknown_after_crash_semantics
+  - synthetic_M0_A_constructibility_without_real_host_secret_provider_or_effect
+  - F4_author_self_review_and_fresh_hash_bound_independent_review_package
+  - Document_Registry_CURRENT_STATE_queue_and_receipt_projection
+
+deferred_scope:
+  F5:
+    owns: [Outbox_claim_delivery_retry_dead_letter_reconciliation_effect_recovery]
+    started: false
+  F6:
+    owns: [Validation_requirement_current_decision_and_Task_completion_eligibility]
+    started: false
+  implementation_profile:
+    owns: [Rust_JavaScript_database_index_cache_crypto_key_storage_performance_and_tests]
+    authorized: false
+  production_profile:
+    owns: [real_host_credentials_device_enrollment_provider_service_runtime_and_external_effect]
+    authorized: false
+
+authorized_outputs:
+  - F4_R1_contract_draft
+  - F4_R1_author_self_review
+  - F4_R1_hash_bound_independent_review_manifest_and_package
+  - F4_R1_registry_CURRENT_STATE_queue_and_receipt_projection
+  - correction_amendment_and_fresh_review_cycle_if_independent_findings_require_it
+  - Jenn_only_atomic_accept_freeze_decision_surface_after_valid_independent_PASS
+
+acceptance_boundary:
+  draft_or_author_review_accepts_F4: false
+  independent_review_accepts_F4: false
+  automatic_acceptance: forbidden
+  Jenn_atomic_decision_required: true
+  partial_acceptance: forbidden
+
+hard_boundaries:
+  modify_F1_F2_or_F3_accepted_subject_bytes: forbidden
+  issue_a_real_TaskPermit: forbidden
+  enroll_or_authenticate_a_real_host: forbidden
+  execute_or_admit_a_real_effect: forbidden
+  start_F5_F6_F7_F8_F9_F10_F11: forbidden
+  implementation: forbidden
+  runtime_source_change: forbidden
+  Resident_or_service_start: forbidden
+  database_creation_or_migration: forbidden
+  production_authentication_or_credential_change: forbidden
+  provider_host_or_executor_execution: forbidden
+  public_API_or_MCP_expansion: forbidden
+  secret_or_private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+  tag_release_deploy_or_publish: forbidden
+
+automatic_progression:
+  within_F4_contract_review_cycle: authorized
+  finding_disposition_and_narrow_amendment: authorized_when_evidence_bound
+  start_downstream_contract_or_implementation: forbidden
+
+next_gate:
+  name: F4_R1_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_AUTHOR_SURFACE
+  decision_owner: Nobao_within_authorized_F4_scope
+  automatic_transition: authorized
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

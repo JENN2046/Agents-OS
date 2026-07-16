@@ -1,0 +1,146 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f3-r1-independent-review-package-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R1
+  review_mode: fresh_full_atomic_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 1
+  subject:
+    revision: R1
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+
+authority_inputs:
+  - role: workspace_governance
+    path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - role: accepted_resident_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - role: accepted_home_direction_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  - role: foundational_direction_acceptance
+    path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  - role: phase_4_start_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  - role: construction_readiness_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  - role: frozen_F2_acceptance_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+  - role: frozen_F2_atomic_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+  - role: non_authoritative_F2_effective_reading_surface
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    authority: false
+  - role: immutable_F3_start_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1.yaml
+    sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+
+review_lineage:
+  - role: author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-resident-singleton-napi-identity-continuity-r1-self-review.yaml
+    sha256: cb90b51f832d21f547bb9eff79784c26f62c013d5a911f098cc18435aeb598f8
+    result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+    may_substitute_for_independent_judgment: false
+
+required_review_questions:
+  - atomic_scope_complete_without_partial_authority_gap
+  - no_identity_spoofing_or_process_equals_identity_error
+  - dual_writer_and_stale_owner_paths_fail_closed
+  - one_thread_one_authoritative_connection_semantics_constructible
+  - identity_continuity_and_discontinuity_reducer_total_and_non_circular
+  - N_API_boundary_closed_versioned_and_non_escalating
+  - Command_definition_intent_assertion_context_envelope_action_DAG_acyclic
+  - currentness_revocation_and_command_commit_races_have_one_total_order
+  - replay_lost_response_and_changed_bytes_semantics_unambiguous
+  - F2_action_ref_and_activation_ack_requirements_preserved_exactly
+  - Temporary_Worker_and_WORKER_ASSIGNMENT_HANDSHAKE_rules_closed
+  - F4_F5_F6_and_implementation_authority_not_silently_imported
+  - startup_recovery_readiness_and_shutdown_fail_closed
+  - constructive_synthetic_M0_witness_possible_without_real_runtime_or_secrets
+  - no_internal_contradiction_or_missing_normative_schema
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - exact_manifest_path_and_sha256
+    - every_input_hash_verified
+    - subject_bytes_reviewed_unchanged
+    - blocker_major_minor_counts
+    - finding_ids_with_exact_section_and_evidence
+    - identity_spoofing_count
+    - dual_writer_count
+    - circular_proof_count
+    - authority_expansion_count
+    - fail_open_currentness_count
+    - replay_ambiguity_count
+    - downstream_boundary_leak_count
+    - M0_impossibility_count
+    - internal_contradiction_count
+    - requires_R2
+  no_finding_rule: >-
+    PASS_NO_BLOCKER is permitted only when every required question is answered
+    from the fixed bytes and no blocker remains.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_may_be_relied_on_as_conclusion: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unknown_or_unavailable_required_input_result: BLOCK
+  forbidden_inputs_accessed: false_required
+  web_required: false
+  runtime_source_required: false
+  secrets_or_private_memory_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-16-agents-os-f3-r1-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  F3_acceptance_ready: false
+  authority_after_pass: Jenn_only
+  automatic_acceptance: forbidden
+
+non_authorization:
+  independent_review_result_created: false
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

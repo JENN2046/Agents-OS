@@ -1,0 +1,177 @@
+schema_version: agents-os.author-contract-review.v0.1
+review_id: agents-os-f3-r3-three-finding-contract-closure-self-review
+review_type: AUTHOR_FULL_ATOMIC_CONTRACT_REVIEW
+date: 2026-07-16
+status: complete
+
+reviewer:
+  identity: Nobao
+  role: author_and_agent_steward
+  independent: false
+  limitation: this_review_does_not_satisfy_the_required_independent_review
+
+acceptance_unit:
+  id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subjects:
+    - revision: R1
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+      sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+      bytes_modified_for_R3: false
+    - revision: R2
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+      sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+      bytes_modified_for_R3: false
+    - revision: R3
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+      sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+  precedence:
+    - R3_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+blocking_review_basis:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r2-full-atomic-independent-review.yaml
+  sha256: 3c4874507aac86f8b66cd540c4466b0dfc386a9e620f7c62b0043d292aca2afe
+  result: BLOCK
+  blocker_count: 0
+  major_count: 3
+  minor_count: 0
+  requires_R3: true
+
+disposition_record:
+  path: control-plane/registry/reviews/2026-07-16-agents-os-f3-r2-independent-review-disposition-v0.1.yaml
+  sha256: db8d67c9d6ed6f912b0fee1e694de8a27ec4671b14294c15e2830e447e9405c5
+
+R3_start_decision:
+  path: control-plane/registry/decisions/2026-07-16-agents-os-f3-r3-three-finding-contract-closure-start-decision-v0.1.yaml
+  sha256: 4007ae7074bbceebd1f67dc8c7b3a316acfaa122dee39a8ddd29aae6eb3fe766
+
+result: PASS_NO_AUTHOR_BLOCKER
+summary:
+  author_blocker_count: 0
+  author_major_count: 0
+  author_minor_count: 0
+  prior_findings_addressed: 3
+  prior_findings_total: 3
+  ready_for_fresh_hash_bound_independent_review: true
+  ready_for_Jenn_atomic_acceptance_decision: false
+  requires_R4_from_author_review: false
+
+finding_disposition:
+  - finding_id: F3-R2-FULL-ATOMIC-IR-M01
+    status: RESOLVED_IN_R3_PENDING_INDEPENDENT_CONFIRMATION
+    R3_sections: [2.1, 2.2, 2.3, 2.4]
+    evidence: >-
+      Readiness and continuity are now rechecked before replay lookup, gate
+      result, command-id reservation, or canonical intake. A non-READY race may
+      open and roll back a transaction but persists nothing. The four lifecycle
+      reason codes are removed from the persisted gate enum, and an identical
+      retry after READY is explicitly a first eligibility attempt.
+  - finding_id: F3-R2-FULL-ATOMIC-IR-M02
+    status: RESOLVED_IN_R3_PENDING_INDEPENDENT_CONFIRMATION
+    R3_sections: [3.1, 3.2, 3.3, 3.4, 3.5]
+    evidence: >-
+      The retained witness journal now owns one globally unique committed epoch
+      high-watermark H. Normal restart requires ledger head H and commits H+1.
+      An exact older restore CASes restored head R while committing global H+1,
+      binds gap R+1..H and a new one-use lineage, and preserves crash-total
+      reservation/commit semantics.
+  - finding_id: F3-R2-FULL-ATOMIC-IR-M03
+    status: RESOLVED_IN_R3_PENDING_INDEPENDENT_CONFIRMATION
+    R3_sections: [4.1, 4.2, 4.3, 5.1, 5.2, 5.3, 5.4]
+    evidence: >-
+      The issuance registry instance now supplies every R1
+      CommandTypeDefinition field with recomputable schema/reducer digests and
+      one exact canonical fingerprint. The synthetic manifest has exactly 57
+      ordered kinds, one schema and predecessor mapping for each, and a closed
+      proof schema for replay, restart, and concurrent-start evidence.
+
+author_adversarial_checks:
+  - id: readiness_race_persists_terminal_entry
+    result: PASS
+    evidence: R3_2_1_rolls_back_before_replay_lookup_or_gate_result
+  - id: unavailable_response_reserves_command_id
+    result: PASS
+    evidence: R3_2_1_and_2_4_explicitly_reserve_nothing
+  - id: lifecycle_reason_reenters_persisted_gate_enum
+    result: PASS
+    evidence: R3_2_3_removes_all_four_codes_and_prints_complete_effective_enum
+  - id: restored_epoch_duplicates_retained_witness_epoch
+    result: PASS
+    evidence: R3_3_1_and_3_4_use_global_H_plus_1
+  - id: restore_gap_is_unbound_or_reusable
+    result: PASS
+    evidence: R3_3_4_binds_exact_R_plus_1_through_H_and_one_use_lineage
+  - id: crash_after_restore_epoch_creates_second_H_plus_1
+    result: PASS
+    evidence: R3_3_5_finalizes_only_the_exact_pending_reservation
+  - id: payload_or_reducer_digest_is_not_reproducible
+    result: PASS
+    evidence: exact_JCS_lines_recompute_to_both_declared_SHA256_values
+  - id: command_type_fingerprint_is_not_reproducible
+    result: PASS
+    evidence: exact_R1_formula_input_recomputes_to_549553a6_prefix_value
+  - id: synthetic_enum_and_mapping_cardinality_diverge
+    result: PASS
+    evidence: enum_57_mapping_57_sequential_1_through_57
+  - id: synthetic_mapping_is_not_topological
+    result: PASS
+    evidence: every_numeric_predecessor_range_ends_before_its_entry_number
+  - id: synthetic_replay_or_dual_start_proof_is_narrative_only
+    result: PASS
+    evidence: R3_5_4_defines_closed_schema_enum_shapes_and_fingerprint
+  - id: F4_F5_F6_or_runtime_boundary_leak
+    result: PASS
+    evidence: R3_1_7_and_8_preserve_non_authorization
+
+mandatory_author_counts:
+  identity_spoofing: 0
+  dual_writer: 0
+  circular_proof: 0
+  authority_expansion: 0
+  fail_open_currentness: 0
+  replay_ambiguity: 0
+  downstream_boundary_leak: 0
+  M0_impossibility: 0
+  internal_contradiction: 0
+
+static_validation:
+  R3_line_count: 814
+  R3_byte_count: 40504
+  markdown_code_fence_markers: 66
+  markdown_code_fences_balanced: true
+  finding_id_coverage: 3_of_3
+  payload_descriptor_sha256_recomputed: 045f1f13910b04589ca0c65e4536b3a8b253e70c37ff59d92caca6ccb51ef2c1
+  reducer_descriptor_sha256_recomputed: 4c4bac289945131cd556dd855398761cc940b150d2930b4f4453d103c1296e70
+  command_type_definition_fingerprint_recomputed: 549553a694a1d95f58932db1831b817f3cf4f744f4e33a73dbfc9ba233a5a07f
+  synthetic_enum_count: 57
+  synthetic_mapping_count: 57
+  synthetic_mapping_sequential: true
+  every_synthetic_predecessor_earlier: true
+  yaml_support_records_parse: PASS
+  git_diff_check: PASS
+  runtime_tests: NOT_RUN_CONTRACT_ONLY
+
+non_authorization:
+  author_review_is_independent_review: false
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false
+
+next_required_action: >-
+  Build a new fixed hash-bound package over the exact R1+R2+R3 atomic bundle
+  and governing frozen inputs, then obtain a fresh full atomic independent
+  review. Only Jenn may later accept and freeze F3.

@@ -1486,11 +1486,561 @@ accepted and froze that exact atomic unit; the immutable decision record binds
 the manifest SHA-256 and repeats every accepted subject path and digest.
 
 The prior 2026-07-07 Active Work Queue remains byte-preserved historical
-evidence and is superseded in the Document Registry. Machine, Dashboard, and
-Control Chain now read v0.2, whose only `NOW` item is a Jenn-owned decision gate
-for an explicit F3 start. This closeout does not start F3 or authorize any
-implementation, runtime, production authentication, database, service,
-provider, credential, commit, or push action.
+evidence and is superseded in the Document Registry. At F2 closeout, Machine,
+Dashboard, and Control Chain read v0.2, whose only `NOW` item was a Jenn-owned
+decision gate for an explicit F3 start. The F2 closeout itself did not start F3
+or authorize any implementation, runtime, production authentication, database,
+service, provider, credential, commit, or push action.
+
+## F3 Contract Closure Start And R1 Author Surface (2026-07-16)
+
+Jenn explicitly started the F3 Resident Singleton / N-API / Identity
+Continuity atomic contract closure. The start decision consumes the frozen F2
+R1-R22 bundle from merged mainline and keeps implementation and runtime
+authority separate.
+
+```yaml
+F3_started: true
+F3_status: CONTRACT_CLOSURE_ACTIVE
+F3_closure_mode: ATOMIC_BUNDLE
+F3_partial_acceptance: forbidden
+F3_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1.yaml
+F3_start_decision_sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+F3_R1_subject: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+F3_R1_subject_sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+F3_R1_line_count: 1050
+F3_R1_author_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F3_R1_author_review_sha256: cb90b51f832d21f547bb9eff79784c26f62c013d5a911f098cc18435aeb598f8
+F3_start_R1_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-resident-singleton-napi-identity-continuity-start-r1-v0.1.md
+F3_start_R1_receipt_sha256: 24b382c1936e29ab5590de3a25409105c366acd728a7761f593ad2327b892f67
+F3_R1_independent_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f3-r1-independent-review-package-v0.1.manifest.yaml
+F3_R1_independent_review_manifest_sha256: 40b07f20be1bd3d25dee62cf2a54dd6a0d8d9246b6d7774f98632ed27c35a2a6
+F3_R1_independent_review_package: control-plane/registry/reports/2026-07-16-agents-os-f3-r1-independent-review-package-v0.1.md
+F3_R1_independent_review_package_sha256: 4c1aa0e67ce2d17956ba0672bcb15a41514cafcd71384afb12ea071644df7402
+F3_R1_independent_review_package_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r1-independent-review-package-v0.1.md
+F3_R1_independent_review_package_receipt_sha256: 00112ddcb088368a30fbec870e69f46173ffdab03c1acc9c40f398caa2436b52
+F3_R1_independent_review_package_ready: true
+F3_R1_independent_review_result_created: false
+F3_R1_author_may_claim_independence: false
+automatic_progression_within_current_safe_scope: true
+F3_accepted: false
+F3_frozen: false
+F4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+credential_change_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.4.md
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.3.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: F3_R1_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R1 closes the first complete author surface for one logical Resident identity,
+one live writer incarnation, one Rust ledger thread and authoritative
+connection, a closed versioned N-API boundary, committed Command intake and
+replay, exact frozen-F2 action/activation projections, and fail-closed recovery.
+It keeps TaskPermit/host/fence semantics in F4 and Outbox delivery/recovery in
+F5. No Rust, JavaScript, database, Resident process, runtime, production
+authentication, provider, service, credential, or public API/MCP action was
+started.
+
+Machine, Dashboard, Control Chain, and Workbench now use queue v0.4. Its unique
+`NOW` item is the fresh hash-bound independent review. The manifest binds the
+fixed R1 subject, governing inputs, reviewer constraints, mandatory questions,
+and result schema. The author may automatically process future findings but
+cannot create or attest the independent result.
+
+## F3 R1 Independent BLOCK And R2 Review Surface (2026-07-16)
+
+The fresh hash-bound R1 independent review completed with `BLOCK`. It found no
+catastrophic blocker, but six contract-level majors required R2. R1 and the
+review remain immutable. The six findings were disposed into one narrow R2
+amendment and a new full R1+R2 review package.
+
+```yaml
+F3_R1_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r1-full-atomic-independent-review.yaml
+F3_R1_independent_review_sha256: 0be7f9e81bdd224e7d1beb83c06d1c8f3afae0ff802bdd5e8f701ff988a07c2e
+F3_R1_independent_review_result: BLOCK
+F3_R1_independent_review_counts: {blocker: 0, major: 6, minor: 0}
+F3_R1_requires_R2: true
+F3_R1_review_disposition: control-plane/registry/reviews/2026-07-16-agents-os-f3-r1-independent-review-disposition-v0.1.yaml
+F3_R1_review_disposition_sha256: 0e68702177124b6f0fb999e79cded787a86f20a46e40f7ae702448038a18e3c5
+F3_R2_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f3-r2-six-finding-contract-closure-start-decision-v0.1.yaml
+F3_R2_start_decision_sha256: be5ad86729daf38419d2c377d273be2824c32f7145b536fdf16f30ba22844b9e
+F3_R2_subject: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+F3_R2_subject_sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+F3_R2_line_count: 1172
+F3_R2_byte_count: 46548
+F3_R2_author_review: PASS_NO_AUTHOR_BLOCKER_NOT_INDEPENDENT
+F3_R2_author_review_sha256: 11e07cde8433886cee4259c255568d898cccd586ecf0c299008be86b409d3f7e
+F3_R2_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f3-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F3_R2_review_manifest_sha256: f8aabb05463f95ae72727330515822765b35586a8a9f35fbbca7346289330fee
+F3_R2_review_manifest_inputs_verified: 17_of_17
+F3_R2_review_package: control-plane/registry/reports/2026-07-16-agents-os-f3-r2-atomic-independent-review-package-v0.1.md
+F3_R2_review_package_sha256: 9863c83f844369d043af28659dc690391a47f551bbc660ca2a166ac638ab9840
+F3_R2_review_package_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r2-atomic-independent-review-package-v0.1.md
+F3_R2_review_package_receipt_sha256: 72337d5c19ee254b7c741c5644519846a77e83f3e3cd2b86b20c76a7baf2c439
+F3_R2_independent_review_status: IN_PROGRESS
+F3_accepted: false
+F3_frozen: false
+F4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.5.md
+active_work_queue_sha256: a0cac2a0d78166bd624ae7e87fc7c0969454b15c6b4838b9b9ed47c12e5ff8de
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.4.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: F3_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R2 closes persisted terminal replay, the exact F2 `AUTHENTICATED` enum seam,
+the total continuity reducer, ledger-external anti-rollback witness semantics,
+closed intake/replay schemas, and a constructive Delegation issuance-before-
+activation M0 trace. The review package authorizes only semantic review. It
+does not authorize implementation, runtime, database, production
+authentication, provider, service, F4, or Git delivery work.
+
+## F3 R2 Independent BLOCK And R3 Review Surface (2026-07-16)
+
+The fresh hash-bound R1+R2 independent review completed with `BLOCK`. It found
+no catastrophic blocker, but three contract-level majors required R3: the
+pre-intake versus persisted-terminal readiness boundary, older-ledger restore
+epoch ordering against retained witness history, and the exact issuance
+registry plus synthetic-manifest vocabulary. R1, R2, and the review remain
+immutable. All three findings were disposed into one narrow R3 amendment and a
+new full R1+R2+R3 review package.
+
+```yaml
+F3_R2_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r2-full-atomic-independent-review.yaml
+F3_R2_independent_review_sha256: 3c4874507aac86f8b66cd540c4466b0dfc386a9e620f7c62b0043d292aca2afe
+F3_R2_independent_review_result: BLOCK
+F3_R2_independent_review_counts: {blocker: 0, major: 3, minor: 0}
+F3_R2_requires_R3: true
+F3_R2_review_disposition: control-plane/registry/reviews/2026-07-16-agents-os-f3-r2-independent-review-disposition-v0.1.yaml
+F3_R2_review_disposition_sha256: db8d67c9d6ed6f912b0fee1e694de8a27ec4671b14294c15e2830e447e9405c5
+F3_R3_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f3-r3-three-finding-contract-closure-start-decision-v0.1.yaml
+F3_R3_start_decision_sha256: 4007ae7074bbceebd1f67dc8c7b3a316acfaa122dee39a8ddd29aae6eb3fe766
+F3_R3_subject: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+F3_R3_subject_sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+F3_R3_line_count: 814
+F3_R3_byte_count: 40504
+F3_R3_author_review: PASS_NO_AUTHOR_BLOCKER_NOT_INDEPENDENT
+F3_R3_author_review_sha256: 9a561c6d6300a299e3e92d5e96ab540c01fa7a7102980957f6b27887adf34fb4
+F3_R3_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f3-r3-atomic-independent-review-package-v0.1.manifest.yaml
+F3_R3_review_manifest_sha256: ddaaf1fe8a2fae333b17971e9404e68202ce210d6ddc1d0e7c7823a3af228269
+F3_R3_review_manifest_inputs_verified: 23_of_23
+F3_R3_review_package: control-plane/registry/reports/2026-07-16-agents-os-f3-r3-atomic-independent-review-package-v0.1.md
+F3_R3_review_package_sha256: c8c25c742150c61f0084f1098fbd7158bce6d85549ef29ebcc27eb0421e5b331
+F3_R3_review_package_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r3-atomic-independent-review-package-v0.1.md
+F3_R3_review_package_receipt_sha256: 73c7f8c6178c61000313cf585e373bb291302925255f245551e2b8bdfed1316f
+F3_R3_independent_review_status: IN_PROGRESS
+F3_accepted: false
+F3_frozen: false
+F4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.6.md
+active_work_queue_sha256: 95406cef83e616d8c0f3b2c95fe463c48de34d4bfc9b63361530068eec3b1565
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.5.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: F3_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R3 makes Resident unavailability a closed pre-intake response that reserves no
+Command identity, separates ledger-local restore CAS from the external global
+authority-epoch high-watermark, completes the exact Delegation issuance
+registry digests and fingerprint, and enumerates all 57 synthetic evidence
+leaves with exact schema/predecessor mappings. The package still authorizes
+only semantic review and creates no acceptance, freeze, implementation,
+runtime, database, authentication, provider, service, F4, or Git authority.
+
+## F3 R3 Independent BLOCK And R4 Review Surface (2026-07-16)
+
+The fresh hash-bound R1+R2+R3 independent review completed with `BLOCK`. It
+found no catastrophic blocker, but four contract-level majors required R4:
+restore attempt retry after an abandoned reservation, an exact R4 contract
+literal throughout the Command proof graph, the full activation command-type
+registry definition, and exact normative schemas for seven descriptive
+synthetic leaves. R1-R3 and the review remain immutable. All four findings
+were disposed into one narrow R4 amendment and a new full R1+R2+R3+R4 review
+package.
+
+```yaml
+F3_R3_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r3-full-atomic-independent-review.yaml
+F3_R3_independent_review_sha256: 33d31ddfaa90e7b9171461d4cd89f013fb13568ef7a645fec356fd44063b784e
+F3_R3_independent_review_result: BLOCK
+F3_R3_independent_review_counts: {blocker: 0, major: 4, minor: 0}
+F3_R3_requires_R4: true
+F3_R3_review_disposition: control-plane/registry/reviews/2026-07-16-agents-os-f3-r3-independent-review-disposition-v0.1.yaml
+F3_R3_review_disposition_sha256: 514560f85d1bd293cbd5478be2bfdf7f17822bd9413df974de5465798b9e4b78
+F3_R4_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f3-r4-four-finding-contract-closure-start-decision-v0.1.yaml
+F3_R4_start_decision_sha256: 6fea822b15249857ac410b2af694685a3f4bf0bdd922cbcdb977d6e88eeb01ce
+F3_R4_subject: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r4-amendment.draft.md
+F3_R4_subject_sha256: 17b933e2ddf063422d4d695b5f07542d00f34a4a20280765369d0949afcff6ad
+F3_R4_line_count: 763
+F3_R4_byte_count: 35815
+F3_R4_author_review: PASS_NO_AUTHOR_BLOCKER_NOT_INDEPENDENT
+F3_R4_author_review_sha256: 366414ae84b5ad31e8acb50a630a1fb1bc883b9c3748f94e392843972fe43440
+F3_R4_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+F3_R4_review_manifest_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+F3_R4_review_manifest_inputs_verified: 29_of_29
+F3_R4_review_package: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.md
+F3_R4_review_package_sha256: aa2920479595d7797819ba0dcb3e386eecef86cfb2c79163c54856fd7e847e9e
+F3_R4_review_package_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r4-atomic-independent-review-package-v0.1.md
+F3_R4_review_package_receipt_sha256: 2ea339ce5ca3b54083ed7f8b2b48d89c592d3e6b98d3e86c464fceda953feb06
+F3_R4_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r4-full-atomic-independent-review.yaml
+F3_R4_independent_review_sha256: 19c14d0a926d76f89a460b8d596c573a49a8fa580739227847ac765b0e52d38b
+F3_R4_independent_review_status: COMPLETE
+F3_R4_independent_review_result: PASS_NO_BLOCKER
+F3_R4_independent_review_counts: {blocker: 0, major: 0, minor: 0}
+F3_R4_questions_verified: 22_of_22
+F3_R4_adversarial_checks_verified: 36_of_36
+F3_R4_synthetic_mappings_verified: 60_of_60
+F3_R4_requires_R5: false
+F3_atomic_freeze_decision_ready: true
+F3_atomic_freeze_decision_package: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-freeze-decision-package-v0.1.md
+F3_atomic_freeze_decision_package_sha256: 888dccbbabe99c799e03a9ea804da459ba4863ec16ca5b3f2b3d669fc362f5c6
+F3_R4_independent_review_closeout_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r4-independent-review-closeout-v0.1.md
+F3_R4_independent_review_closeout_receipt_sha256: 958dbd885530b9cb54ed094724a9eb83493a99e1e959a723cbf3da98cbbed1c1
+F3_accepted: false
+F3_frozen: false
+F4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.8.md
+active_work_queue_sha256: 740fb02e0f910cea4b49a5be09cc897021eab8c6bc0c701678e5e0257aeb912b
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.7.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: EXPLICIT_JENN_F3_R1_R4_ATOMIC_ACCEPT_FREEZE_REVISE_OR_REJECT_DECISION
+```
+
+R4 defines a retryable restore attempt chain after terminal abandonment, binds
+every canonical Command graph node to the exact R4 bundle literal, registers
+both Delegation issuance and activation command types at registry revision 4,
+and raises the synthetic manifest to 60 exact schema/predecessor mappings.
+The independent review passed with no finding and requires no R5. The resulting
+decision package is only a Jenn-owned acceptance surface: it does not itself
+accept or freeze F3, start F4, or create implementation, runtime, database,
+authentication, provider, service, effect, or Git authority.
+
+## F3 R1-R4 Atomic Freeze Closeout (2026-07-16)
+
+Jenn explicitly confirmed Section 6 A of the fixed F3 R4 Atomic Freeze
+Decision Package. The exact four-subject R1+R2+R3+R4 bundle is now accepted
+and frozen under the manifest-bound precedence. The manifest, reviews,
+dispositions, receipts, queues, and other evidence remain outside the
+acceptance unit.
+
+```yaml
+F3_status: ACCEPTED_FROZEN
+F3_acceptance_unit: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE
+F3_subject_count: 4
+F3_partial_acceptance: forbidden
+F3_precedence: [R4_explicit_replacements, R3_other_explicit_replacements, R2_other_explicit_replacements, R1_all_other_clauses]
+F3_manifest: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+F3_manifest_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+F3_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r4-full-atomic-independent-review.yaml
+F3_independent_review_sha256: 19c14d0a926d76f89a460b8d596c573a49a8fa580739227847ac765b0e52d38b
+F3_independent_review_result: PASS_NO_BLOCKER
+F3_requires_R5: false
+F3_freeze_decision: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+F3_freeze_decision_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+F3_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f3-r4-atomic-freeze-closeout-v0.1.md
+F3_freeze_closeout_receipt_sha256: 06d5908ab316012fb123080056a51641df57e25da374843b1b826690f487e4b1
+F3_accepted: true
+F3_frozen: true
+F4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+Resident_start_authorized: false
+database_change_authorized: false
+production_authentication_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+host_executor_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.9.md
+active_work_queue_sha256: f246c61a1e0a7af6f153998f8bef0b068f8a08ef73cd58257ea9aa556f17e146
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.8.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F4_TASKPERMIT_IDENTITY_BOUND_HOST_AND_FENCE_EFFECT_ADMISSION_CONTRACT_CLOSURE
+```
+
+The freeze closes the F3 semantic core and requires no R5. It does not start
+F4 or authorize Rust, JavaScript, database, Resident, runtime, production
+authentication, credential, key, cryptography, service, provider, host,
+executor, effect, public API, MCP, commit, push, PR, merge, tag, release,
+deploy, or publish work.
+
+## F4 Contract Closure Start And R1 Atomic Review Surface (2026-07-16)
+
+Jenn explicitly started F4 TaskPermit / Host Authentication / Fence Effect
+Admission contract closure. The immutable start decision consumes accepted F1
+and frozen F2/F3 authority while keeping implementation, real Host/runtime,
+production authentication and downstream F5/F6 authority separate.
+
+```yaml
+F4_started: true
+F4_status: R1_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F4_closure_mode: ATOMIC_BUNDLE
+F4_acceptance_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE
+F4_partial_acceptance: forbidden
+F4_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml
+F4_start_decision_sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+F4_R1_subject_count: 3
+F4_R1_contract: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+F4_R1_contract_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+F4_R1_M0_A_fixture: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+F4_R1_M0_A_fixture_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+F4_R1_validator: control-plane/registry/validate-f4-m0a-witness.py
+F4_R1_validator_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+F4_R1_author_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F4_R1_author_review_sha256: a82d14e4fa3966a853e542c09e85ba017ac335bce652c4576bfcaf492173eb67
+F4_R1_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.manifest.yaml
+F4_R1_review_manifest_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54
+F4_R1_review_package: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.md
+F4_R1_review_package_sha256: 00ff8a6b3ef89dcf515e0a173cc1e930697365c2a47f009ee02660b6752311c8
+F4_R1_review_package_receipt: control-plane/registry/receipts/2026-07-16-yellow-agents-os-f4-r1-atomic-independent-review-package-v0.1.md
+F4_R1_review_package_receipt_sha256: dfd84447efb2dfc005c9c8daa4c1634fedf72d3a43a42de9d3bd9217e0222461
+F4_R1_validator_result: PASS
+F4_R1_witness_nodes_edges_schema_fingerprints: 14_36_22
+F4_R1_witness_acceptance_count: 1
+F4_R1_witness_accepted_handoff_count: 1
+F4_R1_witness_external_effect_count: 0
+F4_R1_independent_review_result_created: false
+F4_accepted: false
+F4_frozen: false
+F5_started: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+Resident_start_authorized: false
+database_change_authorized: false
+production_authentication_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+host_executor_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.0.md
+active_work_queue_sha256: 795f09d4502d98ca33b6fc1e9b95cb15b8bab32e7f5be66688464739a203b391
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.9.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: F4_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R1 closes TaskPermit identity/immutability/currentness, exact F1/F2/F3
+bindings, Host identity/authentication epochs, Task/Host/effect fences,
+revocation/compromise, capability/resource/secret-handle/attestation/human-
+presence bounds, advisory local admission, atomic Host acceptance, atomic final
+disposition/handoff, crash/replay semantics and the F3/F5 boundary. Its machine
+witness constructs one synthetic acceptance and one immutable handoff while
+performing zero real effects, provider calls or raw-secret accesses.
+
+The author self-review is not independent. Queue v1.0 makes fresh full atomic
+review of all three fixed subjects the unique `NOW` item. No R1 artifact or
+author statement accepts/freezes F4, starts F5/F6, or authorizes Rust, N-API,
+database, Resident, runtime, production authentication, credential, Host,
+provider, service, effect, public API, MCP or Git delivery work.
+
+## F4 R1 Independent Review And R2 Totality Closure (2026-07-16)
+
+The fresh full atomic R1 review recomputed all 17 bound inputs, reviewed all
+three subjects unchanged, and reproduced the zero-effect M0-A validator. It
+returned `BLOCK` with one blocker: mixed proven-negative and unavailable
+evidence had no unique result/reason precedence, and several permit-currentness
+checks lacked a unique reason.
+
+The immutable F4 start decision authorizes evidence-bound finding disposition
+and narrow amendments within F4. The blocker is therefore preserved and bound
+to an R2 correction; no R1 subject or review byte was changed.
+
+```yaml
+F4_started: true
+F4_status: R2_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F4_acceptance_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE
+F4_subject_count: 6
+F4_partial_acceptance: forbidden
+F4_R1_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml
+F4_R1_independent_review_sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+F4_R1_independent_review_result: BLOCK
+F4_R1_blocker_count: 1
+F4_R1_major_count: 0
+F4_R1_minor_count: 0
+F4_R1_finding_id: F4-R1-FULL-ATOMIC-IR-B01
+F4_R1_finding_disposition: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml
+F4_R1_finding_disposition_sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf
+F4_R2_start_decision: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml
+F4_R2_start_decision_sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b
+F4_R2_amendment: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+F4_R2_amendment_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+F4_R2_totality_fixture: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+F4_R2_totality_fixture_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+F4_R2_totality_validator: control-plane/registry/validate-f4-r2-result-reason-totality.py
+F4_R2_totality_validator_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+F4_R2_author_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F4_R2_author_review_sha256: c0202bd21d072fbcd47146e00100597067c127542b3196699e73b1a4bdbc437a
+F4_R2_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F4_R2_review_manifest_sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24
+F4_R2_review_package: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.md
+F4_R2_review_package_sha256: d5884088e2bb50c7dbe937ba08f1b5a1dd247fff012173a3bf1d767858687223
+F4_R1_M0_A_validator_result: PASS
+F4_R1_M0_A_nodes_edges_schema_fingerprints: 14_36_22
+F4_R2_totality_validator_result: PASS
+F4_R2_totality_case_counts: 5_Host_12_permit_6_admission_23_total
+F4_R2_totality_negative_mutations_rejected: 3
+F4_R2_validator_external_effect_provider_secret_counts: 0_0_0
+F4_R2_independent_review_result_created: false
+F4_accepted: false
+F4_frozen: false
+F5_started: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+Resident_start_authorized: false
+database_change_authorized: false
+production_authentication_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+host_executor_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.1.md
+active_work_queue_sha256: 2f6c6b3e415cf938e2e626ffbf75b57b38e51a140b3e8657c9c108a45414a2a5
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.0.md
+task_branch: agent/f3-resident-singleton-contract-closure
+next_gate: F4_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R2 defines one total lattice: proven negative `REJECTED` dominates every
+concurrent `INDETERMINATE`; otherwise unavailable evidence is
+`INDETERMINATE`; success requires all applicable checks to pass. It adds exact
+reason precedence for Host authentication, all 19 permit-currentness checks,
+and all 18 local-admission checks, and replaces the conflicting I19/I20 text.
+
+The six fixed R1+R2 subjects and all 24 manifest inputs entered a fresh
+independent review. Its result and subsequent R3 state are recorded below.
+
+## F4 R2 Independent Review And R3 Totality Closure (2026-07-16)
+
+The R2 fresh review verified 24/24 inputs, read six subjects unchanged, and
+reproduced both validators, but returned `BLOCK` with two fail-closed canonical
+determinism findings: in-window Host lifecycle `PRESTART` had no reason, and
+`HostWorkStartDispositionFactV0_1` lacked complete reason mapping/precedence.
+
+```yaml
+F4_status: R3_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F4_acceptance_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE
+F4_subject_count: 9
+F4_R2_independent_review: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml
+F4_R2_independent_review_sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8
+F4_R2_independent_review_result: BLOCK
+F4_R2_blocker_major_minor: 2_0_0
+F4_R2_findings: [F4-R2-FULL-ATOMIC-IR-B01, F4-R2-FULL-ATOMIC-IR-B02]
+F4_R2_finding_disposition_sha256: 0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b
+F4_R3_start_decision_sha256: 37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e
+F4_R3_amendment_sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939
+F4_R3_fixture_sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4
+F4_R3_validator_sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec
+F4_R3_author_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F4_R3_author_review_sha256: 82cbe3d749e9380aabd4c711188165d37bb2947d095d60c9ec5b5966ae15ffd5
+F4_R3_review_manifest: control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.manifest.yaml
+F4_R3_review_manifest_sha256: de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5
+F4_R3_review_package_sha256: 87012474ef621d79cf54810ef09490593387d4f00a70e9c30e760b9cf476337b
+R1_validator: PASS_14_nodes_36_edges_22_fingerprints_zero_effect
+R2_validator: PASS_23_cases_3_mutations_zero_effect
+R3_validator: PASS_13_cases_3_mutations_zero_effect
+F4_R3_independent_review_result_created: false
+F4_accepted: false
+F4_frozen: false
+F5_started: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.2.md
+active_work_queue_sha256: 157eba0a56c2461874d8616dbb66c6217b4ed9dfa5540021ce7d3c8e6dfab456
+next_gate: F4_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R3 adds a dedicated `PRESTART` rejected reason and extends the total
+negative-over-unavailable lattice to all 12 final start rechecks. It does not
+accept/freeze F4, start F5/F6, or authorize implementation, runtime, database,
+authentication, credential, provider, Host executor, service, effect, public
+API, MCP, or Git delivery work.
+
+## F4 R1-R9 Atomic Freeze Closeout (2026-07-17)
+
+Jenn confirmed the complete Exact decision text in Section 6 A of the fixed
+F4 R9 Atomic Freeze Decision Package. The complete 29-subject unit is accepted
+and semantically frozen under the manifest precedence below. F4 revision stops
+at R9; partial acceptance and automatic downstream transition are forbidden.
+
+```yaml
+F4_status: ACCEPTED_FROZEN
+F4_atomic_freeze_gate: SATISFIED
+F4_acceptance_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE
+F4_subject_count: 29
+F4_partial_acceptance: forbidden
+F4_precedence:
+  - R9_Section_10_final_replacements
+  - R9_other_nonconflicting_clauses
+  - R8_other_explicit_replacements
+  - R7_other_explicit_replacements
+  - R6_other_explicit_replacements
+  - R5_other_explicit_replacements
+  - R4_other_explicit_replacements
+  - R3_other_explicit_replacements
+  - R2_other_explicit_replacements
+  - R1_all_other_clauses
+F4_manifest: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml
+F4_manifest_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+F4_manifest_verified_inputs: 47_47
+F4_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f4-r9-full-atomic-independent-review.yaml
+F4_independent_review_sha256: 376f7d3adcf55336b9419e785a92436f48dd0541b91d457a738a162429299667
+F4_independent_review_result: PASS_NO_BLOCKER
+F4_requires_R10: false
+F4_freeze_decision_package: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-freeze-decision-package-v0.1.md
+F4_freeze_decision_package_sha256: bd37fa970583eec47554a023290dab9328de0efa08dcc90519e06d4208eca87a
+F4_freeze_decision: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+F4_freeze_decision_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+F4_closeout_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f4-r9-atomic-freeze-closeout-v0.1.md
+F4_closeout_receipt_sha256: 2edc246236d8c7d0d48ce500ea4e63391da7078c2c04bf6a510c543b230a36bd
+F4_revisions_stopped: true
+F4_positive_operational_handoff_authorized: false
+F4_real_positive_handoff_status: NON_ISSUABLE_PENDING_INDEPENDENTLY_ACCEPTED_OWNER_INTERFACES_AND_CURRENT_PRODUCTION_RECEIPTS
+F5_started: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md
+active_work_queue_sha256: d99529fbf5f3143b8c4c326d560847eb97b2fe7d777728f10cd2cf01e1a0081c
+superseded_active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md
+consumer_default_queue_projection: SYNCHRONIZED_DURING_F3_F4_GIT_DURABILITY_CLOSEOUT
+default_v1_3_consumer_validation: PASS
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F5_EFFECT_EXECUTION_CONTRACT_CLOSURE
+```
+
+This freeze closes the F4 semantic contract and synthetic non-authority
+construction boundary only. It does not create a positive operational handoff,
+start F5/F6, or authorize implementation, runtime, production authentication,
+provider, Host, database, service, physical effect, public API, MCP, commit,
+push, PR, merge, release, deploy, or publish work.
 
 ## Stable Facts
 
@@ -1505,8 +2055,8 @@ provider, credential, commit, or push action.
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md`.
-- The active work queue's current `NOW` item is `No Active Automatic Construction Item`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md`.
+- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F5 Effect Execution Contract Closure`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.

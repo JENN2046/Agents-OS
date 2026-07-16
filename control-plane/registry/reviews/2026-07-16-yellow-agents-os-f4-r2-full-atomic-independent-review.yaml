@@ -1,0 +1,910 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r2-full-atomic-independent-review-v0.1
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-16
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE
+result: BLOCK
+requires_R3: true
+
+reviewer:
+  identity: Codex_F4_R2_Fresh_Full_Atomic_Hash_Bound_Independent_Reviewer
+  role: independent_reviewer_not_subject_author
+  author_of_subjects: false
+  independence_basis:
+    - fresh_judgment_from_the_hash_bound_manifest_and_six_subjects
+    - no_reliance_on_author_self_review_content_or_conclusion
+    - prior_R1_independent_review_used_only_for_F4_R1_FULL_ATOMIC_IR_B01_finding_lineage
+    - presentation_report_not_read_or_used
+  prohibited_input_compliance:
+    state_private_read: false
+    raw_logs_read: false
+    secrets_or_credentials_read: false
+    private_raw_memory_read: false
+    provider_raw_response_read: false
+    author_self_review_content_read: false
+    presentation_report_read: false
+  side_effect_compliance:
+    service_started: false
+    provider_called: false
+    database_accessed: false
+    Host_or_effect_executed: false
+    runtime_activated: false
+    commit_created: false
+    push_performed: false
+    merge_performed: false
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  externally_declared_sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24
+  recomputed_sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24
+  hash_match: true
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  canonical_authority_used: true
+  presentation_report_digest_bound: false
+  presentation_report_read: false
+
+input_hash_verification:
+  required_count: 24
+  verified_count: 24
+  matched_count: 24
+  mismatched_count: 0
+  unavailable_count: 0
+  all_inputs_verified: true
+  inputs:
+    - index: 1
+      role: normative_contract
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      expected_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      actual_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 2
+      role: constructive_M0_A_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      expected_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      actual_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 3
+      role: deterministic_M0_A_validator
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      expected_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      actual_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 4
+      role: normative_totality_amendment
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+      expected_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      actual_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 5
+      role: result_reason_totality_vector_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+      expected_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      actual_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 6
+      role: deterministic_totality_vector_validator
+      path: control-plane/registry/validate-f4-r2-result-reason-totality.py
+      expected_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      actual_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      status: MATCH
+      content_access: FULL_SUBJECT_READ
+    - index: 7
+      role: workspace_governance
+      path: AGENTS.md
+      expected_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      actual_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 8
+      role: accepted_resident_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      expected_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      actual_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      status: MATCH
+      content_access: HASH_AND_RELEVANT_AUTHORITY_SECTIONS
+    - index: 9
+      role: accepted_high_privilege_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+      expected_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+      actual_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 10
+      role: accepted_home_roadmap_subject
+      path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+      expected_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+      actual_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+      status: MATCH
+      content_access: HASH_AND_RELEVANT_PHASE_SECTIONS
+    - index: 11
+      role: accepted_home_roadmap_decision
+      path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+      expected_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+      actual_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 12
+      role: phase_4_start_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+      expected_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      actual_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 13
+      role: construction_readiness_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+      expected_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      actual_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 14
+      role: accepted_F1_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+      expected_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+      actual_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 15
+      role: frozen_F2_decision
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+      expected_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+      actual_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 16
+      role: frozen_F2_atomic_manifest
+      path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+      expected_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+      actual_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+      status: MATCH
+      content_access: HASH_BOUNDARY_ONLY
+    - index: 17
+      role: frozen_F3_decision
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+      expected_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+      actual_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 18
+      role: frozen_F3_atomic_manifest
+      path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+      expected_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+      actual_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+      status: MATCH
+      content_access: HASH_BOUNDARY_ONLY
+    - index: 19
+      role: immutable_F4_start_decision
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml
+      expected_sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+      actual_sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 20
+      role: prior_R1_review_package_manifest
+      path: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.manifest.yaml
+      expected_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54
+      actual_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54
+      status: MATCH
+      content_access: HASH_LINEAGE_ONLY
+    - index: 21
+      role: prior_R1_fresh_full_atomic_independent_review
+      path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml
+      expected_sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+      actual_sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+      status: MATCH
+      content_access: F4_R1_FULL_ATOMIC_IR_B01_FINDING_LINEAGE_ONLY
+    - index: 22
+      role: R1_finding_disposition
+      path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml
+      expected_sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf
+      actual_sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf
+      status: MATCH
+      content_access: FULL_LINEAGE_READ
+    - index: 23
+      role: immutable_R2_start_decision
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml
+      expected_sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b
+      actual_sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b
+      status: MATCH
+      content_access: FULL_AUTHORITY_READ
+    - index: 24
+      role: R2_author_self_review_not_independent
+      path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-result-reason-totality-closure-self-review.yaml
+      expected_sha256: c0202bd21d072fbcd47146e00100597067c127542b3196699e73b1a4bdbc437a
+      actual_sha256: c0202bd21d072fbcd47146e00100597067c127542b3196699e73b1a4bdbc437a
+      status: MATCH
+      content_access: HASH_ONLY_CONTENT_FORBIDDEN_AND_NOT_OPENED
+
+atomic_subject_review:
+  subject_count_required: 6
+  subject_count_fully_read: 6
+  subject_reads_complete: true
+  partial_review_performed: false
+  atomic_review_complete: true
+  precedence_applied:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+  subjects_unchanged_before_and_after_review: true
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256_before: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      sha256_after: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      full_bytes_reviewed: true
+      unchanged: true
+    - role: constructive_M0_A_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256_before: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      sha256_after: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      full_bytes_reviewed: true
+      unchanged: true
+    - role: deterministic_M0_A_validator
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256_before: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      sha256_after: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      full_bytes_reviewed: true
+      unchanged: true
+    - role: normative_totality_amendment
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+      sha256_before: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      sha256_after: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      full_bytes_reviewed: true
+      unchanged: true
+    - role: result_reason_totality_vector_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+      sha256_before: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      sha256_after: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      full_bytes_reviewed: true
+      unchanged: true
+    - role: deterministic_totality_vector_validator
+      path: control-plane/registry/validate-f4-r2-result-reason-totality.py
+      sha256_before: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      sha256_after: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      full_bytes_reviewed: true
+      unchanged: true
+
+validator_execution:
+  R1_M0_A:
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f4-m0a-witness.py
+    exit_code: 0
+    result: PASS
+    stdout_exact: '{"acceptance_count": 1, "accepted_handoff_count": 1, "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE", "edge_count": 36, "external_effect_count": 0, "fixture_canonical_sha256": "c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2", "interface_version": "agents-os.f4-m0a-witness.v0.1", "node_count": 14, "node_hashes_verified": 14, "provider_call_count": 0, "raw_secret_count": 0, "result": "PASS", "schema_fingerprints_verified": 22, "terminal_outcome": "NOT_EXECUTED"}'
+    counts:
+      nodes: 14
+      edges: 36
+      node_hashes_verified: 14
+      schema_fingerprints_verified: 22
+      acceptance_count: 1
+      accepted_handoff_count: 1
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+      terminal_outcome: NOT_EXECUTED
+  R2_result_reason_totality:
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+    exit_code: 0
+    result: PASS
+    stdout_exact: '{"admission_case_count":6,"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"a6e14eaf85d456fce48cb9a89d31f7a61f7a316468562f2a869763d1c95baf65","fixture_file_sha256":"048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad","host_case_count":5,"negative_mutations_rejected":3,"permit_case_count":12,"provider_call_count":0,"raw_secret_count":0,"result":"PASS","total_case_count":23}'
+    counts:
+      host_cases: 5
+      permit_cases: 12
+      admission_cases: 6
+      total_cases: 23
+      negative_mutations_rejected: 3
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+
+supplemental_reviewer_enumeration:
+  mode: in_memory_import_of_hash_bound_R2_validator_no_file_write
+  result: PASS
+  host_reason_enum_values_exercised: 13/13
+  permit_single_negative_check_mappings_exercised: 19/19
+  permit_REJECTED_plus_INDETERMINATE_dominance_exercised: 19/19
+  admission_single_negative_check_mappings_exercised: 18/18
+  admission_REJECTED_plus_INDETERMINATE_dominance_exercised: 18/18
+  unknown_field_unknown_enum_invalid_NOT_APPLICABLE_rejected: 3/3
+  note: >-
+    This enumeration confirms the implemented closed lists and mappings but
+    cannot repair normative predicates absent from those closed lists. The
+    PRESTART blocker below is such an absent Host predicate.
+
+required_review_questions:
+  required_count: 24
+  answered_count: 24
+  pass_count: 18
+  block_count: 6
+  results:
+    - id: all_24_manifest_inputs_recompute_and_all_six_subjects_are_reviewed_atomically
+      result: PASS
+      evidence: 24/24 hashes MATCH and 6/6 subjects were fully read under one R2-over-R1 review.
+    - id: R2_precedence_is_unambiguous_and_all_R1_subject_bytes_remain_fixed
+      result: PASS
+      evidence: R2 explicit replacements were applied first and all three fixed R1 subject hashes remained unchanged.
+    - id: F4_R1_FULL_ATOMIC_IR_B01_is_fully_closed_without_regression
+      result: PASS
+      evidence: >-
+        For the exact R1 B01 lineage in Sections 5.2, 7.2, 9.2 and I19/I20,
+        R2 Sections 2-5 and 7 provide negative-over-unavailable dominance,
+        ordered reasons, missing currentness reasons and disjoint replacement
+        invariants. The new findings below are fresh uncovered surfaces, not a
+        reopening of the exact recorded B01 section set.
+    - id: shared_result_lattice_is_total_for_every_schema_valid_normalized_tuple
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B01]
+      evidence: R1 permits Host lifecycle PRESTART but R2 has no normalized rejected candidate for a known PRESTART Host whose time and other evidence pass.
+    - id: proven_negative_dominates_every_concurrent_indeterminate_observation
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B02]
+      evidence: R1 Section 9.4 remains outside R2 replacement scope and does not order a proven negative start recheck over a concurrent unavailable recheck.
+    - id: Host_authentication_reason_classification_and_precedence_are_total
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B01]
+      evidence: The 13 declared reason values are ordered, but the valid PRESTART lifecycle predicate is unmapped.
+    - id: all_19_TaskPermit_currentness_checks_have_exact_reason_coverage
+      result: PASS
+      evidence: 19/19 single-negative mappings and 19/19 mixed negative-plus-indeterminate cases reproduced.
+    - id: TaskPermit_lifecycle_time_integrity_and_unavailable_paths_are_total
+      result: PASS
+      evidence: ISSUED/ACTIVE success, four terminal classes, INDETERMINATE lifecycle, time bounds, impossible intervals and unavailable paths have ordered outcomes.
+    - id: all_18_Host_local_admission_checks_have_exact_reason_coverage
+      result: PASS
+      evidence: 18/18 single-negative mappings and 18/18 mixed negative-plus-indeterminate cases reproduced.
+    - id: known_stale_fence_or_epoch_is_REJECTED_not_INDETERMINATE
+      result: PASS
+      evidence: R2 Sections 4-5 and both fence-plus-epoch vectors select REJECTED with EPOCH_STALE/FENCE_STALE or STALE_FENCE/STALE_EPOCH by fixed precedence.
+    - id: I19_R2_and_I20_R2_are_disjoint_complete_and_consistent
+      result: PASS
+      evidence: I19-R2 has the explicit no-proven-negative guard and I20-R2 has the complementary any-proven-negative guard.
+    - id: result_reason_and_fingerprint_are_unique_for_one_evidence_tuple
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B01, F4-R2-FULL-ATOMIC-IR-B02]
+      evidence: PRESTART has no canonical Host reason and Section 9.4 has unmapped/multiple start-disposition reason candidates.
+    - id: all_23_totality_vectors_and_three_negative_mutations_reproduce
+      result: PASS
+      evidence: R2 validator reports 23 cases and 3 rejected negative mutations with exit code 0.
+    - id: R1_M0_A_witness_still_reproduces_14_nodes_36_edges_22_fingerprints
+      result: PASS
+      evidence: R1 validator reports 14 nodes, 36 edges, 22 schema fingerprints and 0 effects.
+    - id: F1_F2_F3_authority_is_preserved_without_identity_or_responsibility_spoofing
+      result: PASS
+      evidence: Exact accepted/frozen bindings remain read-only; permit issuance re-reads their current fingerprints and neither Host nor downstream facts substitute for them.
+    - id: Host_authentication_revocation_and_compromise_cannot_be_bypassed
+      result: PASS
+      evidence: COMPROMISED and REVOKED are higher-priority rejected candidates; compromise is terminal, invalidates earlier epochs and advances the Host fence.
+    - id: no_fail_open_currentness_or_authority_expansion_exists
+      result: PASS
+      evidence: Both findings block deterministic emission but confer no AUTHENTICATED, VALID, ADMITTED, acceptance or handoff authority.
+    - id: Rust_single_writer_and_advisory_JavaScript_boundary_remain_closed
+      result: PASS
+      evidence: R1 Sections 9, 10 and 14 reserve canonical writes to the frozen F3 singleton Rust writer and make JavaScript transport/advisory only.
+    - id: Task_Host_effect_fences_remain_monotonic_and_non_resurrecting
+      result: PASS
+      evidence: All three generations are append-only, advance exactly by one and old generations cannot become current after replay, restore or recovery.
+    - id: replay_lost_reply_crash_and_unknown_outcome_semantics_remain_unambiguous
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B02]
+      evidence: Core crash lookup is closed, but identical Section 9.4 recheck evidence can still derive different first fact bytes/reasons under one observation identity.
+    - id: proof_DAG_and_constructive_M0_A_remain_acyclic_and_possible
+      result: PASS
+      evidence: Validator confirms 14 topologically ordered nodes, 36 earlier-node edges, one acceptance, one handoff and zero effect/provider/secret counts.
+    - id: F5_F6_and_implementation_ownership_do_not_leak_into_F4_R2
+      result: PASS
+      evidence: F4 exports only a sealed handoff; F5 outcome/recovery and F6 validation remain downstream and all implementation/runtime authority remains false.
+    - id: no_internal_contradiction_or_unmapped_reason_candidate_remains
+      result: BLOCK
+      finding_ids: [F4-R2-FULL-ATOMIC-IR-B01, F4-R2-FULL-ATOMIC-IR-B02]
+      evidence: PRESTART and the three Section 9.4 recheck fields create concrete unmapped negative predicates; Section 9.4 also lacks mixed-state and multi-negative precedence.
+    - id: non_authorization_boundary_is_exact_and_complete
+      result: PASS
+      evidence: Review, validators and subjects do not accept/freeze F4 or authorize F5/F6, implementation, database, runtime, provider, credentials, service, public API/MCP or Git delivery.
+
+required_adversarial_checks:
+  required_count: 23
+  answered_count: 23
+  passed_count: 23
+  failed_count: 0
+  all_passed: true
+  results:
+    - id: task_negative_plus_policy_unavailable
+      result: PASS
+      evidence: permit-task-negative-plus-policy-unavailable -> REJECTED/TASK_STALE
+    - id: Host_revoked_plus_verifier_unavailable
+      result: PASS
+      evidence: host-revoked-plus-verifier-unavailable -> REJECTED/REVOKED
+    - id: Host_compromised_plus_revoked
+      result: PASS
+      evidence: host-compromised-plus-revoked -> REJECTED/COMPROMISED
+    - id: Host_unavailable_without_negative
+      result: PASS
+      evidence: host-unavailable-only -> INDETERMINATE/VERIFIER_UNAVAILABLE
+    - id: Host_expired_plus_not_yet_valid_ordering
+      result: PASS
+      evidence: host-expired-plus-not-yet-valid -> REJECTED/EXPIRED
+    - id: prohibited_plus_Host_authentication_negative
+      result: PASS
+      evidence: permit-prohibited-plus-host-auth-negative -> REJECTED/PROHIBITED
+    - id: capability_currentness_rejected
+      result: PASS
+      evidence: permit-capability-reason-coverage -> REJECTED/CAPABILITY_STALE
+    - id: resource_currentness_rejected
+      result: PASS
+      evidence: permit-resource-reason-coverage -> REJECTED/RESOURCE_STALE
+    - id: secret_handle_currentness_rejected
+      result: PASS
+      evidence: permit-secret-reason-coverage -> REJECTED/SECRET_HANDLE_STALE
+    - id: permit_attestation_currentness_rejected
+      result: PASS
+      evidence: permit-attestation-reason-coverage -> REJECTED/ATTESTATION_STALE
+    - id: human_presence_currentness_rejected
+      result: PASS
+      evidence: permit-human-presence-reason-coverage -> REJECTED/HUMAN_PRESENCE_STALE
+    - id: currentness_unavailable_without_negative
+      result: PASS
+      evidence: permit-unavailable-only -> INDETERMINATE/UNAVAILABLE
+    - id: stale_fence_plus_stale_execution_epoch_currentness
+      result: PASS
+      evidence: permit-fence-plus-epoch-negative -> REJECTED/EPOCH_STALE
+    - id: impossible_time_classification
+      result: PASS
+      evidence: permit-impossible-time-classification -> REJECTED/INTEGRITY_FAILURE
+    - id: consumed_permit_plus_unavailable_input
+      result: PASS
+      evidence: permit-consumed-plus-unavailable -> REJECTED/INVOCATIONS_EXHAUSTED
+    - id: permit_negative_plus_Host_unavailable_admission
+      result: PASS
+      evidence: admission-permit-negative-plus-host-unavailable -> REJECTED/PERMIT_INVALID
+    - id: admission_prohibited_plus_invalid_request
+      result: PASS
+      evidence: admission-prohibited-plus-invalid-request -> REJECTED/PROHIBITED
+    - id: admission_stale_fence_plus_stale_epoch
+      result: PASS
+      evidence: admission-stale-fence-plus-epoch -> REJECTED/STALE_FENCE
+    - id: admission_unavailable_without_negative
+      result: PASS
+      evidence: admission-unavailable-only -> INDETERMINATE/CURRENTNESS_UNAVAILABLE
+    - id: admission_integrity_failure_plus_prohibited
+      result: PASS
+      evidence: admission-integrity-dominates-prohibited -> REJECTED/INTEGRITY_FAILURE
+    - id: changed_expected_result_is_rejected
+      result: PASS
+      evidence: R2 negative self-tests reject changed Host and admission expected results.
+    - id: changed_expected_reason_is_rejected
+      result: PASS
+      evidence: R2 negative self-tests reject a changed permit expected reason.
+    - id: unknown_field_enum_or_invalid_NOT_APPLICABLE_rejects_before_reduction
+      result: PASS
+      evidence: Supplemental checks reject an added currentness field, BOGUS Host observation and NOT_APPLICABLE on task_binding_current.
+
+Host_reason_enum_coverage:
+  declared_reason_count: 13
+  enum_values_exercised_count: 13
+  enum_values_exercised: 13/13
+  enum_values:
+    - MATCH
+    - EXPIRED
+    - NOT_YET_VALID
+    - SUSPENDED
+    - REVOKED
+    - COMPROMISED
+    - RETIRED
+    - PROFILE_MISMATCH
+    - CHALLENGE_MISMATCH
+    - VERIFIER_UNAVAILABLE
+    - REVOCATION_UNAVAILABLE
+    - INTEGRITY_FAILURE
+    - UNKNOWN
+  enum_value_coverage_result: PASS
+  semantic_predicate_totality_result: BLOCK
+  unmapped_proven_negative_predicates:
+    - HostIdentityRevisionV0_1.lifecycle_state_PRESTART
+  finding_ids: [F4-R2-FULL-ATOMIC-IR-B01]
+
+TaskPermit_currentness_check_reason_mapping_coverage:
+  declared_check_count: 19
+  mapped_check_count: 19
+  coverage: 19/19
+  result: PASS
+  mappings:
+    task_binding_current: TASK_STALE
+    actor_binding_current: ACTOR_STALE
+    resident_command_binding_current: COMMAND_STALE
+    host_identity_current: HOST_STALE
+    host_authentication_current: AUTH_STALE
+    policy_current: POLICY_STALE
+    prohibited_boundary_current: PROHIBITED
+    capability_grants_current: CAPABILITY_STALE
+    resource_grants_current: RESOURCE_STALE
+    secret_handle_bindings_current: SECRET_HANDLE_STALE
+    permit_attestation_current: ATTESTATION_STALE
+    human_presence_current: HUMAN_PRESENCE_STALE
+    Jenn_authorization_current: AUTHORIZATION_STALE
+    time_window_current: NOT_YET_VALID_or_EXPIRED_or_INTEGRITY_FAILURE_by_closed_time_predicate
+    invocation_available: INVOCATIONS_EXHAUSTED
+    execution_epoch_current: EPOCH_STALE
+    host_fence_current: FENCE_STALE
+    effect_fence_current: FENCE_STALE
+    task_fence_current: FENCE_STALE
+
+Host_local_admission_check_reason_mapping_coverage:
+  declared_check_count: 18
+  mapped_check_count: 18
+  coverage: 18/18
+  result: PASS
+  mappings:
+    request_integrity: INVALID_REQUEST
+    permit_currentness: PERMIT_INVALID
+    host_authentication: HOST_UNAUTHENTICATED
+    host_ownership: HOST_NOT_OWNER
+    task_fence_match: STALE_FENCE
+    host_fence_match: STALE_FENCE
+    effect_fence_match: STALE_FENCE
+    execution_epoch_match: STALE_EPOCH
+    capability_subset: CAPABILITY_DENIED
+    resource_subset: RESOURCE_DENIED
+    secret_handle_scope: SECRET_HANDLE_DENIED
+    permit_attestation: ATTESTATION_INVALID
+    human_presence: HUMAN_PRESENCE_MISSING
+    effect_intent_exact_match: EFFECT_MISMATCH
+    idempotency_identity_match: IDEMPOTENCY_CONFLICT
+    invocation_slot_available: INVOCATION_UNAVAILABLE
+    prohibited_boundary: PROHIBITED
+    Jenn_authorization: AUTHORIZATION_MISSING
+
+adversarial_decisions:
+  declared_count: 59
+  individually_reviewed_count: 59
+  passed_count: 59
+  failed_count: 0
+  adversarial_decisions_passed_out_of_59: 59/59
+  result: PASS
+  passed_ids:
+    - A01
+    - A02
+    - A03
+    - A04
+    - A05
+    - A06
+    - A07
+    - A08
+    - A09
+    - A10
+    - A11
+    - A12
+    - A13
+    - A14
+    - A15
+    - A16
+    - A17
+    - A18
+    - A19
+    - A20
+    - A21
+    - A22
+    - A23
+    - A24
+    - A25
+    - A26
+    - A27
+    - A28
+    - A29
+    - A30
+    - A31
+    - A32
+    - A33
+    - A34
+    - A35
+    - A36
+    - A37
+    - A38
+    - A39
+    - A40
+    - A41
+    - A42
+    - A43
+    - A44
+    - A45
+    - A46
+    - A47
+    - A48
+    - A49
+    - A50
+    - A51
+    - A52
+    - A53
+    - A54
+    - A55
+    - A56
+    - A57
+    - A58
+    - A59
+  note: >-
+    The two blockers are valid counterexamples outside the declared A01-A59
+    list; therefore they do not falsify the exact listed decisions but do
+    prevent the atomic contract from passing.
+
+normative_invariants:
+  declared_count: 64
+  effective_invariants_reviewed_count: 64
+  passed_count: 63
+  failed_count: 1
+  normative_invariants_passed_out_of_64: 63/64
+  result: BLOCK
+  failed_ids:
+    - I20-R2
+  failure_basis: >-
+    I20-R2 requires every reproducibly proven negative to be REJECTED with the
+    first present fixed rejected reason. A current, canonical PRESTART Host is
+    a known failure of R1's ACTIVE requirement, but R2 supplies no PRESTART
+    rejected candidate, so no first present reason exists.
+  passed_ids:
+    - I01
+    - I02
+    - I03
+    - I04
+    - I05
+    - I06
+    - I07
+    - I08
+    - I09
+    - I10
+    - I11
+    - I12
+    - I13
+    - I14
+    - I15
+    - I16
+    - I17
+    - I18
+    - I19-R2
+    - I21
+    - I22
+    - I23
+    - I24
+    - I25
+    - I26
+    - I27
+    - I28
+    - I29
+    - I30
+    - I31
+    - I32
+    - I33
+    - I34
+    - I35
+    - I36
+    - I37
+    - I38
+    - I39
+    - I40
+    - I41
+    - I42
+    - I43
+    - I44
+    - I45
+    - I46
+    - I47
+    - I48
+    - I49
+    - I50
+    - I51
+    - I52
+    - I53
+    - I54
+    - I55
+    - I56
+    - I57
+    - I58
+    - I59
+    - I60
+    - I61
+    - I62
+    - I63
+    - I64
+
+mandatory_risk_counts:
+  identity_spoofing_count: 0
+  authority_expansion_count: 0
+  host_authentication_bypass_count: 0
+  revocation_or_compromise_bypass_count: 0
+  fail_open_currentness_count: 0
+  dual_writer_count: 0
+  circular_proof_count: 0
+  crash_or_replay_ambiguity_count: 1
+  downstream_boundary_leak_count: 0
+  M0_impossibility_count: 0
+  internal_contradiction_count: 2
+  unmapped_reason_surface_count: 2
+  note: >-
+    Both blockers are fail-closed canonical determinism defects. They do not
+    create a successful Host authentication, admission, handoff or external
+    effect path, but B02 creates first-fact/replay fingerprint ambiguity.
+
+findings_summary:
+  blocker_count: 2
+  major_count: 0
+  minor_count: 0
+  total_count: 2
+  unresolved_count: 2
+  requires_R3: true
+
+findings:
+  - id: F4-R2-FULL-ATOMIC-IR-B01
+    severity: BLOCKER
+    title: PRESTART Host identity has no canonical Host authentication rejected reason
+    exact_section_evidence:
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_5.1_HostIdentityRevisionV0_1
+        lines: 260-288
+        evidence: lifecycle_state explicitly admits PRESTART.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_5.2_HostAuthenticationAssessmentV0_1
+        lines: 290-319
+        evidence: AUTHENTICATED requires an ACTIVE Host and every proven negative must be REJECTED with one of 13 closed reasons.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+        section: Section_3.1_Closed_observation_classes_and_3.2_exact_precedence
+        lines: 100-148
+        evidence: rejected lifecycle candidates cover COMPROMISED, REVOKED, RETIRED and SUSPENDED but omit PRESTART; NOT_YET_VALID is limited to trusted time before validity start.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+        section: Section_7_I20_R2
+        lines: 351-364
+        evidence: every proven negative must have a first present fixed rejected reason.
+    concrete_counterexample:
+      host_identity_lifecycle_state: PRESTART
+      host_identity_validity_start_utc_ms: 1000
+      host_identity_validity_end_utc_ms: null
+      assessment_trusted_time_utc_ms: 1500
+      assessment_valid_until_utc_ms: 5000
+      profile_match: true
+      challenge_match: true
+      revocation_head_readable_and_not_revoked: true
+      verifier_evidence_valid: true
+      explanation: >-
+        The tuple is canonical, available and inside both time windows, so it
+        has no integrity, unavailable, expiry or not-yet-valid candidate. It
+        cannot emit MATCH because R1 requires ACTIVE. PRESTART is therefore a
+        proven negative with no member in the closed rejected reason order.
+    impact: >-
+      A conforming verifier cannot emit one schema-valid canonical assessment
+      or fingerprint for this constructible Host state. Improvised mappings
+      would produce divergent immutable bytes. The gap is fail closed and is
+      not a Host authentication bypass, but it violates mandatory Host
+      totality, uniqueness and I20-R2.
+    minimum_correction:
+      - Add one exact PRESTART predicate mapping to a closed rejected reason; either add a dedicated PRESTART/NOT_ACTIVE reason or explicitly and semantically redefine an existing reason.
+      - Insert that reason into the fixed rejected precedence without weakening any existing negative.
+      - Add a PRESTART vector with in-window time and a PRESTART-plus-unavailable mixed vector, plus negative expected-result/reason mutations.
+      - Recount the Host enum and publish a new hash-bound R3 atomic review package.
+    fail_open: false
+    requires_R3: true
+
+  - id: F4-R2-FULL-ATOMIC-IR-B02
+    severity: BLOCKER
+    title: HostWorkStartDisposition remains non-total and has unmapped negative rechecks
+    exact_section_evidence:
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+        section: Section_1_and_Section_2_replacement_scope
+        lines: 40-52
+        evidence: R2 preserves R1 handoff/replay rules and replaces result selection only in R1 Sections 5.2, 7.2 and 9.2, not Section 9.4.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_9.4_HostWorkStartDispositionFactV0_1_schema
+        lines: 807-837
+        evidence: secret_handles_current, permit_attestation_current and human_presence_current each admit REJECTED/INDETERMINATE, but the reason enum has no corresponding secret-handle, attestation or human-presence reason.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_9.4_result_reason_and_replay_prose
+        lines: 839-867
+        evidence: NOT_STARTED requires one proven negative and INDETERMINATE requires unavailable evidence, but no dominance rule, check-to-reason mapping or multi-negative precedence is defined before the fingerprint/replay rule.
+    concrete_counterexamples:
+      - name: unmapped_known_negative
+        tuple:
+          acceptance_present: true
+          before_expiry: true
+          owner_Host_authenticated: true
+          all_fences_match: true
+          execution_epoch_matches: true
+          secret_handles_current: REJECTED
+          permit_attestation_current: PASS
+          human_presence_current: NOT_APPLICABLE
+        contradiction: >-
+          START_AUTHORITY_CURRENT is forbidden and NOT_STARTED is required,
+          but none of EXPIRED, FENCED, HOST_UNAUTHENTICATED, EPOCH_STALE,
+          ACCEPTANCE_MISSING or INTEGRITY_FAILURE truthfully maps a current,
+          reproducibly revoked/out-of-scope secret handle.
+      - name: mixed_negative_and_unavailable
+        tuple:
+          secret_handles_current: REJECTED
+          permit_attestation_current: INDETERMINATE
+          human_presence_current: NOT_APPLICABLE
+        contradiction: >-
+          R1 Section 9.4 simultaneously satisfies the prose condition for
+          NOT_STARTED and the prose condition for INDETERMINATE; R2 does not
+          replace this section or state which one dominates.
+      - name: multiple_negative_reason_precedence
+        tuple:
+          expired: true
+          fence_mismatch: true
+          host_authentication_current: false
+        contradiction: EXPIRED, FENCED and HOST_UNAUTHENTICATED are all truthful but no first-priority reason is specified.
+    impact: >-
+      The same final-recheck evidence and observation identity can yield no
+      legal reason or multiple legal result/reason bytes before first commit.
+      Because reason is fingerprinted, this creates canonical and replay
+      ambiguity immediately before the F5 handoff. Every non-success path still
+      fails closed, so no effect authority is granted by the defect.
+    minimum_correction:
+      - Extend the total negative-over-unavailable lattice to HostWorkStartDispositionFactV0_1.
+      - Map every identity, expiry, fence, epoch, acceptance, secret-handle, attestation and human-presence predicate to an exact closed reason.
+      - Define one rejected-reason precedence and one unavailable reason for every schema-valid normalized recheck tuple.
+      - Add mixed negative/unavailable, all three unmapped recheck negatives and multi-negative precedence vectors with changed-result/reason rejection tests.
+      - Re-run the M0 success witness unchanged only if its six subject hashes remain fixed, then perform a fresh full atomic R3 review.
+    fail_open: false
+    requires_R3: true
+
+non_authorization:
+  independent_review_result_created: true
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false
+  automatic_acceptance: forbidden
+  later_acceptance_authority: Jenn_only_after_a_fresh_hash_bound_PASS
+
+write_scope:
+  created_files:
+    - control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml
+  modified_existing_files: []
+  subject_files_modified: []
+  manifest_files_modified: []
+  presentation_files_modified: []
+  queue_registry_CURRENT_STATE_receipt_files_modified: []
+  review_self_sha256: external_to_avoid_self_digest_cycle
+
+mandatory_counts:
+  input_hashes_verified: 24/24
+  subjects_fully_read: 6/6
+  required_review_questions_answered: 24/24
+  required_review_questions_passed: 18/24
+  required_adversarial_checks_passed: 23/23
+  Host_reason_enum_values_exercised: 13/13
+  Host_semantic_predicate_totality: BLOCK
+  TaskPermit_currentness_checks_mapped: 19/19
+  Host_local_admission_checks_mapped: 18/18
+  adversarial_decisions_passed: 59/59
+  effective_normative_invariants_passed: 63/64
+  blocker_count: 2
+  major_count: 0
+  minor_count: 0
+  requires_R3: true
+
+final_reduction:
+  no_finding_rule_satisfied: false
+  result: BLOCK
+  acceptance_ready: false
+  reason: >-
+    All hashes, subject reads and validators reproduced, but Host PRESTART has
+    no canonical rejected reason and HostWorkStartDisposition remains outside
+    the R2 total reducer with unmapped and unordered negative evidence. Both
+    are blocking canonical determinism defects under the manifest output gate.
+  smallest_safe_next_step: >-
+    Create a narrow R3 amendment that closes both reason surfaces, add fixed
+    negative vectors, bind the new atomic subject set in a new manifest and
+    obtain another fresh full atomic hash-bound independent review. No F4
+    acceptance, implementation or downstream start is authorized here.

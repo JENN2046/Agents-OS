@@ -1,0 +1,618 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f3-r1-full-atomic-independent-review
+review_type: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+date: 2026-07-16
+reviewed_at: "2026-07-16T13:06:56+08:00"
+status: complete
+
+reviewer:
+  identity: Codex_f3_r1_fresh_full_atomic_independent_reviewer
+  independence_basis: >-
+    A separate reviewer agent that did not author the F3 R1 subject performed a
+    fresh review from the canonical manifest and presentation package. The
+    author self-review conclusion was not read or relied upon; only its lineage
+    digest was verified. All findings below were derived from the fixed R1
+    bytes and hash-bound canonical or frozen inputs.
+  author_of_subject: false
+  author_self_review_conclusion_read: false
+  author_self_review_relied_upon: false
+  prior_pass_relied_upon: false
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f3-r1-independent-review-package-v0.1.manifest.yaml
+  sha256: 40b07f20be1bd3d25dee62cf2a54dd6a0d8d9246b6d7774f98632ed27c35a2a6
+  observed_sha256: 40b07f20be1bd3d25dee62cf2a54dd6a0d8d9246b6d7774f98632ed27c35a2a6
+  self_digest_verified: true
+  all_input_hashes_verified: true
+  input_count_verified: 12
+  presentation_report_digest_bound: false
+
+verified_inputs:
+  - role: review_subject
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    expected_sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    observed_sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    verified: true
+  - role: workspace_governance
+    path: AGENTS.md
+    expected_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    observed_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    verified: true
+  - role: accepted_resident_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    expected_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    observed_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    verified: true
+  - role: accepted_home_direction_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    expected_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    observed_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    verified: true
+  - role: foundational_direction_acceptance
+    path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    expected_sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    observed_sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    verified: true
+  - role: phase_4_start_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    expected_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    observed_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    verified: true
+  - role: construction_readiness_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    expected_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    observed_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    verified: true
+  - role: frozen_F2_acceptance_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    observed_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    verified: true
+  - role: frozen_F2_atomic_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    expected_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    observed_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    verified: true
+  - role: non_authoritative_F2_effective_reading_surface
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    expected_sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    observed_sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    verified: true
+    authority: false
+  - role: immutable_F3_start_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1.yaml
+    expected_sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+    observed_sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+    verified: true
+  - role: author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-resident-singleton-napi-identity-continuity-r1-self-review.yaml
+    expected_sha256: cb90b51f832d21f547bb9eff79784c26f62c013d5a911f098cc18435aeb598f8
+    observed_sha256: cb90b51f832d21f547bb9eff79784c26f62c013d5a911f098cc18435aeb598f8
+    verified: true
+    conclusion_read_or_relied_upon: false
+
+secondary_frozen_F2_cross_checks:
+  authority_basis: frozen_F2_atomic_manifest
+  hashes_verified_against_that_manifest: true
+  subjects:
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R18: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+    R19: d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3
+    R20: cad4f293dee172d793db19c9cec0e6148116d44e6b659b3f2ed528a409f5772b
+    R21: 81faf12bb2af9921cc14f85920ea1db10bb5c58fb2ba906ae9f838a6071bcffc
+    R22: 78dd353fe35659669ed10b403d9b266937d91a5f455e13321ef5a9036330f365
+
+subject:
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+  sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+  observed_sha256_after_complete_read: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+  byte_count: 41728
+  line_count: 1050
+  complete_subject_reviewed: true
+  partial_review: false
+  bytes_reviewed_unchanged: true
+  modified_by_review: false
+
+result: BLOCK
+summary:
+  blocker_count: 0
+  major_count: 6
+  minor_count: 0
+  requires_R2: true
+  ready_for_Jenn_atomic_acceptance_decision: false
+  rationale: >-
+    Hash and atomic-scope gates passed, but six correctable major defects remain
+    in the fixed R1 contract: one accepted replay regression, one frozen F2 enum
+    regression, one non-total continuity reducer, one unclosed rollback/epoch
+    path, one missing intake/replay schema, and one non-constructive synthetic
+    M0 genesis. These are contract defects, not requests for implementation or
+    downstream F4/F5/F6 detail.
+
+mandatory_counts:
+  identity_spoofing: 0
+  dual_writer: 0
+  circular_proof: 0
+  authority_expansion: 0
+  fail_open_currentness: 1
+  replay_ambiguity: 2
+  downstream_boundary_leak: 0
+  M0_impossibility: 1
+  internal_contradiction: 0
+
+mandatory_count_basis:
+  identity_spoofing: complete adversarial review found no process/model/session-as-identity path
+  dual_writer: complete adversarial review found no two-live-writer construction; the separate stale-epoch defect is counted under fail_open_currentness
+  circular_proof: the defined Command-to-action graph is acyclic; the undefined intake/replay node is a missing-schema finding, not a demonstrated cycle
+  authority_expansion: no implementation, runtime, provider, database, service, or public-boundary authority is granted
+  fail_open_currentness: F3-R1-FULL-ATOMIC-IR-M04
+  replay_ambiguity: F3-R1-FULL-ATOMIC-IR-M01 and F3-R1-FULL-ATOMIC-IR-M05
+  downstream_boundary_leak: F4, F5, and F6 ownership remains explicit and reserved methods are inert
+  M0_impossibility: F3-R1-FULL-ATOMIC-IR-M06
+  internal_contradiction: no separate within-R1 self-contradiction counted; canonical-input regressions and missing definitions are tracked explicitly below
+
+additional_finding_counts:
+  accepted_architecture_regression: 1
+  frozen_F2_interface_regression: 1
+  non_total_reducer: 1
+  rollback_detection_gap: 1
+  missing_normative_schema: 1
+  synthetic_genesis_gap: 1
+
+required_question_checks:
+  - id: atomic_scope_complete_without_partial_authority_gap
+    result: BLOCK
+    evidence: Sections 1, 13, and 20
+    assessment: >-
+      The bundle is declared atomic and the complete subject was reviewed, but
+      the undefined intake/replay record and the missing synthetic pending-
+      Delegation genesis leave two authority gaps inside that atomic scope.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M05, F3-R1-FULL-ATOMIC-IR-M06]
+  - id: no_identity_spoofing_or_process_equals_identity_error
+    result: PASS
+    evidence: Sections 4, 6, 7, 15, and invariants F3-I01, F3-I17
+    assessment: >-
+      Resident identity is Jenn-decision-bound canonical identity evidence;
+      process, model, session, PID, marker, and epoch are explicitly denied as
+      independent identity evidence.
+  - id: dual_writer_and_stale_owner_paths_fail_closed
+    result: BLOCK
+    evidence: Sections 7.1-7.3, 16.1, and validation matrix line for epoch rollback
+    assessment: >-
+      The live dual-gate construction is sound, but an internally consistent
+      older ledger restore has no bound anti-rollback witness and can be
+      accepted as the current epoch lineage.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M04]
+  - id: one_thread_one_authoritative_connection_semantics_constructible
+    result: PASS
+    evidence: Sections 7.3, 13.1, 16.1, and F3-I03/F3-I04
+    assessment: >-
+      One Rust ledger thread owns one connection; reads and writes serialize
+      through it, and JavaScript, read pools, and other connections are closed.
+  - id: identity_continuity_and_discontinuity_reducer_total_and_non_circular
+    result: BLOCK
+    evidence: Section 15 and frozen F2 R19 Section 2.1
+    assessment: >-
+      The assessment graph is forward-only, but the reducer is not total over
+      the complete frozen F2 Actor assessment enum.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M03]
+  - id: N_API_boundary_closed_versioned_and_non_escalating
+    result: PASS
+    evidence: Sections 9 and 17
+    assessment: >-
+      Exactly five method names are admitted, every frame and payload schema is
+      closed/versioned, unknown values reject before ledger use, and three
+      downstream methods remain CONTRACT_NOT_ACTIVE with no operation.
+  - id: Command_definition_intent_assertion_context_envelope_action_DAG_acyclic
+    result: PASS
+    evidence: Sections 10-13 and frozen F2 R3/R4 reference formulas
+    assessment: >-
+      The Command fingerprint excludes its assertion; the assertion binds the
+      Command; context and envelope are descendants; action/ack references point
+      to the envelope, which has no backward action reference.
+  - id: currentness_revocation_and_command_commit_races_have_one_total_order
+    result: PASS
+    evidence: Sections 12, 13.1, and invariants F3-I10/F3-I11
+    assessment: >-
+      All current F2 assessments and the mutation share one writer transaction
+      and watermark, so revocation-before-commit denies and commit-before-
+      revocation remains historical only.
+  - id: replay_lost_response_and_changed_bytes_semantics_unambiguous
+    result: BLOCK
+    evidence: Sections 13.1-13.4 and accepted Resident Architecture Section 14
+    assessment: >-
+      COMMITTED lost-response and changed-Command behavior is deterministic,
+      but REJECTED commands contradict the accepted persisted-rejection rule,
+      and the canonical intake/replay record needed to recover the graph is not
+      defined.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M01, F3-R1-FULL-ATOMIC-IR-M05]
+  - id: F2_action_ref_and_activation_ack_requirements_preserved_exactly
+    result: BLOCK
+    evidence: Sections 12, 13.3, 14 and frozen F2 R3/R4/R15
+    assessment: >-
+      The action-ref and acknowledgement field/formula projections themselves
+      match frozen F2, but the ordinary Command gate names the impossible F2
+      authentication result VERIFIED instead of AUTHENTICATED, so the complete
+      F2 seam is not exact.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M02]
+  - id: Temporary_Worker_and_WORKER_ASSIGNMENT_HANDSHAKE_rules_closed
+    result: PASS
+    evidence: Sections 12, 14, F3-I14-F3-I16, and frozen F2 R18
+    assessment: >-
+      Ordinary Worker use requires the exact ACTIVE derived responsibility
+      assessment; activation uses NONE_ACTIVATION_PURPOSE_ONLY and binds the
+      exact WORKER_ASSIGNMENT_HANDSHAKE payload mode.
+  - id: F4_F5_F6_and_implementation_authority_not_silently_imported
+    result: PASS
+    evidence: Sections 3, 9, 10.1, 17, 21, and 22
+    assessment: >-
+      TaskPermit/host/fence, Outbox delivery/recovery, Validation decisions,
+      implementation, runtime, provider, service, and database authority remain
+      explicitly excluded.
+  - id: startup_recovery_readiness_and_shutdown_fail_closed
+    result: BLOCK
+    evidence: Sections 8, 16, and 19
+    assessment: >-
+      Early READY, corrupt graph repair, and shutdown paths fail closed, but
+      coherent ledger rollback/restore lacks a currentness anchor and can reach
+      READY under a reused historical epoch value.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M04]
+  - id: constructive_synthetic_M0_witness_possible_without_real_runtime_or_secrets
+    result: BLOCK
+    evidence: Sections 14 and 20; frozen F2 R8 Section 6 and R22 Sections 1-2
+    assessment: >-
+      The witness excludes all real secrets/runtime/provider/host authority, but
+      its listed frozen F2 synthetic starting surface cannot supply the pending
+      Delegation that the sole listed activation Command must acknowledge.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M06]
+  - id: no_internal_contradiction_or_missing_normative_schema
+    result: BLOCK
+    evidence: Sections 2, 12, 13, 15, and 20
+    assessment: >-
+      There is no additional within-R1 self-contradiction count, but two higher-
+      precedence contract regressions, one non-total reducer, one undefined
+      intake/replay record, and one synthetic genesis gap remain.
+    finding_ids:
+      - F3-R1-FULL-ATOMIC-IR-M01
+      - F3-R1-FULL-ATOMIC-IR-M02
+      - F3-R1-FULL-ATOMIC-IR-M03
+      - F3-R1-FULL-ATOMIC-IR-M05
+      - F3-R1-FULL-ATOMIC-IR-M06
+
+adversarial_checks:
+  - id: two_live_writers_each_satisfying_a_different_half
+    result: PASS
+    evidence: Sections 7.1-7.3 and 13.1
+    assessment: >-
+      Lock ownership and current epoch ownership are jointly rechecked inside
+      the one writer transaction; either half alone cannot commit.
+  - id: stale_or_rolled_back_epoch_accepted_after_restart
+    result: BLOCK
+    evidence: Sections 7.2 and 16.1
+    counterexample: >-
+      Restore an internally consistent authorized backup ending at epoch N after
+      epoch N+1 previously committed. With the process lock free, startup sees
+      no internal fork or gap, commits another epoch N+1 for a new incarnation,
+      and can derive READY because no external restore/high-watermark witness is
+      defined.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M04]
+  - id: model_or_session_continuity_without_canonical_identity_evidence
+    result: PASS
+    evidence: Sections 6, 15, and F3-I17
+    assessment: Model/session/provider changes neither prove nor write continuity.
+  - id: discontinuity_or_indeterminate_reaching_READY
+    result: PASS
+    evidence: Sections 8 and 15
+    assessment: READY requires CONTINUOUS at the same read barrier.
+  - id: javascript_direct_SQL_or_read_pool_becomes_second_authority_path
+    result: PASS
+    evidence: Sections 7.3 and 9
+    assessment: All three paths are explicitly forbidden; queries use the one controlled connection.
+  - id: unknown_N_API_method_or_schema_reaches_reducer
+    result: PASS
+    evidence: Section 9
+    assessment: Unknown method/version/schema/digest/enum/field rejects before ledger use.
+  - id: caller_supplies_context_envelope_Event_sequence_or_action_ref
+    result: PASS
+    evidence: Sections 11.2 and 13.1
+    assessment: These are unknown caller fields and every committed value is Rust-derived.
+  - id: authentication_assertion_and_Command_fingerprint_cycle
+    result: PASS
+    evidence: Sections 11.1-11.2
+    assessment: The assertion binds the already-computed Command fingerprint and is excluded from that Command.
+  - id: same_command_id_changed_payload_overwrites_original
+    result: PASS
+    evidence: Section 13.4 and F3-I07-F3-I09
+    assessment: Changed fingerprint returns PROTOCOL_CONFLICT and never replaces the original entry.
+  - id: lost_response_causes_second_mutation
+    result: PASS
+    evidence: Sections 13.4 and 16.3
+    assessment: Identical committed replay returns existing refs with no Event or reducer mutation.
+  - id: revocation_and_Command_use_different_currentness_watermarks
+    result: PASS
+    evidence: Sections 12 and 13.1
+    assessment: Current assessments and mutation share one transaction watermark.
+  - id: pending_Delegation_is_its_own_activation_responsibility_source
+    result: PASS
+    evidence: Sections 14.1-14.2
+    assessment: Activation requires NONE_ACTIVATION_PURPOSE_ONLY and rejects all responsibility substitutes.
+  - id: Temporary_Worker_Actor_ACTIVE_without_exact_responsibility_ACTIVE
+    result: PASS
+    evidence: Section 12 and frozen F2 R18 Section 3
+    assessment: The exact Task/Run binding assessment must itself be ACTIVE.
+  - id: WORKER_ASSIGNMENT_HANDSHAKE_without_exact_payload_mode
+    result: PASS
+    evidence: Sections 14.1-14.2 and F3-I16
+    assessment: The mode is a closed payload value checked against the exact Delegation and bound through the envelope.
+  - id: F3_envelope_treated_as_TaskPermit_or_host_admission
+    result: PASS
+    evidence: Sections 3, 10.1, and 17
+    assessment: F4 remains the sole owner of permit/host/fence admission.
+  - id: reserved_Outbox_or_reconcile_method_performs_partial_operation
+    result: PASS
+    evidence: Section 9 and F3-I19
+    assessment: Reserved methods return CONTRACT_NOT_ACTIVE and perform no operation.
+  - id: recovery_silently_repairs_fork_or_corrupt_history
+    result: PASS
+    evidence: Sections 16.1-16.2
+    assessment: Only derived indexes/projections rebuild; canonical history is never rewritten.
+  - id: synthetic_M0_depends_on_real_secret_provider_host_or_runtime
+    result: PASS
+    evidence: Section 20
+    assessment: The stated witness excludes every such real dependency; its separate synthetic-genesis defect is recorded below.
+
+additional_adversarial_checks:
+  - id: rejected_command_retried_after_gate_change_with_same_command_id
+    result: BLOCK
+    counterexample: >-
+      A Command rejected for a current gate leaves no entry under R1. After the
+      gate changes, the same command_id and bytes can commit, contradicting the
+      accepted persisted-rejection and new-command-id rule.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M01]
+  - id: frozen_F2_AUTHENTICATED_value_tested_against_VERIFIED_literal
+    result: BLOCK
+    counterexample: >-
+      A valid frozen F2 AuthenticationAssessment has AUTHENTICATED; it cannot
+      satisfy the R1 VERIFIED predicate. Emitting VERIFIED instead is rejected
+      by the frozen F2 closed enum.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M02]
+  - id: coordinator_Actor_assessment_SUPERSEDED
+    result: BLOCK
+    counterexample: >-
+      With a valid Resident CONTINUE head and epoch but a reproducible
+      SUPERSEDED assessment for the referenced coordinator Actor revision, none
+      of the Section 15 result branches specifies the continuity outcome.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M03]
+  - id: undefined_intake_ref_uses_content_address_of_record_that_contains_envelope_fingerprint
+    result: BLOCK
+    counterexample: >-
+      The envelope fingerprint contains F3_intake_state_ref while the prose says
+      the referenced intake record contains the envelope fingerprint. A content-
+      addressed ref creates a cycle; an opaque ref avoids it. R1 defines neither
+      the record schema nor the ref rule, so both implementations can claim the
+      prose and recovery cannot verify one canonical graph.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M05]
+  - id: exact_F2_synthetic_manifest_then_activation_ACK
+    result: BLOCK
+    counterexample: >-
+      The frozen F2 synthetic manifest materializes only Profile, Principal, and
+      Binding roots. Starting from that exact surface and the listed F3 ACK type
+      yields no pending Delegation; fabricating one lacks its required committed
+      issuance action and importing one violates the stated starting surface.
+    finding_ids: [F3-R1-FULL-ATOMIC-IR-M06]
+
+findings:
+  - id: F3-R1-FULL-ATOMIC-IR-M01
+    severity: MAJOR
+    title: REJECTED Command replay semantics regress the accepted Resident Architecture
+    section: F3 R1 Sections 2, 13.1, and 13.4; accepted Resident Operating Architecture Section 14
+    evidence: >-
+      R1 ranks the accepted architecture above itself. R1 Section 13.4 says a
+      no-entry submission either commits one entry or rolls back with no entry,
+      and Section 13.1 says a failed gate rolls back the whole mutation. The
+      accepted architecture Section 14 instead requires a rejected Command
+      result to be persisted and requires a new command_id after conditions
+      change.
+    counterexample: >-
+      Command X is rejected because a current responsibility gate is inactive.
+      R1 stores no replay entry. The gate later becomes active and the caller
+      resubmits byte-identical X; R1 can COMMIT X, whereas the higher-precedence
+      architecture requires replay of the first rejection and a new command_id.
+    impact: >-
+      One command identity can change disposition after a gate change, and the
+      fixed intake contract no longer provides the accepted deterministic
+      rejection replay boundary.
+    required_correction: >-
+      In R2, define an immutable REJECTED intake/replay entry that creates no
+      envelope, action ref, Event, or domain mutation; identical replay returns
+      the first low-disclosure rejection; a changed fingerprint conflicts; and
+      retry after a condition change requires a new command_id. Reconcile this
+      with the exact source/global command-id specialization explicitly.
+
+  - id: F3-R1-FULL-ATOMIC-IR-M02
+    severity: MAJOR
+    title: Ordinary Command admission names a non-existent frozen F2 authentication result
+    section: F3 R1 Section 12, especially the ordinary Command gate; frozen F2 R15 Section 2.4
+    evidence: >-
+      R1 requires authentication assessment VERIFIED. Frozen F2
+      AuthenticationAssessmentV0_1R15 has the closed result enum AUTHENTICATED,
+      REJECTED, or INDETERMINATE. VERIFIED belongs to a different principal-
+      control proof interface and is not a valid AuthenticationAssessment value.
+    counterexample: >-
+      A fully valid F2 assessment returns AUTHENTICATED and fails the literal R1
+      gate. Returning VERIFIED to satisfy R1 is an unknown frozen F2 enum value
+      and must reject.
+    impact: >-
+      No ordinary Command can simultaneously satisfy the literal R1 gate and the
+      frozen F2 interface, so the F2-to-F3 admission seam is not constructible.
+    required_correction: >-
+      Replace the ordinary authentication gate value with exact
+      AuthenticationAssessmentV0_1R15.assessment = AUTHENTICATED and audit every
+      F3 reference so VERIFIED remains limited to its frozen proof-assessment
+      interface.
+
+  - id: F3-R1-FULL-ATOMIC-IR-M03
+    severity: MAJOR
+    title: Resident identity-continuity reducer is not total over the frozen Actor assessment enum
+    section: F3 R1 Section 15; frozen F2 R19 Section 2.1
+    evidence: >-
+      Frozen F2 exposes NOT_YET_ACTIVE, ACTIVE, SUSPENDED, COMPROMISED, RETIRED,
+      EXPIRED, SUPERSEDED, and INDETERMINATE. R1 Section 15 explicitly handles
+      only COMPROMISED, RETIRED, and INDETERMINATE in its Actor-status branch,
+      then uses an undefined all-exact-facts-current predicate for CONTINUOUS.
+      It supplies no explicit result for a SUPERSEDED referenced Actor revision
+      and does not define how the Jenn-decision exception changes each branch.
+    counterexample: >-
+      The Resident CONTINUE chain and epoch are valid, but the exact referenced
+      coordinator Actor revision assesses SUPERSEDED. It is not one of the
+      listed INDETERMINATE statuses, while the all-current condition cannot hold;
+      no result or reason code is defined.
+    impact: >-
+      Two conforming reducers can choose different continuity/readiness results
+      for a frozen F2 state, so the required total fail-closed reducer is absent.
+    required_correction: >-
+      Give R2 a precedence-ordered result for every frozen F2 Actor assessment
+      value, define whether and how an exact Jenn continuity decision affects
+      each value, define the complete reason-code set, and add an explicit final
+      fail-closed fallback.
+
+  - id: F3-R1-FULL-ATOMIC-IR-M04
+    severity: MAJOR
+    title: Monotonic authority-epoch rollback rejection has no constructible currentness anchor
+    section: F3 R1 Sections 7.2, 16.1-16.2, and 19; accepted Resident Architecture Sections 16 and 23
+    evidence: >-
+      R1 requires rollback to produce INDETERMINATE and tests epoch rollback,
+      while the accepted architecture supports backup/restore validation. The
+      only persistent epoch evidence R1 defines is inside the same canonical
+      ledger being restored; the OS lock is process-lifetime and carries no
+      durable high-watermark. No accepted restore generation, external monotonic
+      anchor, or Jenn restore decision is bound into startup.
+    counterexample: >-
+      After epoch N+1 commits, restore a valid backup ending at N. A new process
+      acquires the now-free lock, verifies the internally consistent older graph,
+      and commits N+1 for a different incarnation. Every R1 local check passes,
+      although the authority lineage rolled back and reused an epoch number.
+    impact: >-
+      The fixed bytes cannot meet their own stale/rolled-back-epoch adversarial
+      check or guarantee monotonic writer generations across a coherent restore.
+    required_correction: >-
+      Define an exact restore/anti-rollback authority protocol for R2: bind
+      startup to a durable monotonic witness or an explicit accepted Jenn restore
+      decision and new generation, specify atomicity and recovery with the one
+      writer, and fail closed on a stale witness. This finding does not require
+      protection against arbitrary same-OS-user tampering; an authorized older
+      backup restore is sufficient to reproduce it.
+
+  - id: F3-R1-FULL-ATOMIC-IR-M05
+    severity: MAJOR
+    title: The canonical intake and replay record referenced by the envelope has no normative schema
+    section: F3 R1 Sections 13.1-13.4 and invariants F3-I06-F3-I09
+    evidence: >-
+      CommandEnvelopeV0_1 fingerprints F3_intake_state_ref, and the prose says it
+      points to an immutable COMMITTED intake record containing the command,
+      envelope, fingerprint, epoch, and Event sequence. R1 defines no versioned
+      intake-record schema, fingerprint domain, ref construction, result binding,
+      or replay-entry schema, despite requiring unknown-field rejection and
+      recovery verification of the complete graph.
+    counterexample: >-
+      One implementation content-addresses the intake record, creating a cycle
+      because the record contains the envelope fingerprint and the envelope
+      contains the intake ref. Another assigns an opaque ref before both records
+      and is acyclic. The fixed contract cannot choose between them or prove
+      byte-identical recovery.
+    impact: >-
+      The envelope/replay graph is not one constructible canonical schema, and
+      recovery cannot deterministically distinguish a complete entry from a
+      partial or implementation-specific one.
+    required_correction: >-
+      Define closed versioned intake and replay-entry schemas, their exact
+      fingerprints and independent ref rules, disposition/result bindings,
+      command/envelope/Event/action relationships, and recovery validation.
+      Include the corrected persisted-REJECTED semantics from M01 without
+      creating an envelope or action ref for a rejection.
+
+  - id: F3-R1-FULL-ATOMIC-IR-M06
+    severity: MAJOR
+    title: The stated synthetic M0 activation witness has no constructible pending-Delegation genesis
+    section: F3 R1 Sections 10, 14, and 20; frozen F2 R8 Section 6 and R22 Sections 1-2
+    evidence: >-
+      R1 Section 20 starts from the accepted F2 synthetic M0 manifest only,
+      lists one closed DELEGATION_ACTIVATION_ACK definition, and then requires a
+      synthetic pending Delegation to activate. Frozen F2 R8's manifest can
+      materialize only Profile, Principal, and Binding specs, and R22's narrow
+      exception applies only to those three roots. Frozen Delegation issuance
+      requires an immutable committed action ref, while R1 supplies neither a
+      closed issuance Command in the witness nor a fixed pre-existing pending-
+      Delegation graph.
+    counterexample: >-
+      Instantiate exactly the frozen F2 synthetic manifest and the R1 objects
+      listed before the ACK. There is no pending Delegation target. Fabricating
+      one has no F2 issuance action; importing one adds an undeclared input and
+      violates the manifest-only witness premise.
+    impact: >-
+      The mandatory M0 proof cannot reach its activation, replay, crash/restart,
+      and dual-start steps from the stated accepted synthetic surface.
+    required_correction: >-
+      Make R2 constructive by enumerating the complete synthetic genesis. Either
+      define and execute an exact admitted ledger-only Delegation issuance
+      Command with the necessary distinct Actors, root responsibility, assertion,
+      action ref, and pending grant before ACK, or bind an independently accepted
+      exact pending-Delegation fixture and its full frozen F2 proof graph. No real
+      credential, host, provider, service, private Memory, or runtime may enter.
+
+review_boundaries_and_non_findings:
+  - >-
+    Selection of the concrete OS-enforced lock primitive is an implementation
+    profile permitted by Section 7.1 and is not a finding so long as ownership,
+    crash, fork, and dual-start fixtures satisfy the fixed semantics.
+  - >-
+    The accepted architecture expressly says N-API is not a sandbox against
+    fully controlled same-process or same-OS-user code. This review does not
+    convert that excluded threat model into an F3 blocker.
+  - >-
+    F4 TaskPermit/host/fence, F5 delivery/retry/reconciliation, and F6 Validation
+    current-decision detail are correctly deferred; their absence is not a
+    finding and their authority was not imported.
+  - >-
+    No implementation or runtime tests were required or executed. Findings are
+    semantic contract defects demonstrable from the fixed bytes, not unverified
+    implementation concerns.
+
+review_execution:
+  web_used: false
+  runtime_source_read: false
+  runtime_source_modified: false
+  state_private_accessed: false
+  secret_or_env_accessed: false
+  private_raw_memory_accessed: false
+  raw_logs_accessed: false
+  provider_raw_response_accessed: false
+  subject_modified: false
+  manifest_modified: false
+  presentation_package_modified: false
+  queue_registry_or_CURRENT_STATE_modified: false
+
+non_authorization:
+  independent_review_result_created: true
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false
+
+next_required_action: >-
+  Author disposition of F3-R1-FULL-ATOMIC-IR-M01 through M06, one complete R2
+  atomic subject that resolves every accepted/frozen conflict and constructibility
+  gap, then a new fixed hash-bound fresh full atomic independent review. Only
+  Jenn may later accept and freeze F3.

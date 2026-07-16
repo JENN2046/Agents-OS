@@ -1,0 +1,46 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f4-r8-canonical-effective-profile-closure-self-review-v0.1
+date: 2026-07-16
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R8_ATOMIC_BUNDLE
+reviewer: Nobao_subject_author
+independent: false
+result: PASS_FOR_INDEPENDENT_REVIEW_ONLY
+closure_matrix:
+  F4-R7-FULL-ATOMIC-IR-B01: one_exact_F4_FP_schema_registry_with_27_schemas_and_93_discovered_objects
+  F4-R7-FULL-ATOMIC-IR-B02: permit_invocation_acceptance_observation_handoff_IDs_and_all_semantic_refs_recomputed
+  F4-R7-FULL-ATOMIC-IR-B03: HostTrust_HostAuth_and_permit_authenticator_profiles_are_exactly_equal
+  F4-R7-FULL-ATOMIC-IR-B04: seven_legal_authorization_rows_and_all_126_mixed_presence_masks_are_validated
+  F4-R7-FULL-ATOMIC-IR-B05: exact_13_code_final_authority_set_and_28_total_reducer_vectors
+  F4-R7-FULL-ATOMIC-IR-B06: seven_complete_eligibility_rows_and_64_precedence_combinations_with_explicit_presence_and_watermark
+  F4-R7-FULL-ATOMIC-IR-B07: Actor_revision_3_and_Host_trust_revision_7_with_four_explicit_downstream_trust_revision_fields
+evidence_separation:
+  fixture_builder_imported_by_validator: false
+  validator_builds_expected_fixture: false
+  deterministic_builder_rebuild_matches_fixture: true
+R8_validator:
+  result: PASS
+  node_count: 19
+  node_hashes_verified: 19
+  base_dependency_count: 18
+  effective_schema_count: 27
+  effective_schema_object_count: 93
+  authorization_legal_row_count: 7
+  mixed_authorization_masks_rejected: 126
+  eligibility_row_count: 7
+  eligibility_precedence_combinations_checked: 64
+  final_authority_observation_count: 13
+  final_authority_vector_count: 28
+  negative_mutations_rejected: 19
+  acceptance_count: 1
+  accepted_handoff_count: 1
+  terminal_outcome: NOT_EXECUTED
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+causal_checks:
+  permit_inputs_not_from_future_watermark: PASS
+  revocation_sequence_visible_at_authorization_watermark: PASS
+  proof_watermarks_not_after_permit_issuance_event: PASS
+  F1_source_ref_resolves_exact_task_id: PASS
+limitations: {author_review_is_independent: false, validator_is_full_semantic_review: false, F4_accepted: false, F4_frozen: false, F5_started: false, implementation_authorized: false}
+next_gate: fresh_full_atomic_hash_bound_independent_review_of_all_twenty_five_subjects

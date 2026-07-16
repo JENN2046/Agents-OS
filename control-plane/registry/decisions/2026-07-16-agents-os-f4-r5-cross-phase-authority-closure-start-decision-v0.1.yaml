@@ -1,0 +1,31 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r5-cross-phase-authority-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R5
+  purpose: close six later-discovered effective R1 findings while preserving R1-R4 bytes
+  allowed:
+    - replace color/P3 driven authorization with current policy plus single Prohibited Behavior List plus exact Jenn decision requirement
+    - bind F4 Host trust exactly to current F2 EXECUTION_HOST Actor, HOST_PROCESS Principal, and Binding
+    - require complete permit-bound authority recheck in the final disposition/handoff transaction
+    - freeze the non-bypassable currentness and one-time claim seam immediately before physical effect start
+    - bind capability/resource definitions, operation vocabulary, source authority, and containment proof
+    - restrict v0.1 permits to one invocation
+    - create focused offline fixtures, validators, manifests, reports, and fresh independent review inputs
+    - build corrected offline review packaging with every manifest-bound authority input
+  forbidden:
+    - modify any R1-R4 subject or prior review bytes
+    - partial acceptance or automatic freeze
+    - F5 or F6 start
+    - Rust, N-API, database, runtime, service, Host, provider, or physical-effect implementation
+    - production authentication, credentials, keys, or secrets
+    - commit, push, merge, release, deploy, or publish by this decision
+
+completion_gate:
+  required: fresh_full_atomic_hash_bound_independent_review_of_R1_through_R5
+  acceptance_authority: Jenn_only
+  corrected_offline_package_requires_all_manifest_inputs: true

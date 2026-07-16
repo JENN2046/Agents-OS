@@ -1,0 +1,69 @@
+schema_version: agents-os.review-findings-disposition.v0.1
+record_id: agents-os-f4-r1-independent-review-disposition-v0.1
+record_type: ReviewFindingsDisposition
+status: active
+date: 2026-07-16
+
+subjects:
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+  R1_contract:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+    sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+    bytes_modified: false
+  R1_fixture:
+    path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+    sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+    bytes_modified: false
+  R1_validator:
+    path: control-plane/registry/validate-f4-m0a-witness.py
+    sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+    bytes_modified: false
+
+review:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml
+  sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+  result: BLOCK
+  blocker_count: 1
+  major_count: 0
+  minor_count: 0
+  requires_R2: true
+
+disposition:
+  method: NEW_ATOMIC_R2_NARROW_AMENDMENT
+  review_bytes_modified: false
+  R1_acceptance_ready: false
+  every_finding_accepted_for_correction: true
+  R2_start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml
+  R2_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+
+finding_status:
+  F4-R1-FULL-ATOMIC-IR-B01: ACCEPTED_FOR_R2_RESULT_REASON_TOTALITY_AND_PRECEDENCE_CLOSURE
+
+required_R2_evidence:
+  - total_result_lattice_for_all_three_reducers
+  - exact_ordered_check_to_reason_mapping_for_all_three_reducers
+  - complete_TaskPermit_currentness_reason_coverage
+  - corrected_I19_I20_precedence
+  - mixed_REJECTED_plus_INDETERMINATE_vectors
+  - multiple_simultaneous_REJECTED_vectors
+  - deterministic_offline_vector_validator
+
+next_gate: HASH_BOUND_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW_OF_F4_R1_PLUS_R2
+
+boundaries:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  commit_performed: false
+  push_performed: false

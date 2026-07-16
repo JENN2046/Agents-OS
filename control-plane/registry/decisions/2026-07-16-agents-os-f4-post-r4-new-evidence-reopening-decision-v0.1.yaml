@@ -1,0 +1,37 @@
+schema_version: agents-os.review-gate-reopening-decision.v0.1
+decision_id: agents-os-f4-post-r4-new-evidence-reopening-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: REOPENED
+
+previous_gate:
+  review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r4-full-atomic-independent-review.yaml
+  review_sha256: 70298ddbad504ace7378a4d31712af18ba14960ec68b6b62729786c53d98b993
+  result: PASS_NO_BLOCKER
+  immutable_historical_evidence: true
+
+new_evidence:
+  review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-offline-zip-fresh-full-atomic-independent-review-v0.1.yaml
+  result: BLOCK
+  independently_reproduced_open_findings: [F4-R1-IR-B01, F4-R1-IR-B02, F4-R1-IR-B03, F4-R1-IR-B04, F4-R1-IR-B06, F4-R1-IR-M02]
+  already_closed_findings: [F4-R1-IR-B05, F4-R1-IR-M03]
+  evidence_role_only_finding: F4-R1-IR-M01
+
+decision:
+  F4_freeze_gate_satisfied: false
+  F4_acceptance_ready: false
+  prior_R4_pass_deleted_or_rewritten: false
+  partial_acceptance: forbidden
+  next_revision: R5
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+  commit_push_merge_authorized: false
+

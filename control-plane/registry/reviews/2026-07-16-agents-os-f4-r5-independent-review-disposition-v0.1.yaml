@@ -1,0 +1,16 @@
+schema_version: agents-os.review-finding-disposition.v0.1
+disposition_id: agents-os-f4-r5-independent-review-disposition-v0.1
+date: 2026-07-16
+review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r5-full-atomic-independent-review.yaml
+review_sha256: aae988bcbd98199a3e56a5225e895d5f6755ad8f6c6c27ce51432ebadb915517
+review_result: BLOCK
+requires_R6: true
+dispositions:
+  - {finding_id: F4-R5-FULL-ATOMIC-IR-B01, disposition: ACCEPTED_FOR_R6_TOTAL_AUTHORIZATION_RESOLUTION}
+  - {finding_id: F4-R5-FULL-ATOMIC-IR-B02, disposition: ACCEPTED_FOR_R6_F2_RECOVER_COMPATIBILITY}
+  - {finding_id: F4-R5-FULL-ATOMIC-IR-B03, disposition: ACCEPTED_FOR_R6_EXACT_FACT_AND_HANDOFF_INTEGRATION}
+  - {finding_id: F4-R5-FULL-ATOMIC-IR-B04, disposition: ACCEPTED_FOR_R6_CANONICAL_SOURCE_SET_FORMULAS}
+  - {finding_id: F4-R5-FULL-ATOMIC-IR-B05, disposition: ACCEPTED_FOR_R6_FULL_EFFECTIVE_M0_WITNESS}
+F4_freeze_gate_satisfied: false
+non_authorization: {F4_accepted: false, F4_frozen: false, F5_started: false, implementation_authorized: false, runtime_activation_authorized: false, provider_host_database_or_effect_execution_authorized: false, commit_push_merge_authorized: false}
+

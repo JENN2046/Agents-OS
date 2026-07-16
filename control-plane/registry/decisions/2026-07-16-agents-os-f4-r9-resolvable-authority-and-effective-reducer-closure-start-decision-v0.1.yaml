@@ -1,0 +1,22 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r9-resolvable-authority-and-effective-reducer-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R9
+  allowed:
+    - close only the six R8 independent-review blockers and their audit-confirmed validation gaps
+    - materialize and resolve exact effect scope definitions registry source projections final evidence and history evidence
+    - enforce exact authorization revocation semantics and all effective R2 R3 R5 reducers
+    - freeze complete event watermark expiry and same-transaction ordering
+    - harden schema discovery types nullability removed surfaces and re-signed mutation coverage
+    - create a new independent fixture builder fixed fixture semantic validator manifest and fresh review
+  forbidden:
+    - modify R1-R8 or prior review bytes
+    - accept or freeze F4 automatically
+    - start F5/F6 or implementation/runtime/database/service/Host/provider/authentication/effect work
+    - commit push merge release deploy publish
+completion_gate: {required: fresh_full_atomic_hash_bound_independent_review_of_R1_through_R9, acceptance_authority: Jenn_only}

@@ -1,0 +1,34 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f4-r4-start-observation-no-fact-boundary-closure-self-review-v0.1
+date: 2026-07-16
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R4_ATOMIC_BUNDLE
+reviewer: Nobao_subject_author
+independent: false
+result: PASS_FOR_INDEPENDENT_REVIEW_ONLY
+blocking_finding_closed:
+  id: F4-R3-FULL-ATOMIC-IR-B01
+  closure: >-
+    Exact acceptance resolution now precedes identity derivation. Absence,
+    lookup unavailability, integrity conflict, and invalid reference are closed
+    non-persisted NO_FACT responses and cannot enter the fact reducer.
+checks:
+  prior_nine_subject_bytes_changed: false
+  acceptance_missing_removed_from_fact_enum: true
+  no_fact_outcomes_closed: true
+  no_fact_has_observation_identity: false
+  no_fact_has_authority_handoff_reservation_or_effect: false
+  resolved_acceptance_required_before_identity: true
+  canonical_recheck_count: 11
+  validator_result: PASS
+  preflight_cases: 5
+  reducer_cases: 4
+  negative_mutations_rejected: 3
+  external_effect_count: 0
+limitations:
+  author_review_is_independent: false
+  F4_accepted: false
+  F4_frozen: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  provider_host_or_effect_execution_authorized: false
+next_gate: fresh_full_atomic_hash_bound_independent_review_of_all_twelve_subjects

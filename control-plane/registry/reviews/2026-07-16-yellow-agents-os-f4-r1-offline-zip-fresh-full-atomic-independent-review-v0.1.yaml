@@ -1,0 +1,118 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r1-offline-zip-fresh-full-atomic-independent-review-v0.1
+date: 2026-07-16
+status: complete_user_supplied_review_materialization
+materialization_basis: Jenn_supplied_complete_review_text_in_current_session
+original_review_byte_stream_available: false
+original_review_byte_hash_claimed: false
+
+reviewer:
+  identity: ChatGPT GPT-5.6 Thinking
+  independence_basis:
+    - not_the_F4_author_run
+    - reviewed_fixed_uploaded_subject_bytes
+    - did_not_modify_subjects
+    - did_not_execute_runtime_or_external_effects
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 3
+
+result: BLOCK
+requires_R2_as_written_by_reviewer: true
+effective_workspace_next_revision_due_to_existing_R2_R4: R5
+
+package_integrity:
+  archive_sha256: af160c76140f8099ad9e4abee22b4731df7b27ce3c104175c21634235a3ec78e
+  archive_entry_count: 14
+  path_traversal: false
+  symlinks: false
+  duplicate_paths: false
+  checksums_result: PASS
+  canonical_manifest_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54
+  subject_hashes:
+    contract: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+    fixture: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+    validator: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+  author_self_review_sha256: a82d14e4fa3966a853e542c09e85ba017ac335bce652c4576bfcaf492173eb67
+
+validator_reproduction:
+  result: PASS
+  node_count: 14
+  edge_count: 36
+  node_hashes_verified: 14
+  schema_fingerprints_verified: 22
+  acceptance_count: 1
+  accepted_handoff_count: 1
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+  fixture_canonical_sha256: c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2
+  rejected_mutations: [external_effect_count_to_1, node_hash_mutation, accepted_handoff_removal]
+
+findings:
+  - id: F4-R1-IR-B01
+    severity: blocker
+    title: F4_side_effect_colors_and_P3_labels_act_as_a_second_permission_model
+    required_correction: derive a closed authorization requirement from current policy, the single Prohibited Behavior List, and exact Jenn decision; colors may be non-authoritative audit labels only
+  - id: F4-R1-IR-B02
+    severity: blocker
+    title: F4_Host_identity_is_not_exactly_bound_to_F2_EXECUTION_HOST_and_HOST_PROCESS
+    required_correction: make F4 Host trust an exact current F2 Actor_Principal_Binding extension with authenticated provisioning and transition authority
+  - id: F4-R1-IR-B03
+    severity: blocker
+    title: revocation_propagation_can_lag_the_final_handoff
+    required_correction: atomically quarantine a complete affected set or re-read all permit-bound authority in the final disposition_handoff transaction
+  - id: F4-R1-IR-B04
+    severity: blocker
+    title: physical_effect_boundary_can_consume_a_stale_handoff
+    required_correction: freeze non-bypassable F5 seam requirements for expiry, fences, revocation_domain, and one-time claim immediately before physical start
+  - id: F4-R1-IR-B05
+    severity: blocker
+    title: multi_failure_reducers_lack_one_deterministic_total_reason_function
+    required_correction: freeze closed reason coverage and deterministic precedence
+  - id: F4-R1-IR-B06
+    severity: blocker
+    title: capability_and_resource_grants_lack_closed_definition_and_source_authority
+    required_correction: bind definitions, operation registry, source authority sets, and containment proof
+  - id: F4-R1-IR-M01
+    severity: major
+    title: validator_is_an_exact_constructive_witness_not_a_contract_prover
+  - id: F4-R1-IR-M02
+    severity: major
+    title: multiple_invocations_do_not_have_closed_external_idempotency_derivation
+    required_correction: restrict_v0_1_to_one_invocation_or_freeze_per_invocation_derivation
+  - id: F4-R1-IR-M03
+    severity: major
+    title: ACCEPTANCE_MISSING_cannot_construct_a_disposition_fact
+    required_correction: remove_the_fact_reason_or_define_a_no_fact_transport_boundary
+
+finding_counts: {blocker: 6, major: 3, minor: 0}
+
+review_evidence_limitation:
+  manifest_required_authority_input_count: 13
+  offline_zip_available_authority_input_count: 5
+  missing_authority_input_count: 8
+  missing_roles:
+    - workspace_governance
+    - accepted_resident_architecture
+    - accepted_high_privilege_architecture
+    - accepted_home_roadmap_subject
+    - accepted_home_roadmap_decision
+    - phase_4_start_decision
+    - construction_readiness_review
+    - accepted_F1_decision
+  formal_pass_precluded_by_missing_inputs: true
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  real_host_or_effect_execution_authorized: false
+
