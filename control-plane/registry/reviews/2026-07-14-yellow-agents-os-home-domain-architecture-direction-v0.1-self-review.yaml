@@ -1,0 +1,162 @@
+schema_version: agents-os.architecture-direction-self-review.v0.1
+record_id: agents-os-home-domain-architecture-direction-v0.1-self-review
+record_type: AuthorSelfReview
+status: completed_pending_independent_review
+review_mode: SELF_REVIEW
+independent_review_claimed: false
+date: 2026-07-14
+reviewer_identity: Nobao_author_run
+
+phase:
+  phase_id: HOME_DOMAIN_PHASE_1B
+  gate_id: G1B
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-1b-start-decision-v0.1.yaml
+    sha256: 7a26c45a2ccbe3c527f2cccf75353cb716ec649f7422e9cc39cbc91d72388fa0
+
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+  sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  status: fixed_pending_Phase_1C_independent_review
+
+normative_inputs:
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    role: Phase_1A_authority_and_gap_map
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    role: Phase_1A_fact_authority_matrix
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+    sha256: 4654da6e02424caf4a12c9bea44c462dc79ba007493de1bf9590b8fc8901824f
+    role: G1A_result_and_gap_classification
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    role: accepted_phase_and_review_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_resident_and_Orchestrator_authority
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: accepted_Authority_and_Capability_Body_boundary
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+    role: accepted_action_spine_materialization
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: current_local_life_core_policy_boundary
+  - path: control-plane/policies/life-core/policy-index.json
+    sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044
+    role: life_core_module_status_inventory
+
+review_checks:
+  direction_correctness:
+    why_Home_Domain_exists_is_clear: PASS
+    Home_Domain_is_logical_bounded_context: PASS
+    eight_core_domains_covered: PASS
+    first_real_experience_slice_defined: PASS
+  authority_consistency:
+    Home_Domain_is_not_Authority_Kernel: PASS
+    Home_Domain_is_not_permit_issuer: PASS
+    Home_Domain_is_not_second_Task_Ledger: PASS
+    Home_Domain_does_not_write_Orchestrator_state: PASS
+    one_authority_per_fact_class_preserved: PASS
+    unresolved_canonical_writers_not_falsely_claimed_as_implemented: PASS
+  vision_preservation:
+    ordinary_life_not_automatically_taskified: PASS
+    relationship_not_reduced_to_permission: PASS
+    identity_not_reduced_to_prompt_model_session_or_row: PASS
+    VCPToolBox_not_treated_as_life_identity: PASS
+  privacy_and_presence:
+    Session_not_automatically_Memory: PASS
+    Memory_Candidate_not_accepted_Memory: PASS
+    Resident_running_not_Presence_active: PASS
+    Presence_not_sensing_or_recording: PASS
+    private_content_excluded_from_Ledger: PASS
+  portability:
+    replaceable_body_direction_preserved: PASS
+    portability_does_not_mean_copy_everything: PASS
+    migration_protocol_not_claimed_as_existing: PASS
+  scope:
+    runtime_schema_added: false
+    database_schema_added: false
+    new_Task_or_Goal_state_added: false
+    second_permission_model_added: false
+    implementation_started: false
+    Phase_1C_started: false
+
+review_attention_for_Phase_1C:
+  - relationship_semantic_ownership_must_not_be_misread_as_a_resolved_canonical_writer
+  - Presence_meaning_consent_authority_and_device_sensing_truth_must_remain_separate
+  - bounded_result_reference_must_not_become_a_duplicate_Home_Ledger
+  - memory_meaning_must_not_bypass_VCP_native_content_lifecycle_or_governed_access
+  - future_contract_order_must_remain_non_authorizing_and_reorderable_by_readiness_review
+
+findings:
+  blockers: []
+  major_findings: []
+  minor_findings: []
+
+review_result: PASS_READY_FOR_PHASE_1C_INDEPENDENT_REVIEW
+
+G1B:
+  result: PROPOSED_FINAL_DRAFT
+  subject_fixed: true
+  acceptance_authority: Jenn
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+Phase_1C_review_unit:
+  subject:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  input_allowlist:
+    - control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    - control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    - control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    - control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+    - control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-self-review.yaml
+    - control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-1b-start-decision-v0.1.yaml
+    - AGENTS.md
+    - control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    - control-plane/policies/life-core/README.md
+    - control-plane/policies/life-core/policy-index.json
+    - control-plane/policies/life-core/root-principles.md
+    - control-plane/policies/life-core/house-rules.md
+    - control-plane/policies/life-core/memory-rules.md
+    - control-plane/policies/life-core/members-and-rooms.md
+    - control-plane/policies/life-core/a2a-relations.md
+    - control-plane/policies/life-core/runtime-boundaries.md
+    - control-plane/policies/life-core/growth-rules.md
+    - control-plane/policies/life-core/presence-and-sensing.md
+  forbidden_inputs:
+    - author_scratchpad
+    - state-private
+    - private_raw_memory
+    - secrets_credentials_tokens_cookies
+    - provider_raw_responses
+    - unregistered_historical_drafts_outside_allowlist
+  required_output:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-independent-review.yaml
+  author_and_reviewer_must_be_separate: true
+
+decision_effect:
+  Phase_1B_complete: true
+  Phase_1C_started: false
+  Phase_2_started: false
+  Jenn_acceptance_granted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+next_gate:
+  action: EXPLICIT_START_OF_FRESH_PHASE_1C_INDEPENDENT_REVIEW
+  subject_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  implementation_authorized: false
+  runtime_activation_authorized: false

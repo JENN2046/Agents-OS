@@ -41,17 +41,17 @@ def main() -> int:
     check(summary["write_performed"] is False, "dashboard summary should not write", failures)
     check(summary["execution_authorized"] is False, "dashboard should not authorize execution", failures)
     check(summary["queue"]["now"]["title"] == expected_now, "dashboard should surface current NOW", failures)
-    check(summary["route_selection"]["status"] == "awaiting_jenn_selection", "dashboard route selection should wait after no-active contract closure", failures)
-    check(summary["route_selection"]["requires_jenn_decision"] is True, "route selection should require Jenn after no-active contract closure", failures)
+    check(summary["route_selection"]["status"] == "not_active", "dashboard route selection should be inactive for the F3 decision gate", failures)
+    check(summary["route_selection"]["requires_jenn_decision"] is False, "route selection should not claim the generic F3 decision gate", failures)
     check(summary["route_selection"]["route_auto_selection_authorized"] is False, "route selection must not authorize auto-selection", failures)
     check(summary["route_selection"]["queue_promotion_authorized"] is False, "route selection must not authorize queue promotion", failures)
     check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
     check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
-    check(summary["next_user_action"]["status"] == "route_choice_required", "dashboard should surface route choice after no-active contract closure", failures)
-    check(summary["next_user_action"]["decision_owner"] == "Jenn", "next user action owner should be Jenn after no-active contract closure", failures)
-    check(summary["next_user_action"]["requires_jenn_decision"] is True, "next user action should require Jenn after no-active contract closure", failures)
-    check(summary["next_user_action"]["accepted_route_ids"] == ["A", "B", "C", "D", "E"], "next user action should surface route ids after no-active contract closure", failures)
-    check(summary["next_user_action"]["exact_confirmation_templates_available"] is True, "next user action should surface confirmation templates after no-active contract closure", failures)
+    check(summary["next_user_action"]["status"] == "governance_decision_required", "dashboard should surface the F3 governance decision gate", failures)
+    check(summary["next_user_action"]["decision_owner"] == "Jenn", "F3 governance decision owner should be Jenn", failures)
+    check(summary["next_user_action"]["requires_jenn_decision"] is True, "F3 start should require Jenn", failures)
+    check(summary["next_user_action"]["accepted_route_ids"] == [], "generic F3 decision should not surface route ids", failures)
+    check(summary["next_user_action"]["exact_confirmation_templates_available"] is False, "generic F3 decision should not claim route confirmation templates", failures)
     check(
         summary["next_user_action"]["active_queue_mutation_authorized"] is False,
         "next user action must not authorize active queue mutation",
@@ -63,22 +63,22 @@ def main() -> int:
         failures,
     )
     check(summary["next_user_action"]["execution_authorized"] is False, "next user action must not authorize execution", failures)
-    check(summary["route_adoption_gate"]["status"] == "waiting_for_jenn_route_choice", "dashboard route adoption gate should wait after no-active contract closure", failures)
+    check(summary["route_adoption_gate"]["status"] == "not_active", "dashboard route adoption gate should be inactive after F2 freeze", failures)
     check(summary["route_adoption_gate"]["all_required_gates_present"] is True, "dashboard should surface required route adoption gates", failures)
     check(summary["route_adoption_gate"]["future_apply_gate_available"] is True, "dashboard should surface future apply gate availability", failures)
     check(summary["route_adoption_gate"]["can_apply_now"] is False, "route adoption gate must not apply before Jenn route choice", failures)
-    check(summary["route_adoption_gate"]["requires_jenn_decision"] is True, "route adoption gate should require Jenn after no-active contract closure", failures)
+    check(summary["route_adoption_gate"]["requires_jenn_decision"] is False, "route adoption gate should not claim the generic F3 decision", failures)
     check(summary["route_adoption_gate"]["active_queue_mutation_authorized"] is False, "route adoption gate must not authorize active queue mutation", failures)
     check(summary["route_adoption_gate"]["queue_promotion_authorized"] is False, "route adoption gate must not authorize queue promotion", failures)
     check(summary["route_adoption_gate"]["execution_authorized"] is False, "route adoption gate must not authorize execution", failures)
     check(
-        summary["route_choice_adoption_bundle"]["status"] == "waiting_for_jenn_route_choice",
-        "dashboard route choice adoption bundle should wait after no-active contract closure",
+        summary["route_choice_adoption_bundle"]["status"] == "not_active",
+        "dashboard route choice adoption bundle should be inactive after F2 freeze",
         failures,
     )
     check(summary["route_choice_adoption_bundle"]["bundle_preview_available"] is True, "route adoption bundle preview should be available", failures)
     check(summary["route_choice_adoption_bundle"]["can_apply_now"] is False, "route adoption bundle must not apply after route A selection", failures)
-    check(summary["route_choice_adoption_bundle"]["requires_jenn_decision"] is True, "route adoption bundle should require Jenn after no-active contract closure", failures)
+    check(summary["route_choice_adoption_bundle"]["requires_jenn_decision"] is False, "route adoption bundle should not claim the generic F3 decision", failures)
     check(summary["route_choice_adoption_bundle"]["preview_only"] is True, "route adoption bundle should be preview_only", failures)
     check(summary["route_choice_adoption_bundle"]["read_only"] is True, "route adoption bundle should be read_only", failures)
     check(summary["route_choice_adoption_bundle"]["active_queue_mutation_authorized"] is False, "route adoption bundle must not authorize active queue mutation", failures)

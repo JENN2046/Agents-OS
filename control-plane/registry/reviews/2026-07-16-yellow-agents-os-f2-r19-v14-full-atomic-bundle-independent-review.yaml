@@ -1,0 +1,434 @@
+schema_version: "agents-os.hash-bound-independent-review.v0.1"
+review_id: "agents-os-f2-r19-v14-full-atomic-bundle-independent-review"
+review_type: "FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW"
+date: "2026-07-16"
+reviewed_at: "2026-07-16T00:47:19+08:00"
+status: "complete"
+result: "BLOCK"
+
+reviewer:
+  identity: "Codex_fresh_independent_review_quorum_f2_r19_v14"
+  coordinator_task: "/root"
+  independent_runs:
+    - task: "/root/f2_r19_full_semantic"
+      surface: "full_atomic_subject_semantics_authority_and_cross_revision_closure"
+      result: "BLOCK_FINDINGS"
+    - task: "/root/f2_r19_full_materialization"
+      surface: "complete_source_equivalence_and_materialization_projection"
+      result: "BLOCKERS_FOUND"
+    - task: "/root/f2_r19_full_deterministic"
+      surface: "hash_structure_canonical_formulas_indexes_and_machine_checks"
+      result: "FINDINGS_ONLY"
+  independence: >-
+    All three runs were started without conversation context. Each was limited
+    to root AGENTS.md, the exact fixed R1-R19 subjects, and corrected v14. None
+    read an existing review, self-review, decision, CURRENT_STATE, another
+    materialization, state-private content, raw logs, secrets, credentials,
+    provider output, or private raw memory. Runs did not coordinate findings.
+  prior_pass_relied_upon: false
+  read_only_until_conclusion: true
+
+start_gate:
+  Jenn_explicit_start_received: true
+  requested_sequence: >-
+    narrow subject amendment -> corrected complete materialization -> targeted
+    consistency review -> fresh full atomic review
+  targeted_entry_review:
+    path: "control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r19-v14-source-exact-correction-targeted-independent-review.yaml"
+    sha256: "d9be969457cf70a7f761b910eae8db32d338e029d49fbbd11cac7762b0366d32"
+    result: "PASS_NO_BLOCKER"
+    role: "eligibility evidence only; independent runs did not read or rely on it"
+
+acceptance_unit:
+  id: "F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R19_ATOMIC_BUNDLE"
+  partial_acceptance: "forbidden"
+  acceptance_subject_count: 19
+  acceptance_subjects_modified_by_this_review: false
+  subject_hashes:
+    R1: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    R2: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    R3: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    R4: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    R5: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    R6: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    R7: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    R8: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    R9: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    R10: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    R11: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    R12: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    R13: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    R14: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    R15: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    R16: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    R17: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    R18: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    R19: "d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3"
+
+reviewed_materialization:
+  path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+  sha256: "3315e628d2dcd1dd559d75d504eca322967879e99c59ed6c5130cc45e6b050e0"
+  acceptance_subject: false
+  authority: "DERIVED_ONLY"
+  bytes_modified_by_this_review: false
+
+hash_gate:
+  status: "PASS"
+  observed_input_count: 20
+  matched_input_count: 20
+  mismatched_input_count: 0
+  rule: "Any fixed-input hash mismatch terminates review before content inspection."
+
+finding_counts:
+  blocker: 12
+  major: 3
+  minor: 0
+  total: 15
+
+findings:
+  - finding_id: "F2-R19-V14-FULL-IR-B01"
+    severity: "BLOCKER"
+    level: "SUBJECT"
+    title: "Synthetic M0 Profile and Principal creation-spec contracts are not closed"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "689-723"
+        fact: >-
+          Profile and Principal creation specs are said to have their own domain
+          and fingerprint, but exact schemas, domain literals, ordered fields,
+          and exclusion rules are not defined.
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md"
+        lines: "184-198"
+        fact: "Later correction closes only Binding creation-spec precedence."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "2737-2753"
+        fact: "V14 retains anonymous Profile/Principal creation-spec arrays."
+    finding: >-
+      Independent writers cannot reproduce the manifest body or its complete
+      synthetic subject set without inventing the missing spec contracts.
+    required_fix: >-
+      A new narrow acceptance-subject amendment must freeze both schemas,
+      domain tags, field order, exclusions, fingerprints, sorting, and fixtures;
+      a derived materialization may not invent them.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B02"
+    severity: "BLOCKER"
+    level: "SUBJECT"
+    title: "Canonical local digest formulas are incomplete"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md"
+        lines: "49-76"
+        fact: "Every CanonicalDigestScalar requires an exact owning domain-tagged formula."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "577-614,784-830"
+        fact: >-
+          derivation_replay_identity and complete_target_set_fingerprint have
+          only natural-language binding or collection descriptions, not exact
+          domain-tagged ordered tuples.
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md"
+        lines: "417-449"
+        fact: >-
+          complete_affected_binding_set_fingerprint likewise lacks an exact
+          owning tuple formula.
+    finding: >-
+      Synthetic replay identity and the two complete-set digests cannot be
+      reproduced cross-writer, while downstream fingerprints treat them as
+      authoritative scalar inputs.
+    required_fix: >-
+      A narrow subject amendment must define a distinct domain literal,
+      complete ordered tuple, null/array/duplicate rules, persisted scalar
+      representation, and cross-writer fixtures for every digest.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B03"
+    severity: "BLOCKER"
+    level: "SUBJECT"
+    title: "IDENTITY_STEWARD_ACTION retains an untyped target-relation authority input"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "309-368,563-575"
+        fact: >-
+          The generic branch consumes target_relation_ref/fingerprint and also
+          permits stewardship paths for non-Actor targets.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+        lines: "320-365"
+        fact: "Independent stewardship relation is replaced by a derived Actor-targeted assessment."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+        lines: "356-398"
+        fact: "R19 narrows Worker stewardship but does not close the generic authority branch."
+    finding: >-
+      A verifier must invent which object satisfies stewardship authority for
+      Actor, Binding/evidence, or Principal targets, creating authorization or
+      false-rejection divergence.
+    required_fix: >-
+      A narrow amendment must type each allowed target derivation, bind Actor
+      paths to IdentityStewardshipAssessmentV0_1R19, and either define or remove
+      the Principal stewardship path.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B04"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Actor transition authority and Actor-specific basis predicates are incomplete"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "875-921"
+        fact: >-
+          SYSTEM_SERVICE and EXECUTION_HOST provisioning UPDATE and exact Actor
+          authority-basis field rules remain effective.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "345-357,1319-1337"
+        fact: >-
+          UPDATE omits the provisioning route and the Actor general basis is a
+          field list without the complete Actor-specific matrix.
+    required_fix: >-
+      Add the class-limited provisioning UPDATE route and print the complete
+      required/forbidden Actor basis matrix without changing source authority.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B05"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Cross-field numeric, MutationIntent, Event, and CAS invariants are omitted"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+        lines: "158-170"
+        fact: "R7 freezes revision, time, Event, assessment, and depth cross-field rules."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "93-104"
+        fact: "R8 freezes intent time, create-head, target/body, and Event successor rules."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "683-859,2078-2144"
+        fact: "V14 prints scalar fields and schemas but not the complete predicate blocks."
+    required_fix: >-
+      Print the precedence-resolved R7 Section 2.3 and R8 Section 2.1 rules in
+      full, with exact applicability and rejection precedence.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B06"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "The canonical array-order registry is incomplete"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+        lines: "205-221"
+        fact: "R7 freezes ordering for the effective array families."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "687-695,117-172,297-323,2737-2753"
+        fact: >-
+          V14 rejects arrays without declared order while omitting source order
+          for multiple printed arrays.
+    required_fix: >-
+      Print one complete field-level array-order registry covering every array
+      in all 64 schemas, including semantic-order and paired-array exceptions.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B07"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Binding uniqueness and Principal/Actor class compatibility rules are omitted"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+        lines: "376-390"
+        fact: "R1 defines the single-active-Actor Binding and forbidden class pairings."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "253-290,462-475"
+        fact: "The Binding schema and issuance table do not print that closed negative matrix."
+    required_fix: "Restore the uniqueness rule and complete class-compatibility negative matrix."
+
+  - finding_id: "F2-R19-V14-FULL-IR-B08"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Lifecycle successor immutability and attenuation predicates are omitted"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+        lines: "205-220"
+        fact: "Actor stable-field successor invariants remain effective."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+        lines: "299-300,403-405,498-502"
+        fact: "Actor, Profile, and Principal successor rules are explicit."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md"
+        lines: "144-148"
+        fact: "Binding stable-field successor rules are explicit."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+        lines: "233-237"
+        fact: "Assignment successor equality and narrowing rules are explicit."
+    finding: "V14 field lists and transition tables do not print the complete successor predicates."
+    required_fix: "Add complete stable-field equality and permitted-narrowing blocks for all five streams."
+
+  - finding_id: "F2-R19-V14-FULL-IR-B09"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Delegation issuance and attenuation branches are not exact"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+        lines: "618-665"
+        fact: "R1 freezes root depth, child decrement, depth-zero, and lineage rules."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md"
+        lines: "204-240"
+        fact: "R2 freezes exact source-branch and attenuation predicates."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md"
+        lines: "441-500"
+        fact: "R3 freezes issuer/action equality and COMMITTED provenance."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1702-1739"
+        fact: "V14 summarizes these as narrow/decrement/preserve lineage."
+    required_fix: >-
+      Print the root-direction, root-Assignment, and child branches with exact
+      required/forbidden refs, depth formulas, equality, and action predicates.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B10"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "DelegationEffectiveCurrentReducer is not total over Actor states"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+        lines: "713-742"
+        fact: "R1 maps delegator/delegate identity and lifecycle changes."
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+        lines: "1131-1145"
+        fact: "R7 maps SUSPENDED, COMPROMISED, RETIRED, EXPIRED, and revision advance."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "616-641"
+        fact: "V14 adds target pre-start but omits the remaining Actor-state branches."
+    required_fix: "Restore the exact Actor-state mappings inside the existing precedence."
+
+  - finding_id: "F2-R19-V14-FULL-IR-B11"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "IdentityRecoveryEvidence binding disposition elements are not materialized"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md"
+        lines: "417-449"
+        fact: >-
+          R2 defines binding_ref, disposition, disposition_event_ref, and the
+          conditional replacement_binding_ref per element.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1458-1475"
+        fact: "V14 prints only binding_dispositions: []."
+    required_fix: >-
+      Inline the complete effective element schema, conditional nullability,
+      ordering, and duplicate rules, and cite R2 Section 7.2 in the source row.
+
+  - finding_id: "F2-R19-V14-FULL-IR-B12"
+    severity: "BLOCKER"
+    level: "MATERIALIZATION"
+    title: "Binding activation bootstrap conditional fields use source-incompatible omission semantics"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md"
+        lines: "291-325"
+        fact: "R4 includes the conditional steward positions in the exact known projection."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+        lines: "55-80"
+        fact: "The canonical derived profile represents absent schema fields as JSON null."
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1814-1859"
+        fact: "V14 says forbidden conditional fields are omitted, not null."
+    finding: "The same accepted bootstrap object would produce different known bytes and fingerprints."
+    required_fix: >-
+      Keep every schema-known conditional position and encode the bootstrap
+      branch as JSON null, while preserving the exact non-bootstrap values.
+
+  - finding_id: "F2-R19-V14-FULL-IR-M01"
+    severity: "MAJOR"
+    level: "SUBJECT"
+    title: "Nullable expiry semantics are not closed"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+        lines: "158-170,712-738,1100-1113"
+        fact: >-
+          Binding and Assignment permit null expiry while invariants and
+          reducers compare expiry unconditionally.
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md"
+        lines: "111-148"
+        fact: "Binding successor narrowing also lacks a null/finite truth table."
+    finding: >-
+      Non-expiring admission, expiry, and narrowing differ depending on whether
+      null means infinity, is non-comparable, or is invalid.
+    required_fix: >-
+      A narrow subject amendment must define null semantics or forbid null and
+      close comparison and narrowing truth tables.
+
+  - finding_id: "F2-R19-V14-FULL-IR-M02"
+    severity: "MAJOR"
+    level: "MATERIALIZATION"
+    title: "The exact source index omits controlling predicate and domain sections"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "2851-2954"
+        fact: >-
+          Delegation subject omits R2 Section 4; Actor sources use broad parent
+          aliases; two revision domains omit R8 Section 2.4; Authentication and
+          recovery domains omit R15 Section 2.2.
+    required_fix: >-
+      Regenerate source inventory by exact schema, formula, predicate, and
+      reducer provenance, including every controlling subsection.
+
+  - finding_id: "F2-R19-V14-FULL-IR-M03"
+    severity: "MAJOR"
+    level: "MATERIALIZATION"
+    title: "CompromiseImpact effective field order differs from the authoritative schema"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "527-575"
+        fact: >-
+          incident_basis_ref precedes selection_basis_event_sequence in the
+          authoritative known schema.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "2549-2584"
+        fact: "V14 reverses those two positions."
+    required_fix: "Restore the R8 Section 5.1 field order."
+
+independent_validation:
+  source_hashes_R1_through_R19_and_v14: "PASS_20_OF_20"
+  UTF8_LF_terminal_LF_no_trailing_whitespace: "PASS"
+  markdown_fences_balanced: "PASS_514_FENCES"
+  strict_duplicate_key_YAML_parse: "PASS_180_BLOCKS"
+  v14_schema_definition_index_equality: "PASS_64_OF_64"
+  v14_reducer_definition_index_equality: "PASS_15_OF_15"
+  source_section_references_exist: "PASS_292_OF_292"
+  R17_assurance_roles_and_mapping: "PASS_43_OF_43"
+  R6_parsed_binary64_examples: "PASS_8_OF_8"
+  printed_special_formula_direct_self_reference: "PASS_NONE_FOUND"
+  printed_R19_revalidation_and_stewardship_cycles: "PASS_NONE_FOUND"
+  non_authorization_flags: "PASS"
+  semantic_equivalence: "FAIL"
+  materialization_completeness: "FAIL"
+
+review_conclusion:
+  ready_for_Jenn_atomic_acceptance_decision: false
+  F2_accepted: false
+  subject_amendment_required: true
+  corrected_materialization_required: true
+  eligible_next_route: >-
+    new narrow subject amendment for B01-B03 and M01, followed by a new complete
+    materialization that also closes B04-B12 and M02-M03, targeted consistency
+    review, and a separately fresh full atomic-bundle independent review
+
+artifact_scope:
+  source_subjects_modified: false
+  materialization_modified: false
+  targeted_reviews_modified: false
+  registry_modified: false
+  CURRENT_STATE_modified: false
+  other_workspace_changes_touched: false
+  commit_performed: false
+  push_performed: false
+
+authority:
+  Jenn_acceptance_granted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_or_secret_access_authorized: false
+  commit_authorized_by_this_review: false
+  push_authorized_by_this_review: false
+  merge_release_or_deploy_authorized: false
+
+non_authorization: >-
+  This BLOCK review is evidence only. It does not accept F2, modify the fixed
+  R1-R19 subjects or v14, authorize implementation, start F3, activate runtime,
+  authorize production authentication, create or modify a database or service,
+  call a provider, access secrets or private memory, or authorize commit, push,
+  merge, release, or deploy.
+
+next_required_action: "NEW_NARROW_SUBJECT_AMENDMENT_THEN_COMPLETE_REMATERIALIZATION"

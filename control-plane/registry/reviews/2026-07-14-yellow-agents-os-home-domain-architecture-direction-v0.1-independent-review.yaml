@@ -1,0 +1,225 @@
+schema_version: agents-os.architecture-direction-independent-review.v0.1
+record_id: agents-os-home-domain-architecture-direction-v0.1-independent-review
+record_type: IndependentReview
+status: completed
+review_mode: FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+independent_review_claimed: true
+date: 2026-07-14
+
+reviewer:
+  reviewer_identity: Codex_independent_reviewer_home_domain_phase_1c
+  reviewer_run_id: /root/home_domain_phase1c_review
+  author_run_identity: Nobao_author_run
+  author_and_reviewer_separate: true
+  review_started_at: 2026-07-14T00:25:05+08:00
+  review_completed_at: 2026-07-14T00:25:10+08:00
+
+phase:
+  phase_id: HOME_DOMAIN_PHASE_1C
+  gate_id: G1C
+  review_scope: Home_Direction_Subject_Review
+  Phase_2_started: false
+
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+  expected_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  observed_sha256_before_review: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  observed_sha256_after_review: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  hash_match: true
+  bytes_modified_by_reviewer: false
+
+actual_inputs:
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    role: fixed_Home_Domain_Architecture_Direction_subject
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    role: Phase_1A_authority_and_gap_map
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    role: Phase_1A_fact_authority_matrix
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+    sha256: 4654da6e02424caf4a12c9bea44c462dc79ba007493de1bf9590b8fc8901824f
+    role: G1A_result_and_gap_classification
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-self-review.yaml
+    sha256: a6408e713f9ca124c797ca2394138e21a57cbbf14a9c366b0a940ef094aa4448
+    role: author_closeout_and_Phase_1C_review_unit
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-1b-start-decision-v0.1.yaml
+    sha256: 7a26c45a2ccbe3c527f2cccf75353cb716ec649f7422e9cc39cbc91d72388fa0
+    role: Phase_1B_authority_and_scope
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    role: accepted_phase_and_review_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_Resident_Orchestrator_and_fact_authority_architecture
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: accepted_authority_permit_and_host_enforcement_boundary
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+    role: accepted_action_spine_materialization
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: current_local_life_core_policy_boundary
+  - path: control-plane/policies/life-core/policy-index.json
+    sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044
+    role: life_core_module_status_inventory
+  - path: control-plane/policies/life-core/root-principles.md
+    sha256: 7a9bd33b99ae3173577b3e41fd359824936c516d27dd0b6f8aa6b3d0a4c34372
+    role: identity_home_and_life_foundation_policy
+  - path: control-plane/policies/life-core/house-rules.md
+    sha256: 9bfa8887723d4536da870079714bf3f6f45f2700d645d73719f08f0908483b1b
+    role: relationship_boundary_and_truthfulness_policy
+  - path: control-plane/policies/life-core/memory-rules.md
+    sha256: 1fabba2a8f9f7e88da130e2589e164b7dc5917e80e95983fc3a4df2051122235
+    role: memory_candidate_formalization_and_dispute_policy
+  - path: control-plane/policies/life-core/members-and-rooms.md
+    sha256: beadc147d08e6f380566a2c3c1cc6a50ad6b9ecdb7b18e29475e85dbc9d00094
+    role: resident_identity_and_community_policy
+  - path: control-plane/policies/life-core/a2a-relations.md
+    sha256: f04c1c52d549da79d05b23e6922d1a375d748bb4ac2d90e0c7817be66064e97a
+    role: relationship_semantics_without_permission_inheritance
+  - path: control-plane/policies/life-core/runtime-boundaries.md
+    sha256: 94c1b6fce3722c813a09abccdc47622dba9d04340ac2c35ee741bbaa3e2a73df
+    role: life_foundation_and_replaceable_capability_body_boundary
+  - path: control-plane/policies/life-core/growth-rules.md
+    sha256: ce8dece3d6d35eb1f29383fee1694f5dece32b6af245a1e72337c0564f137793
+    role: evidence_backed_reversible_growth_policy
+  - path: control-plane/policies/life-core/presence-and-sensing.md
+    sha256: 7a525db3cbcbf9952927a5e42a43f708488e228c4d4b3e1b3e525351261cf943
+    role: Presence_consent_sensing_recording_and_memory_boundary
+
+input_allowlist:
+  - control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+  - control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+  - control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+  - control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+  - control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-self-review.yaml
+  - control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-1b-start-decision-v0.1.yaml
+  - AGENTS.md
+  - control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+  - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+  - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+  - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+  - control-plane/policies/life-core/README.md
+  - control-plane/policies/life-core/policy-index.json
+  - control-plane/policies/life-core/root-principles.md
+  - control-plane/policies/life-core/house-rules.md
+  - control-plane/policies/life-core/memory-rules.md
+  - control-plane/policies/life-core/members-and-rooms.md
+  - control-plane/policies/life-core/a2a-relations.md
+  - control-plane/policies/life-core/runtime-boundaries.md
+  - control-plane/policies/life-core/growth-rules.md
+  - control-plane/policies/life-core/presence-and-sensing.md
+
+forbidden_inputs:
+  - author_scratchpad
+  - state-private
+  - private_raw_memory
+  - secrets_credentials_tokens_cookies
+  - provider_raw_responses
+  - unregistered_historical_drafts_outside_allowlist
+
+scope_compliance:
+  allowlist_only: true
+  forbidden_input_read: false
+  author_scratchpad_read: false
+  private_raw_memory_read: false
+  secret_or_provider_raw_response_read: false
+  runtime_probe_or_service_start: false
+  database_read_or_write: false
+  Registry_modified: false
+  CURRENT_STATE_modified: false
+  Phase_2_started: false
+
+review_determinations:
+  inheritance:
+    Phase_1A_authority_and_gap_map_inherited_without_silent_replacement: PASS
+    Phase_1A_fact_authority_matrix_inherited_without_false_current_runtime_claims: PASS
+    current_life_core_policy_boundaries_preserved: PASS
+    accepted_Resident_and_VCP_authority_boundaries_preserved: PASS
+    accepted_Scheduling_action_spine_not_modified_or_bypassed: PASS
+  authority_integrity:
+    Home_Domain_is_not_second_ledger: PASS
+    Home_Domain_is_not_permission_system: PASS
+    Home_Domain_is_not_permit_issuer: PASS
+    Home_Domain_does_not_write_Goal_Task_Run_Validation_or_Event_state: PASS
+    relationship_semantic_ownership_does_not_claim_resolved_canonical_writer: PASS
+    one_canonical_writer_per_fact_class_preserved: PASS
+  Presence:
+    Presence_meaning_is_separate_from_consent_authority: PASS
+    consent_authority_is_separate_from_device_sensing_truth: PASS
+    Resident_running_does_not_activate_Presence_or_sensing: PASS
+    sensing_does_not_imply_recording_or_memory_promotion: PASS
+  memory_and_session:
+    memory_meaning_is_separate_from_VCP_native_content_lifecycle: PASS
+    memory_content_is_separate_from_governed_access_authority: PASS
+    Session_does_not_automatically_become_Life_Stream_Task_or_Memory: PASS
+    Memory_Candidate_does_not_automatically_become_formal_Memory: PASS
+    private_content_is_excluded_from_Ledger_evidence: PASS
+  action_boundary:
+    Home_to_Orchestrator_requires_authenticated_authorized_Command: PASS
+    Orchestrator_remains_canonical_action_state_decider: PASS
+    bounded_result_reference_does_not_duplicate_Ledger_authority: PASS
+    capability_or_relationship_does_not_grant_execution_authority: PASS
+  continuity_and_scope:
+    VCPToolBox_is_first_replaceable_body_not_life_identity: PASS
+    all_seven_M0_gaps_are_preserved: PASS
+    runtime_or_database_schema_added: false
+    implementation_or_runtime_activation_started: false
+    future_contract_order_is_non_authorizing_and_reorderable: PASS
+
+gap_preservation:
+  unresolved_blocking_for_home_direction: []
+  unresolved_blocking_for_M0:
+    - HD-M0-01
+    - HD-M0-02
+    - HD-M0-03
+    - HD-M0-04
+    - HD-M0-05
+    - HD-M0-06
+    - HD-M0-07
+  all_seven_present: true
+  any_gap_falsely_claimed_resolved: false
+
+findings:
+  blockers: []
+  major_findings: []
+  minor_findings: []
+  counts:
+    blockers: 0
+    major: 0
+    minor: 0
+
+review_result: PASS_NO_BLOCKER
+
+G1C:
+  result: PASS_NO_BLOCKER
+  reviewed_subject_may_proceed_to_next_explicit_decision_surface: true
+  subject_accepted_by_review: false
+  acceptance_authority: Jenn
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+decision_effect:
+  Phase_1C_complete: true
+  Phase_2_started: false
+  Jenn_acceptance_granted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  private_raw_memory_access_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+next_gate:
+  action: EXPLICIT_START_OF_PHASE_2_FOUNDATIONAL_INTEGRATION_REVIEW
+  automatic_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false

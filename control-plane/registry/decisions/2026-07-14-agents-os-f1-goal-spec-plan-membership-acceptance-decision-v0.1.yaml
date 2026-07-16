@@ -1,0 +1,72 @@
+schema_version: agents-os.contract-acceptance-decision.v0.1
+record_id: agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1
+record_type: ContractAcceptanceDecision
+status: accepted
+immutable: true
+created_at: 2026-07-14T04:03:43+08:00
+effective_at: 2026-07-14T04:03:43+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT
+  decision_source: explicit_current_conversation_statement
+
+acceptance_unit:
+  id: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  composition_precedence:
+    - R3_explicit_replacements
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+accepted_subjects:
+  - role: R1_base_contract
+    path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - role: R2_blocking_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - role: R3_determinism_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+
+review_evidence:
+  final_independent_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r3-atomic-bundle-independent-review.yaml
+    sha256: 55ff971e2099f76d2ad91ceec1856f6b61970a26a9aa901199741ed3c57da835
+    result: PASS_NO_BLOCKER
+    blockers: 0
+    major_findings: 0
+    minor_findings: 0
+  historical_review_lineage_preserved:
+    - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+      result: BLOCK
+    - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r2-atomic-bundle-independent-review.yaml
+      result: BLOCK
+
+acceptance_effect:
+  F1_contract_status: ACCEPTED
+  Goal_specification_semantics: accepted
+  Success_criteria_semantics: accepted
+  Goal_plan_membership_semantics: accepted
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_creation_or_migration_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  private_raw_memory_access_authorized: false
+  commit_authorized_by_this_decision: false
+  push_authorized_by_this_decision: false
+
+next_gate:
+  name: EXPLICIT_START_OF_F2_ACTOR_IDENTITY_AND_DELEGATION_CONTRACT_CLOSURE
+  automatic_transition: forbidden
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  correction_or_change_method: new_hash_bound_amendment_or_superseding_decision

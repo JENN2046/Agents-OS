@@ -1,0 +1,336 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-actor-identity-delegation-v0.1-independent-review
+review_run_id: f2-independent-review-2026-07-14-fresh-01
+review_type: FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+reviewer_identity: Codex_fresh_independent_reviewer
+date: 2026-07-14
+status: complete
+
+review_process_separation:
+  independent_from_subject_author: true
+  independent_from_author_self_review: true
+  prior_author_conclusions_trusted_without_reverification: false
+  subject_modified: false
+  existing_files_modified: false
+  restricted_inputs_observed: true
+  restricted_inputs_not_read:
+    - state-private
+    - secrets_or_credentials
+    - private_raw_memory
+    - provider_raw_output
+    - author_scratchpad
+    - non_allowlisted_historical_drafts
+
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+  expected_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  pre_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  post_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  hash_match_before_review: true
+  hash_match_after_review: true
+
+allowlist_hashes:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-self-review.yaml
+    sha256: c052e466fd974ea851e2ff645b9b31d150c8a66e4fb794e0b9d99d6178c714cc
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-actor-identity-delegation-start-decision-v0.1.yaml
+    sha256: f5815191077701b7fa7d66a784716f0b952caeffec7eecd2c2ac87808c8aedf7
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - path: CURRENT_STATE.md
+    sha256: 68efae42964adb1f3e51e14ea5db2cde03c18820690431bfd0db9b3b7b7e0aab
+
+result: BLOCK
+finding_counts:
+  blockers: 3
+  major: 1
+  minor: 0
+
+blockers:
+  - finding_id: F2-IR-B01
+    title: Responsibility assignment provenance and delegation attenuation are not closed
+    subject_locations:
+      - section: "9.2 ResponsibilityAssignmentRevision"
+        lines: "482-510"
+      - section: "11.2 Delegation invariants"
+        lines: "618-665"
+    finding: >-
+      ResponsibilityAssignmentRevision names an issuer and basis but has no exact
+      source-responsibility reference, authenticated issuing Principal binding, issuance
+      authority reducer, supersession predecessor, or deterministic rule proving that the
+      issuer may create the assignment at that scope. Because a current assignment is itself
+      a responsibility source, this permits an implementation to manufacture responsibility
+      rather than only record properly sourced responsibility. The delegation rules also do
+      not require the immediate source's may_redelegate flag to be true, do not constrain a
+      child's may_redelegate by its parent, and do not require responsibility_kind equality or
+      a defined kind-narrowing relation. Scope subset and remaining_depth alone therefore do
+      not prove non-expansion.
+    impact: >-
+      The ordinary-action rule is scoped by current responsibility. An under-specified way to
+      originate or widen responsibility is an effective authority expansion even though the
+      document correctly removes an ordinary-action allowlist.
+    required_amendment: >-
+      Define the closed set of assignment issuance sources and an exact issuance reducer. Bind
+      every assignment to an authenticated issuing Principal/Command, exact source
+      responsibility or Jenn root governance decision, issuer-currentness Event sequence, and
+      a supersedes_assignment_revision/CAS lineage. Require deterministic scope, time, and
+      responsibility-kind attenuation. For every delegation edge require the immediate source
+      to have may_redelegate=true; require child may_redelegate to be false when the parent is
+      false or remaining_depth is zero; and specify whether responsibility_kind must be equal
+      or may narrow only through a versioned deterministic relation. Add negative tests for
+      self-issued assignment, issuer scope expansion, may_redelegate=false, kind substitution,
+      and stale assignment head.
+
+  - finding_id: F2-IR-B02
+    title: Binding and delegation activation evidence cannot be deterministically verified
+    subject_locations:
+      - section: "7.3-7.5 ActorPrincipalBindingRevision and activation evidence"
+        lines: "353-406"
+      - section: "11.1 and 11.4 Delegation activation"
+        lines: "581-612, 690-696"
+    finding: >-
+      ActorPrincipalBindingRevision contains neither activation_mode nor an activation evidence
+      reference, while Section 7.5 makes accepted activation evidence mandatory. Delegation has
+      activation_evidence_ref but no typed evidence contract defining who authenticated the
+      acknowledgement, which exact grant fingerprint was acknowledged, its Event ordering,
+      currentness, replay behavior, or revocation/supersession. Narrative requirements cannot
+      be reconstructed from the canonical records or their declared fingerprints.
+    impact: >-
+      Rust cannot deterministically establish a current Actor-to-Principal representation or
+      active delegation. This breaks the central anti-self-claim boundary and allows divergent
+      implementations to accept stale, replayed, or unauthenticated activation.
+    required_amendment: >-
+      Add activation_mode and activation_evidence_ref to the binding revision and define typed,
+      immutable BindingActivationEvidence and DelegationActivationEvidence contracts. Each must
+      bind exact Actor and identity revision, Principal and binding revision, environment,
+      authenticator/verifier revisions, target binding or grant fingerprint, authenticated
+      acknowledging Command, time window, Event sequence, status, replay identity, and
+      supersession/revocation. Include these facts in canonical fingerprints, reducers, startup
+      recovery, and explicit negative tests.
+
+  - finding_id: F2-IR-B03
+    title: Canonical Command and replay admission are under-specified
+    subject_locations:
+      - section: "10.1 CommandTypeRegistryRevision"
+        lines: "530-548"
+      - section: "14 Canonical command bytes and authentication"
+        lines: "807-891"
+      - section: "17 Replay, idempotency, and session loss"
+        lines: "965-981"
+      - section: "19 Recovery and fail-closed startup"
+        lines: "1029-1053"
+    finding: >-
+      CanonicalCommand contains an untyped payload while CommandTypeDefinition has no payload
+      schema or canonicalization-contract reference. The text simultaneously requires
+      schema-known fields only and rejects every array without a reviewed order, so exact valid
+      payload bytes cannot be determined from the registry. The nonce single-use key is also
+      not defined precisely, and no atomic intake transition reserves command_id and nonce
+      against the exact current identity/binding/responsibility/list revisions before domain
+      handoff. "Idempotent original result" has no deterministic pending, crashed, or
+      outcome-unknown state.
+    impact: >-
+      Signers and verifiers may hash different bytes, replay protection can race, and recovery
+      can either duplicate a mutation or incorrectly report success. These are contract-level
+      failures in Command authentication, not deferred production cryptographic choices.
+    required_amendment: >-
+      Bind each command type and registry revision to an exact payload schema and payload
+      canonicalization version. Specify NFC normalization order, normalized-key collision and
+      duplicate rejection before RFC 8785 JCS, and the order rule for every permitted payload
+      array. Define the exact nonce replay key and window. Define one Rust single-writer intake
+      transaction that CAS-checks current identity, binding, responsibility/delegation, command
+      registry, prohibited-list revision, command_id, and nonce; atomically records replay
+      reservation and an intake state before handoff. Define idempotent PENDING, COMMITTED,
+      REJECTED, and OUTCOME_INDETERMINATE recovery behavior without automatically retrying an
+      unknown domain effect.
+
+major_findings:
+  - finding_id: F2-IR-M01
+    title: Identity creation and compromise recovery provenance is not fully auditable
+    subject_locations:
+      - section: "5 ActorIdentityRevision and identity stewardship"
+        lines: "178-287"
+    finding: >-
+      ActorIdentityRevision records created_by_actor_ref and a provisioning basis, but it does
+      not bind the authenticated creating Principal/Command. Compromise recovery requires the
+      same or higher identity steward and replacement of every affected Principal binding, but
+      neither the steward ordering nor an atomic recovery evidence set is part of the contract
+      shape or reducer.
+    impact: >-
+      The prose rejects self-creation and self-recovery, but a recovery implementation cannot
+      prove from the declared canonical facts that the proper authenticated steward acted and
+      that all affected bindings were fenced before the Actor returned ACTIVE.
+    required_amendment: >-
+      Bind create/change/recovery revisions to an authenticated steward Principal binding and
+      exact Command/Event. Define the steward ordering as a closed deterministic relation and a
+      recovery evidence contract containing the compromised revision, incident basis, complete
+      affected-binding set, revocation/replacement facts, and atomic activation condition. Add
+      self-create, self-recover, incomplete binding replacement, and stale steward tests.
+
+minor_findings: []
+
+review_dimensions:
+  - dimension: single_prohibited_boundary
+    result: PASS
+    analysis: >-
+      The subject defines one Prohibited Behavior List, rejects permission ladders, risk scores,
+      ordinary-action allowlists, waiver by role or delegation, and does not emit ALLOW or a
+      second authorization assessment. The responsibility-routing model is conceptually
+      distinct, but F2-IR-B01 must close responsibility origination so that distinction is real.
+  - dimension: actor_principal_credential_session_model_and_host_separation
+    result: BLOCK
+    analysis: >-
+      Actor, Principal, credential material, Session, and model are terminologically separated;
+      EXECUTION_HOST is a stable Actor and HOST_PROCESS is a Principal, with F4 effect admission
+      explicitly deferred. The binding activation gap in F2-IR-B02 prevents operational closure.
+  - dimension: responsibility_assignment_and_delegation_non_expansion
+    result: BLOCK
+    analysis: >-
+      Cycle, depth, scope subset, time containment, expiry, revocation, supersession, activation,
+      and parallel-chain non-union are stated. Assignment provenance, redelegation-flag
+      attenuation, and responsibility-kind attenuation are not deterministic as detailed in
+      F2-IR-B01.
+  - dimension: identity_creation_recovery_and_continuity
+    result: MAJOR_FINDING
+    analysis: >-
+      Stable identity is correctly separated from model/session/process and self-claim is
+      rejected. Canonical steward-authentication and complete compromise-recovery evidence need
+      the amendment in F2-IR-M01.
+  - dimension: command_authentication_canonicalization_replay_currentness_race_recovery
+    result: BLOCK
+    analysis: >-
+      Exact digest binding, fail-closed authentication, revocation race ordering, and startup
+      checks are directionally correct. Payload canonicalization and atomic replay/currentness
+      admission remain open under F2-IR-B03.
+  - dimension: accepted_F1_home_and_resident_compatibility
+    result: PASS
+    analysis: >-
+      Jenn-only top-level Goal decisions, Nobao's coordinator role, domain-owned state rules,
+      Rust single-writer authority, Resident/N-API deferral, Home relationship non-authority,
+      and Home identity-meaning versus Control canonical-fact ownership are preserved. No direct
+      conflict was found in the hash-bound allowlist.
+  - dimension: implementation_readiness_honesty
+    result: PASS
+    analysis: >-
+      The subject expressly blocks implementation/runtime authority while the exact canonical
+      Prohibited Behavior List is absent, accepts no production authenticator profile, defers
+      Resident and host mechanics, and states that acceptance would not start F3.
+  - dimension: schema_fields_terms_yaml_and_core_object_boundary
+    result: BLOCK
+    analysis: >-
+      Markdown fences are balanced and all 20 YAML blocks parse. No duplicate formal core object
+      or second ledger is claimed. Missing activation schemas, assignment lineage/source fields,
+      and payload schema bindings are substantive contract gaps identified above.
+  - dimension: privacy_secret_memory_and_provider_output_boundary
+    result: PASS
+    analysis: >-
+      Secret bytes, raw proof, private raw Memory, private conversation, provider raw output,
+      and unnecessary identity data are explicitly excluded; opaque references do not grant read
+      access. No forbidden input was read during this review.
+  - dimension: author_self_review_reverification
+    result: BLOCK
+    analysis: >-
+      Every prior finding was re-adjudicated independently. The author PASS did not lower the
+      standard, and new blockers were found in responsibility origination/attenuation,
+      activation evidence, and Command replay/canonicalization.
+
+self_review_finding_disposition:
+  - self_review_finding_id: F2-SR-01
+    disposition: CONFIRMED_RESOLVED
+    rationale: EXECUTION_HOST and HOST_PROCESS are now separate Actor and Principal classes.
+  - self_review_finding_id: F2-SR-02
+    disposition: CONFIRMED_RESOLVED_WITH_DISTINCT_NEW_BLOCKER
+    rationale: >-
+      The explicit action allowlists, risk ceilings, and ALLOW_DENY state machine are gone.
+      F2-IR-B01 is a different gap: responsibility source creation and attenuation are not closed.
+  - self_review_finding_id: F2-SR-03
+    disposition: PARTIALLY_RESOLVED
+    rationale: >-
+      Assignment and delegation share ResponsibilityScope, but may_redelegate and
+      responsibility_kind attenuation are not enforced across edges.
+  - self_review_finding_id: F2-SR-04
+    disposition: PARTIALLY_RESOLVED
+    rationale: >-
+      Role charter and routing mismatch are correctly described as non-permission concerns, but
+      the proper deterministic source for issuing ResponsibilityAssignmentRevision is undefined.
+  - self_review_finding_id: F2-SR-05
+    disposition: CONFIRMED_RESOLVED
+    rationale: >-
+      F1 decision_authority is preserved as domain decision ownership and accepted bytes are not
+      silently rewritten.
+
+documented_implementation_blockers:
+  - blocker_id: F2-IB-01
+    disposition: CONFIRMED
+    description: >-
+      A single exact canonical Prohibited Behavior List and synchronized governance convergence
+      do not yet exist; implementation and runtime enforcement remain blocked.
+  - blocker_id: F2-IB-02
+    disposition: CONFIRMED
+    description: >-
+      Production authenticator profiles, credentials, trust anchors, and host authentication are
+      intentionally undefined and require later contracts and separate authority.
+  - blocker_id: F2-IB-03
+    disposition: CONFIRMED
+    description: >-
+      Resident singleton/N-API ownership, TaskPermit, and effect fencing remain downstream F3/F4
+      work and are not solved by F2.
+  - blocker_id: F2-INDEPENDENT-SEMANTIC-BLOCKERS
+    disposition: NEW
+    description: >-
+      F2-IR-B01 through F2-IR-B03 must be resolved by a separately hash-bound amendment or new
+      subject revision before the F2 acceptance unit can pass independent review.
+
+non_authorization_effects:
+  F2_accepted: false
+  Jenn_acceptance_substituted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  production_identity_or_credential_created: false
+  database_or_schema_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  accepted_subject_bytes_modified: false
+
+validation:
+  allowlist_preflight_hashes:
+    result: PASS
+    checked_files: 12
+  subject_hash_before_review:
+    result: PASS
+    sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  subject_hash_after_review:
+    result: PASS
+    sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  markdown_fences:
+    result: PASS
+    fence_markers: 114
+    yaml_openers: 20
+  subject_yaml_blocks:
+    result: PASS
+    parsed_blocks: 20
+  utf8_lf_and_trailing_whitespace_scan:
+    result: PASS
+  review_scope:
+    result: PASS
+    note: Only the fixed subject and explicitly hash-bound allowlist were reviewed.
+
+required_next_gate: >-
+  Create a narrow separately hash-bound amendment or revised F2 subject resolving all blockers
+  and the major finding, then run a new fresh independent review. This review does not authorize
+  Jenn acceptance, implementation, runtime activation, production authentication, or F3 start.

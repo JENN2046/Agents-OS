@@ -1,0 +1,12 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r13-m0-actor-eligibility-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+status: active
+authority: {basis: Jenn_explicit_automatic_advancement_after_F2_review, source_review: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r12-atomic-bundle-independent-review.yaml, source_review_sha256: e2d0be833a2507186878d8bbd86eb9ace6a1214e07993a1a149a887ec098fd05}
+scope: [deterministic_M0_Actor_eligibility_assessment, exact_synthetic_Binding_materialization_row, fresh_independent_review]
+forbidden: [new_Actor_field, new_Actor_creation_route, rewrite_R1_through_R12, accept_F2, start_F3, implementation, runtime_activation, commit, push]
+implementation_authorized: false
+runtime_activation_authorized: false
+

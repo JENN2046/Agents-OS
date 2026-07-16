@@ -1,0 +1,225 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r9-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T23:16:03+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r9
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R9_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+  subject_paths:
+    R1: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    R2: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    R3: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+    R4: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+    R5: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+    R6: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+    R7: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+    R8: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+    R9: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r9.draft.md
+  sha256: a0a4ef0e6058bfbf60adf1391624dd0fc1678f5e2db361ce87bdc594e6f570dd
+  acceptance_subject: false
+  authority: none_derived_only
+
+mandatory_review_inputs:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r8-atomic-bundle-independent-review.yaml
+    sha256: 615a9d1deaee5b53a47d0e424762e8757bb1c7b3440f5c99cfbb1e04760453a5
+    role: prior_blocking_findings
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r9-binding-bootstrap-impact-membership-closure-start-decision-v0.1.yaml
+    sha256: d2a16919a1f2d03c1495440197d5a7e68a256b141f424f29b591ef9926c06d4b
+    role: amendment_scope_authority
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r9-binding-bootstrap-impact-membership-closure-self-review.yaml
+    sha256: 92178aa603379498696dff467b86455bdf3d3900f1393e6e1e6c4a65af6b65ee
+    role: author_evidence_only_not_trusted_as_conclusion
+
+normative_context_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 1
+  major: 2
+  minor: 0
+
+findings:
+  - finding_id: F2-R9-IR-B01
+    severity: BLOCKER
+    title: Binding issuance requires exact current proof but does not bind a proof or its assessment
+    affected_sections:
+      - R9 Sections 3.1-3.3
+      - R9 Section 5.1
+      - R2 Section 5
+    finding: >-
+      The Binding issuance table requires exact Actor, Principal, Profile,
+      proof, scope, and time inputs for interactive issuance and analogous exact
+      target inputs for the other modes. The complete Binding schema and body
+      contain target Actor/Principal/Profile refs, scope, and time, but neither
+      they nor TransitionAuthorityBasisV0_1R9 contain a target Actor assessment,
+      PrincipalAssessment, or PrincipalControlProofAssessment ref/fingerprint.
+      The proof first appears in later BindingActivationEvidence, which the R3
+      acyclic graph intentionally creates only after the immutable Binding
+      subject. Consequently no fixed issuance body or authority object selects
+      the exact proof named by the mandatory issuance predicate.
+    impact: >-
+      One implementation can treat proof as a later activation-only fact,
+      another can require existence of any current proof, and another can
+      reject issuance because the exact proof is unbound. The intent/action
+      bytes do not determine the stated issuance result, so the complete
+      Binding mutation remains non-reproducible.
+    required_amendment: >-
+      Choose one boundary explicitly. Recommended: remove proof from Binding
+      subject issuance, require exact current Actor/Principal/Profile
+      assessments at the intent watermark, and leave Principal control proof
+      solely in the later activation-evidence graph. Alternatively add exact
+      assessment/proof refs and fingerprints to the Binding authority/body and
+      preserve the subject-before-evidence DAG. Publish mode-specific
+      required/forbidden fields for either choice.
+
+  - finding_id: F2-R9-IR-M01
+    severity: MAJOR
+    title: Synthetic Binding creation-spec canonicalization has an incomplete precedence declaration
+    affected_sections:
+      - R8 Section 6.2
+      - R9 Sections 1 and 3.4
+    finding: >-
+      R8 says every creation spec has its own domain tag and fingerprint. R9
+      instead requires the Binding creation-spec fingerprint to be the
+      BINDING_REVISION mutation-body fingerprint and explicitly says it is not
+      a second digest domain. That later rule is clear, but R9's exact
+      precedence list names R8 Sections 6.3-6.4 and does not name the conflicting
+      creation-spec rule in R8 Section 6.2.
+    impact: >-
+      A strict precedence resolver can retain the R8 spec-domain digest while
+      another applies the R9 mutation-body digest, producing different
+      manifest and derived Binding bytes.
+    required_amendment: >-
+      Add the exact R8 Section 6.2 Binding-creation-spec rule to R9 precedence
+      and state that only Binding specs use the BINDING_REVISION body domain;
+      leave Profile and Principal spec domains unchanged unless separately
+      amended.
+
+  - finding_id: F2-R9-IR-M02
+    severity: MAJOR
+    title: The R9 materialization still does not print the complete required authority and reducer tables
+    affected_sections:
+      - R9 Section 6
+      - Materialization Sections 3.4, 4.4-4.5, and 6
+    finding: >-
+      R9 requires the derived surface to print complete Profile, Principal,
+      Binding, transition, Actor, and impact authority tables and all unchanged
+      R8 total reducers used by R9. The materialization's Binding table omits
+      the required-current-facts column, its governed-transition table omits
+      source-state/additional predicates and forbidden combinations, its Actor
+      table replaces exact enum basis kinds with narrative Jenn/steward labels,
+      and Section 6 gives only Delegation precedence plus references instead of
+      the complete Binding and Delegation reducers.
+    impact: >-
+      The materialization remains non-authoritative and cannot change contract
+      semantics, but it still fails the explicit implementation-safe reading
+      requirement and cannot close the prior materialization finding.
+    required_amendment: >-
+      Regenerate the surface after the Binding predicate is fixed. Copy every
+      required/forbidden field rule, source/target predicate, exact authority
+      enum, and complete reduction order rather than referring the reader back
+      to older amendments.
+
+prior_finding_disposition:
+  F2-R8-IR-B01: RESOLVED
+  F2-R8-IR-B02: PARTIAL_REMAINS_BLOCKED_BY_F2-R9-IR-B01
+  F2-R8-IR-B03: RESOLVED
+  F2-R8-IR-M01: RESOLVED
+  F2-R8-IR-M02: RESOLVED
+  F2-R8-IR-M03: NOT_RESOLVED
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  manifest_activation_action_body_cycle: PASS
+  Binding_mutation_kind_and_complete_schema: PASS_WITH_BLOCKING_ISSUANCE_INPUT_GAP
+  Binding_final_fingerprint: PASS
+  Binding_issuance_authority: BLOCK_EXACT_PROOF_UNBOUND
+  synthetic_group_intent_structure: PASS
+  synthetic_Binding_spec_domain: PASS_DIRECTION_MAJOR_PRECEDENCE_GAP
+  impact_membership_immutability_and_index: PASS
+  authority_watermark_equality: PASS
+  Profile_target_controller_split: PASS
+  delegation_total_cascade: PASS
+  actor_schema_and_fingerprint: PASS
+  single_prohibited_boundary_preserved: PASS
+  materialization_implementation_safe: false
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+validation:
+  subject_hashes_before_review: PASS
+  materialization_hash_before_review: PASS
+  YAML: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  subject_hashes_after_review: PASS
+  materialization_hash_after_review: PASS
+
+required_next_action:
+  action: CREATE_F2_R10_FINAL_BINDING_ISSUANCE_INPUT_AND_MATERIALIZATION_CLOSURE
+  rewrite_R1_through_R9: forbidden
+  expand_F2_direction: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+  implementation: forbidden
+  runtime_activation: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

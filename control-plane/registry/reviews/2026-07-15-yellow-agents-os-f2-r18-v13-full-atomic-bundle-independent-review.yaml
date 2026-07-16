@@ -1,0 +1,458 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r18-v13-full-atomic-bundle-independent-review
+review_type: FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T21:41:59+08:00
+status: complete
+result: BLOCK
+
+reviewer:
+  identity: Codex_fresh_independent_review_quorum_f2_r18_v13
+  coordinator_task: /root
+  independent_runs:
+    - task: /root/f2_r18_fresh_semantic
+      surface: full_atomic_subject_semantics_and_cross_revision_closure
+      result: BLOCK
+    - task: /root/f2_r18_materialization
+      surface: source_equivalence_and_complete_materialization_projection
+      result: BLOCK
+    - task: /root/f2_r18_deterministic
+      surface: hash_structure_indexes_closed_sets_and_machine_checks
+      result: PASS_FINDINGS_NONE
+  independence: >-
+    Each independent run was started without conversation context and was
+    restricted to root AGENTS.md plus the fixed R1-R18 subjects and v13.
+    None read an existing review, self-review, CURRENT_STATE, another
+    materialization, author scratchpad, state-private, raw log, secret,
+    credential, provider output, or private raw memory.
+  prior_pass_relied_upon: false
+  author_self_review_role: entry_gate_evidence_only_not_conclusion
+  read_only_until_conclusion: true
+
+start_gate:
+  Jenn_explicit_start_received: true
+  exact_requested_gate: FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+  entry_materialization_review:
+    path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v13-materialization-independent-consistency-review.yaml
+    sha256: af0dbd27fb4db877f3093f0e877ce0cdce05ae830466845c8e66836095e523e7
+    role: eligibility_evidence_only
+  entry_subject_self_review:
+    path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-worker-binding-activation-assurance-closure-self-review.yaml
+    sha256: 1470095e6b2f804c2ee361d437fd171c9078a0fc296e23f5100cf161289690d0
+    role: eligibility_evidence_only
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R18_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  acceptance_subject_count: 18
+  acceptance_subjects_modified_by_this_review: false
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+    R18: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+
+reviewed_materialization:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+  sha256: 939ce101619d13f5947620655ea6e25fd859bebba80bdf051bc305a534c8e680
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+  bytes_modified_by_this_review: false
+
+hash_gate:
+  status: PASS
+  rule: Any fixed-input hash mismatch terminates the review before content inspection.
+  observed_input_count: 19
+  matched_input_count: 19
+  mismatched_input_count: 0
+
+exact_content_input_allowlist:
+  - control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+  - control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+
+finding_counts:
+  blocker: 6
+  major: 3
+  minor: 1
+  total: 10
+
+findings:
+  - finding_id: F2-R18-V13-FULL-IR-B01
+    severity: BLOCKER
+    title: Actor validity-window start boundary has no closed subject state
+    affected_surfaces:
+      - Actor identity lifecycle
+      - ActorIdentityAssessmentV0_1R16
+      - ActorIdentityEffectiveReducer
+      - Temporary Worker responsibility projection
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+        lines: 259-276
+        fact: IdentityValidityWindow has not_before and expiry, and every Temporary Worker requires it.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+        lines: 318-330
+        fact: The effective Actor assessment enum has no NOT_YET_ACTIVE state.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+        lines: 235-257
+        fact: The Actor reducer does not define the now-before-not_before branch.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 868-880
+        fact: V13 independently maps outside-window time to EXPIRED.
+    finding: >-
+      Fixed R1-R18 provides no unique Actor assessment when trusted time is
+      earlier than not_before_utc_ms. V13's EXPIRED interpretation is not an
+      authorized subject rule and is semantically different from not-yet-active.
+    impact: >-
+      Writers and reducers cannot deterministically agree on the state of a
+      future-valid Temporary Worker. The derived Worker responsibility reducer
+      and downstream use gate therefore lack a closed input state.
+    required_amendment: >-
+      Amend the subject bundle to define the pre-start branch and its enum,
+      dependency, and downstream mapping, or forbid future not_before values at
+      creation. Regenerate the derived materialization afterward.
+
+  - finding_id: F2-R18-V13-FULL-IR-B02
+    severity: BLOCKER
+    title: Activation-evidence RESUME requires new proof without a canonical proof binding
+    affected_surfaces:
+      - GovernedStateTransitionFactV0_1R9Effective
+      - Binding activation evidence lifecycle
+      - Delegation activation evidence lifecycle
+      - recovery and replay determinism
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+        lines: 821-834
+        fact: Activation-evidence RESUME requires a new current proof or an exact acknowledgement revalidation.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+        lines: 139-147,399-405,421-443
+        fact: The closed transition body and fact contain no proof or revalidation ref/fingerprint.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 464-467,1907-1924
+        fact: V13 retains the new-proof predicate while retaining the proof-less transition schema.
+    finding: >-
+      The acceptance subjects require revalidation but provide no canonical
+      field that binds the revalidated proof or acknowledgement result into the
+      mutation body, intent, CAS, final fact fingerprint, replay identity, or
+      recovery path.
+    impact: >-
+      RESUME cannot be deterministically reconstructed. Implementations must
+      query ambient state, reuse stale evidence, or invent an ungoverned field.
+    required_amendment: >-
+      Add a target-specific canonical revalidation object or exact ref and
+      fingerprint to RESUME, including the Binding principal-control proof and
+      a closed Delegation acknowledgement rule, then bind it through body,
+      intent, fact fingerprint, reducer, replay, and recovery.
+
+  - finding_id: F2-R18-V13-FULL-IR-B03
+    severity: BLOCKER
+    title: Domain Agent stewardship of a non-ACTIVE Worker is recovery-locked
+    affected_surfaces:
+      - post-create IdentityStewardshipAssessment
+      - TemporaryWorkerResponsibilityBindingAssessmentV0_1R18
+      - Actor RESUME RECOVER RETIRE paths
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+        lines: 197-200,227-230
+        fact: Post-create steward actions require the current-target stewardship assessment.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+        lines: 111-126,215-244
+        fact: Domain Agent stewardship requires an ACTIVE Worker binding, but that binding is non-ACTIVE whenever Worker identity is SUSPENDED or COMPROMISED.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+        lines: 302-317
+        fact: The lifecycle matrix otherwise assigns RESUME RECOVER and RETIRE to the current identity steward.
+    finding: >-
+      R18 makes the current target's ACTIVE identity a transitive prerequisite
+      of the Domain Agent stewardship assessment used to restore or retire that
+      same non-ACTIVE target.
+    impact: >-
+      A responsible Domain Agent cannot exercise the lifecycle stewardship that
+      the subject bundle assigns to it; only an unrelated Jenn-root fallback
+      remains, so the declared steward route is internally self-locking.
+    required_amendment: >-
+      Derive stewardship scope/source validity independently from the target
+      Actor current state. Validate the responsibility source, Worker/source/
+      resource tuple, and Domain Agent scope separately, and let the Actor
+      transition matrix evaluate the target state.
+
+  - finding_id: F2-R18-V13-FULL-IR-B04
+    severity: BLOCKER
+    title: V13 reverses the fixed parsed-number admission rule
+    affected_surfaces:
+      - F2 canonical scalar profile
+      - cross-writer JCS admission
+      - every numeric field in the materialization
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+        lines: 39-102
+        fact: Admission is exclusively over parsed binary64 values and parser-rounded source tokens are admitted when the parsed result is a safe integer.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 653-660,680-683
+        fact: V13 rejects parser-rounding admission while its printed safe_uint predicate accepts the rounded safe-integer result.
+    finding: >-
+      V13 contradicts both R6 and its own printed predicate by turning token
+      information loss into a rejection condition.
+    impact: >-
+      Conforming implementations can admit different values and produce
+      different canonical bytes and fingerprints from the same parsed value.
+    required_amendment: >-
+      Restore the exact R6 parsed-value predicate and examples; reject only when
+      the parsed result itself fails the safe-integer predicate.
+
+  - finding_id: F2-R18-V13-FULL-IR-B05
+    severity: BLOCKER
+    title: V13 omits required exact fingerprint and derived-digest formulas
+    affected_surfaces:
+      - complete resolved implementation reading surface
+      - BindingScope fingerprint
+      - Delegation final fingerprint and issuance intent
+      - activation evidence IDs and replay identities
+      - lifecycle replay and responsibility lineage
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+        lines: 566-594
+        fact: The materialization must include canonical reference domain and fingerprint rules in full and be one complete resolved implementation surface.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 1230,2353-2359
+        fact: V13 refers back to earlier formulas and supplies a generalized complete-object fingerprint statement.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+        lines: 136,221,295,385
+        fact: These lines define still-effective special replay evidence-ID and issuance-intent formulas absent from V13.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+        lines: 128,253,355,439
+        fact: These lines define special BindingScope replay and Delegation final-subject formulas absent from V13.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+        lines: 1070
+        fact: The responsibility-lineage formula is absent from V13.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+        lines: 210
+        fact: The lifecycle replay formula is absent from V13.
+    finding: >-
+      V13 does not print multiple still-effective special digest formulas and
+      its broad complete-known-object rule is not byte-equivalent to all of
+      them. A source reference is not the complete surface required by R16.
+    impact: >-
+      An implementation cannot reproduce all normative digests from V13 alone
+      and may apply the generalized formula to a special projection, producing
+      different bytes.
+    required_amendment: >-
+      Print every still-effective special formula and distinguish registered
+      derived-record complete-object fingerprints from special tuple, replay,
+      evidence-ID, lineage, intent, and subject projections.
+
+  - finding_id: F2-R18-V13-FULL-IR-B06
+    severity: BLOCKER
+    title: V13 omits effective closed-set and invariant predicates
+    affected_surfaces:
+      - Assignment issuance
+      - non-transferable responsibility
+      - BindingScope and context scalar admission
+      - Jenn governance authority basis
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+        lines: 175-190
+        fact: Assignment cannot be self-issued.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+        lines: 555-575
+        fact: The non-transferable responsibility set remains effective.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+        lines: 110-140
+        fact: BindingScope contexts are non-empty and forbid wildcard glob regex subtree future and unknown kinds.
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+        lines: 125-150
+        fact: context_id has exact length Unicode and control-character rules.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 357,719-728,1089,1191-1243
+        fact: V13 prints the fields but omits these controlling predicates and closed sets.
+    finding: >-
+      Multiple effective admission and authority constraints do not appear in
+      the alleged complete implementation surface. Field-list equality and
+      index equality do not preserve object validity predicates.
+    impact: >-
+      A V13-only implementation can admit self-issued Assignments, transferable
+      Jenn-only responsibility, invalid Binding scopes or context identifiers,
+      or an empty/invalid governance basis-use set.
+    required_amendment: >-
+      Project every still-effective closed set and invariant into the owning
+      V13 section and include them in source-equivalence validation.
+
+  - finding_id: F2-R18-V13-FULL-IR-M01
+    severity: MAJOR
+    title: V13 Actor CREATE table broadens the class-specific authority union
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+        lines: 81-93
+        fact: Resident Domain and Worker classes use stewardship CREATE Jenn uses governance bootstrap and Service Host use provisioning.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 329-340
+        fact: The CREATE row prints the three bases as one generic union and qualifies only the provisioning branch by class.
+    finding: >-
+      The complete reading table can be implemented as allowing Jenn governance
+      bootstrap to create ordinary non-Jenn Actors, which expands the fixed
+      class-specific authority rule.
+    required_amendment: >-
+      Split CREATE by Actor class and print the mutually exclusive R16 routes.
+
+  - finding_id: F2-R18-V13-FULL-IR-M02
+    severity: MAJOR
+    title: V13 drops the derived SUSPENDED activation-evidence state
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+        lines: 848-853
+        fact: SUSPENDED REVOKED and SUPERSEDED are derived through transition/current-head rules.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 1392-1401,1855-1892
+        fact: V13 lists only ACTIVE REVOKED SUPERSEDED as later states while its reducers depend on SUSPEND and RESUME.
+    finding: >-
+      V13's creation/effective-state explanation contradicts its own transition
+      and reducer surface, leaving the derived suspension representation unclear.
+    required_amendment: >-
+      Separate immutable creation status from derived assessment state and
+      explicitly retain the R7 SUSPENDED projection.
+
+  - finding_id: F2-R18-V13-FULL-IR-M03
+    severity: MAJOR
+    title: The exact source map and activation cross-references are not exact
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+        lines: 228-241
+        fact: Every index row must name the authoritative subject and section exactly.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 2105,2112,2307
+        fact: V13 cites nonexistent R18 Section 12 twice and gives AuthenticationAssertionValue the broad R1 Sections 10-15 range rather than its exact section.
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+        lines: 257-289
+        fact: The controlling activation projection is R18 Section 4.1.
+    finding: >-
+      The object/reducer source surface cannot be followed deterministically and
+      violates the explicit exact-source requirement even where the printed
+      activation body is otherwise correct.
+    required_amendment: >-
+      Replace broad ranges and nonexistent section references with exact subject
+      sections and validate every cross-reference.
+
+  - finding_id: F2-R18-V13-FULL-IR-m01
+    severity: MINOR
+    title: Delegation reason remains unconstrained free text
+    evidence:
+      - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+        lines: 606-611
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md
+        lines: 1222-1227
+      - path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+        lines: 381-383
+    finding: >-
+      The canonical Delegation subject retains a low-disclosure and cross-writer
+      variance surface that may carry unnecessary narrative.
+    required_amendment: >-
+      A later subject amendment should replace reason with a closed reason_code
+      or specify strict length character and disclosure constraints.
+
+independent_atomic_assessment:
+  R1_through_R18_reassessed_as_one_indivisible_unit: FAIL_BLOCKED
+  fixed_input_hash_identity_19_of_19: PASS
+  cross_revision_override_precedence: FAIL_BLOCKER
+  actor_lifecycle_currentness_and_time: FAIL_BLOCKER
+  activation_transition_replay_and_proof_binding: FAIL_BLOCKER
+  stewardship_and_recovery_liveness: FAIL_BLOCKER
+  parsed_number_and_cross_writer_canonicalization: FAIL_BLOCKER
+  canonical_fingerprint_and_digest_reproducibility: FAIL_BLOCKER
+  closed_set_and_invariant_projection: FAIL_BLOCKER
+  authority_projection: FAIL_MAJOR
+  activation_evidence_state_projection: FAIL_MAJOR
+  exact_source_map: FAIL_MAJOR
+  single_prohibited_boundary: PASS
+  non_authorization: PASS
+  partial_acceptance_forbidden: PASS
+
+structural_validation:
+  note: >-
+    Structural PASS does not override semantic findings. The independent
+    deterministic run confirmed that V13 is internally well-formed at the
+    counted row and field level, while the two semantic runs found omitted,
+    contradictory, or unbound normative behavior.
+  input_utf8_no_bom_lf_only_no_trailing_whitespace_19_of_19: PASS
+  markdown_fences_balanced_19_of_19: PASS
+  coordinator_yaml_blocks_strict_duplicate_key_parse_172_of_172: PASS
+  v13_source_hash_map_18_of_18: PASS
+  v13_surface_definitions_and_index_61_of_61: PASS
+  v13_reducer_definitions_and_index_13_of_13: PASS
+  R17_v13_role_enum_exact_order_and_uniqueness_43_of_43: PASS
+  v13_action_mapping_exact_exclusive_coverage_43_of_43: PASS
+  R18_activation_projection_rows_5_of_5: PASS
+
+artifact_validation:
+  strict_duplicate_key_YAML_parse: PASS
+  finding_counts_6_blocker_3_major_1_minor_total_10: PASS
+  evidence_paths_exist: PASS
+  UTF8_without_BOM_LF_only_no_trailing_whitespace: PASS
+  docctl_doctor: PASS_WITH_ONE_EXPECTED_UNREGISTERED_WARNING
+  docctl_status: FAIL_UNREGISTERED_REVIEW_ARTIFACT_AND_EXISTING_SCORE_GATES
+  registry_registration_performed: false
+  note: >-
+    Registration would modify the existing registry examples during an
+    independent review. This run leaves the one new review artifact
+    unregistered and reports the warning instead of expanding scope.
+
+review_conclusion:
+  ready_for_Jenn_atomic_acceptance_decision: false
+  acceptance_recommendation: DO_NOT_ACCEPT_F2_R1_THROUGH_R18_ATOMIC_UNIT
+  subjects_require_amendment: true
+  materialization_requires_regeneration: true
+  safe_next_sequence:
+    - Create a narrow subject amendment that closes B01 B02 and B03 without modifying fixed R1-R18 bytes.
+    - Produce a new complete source-exact materialization correcting B04 through M03.
+    - Run author self-review and targeted independent consistency review.
+    - Run a new fresh full atomic-bundle independent review before Jenn acceptance.
+
+authority:
+  F2_accepted: false
+  Jenn_atomic_acceptance_decision_ready: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  subjects_modified: false
+  materialization_modified: false
+  prior_reviews_modified: false
+  packages_modified: false
+  Registry_modified: false
+  CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false
+
+next_required_action: NARROW_F2_SUBJECT_AMENDMENT_THEN_CORRECTED_COMPLETE_MATERIALIZATION_THEN_FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW

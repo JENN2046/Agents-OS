@@ -1,0 +1,68 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-home-domain-phase-1b-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T00:07:01+08:00
+effective_at: 2026-07-14T00:07:01+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_1B
+  decision_source: explicit_current_conversation_instruction
+
+phase:
+  roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  phase_id: HOME_DOMAIN_PHASE_1B
+  phase_name: Home Domain Architecture Direction
+  prerequisite_gate:
+    gate_id: G1A
+    result: PASS_WITH_GAPS
+    home_domain_drafting_allowed: true
+  normative_inputs:
+    - path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+      sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    - path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+      sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+      sha256: 4654da6e02424caf4a12c9bea44c462dc79ba007493de1bf9590b8fc8901824f
+
+authorized_scope:
+  - create_Home_Domain_Architecture_Direction_v0_1
+  - perform_author_self_review_and_revision
+  - fix_subject_bytes_and_calculate_SHA_256
+  - update_document_registry_and_CURRENT_STATE_to_pending_Phase_1C
+
+hard_boundaries:
+  create_second_Task_ledger: forbidden
+  create_permission_or_permit_issuer: forbidden
+  design_runtime_or_database_schema: forbidden
+  Phase_1C_automatic_start: forbidden
+  Phase_2_automatic_start: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_or_migration: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_gate:
+  gate_id: G1B
+  allowed_results:
+    - PROPOSED_FINAL_DRAFT
+    - REVISION_REQUIRED
+    - BLOCK
+  Phase_1C_requires_fresh_independent_reviewer: true
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

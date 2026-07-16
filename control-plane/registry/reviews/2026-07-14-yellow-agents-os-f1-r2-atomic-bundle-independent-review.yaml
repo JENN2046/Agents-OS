@@ -1,0 +1,231 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+record_id: agents-os-f1-r2-atomic-bundle-independent-review-v0.1
+record_type: HashBoundIndependentReview
+date: 2026-07-14
+reviewer:
+  identity: Nuobao_f1_r2_atomic_independent_reviewer
+  role: independent_reviewer_not_author
+  run_label: F1_R2_ATOMIC_BUNDLE_FRESH_HASH_BOUND_INDEPENDENT_REVIEW_2026_07_14
+
+review_scope:
+  mode: explicit_allowlist_only
+  composition_rule: R2_replacement_rules_take_precedence_and_all_unmodified_R1_clauses_remain
+  hash_algorithm: SHA-256
+  all_input_hashes_verified_before_review: true
+  forbidden_inputs_accessed: false
+  author_self_review_relied_on: false
+  input_allowlist:
+    - role: workspace_governance
+      path: AGENTS.md
+      sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      hash_verified: true
+    - role: R1_subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+      sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+      hash_verified: true
+    - role: R2_amendment_subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+      sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+      hash_verified: true
+    - role: prior_independent_BLOCK_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+      sha256: b5ce737eeec248063be4b6eb15d56676dbfa2ee7aebfe28f20efbf6a473c8df8
+      hash_verified: true
+    - role: prior_findings_disposition
+      path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r1-independent-review-disposition-v0.1.yaml
+      sha256: d63bc04f3d4fe54a87b62eedb39a8202c7f6c64e679f2b128438da5ee83c671f
+      hash_verified: true
+    - role: accepted_parent_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      hash_verified: true
+    - role: accepted_scheduling_freeze
+      path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+      hash_verified: true
+    - role: accepted_scheduling_materialization
+      path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+      hash_verified: true
+    - role: construction_readiness_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+      sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      hash_verified: true
+    - role: accepted_G3_amendment
+      path: control-plane/registry/decisions/2026-07-14-agents-os-minimum-g3-gate-amendment-v0.1.yaml
+      sha256: 47330101e54aee710d6d5e302079d1827b80133b0c06c72b25fa10bd73d09c35
+      hash_verified: true
+    - role: Phase_4_start_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+      sha256: c4b352f44df16bb868529d13c37d569adddf7812d0b9f98f926a943b4ea486
+      hash_verified: true
+
+subjects:
+  acceptance_unit_id: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R2_ATOMIC_BUNDLE
+  partial_review: forbidden
+  R1_subject:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+    bytes_reviewed_unchanged: true
+  R2_amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+    bytes_reviewed_unchanged: true
+
+prior_findings_disposition:
+  path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r1-independent-review-disposition-v0.1.yaml
+  sha256: d63bc04f3d4fe54a87b62eedb39a8202c7f6c64e679f2b128438da5ee83c671f
+  declared_method: NEW_ATOMIC_R2_AMENDMENT
+  declared_every_finding_addressed: true
+  independent_reviewer_conclusion: two_prior_blockers_remain_unresolved
+
+result: BLOCK
+summary:
+  blocker_count: 2
+  major_count: 0
+  minor_count: 0
+  prior_findings_resolved_count: 5
+  prior_findings_unresolved_count: 2
+  disposition: amendment_and_new_hash_bound_independent_review_required_before_Jenn_acceptance
+
+prior_finding_readjudication:
+  - id: F1-IR-B01
+    status: UNRESOLVED
+    basis: >-
+      R2 supplies a versioned total reducer, authority checks, evidence currentness,
+      and fail-closed corruption behavior, but its CARRY_FORWARD predecessor is not
+      an exact revision tuple. The remaining ambiguity is detailed in F1-R2-IR-B01.
+  - id: F1-IR-B02
+    status: RESOLVED
+    basis: >-
+      R2 Sections 3.1-3.3 synchronously bind current parent spec, parent criterion,
+      delegation, and ancestry facts; fence achieved closure while stale; constrain
+      non-achieved stale closure; and bind the actual assessment into closure.
+  - id: F1-IR-B03
+    status: UNRESOLVED
+    basis: >-
+      R2 Section 4 closes the canonical envelope, scalar, reference, duplicate, and
+      array catalog gaps, but R2 introduces undefined semantic fingerprints as
+      normative carry-forward gates. The remaining gap is detailed in F1-R2-IR-B02.
+  - id: F1-IR-M01
+    status: RESOLVED
+    basis: >-
+      R2 Sections 5.1-5.3 define a total disjoint role partition, exact supplemental
+      coverage, exact binding cardinalities, and bidirectional frontier coverage.
+  - id: F1-IR-M02
+    status: RESOLVED
+    basis: >-
+      R2 Section 5.4 reduces leaf/container classification across every current
+      membership for one task_id and applies the result consistently to progress
+      and exact route support.
+  - id: F1-IR-M03
+    status: RESOLVED
+    basis: >-
+      R2 Sections 6.1-6.3 make CLOSED current meaning immutable and require explicit
+      reopen revisions, pointer rebinding, non-current prior decisions, preserved
+      history, and a new closure basis.
+  - id: F1-IR-N01
+    status: RESOLVED
+    basis: >-
+      R2 Section 1 replaces the inaccurate closure claim with proposal-only wording
+      and preserves Jenn-only exact hash-bound acceptance.
+
+blockers:
+  - id: F1-R2-IR-B01
+    severity: BLOCKER
+    prior_finding_link: F1-IR-B01
+    sections:
+      - "R1 7.3 Current criterion decision"
+      - "R2 2.1 Reducer identity and input"
+      - "R2 2.2 Decision operations"
+      - "R2 2.5 Carry-forward"
+      - "R2 2.6 Total reduction"
+    finding: >-
+      Reducer identity is the exact tuple (goal_id, goal_spec_revision,
+      criterion_id, criterion_revision), but CARRY_FORWARD validates only a
+      source_decision_event_id from the "immediately preceding criterion revision."
+      It does not bind or define the source goal_spec_revision, does not require the
+      source tuple to be the immediate predecessor in the current GoalSpec lineage,
+      and does not define the predecessor when a new GoalSpec keeps the same
+      criterion revision. One criterion revision can occur in multiple GoalSpec
+      tuples with distinct heads, so implementations can disagree about whether a
+      named source is eligible or can carry an older satisfied head past a newer
+      exact-tuple head. The Event bytes choose a source ID but the contract does not
+      totally decide source validity.
+    impact: >-
+      Criterion currentness and CLOSED plus ACHIEVED can depend on a non-canonical
+      predecessor interpretation, defeating the promised total reducer and the
+      exact GoalSpec currentness boundary.
+    required_amendment: >-
+      Put the full source tuple in every CARRY_FORWARD Event and define one total
+      predecessor relation for both cases: a GoalSpec revision change with the same
+      criterion revision, and a criterion revision advance. Require the exact latest
+      eligible predecessor head in the current spec/criterion lineage, reject skips
+      and branches, and bind its decision fingerprint and reducer version.
+
+  - id: F1-R2-IR-B02
+    severity: BLOCKER
+    prior_finding_link: F1-IR-B03
+    sections:
+      - "R2 2.5 Carry-forward"
+      - "R2 4.1 Fingerprint envelope"
+      - "R2 4.2 Scalar and object normalization"
+      - "R2 6.2 Explicit reopen"
+    finding: >-
+      R2 makes "criterion_summary semantic fingerprint unchanged" and
+      "REOPEN_CARRY_FORWARD requires semantic fingerprint equality" authoritative
+      gates, but it defines neither semantic fingerprint value shape, field
+      projection, contract version, nor comparison inputs. Section 4 defines the
+      envelope and canonicalization of an entire normalized F1 value; that full
+      value necessarily includes revision/provenance fields that change across the
+      revisions being compared and therefore cannot supply the unstated semantic
+      projection. Natural-language semantic equivalence also cannot be inferred by
+      the deterministic Rust reducer.
+    impact: >-
+      Implementations can compare different field subsets or can make
+      REOPEN_CARRY_FORWARD and criterion CARRY_FORWARD permanently unreachable.
+      Replay cannot verify that the same semantic equality rule was used.
+    required_amendment: >-
+      Define versioned, typed semantic-fingerprint projections for criterion
+      carry-forward and GoalSpec reopen carry-forward, enumerate included and
+      excluded fields, use the Section 4 FingerprintEnvelope, bind the projection
+      contract version in the Event, and require exact digest equality. Ambiguous
+      natural-language equivalence must fail closed to REOPEN_REVISED or a new
+      authoritative criterion decision.
+
+explicit_checks:
+  reducer_totality: BLOCKED_BY_F1_R2_IR_B01
+  carry_forward_chain: BLOCKED_BY_F1_R2_IR_B01_AND_F1_R2_IR_B02
+  parent_stale_non_achieved_closure: PASS
+  canonical_array_coverage: PASS
+  canonical_semantic_fingerprint_coverage: BLOCKED_BY_F1_R2_IR_B02
+  membership_partition: PASS
+  Task_wide_leaf_reduction: PASS
+  closed_Goal_reopen: PASS_EXCEPT_UNDEFINED_REOPEN_CARRY_FORWARD_FINGERPRINT
+  accepted_parent_compatibility: PASS
+  accepted_scheduling_compatibility: PASS
+  formal_core_object_count_unchanged: true
+  implementation_scope_expanded: false
+
+authority_and_scope_assessment:
+  accepted_parent_contracts_overridden: false
+  frozen_scheduling_contracts_overridden: false
+  Phase_4_scope_respected: true
+  F1_acceptance_ready: false
+  new_hash_bound_independent_review_required_after_amendment: true
+
+non_authorization:
+  accepts_F1: false
+  authorizes_implementation: false
+  authorizes_runtime_activation: false
+  authorizes_database_change: false
+  authorizes_service_start: false
+  authorizes_provider_or_executor_execution: false
+  starts_F2: false
+
+statement: >-
+  This review does not accept F1, does not authorize implementation, database
+  work, service startup, provider or executor execution, or runtime activation,
+  and does not start F2. Only Jenn may decide a future exact hash-bound F1 R2
+  atomic acceptance unit after the blockers are resolved and a new independent
+  review is completed.

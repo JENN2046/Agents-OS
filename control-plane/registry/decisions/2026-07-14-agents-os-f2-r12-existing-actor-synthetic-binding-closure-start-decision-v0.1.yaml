@@ -1,0 +1,12 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r12-existing-actor-synthetic-binding-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+status: active
+authority: {basis: Jenn_explicit_automatic_advancement_after_F2_review, source_review: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r11-atomic-bundle-independent-review.yaml, source_review_sha256: f2eb1d18ee7ffea2b1f4425560e16c1200a9e27567ae03ca7136f63f23ffbb3f}
+scope: [bind_preexisting_test_actor_in_synthetic_Binding, correct_Profile_target_controller_materialization, fresh_independent_review]
+forbidden: [add_synthetic_actor_creation_channel, rewrite_R1_through_R11, expand_F2, accept_F2, start_F3, implementation, runtime_activation, commit, push]
+implementation_authorized: false
+runtime_activation_authorized: false
+

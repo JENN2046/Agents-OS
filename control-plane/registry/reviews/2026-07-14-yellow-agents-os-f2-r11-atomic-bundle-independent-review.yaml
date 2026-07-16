@@ -1,0 +1,172 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r11-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T23:34:08+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r11
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R11_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+  R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+  R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+  R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+  R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+  R7_sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+  R8_sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+  R9_sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+  R10_sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+  R11:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+    sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r11.draft.md
+  sha256: 33cac46895795a94f27e3b25640a682e9e9fa198aaa96873bdeb1f5277a50cce
+  acceptance_subject: false
+  authority: none_derived_only
+
+mandatory_review_inputs:
+  prior_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r10-atomic-bundle-independent-review.yaml
+    sha256: 53340e8340ac14e29edddd2ed4f6177973d0e447261eafe1fa1ab50cc06b8aea
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r11-synthetic-precommit-snapshot-final-materialization-closure-start-decision-v0.1.yaml
+    sha256: b55415ef4ab6b76a7df367da0a5a2b12099873c157a1e1624d34d0bc4c79ab05
+  author_self_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r11-synthetic-precommit-snapshot-final-materialization-closure-self-review.yaml
+    sha256: 416e0d5faa90bf5c431469ef4b65b27cd429c80722a67ab720df8cc57529e1d5
+    role: author_evidence_only_not_trusted_as_conclusion
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 1
+  major: 1
+  minor: 0
+
+findings:
+  - finding_id: F2-R11-IR-B01
+    severity: BLOCKER
+    title: Synthetic Binding precommit requires an Actor creation spec that cannot be a manifest member
+    affected_sections:
+      - R11 Sections 2-4
+      - R8 Section 6.2
+      - Materialization Sections 3.3 and 7
+    finding: >-
+      R11 successfully removes manifest, activation, own Binding-spec, Event,
+      action, intent, replay, assessment, and proof values from the precommit
+      input. However the replacement input requires
+      actor_creation_spec_ref/fingerprint, and Section 3 requires the final
+      issuance source to prove that this Actor spec is an exact member of the
+      same ACTIVE manifest. The effective manifest schema defines controller,
+      synthetic_profile_creation_specs, synthetic_principal_creation_specs,
+      permitted_binding_creation_specs, and credential handles, but no
+      synthetic_actor_creation_specs collection. R11 does not amend that
+      schema or its array ordering/fingerprint.
+    impact: >-
+      Under the unknown-field rejection rule, no accepted manifest can contain
+      the Actor creation spec that R11 requires. Treating the Actor spec as an
+      external object contradicts the same-manifest membership predicate. The
+      revised graph is no longer self-referential, but it is still not
+      constructible.
+    required_amendment: >-
+      Choose one exact source. Either add a sorted
+      synthetic_actor_creation_specs collection to the manifest schema/body,
+      define its creation-spec tag/fingerprint and atomic Actor derivation, or
+      replace the Actor creation-spec fields with an exact pre-existing
+      synthetic Actor identity ref/fingerprint plus its accepted provisioning
+      basis. Update the derived issuance proof and fixtures to match that one
+      choice.
+
+  - finding_id: F2-R11-IR-M01
+    severity: MAJOR
+    title: Corrected materialization still misstates Profile-controller basis inputs
+    affected_sections:
+      - R9 Section 5.2
+      - Materialization Section 4.1
+    finding: >-
+      The full basis matrix says PROFILE_CONTROLLER_ACTION always requires a
+      target ACTIVE Profile assessment. R9 explicitly split target Profile
+      state from controller currentness: a Profile RESUME requires the target
+      Profile assessment to be SUSPENDED, and RETIRE permits ACTIVE or
+      SUSPENDED, while the separate controller assessment remains operational.
+      The generic matrix therefore contradicts the lifecycle table immediately
+      below it.
+    impact: >-
+      The derived file is non-authoritative, but it remains internally
+      inconsistent on the exact issue R9 corrected. An implementer cannot use
+      it as the promised complete authority surface without returning to the
+      amendments.
+    required_amendment: >-
+      Make the PROFILE_CONTROLLER_ACTION matrix target-kind aware: for Profile
+      mutations, bind the target assessment at the lifecycle row's source
+      status and bind controller_currentness_assessment_ref separately; for
+      Principal/Binding mutations, require the ACTIVE authenticator Profile.
+
+prior_finding_disposition:
+  F2-R10-IR-B01: PARTIAL_DIRECT_CYCLE_REMOVED_BUT_MANIFEST_MEMBERSHIP_BLOCKED_BY_F2-R11-IR-B01
+  F2-R10-IR-M01: PARTIAL_ASSIGNMENT_AND_EVIDENCE_STEWARD_FIXED_MATERIALIZATION_REMAINS_MAJOR
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  precommit_contains_no_later_manifest_or_activation_values: PASS
+  precommit_contains_no_own_Binding_spec_fingerprint: PASS
+  Binding_spec_then_manifest_then_activation_order: PASS
+  same_manifest_Actor_spec_membership: BLOCK_SCHEMA_MEMBER_MISSING
+  Assignment_transitions_only_JENN_ROOT_ACTION: PASS
+  evidence_steward_removed: PASS
+  ten_basis_kinds_printed: PASS
+  basis_required_forbidden_matrix: PASS_WITH_PROFILE_TARGET_MAJOR
+  Binding_Assignment_Delegation_historical_reducers_printed: PASS
+  impact_membership_and_aggregation: PASS
+  single_prohibited_boundary_preserved: PASS
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+validation:
+  subject_hashes_before_review: PASS
+  materialization_hash_before_review: PASS
+  YAML: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  subject_hashes_after_review: PASS
+  materialization_hash_after_review: PASS
+
+required_next_action:
+  action: CREATE_F2_R12_SYNTHETIC_ACTOR_SOURCE_AND_FINAL_MATERIALIZATION_CLOSURE
+  rewrite_R1_through_R11: forbidden
+  expand_F2_direction: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+  implementation: forbidden
+  runtime_activation: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

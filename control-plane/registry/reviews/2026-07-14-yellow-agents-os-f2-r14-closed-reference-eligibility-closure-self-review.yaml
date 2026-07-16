@@ -1,0 +1,17 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r14-closed-reference-eligibility-closure-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Codex_author_run_f2_r14
+subjects:
+  amendment: {path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md, sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190}
+  materialization: {path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r14.draft.md, sha256: 587774bc86edcf82c8843076cd03a30dc65351a217c2ca75990e80bb0907d792, acceptance_subject: false}
+prior_review: {path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r13-atomic-bundle-independent-review.yaml, sha256: 4b72ac5acb3729125408f219cf92a34e2587ed81e844da0d3a6543d56ae4de92}
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts: {blocker: 0, major: 0, minor: 0}
+finding_disposition: {F2-R13-IR-B01: RESOLVED_BY_CLOSED_POSITIVE_REFERENCE_UNIVERSE, F2-R13-IR-m01: RESOLVED_BY_MATERIALIZATION_WORDING}
+self_review_dimensions: {open_world_negative_scan_removed: PASS, Actor_input_set_complete: PASS, Binding_reference_set_complete: PASS, Jenn_and_host_excluded_by_class_and_ref_shape: PASS, deterministic_handles_manifest_bound: PASS}
+validation: {subject_sha256_fixed: PASS, materialization_sha256_fixed: PASS, yaml_parse: PASS, markdown_fences: PASS, UTF8_LF: PASS, trailing_whitespace: PASS, git_diff_check: PASS}
+non_authorization: {F2_accepted: false, implementation_authorized: false, runtime_activation_authorized: false, F3_started: false, commit_performed: false, push_performed: false}
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R14_ATOMIC_BUNDLE_AND_MATERIALIZATION

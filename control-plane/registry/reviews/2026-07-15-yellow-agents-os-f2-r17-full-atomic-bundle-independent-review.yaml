@@ -1,0 +1,295 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r17-full-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FULL_ATOMIC_BUNDLE_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T01:48:55+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r17_full_bundle
+reviewer_run_independence: fresh_run_separate_from_R17_author_and_prior_review_runs
+author_self_review_role: evidence_only_not_conclusion
+prior_pass_relied_upon: false
+read_only_review_until_conclusion: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  indivisible_subjects:
+    R1:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+      sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+      sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+      sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+      sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+      sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+      sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+      sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+      sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+      sha256: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+      sha256: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v5.draft.md
+  sha256: 86b4e8ea66b8cb4244ef63e5658c92dc4e9428aae63e6405807f5069bec6c40e
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+
+blocking_prior_review:
+  path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r16-full-atomic-bundle-independent-review.yaml
+  sha256: 6d188f61bb8574516a204d2ec907a565ea9bd2c28fd90ae2468c4c86948cdc16
+
+review_package:
+  path: ops/packages/agents-os-f2-r1-r17-full-review-lineage-package-2026-07-15.zip
+  sha256: b01d193ce38abba677c9a9cd09fe0b5706ff2ca067800d8141d9845146fa1d0c
+  package_id: AGENTS_OS_F2_R1_R17_FULL_REVIEW_LINEAGE_PACKAGE_2026_07_15
+  manifest_path: MANIFEST.json
+  checksum_manifest_path: CHECKSUMS.sha256
+  review_lineage_path: REVIEW_LINEAGE.yaml
+
+input_allowlist:
+  - root AGENTS.md
+  - package MANIFEST.json, CHECKSUMS.sha256, README.txt, and REVIEW_LINEAGE.yaml
+  - fixed R1 through R17 acceptance subjects named above
+  - fixed materialization v5 named above
+  - R17 start decision packaged as governance support
+  - prior R14 full atomic-bundle independent review packaged as review lineage
+  - prior R14 materialization-v2 independent review packaged as review lineage
+  - R15 author self-review packaged as evidence-only review lineage
+  - R15 full-bundle independent review packaged as review lineage
+  - R16 author self-review packaged as evidence-only review lineage
+  - blocking prior R16 full-bundle independent review named above
+  - R17 author self-review packaged as evidence-only review lineage
+  - byte-identical packaged copies and packaged R1-R16 predecessor archive
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  raw_logs: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_R1_THROUGH_R17_ATOMIC_UNIT
+finding_counts:
+  blocker: 0
+  major: 2
+  minor: 0
+
+findings:
+  - finding_id: F2-R17-FULL-IR-M01
+    severity: MAJOR
+    title: Materialization v5 changes action and authentication schemas instead of resolving the accepted subjects
+    affected_sections:
+      - Materialization Sections 13 and 14
+      - R1 Sections 14.2 and 15
+      - R8 Sections 2.1 and 2.3
+      - R9 Section 3 and R15 Section 3 overlays
+    finding: >-
+      V5 does not print the exact effective schemas required by its own complete
+      resolved-surface claim. AuthenticationAssertionV0_1Effective adds an
+      assertion_revision and canonical_fingerprint, renames Actor and Principal
+      identity fields, and assigns a standalone domain that R1, R2, and the R15
+      closed derived-record registry do not define. AuthenticatedCommandContext
+      removes command type, target resources, identity revisions, assertion,
+      responsibility source, delegation chain, policy revisions, nonce, time,
+      and intake fields from the R1 interface and adds a new canonical
+      fingerprint. MutationIntentV0_1R15Effective omits the R8 intent revision,
+      target-current refs and fingerprints, structured expected target head,
+      issued/expires times, nonce, and effective_at_event_sequence, while adding
+      target_id, target_revision, expected_previous_revision, and
+      intended_effective_event_sequence that no R9 or R15 overlay defines.
+      LifecycleActionRefV0_1R8 omits interface_version and
+      mutation_replay_identity and adds actor_or_controller_context_ref, which
+      is not in the exact R8 schema.
+    impact: >-
+      An implementer using the mandatory complete materialization would hash,
+      validate, and bind different objects from the fixed R1-R17 subjects.
+      These are mutation, authentication, and command-attribution boundaries,
+      so the divergence is not editorial and v5 cannot be used as the claimed
+      deterministic implementation reading surface.
+    required_amendment: >-
+      Regenerate the materialization without changing the subjects: print the
+      exact R8 MutationIntent and LifecycleActionRef objects plus only the
+      explicit R9/R15 enum additions, and print the exact R1/R2 authentication
+      interfaces without inventing fields or F2 fingerprint authority. Any
+      genuinely intended schema change must be a new acceptance subject rather
+      than derived materialization prose.
+
+  - finding_id: F2-R17-FULL-IR-M02
+    severity: MAJOR
+    title: The exhaustive schema index is source-inaccurate and proves only internal row equality, not a complete effective surface
+    affected_sections:
+      - R17 Section 3
+      - Materialization Sections 3, 12 through 14, 20, and 21
+      - R3 Section 2, R4 Sections 3 and 4, R8 Sections 2 and 6, and R15 Section 2
+    finding: >-
+      Mechanical comparison confirms that the 47 schema rows equal the 47
+      top-level schema blocks printed in v5 and the eight reducer rows equal the
+      eight named reducer headings. That internal equality is not source
+      completeness. The index assigns Profile and Principal revision domains
+      ending in r7 although R8 explicitly replaces both with r8; assigns the
+      nonexistent agents-os.delegation-grant-revision.v0.1-r4 instead of R4's
+      agents-os.delegation-grant-subject.v0.1-r4; assigns MutationIntent an r8
+      domain although R8 fixes agents-os.mutation-intent.v0.1; assigns the
+      synthetic manifest activation revision an r8 domain although R8 fixes
+      agents-os.synthetic-m0-manifest-activation-revision.v0.1; and invents
+      standalone domains for the R9 activation mutation body and R1
+      AuthenticationAssertion. V5 also references but does not print effective
+      schemas such as BindingScopeV0_1, DelegationActivationAcknowledgementRef,
+      and AuthenticatedActorActionRef, despite R17 requiring every effective
+      schema exactly once.
+    impact: >-
+      The index can pass a self-contained name-set check while giving wrong
+      fingerprint bytes and omitting required verification interfaces. This
+      leaves the core of R16 finding M02 unresolved even though duplicate names,
+      stale aliases, and row-set mismatches were removed.
+    required_amendment: >-
+      Build the next materialization inventory from the fixed subject schema
+      definitions before rendering it. For every effective object, copy the
+      exact field set, exact accepted domain or NOT_STANDALONE status, override
+      source, and reducer once; include every referenced normative F2 schema or
+      explicitly classify an external interface without inventing an F2
+      fingerprint. Then mechanically compare both the rendered/index sets and
+      each rendered field/domain projection against its source subjects.
+
+prior_findings_disposition:
+  F2-R16-FULL-IR-M01:
+    result: RESOLVED
+    basis: >-
+      R17 defines 43 unique canonical ActionAssuranceRole values and 43 unique
+      mapping rows. The enum and mapping sets are identical. The exact effective
+      tuple inventory is Actor 7, Profile 5, Principal 6, Binding 4, Binding
+      activation 4, Assignment 4, Delegation 5, Delegation activation 5, and
+      synthetic manifest 3. Each admitted direct assurance action has exactly
+      one mapping; zero or multiple matches reject. Complete sets are derived
+      from closed revision, transition, evidence, and activation indexes, and
+      repeated roles sort deterministically by exact action ref and fingerprint.
+  F2-R16-FULL-IR-M02:
+    result: PARTIALLY_RESOLVED_BLOCKED_BY_F2-R17-FULL-IR-M01_AND_M02
+    basis: >-
+      V5 removes duplicate top-level schema names, prints exactly one complete
+      CompromiseImpactFactV0_1R9Effective, uses
+      TransitionAuthorityBasisV0_1R9, removes ActionAssuranceBindingV0_1R16,
+      and makes its printed schema/reducer names mechanically equal its index
+      rows. It still changes effective schema bodies, omits normative schemas,
+      and records incorrect or invented domain tags, so it is not the exact
+      complete object-to-source/domain surface required by R16 M02 and R17.
+
+review_dimensions:
+  R1_through_R17_re_evaluated_as_one_atomic_unit: PASS_WITH_MAJOR_DERIVED_SURFACE_CONFLICT
+  partial_acceptance_forbidden: PASS
+  cross_revision_override_precedence: PASS
+  ActionAssuranceRole_closed_enum: PASS
+  ActionAssuranceRole_enum_count_43_unique: PASS
+  action_to_role_mapping_count_43_unique: PASS
+  action_to_role_enum_set_equality: PASS
+  action_to_role_total_and_exclusive_effective_tuple_coverage: PASS
+  action_assurance_complete_set_derivation: PASS
+  action_assurance_repeated_role_ordering: PASS
+  unknown_or_mismatched_role_rejection: PASS
+  CompromiseImpact_single_complete_schema: PASS
+  governed_transition_R9_authority_basis: PASS
+  materialization_no_R16_assurance_binding_alias: PASS
+  materialization_no_R8_transition_authority_alias: PASS
+  materialization_top_level_schema_name_uniqueness: PASS
+  materialization_schema_index_matches_printed_schema_names: PASS
+  materialization_reducer_index_matches_named_reducers: PASS
+  materialization_exact_effective_schema_fields: FAIL_MAJOR
+  materialization_complete_effective_schema_coverage: FAIL_MAJOR
+  materialization_exact_source_domain_tags: FAIL_MAJOR
+  materialization_creates_no_new_semantics: FAIL_MAJOR
+  single_prohibited_boundary: PASS
+  non_authorization: PASS
+
+validation:
+  package_sha256_before_review: PASS
+  R1_through_R17_source_hashes_before_review: PASS
+  R1_through_R17_archive_hashes_and_byte_identity: PASS
+  materialization_v5_hash_before_review: PASS
+  blocking_prior_review_hash_before_review: PASS
+  package_internal_checksums_complete_and_matching: PASS
+  package_manifest_hashes_matching: PASS
+  package_source_identity_matching: PASS
+  package_duplicate_path_check: PASS
+  package_path_traversal_check: PASS
+  package_symlink_check: PASS
+  predecessor_package_sha256_and_internal_checksums: PASS
+  predecessor_package_duplicate_path_traversal_symlink_checks: PASS
+  complete_review_lineage_hashes_and_byte_identity: PASS
+  role_enum_and_mapping_mechanical_set_check: PASS
+  v5_top_level_schema_duplicate_check: PASS
+  v5_schema_index_row_set_check: PASS
+  v5_reducer_index_row_set_check: PASS
+  stale_alias_scan: PASS
+  YAML_parse: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  markdown_fences: PASS
+  fixed_hashes_after_review: PASS
+  review_artifact_YAML_parse: PASS
+  exactly_one_review_artifact_created: PASS
+  subjects_modified: false
+  materialization_modified: false
+  prior_reviews_modified: false
+  Registry_modified: false
+  CURRENT_STATE_modified: false
+  package_modified: false
+  commit_performed: false
+  push_performed: false
+
+non_authorization:
+  F2_accepted: false
+  Jenn_freeze_decision_ready: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  F3_start_authorized: false
+
+next_required_action: >-
+  Create one narrow derived-surface correction that changes no R1-R17 subject:
+  regenerate a source-faithful complete materialization and exact index, then
+  run another fresh hash-bound full-bundle review before any Jenn acceptance.

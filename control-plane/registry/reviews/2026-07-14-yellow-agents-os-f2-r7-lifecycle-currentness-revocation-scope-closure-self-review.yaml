@@ -1,0 +1,197 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-self-review
+review_type: HASH_BOUND_AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Nobao_author_run
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R7_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    - role: fixed_R1_base
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - role: fixed_R2_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - role: fixed_R3_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - role: fixed_R4_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - role: fixed_R5_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    - role: fixed_R6_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    - role: fixed_R7_lifecycle_currentness_revocation_scope_scalar_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r7.draft.md
+  sha256: 544a5891b04e270725b7fa7f18ecea7ea7252d49ccfe866442dffbe2b7fc6561
+  authority: none_derived_only
+  acceptance_subject: false
+
+authority_inputs:
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-start-decision-v0.1.yaml
+    sha256: 1e65369572fd9c123bf926a1a3aa6dbe8e2a2cb7d3c851817955f4875a352d81
+  - path: control-plane/registry/reviews/2026-07-14-agents-os-f2-r6-subsequent-lifecycle-review-disposition-v0.1.yaml
+    sha256: 03994c6426e8b13b9c4078fc4745c549b21eb3a712b962dca3dae2823cf9acd1
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r6-atomic-bundle-independent-review.yaml
+    sha256: 9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+author_corrections_before_hash_fixing:
+  - correction_id: F2-R7-SR-01
+    issue: >-
+      A first synthetic M0 shape placed completed Profile and Principal subjects
+      inside a manifest that those subjects referenced, creating a fingerprint
+      cycle.
+    correction: >-
+      The fixed R7 subject uses non-referential creation specs, then requires a
+      separate Jenn decision to accept the exact manifest fingerprint before
+      created subjects may reference it.
+    outcome: CLOSED_BEFORE_HASH_FIXING
+  - correction_id: F2-R7-SR-02
+    issue: >-
+      Activation assessments needed explicit transition inputs and effective
+      Binding status needed exact mappings from Actor, Principal, Profile, and
+      credential assessments.
+    correction: >-
+      Added transition refs to both activation assessments and a
+      precedence-complete Binding effective reducer with separate activation
+      and effective projections.
+    outcome: CLOSED_BEFORE_HASH_FIXING
+  - correction_id: F2-R7-SR-03
+    issue: >-
+      Profile and Principal lifecycle-controller authority and synthetic
+      manifest acceptance basis were initially under-typed.
+    correction: >-
+      Added typed lifecycle-controller refs, exact profile-steward classes,
+      credential-status-provider binding, and lifecycle action authority-basis
+      fingerprints.
+    outcome: CLOSED_BEFORE_HASH_FIXING
+  - correction_id: F2-R7-SR-04
+    issue: >-
+      Compromise impact needed its own one-head revision stream, terminality,
+      and exact clear-challenge target rule.
+    correction: >-
+      Added impact stream ID, revision/CAS, Event CAS, terminal invalidation,
+      and exact challenged-target equality for clearing.
+    outcome: CLOSED_BEFORE_HASH_FIXING
+  - correction_id: F2-R7-SR-05
+    issue: >-
+      Binding and Delegation subjects lacked explicit missing current-head CAS
+      additions, and Binding issuance needed bootstrap-safe provenance.
+    correction: >-
+      Added exact CAS overlays and typed Binding issuance routes that omit an
+      Actor issuer for bootstrap, provisioning, and synthetic flows.
+    outcome: CLOSED_BEFORE_HASH_FIXING
+
+subsequent_finding_readjudication:
+  - finding_id: F2-R6-SR-B01
+    result: RESOLVED_IN_R7
+    basis: >-
+      Principal and Authenticator Profile now have creation authority,
+      transition matrices, one-head CAS, immutable fields, deterministic
+      assessments, controller currentness, and an acyclic synthetic M0 path.
+  - finding_id: F2-R6-SR-B02
+    result: RESOLVED_IN_R7
+    basis: >-
+      Activation projections now answer activation only; distinct effective
+      reducers own Binding and Delegation usability/currentness.
+  - finding_id: F2-R6-SR-B03
+    result: RESOLVED_IN_R7
+    basis: >-
+      HistoricalActionValidityAssessment and revisioned compromise-impact facts
+      separate validity at issuance from continuing operational dependencies.
+  - finding_id: F2-R6-SR-B04
+    result: RESOLVED_IN_R7
+    basis: >-
+      GovernedStateTransitionFact supplies exact target, transition, action,
+      authority, head CAS, Event sequence, terminality, and target-specific
+      authority without changing issuer provenance.
+  - finding_id: F2-R6-SR-B05
+    result: RESOLVED_IN_R7
+    basis: >-
+      Actor transitions now have exact source/target states, authority,
+      self-transition rules, terminal states, recovery evidence, CAS, and a
+      typed validity window.
+  - finding_id: F2-R6-SR-B06
+    result: RESOLVED_IN_R7
+    basis: >-
+      The parsed-binary64 scalar profile covers every F2 revision, Event,
+      timestamp, duration, depth, and cross-contract numeric occurrence.
+  - finding_id: F2-R6-SR-M01
+    result: RESOLVED_IN_R7
+    basis: >-
+      F2 v0.1 now accepts only exact-set responsibility scopes and rejects
+      mutable subtree containment semantics.
+  - finding_id: F2-R6-SR-M02
+    result: RESOLVED_IN_R7
+    basis: >-
+      Recursive PARENT_ASSIGNMENT is rejected and every downstream transfer
+      uses one depth-bounded acyclic Delegation lineage.
+  - finding_id: F2-R6-SR-M03
+    result: RESOLVED_BY_DERIVED_MATERIALIZATION
+    basis: >-
+      A hash-bound, non-authoritative effective reading surface identifies
+      source precedence, current-state owners, and superseded readings.
+
+review_dimensions:
+  R7_scope_matches_start_decision: PASS
+  R1_through_R6_bytes_unchanged: PASS
+  lifecycle_heads_have_contiguous_CAS: PASS
+  actor_transition_matrix_complete: PASS
+  principal_transition_matrix_complete: PASS
+  profile_transition_matrix_complete: PASS
+  synthetic_M0_graph_acyclic: PASS
+  activation_and_effective_currentness_separate: PASS
+  sole_effective_delegation_reducer_preserved: PASS
+  historical_action_and_current_session_separate: PASS
+  compromise_impact_revision_and_CAS_complete: PASS
+  transition_fact_authority_and_terminality_complete: PASS
+  revoker_does_not_impersonate_issuer: PASS
+  exact_set_scope_only: PASS
+  single_responsibility_lineage: PASS
+  all_F2_numeric_domains_closed: PASS
+  cross_writer_canonicalization_closed: PASS
+  effective_materialization_non_authoritative: PASS
+  single_prohibited_boundary_preserved: PASS
+  new_permission_model_created: false
+  implementation_or_runtime_authority_added: false
+  F3_started: false
+
+remaining_external_dependencies:
+  - canonical Prohibited Behavior List convergence
+  - accepted F3 Command intake and Rust single-writer contract
+  - accepted F4 TaskPermit host authentication and effect fencing contract
+  - separate production Authenticator and key-provisioning review
+  - explicit Jenn implementation authorization
+  - explicit Jenn runtime-activation authorization
+
+next_gate:
+  action: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R7_ATOMIC_BUNDLE_AND_MATERIALIZATION
+  acceptance_ready_before_that_review: false
+  Jenn_acceptance_substituted: false
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false

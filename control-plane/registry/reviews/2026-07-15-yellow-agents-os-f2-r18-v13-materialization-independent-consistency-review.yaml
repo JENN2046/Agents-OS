@@ -1,0 +1,403 @@
+review_id: "F2_R18_V13_MATERIALIZATION_INDEPENDENT_CONSISTENCY_REVIEW_2026_07_15_RUN_01"
+review_type: "FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_V13"
+review_date: "2026-07-15"
+reviewer:
+  identity: "Nobao fresh hash-bound independent materialization consistency reviewer"
+  runtime_task: "/root/f2_r18_v13_materialization_consistency_review"
+  run_id: "f2-r18-v13-materialization-consistency-20260715-01"
+independent: true
+review_method: "fresh_hash_bound_full_surface_adversarial_source_exact_materialization_review"
+result: "PASS_NO_BLOCKER"
+
+scope:
+  acceptance_subjects: "fixed F2 R1 through R18"
+  derived_surface: "F2 Effective Contract Materialization v0.1-r18-v13"
+  review_surface_only: true
+  full_atomic_bundle_review: false
+  subject_bytes_modified: false
+  materialization_bytes_modified: false
+  existing_files_modified: false
+  output_artifact_created: true
+  input_allowlist_enforced: true
+  exclusions:
+    - "AGENTS.md and workspace operating documents"
+    - "CURRENT_STATE"
+    - "Registry beyond the exact allowlist"
+    - "author scratchpads and author self-review"
+    - "other reviews and materializations"
+    - "private memory and state-private"
+    - "secrets, provider raw responses, and runtime logs"
+
+hash_gate:
+  status: "PASS"
+  rule: "Any mismatch would have terminated this review as BLOCK before normative content inspection."
+  observed_input_count: 20
+  matched_input_count: 20
+  mismatched_input_count: 0
+
+exact_input_allowlist:
+  - id: "R1"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+    expected_sha256: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    observed_sha256: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    hash_match: true
+  - id: "R2"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md"
+    expected_sha256: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    observed_sha256: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    hash_match: true
+  - id: "R3"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md"
+    expected_sha256: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    observed_sha256: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    hash_match: true
+  - id: "R4"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md"
+    expected_sha256: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    observed_sha256: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    hash_match: true
+  - id: "R5"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md"
+    expected_sha256: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    observed_sha256: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    hash_match: true
+  - id: "R6"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md"
+    expected_sha256: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    observed_sha256: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    hash_match: true
+  - id: "R7"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+    expected_sha256: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    observed_sha256: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    hash_match: true
+  - id: "R8"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+    expected_sha256: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    observed_sha256: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    hash_match: true
+  - id: "R9"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md"
+    expected_sha256: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    observed_sha256: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    hash_match: true
+  - id: "R10"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md"
+    expected_sha256: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    observed_sha256: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    hash_match: true
+  - id: "R11"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md"
+    expected_sha256: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    observed_sha256: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    hash_match: true
+  - id: "R12"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md"
+    expected_sha256: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    observed_sha256: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    hash_match: true
+  - id: "R13"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md"
+    expected_sha256: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    observed_sha256: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    hash_match: true
+  - id: "R14"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md"
+    expected_sha256: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    observed_sha256: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    hash_match: true
+  - id: "R15"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+    expected_sha256: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    observed_sha256: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    hash_match: true
+  - id: "R16"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+    expected_sha256: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    observed_sha256: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    hash_match: true
+  - id: "R17"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+    expected_sha256: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    observed_sha256: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    hash_match: true
+  - id: "R18"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md"
+    expected_sha256: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    observed_sha256: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    hash_match: true
+  - id: "MATERIALIZATION_V13"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+    expected_sha256: "939ce101619d13f5947620655ea6e25fd859bebba80bdf051bc305a534c8e680"
+    observed_sha256: "939ce101619d13f5947620655ea6e25fd859bebba80bdf051bc305a534c8e680"
+    hash_match: true
+  - id: "V12_PRIOR_FINDING_EVIDENCE"
+    path: "control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v12-materialization-independent-consistency-review.yaml"
+    expected_sha256: "7be0b6ba016d3245e8d0834ccad674b44c32e9011bca635c9863068d31f3f5ec"
+    observed_sha256: "7be0b6ba016d3245e8d0834ccad674b44c32e9011bca635c9863068d31f3f5ec"
+    hash_match: true
+    use: "Prior finding evidence only; every disposition below was independently reverified against fixed R1-R18 and V13."
+
+prior_findings_disposition:
+  - id: "F2-R18-V12-MCR-M01"
+    disposition: "RESOLVED"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+        lines: "405-417,424-436"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+        lines: "477-507,541-564"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+        lines: "587-610,1718-1760"
+    decision_basis: >-
+      DelegationEffectiveCurrentReducer now includes the target Delegation's own
+      DELEGATION_ISSUANCE and transitive activation assurance branches.
+      INVALIDATED maps prospectively to REVOKED; CHALLENGED or INDETERMINATE
+      maps to INDETERMINATE while preserving a proven safer state; ACTIVE is
+      reachable only when every required direct and transitive assurance is
+      CONFIRMED. Root and ancestor cascade precedence remains unchanged.
+
+  - id: "F2-R18-V12-MCR-M02"
+    disposition: "RESOLVED"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+        lines: "167-200,298-304"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+        lines: "815-844,939-958,2292-2293"
+    decision_basis: >-
+      The closed domain registry now includes
+      ActorGeneralTransitionAuthorityBasisV0_1R16 under the exact R16 domain
+      agents-os.actor-general-transition-authority-basis.v0.1-r16. Its printed
+      schema and exhaustive index row agree with that registry and add no domain.
+
+  - id: "F2-R18-V12-MCR-M03"
+    disposition: "RESOLVED"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+        lines: "179-215"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md"
+        lines: "255-310"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+        lines: "1392-1423,1749-1760,2047-2126"
+    decision_basis: >-
+      The sole ActionAssuranceCompleteSetReducer now states that synthetic M0
+      Binding activation has no separate BINDING_ACTIVATION action, consumes
+      exact SYNTHETIC_MANIFEST_CREATE and SYNTHETIC_MANIFEST_ACCEPT assurance
+      transitively, and includes every accepted Binding-activation-evidence
+      transition through the assessment watermark. Ordinary Binding and
+      Delegation activation remain separate exact branches.
+
+  - id: "F2-R18-V12-MCR-M04"
+    disposition: "RESOLVED"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+        lines: "509-525"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+        lines: "28-30,98-120"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+        lines: "2128-2130,2205-2222,2329"
+    decision_basis: >-
+      Section 20 now names both R16 Section 3.2 and controlling R17 Section 2,
+      the schema prints ActionAssuranceBindingV0_1R17[], and the exact schema
+      index row includes R17 Section 2. No R16 assurance binding type remains in
+      V13, so R17 replacement precedence is explicit and unambiguous.
+
+findings:
+  blocker: []
+  major: []
+  minor: []
+
+validation_evidence:
+  - id: "HASH_LOCK"
+    status: "PASS"
+    evidence: "All 20 observed SHA-256 values exactly match the fixed allowlist; no mismatch occurred."
+
+  - id: "FULL_V13_ADVERSARIAL_SOURCE_EXACT_READ"
+    status: "PASS"
+    evidence: >-
+      All 2,376 V13 lines were independently reviewed as one resolved surface
+      against fixed R1-R18. Review was not limited to the four V12 corrections.
+      Source precedence, schemas, domains, authority tables, reducers, evidence
+      projections, source claims, and non-authorization were checked together.
+
+  - id: "PRECEDENCE_AND_SOURCE_EXACTNESS"
+    status: "PASS"
+    evidence: >-
+      The effective contract was reconstructed in R1-to-R18 precedence order.
+      V13 preserves later replacements, does not revive a superseded alias, and
+      does not change the meaning of any fixed subject. Broad explanatory prose
+      was not used to excuse a conflicting field, branch, domain, or source row.
+
+  - id: "PRIOR_FINDINGS_M01_THROUGH_M04"
+    status: "PASS"
+    evidence: >-
+      F2-R18-V12-MCR-M01 through M04 are independently closed by the exact V13
+      branches, domain row, activation complete-set branch, and R17 source/index
+      attribution documented above.
+
+  - id: "SCHEMA_INDEX_SET"
+    status: "PASS"
+    evidence: >-
+      Mechanical extraction from YAML fences found 61 unique top-level schema
+      surfaces. The Section 21 index contains the same 61 unique names, with no
+      duplicate and no printed/indexed set difference. Each row was then checked
+      semantically for effective field shape, domain/classification, controlling
+      source, and printed location; count equality was not treated as sufficient.
+    observed:
+      printed_schema_rows: 61
+      indexed_schema_rows: 61
+      unique_printed_schema_names: 61
+      unique_index_schema_names: 61
+      duplicate_printed_schema_names: 0
+      duplicate_index_schema_names: 0
+      printed_not_indexed: 0
+      indexed_not_printed: 0
+
+  - id: "REDUCER_INDEX_SET"
+    status: "PASS"
+    evidence: >-
+      Mechanical heading extraction found 13 unique explicitly named reducer
+      definitions. The reducer index contains the same 13 unique names, with no
+      duplicate and no set difference. Every reducer was also checked for omitted
+      terminal, safety-preservation, assurance, currentness, and success branches;
+      count equality did not override semantic review.
+    observed:
+      printed_named_reducer_rows: 13
+      indexed_reducer_rows: 13
+      unique_printed_reducer_names: 13
+      unique_index_reducer_names: 13
+      duplicate_printed_reducer_names: 0
+      duplicate_index_reducer_names: 0
+      printed_not_indexed: 0
+      indexed_not_printed: 0
+
+  - id: "R17_CLOSED_ROLE_VOCABULARY"
+    status: "PASS"
+    evidence: >-
+      Mechanical comparison found 43 R17 role identifiers and the same 43 V13
+      identifiers in identical canonical order with an empty diff. All nine
+      assurance-bound R16 assessment schemas use
+      ActionAssuranceBindingV0_1R17[]; ActionAssuranceBindingV0_1R16 has zero
+      occurrences. Bare action or transition words were distinguished from roles.
+    observed:
+      source_role_identifiers: 43
+      materialized_role_identifiers: 43
+      role_set_or_order_diff: 0
+      assurance_bound_schema_type_occurrences: 9
+      superseded_R16_binding_type_occurrences: 0
+
+  - id: "R15_R18_ASSURANCE_COMPOSITION"
+    status: "PASS"
+    evidence: >-
+      Actor, Profile, Principal, Binding, Assignment, Delegation, activation,
+      synthetic manifest, and dependent assessment composition preserves the
+      R15 effect table, R16 transitive binding and safer-state order, R17 closed
+      role derivation, and R18 exact activation-source replacement. Direct and
+      transitive assurance are neither silently duplicated nor omitted.
+
+  - id: "OMITTED_REDUCER_BRANCH_SCAN"
+    status: "PASS"
+    evidence: >-
+      All 13 reducers were checked branch-by-branch for missing/forked coverage,
+      watermark and fingerprint mismatch, challenged/invalidated enabling action,
+      safety transition preservation, terminal/current-head precedence, and
+      ACTIVE or ACTIVATED success gating. No fixed-source-required branch is
+      absent or contradicted in V13.
+
+  - id: "R18_TEMPORARY_WORKER_BINDING_PROJECTION"
+    status: "PASS"
+    evidence: >-
+      Actor assignment-binding fields are removed, identity currentness is
+      independent of responsibility, intended_initial_resource_ref is limited to
+      CREATE evidence, the exact TASK/RUN ref and assessment schemas are printed,
+      the sole reducer follows Assignment/Delegation state exactly, no second
+      ledger is created, and only ACTIVE supports future F3 operational use.
+
+  - id: "R18_ACTIVATION_ASSURANCE_PROJECTION"
+    status: "PASS"
+    evidence: >-
+      Bootstrap, authenticated steward, synthetic transitive manifest, explicit
+      acknowledgement, and worker-handshake action-ref/fingerprint projections
+      match R18. Synthetic selection precedes source-shape interpretation, no
+      invented BINDING_ACTIVATION action exists, activation-evidence transitions
+      are complete in ordinary, synthetic, and Delegation branches, and the
+      future F3 mode binding remains fail-closed and unimplemented.
+
+  - id: "ACTIVE_ONLY_ACTIVATION_EVIDENCE_CREATION"
+    status: "PASS"
+    evidence: >-
+      ACTIVE-only creation is printed as a rule, not inserted as a schema field.
+      REVOKED and SUPERSEDED remain later effective states derived only through
+      accepted transition/current-head rules.
+
+  - id: "F3_OWNERSHIP_BOUNDARY"
+    status: "PASS"
+    evidence: >-
+      CommandTypeDefinition, CanonicalCommand, and AuthenticatedCommandContext
+      remain F3-owned placeholders, have no implementable F2 field list or F2
+      domain, and are excluded from the 61-row inventory. No F3 payload, runtime
+      intake, or authority was invented.
+
+  - id: "SUPERSEDED_ALIAS_AND_INVENTED_FIELD_SCAN"
+    status: "PASS"
+    evidence: >-
+      No effective assignment_binding_ref, assignment_assessment_ref,
+      intended_assignment_binding_ref, SyntheticBindingIssuanceInputSnapshotV0_1R10,
+      ActionAssuranceBindingV0_1R16, TransitionAuthorityBasisV0_1R8,
+      compromised_subject_action_set_ref, compromised_subject_action_set_fingerprint,
+      R16 assurance-role alias, or other superseded effective surface remains.
+      The sole assignment_binding_ref occurrence is an explicit rejection rule.
+
+  - id: "MATERIALIZATION_CREATED_SEMANTICS"
+    status: "PASS"
+    evidence: >-
+      No field, schema, domain, reducer, action role, authority kind, permission,
+      runtime grant, production authentication path, or F3 contract absent from
+      fixed R1-R18 was found. V13 resolves reading-surface inconsistencies only
+      and creates no normative semantics or authority.
+
+finding_counts:
+  blocker: 0
+  major: 0
+  minor: 0
+  total: 0
+
+non_authorization:
+  F2_acceptance_granted: false
+  F2_acceptance_ready_declared: false
+  Jenn_acceptance_declared: false
+  Jenn_freeze_ready_declared: false
+  full_atomic_bundle_review_performed: false
+  full_atomic_bundle_review_started: false
+  full_atomic_bundle_review_authorized_to_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  F3_authorized: false
+  database_write_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  commit_authorized_by_this_review: false
+  push_authorized_by_this_review: false
+  statement: >-
+    This artifact is materialization-consistency evidence only. PASS_NO_BLOCKER
+    means that this exact V13 reading surface has no blocker, major, or minor
+    source-exact consistency finding against the fixed R1-R18 inputs. It does not
+    accept F2, declare Jenn acceptance or freeze readiness, perform or start a
+    full atomic-bundle review, authorize F3, implementation, runtime, production
+    authentication, database or service changes, provider execution, commit, or
+    push.
+
+next_gate:
+  full_atomic_bundle_review_eligible: true
+  required_next_gate: "ELIGIBLE_FOR_EXPLICIT_START_OF_FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW"
+  automatic_start: false
+  reason: >-
+    This exact hash-bound materialization review found no source-exact
+    consistency finding. A fresh full atomic-bundle independent review remains a
+    separate gate and may begin only through an explicit start; it was neither
+    performed nor authorized by this review.

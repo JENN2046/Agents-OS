@@ -1,0 +1,119 @@
+review_id: "F2_R18_MATERIALIZATION_V12_ROLE_VOCABULARY_PRELUDE_SELF_REVIEW_2026_07_15"
+review_type: "AUTHOR_SELF_REVIEW_OF_DERIVED_MATERIALIZATION_V12"
+review_date: "2026-07-15"
+reviewer:
+  identity: "Nobao author run"
+  run_id: "f2-r18-materialization-v12-author-closeout-20260715-01"
+independent: false
+result: "PASS_NO_AUTHOR_BLOCKER"
+
+scope:
+  acceptance_subjects: "fixed F2 R1 through R18"
+  derived_surface: "F2 Effective Contract Materialization v0.1-r18-v12"
+  allowed_changes:
+    - "replace superseded R16 synthetic-manifest role aliases with the exact R17 role vocabulary"
+    - "replace the inaccurate common-prelude reducer count with the exact four reducer names"
+  forbidden_changes_respected:
+    subjects_modified: false
+    new_schema_or_field_added: false
+    new_reducer_added: false
+    new_authority_added: false
+    full_atomic_bundle_review_started: false
+    implementation_started: false
+
+fixed_subject_hashes:
+  R1: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+  R2: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+  R3: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+  R4: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+  R5: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+  R6: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+  R7: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+  R8: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+  R9: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+  R10: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+  R11: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+  R12: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+  R13: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+  R14: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+  R15: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+  R16: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+  R17: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+  R18: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+  observed_match_count: 18
+  expected_count: 18
+
+review_inputs:
+  prior_materialization:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+    sha256: "816b6f5fd704057f4cb226e3eef7e07f30e591f471a88085497399941c1ffb0a"
+  prior_independent_review:
+    path: "control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v11-materialization-independent-consistency-review.yaml"
+    sha256: "d06d4ce00a4051ddc5d0e5f33aba4627a0ce9fc62895b6d1922440df2195bcea"
+    result: "BLOCK"
+    findings: "0 blocker, 1 major, 1 minor"
+  reviewed_materialization:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v12.draft.md"
+    sha256: "d74f1259f2bdc9714876266b4f7f0173cceef5ae1193ceb83e664b4cc2d3c102"
+
+prior_findings_disposition:
+  - finding_id: "F2-R18-V11-MCR-M01"
+    prior_severity: "major"
+    disposition: "RESOLVED_IN_V12_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      The sole indexed SyntheticM0ManifestAssessmentReducer now uses only
+      SYNTHETIC_MANIFEST_CREATE, SYNTHETIC_MANIFEST_ACCEPT, and
+      SYNTHETIC_MANIFEST_REVOKE in assurance-role contexts. The superseded
+      MANIFEST_CREATE, MANIFEST_ACCEPT, and MANIFEST_REVOKE aliases are not used.
+  - finding_id: "F2-R18-V11-MCR-m01"
+    prior_severity: "minor"
+    disposition: "RESOLVED_IN_V12_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      The common R16 prelude no longer states an inaccurate positional count. It
+      names AuthenticatorProfileEffectiveReducer, PrincipalEffectiveReducer,
+      BindingActivationEffectiveReducer, and DelegationActivationEffectiveReducer
+      as the exact four governed reducers.
+
+validation:
+  subject_hash_lock: "PASS_18_OF_18"
+  materialization_sha256: "PASS"
+  v11_to_v12_scope_diff: "PASS_ONLY_ROLE_VOCABULARY_AND_PRELUDE_DESCRIPTION"
+  utf8_without_bom: "PASS"
+  lf_only: "PASS"
+  trailing_whitespace: "PASS"
+  markdown_fence_balance: "PASS"
+  yaml_fences:
+    parsed: 26
+    failures: 0
+  schema_index:
+    rows: 61
+    unique: 61
+  reducer_index:
+    rows: 13
+    unique: 13
+  superseded_role_alias_scan: "PASS"
+  prelude_exact_name_scan: "PASS"
+  git_diff_check: "PASS"
+
+findings:
+  blocker: []
+  major: []
+  minor: []
+
+non_authorization:
+  F2_acceptance_granted: false
+  full_atomic_bundle_review_performed: false
+  full_atomic_bundle_review_authorized_to_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate:
+  required: "FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_MATERIALIZATION_V12"
+  full_atomic_bundle_review_eligible: false
+  statement: >-
+    Author review cannot confirm independence. V12 must be reviewed in a fresh
+    read-only run against the fixed R1-R18 hashes and the v11 finding evidence.

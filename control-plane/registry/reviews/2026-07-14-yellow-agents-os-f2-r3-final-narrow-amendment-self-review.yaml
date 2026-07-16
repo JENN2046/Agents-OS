@@ -1,0 +1,123 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r3-final-narrow-amendment-self-review
+review_type: HASH_BOUND_AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Nobao_author_run
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R3_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    - role: fixed_R1_base
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - role: fixed_R2_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - role: fixed_R3_final_narrow_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+
+authority_inputs:
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r3-final-narrow-amendment-start-decision-v0.1.yaml
+    sha256: a3200eeba3fc4ddb1a7d026718680d9ee04d88b823911a5e381435d53cd66afc
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+    sha256: 728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+review_corrections_made_before_hash_fixing:
+  - correction_id: F2-R3-SR-01
+    issue: >-
+      A first draft made the committed issuance action name the final grant
+      subject while the final subject also contained that action reference.
+    correction: >-
+      Added an exact delegation issuance-intent fingerprint, required the F3
+      action to commit that intent, then derived the final grant subject from
+      the intent, committed action reference, and grant Event sequence.
+    outcome: ACYCLIC
+  - correction_id: F2-R3-SR-02
+    issue: >-
+      R3 needed to say exactly which R1/R2 clauses it replaces rather than rely
+      on a general later-amendment precedence statement.
+    correction: >-
+      Added the exact replacement list and explicitly replaced R2 Section 12
+      with the R3 atomic acceptance clause.
+    outcome: CLOSED
+  - correction_id: F2-R3-SR-03
+    issue: >-
+      Delegation issuance actions needed exact responsibility-source binding.
+    correction: >-
+      Bound root, assignment-rooted, and child grant issuance actions to the
+      exact root direction, source assignment, or active parent delegation.
+    outcome: CLOSED
+
+blocker_readjudication:
+  - finding_id: F2-R2-IR-B01
+    result: RESOLVED_IN_R3
+    basis: >-
+      DelegationActivationAcknowledgementRef is an F3-owned, COMMITTED,
+      activation-purpose-only fact. It authenticates the exact delegate binding
+      while requiring responsibility_source_mode NONE_ACTIVATION_PURPOSE_ONLY,
+      rejects the pending grant as responsibility, and atomically binds replay,
+      evidence, assessment, and activation Event.
+  - finding_id: F2-R2-IR-B02
+    result: RESOLVED_IN_R3
+    basis: >-
+      Binding and delegation now use immutable subject fingerprints followed by
+      evidence and derived assessment fingerprints. Exact domain-separated JCS
+      evidence IDs, ordered field projections, fixed-point rejection, CAS, and
+      startup recovery order are defined.
+  - finding_id: F2-R2-IR-B03
+    result: RESOLVED_IN_R3
+    basis: >-
+      ResponsibilityAssignmentRevisionR2 now has an exception-free
+      actor_id != issued_by_actor_id invariant. Every grant records exact issuer
+      identity, binding, action, currentness, root/assignment provenance, and
+      acyclic intent/subject fingerprints.
+
+review_dimensions:
+  narrow_scope_only: PASS
+  R1_R2_fixed_bytes_unchanged: PASS
+  first_delegation_activation_total_without_self_proving_responsibility: PASS
+  binding_activation_fingerprint_graph_acyclic_and_exact: PASS
+  delegation_issuance_and_activation_graph_acyclic_and_exact: PASS
+  assignment_self_issuance_normatively_forbidden: PASS
+  Jenn_root_delegation_provenance_reconstructable: PASS
+  assignment_and_child_delegation_provenance_reconstructable: PASS
+  startup_recovery_deterministic: PASS
+  negative_tests_cover_prior_blockers: PASS
+  single_prohibited_boundary_preserved: PASS
+  new_permission_model_created: false
+  F3_started: false
+  implementation_or_runtime_authority_added: false
+
+remaining_dependencies:
+  - one canonical Prohibited Behavior List and synchronized governance convergence
+  - accepted F3 Command intake and Rust single-writer contract
+  - accepted F4 TaskPermit, host authentication, and effect-fencing contract
+  - separate production authenticator and credential review
+  - explicit Jenn implementation and runtime activation decisions
+
+next_gate:
+  action: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R3_ATOMIC_BUNDLE
+  acceptance_ready_before_that_review: false
+  Jenn_acceptance_substituted: false
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false

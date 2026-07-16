@@ -1,0 +1,198 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+record_id: agents-os-f1-r3-atomic-bundle-independent-review-v0.1
+record_type: HashBoundIndependentReview
+date: 2026-07-14
+reviewer:
+  identity: Nuobao_f1_r3_atomic_independent_reviewer
+  role: independent_reviewer_not_author
+  run_label: F1_R3_ATOMIC_BUNDLE_FRESH_HASH_BOUND_INDEPENDENT_REVIEW_2026_07_14
+
+review_scope:
+  mode: explicit_allowlist_only
+  composition_rule: R3_explicit_replacements_over_R2_explicit_replacements_over_R1_with_all_other_clauses_preserved
+  hash_algorithm: SHA-256
+  hash_gate_restarted_from_zero_after_corrected_Phase_4_input_hash: true
+  all_input_hashes_verified_before_review: true
+  forbidden_inputs_accessed: false
+  author_self_review_relied_on: false
+  web_accessed: false
+  runtime_source_accessed: false
+  input_allowlist:
+    - role: workspace_governance
+      path: AGENTS.md
+      sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      hash_verified: true
+    - role: R1_subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+      sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+      hash_verified: true
+    - role: R2_amendment_subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+      sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+      hash_verified: true
+    - role: R3_amendment_subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+      sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+      hash_verified: true
+    - role: R1_independent_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+      sha256: b5ce737eeec248063be4b6eb15d56676dbfa2ee7aebfe28f20efbf6a473c8df8
+      hash_verified: true
+    - role: R1_review_disposition
+      path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r1-independent-review-disposition-v0.1.yaml
+      sha256: d63bc04f3d4fe54a87b62eedb39a8202c7f6c64e679f2b128438da5ee83c671f
+      hash_verified: true
+    - role: R2_independent_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r2-atomic-bundle-independent-review.yaml
+      sha256: b95d819a05366e1dd513e4afeb2b7b361118a4e1df2a7da47dbca2d494a23cf3
+      hash_verified: true
+    - role: R2_review_disposition
+      path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r2-independent-review-disposition-v0.1.yaml
+      sha256: 48607ebee09ae8b114e9b629411d621dffe4495e35b6cc1b85890bc741ba9d78
+      hash_verified: true
+    - role: accepted_parent_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      hash_verified: true
+    - role: accepted_scheduling_freeze
+      path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+      hash_verified: true
+    - role: accepted_scheduling_materialization
+      path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+      hash_verified: true
+    - role: construction_readiness_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+      sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      hash_verified: true
+    - role: accepted_G3_amendment
+      path: control-plane/registry/decisions/2026-07-14-agents-os-minimum-g3-gate-amendment-v0.1.yaml
+      sha256: 47330101e54aee710d6d5e302079d1827b80133b0c06c72b25fa10bd73d09c35
+      hash_verified: true
+    - role: Phase_4_start_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+      sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      hash_verified: true
+
+subjects:
+  acceptance_unit_id: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+  partial_review: forbidden
+  R1_subject:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+    bytes_reviewed_unchanged: true
+  R2_amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+    bytes_reviewed_unchanged: true
+  R3_amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+    bytes_reviewed_unchanged: true
+
+result: PASS_NO_BLOCKER
+summary:
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  original_findings_resolved_count: 7
+  R2_blockers_resolved_count: 2
+  disposition: exact_R3_atomic_bundle_is_ready_for_Jenn_acceptance_decision
+
+finding_readjudication:
+  - id: F1-IR-B01
+    status: RESOLVED
+    basis: >-
+      R2 supplies the total reducer and R3 Section 2 completes CARRY_FORWARD
+      with the full source tuple, immediate GoalSpec predecessor relation,
+      exact latest reducer head, reducer version and fingerprints.
+  - id: F1-IR-B02
+    status: RESOLVED_NO_REGRESSION
+    basis: >-
+      R2 Sections 3.1-3.3 retain the synchronous Subgoal parent-alignment gates
+      and closure bindings; R3 does not replace them.
+  - id: F1-IR-B03
+    status: RESOLVED
+    basis: >-
+      R2 defines the canonical envelope and complete normalization rules; R3
+      Section 3 removes the remaining untyped semantic-fingerprint uses with
+      two versioned typed projections and exact envelope equality.
+  - id: F1-IR-M01
+    status: RESOLVED_NO_REGRESSION
+    basis: >-
+      R2 Sections 5.1-5.3 retain the total disjoint membership-role partition,
+      exact supplemental coverage and bidirectional route coverage.
+  - id: F1-IR-M02
+    status: RESOLVED_NO_REGRESSION
+    basis: >-
+      R2 Section 5.4 retains plan-wide task_id leaf and container reduction for
+      both progress and exact route support.
+  - id: F1-IR-M03
+    status: RESOLVED_NO_REGRESSION
+    basis: >-
+      R2 Section 6 retains CLOSED immutability, explicit new spec and plan
+      rebinding, non-current prior decisions and new closure basis requirements;
+      R3 adds deterministic reopen projection equality without weakening them.
+  - id: F1-IR-N01
+    status: RESOLVED_NO_REGRESSION
+    basis: >-
+      R2 Section 1 retains proposal-only wording and Jenn-only exact hash-bound
+      acceptance authority.
+  - id: F1-R2-IR-B01
+    status: RESOLVED
+    basis: >-
+      For each target tuple R3 computes exactly the immediately preceding
+      GoalSpec in the same lineage and permits only an unchanged criterion
+      revision or a positive consecutive one-revision advance. It rejects
+      missing, retired-and-reintroduced, skipped, branched and older heads,
+      binds the exact current reducer head immediately before the target Event,
+      and requires the target tuple to have no prior head.
+  - id: F1-R2-IR-B02
+    status: RESOLVED
+    basis: >-
+      CriterionCarryForwardProjection and GoalSpecReopenProjection enumerate
+      their included and excluded fields, bind distinct projection contract
+      versions, use f1-canonical-json.v0.1 and FingerprintEnvelope, require exact
+      digest equality, and fail closed on unknown or inconsistent replay input.
+
+explicit_checks:
+  predecessor_unchanged_criterion_revision: PASS
+  predecessor_advanced_criterion_revision: PASS
+  immediate_GoalSpec_lineage_and_no_gap_rule: PASS
+  exact_latest_source_head_identity: PASS
+  target_tuple_no_prior_head_rule: PASS
+  source_reducer_version_and_fingerprint_binding: PASS
+  criterion_projection_included_fields_complete: PASS
+  criterion_projection_excluded_revision_and_provenance_fields_explicit: PASS
+  reopen_projection_included_fields_complete: PASS
+  reopen_projection_excluded_revision_and_provenance_fields_explicit: PASS
+  projection_replay_version_binding_and_fail_closed_recovery: PASS
+  reopen_carry_forward_and_reopen_revised_behavior: PASS
+  R2_five_previously_resolved_findings_no_regression: PASS
+  accepted_parent_compatibility: PASS
+  accepted_scheduling_compatibility: PASS
+  formal_core_object_count_unchanged: true
+  implementation_scope_expanded: false
+
+authority_and_scope_assessment:
+  accepted_parent_contracts_overridden: false
+  frozen_scheduling_contracts_overridden: false
+  Phase_4_scope_respected: true
+  F1_acceptance_ready_for_Jenn_decision: true
+  acceptance_performed_by_this_review: false
+
+non_authorization:
+  accepts_F1: false
+  authorizes_implementation: false
+  authorizes_runtime_activation: false
+  authorizes_database_change: false
+  authorizes_service_start: false
+  authorizes_provider_or_executor_execution: false
+  starts_F2: false
+
+statement: >-
+  This review finds no blocker in the exact composed F1 R3 atomic bundle. It
+  does not accept F1, does not authorize implementation, database work, service
+  startup, provider or executor execution, or runtime activation, and does not
+  start F2. Only Jenn may accept the exact hash-bound atomic bundle.

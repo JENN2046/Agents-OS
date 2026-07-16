@@ -1,0 +1,142 @@
+schema_version: agents-os.phase-review.v0.1
+record_id: agents-os-home-domain-phase-1a-self-review
+record_type: AuthorSelfReview
+status: completed
+review_mode: SELF_REVIEW
+independent_review_claimed: false
+date: 2026-07-13
+reviewer_identity: Nobao_author_run
+
+phase:
+  phase_id: HOME_DOMAIN_PHASE_1A
+  gate_id: G1A
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-phase-1a-start-decision-v0.1.yaml
+    sha256: cf27d12fb29899129660112268a5af2559c3e3c40ca9d88ef60dee7ab6aea19c
+
+subjects:
+  - role: life_core_authority_and_gap_map
+    path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+  - role: home_fact_authority_matrix
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+
+normative_and_interpretive_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: current_root_operating_contract
+  - path: CURRENT_STATE.md
+    sha256: 957df04051bc8b4e4357106f0e5feddf4ca6b0dabcd78e78f3bc33ead9222e1c
+    role: pre_G1A_current_state_projection_expected_to_change_after_gate
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    role: accepted_phase_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_resident_and_fact_authority_architecture
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: accepted_authority_and_host_boundary
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: local_life_core_policy_index_boundary
+  - path: control-plane/policies/life-core/policy-index.json
+    sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044
+    role: module_status_inventory
+  - path: control-plane/policies/life-core/agents-os-life-core-v0.1.local-mirror.md
+    sha256: bd365321c165a61875e4ad0a756dff67f012df21fafea8554bdf71f899a854dc
+    role: upstream_reading_mirror
+  - path: labs/nobao-local-resident-role-prompt-v0.3-draft.md
+    sha256: fe13488c2af151828c2bfdbb0f85e939b92ad31d8be13b10b4331c97e73d0bd9
+    role: interpretive_identity_charter_not_runtime_authority
+  - path: labs/nobao-active-prompt-v0.1-draft.md
+    sha256: 48a2e1f49152b3ec5801e1179fd7d0aa11edc0b6b8d39b8fcfe32a738e744c0a
+    role: inactive_prompt_candidate
+
+review_checks:
+  required_fact_distinctions:
+    stable_identity_vs_identity_narrative: PASS
+    formal_relationship_vs_subjective_memory: PASS
+    Presence_consent_vs_device_sensing_state: PASS
+    Session_content_vs_Life_Stream_candidate: PASS
+    Memory_content_vs_memory_access_authority: PASS
+    Intent_candidate_vs_authorized_Command: PASS
+  authority_integrity:
+    one_writer_claimed_only_where_supported: PASS
+    reporters_separated_from_canonical_writers: PASS
+    logical_storage_separated_from_physical_location: PASS
+    unresolved_physical_locations_not_invented: PASS
+    Jenn_final_authority_recorded: PASS
+  architecture_boundaries:
+    second_Task_ledger_created: false
+    Home_Domain_writes_Task_state: false
+    relationship_grants_permission: false
+    Presence_implies_sensing_activation: false
+    Session_auto_promotes_to_Memory_or_Task: false
+    VCPToolBox_treated_as_irreplaceable_identity: false
+    future_Resident_implementation_claimed_as_current: false
+  scope_boundaries:
+    private_raw_memory_read: false
+    secret_or_provider_config_read: false
+    runtime_probe_or_service_start: false
+    database_read_or_write: false
+    Phase_1B_started: false
+
+findings:
+  blockers: []
+  major_findings: []
+  minor_findings: []
+  documented_gaps:
+    - local_life_core_mirror_snapshot_is_2026_06_30_and_live_Notion_currentness_was_not_verified
+    - runtime_identity_memory_and_device_state_implementations_were_not_probed
+    - standing_authorization_pilot_expired_on_2026_07_07
+    - A2A_document_lifecycle_and_formal_memory_status_require_distinct_labels
+    - Presence_policy_and_concrete_consent_or_sensing_facts_require_distinct_contracts
+
+gap_reduction:
+  unresolved_blocking_for_home_direction: []
+  unresolved_blocking_for_M0:
+    - HD-M0-01
+    - HD-M0-02
+    - HD-M0-03
+    - HD-M0-04
+    - HD-M0-05
+    - HD-M0-06
+    - HD-M0-07
+  all_gaps_classified: true
+  home_direction_can_model_gaps_without_inventing_facts: true
+
+review_result: PASS_WITH_GAPS
+
+G1A:
+  result: PASS_WITH_GAPS
+  home_domain_drafting_allowed: true
+  unresolved_blocking_for_home_direction: []
+  unresolved_blocking_for_M0:
+    - HD-M0-01
+    - HD-M0-02
+    - HD-M0-03
+    - HD-M0-04
+    - HD-M0-05
+    - HD-M0-06
+    - HD-M0-07
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+decision_effect:
+  Phase_1A_complete: true
+  Phase_1B_started: false
+  Phase_1B_automatic_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+next_gate:
+  action: EXPLICIT_START_DECISION_FOR_PHASE_1B
+  normative_subjects:
+    - sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    - sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+  implementation_authorized: false
+  runtime_activation_authorized: false

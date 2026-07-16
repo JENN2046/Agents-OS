@@ -1,0 +1,90 @@
+schema_version: agents-os.roadmap-acceptance-decision.v0.1
+record_id: agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1
+record_type: RoadmapAcceptanceDecision
+status: accepted
+immutable: true
+created_at: 2026-07-13T23:30:16+08:00
+effective_at: 2026-07-13T23:30:16+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT
+  decision_source: explicit_current_conversation_confirmation
+
+acceptance_unit:
+  acceptance_unit_id: HOME_DOMAIN_CONSTRUCTION_ROADMAP_R3
+  atomic: true
+  partial_acceptance_permitted: false
+  result: ACCEPTED
+
+accepted_subjects:
+  - role: home_domain_construction_roadmap
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    byte_count: 23757
+    lf_count: 920
+    accepted_scope: entire_file
+
+review_evidence:
+  - role: hash_bound_independent_final_review
+    path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r3-independent-final-review.yaml
+    sha256: 3c52c5745a26a3f3e33ea74a064dce778a79052174dc488c5217c03a24f54cf0
+    byte_count: 12370
+    lf_count: 230
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_finding_count: 0
+    minor_finding_count: 2
+    prior_findings_verified_resolved: 15
+    prior_findings_unresolved: 0
+
+acknowledged_nonblocking_findings:
+  - finding_id: R3_MINOR_01
+    disposition: ACCEPTED_AS_NONBLOCKING_EDITORIAL_DUPLICATION
+    correction_in_accepted_subject: not_performed_hash_must_remain_unchanged
+  - finding_id: R3_MINOR_02
+    disposition: ACCEPTED_AS_NONBLOCKING_EDITORIAL_DUPLICATION
+    correction_in_accepted_subject: not_performed_hash_must_remain_unchanged
+
+decision_scope:
+  roadmap_governance_direction_accepted: true
+  Home_Domain_Architecture_Direction_accepted: false
+  Life_Core_Authority_and_Gap_Map_accepted: false
+  Phase_1A_started: false
+  Phase_1A_start_authorized_by_this_decision: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_execution_authorized: false
+  service_start_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  subject_self_digest: false
+  reproduction_command: >-
+    sha256sum --
+    control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r3-independent-final-review.yaml
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_to_materialize_status: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_new_review_plus_new_Jenn_decision
+  derived_registry_and_status_projection_updates: permitted
+
+next_gate:
+  action: EXPLICIT_START_DECISION_FOR_PHASE_1A
+  automatic_phase_advance: false
+  implementation_authorized: false
+  runtime_activation_authorized: false

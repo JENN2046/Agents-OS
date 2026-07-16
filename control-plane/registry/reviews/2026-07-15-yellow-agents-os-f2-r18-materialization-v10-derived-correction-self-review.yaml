@@ -1,0 +1,113 @@
+schema_version: agents-os.materialization-self-review.v0.1
+review_id: agents-os-f2-r18-materialization-v10-derived-correction-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-15
+status: complete
+reviewer_identity: Codex_author_run_f2_r18_materialization_v10
+independent_review: false
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R18_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+    R18: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+
+prior_independent_review:
+  path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v9-materialization-independent-consistency-review.yaml
+  sha256: 1c3228ef0204e35735daf574b48dbc5531c655c265728a956d49a3737d97e1d0
+  result: BLOCK
+
+derived_materialization:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v10.draft.md
+  sha256: eda49327933a9a88ed34599f270e9d341c6cb068ee67d51c27006d65654b76a2
+  acceptance_subject: false
+  source_of_authority: fixed_R1_through_R18_only
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts: {blocker: 0, major: 0, minor: 0}
+
+prior_findings_disposition:
+  - finding_id: F2-R18-V9-MCR-B01
+    status: RESOLVED_IN_V10
+    evidence: >-
+      DelegationGrantRevisionV0_1R15Effective retains the complete
+      ResponsibilityScopeV0_1R7 value and no longer prints a separate
+      responsibility_scope_fingerprint field.
+  - finding_id: F2-R18-V9-MCR-B02
+    status: RESOLVED_IN_V10
+    evidence: >-
+      Binding activation evidence now prints the R8 synthetic stewardship-source
+      replacement as the exact SyntheticManifestDerivedLifecycleRefV0_1 object,
+      omits every separate steward field, and keeps the R18 assurance projection
+      action-free and transitively bound to manifest assurance.
+  - finding_id: F2-R18-V9-MCR-M01
+    status: RESOLVED_IN_V10
+    evidence: >-
+      The sole indexed ResponsibilityAssignmentEffectiveReducer now inlines the
+      R15 INVALIDATED and CHALLENGED or INDETERMINATE branches plus the R16
+      complete-set, safer-state preservation, and CONFIRMED-only ACTIVE order.
+
+source_exactness:
+  R1_through_R18_subjects_modified: false
+  materialization_only_revision: true
+  materialization_created_subject_field: false
+  Delegation_separate_responsibility_scope_fingerprint_absent: true
+  R8_synthetic_stewardship_source_exactly_printed: true
+  synthetic_binding_has_no_invented_activation_action: true
+  Assignment_assurance_mapping_in_sole_indexed_reducer: true
+  F3_owned_Command_surfaces_remain_placeholders: true
+  second_ledger_created: false
+  authority_expanded: false
+
+inventory:
+  effective_top_level_schema_rows: 61
+  parsed_unique_top_level_schemas: 61
+  schema_index_exact_set_match: true
+  duplicate_schema_rows: 0
+  explicit_named_reducer_rows: 13
+  reducer_index_unique_rows: 13
+  duplicate_reducer_rows: 0
+
+validation:
+  R1_through_R18_hash_lock: PASS_18_OF_18
+  materialization_v10_hash_fixed: PASS
+  all_yaml_fences_parse: PASS_26_OF_26
+  markdown_fences: PASS
+  UTF8_no_BOM_LF: PASS
+  trailing_whitespace: PASS
+  schema_index_unique_set: PASS_61
+  reducer_index_unique_set: PASS_13
+  targeted_prior_finding_assertions: PASS
+
+limitations:
+  independent_materialization_consistency_review: PENDING
+  fresh_full_R1_R18_atomic_bundle_review: NOT_AUTHORIZED_IN_THIS_GATE
+  Jenn_acceptance: NOT_PERFORMED
+
+non_authorization:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_V10

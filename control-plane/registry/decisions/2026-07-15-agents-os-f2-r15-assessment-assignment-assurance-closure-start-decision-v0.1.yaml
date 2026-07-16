@@ -1,0 +1,37 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r15-assessment-assignment-assurance-closure-start
+date: 2026-07-15
+owner: Jenn
+agent_steward: Nobao
+status: active
+
+authority:
+  basis: Jenn_explicit_request_to_create_concentrated_F2_R15
+  reviewed_package_sha256: 4c0c4de884cbcb065c796a7ae5ebd366a6ae5390b59862edbedf42c10ebe8a95
+
+scope:
+  - canonical assessment and evidence profile
+  - Responsibility Assignment body intent action subject closure
+  - derived Identity Stewardship assessment without a second relation ledger
+  - total CompromiseImpact action mapping
+  - complete effective materialization v3
+  - complete review-lineage package
+
+forbidden:
+  - expand F2 capabilities beyond closure
+  - create a stewardship relation ledger
+  - create a permission taxonomy or allowlist
+  - rewrite R1 through R14
+  - accept or freeze F2
+  - start F3
+  - implement runtime
+  - create or migrate a database
+  - activate production authentication
+  - commit
+  - push
+
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+

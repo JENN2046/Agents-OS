@@ -1,0 +1,44 @@
+record_type: FoundationContractAmendmentStartDecision
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r9-binding-bootstrap-impact-membership-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+executor: Codex
+status: active
+
+authority_basis:
+  - Jenn instructed Nobao to continue automatically after F2 review cycles
+  - Jenn requested the next step
+  - the fresh R8 independent review requires a narrow R9 amendment
+
+fixed_review_input:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r8-atomic-bundle-independent-review.yaml
+  sha256: 615a9d1deaee5b53a47d0e424762e8757bb1c7b3440f5c99cfbb1e04760453a5
+  result: BLOCK
+
+authorized_scope:
+  - remove the synthetic manifest activation decision-intent fixed point
+  - add complete Binding issuance mutation schema and fingerprint path
+  - make CompromiseImpact target membership immutable within one stream
+  - bind current authority bases to the intent ledger-head watermark
+  - separate target Profile state from lifecycle-controller currentness
+  - regenerate a complete R9 effective materialization
+  - perform author self-review and fresh hash-bound independent review
+
+forbidden:
+  - rewrite R1 through R8
+  - expand F2 architecture direction
+  - accept F2
+  - start F3
+  - implement runtime or database state
+  - activate production authentication, services, providers, or secrets
+  - commit
+  - push
+
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+commit_authorized: false
+push_authorized: false

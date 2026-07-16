@@ -1,0 +1,119 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r2-narrow-amendment-self-review
+review_type: AUTHOR_SELF_REVIEW
+status: complete
+date: 2026-07-14
+author_reviewer: Codex_as_Nobao
+independent_review: false
+
+atomic_subjects:
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    role: fixed_R1_base
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    role: fixed_R2_narrow_amendment
+
+review_inputs:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-independent-review.yaml
+    sha256: 690f8f2cf451525cedcb9b2dda35e137fdc2bd095f5c2fddad723e63fff92f8e
+    role: blocking_findings_source
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r2-narrow-amendment-start-decision-v0.1.yaml
+    sha256: e7b094cd47514b81c8a1c057ba0c5c2941351e5039e42d7773237c0e9c714bdf
+    role: amendment_scope_boundary
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+    role: accepted_permission_direction
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    role: accepted_predecessor_boundary
+
+review_result: PASS_NO_AUTHOR_BLOCKER
+independent_review_readiness: READY
+partial_acceptance: forbidden
+
+blocking_finding_disposition:
+  - finding_id: F2-IR-B01
+    disposition: RESOLVED_IN_R2
+    evidence_sections:
+      - R2_Section_3
+      - R2_Section_4
+    rationale: >-
+      Assignment issuance now has a closed source set, exact authenticated issuer action,
+      source currentness, immutable predecessor/CAS lineage, and exact kind/scope/time/depth
+      attenuation. Every delegation edge checks immediate-source redelegation and narrowing.
+  - finding_id: F2-IR-B02
+    disposition: RESOLVED_IN_R2
+    evidence_sections:
+      - R2_Section_5
+      - R2_Section_6
+      - R2_Section_9
+    rationale: >-
+      Binding and delegation now carry typed activation evidence with exact target fingerprints,
+      Principal control proof, authenticated acknowledgement, time, replay identity, revision,
+      revocation, supersession, fingerprint, reducer, recovery, and negative-test semantics.
+  - finding_id: F2-IR-B03
+    disposition: RESOLVED_BY_OWNERSHIP_REPLACEMENT
+    evidence_sections:
+      - R2_Section_2
+      - R2_Section_8
+    rationale: >-
+      Incomplete F2-owned Command schemas are explicitly replaced. F2 owns only an immutable
+      attribution interface; F3 owns payload schema, canonical bytes, nonce/replay CAS, intake
+      states, crash recovery, and atomic domain handoff. Runtime remains closed until F3 exists.
+  - finding_id: F2-IR-M01
+    disposition: RESOLVED_IN_R2
+    evidence_sections:
+      - R2_Section_7
+    rationale: >-
+      Identity transitions now bind a closed steward relation and authenticated action, while
+      compromise recovery binds the complete affected-binding set and one atomic activation rule.
+
+self_review_corrections:
+  - correction_id: F2-R2-SR-01
+    finding: first-edge delegation correction initially omitted Jenn root direction
+    resolution: added the exact authenticated Jenn root path without opening it to other Actors
+  - correction_id: F2-R2-SR-02
+    finding: target Principal control proof was initially an untyped reference
+    resolution: added PrincipalControlProofAssessmentRef and exact VERIFIED-only semantics
+  - correction_id: F2-R2-SR-03
+    finding: new recovery arrays lacked explicit canonical ordering
+    resolution: added ordering, uniqueness, and exact-set-equality rules
+  - correction_id: F2-R2-SR-04
+    finding: R1 AuthenticatedCommandContext ownership remained ambiguous
+    resolution: explicitly replaced it with the F3-owned Command boundary and F2 attribution ref
+
+scope_control:
+  new_permission_model_added: false
+  ordinary_action_allowlist_added: false
+  risk_permission_matrix_added: false
+  single_prohibited_boundary_changed: false
+  full_Command_protocol_added_to_F2: false
+  F3_started: false
+
+documented_remaining_dependencies:
+  - canonical Prohibited Behavior List convergence
+  - accepted F3 Command intake and Resident ownership contract
+  - accepted F4 TaskPermit and host authentication contract
+  - production authenticator and provisioning profiles
+
+validation:
+  R1_hash_match: PASS
+  R2_hash_match: PASS
+  R2_markdown_fences: PASS
+  R2_yaml_blocks:
+    result: PASS
+    count: 11
+  R2_utf8_lf: PASS
+  R2_trailing_whitespace: PASS
+  legacy_permission_construct_scan: PASS_ZERO_MATCH
+  git_diff_check: PASS
+
+authority_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R2_ATOMIC_BUNDLE

@@ -1,0 +1,135 @@
+schema_version: agents-os.independent-final-review.v0.1
+record_id: agents-os-home-domain-construction-roadmap-r2-independent-final-review
+record_type: IndependentFinalReview
+status: complete
+immutable_after_creation: true
+
+reviewer_identity: /root/home_domain_r2_final_review
+review_run_id: home-domain-r2-independent-final-20260713T220534+0800
+review_started_at: "2026-07-13T22:05:34+08:00"
+review_completed_at: "2026-07-13T22:05:56+08:00"
+review_mode: fresh_hash_bound_read_only
+author_run_separated: true
+author_scratchpad_read: false
+
+subject:
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r2.draft.md
+  expected_sha256: 801657c6ae8852e69e60a12e462e284617606fcae0d006c639c311e3d9cd6e51
+  observed_sha256: 801657c6ae8852e69e60a12e462e284617606fcae0d006c639c311e3d9cd6e51
+  hash_gate: PASS_EXACT_MATCH
+
+normative_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_operating_contract_and_permission_boundary
+  - path: CURRENT_STATE.md
+    sha256: 422a3819eefe7cc175ea8ccc5a611c4eb2576f492a8f1d1e10a52f8d00e7effe
+    role: current_operational_and_architecture_handoff
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_resident_topology_ledger_and_rust_core_authority
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: accepted_authority_taskpermit_and_host_enforcement_boundary
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+    role: immutable_scheduling_acceptance_and_freeze_authority
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+    role: derived_accepted_scheduling_materialization
+  - path: control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
+    sha256: d3babe879a88597c80201a1bc6998ea6b690f9568caf0b1c300edff3b40645a8
+    role: mandatory_clean_checkout_evidence_qualification
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: life_core_local_mirror_authority_index_and_boundary
+  - path: control-plane/policies/life-core/root-principles.md
+    sha256: 7a9bd33b99ae3173577b3e41fd359824936c516d27dd0b6f8aa6b3d0a4c34372
+    role: community_home_and_non_task_first_root_principles
+  - path: control-plane/policies/life-core/memory-rules.md
+    sha256: 1fabba2a8f9f7e88da130e2589e164b7dc5917e80e95983fc3a4df2051122235
+    role: selective_memory_review_and_private_raw_memory_boundary
+  - path: control-plane/policies/life-core/presence-and-sensing.md
+    sha256: 7a525db3cbcbf9952927a5e42a43f708488e228c4d4b3e1b3e525351261cf943
+    role: consent_sensing_retention_and_continuous_presence_boundary
+  - path: control-plane/policies/life-core/growth-rules.md
+    sha256: ce8dece3d6d35eb1f29383fee1694f5dece32b6af245a1e72337c0564f137793
+    role: reflection_candidate_review_and_no_permission_growth_boundary
+  - path: control-plane/policies/life-core/a2a-relations.md
+    sha256: f04c1c52d549da79d05b23e6922d1a375d748bb4ac2d90e0c7817be66064e97a
+    role: relationship_visibility_dispute_and_no_implicit_permission_boundary
+  - path: control-plane/policies/life-core/runtime-boundaries.md
+    sha256: 94c1b6fce3722c813a09abccdc47622dba9d04340ac2c35ee741bbaa3e2a73df
+    role: life_foundation_runtime_capability_and_permission_separation
+  - path: labs/nobao-local-resident-role-prompt-v0.3-draft.md
+    sha256: fe13488c2af151828c2bfdbb0f85e939b92ad31d8be13b10b4331c97e73d0bd9
+    role: lower_authority_interpretive_identity_and_governance_charter
+
+input_allowlist:
+  - AGENTS.md
+  - CURRENT_STATE.md
+  - control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r2.draft.md
+  - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+  - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+  - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+  - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+  - control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
+  - control-plane/policies/life-core/README.md
+  - control-plane/policies/life-core/root-principles.md
+  - control-plane/policies/life-core/memory-rules.md
+  - control-plane/policies/life-core/presence-and-sensing.md
+  - control-plane/policies/life-core/growth-rules.md
+  - control-plane/policies/life-core/a2a-relations.md
+  - control-plane/policies/life-core/runtime-boundaries.md
+  - labs/nobao-local-resident-role-prompt-v0.3-draft.md
+
+review_result: PASS_NO_BLOCKER
+blockers: []
+major_findings: []
+minor_findings: []
+
+review_determinations:
+  resident_topology_consistent: true
+  home_domain_is_logical_bounded_context_only: true
+  second_runtime_created: false
+  second_ledger_created: false
+  second_permission_system_created: false
+  authority_boundary_expanded: false
+  relationship_expands_permission: false
+  session_automatically_becomes_goal_or_task: false
+  session_automatically_becomes_life_stream_candidate: false
+  memory_candidate_automatically_becomes_long_term_memory: false
+  independent_review_separated_from_Jenn_decision: true
+  phase_gate_implies_implementation_authority: false
+  M0_isolation_sufficient_for_proposed_scope: true
+  roadmap_phase_order_self_consistent: true
+  frozen_scheduling_semantics_modified_or_weakened: false
+  accepted_resident_semantics_modified_or_weakened: false
+
+validation:
+  subject_sha256_exact_match: PASS
+  all_allowlisted_input_sha256_recorded: PASS
+  subject_utf8_lf_only_no_bom: PASS
+  allowlisted_yaml_parse: PASS
+  markdown_semantic_cross_review: PASS
+  accepted_topology_cross_review: PASS
+  authority_and_permission_cross_review: PASS
+  M0_negative_path_cross_review: PASS
+  scheduling_freeze_cross_review: PASS
+  validation_evidence_qualification_preserved: PASS
+
+decision_effect:
+  may_proceed_to_Jenn_decision_surface: true
+  acceptance_granted_by_this_review: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_execution_authorized: false
+  service_start_authorized: false
+  registry_update_authorized: false
+
+prohibited_inputs_accessed: false
+subject_modified: false
+registry_modified: false
+current_state_modified: false
+frozen_inputs_modified: false

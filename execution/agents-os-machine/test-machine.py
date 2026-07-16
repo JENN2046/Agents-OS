@@ -91,6 +91,21 @@ def main() -> int:
             "route bundle readiness must not authorize route adoption",
             failures,
         )
+    if "jenn_decision_required" in preview["denied_signals"]:
+        check(preview["blocked"] is True, "Jenn decision current preview should be blocked", failures)
+        check(preview["actionable"] is False, "Jenn decision current preview should be actionable=false", failures)
+        check(
+            preview["next_user_action"]["status"] == "governance_decision_required",
+            "Jenn decision current preview should surface governance decision handoff",
+            failures,
+        )
+        check(preview["next_user_action"]["decision_owner"] == "Jenn", "governance decision owner should be Jenn", failures)
+        check(preview["next_user_action"]["accepted_route_ids"] == [], "generic governance decision should not surface route ids", failures)
+        check(
+            preview["next_user_action"]["exact_confirmation_templates_available"] is False,
+            "generic governance decision should not claim route confirmation templates",
+            failures,
+        )
     check(preview["review_gate"]["requires_nobao_review"] is True, "preview should require Nobao review", failures)
     ok, failed_flags = machine.has_false_dangerous_flags(preview["authorization"])
     check(ok, f"preview dangerous flags should be false: {failed_flags}", failures)
@@ -256,6 +271,36 @@ requires_jenn_route_choice=true
         "route selection bundle readiness must keep can_apply_now=false",
         failures,
     )
+
+    governance_decision_queue = machine.parse_queue_markdown(
+        """# fixture
+
+## NOW
+
+### NOW-001: Awaiting Jenn Explicit Start Decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+""",
+        Path("fixture-governance-decision-stop.md"),
+    )
+    check(governance_decision_queue["passed"], "governance decision fixture should parse", failures)
+    governance_decision_preview = machine.build_preview(machine.now_item(governance_decision_queue))
+    check(governance_decision_preview["blocked"] is True, "governance decision fixture should be blocked", failures)
+    check(governance_decision_preview["actionable"] is False, "governance decision fixture should be actionable=false", failures)
+    check(
+        "jenn_decision_required" in governance_decision_preview["denied_signals"],
+        "governance decision signal should be recorded",
+        failures,
+    )
+    check(
+        governance_decision_preview["next_user_action"]["status"] == "governance_decision_required",
+        "governance decision fixture should surface generic Jenn handoff",
+        failures,
+    )
+    check(governance_decision_preview["next_user_action"]["accepted_route_ids"] == [], "generic Jenn handoff should omit route ids", failures)
 
     external_queue = machine.parse_queue_markdown(
         """# fixture

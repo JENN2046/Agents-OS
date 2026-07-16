@@ -1,0 +1,33 @@
+schema_version: agents-os.foundation-contract-start-decision.v0.1
+decision_id: agents-os-f2-r18-worker-binding-activation-assurance-closure-start
+date: 2026-07-15
+owner: Jenn
+subject: F2 Actor Identity and Delegation v0.1 R18
+status: authorized_for_documentation_only
+
+authorization:
+  create_R18_narrow_amendment: true
+  create_author_self_review: true
+  update_registry_and_current_state: true
+
+scope:
+  - remove_temporary_worker_identity_responsibility_cycle
+  - define_derived_temporary_worker_responsibility_binding_assessment
+  - define_exact_binding_and_delegation_activation_assurance_projection
+  - require_materialization_v9_to_remove_derived_only_invented_fields
+
+forbidden:
+  - modify_R1_through_R17_subject_bytes
+  - modify_prior_review_artifacts
+  - create_second_responsibility_ledger
+  - expand_F2_identity_or_delegation_capabilities
+  - accept_F2
+  - implement_runtime
+  - start_F3
+  - activate_runtime
+  - authorize_production_authentication
+  - commit
+  - push
+
+required_next_gate_after_author_closeout:
+  CREATE_SOURCE_EXACT_MATERIALIZATION_V9_FOR_F2_R1_THROUGH_R18

@@ -1,0 +1,34 @@
+schema_version: agents-os.foundation-contract-start-decision.v0.1
+decision_id: agents-os-f2-r17-role-vocabulary-materialization-closure-start
+date: 2026-07-15
+owner: Jenn
+subject: F2 Actor Identity and Delegation v0.1 R17
+status: authorized_for_documentation_only
+
+authorization:
+  create_R17_narrow_amendment: true
+  create_complete_materialization_v5: true
+  create_author_self_review: true
+  rebuild_hash_bound_review_package: true
+  update_registry_and_current_state: true
+
+scope:
+  - close_ActionAssuranceRole_vocabulary_and_total_mapping
+  - remove_materialization_duplicate_schemas_and_stale_aliases
+  - create_exact_schema_reducer_domain_source_index
+
+forbidden:
+  - modify_R1_through_R16_subject_bytes
+  - modify_prior_review_artifacts
+  - expand_F2_capabilities
+  - accept_F2
+  - implement_runtime
+  - start_F3
+  - activate_runtime
+  - authorize_production_authentication
+  - commit
+  - push
+
+required_next_gate_after_author_closeout:
+  FRESH_HASH_BOUND_INDEPENDENT_FULL_BUNDLE_REVIEW_OF_F2_R1_THROUGH_R17_AND_MATERIALIZATION_V5
+

@@ -1,0 +1,57 @@
+schema_version: agents-os.subsequent-review-disposition.v0.1
+record_id: agents-os-home-domain-roadmap-r2-subsequent-external-review-disposition-v0.1
+record_type: SubsequentExternalReviewDisposition
+status: active_R3_revision_required
+created_at: 2026-07-13T22:37:23+08:00
+owner: Jenn
+agent_steward: Nobao
+
+R2_subject:
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r2.draft.md
+  sha256: 801657c6ae8852e69e60a12e462e284617606fcae0d006c639c311e3d9cd6e51
+
+repository_review_evidence:
+  author_self_review:
+    path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-self-review.yaml
+    sha256: 6ed937ebaa7a1b4f85ccc8f901b92521506f120de317a74f927877bbed33865f
+    result: PASS_READY_FOR_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+  independent_final_review:
+    path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-independent-final-review.yaml
+    sha256: 3f9912fe84cf00a4bd934f4e7d14af7ae23f8695e995e75767ae554b49bc19af
+    result: PASS_NO_BLOCKER
+    integrity: VALID
+
+subsequent_external_review:
+  source_type: Jenn_supplied_external_review_in_current_conversation
+  persisted_prior_repository_artifact: false
+  disposition_basis: governance_findings_adopted_with_factual_corrections
+  copied_raw_conversation_content: false
+
+truthful_lineage:
+  earlier_same_hash_blocking_repository_review_exists: false
+  R2_independent_review_invalidated: false
+  new_governance_findings_identified_after_independent_review: true
+  reason_for_R3: subsequent_governance_findings_require_subject_revision_before_Jenn_acceptance
+
+disposition:
+  conflict_kind: subsequent_scope_expansion_not_prior_artifact_override
+  conflict_resolved_by: SUBJECT_REVISION_TO_R3
+  R2_acceptance_ready: false
+  R3_required: true
+  neither_R2_review_deleted_or_rewritten: true
+  may_proceed_directly_to_Jenn_acceptance: false
+
+authority_effect:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+immutability_policy:
+  edit_R2_subject: forbidden
+  edit_R2_self_review: forbidden
+  edit_R2_independent_review: forbidden
+  correction_method: new_superseding_disposition_record

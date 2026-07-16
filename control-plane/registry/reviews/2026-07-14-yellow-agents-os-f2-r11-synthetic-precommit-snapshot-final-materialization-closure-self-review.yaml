@@ -1,0 +1,26 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r11-synthetic-precommit-snapshot-final-materialization-closure-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Codex_author_run_f2_r11
+subjects:
+  amendment: {path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md, sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6}
+  materialization: {path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r11.draft.md, sha256: 33cac46895795a94f27e3b25640a682e9e9fa198aaa96873bdeb1f5277a50cce, acceptance_subject: false}
+prior_review: {path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r10-atomic-bundle-independent-review.yaml, sha256: 53340e8340ac14e29edddd2ed4f6177973d0e447261eafe1fa1ab50cc06b8aea}
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts: {blocker: 0, major: 0, minor: 0}
+finding_disposition:
+  F2-R10-IR-B01: RESOLVED_BY_ACYCLIC_PRECOMMIT_AND_DERIVED_PROVENANCE_SPLIT
+  F2-R10-IR-M01: RESOLVED_BY_EXACT_TABLE_RESTORATION
+self_review_dimensions:
+  synthetic_precommit_has_only_prior_inputs: PASS
+  own_spec_manifest_activation_and_Event_forbidden: PASS
+  post_activation_provenance_outside_body: PASS
+  Assignment_Jenn_only_transition_restored: PASS
+  evidence_steward_removed: PASS
+  all_ten_basis_field_rows_printed: PASS
+  complete_reducers_preserved: PASS
+validation: {subject_sha256_fixed: PASS, materialization_sha256_fixed: PASS, yaml_parse: PASS, markdown_fences: PASS, UTF8_LF: PASS, trailing_whitespace: PASS, git_diff_check: PASS}
+non_authorization: {F2_accepted: false, implementation_authorized: false, runtime_activation_authorized: false, production_authentication_authorized: false, F3_started: false, commit_performed: false, push_performed: false}
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R11_ATOMIC_BUNDLE_AND_MATERIALIZATION

@@ -1,0 +1,95 @@
+schema_version: agents-os.architecture-amendment-decision.v0.1
+record_id: agents-os-minimum-g3-gate-amendment-v0.1
+record_type: ArchitectureAmendmentDecision
+status: accepted
+immutable: true
+created_at: 2026-07-14T03:04:50+08:00
+effective_at: 2026-07-14T03:04:50+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_MINIMUM_G3_GATE_AMENDMENT_V0_1
+  decision_source: explicit_current_conversation_decision
+
+amended_subject:
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+  sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  original_bytes_modified: false
+  amended_scope: Phase_3_G3_transition_semantics_only
+
+amendment_basis:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    role: Phase_3_dependency_graph_scope_and_G3_GOV_01_finding
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1-self-review.yaml
+    sha256: dcee1c3d3faf5b11a4f85b19509b52cbd9ca05249cc2740b42561e7262d7b2ea
+    role: truthful_NOT_READY_author_review
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    role: accepted_foundational_direction
+
+superseded_gate_semantics:
+  G3_ready_requires_all_required_contracts_already_accepted: true
+  effect: superseded_by_this_amendment
+  reason: circular_dependency_on_Phase_4_contract_closure
+
+accepted_gate_semantics:
+  G3:
+    ready_name: READY_FOR_FOUNDATION_CONTRACT_CLOSURE
+    ready_requires:
+      - every_HD_M0_gap_mapped_to_declared_contract_acceptance_unit_or_explicit_M0_exclusion
+      - foundation_contract_dependency_graph_complete
+      - M0_A_scope_complete
+      - M0_B_scope_complete
+      - deferred_scope_complete
+      - hard_stop_list_complete
+      - validation_plan_complete
+    does_not_require:
+      - foundation_contracts_already_accepted
+    phase_gate_is_authorization: false
+  post_contract_gate:
+    gate_id: G4_CONSTRUCTION_AUTHORIZATION_READINESS
+    requires:
+      - every_contract_required_by_selected_M0_slice_accepted
+      - every_explicit_exclusion_scope_and_expiry_validated
+      - implementation_dependency_graph_current
+      - M0_validation_plan_current
+    implementation_authorized_by_gate_alone: false
+    separate_Jenn_implementation_authorization_required: true
+
+current_G3_reduction:
+  every_HD_M0_gap_mapped_or_excluded: true
+  dependency_graph_complete: true
+  M0_A_scope_complete: true
+  M0_B_scope_complete: true
+  deferred_scope_complete: true
+  hard_stop_list_complete: true
+  validation_plan_complete: true
+  result: READY_FOR_FOUNDATION_CONTRACT_CLOSURE
+
+non_effects:
+  foundation_contracts_accepted: false
+  Phase_4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  sensing_or_recording_authorized: false
+  secret_access_authorized: false
+  private_raw_memory_access_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+next_gate:
+  action: EXPLICIT_START_OF_PHASE_4_FOUNDATION_CONTRACT_CLOSURE
+  automatic_phase_advance: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_amended_R3_subject: forbidden
+  correction_method: create_a_new_superseding_amendment_decision

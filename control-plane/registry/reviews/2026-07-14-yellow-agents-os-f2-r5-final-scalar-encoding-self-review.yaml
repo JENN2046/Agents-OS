@@ -1,0 +1,119 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r5-final-scalar-encoding-self-review
+review_type: HASH_BOUND_AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Nobao_author_run
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R5_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    - role: fixed_R1_base
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - role: fixed_R2_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - role: fixed_R3_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - role: fixed_R4_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - role: fixed_R5_final_scalar_encoding_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+
+authority_inputs:
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r5-final-scalar-encoding-amendment-start-decision-v0.1.yaml
+    sha256: e3fffb80b15c4a55c23f8ab6aa54e03bdfae5e70279f35b35ea6c2ec2db5e3fb
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r4-atomic-bundle-independent-review.yaml
+    sha256: 203eb7fb07f4df7b85b51353da0604f901bbe595093e84758df1c4ce1f25d3cf
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+author_corrections_before_hash_fixing:
+  - correction_id: F2-R5-SR-01
+    issue: >-
+      The digest scalar type needed an explicit canonicalization contract
+      version in addition to the owning formula's domain tag.
+    correction: >-
+      Added agents-os.f2-digest-scalar.v0.1 and fixed persisted/insertion
+      encoding to the exact 64-character lowercase-hex JSON string.
+    outcome: CLOSED
+  - correction_id: F2-R5-SR-02
+    issue: >-
+      NFC and safe-integer wording needed cross-language version and acceptance
+      criteria.
+    correction: >-
+      Fixed Unicode normalization data to 15.1.0 and made revision acceptance
+      equivalent to ECMAScript Number.isSafeInteger(value) with value >= 0.
+    outcome: CLOSED
+
+blocker_readjudication:
+  - finding_id: F2-R4-IR-B01
+    result: RESOLVED_IN_R5
+    basis: >-
+      The acknowledgement replay identity, both stable evidence IDs, and both
+      evidence replay identities now persist as exact 64-character lowercase
+      hex JSON strings. Every parent formula inserts that same string without
+      decoding, wrapping, prefixing, or re-encoding it. Alternate raw, Envelope,
+      uppercase, base64, prefixed, or malformed representations are rejected.
+  - finding_id: F2-R4-IR-B02
+    result: RESOLVED_IN_R5
+    basis: >-
+      BindingScope context_id is a normalized, non-empty, bounded Unicode 15.1
+      NFC JSON string with exact control-character exclusions. context_revision
+      is an exact JCS-safe unsigned integer from 0 through 2^53-1 with explicit
+      wrong-type, fractional, negative, and overflow rejection.
+
+review_dimensions:
+  R5_scope_is_exactly_two_scalar_blockers: PASS
+  R1_through_R4_fixed_bytes_unchanged: PASS
+  digest_algorithm_and_input_serialization_exact: PASS
+  digest_persisted_encoding_exact: PASS
+  digest_parent_JCS_insertion_exact: PASS
+  fingerprint_envelope_and_digest_scalar_distinct: PASS
+  all_five_affected_fields_enumerated: PASS
+  alternate_digest_representations_rejected: PASS
+  context_id_JSON_type_and_NFC_version_exact: PASS
+  context_id_nonempty_length_and_control_rules_exact: PASS
+  context_revision_range_and_JCS_number_rule_exact: PASS
+  normalization_collision_and_tuple_order_exact: PASS
+  cross_writer_boundary_and_negative_fixtures_complete: PASS
+  action_ref_fingerprint_and_acyclic_graph_unchanged: PASS
+  BindingScope_remains_representation_only: PASS
+  single_prohibited_boundary_preserved: PASS
+  new_permission_model_created: false
+  implementation_or_runtime_authority_added: false
+  F3_started: false
+
+remaining_dependencies:
+  - one canonical Prohibited Behavior List and synchronized governance convergence
+  - accepted F3 Command intake, immutable action-ref, and Rust single-writer contract
+  - accepted F4 TaskPermit, host authentication, and effect-fencing contract
+  - separate production authenticator and credential review
+  - explicit Jenn implementation and runtime activation decisions
+
+next_gate:
+  action: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R5_ATOMIC_BUNDLE
+  acceptance_ready_before_that_review: false
+  Jenn_acceptance_substituted: false
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false

@@ -1,0 +1,79 @@
+schema_version: agents-os.contract-closure-start-decision.v0.1
+record_id: agents-os-f2-actor-identity-delegation-start-decision-v0.1
+record_type: ContractClosureStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T04:06:12+08:00
+effective_at: 2026-07-14T04:06:12+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F2_ACTOR_IDENTITY_AND_DELEGATION_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+
+contract_unit:
+  id: F2
+  name: Actor Identity / Delegation v0.1
+  closure_mode: ONE_CONTRACT_AT_A_TIME
+  predecessor:
+    id: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+    acceptance_record:
+      path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+      sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+
+authorized_outputs:
+  - F2_contract_subject
+  - F2_author_self_review
+  - F2_hash_bound_independent_review
+  - F2_findings_disposition_and_narrow_amendment_when_required
+  - F2_registry_and_CURRENT_STATE_projection
+  - F2_Jenn_decision_surface
+
+required_scope:
+  - stable_actor_identity_facts
+  - authenticated_actor_binding
+  - authority_assignment
+  - scoped_delegation
+  - revocation_expiry_and_replay
+  - authenticated_Command_context
+  - deterministic_authorization_assessment
+  - synthetic_M0_principal_boundary
+
+excluded_scope:
+  - Resident_singleton_and_N_API_ownership
+  - production_credential_provisioning
+  - TaskPermit_signing_and_host_authentication
+  - runtime_implementation
+  - database_schema_or_migration
+  - service_start_or_activation
+
+acceptance_boundary:
+  draft_or_review_does_not_accept_F2: true
+  independent_review_does_not_accept_F2: true
+  acceptance_authority: Jenn
+  F3_automatic_start: forbidden
+
+hard_boundaries:
+  modify_accepted_or_frozen_subject_bytes: forbidden
+  start_F3_automatically: forbidden
+  implement_contract: forbidden
+  production_key_or_credential_work: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_or_migration: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision

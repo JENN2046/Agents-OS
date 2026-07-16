@@ -1,0 +1,12 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r14-closed-reference-eligibility-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+status: active
+authority: {basis: Jenn_explicit_automatic_advancement_after_F2_review, source_review: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r13-atomic-bundle-independent-review.yaml, source_review_sha256: 4b72ac5acb3729125408f219cf92a34e2587ed81e844da0d3a6543d56ae4de92}
+scope: [closed_reference_eligibility, remove_open_world_negative_scan, materialization_wording, fresh_independent_review]
+forbidden: [global_Binding_or_credential_scan, rewrite_R1_through_R13, accept_F2, start_F3, implementation, runtime_activation, commit, push]
+implementation_authorized: false
+runtime_activation_authorized: false
+

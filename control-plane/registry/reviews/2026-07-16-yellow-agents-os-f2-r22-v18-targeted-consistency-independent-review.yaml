@@ -1,0 +1,100 @@
+review:
+  id: agents-os-f2-r22-v18-targeted-consistency-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  result: PASS_NO_BLOCKER
+  review_kind: targeted_consistency_after_synthetic_assurance_closure
+
+candidate:
+  acceptance_subjects: R1-R22
+  subject_count: 22
+  amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r22-synthetic-derived-subject-assurance-closure-amendment.draft.md
+    sha256: 78dd353fe35659669ed10b403d9b266937d91a5f455e13321ef5a9036330f365
+  materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    authoritative: false
+
+independence:
+  reviewer_count: 2
+  reviewer_lanes:
+    - targeted_materialization_equivalence
+    - targeted_deterministic_constructibility
+  fresh_context_each: true
+  prior_reviews_read: false
+  prior_decisions_read: false
+  other_materializations_read: false
+  private_or_raw_evidence_read: false
+  read_only: true
+
+targeted_scope:
+  - exact_three_synthetic_root_branches
+  - immutable_origin_anchor_versus_current_manifest_at_W
+  - manifest_CREATE_ACCEPT_assurance_projection
+  - ordinary_and_post_root_action_preservation
+  - manifest_REVOKE_fail_closed_currentness
+  - R18_activation_byte_identity
+  - R21_compromise_set_union
+  - end_to_end_M0_constructibility
+
+result:
+  BLOCKING_F2: 0
+  MATERIALIZATION_DIFFERENCE: 0
+  identity_spoofing: 0
+  authority_expansion: 0
+  revocation_compromise_bypass: 0
+  fail_open: 0
+  dual_writer: 0
+  circular_proof: 0
+  M0_impossibility: 0
+  internal_contradiction: 0
+
+deterministic_validation:
+  source_hashes: 22_of_22
+  schemas_actual_and_index: 67_of_67
+  duplicate_schemas: 0
+  reducers_actual_and_index: 15_of_15
+  duplicate_reducers: 0
+  standalone_domains: 55_unique
+  assurance_roles_and_mapping: 43_of_43
+  compromise_action_classes: 11_of_11
+  R21_member_schema: byte_identical
+  R21_target_set_formula: byte_identical
+  v17_to_v18_diff_hunks: 36_expected_only
+  unexpected_differences: 0
+  new_schema_field_enum_domain_role_action_writer_or_authority: 0
+
+constructive_witness:
+  canonical_manifest_enabling_pair: >-
+    P(W) contains exact SYNTHETIC_MANIFEST_CREATE and
+    SYNTHETIC_MANIFEST_ACCEPT bindings in R17 order, with exact action,
+    historical-assessment, impact-coverage, and containing-assessment
+    watermark W.
+  profile_result: ACTIVE
+  principal_result: ACTIVE
+  binding_activation_result: ACTIVATED
+  effective_binding_result: ACTIVE
+  direct_synthetic_root_roles_present: 0
+  compromise_dependency_edges_before_union: 8
+  compromise_unique_members_after_union: 2
+  manifest_revoke_new_use: denied
+
+gate:
+  targeted_review_complete: true
+  eligible_for_fresh_full_atomic_review: true
+  eligible_for_Jenn_atomic_freeze_decision: false
+  reason_not_yet_on_freeze_surface: fresh_full_atomic_review_pending
+  requires_R23: false
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  commit_created: false
+  push_performed: false

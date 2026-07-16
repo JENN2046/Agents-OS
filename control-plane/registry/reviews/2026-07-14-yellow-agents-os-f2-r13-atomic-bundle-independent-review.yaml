@@ -1,0 +1,169 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r13-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T23:48:18+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r13
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R13_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+  R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+  R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+  R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+  R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+  R7_sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+  R8_sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+  R9_sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+  R10_sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+  R11_sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+  R12_sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+  R13:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+    sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r13.draft.md
+  sha256: 871dafd4b4b0ec8461ae9b09b4697926f3fa486238f09289a12bdaa11ea17431
+  acceptance_subject: false
+  authority: none_derived_only
+
+mandatory_review_inputs:
+  prior_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r12-atomic-bundle-independent-review.yaml
+    sha256: e2d0be833a2507186878d8bbd86eb9ace6a1214e07993a1a149a887ec098fd05
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r13-m0-actor-eligibility-closure-start-decision-v0.1.yaml
+    sha256: d6cd50e99a9b58338e24604290e979d9d3ff746c8d76dcfaf7f8e1ed8e35b461
+  author_self_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r13-m0-actor-eligibility-closure-self-review.yaml
+    sha256: 3d16b61d54327c6a8a99a2b92641dd69c47d017663f926c314dabc44e31aa2ef
+    role: author_evidence_only_not_trusted_as_conclusion
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 1
+  major: 0
+  minor: 1
+
+findings:
+  - finding_id: F2-R13-IR-B01
+    severity: BLOCKER
+    title: Negative production and Jenn-credential exclusions have no closed evidence universe
+    affected_sections:
+      - R13 Sections 2-4
+      - Materialization Sections 3.3 and 4.4
+    finding: >-
+      R13 closes the positive eligibility path: the exact Actor revision is
+      ACTIVE at ACCEPT, its contiguous lineage reaches revision 1 CREATE, that
+      CREATE uses a verified Jenn governance authority with SYNTHETIC_TEST and
+      IDENTITY_BOOTSTRAP, and the immutable actor_class is allowlisted. The
+      same ELIGIBLE predicate additionally requires that no production Actor
+      Binding or active Jenn credential is referenced. The contract does not
+      define the exact reference locations or index universe covered by those
+      negative checks. The assessment schema binds Actor lineage and root
+      authority evidence, but has no Binding/credential inventory or coverage
+      reference, and the text does not say whether the check covers only
+      assignment_binding_ref, every Binding for actor_id, manifest credential
+      handles, creation specs, or another closed set.
+    impact: >-
+      Two conforming reducers can agree on all positive fields yet disagree on
+      ELIGIBLE because one scans only the Actor revision while another scans
+      all Actor Bindings or manifest credential handles. A missing index entry
+      can also be treated as absence instead of incomplete evidence. The core
+      prohibition against using a production or Jenn identity in the
+      synthetic M0 path therefore remains non-deterministic.
+    required_amendment: >-
+      Define the exact negative-check universe and its completeness proof at
+      the ACCEPT watermark. Either bind a closed sorted inventory plus
+      coverage fingerprint into the eligibility assessment, or narrow the
+      Actor predicate to exact immutable Actor-lineage fields and place the
+      existing manifest credential/Binding exclusions in a separately named
+      complete manifest validation predicate. Missing or incomplete coverage
+      must reduce to INDETERMINATE, never ELIGIBLE.
+
+  - finding_id: F2-R13-IR-m01
+    severity: MINOR
+    title: Materialization retains one superseded ACTIVE-only sentence
+    affected_sections:
+      - Materialization Section 3.3
+    finding: >-
+      The paragraph immediately before the R13 eligibility schema still says
+      Rust separately requires only the Actor's exact ACTIVE assessment at
+      ACCEPT. R13 replaces that wording with the stronger ELIGIBLE assessment,
+      and the following schema, table, and atomic graph state the stronger rule.
+    impact: >-
+      The later exact surfaces control, but this stale sentence weakens the
+      resolved reading surface and can mislead a reader extracting the prose
+      without the following table.
+    required_amendment: >-
+      Replace the ACTIVE-only sentence with the exact R13 ELIGIBLE requirement.
+
+prior_finding_disposition:
+  F2-R12-IR-B01: >-
+    PARTIAL_POSITIVE_ELIGIBILITY_CLOSED_BUT_NEGATIVE_REFERENCE_COVERAGE_REMAINS_OPEN
+  F2-R12-IR-M01: RESOLVED_BY_EVENT_TIME_SYNTHETIC_ROW
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  Actor_lineage_complete_and_contiguous: PASS
+  root_create_basis_exact: PASS
+  root_authority_environment_SYNTHETIC_TEST: PASS
+  root_authority_IDENTITY_BOOTSTRAP_use: PASS
+  actor_class_allowlist_and_Jenn_host_exclusion: PASS
+  production_Binding_exclusion: BLOCK_UNDEFINED_REFERENCE_UNIVERSE
+  active_Jenn_credential_exclusion: BLOCK_UNDEFINED_REFERENCE_UNIVERSE
+  Event_time_evidence_outside_body: PASS
+  materialization_synthetic_row: PASS_WITH_STALE_PROSE_MINOR
+  body_and_final_fingerprint_acyclic: PASS
+  full_bundle_consistency: BLOCK
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+validation:
+  subject_hashes_before_review: PASS
+  materialization_hash_before_review: PASS
+  YAML: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  subject_hashes_after_review: PASS
+  materialization_hash_after_review: PASS
+
+required_next_action:
+  action: CREATE_F2_R14_SYNTHETIC_NEGATIVE_REFERENCE_COVERAGE_CLOSURE
+  rewrite_R1_through_R13: forbidden
+  expand_F2_direction: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+  implementation: forbidden
+  runtime_activation: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

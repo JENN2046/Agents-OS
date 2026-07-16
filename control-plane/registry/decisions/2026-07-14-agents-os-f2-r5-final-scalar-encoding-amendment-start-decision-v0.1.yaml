@@ -1,0 +1,77 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f2-r5-final-scalar-encoding-amendment-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T13:16:42+08:00
+effective_at: 2026-07-14T13:16:42+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  decision: EXPLICIT_START_OF_F2_R5_FINAL_SCALAR_ENCODING_AMENDMENT
+  decision_source: exact_current_conversation_instruction
+
+amendment_unit:
+  id: F2_R5_FINAL_SCALAR_ENCODING_AMENDMENT
+  fixed_subjects:
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r4-atomic-bundle-independent-review.yaml
+    sha256: 203eb7fb07f4df7b85b51353da0604f901bbe595093e84758df1c4ce1f25d3cf
+    result: BLOCK
+
+required_scope:
+  - F2_R4_IR_B01_exact_digest_scalar_storage_and_JCS_insertion
+  - F2_R4_IR_B02_exact_BindingScope_context_scalar_types_and_bounds
+  - prior_findings_disposition
+  - author_self_review
+  - final_hash_bound_independent_review_surface
+
+design_constraints:
+  permission_direction: SINGLE_PROHIBITED_BOUNDARY
+  preserve_R3_R4_acyclic_graphs: required
+  add_permission_levels: forbidden
+  add_risk_permission_matrix: forbidden
+  add_ordinary_action_allowlist: forbidden
+  modify_R1_through_R4_bytes: forbidden
+  expand_F3: forbidden
+
+excluded_scope:
+  - expand_F2_features
+  - define_new_core_objects
+  - change_action_ref_fingerprint_projection
+  - implement_runtime_or_F3
+  - production_authentication
+  - TaskPermit_or_host_authentication
+  - database_schema_or_migration
+  - service_or_provider_activation
+
+hard_boundaries:
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  F3_started: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision
+  superseded_by: null

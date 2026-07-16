@@ -1,0 +1,62 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-home-domain-phase-1a-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-13T23:56:26+08:00
+effective_at: 2026-07-13T23:56:26+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_1A
+  decision_source: explicit_current_conversation_instruction
+
+phase:
+  roadmap_acceptance_unit: HOME_DOMAIN_CONSTRUCTION_ROADMAP_R3
+  roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  roadmap_acceptance_record:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  phase_id: HOME_DOMAIN_PHASE_1A
+  phase_name: Existing Life-Core Authority and Gap Map
+
+authorized_scope:
+  - read_current_registered_governance_and_policy_inputs
+  - create_Life_Core_Authority_and_Gap_Map_v0_1
+  - create_Home_Fact_Authority_Matrix_v0_1
+  - create_conflict_and_duplication_inventory
+  - create_unresolved_foundation_list
+  - perform_author_self_review
+  - update_document_registry_and_CURRENT_STATE_at_G1A
+
+hard_boundaries:
+  Home_Domain_semantic_expansion: forbidden
+  Phase_1B_automatic_start: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_or_migration: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_gate:
+  gate_id: G1A
+  allowed_results:
+    - PASS
+    - PASS_WITH_GAPS
+    - BLOCK
+  Phase_1B_requires_separate_transition: true
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record
+

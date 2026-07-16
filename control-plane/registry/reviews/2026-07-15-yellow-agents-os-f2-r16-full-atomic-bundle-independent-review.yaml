@@ -1,0 +1,287 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r16-full-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FULL_ATOMIC_BUNDLE_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T01:22:21+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r16_full_bundle
+reviewer_run_independence: fresh_run_separate_from_author_and_prior_review_runs
+author_self_review_role: evidence_only_not_conclusion
+prior_pass_relied_upon: false
+read_only_review_until_conclusion: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R16_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  indivisible_subjects:
+    R1:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+      sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+      sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+      sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+      sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+      sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+      sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+      sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+      sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+      sha256: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r16-v4.draft.md
+  sha256: 3e871c24b66e1a7764578ac09538bd8d3e4f7bc88fc4356f258500bb890d6ab3
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+
+blocking_prior_review:
+  path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r15-full-atomic-bundle-independent-review.yaml
+  sha256: da06fa00d0a7c6c22ca6e9a2f683cf74d7b86b5074a0e94d4c7fb4cf121dc4db
+
+review_package:
+  path: ops/packages/agents-os-f2-r1-r16-full-review-lineage-package-2026-07-15.zip
+  sha256: 4cbc060b8248c68c51ed0df017be4f3eed8e01b42b097767406cff643acd27fa
+  package_id: AGENTS_OS_F2_R1_R16_FULL_REVIEW_LINEAGE_PACKAGE_2026_07_15
+  manifest_path: MANIFEST.json
+  checksum_manifest_path: CHECKSUMS.sha256
+  review_lineage_path: REVIEW_LINEAGE.yaml
+
+input_allowlist:
+  - root AGENTS.md
+  - package MANIFEST.json, CHECKSUMS.sha256, README.txt, and REVIEW_LINEAGE.yaml
+  - fixed R1 through R16 acceptance subjects named above
+  - fixed materialization v4 named above
+  - R16 start decision packaged as governance support
+  - prior R14 full atomic-bundle independent review packaged as review lineage
+  - prior R14 materialization-v2 independent review packaged as review lineage
+  - R15 author self-review packaged as evidence-only review lineage
+  - blocking prior R15 full-bundle independent review named above
+  - R16 author self-review packaged as evidence-only review lineage
+  - byte-identical packaged copies and packaged R1-R15 predecessor archive
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  raw_logs: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_R1_THROUGH_R16_ATOMIC_UNIT
+finding_counts:
+  blocker: 0
+  major: 2
+  minor: 0
+
+findings:
+  - finding_id: F2-R16-FULL-IR-M01
+    severity: MAJOR
+    title: ActionAssuranceBinding action roles lack a closed canonical vocabulary
+    affected_sections:
+      - R16 Sections 3.1 through 3.4
+      - Materialization Sections 15, 18, and 19
+    finding: >-
+      R16 requires unknown action roles to reject and every directly affected
+      assessment to carry a complete exact role set, but
+      ActionAssuranceBindingV0_1R16 leaves action_role unconstrained. The schema
+      catalogue describes roles only as phrases such as current revision and all
+      effective lifecycle actions; it does not define canonical role strings or
+      an exact action-kind-to-role mapping for those transition actions. The
+      closed vocabulary therefore cannot be implemented, completeness cannot be
+      compared byte-for-byte, and independent writers can assign different role
+      labels to the same exact action while producing different canonical
+      assessment fingerprints.
+    impact: >-
+      The transitive historical assessment and impact-input-set edge is present,
+      but the containing assessment's required action set is not itself fully
+      canonical. Unknown-role rejection and deterministic cross-writer
+      assessment identity remain under-specified across every R16 replacement
+      assessment.
+    required_amendment: >-
+      Publish a closed ActionAssuranceRole enum and a total exclusive mapping
+      from every effective F2 action class and transition kind to one canonical
+      role value, including repeated transition actions, then state the exact
+      complete-set derivation and retain sorting by role and action ref.
+
+  - finding_id: F2-R16-FULL-IR-M02
+    severity: MAJOR
+    title: Materialization v4 remains internally inconsistent and alias-dependent
+    affected_sections:
+      - R16 Section 4
+      - Materialization Sections 4.1, 5.1, 14, 19, and 21
+    finding: >-
+      V4 prints two different schemas under the same
+      CompromiseImpactFactV0_1R9Effective name: Section 5.1 omits
+      compromised_subject_action_set_ref and its fingerprint, while Section 19
+      includes them. Section 19 also types GovernedStateTransitionFact authority
+      as superseded TransitionAuthorityBasisV0_1R8 even though R9 replaces that
+      basis with TransitionAuthorityBasisV0_1R9 and v4 prints only the R9 schema.
+      Section 14 first refers readers back to the R8 transition envelope rather
+      than printing the effective schema at that point. The Section 21 index is
+      not an object-to-source/domain map for every printed schema and reducer;
+      it enumerates only the R16 replacement records and relies on broad section
+      prose for the remainder.
+    impact: >-
+      The required complete derived reading surface gives conflicting known
+      objects and an undefined stale authority alias for a governed mutation.
+      Implementers cannot determine one effective fingerprint object or exact
+      authority schema from v4, so it is unreliable as the mandatory complete
+      resolved surface.
+    required_amendment: >-
+      Regenerate a v5 that prints each effective schema exactly once, uses the
+      R9 authority basis in GovernedStateTransitionFact, removes the conflicting
+      CompromiseImpact projection, and provides an exact domain and source entry
+      for every schema and reducer without superseded or undefined aliases.
+
+prior_findings_disposition:
+  F2-R15-FULL-IR-B01:
+    result: RESOLVED
+    basis: >-
+      The CREATE target spec excludes authority, assessment, body, intent,
+      action, replay, final Actor fingerprint, Event, and other later objects;
+      its exact head-absence watermark equals the CREATE assessment, authority,
+      and intent-currentness watermark. Current-head CAS rejects an intervening
+      create. CREATE-only and post-create assessments are mutually forbidden,
+      Jenn bootstrap and service/host provisioning routes remain separate, and
+      no second relation ledger is introduced.
+  F2-R15-FULL-IR-M01:
+    result: PARTIALLY_RESOLVED_BLOCKED_BY_F2-R16-FULL-IR-M01
+    basis: >-
+      Every directly affected R16 schema now contains one transitive binding to
+      a fingerprinted historical assessment whose exact impact input set and
+      equal watermark are bound. Commit-time validity, full authenticated
+      identity fields, null non-Actor action fields, deterministic array order,
+      unknown-field rejection, total impact effects, no auto-restore, and no
+      invalid enabling reactivation remain effective. The canonical role
+      vocabulary and exact total mapping are still absent.
+  F2-R15-FULL-IR-M02:
+    result: NOT_RESOLVED_F2-R16-FULL-IR-M02
+    basis: >-
+      V4 substantially expands the printed schema catalogue and includes
+      RESPONSIBILITY_ASSIGNMENT_REVISION in both mutation lists, but duplicate
+      conflicting schemas, a superseded undefined authority alias, and an
+      incomplete exact object/source/domain index keep the surface unreliable.
+
+review_dimensions:
+  R1_through_R16_re_evaluated_as_one_atomic_unit: PASS
+  partial_acceptance_forbidden: PASS
+  cross_revision_override_precedence: PASS_WITH_MAJOR_MATERIALIZATION_CONFLICT
+  Actor_CREATE_target_spec_excludes_later_objects: PASS
+  Actor_CREATE_head_absence_proof_and_currentness: PASS
+  Actor_CREATE_only_vs_post_create_assessment_split: PASS
+  Actor_CREATE_Jenn_and_provisioning_routes: PASS
+  Actor_stewardship_no_second_relation_ledger: PASS
+  ActionAssuranceBinding_transitive_exact_input_set: PASS
+  historical_action_commit_time_validity_retained: PASS
+  action_assurance_equal_watermarks: PASS
+  action_assurance_complete_canonical_role_sets: FAIL_MAJOR
+  action_assurance_deterministic_array_order: PASS
+  canonical_unknown_field_rejection: PASS
+  CompromiseImpact_classification_total_and_exclusive: PASS
+  CompromiseImpact_CHALLENGED_INVALIDATED_effects_total: PASS
+  safety_transition_no_auto_restore: PASS
+  invalid_enabling_transition_no_reactivation: PASS
+  total_reducers_and_precedence: PASS
+  CAS_and_current_heads: PASS
+  historical_issuance_vs_current_operational_dependency: PASS
+  scalar_JCS_and_fingerprint_rules: PASS
+  activation_vs_effective_currentness_split: PASS
+  assignment_and_delegation_lineage: PASS
+  lifecycle_revocation_and_terminal_semantics: PASS
+  synthetic_M0_closed_reference_eligibility: PASS
+  single_prohibited_boundary: PASS
+  non_authorization: PASS
+  materialization_v4_complete_and_internally_consistent: FAIL_MAJOR
+  materialization_no_stale_R7_R15_assessment_schema_effective: PASS
+  materialization_no_undefined_required_alias: FAIL_MAJOR
+  materialization_exact_source_map_and_domain_tags: FAIL_MAJOR
+  materialization_mutation_lists_include_Assignment: PASS
+
+validation:
+  package_sha256_before_review: PASS
+  R1_through_R16_source_hashes_before_review: PASS
+  R1_through_R16_archive_hashes_and_byte_identity: PASS
+  materialization_v4_hash_before_review: PASS
+  blocking_prior_review_hash_before_review: PASS
+  package_internal_checksums_complete_and_matching: PASS
+  package_manifest_hashes_matching: PASS
+  package_duplicate_path_check: PASS
+  package_path_traversal_check: PASS
+  package_symlink_check: PASS
+  predecessor_package_sha256_and_internal_checksums: PASS
+  predecessor_package_duplicate_path_traversal_symlink_checks: PASS
+  complete_review_lineage_hashes_and_byte_identity: PASS
+  YAML_parse: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  markdown_fences: PASS
+  fixed_hashes_after_review: PASS
+  review_artifact_YAML_parse: PASS
+  exactly_one_review_artifact_created: PASS
+  subjects_modified: false
+  materialization_modified: false
+  prior_reviews_modified: false
+  Registry_modified_by_reviewer: false
+  CURRENT_STATE_modified_by_reviewer: false
+
+exact_next_action:
+  action: PREPARE_NARROW_R17_ROLE_VOCABULARY_CLOSURE_AND_COMPLETE_V5_MATERIALIZATION
+  required_subject_correction:
+    - define the closed canonical action-assurance role enum and total action-to-role mapping
+  required_derived_correction:
+    - remove duplicate conflicting schemas and stale aliases from a regenerated v5
+    - provide an exact object-to-domain-and-source map for every schema and reducer
+  rebuild_hash_bound_package: required
+  fresh_full_R1_through_R17_atomic_bundle_independent_review: required
+  Jenn_atomic_acceptance_decision: only_after_clean_independent_review
+  partial_acceptance: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  credential_or_auth_change_authorized: false
+  F3_started: false
+  Registry_or_CURRENT_STATE_update_authorized: false
+  commit_performed: false
+  push_performed: false

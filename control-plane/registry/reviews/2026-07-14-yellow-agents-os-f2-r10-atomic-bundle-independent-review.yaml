@@ -1,0 +1,170 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r10-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T23:27:47+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r10
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R10_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+  R10_path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r10.draft.md
+  sha256: 0429dac3235f1d411c98ac7db12df8f08bd2f4358900c5743fa2281610c3d17e
+  acceptance_subject: false
+  authority: none_derived_only
+
+mandatory_review_inputs:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r9-atomic-bundle-independent-review.yaml
+    sha256: 2d16708c7b33c76fb7db41935b4b90fd81576076758567b94cf58f823ef1272f
+    role: prior_findings
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r10-binding-issuance-snapshot-materialization-closure-start-decision-v0.1.yaml
+    sha256: 8fcf4365225d12bf25727293bfb10b91c9d3d9c6e8fb578b387bb8b043f3234f
+    role: amendment_scope_authority
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r10-binding-issuance-snapshot-materialization-closure-self-review.yaml
+    sha256: 6990357cb4db8bf413613d27f0284cb4493d30e9ccccb35595f8c7cd9d9c6ab5
+    role: author_evidence_only_not_trusted_as_conclusion
+
+normative_context_allowlist_reused_from_R9_review: true
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 1
+  major: 1
+  minor: 0
+
+findings:
+  - finding_id: F2-R10-IR-B01
+    severity: BLOCKER
+    title: Synthetic Binding issuance snapshot introduces manifest, activation, and creation-spec fingerprint cycles
+    affected_sections:
+      - R10 Sections 3.3-5
+      - R8 Sections 6.2-6.4
+      - Materialization Sections 3.3 and 7
+    finding: >-
+      R10 requires SyntheticBindingIssuanceInputSnapshot to be included in the
+      Binding creation spec and therefore in that spec's BINDING_REVISION body
+      fingerprint. The snapshot itself contains manifest_ref/fingerprint,
+      manifest_activation_ref/fingerprint, and
+      binding_creation_spec_ref/fingerprint. The manifest fingerprint depends
+      on the ordered Binding spec containing this snapshot; the activation
+      fingerprint is created only after and depends on that manifest
+      fingerprint; and the Binding creation-spec fingerprint directly depends
+      on the snapshot containing that same fingerprint.
+    impact: >-
+      The synthetic snapshot cannot be serialized before manifest creation and
+      cannot satisfy the claimed precommitted Binding body. This recreates both
+      direct self-reference and post-action back-reference inside the M0 graph,
+      so atomic synthetic Binding materialization is not constructible.
+    required_amendment: >-
+      Split pre-manifest spec inputs from post-activation derived provenance.
+      The Binding creation spec may bind only Actor/Principal/Profile/controller
+      creation-spec refs or fingerprints, scope, window, and other values that
+      exist before the manifest fingerprint. Exclude manifest, activation, and
+      own Binding-spec refs/fingerprints from the pre-action snapshot. Insert
+      those later values only into a separately defined derived issuance ref or
+      final-subject overlay whose fingerprint is not part of the manifest body.
+
+  - finding_id: F2-R10-IR-M01
+    severity: MAJOR
+    title: The derived materialization still diverges from the effective authority tables
+    affected_sections:
+      - R10 Section 6
+      - Materialization Sections 4.5 and 6
+    finding: >-
+      The materialization says Assignment SUSPEND, RESUME, and REVOKE allow
+      DIRECT_DELEGATOR_ACTION, while the effective R8 Section 3.2 table allows
+      only JENN_ROOT_ACTION and R10 does not amend that rule. It also uses the
+      removed evidence-steward wording for Delegation activation evidence and
+      does not print the complete required/forbidden field matrix for each
+      TransitionAuthorityBasis kind despite R10's explicit complete-table
+      requirement.
+    impact: >-
+      The file is non-authoritative, so this does not change the fixed subject
+      semantics, but an implementer following the promised resolved surface
+      would create an unauthorized Assignment transition route and encounter
+      an undefined role. The previous materialization finding is not closed.
+    required_amendment: >-
+      Regenerate the materialization from the exact R8/R9/R10 tables. Remove
+      DIRECT_DELEGATOR_ACTION from every Assignment row, remove all
+      evidence-steward wording, and print the full required/forbidden basis-field
+      matrix and exact reducers without narrative substitutions.
+
+prior_finding_disposition:
+  F2-R9-IR-B01: RESOLVED_FOR_NON_SYNTHETIC_BINDING_BUT_SYNTHETIC_PATH_BLOCKED_BY_F2-R10-IR-B01
+  F2-R9-IR-M01: RESOLVED
+  F2-R9-IR-M02: NOT_RESOLVED
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  non_synthetic_Binding_issuance_snapshot: PASS
+  control_proof_activation_boundary: PASS
+  Binding_snapshot_watermark_and_assessment_binding: PASS
+  Binding_creation_spec_precedence: PASS
+  synthetic_group_intent_acyclicity: BLOCK
+  synthetic_partial_materialization_rule: PASS_DIRECTION_UNCONSTRUCTIBLE_INPUT
+  impact_membership_immutability_and_index: PASS
+  authority_watermark_and_Profile_controller_split: PASS
+  materialization_complete_and_implementation_readable: false
+  single_prohibited_boundary_preserved: PASS
+  permission_ladder_added: false
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+validation:
+  subject_hashes_before_review: PASS
+  materialization_hash_before_review: PASS
+  YAML: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  subject_hashes_after_review: PASS
+  materialization_hash_after_review: PASS
+
+required_next_action:
+  action: CREATE_F2_R11_SYNTHETIC_PRECOMMIT_SNAPSHOT_AND_FINAL_MATERIALIZATION_CLOSURE
+  rewrite_R1_through_R10: forbidden
+  expand_F2_direction: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+  implementation: forbidden
+  runtime_activation: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

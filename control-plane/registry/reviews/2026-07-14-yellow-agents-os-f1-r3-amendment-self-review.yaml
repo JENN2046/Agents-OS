@@ -1,0 +1,63 @@
+schema_version: agents-os.contract-self-review.v0.1
+record_id: agents-os-f1-r3-amendment-self-review
+record_type: AuthorSelfReview
+status: active
+date: 2026-07-14
+
+review_classification:
+  independence: SELF_REVIEW
+  may_claim_independent_review: false
+  may_accept_subjects: false
+
+atomic_subjects:
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+
+prior_review:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r2-atomic-bundle-independent-review.yaml
+  sha256: b95d819a05366e1dd513e4afeb2b7b361118a4e1df2a7da47dbca2d494a23cf3
+  result: BLOCK
+
+disposition:
+  path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r2-independent-review-disposition-v0.1.yaml
+  sha256: 48607ebee09ae8b114e9b629411d621dffe4495e35b6cc1b85890bc741ba9d78
+
+finding_recheck:
+  F1_R2_IR_B01:
+    result: PASS
+    basis: exact_immediately_preceding_GoalSpec_tuple_and_latest_reducer_head
+  F1_R2_IR_B02:
+    result: PASS
+    basis: two_versioned_typed_field_projections_with_exact_digest_equality
+
+composition_review:
+  R3_precedence_explicit: PASS
+  R1_and_R2_bytes_unchanged: PASS
+  no_natural_language_equivalence_in_Rust: PASS
+  no_revision_skip_or_retired_criterion_carry: PASS
+  reopen_requires_exact_projection_or_REOPEN_REVISED: PASS
+  replay_binds_versions_and_full_fingerprint_envelopes: PASS
+  accepted_parent_compatibility: PASS
+  accepted_scheduling_compatibility: PASS
+  implementation_scope_not_expanded: PASS
+
+result: PASS_FOR_NEW_HASH_BOUND_INDEPENDENT_REVIEW
+blockers: []
+major_findings: []
+minor_findings: []
+
+next_gate:
+  name: HASH_BOUND_INDEPENDENT_REVIEW_OF_F1_R3_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+
+boundaries:
+  F1_accepted: false
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_performed: false
+  push_performed: false
