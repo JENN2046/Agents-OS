@@ -1,0 +1,140 @@
+review:
+  id: agents-os-f2-r20-v15-full-atomic-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  result: BLOCKING_F2
+  review_kind: fresh_full_atomic_bundle_independent_review
+
+candidate:
+  acceptance_subjects: R1-R20
+  subject_count: 20
+  final_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r20-final-freeze-closure-amendment.draft.md
+    sha256: cad4f293dee172d793db19c9cec0e6148116d44e6b659b3f2ed528a409f5772b
+  materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r20-v15.draft.md
+    sha256: 23d151b1a6233f807b2be3f8151361db83649fe604932fdac135fdb72506cd00
+    authoritative: false
+
+independence:
+  reviewer_count: 3
+  reviewer_lanes:
+    - full_semantic
+    - full_materialization_equivalence
+    - full_deterministic_constructive
+  fresh_context_each: true
+  prior_reviews_read: false
+  prior_decisions_read: false
+  other_materializations_read: false
+  CURRENT_STATE_or_ROADMAP_read: false
+  private_state_or_raw_logs_read: false
+  read_only: true
+
+freeze_rule:
+  name: F2_FREEZE_RULE_V0_1
+  blocker_classes:
+    - IDENTITY_SPOOFING
+    - AUTHORITY_EXPANSION
+    - REVOCATION_COMPROMISE_BYPASS
+    - FAIL_OPEN
+    - DUAL_WRITER
+    - CIRCULAR_PROOF
+    - M0_IMPOSSIBILITY
+    - INTERNAL_CONTRADICTION
+
+unique_blockers:
+  - id: F2-R20-FULL-B01
+    classes:
+      - M0_IMPOSSIBILITY
+      - INTERNAL_CONTRADICTION
+    title: synthetic_M0_Actor_eligibility_intersection_is_empty
+    witness: >-
+      R13-R14 require an eligible Actor class from Resident, Domain Agent,
+      Temporary Worker, or System Service whose revision-1 CREATE basis is
+      JENN_GOVERNANCE_DECISION_BASIS. R2/R16 admit those classes only through
+      IDENTITY_STEWARD_ACTION or ACCEPTED_PROVISIONING_ACTION. Jenn alone uses
+      the governance basis and is excluded. Exhaustive intersection is 0 of 6
+      Actor classes, so manifest ACCEPT cannot obtain ELIGIBLE.
+    independently_confirmed_by:
+      - full_semantic
+      - full_deterministic_constructive
+    remediation_boundary: narrow_subject_correction_required
+  - id: F2-R20-FULL-B02
+    classes:
+      - M0_IMPOSSIBILITY
+      - INTERNAL_CONTRADICTION
+    title: synthetic_Binding_activation_replay_derivation_is_undefined
+    witness: >-
+      R8/R15 replace synthetic Binding activation stewardship_source with a
+      SyntheticManifestDerivedLifecycleRef that has no kind or source_ref.
+      The still-owning R4/R5 replay formula requires exactly those nonexistent
+      fields. A legal synthetic activation evidence replay identity cannot be
+      computed, so the Binding cannot reach ACTIVATED.
+    independently_confirmed_by:
+      - full_materialization_equivalence
+    remediation_boundary: narrow_subject_correction_required
+  - id: F2-R20-FULL-B03
+    classes:
+      - REVOCATION_COMPROMISE_BYPASS
+      - INTERNAL_CONTRADICTION
+    title: compromise_target_type_excludes_assurance_actions
+    witness: >-
+      R15/R17/R18 admit authenticated issuance, Binding activation, and
+      Delegation activation assurance actions through their owning immutable
+      action refs. R20 restricts every complete target element to
+      LifecycleActionRefV0_1R8. The excluded actions cannot enter CHALLENGE or
+      INVALIDATE target sets, creating a compromise-response bypass.
+    independently_confirmed_by:
+      - full_materialization_equivalence
+    remediation_boundary: narrow_subject_correction_required
+
+classification:
+  BLOCKING_F2: 3
+  DOWNSTREAM_F3_OR_F4: 2
+  IMPLEMENTATION_PROFILE: 5
+  MATERIALIZATION_ONLY: 4
+  identity_spoofing: 0
+  authority_expansion: 0
+  fail_open_currentness: 0
+  dual_writer: 0
+  circular_proof: 0
+
+materialization_only_findings:
+  - Binding_and_Assignment_reducers_underprint_Actor_SUPERSEDED
+  - Delegation_reducer_underprints_activation_NOT_ACTIVATED
+  - pre_start_authentication_overselects_REJECTED
+  - fail_closed_startup_and_recovery_boundary_underprinted
+
+deterministic_evidence:
+  subject_hashes: 20_of_20
+  v15_hash_match: true
+  strict_yaml_fences: 185_of_185
+  schema_inventory: 66_of_66
+  reducer_inventory: 15_of_15
+  fingerprint_domains: 55_unique_plus_11_not_standalone
+  source_section_refs: 328_of_328
+  R20_formula_text_equality: 5_of_5
+  assurance_roles: 43_of_43
+  R6_numeric_vectors: 8_of_8
+  Actor_class_exhaustion: 0_of_6_eligible
+  conditional_post_Actor_M0_DAG: 32_nodes_80_edges_toposort_32_of_32
+
+gate:
+  full_atomic_review_complete: true
+  PASS_NO_BLOCKER: false
+  F2_freeze_eligible: false
+  Jenn_atomic_freeze_decision_ready: false
+  subject_correction_required: true
+  required_next_surface: R21_verified_core_constructibility_amendment
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  commit_created: false
+  push_performed: false

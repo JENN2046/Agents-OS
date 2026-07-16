@@ -1,0 +1,58 @@
+schema_version: agents-os.contract-self-review.v0.1
+record_id: agents-os-f1-r2-amendment-self-review
+record_type: AuthorSelfReview
+status: active
+date: 2026-07-14
+
+review_classification:
+  independence: SELF_REVIEW
+  may_claim_independent_review: false
+  may_accept_subjects: false
+
+atomic_subjects:
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+    role: fixed_R1_subject
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+    role: R2_blocking_amendment
+
+prior_review:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+  sha256: b5ce737eeec248063be4b6eb15d56676dbfa2ee7aebfe28f20efbf6a473c8df8
+  result: BLOCK
+
+disposition:
+  path: control-plane/registry/reviews/2026-07-14-agents-os-f1-r1-independent-review-disposition-v0.1.yaml
+  sha256: d63bc04f3d4fe54a87b62eedb39a8202c7f6c64e679f2b128438da5ee83c671f
+
+finding_recheck:
+  F1-IR-B01_total_decision_reducer: PASS
+  F1-IR-B02_parent_alignment_gate: PASS
+  F1-IR-B03_versioned_canonicalization: PASS
+  F1-IR-M01_membership_partition: PASS
+  F1-IR-M02_plan_wide_leaf_reduction: PASS
+  F1-IR-M03_closed_Goal_reopen_currentness: PASS
+  F1-IR-N01_authority_wording: PASS
+
+additional_author_corrections:
+  - CARRY_FORWARD_is_a_valid_first_head_for_a_new_exact_revision_tuple
+  - stale_parent_non_achieved_closure_binds_actual_alignment_not_false_CURRENT
+  - fingerprint_array_catalog_includes_evidence_items_reason_codes_and_root_refs
+
+result: PASS_FOR_NEW_HASH_BOUND_INDEPENDENT_REVIEW
+blockers: []
+major_findings: []
+minor_findings: []
+
+next_gate:
+  name: HASH_BOUND_INDEPENDENT_REVIEW_OF_F1_R2_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+
+boundaries:
+  F1_accepted: false
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_performed: false
+  push_performed: false

@@ -1,0 +1,90 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T22:10:18+08:00
+effective_at: 2026-07-14T22:10:18+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  decision: EXPLICIT_START_OF_F2_R7_LIFECYCLE_CURRENTNESS_REVOCATION_SCOPE_CLOSURE
+  decision_source: current_conversation_instruction_做下一步
+
+amendment_unit:
+  id: F2_R7_LIFECYCLE_CURRENTNESS_REVOCATION_SCOPE_CLOSURE
+  fixed_subjects:
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+  prior_independent_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r6-atomic-bundle-independent-review.yaml
+    sha256: 9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+    result: PASS_NO_BLOCKER_BUT_SUBSEQUENT_FINDINGS_EXIST
+
+required_scope:
+  - actor_principal_and_authenticator_profile_lifecycle
+  - activation_assessment_and_effective_currentness_separation
+  - historical_issuance_validity_and_current_operational_dependency_separation
+  - typed_transition_fact_and_target_specific_transition_authority
+  - complete_actor_identity_transition_matrix_and_validity_window
+  - F2_wide_canonical_numeric_scalar_profile
+  - ResponsibilityScope_EXACT_SET_only_v0_1
+  - single_delegation_lineage_and_recursive_assignment_removal
+  - effective_contract_materialization
+  - author_self_review
+  - fresh_hash_bound_independent_review
+
+design_constraints:
+  permission_direction: SINGLE_PROHIBITED_BOUNDARY
+  modify_R1_through_R6_bytes: forbidden
+  rewrite_R1: forbidden
+  create_second_current_state_authority: forbidden
+  preserve_R1_DelegationAssessment_as_only_effective_delegation_reducer: required
+  preserve_historical_committed_action_facts: required
+  ordinary_session_end_retroactive_invalidation: forbidden
+  PARENT_ASSIGNMENT_in_v0_1: forbidden
+  DECLARED_SUBTREE_in_v0_1: forbidden
+
+excluded_scope:
+  - expand_home_domain
+  - implement_F2_or_F3
+  - start_F3
+  - production_authenticator_selection
+  - production_key_or_credential_provisioning
+  - canonical_Prohibited_Behavior_List_convergence
+  - TaskPermit_or_host_effect_fencing
+  - database_schema_or_migration
+  - service_or_provider_activation
+
+hard_boundaries:
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  F3_started: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision
+  superseded_by: null

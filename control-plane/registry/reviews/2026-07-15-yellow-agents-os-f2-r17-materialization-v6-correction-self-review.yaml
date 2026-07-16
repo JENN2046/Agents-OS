@@ -1,0 +1,97 @@
+schema_version: agents-os.hash-bound-author-self-review.v0.1
+review_id: agents-os-f2-r17-materialization-v6-correction-self-review
+review_type: HASH_BOUND_AUTHOR_SELF_REVIEW_OF_CORRECTED_DERIVED_MATERIALIZATION
+date: 2026-07-15
+status: complete
+reviewer_identity: Codex_author_materialization_v6
+independent_review: false
+
+fixed_acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+  subjects_unchanged: true
+  partial_acceptance: forbidden
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+
+blocking_review_input:
+  path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-full-atomic-bundle-independent-review.yaml
+  sha256: c219f68092d7fddfe7cde42a6b75d3c4fbbf61bc79988ac8cddece1e8f3ef13d
+  result: BLOCK
+
+historical_derived_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v5.draft.md
+  sha256: 86b4e8ea66b8cb4244ef63e5658c92dc4e9428aae63e6405807f5069bec6c40e
+  status: retained_immutable_failed_review_surface
+
+corrected_derived_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v6.draft.md
+  sha256: 1d01e220b1d94687f96216efb3e26b10ff1005394eb48d2a57b5e10d5f3caabd
+  authority: DERIVED_ONLY
+  acceptance_subject: false
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts:
+  blocker: 0
+  major: 0
+  minor: 0
+
+prior_findings_disposition:
+  F2-R17-FULL-IR-M01:
+    result: RESOLVED_IN_V6_PENDING_INDEPENDENT_CONFIRMATION
+    basis: >-
+      Sections 13 and 14 now reproduce the fixed R1 authentication and command
+      interfaces and the exact R8 MutationIntent and LifecycleActionRef fields,
+      with only the explicit R9 and R15 enum additions. V6 does not invent an
+      F2 fingerprint authority for an external interface.
+  F2-R17-FULL-IR-M02:
+    result: RESOLVED_IN_V6_PENDING_INDEPENDENT_CONFIRMATION
+    basis: >-
+      The inventory was rebuilt source-first. It contains 62 unique normative
+      surfaces and eight unique named reducers; each surface records its exact
+      accepted domain or NOT_STANDALONE status and its effective source.
+
+author_validation:
+  fixed_subject_hashes_match: PASS
+  v5_hash_unchanged: PASS
+  v6_sha256: 1d01e220b1d94687f96216efb3e26b10ff1005394eb48d2a57b5e10d5f3caabd
+  unique_top_level_surfaces: 62
+  schema_index_rows: 62
+  unique_named_reducers: 8
+  reducer_index_rows: 8
+  yaml_blocks_parsed: 26
+  markdown_fences_balanced: PASS
+  utf8_lf: PASS
+  trailing_whitespace: PASS
+  stale_or_invented_v5_markers_absent: PASS
+  exact_source_field_projection_checks: PASS
+  exact_source_domain_checks: PASS
+
+authority:
+  Jenn_acceptance_performed: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  F3_start_authorized: false
+  commit_performed: false
+  push_performed: false
+
+limitations:
+  - This is an author self-review and cannot clear the independent review gate.
+  - V6 is a corrected derived reading surface and does not replace R1 through R17.
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_R17_AND_V6

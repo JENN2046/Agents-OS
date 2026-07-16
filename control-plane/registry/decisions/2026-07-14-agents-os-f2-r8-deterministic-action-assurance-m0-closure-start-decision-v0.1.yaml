@@ -1,0 +1,91 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f2-r8-deterministic-action-assurance-m0-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T22:37:39+08:00
+effective_at: 2026-07-14T22:37:39+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  decision: AUTOMATIC_CONTINUATION_TO_F2_R8_DETERMINISTIC_ACTION_ASSURANCE_AND_M0_CLOSURE
+  decision_source:
+    - current_conversation_instruction_做下一步
+    - prior_current_conversation_instruction_后面你自动推进
+
+amendment_unit:
+  id: F2_R8_DETERMINISTIC_ACTION_ASSURANCE_AND_M0_CLOSURE
+  fixed_subjects:
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r7-atomic-bundle-independent-review.yaml
+    sha256: 0c774f0773451e0858b1c9125fe35a32c8b94f484a2850a2ab24d2ca4fc6cc7f
+    result: BLOCK
+    blockers: 6
+    major: 1
+
+required_scope:
+  - exact_mutation_intent_and_action_binding
+  - typed_total_transition_authority_basis
+  - total_delegation_ancestor_cascade_reducer
+  - complete_multi_impact_historical_assurance_reducer
+  - canonical_acyclic_synthetic_M0_controller_graph
+  - exact_complete_ActorIdentityRevision_fingerprint
+  - regenerated_effective_materialization
+  - author_self_review
+  - fresh_hash_bound_independent_review
+
+design_constraints:
+  modify_R1_through_R7_bytes: forbidden
+  expand_F2_direction: forbidden
+  create_permission_ladder: forbidden
+  create_second_current_state_authority: forbidden
+  preserve_single_prohibited_boundary: required
+  preserve_R7_EXACT_SET_only: required
+  preserve_R7_single_delegation_lineage: required
+  preserve_R7_scalar_profile: required
+
+excluded_scope:
+  - implement_F2_or_F3
+  - start_F3
+  - production_authenticator_or_credentials
+  - canonical_Prohibited_Behavior_List_convergence
+  - TaskPermit_host_authentication_or_effect_fencing
+  - database_schema_or_migration
+  - service_or_provider_activation
+
+hard_boundaries:
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  F3_started: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision
+  superseded_by: null

@@ -1,0 +1,290 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r15-full-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FULL_ATOMIC_BUNDLE_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T00:53:09+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r15_full_bundle
+reviewer_run_independence: fresh_run_separate_from_author_and_prior_review_runs
+author_self_review_role: evidence_only_not_conclusion
+prior_pass_relied_upon: false
+read_only_review_until_conclusion: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R15_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  indivisible_subjects:
+    R1:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+      sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+      sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+      sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+      sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+      sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+      sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14:
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+      sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15:
+      path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+      sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r15-v3.draft.md
+  sha256: 160866079080d8eea8b04f9d547ec00a725864a7b5f298cd1686ffb789ea00f6
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+
+review_package:
+  path: ops/packages/agents-os-f2-r1-r15-full-review-lineage-package-2026-07-15.zip
+  sha256: 3123f1c9aa6a41b14c7f55480744be1c527ccd657f9bc89743fd76240f6c4969
+  package_id: AGENTS_OS_F2_R1_R15_FULL_REVIEW_LINEAGE_PACKAGE_2026_07_15
+  manifest_path: MANIFEST.json
+  checksum_manifest_path: CHECKSUMS.sha256
+  review_lineage_path: REVIEW_LINEAGE.yaml
+
+input_allowlist:
+  - root AGENTS.md
+  - package MANIFEST.json, CHECKSUMS.sha256, README.txt, and REVIEW_LINEAGE.yaml
+  - fixed R1 through R15 acceptance subjects named above
+  - fixed materialization v3 named above
+  - R15 start decision packaged as governance support
+  - prior R14 full atomic-bundle independent review packaged as review lineage
+  - prior R14 materialization-v2 independent review packaged as review lineage
+  - R15 author self-review packaged as evidence-only review lineage
+  - byte-identical packaged copies and the packaged R1-R14 predecessor archive
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  raw_logs: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_R1_THROUGH_R15_ATOMIC_UNIT
+finding_counts:
+  blocker: 1
+  major: 2
+  minor: 0
+
+findings:
+  - finding_id: F2-R15-FULL-IR-B01
+    severity: BLOCKER
+    title: Steward-derived Actor CREATE is circular after the relation-to-assessment replacement
+    affected_sections:
+      - R8 Sections 2.4, 7.1, and 7.2
+      - R15 Sections 4 and 5.3
+      - Materialization Sections 2, 3.4, 4.1, and 9
+    finding: >-
+      R15 replaces the Actor transition authority basis stewardship relation
+      ref/fingerprint with an IdentityStewardshipAssessment ref/fingerprint.
+      That assessment requires target_actor_identity_ref,
+      target_actor_identity_fingerprint, target_actor_identity_assessment_ref,
+      one watermark, and an exact current target Actor revision. The Actor CREATE
+      path still permits and, for Resident Coordinator, Domain Agent, and
+      Temporary Worker steward routes, requires IDENTITY_STEWARD_ACTION. R8's
+      body-to-intent-to-action-to-final-subject order requires the authority
+      basis to be fixed before the new Actor revision is committed. Therefore a
+      stewardship assessment for the target CREATE cannot exist without the
+      target current Actor revision, while that revision cannot be committed
+      without the assessment. No pre-create target specification or explicit
+      CREATE exception breaks the cycle.
+    impact: >-
+      Ordinary steward-authorized Actor creation is not constructible under the
+      effective contract. The derived relation closes the second-ledger defect
+      for existing targets but opens a precommit circularity at a core identity
+      lifecycle path.
+    required_amendment: >-
+      Define a closed acyclic CREATE-time stewardship assessment over an exact
+      precommit Actor body/spec and intended target identity, or explicitly
+      restrict Actor CREATE to a non-circular Jenn/provisioning basis. Preserve
+      the existing current-target assessment for post-create transitions.
+
+  - finding_id: F2-R15-FULL-IR-M01
+    severity: MAJOR
+    title: CompromiseImpact reducer inputs are required but not represented by every affected assessment schema
+    affected_sections:
+      - R15 Sections 2.1-2.4, 3.4, and 5.3
+      - Materialization Sections 5, 6, 8, 9, 10, 11, 12, and 15
+    finding: >-
+      R15 requires every affected assessment to bind both the exact
+      HistoricalActionValidityAssessment ref/fingerprint and the exact
+      HistoricalImpactInputSet ref/fingerprint at a coverage watermark equal to
+      the effective assessment watermark. The replacement Actor identity schema
+      has none of those fields. Assignment and Delegation assessments name
+      historical validity refs but do not directly carry the required
+      historical assessment fingerprint, impact-input-set ref/fingerprint, or
+      coverage watermark. Profile, Principal, Binding, activation, and manifest
+      assessment schemas are not amended with the required direct bindings
+      either. The common known-object fingerprint rule rejects unknown fields,
+      so the missing bindings cannot be added informally to canonical objects.
+    impact: >-
+      The total CHALLENGED/INVALIDATED effect table does not produce a fully
+      canonical, watermark-bound affected assessment across all advertised
+      target classes. Implementations can either omit required reducer inputs or
+      introduce non-schema fields and divergent fingerprints.
+    required_amendment: >-
+      Publish complete replacement schemas for every affected assessment with
+      exact direct assurance/input-set fields and equal-watermark rules, or
+      revise Section 5.3 to a single explicit transitive binding through a
+      fingerprinted HistoricalActionValidityAssessment and make that rule exact
+      for each reducer.
+
+  - finding_id: F2-R15-FULL-IR-M02
+    severity: MAJOR
+    title: Materialization v3 is not the complete effective reading surface required by R15
+    affected_sections:
+      - R15 Section 6
+      - Materialization Sections 2 through 16
+    finding: >-
+      R15 requires v3 to print the complete effective schema, domain/fingerprint
+      rule, authority predicate, currentness reducer, and source subject for each
+      listed F2 surface. V3 names but does not print complete schemas for
+      AuthenticatorProfileAssessmentR7,
+      CredentialHandleStatusAssessmentRefV0_1, PrincipalAssessmentR7,
+      ActorPrincipalBindingAssessmentR7, HistoricalImpactInputSetV0_1,
+      SyntheticM0ManifestAssessmentV0_1, SyntheticM0ControllerSpecV0_1,
+      SyntheticM0PrincipalProvisioningManifest, GovernedStateTransitionFact,
+      or the R15-effective Actor transition authority basis. Several appear only
+      as prose or a domain-table row, and several do not appear by name at all.
+      In addition, Section 2's advertised effective mutation-kind list omits
+      RESPONSIBILITY_ASSIGNMENT_REVISION even though Section 14 correctly
+      includes it.
+    impact: >-
+      The derived-only surface cannot serve as the exact complete implementation
+      reading surface mandated by R15, and its two mutation-kind presentations
+      conflict. This does not change subject authority, but it blocks the
+      required complete review surface.
+    required_amendment: >-
+      Regenerate a v4 derived materialization from the corrected atomic subjects,
+      printing every required complete schema, fingerprint/domain rule,
+      authority predicate, reducer, and source map exactly once without
+      contradictory summary lists.
+
+prior_findings_disposition:
+  external_B01_ActorIdentityAssessment_fingerprint: RESOLVED_BY_R15_SECTIONS_2_1_TO_2_3
+  external_B02_Assignment_issuance_binding: RESOLVED_BY_R15_SECTION_3
+  external_B03_stewardship_relation_authority: >-
+    PARTIALLY_RESOLVED_NO_SECOND_LEDGER_BUT_BLOCKED_BY_CREATE_CIRCULARITY_F2-R15-FULL-IR-B01
+  external_B04_CompromiseImpact_total_mapping: >-
+    PARTIALLY_RESOLVED_TOTAL_TABLE_PRESENT_BUT_SCHEMA_BINDING_INCOMPLETE_F2-R15-FULL-IR-M01
+  external_E01_review_lineage: RESOLVED_FOR_REVIEW_INPUT_BY_REBUILT_PACKAGE
+  external_M01_incomplete_materialization: NOT_RESOLVED_F2-R15-FULL-IR-M02
+  external_M02_acceptance_hashes_external_to_R14: >-
+    RESOLVED_BY_R1_THROUGH_R15_MANIFEST_HASH_BINDING_PENDING_LATER_JENN_DECISION
+  prior_R14_materialization_stale_ACTIVE_only_rule: RESOLVED_IN_V3
+
+review_dimensions:
+  R1_through_R15_re_evaluated_as_one_atomic_unit: PASS
+  partial_acceptance_forbidden: PASS
+  cross_revision_override_precedence: PASS_WITH_BLOCKING_CIRCULARITY
+  canonical_derived_record_profile_closed: PASS
+  ActorIdentityAssessment_canonical_fingerprint: PASS
+  Assignment_body_intent_F3_committed_action_subject_order: PASS
+  Assignment_action_replay_exact_binding: PASS
+  Assignment_assessment_canonicalization: PASS_WITH_MAJOR_ASSURANCE_BINDING_GAP
+  IdentityRecoveryEvidence_canonicalization: PASS
+  derived_stewardship_without_second_ledger: PASS
+  derived_stewardship_total_class_predicate: BLOCK_CREATE_CIRCULARITY
+  CompromiseImpact_action_classification_total_and_exclusive: PASS
+  CompromiseImpact_effect_mapping_total: PASS_WITH_MAJOR_SCHEMA_BINDING_GAP
+  safety_transition_no_auto_restore: PASS
+  total_reducers_and_precedence: PASS_WITH_MAJOR_ASSURANCE_BINDING_GAP
+  currentness_and_equal_watermarks: PASS_WITH_MAJOR_ASSURANCE_BINDING_GAP
+  canonical_fingerprints_and_registered_domains: PASS
+  JCS_and_scalar_consistency: PASS
+  historical_issuance_vs_current_operational_dependency: PASS
+  lifecycle_revocation_and_terminal_semantics: PASS
+  synthetic_M0_closed_reference_eligibility: PASS
+  single_prohibited_boundary: PASS
+  no_new_permission_taxonomy: PASS
+  no_second_relation_ledger: PASS
+  no_runtime_implementation: PASS
+  no_F3_start: PASS
+  no_implementation_authority: PASS
+  no_runtime_activation_authority: PASS
+  no_production_authentication_authority: PASS
+  materialization_v3_complete_and_exact: FAIL_MAJOR
+
+validation:
+  package_sha256_before_review: PASS
+  R1_through_R15_source_hashes_before_review: PASS
+  R1_through_R15_archive_hashes_and_byte_identity: PASS
+  materialization_v3_hash_before_review: PASS
+  package_internal_checksums_complete_and_matching: PASS
+  package_manifest_hashes_matching: PASS
+  package_archive_integrity_test: PASS
+  package_duplicate_path_check: PASS
+  package_path_traversal_check: PASS
+  package_symlink_check: PASS
+  predecessor_package_sha256_and_archive_safety: PASS
+  mandatory_review_lineage_hashes: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  markdown_fences: PASS
+  review_YAML_parse: PASS
+  fixed_hashes_after_review: PASS
+  exactly_one_review_artifact_created: PASS
+  subjects_modified: false
+  materialization_modified: false
+  Registry_modified_by_reviewer: false
+  CURRENT_STATE_modified_by_reviewer: false
+
+exact_next_action:
+  action: PREPARE_NARROW_R16_SEMANTIC_CLOSURE_AND_COMPLETE_V4_MATERIALIZATION
+  required_subject_corrections:
+    - break stewardship-authorized Actor CREATE circularity with exact acyclic precommit semantics
+    - make CompromiseImpact reducer input binding exact in every affected assessment schema
+  required_derived_correction:
+    - regenerate a genuinely complete and internally consistent effective materialization v4
+  rebuild_hash_bound_package: required
+  fresh_full_R1_through_R16_atomic_bundle_independent_review: required
+  Jenn_atomic_acceptance_decision: only_after_clean_independent_review
+  partial_acceptance: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  credential_or_auth_change_authorized: false
+  F3_started: false
+  Registry_or_CURRENT_STATE_update_authorized: false
+  commit_performed: false
+  push_performed: false

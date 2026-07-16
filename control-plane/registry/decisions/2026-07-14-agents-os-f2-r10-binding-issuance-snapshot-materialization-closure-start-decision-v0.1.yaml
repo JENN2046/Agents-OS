@@ -1,0 +1,36 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r10-binding-issuance-snapshot-materialization-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+status: active
+
+authority:
+  basis: Jenn_explicit_automatic_advancement_after_F2_review
+  source_review: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r9-atomic-bundle-independent-review.yaml
+  source_review_sha256: 2d16708c7b33c76fb7db41935b4b90fd81576076758567b94cf58f823ef1272f
+
+scope:
+  - bind_exact_Binding_issuance_snapshot_inputs
+  - keep_Principal_control_proof_in_later_activation_graph
+  - explicitly_override_R8_Binding_creation_spec_digest_rule
+  - regenerate_complete_effective_materialization
+  - author_self_review
+  - fresh_hash_bound_independent_review
+
+forbidden:
+  - rewrite_R1_through_R9
+  - expand_F2_direction
+  - accept_F2
+  - start_F3
+  - implement_runtime
+  - create_or_migrate_database
+  - activate_authentication_or_provider
+  - access_secrets_or_private_memory
+  - commit
+  - push
+
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+

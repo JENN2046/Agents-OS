@@ -1,0 +1,486 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r5-atomic-bundle-independent-review
+review_run_id: f2-r5-atomic-independent-review-2026-07-14-fresh-01
+review_type: FRESH_HASH_BOUND_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+reviewer_identity: Codex_fresh_independent_reviewer
+date: 2026-07-14
+status: complete
+
+review_process_separation:
+  independent_from_subject_author: true
+  independent_from_author_self_review: true
+  author_conclusions_trusted_without_reverification: false
+  all_conclusions_rederived_from_fixed_subjects: true
+  every_prior_finding_readjudicated: true
+  subject_modified: false
+  existing_files_modified: false
+  only_new_file_is_this_review: true
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false
+  restricted_inputs_observed: true
+  restricted_inputs_not_read:
+    - state-private
+    - secrets_or_credentials
+    - private_raw_memory
+    - provider_raw_output
+    - author_scratchpad
+    - non_allowlisted_historical_drafts
+
+atomic_subjects:
+  - role: fixed_R1_base
+    path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    expected_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    pre_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    post_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R2_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    expected_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    pre_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    post_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R3_final_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+    expected_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    pre_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    post_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R4_final_canonicalization_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+    expected_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    pre_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    post_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R5_final_scalar_encoding_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+    expected_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    pre_review_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    post_review_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    hash_match_before_review: true
+    hash_match_after_review: true
+
+allowlist_hashes_actually_read:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: CURRENT_STATE.md
+    sha256: 703c598aa782b90b7d6800146cdd54928dc6e94c591ab478817866a8570828cf
+    role: state_and_non_authorization_consistency_only
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r5-final-scalar-encoding-amendment-start-decision-v0.1.yaml
+    sha256: e3fffb80b15c4a55c23f8ab6aa54e03bdfae5e70279f35b35ea6c2ec2db5e3fb
+    role: R5_scope_authority
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r4-atomic-bundle-independent-review.yaml
+    sha256: 203eb7fb07f4df7b85b51353da0604f901bbe595093e84758df1c4ce1f25d3cf
+    role: immediate_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r3-atomic-bundle-independent-review.yaml
+    sha256: 22b2e1e7e7eae44f8ef834b479bc3cd2dfd340cca5758926aad1ae468a1f4032
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+    sha256: 728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-independent-review.yaml
+    sha256: 690f8f2cf451525cedcb9b2dda35e137fdc2bd095f5c2fddad723e63fff92f8e
+    role: original_independent_findings
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r5-final-scalar-encoding-self-review.yaml
+    sha256: 17040c9a37a55d951068548761bfd24726fc6d191111a076df51107fd463c7f2
+    role: author_evidence_only_conclusions_not_trusted
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+    role: accepted_single_prohibited_boundary_direction
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    role: accepted_F1_boundary
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    role: Home_identity_relationship_and_authority_boundary
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    role: accepted_foundational_direction
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: Resident_and_Rust_single_writer_boundary
+
+result: BLOCK
+finding_counts:
+  blockers: 1
+  major: 0
+  minor: 0
+
+findings:
+  - finding_id: F2-R5-IR-B01
+    severity: BLOCKER
+    title: context_revision gives contradictory outcomes for rounded fractions and negative zero
+    subject_locations:
+      - subject: R5
+        section: "4.2 context_revision"
+        lines: "149-170"
+      - subject: R5
+        section: "5 Cross-writer and boundary fixtures"
+        lines: "192-218"
+    finding: >-
+      R5 simultaneously requires the mathematical value to be an integer, says every fraction
+      and negative value is rejected, and makes acceptance exactly equivalent after JSON number
+      parsing to ECMAScript Number.isSafeInteger(value) && value >= 0. These rules disagree on
+      valid JSON number tokens that round during binary64 parsing and on negative zero. For
+      example, ECMAScript parses 9007199254740990.5 to the safe integer 9007199254740990, so the
+      stated exact predicate accepts it while the fraction rule rejects it. ECMAScript preserves
+      JSON token -0 as negative zero; Number.isSafeInteger(-0) and -0 >= 0 are both true, while
+      the negative-value wording can require rejection. RFC 8785 defines canonical serialization
+      of an already parsed JSON data model; the phrase "RFC 8785 JSON number parsing" does not
+      establish a separate exact-decimal admission algorithm that resolves this conflict.
+    impact: >-
+      Two implementations can disagree on whether a BindingScope is valid before
+      binding_scope_fingerprint computation. That changes binding subject admission and every
+      downstream binding activation evidence and assessment result. Even where accepted inputs
+      later serialize to the same JCS integer, the acceptance boundary itself is not
+      interoperable and startup recovery can reject data accepted by another writer.
+    required_amendment: >-
+      Define one precedence-complete admission rule for context_revision. State whether
+      validation applies to the original JSON number token, an exact-decimal mathematical value,
+      or only the parsed IEEE 754 binary64 value; explicitly decide -0; and make the prose,
+      predicate, and fixtures agree. If decimal or exponent forms remain permitted, specify
+      exact-decimal parsing before any binary64 rounding and require that exact value to be an
+      in-range integer, or expressly state that rounded lexical forms are accepted. Add positive
+      and negative fixtures for -0, 0, exact exponent forms, fractional values that binary64
+      rounds to integers, inexact exponent forms, and both safe-integer boundaries.
+
+prior_finding_disposition:
+  - finding_id: F2-IR-B01
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      Assignment provenance, self-issuance rejection, attenuation, grant CAS, and issuance
+      action binding are closed. BindingScope admission still affects deterministic binding
+      activation through F2-R5-IR-B01.
+  - finding_id: F2-IR-B02
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      Typed evidence, stable IDs, acyclic graphs, digest encodings, and exact parent projections
+      exist, but context_revision admission remains non-deterministic.
+  - finding_id: F2-IR-B03
+    disposition: RESOLVED_BY_EXPLICIT_F3_OWNERSHIP_REPLACEMENT
+    rationale: >-
+      R2 assigns Command payload canonicalization, atomic intake, replay, crash outcome, and
+      domain handoff to F3 and keeps runtime intake closed until that separate contract exists.
+  - finding_id: F2-IR-M01
+    disposition: RESOLVED
+    rationale: >-
+      R2 closes identity transition and recovery provenance with complete affected-binding
+      evidence, stewardship, atomic recovery, and fail-closed conditions.
+  - finding_id: F2-R2-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R3 supplies a responsibility-free, activation-purpose-only acknowledgement backed by an
+      already-active Principal binding and forbids the pending grant as responsibility.
+  - finding_id: F2-R2-IR-B02
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      R3 removes subject/evidence fixed points and R4-R5 close all digest projections, but the
+      BindingScope input domain remains ambiguous under F2-R5-IR-B01.
+  - finding_id: F2-R2-IR-B03
+    disposition: RESOLVED
+    rationale: >-
+      R3 forbids assignment self-issuance and closes Jenn-root, assignment-rooted, and child
+      delegation provenance; R4 binds the complete committed action ref into the grant subject.
+  - finding_id: F2-R3-IR-B01
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      R4 supplies the missing domain-separated projections and R5 closes all five digest scalar
+      representations, but exact BindingScope admission is still incomplete.
+  - finding_id: F2-R3-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      The canonical action-ref fingerprint covers every R2 field, is recomputed from immutable
+      F3 COMMITTED bytes, and is bound into the final acyclic delegation subject.
+  - finding_id: F2-R4-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      CanonicalDigestScalarV0_1 fixes SHA-256, RFC 8785 JCS under the owning domain-tagged
+      formula, the scalar contract version, 64-character lowercase-hex JSON string persistence,
+      validation, and unchanged string insertion into every immediate parent formula.
+  - finding_id: F2-R4-IR-B02
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      context_id is now exact and context_revision has a fixed nominal range and JSON type, but
+      its parsed-value predicate conflicts with its fraction and negative-value rejection rules.
+
+author_self_review_readjudication:
+  - correction_id: F2-R5-SR-01
+    disposition: CONFIRMED
+    rationale: >-
+      The digest scalar has an explicit version and exact persisted and inserted representation.
+  - correction_id: F2-R5-SR-02
+    disposition: NOT_CONFIRMED_BLOCKING
+    rationale: >-
+      Unicode 15.1 NFC and the nominal safe-integer range are fixed, but
+      Number.isSafeInteger(value) after binary64 parsing is not equivalent to rejecting every
+      source fraction or negative zero.
+  - author_claim: PASS_NO_AUTHOR_BLOCKER
+    disposition: REJECTED
+    rationale: F2-R5-IR-B01 remains a deterministic cross-writer blocker.
+
+digest_scalar_reverification:
+  canonical_type_name: CanonicalDigestScalarV0_1
+  algorithm: SHA-256
+  raw_digest_size_octets: 32
+  owning_serialization: RFC_8785_JCS_under_exact_domain_tagged_formula
+  canonicalization_contract_version: agents-os.f2-digest-scalar.v0.1
+  persisted_JSON_type: string
+  persisted_encoding: lowercase_hex
+  persisted_length_ASCII_characters: 64
+  accepted_pattern: "^[0-9a-f]{64}$"
+  parent_insertion: exact_persisted_JSON_string_without_transformation
+  FingerprintEnvelope_used_for_digest_scalar: false
+  alternate_encodings_rejected: true
+  result: PASS
+
+digest_field_and_parent_projection_coverage:
+  - field: DelegationActivationAcknowledgementRef.replay_identity
+    owning_formula: agents-os.delegation-activation-ack.v0.1
+    inserted_into:
+      - agents-os.delegation-activation-acknowledgement-ref.v0.1
+    exact_string_insertion_required: true
+    result: PASS
+  - field: BindingActivationEvidence.evidence_id
+    owning_formula: agents-os.binding-activation-evidence-id.v0.1
+    inserted_into:
+      - agents-os.binding-activation-evidence-replay.v0.1
+      - agents-os.binding-activation-evidence.v0.1
+      - agents-os.binding-activation-assessment.v0.1_as_activation_evidence_id
+      - recovery_and_current_projection_occurrences
+    exact_string_insertion_required: true
+    result: PASS
+  - field: DelegationActivationEvidence.evidence_id
+    owning_formula: agents-os.delegation-activation-evidence-id.v0.1
+    inserted_into:
+      - agents-os.delegation-activation-evidence-replay.v0.1
+      - agents-os.delegation-activation-evidence.v0.1
+      - agents-os.delegation-activation-assessment.v0.1_as_activation_evidence_id
+      - recovery_and_current_projection_occurrences
+    exact_string_insertion_required: true
+    result: PASS
+  - field: BindingActivationEvidence.replay_identity
+    owning_formula: agents-os.binding-activation-evidence-replay.v0.1
+    inserted_into:
+      - agents-os.binding-activation-evidence.v0.1
+      - recovery_occurrences
+    exact_string_insertion_required: true
+    result: PASS
+  - field: DelegationActivationEvidence.replay_identity
+    owning_formula: agents-os.delegation-activation-evidence-replay.v0.1
+    inserted_into:
+      - agents-os.delegation-activation-evidence.v0.1
+      - recovery_occurrences
+    exact_string_insertion_required: true
+    result: PASS
+digest_field_coverage_summary:
+  omitted_SHA_derived_activation_digest_field_found: false
+  result: PASS
+
+FingerprintEnvelope_distinction_and_recovery:
+  digest_scalars_are_envelopes: false
+  named_fingerprint_results_remain_R4FingerprintEnvelope: true
+  nested_named_fingerprint_insertion_uses_verified_lowercase_digest: true
+  digest_scalar_insertion_uses_persisted_lowercase_hex_string: true
+  startup_validates_scalar_type_and_bounds_first: true
+  alternate_or_legacy_representation_silently_converted: false
+  mismatch_result: rejection_or_owning_reducer_INDETERMINATE
+  result: PASS
+
+BindingScope_scalar_reverification:
+  context_id:
+    JSON_type_string: true
+    valid_Unicode_scalar_sequence: true
+    normalization_form: NFC
+    normalization_data_version: Unicode_15.1.0
+    normalized_length_scalar_values_inclusive: 1_to_256
+    control_ranges_rejected:
+      - U+0000-U+001F
+      - U+007F
+      - U+0080-U+009F
+    ordering_and_equality: normalized_UTF8_bytes
+    normalization_collision_is_same_ID: true
+    duplicate_tuple_checked_after_normalization: true
+    result: PASS
+  context_revision:
+    JSON_type_number: true
+    nominal_minimum: 0
+    nominal_maximum: 9007199254740991
+    RFC8785_safe_integer_target: true
+    exact_fraction_acceptance_rule_consistent: false
+    negative_zero_rule_explicit_and_consistent: false
+    exponent_rule_precedence_complete: false
+    result: BLOCK
+  representation_only_not_permission: true
+  result: BLOCK
+
+field_projection_reverification:
+  PrincipalControlProofAssessmentRef:
+    field_complete: true
+    domain_separated: true
+    result: PASS
+  AuthenticatedActorActionRef:
+    every_R2_declared_field_covered: true
+    optional_delegation_chain_null_explicit: true
+    fingerprint_recomputed_not_trusted: true
+    final_grant_binding_complete: true
+    action_subject_cycle_absent: true
+    result: PASS
+  DelegationActivationAcknowledgementRef:
+    field_complete: true
+    responsibility_free_activation_path: true
+    replay_identity_encoding_complete: true
+    result: PASS
+  BindingActivationEvidence:
+    field_complete: true
+    revision_and_CAS_fields_covered: true
+    stable_evidence_ID_encoding_complete: true
+    replay_identity_encoding_complete: true
+    structured_refs_use_exact_fingerprints: true
+    upstream_BindingScope_admission_complete: false
+    result: BLOCK
+  BindingActivationAssessment:
+    field_complete: true
+    reason_code_order_deterministic: true
+    self_fingerprint_excluded: true
+    upstream_BindingScope_admission_complete: false
+    result: BLOCK
+  DelegationActivationEvidence:
+    field_complete: true
+    removed_acknowledging_action_ref_absent: true
+    acknowledgement_fingerprint_bound: true
+    stable_evidence_ID_encoding_complete: true
+    replay_identity_encoding_complete: true
+    revision_and_CAS_fields_covered: true
+    result: PASS
+  DelegationActivationAssessment:
+    field_complete: true
+    reason_code_order_deterministic: true
+    self_fingerprint_excluded: true
+    result: PASS
+  DelegationGrantRevision_final_subject:
+    issuance_intent_field_complete: true
+    complete_action_ref_fingerprint_bound: true
+    F3_contract_version_bound: true
+    created_event_sequence_bound: true
+    acyclic: true
+    result: PASS
+
+fixture_coverage_reverification:
+  digest_all_zero_and_all_ff: PASS
+  all_five_digest_fields: PASS
+  immediate_parent_embedding: PASS
+  digest_alternate_representations: PASS
+  context_id_NFC_equivalence_and_collisions: PASS
+  context_id_min_max_and_invalid_boundaries: PASS
+  context_revision_safe_integer_boundaries: PASS
+  context_revision_fraction_near_binary64_rounding_boundary: MISSING
+  context_revision_negative_zero: MISSING
+  context_revision_exact_exponent_positive_case: MISSING
+  context_revision_inexact_exponent_negative_case: PRESENT_BUT_NORMATIVELY_AMBIGUOUS
+  differently_ordered_scope_tuples: PASS
+  two_independent_implementations_required: true
+  result: BLOCK
+
+review_dimensions:
+  R5_scope_and_exact_replacement_precedence: PASS
+  all_subject_hashes_fixed_and_matching: PASS
+  CanonicalDigestScalar_exact_algorithm_and_version: PASS
+  CanonicalDigestScalar_persisted_JSON_type_and_lowercase_hex: PASS
+  CanonicalDigestScalar_all_five_fields_and_parent_insertions: PASS
+  FingerprintEnvelope_distinction: PASS
+  digest_recovery_and_no_silent_conversion: PASS
+  context_id_exact_JSON_Unicode_NFC_length_control_and_collision_semantics: PASS
+  context_revision_exact_type_range_exponent_and_negative_zero_semantics: BLOCK
+  BindingScope_closed_representation_only_and_not_permission_allowlist: BLOCK_ON_CONTEXT_REVISION_ONLY
+  binding_subject_evidence_assessment_graph_acyclic: PASS
+  binding_subject_evidence_assessment_graph_exact_and_recoverable: BLOCK_ON_SCOPE_ADMISSION
+  delegation_subject_evidence_assessment_graph_acyclic: PASS
+  delegation_subject_evidence_assessment_graph_exact_and_recoverable: PASS
+  delegation_issuance_intent_action_subject_graph_acyclic: PASS
+  delegation_issuance_provenance_complete_and_fingerprint_bound: PASS
+  assignment_self_issuance_forbidden: PASS
+  Jenn_root_assignment_rooted_and_child_provenance: PASS
+  evidence_revision_CAS_and_replay_revision_behavior: PASS
+  activation_semantics_and_fail_closed_recovery: BLOCK_ON_SCOPE_ADMISSION
+  fixture_coverage: BLOCK
+  single_prohibited_boundary: PASS
+  second_permission_model_created: false
+  ordinary_action_allowlist_created: false
+  F1_Home_Resident_compatibility: PASS
+  no_second_ledger_or_new_core_object: PASS
+  privacy_secret_memory_provider_boundary: PASS
+  no_implementation_runtime_or_F3_authority: PASS
+  non_authorization_honesty: PASS
+
+compatibility_assessment: >-
+  No conflict was found with accepted F1 Jenn-only Goal decisions, Home identity meaning versus
+  canonical Control identity facts, Home relationship non-authority, Nobao resident coordination,
+  Rust single-writer ownership, the no-second-ledger boundary, or the accepted single Prohibited
+  Behavior List direction. F2-R5-IR-B01 is a narrow internal JSON-number admission defect and does
+  not require reopening those accepted directions or any resolved delegation graph.
+
+downstream_dependencies:
+  - Resolve F2-R5-IR-B01 in one fixed-hash scalar amendment and run a fresh atomic review.
+  - Complete one canonical Prohibited Behavior List and synchronized governance convergence.
+  - Accept F3 Command intake, immutable action-ref, replay, and Rust single-writer contracts.
+  - Accept F4 TaskPermit, host authentication, and effect-fencing contracts.
+  - Separately review production authenticator, credential, trust-anchor, and provisioning profiles.
+  - Obtain explicit Jenn implementation and runtime-activation decisions after contract closure.
+
+non_authorization_effects:
+  F2_accepted: false
+  Jenn_acceptance_substituted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  production_identity_or_credential_created: false
+  database_or_schema_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  TaskPermit_or_effect_admission_authorized: false
+  accepted_subject_bytes_modified: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false
+
+validation:
+  allowlist_preflight_hashes:
+    result: PASS
+    checked_files: 13
+  allowlist_post_review_hashes:
+    result: PASS
+    checked_files: 13
+    all_match_recorded_sha256: true
+  atomic_subject_hashes_before_review:
+    result: PASS
+    checked_files: 5
+  atomic_subject_hashes_after_review:
+    result: PASS
+    checked_files: 5
+  review_yaml_parse:
+    result: PASS
+  subject_markdown_fences:
+    result: PASS
+  subject_yaml_blocks:
+    result: PASS
+    R1_parsed_blocks: 20
+    R2_parsed_blocks: 11
+    R3_parsed_blocks: 7
+    R4_parsed_blocks: 5
+    R5_parsed_blocks: 4
+  utf8_lf_BOM_and_trailing_whitespace_scan:
+    result: PASS
+  exact_artifact_scope:
+    result: PASS
+    note: Only the specified review artifact was created; no existing file was edited.
+
+required_next_gate: >-
+  Create one minimal hash-bound amendment that removes the context_revision fraction,
+  exponent, and negative-zero admission contradiction, then run a new fresh independent
+  R1-R6 atomic-bundle review. This review does not accept F2, start F3, authorize
+  implementation or runtime activation, change Registry or CURRENT_STATE, commit, or push.

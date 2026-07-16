@@ -1,0 +1,388 @@
+review_id: "F2_R18_V11_MATERIALIZATION_INDEPENDENT_CONSISTENCY_REVIEW_2026_07_15_RUN_01"
+review_type: "FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_V11"
+review_date: "2026-07-15"
+reviewer:
+  identity: "Nobao fresh independent materialization consistency reviewer"
+  runtime_task: "/root/f2_r18_v11_materialization_consistency_review"
+  run_id: "f2-r18-v11-materialization-consistency-20260715-01"
+independent: true
+review_method: "fresh_hash_bound_full_surface_adversarial_source_exact_materialization_review"
+result: "BLOCK"
+
+scope:
+  acceptance_subjects: "fixed F2 R1 through R18"
+  derived_surface: "F2 Effective Contract Materialization v0.1-r18-v11"
+  review_surface_only: true
+  full_atomic_bundle_review: false
+  subject_bytes_modified: false
+  materialization_bytes_modified: false
+  existing_files_modified: false
+  output_artifact_created: true
+  exclusions:
+    - "author scratchpads"
+    - "v11 author self-review"
+    - "CURRENT_STATE"
+    - "Registry beyond the exact allowlist"
+    - "private memory and state-private"
+    - "secrets, provider raw responses, and runtime logs"
+
+hash_gate:
+  status: "PASS"
+  rule: "Any mismatch would have terminated this review as BLOCK before normative content inspection."
+  observed_input_count: 20
+  matched_input_count: 20
+
+exact_input_allowlist:
+  - id: "R1"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+    expected_sha256: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    observed_sha256: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    hash_match: true
+  - id: "R2"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md"
+    expected_sha256: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    observed_sha256: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    hash_match: true
+  - id: "R3"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md"
+    expected_sha256: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    observed_sha256: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    hash_match: true
+  - id: "R4"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md"
+    expected_sha256: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    observed_sha256: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    hash_match: true
+  - id: "R5"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md"
+    expected_sha256: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    observed_sha256: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    hash_match: true
+  - id: "R6"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md"
+    expected_sha256: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    observed_sha256: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    hash_match: true
+  - id: "R7"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md"
+    expected_sha256: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    observed_sha256: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    hash_match: true
+  - id: "R8"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+    expected_sha256: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    observed_sha256: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    hash_match: true
+  - id: "R9"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md"
+    expected_sha256: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    observed_sha256: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    hash_match: true
+  - id: "R10"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md"
+    expected_sha256: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    observed_sha256: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    hash_match: true
+  - id: "R11"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md"
+    expected_sha256: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    observed_sha256: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    hash_match: true
+  - id: "R12"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md"
+    expected_sha256: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    observed_sha256: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    hash_match: true
+  - id: "R13"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md"
+    expected_sha256: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    observed_sha256: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    hash_match: true
+  - id: "R14"
+    path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md"
+    expected_sha256: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    observed_sha256: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    hash_match: true
+  - id: "R15"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+    expected_sha256: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    observed_sha256: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    hash_match: true
+  - id: "R16"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+    expected_sha256: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    observed_sha256: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    hash_match: true
+  - id: "R17"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+    expected_sha256: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    observed_sha256: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    hash_match: true
+  - id: "R18"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md"
+    expected_sha256: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    observed_sha256: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    hash_match: true
+  - id: "MATERIALIZATION_V11"
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+    expected_sha256: "816b6f5fd704057f4cb226e3eef7e07f30e591f471a88085497399941c1ffb0a"
+    observed_sha256: "816b6f5fd704057f4cb226e3eef7e07f30e591f471a88085497399941c1ffb0a"
+    hash_match: true
+  - id: "V10_HISTORICAL_FINDING_EVIDENCE"
+    path: "control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v10-materialization-independent-consistency-review.yaml"
+    expected_sha256: "ba0b5dd9170dc1483abed03a56a37d0efe1b2418731d91a55c2354620ffb0ead"
+    observed_sha256: "ba0b5dd9170dc1483abed03a56a37d0efe1b2418731d91a55c2354620ffb0ead"
+    hash_match: true
+    use: "Historical finding evidence only; its conclusions were not adopted as current conclusions."
+
+historical_finding_reverification:
+  - id: "F2-R18-V10-MCR-M01"
+    disposition: "RESOLVED"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md"
+        lines: "54-68,931-951"
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md"
+        lines: "784-820"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+        lines: "12,21-56,1581-1589"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+        lines: "1236-1354,2265"
+    decision_basis: >-
+      Every normative source claim is confined to the fixed R1-R18 set. Section
+      17 cites only R1 Sections 2 and 16. The exhaustive
+      BindingActivationEvidence source-index row now includes R8 Section 6.4,
+      matching the printed synthetic stewardship-source replacement.
+
+  - id: "F2-R18-V10-MCR-M02"
+    disposition: "PARTIAL"
+    source_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md"
+        lines: "405-417,424-436"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+        lines: "541-564"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+        lines: "28-30,35-120,179-215"
+    materialization_evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+        lines: "507-555"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+        lines: "2184-2208,2310"
+    decision_basis: >-
+      The sole indexed Binding reducer now composes direct issuance coverage,
+      transitive activation assurance, R15 CHALLENGED/INVALIDATED effects, R16
+      safer-state ordering, and CONFIRMED-only ACTIVE. The synthetic-manifest
+      reducer now prints the required branches and safer REVOKE behavior, but its
+      success branches name the superseded R16 MANIFEST_CREATE and
+      MANIFEST_ACCEPT role tokens instead of the R17-effective closed role names.
+      Therefore the historical two-reducer defect is improved but not source-exact.
+
+findings:
+  blocker: []
+  major:
+    - id: "F2-R18-V11-MCR-M01"
+      title: "The sole indexed synthetic-manifest reducer uses role aliases superseded by R17"
+      source_locations:
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+          lines: "510-525"
+          evidence: >-
+            R16 used MANIFEST_CREATE, MANIFEST_ACCEPT, and MANIFEST_REVOKE as
+            prose role names for the manifest assessment.
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+          lines: "28-30,35-120,169-215"
+          evidence: >-
+            R17 has exact precedence over R16 action-role prose, replaces it with
+            the closed SYNTHETIC_MANIFEST_CREATE, SYNTHETIC_MANIFEST_ACCEPT, and
+            SYNTHETIC_MANIFEST_REVOKE vocabulary, and rejects aliases.
+      materialization_locations:
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+          lines: "2184-2208"
+          evidence: >-
+            The sole indexed SyntheticM0ManifestAssessmentReducer correctly
+            prints coverage, R15 invalidation/challenge effects, derived-subject
+            non-activity, safer REVOKE preservation, and CONFIRMED-only success,
+            but lines 2201 and 2206-2207 require MANIFEST_CREATE and
+            MANIFEST_ACCEPT rather than the R17-effective role identifiers.
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+          lines: "1977-2027,2073-2075,2310"
+          evidence: >-
+            V11 itself prints the closed R17 role enum and mapping and indexes
+            the reducer to R17 Section 2.3, making the stale reducer tokens an
+            internal source-precedence contradiction rather than an omitted index row.
+      impact: >-
+        A literal implementation cannot satisfy the reducer with the closed R17
+        role set: it must either accept aliases that R17 requires it to reject or
+        fail to recognize the required manifest create/accept assurance. The sole
+        indexed reducer is therefore not an exact implementable composition even
+        though its state-transition branches are otherwise complete. Inventory
+        row counts cannot cure this semantic mismatch.
+      required_correction: >-
+        Replace every reducer use of MANIFEST_CREATE and MANIFEST_ACCEPT with the
+        exact R17-effective SYNTHETIC_MANIFEST_CREATE and
+        SYNTHETIC_MANIFEST_ACCEPT identifiers; scan the complete materialization
+        for every other superseded R16 assurance-role token, recompute the
+        materialization hash, and submit the corrected bytes to a fresh
+        hash-bound independent materialization consistency review.
+  minor:
+    - id: "F2-R18-V11-MCR-m01"
+      title: "The common R16 prelude misstates the number of reducers to which it applies"
+      source_locations:
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md"
+          lines: "541-564"
+          evidence: "R16 defines one order for each directly affected schema reducer."
+      materialization_locations:
+        - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v11.draft.md"
+          lines: "1758-1781,1783-1883"
+          evidence: >-
+            Section 18.1 says the five reducers below use the common prelude, but
+            only four object-specific reducers follow in Section 18.2 through
+            18.5 before Section 19 begins.
+      impact: >-
+        The count does not by itself change the four printed reducer bodies, but
+        it leaves the intended application set ambiguous and weakens the claimed
+        exactness of the materialization.
+      required_correction: >-
+        State the exact reducer names governed by the prelude and correct the
+        count. If a fifth reducer was intended, identify it explicitly and make
+        its composition source-exact rather than relying on positional prose.
+
+validation_evidence:
+  - id: "HASH_LOCK"
+    status: "PASS"
+    evidence: "All 20 observed SHA-256 values exactly match the fixed allowlist."
+
+  - id: "FULL_V11_ADVERSARIAL_READ"
+    status: "PASS_EXECUTION_FAIL_RESULT"
+    evidence: >-
+      All 2,336 v11 lines were checked as a complete source-exact reading surface
+      against fixed R1-R18; review was not limited to a v10-v11 diff. The result
+      is BLOCK because one major reducer-role source-precedence conflict remains.
+
+  - id: "NORMATIVE_SOURCE_CONFINEMENT"
+    status: "PASS"
+    evidence: >-
+      All normative source claims are within fixed R1-R18. Section 17 is supported
+      only by R1 Sections 2 and 16, and no operating instruction or unbound
+      direction artifact is claimed as normative authority.
+
+  - id: "BINDING_ACTIVATION_EVIDENCE_SOURCE_INDEX"
+    status: "PASS"
+    evidence: >-
+      The BindingActivationEvidence index row includes R8 Section 6.4 and matches
+      the selected synthetic stewardship-source union and absent-field rules.
+
+  - id: "BINDING_REDUCER_R15_R16_COMPOSITION"
+    status: "PASS"
+    evidence: >-
+      The sole indexed Binding reducer verifies direct issuance and transition
+      coverage plus transitive activation assurance, maps invalidated issuance or
+      activation to REVOKED, maps challenged/indeterminate enabling assurance to
+      INDETERMINATE while preserving safer states, applies ordinary currentness
+      after assurance, and returns ACTIVE only with complete CONFIRMED assurance.
+
+  - id: "SYNTHETIC_MANIFEST_REDUCER_R15_R16_COMPOSITION"
+    status: "FAIL_ROLE_EXACTNESS"
+    evidence: >-
+      The reducer contains the required create/accept invalidation, challenge,
+      derived-subject non-activity, safer REVOKE, and CONFIRMED-only success
+      branches, but success uses R16 MANIFEST_CREATE/MANIFEST_ACCEPT aliases that
+      R17 supersedes and rejects. See F2-R18-V11-MCR-M01.
+
+  - id: "SCHEMA_INDEX_SET"
+    status: "PASS_COUNT_AND_EXACT_SET_ONLY"
+    evidence: >-
+      Parsed YAML fences after the document header contain 61 unique top-level
+      surface names. The schema index contains the same 61 unique names, with no
+      duplicates or set difference. This count does not override semantic failure.
+    observed:
+      printed_schema_rows: 61
+      indexed_schema_rows: 61
+      unique_printed_schema_names: 61
+      unique_index_schema_names: 61
+      duplicate_printed_schema_names: 0
+      duplicate_index_schema_names: 0
+      printed_not_indexed: 0
+      indexed_not_printed: 0
+
+  - id: "REDUCER_INDEX_SET"
+    status: "PASS_COUNT_AND_EXACT_SET_ONLY"
+    evidence: >-
+      Thirteen unique explicitly named reducer headings and thirteen unique index
+      rows are present with no set difference. Semantic exactness fails in the
+      sole indexed synthetic-manifest reducer.
+    observed:
+      printed_named_reducer_rows: 13
+      indexed_reducer_rows: 13
+      unique_printed_reducer_names: 13
+      unique_index_reducer_names: 13
+      duplicate_printed_reducer_names: 0
+      duplicate_index_reducer_names: 0
+      printed_not_indexed: 0
+      indexed_not_printed: 0
+
+  - id: "MATERIALIZATION_CREATED_FIELDS_AND_SEMANTICS"
+    status: "FAIL_SEMANTIC_ALIAS"
+    evidence: >-
+      No new effective subject or assessment field was found. The remaining
+      defect is a reducer-semantic alias incompatible with the closed R17 role
+      vocabulary, not an inventory-count or field-shape omission.
+
+  - id: "SUPERSEDED_ALIAS_SCAN"
+    status: "FAIL"
+    evidence: >-
+      No effective assignment_binding_ref, assignment_assessment_ref,
+      intended_assignment_binding_ref, SyntheticBindingIssuanceInputSnapshotV0_1R10,
+      ActionAssuranceBindingV0_1R16, TransitionAuthorityBasisV0_1R8,
+      compromised_subject_action_set_ref, or
+      compromised_subject_action_set_fingerprint remains. The sole synthetic
+      reducer nevertheless retains the superseded R16 MANIFEST_CREATE and
+      MANIFEST_ACCEPT assurance-role tokens.
+
+  - id: "F3_OWNERSHIP_BOUNDARY"
+    status: "PASS"
+    evidence: >-
+      CommandTypeDefinition, CanonicalCommand, and AuthenticatedCommandContext
+      remain F3-owned placeholders, are excluded from the 61-row schema set, and
+      are not printed as implementable F2 field schemas. No F3 payload is invented.
+
+  - id: "ACTIVATION_EVIDENCE_CREATION_STATUS"
+    status: "PASS"
+    evidence: >-
+      ACTIVE-only evidence-stream creation is represented as a rule;
+      creation_status is not inserted into either evidence schema.
+
+  - id: "OMITTED_REDUCER_BRANCH_SCAN"
+    status: "FAIL_EXACT_IDENTIFIER"
+    evidence: >-
+      Binding and synthetic-manifest state branches are present, but the latter's
+      enabling-success branch cannot be exact under the R17 role vocabulary.
+      The common-prelude reducer count also requires the minor clarification.
+
+finding_counts:
+  blocker: 0
+  major: 1
+  minor: 1
+  total: 2
+
+non_authorization:
+  F2_acceptance_granted: false
+  full_atomic_bundle_review_performed: false
+  full_atomic_bundle_review_authorized_to_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  database_write_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  commit_authorized_by_this_review: false
+  push_authorized_by_this_review: false
+  statement: >-
+    This artifact is materialization-consistency evidence only. It does not
+    accept F2, perform or start a full atomic-bundle review, authorize
+    implementation or runtime, start F3, or authorize commit or push.
+
+next_gate:
+  full_atomic_bundle_review_eligible: false
+  required_next_gate: "CORRECTED_SOURCE_EXACT_MATERIALIZATION_AND_FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW"
+  reason: "One major source-precedence defect remains in the sole indexed synthetic-manifest reducer."

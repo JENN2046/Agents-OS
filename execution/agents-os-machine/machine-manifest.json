@@ -5,7 +5,7 @@
   "version": "0.1",
   "status": "preview_only",
   "workspace_root": "/home/jenn/AGENTS_OS_Workspace",
-  "queue_source": "control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md",
+  "queue_source": "control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.2.md",
   "default_mode": "preview_only",
   "allowed_modes": [
     "inspect_queue",

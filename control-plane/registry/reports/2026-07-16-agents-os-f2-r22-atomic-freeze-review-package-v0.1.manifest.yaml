@@ -1,0 +1,181 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f2-r22-atomic-freeze-review-package-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_jenn_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R22_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 22
+  precedence:
+    - R22_explicit_replacements
+    - R21_explicit_replacements
+    - R20_explicit_replacements
+    - R19_explicit_replacements
+    - R18_explicit_replacements
+    - R17_explicit_replacements
+    - R16_explicit_replacements
+    - R15_explicit_replacements
+    - R14_explicit_replacements
+    - R13_explicit_replacements
+    - R12_explicit_replacements
+    - R11_explicit_replacements
+    - R10_explicit_replacements
+    - R9_explicit_replacements
+    - R8_explicit_replacements
+    - R7_explicit_replacements
+    - R6_explicit_replacements
+    - R5_explicit_replacements
+    - R4_explicit_replacements
+    - R3_explicit_replacements
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+acceptance_subjects:
+  - revision: R1
+    path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  - revision: R2
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+  - revision: R3
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+    sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+  - revision: R4
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+    sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+  - revision: R5
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+    sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+  - revision: R6
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+    sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+  - revision: R7
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+    sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+  - revision: R8
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+    sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+  - revision: R9
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+    sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+  - revision: R10
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+    sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+  - revision: R11
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+    sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+  - revision: R12
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+    sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+  - revision: R13
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+    sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+  - revision: R14
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+    sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+  - revision: R15
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+    sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+  - revision: R16
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+    sha256: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+  - revision: R17
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+    sha256: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+  - revision: R18
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+    sha256: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+  - revision: R19
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md
+    sha256: d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3
+  - revision: R20
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r20-final-freeze-closure-amendment.draft.md
+    sha256: cad4f293dee172d793db19c9cec0e6148116d44e6b659b3f2ed528a409f5772b
+  - revision: R21
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r21-verified-core-constructibility-amendment.draft.md
+    sha256: 81faf12bb2af9921cc14f85920ea1db10bb5c58fb2ba906ae9f838a6071bcffc
+  - revision: R22
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r22-synthetic-derived-subject-assurance-closure-amendment.draft.md
+    sha256: 78dd353fe35659669ed10b403d9b266937d91a5f455e13321ef5a9036330f365
+
+current_supporting_evidence:
+  - role: non_authoritative_complete_materialization
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    acceptance_subject: false
+  - role: targeted_consistency_independent_review
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r22-v18-targeted-consistency-independent-review.yaml
+    sha256: d5ca1570845f2645adf41c291bac1eb050bf1d16a0c8994570f825b1c8ce4523
+    result: PASS_NO_BLOCKER
+    acceptance_subject: false
+  - role: fresh_full_atomic_freeze_independent_review
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r22-v18-full-atomic-freeze-independent-review.yaml
+    sha256: f7cf9f562072f09fc096d5bc328c7e96265dfb74c1d382e0a32f6c67373fb315
+    result: PASS_NO_BLOCKER
+    acceptance_subject: false
+
+required_review_lineage:
+  - {path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r14-atomic-bundle-independent-review.yaml, sha256: c24216b0eeb52f78d5dfa4f30d571a495e0005b5722a36e255b8666fc1665b80, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r14-materialization-v2-independent-review.yaml, sha256: 589d2dbf8adb4e38dde4e7d7fe4b879f38916e447c86405e528faaeb06e40a1a, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r15-assessment-assignment-assurance-closure-self-review.yaml, sha256: 25639551d09408ce8111777e23a062fab303e96c8d35be3de88bcde31a4f29a0, result: PASS_NO_AUTHOR_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r15-full-atomic-bundle-independent-review.yaml, sha256: da06fa00d0a7c6c22ca6e9a2f683cf74d7b86b5074a0e94d4c7fb4cf121dc4db, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r16-stewardship-assurance-materialization-closure-self-review.yaml, sha256: 65b6a290e3908be7d848efbb17e3f38036321c3406021b6597e9ecfd72097380, result: PASS_NO_AUTHOR_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r16-full-atomic-bundle-independent-review.yaml, sha256: 6d188f61bb8574516a204d2ec907a565ea9bd2c28fd90ae2468c4c86948cdc16, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-role-vocabulary-materialization-closure-self-review.yaml, sha256: 20cd586db1521c1713b742ece4b6af3010648f0d18125404a4a0abb48e993e9d, result: PASS_NO_AUTHOR_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-full-atomic-bundle-independent-review.yaml, sha256: c219f68092d7fddfe7cde42a6b75d3c4fbbf61bc79988ac8cddece1e8f3ef13d, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-materialization-v6-independent-consistency-review.yaml, sha256: 62928966fcde53d39535da51fb5fbf42c2d11c2706db984ae495c34af35806b6, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-materialization-v7-independent-consistency-review.yaml, sha256: f70f27db2592f60e4e7d5979efa6e20e844bc59fb1441499db8cdf4fbfdb3206, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-v7-full-atomic-bundle-independent-review.yaml, sha256: 4e9088edf94fd3b20eefbc9eb11dbcaaff0e2bc0d07d5d30f0e2f7aac67481ab, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-v8-full-atomic-bundle-independent-review.yaml, sha256: 4a9c2197a77d6db0e63e3f0808efbb57f48ce4cf915d1df30a12a45b932c0527, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-worker-binding-activation-assurance-closure-self-review.yaml, sha256: 1470095e6b2f804c2ee361d437fd171c9078a0fc296e23f5100cf161289690d0, result: PASS_NO_AUTHOR_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v9-materialization-independent-consistency-review.yaml, sha256: 1c3228ef0204e35735daf574b48dbc5531c655c265728a956d49a3737d97e1d0, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v10-materialization-independent-consistency-review.yaml, sha256: ba0b5dd9170dc1483abed03a56a37d0efe1b2418731d91a55c2354620ffb0ead, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v11-materialization-independent-consistency-review.yaml, sha256: d06d4ce00a4051ddc5d0e5f33aba4627a0ce9fc62895b6d1922440df2195bcea, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v12-materialization-independent-consistency-review.yaml, sha256: 7be0b6ba016d3245e8d0834ccad674b44c32e9011bca635c9863068d31f3f5ec, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v13-materialization-independent-consistency-review.yaml, sha256: af0dbd27fb4db877f3093f0e877ce0cdce05ae830466845c8e66836095e523e7, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v13-full-atomic-bundle-independent-review.yaml, sha256: 0c9bb9b593df1253a48a96ea12df0c1a2f7310c22ed2443206aecd97d6a860ae, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r19-v14-targeted-consistency-independent-review.yaml, sha256: f561adb85427615a852b1eb4c0561c688fc55f308c71e2bd483d73d988c2e86d, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r19-v14-source-exact-correction-targeted-independent-review.yaml, sha256: d9be969457cf70a7f761b910eae8db32d338e029d49fbbd11cac7762b0366d32, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r19-v14-full-atomic-bundle-independent-review.yaml, sha256: 20a6906b05592c04f62a5b41627d62f595a20e90ef69371a39cad63a68e051d2, result: BLOCK}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r20-v15-targeted-consistency-independent-review.yaml, sha256: cb2be99f12e7797fb8a3b631d2185ccd2518cf456b11b772ec25908d3ee69d94, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r20-v15-full-atomic-independent-review.yaml, sha256: 42ca34490e8bdbf7eb181027bbb2775c0219e85a8a6c4846b657101aa58fe342, result: BLOCKING_F2}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r21-v16-targeted-consistency-independent-review.yaml, sha256: 0d32f377017acfb4bcc4e55d022757c41b46d5d5c44b0a9566aee1c782bc74f4, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r21-v17-targeted-consistency-independent-review.yaml, sha256: fc22055fa1bffe3232f2f9d7cd52f83bff9f695e5ebb6f0ee3ba71e7866542f6, result: PASS_NO_BLOCKER}
+  - {path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f2-r21-v17-full-atomic-independent-review.yaml, sha256: f77007120361a737a4713234efe3eaecbcebe69c2f5d5464888d771289d727b2, result: BLOCKING_F2}
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  eligible: true
+  authority: Jenn
+  allowed_decisions: [ACCEPT_AND_FREEZE, REVISE, REJECT]
+  automatic_transition: forbidden
+  next_surface: Jenn_atomic_acceptance_and_freeze_decision
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  commit_created: false
+  push_performed: false

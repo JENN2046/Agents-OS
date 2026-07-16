@@ -1,0 +1,312 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r7-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T22:32:18+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r7
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R7_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    - role: fixed_R1_base
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - role: fixed_R2_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - role: fixed_R3_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - role: fixed_R4_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - role: fixed_R5_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    - role: fixed_R6_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    - role: fixed_R7_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r7.draft.md
+  sha256: 544a5891b04e270725b7fa7f18ecea7ea7252d49ccfe866442dffbe2b7fc6561
+  acceptance_subject: false
+  authority: none_derived_only
+
+review_lineage_inputs:
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-start-decision-v0.1.yaml
+    sha256: 1e65369572fd9c123bf926a1a3aa6dbe8e2a2cb7d3c851817955f4875a352d81
+  - path: control-plane/registry/reviews/2026-07-14-agents-os-f2-r6-subsequent-lifecycle-review-disposition-v0.1.yaml
+    sha256: 03994c6426e8b13b9c4078fc4745c549b21eb3a712b962dca3dae2823cf9acd1
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r6-atomic-bundle-independent-review.yaml
+    sha256: 9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-self-review.yaml
+    sha256: c479c5d9f65259d164ab4a4ae3131590644698b530ff1526c0ffec831c940763
+    role: author_evidence_only_not_trusted_as_review_conclusion
+
+normative_context_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 6
+  major: 1
+  minor: 0
+
+findings:
+  - finding_id: F2-R7-IR-B01
+    severity: BLOCKER
+    title: Lifecycle and governed transition actions are not bound to the exact requested mutation
+    affected_sections:
+      - R7 Section 3.1
+      - R7 Sections 4.2-4.3
+      - R7 Sections 5.2 and 6.1-6.2
+      - R7 Sections 8.1-8.2
+      - R7 Section 9.2
+    finding: >-
+      LifecycleActionRef proves an action identity and, for an Actor route, the
+      acting Actor, but R7 never requires the committed Command payload or a
+      separate acyclic intent fingerprint to bind the exact target, transition,
+      expected head, authority basis, effective Event, and other mutation
+      fields. GovernedStateTransitionFact explicitly says only that the action
+      must prove the exact Actor. The same otherwise-valid committed action can
+      therefore be reused as provenance for a different transition fact or
+      lifecycle revision without violating the written predicate.
+    impact: >-
+      Authentication attribution is not consent to the exact mutation. Actor,
+      Profile, Principal, Binding, Assignment, Delegation, activation-evidence,
+      and compromise-impact state changes are not deterministically authorized
+      by the action bytes they cite.
+    required_amendment: >-
+      Define one acyclic transition-intent fingerprint containing every
+      mutation field that must be chosen before action commit, require the F3
+      Command envelope to name it, bind the resulting subject/fact to the
+      complete AuthenticatedActorActionRef, and define replay uniqueness. Give
+      governance/provisioning decision routes an equivalent exact-content
+      binding rule.
+
+  - finding_id: F2-R7-IR-B02
+    severity: BLOCKER
+    title: Target-specific transition authority still contains non-canonical roles and predicates
+    affected_sections:
+      - R7 Section 8.2
+    finding: >-
+      The matrix relies on undefined or non-reducible terms including
+      evidence_steward, target_Binding_lifecycle_authority, and Nobao_for_a_subordinate_chain_in_accepted_scope.
+      It does not type the authority_basis_ref by target_kind and transition or
+      state the exact current responsibility/identity/controller assessment
+      that proves each phrase. accepted_incident_action is likewise described
+      narratively rather than as one closed basis union.
+    impact: >-
+      Two conforming writers can disagree over who may suspend, resume, revoke,
+      or renounce the same target. This leaves the R6 revocation blocker open
+      despite the new fact envelope.
+    required_amendment: >-
+      Replace every narrative authority phrase with a typed target-specific
+      AuthorityBasis union, exact required refs/fingerprints/current
+      assessments, required or forbidden requested_by_actor_ref rules, and one
+      total predicate per target_kind plus transition.
+
+  - finding_id: F2-R7-IR-B03
+    severity: BLOCKER
+    title: Delegation effective reducer does not define descendant cascade outcomes
+    affected_sections:
+      - R7 Section 8.3
+      - R7 Section 12.2
+    finding: >-
+      Section 8.3 promises that closing a parent makes descendants safely
+      non-active, but the Section 12.2 total-order list maps only a target
+      REVOKE or RENOUNCE. It does not map an exact parent or ancestor that is
+      REVOKED, RENOUNCED, EXPIRED, or otherwise closed, nor an inactive root
+      Assignment/source responsibility. Those inputs are neither missing nor
+      necessarily superseded, so no listed branch determines the child's
+      output.
+    impact: >-
+      delegation_effective_current_projection is not a total deterministic
+      reducer and implementations can return REVOKED, EXPIRED, SUPERSEDED, or
+      INDETERMINATE for the same immutable facts.
+    required_amendment: >-
+      Add an exhaustive source/ancestor-state matrix and precedence, including
+      the exact prospective Event boundary for parent REVOKE, RENOUNCE,
+      SUSPEND, RESUME, expiry, supersession, challenge, and invalidation.
+
+  - finding_id: F2-R7-IR-B04
+    severity: BLOCKER
+    title: Historical action current assurance lacks a complete multi-impact reducer
+    affected_sections:
+      - R7 Sections 9.1-9.2
+    finding: >-
+      HistoricalActionValidityAssessment carries a caller-visible list of
+      compromise impact refs, but R7 does not define how the reducer proves
+      that the list contains every current impact head targeting the action at
+      based_on_event_sequence. It also lacks an aggregation rule when separate
+      incidents/impact streams simultaneously CONFIRM, CHALLENGE, INVALIDATE,
+      or clear their own challenge for the same action.
+    impact: >-
+      Omitting a current impact stream can incorrectly produce CONFIRMED, while
+      different traversal orders can produce different assurance. Assignment
+      and Delegation currentness both consume this value, so historical/current
+      separation is not yet operationally closed.
+    required_amendment: >-
+      Define a complete ledger-derived impact-input set with a coverage
+      watermark/fingerprint and a total aggregation precedence. CLEAR_CHALLENGE
+      must affect only its exact stream; any current INVALIDATED input should
+      have an explicit terminal aggregate effect and all omitted/conflicting
+      coverage must fail closed.
+
+  - finding_id: F2-R7-IR-B05
+    severity: BLOCKER
+    title: Synthetic M0 lifecycle controller provisioning is not a closed canonical graph
+    affected_sections:
+      - R7 Sections 5.1-5.3
+      - R7 Section 6.5
+    finding: >-
+      SYNTHETIC_FIXTURE_CONTROLLER must exist inside one accepted manifest and
+      Profile assessment must verify its exact current fingerprint. However the
+      manifest has no synthetic-controller creation-spec collection and R7
+      defines no canonical controller subject or deterministic controller
+      fingerprint. creation_authority_ref is also untyped. The prose does not
+      state exactly how a Profile/Principal's manifest-derived lifecycle refs
+      are inserted into the non-referential creation spec; Principal has both a
+      provisioning_source_ref and transition_action_ref.
+    impact: >-
+      A synthetic Profile cannot deterministically prove controller currentness
+      or be reproduced from the manifest without implementation invention. The
+      requested authoritative M0 fixture provisioning path remains incomplete.
+    required_amendment: >-
+      Add a canonical synthetic-controller spec/object and manifest ordering,
+      type creation_authority_ref, and define the exact acyclic derivation of
+      every Profile, Principal, and Binding lifecycle/issuance ref from manifest
+      plus acceptance decision; alternatively eliminate the separate synthetic
+      controller identity and use one fully specified manifest-owned verifier.
+
+  - finding_id: F2-R7-IR-B06
+    severity: BLOCKER
+    title: The complete ActorIdentityRevision fingerprint still references a nonexistent owning domain tag
+    affected_sections:
+      - R7 Sections 2.1 and 4.2
+      - R1 Section 18
+      - R4 Section 2
+    finding: >-
+      R7 says the complete effective Actor revision keeps the owning R1-R4
+      Actor identity domain tag, but R1 provides only a generic
+      FingerprintEnvelope and narrative inclusion rule, and R4 does not define
+      an ActorIdentityRevision domain tag or complete formula. R7 adds lifecycle
+      fields before Event sequence without naming an exact tag and complete
+      effective schema projection. The text also does not explicitly enumerate
+      which overlapping R2 stewardship fields remain or are removed.
+    impact: >-
+      Rust and JavaScript writers cannot independently reproduce the same Actor
+      revision bytes/fingerprint, so Actor lifecycle head CAS and every
+      dependent Principal/Binding assessment lack a fixed identity input.
+    required_amendment: >-
+      Define the exact ActorIdentityRevision v0.1-r7 domain tag and complete
+      schema-known object, explicitly resolve all R2/R7 overlapping lifecycle
+      fields, and add cross-writer fixtures for every transition.
+
+  - finding_id: F2-R7-IR-M01
+    severity: MAJOR
+    title: The derived materialization overstates closure and does not fully expose effective schema precedence
+    affected_sections:
+      - Materialization Sections 2, 4, 6, 10, 11, and 15
+    finding: >-
+      The materialization is hash-bound and correctly non-authoritative, but it
+      summarizes rather than expands several effective schemas. It says the
+      Actor contains R2/R7 lifecycle provenance without resolving their
+      overlapping fields, states that the synthetic manifest avoids a cycle
+      despite the undefined controller path, and presents transition and
+      historical assurance as closed despite the missing predicates above.
+    impact: >-
+      It is useful as a topic map but not yet the implementation-safe resolved
+      reading surface required by R7 Section 13.3 and the prior M03 finding.
+    required_amendment: >-
+      Regenerate the materialization after blocker closure with the exact
+      effective schemas, reducer tables, source section/hash annotations, and
+      explicit removal of superseded fields and claims.
+
+prior_finding_disposition:
+  F2-R6-SR-B01: PARTIAL_REMAINS_BLOCKED_BY_F2-R7-IR-B05
+  F2-R6-SR-B02: PARTIAL_REMAINS_BLOCKED_BY_F2-R7-IR-B03
+  F2-R6-SR-B03: PARTIAL_REMAINS_BLOCKED_BY_F2-R7-IR-B04
+  F2-R6-SR-B04: PARTIAL_REMAINS_BLOCKED_BY_F2-R7-IR-B01_AND_F2-R7-IR-B02
+  F2-R6-SR-B05: RESOLVED_SUBJECT_TO_ACTOR_FINGERPRINT_CLOSURE
+  F2-R6-SR-B06: RESOLVED
+  F2-R6-SR-M01: RESOLVED_EXACT_SET_ONLY
+  F2-R6-SR-M02: RESOLVED_SINGLE_DELEGATION_LINEAGE
+  F2-R6-SR-M03: PARTIAL_REMAINS_MAJOR
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  actor_lifecycle_matrix_semantics: PASS_WITH_FINGERPRINT_BLOCKER
+  principal_lifecycle_and_head_CAS: PASS_WITH_M0_PROVISIONING_BLOCKER
+  authenticator_profile_lifecycle_and_head_CAS: PASS_WITH_M0_PROVISIONING_BLOCKER
+  activation_vs_effective_binding_currentness: PASS
+  delegation_activation_vs_effective_currentness: BLOCK_INCOMPLETE_CASCADE_REDUCER
+  historical_action_vs_current_session_separation: PASS_DIRECTION_BLOCK_AGGREGATION
+  transition_fact_schema: PASS_DIRECTION_BLOCK_ACTION_AND_AUTHORITY_BINDING
+  transition_terminality_and_prospective_effect: PASS
+  ResponsibilityScope_EXACT_SET_only: PASS
+  single_responsibility_lineage_and_cycle_rule: PASS
+  F2_numeric_scalar_domains: PASS
+  new_R7_array_orders: PASS
+  new_R7_record_canonicalization: BLOCK_ACTOR_IDENTITY_FORMULA
+  synthetic_M0_graph_acyclicity: BLOCK_INCOMPLETE_GRAPH
+  single_prohibited_boundary_preserved: PASS
+  permission_ladder_added: false
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+required_next_action:
+  action: CREATE_F2_R8_DETERMINISTIC_ACTION_ASSURANCE_AND_M0_CLOSURE_AMENDMENT
+  rewrite_R1_through_R7: forbidden
+  expand_F2_direction: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

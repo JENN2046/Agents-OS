@@ -1,0 +1,95 @@
+schema_version: agents-os.materialization-self-review.v0.1
+review_id: agents-os-f2-r18-materialization-v9-source-exact-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-15
+status: complete
+reviewer_identity: Codex_author_run_f2_r18_materialization_v9
+independent_review: false
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R18_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+    R18: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+
+derived_materialization:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v9.draft.md
+  sha256: 9e11ade05f09d56ab00e684359d61eae073fcc692b0673510c7ae6c196fe74c4
+  acceptance_subject: false
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts: {blocker: 0, major: 0, minor: 0}
+
+source_exactness:
+  R18_identity_responsibility_overlay_applied: true
+  assignment_binding_ref_absent: true
+  Actor_assignment_assessment_ref_absent: true
+  CREATE_intended_assignment_binding_ref_absent: true
+  intended_initial_resource_ref_present: true
+  TemporaryWorker_binding_ref_schema_present_once: true
+  TemporaryWorker_binding_assessment_schema_present_once: true
+  TemporaryWorker_binding_reducer_present_once: true
+  second_responsibility_ledger_created: false
+  activation_assurance_projection_exact: true
+  synthetic_binding_has_no_invented_activation_action: true
+  activation_evidence_creation_ACTIVE_only_rule_present: true
+  compromised_subject_action_set_ref_absent: true
+  compromised_subject_action_set_fingerprint_absent: true
+  complete_target_action_refs_retained: true
+  complete_target_set_fingerprint_retained: true
+  F3_Command_schemas_printed_as_complete: false
+  F3_ownership_placeholders_present: true
+
+inventory:
+  effective_top_level_schema_rows: 61
+  parsed_unique_top_level_schemas: 61
+  schema_index_exact_set_match: true
+  duplicate_schema_rows: 0
+  explicit_named_reducer_rows: 13
+  reducer_index_unique_rows: 13
+  duplicate_reducer_rows: 0
+
+validation:
+  R1_through_R17_hashes_unchanged: PASS
+  R18_hash_matches_source_map: PASS
+  materialization_v9_hash_fixed: PASS
+  all_yaml_fences_parse: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  git_diff_check: PASS
+  schema_index_exact_set: PASS
+  reducer_index_unique_set: PASS
+
+limitations:
+  independent_materialization_consistency_review: PENDING
+  fresh_full_R1_R18_atomic_bundle_review: NOT_STARTED
+  Jenn_acceptance: NOT_PERFORMED
+
+non_authorization:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_V9

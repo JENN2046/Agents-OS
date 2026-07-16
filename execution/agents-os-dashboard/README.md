@@ -38,7 +38,7 @@ route_selection.status=awaiting_jenn_selection|not_active
 route_selection.route_auto_selection_authorized=false
 route_selection.queue_promotion_authorized=false
 route_selection.execution_authorized=false
-next_user_action.status=route_choice_required|none
+next_user_action.status=route_choice_required|governance_decision_required|none
 next_user_action.decision_owner=Jenn|null
 next_user_action.active_queue_mutation_authorized=false
 next_user_action.queue_promotion_authorized=false
@@ -59,6 +59,10 @@ route_choice_adoption_bundle.raw_template_output=false
 
 Memory candidates are candidate-only records. They may be reviewed later, but
 the dashboard cannot write formal Memory or read private raw Memory.
+
+For a non-route queue stop that declares `requires_jenn_decision=true`, the
+dashboard emits `next_user_action.status=governance_decision_required`, keeps
+`decision_owner=Jenn`, and does not claim route ids or route-choice templates.
 
 ## Boundaries
 

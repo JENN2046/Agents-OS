@@ -1,0 +1,230 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r17-v7-full-atomic-bundle-independent-review
+review_type: FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T03:21:43+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r17_v7_full_atomic_bundle
+reviewer_run_independence: fresh_run_separate_from_subject_authors_and_prior_reviewers
+author_self_reviews_role: evidence_only_not_conclusion
+prior_pass_relied_upon: false
+read_only_review_until_conclusion: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects_modified_by_this_review: false
+  subject_count: 17
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+
+reviewed_materialization:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v7.draft.md
+  sha256: 6a23c7e1b8ec8da530836a36bb673ac4f5ea13ebdfd835fc6144d422cceee28d
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+
+fixed_review_inputs:
+  full_review_lineage_package:
+    path: ops/packages/agents-os-f2-r1-r17-full-review-lineage-package-2026-07-15.zip
+    sha256: b01d193ce38abba677c9a9cd09fe0b5706ff2ca067800d8141d9845146fa1d0c
+  materialization_v7_consistency_package:
+    path: ops/packages/agents-os-f2-r1-r17-materialization-v7-consistency-review-package-2026-07-15.zip
+    sha256: 4b9792c4102ed60e54eb985991ef8dc7a4aa5caef3ea1bd6337b23a3620af590
+  prior_R17_full_review:
+    sha256: c219f68092d7fddfe7cde42a6b75d3c4fbbf61bc79988ac8cddece1e8f3ef13d
+    result: BLOCK
+  materialization_v6_consistency_review:
+    sha256: 62928966fcde53d39535da51fb5fbf42c2d11c2706db984ae495c34af35806b6
+    result: BLOCK
+  materialization_v7_consistency_review:
+    sha256: f70f27db2592f60e4e7d5979efa6e20e844bc59fb1441499db8cdf4fbfdb3206
+    result: PASS_NO_BLOCKER
+
+result: BLOCK
+ready_for_Jenn_atomic_acceptance_decision: false
+acceptance_recommendation: DO_NOT_ACCEPT_R1_THROUGH_R17_ATOMIC_UNIT_YET
+finding_counts:
+  blocker: 0
+  major: 1
+  minor: 0
+
+findings:
+  - finding_id: F2-R17-V7-FULL-IR-M01
+    severity: MAJOR
+    title: Materialization v7 omits required currentness reducers and indexes a non-definition
+    affected_sections:
+      - R7 Sections 5.3, 6.4, 7.2-7.4, and R8 Section 6.3
+      - R16 Section 4
+      - Materialization v7 Sections 3, 18, 20.1, and 21
+    finding: >-
+      R16 requires the complete resolved implementation reading surface to
+      include all reducer precedence and currentness/watermark rules. V7 prints
+      the R16 Profile, Principal, Binding-activation, and
+      Delegation-activation assessment schemas, but it does not print their
+      source-defined currentness reducers. In particular it omits the R7
+      Profile checks for current-head CAS, transition authority,
+      verifier/clock availability, controller currentness, and fingerprint;
+      the R7 Principal checks for the exact current ACTIVE head, ACTIVE Profile,
+      every ACTIVE credential handle, transition provenance, and fingerprints;
+      and the activation-assessment reductions over exact evidence heads and
+      transition facts. Section 20.1 names
+      SyntheticM0ManifestAssessmentReducer but supplies no total ACCEPT,
+      REVOKE, missing-head, fork, CAS-gap, decision-mismatch, and fingerprint
+      reduction from R8 Section 6.3. Section 21 nevertheless indexes that
+      heading as a reducer and claims reducer completeness.
+    impact: >-
+      The fixed R1-R17 subjects remain semantically reviewable, but v7 is not
+      the complete resolved implementation reading surface required by R16.
+      Independent implementations using v7 must refer back to superseded
+      layers or invent reduction behavior for identity-control and synthetic
+      bootstrap currentness. The 62-of-62 schema row equality and 8-of-8 named
+      reducer row equality prove inventory equality only; they do not prove
+      behavioral completeness. Jenn therefore does not yet have the required
+      exact materialization for an atomic acceptance decision.
+    required_amendment: >-
+      Regenerate only the derived materialization. Print the exact effective
+      Profile, Principal, Binding-activation, Delegation-activation, and
+      Synthetic M0 manifest assessment reducers, including precedence,
+      current-head/CAS, dependency, fingerprint, assurance, and watermark
+      failure behavior. Index each actual reducer definition exactly once and
+      rerun a fresh full atomic-bundle review. Do not change R1-R17.
+
+independent_atomic_assessment:
+  identity_principal_profile_binding_lifecycles_and_currentness: PASS_SUBJECTS
+  assignment_and_delegation_lifecycles_and_currentness: PASS_SUBJECTS
+  single_prohibited_boundary: PASS
+  issuance_action_subject_cycles: PASS
+  canonical_scalar_and_fingerprint_domains: PASS
+  identity_stewardship_and_recovery: PASS
+  compromise_impact_total_mapping: PASS
+  synthetic_M0_graph: PASS_SUBJECTS
+  R17_closed_ActionAssuranceRole_enum_43_of_43: PASS
+  R17_total_exclusive_action_mapping_43_of_43: PASS
+  R17_complete_set_and_repeated_role_rules: PASS
+  materialization_v7_five_source_exact_corrections: PASS
+  materialization_v7_schema_inventory_62_of_62: PASS
+  materialization_v7_named_reducer_index_8_of_8: PASS_INVENTORY_ONLY
+  materialization_v7_behavioral_completeness: FAIL_MAJOR
+  creates_no_new_subject_semantics: PASS
+
+prior_findings_disposition:
+  initial_R1:
+    finding_ids: [F2-IR-B01, F2-IR-B02, F2-IR-B03, F2-IR-M01]
+    result: RESOLVED_BY_R2_THROUGH_R8_AND_R15_R16
+  R2:
+    finding_ids: [F2-R2-IR-B01, F2-R2-IR-B02, F2-R2-IR-B03]
+    result: RESOLVED_BY_R3_THROUGH_R6
+  R3:
+    finding_ids: [F2-R3-IR-B01, F2-R3-IR-B02]
+    result: RESOLVED_BY_R4_THROUGH_R6
+  R4_R5:
+    finding_ids: [F2-R4-IR-B01, F2-R4-IR-B02, F2-R5-IR-B01]
+    result: RESOLVED_BY_R5_R6
+  subsequent_R6_lifecycle:
+    finding_ids:
+      - F2-R6-SR-B01
+      - F2-R6-SR-B02
+      - F2-R6-SR-B03
+      - F2-R6-SR-B04
+      - F2-R6-SR-B05
+      - F2-R6-SR-B06
+      - F2-R6-SR-M01
+      - F2-R6-SR-M02
+      - F2-R6-SR-M03
+    result: RESOLVED_BY_R7_R8_AND_LATER_MATERIALIZATION
+  R7:
+    finding_ids:
+      - F2-R7-IR-B01
+      - F2-R7-IR-B02
+      - F2-R7-IR-B03
+      - F2-R7-IR-B04
+      - F2-R7-IR-B05
+      - F2-R7-IR-B06
+      - F2-R7-IR-M01
+    result: RESOLVED_BY_R8
+  R8:
+    finding_ids:
+      - F2-R8-IR-B01
+      - F2-R8-IR-B02
+      - F2-R8-IR-B03
+      - F2-R8-IR-M01
+      - F2-R8-IR-M02
+      - F2-R8-IR-M03
+    result: RESOLVED_BY_R9_AND_LATER_MATERIALIZATION
+  R9_R14:
+    finding_ids:
+      - F2-R9-IR-B01
+      - F2-R9-IR-M01
+      - F2-R9-IR-M02
+      - F2-R10-IR-B01
+      - F2-R10-IR-M01
+      - F2-R11-IR-B01
+      - F2-R11-IR-M01
+      - F2-R12-IR-B01
+      - F2-R12-IR-M01
+      - F2-R13-IR-B01
+      - F2-R14-IR-M01
+    result: RESOLVED_BY_R10_THROUGH_R14_AND_V7
+  R15:
+    finding_ids: [F2-R15-FULL-IR-B01, F2-R15-FULL-IR-M01, F2-R15-FULL-IR-M02]
+    result: RESOLVED_BY_R16_EXCEPT_NEW_V7_COMPLETENESS_FINDING_IS_SEPARATE
+  R16:
+    finding_ids: [F2-R16-FULL-IR-M01, F2-R16-FULL-IR-M02]
+    result: RESOLVED_BY_R17_AND_V7_AS_STATED
+  prior_R17_full_review:
+    F2-R17-FULL-IR-M01: RESOLVED_BY_V6_AND_RETAINED_IN_V7
+    F2-R17-FULL-IR-M02: RESOLVED_AS_TO_SOURCE_FIELDS_AND_INDEX_SET_BUT_NEW_BEHAVIORAL_COMPLETENESS_FINDING_REMAINS
+  materialization_v6_review:
+    F2-R17-V6-ICR-M01: RESOLVED_BY_V7
+    F2-R17-V6-ICR-M02: RESOLVED_BY_V7
+  materialization_v7_consistency_review:
+    result: NO_FINDINGS_TO_DISPOSE
+    note: targeted five-schema PASS does not establish full reducer completeness
+
+validation:
+  full_review_lineage_package_sha256: PASS
+  materialization_v7_package_sha256: PASS
+  recursive_nested_package_checksums_and_path_safety: PASS
+  package_R1_R17_source_byte_identity_17_of_17: PASS
+  R1_R17_source_hashes_17_of_17: PASS
+  materialization_v7_sha256: PASS
+  specified_prior_review_hashes: PASS
+  v7_utf8_without_bom_LF_only_no_trailing_whitespace: PASS
+  v7_markdown_fences_78_balanced: PASS
+  v7_yaml_blocks_26_strict_duplicate_key_parse: PASS
+  v7_top_level_surfaces_62_unique: PASS
+  v7_surface_index_62_unique_and_equal: PASS
+  v7_non_NOT_STANDALONE_domains_present_in_fixed_subjects_49_of_49: PASS
+  v7_ActionAssuranceRole_enum_exact_order_and_uniqueness_43_of_43: PASS
+  v7_action_to_role_mapping_exact_and_exclusive_43_of_43: PASS
+  v7_named_reducer_index_8_unique_and_equal: PASS_INVENTORY_ONLY
+  v7_required_reducer_behavior_projection: FAIL_MAJOR
+
+authority:
+  F2_accepted: false
+  Jenn_atomic_acceptance_decision_ready: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_start_authorized: false
+  commit_performed: false
+  push_performed: false
+
+next_required_action: DERIVED_MATERIALIZATION_V8_REDUCER_COMPLETENESS_CORRECTION_THEN_FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW

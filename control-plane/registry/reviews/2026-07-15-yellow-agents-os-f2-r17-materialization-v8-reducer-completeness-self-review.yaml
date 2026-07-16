@@ -1,0 +1,85 @@
+schema_version: agents-os.hash-bound-author-self-review.v0.1
+review_id: agents-os-f2-r17-materialization-v8-reducer-completeness-self-review
+review_type: HASH_BOUND_AUTHOR_SELF_REVIEW_OF_DERIVED_REDUCER_COMPLETENESS
+date: 2026-07-15
+status: complete
+reviewer_identity: Codex_author_materialization_v8
+independent_review: false
+
+fixed_acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+  subjects_unchanged: true
+  subject_count: 17
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+
+blocking_review_input:
+  path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-v7-full-atomic-bundle-independent-review.yaml
+  sha256: 4e9088edf94fd3b20eefbc9eb11dbcaaff0e2bc0d07d5d30f0e2f7aac67481ab
+  result: BLOCK
+
+historical_derived_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v7.draft.md
+  sha256: 6a23c7e1b8ec8da530836a36bb673ac4f5ea13ebdfd835fc6144d422cceee28d
+  status: retained_immutable_failed_full_review_surface
+
+corrected_derived_surface:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v8.draft.md
+  sha256: f37b5c5dda4968ec407c184e8dd2316688b350902a8b394be149791a63ce7133
+  authority: DERIVED_ONLY
+  acceptance_subject: false
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts: {blocker: 0, major: 0, minor: 0}
+
+prior_findings_disposition:
+  F2-R17-V7-FULL-IR-M01:
+    result: RESOLVED_IN_V8_PENDING_INDEPENDENT_CONFIRMATION
+    basis: >-
+      V8 prints the complete Profile, Principal, Binding-activation,
+      Delegation-activation, and Synthetic manifest assessment reducers. It
+      includes R16 assurance/watermark precedence and the R7/R8 object-specific
+      current-head, CAS, dependency, fingerprint, and terminal behavior.
+
+author_validation:
+  fixed_subject_hashes_match: PASS
+  v7_hash_unchanged: PASS
+  v8_sha256: f37b5c5dda4968ec407c184e8dd2316688b350902a8b394be149791a63ce7133
+  schema_semantics_unchanged_from_v7: PASS
+  unique_top_level_surfaces: 62
+  schema_index_rows: 62
+  named_reducer_definitions: 12
+  reducer_index_rows: 12
+  reducer_definition_index_set_equality: PASS
+  yaml_blocks_parsed: 26
+  markdown_fences_balanced: PASS
+  utf8_lf: PASS
+  trailing_whitespace: PASS
+
+authority:
+  F2_accepted: false
+  Jenn_acceptance_ready: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_start_authorized: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW_OF_FIXED_F2_R1_R17_AND_MATERIALIZATION_V8

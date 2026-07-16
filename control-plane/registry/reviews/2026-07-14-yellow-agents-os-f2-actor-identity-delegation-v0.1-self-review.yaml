@@ -1,0 +1,104 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-actor-identity-delegation-v0.1-self-review
+review_type: AUTHOR_SELF_REVIEW
+status: complete
+date: 2026-07-14
+author_reviewer: Codex_as_Nobao
+independent_review: false
+
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+  sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+  bytes_fixed_for_next_review: true
+
+normative_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: current_workspace_operating_contract
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-actor-identity-delegation-start-decision-v0.1.yaml
+    sha256: f5815191077701b7fa7d66a784716f0b952caeffec7eecd2c2ac87808c8aedf7
+    role: F2_documentation_only_start_boundary
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+    role: accepted_single_prohibited_boundary_direction
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    role: accepted_F1_predecessor
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    role: accepted_foundational_direction
+
+review_result: PASS_NO_AUTHOR_BLOCKER
+independent_review_readiness: READY
+
+review_dimensions:
+  single_prohibited_boundary: PASS
+  identity_is_not_permission: PASS
+  responsibility_is_not_permission: PASS
+  delegation_does_not_elevate_permission: PASS
+  domain_invariants_remain_domain_owned: PASS
+  actor_and_principal_separation: PASS
+  F1_and_home_direction_compatibility: PASS
+  deterministic_identity_and_replay_semantics: PASS
+  low_disclosure_boundary: PASS
+  implementation_and_runtime_boundary: PASS
+
+findings_resolved_in_subject:
+  - finding_id: F2-SR-01
+    severity: BLOCKER
+    finding: HOST_PRINCIPAL conflated stable Actor class with ephemeral Principal class
+    resolution: renamed stable Actor class to EXECUTION_HOST and retained HOST_PROCESS as the Principal class
+  - finding_id: F2-SR-02
+    severity: BLOCKER
+    finding: earlier F2 design duplicated permission through action allowlists, risk ceilings, and ALLOW_DENY assessment
+    resolution: removed those structures and retained one prohibited-first boundary only
+  - finding_id: F2-SR-03
+    severity: MAJOR
+    finding: responsibility assignment and delegation used inconsistent scope shapes
+    resolution: both now bind the same ResponsibilityScope contract
+  - finding_id: F2-SR-04
+    severity: MAJOR
+    finding: accepted role and responsibility mismatch could be misread as hidden permission sources or denials
+    resolution: role charter is only an assignment basis and mismatch is an accountability-routing issue, not a permission denial
+  - finding_id: F2-SR-05
+    severity: MAJOR
+    finding: accepted upstream authority terminology lacked an explicit mapping to the new separation of concerns
+    resolution: F1 decision ownership is classified as a domain invariant and historical bytes require future overlays rather than silent rewrite
+
+documented_implementation_blockers:
+  - blocker_id: F2-IB-01
+    description: one canonical Prohibited Behavior List artifact and its exact entries do not yet exist as a synchronized governance convergence
+    blocks_F2_semantic_acceptance: false
+    blocks_implementation: true
+    required_resolution: separately reviewed synchronized governance convergence
+  - blocker_id: F2-IB-02
+    description: production authenticator profiles, credentials, trust anchors, and host authentication are intentionally undefined
+    blocks_F2_semantic_acceptance: false
+    blocks_implementation: true
+    required_resolution: F3_F4_and_separate_implementation_authority
+  - blocker_id: F2-IB-03
+    description: Resident singleton ownership, N_API connection ownership, TaskPermit, and effect fencing remain downstream contracts
+    blocks_F2_semantic_acceptance: false
+    blocks_implementation: true
+    required_resolution: accepted_F3_and_F4_contracts
+
+validation:
+  markdown_fences:
+    result: PASS
+    count: 114
+  yaml_blocks:
+    result: PASS
+    count: 20
+  utf8_lf: PASS
+  trailing_whitespace: PASS
+  git_diff_check: PASS
+  legacy_permission_construct_scan: PASS_ZERO_MATCH
+
+authority_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_SHA_639E2554

@@ -1,0 +1,57 @@
+schema_version: agents-os.architecture-roadmap-self-review.v0.1
+review_id: agents-os-home-domain-construction-roadmap-r2-self-review
+review_type: SELF_REVIEW
+status: completed
+created_at: 2026-07-13T21:58:17+08:00
+owner: Jenn
+agent_steward: Nobao
+reviewer_identity: Codex_author_run
+
+subject:
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r2.draft.md
+  sha256: 801657c6ae8852e69e60a12e462e284617606fcae0d006c639c311e3d9cd6e51
+
+scope:
+  purpose: verify_bounded_R2_closure_of_the_five_R1_blocking_findings
+  independent_review: false
+  Jenn_acceptance_decision: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+blocking_closure:
+  - finding: deployment_containment_was_reversed
+    result: CLOSED
+    evidence: logical_and_deployment_views_are_separated_and_VCPToolBox_hosts_AGENTSOSResident
+  - finding: Session_content_implicitly_promoted_to_Life_Stream
+    result: CLOSED
+    evidence: M0_B_uses_explicit_nonautomatic_branching_with_ephemeral_and_remain_in_session_paths
+  - finding: independent_review_did_not_bind_normative_inputs
+    result: CLOSED
+    evidence: G1C_binds_subject_and_normative_input_paths_roles_and_SHA_256_digests
+  - finding: G2_lacked_a_separate_Jenn_decision
+    result: CLOSED
+    evidence: independent_review_and_Jenn_decision_are_separate_and_acceptance_requires_a_hash_bound_decision_record
+  - finding: M0_did_not_forbid_real_private_content_or_existing_databases
+    result: CLOSED
+    evidence: M0_data_boundary_requires_synthetic_or_sanitized_fixtures_and_temporary_isolated_test_database_only
+
+self_review_result: PASS_READY_FOR_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+blockers: []
+major_findings: []
+minor_findings: []
+
+next_gate:
+  action: fresh_independent_reviewer_run
+  may_claim_G1C_pass: false
+  may_claim_Jenn_acceptance: false
+  may_start_implementation: false
+
+integrity:
+  algorithm: SHA-256
+  byte_scope: entire_subject_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  reproduction_command: >-
+    sha256sum
+    control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r2.draft.md

@@ -1,0 +1,271 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r17-v8-full-atomic-bundle-independent-review
+review_type: FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+date: 2026-07-15
+reviewed_at: 2026-07-15T09:02:26+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r17_v8_full_atomic_bundle
+reviewer_run_independence: fresh_run_separate_from_subject_and_materialization_authors_and_prior_reviewers
+author_self_review_role: evidence_only_not_conclusion
+prior_pass_relied_upon: false
+read_only_review_until_conclusion: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects_modified_by_this_review: false
+  subject_count: 17
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+    R10: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+    R11: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+    R12: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+    R13: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+    R14: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+    R15: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+    R16: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+    R17: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+
+reviewed_materialization:
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v8.draft.md
+  sha256: f37b5c5dda4968ec407c184e8dd2316688b350902a8b394be149791a63ce7133
+  acceptance_subject: false
+  authority: DERIVED_ONLY
+
+fixed_review_inputs:
+  full_atomic_review_package:
+    path: ops/packages/agents-os-f2-r1-r17-materialization-v8-full-atomic-review-package-2026-07-15.zip
+    sha256: de7cf703e58ae7480b8f96191853665bc01bdfae6d8e6647736ccc47a6ac988d
+    member_count: 28
+  blocking_v7_full_atomic_review:
+    path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-v7-full-atomic-bundle-independent-review.yaml
+    sha256: 4e9088edf94fd3b20eefbc9eb11dbcaaff0e2bc0d07d5d30f0e2f7aac67481ab
+    result: BLOCK
+  historical_materialization_v7:
+    path: control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v7.draft.md
+    sha256: 6a23c7e1b8ec8da530836a36bb673ac4f5ea13ebdfd835fc6144d422cceee28d
+  v8_author_self_review:
+    path: control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-materialization-v8-reducer-completeness-self-review.yaml
+    sha256: a0b964f6e1676a13643950a58b72dc1756e42a29b072c3f0932e0266abf5a877
+    role: evidence_only
+  full_review_lineage_package:
+    path: ops/packages/agents-os-f2-r1-r17-full-review-lineage-package-2026-07-15.zip
+    sha256: b01d193ce38abba677c9a9cd09fe0b5706ff2ca067800d8141d9845146fa1d0c
+  v7_consistency_review_package:
+    path: ops/packages/agents-os-f2-r1-r17-materialization-v7-consistency-review-package-2026-07-15.zip
+    sha256: 4b9792c4102ed60e54eb985991ef8dc7a4aa5caef3ea1bd6337b23a3620af590
+
+input_allowlist_observed:
+  - root AGENTS.md
+  - fixed review package metadata and checksum manifest
+  - fixed R1 through R17 acceptance subjects
+  - fixed materialization v7 and v8
+  - blocking v7 full atomic-bundle review
+  - v8 author self-review as evidence only
+  - packaged review lineage and provenance archives
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  raw_logs: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: PASS_NO_BLOCKER
+ready_for_Jenn_atomic_acceptance_decision: true
+acceptance_recommendation: READY_FOR_JENN_ATOMIC_ACCEPTANCE_DECISION
+finding_counts:
+  blocker: 0
+  major: 0
+  minor: 0
+findings: []
+
+independent_atomic_assessment:
+  R1_through_R17_reassessed_as_one_indivisible_unit: PASS
+  cross_revision_override_precedence: PASS
+  identity_principal_profile_binding_lifecycles_and_currentness: PASS
+  assignment_and_delegation_lifecycles_and_currentness: PASS
+  single_prohibited_boundary: PASS
+  issuance_action_subject_cycles: PASS
+  canonical_scalar_JCS_number_and_fingerprint_domains: PASS
+  identity_stewardship_and_recovery: PASS
+  compromise_impact_total_mapping_and_membership: PASS
+  synthetic_M0_graph_and_atomicity: PASS
+  R16_assurance_watermark_and_safer_state_precedence: PASS
+  R17_closed_ActionAssuranceRole_enum_43_of_43: PASS
+  R17_total_exclusive_action_mapping_43_of_43: PASS
+  R17_complete_set_and_repeated_role_rules: PASS
+  materialization_v8_schema_inventory_62_of_62: PASS
+  materialization_v8_reducer_definitions_and_index_12_of_12: PASS
+  materialization_v8_behavioral_completeness: PASS
+  materialization_v8_creates_no_new_subject_semantics: PASS
+  non_authorization: PASS
+
+v8_reducer_completeness_assessment:
+  AuthenticatorProfileEffectiveReducer:
+    current_head_and_CAS: PASS
+    transition_authority_and_terminal_behavior: PASS
+    verifier_clock_controller_provider_and_provisioning_dependencies: PASS
+    fingerprint_and_assurance_watermark_fail_closed_behavior: PASS
+    exact_ACTIVE_SUSPENDED_RETIRED_SUPERSEDED_INDETERMINATE_projection: PASS
+  PrincipalEffectiveReducer:
+    current_head_and_CAS: PASS
+    transition_provenance_and_terminal_behavior: PASS
+    exact_Profile_and_credential_dependencies: PASS
+    parallel_array_fingerprint_and_assurance_watermark_fail_closed_behavior: PASS
+    exact_ACTIVE_SUSPENDED_REVOKED_RETIRED_SUPERSEDED_INDETERMINATE_projection: PASS
+  BindingActivationEffectiveReducer:
+    exact_evidence_head_CAS_and_replay: PASS
+    immutable_Binding_proof_stewardship_time_and_transition_dependencies: PASS
+    fingerprint_and_assurance_watermark_fail_closed_behavior: PASS
+    safer_state_no_automatic_restore: PASS
+    projection_ownership_only: PASS
+  DelegationActivationEffectiveReducer:
+    exact_evidence_head_CAS_and_replay: PASS
+    immutable_Delegation_acknowledgement_delegate_Binding_time_and_transition_dependencies: PASS
+    fingerprint_and_assurance_watermark_fail_closed_behavior: PASS
+    safer_state_no_automatic_restore: PASS
+    projection_ownership_only: PASS
+  SyntheticM0ManifestAssessmentReducer:
+    ACCEPT_to_ACTIVE: PASS
+    REVOKE_to_REVOKED_terminal: PASS
+    missing_head_fork_noncontiguous_revision_and_CAS_gap_to_INDETERMINATE: PASS
+    Jenn_decision_lifecycle_action_intent_replay_and_fingerprint_equalities: PASS
+    assurance_watermark_and_safer_state_precedence: PASS
+    manifest_owned_controller_no_second_currentness_stream: PASS
+
+prior_findings_disposition:
+  initial_R1:
+    finding_ids: [F2-IR-B01, F2-IR-B02, F2-IR-B03, F2-IR-M01]
+    result: RESOLVED_BY_R2_THROUGH_R8_AND_R15_R16
+  R2:
+    finding_ids: [F2-R2-IR-B01, F2-R2-IR-B02, F2-R2-IR-B03]
+    result: RESOLVED_BY_R3_THROUGH_R6
+  R3:
+    finding_ids: [F2-R3-IR-B01, F2-R3-IR-B02]
+    result: RESOLVED_BY_R4_THROUGH_R6
+  R4_R5:
+    finding_ids: [F2-R4-IR-B01, F2-R4-IR-B02, F2-R5-IR-B01]
+    result: RESOLVED_BY_R5_R6
+  subsequent_R6_lifecycle:
+    finding_ids:
+      - F2-R6-SR-B01
+      - F2-R6-SR-B02
+      - F2-R6-SR-B03
+      - F2-R6-SR-B04
+      - F2-R6-SR-B05
+      - F2-R6-SR-B06
+      - F2-R6-SR-M01
+      - F2-R6-SR-M02
+      - F2-R6-SR-M03
+    result: RESOLVED_BY_R7_R8_AND_LATER_MATERIALIZATION
+  R7:
+    finding_ids:
+      - F2-R7-IR-B01
+      - F2-R7-IR-B02
+      - F2-R7-IR-B03
+      - F2-R7-IR-B04
+      - F2-R7-IR-B05
+      - F2-R7-IR-B06
+      - F2-R7-IR-M01
+    result: RESOLVED_BY_R8
+  R8:
+    finding_ids:
+      - F2-R8-IR-B01
+      - F2-R8-IR-B02
+      - F2-R8-IR-B03
+      - F2-R8-IR-M01
+      - F2-R8-IR-M02
+      - F2-R8-IR-M03
+    result: RESOLVED_BY_R9_AND_LATER_MATERIALIZATION
+  R9_R14:
+    finding_ids:
+      - F2-R9-IR-B01
+      - F2-R9-IR-M01
+      - F2-R9-IR-M02
+      - F2-R10-IR-B01
+      - F2-R10-IR-M01
+      - F2-R11-IR-B01
+      - F2-R11-IR-M01
+      - F2-R12-IR-B01
+      - F2-R12-IR-M01
+      - F2-R13-IR-B01
+      - F2-R14-IR-M01
+    result: RESOLVED_BY_R10_THROUGH_R14_AND_MATERIALIZATION_V8
+  R15:
+    finding_ids: [F2-R15-FULL-IR-B01, F2-R15-FULL-IR-M01, F2-R15-FULL-IR-M02]
+    result: RESOLVED_BY_R16_R17_AND_MATERIALIZATION_V8
+  R16:
+    finding_ids: [F2-R16-FULL-IR-M01, F2-R16-FULL-IR-M02]
+    result: RESOLVED_BY_R17_AND_MATERIALIZATION_V8
+  prior_R17_full_review:
+    F2-R17-FULL-IR-M01: RESOLVED_BY_V6_AND_RETAINED_IN_V8
+    F2-R17-FULL-IR-M02: RESOLVED_BY_V6_V7_AND_RETAINED_IN_V8
+  materialization_v6_review:
+    F2-R17-V6-ICR-M01: RESOLVED_BY_V7_AND_RETAINED_IN_V8
+    F2-R17-V6-ICR-M02: RESOLVED_BY_V7_AND_RETAINED_IN_V8
+  materialization_v7_consistency_review:
+    result: NO_FINDINGS_TO_DISPOSE
+  materialization_v7_full_atomic_review:
+    F2-R17-V7-FULL-IR-M01: RESOLVED_BY_V8
+
+validation:
+  full_atomic_review_package_sha256: PASS
+  package_member_count_28: PASS
+  package_internal_checksums_27_of_27: PASS
+  package_path_safety: PASS
+  recursive_provenance_archive_checksums_and_path_safety: PASS
+  package_R1_R17_source_byte_identity_17_of_17: PASS
+  R1_R17_source_hashes_17_of_17: PASS
+  materialization_v7_source_byte_identity_and_sha256: PASS
+  materialization_v8_source_byte_identity_and_sha256: PASS
+  blocking_v7_review_source_byte_identity_and_sha256: PASS
+  v8_author_self_review_source_byte_identity_and_sha256: PASS
+  v8_utf8_without_BOM_LF_only_no_trailing_whitespace: PASS
+  v8_markdown_fences_90_balanced: PASS
+  v8_yaml_blocks_26_strict_duplicate_key_parse: PASS
+  v8_top_level_surfaces_62_unique: PASS
+  v8_surface_index_62_unique_and_equal: PASS
+  v8_non_NOT_STANDALONE_domains_present_in_fixed_subjects_49_of_49: PASS
+  v8_named_reducer_definitions_12_unique: PASS
+  v8_reducer_index_12_unique_and_equal: PASS
+  v8_ActionAssuranceRole_enum_exact_order_and_uniqueness_43_of_43: PASS
+  v8_action_to_role_mapping_exact_order_and_exclusive_coverage_43_of_43: PASS
+  v8_schema_blocks_2_through_26_byte_identical_to_v7: PASS
+  v8_required_reducer_behavior_projection: PASS
+  review_artifact_YAML_parse: PASS
+  exactly_one_review_artifact_created: PASS
+  subjects_modified: false
+  materializations_modified: false
+  prior_reviews_modified: false
+  packages_modified: false
+  Registry_modified: false
+  CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false
+
+authority:
+  F2_accepted: false
+  Jenn_atomic_acceptance_decision_ready: true
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  F3_start_authorized: false
+  commit_performed: false
+  push_performed: false
+
+next_required_action: JENN_F2_R1_R17_ATOMIC_ACCEPTANCE_DECISION

@@ -1,0 +1,64 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r10-binding-issuance-snapshot-materialization-closure-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Codex_author_run_f2_r10
+
+subjects:
+  amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+    sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+  materialization:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r10.draft.md
+    sha256: 0429dac3235f1d411c98ac7db12df8f08bd2f4358900c5743fa2281610c3d17e
+    acceptance_subject: false
+
+prior_review:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r9-atomic-bundle-independent-review.yaml
+  sha256: 2d16708c7b33c76fb7db41935b4b90fd81576076758567b94cf58f823ef1272f
+
+result: PASS_NO_AUTHOR_BLOCKER
+finding_counts:
+  blocker: 0
+  major: 0
+  minor: 0
+
+finding_disposition:
+  F2-R9-IR-B01: RESOLVED_BY_EXACT_ISSUANCE_SNAPSHOT_AND_LATER_PROOF_BOUNDARY
+  F2-R9-IR-M01: RESOLVED_BY_EXPLICIT_R8_SECTION_6_2_BINDING_ONLY_OVERRIDE
+  F2-R9-IR-M02: RESOLVED_BY_REGENERATED_COMPLETE_READING_SURFACE
+
+self_review_dimensions:
+  subject_before_activation_DAG_preserved: PASS
+  future_proof_removed_from_issuance_predicate: PASS
+  exact_actor_principal_profile_snapshot_bound: PASS
+  synthetic_no_preexisting_assessment_cycle: PASS
+  snapshot_authority_intent_watermark_equality: PASS
+  Binding_spec_precedence_explicit: PASS
+  Profile_Principal_spec_domains_unchanged: PASS
+  exact_actor_authority_enums_printed: PASS
+  transition_source_and_additional_predicates_printed: PASS
+  Binding_reducer_printed_in_full: PASS
+  Assignment_Delegation_historical_reducers_printed: PASS
+  new_architecture_direction_added: false
+
+validation:
+  subject_sha256_fixed: PASS
+  materialization_sha256_fixed: PASS
+  yaml_parse: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  git_diff_check: PASS
+
+non_authorization:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R10_ATOMIC_BUNDLE_AND_MATERIALIZATION

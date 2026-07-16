@@ -98,3 +98,15 @@ actionable=false
 execution_authorized=false
 requires_jenn_decision=true
 ```
+
+When a current queue item declares `requires_jenn_decision=true` without the
+route-selection stop signal, Machine emits a generic governance handoff:
+
+```text
+next_user_action.status=governance_decision_required
+next_user_action.decision_owner=Jenn
+next_user_action.accepted_route_ids=
+next_user_action.exact_confirmation_templates_available=false
+actionable=false
+execution_authorized=false
+```

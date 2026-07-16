@@ -1,0 +1,79 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r9-binding-bootstrap-impact-membership-closure-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Codex_author_f2_r9
+independent_review: false
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R9_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subject_hashes:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+    R9: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r9.draft.md
+  sha256: a0a4ef0e6058bfbf60adf1391624dd0fc1678f5e2db361ce87bdc594e6f570dd
+  acceptance_subject: false
+
+review_basis:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r8-atomic-bundle-independent-review.yaml
+    sha256: 615a9d1deaee5b53a47d0e424762e8757bb1c7b3440f5c99cfbb1e04760453a5
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r9-binding-bootstrap-impact-membership-closure-start-decision-v0.1.yaml
+    sha256: d2a16919a1f2d03c1495440197d5a7e68a256b141f424f29b591ef9926c06d4b
+
+result: PASS_NO_AUTHOR_BLOCKER
+acceptance_recommendation: REQUIRE_FRESH_INDEPENDENT_REVIEW
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+prior_findings_disposition:
+  F2-R8-IR-B01: RESOLVED_BY_ACYCLIC_PRE_ACTION_ACTIVATION_BODY
+  F2-R8-IR-B02: RESOLVED_BY_COMPLETE_BINDING_MUTATION_SCHEMA_AND_FINGERPRINT
+  F2-R8-IR-B03: RESOLVED_BY_IMMUTABLE_PER_STREAM_TARGET_MEMBERSHIP
+  F2-R8-IR-M01: RESOLVED_BY_EXACT_LEDGER_HEAD_WATERMARK_EQUALITY
+  F2-R8-IR-M02: RESOLVED_BY_TARGET_PROFILE_AND_CONTROLLER_ASSESSMENT_SPLIT
+  F2-R8-IR-M03: RESOLVED_BY_COMPLETE_R9_MATERIALIZATION
+
+self_review_dimensions:
+  activation_cycle: PASS_DECISION_REMOVED_FROM_PRE_ACTION_BODY
+  binding_issuance: PASS_COMPLETE_NON_SYNTHETIC_AND_SYNTHETIC_PATHS
+  impact_membership: PASS_IMMUTABLE_AND_TERMINAL_INDEXED
+  authority_watermark: PASS_EXACT_EQUALITY_WITH_TYPED_EXCEPTION_REVALIDATION
+  profile_controller_currentness: PASS_SEPARATE_FROM_TARGET_PROFILE_STATUS
+  materialization: PASS_COMPLETE_CHANGED_SCHEMAS_AND_AUTHORITY_TABLES
+  scope: PASS_NO_NEW_F2_DIRECTION
+
+validation:
+  subject_sha256_match: true
+  materialization_sha256_match: true
+  yaml_blocks_parse: true
+  markdown_fences_balanced: true
+  utf8_lf: true
+  trailing_whitespace_zero: true
+  git_diff_check: PASS
+  document_registry: PASS_464_OF_464_ZERO_WARNINGS
+  docctl_status: PASS_506_DOCUMENTS_ZERO_UNREGISTERED_ZERO_WARNINGS_ZERO_FAILURES
+  docctl_doctor: PASS_506_DOCUMENTS_ZERO_UNREGISTERED_ZERO_WARNINGS_ZERO_FAILURES
+
+authority:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R9_ATOMIC_BUNDLE_AND_MATERIALIZATION

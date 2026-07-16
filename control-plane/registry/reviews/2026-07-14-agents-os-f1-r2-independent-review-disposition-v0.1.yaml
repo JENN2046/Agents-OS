@@ -1,0 +1,34 @@
+schema_version: agents-os.review-findings-disposition.v0.1
+record_id: agents-os-f1-r2-independent-review-disposition-v0.1
+record_type: ReviewFindingsDisposition
+status: active
+date: 2026-07-14
+
+review:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r2-atomic-bundle-independent-review.yaml
+  sha256: b95d819a05366e1dd513e4afeb2b7b361118a4e1df2a7da47dbca2d494a23cf3
+  result: BLOCK
+
+disposition:
+  method: NEW_R3_AMENDMENT_ADDED_TO_ATOMIC_BUNDLE
+  R1_bytes_modified: false
+  R2_bytes_modified: false
+  prior_reviews_modified: false
+  resolved_findings_preserved: 5
+  unresolved_findings_addressed: 2
+  R3_amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+
+finding_status:
+  F1-R2-IR-B01: RESOLVED_IN_R3_SECTION_2_PENDING_REVIEW
+  F1-R2-IR-B02: RESOLVED_IN_R3_SECTION_3_PENDING_REVIEW
+
+next_gate: HASH_BOUND_INDEPENDENT_REVIEW_OF_F1_R3_ATOMIC_BUNDLE
+
+boundaries:
+  F1_accepted: false
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_performed: false
+  push_performed: false

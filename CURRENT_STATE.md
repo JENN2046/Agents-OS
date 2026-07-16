@@ -80,6 +80,1418 @@ design draft with deferred known gaps, is not proposed for acceptance, and is ex
 acceptance. Architecture acceptance does not authorize implementation, database work, service startup, provider or
 executor calls, or runtime activation.
 
+## Home Domain Roadmap R3 Handoff (2026-07-13)
+
+The Home Domain construction roadmap has advanced from the unaccepted R2 review
+surface to a governance-only R3 subject:
+
+```text
+control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+```
+
+R3 addresses seven subsequent governance amendments, three non-blocking
+clarifications, and truthful review lineage without expanding Home Domain
+semantics or starting Phase 1A. The R2 subject, R2 author self-review, and R2
+independent review remain unchanged historical evidence. The R2 independent
+review remains valid within its recorded scope; a later external review added
+new governance findings and caused subject revision rather than retroactive
+review deletion or rewriting.
+
+Current R3 state:
+
+```yaml
+status: ACCEPTED
+accepted_subject_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+independent_review_result: PASS_NO_BLOCKER
+independent_review_sha256: 3c52c5745a26a3f3e33ea74a064dce778a79052174dc488c5217c03a24f54cf0
+Jenn_acceptance_decision: ACCEPT
+acceptance_record: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+implementation_authorized: false
+runtime_activation_authorized: false
+database_change_authorized: false
+provider_execution_authorized: false
+Phase_1A_started: true
+Phase_1A_completed: true
+```
+
+Jenn accepted the fixed R3 roadmap after its hash-bound independent review. The
+acceptance covers the roadmap governance direction only; it does not accept a
+future Life-Core Authority and Gap Map or Home Domain Architecture Direction,
+and it did not automatically start Phase 1A. Jenn subsequently issued an
+explicit Phase 1A start instruction. Registry and CURRENT_STATE projections
+indicate lifecycle state but do not grant implementation or runtime authority.
+
+## Home Domain Phase 1A G1A Handoff (2026-07-13)
+
+Phase 1A completed its current-authority and gap inventory without reading
+private raw memory, probing runtime state, creating a database, or starting a
+service. Its fixed outputs are:
+
+```text
+control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+```
+
+Current G1A state:
+
+```yaml
+G1A_result: PASS_WITH_GAPS
+home_domain_drafting_allowed: true
+unresolved_blocking_for_home_direction: []
+unresolved_blocking_for_M0:
+  - HD-M0-01
+  - HD-M0-02
+  - HD-M0-03
+  - HD-M0-04
+  - HD-M0-05
+  - HD-M0-06
+  - HD-M0-07
+Phase_1A_complete: true
+Phase_1B_started: true
+Phase_1B_completed: true
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+The gaps block M0 readiness but do not block upper-level Home Domain direction
+work. Jenn subsequently issued an explicit Phase 1B start instruction. No
+automatic implementation or runtime transition was authorized.
+
+## Home Domain Phase 1B G1B Handoff (2026-07-14)
+
+Phase 1B produced and author-reviewed the Home Domain upper-level architecture
+direction:
+
+```text
+control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+```
+
+Current G1B state:
+
+```yaml
+G1B_result: PROPOSED_FINAL_DRAFT
+subject_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+self_review_sha256: a6408e713f9ca124c797ca2394138e21a57cbbf14a9c366b0a940ef094aa4448
+Home_Domain_classification: logical_bounded_context
+second_Task_Ledger_created: false
+Phase_1B_complete: true
+Phase_1C_started: true
+Phase_1C_completed: true
+Jenn_acceptance_granted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+The direction separates Home semantics from Orchestrator facts, Authority /
+Control enforcement, and Capability Body state. A fresh Phase 1C independent
+review checked the fixed subject and explicit allowlist and returned
+`PASS_NO_BLOCKER` with zero blocker, major, or minor findings. The review does
+not grant Jenn acceptance.
+
+Current G1C state:
+
+```yaml
+G1C_result: PASS_NO_BLOCKER
+subject_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+independent_review_sha256: 6956cbffe74d770e6b18370cb147b8fcee00cc4a41431e4a325a24d7a8f40627
+blockers: 0
+major_findings: 0
+minor_findings: 0
+Phase_1C_complete: true
+Phase_2_started: true
+Jenn_acceptance_granted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Jenn explicitly started Phase 2 by directing implementation of the frozen
+Phase 2 plan. The start decision is recorded at:
+
+```text
+control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-2-start-decision-v0.1.yaml
+```
+
+## Home Domain Phase 2 G2 Review Handoff (2026-07-14)
+
+```yaml
+Phase_2_started: true
+Phase_2_status: ACCEPTED
+candidate_authority_map_sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+candidate_home_direction_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+bound_home_fact_authority_matrix_sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+G2_review_result: PASS_NO_BLOCKER
+foundational_integration_review_sha256: a47afeb33031407fda0fa14a985f1847098956f773066354017faf7be6da7f75
+mandatory_determinations_passed: 12
+blockers: 0
+semantic_major_findings: 0
+minor_findings: 1
+fresh_independent_review_completed: true
+Jenn_acceptance_granted: true
+Jenn_decision: ACCEPT
+acceptance_record: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+Phase_3_started: true
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Phase 2 reviews the Home Domain, Orchestrator, Authority / Control boundary,
+Capability Body, four data authorities, identity continuity, and replaceable
+body principle as one architecture direction. It does not resolve the seven M0
+gaps and does not authorize implementation.
+
+The fresh Foundational Integration Review returned `PASS_NO_BLOCKER`: all 12
+mandatory determinations passed, all seven M0 gaps remain explicit, and the
+accepted Resident, High-Privilege, and Scheduling boundaries were not bypassed.
+Its one minor finding is an editorial interpretation guard: R3's anticipatory
+"accepted Life-Core Authority and Gap Map" wording cannot establish current
+acceptance. The map remains a candidate until Jenn makes the G2 decision.
+
+Review artifact:
+
+```text
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-foundational-integration-review-v0.1.yaml
+```
+
+Jenn accepted the exact reviewed authority map and Home Domain direction hashes.
+The Home Fact Authority Matrix remains a hash-bound normative input rather than
+a separately accepted subject. Future changes use a new revision or amendment;
+the accepted historical bytes remain unchanged.
+
+This acceptance does not resolve `HD-M0-01` through `HD-M0-07`, authorize
+implementation, activate runtime, or start Phase 3. The next gate is:
+
+```text
+EXPLICIT_START_OF_PHASE_3_CONSTRUCTION_READINESS_REVIEW
+```
+
+Jenn explicitly started Phase 3. The immutable start decision is:
+
+```text
+control-plane/registry/decisions/2026-07-14-agents-os-phase-3-construction-readiness-start-decision-v0.1.yaml
+```
+
+Current Phase 3 state:
+
+```yaml
+Phase_3_started: true
+Phase_3_status: READY_FOR_FOUNDATION_CONTRACT_CLOSURE
+G3_result: READY_FOR_FOUNDATION_CONTRACT_CLOSURE
+construction_readiness_review_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+self_review_sha256: dcee1c3d3faf5b11a4f85b19509b52cbd9ca05249cc2740b42561e7262d7b2ea
+gate_amendment: control-plane/registry/decisions/2026-07-14-agents-os-minimum-g3-gate-amendment-v0.1.yaml
+blockers: []
+Phase_4_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Phase 3 completed all required review outputs: the foundation contract
+dependency graph, M0-A and M0-B scopes, explicit exclusions, deferred scope,
+hard stops, and validation plan. Its initial review returned `NOT_READY`
+because accepted R3 contained a circular transition: it required Phase 4
+contracts to be accepted before G3 could allow entry into Phase 4 contract
+closure.
+
+Review artifacts:
+
+```text
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1-self-review.yaml
+```
+
+The recommended correction is a new decision or amendment that makes G3 test
+whether every gap is mapped to a declared acceptance unit or explicit M0
+exclusion. A new post-contract gate would then verify that required contracts
+are actually accepted before any M0 implementation authorization.
+
+Jenn accepted the minimum G3 gate amendment. G3 now checks whether every gap
+has a declared contract acceptance unit or explicit M0 exclusion; the new
+post-contract gate checks whether required contracts are actually accepted
+before any M0 implementation decision.
+
+The amendment does not accept F1-F11, start Phase 4, or authorize
+implementation. The next gate is:
+
+```text
+EXPLICIT_START_OF_PHASE_4_FOUNDATION_CONTRACT_CLOSURE
+```
+
+Jenn explicitly started Phase 4. The immutable start decision is:
+
+```text
+control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+```
+
+Phase 4 start snapshot:
+
+```yaml
+Phase_4_started: true
+Phase_4_status: F1_CONTRACT_CLOSURE_IN_PROGRESS
+current_acceptance_unit: F1
+current_contract: Goal Specification / Success Criteria / Plan Membership
+closure_mode: ONE_CONTRACT_AT_A_TIME
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Phase 4 contract drafting, self-review, fixed-hash independent review, and a
+Jenn decision surface are authorized. No draft or review accepts a contract.
+Each contract or declared atomic bundle still requires Jenn's explicit
+acceptance, and the next unit does not start automatically.
+
+Historical checkpoint: F1 author closeout completed with the fixed subject and
+author self-review below:
+
+```text
+control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+SHA-256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-self-review.yaml
+```
+
+```yaml
+F1_status: PENDING_HASH_BOUND_INDEPENDENT_REVIEW
+F1_accepted: false
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Jenn explicitly accepted the exact F1 R3 atomic bundle. The immutable
+acceptance record is:
+
+```text
+control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+```
+
+```yaml
+F1_status: ACCEPTED
+F1_acceptance_unit: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+F1_partial_acceptance: forbidden
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+next_gate: EXPLICIT_START_OF_F2_ACTOR_IDENTITY_AND_DELEGATION_CONTRACT_CLOSURE
+```
+
+This acceptance freezes the F1 semantics. It does not edit the accepted subject
+bytes, authorize implementation, activate runtime, or automatically start F2.
+
+Historical checkpoint: the exact F1 R3 atomic bundle passed a fresh hash-bound independent final
+review. All seven original findings and both R2 blockers were independently
+re-adjudicated as resolved with no regression:
+
+```text
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r3-atomic-bundle-independent-review.yaml
+SHA-256: 55ff971e2099f76d2ad91ceec1856f6b61970a26a9aa901199741ed3c57da835
+```
+
+```yaml
+F1_status: PENDING_JENN_ACCEPTANCE_DECISION
+F1_review_result: PASS_NO_BLOCKER
+F1_acceptance_unit: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+F1_partial_acceptance: forbidden
+F1_accepted: false
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Historical checkpoint: the R2 independent review confirmed five prior findings resolved and returned
+`BLOCK` on two remaining carry-forward determinism gaps. A narrow R3 amendment
+binds the exact predecessor tuple and replaces natural-language semantic
+equivalence with typed field-projection equality:
+
+```text
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-r2-atomic-bundle-independent-review.yaml
+SHA-256: b95d819a05366e1dd513e4afeb2b7b361118a4e1df2a7da47dbca2d494a23cf3
+
+control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+SHA-256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+```
+
+```yaml
+F1_status: R3_ATOMIC_BUNDLE_PENDING_HASH_BOUND_INDEPENDENT_REVIEW
+F1_R2_review_result: BLOCK
+F1_R3_partial_acceptance: forbidden
+F1_accepted: false
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Historical checkpoint: the first independent review of fixed F1 R1 returned `BLOCK` with three
+blockers, three major findings, and one minor finding. The R1 bytes and review
+remain unchanged. Every finding is mapped into a separate R2 amendment:
+
+```text
+control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+SHA-256: b5ce737eeec248063be4b6eb15d56676dbfa2ee7aebfe28f20efbf6a473c8df8
+
+control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+SHA-256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+```
+
+```yaml
+F1_status: R2_ATOMIC_BUNDLE_PENDING_HASH_BOUND_INDEPENDENT_REVIEW
+F1_R1_review_result: BLOCK
+F1_R2_partial_acceptance: forbidden
+F1_accepted: false
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+Current authoritative F1 projection:
+
+```yaml
+Phase_4_started: true
+Phase_4_status: F1_ACCEPTED_WAITING_EXPLICIT_F2_START
+F1_status: ACCEPTED
+F1_acceptance_record: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+F1_acceptance_unit: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1_R3_ATOMIC_BUNDLE
+F1_partial_acceptance: forbidden
+F2_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+next_gate: EXPLICIT_START_OF_F2_ACTOR_IDENTITY_AND_DELEGATION_CONTRACT_CLOSURE
+```
+
+Jenn explicitly started F2. The immutable start decision is:
+
+```text
+control-plane/registry/decisions/2026-07-14-agents-os-f2-actor-identity-delegation-start-decision-v0.1.yaml
+```
+
+```yaml
+Phase_4_status: F2_CONTRACT_CLOSURE_IN_PROGRESS
+F1_status: ACCEPTED
+F2_started: true
+F2_status: AUTHORING
+F3_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+F2 is limited to Actor Identity and Delegation semantics. Production
+credentials, Resident singleton ownership, host authentication, TaskPermit,
+implementation, and runtime activation remain outside this start decision.
+
+Jenn accepted the single prohibited-boundary direction for F2 and future
+permission-governance convergence:
+
+```text
+control-plane/registry/decisions/
+2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+```
+
+```yaml
+permission_direction: SINGLE_PROHIBITED_BOUNDARY
+ordinary_actions: AUTONOMOUS_BY_DEFAULT
+identity_is_permission: false
+responsibility_is_permission: false
+delegation_grants_permission: false
+domain_invariants_are_permission_levels: false
+F2_status: AUTHORING_WITH_ACCEPTED_PERMISSION_DIRECTION
+F2_full_acceptance: false
+implementation_authorized: false
+runtime_activation_authorized: false
+```
+
+The target has one canonical Prohibited Behavior List. Identity answers who is
+acting, responsibility and delegation answer who owns which work, and domain
+invariants define correct state changes. The existing root, life-core, and
+automation permission language remains effective until a later synchronized,
+reviewed convergence change; this direction decision does not silently rewrite
+those current files or activate runtime enforcement.
+
+F2 author self-review and closeout completed against fixed subject bytes:
+
+```text
+Subject:
+control-plane/registry/drafts/
+2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+
+SHA-256:
+639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+
+Author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-self-review.yaml
+```
+
+```yaml
+F2_status: PENDING_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+F2_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_subject_bytes_fixed: true
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_SHA_639E2554
+```
+
+The self-review records implementation blockers without treating them as F2
+semantic blockers: the canonical Prohibited Behavior List still needs a future
+synchronized governance convergence, and production authentication, Resident
+ownership, TaskPermit, host authentication, and effect fencing remain deferred.
+
+The fresh hash-bound F2 independent review completed against the unchanged
+subject and returned `BLOCK`:
+
+```text
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-independent-review.yaml
+
+Review SHA-256:
+690f8f2cf451525cedcb9b2dda35e137fdc2bd095f5c2fddad723e63fff92f8e
+```
+
+```yaml
+F2_status: BLOCKED_PENDING_NARROW_REVISION
+F2_subject_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_independent_review_result: BLOCK
+F2_independent_review_findings:
+  blockers: 3
+  major: 1
+  minor: 0
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: EXPLICIT_START_OF_F2_R2_NARROW_AMENDMENT
+```
+
+The blockers concern responsibility-assignment provenance and attenuation,
+binding/delegation activation evidence, and canonical Command replay/admission.
+Identity compromise recovery has one major provenance gap. The accepted single
+Prohibited Boundary direction remains intact; the review does not request a
+return to permission levels, risk tiers, or ordinary-action allowlists.
+
+Jenn explicitly started the F2 R2 narrow amendment. The fixed R1 subject remains
+unchanged; R2 closes only the three blockers and one major finding:
+
+```text
+R2 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+
+R2 SHA-256:
+8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+
+R2 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r2-narrow-amendment-self-review.yaml
+```
+
+```yaml
+F2_status: R2_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R2_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R2_ATOMIC_BUNDLE
+```
+
+R2 closes responsibility provenance and attenuation, binding/delegation
+activation evidence, and identity recovery provenance. It explicitly moves
+complete Command payload canonicalization, nonce/replay intake, and crash
+outcome handling to F3 instead of expanding F2 into a Command runtime. This
+ownership handoff does not start F3.
+
+The fresh R2 atomic-bundle independent review returned `BLOCK` with three
+remaining deterministic gaps:
+
+```text
+Review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+
+Review SHA-256:
+728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+```
+
+```yaml
+F2_R2_review_result: BLOCK
+F2_R2_review_findings:
+  blockers: 3
+  major: 0
+  minor: 0
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+```
+
+Jenn explicitly started the F2 R3 final narrow amendment. R3 changes only the
+three R2 review blockers: non-circular delegation acknowledgement, acyclic
+binding/delegation activation fingerprints, and assignment/grant issuance
+provenance. The fixed R1 and R2 bytes remain unchanged.
+
+```text
+R3 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r3-final-narrow-amendment-start-decision-v0.1.yaml
+
+R3 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+
+R3 SHA-256:
+d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+
+R3 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r3-final-narrow-amendment-self-review.yaml
+```
+
+```yaml
+F2_status: R3_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R3_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R3_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R3_ATOMIC_BUNDLE_SHA_D4C7E2E5
+```
+
+R3 preserves the one-Prohibited-Behavior-List direction. It does not create a
+permission ladder, start F3, implement runtime code, create production
+identities or credentials, change a database, or authorize runtime activation.
+
+The fresh hash-bound F2 R3 atomic-bundle independent review completed against
+the unchanged R1, R2, and R3 subjects and returned `BLOCK`:
+
+```text
+Review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r3-atomic-bundle-independent-review.yaml
+
+Review SHA-256:
+22b2e1e7e7eae44f8ef834b479bc3cd2dfd340cca5758926aad1ae468a1f4032
+```
+
+```yaml
+F2_status: BLOCKED_PENDING_R4_FINAL_CANONICALIZATION_AMENDMENT
+F2_R3_review_result: BLOCK
+F2_R3_review_findings:
+  blockers: 2
+  major: 0
+  minor: 0
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: EXPLICIT_START_OF_F2_R4_FINAL_CANONICALIZATION_AMENDMENT
+```
+
+The first remaining blocker is exact canonicalization: `BindingScope`, both
+activation-evidence replay identities, and both activation-assessment
+fingerprints still need closed domain-separated projections. The second is
+issuance provenance binding: the final delegation subject fingerprint must bind
+the complete immutable `AuthenticatedActorActionRef`, not only three of its
+fields. The review confirms that R3 solved the responsibility-free activation
+path, removed the fingerprint cycles, prohibited assignment self-issuance, and
+preserved the single prohibited boundary direction.
+
+Jenn explicitly started the F2 R4 final canonicalization amendment. R4 is
+limited to the two R3 review blockers and leaves R1, R2, and R3 immutable:
+
+```text
+R4 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r4-final-canonicalization-amendment-start-decision-v0.1.yaml
+
+R4 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+
+R4 SHA-256:
+a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+
+R4 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r4-final-canonicalization-self-review.yaml
+```
+
+```yaml
+F2_status: R4_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R4_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R4_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R4_ATOMIC_BUNDLE_SHA_A60A6A75
+```
+
+R4 defines a closed representation-only `BindingScopeV0_1`, exact
+domain-separated evidence replay/evidence/assessment projections, one canonical
+fingerprint representation, and a complete `AuthenticatedActorActionRef`
+fingerprint bound into the final delegation subject. It does not implement the
+formulas, start F3, create a new permission model, or authorize runtime.
+
+The fresh F2 R4 atomic-bundle independent review completed against unchanged
+R1-R4 subjects and returned `BLOCK`:
+
+```text
+Review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r4-atomic-bundle-independent-review.yaml
+
+Review SHA-256:
+203eb7fb07f4df7b85b51353da0604f901bbe595093e84758df1c4ce1f25d3cf
+```
+
+```yaml
+F2_status: BLOCKED_PENDING_R5_SCALAR_ENCODING_AMENDMENT
+F2_R4_review_result: BLOCK
+F2_R4_review_findings:
+  blockers: 2
+  major: 0
+  minor: 0
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: EXPLICIT_START_OF_F2_R5_FINAL_SCALAR_ENCODING_AMENDMENT
+```
+
+The remaining gaps are limited to scalar representation. Every SHA-derived
+`replay_identity` and stable `evidence_id` must define one persisted encoding
+and one inserted JCS value. `BindingScopeV0_1.context_id` must be a normalized
+non-empty string, and `context_revision` must use one fixed bounded integer
+domain. The review confirms that the complete `AuthenticatedActorActionRef`
+binding and the acyclic issuance graph now pass.
+
+Jenn explicitly started the F2 R5 final scalar-encoding amendment. R5 changes
+only the two remaining representation gaps and leaves R1-R4 immutable:
+
+```text
+R5 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r5-final-scalar-encoding-amendment-start-decision-v0.1.yaml
+
+R5 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+
+R5 SHA-256:
+cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+
+R5 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r5-final-scalar-encoding-self-review.yaml
+```
+
+```yaml
+F2_status: R5_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R5_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+F2_R5_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R5_ATOMIC_BUNDLE_SHA_CF568EAC
+```
+
+R5 fixes every affected replay identity and evidence ID to one 64-character
+lowercase-hex JSON string representation and fixes its parent-JCS insertion
+rule. It also fixes `BindingScope` context IDs to bounded Unicode 15.1 NFC
+strings and revisions to the exact JCS-safe unsigned integer range. It does not
+implement, migrate, start F3, or authorize runtime.
+
+The fresh R5 atomic-bundle independent review preserved all fixed subject
+hashes and returned `BLOCK` with one deterministic admission conflict:
+
+```text
+R5 independent review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r5-atomic-bundle-independent-review.yaml
+
+R5 review SHA-256:
+dd02093894785ca2f4eb795825a465485cfdbe3ed80a7bc7a78070a051e71068
+
+Finding:
+F2-R5-IR-B01 context_revision rounded-fraction and negative-zero admission
+```
+
+Under Jenn's current instruction to continue automatically, Nobao started the
+minimal R6 number-admission amendment. R6 selects the already-parsed
+ECMAScript Number / IEEE 754 binary64 value as the sole validation domain,
+uses one complete safe-unsigned-integer predicate, rejects `-0`, and makes
+rounded fractions and exponent forms follow their parsed value. It does not
+add an exact-decimal model or token-preserving parser.
+
+```text
+R6 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r6-final-number-admission-amendment-start-decision-v0.1.yaml
+
+R6 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+
+R6 SHA-256:
+bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+
+R6 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r6-final-number-admission-self-review.yaml
+```
+
+```yaml
+F2_status: R6_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R6_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+F2_R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+F2_R5_independent_review: BLOCK
+F2_R6_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R6_ATOMIC_BUNDLE_SHA_BED38CF8
+```
+
+The fresh R6 atomic-bundle independent review completed against unchanged
+R1-R6 bytes and returned `PASS_NO_BLOCKER` with zero blocker, major, or minor
+findings. It confirmed that `F2-R5-IR-B01` is precedence-completely closed and
+re-adjudicated every prior F2 blocker or major finding as resolved. The review
+does not itself accept F2 or authorize F3, implementation, authentication, or
+runtime activation.
+
+```text
+R6 independent review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r6-atomic-bundle-independent-review.yaml
+
+R6 independent review SHA-256:
+9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+```
+
+```yaml
+F2_status: R6_ATOMIC_BUNDLE_PENDING_JENN_FINAL_ACCEPTANCE_DECISION
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R6_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+F2_R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+F2_R6_independent_review: PASS_NO_BLOCKER
+F2_R6_independent_review_sha256: 9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: JENN_FINAL_ACCEPTANCE_DECISION_FOR_F2_R6_ATOMIC_BUNDLE
+```
+
+Subsequent external review findings were independently checked against the
+fixed R1-R6 bytes. Six lifecycle/currentness/revocation/scalar findings are
+valid blockers. The previously non-blocking scope and responsibility-lineage
+findings are also blocking because mutable subtree semantics or recursive
+Assignments could change responsibility without changing subject bytes or
+bypass the one Delegation-depth policy. The R6 independent review remains
+immutable evidence, but its `PASS_NO_BLOCKER` is no longer sufficient for F2
+acceptance.
+
+```text
+Subsequent review disposition:
+control-plane/registry/reviews/
+2026-07-14-agents-os-f2-r6-subsequent-lifecycle-review-disposition-v0.1.yaml
+
+R7 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-start-decision-v0.1.yaml
+```
+
+Jenn explicitly instructed the next step, and R7 now closes the concentrated
+scope without modifying R1-R6:
+
+```text
+R7 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+
+R7 SHA-256:
+343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+
+Effective materialization:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r7.draft.md
+
+Materialization SHA-256:
+544a5891b04e270725b7fa7f18ecea7ea7252d49ccfe866442dffbe2b7fc6561
+
+R7 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r7-lifecycle-currentness-revocation-scope-closure-self-review.yaml
+```
+
+R7 separates activation from effective currentness, separates historical
+issuance validity from current session state, supplies lifecycle CAS and
+transition matrices, defines typed prospective transition facts, restricts
+responsibility to exact sets and one Delegation lineage, and generalizes the
+R6 parsed-number rule to every F2 numeric scalar. The materialization is a
+derived reading surface only and creates no new authority.
+
+```yaml
+F2_status: R7_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R7_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+F2_R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+F2_R7_sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+F2_effective_materialization_sha256: 544a5891b04e270725b7fa7f18ecea7ea7252d49ccfe866442dffbe2b7fc6561
+F2_R7_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R7_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+The fresh R7 independent review completed with `BLOCK`: six deterministic
+contract blockers and one materialization major remained. The review artifact
+is preserved at:
+
+```text
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r7-atomic-bundle-independent-review.yaml
+```
+
+Under Jenn's instruction to continue automatically, R8 closes only those
+findings. It adds exact mutation-intent/action/replay binding, typed total
+authority bases, a total Delegation descendant reducer, complete historical
+impact aggregation, an acyclic manifest-owned synthetic M0 graph, and complete
+changed-object canonicalization. It does not modify R1-R7.
+
+```text
+R8 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r8-deterministic-action-assurance-m0-closure-start-decision-v0.1.yaml
+
+R8 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+
+R8 effective materialization:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r8.draft.md
+
+R8 author self-review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r8-deterministic-action-assurance-m0-closure-self-review.yaml
+```
+
+```yaml
+F2_status: R8_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R8_ATOMIC_BUNDLE
+F2_R1_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+F2_R2_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+F2_R3_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+F2_R4_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+F2_R5_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+F2_R6_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+F2_R7_sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+F2_R8_sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+F2_R8_materialization_sha256: 7e81bc87824a07b6668644822d5d43e9e8c896e0e61a09a9ca4207170f6b9b2e
+F2_R7_independent_review: BLOCK
+F2_R8_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R8_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+The fresh R8 independent review returned `BLOCK` with three blockers and three
+majors. R9 closes only those findings and preserves R1-R8 unchanged.
+
+```text
+R8 independent review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r8-atomic-bundle-independent-review.yaml
+
+R9 start decision:
+control-plane/registry/decisions/
+2026-07-14-agents-os-f2-r9-binding-bootstrap-impact-membership-closure-start-decision-v0.1.yaml
+
+R9 amendment:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+
+R9 effective materialization:
+control-plane/registry/drafts/
+2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r9.draft.md
+```
+
+```yaml
+F2_status: R9_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R9_ATOMIC_BUNDLE
+F2_R9_sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+F2_R9_materialization_sha256: a0a4ef0e6058bfbf60adf1391624dd0fc1678f5e2db361ce87bdc594e6f570dd
+F2_R8_independent_review: BLOCK
+F2_R9_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_partial_acceptance: forbidden
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R9_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+The fresh R9 independent review returned `BLOCK` with one blocker and two
+majors. The activation cycle, impact membership, authority watermark, and
+Profile/controller split passed. Binding issuance still incorrectly requires
+an exact control proof that belongs to later activation evidence, while the
+fixed Binding issuance body does not bind the required Actor/Principal/Profile
+issuance snapshot. Synthetic Binding digest precedence and the complete
+materialization also remain open.
+
+```text
+R9 independent review:
+control-plane/registry/reviews/
+2026-07-14-yellow-agents-os-f2-r9-atomic-bundle-independent-review.yaml
+
+SHA-256:
+2d16708c7b33c76fb7db41935b4b90fd81576076758567b94cf58f823ef1272f
+```
+
+```yaml
+F2_status: BLOCKED_PENDING_R10_BINDING_ISSUANCE_SNAPSHOT_AND_MATERIALIZATION_CLOSURE
+F2_R9_independent_review: BLOCK
+F2_R9_review_blockers: 1
+F2_R9_review_majors: 2
+
+### F2 R10 Binding issuance snapshot and materialization closure
+
+The R9 independent review left one Binding issuance determinism blocker and
+two materialization/precedence majors. R10 chooses the acyclic boundary:
+Binding issuance binds exact Actor, Principal, Profile, scope, time, and
+authority snapshot facts; Principal control proof remains solely in the later
+activation graph. It also explicitly overrides the R8 Binding creation-spec
+digest rule and regenerates the complete resolved reading surface.
+
+```text
+R10 start decision:
+control-plane/registry/decisions/2026-07-14-agents-os-f2-r10-binding-issuance-snapshot-materialization-closure-start-decision-v0.1.yaml
+
+R10 amendment:
+control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+
+R10 effective materialization:
+control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r10.draft.md
+```
+
+```yaml
+F2_status: R10_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R10_ATOMIC_BUNDLE
+F2_R10_sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+F2_R10_materialization_sha256: 0429dac3235f1d411c98ac7db12df8f08bd2f4358900c5743fa2281610c3d17e
+F2_R10_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R10_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+R10 independent review found the non-synthetic boundary correct but blocked the
+synthetic path on a self-referential precommit snapshot. R11 removes every
+manifest, activation, own-spec, and Event field from that precommit object and
+places later provenance only in the final derived issuance ref. It also
+corrects the resolved materialization to the exact authority tables.
+
+```yaml
+F2_status: R11_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R11_ATOMIC_BUNDLE
+F2_R11_sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+F2_R11_materialization_sha256: 33cac46895795a94f27e3b25640a682e9e9fa198aaa96873bdeb1f5277a50cce
+F2_R11_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R11_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+R11 independent review found that the synthetic manifest never owns Actor
+creation specs. R12 therefore binds an exact pre-existing non-production Actor
+revision and verifies its ACTIVE assessment at the manifest ACCEPT Event. It
+does not add a second Actor provisioning route.
+
+```yaml
+F2_status: R12_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R12_ATOMIC_BUNDLE
+F2_R12_sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+F2_R12_materialization_sha256: 3491fb05e2c40d6eed48ef272ed36beaa48ad9e529016d0c039c4555ffd245ec
+F2_R12_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R12_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+R12 independent review required a deterministic meaning for “M0 non-production
+Actor”. R13 derives eligibility from the existing Actor revision lineage and
+its Jenn `SYNTHETIC_TEST` bootstrap provenance; it adds no Actor field or route.
+
+```yaml
+F2_status: R13_ATOMIC_BUNDLE_PENDING_FRESH_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R13_ATOMIC_BUNDLE
+F2_R13_sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+F2_R13_materialization_sha256: 871dafd4b4b0ec8461ae9b09b4697926f3fa486238f09289a12bdaa11ea17431
+F2_R13_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+F3_started: false
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R13_ATOMIC_BUNDLE_AND_MATERIALIZATION
+```
+
+R14 removed the final open-world negative scan and closed the exact Actor,
+Profile, Principal, credential-handle, and Binding reference universe. The
+first R14 review passed the contract but found one stale ACTIVE-only sentence
+in the derived materialization. The regenerated materialization removed it and
+the fresh review returned `PASS_NO_BLOCKER` with no findings.
+
+```yaml
+F2_status: R14_ATOMIC_BUNDLE_PENDING_JENN_ACCEPTANCE
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R14_ATOMIC_BUNDLE
+F2_R14_sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+F2_R14_materialization_v2_sha256: ffd42f425c12e31e4c74dfeda815feaa535433e2e9770eef5178f6f4da609460
+F2_R14_final_independent_review: PASS_NO_BLOCKER
+F2_R14_final_independent_review_sha256: 589d2dbf8adb4e38dde4e7d7fe4b879f38916e447c86405e528faaeb06e40a1a
+F2_acceptance_recommendation: ACCEPTABLE_AS_ONE_ATOMIC_BUNDLE
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: JENN_ATOMIC_ACCEPTANCE_DECISION_FOR_F2_R1_THROUGH_R14
+```
+
+### F2 R15 canonical assessment, Assignment, stewardship, and assurance closure
+
+The external review of the R1-R14 package found four remaining deterministic
+reference gaps and one package-lineage gap. R15 closes only those issues. It
+adds no permission taxonomy, stewardship ledger, runtime object, or new F2
+capability.
+
+```text
+R15 amendment:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+
+Complete materialization v3:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r15-v3.draft.md
+
+Author self-review:
+control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r15-assessment-assignment-assurance-closure-self-review.yaml
+```
+
+```yaml
+F2_status: R15_ATOMIC_BUNDLE_BLOCKED_BY_FRESH_FULL_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R15_ATOMIC_BUNDLE
+F2_R15_sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+F2_R15_materialization_v3_sha256: 160866079080d8eea8b04f9d547ec00a725864a7b5f298cd1686ffb789ea00f6
+F2_R15_author_self_review_sha256: 25639551d09408ce8111777e23a062fab303e96c8d35be3de88bcde31a4f29a0
+F2_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_fresh_R15_full_independent_review: BLOCK
+F2_fresh_R15_full_independent_review_sha256: da06fa00d0a7c6c22ca6e9a2f683cf74d7b86b5074a0e94d4c7fb4cf121dc4db
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: CREATE_NARROW_R16_STEWARDSHIP_ASSURANCE_AND_MATERIALIZATION_CLOSURE
+```
+
+### F2 R16 stewardship, assurance schema, and materialization closure
+
+The fresh R1-R15 full review found one CREATE-time stewardship cycle, one
+assurance-schema binding gap, and one incomplete materialization finding. R16
+closes only those findings. It adds no permission taxonomy, relation ledger,
+runtime object, or F2 capability.
+
+```text
+R16 amendment:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+
+Complete materialization v4:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r16-v4.draft.md
+
+Author self-review:
+control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r16-stewardship-assurance-materialization-closure-self-review.yaml
+```
+
+```yaml
+F2_status: R16_ATOMIC_BUNDLE_BLOCKED_BY_FRESH_FULL_INDEPENDENT_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R16_ATOMIC_BUNDLE
+F2_R16_sha256: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+F2_R16_materialization_v4_sha256: 3e871c24b66e1a7764578ac09538bd8d3e4f7bc88fc4356f258500bb890d6ab3
+F2_R16_author_self_review_sha256: 65b6a290e3908be7d848efbb17e3f38036321c3406021b6597e9ecfd72097380
+F2_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_fresh_R16_full_independent_review: BLOCK
+F2_fresh_R16_full_independent_review_sha256: 6d188f61bb8574516a204d2ec907a565ea9bd2c28fd90ae2468c4c86948cdc16
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: CREATE_NARROW_R17_ROLE_VOCABULARY_AND_COMPLETE_MATERIALIZATION_V5
+```
+
+### F2 R17 role vocabulary and complete materialization closure
+
+The fresh R1-R16 full review found no blocker and two major findings: the
+assurance role remained an open string, and materialization v4 contained
+duplicate or stale effective surfaces. R17 closes only those findings. It adds
+no permission taxonomy, runtime object, F2 capability, or implementation
+authority.
+
+```text
+R17 amendment:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+
+Complete materialization v5:
+control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r17-v5.draft.md
+
+Author self-review:
+control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r17-role-vocabulary-materialization-closure-self-review.yaml
+```
+
+```yaml
+F2_status: R17_SUBJECTS_FIXED_MATERIALIZATION_V6_PENDING_FRESH_INDEPENDENT_CONSISTENCY_REVIEW
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R17_ATOMIC_BUNDLE
+F2_R17_sha256: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+F2_R17_materialization_v5_sha256: 86b4e8ea66b8cb4244ef63e5658c92dc4e9428aae63e6405807f5069bec6c40e
+F2_R17_author_self_review_sha256: 20cd586db1521c1713b742ece4b6af3010648f0d18125404a4a0abb48e993e9d
+F2_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_fresh_R17_full_independent_review: BLOCK
+F2_fresh_R17_full_independent_review_sha256: c219f68092d7fddfe7cde42a6b75d3c4fbbf61bc79988ac8cddece1e8f3ef13d
+F2_R17_materialization_v6_sha256: 1d01e220b1d94687f96216efb3e26b10ff1005394eb48d2a57b5e10d5f3caabd
+F2_R17_materialization_v6_author_self_review_sha256: 4fb1d82ac0f366d29aea34cfd6873b7502e1781ea984e8342e97fecaeb8ce6be
+F2_R17_materialization_v6_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R17_subjects_modified_for_v6: false
+F2_R17_materialization_v6_independent_consistency_review: BLOCK
+F2_R17_materialization_v6_independent_consistency_review_sha256: 62928966fcde53d39535da51fb5fbf42c2d11c2706db984ae495c34af35806b6
+F2_R17_materialization_v6_independent_findings: 0_BLOCKER_2_MAJOR_0_MINOR
+F2_R17_materialization_v7_sha256: 6a23c7e1b8ec8da530836a36bb673ac4f5ea13ebdfd835fc6144d422cceee28d
+F2_R17_materialization_v7_author_self_review_sha256: a4f616e5d4283d0ff997adaf52478fa3ce26ed320cf8501a9460c7d14e52babb
+F2_R17_materialization_v7_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R17_subjects_modified_for_v7: false
+F2_R17_materialization_v7_independent_consistency_review: PASS_NO_BLOCKER
+F2_R17_materialization_v7_independent_consistency_review_sha256: f70f27db2592f60e4e7d5979efa6e20e844bc59fb1441499db8cdf4fbfdb3206
+F2_R17_materialization_v7_independent_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F2_Jenn_acceptance_ready: false
+F2_R17_v7_full_atomic_bundle_independent_review: BLOCK
+F2_R17_v7_full_atomic_bundle_independent_review_sha256: 4e9088edf94fd3b20eefbc9eb11dbcaaff0e2bc0d07d5d30f0e2f7aac67481ab
+F2_R17_v7_full_atomic_bundle_findings: 0_BLOCKER_1_MAJOR_0_MINOR
+F2_R17_subject_semantics_full_review: PASS
+F2_R17_materialization_v8_sha256: f37b5c5dda4968ec407c184e8dd2316688b350902a8b394be149791a63ce7133
+F2_R17_materialization_v8_author_self_review_sha256: a0b964f6e1676a13643950a58b72dc1756e42a29b072c3f0932e0266abf5a877
+F2_R17_materialization_v8_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R17_subjects_modified_for_v8: false
+F2_R17_v8_full_atomic_bundle_independent_review: PASS_NO_BLOCKER
+F2_R17_v8_full_atomic_bundle_independent_review_sha256: 4a9c2197a77d6db0e63e3f0808efbb57f48ce4cf915d1df30a12a45b932c0527
+F2_R17_v8_full_atomic_bundle_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F2_Jenn_acceptance_ready: true
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: JENN_F2_R1_R17_ATOMIC_ACCEPTANCE_DECISION
+```
+
+### F2 R18 Temporary Worker binding and activation assurance closure
+
+The R1-R17 v8 acceptance-readiness conclusion was superseded by a later
+external full-package semantic review. That review identified two subject
+closure gaps and one derived-materialization error:
+
+```text
+Temporary Worker assignment_binding_ref was opaque and not computable
+Binding/Delegation activation assurance did not name exact source fields
+materialization v8 printed two CompromiseImpact fields absent from R1-R17
+```
+
+R18 closes only the two subject gaps. It removes responsibility currentness
+from Actor identity, defines one derived typed Temporary Worker responsibility
+binding assessment over existing Assignment/Delegation facts, and freezes exact
+per-mode activation assurance projections. It creates no second responsibility
+ledger and no permission taxonomy.
+
+```yaml
+F2_status: R18_V13_MATERIALIZATION_CONSISTENCY_PASS_AWAITING_EXPLICIT_FULL_ATOMIC_REVIEW_START
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R18_ATOMIC_BUNDLE
+F2_R18_sha256: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+F2_R18_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_author_self_review_sha256: 1470095e6b2f804c2ee361d437fd171c9078a0fc296e23f5100cf161289690d0
+F2_R18_materialization_v9: CREATED_SOURCE_EXACT
+F2_R18_materialization_v9_sha256: 9e11ade05f09d56ab00e684359d61eae073fcc692b0673510c7ae6c196fe74c4
+F2_R18_materialization_v9_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_materialization_v9_author_self_review_sha256: 3e0cec161c16adbafa0fa695d9da1c2963dee61e3f498f82b79df66db1c21436
+F2_R18_materialization_v9_independent_consistency_review: BLOCK
+F2_R18_materialization_v9_independent_consistency_review_sha256: 1c3228ef0204e35735daf574b48dbc5531c655c265728a956d49a3737d97e1d0
+F2_R18_materialization_v9_independent_findings: 2_BLOCKER_1_MAJOR_0_MINOR
+F2_R18_materialization_v9_requires_correction: true
+F2_R18_materialization_v9_correction_disposition: SUPERSEDED_BY_V10
+F2_R1_through_R18_subjects_modified_by_review: false
+F2_R18_materialization_v10: CREATED_DERIVED_CORRECTION
+F2_R18_materialization_v10_sha256: eda49327933a9a88ed34599f270e9d341c6cb068ee67d51c27006d65654b76a2
+F2_R18_materialization_v10_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_materialization_v10_author_self_review_sha256: 82d305d703776f6a074c7f7a4f9b8ba464a0f1661d4e2394c3477fdd5c5d6a81
+F2_R18_materialization_v10_prior_findings_disposition: 3_RESOLVED_CONFIRMED
+F2_R18_materialization_v10_independent_consistency_review: BLOCK
+F2_R18_materialization_v10_independent_consistency_review_sha256: ba0b5dd9170dc1483abed03a56a37d0efe1b2418731d91a55c2354620ffb0ead
+F2_R18_materialization_v10_independent_findings: 0_BLOCKER_2_MAJOR_0_MINOR
+F2_R18_materialization_v10_requires_correction: true
+F2_R18_materialization_v10_correction_disposition: SUPERSEDED_BY_V11
+F2_R1_through_R18_subjects_modified_by_v10_review: false
+F2_R18_materialization_v11: CREATED_DERIVED_CORRECTION
+F2_R18_materialization_v11_sha256: 816b6f5fd704057f4cb226e3eef7e07f30e591f471a88085497399941c1ffb0a
+F2_R18_materialization_v11_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_materialization_v11_author_self_review_sha256: 264b4710cd6b21bee28cb545ea0805d486f0af26be54459552e1e599015867e4
+F2_R18_materialization_v11_prior_findings_disposition: 1_RESOLVED_1_PARTIAL
+F2_R18_materialization_v11_independent_consistency_review: BLOCK
+F2_R18_materialization_v11_independent_consistency_review_sha256: d06d4ce00a4051ddc5d0e5f33aba4627a0ce9fc62895b6d1922440df2195bcea
+F2_R18_materialization_v11_independent_findings: 0_BLOCKER_1_MAJOR_1_MINOR
+F2_R18_materialization_v11_requires_correction: true
+F2_R18_materialization_v11_correction_disposition: SUPERSEDED_BY_V12
+F2_R1_through_R18_subjects_modified_by_v11_review: false
+F2_R18_materialization_v12: CREATED_ROLE_EXACT_DERIVED_CORRECTION
+F2_R18_materialization_v12_sha256: d74f1259f2bdc9714876266b4f7f0173cceef5ae1193ceb83e664b4cc2d3c102
+F2_R18_materialization_v12_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_materialization_v12_author_self_review_sha256: d295c1c84fb67bb3d47dbe63c80636c60081a1cc458ad1be7d15d109c8fce825
+F2_R18_materialization_v12_prior_findings_disposition: 2_RESOLVED_CONFIRMED
+F2_R18_materialization_v12_independent_consistency_review: BLOCK
+F2_R18_materialization_v12_independent_consistency_review_sha256: 7be0b6ba016d3245e8d0834ccad674b44c32e9011bca635c9863068d31f3f5ec
+F2_R18_materialization_v12_independent_findings: 0_BLOCKER_4_MAJOR_0_MINOR
+F2_R18_materialization_v12_requires_correction: true
+F2_R18_materialization_v12_correction_disposition: SUPERSEDED_BY_V13
+F2_R1_through_R18_subjects_modified_by_v12: false
+F2_R18_materialization_v13: CREATED_FOUR_MAJOR_DERIVED_CORRECTION
+F2_R18_materialization_v13_sha256: 939ce101619d13f5947620655ea6e25fd859bebba80bdf051bc305a534c8e680
+F2_R18_materialization_v13_author_self_review: PASS_NO_AUTHOR_BLOCKER
+F2_R18_materialization_v13_author_self_review_sha256: c4dc8910e73b99b965594e0929caec9fe1dc2d3f5af643c7d21ef99f81d23bf8
+F2_R18_materialization_v13_prior_findings_disposition: 4_RESOLVED_CONFIRMED
+F2_R18_materialization_v13_independent_consistency_review: PASS_NO_BLOCKER
+F2_R18_materialization_v13_independent_consistency_review_sha256: af0dbd27fb4db877f3093f0e877ce0cdce05ae830466845c8e66836095e523e7
+F2_R18_materialization_v13_independent_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F2_R18_materialization_v13_requires_correction: false
+F2_R18_materialization_v13_full_atomic_review_eligible: true
+F2_R18_materialization_v13_full_atomic_review_started: false
+F2_R1_through_R18_subjects_modified_by_v13: false
+F2_Jenn_acceptance_ready: false
+F2_accepted: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+F3_started: false
+next_gate: ELIGIBLE_FOR_EXPLICIT_START_OF_FRESH_FULL_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+```
+
+## F2 R19-R22 Atomic Freeze Closeout (2026-07-16)
+
+R19 through R22 closed the remaining pre-start state, synthetic M0
+constructibility, replay/compromise coverage, and synthetic derived-subject
+assurance findings without expanding F2 into F3, F4, implementation, or runtime
+authority. The exact R1-R22 subject set and its derived v18 reading surface
+completed both the R22 targeted consistency review and a fresh full atomic
+freeze review.
+
+```yaml
+F2_status: ACCEPTED_FROZEN
+F2_acceptance_unit: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R22_ATOMIC_BUNDLE
+F2_subject_count: 22
+F2_partial_acceptance: forbidden
+F2_R22_materialization_v18_sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+F2_R22_targeted_review: PASS_NO_BLOCKER
+F2_R22_full_atomic_freeze_review: PASS_NO_BLOCKER
+F2_freeze_eligible: true
+F2_requires_R23: false
+F2_review_package_manifest_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+F2_acceptance_decision: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+F2_acceptance_decision_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+F2_accepted: true
+F2_frozen: true
+F3_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v0.2.md
+superseded_active_work_queue: control-plane/registry/reports/2026-07-07-agents-os-active-work-queue-v0.1.md
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_CONTRACT_CLOSURE
+```
+
+Review package:
+
+```text
+control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.md
+control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+```
+
+The manifest binds all 22 acceptance subjects separately from the
+non-authoritative v18 materialization and review evidence. Jenn explicitly
+accepted and froze that exact atomic unit; the immutable decision record binds
+the manifest SHA-256 and repeats every accepted subject path and digest.
+
+The prior 2026-07-07 Active Work Queue remains byte-preserved historical
+evidence and is superseded in the Document Registry. Machine, Dashboard, and
+Control Chain now read v0.2, whose only `NOW` item is a Jenn-owned decision gate
+for an explicit F3 start. This closeout does not start F3 or authorize any
+implementation, runtime, production authentication, database, service,
+provider, credential, commit, or push action.
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.

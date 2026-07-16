@@ -1,0 +1,42 @@
+schema_version: agents-os.review-findings-disposition.v0.1
+record_id: agents-os-f1-r1-independent-review-disposition-v0.1
+record_type: ReviewFindingsDisposition
+status: active
+date: 2026-07-14
+
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+  sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+
+review:
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f1-goal-spec-plan-membership-v0.1-independent-review.yaml
+  sha256: b5ce737eeec248063be4b6eb15d56676dbfa2ee7aebfe28f20efbf6a473c8df8
+  result: BLOCK
+
+disposition:
+  method: NEW_ATOMIC_R2_AMENDMENT
+  R1_bytes_modified: false
+  R1_review_modified: false
+  R1_acceptance_ready: false
+  R2_amendment:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+  every_finding_addressed: true
+
+finding_status:
+  F1-IR-B01: RESOLVED_IN_R2_SECTION_2_PENDING_REVIEW
+  F1-IR-B02: RESOLVED_IN_R2_SECTION_3_PENDING_REVIEW
+  F1-IR-B03: RESOLVED_IN_R2_SECTION_4_PENDING_REVIEW
+  F1-IR-M01: RESOLVED_IN_R2_SECTION_5_1_TO_5_3_PENDING_REVIEW
+  F1-IR-M02: RESOLVED_IN_R2_SECTION_5_4_PENDING_REVIEW
+  F1-IR-M03: RESOLVED_IN_R2_SECTION_6_PENDING_REVIEW
+  F1-IR-N01: RESOLVED_IN_R2_SECTION_1_PENDING_REVIEW
+
+next_gate: HASH_BOUND_INDEPENDENT_REVIEW_OF_F1_R2_ATOMIC_BUNDLE
+
+boundaries:
+  F1_accepted: false
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_performed: false
+  push_performed: false

@@ -1,0 +1,80 @@
+schema_version: agents-os.contract-self-review.v0.1
+record_id: agents-os-f1-goal-spec-plan-membership-v0.1-self-review
+record_type: AuthorSelfReview
+status: active
+created_at: 2026-07-14T03:22:00+08:00
+
+review_classification:
+  lane: YELLOW
+  independence: SELF_REVIEW
+  may_claim_independent_review: false
+  may_accept_subject: false
+
+subject:
+  acceptance_unit_id: F1_GOAL_SPECIFICATION_SUCCESS_CRITERIA_PLAN_MEMBERSHIP_V0_1
+  path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+  sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  bytes_fixed_before_review: true
+
+normative_inputs:
+  - path: AGENTS.md
+    role: root_workspace_operating_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_Goal_Task_dependency_and_closure_architecture
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+    role: frozen_action_spine_acceptance_record
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    role: accepted_F1_dependency_and_scope_assignment
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-minimum-g3-gate-amendment-v0.1.yaml
+    sha256: 47330101e54aee710d6d5e302079d1827b80133b0c06c72b25fa10bd73d09c35
+    role: accepted_contract_closure_entry_gate
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    role: current_Phase_4_and_F1_authority
+
+review_dimensions:
+  inherited_authority_preserved: PASS
+  no_sixth_formal_core_object: PASS
+  top_level_and_subgoal_authority: PASS
+  immutable_revision_and_current_pointer_model: PASS
+  success_criterion_identity_and_decision_currentness: PASS
+  plan_membership_full_snapshot_and_lineage: PASS
+  plan_progress_separated_from_Goal_success: PASS
+  shared_Task_compatibility_with_dependency_v0_1: PASS
+  closure_is_synchronous_and_hash_bound: PASS
+  low_disclosure_and_private_data_boundary: PASS
+  recovery_and_negative_path_coverage: PASS
+  no_implementation_or_runtime_authority: PASS
+
+author_corrections_before_fixed_hash:
+  - clarified_that_a_clear_current_Jenn_expression_needs_no_extra_confirmation_package
+  - normalized_criterion_set_order_for_fingerprinting
+  - made_plan_id_single_and_stable_per_Goal_in_v0_1
+  - removed_ambiguous_embedded_plan_current_status
+  - constrained_decomposition_to_the_same_route_or_supplemental_lineage
+  - distinguished_same_Goal_multiple_bindings_from_cross_Goal_sharing
+  - corrected_achieved_gate_to_require_routes_for_required_criteria
+
+findings:
+  blockers: []
+  major: []
+  minor: []
+
+result: PASS_FOR_INDEPENDENT_REVIEW
+
+required_next_gate:
+  name: HASH_BOUND_INDEPENDENT_REVIEW_OF_F1
+  fresh_reviewer_run_required: true
+  exact_subject_sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+
+boundaries:
+  F1_accepted: false
+  F2_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  commit_performed: false
+  push_performed: false

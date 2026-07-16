@@ -1,0 +1,126 @@
+schema_version: agents-os.foundational-direction-acceptance-decision.v0.1
+record_id: agents-os-foundational-direction-acceptance-decision-v0.1
+record_type: FoundationalDirectionAcceptanceDecision
+status: accepted
+immutable: true
+created_at: 2026-07-14T02:41:08+08:00
+effective_at: 2026-07-14T02:41:08+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT
+  decision_source: explicit_current_conversation_decision
+  future_adjustment_intent: amendments_and_new_revisions_remain_allowed
+
+acceptance_unit:
+  acceptance_unit_id: AGENTS_OS_FOUNDATIONAL_DIRECTION_V0_1
+  atomic: true
+  partial_acceptance_permitted: false
+  result: ACCEPTED
+
+accepted_subjects:
+  - role: life_core_authority_and_gap_map
+    path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    byte_count: 16964
+    lf_count: 467
+    accepted_scope: entire_file
+  - role: home_domain_architecture_direction
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    byte_count: 25422
+    lf_count: 820
+    accepted_scope: entire_file
+
+bound_normative_inputs:
+  - role: home_fact_authority_matrix
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    byte_count: 10442
+    lf_count: 108
+    accepted_subject: false
+
+review_evidence:
+  - role: home_direction_subject_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-independent-review.yaml
+    sha256: 6956cbffe74d770e6b18370cb147b8fcee00cc4a41431e4a325a24d7a8f40627
+    byte_count: 11030
+    lf_count: 225
+    result: PASS_NO_BLOCKER
+  - role: foundational_integration_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-foundational-integration-review-v0.1.yaml
+    sha256: a47afeb33031407fda0fa14a985f1847098956f773066354017faf7be6da7f75
+    byte_count: 17196
+    lf_count: 346
+    result: PASS_NO_BLOCKER
+    mandatory_pass: 12
+    blocker_count: 0
+    semantic_major_count: 0
+    minor_count: 1
+
+acknowledged_nonblocking_finding:
+  finding_id: FI-MINOR-01
+  disposition: ACCEPTED_AS_INTERPRETATION_GUARD
+  meaning: >-
+    R3 anticipatory wording did not establish prior acceptance; this decision
+    is the first Jenn acceptance of the fixed authority map and Home Direction.
+  fixed_subject_edit_performed: false
+
+unresolved_foundation_requirements:
+  - HD-M0-01
+  - HD-M0-02
+  - HD-M0-03
+  - HD-M0-04
+  - HD-M0-05
+  - HD-M0-06
+  - HD-M0-07
+
+decision_scope:
+  foundational_direction_accepted: true
+  Home_Domain_is_logical_bounded_context: true
+  Home_Domain_is_second_ledger: false
+  Phase_2_complete: true
+  Phase_3_started: false
+  Phase_3_start_authorized_by_this_decision: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_execution_authorized: false
+  service_start_authorized: false
+  sensing_or_recording_authorized: false
+  private_raw_memory_access_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+future_change_policy:
+  historical_subject_bytes_may_be_edited: false
+  allowed_change_methods:
+    - new_version_plus_independent_review_plus_Jenn_decision
+    - explicit_architecture_amendment_plus_impact_review_plus_Jenn_decision
+    - versioned_policy_revision_within_an_already_delegated_policy_scope
+  HD_M0_06_presence_contract_must_precede_relevant_sensing_implementation: true
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  subject_self_digest: false
+
+next_gate:
+  action: EXPLICIT_START_OF_PHASE_3_CONSTRUCTION_READINESS_REVIEW
+  automatic_phase_advance: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subjects_to_materialize_status: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_new_review_plus_new_Jenn_decision
+  derived_registry_and_status_projection_updates: permitted

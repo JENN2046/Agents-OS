@@ -1,0 +1,355 @@
+schema_version: "agents-os.hash-bound-independent-review.v0.1"
+review_id: "agents-os-f2-r19-v14-targeted-consistency-independent-review"
+review_type: "FRESH_TARGETED_CONSISTENCY_INDEPENDENT_REVIEW"
+date: "2026-07-15"
+reviewed_at: "2026-07-16T00:05:07+08:00"
+status: "complete"
+result: "BLOCK"
+
+reviewer:
+  identity: "Codex_fresh_independent_targeted_consistency_reviewer_f2_r19_v14"
+  runtime_task: "/root/f2_r19_targeted_consistency"
+  coordinator_task: "/root"
+  independent: true
+  read_only_until_conclusion: true
+  source_or_draft_bytes_modified: false
+  output_artifact_only: true
+
+scope:
+  acceptance_subjects: "fixed F2 R1 through R19"
+  derived_surface: "F2 Effective Contract Materialization v0.1-r19-v14"
+  review_surface_only: true
+  full_atomic_bundle_review: false
+  targeted_questions:
+    - "Exact closure of the six BLOCKER, three MAJOR, and one MINOR findings in the R18-v13 full review"
+    - "R19 precedence, narrowness, internal acyclicity, and absence of authority expansion"
+    - "R19 schema, formula, domain, and downstream reducer materialization"
+    - "Exact source references and 64-schema/15-reducer row-set equality"
+  excluded_actions:
+    - "subject or materialization edits"
+    - "acceptance decision"
+    - "implementation or runtime activation"
+    - "commit, push, merge, release, or deploy"
+
+fixed_inputs:
+  source_subject_count: 19
+  derived_surface_count: 1
+  observed_input_count: 20
+  matched_input_count: 20
+  mismatched_input_count: 0
+  hash_gate: "PASS"
+  subject_hashes:
+    R1: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+    R2: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+    R3: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+    R4: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+    R5: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+    R6: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+    R7: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+    R8: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+    R9: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+    R10: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+    R11: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+    R12: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+    R13: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+    R14: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+    R15: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+    R16: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+    R17: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+    R18: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+    R19: "d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3"
+  materialization:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+    expected_sha256: "ff0f656670208801b22bff9a8ea3b52b5f1871ea89147d9dfe378ab0134ffac9"
+    observed_sha256: "ff0f656670208801b22bff9a8ea3b52b5f1871ea89147d9dfe378ab0134ffac9"
+    hash_match: true
+    authority: "DERIVED_ONLY"
+  R19_subject:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+    expected_sha256: "d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3"
+    observed_sha256: "d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3"
+    hash_match: true
+
+prior_review:
+  path: "control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v13-full-atomic-bundle-independent-review.yaml"
+  sha256: "0c9bb9b593df1253a48a96ea12df0c1a2f7310c22ed2443206aecd97d6a860ae"
+  role: "fixed prior-finding evidence; every disposition below was independently rechecked"
+  finding_counts:
+    blocker: 6
+    major: 3
+    minor: 1
+    total: 10
+
+prior_findings_disposition:
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B01"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+        lines: "50-112"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1226-1265,2283-2306,2343-2347"
+    basis: >-
+      NOT_YET_ACTIVE is an explicit derived Actor state with total start/expiry
+      precedence and is carried into Binding, Assignment, Delegation, Temporary
+      Worker responsibility, authentication, stewardship, and operational-use
+      outcomes without becoming a stored status or permission.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B02"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+        lines: "116-266"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1900-1986,2128-2144,2527-2545,2610-2617"
+    basis: >-
+      The exact VALID revalidation ref/fingerprint is conditional on activation-
+      evidence RESUME, occupies the governed body/fact known-object positions,
+      and is bound through body fingerprint, intent, committed action,
+      LifecycleActionRef, replay identity, final fact, Event, and current-head
+      CAS. Binding uses a fresh post-SUSPEND proof. Delegation binds the exact
+      immutable acknowledgement and its historical action-validity assessment;
+      routine session or credential turnover does not rewrite historical
+      acknowledgement assurance.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B03"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+        lines: "268-398"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1346-1457"
+    basis: >-
+      The stewardship scope assessment deliberately excludes the target Worker
+      assessment and operational Worker-binding assessment, rejects every Domain
+      Agent responsibility lineage containing or deriving from the target
+      Worker, and is allowlisted only for post-create stewardship. The target
+      lifecycle matrix, not the scope projection, evaluates the target state.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B04"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md"
+        lines: "39-102"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "687-695,714-733,832-843"
+    basis: >-
+      Admission is again exclusively over the parsed ECMAScript binary64 value;
+      parser rounding alone does not reject, negative zero does reject, and the
+      R6 rounded-token examples are reproduced with the same outcomes.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B05"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "861-903,905-1216"
+    basis: >-
+      V14 distinguishes the registered complete-known-object rule from the exact
+      special catalogue and prints the still-effective acknowledgement replay,
+      evidence-ID, BindingScope, action/acknowledgement, activation replay,
+      Delegation intent/subject, lineage, mutation/replay, impact-set, Actor,
+      Binding, Assignment, Worker-binding, and R19 derived-record formulas.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-B06"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "403-417,845-853,1500-1501,1541-1558,1724-1732"
+    basis: >-
+      The materialization prints the closed Jenn permitted-basis-use set,
+      BindingScope/context scalar constraints, Assignment non-self-issuance and
+      non-recursion, and the complete non-transferable responsibility set.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-M01"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "330-343"
+    basis: >-
+      Actor CREATE is split by all six exact classes and the bootstrap,
+      stewardship, and provisioning paths are mutually class-exclusive.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-M02"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1814-1843,1862-1879,1888-1898,2458-2515"
+    basis: >-
+      Creation remains stored ACTIVE-only while SUSPENDED, REVOKED, RENOUNCED,
+      and SUPERSEDED are explicitly distinguished as derived stream states and
+      are consumed by the activation reducers.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-M03"
+    disposition: "UNRESOLVED"
+    mapped_current_finding_id: "F2-R19-V14-TCIR-M01"
+    basis: >-
+      The formerly cited nonexistent activation section is gone, but the
+      exhaustive source index still does not satisfy R17's per-row exact subject
+      and section requirement and omits R19 from several downstream rows whose
+      printed enums or reducers now consume NOT_YET_ACTIVE.
+
+  - prior_finding_id: "F2-R18-V13-FULL-IR-m01"
+    disposition: "RESOLVED"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md"
+        lines: "400-484"
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1657-1707"
+    basis: >-
+      The old free-text reason field is forbidden and replaced by a closed ASCII
+      reason_code plus an optional immutable ARTIFACT_METADATA low-disclosure ref
+      that is embedded, non-authoritative, and NOT_STANDALONE.
+
+finding_counts:
+  blocker: 0
+  major: 1
+  minor: 0
+  total: 1
+
+findings:
+  - finding_id: "F2-R19-V14-TCIR-M01"
+    severity: "MAJOR"
+    title: "The exhaustive source index remains non-section-exact and omits controlling R19 downstream attribution"
+    affected_surfaces:
+      - "R17 exact source-map contract"
+      - "R19 NOT_YET_ACTIVE downstream schema and reducer materialization"
+      - "v14 source-field equivalence claim"
+    evidence:
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md"
+        lines: "228-247"
+        fact: >-
+          Every index row must name the authoritative source subject and section;
+          broad source-only prose and unresolved aliases fail validation.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "2852-2941"
+        fact: >-
+          Rows still use non-section-exact forms including R7, R11-R14,
+          R3/R4/R7, R9-R14 overlays, and R2-R4 activation. The effective Binding,
+          Assignment, and Delegation assessment rows and their current reducers
+          do not cite R19 even though their printed enums/branches consume the
+          R19 NOT_YET_ACTIVE overlay.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "1741-1744"
+        fact: >-
+          The owning activation-evidence section source header stops at R18 even
+          though Section 12.1 prints the R19 revalidation schema and reducer.
+      - path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r19-v14.draft.md"
+        lines: "2283-2306,2343-2347,2927-2929"
+        fact: >-
+          NOT_YET_ACTIVE is materially present in downstream schemas and reducers,
+          but the corresponding index source rows lack R19 Section 2.
+    finding: >-
+      V14 achieves structural row-set equality but does not achieve the source-
+      exact equality required by R17 and R19. A reader cannot reconstruct every
+      effective row from the index without interpreting revision ranges or
+      discovering an unlisted R19 overlay.
+    impact: >-
+      The derived surface overstates source-map closure and can cause an
+      implementer or future reviewer to miss a controlling R19 branch. This does
+      not create runtime authority, but it prevents v14 from serving as the
+      complete source-exact implementation reading surface required for the next
+      full atomic-bundle review.
+    suggested_fix: >-
+      Replace every revision-only, range, slash, and generic overlay source entry
+      in both schema and reducer indexes with the exact controlling subject and
+      section list. Add R19 Section 2 to every downstream assessment/reducer row
+      that materializes NOT_YET_ACTIVE, add R19 Section 3 to the Section 12 source
+      header, and rerun both row-set equality and row-by-row source-predicate/
+      formula validation.
+
+targeted_consistency_matrix:
+  source_hashes_R1_through_R19_and_v14: "PASS_20_OF_20"
+  R19_precedence_and_narrowness: "PASS"
+  Actor_NOT_YET_ACTIVE_total_projection: "PASS"
+  activation_RESUME_revalidation_body_to_intent_to_action_to_replay_to_fact_CAS: "PASS"
+  Delegation_acknowledgement_historical_assurance: "PASS"
+  Worker_stewardship_target_state_acyclicity: "PASS"
+  Worker_target_lineage_backflow_rejection: "PASS"
+  Delegation_reason_closed_value: "PASS"
+  R6_parsed_binary64_number_admission: "PASS"
+  exact_special_formula_catalogue: "PASS"
+  closed_invariants: "PASS"
+  class_exclusive_Actor_CREATE: "PASS"
+  activation_evidence_stored_ACTIVE_vs_derived_states: "PASS"
+  R19_schema_field_domain_and_reducer_materialization: "PASS_WITH_SOURCE_ATTRIBUTION_FINDING"
+  exact_source_references: "FAIL_MAJOR"
+  no_new_semantics_or_authority_expansion_detected: "PASS"
+  non_authorization: "PASS"
+
+row_set_validation:
+  schema_definitions: 64
+  schema_index_rows: 64
+  unique_schema_definitions: 64
+  unique_schema_index_rows: 64
+  duplicate_schema_definitions: 0
+  duplicate_schema_index_rows: 0
+  schema_definitions_not_indexed: []
+  schema_index_rows_not_defined: []
+  schema_row_set_equality: "PASS"
+  reducer_definitions: 15
+  reducer_index_rows: 15
+  unique_reducer_definitions: 15
+  unique_reducer_index_rows: 15
+  duplicate_reducer_definitions: 0
+  duplicate_reducer_index_rows: 0
+  reducer_definitions_not_indexed: []
+  reducer_index_rows_not_defined: []
+  reducer_row_set_equality: "PASS"
+  semantic_note: >-
+    Structural equality does not override F2-R19-V14-TCIR-M01; source-subject and
+    source-section equality is a separate normative requirement.
+
+artifact_validation:
+  strict_duplicate_key_YAML_parse: "PASS"
+  finding_counts_0_blocker_1_major_0_minor_total_1: "PASS"
+  prior_disposition_count_10: "PASS"
+  evidence_paths_exist: "PASS"
+  UTF8_without_BOM_LF_only_no_trailing_whitespace: "PASS"
+  docctl_doctor: "PASS_WITH_FOUR_EXPECTED_UNREGISTERED_WARNINGS"
+  docctl_status: "FAIL_EXISTING_SCORE_GATES_AND_FOUR_UNREGISTERED_REVIEW_INPUTS_OR_ARTIFACTS"
+  registry_registration_performed: false
+  note: >-
+    Doctor reported no validator failure. The four warnings are the fixed R19
+    subject, fixed v14 materialization, prior R18-v13 review, and this new review
+    artifact. Registration would modify existing registry files and is outside
+    this read-only review closure.
+
+artifact_scope:
+  source_subjects_modified: false
+  materialization_modified: false
+  prior_review_modified: false
+  registry_modified: false
+  CURRENT_STATE_modified: false
+  other_workspace_changes_touched: false
+  commit_performed: false
+  push_performed: false
+
+review_conclusion:
+  ready_for_fresh_full_atomic_bundle_independent_review: false
+  subject_amendment_required: false
+  materialization_correction_required: true
+  prior_findings_resolved: 9
+  prior_findings_unresolved: 1
+  recommendation: "CORRECT_V14_SOURCE_MAP_THEN_REPEAT_TARGETED_CONSISTENCY_REVIEW"
+
+authority:
+  F2_accepted: false
+  Jenn_atomic_acceptance_decision_ready: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_or_secret_access_authorized: false
+  commit_authorized_by_this_review: false
+  push_authorized_by_this_review: false
+  release_or_deploy_authorized: false
+
+non_authorization: >-
+  This review is evidence only. It does not accept F2, modify R1-R19 or v14,
+  authorize implementation, start F3, activate runtime, authorize production
+  authentication, create a database or service, call a provider, access secrets
+  or private memory, or authorize commit, push, merge, release, or deploy.
+
+next_required_action: "SOURCE_EXACT_V14_CORRECTION_THEN_REPEAT_TARGETED_CONSISTENCY_REVIEW"

@@ -1,0 +1,16 @@
+schema_version: agents-os.foundation-contract-amendment-start-decision.v0.1
+decision_id: agents-os-f2-r11-synthetic-precommit-snapshot-final-materialization-closure-start
+date: 2026-07-14
+owner: Jenn
+agent_steward: Nobao
+status: active
+authority:
+  basis: Jenn_explicit_automatic_advancement_after_F2_review
+  source_review: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r10-atomic-bundle-independent-review.yaml
+  source_review_sha256: 53340e8340ac14e29edddd2ed4f6177973d0e447261eafe1fa1ab50cc06b8aea
+scope: [remove_synthetic_snapshot_fixed_point, separate_post_activation_provenance, correct_complete_materialization, author_self_review, fresh_independent_review]
+forbidden: [rewrite_R1_through_R10, expand_F2_direction, accept_F2, start_F3, implement_runtime, database_change, runtime_activation, secret_access, commit, push]
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+

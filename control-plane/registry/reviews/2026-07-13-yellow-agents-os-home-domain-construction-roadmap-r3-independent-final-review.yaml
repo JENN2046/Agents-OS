@@ -1,0 +1,230 @@
+schema_version: agents-os.independent-final-review.v0.2
+record_id: agents-os-home-domain-construction-roadmap-r3-independent-final-review
+record_type: IndependentFinalReview
+status: complete
+immutable_after_creation: true
+
+reviewer_identity: /root/home_domain_r3_final_review
+review_run_id: home-domain-r3-independent-final-20260713T225120+0800
+review_started_at: "2026-07-13T22:47:00+08:00"
+review_completed_at: "2026-07-13T22:52:00+08:00"
+review_mode: fresh_hash_bound_read_only
+author_run_separated: true
+author_scratchpad_read: false
+prohibited_inputs_accessed: false
+
+subject:
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+  expected_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  observed_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  hash_gate: PASS_EXACT_MATCH
+
+review_lineage_inputs:
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-self-review.yaml
+    sha256: 6ed937ebaa7a1b4f85ccc8f901b92521506f120de317a74f927877bbed33865f
+    role: R2_author_self_review
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-independent-final-review.yaml
+    sha256: 3f9912fe84cf00a4bd934f4e7d14af7ae23f8695e995e75767ae554b49bc19af
+    role: R2_valid_independent_review
+  - path: control-plane/registry/reviews/2026-07-13-agents-os-home-domain-roadmap-r2-subsequent-external-review-disposition-v0.1.yaml
+    sha256: af74e6eddfb4c525b2d25cb240ff63d16de3550183bdf23dd60d0253f8b130e5
+    role: subsequent_external_review_disposition
+  - path: control-plane/registry/reviews/2026-07-13-agents-os-home-domain-roadmap-prior-findings-disposition-v0.1.yaml
+    sha256: fb119994a79b2174cc3ff6d0caa8c2ee604f6ddbdac5f29166aec94fea96e1b3
+    role: prior_findings_resolution_matrix
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r3-self-review.yaml
+    sha256: be9975fe4653af75d01ff42707901e1228310adf1d6b14a233f523b3dc667954
+    role: R3_author_closeout
+
+normative_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: CURRENT_STATE.md
+    sha256: 4ee0071e34961d5c83f626411f8b665b3eb87c9edfb38882b32e4a8bac430612
+    role: current_project_state
+  - path: control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    sha256: 6bf28379a6fd9f74ab47b241e6aee246048a9003ea965a1721ddba8e17c68c0a
+    role: document_discovery_and_lifecycle_registry
+  - path: control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    sha256: e22f579a0262f024b5df8e58cf321213c9aa243e56eabef0fd3587f1b2cbfd57
+    role: federated_registry_count_and_member_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_resident_topology_and_ledger_authority
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: authority_permit_and_host_enforcement_boundary
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+    role: accepted_action_spine_freeze
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+    role: accepted_scheduling_materialization
+  - path: control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
+    sha256: d3babe879a88597c80201a1bc6998ea6b690f9568caf0b1c300edff3b40645a8
+    role: repository_validation_qualification
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: current_life_core_policy_index
+
+input_allowlist:
+  subject_and_lineage:
+    - control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    - control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-self-review.yaml
+    - control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-independent-final-review.yaml
+    - control-plane/registry/reviews/2026-07-13-agents-os-home-domain-roadmap-r2-subsequent-external-review-disposition-v0.1.yaml
+    - control-plane/registry/reviews/2026-07-13-agents-os-home-domain-roadmap-prior-findings-disposition-v0.1.yaml
+    - control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r3-self-review.yaml
+  normative:
+    - AGENTS.md
+    - CURRENT_STATE.md
+    - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    - control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    - control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    - control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    - control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    - control-plane/registry/reviews/2026-07-13-agents-os-scheduling-time-capacity-clean-checkout-validation-qualification-v0.1.yaml
+    - control-plane/policies/life-core/README.md
+
+forbidden_inputs:
+  - author_scratchpad
+  - private_raw_memory
+  - state-private
+  - unregistered_historical_drafts_outside_allowlist
+
+prior_findings_review:
+  total: 15
+  resolved: 15
+  rebutted: 0
+  unresolved: 0
+  determinations:
+    - finding_id: R1_CONVERSATION_REVIEW_01
+      author_disposition: RESOLVED_IN_R2
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R2_and_R3_Section_1_separate_logical_architecture_from_accepted_VCPToolBox_deployment_topology
+    - finding_id: R1_CONVERSATION_REVIEW_02
+      author_disposition: RESOLVED_IN_R2
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_11_requires_explicit_nonautomatic_Session_branching
+    - finding_id: R1_CONVERSATION_REVIEW_03
+      author_disposition: RESOLVED_IN_R2
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Sections_6_and_14_require_fixed_subject_and_actual_normative_input_hashes
+    - finding_id: R1_CONVERSATION_REVIEW_04
+      author_disposition: RESOLVED_IN_R2
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_7_separates_review_from_hash_bound_Jenn_decision
+    - finding_id: R1_CONVERSATION_REVIEW_05
+      author_disposition: RESOLVED_IN_R2
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Sections_10_and_11_forbid_private_raw_memory_and_existing_database_writes
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_01
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_2_places_applicable_system_runtime_tool_and_safety_constraints_before_Jenn_decisions
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_02
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_4_defines_G1A_result_drafting_boolean_and_separate_direction_and_M0_gap_classes
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_03
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_4_1_mandates_registry_and_CURRENT_STATE_delivery_at_gate_transitions
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_04
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_14_fixes_subject_lineage_normative_inputs_and_forbidden_inputs
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_05
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Sections_6_and_7_define_separate_subject_and_foundational_integration_reviews_and_outputs
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_06
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_14_and_the_disposition_artifact_identify_all_fifteen_findings_without_an_unbound_aggregate_claim
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_07
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_9_allows_only_declared_complete_atomic_acceptance_bundles_and_forbids_partial_acceptance
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_01
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_3_marks_Phase_0_as_a_historical_snapshot_not_a_continuous_worktree_invariant
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_02
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_1_splits_identity_meaning_canonical_identity_facts_and_identity_narrative_by_authority
+    - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_03
+      author_disposition: RESOLVED_IN_R3
+      independent_determination: VERIFIED_RESOLVED
+      evidence: R3_Section_10_requires_deterministic_test_principals_and_synthetic_credentials_and_forbids_active_identities
+
+review_determinations:
+  seven_governance_amendments_closed: true
+  three_nonblocking_clarifications_closed: true
+  truthful_review_lineage: true
+  R2_independent_review_preserved_as_valid_in_recorded_scope: true
+  later_external_governance_findings_recorded_as_subsequent: true
+  G1A_to_G1B_gate_deterministic: true
+  registry_and_CURRENT_STATE_delivery_mandatory_at_defined_transitions: true
+  Phase_1C_and_Phase_2_reviews_distinct: true
+  Jenn_acceptance_requires_subject_and_both_review_hashes: true
+  explicit_atomic_bundle_supported_with_complete_hashes: true
+  M0_uses_synthetic_test_identity_only: true
+  home_domain_expanded_in_R3: false
+  Phase_1A_started: false
+  second_ledger_created: false
+  frozen_scheduling_semantics_modified_or_weakened: false
+  accepted_resident_semantics_modified_or_weakened: false
+
+review_result: PASS_NO_BLOCKER
+blockers: []
+major_findings: []
+minor_findings:
+  - finding_id: R3_MINOR_01
+    location: R3_Section_3_Current_State
+    finding: duplicate_empty_docctl_doctor_key_precedes_the_effective_mapping_in_a_markdown_YAML_example
+    effect: no_contract_reduction_or_evidence_claim_changes_but_the_duplicate_should_be_removed_in_a_future_revision
+  - finding_id: R3_MINOR_02
+    location: R3_Section_7_Independent_Final_Review_Questions
+    finding: Presence_drift_into_continuous_sensing_question_is_repeated_verbatim
+    effect: editorial_duplication_only_with_no_change_to_review_scope
+
+validation:
+  subject_sha256_exact_match_before_review: PASS
+  subject_sha256_exact_match_after_review: PASS
+  all_declared_input_sha256_recorded_and_matched: PASS
+  artifact_yaml_parse: PASS
+  artifact_utf8_lf_only_no_bom: PASS
+  artifact_trailing_whitespace: PASS
+  git_diff_check: PASS
+  forbidden_input_boundary: PASS
+  subject_and_historical_inputs_unchanged: PASS
+
+decision_effect:
+  may_proceed_to_Jenn_decision_surface: true
+  Jenn_acceptance_granted_by_this_review: false
+  Phase_1A_authorized: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  provider_execution_authorized: false
+  service_start_authorized: false
+  commit_authorized: false
+  push_authorized: false
+
+write_scope:
+  artifact_created: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r3-independent-final-review.yaml
+  subject_modified: false
+  R2_history_modified: false
+  registry_modified: false
+  current_state_modified: false
+  runtime_modified: false
+
+next_gate:
+  action: JENN_FINAL_DECISION_ON_FIXED_R3
+  reviewed_subject_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  implementation_authorized: false
+  runtime_activation_authorized: false

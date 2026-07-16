@@ -1,0 +1,76 @@
+schema_version: agents-os.subsequent-review-disposition.v0.1
+record_id: agents-os-f2-r6-subsequent-lifecycle-review-disposition-v0.1
+record_type: SubsequentReviewDisposition
+date: 2026-07-14
+status: complete
+immutable: true
+
+subject_bundle:
+  acceptance_unit_id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R6_ATOMIC_BUNDLE
+  R6_subject_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+  prior_independent_review_path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r6-atomic-bundle-independent-review.yaml
+  prior_independent_review_sha256: 9eaef5589b2b764034d0cc2b4e7c57e666e437c3e4cfe26a9442bcc7aa19744f
+  prior_review_deleted_or_rewritten: false
+  fixed_subjects_modified: false
+
+subsequent_review_source:
+  source_kind: Jenn_supplied_external_review_in_current_conversation
+  independently_rechecked_against_fixed_R1_R6: true
+  source_artifact_path: null
+  raw_external_review_persisted: false
+
+disposition:
+  R6_acceptance_ready: false
+  prior_PASS_NO_BLOCKER_integrity: preserved
+  prior_PASS_NO_BLOCKER_sufficient_for_acceptance: false
+  resolution_method: R7_CONCENTRATED_AMENDMENT
+  R1_rewrite_required: false
+
+findings:
+  - finding_id: F2-R6-SR-B01
+    title: Principal and Authenticator Profile lifecycle is not closed
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-B02
+    title: Activation assessment is conflated with effective currentness
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-B03
+    title: Historical issuance proof is conflated with current binding status
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-B04
+    title: Suspension revocation and renunciation lack an executable fact model
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-B05
+    title: Actor identity transition matrix and validity window are incomplete
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-B06
+    title: F2-wide JCS numeric scalar domain is incomplete
+    severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7
+  - finding_id: F2-R6-SR-M01
+    title: ResponsibilityScope subtree containment is not revision-bound
+    original_severity: MAJOR
+    final_severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7_EXACT_SET_ONLY
+  - finding_id: F2-R6-SR-M02
+    title: Assignment and Delegation create overlapping responsibility lineages
+    original_severity: MAJOR
+    final_severity: BLOCKER
+    disposition: ACCEPTED_FOR_R7_SINGLE_DELEGATION_LINEAGE
+  - finding_id: F2-R6-SR-M03
+    title: Effective contract materialization is required for review and implementation
+    severity: MAJOR
+    disposition: REQUIRED_BEFORE_R7_INDEPENDENT_REVIEW
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false

@@ -1,0 +1,132 @@
+review_id: "F2_R18_MATERIALIZATION_V13_FOUR_MAJOR_CORRECTION_SELF_REVIEW_2026_07_15"
+review_type: "AUTHOR_SELF_REVIEW_OF_DERIVED_MATERIALIZATION_V13"
+review_date: "2026-07-15"
+reviewer:
+  identity: "Nobao author run"
+  run_id: "f2-r18-materialization-v13-author-closeout-20260715-01"
+independent: false
+result: "PASS_NO_AUTHOR_BLOCKER"
+
+scope:
+  acceptance_subjects: "fixed F2 R1 through R18"
+  derived_surface: "F2 Effective Contract Materialization v0.1-r18-v13"
+  allowed_changes:
+    - "compose target-own Delegation issuance and transitive activation assurance effects into the sole reducer"
+    - "add the existing R16 Actor general transition authority-basis domain to the closed registry"
+    - "complete synthetic Binding activation-evidence transition coverage in the complete-set reducer"
+    - "bind the synthetic manifest assessment source claim and index row to the controlling R17 replacement"
+  forbidden_changes_respected:
+    subjects_modified: false
+    new_schema_or_field_added: false
+    new_reducer_added: false
+    new_authority_added: false
+    full_atomic_bundle_review_started: false
+    implementation_started: false
+
+fixed_subject_hashes:
+  R1: "639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b"
+  R2: "8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd"
+  R3: "d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db"
+  R4: "a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59"
+  R5: "cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be"
+  R6: "bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932"
+  R7: "343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c"
+  R8: "861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3"
+  R9: "438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94"
+  R10: "b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8"
+  R11: "baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6"
+  R12: "4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a"
+  R13: "e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce"
+  R14: "19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190"
+  R15: "b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2"
+  R16: "b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a"
+  R17: "3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8"
+  R18: "1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222"
+  observed_match_count: 18
+  expected_count: 18
+
+review_inputs:
+  prior_materialization:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v12.draft.md"
+    sha256: "d74f1259f2bdc9714876266b4f7f0173cceef5ae1193ceb83e664b4cc2d3c102"
+  prior_independent_review:
+    path: "control-plane/registry/reviews/2026-07-15-yellow-agents-os-f2-r18-v12-materialization-independent-consistency-review.yaml"
+    sha256: "7be0b6ba016d3245e8d0834ccad674b44c32e9011bca635c9863068d31f3f5ec"
+    result: "BLOCK"
+    findings: "0 blocker, 4 major, 0 minor"
+  reviewed_materialization:
+    path: "control-plane/registry/drafts/2026-07-15-agents-os-f2-effective-contract-materialization-v0.1-r18-v13.draft.md"
+    sha256: "939ce101619d13f5947620655ea6e25fd859bebba80bdf051bc305a534c8e680"
+
+prior_findings_disposition:
+  - finding_id: "F2-R18-V12-MCR-M01"
+    disposition: "RESOLVED_IN_V13_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      DelegationEffectiveCurrentReducer now maps target-own DELEGATION_ISSUANCE
+      or transitive activation INVALIDATED assurance to prospective REVOKED,
+      maps CHALLENGED or INDETERMINATE to INDETERMINATE while preserving safer
+      states, and permits ACTIVE only when all direct and transitive assurance is
+      CONFIRMED. Its source-index row now includes R15 Section 5.
+  - finding_id: "F2-R18-V12-MCR-M02"
+    disposition: "RESOLVED_IN_V13_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      The closed domain registry now includes
+      ActorGeneralTransitionAuthorityBasisV0_1R16 with the exact existing R16
+      domain. No new domain was created.
+  - finding_id: "F2-R18-V12-MCR-M03"
+    disposition: "RESOLVED_IN_V13_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      ActionAssuranceCompleteSetReducer now has separate ordinary Binding,
+      synthetic Binding, Delegation activation, and synthetic manifest branches.
+      Synthetic Binding consumes the exact manifest create/accept assurance
+      transitively and includes every accepted activation-evidence transition
+      through the assessment watermark.
+  - finding_id: "F2-R18-V12-MCR-M04"
+    disposition: "RESOLVED_IN_V13_PENDING_INDEPENDENT_CONFIRMATION"
+    correction: >-
+      Section 20 and the SyntheticM0ManifestAssessmentV0_1R16 index row now cite
+      R16 Section 3.2 and the controlling R17 Section 2 type replacement.
+
+validation:
+  subject_hash_lock: "PASS_18_OF_18"
+  materialization_sha256: "PASS"
+  v12_to_v13_scope_diff: "PASS_ONLY_FOUR_REVIEWED_MATERIALIZATION_MAJORS"
+  utf8_without_bom: "PASS"
+  lf_only: "PASS"
+  trailing_whitespace: "PASS"
+  markdown_fence_balance: "PASS"
+  yaml_fences:
+    parsed: 26
+    failures: 0
+  schema_index:
+    rows: 61
+    unique: 61
+  reducer_index:
+    rows: 13
+    unique: 13
+  exact_R17_role_scan: "PASS"
+  four_finding_negative_path_scan: "PASS"
+  git_diff_check: "PASS"
+
+findings:
+  blocker: []
+  major: []
+  minor: []
+
+non_authorization:
+  F2_acceptance_granted: false
+  full_atomic_bundle_review_performed: false
+  full_atomic_bundle_review_authorized_to_start: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate:
+  required: "FRESH_HASH_BOUND_INDEPENDENT_MATERIALIZATION_CONSISTENCY_REVIEW_OF_FIXED_F2_R1_THROUGH_R18_AND_MATERIALIZATION_V13"
+  full_atomic_bundle_review_eligible: false
+  statement: >-
+    Author review cannot confirm independence. V13 must be reviewed in a fresh
+    read-only run against fixed R1-R18 and the v12 finding evidence.

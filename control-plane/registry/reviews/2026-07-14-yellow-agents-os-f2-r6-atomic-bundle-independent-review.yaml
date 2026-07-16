@@ -1,0 +1,381 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r6-atomic-bundle-independent-review
+review_run_id: f2-r6-atomic-independent-review-2026-07-14-fresh-01
+review_type: FRESH_HASH_BOUND_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+reviewer_identity: Codex_fresh_independent_reviewer
+date: 2026-07-14
+completed_at: 2026-07-14T13:37:37+08:00
+status: complete
+
+review_process_separation:
+  independent_from_subject_author: true
+  independent_from_author_self_review: true
+  author_conclusions_trusted_without_reverification: false
+  all_conclusions_rederived_from_fixed_subjects: true
+  every_prior_finding_readjudicated: true
+  subject_modified: false
+  existing_files_modified: false
+  only_new_file_is_this_review: true
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false
+  restricted_inputs_observed: true
+  restricted_inputs_not_read:
+    - state-private
+    - secrets_or_credentials
+    - private_raw_memory
+    - provider_raw_output
+    - author_scratchpad
+    - non_allowlisted_historical_drafts
+
+atomic_subjects:
+  - role: fixed_R1_base
+    path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    expected_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    pre_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    post_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R2_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    expected_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    pre_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    post_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R3_final_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+    expected_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    pre_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    post_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R4_final_canonicalization_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+    expected_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    pre_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    post_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R5_final_scalar_encoding_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+    expected_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    pre_review_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    post_review_sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R6_final_number_admission_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+    expected_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    pre_review_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    post_review_sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    hash_match_before_review: true
+    hash_match_after_review: true
+
+allowlist_hashes_actually_read:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: CURRENT_STATE.md
+    sha256: 6ed959a9ab609f24da26375f8dddef2809d6fac1e499b0a1c0e54ad706e1ecff
+    role: state_and_non_authorization_consistency_only
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r6-final-number-admission-amendment-start-decision-v0.1.yaml
+    sha256: 069876cadb7f3844fd7d1032ad25565e4b899f90119d129be203230bc4d1abd6
+    role: R6_scope_authority
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r5-atomic-bundle-independent-review.yaml
+    sha256: dd02093894785ca2f4eb795825a465485cfdbe3ed80a7bc7a78070a051e71068
+    role: immediate_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r4-atomic-bundle-independent-review.yaml
+    sha256: 203eb7fb07f4df7b85b51353da0604f901bbe595093e84758df1c4ce1f25d3cf
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r3-atomic-bundle-independent-review.yaml
+    sha256: 22b2e1e7e7eae44f8ef834b479bc3cd2dfd340cca5758926aad1ae468a1f4032
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+    sha256: 728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-independent-review.yaml
+    sha256: 690f8f2cf451525cedcb9b2dda35e137fdc2bd095f5c2fddad723e63fff92f8e
+    role: original_independent_findings
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r6-final-number-admission-self-review.yaml
+    sha256: f1eed9f5cca469ae599aba842ed5e935f83f39d27dde51b111c3a206d425a89b
+    role: author_evidence_only_conclusions_not_trusted
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+    role: accepted_single_prohibited_boundary_direction
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    role: accepted_F1_boundary
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    role: Home_identity_relationship_and_authority_boundary
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    role: accepted_foundational_direction
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: Resident_and_Rust_single_writer_boundary
+
+external_primary_reference_checked:
+  - uri: https://www.rfc-editor.org/rfc/rfc8785.html
+    role: RFC_8785_JCS_number_domain_and_serialization
+    verified_points:
+      - input_JSON_numbers_are_IEEE_754_double_precision_values
+      - number_serialization_follows_ECMAScript
+      - source_number_spelling_is_not_preserved_by_canonical_serialization
+      - NaN_and_Infinity_are_not_admissible_JCS_values
+
+result: PASS_NO_BLOCKER
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+findings: []
+
+R6_blocker_readjudication:
+  finding_id: F2-R5-IR-B01
+  disposition: RESOLVED
+  rationale: >-
+    R6 chooses one normative domain: the already-parsed ECMAScript Number / IEEE 754 binary64
+    value. Its complete predicate is Number.isSafeInteger(value) && value >= 0 &&
+    !Object.is(value, -0). Original decimal spelling has no competing admission authority.
+    Rounded fractional tokens are expressly judged by their parsed result, negative zero is
+    expressly rejected, exponent forms are judged by their parsed result, non-finite values are
+    rejected, and the inclusive upper bound is 2^53 - 1. The admitted parsed value is the value
+    serialized into the owning R4 JCS tuple and used for sorting and duplicate comparison.
+    Recovery repeats admission before fingerprint verification and never repairs alternate data.
+    The prose, predicate, examples, and mandatory cross-writer fixtures therefore agree.
+
+number_admission_reverification:
+  normative_domain: parsed_ECMAScript_Number_IEEE_754_binary64
+  original_JSON_number_token_normative_after_parse: false
+  exact_admission_predicate: >-
+    Number.isSafeInteger(value) && value >= 0 && !Object.is(value, -0)
+  positive_zero:
+    admitted: true
+    JCS_serialization: "0"
+  negative_zero:
+    admitted: false
+    explicit_Object_is_test: true
+  decimal_or_exponent_lexical_form_rejected_by_form_alone: false
+  rounded_fraction_rule: parsed_binary64_result_controls
+  rounded_fraction_positive_fixture:
+    source_token: "9007199254740990.5"
+    parsed_value: 9007199254740990
+    admitted: true
+    JCS_serialization: "9007199254740990"
+  rounded_fraction_negative_fixture:
+    source_token: "9007199254740991.5"
+    parsed_value: 9007199254740992
+    admitted: false
+  exponent_positive_fixture:
+    source_token: "1e3"
+    parsed_value: 1000
+    admitted: true
+    JCS_serialization: "1000"
+  nonfinite_fixture:
+    source_token: "1e309"
+    parsed_value: Infinity
+    admitted: false
+    JCS_serialization_permitted: false
+  minimum_admitted_value: 0
+  maximum_admitted_value: 9007199254740991
+  maximum_plus_one_admitted: false
+  wrong_JSON_types_admitted: false
+  JCS_insertion_uses_parsed_value_not_source_spelling: true
+  sorting_uses_admitted_parsed_numeric_value: true
+  duplicate_detection_uses_admitted_parsed_numeric_value: true
+  recovery_reapplies_predicate_before_fingerprint_verification: true
+  cross_writer_fixture_set_covers_required_boundaries: true
+  result: PASS
+
+prior_finding_disposition:
+  - finding_id: F2-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R2-R4 close assignment provenance, attenuation, grant CAS, self-issuance rejection,
+      authenticated issuance-action binding, and activation evidence. R5-R6 now also close the
+      last BindingScope admission ambiguity that previously kept activation nondeterministic.
+  - finding_id: F2-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      R2-R5 define typed evidence, stable IDs, acyclic graphs, complete projections, digest
+      scalar encodings, revision CAS, and recovery order. R6 supplies the last deterministic
+      scope input admission and canonical insertion rule.
+  - finding_id: F2-IR-B03
+    disposition: RESOLVED_BY_EXPLICIT_F3_OWNERSHIP_REPLACEMENT
+    rationale: >-
+      R2 assigns Command payload schemas, canonicalization, atomic intake, replay, crash outcome,
+      and domain handoff to F3. F2 neither starts F3 nor admits runtime intake without it.
+  - finding_id: F2-IR-M01
+    disposition: RESOLVED
+    rationale: >-
+      R2 closes identity-transition and recovery provenance, the affected-binding set, atomic
+      recovery, and fail-closed conditions without creating a second writer.
+  - finding_id: F2-R2-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R3 defines a responsibility-free activation acknowledgement backed by an already-active
+      Principal binding and forbids treating the pending grant as responsibility.
+  - finding_id: F2-R2-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      R3 removes subject/evidence fixed points, R4 defines domain-separated projections, R5
+      fixes every inserted digest scalar, and R6 closes the final BindingScope numeric domain.
+  - finding_id: F2-R2-IR-B03
+    disposition: RESOLVED
+    rationale: >-
+      R3 forbids assignment self-issuance and fixes Jenn-root, assignment-rooted, and child
+      delegation provenance. R4 binds the complete immutable F3 action ref into the grant.
+  - finding_id: F2-R3-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R4 supplies complete domain-separated field projections; R5 fixes all replay/evidence-ID
+      scalar representations and context scalar types; R6 fixes the final parsed-number boundary.
+  - finding_id: F2-R3-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      The action-ref fingerprint covers every R2 field, is recomputed from immutable F3 COMMITTED
+      bytes, and is bound into the final acyclic delegation subject.
+  - finding_id: F2-R4-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      CanonicalDigestScalarV0_1 fixes SHA-256, the owning domain-tagged JCS formula, lowercase-hex
+      string persistence, validation, and exact parent insertion for all five affected fields.
+  - finding_id: F2-R4-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      R5 closes context_id and the nominal context_revision range and type. R6 makes the exact
+      parsed-number predicate, negative-zero result, rounding behavior, and insertion unambiguous.
+  - finding_id: F2-R5-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R6 is precedence-complete: parsed binary64 controls; -0 is rejected explicitly; rounded
+      fractions, exponents, non-finite results, safe-integer boundaries, JCS insertion, duplicate
+      detection, recovery, and cross-writer fixtures all follow that one rule.
+
+author_self_review_readjudication:
+  - correction_id: F2-R6-SR-01
+    disposition: CONFIRMED
+    rationale: >-
+      The parsed binary64 data-model domain is explicit and source-token exact-decimal semantics
+      are expressly excluded.
+  - correction_id: F2-R6-SR-02
+    disposition: CONFIRMED
+    rationale: >-
+      The exact predicate separately rejects negative zero and gives one outcome for rounded
+      fractions, exponent forms, non-finite results, and both safe-integer boundaries.
+  - correction_id: F2-R6-SR-03
+    disposition: CONFIRMED
+    rationale: >-
+      JCS insertion, numeric ordering, normalized duplicate detection, recovery, and mandatory
+      two-writer fixtures all consume the admitted parsed value.
+  - author_claim: PASS_NO_AUTHOR_BLOCKER
+    disposition: CONFIRMED_BY_INDEPENDENT_REDERIVATION
+
+full_bundle_reverification:
+  actor_identity_stable_and_distinct_from_model_session_or_credential: PASS
+  principal_binding_proves_representation_not_permission: PASS
+  responsibility_assignment_is_not_permission: PASS
+  delegation_transfers_bounded_responsibility_not_identity_or_permission: PASS
+  assignment_self_issuance_forbidden: PASS
+  Jenn_root_assignment_rooted_and_child_delegation_provenance: PASS
+  activation_acknowledgement_responsibility_free_and_acyclic: PASS
+  immutable_F3_action_ref_complete_and_bound_to_final_grant: PASS
+  binding_subject_evidence_assessment_graph_acyclic: PASS
+  binding_subject_evidence_assessment_graph_canonical_and_recoverable: PASS
+  delegation_subject_evidence_assessment_graph_acyclic: PASS
+  delegation_subject_evidence_assessment_graph_canonical_and_recoverable: PASS
+  evidence_revision_CAS_and_replay_behavior: PASS
+  digest_scalar_representation_and_parent_insertion: PASS
+  BindingScope_context_id_type_normalization_and_bounds: PASS
+  BindingScope_context_revision_admission_and_insertion: PASS
+  startup_recovery_order_and_fail_closed_behavior: PASS
+  single_prohibited_boundary: PASS
+  second_permission_model_created: false
+  ordinary_action_allowlist_created: false
+  relationship_or_role_grants_permission: false
+  no_second_ledger_or_new_orchestrator_core_object: PASS
+  Rust_single_writer_boundary_preserved: PASS
+  F1_Home_and_Resident_compatibility: PASS
+  privacy_secret_memory_and_provider_boundary: PASS
+  non_authorization_honesty: PASS
+
+compatibility_assessment: >-
+  The R1-R6 bundle remains compatible with the accepted single Prohibited Behavior List
+  direction, Jenn-only F1 decisions, Home identity meaning versus canonical Control identity
+  facts, relationship non-authority, Nobao resident coordination, Rust single-writer ownership,
+  and the no-second-ledger boundary. R6 changes only BindingScope context_revision admission and
+  canonical use. It adds no permission tier, ordinary-action allowlist, trust score, runtime,
+  authenticator, database, service, provider, permit, or host effect.
+
+remaining_downstream_dependencies:
+  - Complete one canonical Prohibited Behavior List and synchronized governance convergence.
+  - Accept F3 Command intake, immutable action-ref, replay, and Rust single-writer contracts.
+  - Accept F4 TaskPermit, host authentication, and effect-fencing contracts.
+  - Separately review production authenticator, credential, trust-anchor, and provisioning profiles.
+  - Obtain explicit Jenn implementation and runtime-activation decisions after contract closure.
+
+non_authorization_effects:
+  F2_accepted: false
+  Jenn_acceptance_substituted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  production_identity_or_credential_created: false
+  database_or_schema_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  TaskPermit_or_effect_admission_authorized: false
+  accepted_subject_bytes_modified: false
+  commit_performed: false
+  push_performed: false
+
+validation:
+  allowlist_preflight_hashes:
+    result: PASS
+    checked_files: 14
+  atomic_subject_hashes_before_review:
+    result: PASS
+    checked_files: 6
+  atomic_subject_hashes_after_review:
+    result: PASS
+    checked_files: 6
+  ECMAScript_fixture_probe:
+    result: PASS
+    checked_tokens:
+      - "0"
+      - "-0"
+      - "1e3"
+      - "1000.0"
+      - "1.5"
+      - "9007199254740990.5"
+      - "9007199254740991"
+      - "9007199254740991.5"
+      - "9007199254740992"
+      - "1e309"
+  RFC_8785_primary_source_check:
+    result: PASS
+  review_yaml_parse:
+    result: PASS
+  subject_markdown_fences:
+    result: PASS
+    R1_fence_markers: 114
+    R2_fence_markers: 50
+    R3_fence_markers: 66
+    R4_fence_markers: 52
+    R5_fence_markers: 30
+    R6_fence_markers: 14
+  utf8_lf_and_trailing_whitespace_scan:
+    result: PASS
+  review_scope:
+    result: PASS
+    note: Only fixed subjects, explicit review evidence, accepted boundary inputs, and RFC 8785 were read.
+
+required_next_gate: >-
+  Jenn may now decide whether to accept the indivisible
+  F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R6_ATOMIC_BUNDLE. This review does not itself accept F2,
+  start F3, authorize implementation or runtime activation, approve production authentication,
+  change a database, start a service or provider, issue a TaskPermit, admit host effects, commit,
+  or push.

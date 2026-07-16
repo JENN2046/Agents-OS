@@ -1,0 +1,206 @@
+review:
+  id: agents-os-f2-r22-v18-full-atomic-freeze-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  result: PASS_NO_BLOCKER
+  review_kind: fresh_full_atomic_bundle_independent_review
+
+candidate:
+  acceptance_subjects: R1-R22
+  subject_count: 22
+  final_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r22-synthetic-derived-subject-assurance-closure-amendment.draft.md
+    sha256: 78dd353fe35659669ed10b403d9b266937d91a5f455e13321ef5a9036330f365
+  corrected_complete_materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r22-v18.draft.md
+    sha256: 27134fe18bf67d0a305133ff4f329dbbd1d07c930b0c74724551e44454789d95
+    authoritative: false
+    acceptance_subject: false
+
+independence:
+  reviewer_count: 3
+  reviewer_lanes:
+    - full_semantic
+    - full_materialization_equivalence
+    - full_deterministic_constructive
+  fresh_context_each: true
+  prior_reviews_read: false
+  prior_decisions_read: false
+  other_materializations_read: false
+  CURRENT_STATE_or_ROADMAP_read: false
+  private_state_or_raw_logs_read: false
+  read_only: true
+  unanimous_result: PASS_NO_BLOCKER
+
+freeze_rule:
+  name: F2_FREEZE_RULE_V0_1
+  blocker_classes:
+    - IDENTITY_SPOOFING
+    - AUTHORITY_EXPANSION
+    - REVOCATION_COMPROMISE_BYPASS
+    - FAIL_OPEN
+    - DUAL_WRITER
+    - CIRCULAR_PROOF
+    - M0_IMPOSSIBILITY
+    - INTERNAL_CONTRADICTION
+
+classification:
+  BLOCKING_F2: 0
+  DOWNSTREAM_F3_OR_F4: 2_documented_groups
+  IMPLEMENTATION_PROFILE: 4_documented_groups
+  MATERIALIZATION_DIFFERENCE: 0
+  identity_spoofing: 0
+  authority_expansion: 0
+  revocation_compromise_bypass: 0
+  fail_open_currentness: 0
+  dual_writer: 0
+  circular_proof: 0
+  M0_impossibility: 0
+  internal_contradiction: 0
+
+core_safety_findings:
+  identity_spoofing: none
+  authority_expansion: none
+  revocation_bypass: none
+  fail_open_currentness: none
+  dual_writer: none
+  circular_proof: none
+
+documented_gaps:
+  only_downstream_or_implementation: true
+  downstream_F3:
+    - Command registry, envelope, immutable authenticated action reference, intake, replay, and Worker handshake design
+  downstream_F4:
+    - TaskPermit, identity-bound host-and-fence effect admission, and effect protocol design
+  implementation_profile:
+    - Prohibited Behavior List governance synchronization
+    - production authentication, cryptographic, key, trust, and provisioning profile
+    - Rust, database, storage, indexing, cache, and performance design
+    - conformance fixtures, tests, and implementation evidence
+  reopen_F2: false
+
+deterministic_validation:
+  source_hashes: 22_of_22
+  files_checked: 23
+  UTF8_failures: 0
+  fence_failures: 0
+  YAML_blocks: 188
+  YAML_parse_failures: 0
+  schemas_actual_and_index: 67_of_67
+  duplicate_or_missing_schemas: 0
+  reducers_actual_and_index: 15_of_15
+  duplicate_or_missing_reducers: 0
+  standalone_domains: 55_unique
+  not_standalone_surfaces: 12
+  section_citations: 367
+  unique_section_citations: 168
+  missing_headings: 0
+  domains_traceable_to_subjects: 55_of_55
+  special_formula_tags_traceable: 28_of_28
+  assurance_roles_and_mapping: 43_of_43
+  assurance_role_order: exact_R17_order
+  proof_DAG_nodes: 42
+  proof_DAG_edges: 70
+  proof_DAG_topological_result: PASS
+  proof_DAG_digest: ced93d50e16e64b0086c4f046cfe93512860c6dabff6e0000d2e2a7a883a381a
+  authoritative_single_writer_surfaces: 12
+  duplicate_authoritative_writers: 0
+  derived_reducers_with_authoritative_writer: 0
+
+materialization_result:
+  source_equivalence: PASS_NO_DIFFERENCE
+  total_materialization_differences: 0
+  v17_corrections_preserved: true
+  v17_high_risk_views_preserved: true
+  R22_overlay_exact: true
+  new_schema_field_enum_domain_role_action_writer_or_authority: 0
+  acceptance_semantics_created_by_materialization: 0
+
+R21_invariance:
+  ordinary_replay_formula:
+    byte_identical: true
+    sha256: 9aceecb9cbb9fe89406498523be1ffa81e78ce9bf92f102f6896669cfc6dce62
+  synthetic_replay_formula:
+    byte_identical: true
+    sha256: 814c7aa6f45f80d54cc8867045a344f13681588d0e49de0e38b33ed91695e56d
+  compromise_target_set_formula:
+    byte_identical: true
+    sha256: 3afbf4e1d259a5e27b826b7d7031f809a91a1386e1b9a47baae4421906a187ba
+  compromise_member_schema: byte_identical
+  synthetic_source_projection: exact
+
+R22_closure:
+  synthetic_root_branches:
+    - synthetic_Profile_revision_1_CREATE
+    - synthetic_Principal_revision_1_CREATE
+    - synthetic_Binding_revision_1_issuance
+  direct_synthetic_root_roles_present: 0
+  projected_assurance_bindings:
+    - SYNTHETIC_MANIFEST_CREATE
+    - SYNTHETIC_MANIFEST_ACCEPT
+  assurance_pair_byte_identical_across_consumers: true
+  immutable_origin_anchor_preserved: true
+  current_manifest_assessment_rebuilt_at_W: true
+  current_manifest_REVOKE_fail_closed: true
+  R18_activation_enabling_pair_byte_identical: true
+  ordinary_and_post_root_actions_unchanged: true
+  invented_direct_action_or_derived_ref_as_action: 0
+  negative_cases_fail_closed: 15_of_15
+
+constructive_M0_witness:
+  path:
+    - Actor_ACTIVE
+    - Eligibility_ELIGIBLE
+    - Manifest_ACTIVE
+    - Profile_ACTIVE
+    - Principal_ACTIVE
+    - BindingActivation_ACTIVATED
+    - Binding_ACTIVE
+  result: PASS
+  sha256: ab438a9f53f68c3cd5612e3445239f8e259fffcfed797a7910c3d1a4cb843974
+  component_digests:
+    actor: 8fb6fb473fa6b6cec168e5aeaebf93deb3eaecd9a0d1e82c808b9b4d7958ca98
+    eligibility: bd8288824cfc6c5aa15c3e159afe32e4eae5a40cdf48b2121ebaf63b26728134
+    binding_spec: 7001a5199ad12d615c2a5c3688e1febbaed93061ccc14ddddcad98f089d4339b
+    manifest: d620867dee9aaa5456b175b70699c8e1c23e0c18bf8ebb9548c304c121210562
+    binding: 304287db93877185350ca7fb3993909ebdee0caf4b8f10a08f85123cb55aeee6
+    evidence: 0032a6909193a6032b07a2f33f170d7943b98b62972bdb48140b85ae5e4bbaa9
+
+compromise_validation:
+  assurance_role_universe: 43_roles_43_unique_refs
+  assurance_role_universe_sha256: 03e0dcd1404ce7277385fa5a3b0c1b06d4ffbd4aa98061d9033ff1805de9e15d
+  R22_path_contributions_before_union: 8
+  unique_members_after_exact_identity_union: 2
+  union_sha256: 2b5eded120b85eeaa423b5d05b3b14272554baf1dddce801afc642683791ce84
+  members_after_current_manifest_revoke: 3
+  current_manifest_revoke_occurrences: 1
+  revocation_bypass_or_duplicate_downstream_projection: 0
+
+acceptance_unit:
+  subjects_complete: true
+  precedence_unambiguous: true
+  hashes_fixed: true
+  partial_acceptance_forbidden: true
+  circular_references: false
+  unresolved_internal_blockers: 0
+  effective_view_creates_new_semantics: false
+
+gate:
+  fresh_full_atomic_review_complete: true
+  PASS_NO_BLOCKER: true
+  F2_freeze_eligible: true
+  Jenn_atomic_freeze_decision_ready: true
+  requires_R23: false
+  next_authorized_surface: Jenn_atomic_acceptance_and_freeze_decision
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  commit_created: false
+  push_performed: false

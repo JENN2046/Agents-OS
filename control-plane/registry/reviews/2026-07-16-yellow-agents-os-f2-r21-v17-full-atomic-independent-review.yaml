@@ -1,0 +1,136 @@
+review:
+  id: agents-os-f2-r21-v17-full-atomic-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  result: BLOCKING_F2
+  review_kind: fresh_full_atomic_bundle_independent_review
+
+candidate:
+  acceptance_subjects: R1-R21
+  subject_count: 21
+  final_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r21-verified-core-constructibility-amendment.draft.md
+    sha256: 81faf12bb2af9921cc14f85920ea1db10bb5c58fb2ba906ae9f838a6071bcffc
+  materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r21-v17.draft.md
+    sha256: 7df172456c98ae64c0dbd63f717250a7627e01a8be607ed3c932b33ce0ecaa87
+    authoritative: false
+
+independence:
+  reviewer_count: 3
+  reviewer_lanes:
+    - full_semantic
+    - full_materialization_equivalence
+    - full_deterministic_constructive
+  focused_blocker_verifier_count: 1
+  fresh_context_each: true
+  prior_reviews_read: false
+  prior_decisions_read: false
+  other_materializations_read: false
+  CURRENT_STATE_or_ROADMAP_read: false
+  private_state_or_raw_logs_read: false
+  read_only: true
+
+freeze_rule:
+  name: F2_FREEZE_RULE_V0_1
+  blocker_classes:
+    - IDENTITY_SPOOFING
+    - AUTHORITY_EXPANSION
+    - REVOCATION_COMPROMISE_BYPASS
+    - FAIL_OPEN
+    - DUAL_WRITER
+    - CIRCULAR_PROOF
+    - M0_IMPOSSIBILITY
+    - INTERNAL_CONTRADICTION
+
+unique_blockers:
+  - id: F2-R21-FULL-B01
+    classes:
+      - M0_IMPOSSIBILITY
+      - INTERNAL_CONTRADICTION
+    title: synthetic_derived_subject_action_assurance_is_unconstructible
+    witness: >-
+      R8 materializes synthetic Profile, Principal, and Binding CREATE results
+      from one manifest ACCEPT Event and group intent through exact
+      SyntheticManifestDerivedLifecycleRef values, expressly without a
+      distinct per-subject action, intent, or Event. R16-R17 nevertheless
+      require direct PROFILE_REVISION_CREATE, PRINCIPAL_REVISION_CREATE, and
+      BINDING_ISSUANCE committed-action assurance for ACTIVE assessments.
+      Omitting those roles yields INDETERMINATE; treating a derived ref as an
+      action invents a forbidden action; and relabeling manifest ACCEPT gives
+      one action multiple roles and violates the exclusive R17 mapping. R18's
+      transitive manifest exception covers synthetic Binding activation only.
+      The graph can reach ACTIVATED activation evidence, but Profile,
+      Principal, and effective Binding cannot reach ACTIVE.
+    independently_confirmed_by:
+      - full_deterministic_constructive
+      - focused_fresh_blocker_verification
+    rejected_escape_routes:
+      - derived_lifecycle_ref_as_direct_committed_action
+      - manifest_ACCEPT_relabelled_with_three_direct_roles
+      - preexisting_transitive_exception_for_subject_issuance
+    remediation_boundary: >-
+      authoritative narrow subject correction for synthetic Profile CREATE,
+      Principal CREATE, and Binding issuance assurance only; exact transitive
+      manifest assurance, no invented direct action, fail-closed complete set,
+      and aligned CompromiseImpact projection
+
+classification:
+  BLOCKING_F2: 1
+  DOWNSTREAM_F3_OR_F4: 2_documented_groups
+  IMPLEMENTATION_PROFILE: 4_documented_groups
+  MATERIALIZATION_DIFFERENCE: 0
+  identity_spoofing: 0
+  authority_expansion: 0
+  revocation_compromise_bypass: 0
+  fail_open_currentness: 0
+  dual_writer: 0
+  circular_proof: 0
+  M0_impossibility: 1
+  internal_contradiction: 1
+
+deterministic_evidence:
+  subject_hashes: 21_of_21
+  v17_hash_match: true
+  files_utf8_lf_final_newline: 22_of_22
+  YAML_blocks: 187_of_187
+  schema_inventory: 67_of_67
+  reducer_inventory: 15_of_15
+  standalone_domains: 55_unique
+  not_standalone_surfaces: 12
+  schema_source_refs: 223_of_223
+  reducer_source_refs: 116_of_116
+  special_formulas: 28_of_28
+  assurance_roles_and_mapping: 43_of_43
+  precedence_DAG: acyclic
+  canonical_writer_paths: complete
+  maximum_M0_prefix_reached: synthetic_Binding_activation_ACTIVATED
+  end_to_end_M0_witness_exists: false
+
+materialization_result:
+  source_equivalence: PASS_NO_DIFFERENCE
+  new_authority_in_v17: 0
+  profile_steward_tokens: 3_of_3
+  evidence_id_scalar_bindings: 2_of_2
+  compromise_action_class_tokens: 11_of_11
+  R6_number_vectors: 8_of_8
+
+gate:
+  full_atomic_review_complete: true
+  PASS_NO_BLOCKER: false
+  F2_freeze_eligible: false
+  Jenn_atomic_freeze_decision_ready: false
+  subject_correction_required: true
+  required_next_surface: R22_synthetic_derived_subject_assurance_closure
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  commit_created: false
+  push_performed: false

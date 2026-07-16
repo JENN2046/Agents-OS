@@ -1,0 +1,300 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r8-atomic-bundle-independent-review
+review_type: FRESH_HASH_BOUND_INDEPENDENT_FINAL_REVIEW
+date: 2026-07-14
+reviewed_at: 2026-07-14T23:04:34+08:00
+status: complete
+reviewer_identity: Codex_fresh_independent_reviewer_f2_r8
+reviewer_run_independence: fresh_run_separate_from_author_run
+read_only_review: true
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R8_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    - role: fixed_R1_base
+      path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - role: fixed_R2_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    - role: fixed_R3_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+      sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    - role: fixed_R4_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+      sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    - role: fixed_R5_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+      sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    - role: fixed_R6_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+      sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    - role: fixed_R7_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+      sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    - role: fixed_R8_amendment
+      path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+      sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r8.draft.md
+  sha256: 7e81bc87824a07b6668644822d5d43e9e8c896e0e61a09a9ca4207170f6b9b2e
+  acceptance_subject: false
+  authority: none_derived_only
+
+mandatory_review_inputs:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r7-atomic-bundle-independent-review.yaml
+    sha256: 0c774f0773451e0858b1c9125fe35a32c8b94f484a2850a2ab24d2ca4fc6cc7f
+    role: prior_blocking_findings
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r8-deterministic-action-assurance-m0-closure-self-review.yaml
+    sha256: e38f91b10c24406d1ba04f061d3101f476d3b4de3fb6d7a6598e67258894b4b9
+    role: author_evidence_only_not_trusted_as_conclusion
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r8-deterministic-action-assurance-m0-closure-start-decision-v0.1.yaml
+    sha256: 81301c95a64181a47d9b8ffd7c52181c68658dcf05ccb03f4fb5a00d7c0248ae
+    role: amendment_scope_authority
+
+normative_context_inputs:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+
+forbidden_inputs_observed:
+  author_scratchpad: not_read
+  state_private: not_read
+  secrets_or_credentials: not_read
+  private_raw_memory: not_read
+  provider_raw_output: not_read
+  non_allowlisted_historical_drafts: not_read
+
+result: BLOCK
+acceptance_recommendation: DO_NOT_ACCEPT_YET
+finding_counts:
+  blockers: 3
+  major: 3
+  minor: 0
+
+findings:
+  - finding_id: F2-R8-IR-B01
+    severity: BLOCKER
+    title: Synthetic manifest activation contains a direct decision-intent fingerprint cycle
+    affected_sections:
+      - R8 Section 2.2 SYNTHETIC_M0_MANIFEST_ACTIVATION body projection
+      - R8 Sections 2.3-2.4
+      - R8 Section 6.3
+      - Materialization Sections 3 and 7
+    finding: >-
+      The activation mutation body explicitly includes Jenn_decision_ref and
+      Jenn_decision_fingerprint. The resulting body fingerprint is included in
+      MutationIntent. LifecycleActionRef then requires the same later Jenn
+      decision bytes to contain that intent and body fingerprint, and Section
+      6.3 requires the activation Jenn decision fields to equal the decision in
+      LifecycleActionRef. The decision fingerprint is therefore required to
+      compute the body that the same decision must bind.
+    impact: >-
+      Neither manifest ACCEPT nor terminal REVOKE can be serialized without a
+      cryptographic fixed point. The claimed acyclic M0 bootstrap graph is not
+      constructible.
+    required_amendment: >-
+      Remove the later decision ref/fingerprint from the pre-action activation
+      body. Let the body and intent bind manifest, transition, CAS, authority
+      basis, and Event; after the Jenn decision commits, derive and verify the
+      decision fields in the final activation revision through the exact
+      LifecycleActionRef.
+
+  - finding_id: F2-R8-IR-B02
+    severity: BLOCKER
+    title: Binding issuance has no complete R8 mutation kind, schema, or fingerprint path
+    affected_sections:
+      - R7 Section 7.1
+      - R8 Sections 2.1-2.4
+      - R8 Sections 6.2 and 6.4
+      - Materialization Sections 3 and 7
+    finding: >-
+      R8 globally replaces LifecycleActionRefV0_1 with the intent-bound R8
+      reference, while a non-synthetic Binding still obtains
+      binding_issuance_source_ref from the replaced R7 lifecycle interface.
+      MutationIntent has no BINDING_REVISION mutation kind or binding body
+      projection, so a conforming non-synthetic Binding cannot create the new
+      action ref. The synthetic path also says every derived subject receives
+      mutation_body_fingerprint, mutation_intent_ref, lifecycle_action_ref, and
+      replay fields, but the effective Binding schema has only
+      binding_issuance_source_ref and its R3/R4 fingerprint formula does not
+      contain the generic R8 overlay or the R7/R8 issuance provenance.
+    impact: >-
+      Binding creation is either impossible under the exact-intent rule or
+      implementation-defined. Synthetic Binding bytes cannot be reproduced
+      from the claimed common overlay, and representation currentness depends
+      on this unresolved subject.
+    required_amendment: >-
+      Add BINDING_REVISION to the mutation-kind/target/body tables and publish
+      one complete effective Binding schema and fingerprint formula, including
+      exact issuance provenance and R8 action/intent/replay fields. Define the
+      synthetic derived-field replacement against that same schema rather than
+      adding unnamed generic fields.
+
+  - finding_id: F2-R8-IR-B03
+    severity: BLOCKER
+    title: A compromise-impact successor can silently drop an earlier challenged action
+    affected_sections:
+      - R7 Section 9.2
+      - R8 Sections 5.1-5.4
+    finding: >-
+      HistoricalImpactInputSet indexes only current impact-stream heads whose
+      current head names the action. CLEAR_CHALLENGE must preserve the exact
+      challenged set, but neither R7 nor R8 requires an INVALIDATE successor to
+      preserve the current target set or monotonically retain every previously
+      challenged action. A CHALLENGE head for actions A and B can therefore be
+      succeeded by INVALIDATE naming only A. The current-head index no longer
+      finds the stream for B, so B becomes CONFIRMED without an exact clear.
+    impact: >-
+      The new completeness watermark cannot detect this within-stream omission.
+      Historical assurance can be silently relaxed and Assignment/Delegation
+      currentness can become ACTIVE from the same incident history.
+    required_amendment: >-
+      Make the target-action set immutable for one impact_stream_id, or define
+      per-action monotonic stream state with explicit set-delta rules. No
+      successor may remove a CHALLENGED action except exact CLEAR_CHALLENGE, and
+      INVALIDATED membership must remain terminal and discoverable.
+
+  - finding_id: F2-R8-IR-M01
+    severity: MAJOR
+    title: Typed transition authority does not bind its currentness watermark exactly
+    affected_sections:
+      - R8 Sections 2.1 and 3.1
+    finding: >-
+      TransitionAuthorityBasis contains based_on_event_sequence and
+      MutationIntent contains expected_ledger_head_event_sequence, but R8 never
+      states their required equality or an exact alternative relation. The
+      prose says inputs must be current and stale inputs reject, without
+      defining the deterministic currentness boundary.
+    impact: >-
+      Implementations can disagree whether a basis assessed one or more Events
+      earlier is stale, and a transition can cite identity, Binding,
+      responsibility, Profile, or controller state that changed before the
+      intended mutation Event.
+    required_amendment: >-
+      Require authority_basis.based_on_event_sequence to equal the intent's
+      expected ledger head for current-state bases. If a prior immutable basis
+      is allowed, enumerate that basis kind separately and define its validity
+      window and revalidation rule.
+
+  - finding_id: F2-R8-IR-M02
+    severity: MAJOR
+    title: PROFILE_CONTROLLER_ACTION is internally inconsistent for suspended Profile transitions
+    affected_sections:
+      - R8 Sections 3.1-3.2
+    finding: >-
+      The basis kind requires an exact ACTIVE Profile assessment. The transition
+      table nevertheless permits PROFILE_CONTROLLER_ACTION to RESUME a target
+      Profile whose required current state is SUSPENDED and to RETIRE a target
+      Profile from SUSPENDED. No distinct controller-currentness assessment is
+      supplied that could satisfy the ACTIVE Profile field without referring to
+      the suspended target.
+    impact: >-
+      The table is mechanically total but advertises controller routes that
+      cannot satisfy their own required inputs. Writers may either reject the
+      route or reinterpret profile_assessment_ref as an unspecified other
+      Profile.
+    required_amendment: >-
+      Split target_Profile_state from lifecycle_controller_currentness. For a
+      Profile target, bind the exact target assessment at the transition's
+      required source state and separately bind the controller Actor/component
+      or synthetic manifest assessment.
+
+  - finding_id: F2-R8-IR-M03
+    severity: MAJOR
+    title: The regenerated materialization omits required full authority tables and overclaims closure
+    affected_sections:
+      - R8 Section 8.2
+      - Materialization Sections 3, 4, 6, and 7
+    finding: >-
+      R8 requires the regenerated surface to print every total reducer and
+      authority table. The materialization abbreviates Profile and Principal
+      lifecycle rows as the exact R8 Section 3.2 subset instead of printing the
+      table, summarizes rather than resolves several complete body projections,
+      and repeats the cyclic activation decision and incomplete Binding
+      materialization as if they were acyclic and exact.
+    impact: >-
+      The file remains useful as a source map but is not yet the complete,
+      implementation-safe resolved reading surface required to close prior
+      finding F2-R7-IR-M01.
+    required_amendment: >-
+      Regenerate it only after the subject blockers are closed. Include every
+      effective lifecycle/transition row, exact changed subject schema and
+      formula, explicit action/body ordering, and no claim stronger than the
+      fixed subjects support.
+
+prior_finding_disposition:
+  F2-R7-IR-B01: PARTIAL_REMAINS_BLOCKED_BY_F2-R8-IR-B02
+  F2-R7-IR-B02: PARTIAL_REMAINS_MAJOR_BY_F2-R8-IR-M01_AND_F2-R8-IR-M02
+  F2-R7-IR-B03: RESOLVED
+  F2-R7-IR-B04: PARTIAL_REMAINS_BLOCKED_BY_F2-R8-IR-B03
+  F2-R7-IR-B05: NOT_RESOLVED_DUE_TO_F2-R8-IR-B01_AND_F2-R8-IR-B02
+  F2-R7-IR-B06: RESOLVED
+  F2-R7-IR-M01: NOT_RESOLVED
+
+review_dimensions:
+  fixed_subject_hashes_match: PASS
+  materialization_hash_matches: PASS
+  exact_action_body_binding: BLOCK_BINDING_PATH_INCOMPLETE
+  action_body_cycle_check: BLOCK_SYNTHETIC_ACTIVATION_CYCLE
+  typed_transition_authority: PASS_WITH_MAJOR_CURRENTNESS_AND_PROFILE_ROUTE_GAPS
+  delegation_descendant_cascade: PASS
+  historical_multi_impact_aggregation: BLOCK_TARGET_MEMBERSHIP_NOT_MONOTONIC
+  synthetic_controller_spec: PASS
+  synthetic_atomic_materialization: BLOCK_ACTIVATION_AND_BINDING_PATH
+  actor_effective_schema_and_fingerprint: PASS
+  Profile_and_Principal_R8_provenance: PASS
+  R8_numeric_scalar_inheritance: PASS
+  single_prohibited_boundary_preserved: PASS
+  permission_ladder_added: false
+  materialization_implementation_safe: false
+  implementation_authority_granted: false
+  runtime_activation_authority_granted: false
+  production_authentication_authority_granted: false
+  F3_started: false
+
+validation:
+  subject_hashes_before_review: PASS
+  derived_materialization_hash_before_review: PASS
+  YAML: PASS
+  markdown_fences: PASS
+  UTF8_LF: PASS
+  trailing_whitespace: PASS
+  subject_hashes_after_review: PASS
+  derived_materialization_hash_after_review: PASS
+
+required_next_action:
+  action: CREATE_F2_R9_FINAL_BINDING_BOOTSTRAP_AND_IMPACT_MEMBERSHIP_CLOSURE_AMENDMENT
+  rewrite_R1_through_R8: forbidden
+  expand_F2_direction: forbidden
+  regenerate_materialization_after_amendment: required
+  fresh_hash_bound_independent_review_after_amendment: required
+  implementation: forbidden
+  runtime_activation: forbidden
+
+non_authorization_effects:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  registry_or_CURRENT_STATE_modified: false
+  commit_performed: false
+  push_performed: false

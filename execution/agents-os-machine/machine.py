@@ -30,7 +30,7 @@ from path_boundary import preflight_target
 
 MANIFEST_PATH = MACHINE_DIR / "machine-manifest.json"
 SCHEMA_PATH = MACHINE_DIR / "queue-item.schema.json"
-DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
+DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-16-agents-os-active-work-queue-v0.2.md"
 ROUTE_SELECTION_PACKAGE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 ROUTE_ADOPTION_BUNDLE_PREVIEW = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md"
 TASK_ENVELOPE_VALIDATOR = WORKSPACE_ROOT / "control-plane" / "task-envelope" / "validate-task-envelope.py"
@@ -71,6 +71,12 @@ ROUTE_SELECTION_REQUIRED = re.compile(
     r"|\brequires_jenn_route_choice\s*=\s*true\b"
     r"|\bno_active_route_selected\s*=\s*true\b"
     r"|\bdo not infer a new construction route without Jenn direction\b",
+    re.I,
+)
+
+JENN_DECISION_REQUIRED = re.compile(
+    r"\brequires_jenn_decision\s*=\s*true\b"
+    r"|\bdecision_owner\s*=\s*Jenn\b",
     re.I,
 )
 
@@ -148,13 +154,23 @@ def parse_route_option_ids(path: Path = ROUTE_SELECTION_PACKAGE) -> list[str]:
 
 def next_user_action_for_item(item: dict[str, Any]) -> dict[str, Any]:
     route_choice_required = "route_selection_required" in item.get("denied_signals", [])
+    governance_decision_required = "jenn_decision_required" in item.get("denied_signals", [])
     route_ids = parse_route_option_ids() if route_choice_required else []
+    status = "none"
+    instruction = None
+    if route_choice_required:
+        status = "route_choice_required"
+        instruction = "choose_one_route_id"
+    elif governance_decision_required:
+        status = "governance_decision_required"
+        instruction = "follow_current_queue_decision_gate"
+    requires_jenn_decision = route_choice_required or governance_decision_required
     return {
         "schema_version": "agents-os.machine.next-user-action.v0.1",
-        "status": "route_choice_required" if route_choice_required else "none",
-        "decision_owner": "Jenn" if route_choice_required else None,
-        "requires_jenn_decision": route_choice_required,
-        "instruction": "choose_one_route_id" if route_choice_required else None,
+        "status": status,
+        "decision_owner": "Jenn" if requires_jenn_decision else None,
+        "requires_jenn_decision": requires_jenn_decision,
+        "instruction": instruction,
         "accepted_route_ids": route_ids,
         "template_source_path": rel(ROUTE_SELECTION_PACKAGE),
         "exact_confirmation_templates_available": ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
@@ -207,11 +223,16 @@ def normalize_item(lane: str, item_id: str, title: str, body_lines: list[str]) -
     route_selection_required = bool(ROUTE_SELECTION_REQUIRED.search(item_text))
     if route_selection_required:
         denied_signals.append("route_selection_required")
+    jenn_decision_required = bool(JENN_DECISION_REQUIRED.search(item_text))
+    if jenn_decision_required and not route_selection_required:
+        denied_signals.append("jenn_decision_required")
     denied_signals = sorted(set(denied_signals))
     requires_jenn = bool(denied_signals)
     review_reason = "machine preview must be reviewed before execution"
     if route_selection_required:
         review_reason = "route selection required by queue stop-state"
+    elif jenn_decision_required:
+        review_reason = "Jenn governance decision required by queue stop-state"
     elif requires_jenn:
         review_reason = "denied signal detected"
     return {
@@ -740,8 +761,19 @@ def validate_preview(preview: dict[str, Any]) -> list[str]:
             errors.append("route selection preview should surface accepted route ids")
         if next_user_action.get("exact_confirmation_templates_available") is not True:
             errors.append("route selection preview should point to available confirmation templates")
+    elif "jenn_decision_required" in preview.get("denied_signals", []):
+        if next_user_action.get("status") != "governance_decision_required":
+            errors.append("Jenn decision preview must surface governance_decision_required next user action")
+        if next_user_action.get("decision_owner") != "Jenn":
+            errors.append("Jenn decision preview next user action owner must be Jenn")
+        if next_user_action.get("requires_jenn_decision") is not True:
+            errors.append("Jenn decision preview next user action must require Jenn decision")
+        if next_user_action.get("accepted_route_ids"):
+            errors.append("generic Jenn decision preview must not surface route ids")
+        if next_user_action.get("exact_confirmation_templates_available") is not False:
+            errors.append("generic Jenn decision preview must not claim route confirmation templates")
     elif next_user_action.get("status") != "none":
-        errors.append("non-route preview next user action must be none")
+        errors.append("non-decision preview next user action must be none")
     route_choice_readiness = preview.get("route_choice_adoption_bundle_readiness", {})
     for flag in (
         "can_apply_now",

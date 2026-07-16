@@ -1,0 +1,387 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f2-r4-atomic-bundle-independent-review
+review_run_id: f2-r4-atomic-independent-review-2026-07-14-fresh-01
+review_type: FRESH_HASH_BOUND_ATOMIC_BUNDLE_INDEPENDENT_REVIEW
+reviewer_identity: Codex_fresh_independent_reviewer
+date: 2026-07-14
+status: complete
+
+review_process_separation:
+  independent_from_subject_author: true
+  independent_from_author_self_review: true
+  prior_author_conclusions_trusted_without_reverification: false
+  every_prior_finding_readjudicated: true
+  subject_modified: false
+  existing_files_modified: false
+  only_new_file_is_this_review: true
+  restricted_inputs_observed: true
+  restricted_inputs_not_read:
+    - state-private
+    - secrets_or_credentials
+    - private_raw_memory
+    - provider_raw_output
+    - author_scratchpad
+    - non_allowlisted_historical_drafts
+
+atomic_subjects:
+  - role: fixed_R1_base
+    path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+    expected_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    pre_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    post_review_sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R2_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+    expected_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    pre_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    post_review_sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R3_final_narrow_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+    expected_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    pre_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    post_review_sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    hash_match_before_review: true
+    hash_match_after_review: true
+  - role: fixed_R4_final_canonicalization_amendment
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+    expected_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    pre_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    post_review_sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    hash_match_before_review: true
+    hash_match_after_review: true
+
+allowlist_hashes_actually_read:
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: CURRENT_STATE.md
+    sha256: 8d2360de80457a661d0d2f4f90ccf20e4f0d86c3e98558a15078a1061424c677
+    role: state_and_non_authorization_consistency_only
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r4-final-canonicalization-amendment-start-decision-v0.1.yaml
+    sha256: 22f3e5b21d4c2cf7cc1948a3703d24362eae456761111d7bbe4f9366a47d52e7
+    role: R4_scope_authority
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r3-atomic-bundle-independent-review.yaml
+    sha256: 22b2e1e7e7eae44f8ef834b479bc3cd2dfd340cca5758926aad1ae468a1f4032
+    role: immediate_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+    sha256: 728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+    role: prior_blocking_review
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-actor-identity-delegation-v0.1-independent-review.yaml
+    sha256: 690f8f2cf451525cedcb9b2dda35e137fdc2bd095f5c2fddad723e63fff92f8e
+    role: original_independent_findings
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r4-final-canonicalization-self-review.yaml
+    sha256: e816f9bdb6c4de053e2ca7fd4ae009651cdde3f28d413b50e8914b2425648db7
+    role: prior_evidence_only_conclusions_not_trusted
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-single-prohibited-boundary-direction-decision-v0.1.yaml
+    sha256: 1c2eb30415c523851a54c7e764ebb49faef6a161eed209adae0185e4e97422b7
+    role: accepted_single_prohibited_boundary_direction
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    role: accepted_F1_boundary
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    role: Home_identity_and_authority_boundary
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+    role: accepted_foundational_direction
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: Resident_and_Rust_single_writer_boundary
+
+result: BLOCK
+finding_counts:
+  blockers: 2
+  major: 0
+  minor: 0
+
+findings:
+  - finding_id: F2-R4-IR-B01
+    severity: BLOCKER
+    title: SHA-derived replay identities and stable evidence IDs have no exact inserted JCS representation
+    subject_locations:
+      - subject: R3
+        section: "2 Non-circular delegation activation acknowledgement"
+        lines: "61-177"
+      - subject: R3
+        section: "3-4 Acyclic activation fingerprint graphs"
+        lines: "179-328"
+      - subject: R4
+        section: "2 Canonicalization primitives"
+        lines: "56-93"
+      - subject: R4
+        section: "4.3, 5, and 6 acknowledgement, evidence, and assessment fingerprints"
+        lines: "212-425"
+    finding: >-
+      R4 defines an envelope and nested-value rule for named R4 fingerprint results and says
+      that a nested *_fingerprint contributes its lowercase digest string. It does not define
+      the stored type or insertion rule for SHA-derived values named replay_identity or
+      evidence_id. The acknowledgement fingerprint inserts the R3 acknowledgement
+      replay_identity; both evidence fingerprints insert R4 replay identities; and the evidence
+      formulas insert stable evidence_id values derived by R3. Those source formulas say
+      SHA-256(JCS(...)) but do not say whether the resulting value is raw bytes, lowercase hex,
+      a FingerprintEnvelope, or another scalar encoding. The R4 rule is expressly limited to
+      *_fingerprint insertion and therefore does not close these positions. Independent writers
+      can hash the same semantic inputs yet insert different JCS values into the acknowledgement
+      or evidence formula.
+    impact: >-
+      Binding and delegation evidence can still receive different canonical fingerprints and
+      replay keys across writers or during startup recovery. This is the same determinism
+      surface identified by F2-R3-IR-B01, so the activation graph is acyclic but not yet
+      byte-identical and acceptance-ready.
+    required_amendment: >-
+      Define one exact domain-separated digest-value type for every SHA-derived replay identity
+      and stable evidence ID, including algorithm, canonicalization version, lowercase-hex
+      encoding, and whether the persisted field is an envelope or scalar. State the exact value
+      inserted into JCS whenever replay_identity or evidence_id appears in another formula.
+      Apply that rule to the R3 acknowledgement replay identity, both R3 evidence IDs, and both
+      R4 evidence replay identities. Add cross-writer fixtures that distinguish raw bytes,
+      uppercase hex, lowercase hex, and envelope-object encodings.
+
+  - finding_id: F2-R4-IR-B02
+    severity: BLOCKER
+    title: BindingScopeV0_1 leaves context_id and context_revision representation under-typed
+    subject_locations:
+      - subject: R4
+        section: "2 Canonicalization primitives"
+        lines: "56-93"
+      - subject: R4
+        section: "3 Closed BindingScope v0.1"
+        lines: "95-140"
+    finding: >-
+      BindingScopeV0_1 closes context_kind, ordering, duplicates, wildcards, unknown fields, and
+      the set fingerprint, but context_id has no declared type or non-empty constraint. The
+      scalar-reference rule does not apply because context_id is not a *_ref field. The scope
+      fingerprint and UTF-8 sort prose presume a string while the YAML shape itself permits an
+      untyped value. In addition, context_revision is declared only as a nonnegative integer,
+      while R4's primitive rule requires every integer to be within a contract-declared range;
+      no upper bound or fixed integer domain is declared. Implementations using bounded integer
+      types can therefore disagree on acceptance, and an empty or non-string context_id has no
+      single normative outcome.
+    impact: >-
+      Two conforming-looking writers can accept different BindingScope values or fail to share
+      canonical fixture coverage, which changes binding_subject_fingerprint and every downstream
+      binding activation fingerprint. This leaves F2-R3-IR-B01 unresolved at its first input.
+    required_amendment: >-
+      Declare context_id as one normalized, non-empty UTF-8 scalar string with an exact validity
+      rule, and declare context_revision in a fixed interoperable integer domain such as unsigned
+      64-bit JSON integer. State rejection for wrong type, empty normalized value, overflow, and
+      negative values. Add positive boundary fixtures and negative wrong-type, empty, overflow,
+      and normalization-collision fixtures. Keep BindingScope representation-only and do not add
+      action, capability, or permission semantics.
+
+prior_finding_disposition:
+  - finding_id: F2-IR-B01
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      Assignment provenance, self-issuance rejection, attenuation, grant CAS, and issuance
+      provenance semantics are closed by R2-R4. Binding activation canonicalization remains
+      blocked by F2-R4-IR-B01 and F2-R4-IR-B02.
+  - finding_id: F2-IR-B02
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      Typed activation evidence and acyclic subject-to-evidence-to-assessment graphs exist, but
+      the remaining digest representation and BindingScope type gaps prevent deterministic
+      verification.
+  - finding_id: F2-IR-B03
+    disposition: RESOLVED_BY_EXPLICIT_F3_OWNERSHIP_REPLACEMENT
+    rationale: >-
+      R2 moves Command payload schemas, canonicalization, atomic intake, replay, crash state, and
+      domain handoff to the separate F3 contract and keeps runtime intake closed until F3 exists.
+  - finding_id: F2-IR-M01
+    disposition: RESOLVED
+    rationale: >-
+      R2 defines the closed stewardship relation, authenticated action reference, complete
+      affected-binding set, exact recovery evidence, and atomic recovery condition.
+  - finding_id: F2-R2-IR-B01
+    disposition: RESOLVED
+    rationale: >-
+      R3 defines a responsibility-free, activation-purpose-only acknowledgement through an
+      already-active Principal binding and rejects use of the pending grant as responsibility.
+  - finding_id: F2-R2-IR-B02
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      R3 removes the subject/evidence fixed point and R4 supplies domain-separated projections,
+      but F2-R4-IR-B01 and F2-R4-IR-B02 leave two inputs without an exact interoperable value.
+  - finding_id: F2-R2-IR-B03
+    disposition: RESOLVED
+    rationale: >-
+      R3 forbids assignment self-issuance without exception and defines exact Jenn-root,
+      assignment-rooted, and parent-delegation issuance provenance. R4 now binds the complete
+      AuthenticatedActorActionRef fingerprint into the grant subject.
+  - finding_id: F2-R3-IR-B01
+    disposition: PARTIALLY_RESOLVED_BLOCKING
+    rationale: >-
+      R4 closes domain separation, field projections, nested structured refs, assessment
+      fingerprints, and removal of acknowledging_action_ref. SHA-derived replay/evidence-ID
+      insertion and BindingScope scalar typing remain incomplete as specified in the new blockers.
+  - finding_id: F2-R3-IR-B02
+    disposition: RESOLVED
+    rationale: >-
+      canonical_action_ref_fingerprint covers every R2-declared AuthenticatedActorActionRef
+      field, excludes only itself, is recomputed from immutable F3 COMMITTED bytes, and is bound
+      into the final grant subject after the pre-action intent without a reverse dependency.
+
+author_self_review_readjudication:
+  - correction_id: F2-R4-SR-01
+    disposition: REJECTED_AS_INCOMPLETE
+    rationale: >-
+      The author correctly supplied formulas, but the claim of complete canonical closure misses
+      the replay/evidence-ID inserted-value ambiguity and BindingScope field types.
+  - correction_id: F2-R4-SR-02
+    disposition: CONFIRMED
+    rationale: >-
+      The full action-ref fingerprint is field-complete, recomputed rather than trusted, and
+      bound into the final grant subject without restoring the action/subject cycle.
+  - correction_id: F2-R4-SR-03
+    disposition: CONFIRMED_WITH_BLOCKING_INPUT_GAPS
+    rationale: >-
+      Evidence and assessment formulas cover their source-schema fields and exact structured-ref
+      fingerprints, but two inserted input types remain non-canonical under the blockers above.
+
+field_projection_reverification:
+  PrincipalControlProofAssessmentRef:
+    field_complete: true
+    domain_separated: true
+    optional_null_handling: not_applicable
+    nested_ref_treatment: deterministic_scalar_refs
+    result: PASS
+  AuthenticatedActorActionRef:
+    field_complete: true
+    every_R2_declared_field_covered: true
+    optional_delegation_chain_null_explicit: true
+    fingerprint_recomputed_not_trusted: true
+    final_grant_binding_complete: true
+    action_subject_cycle_absent: true
+    result: PASS
+  DelegationActivationAcknowledgementRef:
+    field_complete: true
+    responsibility_free_activation_path: true
+    replay_identity_semantics_complete: true
+    replay_identity_inserted_representation_complete: false
+    result: BLOCK
+  BindingActivationEvidence:
+    field_complete: true
+    revision_and_CAS_fields_covered: true
+    structured_refs_use_exact_fingerprints: true
+    replay_revision_behavior_explicit: true
+    replay_identity_inserted_representation_complete: false
+    evidence_id_inserted_representation_complete: false
+    result: BLOCK
+  BindingActivationAssessment:
+    field_complete: true
+    reason_code_order_deterministic: true
+    self_fingerprint_excluded: true
+    upstream_binding_scope_complete: false
+    result: BLOCK
+  DelegationActivationEvidence:
+    field_complete: true
+    removed_acknowledging_action_ref_absent: true
+    acknowledgement_fingerprint_bound: true
+    revision_and_CAS_fields_covered: true
+    replay_revision_behavior_explicit: true
+    replay_identity_inserted_representation_complete: false
+    evidence_id_inserted_representation_complete: false
+    result: BLOCK
+  DelegationActivationAssessment:
+    field_complete: true
+    reason_code_order_deterministic: true
+    self_fingerprint_excluded: true
+    result: PASS
+  DelegationGrantRevision_final_subject:
+    issuance_intent_field_complete: true
+    complete_action_ref_fingerprint_bound: true
+    F3_contract_version_bound: true
+    created_event_sequence_bound: true
+    acyclic: true
+    result: PASS
+
+review_dimensions:
+  R4_scope_and_exact_replacement_precedence: PASS
+  BindingScope_closed_representation_only_and_not_permission_allowlist: BLOCK_ON_FIELD_TYPES_ONLY
+  PrincipalControlProofAssessmentRef_exactness: PASS
+  AuthenticatedActorActionRef_exactness_and_complete_grant_binding: PASS
+  DelegationActivationAcknowledgementRef_exactness: BLOCK_ON_REPLAY_VALUE_REPRESENTATION
+  binding_subject_evidence_assessment_graph_acyclic: PASS
+  binding_subject_evidence_assessment_graph_exact_and_recoverable: BLOCK
+  delegation_subject_evidence_assessment_graph_acyclic: PASS
+  delegation_subject_evidence_assessment_graph_exact_and_recoverable: BLOCK
+  delegation_issuance_intent_action_subject_graph_acyclic: PASS
+  delegation_issuance_provenance_complete_and_fingerprint_bound: PASS
+  assignment_self_issuance_forbidden: PASS
+  Jenn_root_assignment_rooted_and_child_provenance: PASS
+  evidence_revision_CAS_and_replay_revision_behavior: PASS
+  startup_recovery_order: PASS_WITH_BLOCKING_CANONICAL_INPUT_GAPS
+  cross_writer_and_tamper_fixture_requirements: PASS_WITH_BLOCKING_MISSING_VALUE_TYPE_FIXTURES
+  single_prohibited_boundary: PASS
+  second_permission_model_created: false
+  ordinary_action_allowlist_created: false
+  F1_Home_Resident_compatibility: PASS
+  no_second_ledger_or_new_core_object: PASS
+  privacy_secret_memory_provider_boundary: PASS
+  non_authorization_honesty: PASS
+
+compatibility_assessment: >-
+  No conflict was found with the single Prohibited Behavior List direction, Jenn-only F1 Goal
+  decisions, Home identity meaning versus canonical Control identity facts, Home relationship
+  non-authority, Nobao resident coordination, Rust single-writer ownership, or the no-second-ledger
+  boundary. The blockers are narrow internal canonical-value defects and require no modification
+  of accepted upstream subjects.
+
+downstream_dependencies:
+  - Resolve F2-R4-IR-B01 and F2-R4-IR-B02 in a new fixed-hash narrow amendment.
+  - Complete one canonical Prohibited Behavior List and synchronized governance convergence.
+  - Accept F3 Command intake, immutable action-ref, replay, and Rust single-writer contracts.
+  - Accept F4 TaskPermit, host authentication, and effect-fencing contracts.
+  - Separately review production authenticator, credential, trust-anchor, and provisioning profiles.
+  - Obtain explicit Jenn implementation and runtime-activation decisions after contract closure.
+
+non_authorization_effects:
+  F2_accepted: false
+  Jenn_acceptance_substituted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  production_identity_or_credential_created: false
+  database_or_schema_change_authorized: false
+  service_or_provider_execution_authorized: false
+  F3_started: false
+  TaskPermit_or_effect_admission_authorized: false
+  accepted_subject_bytes_modified: false
+  commit_performed: false
+  push_performed: false
+
+validation:
+  allowlist_preflight_hashes:
+    result: PASS
+    checked_files: 12
+  atomic_subject_hashes_before_review:
+    result: PASS
+    checked_files: 4
+  atomic_subject_hashes_after_review:
+    result: PASS
+    checked_files: 4
+  review_yaml_parse:
+    result: PASS
+  subject_markdown_fences:
+    result: PASS
+  subject_yaml_blocks:
+    result: PASS
+    R1_parsed_blocks: 20
+    R2_parsed_blocks: 11
+    R3_parsed_blocks: 7
+    R4_parsed_blocks: 5
+  utf8_lf_and_trailing_whitespace_scan:
+    result: PASS
+  review_scope:
+    result: PASS
+    note: Only the four fixed subjects and explicit hash-bound allowlist were read.
+
+required_next_gate: >-
+  Create one minimal hash-bound canonical-value amendment resolving F2-R4-IR-B01 and
+  F2-R4-IR-B02, then run a new fresh independent atomic-bundle review. This review does not
+  accept F2, start F3, or authorize implementation, runtime activation, production
+  authentication, database changes, services, providers, TaskPermits, host effects, commit,
+  or push.

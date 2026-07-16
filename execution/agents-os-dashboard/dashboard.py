@@ -24,7 +24,7 @@ DASHBOARD_DIR = Path(__file__).resolve().parent
 WORKSPACE_ROOT = DASHBOARD_DIR.parents[1]
 REGISTRY_DIR = WORKSPACE_ROOT / "control-plane" / "registry"
 MACHINE_PATH = WORKSPACE_ROOT / "execution" / "agents-os-machine" / "machine.py"
-DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-active-work-queue-v0.1.md"
+DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-16-agents-os-active-work-queue-v0.2.md"
 ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 ROUTE_CHOICE_QUEUE_PROPOSAL_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-route-choice-queue-proposal-v0.1.md"
 ROUTE_ADOPTION_BUNDLE_REPORT = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md"
@@ -273,19 +273,31 @@ def route_selection_status(normalized_queue: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def next_user_action_status(route_selection: dict[str, Any]) -> dict[str, Any]:
+def next_user_action_status(route_selection: dict[str, Any], normalized_queue: dict[str, Any]) -> dict[str, Any]:
     route_ids = [
         str(option.get("option_id"))
         for option in route_selection.get("options", [])
         if option.get("option_id")
     ]
     awaiting_selection = route_selection.get("status") == "awaiting_jenn_selection"
+    now_items = normalized_queue.get("lanes", {}).get("NOW", [])
+    now_denied_signals = now_items[0].get("denied_signals", []) if now_items else []
+    governance_decision_required = "jenn_decision_required" in now_denied_signals
+    status = "none"
+    instruction = None
+    if awaiting_selection:
+        status = "route_choice_required"
+        instruction = "choose_one_route_id"
+    elif governance_decision_required:
+        status = "governance_decision_required"
+        instruction = "follow_current_queue_decision_gate"
+    requires_jenn_decision = awaiting_selection or governance_decision_required
     return {
         "schema_version": "agents-os.dashboard.next-user-action.v0.1",
-        "status": "route_choice_required" if awaiting_selection else "none",
-        "decision_owner": "Jenn" if awaiting_selection else None,
-        "requires_jenn_decision": awaiting_selection,
-        "instruction": "choose_one_route_id" if awaiting_selection else None,
+        "status": status,
+        "decision_owner": "Jenn" if requires_jenn_decision else None,
+        "requires_jenn_decision": requires_jenn_decision,
+        "instruction": instruction,
         "accepted_route_ids": route_ids if awaiting_selection else [],
         "template_source_path": rel(ROUTE_SELECTION_PACKAGE),
         "exact_confirmation_templates_available": awaiting_selection and ROUTE_SELECTION_PACKAGE.exists() and bool(route_ids),
@@ -477,7 +489,7 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     memory_candidates = build_memory_candidates(normalized_queue, validation)
     now_title = first_item_title(normalized_queue, "NOW")
     route_selection = route_selection_status(normalized_queue)
-    next_user_action = next_user_action_status(route_selection)
+    next_user_action = next_user_action_status(route_selection, normalized_queue)
     route_adoption_gate = route_adoption_gate_status(normalized_queue)
     route_choice_adoption_bundle = route_choice_adoption_bundle_status(normalized_queue)
     queue_summary = {
@@ -600,6 +612,15 @@ def validate_dashboard_summary(summary: dict[str, Any]) -> list[str]:
             errors.append("dashboard next user action route ids must match route selection options")
         if next_user_action.get("exact_confirmation_templates_available") is not True:
             errors.append("dashboard next user action should point to available confirmation templates")
+    elif next_user_action.get("status") == "governance_decision_required":
+        if next_user_action.get("decision_owner") != "Jenn":
+            errors.append("dashboard governance decision owner must be Jenn")
+        if next_user_action.get("requires_jenn_decision") is not True:
+            errors.append("dashboard governance decision must require Jenn")
+        if next_user_action.get("accepted_route_ids"):
+            errors.append("dashboard generic governance decision must not surface route ids")
+        if next_user_action.get("exact_confirmation_templates_available") is not False:
+            errors.append("dashboard generic governance decision must not claim route confirmation templates")
     route_adoption_gate = summary.get("route_adoption_gate", {})
     for flag in (
         "route_auto_selection_authorized",

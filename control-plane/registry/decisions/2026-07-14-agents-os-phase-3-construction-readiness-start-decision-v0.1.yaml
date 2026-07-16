@@ -1,0 +1,87 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-phase-3-construction-readiness-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T02:44:30+08:00
+effective_at: 2026-07-14T02:44:30+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_3_CONSTRUCTION_READINESS_REVIEW
+  decision_source: exact_current_conversation_instruction
+
+phase:
+  phase_id: HOME_DOMAIN_PHASE_3
+  phase_name: Construction Readiness Review
+  roadmap:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  prerequisite_gate:
+    gate_id: G2
+    review_result: PASS_NO_BLOCKER
+    Jenn_decision: ACCEPT
+    acceptance_record:
+      path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+      sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+
+fixed_inputs:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-foundational-integration-review-v0.1.yaml
+    sha256: a47afeb33031407fda0fa14a985f1847098956f773066354017faf7be6da7f75
+    role: accepted_foundational_integration_review
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    role: accepted_gap_inventory
+  - path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61cfe88876907b955383f603b089cef626bb9b8bb
+    role: accepted_Home_Domain_direction
+  - path: CURRENT_STATE.md
+    sha256: 95d3caeca61c60616ef8329243115e33c331f827fe7072e64823d36e03ec1f7a
+    role: pre_start_current_state
+
+authorized_outputs:
+  - foundation_contract_dependency_graph
+  - M0_A_scope
+  - M0_B_scope
+  - deferred_scope
+  - hard_stop_list
+  - validation_plan
+  - Construction_Readiness_Review
+  - author_self_review
+  - Registry_and_CURRENT_STATE_projection
+
+review_requirements:
+  classify_every_HD_M0_gap: true
+  distinguish_required_contract_from_explicit_M0_exclusion: true
+  distinguish_contract_closure_from_implementation_authority: true
+  detect_phase_gate_circularity_or_conflict: true
+  no_false_READY_result: true
+
+allowed_G3_results:
+  - READY_FOR_M0_CONTRACT_CLOSURE
+  - NOT_READY
+
+hard_boundaries:
+  modify_accepted_subject_bytes: forbidden
+  modify_R3_to_hide_gate_conflict: forbidden
+  Phase_4_automatic_start: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_or_migration: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  phase_gate_is_authorization: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

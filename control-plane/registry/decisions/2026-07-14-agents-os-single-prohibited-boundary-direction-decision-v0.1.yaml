@@ -1,0 +1,95 @@
+schema_version: agents-os.architecture-direction-decision.v0.1
+record_id: agents-os-single-prohibited-boundary-direction-decision-v0.1
+record_type: ArchitectureDirectionDecision
+status: accepted
+immutable: true
+created_at: 2026-07-14T09:30:37+08:00
+effective_at: 2026-07-14T09:30:37+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  decision_source: exact_current_conversation_instruction
+
+decision:
+  permission_direction: SINGLE_PROHIBITED_BOUNDARY
+  ordinary_action_allowlist: forbidden
+  permission_level_ladder: forbidden
+  risk_level_as_permission: forbidden
+  role_or_relationship_as_permission: forbidden
+
+  default_rule: >-
+    Inside current responsibility and task scope, an Actor acts autonomously
+    unless the one current Prohibited Behavior List applies.
+
+  prohibited_match_rule: >-
+    When an action matches the Prohibited Behavior List, execution stops and
+    the Actor reports the matched prohibition and the smallest safe alternative.
+
+  unresolved_boundary_rule: >-
+    The Actor gathers missing facts when safe; if the boundary still cannot be
+    established, execution stops.
+
+separation_of_concerns:
+  identity_system: answers_who_is_acting
+  responsibility_and_delegation: answers_who_is_responsible_for_what
+  domain_invariants: define_how_domain_state_may_change_correctly
+  prohibited_behavior_list: defines_the_only_project_permission_boundary
+
+  identity_is_permission_model: false
+  responsibility_is_permission_model: false
+  delegation_is_permission_grant: false
+  domain_invariant_is_permission_level: false
+  workflow_lane_is_permission: false
+  evidence_requirement_is_permission: false
+
+boundary_ownership:
+  canonical_list_count: 1
+  list_change_authority: Jenn
+  agent_self_waiver: forbidden
+  delegation_waiver: forbidden
+  relationship_waiver: forbidden
+  urgency_waiver: forbidden
+
+F2_effect:
+  contract_path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+  required_changes:
+    - replace authority assignment with responsibility assignment
+    - remove ordinary action permission lists and risk ceilings
+    - remove deterministic ALLOW_DENY authorization state machine
+    - make delegation transfer responsibility rather than permission
+    - retain only one Prohibited Boundary rule
+  superseded_F2_start_scope_terms:
+    - authority_assignment
+    - deterministic_authorization_assessment
+  replacement_F2_scope_terms:
+    - responsibility_assignment
+    - deterministic_identity_and_responsibility_attribution
+    - single_prohibited_boundary_rule
+
+migration_boundary:
+  current_workspace_rules_remain_effective_until_synchronized_revision: true
+  synchronized_future_revision_required:
+    - AGENTS.md
+    - control-plane/policies/life-core/permission-levels.md
+    - governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md
+  historical_labels_after_convergence: non_normative_only
+  runtime_enforcement_change_authorized: false
+
+excluded_effects:
+  F2_full_acceptance: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  secret_access_authorized: false
+  private_raw_memory_access_authorized: false
+  F3_started: false
+  commit_authorized_by_this_decision: false
+  push_authorized_by_this_decision: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision
+  superseded_by: null

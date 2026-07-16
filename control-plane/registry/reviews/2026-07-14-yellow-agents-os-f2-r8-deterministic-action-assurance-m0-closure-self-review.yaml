@@ -1,0 +1,133 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f2-r8-deterministic-action-assurance-m0-closure-self-review
+review_type: AUTHOR_SELF_REVIEW
+date: 2026-07-14
+status: complete
+reviewer_identity: Codex_author_f2_r8
+independent_review: false
+
+acceptance_unit:
+  id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R8_ATOMIC_BUNDLE
+  partial_acceptance: forbidden
+  subjects:
+    R1: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    R2: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+    R3: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+    R4: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+    R5: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+    R6: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+    R7: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+    R8: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+
+derived_review_surface:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-effective-contract-materialization-v0.1-r8.draft.md
+  sha256: 7e81bc87824a07b6668644822d5d43e9e8c896e0e61a09a9ca4207170f6b9b2e
+  acceptance_subject: false
+  authority: none_derived_only
+
+review_basis:
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r7-atomic-bundle-independent-review.yaml
+    sha256: 0c774f0773451e0858b1c9125fe35a32c8b94f484a2850a2ab24d2ca4fc6cc7f
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-f2-r8-deterministic-action-assurance-m0-closure-start-decision-v0.1.yaml
+    role: scope_authority
+
+result: PASS_NO_AUTHOR_BLOCKER
+acceptance_recommendation: REQUIRE_FRESH_INDEPENDENT_REVIEW
+finding_counts:
+  blockers: 0
+  major: 0
+  minor: 0
+
+prior_findings_disposition:
+  F2-R7-IR-B01: RESOLVED_IN_R8_SECTION_2_AND_FINAL_SCHEMA_OVERLAYS
+  F2-R7-IR-B02: RESOLVED_IN_R8_SECTION_3_TYPED_TOTAL_AUTHORITY
+  F2-R7-IR-B03: RESOLVED_IN_R8_SECTION_4_TOTAL_DESCENDANT_REDUCER
+  F2-R7-IR-B04: RESOLVED_IN_R8_SECTION_5_COMPLETE_IMPACT_SET_AND_AGGREGATION
+  F2-R7-IR-B05: RESOLVED_IN_R8_SECTION_6_MANIFEST_OWNED_ACYCLIC_GRAPH
+  F2-R7-IR-B06: RESOLVED_IN_R8_SECTION_7_COMPLETE_ACTOR_SCHEMA_AND_FINGERPRINT
+  F2-R7-IR-M01: RESOLVED_BY_R8_EFFECTIVE_MATERIALIZATION
+
+author_self_review:
+  exact_mutation_binding:
+    result: PASS
+    basis: >-
+      Mutation intent, body digest, exact action bytes, one Event, replay
+      identity, and final subject or fact form one acyclic chain. Actor,
+      Profile, Principal, governed transition, compromise impact, manifest,
+      and manifest activation are covered.
+  typed_authority:
+    result: PASS
+    basis: >-
+      Stable authority basis IDs, exact basis unions, required and forbidden
+      inputs, total target-transition tables, and separate pre-existing Jenn
+      root authority versus later exact Jenn decision remove narrative roles
+      and bootstrap cycles.
+  delegation_cascade:
+    result: PASS
+    basis: >-
+      Root source and every ancestor are complete reducer inputs with a fixed
+      mapping, precedence, prospective Event boundary, and stream-local resume.
+  historical_assurance:
+    result: PASS
+    basis: >-
+      Ledger-derived complete current impact heads, watermark, fingerprint,
+      terminal invalidation, coverage failure, and stream-local clear have a
+      total aggregate order.
+  synthetic_M0:
+    result: PASS
+    basis: >-
+      A manifest-owned immutable controller, Jenn-only manifest creation and
+      activation, exact derived refs, one atomic group intent, and fail-closed
+      manifest assessment form an acyclic reproducible graph.
+  canonicalization:
+    result: PASS
+    basis: >-
+      R8 supplies complete Actor schema and formula, updated Profile/Principal
+      tags and provenance-bound known objects, a default exact R8 fingerprint
+      rule, and the inherited R7 scalar profile.
+  materialization:
+    result: PASS
+    basis: >-
+      The derived surface binds R1-R8 hashes, expands R8 effective schemas,
+      reducer tables, source precedence, removed fields, and non-authority.
+  scope:
+    result: PASS
+    basis: >-
+      R8 closes R7 review findings only. It does not expand the Home Domain,
+      converge the Prohibited List, start F3, or authorize implementation,
+      runtime, production authentication, database, service, provider, secret,
+      private memory, commit, or push operations.
+
+author_corrections_made_before_hash_closeout:
+  - added stable authority-basis IDs and exact enum-only transition tables
+  - separated pre-existing Jenn root authority from later intent-bound decision action
+  - added full Profile and Principal mutation provenance overlays
+  - added complete CompromiseImpactFact R8 provenance and authority
+  - made incomplete historical coverage dominate challenge while terminal invalidation dominates all
+  - made synthetic subject materialization one atomic manifest-activation result
+  - added synthetic Profile controller ref and total manifest assessment
+  - added global R8 fingerprint rule and updated changed-object domain tags
+
+validation:
+  subject_sha256_match: true
+  materialization_sha256_match: true
+  yaml_blocks_parse: true
+  markdown_fences_balanced: true
+  utf8_lf: true
+  trailing_whitespace_zero: true
+  git_diff_check: PASS
+  document_registry: PASS_459_OF_459_ZERO_WARNINGS
+  federated_registry: PASS
+  docctl_status: PASS_501_DOCUMENTS_ZERO_UNREGISTERED_ZERO_WARNINGS_ZERO_FAILURES
+  docctl_doctor: PASS_501_DOCUMENTS_ZERO_UNREGISTERED_ZERO_WARNINGS_ZERO_FAILURES
+
+authority:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  F3_started: false
+  commit_performed: false
+  push_performed: false
+
+next_gate: FRESH_HASH_BOUND_INDEPENDENT_REVIEW_OF_F2_R8_ATOMIC_BUNDLE_AND_MATERIALIZATION

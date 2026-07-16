@@ -1,0 +1,111 @@
+schema_version: agents-os.prior-findings-disposition.v0.1
+record_id: agents-os-home-domain-roadmap-prior-findings-disposition-v0.1
+record_type: PriorFindingsDisposition
+status: resolved_in_R3_author_subject_pending_independent_review
+created_at: 2026-07-13T22:37:23+08:00
+owner: Jenn
+agent_steward: Nobao
+
+lineage_sources:
+  R1_conversation_review:
+    persisted_original_repository_artifact: false
+    durable_closure_evidence: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-construction-roadmap-r2-self-review.yaml
+    finding_count: 5
+  R2_subsequent_external_review:
+    persisted_original_repository_artifact: false
+    durable_disposition: control-plane/registry/reviews/2026-07-13-agents-os-home-domain-roadmap-r2-subsequent-external-review-disposition-v0.1.yaml
+    blocking_amendment_count: 7
+    nonblocking_clarification_count: 3
+
+summary:
+  total: 15
+  resolved_in_R2: 5
+  resolved_in_R3: 10
+  rebutted: 0
+  unresolved: 0
+  independent_verification_pending: true
+
+findings:
+  - finding_id: R1_CONVERSATION_REVIEW_01
+    source_class: conversation_review_not_persisted_as_original_artifact
+    finding: logical_and_deployment_containment_were_conflated
+    status: RESOLVED_IN_R2
+    changed_section: R2_Section_1
+  - finding_id: R1_CONVERSATION_REVIEW_02
+    source_class: conversation_review_not_persisted_as_original_artifact
+    finding: Session_content_was_implicitly_promoted_to_Life_Stream
+    status: RESOLVED_IN_R2
+    changed_section: R2_Section_11
+  - finding_id: R1_CONVERSATION_REVIEW_03
+    source_class: conversation_review_not_persisted_as_original_artifact
+    finding: independent_review_did_not_bind_normative_input_hashes
+    status: RESOLVED_IN_R2
+    changed_section: R2_Section_6
+  - finding_id: R1_CONVERSATION_REVIEW_04
+    source_class: conversation_review_not_persisted_as_original_artifact
+    finding: G2_did_not_separate_Jenn_acceptance
+    status: RESOLVED_IN_R2
+    changed_section: R2_Section_7
+  - finding_id: R1_CONVERSATION_REVIEW_05
+    source_class: conversation_review_not_persisted_as_original_artifact
+    finding: M0_did_not_forbid_real_private_content_or_existing_databases
+    status: RESOLVED_IN_R2
+    changed_section: R2_Sections_10_and_11
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_01
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: authority_inheritance_order_inverted_applicable_higher_constraints
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_2
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_02
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: G1A_did_not_define_transition_to_Phase_1B
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_4
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_03
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: Registry_and_CURRENT_STATE_delivery_were_not_mandatory
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_4_1
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_04
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: final_review_unit_and_allowlist_were_not_fixed_by_subject
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_14
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_05
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: Phase_1C_and_Phase_2_review_evidence_were_ambiguous
+    status: RESOLVED_IN_R3
+    changed_section: R3_Sections_6_and_7
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_06
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: revision_tracking_used_an_unbound_aggregate_count
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_14
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_07
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: separate_contract_acceptance_rule_forbade_explicit_atomic_bundles
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_9
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_01
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: Phase_0_snapshot_semantics_were_not_explicit
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_3
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_02
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: canonical_identity_authority_was_not_explicitly_split_from_narrative
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_1
+  - finding_id: R2_SUBSEQUENT_EXTERNAL_REVIEW_NB_03
+    source_class: Jenn_supplied_subsequent_external_review
+    finding: M0_test_identity_boundary_was_not_explicit
+    status: RESOLVED_IN_R3
+    changed_section: R3_Section_10
+
+authority_effect:
+  R3_independent_review_required: true
+  Jenn_acceptance_granted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  commit_authorized: false
+  push_authorized: false

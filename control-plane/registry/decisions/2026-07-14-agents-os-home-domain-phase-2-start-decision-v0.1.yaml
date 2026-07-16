@@ -1,0 +1,144 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-home-domain-phase-2-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T00:48:34+08:00
+effective_at: 2026-07-14T00:48:34+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_2_FOUNDATIONAL_INTEGRATION_REVIEW
+  decision_source: explicit_current_conversation_instruction_to_implement_the_frozen_Phase_2_plan
+
+phase:
+  phase_id: HOME_DOMAIN_PHASE_2
+  phase_name: Foundational Integration Review and Jenn Decision Surface
+  roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  roadmap_acceptance:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  prerequisite_gate:
+    gate_id: G1C
+    result: PASS_NO_BLOCKER
+    Phase_1C_complete: true
+    blocker_count: 0
+    major_finding_count: 0
+    minor_finding_count: 0
+
+candidate_accepted_subjects:
+  authority_map:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+  home_direction:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+
+bound_normative_inputs:
+  - path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    role: Phase_1A_home_fact_authority_matrix
+  - path: control-plane/registry/reviews/2026-07-13-yellow-agents-os-home-domain-phase-1a-self-review.yaml
+    sha256: 4654da6e02424caf4a12c9bea44c462dc79ba007493de1bf9590b8fc8901824f
+    role: G1A_result_and_gap_classification
+  - path: control-plane/registry/decisions/2026-07-14-agents-os-home-domain-phase-1b-start-decision-v0.1.yaml
+    sha256: 7a26c45a2ccbe3c527f2cccf75353cb716ec649f7422e9cc39cbc91d72388fa0
+    role: Phase_1B_authority_and_scope
+  - path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-home-domain-architecture-direction-v0.1-independent-review.yaml
+    sha256: 6956cbffe74d770e6b18370cb147b8fcee00cc4a41431e4a325a24d7a8f40627
+    role: G1C_home_direction_subject_review
+  - path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    role: root_workspace_operating_contract
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    role: accepted_Resident_Orchestrator_and_fact_authority_architecture
+  - path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    role: accepted_authority_permit_and_host_enforcement_boundary
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+    sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+    role: accepted_action_spine_freeze
+  - path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+    sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+    role: accepted_action_spine_materialization
+  - path: control-plane/policies/life-core/README.md
+    sha256: d59ffff04f98556f7f3303007008db991a7061e5001c894834483c847e86cac8
+    role: life_core_policy_boundary
+  - path: control-plane/policies/life-core/policy-index.json
+    sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044
+    role: current_life_core_module_inventory
+  - path: control-plane/policies/life-core/root-principles.md
+    sha256: 7a9bd33b99ae3173577b3e41fd359824936c516d27dd0b6f8aa6b3d0a4c34372
+    role: identity_home_and_life_foundation
+  - path: control-plane/policies/life-core/house-rules.md
+    sha256: 9bfa8887723d4536da870079714bf3f6f45f2700d645d73719f08f0908483b1b
+    role: relationship_boundary_and_truthfulness
+  - path: control-plane/policies/life-core/memory-rules.md
+    sha256: 1fabba2a8f9f7e88da130e2589e164b7dc5917e80e95983fc3a4df2051122235
+    role: memory_candidate_and_formalization_boundary
+  - path: control-plane/policies/life-core/members-and-rooms.md
+    sha256: beadc147d08e6f380566a2c3c1cc6a50ad6b9ecdb7b18e29475e85dbc9d00094
+    role: resident_identity_and_community_policy
+  - path: control-plane/policies/life-core/a2a-relations.md
+    sha256: f04c1c52d549da79d05b23e6922d1a375d748bb4ac2d90e0c7817be66064e97a
+    role: relationship_semantics_without_permission_inheritance
+  - path: control-plane/policies/life-core/runtime-boundaries.md
+    sha256: 94c1b6fce3722c813a09abccdc47622dba9d04340ac2c35ee741bbaa3e2a73df
+    role: replaceable_capability_body_boundary
+  - path: control-plane/policies/life-core/growth-rules.md
+    sha256: ce8dece3d6d35eb1f29383fee1694f5dece32b6af245a1e72337c0564f137793
+    role: evidence_backed_reversible_growth
+  - path: control-plane/policies/life-core/presence-and-sensing.md
+    sha256: 7a525db3cbcbf9952927a5e42a43f708488e228c4d4b3e1b3e525351261cf943
+    role: Presence_consent_sensing_recording_and_memory_boundary
+
+pre_start_state:
+  CURRENT_STATE_sha256: c3143d5c33d945210cc609aadcc616ed226f7b32cc1572775f611ae16256a6cb
+  document_registry: documents_404_pass_404_warn_0_fail_0
+  federated_registry: registries_3_pass_3_warn_0_fail_0
+  docctl: documents_446_unregistered_0_warn_0_fail_0
+  unrelated_dirty_and_untracked_inventory_present: true
+
+review_contract:
+  reviewer_must_be_fresh: true
+  Phase_1C_reviewer_reuse: forbidden
+  reviewer_input_selection: fixed_allowlist_only
+  reviewer_may_modify_fixed_subjects: false
+  reviewer_may_modify_Registry_or_CURRENT_STATE: false
+  allowed_output: control-plane/registry/reviews/2026-07-14-yellow-agents-os-foundational-integration-review-v0.1.yaml
+  allowed_results:
+    - PASS_NO_BLOCKER
+    - REVISION_REQUIRED
+    - BLOCK
+  insufficient_evidence_result: REVISION_REQUIRED
+  accepted_architecture_irreconcilable_conflict_result: BLOCK
+
+hard_boundaries:
+  Phase_3_automatic_start: forbidden
+  modify_fixed_Phase_1A_or_Phase_1B_subjects: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_or_migration: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  runtime_reality_map_as_normative_input: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_gate:
+  gate_id: G2
+  independent_review_does_not_accept_subjects: true
+  Jenn_decision_required: true
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

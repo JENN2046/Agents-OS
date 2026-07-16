@@ -1,0 +1,135 @@
+review:
+  id: agents-os-f2-r20-v15-targeted-consistency-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  reviewer_role: independent_read_only_subagent
+  result: PASS_NO_BLOCKER
+  review_kind: targeted_consistency_after_corrected_complete_materialization
+
+scope:
+  authority_subject_set: R1-R20
+  authority_subject_count: 20
+  derived_materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r20-v15.draft.md
+    sha256: 23d151b1a6233f807b2be3f8151361db83649fe604932fdac135fdb72506cd00
+    authoritative: false
+  final_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r20-final-freeze-closure-amendment.draft.md
+    sha256: cad4f293dee172d793db19c9cec0e6148116d44e6b659b3f2ed528a409f5772b
+  targeted_subjects:
+    - B01_deterministic_synthetic_profile_and_principal_creation_specs
+    - B02_five_exact_local_digest_formulas
+    - B03_typed_identity_steward_action_target_derivation
+    - M01_total_nullable_expiry_semantics
+    - faithful_materialization_only_corrections_from_r19_v14_review
+  excluded_from_blocker_absorption:
+    - final_F3_wire_schema
+    - F3_replay_or_storage_implementation
+    - F4_key_algorithm_or_host_transport
+    - Rust_module_layout
+    - database_index_design
+    - performance_or_cache_policy
+
+independence:
+  fresh_context: true
+  read_only: true
+  prior_review_artifacts_read: false
+  prior_decision_artifacts_read: false
+  CURRENT_STATE_read: false
+  other_materializations_read: false
+  private_state_or_raw_logs_read: false
+  fixed_subjects_and_v15_only: true
+
+freeze_rule:
+  name: F2_FREEZE_RULE_V0_1
+  blocker_classes:
+    - IDENTITY_SPOOFING
+    - AUTHORITY_EXPANSION
+    - REVOCATION_COMPROMISE_BYPASS
+    - FAIL_OPEN
+    - DUAL_WRITER
+    - CIRCULAR_PROOF
+    - M0_IMPOSSIBILITY
+    - INTERNAL_CONTRADICTION
+  non_blocking_classes:
+    - DOWNSTREAM_F3_OR_F4
+    - IMPLEMENTATION_PROFILE
+    - MATERIALIZATION_ONLY
+  perfection_required: false
+
+targeted_result:
+  blocking_F2: 0
+  downstream_F3_or_F4: 0
+  implementation_profile: 0
+  unresolved_materialization_differences: 0
+  B02_formula_equality: 5_of_5
+  B03_stewardship_and_principal_compromise_narrowing: PASS
+  M01_nullable_expiry: PASS
+  creates_new_identity_capability: false
+  creates_new_authority_or_permission: false
+  creates_new_implementation_authorization: false
+  materialization_creates_new_semantics: false
+
+closed_materialization_findings:
+  - id: MAT-B01
+    issue: synthetic_creation_spec_closure_underprinted
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+  - id: MAT-CAS-01
+    issue: subject_revision_CAS_overgeneralized_to_facts
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+  - id: MAT-ORDER-01
+    issue: owning_array_orders_not_exactly_projected
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+  - id: MAT-PROV-01
+    issue: Actor_source_provenance_incomplete
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+  - id: MAT-CAS-02
+    issue: activation_evidence_subject_CAS_omitted_from_split
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+  - id: MAT-ORDER-02
+    issue: generic_and_specific_array_order_overreach
+    disposition: CLOSED_IN_V15_ONLY
+    subject_amendment_required: false
+
+deterministic_validation:
+  fixed_subject_hashes: 20_of_20
+  hash_mismatches: 0
+  utf8_lf_terminal_newline: PASS
+  balanced_markdown_fences: PASS
+  strict_yaml_blocks: 33_of_33
+  schema_inventory: 66_of_66
+  duplicate_schema_rows: 0
+  reducer_inventory: 15_of_15
+  duplicate_reducer_rows: 0
+  unique_fingerprint_domains: 55_of_55
+  exact_R20_v15_schema_matches: 2_of_2
+  exact_R20_v15_formula_matches: 5_of_5
+  source_section_references: 328_of_328
+  targeted_exactness_regression: PASS
+
+gate:
+  targeted_consistency_review_complete: true
+  eligible_for_fresh_full_atomic_review: true
+  eligible_for_Jenn_atomic_freeze_decision: false
+  requires_R21: false
+  reason_not_yet_on_freeze_surface: fresh_full_atomic_review_pending
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_write_performed: false
+  service_started: false
+  provider_call_performed: false
+  commit_created: false
+  push_performed: false

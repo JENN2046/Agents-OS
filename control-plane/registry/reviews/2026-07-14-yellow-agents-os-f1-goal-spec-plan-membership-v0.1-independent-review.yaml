@@ -1,0 +1,217 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+record_id: agents-os-f1-goal-spec-plan-membership-v0.1-independent-review
+record_type: HashBoundIndependentReview
+date: 2026-07-14
+reviewer:
+  identity: Nuobao_independent_reviewer
+  role: independent_reviewer_not_author
+  run_label: F1_FINAL_HASH_BOUND_INDEPENDENT_REVIEW_2026_07_14
+review_scope:
+  mode: explicit_allowlist_only
+  all_input_hashes_verified_before_review: true
+  hash_algorithm: SHA-256
+  forbidden_inputs_accessed: false
+  input_allowlist:
+    - role: workspace_governance
+      path: AGENTS.md
+      sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      hash_verified: true
+    - role: subject
+      path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+      sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+      hash_verified: true
+    - role: accepted_parent_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      hash_verified: true
+    - role: accepted_scheduling_freeze_decision
+      path: control-plane/registry/decisions/2026-07-13-agents-os-r1-scheduling-freeze-decision-v0.1.yaml
+      sha256: c09a68e3b35275156815acf5398ad7a80c499e2eb9f3c34ae934f63ebe094f8f
+      hash_verified: true
+    - role: accepted_scheduling_materialization
+      path: control-plane/registry/decisions/2026-07-13-agents-os-scheduling-time-capacity-v0.1-accepted-materialization.md
+      sha256: 99272a908b5ec6b5be956dc025433acc592e4b75aac9a08bd7e0ab1d9b9ac7f5
+      hash_verified: true
+    - role: construction_readiness_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+      sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      hash_verified: true
+    - role: accepted_G3_gate_amendment
+      path: control-plane/registry/decisions/2026-07-14-agents-os-minimum-g3-gate-amendment-v0.1.yaml
+      sha256: 47330101e54aee710d6d5e302079d1827b80133b0c06c72b25fa10bd73d09c35
+      hash_verified: true
+    - role: Phase_4_start_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+      sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      hash_verified: true
+subject:
+  path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+  sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  bytes_reviewed_unchanged: true
+result: BLOCK
+summary:
+  blocker_count: 3
+  major_count: 3
+  minor_count: 1
+  disposition: revision_and_new_hash_bound_independent_review_required_before_Jenn_acceptance
+blockers:
+  - id: F1-IR-B01
+    severity: BLOCKER
+    sections:
+      - "7.3 Current criterion decision"
+      - "7.4 Top-level completion review"
+      - "13.1 Synchronous gate"
+      - "13.2 Achieved gate"
+      - "15 Currentness and fingerprints"
+    finding: >-
+      SuccessCriterionDecisionValue is said to be reduced from immutable decision
+      Events, but the contract defines no total reducer for multiple decisions at
+      the same exact Goal and criterion revisions. It does not state precedence,
+      supersession, revocation, conflict handling, or how evidence freshness is
+      deterministically established. The undefined compatible carry-forward rule
+      can therefore produce different current SATISFIED results from the same
+      Event history, and CLOSED plus ACHIEVED directly trusts that result.
+    required_amendment: >-
+      Define a versioned, total, fail-closed decision reducer over the complete
+      ordered Event set, including exact authority checks, supersession and
+      revocation semantics, same-sequence impossibility or tie rejection,
+      evidence-currentness inputs, conflicting-evidence behavior, and the only
+      permitted carry-forward rules. Bind the reducer version and resulting
+      current decision identity into GoalClosureBasis.
+  - id: F1-IR-B02
+    severity: BLOCKER
+    sections:
+      - "6.4 ParentGoalBinding"
+      - "6.5 Spec mutation authority"
+      - "13.2 Achieved gate"
+      - "13.4 Post-closure change"
+    finding: >-
+      A parent specification change derives PARENT_ALIGNMENT_REVIEW_REQUIRED,
+      but the achieved closure gate does not require a current ParentGoalBinding
+      or reject that review condition. Section 6.4 even permits the condition to
+      end when Nobao closes the Subgoal without defining an alignment check.
+      This permits CLOSED plus ACHIEVED under a stale parent direction, contrary
+      to the inherited rule that Nobao's Subgoal authority exists only within
+      the accepted current parent direction.
+    required_amendment: >-
+      Make current parent alignment a synchronous Subgoal readiness and ACHIEVED
+      closure gate. Define which non-achieved closures remain allowed while
+      alignment is pending, and require exact current parent spec, criterion,
+      delegation, and ancestry-cycle bindings in the closure basis.
+  - id: F1-IR-B03
+    severity: BLOCKER
+    sections:
+      - "5.2 Revision rules"
+      - "5.3 Aggregate compare-and-set"
+      - "15 Currentness and fingerprints"
+      - "16 Recovery and replay"
+    finding: >-
+      The fingerprint rule refers to stable business-key array order defined by
+      the contract, but the contract does not define keys or order semantics for
+      most arrays, including scope, constraint, unresolved-question, evidence,
+      membership, route, challenge, replacement, and change-summary collections.
+      Fingerprint fields also do not bind an explicit canonicalization contract
+      version even though recovery must fail closed on an unknown version. The
+      same semantic state can therefore hash differently, or ordered semantic
+      content can be incorrectly normalized, defeating deterministic replay,
+      CAS currentness, and recovery verification.
+    required_amendment: >-
+      Declare a concrete canonicalization contract version and, for every array,
+      whether order is semantic or the exact unique business-key sort tuple.
+      Define normalization and duplicate rejection for compound refs and pairs,
+      and store or bind algorithm plus canonicalization version with every
+      canonical fingerprint used by recovery.
+major_findings:
+  - id: F1-IR-M01
+    severity: MAJOR
+    sections:
+      - "8.1 Full-snapshot rule"
+      - "9.1 Contract shape"
+      - "10.1 Route expression"
+      - "10.2 Selected route"
+      - "12.1 Counting set"
+    finding: >-
+      The plan snapshot has membership_refs, criterion_route_refs, and
+      supplemental_plan_membership_refs, but no exact partition and coverage
+      invariant connects them. The membership shape also permits null route or
+      criterion bindings for selected or unselected route roles and permits
+      route bindings on supplemental work. An orphan membership labelled
+      SELECTED_CRITERION_ROUTE can enter plan progress without belonging to any
+      selected route, while closure evaluates only selected route members.
+    required_amendment: >-
+      Define a total disjoint role partition, exact binding cardinalities for
+      each plan_role, equality between supplemental refs and supplemental-role
+      memberships, route-member bidirectional coverage, and rejection of orphan,
+      multiply classified, or multiply referenced memberships.
+  - id: F1-IR-M02
+    severity: MAJOR
+    sections:
+      - "9.5 Decomposition and leaf identity"
+      - "11 Shared Task semantics"
+      - "12.1 Counting set"
+    finding: >-
+      The contract permits multiple current membership lineages for one Task in
+      one Goal and deduplicates progress by task_id, but leaf/container status is
+      defined per membership. It does not resolve a Task that is a container in
+      one membership and a leaf, child, selected route member, or supplemental
+      member in another. Different evaluation orders can include or exclude the
+      same task_id and can obscure route completion support.
+    required_amendment: >-
+      Define plan-wide Task-level leaf reduction across every current membership,
+      or reject conflicting parentage and leaf/container roles for a shared
+      task_id within one Goal plan. Specify how route support and progress use the
+      same normalized result.
+  - id: F1-IR-M03
+    severity: MAJOR
+    sections:
+      - "7.5 Criterion change effects"
+      - "13.4 Post-closure change"
+      - "15 Currentness and fingerprints"
+      - "16 Recovery and replay"
+    finding: >-
+      The contract allows later Goal amendment without automatic reopen and
+      preserves historical closure, but it does not define the current pointer,
+      criterion-decision, plan-compatibility, or closure-eligibility state for a
+      CLOSED Goal whose spec is revised, nor the required rebinding after an
+      explicit reopen. This leaves current Goal meaning and re-closure behavior
+      ambiguous even though F1 owns spec and plan currentness.
+    required_amendment: >-
+      Define closed-Goal amendment legality and projection semantics, and define
+      explicit reopen currentness rules for spec, plan, criterion decisions,
+      challenges, and prior closure basis. Historical closure must remain
+      immutable and must not silently become current evidence for re-closure.
+minor_findings:
+  - id: F1-IR-N01
+    severity: MINOR
+    sections:
+      - "1 Status and authority"
+      - "20 Acceptance unit"
+    finding: >-
+      The sentence stating that the document closes F1 conflicts with its own
+      proposed status and Jenn-only acceptance boundary. The later clauses deny
+      self-acceptance, but the opening wording is still an inaccurate authority
+      claim.
+    required_amendment: >-
+      Replace closes with proposes the contract for, or state that F1 closes only
+      after a separate exact hash-bound Jenn acceptance decision.
+authority_and_scope_assessment:
+  accepted_parent_contracts_overridden: false
+  implementation_scope_expanded: false
+  formal_core_object_count_changed: false
+  deterministic_closure_complete: false
+  shared_task_semantics_complete: false
+  recovery_and_currentness_complete: false
+non_authorization:
+  accepts_F1: false
+  authorizes_implementation: false
+  authorizes_runtime_activation: false
+  authorizes_database_change: false
+  authorizes_service_start: false
+  authorizes_provider_or_executor_execution: false
+  starts_F2: false
+statement: >-
+  This independent review does not accept F1, does not authorize implementation,
+  database work, service startup, provider or executor execution, or runtime
+  activation, and does not start F2. Only Jenn may decide a future exact
+  hash-bound F1 acceptance unit after the blocking findings are resolved and a
+  new independent review is completed.

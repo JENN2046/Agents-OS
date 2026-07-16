@@ -1,0 +1,123 @@
+review:
+  id: agents-os-f2-r21-v17-targeted-consistency-independent-review
+  date: 2026-07-16
+  lane: Yellow
+  owner: Jenn
+  integrator: Nobao
+  reviewer_role: independent_read_only_subagent
+  result: PASS_NO_BLOCKER
+  review_kind: targeted_source_exact_materialization_correction
+
+candidate:
+  acceptance_subjects: R1-R21
+  subject_count: 21
+  amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r21-verified-core-constructibility-amendment.draft.md
+    sha256: 81faf12bb2af9921cc14f85920ea1db10bb5c58fb2ba906ae9f838a6071bcffc
+  historical_materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r21-v16.draft.md
+    sha256: 8f75dd02eb99999b0f6919a5fe213e902e8c60d2e8e003bdbbc10e219f72cbb0
+    immutable_review_evidence: true
+  corrected_materialization:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f2-effective-contract-materialization-v0.1-r21-v17.draft.md
+    sha256: 7df172456c98ae64c0dbd63f717250a7627e01a8be607ed3c932b33ce0ecaa87
+    authoritative: false
+
+independence:
+  fresh_context: true
+  fixed_subjects_v16_and_v17_only: true
+  prior_reviews_read: false
+  prior_decisions_read: false
+  other_materializations_read: false
+  private_or_raw_evidence_read: false
+  read_only: true
+
+targeted_scope:
+  - closed_Profile_steward_values
+  - credential_status_provider_relation
+  - activation_evidence_id_scalar_bindings
+  - closed_CompromiseImpact_action_class_tokens
+  - effective_R6_BindingScope_source_precedence
+
+exact_diff:
+  insertions: 50
+  deletions: 19
+  zero_context_hunks: 16
+  common_unchanged_lines: 3623
+  unexpected_differences: 0
+  new_schema_type_field_or_authority: 0
+
+result:
+  BLOCKING_F2: 0
+  DOWNSTREAM_F3_OR_F4: 0
+  IMPLEMENTATION_PROFILE: 0
+  MATERIALIZATION_DIFFERENCE_unresolved: 0
+  expected_materialization_corrections_verified: 5_of_5
+  identity_spoofing: 0
+  authority_expansion: 0
+  revocation_compromise_bypass: 0
+  fail_open: 0
+  dual_writer: 0
+  circular_proof: 0
+  M0_impossibility: 0
+  internal_contradiction: 0
+
+deterministic_validation:
+  source_hashes: 21_of_21
+  schemas_actual: 67
+  duplicate_schemas: 0
+  reducers_actual: 15
+  duplicate_reducers: 0
+  standalone_domains_unique: 55_of_55
+  not_standalone_surfaces: 12
+  derived_record_domain_registry: 28_of_28_unique
+  digest_formulas: 28
+  helper_projections: 1
+  assurance_roles: 43
+  duplicate_assurance_roles: 0
+  yaml_field_key_vocabulary: 493_unchanged_from_v16
+
+verified_corrections:
+  - id: V16-MD-01
+    status: CLOSED_IN_V17
+    evidence: >-
+      The exact ordered R7 Profile steward three-value set and each value's
+      existing meaning are printed without a fourth value.
+  - id: V16-MD-02
+    status: CLOSED_IN_V17
+    evidence: >-
+      The credential status provider must be the lifecycle controller or an
+      exact accepted component with the same Profile steward and provisioning
+      basis; unavailable or conflicting status yields INDETERMINATE.
+  - id: V16-MD-03
+    status: CLOSED_IN_V17
+    evidence: >-
+      Binding and Delegation activation evidence_id fields are both bound to
+      CanonicalDigestScalarV0_1; no untyped occurrence remains.
+  - id: V16-MD-04
+    status: CLOSED_IN_V17
+    evidence: >-
+      All eleven exact R15 CompromiseImpact target action-class tokens are
+      printed and presentation group labels are expressly non-tokens.
+  - id: V16-MD-05
+    status: CLOSED_IN_V17
+    evidence: >-
+      BindingScopeContextV0_1 provenance follows R6 replacement precedence
+      instead of citing superseded R5 Section 4.2.
+
+gate:
+  targeted_review_complete: true
+  eligible_for_fresh_full_atomic_review: true
+  eligible_for_Jenn_atomic_freeze_decision: false
+  reason_not_yet_on_freeze_surface: fresh_full_atomic_review_pending
+  requires_R22: false
+
+non_authorization:
+  Jenn_acceptance_granted: false
+  F2_frozen: false
+  F3_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  commit_created: false
+  push_performed: false

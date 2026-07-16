@@ -1,0 +1,74 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f2-r3-final-narrow-amendment-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-14T12:38:05+08:00
+effective_at: 2026-07-14T12:38:05+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  decision: EXPLICIT_START_OF_F2_R3_FINAL_NARROW_AMENDMENT
+  decision_source: exact_current_conversation_instruction
+
+amendment_unit:
+  id: F2_R3_FINAL_NARROW_AMENDMENT
+  fixed_subjects:
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+      sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+    - path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+      sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-f2-r2-atomic-bundle-independent-review.yaml
+    sha256: 728807c1680063f63da4e7e94453cd24bebecd557f8cc24a91676d1e35726259
+    result: BLOCK
+
+required_scope:
+  - F2_R2_IR_B01_non_circular_delegation_acknowledgement
+  - F2_R2_IR_B02_acyclic_binding_and_delegation_fingerprint_graph
+  - F2_R2_IR_B03_self_issuance_and_Jenn_root_grant_provenance
+  - prior_findings_disposition
+  - author_self_review
+  - final_hash_bound_independent_review_surface
+
+design_constraints:
+  permission_direction: SINGLE_PROHIBITED_BOUNDARY
+  add_permission_levels: forbidden
+  add_risk_permission_matrix: forbidden
+  add_ordinary_action_allowlist: forbidden
+  responsibility_is_permission: false
+  delegation_grants_permission: false
+  modify_R1_or_R2_bytes: forbidden
+  start_F3: forbidden
+
+excluded_scope:
+  - expand_F2_features
+  - define_final_Prohibited_Behavior_List_entries
+  - implement_runtime_or_F3
+  - production_authentication
+  - TaskPermit_or_host_authentication
+  - database_schema_or_migration
+  - service_or_provider_activation
+
+hard_boundaries:
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+
+completion_effect:
+  F2_accepted: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  F3_started: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision
+  superseded_by: null
