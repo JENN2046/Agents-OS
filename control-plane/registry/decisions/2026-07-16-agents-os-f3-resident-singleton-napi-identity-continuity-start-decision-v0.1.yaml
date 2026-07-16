@@ -1,0 +1,135 @@
+schema_version: agents-os.contract-closure-start-decision.v0.1
+record_id: agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1
+record_type: ContractClosureStartDecision
+status: active
+immutable: true
+created_at: 2026-07-16T12:19:22+08:00
+effective_at: 2026-07-16T12:19:22+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction_start_F3
+
+contract_unit:
+  id: F3
+  name: Resident Singleton / N-API / Identity Continuity v0.1
+  closure_mode: ATOMIC_BUNDLE
+  atomicity_reason: >-
+    Singleton ownership without identity continuity, or identity continuity
+    without one canonical writer and one closed N-API intake boundary, would
+    leave an authority gap.
+  partial_acceptance: forbidden
+  predecessor:
+    id: F2_ACTOR_IDENTITY_AND_DELEGATION_V0_1_R22_ATOMIC_BUNDLE
+    status: ACCEPTED_FROZEN
+    acceptance_record:
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+      sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    review_package_manifest:
+      path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+      sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+  mainline_basis:
+    branch: main
+    merge_commit: 7730354b59c7912b7d3f63b7491a547c40d174f7
+
+governing_inputs:
+  phase_4_start_decision:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  construction_readiness_review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+  home_direction:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+
+authorized_outputs:
+  - F3_atomic_contract_subjects
+  - F3_author_self_reviews
+  - F3_non_authoritative_effective_materializations
+  - F3_hash_bound_independent_reviews
+  - F3_findings_dispositions_and_narrow_amendments_when_required
+  - F3_registry_CURRENT_STATE_and_active_queue_projection
+  - F3_Jenn_atomic_freeze_decision_surface
+
+required_scope:
+  - one_logical_Resident_identity_and_one_canonical_ledger_authority
+  - one_live_Resident_writer_incarnation_and_monotonic_authority_epoch
+  - one_Rust_owned_ledger_thread_and_one_authoritative_SQLite_connection_contract
+  - closed_versioned_N_API_boundary
+  - deterministic_resident_identity_continuity_and_discontinuity_assessment
+  - canonical_Command_type_intent_envelope_and_committed_intake_contract
+  - exact_F2_authenticated_Command_context_and_action_reference_projection
+  - command_and_activation_replay_identity_and_conflict_rules
+  - DELEGATION_ACTIVATION_ACK_and_WORKER_ASSIGNMENT_HANDSHAKE_mode_binding
+  - fail_closed_startup_recovery_shutdown_and_readiness_contract
+  - HD_M0_02_closure_and_constructive_synthetic_M0_witness
+
+excluded_scope:
+  - F4_TaskPermit_host_authentication_or_effect_fencing
+  - F5_Outbox_delivery_retry_dead_letter_or_effect_recovery
+  - F6_Validation_current_decision
+  - F7_or_later_Home_Memory_Presence_or_relationship_contracts
+  - Rust_or_JavaScript_implementation
+  - database_schema_creation_migration_or_live_database_access
+  - Resident_VCPToolBox_or_any_service_start
+  - runtime_source_or_active_configuration_change
+  - production_authentication_crypto_key_or_credential_provisioning
+  - provider_executor_plugin_or_external_effect_execution
+  - public_API_or_MCP_schema_expansion
+
+acceptance_boundary:
+  draft_or_review_does_not_accept_F3: true
+  independent_review_does_not_accept_F3: true
+  acceptance_authority: Jenn
+  acceptance_unit_must_be_atomic: true
+  partial_acceptance: forbidden
+  F4_automatic_start: forbidden
+  implementation_authority_by_acceptance: false
+  runtime_activation_authority_by_acceptance: false
+  production_authentication_authority_by_acceptance: false
+
+hard_boundaries:
+  modify_F2_accepted_or_frozen_subject_bytes: forbidden
+  start_F4_automatically: forbidden
+  implement_contract: forbidden
+  runtime_source_change: forbidden
+  runtime_activation: forbidden
+  database_creation_migration_or_live_access: forbidden
+  Resident_or_service_start: forbidden
+  production_authentication_or_credential_work: forbidden
+  provider_or_executor_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  public_MCP_or_API_expansion: forbidden
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+  merge: not_authorized_by_this_decision
+  release_deploy_publish_or_tag: forbidden
+
+effects:
+  F3_started: true
+  F3_status: CONTRACT_CLOSURE_ACTIVE
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+
+next_gate:
+  name: F3_R1_AUTHOR_CLOSEOUT_AND_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

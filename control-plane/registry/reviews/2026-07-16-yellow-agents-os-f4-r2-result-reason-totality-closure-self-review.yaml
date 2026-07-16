@@ -1,0 +1,192 @@
+schema_version: agents-os.contract-author-self-review.v0.1
+review_id: agents-os-f4-r2-result-reason-totality-closure-self-review-v0.1
+review_type: author_self_review
+reviewer: Nobao
+reviewer_independence: false
+date: 2026-07-16
+status: complete
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit:
+  contract_id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 6
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+  subjects:
+    - role: R1_normative_contract
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      line_count: 1451
+      bytes_modified_by_R2: false
+    - role: R1_constructive_M0_A_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      line_count: 1036
+      bytes_modified_by_R2: false
+    - role: R1_deterministic_offline_validator
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      line_count: 875
+      bytes_modified_by_R2: false
+    - role: R2_normative_amendment
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+      sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+      line_count: 401
+    - role: R2_totality_vector_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+      sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+      line_count: 175
+    - role: R2_totality_vector_validator
+      path: control-plane/registry/validate-f4-r2-result-reason-totality.py
+      sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+      line_count: 285
+  encoding: UTF-8
+  line_endings: LF
+  byte_order_mark: absent
+
+authority_basis:
+  F4_start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml
+    sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+  R1_independent_review:
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml
+    sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0
+    result: BLOCK
+    blocker_count: 1
+  finding_disposition:
+    path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml
+    sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf
+  R2_start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml
+    sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b
+
+review_scope:
+  - F4_R1_FULL_ATOMIC_IR_B01_exact_disposition
+  - R2_precedence_and_immutable_R1_inputs
+  - total_result_lattice_for_three_reducers
+  - exact_closed_reason_candidate_classification
+  - exact_rejected_and_indeterminate_reason_precedence
+  - all_19_permit_currentness_check_reason_coverage
+  - all_18_local_admission_check_reason_coverage
+  - corrected_I19_R2_and_I20_R2
+  - canonical_fingerprint_and_replay_uniqueness
+  - mixed_negative_unavailable_and_multiple_negative_vectors
+  - unchanged_M0_A_success_path_constructibility
+  - acceptance_and_non_authorization_boundary
+
+checks:
+  finding_coverage:
+    result: PASS
+    evidence: the sole R1 independent blocker is accepted and every minimum R2 correction is represented by normative text plus fixed vectors
+  atomicity:
+    result: PASS
+    evidence: R1 contract fixture validator plus R2 amendment fixture validator form one six-subject partial-acceptance-forbidden unit
+  R1_immutability:
+    result: PASS
+    evidence: all three R1 subject SHA-256 values remain identical to the R1 manifest and independent review
+  result_lattice:
+    result: PASS
+    evidence: any applicable REJECTED dominates concurrent INDETERMINATE; only absence of REJECTED permits INDETERMINATE; all applicable PASS or permitted NOT_APPLICABLE is required for success
+  Host_reason_totality:
+    result: PASS
+    evidence: every R1 Host reason is classified as PASS REJECTED or INDETERMINATE with one closed precedence list per non-success class
+  TaskPermit_reason_totality:
+    result: PASS
+    evidence: lifecycle integrity and all 19 checks have an exact negative or unavailable mapping; five previously uncovered checks receive explicit closed reasons
+  admission_reason_totality:
+    result: PASS
+    evidence: all 18 admission checks map to a unique closed reason and known stale fence or epoch evidence is REJECTED
+  conflict_semantics:
+    result: PASS
+    evidence: reproducibly incompatible same-watermark facts are REJECTED/INTEGRITY_FAILURE while evidence too unavailable to prove either state is INDETERMINATE only when no negative exists
+  invariant_consistency:
+    result: PASS
+    evidence: I19-R2 is limited to no-proven-negative inputs and I20-R2 explicitly makes proven negatives dominant
+  canonical_bytes:
+    result: PASS
+    evidence: result and the first present ordered reason are derived from one normalized tuple and remain fingerprinted; caller-selected or lower-priority values reject
+  adversarial_decisions:
+    result: PASS
+    passed: 59
+    required: 59
+    basis: R1_A1_A49_plus_R2_A50_A59
+  normative_invariants:
+    result: PASS
+    passed: 64
+    required: 64
+    replacements: [I19-R2, I20-R2]
+  M0_A_constructibility:
+    result: PASS
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f4-m0a-witness.py
+    node_hashes_verified: 14
+    proof_edges_verified: 36
+    schema_fingerprints_verified: 22
+    acceptance_count: 1
+    accepted_handoff_count: 1
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+  R2_totality_vectors:
+    result: PASS
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+    host_case_count: 5
+    permit_case_count: 12
+    admission_case_count: 6
+    total_case_count: 23
+    negative_mutations_rejected: 3
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+  non_authorization:
+    result: PASS
+    evidence: R2 author closeout creates no F4 acceptance or freeze F5/F6 implementation database Resident runtime authentication provider Host service effect or Git-delivery authority
+
+blocker_disposition:
+  F4-R1-FULL-ATOMIC-IR-B01:
+    status: CLOSED_IN_R2_AUTHOR_SURFACE_PENDING_INDEPENDENT_REVIEW
+    corrections:
+      - one_total_REJECTED_then_INDETERMINATE_then_success_lattice
+      - exact_Host_authentication_reason_precedence
+      - exact_TaskPermit_currentness_check_to_reason_mapping_and_precedence
+      - exact_Host_local_admission_check_to_reason_mapping_and_precedence
+      - five_missing_currentness_reason_values
+      - corrected_I19_R2_and_I20_R2
+      - 23_fixed_vectors_including_mixed_and_multiple_failure_states
+      - three_negative_expected_result_or_reason_mutations_rejected
+
+blockers: []
+majors: []
+minors: []
+
+scope_limitations:
+  - this_is_an_author_review_not_an_independent_review
+  - no_real_host_authentication_secret_provider_runtime_database_or_effect_was_used
+  - no_Rust_JavaScript_database_index_crypto_key_custody_or_performance_implementation_was_reviewed
+  - the_R1_M0_A_fixture_remains_a_synthetic_success_path_and_the_R2_vectors_are_synthetic_negative_semantics_only
+
+decision:
+  R2_author_closeout_ready: true
+  hash_bound_independent_review_eligible: true
+  F4_accepted: false
+  F4_frozen: false
+  Jenn_decision_ready: false
+  additional_amendment_required_by_author_review: false
+
+non_authorization:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  Resident_start_authorized: false
+  service_start_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  credential_change_authorized: false
+  F5_started: false
+  F6_started: false
+  commit_performed: false
+  push_performed: false
+  merge_performed: false

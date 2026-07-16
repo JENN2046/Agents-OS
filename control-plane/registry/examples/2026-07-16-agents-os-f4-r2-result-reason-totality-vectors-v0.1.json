@@ -1,0 +1,175 @@
+{
+  "interface_version": "agents-os.f4-r2-result-reason-totality-vectors.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE",
+  "host_authentication": {
+    "cases": [
+      {
+        "id": "host-revoked-plus-verifier-unavailable",
+        "observations": ["REVOKED", "VERIFIER_UNAVAILABLE"],
+        "expected": ["REJECTED", "REVOKED"]
+      },
+      {
+        "id": "host-compromised-plus-revoked",
+        "observations": ["REVOKED", "COMPROMISED"],
+        "expected": ["REJECTED", "COMPROMISED"]
+      },
+      {
+        "id": "host-unavailable-only",
+        "observations": ["UNKNOWN", "VERIFIER_UNAVAILABLE"],
+        "expected": ["INDETERMINATE", "VERIFIER_UNAVAILABLE"]
+      },
+      {
+        "id": "host-all-positive",
+        "observations": ["MATCH"],
+        "expected": ["AUTHENTICATED", "MATCH"]
+      },
+      {
+        "id": "host-expired-plus-not-yet-valid",
+        "observations": ["NOT_YET_VALID", "EXPIRED"],
+        "expected": ["REJECTED", "EXPIRED"]
+      }
+    ]
+  },
+  "permit_currentness": {
+    "base_lifecycle": "ACTIVE",
+    "base_checks": {
+      "task_binding_current": "PASS",
+      "actor_binding_current": "PASS",
+      "resident_command_binding_current": "PASS",
+      "host_identity_current": "PASS",
+      "host_authentication_current": "PASS",
+      "policy_current": "PASS",
+      "prohibited_boundary_current": "PASS",
+      "capability_grants_current": "PASS",
+      "resource_grants_current": "PASS",
+      "secret_handle_bindings_current": "NOT_APPLICABLE",
+      "permit_attestation_current": "PASS",
+      "human_presence_current": "NOT_APPLICABLE",
+      "Jenn_authorization_current": "NOT_APPLICABLE",
+      "time_window_current": "PASS",
+      "invocation_available": "PASS",
+      "execution_epoch_current": "PASS",
+      "host_fence_current": "PASS",
+      "effect_fence_current": "PASS",
+      "task_fence_current": "PASS"
+    },
+    "cases": [
+      {
+        "id": "permit-task-negative-plus-policy-unavailable",
+        "overrides": {"task_binding_current": "REJECTED", "policy_current": "INDETERMINATE"},
+        "expected": ["REJECTED", "TASK_STALE"]
+      },
+      {
+        "id": "permit-prohibited-plus-host-auth-negative",
+        "overrides": {"prohibited_boundary_current": "REJECTED", "host_authentication_current": "REJECTED"},
+        "expected": ["REJECTED", "PROHIBITED"]
+      },
+      {
+        "id": "permit-capability-reason-coverage",
+        "overrides": {"capability_grants_current": "REJECTED"},
+        "expected": ["REJECTED", "CAPABILITY_STALE"]
+      },
+      {
+        "id": "permit-resource-reason-coverage",
+        "overrides": {"resource_grants_current": "REJECTED"},
+        "expected": ["REJECTED", "RESOURCE_STALE"]
+      },
+      {
+        "id": "permit-secret-reason-coverage",
+        "overrides": {"secret_handle_bindings_current": "REJECTED"},
+        "expected": ["REJECTED", "SECRET_HANDLE_STALE"]
+      },
+      {
+        "id": "permit-attestation-reason-coverage",
+        "overrides": {"permit_attestation_current": "REJECTED"},
+        "expected": ["REJECTED", "ATTESTATION_STALE"]
+      },
+      {
+        "id": "permit-human-presence-reason-coverage",
+        "overrides": {"human_presence_current": "REJECTED"},
+        "expected": ["REJECTED", "HUMAN_PRESENCE_STALE"]
+      },
+      {
+        "id": "permit-unavailable-only",
+        "overrides": {"policy_current": "INDETERMINATE"},
+        "expected": ["INDETERMINATE", "UNAVAILABLE"]
+      },
+      {
+        "id": "permit-fence-plus-epoch-negative",
+        "overrides": {"host_fence_current": "REJECTED", "execution_epoch_current": "REJECTED"},
+        "expected": ["REJECTED", "EPOCH_STALE"]
+      },
+      {
+        "id": "permit-impossible-time-classification",
+        "overrides": {"time_window_current": "REJECTED"},
+        "expected": ["REJECTED", "INTEGRITY_FAILURE"]
+      },
+      {
+        "id": "permit-all-current",
+        "overrides": {},
+        "expected": ["VALID", "ALL_CURRENT"]
+      },
+      {
+        "id": "permit-consumed-plus-unavailable",
+        "lifecycle": "CONSUMED",
+        "overrides": {"policy_current": "INDETERMINATE"},
+        "expected": ["REJECTED", "INVOCATIONS_EXHAUSTED"]
+      }
+    ]
+  },
+  "host_local_admission": {
+    "base_checks": {
+      "request_integrity": "PASS",
+      "permit_currentness": "PASS",
+      "host_authentication": "PASS",
+      "host_ownership": "PASS",
+      "task_fence_match": "PASS",
+      "host_fence_match": "PASS",
+      "effect_fence_match": "PASS",
+      "execution_epoch_match": "PASS",
+      "capability_subset": "PASS",
+      "resource_subset": "PASS",
+      "secret_handle_scope": "NOT_APPLICABLE",
+      "permit_attestation": "PASS",
+      "human_presence": "NOT_APPLICABLE",
+      "effect_intent_exact_match": "PASS",
+      "idempotency_identity_match": "PASS",
+      "invocation_slot_available": "PASS",
+      "prohibited_boundary": "PASS",
+      "Jenn_authorization": "NOT_APPLICABLE"
+    },
+    "cases": [
+      {
+        "id": "admission-permit-negative-plus-host-unavailable",
+        "overrides": {"permit_currentness": "REJECTED", "host_authentication": "INDETERMINATE"},
+        "expected": ["REJECTED", "PERMIT_INVALID"]
+      },
+      {
+        "id": "admission-prohibited-plus-invalid-request",
+        "overrides": {"prohibited_boundary": "REJECTED", "request_integrity": "REJECTED"},
+        "expected": ["REJECTED", "PROHIBITED"]
+      },
+      {
+        "id": "admission-stale-fence-plus-epoch",
+        "overrides": {"host_fence_match": "REJECTED", "execution_epoch_match": "REJECTED"},
+        "expected": ["REJECTED", "STALE_FENCE"]
+      },
+      {
+        "id": "admission-unavailable-only",
+        "overrides": {"host_authentication": "INDETERMINATE"},
+        "expected": ["INDETERMINATE", "CURRENTNESS_UNAVAILABLE"]
+      },
+      {
+        "id": "admission-all-checks-pass",
+        "overrides": {},
+        "expected": ["ADMITTED", "ALL_CHECKS_PASS"]
+      },
+      {
+        "id": "admission-integrity-dominates-prohibited",
+        "integrity_failure": true,
+        "overrides": {"prohibited_boundary": "REJECTED"},
+        "expected": ["REJECTED", "INTEGRITY_FAILURE"]
+      }
+    ]
+  }
+}

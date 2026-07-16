@@ -1,0 +1,1036 @@
+{
+  "interface_version": "agents-os.f4-m0a-witness.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE",
+  "mode": "SYNTHETIC_ZERO_EFFECT",
+  "nodes": [
+    {
+      "ordinal": 1,
+      "node_id": "task_authority",
+      "kind": "F1_TASK_AUTHORITY_BINDING",
+      "depends_on": [],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F1_TASK_AUTHORITY_BINDING",
+        "task_authority",
+        {
+          "interface_version": "agents-os.f4-task-authority-binding.v0.1",
+          "task_id": "task:m0-a:f4:001",
+          "task_lifecycle_generation": 1,
+          "task_completion_epoch": 0,
+          "task_state_revision": 1,
+          "task_state_fingerprint": "2992e1bb33a0e01503fa2894b36b51ee4075083a7e7033229ab98526d7c08996",
+          "goal_id": "goal:m0-a:f4:001",
+          "goal_spec_revision": 1,
+          "goal_spec_fingerprint": "b0a2ad6f890aad9b7d97c8d465850bbdbd9d868bdef914f6b8dd8226dadedd8b",
+          "goal_plan_membership_revision": 1,
+          "goal_plan_membership_fingerprint": "7a95ce52765d89a3a6645e2802a3c4f4ff137eb623529cb15317d0932bb39575",
+          "task_commitment_snapshot_id": "commitment:m0-a:f4:001",
+          "task_commitment_snapshot_fingerprint": "3c7ddcf581159b36f5afc91714f2dfdc8181ea1979c8de89a8daf3e802f9a03f",
+          "dependency_closure_snapshot_id": "dependencies:m0-a:f4:001",
+          "dependency_closure_fingerprint": "f5a6a94ae2cde3835f155e9925aec6381aa8279ca40636e3836715d9799a5bc8",
+          "task_completion_refs": [],
+          "completion_assurance_versions": [],
+          "previous_execution_epoch": 0,
+          "execution_epoch_head_fingerprint": "c706dc202a17b398c174164a569299460de4303afaf96aa2b830f0fb09501378",
+          "currentness_event_sequence": 10,
+          "canonical_fingerprint": "3e77280fefccd965a95f6dfdce0bbab3b65a3f2bf06f43be66e41d296accf5fb"
+        },
+        []
+      ],
+      "sha256": "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083"
+    },
+    {
+      "ordinal": 2,
+      "node_id": "actor_authority",
+      "kind": "F2_ACTOR_AUTHORITY_BINDING",
+      "depends_on": [],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F2_ACTOR_AUTHORITY_BINDING",
+        "actor_authority",
+        {
+          "interface_version": "agents-os.f4-actor-authority-binding.v0.1",
+          "actor_id": "actor:m0-a:synthetic",
+          "actor_identity_revision": 1,
+          "actor_identity_assessment_ref": "fixture:f2-actor-assessment",
+          "actor_identity_assessment_fingerprint": "70bb3ea7cc466e932718cdc7e468e003fb10e0df73f57fe588953905e3184b7f",
+          "principal_id": "principal:m0-a:synthetic",
+          "principal_binding_revision": 1,
+          "principal_binding_assessment_ref": "fixture:f2-principal-assessment",
+          "principal_binding_assessment_fingerprint": "bf0123b189acae7a509b2cb7a72723c10f502e8d1ca13dbcafb506f7fabfe9cd",
+          "authentication_assessment_ref": "fixture:f2-authentication-assessment",
+          "authentication_assessment_fingerprint": "d6e617b48acc681038e7c424f4162bf9f14a00e8130f8ce5457fb10b2993073d",
+          "authentication_result": "AUTHENTICATED",
+          "responsibility_source_kind": "ASSIGNMENT",
+          "responsibility_source_ref": "assignment:m0-a:f4:001",
+          "responsibility_source_fingerprint": "f38094a612019f18c3c3e6e451f58f043a4bfbd68c88f7839f96df058a5d70ac",
+          "delegation_chain_fingerprint": null,
+          "bound_resource_ref": "resource:m0-a:synthetic:001",
+          "action_ref": "action:m0-a:f4:001",
+          "action_fingerprint": "ff15060c5bd43173f64beeb1a5a0fcd774eba53db1fc1727e62cc998c1962e3e",
+          "prohibited_behavior_list_revision": 1,
+          "prohibited_boundary_evidence_ref": "fixture:f2-prohibited-boundary",
+          "prohibited_boundary_evidence_fingerprint": "1fb14e8f30c937523b972ea6cd4211d47c09958a8c7a273bdf110d379985ada6",
+          "authority_event_sequence": 20,
+          "canonical_fingerprint": "9924bf71d3d80ac6f2e09dcd65ecf5221ad8401e38992940212fa649e263fc60"
+        },
+        []
+      ],
+      "sha256": "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+    },
+    {
+      "ordinal": 3,
+      "node_id": "resident_command",
+      "kind": "F3_RESIDENT_COMMAND_BINDING",
+      "depends_on": [
+        "actor_authority"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F3_RESIDENT_COMMAND_BINDING",
+        "resident_command",
+        {
+          "interface_version": "agents-os.f4-resident-command-binding.v0.1",
+          "resident_identity_ref": "resident:m0-a:synthetic",
+          "resident_identity_revision": 1,
+          "resident_incarnation_id": "resident-incarnation:m0-a:001",
+          "resident_epoch": 1,
+          "resident_continuity_assessment_ref": "fixture:f3-continuity",
+          "resident_continuity_assessment_fingerprint": "7daea9c7bbb0b2680ff23f22c318f29fc041e16de112d24afe6376d31047d53e",
+          "resident_continuity_result": "CONTINUOUS",
+          "command_id": "command:m0-a:effect-intent:001",
+          "command_fingerprint": "c8d1c904617b543ccaec40737f5ed939a8547da8a954575e092dc23c0ddd7775",
+          "command_type_id": "command-type:m0-a:synthetic-effect-intent",
+          "command_type_version": 1,
+          "command_definition_fingerprint": "cf757b8b86fa866d4e2bd781cfae6af3a23686b899b733e739e27754f08e00a6",
+          "command_envelope_ref": "fixture:f3-command-envelope",
+          "command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+          "authenticated_context_ref": "fixture:f3-authenticated-context",
+          "authenticated_context_fingerprint": "1e29154e1735ee6afdf5b02acf5a56bd8df0c8420b54a693d0385b163ff34c40",
+          "authenticated_action_ref": "fixture:f3-authenticated-action",
+          "authenticated_action_fingerprint": "55df79f228246d8ce08aee851872726151bf685f0bcb2fcf529fdf29a404e512",
+          "F3_contract_version": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+          "writer_event_sequence": 30,
+          "canonical_fingerprint": "1be2cd1e2eb9d105ab126a8734c76f6baec10b0046d93c6ae0acc7106bf1d750"
+        },
+        [
+          [
+            "actor_authority",
+            "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+          ]
+        ]
+      ],
+      "sha256": "a44c131c2f683fdb00f0d6f633d3dea011aabaa039f7358a04c8242af504df7a"
+    },
+    {
+      "ordinal": 4,
+      "node_id": "host_identity",
+      "kind": "F4_HOST_IDENTITY",
+      "depends_on": [
+        "actor_authority"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_HOST_IDENTITY",
+        "host_identity",
+        {
+          "interface_version": "agents-os.host-identity-revision.v0.1",
+          "host_id": "host:m0-a:synthetic",
+          "revision": 1,
+          "previous_revision_ref": null,
+          "previous_revision_fingerprint": null,
+          "host_kind": "SYNTHETIC_M0_HOST",
+          "controller_actor_id": "actor:m0-a:synthetic",
+          "controller_actor_identity_revision": 1,
+          "authenticator_profile_ref": "auth-profile:m0-a:synthetic",
+          "authenticator_profile_revision": 1,
+          "authenticator_profile_fingerprint": "8506ba41b693a82af5c27124b83c87c3ec9436fcb59afd5843ab62c4718236d2",
+          "credential_binding_ref": "credential-handle:m0-a:synthetic",
+          "credential_binding_fingerprint": "c1ad2a749cb29dabf3fe3236108e61ab09a9ddcc3adde7c946b41f2b7c2c63cc",
+          "lifecycle_state": "ACTIVE",
+          "validity_start_utc_ms": 1000,
+          "validity_end_utc_ms": null,
+          "issued_event_sequence": 40,
+          "canonical_fingerprint": "3d07231235e7a731de2ce80cfd250fb1c492eea33db7c423c5805aabbc33e946"
+        },
+        [
+          [
+            "actor_authority",
+            "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+          ]
+        ]
+      ],
+      "sha256": "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1"
+    },
+    {
+      "ordinal": 5,
+      "node_id": "host_authentication",
+      "kind": "F4_HOST_AUTHENTICATION",
+      "depends_on": [
+        "host_identity"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_HOST_AUTHENTICATION",
+        "host_authentication",
+        {
+          "interface_version": "agents-os.host-authentication-assessment.v0.1",
+          "host_identity_ref": "fixture:host-identity",
+          "host_identity_fingerprint": "3d07231235e7a731de2ce80cfd250fb1c492eea33db7c423c5805aabbc33e946",
+          "authenticator_profile_ref": "auth-profile:m0-a:synthetic",
+          "authenticator_profile_fingerprint": "8506ba41b693a82af5c27124b83c87c3ec9436fcb59afd5843ab62c4718236d2",
+          "challenge_ref": "challenge:m0-a:f4:001",
+          "challenge_fingerprint": "23d06757cf25e4a9055ca8ac542bd834c1804c0a473fe6167232ab440bb1f241",
+          "verifier_identity_ref": "verifier:m0-a:synthetic",
+          "verifier_profile_ref": "verifier-profile:m0-a:synthetic",
+          "verification_evidence_ref": "verification-evidence:m0-a:f4:001",
+          "verification_evidence_fingerprint": "840349368168827f96c2739bac364a31e0f67a66905ec4e9bee7419124c47e33",
+          "host_authentication_epoch": 1,
+          "trusted_time_utc_ms": 1500,
+          "valid_until_utc_ms": 5000,
+          "host_revocation_event_sequence": 40,
+          "result": "AUTHENTICATED",
+          "reason": "MATCH",
+          "assessment_fingerprint": "bc1250b56a6abea4362cba710d9b4b9a298c4cd17555db3e429fff817d37a23e"
+        },
+        [
+          [
+            "host_identity",
+            "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1"
+          ]
+        ]
+      ],
+      "sha256": "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca"
+    },
+    {
+      "ordinal": 6,
+      "node_id": "fence_heads",
+      "kind": "F4_FENCE_HEADS",
+      "depends_on": [
+        "task_authority",
+        "host_identity"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_FENCE_HEADS",
+        "fence_heads",
+        {
+          "interface_version": "agents-os.f4-fence-state.v0.1",
+          "task_id": "task:m0-a:f4:001",
+          "task_lifecycle_generation": 1,
+          "host_id": "host:m0-a:synthetic",
+          "execution_epoch": 1,
+          "task_fence_generation": 1,
+          "host_fence_generation": 1,
+          "effect_fence_generation": 1,
+          "fence_reason": "GENESIS",
+          "source_event_ref": "fixture:f4-fence-genesis",
+          "source_event_fingerprint": "216e69b82e5cb1eba59c91b905a81aac335fd1f6fe5824ebc7677b42208e5af5",
+          "event_sequence": 50,
+          "canonical_fingerprint": "198a8c3aecc56204802f5deeddf72c78e823115ef0152fd37110137fa14c59e9"
+        },
+        [
+          [
+            "task_authority",
+            "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083"
+          ],
+          [
+            "host_identity",
+            "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1"
+          ]
+        ]
+      ],
+      "sha256": "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495"
+    },
+    {
+      "ordinal": 7,
+      "node_id": "effect_scope",
+      "kind": "F4_EFFECT_SCOPE",
+      "depends_on": [
+        "task_authority",
+        "actor_authority",
+        "resident_command"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_EFFECT_SCOPE",
+        "effect_scope",
+        {
+          "capability_grants": [
+            {
+              "capability_id": "capability:m0-a:synthetic-noop",
+              "capability_revision": 1,
+              "operation_set": [
+                "SYNTHETIC_NOOP"
+              ],
+              "constraint_fingerprint": "cda57607bc89e03a1753015284d949f297277a60add31680d0a2a9dd32771f4b",
+              "canonical_fingerprint": "f69a375b446fae6754d8197cc72a4cb843e6debc49e1f66b60cc2649f9e904f9"
+            }
+          ],
+          "resource_grants": [
+            {
+              "resource_kind": "SYNTHETIC_M0_RESOURCE",
+              "resource_ref": "resource:m0-a:synthetic:001",
+              "resource_subject_fingerprint": "e01bafac8d1d08f359ce2b6d640db050234f750393d0e82446086e2d2ccd5d59",
+              "operation_set": [
+                "SYNTHETIC_NOOP"
+              ],
+              "selector_constraint_fingerprint": "d85500512d1e8373d99543bc18cbc2a96093766c56726944b71f4fb44de53952",
+              "canonical_fingerprint": "e92da07c2f7691e8da62eea56d36456e6b31116c86e45dd5d6f93a15ae4db421"
+            }
+          ],
+          "secret_handle_bindings": [],
+          "capability_set_fingerprint": "3f2dd1a3c93763bc28b4cca25d981f2824ced323cb914760ef5ceee8a55f81e0",
+          "resource_set_fingerprint": "64155b9ce76314d4535d2c3fa39e0e5ce4ddb4f793147b24aa4e743531b771c0",
+          "secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+          "effect_intent_binding": {
+            "interface_version": "agents-os.effect-intent-binding.v0.1",
+            "effect_intent_id": "effect-intent:m0-a:f4:001",
+            "operation_kind": "SYNTHETIC_NOOP",
+            "target_resource_refs": [
+              "resource:m0-a:synthetic:001"
+            ],
+            "payload_fingerprint": "9cb8a5cdbc88af6521d96a7a895ffb0c7f9b8fa1cc642ce23d3ced516cc143ff",
+            "capability_set_fingerprint": "3f2dd1a3c93763bc28b4cca25d981f2824ced323cb914760ef5ceee8a55f81e0",
+            "resource_set_fingerprint": "64155b9ce76314d4535d2c3fa39e0e5ce4ddb4f793147b24aa4e743531b771c0",
+            "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+            "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "side_effect_class": "GREEN",
+            "external_effect_requested": true,
+            "raw_payload_present": false,
+            "canonical_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e"
+          },
+          "human_presence_binding": {
+            "mode": "NOT_REQUIRED",
+            "presence_event_ref": null,
+            "presence_event_fingerprint": null,
+            "present_actor_id": null,
+            "present_actor_identity_revision": null,
+            "authorized_scope_fingerprint": null,
+            "observer_host_id": null,
+            "observed_at_utc_ms": null,
+            "valid_until_utc_ms": null,
+            "revocation_event_sequence": null,
+            "currentness_result": "NOT_APPLICABLE",
+            "canonical_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0"
+          },
+          "Jenn_authorization_binding": {
+            "mode": "NOT_REQUIRED",
+            "authorization_event_ref": null,
+            "authorization_event_fingerprint": null,
+            "Jenn_actor_identity_ref": null,
+            "authorized_scope_fingerprint": null,
+            "authorized_side_effect_class": null,
+            "policy_bundle_revision": null,
+            "prohibited_behavior_list_revision": null,
+            "issued_at_utc_ms": null,
+            "expires_at_utc_ms": null,
+            "revocation_event_sequence": null,
+            "currentness_result": "NOT_APPLICABLE",
+            "canonical_fingerprint": "f2c1ca0725159cebcfec7b7505e05e63c87a84fd4254aeaa3834d17e6589824b"
+          }
+        },
+        [
+          [
+            "task_authority",
+            "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083"
+          ],
+          [
+            "actor_authority",
+            "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+          ],
+          [
+            "resident_command",
+            "a44c131c2f683fdb00f0d6f633d3dea011aabaa039f7358a04c8242af504df7a"
+          ]
+        ]
+      ],
+      "sha256": "b50031771d409c77b619fab71800b12bf670b0dbe690d067544b3780bb7da4ac"
+    },
+    {
+      "ordinal": 8,
+      "node_id": "task_permit",
+      "kind": "F4_TASK_PERMIT_ISSUANCE",
+      "depends_on": [
+        "task_authority",
+        "actor_authority",
+        "resident_command",
+        "host_identity",
+        "host_authentication",
+        "fence_heads",
+        "effect_scope"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_TASK_PERMIT_ISSUANCE",
+        "task_permit",
+        {
+          "permit": {
+            "interface_version": "agents-os.task-permit.v0.1",
+            "F4_contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE",
+            "permit_id": "11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "permit_revision": 1,
+            "issuance_event_sequence": 70,
+            "task_authority_binding": {
+              "interface_version": "agents-os.f4-task-authority-binding.v0.1",
+              "task_id": "task:m0-a:f4:001",
+              "task_lifecycle_generation": 1,
+              "task_completion_epoch": 0,
+              "task_state_revision": 1,
+              "task_state_fingerprint": "2992e1bb33a0e01503fa2894b36b51ee4075083a7e7033229ab98526d7c08996",
+              "goal_id": "goal:m0-a:f4:001",
+              "goal_spec_revision": 1,
+              "goal_spec_fingerprint": "b0a2ad6f890aad9b7d97c8d465850bbdbd9d868bdef914f6b8dd8226dadedd8b",
+              "goal_plan_membership_revision": 1,
+              "goal_plan_membership_fingerprint": "7a95ce52765d89a3a6645e2802a3c4f4ff137eb623529cb15317d0932bb39575",
+              "task_commitment_snapshot_id": "commitment:m0-a:f4:001",
+              "task_commitment_snapshot_fingerprint": "3c7ddcf581159b36f5afc91714f2dfdc8181ea1979c8de89a8daf3e802f9a03f",
+              "dependency_closure_snapshot_id": "dependencies:m0-a:f4:001",
+              "dependency_closure_fingerprint": "f5a6a94ae2cde3835f155e9925aec6381aa8279ca40636e3836715d9799a5bc8",
+              "task_completion_refs": [],
+              "completion_assurance_versions": [],
+              "previous_execution_epoch": 0,
+              "execution_epoch_head_fingerprint": "c706dc202a17b398c174164a569299460de4303afaf96aa2b830f0fb09501378",
+              "currentness_event_sequence": 10,
+              "canonical_fingerprint": "3e77280fefccd965a95f6dfdce0bbab3b65a3f2bf06f43be66e41d296accf5fb"
+            },
+            "actor_authority_binding": {
+              "interface_version": "agents-os.f4-actor-authority-binding.v0.1",
+              "actor_id": "actor:m0-a:synthetic",
+              "actor_identity_revision": 1,
+              "actor_identity_assessment_ref": "fixture:f2-actor-assessment",
+              "actor_identity_assessment_fingerprint": "70bb3ea7cc466e932718cdc7e468e003fb10e0df73f57fe588953905e3184b7f",
+              "principal_id": "principal:m0-a:synthetic",
+              "principal_binding_revision": 1,
+              "principal_binding_assessment_ref": "fixture:f2-principal-assessment",
+              "principal_binding_assessment_fingerprint": "bf0123b189acae7a509b2cb7a72723c10f502e8d1ca13dbcafb506f7fabfe9cd",
+              "authentication_assessment_ref": "fixture:f2-authentication-assessment",
+              "authentication_assessment_fingerprint": "d6e617b48acc681038e7c424f4162bf9f14a00e8130f8ce5457fb10b2993073d",
+              "authentication_result": "AUTHENTICATED",
+              "responsibility_source_kind": "ASSIGNMENT",
+              "responsibility_source_ref": "assignment:m0-a:f4:001",
+              "responsibility_source_fingerprint": "f38094a612019f18c3c3e6e451f58f043a4bfbd68c88f7839f96df058a5d70ac",
+              "delegation_chain_fingerprint": null,
+              "bound_resource_ref": "resource:m0-a:synthetic:001",
+              "action_ref": "action:m0-a:f4:001",
+              "action_fingerprint": "ff15060c5bd43173f64beeb1a5a0fcd774eba53db1fc1727e62cc998c1962e3e",
+              "prohibited_behavior_list_revision": 1,
+              "prohibited_boundary_evidence_ref": "fixture:f2-prohibited-boundary",
+              "prohibited_boundary_evidence_fingerprint": "1fb14e8f30c937523b972ea6cd4211d47c09958a8c7a273bdf110d379985ada6",
+              "authority_event_sequence": 20,
+              "canonical_fingerprint": "9924bf71d3d80ac6f2e09dcd65ecf5221ad8401e38992940212fa649e263fc60"
+            },
+            "resident_command_binding": {
+              "interface_version": "agents-os.f4-resident-command-binding.v0.1",
+              "resident_identity_ref": "resident:m0-a:synthetic",
+              "resident_identity_revision": 1,
+              "resident_incarnation_id": "resident-incarnation:m0-a:001",
+              "resident_epoch": 1,
+              "resident_continuity_assessment_ref": "fixture:f3-continuity",
+              "resident_continuity_assessment_fingerprint": "7daea9c7bbb0b2680ff23f22c318f29fc041e16de112d24afe6376d31047d53e",
+              "resident_continuity_result": "CONTINUOUS",
+              "command_id": "command:m0-a:effect-intent:001",
+              "command_fingerprint": "c8d1c904617b543ccaec40737f5ed939a8547da8a954575e092dc23c0ddd7775",
+              "command_type_id": "command-type:m0-a:synthetic-effect-intent",
+              "command_type_version": 1,
+              "command_definition_fingerprint": "cf757b8b86fa866d4e2bd781cfae6af3a23686b899b733e739e27754f08e00a6",
+              "command_envelope_ref": "fixture:f3-command-envelope",
+              "command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+              "authenticated_context_ref": "fixture:f3-authenticated-context",
+              "authenticated_context_fingerprint": "1e29154e1735ee6afdf5b02acf5a56bd8df0c8420b54a693d0385b163ff34c40",
+              "authenticated_action_ref": "fixture:f3-authenticated-action",
+              "authenticated_action_fingerprint": "55df79f228246d8ce08aee851872726151bf685f0bcb2fcf529fdf29a404e512",
+              "F3_contract_version": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+              "writer_event_sequence": 30,
+              "canonical_fingerprint": "1be2cd1e2eb9d105ab126a8734c76f6baec10b0046d93c6ae0acc7106bf1d750"
+            },
+            "host_identity_ref": "fixture:host-identity",
+            "host_identity_fingerprint": "3d07231235e7a731de2ce80cfd250fb1c492eea33db7c423c5805aabbc33e946",
+            "host_authenticator_profile_ref": "auth-profile:m0-a:synthetic",
+            "host_authenticator_profile_fingerprint": "8506ba41b693a82af5c27124b83c87c3ec9436fcb59afd5843ab62c4718236d2",
+            "host_authentication_assessment_ref": "fixture:host-authentication",
+            "host_authentication_assessment_fingerprint": "bc1250b56a6abea4362cba710d9b4b9a298c4cd17555db3e429fff817d37a23e",
+            "host_authentication_epoch": 1,
+            "issuer_resident_identity_ref": "resident:m0-a:synthetic",
+            "issuer_resident_epoch": 1,
+            "policy_bundle_revision": 1,
+            "policy_bundle_fingerprint": "951c935d83918058ccf48ea18c48fe1c83ca860d1a28b637dab7e93abc6446ed",
+            "prohibited_behavior_list_revision": 1,
+            "prohibited_boundary_evidence_ref": "fixture:f4-prohibited-boundary",
+            "prohibited_boundary_evidence_fingerprint": "dea8198f4cab447ddcea8f4ff47201ffd03a148a3c057853d893dab5dc2db795",
+            "capability_grants": [
+              {
+                "capability_id": "capability:m0-a:synthetic-noop",
+                "capability_revision": 1,
+                "operation_set": [
+                  "SYNTHETIC_NOOP"
+                ],
+                "constraint_fingerprint": "cda57607bc89e03a1753015284d949f297277a60add31680d0a2a9dd32771f4b",
+                "canonical_fingerprint": "f69a375b446fae6754d8197cc72a4cb843e6debc49e1f66b60cc2649f9e904f9"
+              }
+            ],
+            "resource_grants": [
+              {
+                "resource_kind": "SYNTHETIC_M0_RESOURCE",
+                "resource_ref": "resource:m0-a:synthetic:001",
+                "resource_subject_fingerprint": "e01bafac8d1d08f359ce2b6d640db050234f750393d0e82446086e2d2ccd5d59",
+                "operation_set": [
+                  "SYNTHETIC_NOOP"
+                ],
+                "selector_constraint_fingerprint": "d85500512d1e8373d99543bc18cbc2a96093766c56726944b71f4fb44de53952",
+                "canonical_fingerprint": "e92da07c2f7691e8da62eea56d36456e6b31116c86e45dd5d6f93a15ae4db421"
+              }
+            ],
+            "effect_intent_binding": {
+              "interface_version": "agents-os.effect-intent-binding.v0.1",
+              "effect_intent_id": "effect-intent:m0-a:f4:001",
+              "operation_kind": "SYNTHETIC_NOOP",
+              "target_resource_refs": [
+                "resource:m0-a:synthetic:001"
+              ],
+              "payload_fingerprint": "9cb8a5cdbc88af6521d96a7a895ffb0c7f9b8fa1cc642ce23d3ced516cc143ff",
+              "capability_set_fingerprint": "3f2dd1a3c93763bc28b4cca25d981f2824ced323cb914760ef5ceee8a55f81e0",
+              "resource_set_fingerprint": "64155b9ce76314d4535d2c3fa39e0e5ce4ddb4f793147b24aa4e743531b771c0",
+              "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+              "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+              "idempotency_key": "idempotency:m0-a:f4:001",
+              "side_effect_class": "GREEN",
+              "external_effect_requested": true,
+              "raw_payload_present": false,
+              "canonical_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e"
+            },
+            "execution_epoch": 1,
+            "host_fence_generation": 1,
+            "effect_fence_generation": 1,
+            "task_fence_generation": 1,
+            "issued_at_utc_ms": 2000,
+            "not_before_utc_ms": 2000,
+            "expires_at_utc_ms": 10000,
+            "start_authority_commit_before_utc_ms": 5000,
+            "max_invocations": 1,
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "requires_human_presence": false,
+            "human_presence_binding": {
+              "mode": "NOT_REQUIRED",
+              "presence_event_ref": null,
+              "presence_event_fingerprint": null,
+              "present_actor_id": null,
+              "present_actor_identity_revision": null,
+              "authorized_scope_fingerprint": null,
+              "observer_host_id": null,
+              "observed_at_utc_ms": null,
+              "valid_until_utc_ms": null,
+              "revocation_event_sequence": null,
+              "currentness_result": "NOT_APPLICABLE",
+              "canonical_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0"
+            },
+            "Jenn_authorization_binding": {
+              "mode": "NOT_REQUIRED",
+              "authorization_event_ref": null,
+              "authorization_event_fingerprint": null,
+              "Jenn_actor_identity_ref": null,
+              "authorized_scope_fingerprint": null,
+              "authorized_side_effect_class": null,
+              "policy_bundle_revision": null,
+              "prohibited_behavior_list_revision": null,
+              "issued_at_utc_ms": null,
+              "expires_at_utc_ms": null,
+              "revocation_event_sequence": null,
+              "currentness_result": "NOT_APPLICABLE",
+              "canonical_fingerprint": "f2c1ca0725159cebcfec7b7505e05e63c87a84fd4254aeaa3834d17e6589824b"
+            },
+            "secret_handle_bindings": [],
+            "permit_attestation_profile_ref": "attestation-profile:m0-a:synthetic",
+            "permit_attestation_profile_fingerprint": "7404d873b25006a1ec4fa6a6e3005f122a558a9c6bf7302cd1dd3eecde76aaeb",
+            "permit_attestation_evidence_ref": "attestation-evidence:m0-a:f4:001",
+            "permit_attestation_evidence_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+            "canonical_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6"
+          },
+          "issuance_fact": {
+            "permit_ref": "permit:11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+            "issuance_command_envelope_ref": "fixture:f3-command-envelope",
+            "issuance_command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+            "issuance_event_sequence": 70,
+            "fact_fingerprint": "bbc7fb0e1a1bfe63568748d87e089bf4f4a0ebbe4665f7a6175c1717a0a29311"
+          }
+        },
+        [
+          [
+            "task_authority",
+            "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083"
+          ],
+          [
+            "actor_authority",
+            "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+          ],
+          [
+            "resident_command",
+            "a44c131c2f683fdb00f0d6f633d3dea011aabaa039f7358a04c8242af504df7a"
+          ],
+          [
+            "host_identity",
+            "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1"
+          ],
+          [
+            "host_authentication",
+            "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca"
+          ],
+          [
+            "fence_heads",
+            "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495"
+          ],
+          [
+            "effect_scope",
+            "b50031771d409c77b619fab71800b12bf670b0dbe690d067544b3780bb7da4ac"
+          ]
+        ]
+      ],
+      "sha256": "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d"
+    },
+    {
+      "ordinal": 9,
+      "node_id": "permit_currentness",
+      "kind": "F4_PERMIT_CURRENTNESS",
+      "depends_on": [
+        "task_authority",
+        "actor_authority",
+        "resident_command",
+        "host_identity",
+        "host_authentication",
+        "fence_heads",
+        "task_permit"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_PERMIT_CURRENTNESS",
+        "permit_currentness",
+        {
+          "interface_version": "agents-os.task-permit-currentness-assessment.v0.1",
+          "permit_ref": "permit:11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+          "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+          "lifecycle_state": "ISSUED",
+          "trusted_time_utc_ms": 2100,
+          "task_binding_current": "PASS",
+          "actor_binding_current": "PASS",
+          "resident_command_binding_current": "PASS",
+          "host_identity_current": "PASS",
+          "host_authentication_current": "PASS",
+          "policy_current": "PASS",
+          "prohibited_boundary_current": "PASS",
+          "capability_grants_current": "PASS",
+          "resource_grants_current": "PASS",
+          "secret_handle_bindings_current": "NOT_APPLICABLE",
+          "permit_attestation_current": "PASS",
+          "human_presence_current": "NOT_APPLICABLE",
+          "Jenn_authorization_current": "NOT_APPLICABLE",
+          "time_window_current": "PASS",
+          "invocation_available": "PASS",
+          "execution_epoch_current": "PASS",
+          "host_fence_current": "PASS",
+          "effect_fence_current": "PASS",
+          "task_fence_current": "PASS",
+          "result": "VALID",
+          "reason": "ALL_CURRENT",
+          "assessment_event_sequence": 80,
+          "assessment_fingerprint": "316dd51d03eb2da6eb550a98c6cc6f88452b543a96f80f9ba8c9f693a81e2e3c"
+        },
+        [
+          [
+            "task_authority",
+            "b08e42861bf1e294c97fd1cb46148279bc16468e4cd60e5d099a077209df2083"
+          ],
+          [
+            "actor_authority",
+            "68a8798236f6a255a0656024f8ac5a4e84510fe0ea8077fc097958e287cbbb51"
+          ],
+          [
+            "resident_command",
+            "a44c131c2f683fdb00f0d6f633d3dea011aabaa039f7358a04c8242af504df7a"
+          ],
+          [
+            "host_identity",
+            "e8692475a621a8241d0035fce786b326711774f26a84c41d39021318f09addc1"
+          ],
+          [
+            "host_authentication",
+            "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca"
+          ],
+          [
+            "fence_heads",
+            "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495"
+          ],
+          [
+            "task_permit",
+            "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d"
+          ]
+        ]
+      ],
+      "sha256": "02fff91511fd50da3e3e699dad4f8c6918e17366513e1aa3ba621a8bc1e894a2"
+    },
+    {
+      "ordinal": 10,
+      "node_id": "admission",
+      "kind": "F4_LOCAL_ADMISSION",
+      "depends_on": [
+        "effect_scope",
+        "task_permit",
+        "permit_currentness"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_LOCAL_ADMISSION",
+        "admission",
+        {
+          "invocation_identity": {
+            "permit_id": "11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+            "invocation_ordinal": 1,
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "execution_epoch": 1,
+            "host_id": "host:m0-a:synthetic",
+            "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+            "canonical_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b"
+          },
+          "request": {
+            "interface_version": "agents-os.host-local-admission-request.v0.1",
+            "invocation_identity": {
+              "permit_id": "11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+              "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+              "invocation_ordinal": 1,
+              "idempotency_key": "idempotency:m0-a:f4:001",
+              "execution_epoch": 1,
+              "host_id": "host:m0-a:synthetic",
+              "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+              "canonical_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b"
+            },
+            "task_permit_ref": "permit:11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "task_permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+            "effect_intent_ref": "fixture:effect-intent",
+            "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+            "resident_command_envelope_ref": "fixture:f3-command-envelope",
+            "resident_command_envelope_fingerprint": "71d92e1884a8dc0dd14fd045fa6b4f4bf5fe351b1e57e295d383311e9254233b",
+            "target_host_id": "host:m0-a:synthetic",
+            "target_host_identity_revision": 1,
+            "requested_at_utc_ms": 2200,
+            "request_event_sequence": 81,
+            "canonical_fingerprint": "239f4d382e6635a2e1d125780e6901985f9d9ecb6686fb75fb58aaf06d5f9920"
+          },
+          "decision": {
+            "interface_version": "agents-os.host-local-admission-decision.v0.1",
+            "invocation_identity_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b",
+            "request_ref": "fixture:admission-request",
+            "request_fingerprint": "239f4d382e6635a2e1d125780e6901985f9d9ecb6686fb75fb58aaf06d5f9920",
+            "permit_currentness_assessment_ref": "fixture:permit-currentness",
+            "permit_currentness_assessment_fingerprint": "316dd51d03eb2da6eb550a98c6cc6f88452b543a96f80f9ba8c9f693a81e2e3c",
+            "host_authentication_assessment_ref": "fixture:host-authentication",
+            "host_authentication_assessment_fingerprint": "bc1250b56a6abea4362cba710d9b4b9a298c4cd17555db3e429fff817d37a23e",
+            "fence_state_ref": "fixture:fence-heads",
+            "fence_state_fingerprint": "198a8c3aecc56204802f5deeddf72c78e823115ef0152fd37110137fa14c59e9",
+            "current_watermark_event_sequence": 80,
+            "request_integrity": "PASS",
+            "permit_currentness": "PASS",
+            "host_authentication": "PASS",
+            "host_ownership": "PASS",
+            "task_fence_match": "PASS",
+            "host_fence_match": "PASS",
+            "effect_fence_match": "PASS",
+            "execution_epoch_match": "PASS",
+            "capability_subset": "PASS",
+            "resource_subset": "PASS",
+            "secret_handle_scope": "NOT_APPLICABLE",
+            "permit_attestation": "PASS",
+            "human_presence": "NOT_APPLICABLE",
+            "effect_intent_exact_match": "PASS",
+            "idempotency_identity_match": "PASS",
+            "invocation_slot_available": "PASS",
+            "prohibited_boundary": "PASS",
+            "Jenn_authorization": "NOT_APPLICABLE",
+            "decision": "ADMITTED",
+            "reason": "ALL_CHECKS_PASS",
+            "decided_at_utc_ms": 2200,
+            "decision_fingerprint": "ae80d10353593ed88329ba5a1243af9fd8cb4d652ee57e7e834d356d19014a07"
+          }
+        },
+        [
+          [
+            "effect_scope",
+            "b50031771d409c77b619fab71800b12bf670b0dbe690d067544b3780bb7da4ac"
+          ],
+          [
+            "task_permit",
+            "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d"
+          ],
+          [
+            "permit_currentness",
+            "02fff91511fd50da3e3e699dad4f8c6918e17366513e1aa3ba621a8bc1e894a2"
+          ]
+        ]
+      ],
+      "sha256": "58d4aa2b417b69afded453102b819b49b25d74ac1bf2b6a95ee5d9101a3afcac"
+    },
+    {
+      "ordinal": 11,
+      "node_id": "work_acceptance",
+      "kind": "F4_HOST_WORK_ACCEPTANCE",
+      "depends_on": [
+        "host_authentication",
+        "fence_heads",
+        "admission"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_HOST_WORK_ACCEPTANCE",
+        "work_acceptance",
+        {
+          "acceptance": {
+            "interface_version": "agents-os.host-work-acceptance-fact.v0.1",
+            "acceptance_id": "360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+            "invocation_identity": {
+              "permit_id": "11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+              "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+              "invocation_ordinal": 1,
+              "idempotency_key": "idempotency:m0-a:f4:001",
+              "execution_epoch": 1,
+              "host_id": "host:m0-a:synthetic",
+              "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+              "canonical_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b"
+            },
+            "admission_request_ref": "fixture:admission-request",
+            "admission_request_fingerprint": "239f4d382e6635a2e1d125780e6901985f9d9ecb6686fb75fb58aaf06d5f9920",
+            "admission_decision_ref": "fixture:admission-decision",
+            "admission_decision_fingerprint": "ae80d10353593ed88329ba5a1243af9fd8cb4d652ee57e7e834d356d19014a07",
+            "permit_currentness_assessment_ref": "fixture:permit-currentness",
+            "permit_currentness_assessment_fingerprint": "316dd51d03eb2da6eb550a98c6cc6f88452b543a96f80f9ba8c9f693a81e2e3c",
+            "host_authentication_assessment_ref": "fixture:host-authentication",
+            "host_authentication_assessment_fingerprint": "bc1250b56a6abea4362cba710d9b4b9a298c4cd17555db3e429fff817d37a23e",
+            "accepted_host_id": "host:m0-a:synthetic",
+            "accepted_host_identity_revision": 1,
+            "accepted_host_authentication_epoch": 1,
+            "accepted_task_fence_generation": 1,
+            "accepted_host_fence_generation": 1,
+            "accepted_effect_fence_generation": 1,
+            "accepted_execution_epoch": 1,
+            "accepted_watermark_event_sequence": 84,
+            "accepted_at_utc_ms": 2300,
+            "start_authority_expires_at_utc_ms": 5000,
+            "host_acceptance_attestation_ref": "attestation:host-acceptance:m0-a:001",
+            "host_acceptance_attestation_fingerprint": "03611a8a6fe3fbc2c09a8861429809bbd75b2ed40cbcae5d201f09008a52b3a0",
+            "fact_fingerprint": "de765665fbbcf9d0587291f65231d23721bb4b4a7cb918aefa8facaeed4a39d9"
+          },
+          "activation_transition": {
+            "permit_ref": "permit:11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+            "transition_kind": "ACTIVATE",
+            "expected_previous_state": "ISSUED",
+            "resulting_state": "ACTIVE",
+            "reason": "HOST_ACCEPTANCE",
+            "transition_action_ref": "acceptance:360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+            "transition_action_fingerprint": "de765665fbbcf9d0587291f65231d23721bb4b4a7cb918aefa8facaeed4a39d9",
+            "event_sequence": 84,
+            "fact_fingerprint": "51ad47cdd8be18b6401ea06386dcb5d5640f4d9ac64f55e35def01d24993914c"
+          }
+        },
+        [
+          [
+            "host_authentication",
+            "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca"
+          ],
+          [
+            "fence_heads",
+            "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495"
+          ],
+          [
+            "admission",
+            "58d4aa2b417b69afded453102b819b49b25d74ac1bf2b6a95ee5d9101a3afcac"
+          ]
+        ]
+      ],
+      "sha256": "ce4f54b01a02aeffd8aab0dbf8f4e869d6b9337e37ccfabe3882ffd590d2d828"
+    },
+    {
+      "ordinal": 12,
+      "node_id": "start_disposition",
+      "kind": "F4_START_AUTHORITY_DISPOSITION",
+      "depends_on": [
+        "host_authentication",
+        "fence_heads",
+        "work_acceptance"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_START_AUTHORITY_DISPOSITION",
+        "start_disposition",
+        {
+          "interface_version": "agents-os.host-work-start-disposition-fact.v0.1",
+          "observation_id": "e1dc5fe9bc56db0658a8468e77596e8a37d16fe5ea723f74d31e34e2b6177b06",
+          "observation_attempt": 1,
+          "acceptance_ref": "acceptance:360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+          "acceptance_fingerprint": "de765665fbbcf9d0587291f65231d23721bb4b4a7cb918aefa8facaeed4a39d9",
+          "invocation_identity_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b",
+          "observed_host_id": "host:m0-a:synthetic",
+          "observed_host_identity_revision": 1,
+          "observed_host_authentication_epoch": 1,
+          "rechecked_task_fence_generation": 1,
+          "rechecked_host_fence_generation": 1,
+          "rechecked_effect_fence_generation": 1,
+          "rechecked_execution_epoch": 1,
+          "rechecked_secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+          "rechecked_permit_attestation_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+          "rechecked_human_presence_binding_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0",
+          "secret_handles_current": "NOT_APPLICABLE",
+          "permit_attestation_current": "PASS",
+          "human_presence_current": "NOT_APPLICABLE",
+          "disposition": "START_AUTHORITY_CURRENT",
+          "reason": "ALL_RECHECKS_PASS",
+          "observed_at_utc_ms": 2400,
+          "observation_event_sequence": 90,
+          "host_observation_attestation_ref": "attestation:host-observation:m0-a:001",
+          "host_observation_attestation_fingerprint": "85377d2f3aaea842bec144af4713162ab43818a551c7e24f2316b8965583a128",
+          "fact_fingerprint": "2bc2daed4ac653cfddf98da4a5702e26f1e703a2b081377b05bd9d6a82056f6c"
+        },
+        [
+          [
+            "host_authentication",
+            "8f900aa362fb696c5c092e4de720a793b9d30ee4da7f1a0f0fb37dd4351854ca"
+          ],
+          [
+            "fence_heads",
+            "4855014885a75a4ba33c5e9ba104a5dc51e1b1f1e56c2ffad8812014a435c495"
+          ],
+          [
+            "work_acceptance",
+            "ce4f54b01a02aeffd8aab0dbf8f4e869d6b9337e37ccfabe3882ffd590d2d828"
+          ]
+        ]
+      ],
+      "sha256": "c5afb94462805a9b4bbbfa963581626a36d15280f36629a28f957ce23f3463de"
+    },
+    {
+      "ordinal": 13,
+      "node_id": "accepted_handoff",
+      "kind": "F4_ACCEPTED_EFFECT_HANDOFF",
+      "depends_on": [
+        "effect_scope",
+        "task_permit",
+        "work_acceptance",
+        "start_disposition"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "F4_ACCEPTED_EFFECT_HANDOFF",
+        "accepted_handoff",
+        {
+          "interface_version": "agents-os.f4-accepted-effect-handoff.v0.1",
+          "handoff_id": "c18210d18e36e3c672314bb8aa254d972bb17760cb5284afe56f64dc2b568c29",
+          "acceptance_ref": "acceptance:360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49",
+          "acceptance_fingerprint": "de765665fbbcf9d0587291f65231d23721bb4b4a7cb918aefa8facaeed4a39d9",
+          "start_disposition_ref": "observation:e1dc5fe9bc56db0658a8468e77596e8a37d16fe5ea723f74d31e34e2b6177b06",
+          "start_disposition_fingerprint": "2bc2daed4ac653cfddf98da4a5702e26f1e703a2b081377b05bd9d6a82056f6c",
+          "invocation_identity": {
+            "permit_id": "11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+            "permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+            "invocation_ordinal": 1,
+            "idempotency_key": "idempotency:m0-a:f4:001",
+            "execution_epoch": 1,
+            "host_id": "host:m0-a:synthetic",
+            "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+            "canonical_fingerprint": "e849a2e38c467b7a662ecc698bed7577d18e6805d77b081f77ddda866d02f32b"
+          },
+          "task_permit_ref": "permit:11e33913a53bdd52b8e86603fd895249a5a21cafa80672d2359561b23912b36e",
+          "task_permit_fingerprint": "ccff462f48ab27250f3c874910f5a1dedeb75a9ac96b582c507614dc6d6ec5a6",
+          "effect_intent_ref": "fixture:effect-intent",
+          "effect_intent_fingerprint": "16d0ac4ad8f436ef7f27bab22d97b2b3d7e84baa6e9a68d426d5987803268c2e",
+          "owner_host_id": "host:m0-a:synthetic",
+          "owner_host_identity_revision": 1,
+          "owner_host_authentication_epoch": 1,
+          "execution_epoch": 1,
+          "task_fence_generation": 1,
+          "host_fence_generation": 1,
+          "effect_fence_generation": 1,
+          "start_authority_expires_at_utc_ms": 5000,
+          "capability_set_fingerprint": "3f2dd1a3c93763bc28b4cca25d981f2824ced323cb914760ef5ceee8a55f81e0",
+          "resource_set_fingerprint": "64155b9ce76314d4535d2c3fa39e0e5ce4ddb4f793147b24aa4e743531b771c0",
+          "secret_handle_set_fingerprint": "fdd46d28d0e8baf7c7398d4050c4b0c6504e692fae282aec071c18d7b15650d9",
+          "permit_attestation_evidence_fingerprint": "f6a117c0fb68da59bd92ac87d3d5d5d3750e8c383c7f0340831a5eb039b4d407",
+          "human_presence_binding_fingerprint": "61f72b17e4a3ea84b37222c8a4f10f02ce5380f3a32e20dd716abc6fe80108e0",
+          "Jenn_authorization_binding_fingerprint": "f2c1ca0725159cebcfec7b7505e05e63c87a84fd4254aeaa3834d17e6589824b",
+          "expected_result_contract_ref": "result-contract:m0-a:not-executed",
+          "expected_result_contract_fingerprint": "b9c5fd92d526c3be47367348a1751fe5ddb15fb2424a2efd3cbc9034458ae997",
+          "handoff_event_sequence": 91,
+          "canonical_fingerprint": "d25184ccb13f7d1ad0f32af9401d20d2944a156c89a62b6a6156184a47622c24"
+        },
+        [
+          [
+            "effect_scope",
+            "b50031771d409c77b619fab71800b12bf670b0dbe690d067544b3780bb7da4ac"
+          ],
+          [
+            "task_permit",
+            "108e86b598c7880e8ce4a3a2aba41e2cd8b825f48865277de08998315664230d"
+          ],
+          [
+            "work_acceptance",
+            "ce4f54b01a02aeffd8aab0dbf8f4e869d6b9337e37ccfabe3882ffd590d2d828"
+          ],
+          [
+            "start_disposition",
+            "c5afb94462805a9b4bbbfa963581626a36d15280f36629a28f957ce23f3463de"
+          ]
+        ]
+      ],
+      "sha256": "223ee57b78c6a9c6b74f025cc178cfa2b32a73450f2ea3eb91470b670a321bcf"
+    },
+    {
+      "ordinal": 14,
+      "node_id": "zero_effect_terminal_stub",
+      "kind": "SYNTHETIC_F5_BOUNDARY_STUB",
+      "depends_on": [
+        "accepted_handoff"
+      ],
+      "canonical_value": [
+        "agents-os.f4-m0a-node.v0.1",
+        "SYNTHETIC_F5_BOUNDARY_STUB",
+        "zero_effect_terminal_stub",
+        {
+          "interface_version": "agents-os.synthetic-f5-boundary-stub.v0.1",
+          "fixture_only": true,
+          "handoff_ref": "handoff:c18210d18e36e3c672314bb8aa254d972bb17760cb5284afe56f64dc2b568c29",
+          "handoff_fingerprint": "d25184ccb13f7d1ad0f32af9401d20d2944a156c89a62b6a6156184a47622c24",
+          "provider_call_count": 0,
+          "network_call_count": 0,
+          "process_start_count": 0,
+          "file_mutation_count": 0,
+          "device_actuation_count": 0,
+          "external_effect_count": 0,
+          "positive_non_execution_evidence": true,
+          "terminal_outcome": "NOT_EXECUTED",
+          "production_F5_fact": false,
+          "canonical_fingerprint": "dac1bc667f5b68b2cd3f331ecdb4955f36282bc871abe254e9a19ffa01d4aa2f"
+        },
+        [
+          [
+            "accepted_handoff",
+            "223ee57b78c6a9c6b74f025cc178cfa2b32a73450f2ea3eb91470b670a321bcf"
+          ]
+        ]
+      ],
+      "sha256": "17a72636d1bb1d65283892cfeedf4d0cde1984efdc102d9961691fc73d5de7c2"
+    }
+  ],
+  "assertions": {
+    "node_count": 14,
+    "schema_fingerprint_count": 22,
+    "acceptance_count": 1,
+    "accepted_handoff_count": 1,
+    "start_authority_current_count": 1,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "real_resource_count": 0,
+    "production_registry_entry_count": 0,
+    "production_F5_fact_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  }
+}

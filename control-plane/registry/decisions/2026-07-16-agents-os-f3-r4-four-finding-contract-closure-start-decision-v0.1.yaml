@@ -1,0 +1,108 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f3-r4-four-finding-contract-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-16T14:33:21+08:00
+effective_at: 2026-07-16T14:33:21+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_F3_R4_NARROW_CONTRACT_CORRECTION
+  decision_sources:
+    - exact_current_conversation_instruction_start_F3
+    - exact_current_conversation_instruction_allow_automatic_progression
+    - F3_start_decision_authorized_findings_dispositions_and_narrow_amendments
+
+amendment_unit:
+  id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE
+  fixed_subjects:
+    R1:
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+      sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+      modify_bytes: forbidden
+    R2:
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+      sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+      modify_bytes: forbidden
+    R3:
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+      sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+      modify_bytes: forbidden
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r3-full-atomic-independent-review.yaml
+    sha256: 33d31ddfaa90e7b9171461d4cd89f013fb13568ef7a645fec356fd44063b784e
+    result: BLOCK
+    blocker_count: 0
+    major_count: 4
+    minor_count: 0
+    requires_R4: true
+
+required_scope:
+  - F3_R3_IR_M01_restore_lineage_abandon_retry_chain
+  - F3_R3_IR_M02_effective_F3_contract_version_R4_literal
+  - F3_R3_IR_M03_complete_activation_CommandTypeDefinition_and_descriptors
+  - F3_R3_IR_M04_exact_seven_synthetic_leaf_schemas_and_revised_manifest
+  - prior_findings_disposition
+  - author_self_review
+  - new_hash_bound_fresh_full_atomic_independent_review_surface
+
+design_constraints:
+  amendment_must_be_narrow: true
+  R1_R2_R3_bytes_immutable: true
+  F2_frozen_bytes_immutable: true
+  accepted_resident_architecture_preserved: true
+  atomic_acceptance_only: true
+  partial_acceptance: forbidden
+  one_singleton_writer: preserved
+  one_Rust_ledger_thread_and_connection: preserved
+  F4_F5_F6_ownership: preserved
+  synthetic_evidence_only: true
+
+excluded_scope:
+  - F4_TaskPermit_host_or_fence_admission
+  - F5_Outbox_delivery_retry_or_reconciliation
+  - F6_Validation_current_decision
+  - Rust_or_JavaScript_implementation
+  - database_schema_creation_migration_or_live_access
+  - runtime_or_service_activation
+  - production_authentication_crypto_keys_or_credentials
+  - provider_executor_plugin_or_external_effect_execution
+  - public_API_or_MCP_expansion
+
+hard_boundaries:
+  modify_F3_R1_R2_R3_fixed_subjects: forbidden
+  modify_F3_R3_independent_review: forbidden
+  modify_F2_frozen_subjects: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  F4_start: forbidden
+  F3_acceptance_or_freeze: Jenn_only
+  commit: not_authorized_by_this_decision
+  push: not_authorized_by_this_decision
+  merge: not_authorized_by_this_decision
+
+completion_effect:
+  F3_started: true
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+
+next_gate:
+  name: F3_R4_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

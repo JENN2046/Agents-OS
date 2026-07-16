@@ -1,0 +1,617 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r3-full-atomic-independent-review-v0.1
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-16
+reviewed_at: "2026-07-16T19:15:14+08:00"
+status: complete
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE
+result: BLOCK
+requires_R4: true
+
+reviewer:
+  identity: Codex_F4_R3_Fresh_Full_Atomic_Hash_Bound_Independent_Reviewer
+  role: independent_reviewer_not_subject_author
+  author_of_any_subject: false
+  independence_basis: >-
+    This reviewer did not author the R1, R2, or R3 subjects. Fresh judgment was
+    formed from the manifest-bound nine subjects and fixed authority inputs
+    before the prior R1/R2 reviews were consulted solely for finding lineage.
+  author_self_review_content_read: false
+  author_self_review_hash_only: true
+  prior_R1_R2_reviews_used_only_for_finding_lineage: true
+  prior_reviews_substituted_for_fresh_judgment: false
+  presentation_package_accessed: false
+  forbidden_inputs_accessed: false
+  forbidden_inputs:
+    state_private: not_accessed
+    raw_logs: not_accessed
+    secrets_credentials_tokens_cookies: not_accessed
+    private_raw_memory: not_accessed
+    provider_raw_response: not_accessed
+    active_runtime_configuration: not_accessed
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_external_sha256: de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5
+  recomputed_sha256: de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5
+  hash_result: MATCH
+  entire_file_byte_scope: true
+  canonicalization: none
+  canonical_authority_for_this_review: true
+
+input_integrity:
+  declared_input_count: 31
+  recomputed_input_count: 31
+  matched_input_count: 31
+  mismatched_input_count: 0
+  result: PASS
+  inputs:
+    - {ordinal: 1, role: R1_normative_contract, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md, expected_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3, recomputed_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3, result: MATCH, access: full_subject_read}
+    - {ordinal: 2, role: R1_M0_A_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json, expected_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75, recomputed_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75, result: MATCH, access: full_subject_read}
+    - {ordinal: 3, role: R1_M0_A_validator, path: control-plane/registry/validate-f4-m0a-witness.py, expected_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa, recomputed_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa, result: MATCH, access: full_subject_read}
+    - {ordinal: 4, role: R2_totality_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md, expected_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705, recomputed_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705, result: MATCH, access: full_subject_read}
+    - {ordinal: 5, role: R2_totality_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json, expected_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad, recomputed_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad, result: MATCH, access: full_subject_read}
+    - {ordinal: 6, role: R2_totality_validator, path: control-plane/registry/validate-f4-r2-result-reason-totality.py, expected_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941, recomputed_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941, result: MATCH, access: full_subject_read}
+    - {ordinal: 7, role: R3_PRESTART_and_start_disposition_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md, expected_sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939, recomputed_sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939, result: MATCH, access: full_subject_read}
+    - {ordinal: 8, role: R3_PRESTART_and_start_disposition_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json, expected_sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4, recomputed_sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4, result: MATCH, access: full_subject_read}
+    - {ordinal: 9, role: R3_PRESTART_and_start_disposition_validator, path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py, expected_sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec, recomputed_sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec, result: MATCH, access: full_subject_read}
+    - {ordinal: 10, role: workspace_governance, path: AGENTS.md, expected_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9, recomputed_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9, result: MATCH, access: full_governance_read}
+    - {ordinal: 11, role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, expected_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e, recomputed_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e, result: MATCH, access: authority_inspection}
+    - {ordinal: 12, role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, expected_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71, recomputed_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71, result: MATCH, access: authority_inspection}
+    - {ordinal: 13, role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, expected_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d, recomputed_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d, result: MATCH, access: authority_inspection}
+    - {ordinal: 14, role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, expected_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b, recomputed_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b, result: MATCH, access: authority_inspection}
+    - {ordinal: 15, role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, expected_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486, recomputed_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486, result: MATCH, access: authority_inspection}
+    - {ordinal: 16, role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, expected_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670, recomputed_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670, result: MATCH, access: authority_inspection}
+    - {ordinal: 17, role: accepted_F1_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml, expected_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2, recomputed_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2, result: MATCH, access: authority_inspection}
+    - {ordinal: 18, role: frozen_F2_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml, expected_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1, recomputed_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1, result: MATCH, access: authority_inspection}
+    - {ordinal: 19, role: frozen_F2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml, expected_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1, recomputed_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1, result: MATCH, access: authority_inspection}
+    - {ordinal: 20, role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, expected_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529, recomputed_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529, result: MATCH, access: authority_inspection}
+    - {ordinal: 21, role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, expected_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff, recomputed_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff, result: MATCH, access: authority_inspection}
+    - {ordinal: 22, role: immutable_F4_start_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml, expected_sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8, recomputed_sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8, result: MATCH, access: authority_inspection}
+    - {ordinal: 23, role: prior_R1_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.manifest.yaml, expected_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54, recomputed_sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54, result: MATCH, access: hash_and_lineage_metadata_only}
+    - {ordinal: 24, role: prior_R1_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml, expected_sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0, recomputed_sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0, result: MATCH, access: finding_lineage_only}
+    - {ordinal: 25, role: R1_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml, expected_sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf, recomputed_sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf, result: MATCH, access: finding_lineage_only}
+    - {ordinal: 26, role: immutable_R2_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml, expected_sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b, recomputed_sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b, result: MATCH, access: lineage_authority_inspection}
+    - {ordinal: 27, role: prior_R2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.manifest.yaml, expected_sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24, recomputed_sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24, result: MATCH, access: hash_and_lineage_metadata_only}
+    - {ordinal: 28, role: prior_R2_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml, expected_sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8, recomputed_sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8, result: MATCH, access: finding_lineage_only}
+    - {ordinal: 29, role: R2_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r2-independent-review-disposition-v0.1.yaml, expected_sha256: 0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b, recomputed_sha256: 0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b, result: MATCH, access: finding_lineage_only}
+    - {ordinal: 30, role: immutable_R3_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-start-decision-v0.1.yaml, expected_sha256: 37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e, recomputed_sha256: 37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e, result: MATCH, access: lineage_authority_inspection}
+    - {ordinal: 31, role: R3_author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-self-review.yaml, expected_sha256: 82cbe3d749e9380aabd4c711188165d37bb2947d095d60c9ec5b5966ae15ffd5, recomputed_sha256: 82cbe3d749e9380aabd4c711188165d37bb2947d095d60c9ec5b5966ae15ffd5, result: MATCH, access: hash_only_content_not_read}
+
+atomic_subject_review:
+  declared_subject_count: 9
+  entire_files_read_count: 9
+  pre_read_hash_match_count: 9
+  post_read_hash_match_count: 9
+  unchanged_count: 9
+  precedence_applied:
+    - R3_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+  result: PASS
+  subjects:
+    - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md, byte_count: 71336, line_count: 1451, pre_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3, post_sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3, unchanged: true, entire_file_read: true}
+    - {revision: R1, role: M0_A_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json, byte_count: 50620, line_count: 1036, pre_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75, post_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75, unchanged: true, entire_file_read: true}
+    - {revision: R1, role: M0_A_validator, path: control-plane/registry/validate-f4-m0a-witness.py, byte_count: 37575, line_count: 875, pre_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa, post_sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa, unchanged: true, entire_file_read: true}
+    - {revision: R2, role: totality_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md, byte_count: 16061, line_count: 401, pre_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705, post_sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705, unchanged: true, entire_file_read: true}
+    - {revision: R2, role: totality_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json, byte_count: 6218, line_count: 175, pre_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad, post_sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad, unchanged: true, entire_file_read: true}
+    - {revision: R2, role: totality_validator, path: control-plane/registry/validate-f4-r2-result-reason-totality.py, byte_count: 12302, line_count: 285, pre_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941, post_sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941, unchanged: true, entire_file_read: true}
+    - {revision: R3, role: PRESTART_and_start_disposition_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md, byte_count: 10305, line_count: 264, pre_sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939, post_sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939, unchanged: true, entire_file_read: true}
+    - {revision: R3, role: PRESTART_and_start_disposition_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json, byte_count: 2885, line_count: 39, pre_sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4, post_sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4, unchanged: true, entire_file_read: true}
+    - {revision: R3, role: PRESTART_and_start_disposition_validator, path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py, byte_count: 6470, line_count: 162, pre_sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec, post_sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec, unchanged: true, entire_file_read: true}
+
+validators:
+  all_ran_offline: true
+  validator_count: 3
+  passed_count: 3
+  failed_count: 0
+  result: PASS
+  runs:
+    - id: R1_M0_A_witness
+      command: python3 control-plane/registry/validate-f4-m0a-witness.py
+      exit_code: 0
+      exact_stdout: '{"acceptance_count": 1, "accepted_handoff_count": 1, "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE", "edge_count": 36, "external_effect_count": 0, "fixture_canonical_sha256": "c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2", "interface_version": "agents-os.f4-m0a-witness.v0.1", "node_count": 14, "node_hashes_verified": 14, "provider_call_count": 0, "raw_secret_count": 0, "result": "PASS", "schema_fingerprints_verified": 22, "terminal_outcome": "NOT_EXECUTED"}'
+      counts: {nodes: 14, edges: 36, node_hashes_verified: 14, schema_fingerprints_verified: 22, acceptances: 1, handoffs: 1, external_effects: 0, provider_calls: 0, raw_secrets: 0}
+    - id: R2_result_reason_totality
+      command: python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+      exit_code: 0
+      exact_stdout: '{"admission_case_count":6,"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"a6e14eaf85d456fce48cb9a89d31f7a61f7a316468562f2a869763d1c95baf65","fixture_file_sha256":"048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad","host_case_count":5,"negative_mutations_rejected":3,"permit_case_count":12,"provider_call_count":0,"raw_secret_count":0,"result":"PASS","total_case_count":23}'
+      counts: {host_cases: 5, permit_cases: 12, admission_cases: 6, total_cases: 23, negative_mutations_rejected: 3, external_effects: 0, provider_calls: 0, raw_secrets: 0}
+    - id: R3_PRESTART_start_disposition_totality
+      command: python3 control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+      exit_code: 0
+      exact_stdout: '{"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"f2f9872cc8dd5b0fea6436d748688c126b65a4065c6fadecaf62adbaf03ce124","fixture_file_sha256":"548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4","host_case_count":3,"negative_mutations_rejected":3,"provider_call_count":0,"raw_secret_count":0,"result":"PASS","start_disposition_case_count":10,"total_case_count":13}'
+      counts: {host_cases: 3, start_disposition_cases: 10, total_cases: 13, negative_mutations_rejected: 3, external_effects: 0, provider_calls: 0, raw_secrets: 0}
+
+host_authentication_totality:
+  declared_reason_count: 14
+  mapped_reason_count: 14
+  lifecycle_state_count: 6
+  mapped_lifecycle_state_count: 6
+  negative_dominates_unavailable: true
+  result: PASS
+  reason_mapping:
+    - {reason: MATCH, class: PASS, predicate: ACTIVE_and_every_required_identity_profile_challenge_time_epoch_evidence_and_revocation_predicate_passes}
+    - {reason: INTEGRITY_FAILURE, class: REJECTED, predicate: reproducible_canonical_fingerprint_revision_or_same_watermark_incompatibility}
+    - {reason: COMPROMISED, class: REJECTED, predicate: current_Host_revision_or_authentication_lineage_has_current_compromise_fact}
+    - {reason: REVOKED, class: REJECTED, predicate: current_revocation_head_proves_Host_revision_or_authentication_epoch_revoked}
+    - {reason: RETIRED, class: REJECTED, predicate: bound_Host_revision_is_RETIRED}
+    - {reason: SUSPENDED, class: REJECTED, predicate: bound_Host_revision_is_SUSPENDED}
+    - {reason: PRESTART, class: REJECTED, predicate: current_Host_revision_is_PRESTART_independent_of_time}
+    - {reason: PROFILE_MISMATCH, class: REJECTED, predicate: verifier_or_authenticator_profile_differs_from_bound_current_profile}
+    - {reason: CHALLENGE_MISMATCH, class: REJECTED, predicate: response_does_not_bind_exact_current_challenge}
+    - {reason: EXPIRED, class: REJECTED, predicate: trusted_time_at_or_after_any_applicable_exclusive_expiry}
+    - {reason: NOT_YET_VALID, class: REJECTED, predicate: trusted_time_before_applicable_inclusive_validity_start}
+    - {reason: REVOCATION_UNAVAILABLE, class: INDETERMINATE, predicate: required_revocation_head_not_reproducibly_readable_and_no_negative_exists}
+    - {reason: VERIFIER_UNAVAILABLE, class: INDETERMINATE, predicate: verifier_or_verification_evidence_not_reproducibly_readable_and_no_negative_exists}
+    - {reason: UNKNOWN, class: INDETERMINATE, predicate: other_required_Host_authentication_fact_unavailable_and_no_specific_candidate_or_negative_exists}
+  lifecycle_mapping:
+    ACTIVE: AUTHENTICATED_MATCH_only_when_all_other_predicates_pass
+    PRESTART: REJECTED_PRESTART
+    SUSPENDED: REJECTED_SUSPENDED
+    REVOKED: REJECTED_REVOKED
+    COMPROMISED: REJECTED_COMPROMISED
+    RETIRED: REJECTED_RETIRED
+  rejected_precedence: [INTEGRITY_FAILURE, COMPROMISED, REVOKED, RETIRED, SUSPENDED, PRESTART, PROFILE_MISMATCH, CHALLENGE_MISMATCH, EXPIRED, NOT_YET_VALID]
+  indeterminate_precedence: [REVOCATION_UNAVAILABLE, VERIFIER_UNAVAILABLE, UNKNOWN]
+
+permit_currentness_mapping:
+  declared_check_count: 19
+  mapped_check_count: 19
+  coverage: 19/19
+  negative_dominates_unavailable: true
+  result: PASS
+  checks:
+    - {check: task_binding_current, rejected_reason: TASK_STALE}
+    - {check: actor_binding_current, rejected_reason: ACTOR_STALE}
+    - {check: resident_command_binding_current, rejected_reason: COMMAND_STALE}
+    - {check: host_identity_current, rejected_reason: HOST_STALE}
+    - {check: host_authentication_current, rejected_reason: AUTH_STALE}
+    - {check: policy_current, rejected_reason: POLICY_STALE}
+    - {check: prohibited_boundary_current, rejected_reason: PROHIBITED}
+    - {check: capability_grants_current, rejected_reason: CAPABILITY_STALE}
+    - {check: resource_grants_current, rejected_reason: RESOURCE_STALE}
+    - {check: secret_handle_bindings_current, rejected_reason: SECRET_HANDLE_STALE, permits_NOT_APPLICABLE: true}
+    - {check: permit_attestation_current, rejected_reason: ATTESTATION_STALE}
+    - {check: human_presence_current, rejected_reason: HUMAN_PRESENCE_STALE, permits_NOT_APPLICABLE: true}
+    - {check: Jenn_authorization_current, rejected_reason: AUTHORIZATION_STALE, permits_NOT_APPLICABLE: true}
+    - {check: time_window_current, rejected_reason: NOT_YET_VALID_or_EXPIRED, impossible_classification_reason: INTEGRITY_FAILURE}
+    - {check: invocation_available, rejected_reason: INVOCATIONS_EXHAUSTED}
+    - {check: execution_epoch_current, rejected_reason: EPOCH_STALE}
+    - {check: host_fence_current, rejected_reason: FENCE_STALE}
+    - {check: effect_fence_current, rejected_reason: FENCE_STALE}
+    - {check: task_fence_current, rejected_reason: FENCE_STALE}
+
+host_local_admission_mapping:
+  declared_check_count: 18
+  mapped_check_count: 18
+  coverage: 18/18
+  negative_dominates_unavailable: true
+  advisory_only: true
+  result: PASS
+  checks:
+    - {check: request_integrity, rejected_reason: INVALID_REQUEST}
+    - {check: permit_currentness, rejected_reason: PERMIT_INVALID}
+    - {check: host_authentication, rejected_reason: HOST_UNAUTHENTICATED}
+    - {check: host_ownership, rejected_reason: HOST_NOT_OWNER}
+    - {check: task_fence_match, rejected_reason: STALE_FENCE}
+    - {check: host_fence_match, rejected_reason: STALE_FENCE}
+    - {check: effect_fence_match, rejected_reason: STALE_FENCE}
+    - {check: execution_epoch_match, rejected_reason: STALE_EPOCH}
+    - {check: capability_subset, rejected_reason: CAPABILITY_DENIED}
+    - {check: resource_subset, rejected_reason: RESOURCE_DENIED}
+    - {check: secret_handle_scope, rejected_reason: SECRET_HANDLE_DENIED, permits_NOT_APPLICABLE: true}
+    - {check: permit_attestation, rejected_reason: ATTESTATION_INVALID}
+    - {check: human_presence, rejected_reason: HUMAN_PRESENCE_MISSING, permits_NOT_APPLICABLE: true}
+    - {check: effect_intent_exact_match, rejected_reason: EFFECT_MISMATCH}
+    - {check: idempotency_identity_match, rejected_reason: IDEMPOTENCY_CONFLICT}
+    - {check: invocation_slot_available, rejected_reason: INVOCATION_UNAVAILABLE}
+    - {check: prohibited_boundary, rejected_reason: PROHIBITED}
+    - {check: Jenn_authorization, rejected_reason: AUTHORIZATION_MISSING, permits_NOT_APPLICABLE: true}
+
+start_disposition_mapping:
+  declared_recheck_count: 12
+  mapped_recheck_count: 12
+  coverage: 12/12
+  abstract_reducer_negative_dominates_unavailable: true
+  multiple_negative_precedence_unique: true
+  full_fact_constructibility: BLOCK
+  finding: F4-R3-FULL-ATOMIC-IR-B01
+  checks:
+    - {check: canonical_fingerprint_same_watermark_integrity, rejected_reason: INTEGRITY_FAILURE}
+    - {check: exact_acceptance_present_and_current, rejected_reason: ACCEPTANCE_MISSING, constructible_fact_identity: false, finding: F4-R3-FULL-ATOMIC-IR-B01}
+    - {check: handoff_deadline_and_expiry_current, rejected_reason: EXPIRED}
+    - {check: owner_Host_identity_revision_current, rejected_reason: HOST_UNAUTHENTICATED}
+    - {check: owner_Host_authentication_epoch_current, rejected_reason: HOST_UNAUTHENTICATED}
+    - {check: task_fence_generation_matches, rejected_reason: FENCED}
+    - {check: Host_fence_generation_matches, rejected_reason: FENCED}
+    - {check: effect_fence_generation_matches, rejected_reason: FENCED}
+    - {check: execution_epoch_matches, rejected_reason: EPOCH_STALE}
+    - {check: secret_handles_current, rejected_reason: SECRET_HANDLE_STALE, permits_NOT_APPLICABLE: true}
+    - {check: permit_attestation_current, rejected_reason: ATTESTATION_STALE}
+    - {check: human_presence_current, rejected_reason: HUMAN_PRESENCE_STALE, permits_NOT_APPLICABLE: true}
+  rejected_precedence: [INTEGRITY_FAILURE, ACCEPTANCE_MISSING, HOST_UNAUTHENTICATED, FENCED, EPOCH_STALE, EXPIRED, SECRET_HANDLE_STALE, ATTESTATION_STALE, HUMAN_PRESENCE_STALE]
+  indeterminate_pair: [INDETERMINATE, OBSERVATION_UNAVAILABLE]
+  success_pair: [START_AUTHORITY_CURRENT, ALL_RECHECKS_PASS]
+
+required_review_questions:
+  declared_count: 26
+  answered_count: 26
+  passed_count: 23
+  blocked_count: 3
+  result: BLOCK
+  results:
+    - {id: all_31_inputs_recompute_and_all_nine_subjects_are_read_atomically, result: PASS, evidence: 31/31_hashes_match_and_9/9_entire_subjects_read_with_unchanged_post_hashes}
+    - {id: R3_R2_R1_precedence_is_unambiguous_and_prior_subjects_are_fixed, result: PASS, evidence: R3_explicit_then_R2_other_explicit_then_R1_all_other_and_all_fixed_hashes_match}
+    - {id: both_R2_blockers_are_fully_closed_without_regression, result: BLOCK, finding: F4-R3-FULL-ATOMIC-IR-B01, evidence: PRESTART_is_closed_and_the_abstract_start_reducer_is_total_but_ACCEPTANCE_MISSING_has_no_constructible_canonical_fact_identity}
+    - {id: PRESTART_is_a_closed_rejected_reason_independent_of_time, result: PASS, evidence: R3_Section_2_maps_in_window_PRESTART_to_REJECTED_PRESTART}
+    - {id: all_14_Host_reasons_and_every_Host_lifecycle_predicate_are_total, result: PASS, evidence: 14/14_reasons_and_6/6_lifecycle_states_mapped}
+    - {id: Host_negative_dominates_concurrent_unavailable_evidence, result: PASS, evidence: rejected_precedence_is_selected_before_R3_inherited_indeterminate_precedence}
+    - {id: all_12_start_recheck_observations_have_exact_reason_mapping, result: PASS, evidence: 12/12_table_mappings_present_although_one_output_identity_is_not_constructible}
+    - {id: start_disposition_negative_dominates_unavailable, result: PASS, evidence: R3_Section_3_3_rejected_first_lattice}
+    - {id: start_disposition_multiple_negative_precedence_is_unique, result: PASS, evidence: fixed_nine_reason_rejected_precedence_and_duplicate_collapse}
+    - {id: start_disposition_success_and_indeterminate_pairings_are_closed, result: PASS, evidence: only_ALL_RECHECKS_PASS_success_and_OBSERVATION_UNAVAILABLE_indeterminate_pairs_are_legal}
+    - {id: start_disposition_fingerprint_first_fact_and_replay_are_unique, result: BLOCK, finding: F4-R3-FULL-ATOMIC-IR-B01, evidence: acceptance_absence_removes_the_acceptance_fingerprint_required_to_derive_observation_id}
+    - {id: I19_R2_and_I20_R3_are_disjoint_complete_and_consistent, result: PASS, evidence: I19_R2_has_no_negative_guard_and_I20_R3_owns_any_proven_negative}
+    - {id: R1_validator_reproduces_exact_counts, result: PASS, evidence: 14_nodes_36_edges_22_schema_fingerprints_1_acceptance_1_handoff_0_effects}
+    - {id: R2_validator_reproduces_23_cases_and_three_mutations, result: PASS, evidence: 23_cases_and_3_of_3_negative_mutations}
+    - {id: R3_validator_reproduces_13_cases_and_three_mutations, result: PASS, evidence: 13_cases_and_3_of_3_negative_mutations}
+    - {id: all_19_permit_and_18_admission_check_mappings_remain_total, result: PASS, evidence: 19/19_and_18/18}
+    - {id: 69_adversarial_decisions_and_64_effective_invariants_pass, result: PASS, evidence: A1_A69_69/69_and_I01_I64_64/64_under_effective_replacements}
+    - {id: F1_F2_F3_authority_and_identity_bindings_are_preserved, result: PASS, evidence: fixed_acceptance_and_freeze_hashes_match_and_R1_binds_exact_snapshots}
+    - {id: no_Host_authentication_revocation_or_compromise_bypass, result: PASS, evidence: revoked_compromised_terminal_and_negative_over_unavailable_precedence}
+    - {id: no_fail_open_currentness_or_authority_expansion, result: PASS, evidence: only_positive_all_PASS_or_permitted_NOT_APPLICABLE_paths_succeed}
+    - {id: one_Rust_writer_and_advisory_JavaScript_boundary_remain_closed, result: PASS, evidence: acceptance_disposition_handoff_writes_are_Rust_canonical_and_JavaScript_is_transport_only}
+    - {id: Task_Host_effect_fences_remain_monotonic, result: PASS, evidence: append_only_plus_one_generations_and_no_old_generation_resurrection}
+    - {id: crash_replay_lost_reply_and_unknown_outcome_paths_remain_unambiguous, result: PASS, evidence: unique_key_lookup_no_blind_retry_and_F5_UNKNOWN_AFTER_CRASH_boundary}
+    - {id: proof_DAG_and_M0_A_remain_acyclic_and_constructible, result: PASS, evidence: validator_proves_14_topological_nodes_36_edges_and_zero_effect_fixture}
+    - {id: F5_F6_and_implementation_ownership_do_not_leak, result: PASS, evidence: sealed_handoff_only_and_all_downstream_or_implementation_authority_false}
+    - {id: no_internal_contradiction_unmapped_reason_or_M0_impossibility_remains, result: BLOCK, finding: F4-R3-FULL-ATOMIC-IR-B01, evidence: ACCEPTANCE_MISSING_requires_a_fact_whose_identity_requires_the_missing_acceptance_fingerprint}
+
+required_adversarial_checks:
+  declared_count: 26
+  answered_count: 26
+  passed_count: 25
+  blocked_count: 1
+  result: BLOCK
+  results:
+    - {id: PRESTART_in_window, result: PASS, derived: REJECTED_PRESTART}
+    - {id: PRESTART_plus_verifier_unavailable, result: PASS, derived: REJECTED_PRESTART}
+    - {id: PRESTART_changed_expected_reason_rejected, result: PASS, evidence: R3_negative_mutation_1_rejected}
+    - {id: start_secret_handle_negative, result: PASS, derived: NOT_STARTED_SECRET_HANDLE_STALE}
+    - {id: start_attestation_negative, result: PASS, derived: NOT_STARTED_ATTESTATION_STALE}
+    - {id: start_human_presence_negative, result: PASS, derived: NOT_STARTED_HUMAN_PRESENCE_STALE}
+    - {id: start_secret_negative_plus_attestation_unavailable, result: PASS, derived: NOT_STARTED_SECRET_HANDLE_STALE}
+    - {id: start_host_fence_expiry_multiple_negative, result: PASS, derived: NOT_STARTED_HOST_UNAUTHENTICATED}
+    - {id: start_fence_plus_epoch_negative, result: PASS, derived: NOT_STARTED_FENCED}
+    - {id: start_unavailable_without_negative, result: PASS, derived: INDETERMINATE_OBSERVATION_UNAVAILABLE}
+    - {id: start_integrity_negative_plus_unavailable, result: PASS, derived: NOT_STARTED_INTEGRITY_FAILURE}
+    - {id: start_acceptance_missing_plus_Host_negative, result: BLOCK, finding: F4-R3-FULL-ATOMIC-IR-B01, evidence: abstract_pair_derives_NOT_STARTED_ACCEPTANCE_MISSING_but_no_acceptance_fingerprint_exists_to_derive_the_required_observation_id}
+    - {id: start_all_rechecks_pass, result: PASS, derived: START_AUTHORITY_CURRENT_ALL_RECHECKS_PASS}
+    - {id: start_changed_expected_result_rejected, result: PASS, evidence: R3_negative_mutation_2_rejected}
+    - {id: start_changed_expected_reason_rejected, result: PASS, evidence: R3_negative_mutation_3_rejected}
+    - {id: R2_task_negative_plus_policy_unavailable, result: PASS, derived: REJECTED_TASK_STALE}
+    - {id: R2_Host_revoked_plus_verifier_unavailable, result: PASS, derived: REJECTED_REVOKED}
+    - {id: R2_prohibited_plus_Host_negative, result: PASS, derived: REJECTED_PROHIBITED}
+    - {id: R2_all_five_added_permit_reasons, result: PASS, derived: CAPABILITY_RESOURCE_SECRET_HANDLE_ATTESTATION_HUMAN_PRESENCE_STALE_all_explicit}
+    - {id: R2_stale_fence_plus_epoch_currentness, result: PASS, derived: REJECTED_EPOCH_STALE}
+    - {id: R2_permit_negative_plus_Host_unavailable_admission, result: PASS, derived: REJECTED_PERMIT_INVALID}
+    - {id: R2_admission_prohibited_plus_invalid_request, result: PASS, derived: REJECTED_PROHIBITED}
+    - {id: R2_admission_integrity_plus_prohibited, result: PASS, derived: REJECTED_INTEGRITY_FAILURE}
+    - {id: unknown_field_enum_or_invalid_NOT_APPLICABLE, result: PASS, derived: reject_before_canonical_output}
+    - {id: changed_bytes_under_same_observation_identity, result: PASS, derived: integrity_conflict_not_idempotent_success}
+    - {id: successful_handoff_does_not_prove_physical_effect, result: PASS, derived: F4_authority_current_only_F5_owns_effect_outcome}
+
+adversarial_decisions_A1_A69:
+  declared_count: 69
+  reviewed_count: 69
+  passed_count: 69
+  failed_count: 0
+  result: PASS
+  individual_results:
+    - {number: 1, result: PASS, decision: reject_RED_prompt_has_no_authority}
+    - {number: 2, result: PASS, decision: reject_P3b_permanently}
+    - {number: 3, result: PASS, decision: INDETERMINATE_no_issuance_or_acceptance}
+    - {number: 4, result: PASS, decision: currentness_REJECTED_Task_fence_policy}
+    - {number: 5, result: PASS, decision: currentness_REJECTED_old_permit_never_revives}
+    - {number: 6, result: PASS, decision: reject_actor_identity_revision_fingerprint_mismatch}
+    - {number: 7, result: PASS, decision: reject_delegation_authority_binding}
+    - {number: 8, result: PASS, decision: reject_Host_admission}
+    - {number: 9, result: PASS, decision: reject_permit_currentness}
+    - {number: 10, result: PASS, decision: Host_authentication_REJECTED_CHALLENGE_MISMATCH}
+    - {number: 11, result: PASS, decision: Host_authentication_or_currentness_INDETERMINATE}
+    - {number: 12, result: PASS, decision: Host_authentication_REJECTED_PROFILE_MISMATCH}
+    - {number: 13, result: PASS, decision: reject_terminal_COMPROMISED_identity_restart}
+    - {number: 14, result: PASS, decision: admission_REJECTED_HOST_NOT_OWNER}
+    - {number: 15, result: PASS, decision: reject_JavaScript_Host_spoof_Rust_identity_wins}
+    - {number: 16, result: PASS, decision: admission_REJECTED_CAPABILITY_DENIED}
+    - {number: 17, result: PASS, decision: reject_wildcard_implicit_or_ambient_resource}
+    - {number: 18, result: PASS, decision: reject_payload_fingerprint_integrity_conflict}
+    - {number: 19, result: PASS, decision: reject_LEDGER_ONLY_as_effect_intent}
+    - {number: 20, result: PASS, decision: reject_stale_Command_owner_contract_or_registry}
+    - {number: 21, result: PASS, decision: reject_issuance_on_Resident_epoch_change}
+    - {number: 22, result: PASS, decision: currentness_or_admission_REJECTED_on_Resident_epoch_change}
+    - {number: 23, result: PASS, decision: currentness_or_admission_REJECTED_on_any_fence_mismatch}
+    - {number: 24, result: PASS, decision: INDETERMINATE_no_acceptance_on_unreproducible_fence_head}
+    - {number: 25, result: PASS, decision: INDETERMINATE_or_REJECTED_never_extend_time}
+    - {number: 26, result: PASS, decision: REJECTED_before_not_before_or_at_after_expiry}
+    - {number: 27, result: PASS, decision: reject_acceptance_after_commit_deadline}
+    - {number: 28, result: PASS, decision: NOT_STARTED_EXPIRED}
+    - {number: 29, result: PASS, decision: identical_invocation_replay_returns_same_facts}
+    - {number: 30, result: PASS, decision: changed_bytes_same_invocation_are_protocol_conflict}
+    - {number: 31, result: PASS, decision: only_exact_owner_Host_and_unique_acceptance_can_win}
+    - {number: 32, result: PASS, decision: dual_writer_integrity_failure_no_second_acceptance}
+    - {number: 33, result: PASS, decision: lookup_unique_acceptance_before_any_start_or_retry}
+    - {number: 34, result: PASS, decision: accepted_not_proven_started_recheck_current_authority}
+    - {number: 35, result: PASS, decision: F5_UNKNOWN_AFTER_CRASH_absent_positive_terminal_evidence}
+    - {number: 36, result: PASS, decision: provider_success_without_handoff_proves_no_authority_or_F4_outcome}
+    - {number: 37, result: PASS, decision: Outbox_without_F4_acceptance_has_no_dispatch_authority}
+    - {number: 38, result: PASS, decision: revocation_ordered_first_rejects_acceptance}
+    - {number: 39, result: PASS, decision: acceptance_history_preserved_next_recheck_FENCED}
+    - {number: 40, result: PASS, decision: incomplete_revocation_enumeration_fails_domain_closed}
+    - {number: 41, result: PASS, decision: restored_old_fence_head_rejected_no_resurrection}
+    - {number: 42, result: PASS, decision: missing_attestation_rejects_or_is_INDETERMINATE}
+    - {number: 43, result: PASS, decision: embedded_secret_rejected_and_not_persisted}
+    - {number: 44, result: PASS, decision: secret_handle_wrong_owner_rejected}
+    - {number: 45, result: PASS, decision: substitute_UI_network_IPC_process_evidence_rejected}
+    - {number: 46, result: PASS, decision: unknown_enum_schema_digest_or_extra_field_rejected}
+    - {number: 47, result: PASS, decision: F5_scope_widening_rejected}
+    - {number: 48, result: PASS, decision: any_real_M0_effect_fails_fixture}
+    - {number: 49, result: PASS, decision: substitute_or_stale_human_presence_rejects_or_is_INDETERMINATE}
+    - {number: 50, result: PASS, decision: REJECTED_TASK_STALE}
+    - {number: 51, result: PASS, decision: REJECTED_REVOKED}
+    - {number: 52, result: PASS, decision: REJECTED_COMPROMISED}
+    - {number: 53, result: PASS, decision: currentness_REJECTED_PROHIBITED}
+    - {number: 54, result: PASS, decision: currentness_REJECTED_CAPABILITY_STALE}
+    - {number: 55, result: PASS, decision: explicit_RESOURCE_SECRET_HANDLE_ATTESTATION_HUMAN_PRESENCE_STALE_reasons}
+    - {number: 56, result: PASS, decision: admission_REJECTED_PERMIT_INVALID}
+    - {number: 57, result: PASS, decision: admission_REJECTED_PROHIBITED}
+    - {number: 58, result: PASS, decision: admission_REJECTED_STALE_FENCE}
+    - {number: 59, result: PASS, decision: unique_reducer_specific_INDETERMINATE_unavailable_reason}
+    - {number: 60, result: PASS, decision: Host_REJECTED_PRESTART}
+    - {number: 61, result: PASS, decision: Host_REJECTED_PRESTART_dominates_verifier_unavailable}
+    - {number: 62, result: PASS, decision: NOT_STARTED_SECRET_HANDLE_STALE}
+    - {number: 63, result: PASS, decision: NOT_STARTED_ATTESTATION_STALE}
+    - {number: 64, result: PASS, decision: NOT_STARTED_HUMAN_PRESENCE_STALE}
+    - {number: 65, result: PASS, decision: NOT_STARTED_SECRET_HANDLE_STALE_dominates_unavailable}
+    - {number: 66, result: PASS, decision: NOT_STARTED_HOST_UNAUTHENTICATED}
+    - {number: 67, result: PASS, decision: NOT_STARTED_FENCED}
+    - {number: 68, result: PASS, decision: INDETERMINATE_OBSERVATION_UNAVAILABLE}
+    - {number: 69, result: PASS, decision: START_AUTHORITY_CURRENT_ALL_RECHECKS_PASS}
+
+effective_normative_invariants:
+  declared_count: 64
+  reviewed_count: 64
+  passed_count: 64
+  failed_count: 0
+  result: PASS
+  effective_replacements:
+    I19: I19_R2
+    I20: I20_R3
+  individual_results:
+    I01: PASS
+    I02: PASS
+    I03: PASS
+    I04: PASS
+    I05: PASS
+    I06: PASS
+    I07: PASS
+    I08: PASS
+    I09: PASS
+    I10: PASS
+    I11: PASS
+    I12: PASS
+    I13: PASS
+    I14: PASS
+    I15: PASS
+    I16: PASS
+    I17: PASS
+    I18: PASS
+    I19_R2: PASS
+    I20_R3: PASS
+    I21: PASS
+    I22: PASS
+    I23: PASS
+    I24: PASS
+    I25: PASS
+    I26: PASS
+    I27: PASS
+    I28: PASS
+    I29: PASS
+    I30: PASS
+    I31: PASS
+    I32: PASS
+    I33: PASS
+    I34: PASS
+    I35: PASS
+    I36: PASS
+    I37: PASS
+    I38: PASS
+    I39: PASS
+    I40: PASS
+    I41: PASS
+    I42: PASS
+    I43: PASS
+    I44: PASS
+    I45: PASS
+    I46: PASS
+    I47: PASS
+    I48: PASS
+    I49: PASS
+    I50: PASS
+    I51: PASS
+    I52: PASS
+    I53: PASS
+    I54: PASS
+    I55: PASS
+    I56: PASS
+    I57: PASS
+    I58: PASS
+    I59: PASS
+    I60: PASS
+    I61: PASS
+    I62: PASS
+    I63: PASS
+    I64: PASS
+  note: >-
+    The new blocker is a constructibility contradiction for one required
+    negative disposition fact, not a failure of the 64 stated effective
+    invariants or of the A1-A69 abstract decision set.
+
+prior_finding_lineage:
+  fresh_judgment_completed_before_lineage_read: true
+  results:
+    - {finding_id: F4-R1-FULL-ATOMIC-IR-B01, prior_result: BLOCKER, current_status: CLOSED_BY_R2, evidence: negative_over_unavailable_lattice_and_fixed_reason_precedence_are_effective}
+    - {finding_id: F4-R2-FULL-ATOMIC-IR-B01, prior_result: BLOCKER, current_status: CLOSED_BY_R3, evidence: PRESTART_is_a_dedicated_rejected_reason_with_time_independence_and_precedence}
+    - {finding_id: F4-R2-FULL-ATOMIC-IR-B02, prior_result: BLOCKER, current_status: ABSTRACT_REDUCER_CLOSED_BUT_FULL_FACT_CONSTRUCTIBILITY_BLOCKED, successor_finding: F4-R3-FULL-ATOMIC-IR-B01}
+
+mandatory_risk_counts:
+  note: category_counts_are_non_additive_and_may_reference_the_same_finding
+  source_hash_mismatch: 0
+  partial_subject_review: 0
+  forbidden_input_access: 0
+  identity_spoofing_bypass: 0
+  authority_expansion: 0
+  Host_revocation_or_compromise_bypass: 0
+  fail_open_currentness: 0
+  dual_writer_path: 0
+  fence_resurrection: 0
+  crash_or_lost_reply_blind_retry: 0
+  start_disposition_first_fact_or_replay_ambiguity: 1
+  circular_proof_DAG: 0
+  M0_A_positive_witness_impossibility: 0
+  full_negative_fact_constructibility: 1
+  unmapped_reason: 0
+  internal_contradiction: 1
+  F5_F6_or_implementation_authority_leak: 0
+  successful_handoff_physical_effect_conflation: 0
+  unresolved_contract_ambiguity: 1
+
+findings_summary:
+  blocker_count: 1
+  major_count: 0
+  minor_count: 0
+  total_count: 1
+  unresolved_count: 1
+  requires_R4: true
+
+findings:
+  - id: F4-R3-FULL-ATOMIC-IR-B01
+    severity: BLOCKER
+    title: ACCEPTANCE_MISSING cannot produce the canonical HostWorkStartDisposition fact identity required by R3
+    section:
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_9_4_HostWorkStartDispositionFact_schema_and_observation_identity
+        lines: 807-867
+        evidence: >-
+          The fact requires acceptance_ref and acceptance_fingerprint, and
+          observation_id is SHA-256 over acceptance_fingerprint plus the
+          observation attempt. NOT_STARTED is described as a committed fact.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+        section: Section_14_F4NapiSurface_observeStartAuthority
+        lines: 1120-1123
+        evidence: >-
+          observeStartAuthority accepts only a HostWorkAcceptanceFact ref and
+          returns a HostWorkStartDispositionFact; it defines neither an
+          expected-acceptance fingerprint source nor an outer fail-closed
+          no-fact decision for a missing acceptance.
+      - path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md
+        section: Sections_3_2_3_3_and_3_5
+        lines: 128-211
+        evidence: >-
+          R3 classifies exact acceptance missing as a proven negative, requires
+          NOT_STARTED / ACCEPTANCE_MISSING for every schema-valid normalized
+          tuple, and asserts one canonical fact fingerprint and replay under
+          the unchanged R1 identity formula.
+      - path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json
+        section: acceptance_missing_plus_host_negative_vector
+        line: 35
+        evidence: >-
+          The vector proves only the abstract pair; it does not construct the
+          required fact, observation_id, acceptance binding, or replay key.
+    counterexample:
+      observe_input: acceptance:missing:001
+      canonical_acceptance_row_exists: false
+      acceptance_current: REJECTED
+      host_identity_current: REJECTED
+      abstract_R3_reducer_output: [NOT_STARTED, ACCEPTANCE_MISSING]
+      required_output_schema: HostWorkStartDispositionFactV0_1
+      required_identity_formula: SHA256_JCS_domain_acceptance_fingerprint_observation_attempt
+      canonical_acceptance_fingerprint_available: false
+      caller_may_supply_authoritative_fingerprint: false
+      alternative_no_fact_fail_closed_decision_defined: false
+      contradiction: >-
+        The reducer requires a committed canonical negative fact, but the only
+        canonical input from which its observation identity is derived is the
+        acceptance fingerprint that is absent. Choosing an arbitrary caller
+        fingerprint creates multiple possible first-fact identities; emitting
+        no fact violates the declared total output and N-API surface.
+    impact: >-
+      The required acceptance-missing negative path is not constructible as one
+      canonical immutable fact. Independent implementations can either invent
+      different acceptance fingerprints and observation IDs or return an
+      undocumented no-fact rejection. This is fail-closed with respect to
+      effect authority, but it breaks full totality, first-fact/replay
+      uniqueness, the required acceptance-missing adversarial check, and the
+      no-internal-contradiction review gate.
+    minimum_correction:
+      - >-
+        Choose one closed model: either define a canonical expected-acceptance
+        identity/fingerprint that exists before acceptance and is the sole
+        binding used for missing-acceptance observations, or declare missing
+        acceptance a fail-closed request error that emits no
+        HostWorkStartDispositionFact.
+      - >-
+        If the no-fact model is chosen, add a versioned outer decision schema,
+        update observeStartAuthority output, remove ACCEPTANCE_MISSING from the
+        fact reducer, and specify replay/idempotency for that rejection.
+      - >-
+        If the expected-identity model is chosen, bind it from an existing
+        immutable invocation/admission fact without caller choice, update the
+        observation-id formula and handoff-absence key consistently, and prove
+        changed-byte conflict behavior.
+      - >-
+        Replace the abstract acceptance-missing vector with a constructive
+        full-fact or explicit no-fact fixture and add changed-identity,
+        changed-reason, and identical-replay negative tests.
+      - Perform a new full atomic hash-bound R4 independent review.
+    fail_open: false
+    requires_R4: true
+
+final_reduction:
+  hashes_complete: true
+  atomic_subject_read_complete: true
+  validators_complete: true
+  required_questions_passed: 23/26
+  required_adversarial_checks_passed: 25/26
+  Host_reason_and_lifecycle_coverage: 14/14_reasons_and_6/6_lifecycle_states
+  permit_mapping_coverage: 19/19
+  admission_mapping_coverage: 18/18
+  start_mapping_coverage: 12/12_abstract_mapping_with_1_constructibility_blocker
+  adversarial_decisions_passed: 69/69
+  effective_invariants_passed: 64/64
+  no_finding_rule_satisfied: false
+  result: BLOCK
+  acceptance_ready: false
+  requires_R4: true
+  rationale: >-
+    All 31 inputs and all nine subjects are hash-stable, all validators pass,
+    PRESTART and all abstract reason mappings are closed, and A1-A69 plus the
+    64 effective invariants pass. The acceptance-missing disposition path still
+    cannot derive the canonical observation identity of the fact R3 requires,
+    so the full atomic no-finding gate is not satisfied.
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_Host_or_effect_execution_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

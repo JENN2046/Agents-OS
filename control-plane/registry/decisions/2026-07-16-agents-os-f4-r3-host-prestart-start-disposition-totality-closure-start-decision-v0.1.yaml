@@ -1,0 +1,95 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f4-r3-host-prestart-start-disposition-totality-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-16T18:56:43+08:00
+effective_at: 2026-07-16T18:56:43+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_F4_R3_NARROW_CONTRACT_CORRECTION
+  decision_sources:
+    - exact_current_conversation_instruction_start_F4
+    - exact_current_conversation_instruction_allow_automatic_progression
+    - immutable_F4_start_decision_authorized_findings_dispositions_and_narrow_amendments
+
+amendment_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE
+  fixed_R1_R2_subject_count: 6
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml
+    sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8
+    result: BLOCK
+    blocker_count: 2
+    major_count: 0
+    minor_count: 0
+    requires_R3: true
+
+required_scope:
+  - F4_R2_IR_B01_PRESTART_Host_authentication_reason_totality
+  - F4_R2_IR_B02_HostWorkStartDisposition_result_reason_totality
+  - exact_negative_over_unavailable_dominance_for_start_disposition
+  - exact_reason_mapping_and_precedence_for_every_start_recheck
+  - deterministic_PRESTART_and_start_disposition_vectors
+  - author_self_review
+  - new_hash_bound_fresh_full_atomic_independent_review_surface
+
+design_constraints:
+  amendment_must_be_narrow: true
+  all_R1_R2_subject_bytes_immutable: true
+  both_R1_R2_independent_review_bytes_immutable: true
+  F1_F2_F3_accepted_or_frozen_bytes_immutable: true
+  atomic_acceptance_only: true
+  partial_acceptance: forbidden
+  all_non_success_results_fail_closed: true
+  one_singleton_writer: preserved
+  F5_F6_ownership: preserved
+  synthetic_evidence_only: true
+
+excluded_scope:
+  - F5_Outbox_delivery_retry_dead_letter_reconciliation_or_effect_outcome
+  - F6_Validation_current_decision_or_Task_completion_eligibility
+  - Rust_or_JavaScript_implementation
+  - database_schema_creation_migration_or_live_access
+  - runtime_Resident_or_service_activation
+  - production_authentication_crypto_keys_credentials_or_enrollment
+  - provider_Host_executor_or_external_effect_execution
+  - public_API_or_MCP_expansion
+
+hard_boundaries:
+  modify_F4_R1_R2_fixed_subjects: forbidden
+  modify_F4_R1_or_R2_independent_reviews: forbidden
+  modify_F1_F2_F3_accepted_or_frozen_subjects: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  provider_Host_or_effect_execution: forbidden
+  secret_access: forbidden
+  private_raw_memory_access: forbidden
+  F5_or_F6_start: forbidden
+  F4_acceptance_or_freeze: Jenn_only
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+
+completion_effect:
+  F4_started: true
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+
+next_gate:
+  name: F4_R3_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

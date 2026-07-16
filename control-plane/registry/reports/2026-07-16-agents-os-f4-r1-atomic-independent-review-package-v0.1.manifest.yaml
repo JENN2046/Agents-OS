@@ -1,0 +1,194 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f4-r1-atomic-independent-review-package-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 3
+  subjects:
+    - ordinal: 1
+      role: normative_contract
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+    - ordinal: 2
+      role: constructive_M0_A_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+    - ordinal: 3
+      role: deterministic_offline_validator
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+
+authority_inputs:
+  - role: workspace_governance
+    path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  - role: accepted_resident_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - role: accepted_high_privilege_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+  - role: accepted_home_roadmap_subject
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  - role: accepted_home_roadmap_decision
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  - role: phase_4_start_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  - role: construction_readiness_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  - role: accepted_F1_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - role: frozen_F2_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+  - role: frozen_F2_atomic_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+  - role: frozen_F3_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+  - role: frozen_F3_atomic_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+  - role: immutable_F4_start_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml
+    sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+
+review_lineage:
+  - role: author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-taskpermit-host-authentication-effect-admission-r1-self-review.yaml
+    sha256: a82d14e4fa3966a853e542c09e85ba017ac335bce652c4576bfcaf492173eb67
+    result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+    may_substitute_for_independent_judgment: false
+
+required_review_questions:
+  - all_three_subject_hashes_recompute_and_subjects_are_reviewed_atomically
+  - F1_F2_F3_authority_is_preserved_without_identity_or_responsibility_spoofing
+  - TaskPermit_identity_scope_immutability_epoch_and_lifecycle_are_closed
+  - Host_identity_authentication_challenge_epoch_revocation_and_compromise_are_fail_closed
+  - capability_resource_secret_handle_attestation_and_human_presence_scope_cannot_expand
+  - P3a_requires_exact_current_Jenn_authorization_and_P3b_is_never_issuable
+  - all_19_permit_currentness_checks_have_total_fail_closed_semantics
+  - all_18_local_admission_checks_are_advisory_and_cannot_bypass_the_canonical_writer
+  - Task_Host_effect_fences_are_monotonic_and_cannot_resurrect_old_authority
+  - incomplete_revocation_propagation_fails_the_containing_admission_domain_closed
+  - issuance_acceptance_observation_and_handoff_replay_identities_are_unambiguous
+  - crash_lost_reply_and_unknown_transaction_outcomes_cannot_cause_blind_retry
+  - successful_start_disposition_and_handoff_share_one_atomic_final_recheck_transaction
+  - acceptance_or_handoff_never_proves_physical_start_or_effect_outcome
+  - NOT_EXECUTED_requires_positive_F5_evidence_and_UNKNOWN_AFTER_CRASH_has_no_automatic_retry
+  - F3_Command_definition_seam_has_no_same_subject_hash_cycle
+  - Rust_single_writer_and_future_N_API_boundary_do_not_admit_a_second_authority_path
+  - all_49_adversarial_decisions_and_64_normative_invariants_are_satisfied
+  - offline_validator_recomputes_the_exact_14_node_36_edge_22_schema_witness
+  - M0_A_witness_has_one_acceptance_one_handoff_and_zero_real_effect_provider_secret_or_production_fact
+  - no_internal_contradiction_or_implementation_downstream_authority_leak_exists
+
+required_validator_command:
+  command: python3 control-plane/registry/validate-f4-m0a-witness.py
+  expected:
+    result: PASS
+    node_count: 14
+    edge_count: 36
+    node_hashes_verified: 14
+    schema_fingerprints_verified: 22
+    acceptance_count: 1
+    accepted_handoff_count: 1
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - exact_manifest_path_and_sha256
+    - every_input_hash_verified
+    - all_three_subject_bytes_reviewed_unchanged
+    - validator_command_and_exact_result
+    - blocker_major_minor_counts
+    - finding_ids_with_exact_section_and_evidence
+    - identity_spoofing_count
+    - authority_expansion_count
+    - host_authentication_bypass_count
+    - revocation_or_compromise_bypass_count
+    - fail_open_currentness_count
+    - dual_writer_count
+    - circular_proof_count
+    - crash_or_replay_ambiguity_count
+    - downstream_boundary_leak_count
+    - M0_impossibility_count
+    - internal_contradiction_count
+    - adversarial_decisions_passed
+    - normative_invariants_passed
+    - requires_R2
+  no_finding_rule: >-
+    PASS_NO_BLOCKER is permitted only when every required question is answered
+    from the fixed bytes, the validator returns the exact expected result, and
+    no blocker remains.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_may_be_relied_on_as_conclusion: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unknown_or_unavailable_required_input_result: BLOCK
+  validator_mismatch_result: BLOCK
+  forbidden_inputs_accessed: false_required
+  web_required: false
+  runtime_source_required: false
+  secrets_or_private_memory_required: false
+  real_host_provider_service_or_database_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  F4_acceptance_ready: false
+  authority_after_pass: Jenn_only
+  automatic_acceptance: forbidden
+
+non_authorization:
+  independent_review_result_created: false
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  Resident_start_authorized: false
+  service_start_authorized: false
+  provider_or_host_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

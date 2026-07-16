@@ -1,0 +1,105 @@
+# AGENTS OS Active Work Queue v1.2
+
+Date: 2026-07-16  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.1.md`
+
+## Purpose
+
+Current queue after the F4 R2 independent review returned two blockers and the
+authorized narrow R3 correction closed its nine-subject author surface. Queues
+v0.1-v1.1 remain byte-preserved historical evidence.
+
+This queue does not accept/freeze F4, start F5/F6, or authorize implementation,
+runtime, database, Resident, authentication, credential, Host, provider,
+service, effect, public API, MCP, Git delivery, release, deploy, or Memory work.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_started=true
+F4_status=R3_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F4_acceptance_unit=F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE
+F4_subject_count=9
+F4_partial_acceptance=forbidden
+F4_R2_independent_review_result=BLOCK
+F4_R2_independent_review_blocker_count=2
+F4_R2_independent_review_sha256=df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8
+F4_R2_finding_disposition_sha256=0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b
+F4_R3_start_decision_sha256=37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e
+F4_R3_amendment_sha256=4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939
+F4_R3_fixture_sha256=548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4
+F4_R3_validator_sha256=12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec
+F4_R3_author_review_result=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F4_R3_author_review_sha256=82cbe3d749e9380aabd4c711188165d37bb2947d095d60c9ec5b5966ae15ffd5
+F4_R3_review_manifest_sha256=de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5
+F4_R3_independent_review_result_created=false
+F4_accepted=false
+F4_frozen=false
+F5_started=false
+F6_started=false
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+database_change_authorized=false
+service_start_authorized=false
+provider_host_or_effect_execution_authorized=false
+commit_push_PR_merge_authorized=false
+```
+
+## NOW
+
+### NOW-001: F4 R3 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+review_manifest=control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.manifest.yaml
+review_manifest_sha256=de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5
+review_package=control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.md
+subject_count=9
+manifest_input_count=31
+required_questions=26
+required_adversarial_checks=26
+fresh_independent_reviewer_required=true
+partial_review=forbidden
+execution_authorized=false
+```
+
+## NEXT
+
+```text
+BLOCK=preserve_R1_R2_R3_and_review_bytes_then_route_exact_findings_to_R4_if_required
+PASS_NO_BLOCKER=prepare_Jenn_only_atomic_accept_freeze_decision_surface
+automatic_acceptance=forbidden
+automatic_F5_start=forbidden
+```
+
+## BLOCKED
+
+```text
+self_attested_independent_review=forbidden
+partial_F4_acceptance=forbidden
+F4_automatic_acceptance_or_freeze=forbidden
+F5_F6_start=not_authorized
+implementation_runtime_database_authentication_provider_Host_effect=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_F4_R3_package
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F4_R1_independent_review=BLOCK_1_preserved
+F4_R2_independent_review=BLOCK_2_preserved
+F4_R2_findings_disposition=bound_to_R3
+F4_R3_author_self_review=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F4_R3_atomic_review_package=ready
+R1_validator=PASS_14_36_22_zero_effect
+R2_validator=PASS_23_cases_3_mutations_zero_effect
+R3_validator=PASS_13_cases_3_mutations_zero_effect
+active_work_queue_v0_1_through_v1_1=superseded_historical_bytes_preserved
+```

@@ -1,0 +1,191 @@
+schema_version: agents-os.author-contract-review.v0.1
+review_id: agents-os-f3-r2-six-finding-contract-closure-self-review
+review_type: AUTHOR_FULL_ATOMIC_CONTRACT_REVIEW
+date: 2026-07-16
+status: complete
+
+reviewer:
+  identity: Nobao
+  role: author_and_agent_steward
+  independent: false
+  limitation: this_review_does_not_satisfy_the_required_independent_review
+
+acceptance_unit:
+  id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subjects:
+    - revision: R1
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+      sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+      bytes_modified_for_R2: false
+    - revision: R2
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+      sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+blocking_review_basis:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r1-full-atomic-independent-review.yaml
+  sha256: 0be7f9e81bdd224e7d1beb83c06d1c8f3afae0ff802bdd5e8f701ff988a07c2e
+  result: BLOCK
+  blocker_count: 0
+  major_count: 6
+  minor_count: 0
+  requires_R2: true
+
+disposition_record:
+  path: control-plane/registry/reviews/2026-07-16-agents-os-f3-r1-independent-review-disposition-v0.1.yaml
+  sha256: 0e68702177124b6f0fb999e79cded787a86f20a46e40f7ae702448038a18e3c5
+
+R2_start_decision:
+  path: control-plane/registry/decisions/2026-07-16-agents-os-f3-r2-six-finding-contract-closure-start-decision-v0.1.yaml
+  sha256: be5ad86729daf38419d2c377d273be2824c32f7145b536fdf16f30ba22844b9e
+
+result: PASS_NO_AUTHOR_BLOCKER
+summary:
+  author_blocker_count: 0
+  author_major_count: 0
+  author_minor_count: 0
+  prior_findings_addressed: 6
+  prior_findings_total: 6
+  ready_for_fresh_hash_bound_independent_review: true
+  ready_for_Jenn_atomic_acceptance_decision: false
+  requires_R3_from_author_review: false
+
+finding_disposition:
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M01
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [2.1, 2.3, 2.4, 2.5, 2.7]
+    evidence: >-
+      Every canonically identified first REJECTED or gate-derived INDETERMINATE
+      Command now persists one immutable terminal intake and replay entry. An
+      identical retry returns the first disposition; changed conditions require
+      a new command_id; changed bytes conflict.
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M02
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [3]
+    evidence: >-
+      The ordinary gate now requires the exact frozen
+      AuthenticationAssessmentV0_1R15 value AUTHENTICATED. VERIFIED is confined
+      to the principal-control proof assessment interface.
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M03
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [4]
+    evidence: >-
+      The reducer gives a precedence-ordered result and closed reason for all
+      eight frozen F2 Actor assessment values, defines the exact Jenn-decision
+      effect, and ends with an explicit fail-closed fallback.
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M04
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [5.1, 5.2, 5.3, 5.4, 5.5]
+    evidence: >-
+      A ledger-external monotonic witness journal binds reservation, epoch, and
+      commit generations; crash windows are total; committed-witness/ledger
+      rollback fails closed; only an exact Jenn restore decision can create a
+      new restore lineage and generation.
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M05
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [2.2, 2.3, 2.4, 2.5, 2.6, 2.7]
+    evidence: >-
+      Closed gate, intake, and replay schemas now have exact fingerprint
+      domains, independent ref rules, terminal shape rules, global replay-key
+      specialization, and an acyclic computation order.
+  - finding_id: F3-R1-FULL-ATOMIC-IR-M06
+    status: RESOLVED_IN_R2_PENDING_INDEPENDENT_CONFIRMATION
+    R2_sections: [6.1, 6.2, 6.3, 6.4, 6.5, 6.6]
+    evidence: >-
+      The witness now starts from a complete declared genesis, executes one
+      exact LEDGER_ONLY DELEGATION_ISSUANCE Command to create the pending grant,
+      then executes the separate activation acknowledgement and replay/restart
+      trace without real runtime, secret, provider, host, or effect authority.
+
+author_adversarial_checks:
+  - id: rejected_command_retried_after_gate_change
+    result: PASS
+    evidence: R2_2_7_returns_first_REJECTED_and_requires_new_command_id
+  - id: changed_source_evades_command_identity
+    result: PASS
+    evidence: R2_2_1_uses_global_command_id_namespace
+  - id: intake_envelope_content_address_cycle
+    result: PASS
+    evidence: R2_2_2_derives_refs_before_envelope_and_never_from_record_bytes
+  - id: deterministic_reducer_rejection_not_persisted
+    result: PASS
+    evidence: R2_2_3_includes_reducer_preconditions_in_terminal_gate_result
+  - id: F2_authentication_closed_enum_mismatch
+    result: PASS
+    evidence: R2_3_uses_AUTHENTICATED_only
+  - id: Actor_SUPERSEDED_has_no_continuity_result
+    result: PASS
+    evidence: R2_4_maps_SUPERSEDED_to_INDETERMINATE
+  - id: Jenn_decision_overrides_non_ACTIVE_Actor
+    result: PASS
+    evidence: R2_4_forbids_override_and_requires_new_ACTIVE_revision
+  - id: internally_consistent_old_ledger_reaches_READY
+    result: PASS
+    evidence: R2_5_4_committed_witness_ahead_of_ledger_fails_closed
+  - id: crash_after_reservation_reuses_generation
+    result: PASS
+    evidence: R2_5_2_has_closed_ABANDONED_transition_and_never_reuses_generation
+  - id: crash_after_epoch_before_witness_commit_creates_duplicate_epoch
+    result: PASS
+    evidence: R2_5_4_finalizes_exact_pending_reservation_before_new_incarnation_epoch
+  - id: restore_decision_silently_overrides_F2
+    result: PASS
+    evidence: R2_5_5_requires_all_F2_recovery_and_denies_override
+  - id: synthetic_activation_has_no_pending_grant
+    result: PASS
+    evidence: R2_6_4_commits_exact_F2_issuance_subject_before_R2_6_5_ACK
+  - id: pending_grant_self_authorizes_activation
+    result: PASS
+    evidence: R2_6_5_requires_NONE_ACTIVATION_PURPOSE_ONLY
+  - id: synthetic_fixture_imports_real_authority
+    result: PASS
+    evidence: R2_6_3_and_R2_6_5_forbid_real_secret_runtime_provider_host_effect_inputs
+  - id: F4_F5_F6_boundary_leak
+    result: PASS
+    evidence: R2_1_and_R2_6_preserve_downstream_ownership
+
+mandatory_author_counts:
+  identity_spoofing: 0
+  dual_writer: 0
+  circular_proof: 0
+  authority_expansion: 0
+  fail_open_currentness: 0
+  replay_ambiguity: 0
+  downstream_boundary_leak: 0
+  M0_impossibility: 0
+  internal_contradiction: 0
+
+static_validation:
+  R2_line_count: 1172
+  R2_byte_count: 46548
+  markdown_code_fence_markers: 102
+  markdown_code_fences_balanced: true
+  finding_id_coverage: 6_of_6
+  git_diff_check: PASS
+  runtime_tests: NOT_RUN_CONTRACT_ONLY
+
+non_authorization:
+  author_review_is_independent_review: false
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false
+
+next_required_action: >-
+  Build a new fixed hash-bound package over the exact R1+R2 atomic bundle and
+  governing frozen inputs, then obtain a fresh full atomic independent review.
+  Only Jenn may later accept and freeze F3.

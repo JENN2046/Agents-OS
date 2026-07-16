@@ -1,0 +1,126 @@
+schema_version: agents-os.contract-author-self-review.v0.1
+review_id: agents-os-f3-resident-singleton-napi-identity-continuity-r1-self-review-v0.1
+review_type: author_self_review
+reviewer: Nobao
+reviewer_independence: false
+date: 2026-07-16
+status: complete
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+subject:
+  contract_id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R1
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+  sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+  line_count: 1050
+  encoding: UTF-8
+  line_endings: LF
+  byte_order_mark: absent
+
+authority_basis:
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-start-decision-v0.1.yaml
+    sha256: c5b5893cb75d7283a263fae8cbb52e2d52e5f9e90e4cf312ff1c5023c51488ba
+  F2_frozen_manifest_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+  F2_freeze_decision_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+
+review_scope:
+  - atomic_scope_and_precedence
+  - Resident_identity_and_continuity_authority
+  - dual_singleton_gate_and_monotonic_epoch
+  - single_Rust_ledger_thread_and_authoritative_connection
+  - N_API_method_and_availability_boundary
+  - Command_definition_intent_submission_context_envelope_and_replay
+  - exact_F2_action_ref_and_activation_ack_projection
+  - recovery_readiness_and_crash_ordering
+  - F4_F5_F6_and_implementation_boundary_separation
+  - constructive_synthetic_M0_witness
+  - acceptance_and_non_authorization_boundary
+
+checks:
+  atomicity:
+    result: PASS
+    evidence: singleton ownership, N-API intake, and identity continuity are one partial-acceptance-forbidden unit
+  authority_non_expansion:
+    result: PASS
+    evidence: F2 remains authoritative for identity/authentication/responsibility facts and F4 retains permit/host/fence authority
+  dual_writer_prevention:
+    result: PASS
+    evidence: live write authority requires both an OS-enforced process-lifetime lock and one current CAS-bound authority epoch
+  connection_ownership:
+    result: PASS
+    evidence: exactly one Rust ledger thread owns exactly one authoritative read-write connection; direct and pooled alternatives are forbidden
+  identity_spoofing:
+    result: PASS
+    evidence: root identity revision and continuity changes require immutable Jenn decisions and cannot be asserted by a process, model, prompt, or session
+  identity_continuity_fail_closed:
+    result: PASS
+    evidence: missing, forked, corrupt, discontinuous, or indeterminate evidence prevents READY and ordinary intake
+  proof_DAG:
+    result: PASS
+    ordering:
+      - CommandTypeDefinition
+      - CanonicalCommand
+      - F2_AuthenticationAssertion_and_Assessment
+      - AuthenticatedCommandContext
+      - CommandEnvelope
+      - AuthenticatedActorActionRef_or_DelegationActivationAcknowledgementRef
+      - domain_fact_and_Event
+    circular_edges: 0
+  replay:
+    result: PASS
+    evidence: one command_id binds to one canonical fingerprint; identical commit replay is side-effect-free and changed bytes are a protocol conflict
+  currentness_and_revocation_race:
+    result: PASS
+    evidence: all current assessments occur inside the same single-writer transaction, producing a deterministic before-or-after total order
+  F2_interface_coverage:
+    result: PASS
+    covered:
+      - CommandTypeDefinition
+      - CanonicalCommand
+      - AuthenticatedCommandContext
+      - committed_CommandEnvelope
+      - AuthenticatedActorActionRefR4Effective
+      - DelegationActivationAcknowledgementRefR4Effective
+      - DELEGATION_ACTIVATION_ACK
+      - WORKER_ASSIGNMENT_HANDSHAKE_mode
+      - TemporaryWorkerResponsibilityBindingAssessment_ACTIVE_gate
+  downstream_boundary:
+    result: PASS
+    evidence: TaskPermit/host/fence, Outbox delivery, Validation current decision, implementation, and runtime remain outside F3
+  M0_constructibility:
+    result: PASS
+    evidence: Section 20 supplies a synthetic no-provider/no-secret/no-runtime witness including dual-start, replay, and restart continuity
+  non_authorization:
+    result: PASS
+    evidence: draft, review, and later acceptance create no implementation/runtime/database/auth/provider/service/F4 or Git delivery authority
+
+blockers: []
+majors: []
+minors: []
+
+scope_limitations:
+  - this_is_an_author_review_not_an_independent_review
+  - no_implementation_or_runtime_validation_was_performed_or_authorized
+  - the_exact_lock_primitive_and_storage_schema_remain_future_implementation_profile_choices_constrained_by_this_contract
+  - reserved_outbox_and_reconcile_methods_remain_unavailable_until_their_owning_contracts_are_accepted
+
+decision:
+  R1_author_closeout_ready: true
+  hash_bound_independent_review_eligible: true
+  F3_accepted: false
+  F3_frozen: false
+  Jenn_decision_ready: false
+  additional_amendment_required_by_author_review: false
+
+non_authorization:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  credential_change_authorized: false
+  F4_started: false
+  commit_performed: false
+  push_performed: false
+  merge_performed: false

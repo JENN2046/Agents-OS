@@ -1,0 +1,181 @@
+schema_version: agents-os.contract-author-self-review.v0.1
+review_id: agents-os-f4-taskpermit-host-authentication-effect-admission-r1-self-review-v0.1
+review_type: author_self_review
+reviewer: Nobao
+reviewer_independence: false
+date: 2026-07-16
+status: complete
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit:
+  contract_id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 3
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+      sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+      line_count: 1451
+    - role: constructive_M0_A_fixture
+      path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+      sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+      line_count: 1036
+    - role: deterministic_offline_validator
+      path: control-plane/registry/validate-f4-m0a-witness.py
+      sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+      line_count: 875
+  encoding: UTF-8
+  line_endings: LF
+  byte_order_mark: absent
+
+authority_basis:
+  start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml
+    sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8
+  F1_acceptance_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  F2_freeze_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+  F3_freeze_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+
+review_scope:
+  - atomic_scope_and_precedence
+  - canonical_fingerprint_profile_and_self_cycle_exclusion
+  - F1_F2_F3_exact_authority_bindings
+  - TaskPermit_identity_immutability_scope_and_lifecycle
+  - Host_identity_authentication_epoch_and_compromise_semantics
+  - capability_resource_secret_handle_attestation_and_human_presence_currentness
+  - Task_Host_effect_fences_and_revocation_propagation
+  - advisory_admission_atomic_acceptance_and_atomic_disposition_handoff
+  - replay_lost_reply_crash_and_unknown_outcome_semantics
+  - F3_Command_and_F5_outcome_boundary_separation
+  - constructive_zero_effect_M0_A_fixture_and_validator
+  - acceptance_and_non_authorization_boundary
+
+checks:
+  atomicity:
+    result: PASS
+    evidence: contract, fixture, and validator form one three-subject partial-acceptance-forbidden unit
+  authority_non_expansion:
+    result: PASS
+    evidence: F1 Task, F2 Actor authority, and F3 Resident/Command facts remain upstream current inputs; downstream evidence cannot mint or widen authority
+  canonical_identity:
+    result: PASS
+    evidence: every F4 fingerprint has one explicit schema-name domain separator and ordered field projection excluding its own digest
+  circular_proof:
+    result: PASS
+    evidence: F4 consumes an accepted upstream EFFECT_INTENT definition and does not create a production F3 definition whose owner digest would depend on this subject
+  TaskPermit_immutability:
+    result: PASS
+    evidence: revision 1 only, no amendment, one issuance envelope to one fingerprint, fresh execution epoch, and immutable host/effect/capability/resource/policy/time/fence scope
+  host_identity_and_authentication:
+    result: PASS
+    evidence: exact ACTIVE Host revision, verifier evidence, challenge, authentication epoch, time and revocation head are required; compromise is terminal
+  low_disclosure:
+    result: PASS
+    evidence: raw secret/credential/private content/provider response are forbidden; secret authority is an exact current Host-owned handle revision and revocation head
+  currentness:
+    result: PASS
+    evidence: 19 explicit permit-currentness checks fail closed at one reproducible watermark, including grants, secret handles, attestation, human presence and Jenn authorization
+  admission:
+    result: PASS
+    evidence: 18 explicit Host-local checks are advisory only; the Rust canonical writer re-evaluates and atomically commits one invocation acceptance
+  disposition_handoff_race:
+    result: PASS
+    evidence: final Host/epoch/fence/scope recheck, successful disposition, and unique accepted handoff share one serializable canonical transaction
+  fences_and_revocation:
+    result: PASS
+    evidence: Task/Host/effect generations increase exactly by one, old generations never revive, compromise fences Host work, and incomplete propagation fails the containing domain closed
+  replay_and_crash:
+    result: PASS
+    evidence: unique issuance/acceptance/observation/handoff identities make identical replay stable, changed bytes conflicting, and unknown commits lookup-first without blind retry
+  outcome_boundary:
+    result: PASS
+    evidence: acceptance and handoff never prove physical start or result; absence/crash never proves NOT_EXECUTED and UNKNOWN_AFTER_CRASH grants no automatic retry
+  proof_DAG:
+    result: PASS
+    evidence: upstream authority -> permit -> currentness -> advisory admission -> atomic acceptance -> atomic disposition/handoff -> future F5 accounting, with no reverse proof edge
+  adversarial_decisions:
+    result: PASS
+    passed: 49
+    required: 49
+  normative_invariants:
+    result: PASS
+    passed: 64
+    required: 64
+  M0_A_constructibility:
+    result: PASS
+    command: python3 control-plane/registry/validate-f4-m0a-witness.py
+    node_hashes_verified: 14
+    proof_edges_verified: 36
+    schema_fingerprints_verified: 22
+    acceptance_count: 1
+    accepted_handoff_count: 1
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+  validator_negative_paths:
+    result: PASS
+    blocked_mutations:
+      - external_effect_count_changed_to_1
+      - node_hash_changed
+      - accepted_handoff_node_removed
+  non_authorization:
+    result: PASS
+    evidence: R1 author closeout creates no F4 acceptance/freeze, implementation, database, Resident, runtime, production authentication, provider, service, F5/F6 or Git delivery authority
+
+author_findings_closed_before_fixing_subject_hashes:
+  - id: F4-R1-AUTHOR-01
+    issue: fact-separation table overclaimed local-admission and start-disposition meaning
+    correction: separated advisory decision, committed acceptance, current handoff authority and physical outcome
+  - id: F4-R1-AUTHOR-02
+    issue: Host authentication lacked an explicit monotonic epoch
+    correction: added Host authentication epoch and currentness/recheck bindings
+  - id: F4-R1-AUTHOR-03
+    issue: first fixture proved DAG shape but did not instantiate every exact F4 schema or accepted handoff
+    correction: replaced it with a 14-node, 22-schema-fingerprint exact materialization including the immutable handoff
+  - id: F4-R1-AUTHOR-04
+    issue: successful start disposition and handoff had a revocation race gap
+    correction: required one serializable final-recheck/disposition/handoff transaction
+  - id: F4-R1-AUTHOR-05
+    issue: human presence, secret-handle currentness, permit attestation and grant currentness were under-bound
+    correction: added exact schemas/checks, currentness evidence and handoff bindings
+  - id: F4-R1-AUTHOR-06
+    issue: execution epoch was described both as upstream-equal and newly allocated
+    correction: bound the previous epoch head and required atomic allocation of previous plus one
+  - id: F4-R1-AUTHOR-07
+    issue: duplicate JSON keys could have been normalized silently by the validator
+    correction: validator now rejects duplicate object keys before exact fixture comparison
+
+blockers: []
+majors: []
+minors: []
+
+scope_limitations:
+  - this_is_an_author_review_not_an_independent_review
+  - no_real_host_authentication_secret_provider_runtime_database_or_effect_was_used
+  - no_Rust_N_API_database_index_crypto_key_custody_or_performance_implementation_was_reviewed
+  - the_synthetic_F5_stub_is_fixture_only_and_is_not_a_production_F5_fact
+
+decision:
+  R1_author_closeout_ready: true
+  hash_bound_independent_review_eligible: true
+  F4_accepted: false
+  F4_frozen: false
+  Jenn_decision_ready: false
+  additional_amendment_required_by_author_review: false
+
+non_authorization:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  Resident_start_authorized: false
+  service_start_authorized: false
+  provider_or_host_execution_authorized: false
+  credential_change_authorized: false
+  F5_started: false
+  F6_started: false
+  commit_performed: false
+  push_performed: false
+  merge_performed: false

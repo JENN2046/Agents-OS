@@ -1,0 +1,2995 @@
+{
+  "schema_version": "agents-os.f4-r9-synthetic-nonauthority-m0a.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE",
+  "object_store": [
+    {
+      "object_key": "prospective-f3",
+      "exact_schema_name": "ProspectiveF3InterfaceRequirementV0_1R9",
+      "object": {
+        "interface_version": "agents-os.prospective-f3-interface-requirement.v0.1-r9",
+        "requirement_ref": "synthetic-f4-r9:prospective-f3:closed-effect-intent-command",
+        "owner": "F3",
+        "required_interface_kind": "CLOSED_EFFECT_INTENT_COMMAND_TYPE",
+        "required_effect_authority_atom_schema_fingerprint": "53c1fcabb38bdc084dbd27cd016ffc84bdd95c1d79ab69b59c3cdba719aa07b5",
+        "required_intake_result": "COMMITTED",
+        "status": "UNACCEPTED_DOWNSTREAM_REQUIREMENT",
+        "usable_in_runtime": false,
+        "synthetic_fixture_only": true,
+        "authority_eligible": false,
+        "canonical_fingerprint": "fa648fa36e0c3d505335dbb7390ea29ab466c44b440b22249152bacbf513b9a8"
+      }
+    },
+    {
+      "object_key": "constraint",
+      "exact_schema_name": "EffectConstraintV0_1R9",
+      "object": {
+        "interface_version": "agents-os.effect-constraint.v0.1-r9",
+        "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+        "payload_schema_fingerprint": "52589f6333084a7e39f0ff46d14b6f657abc0ba94ebb72538b81a7acbd14c81f",
+        "external_effect_allowed": false,
+        "provider_call_allowed": false,
+        "raw_secret_allowed": false,
+        "requires_human_presence": false,
+        "not_before_utc_ms": 1000,
+        "expires_at_utc_ms": 5000,
+        "canonical_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff"
+      }
+    },
+    {
+      "object_key": "atom",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "object": {
+        "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+        "atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+        "operation_registry_ref": "synthetic-f4-r9:operation-registry:v1",
+        "operation_registry_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+        "operation_kind": "F4_M0_SYNTHETIC_NOOP",
+        "resource_kind_registry_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+        "resource_kind_registry_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+        "resource_kind": "SYNTHETIC_M0_RESOURCE",
+        "resource_ref": "synthetic-f4-r9:resource:a",
+        "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+        "constraint_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+        "authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+        "canonical_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb"
+      }
+    },
+    {
+      "object_key": "scope",
+      "exact_schema_name": "F4SyntheticExactEffectScopeV0_1R9",
+      "object": {
+        "interface_version": "agents-os.f4-synthetic-exact-effect-scope.v0.1-r9",
+        "scope_ref": "synthetic-f4-r9:scope:m0-a",
+        "effect_authority_atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+        "effect_authority_atom_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb",
+        "effect_authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef"
+      }
+    },
+    {
+      "object_key": "currentness-operation_registry",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:operation_registry:8",
+        "input_kind": "OPERATION_REGISTRY",
+        "input_ref": "synthetic-f4-r9:operation-registry:v1",
+        "input_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:operation_registry:8",
+        "canonical_writer_fingerprint": "d1339cde6edbde565f43aefb75cffaf69d707bcde2c5957b8a0723e1ec88574e",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:operation_registry:8",
+        "observed_latest_input_ref": "synthetic-f4-r9:operation-registry:v1",
+        "observed_latest_input_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+        "observed_owner_head_event_sequence": 40,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 68,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "d135bcdfe30d448450227de423bc5fa229d70b89b2e421b8b08a77476a4d75d1"
+      }
+    },
+    {
+      "object_key": "currentness-resource_kind_registry",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:resource_kind_registry:9",
+        "input_kind": "RESOURCE_KIND_REGISTRY",
+        "input_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+        "input_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:resource_kind_registry:9",
+        "canonical_writer_fingerprint": "9eb6de75017fdd8eae5a8d0cb4eaafd150edfcb5b8a45f9cd181ff27d79e888a",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:resource_kind_registry:9",
+        "observed_latest_input_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+        "observed_latest_input_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+        "observed_owner_head_event_sequence": 40,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 69,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "788ae22842c9c77f72e93078450bc2f51474dc53b84a882e1d8c213da6a593a7"
+      }
+    },
+    {
+      "object_key": "currentness-effect_constraint",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:effect_constraint:10",
+        "input_kind": "EFFECT_CONSTRAINT",
+        "input_ref": "synthetic-f4-r9:constraint:no-effect",
+        "input_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:effect_constraint:10",
+        "canonical_writer_fingerprint": "cfdcace04e500f45ef7f90c2b95d8d05a608bd3320267605af4a2727dbd0eeca",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:effect_constraint:10",
+        "observed_latest_input_ref": "synthetic-f4-r9:constraint:no-effect",
+        "observed_latest_input_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+        "observed_owner_head_event_sequence": 40,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 70,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "8ca755f67bac64c1dc5aa6b0d0fdd16b8695fe7d0746b5d3cb4d903f63996bbc"
+      }
+    },
+    {
+      "object_key": "receipt-f1_task_scope",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object": {
+        "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+        "receipt_ref": "synthetic-f4-r9:receipt:f1_task_scope",
+        "receipt_revision": 1,
+        "role": "F1_TASK_SCOPE",
+        "owner_phase": "F1",
+        "owner_contract_ref": "synthetic-f4-r9:owner-contract:f1",
+        "owner_contract_fingerprint": "b32346b5c6f794b2da1ec949a2d72706de2b8b3972f154d9d4c675caac4ce585",
+        "owner_result_profile_ref": "synthetic-f4-r9:owner-result-profile:normalized-v1",
+        "owner_result_profile_fingerprint": "52b37f3f178008ed0f966010f2af948b3c04032d86124711e95a0a5e57f98304",
+        "responsibility_route": "NOT_APPLICABLE",
+        "assessment_schema_name": "SYNTHETIC_F1_TASK_SCOPE_ASSESSMENT",
+        "assessment_ref": "synthetic-f4-r9:assessment:f1_task_scope",
+        "assessment_fingerprint": "01d1fd250199f9eb822e2f4ddb855184040fa1d9d390a26c21dd63163cbffac8",
+        "subject_schema_name": "SYNTHETIC_F1_TASK_SCOPE_SUBJECT",
+        "subject_ref": "synthetic-f4-r9:subject:f1_task_scope",
+        "subject_revision": 1,
+        "subject_fingerprint": "b83ff22a7a17b6a560cd02d814847b4afc48f1e254f239256454463d089ccc8e",
+        "owner_result": "TASK_SCOPE_CURRENT",
+        "owner_head_event_sequence": 11,
+        "assessed_at_event_sequence": 21,
+        "resolved_at_watermark_event_sequence": 31,
+        "owner_currentness": "CURRENT",
+        "authority_atom_set_mode": "OWNER_ISSUED_ATOM_SET",
+        "authority_atoms": [
+          {
+            "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+            "atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+            "operation_registry_ref": "synthetic-f4-r9:operation-registry:v1",
+            "operation_registry_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+            "operation_kind": "F4_M0_SYNTHETIC_NOOP",
+            "resource_kind_registry_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+            "resource_kind_registry_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+            "resource_kind": "SYNTHETIC_M0_RESOURCE",
+            "resource_ref": "synthetic-f4-r9:resource:a",
+            "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+            "constraint_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+            "authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+            "canonical_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb"
+          }
+        ],
+        "authority_atom_set_fingerprint": "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c"
+      }
+    },
+    {
+      "object_key": "currentness-f1_task_scope",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:owner_receipt:1",
+        "input_kind": "OWNER_RECEIPT",
+        "input_ref": "synthetic-f4-r9:receipt:f1_task_scope",
+        "input_fingerprint": "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:owner_receipt:1",
+        "canonical_writer_fingerprint": "b8026260c03a599bb93c6770113e9a1f06cd421e2e0c9015d94c6accb1d1fade",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:owner_receipt:1",
+        "observed_latest_input_ref": "synthetic-f4-r9:receipt:f1_task_scope",
+        "observed_latest_input_fingerprint": "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c",
+        "observed_owner_head_event_sequence": 11,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 61,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "5f9e654f5f286b0d180bd05c40516c385dde065ee9550a65dc81e455769a9685"
+      }
+    },
+    {
+      "object_key": "receipt-f2_actor_binding",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object": {
+        "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+        "receipt_ref": "synthetic-f4-r9:receipt:f2_actor_binding",
+        "receipt_revision": 1,
+        "role": "F2_ACTOR_BINDING",
+        "owner_phase": "F2",
+        "owner_contract_ref": "synthetic-f4-r9:owner-contract:f2",
+        "owner_contract_fingerprint": "a64de85332c79b4cf889c291dc98f2b999f2b871d29e746bec2651feeb56e47a",
+        "owner_result_profile_ref": "synthetic-f4-r9:owner-result-profile:normalized-v1",
+        "owner_result_profile_fingerprint": "52b37f3f178008ed0f966010f2af948b3c04032d86124711e95a0a5e57f98304",
+        "responsibility_route": "NOT_APPLICABLE",
+        "assessment_schema_name": "SYNTHETIC_F2_ACTOR_BINDING_ASSESSMENT",
+        "assessment_ref": "synthetic-f4-r9:assessment:f2_actor_binding",
+        "assessment_fingerprint": "b1115022d384e33e228103f25600be8f365b01cff96a924fb07ad72d1d88220c",
+        "subject_schema_name": "SYNTHETIC_F2_ACTOR_BINDING_SUBJECT",
+        "subject_ref": "synthetic-f4-r9:subject:f2_actor_binding",
+        "subject_revision": 1,
+        "subject_fingerprint": "a2734493fc747a31f36e709c71ee06006a1958892ce89429bcdfb13d757197b3",
+        "owner_result": "BINDING_CURRENT",
+        "owner_head_event_sequence": 12,
+        "assessed_at_event_sequence": 22,
+        "resolved_at_watermark_event_sequence": 32,
+        "owner_currentness": "CURRENT",
+        "authority_atom_set_mode": "GATE_ONLY",
+        "authority_atoms": [],
+        "authority_atom_set_fingerprint": "baefdc963651d04e61ac608f3ac628b325141e7ae0e069b68e6c4715d29a1b6f",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "e5ec7d9e794c18a34664c52716de68f618a9e00b6feb899d34da95b360f4fadd"
+      }
+    },
+    {
+      "object_key": "currentness-f2_actor_binding",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:owner_receipt:2",
+        "input_kind": "OWNER_RECEIPT",
+        "input_ref": "synthetic-f4-r9:receipt:f2_actor_binding",
+        "input_fingerprint": "e5ec7d9e794c18a34664c52716de68f618a9e00b6feb899d34da95b360f4fadd",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:owner_receipt:2",
+        "canonical_writer_fingerprint": "57be22cab0382fddbe9e2577c2a16c8a3da33b2dad368f52401610b5a8aaa0c2",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:owner_receipt:2",
+        "observed_latest_input_ref": "synthetic-f4-r9:receipt:f2_actor_binding",
+        "observed_latest_input_fingerprint": "e5ec7d9e794c18a34664c52716de68f618a9e00b6feb899d34da95b360f4fadd",
+        "observed_owner_head_event_sequence": 12,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 62,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "ab29abfa8fcf97b4f220f8ff99359efa99aad0b5bebdd379bc7dcb0209ac271b"
+      }
+    },
+    {
+      "object_key": "receipt-f2_responsibility",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object": {
+        "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+        "receipt_ref": "synthetic-f4-r9:receipt:f2_responsibility",
+        "receipt_revision": 1,
+        "role": "F2_RESPONSIBILITY",
+        "owner_phase": "F2",
+        "owner_contract_ref": "synthetic-f4-r9:owner-contract:f2",
+        "owner_contract_fingerprint": "a64de85332c79b4cf889c291dc98f2b999f2b871d29e746bec2651feeb56e47a",
+        "owner_result_profile_ref": "synthetic-f4-r9:owner-result-profile:normalized-v1",
+        "owner_result_profile_fingerprint": "52b37f3f178008ed0f966010f2af948b3c04032d86124711e95a0a5e57f98304",
+        "responsibility_route": "DELEGATED_RESPONSIBILITY",
+        "assessment_schema_name": "SYNTHETIC_F2_RESPONSIBILITY_ASSESSMENT",
+        "assessment_ref": "synthetic-f4-r9:assessment:f2_responsibility",
+        "assessment_fingerprint": "3f36ae8c62215a08aebbcf8fd33de8aa09b9df1ca5a0d332de7989100c9bd4af",
+        "subject_schema_name": "SYNTHETIC_F2_RESPONSIBILITY_SUBJECT",
+        "subject_ref": "synthetic-f4-r9:subject:f2_responsibility",
+        "subject_revision": 1,
+        "subject_fingerprint": "9ba3b3f57e442af51b65d8c79b736b3f51408cc6204827ca074a709812950417",
+        "owner_result": "RESPONSIBILITY_CURRENT",
+        "owner_head_event_sequence": 13,
+        "assessed_at_event_sequence": 23,
+        "resolved_at_watermark_event_sequence": 33,
+        "owner_currentness": "CURRENT",
+        "authority_atom_set_mode": "OWNER_ISSUED_ATOM_SET",
+        "authority_atoms": [
+          {
+            "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+            "atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+            "operation_registry_ref": "synthetic-f4-r9:operation-registry:v1",
+            "operation_registry_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+            "operation_kind": "F4_M0_SYNTHETIC_NOOP",
+            "resource_kind_registry_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+            "resource_kind_registry_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+            "resource_kind": "SYNTHETIC_M0_RESOURCE",
+            "resource_ref": "synthetic-f4-r9:resource:a",
+            "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+            "constraint_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+            "authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+            "canonical_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb"
+          }
+        ],
+        "authority_atom_set_fingerprint": "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12"
+      }
+    },
+    {
+      "object_key": "currentness-f2_responsibility",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:owner_receipt:3",
+        "input_kind": "OWNER_RECEIPT",
+        "input_ref": "synthetic-f4-r9:receipt:f2_responsibility",
+        "input_fingerprint": "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:owner_receipt:3",
+        "canonical_writer_fingerprint": "7e0d36949c3ce195ff1470b9759dde538ddf1c5099b550410c62d3bb77b946cd",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:owner_receipt:3",
+        "observed_latest_input_ref": "synthetic-f4-r9:receipt:f2_responsibility",
+        "observed_latest_input_fingerprint": "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+        "observed_owner_head_event_sequence": 13,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 63,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "90c835a72241e56a3af4950b839d813b31726dcf31662d27347e287b80392d09"
+      }
+    },
+    {
+      "object_key": "pbl",
+      "exact_schema_name": "ProhibitedBoundaryAssessmentV0_1R9Final",
+      "object": {
+        "interface_version": "agents-os.prohibited-boundary-assessment.v0.1-r9-final",
+        "assessment_ref": "synthetic-f4-r9:pbl-assessment:m0-a",
+        "exact_effect_scope_ref": "synthetic-f4-r9:scope:m0-a",
+        "exact_effect_scope_fingerprint": "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef",
+        "prohibited_behavior_list_revision": "synthetic-f4-r9:pbl:revision:1",
+        "evaluated_rule_set_fingerprint": "253e47eb8d59d55ec628b125de6f89d7f595c9a46288d3e958082749f6131c66",
+        "matched_rule_ids": [],
+        "evaluation_result": "NO_PROHIBITED_MATCH",
+        "evaluated_at_event_sequence": 40,
+        "canonical_fingerprint": "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775"
+      }
+    },
+    {
+      "object_key": "currentness-pbl",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:pbl_assessment:4",
+        "input_kind": "PBL_ASSESSMENT",
+        "input_ref": "synthetic-f4-r9:pbl-assessment:m0-a",
+        "input_fingerprint": "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:pbl_assessment:4",
+        "canonical_writer_fingerprint": "23ce3dc7e9e84d0f4b6eb6e1d267f34d44c95a37ab1617434d6a62e44ef109fc",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:pbl_assessment:4",
+        "observed_latest_input_ref": "synthetic-f4-r9:pbl-assessment:m0-a",
+        "observed_latest_input_fingerprint": "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775",
+        "observed_owner_head_event_sequence": 40,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 64,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "13ac4c8c80f235fcb04dc4436a88a81b4dc7b8132bfb2d3feff8eb19b5292bb8"
+      }
+    },
+    {
+      "object_key": "policy",
+      "exact_schema_name": "EffectAuthorizationPolicyAssessmentV0_1R9",
+      "object": {
+        "interface_version": "agents-os.effect-authorization-policy-assessment.v0.1-r9",
+        "assessment_ref": "synthetic-f4-r9:policy-assessment:m0-a",
+        "exact_effect_scope_ref": "synthetic-f4-r9:scope:m0-a",
+        "exact_effect_scope_fingerprint": "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef",
+        "policy_bundle_revision": "synthetic-f4-r9:policy:revision:1",
+        "authorization_requirement": "EXACT_CURRENT_JENN_AUTHORIZATION_REQUIRED",
+        "assessed_at_event_sequence": 40,
+        "result": "CURRENT",
+        "canonical_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44"
+      }
+    },
+    {
+      "object_key": "currentness-policy",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:authorization_policy_assessment:5",
+        "input_kind": "AUTHORIZATION_POLICY_ASSESSMENT",
+        "input_ref": "synthetic-f4-r9:policy-assessment:m0-a",
+        "input_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:authorization_policy_assessment:5",
+        "canonical_writer_fingerprint": "21c40edb4b1e6b7284bce93c88526afac97b1e566aa1484910469251e0a97ed0",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:authorization_policy_assessment:5",
+        "observed_latest_input_ref": "synthetic-f4-r9:policy-assessment:m0-a",
+        "observed_latest_input_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+        "observed_owner_head_event_sequence": 40,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 65,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "6722f7e1737e763f0494b50d6fee658641e04ae249a1349fdee27428f0100522"
+      }
+    },
+    {
+      "object_key": "narrowing-host_capability_resource_scope",
+      "exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+      "object": {
+        "interface_version": "agents-os.effect-scope-narrowing-receipt.v0.1-r9",
+        "receipt_ref": "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+        "receipt_revision": 1,
+        "role": "HOST_CAPABILITY_RESOURCE_SCOPE",
+        "owner_kind": "HOST_TRUST_CANONICAL_WRITER",
+        "source_contract_ref": "synthetic-f4-r9:narrowing-contract:host_capability_resource_scope",
+        "source_contract_fingerprint": "b9600e37b2c62fdec862fb116935fe1b3509c5da0a56946112034c38534da2a6",
+        "source_input_ref": "synthetic-f4-r9:host-scope-assessment:m0-a",
+        "source_input_fingerprint": "10f677df4907da109cb28744674ca62cfad2fa0d513e2ff9a9e3b2c552592cea",
+        "source_result_profile_ref": "synthetic-f4-r9:narrowing-result-profile:v1",
+        "source_result_profile_fingerprint": "45c7bb917763822ea41df9375707b6a74f8f02b75d3d10d9678e084656aad587",
+        "source_result": "CURRENT_SCOPE_CONSTRAINT",
+        "authority_atoms": [
+          {
+            "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+            "atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+            "operation_registry_ref": "synthetic-f4-r9:operation-registry:v1",
+            "operation_registry_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+            "operation_kind": "F4_M0_SYNTHETIC_NOOP",
+            "resource_kind_registry_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+            "resource_kind_registry_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+            "resource_kind": "SYNTHETIC_M0_RESOURCE",
+            "resource_ref": "synthetic-f4-r9:resource:a",
+            "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+            "constraint_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+            "authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+            "canonical_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb"
+          }
+        ],
+        "authority_atom_set_fingerprint": "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+        "owner_head_event_sequence": 46,
+        "evaluated_at_event_sequence": 56,
+        "resolved_at_watermark_event_sequence": 66,
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0"
+      }
+    },
+    {
+      "object_key": "currentness-narrowing-host_capability_resource_scope",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:scope_narrowing_receipt:6",
+        "input_kind": "SCOPE_NARROWING_RECEIPT",
+        "input_ref": "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+        "input_fingerprint": "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:scope_narrowing_receipt:6",
+        "canonical_writer_fingerprint": "e568685ccdc36d3b6fee87b173badd533b40a115e845fca622e6f34fa75060ea",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:scope_narrowing_receipt:6",
+        "observed_latest_input_ref": "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+        "observed_latest_input_fingerprint": "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0",
+        "observed_owner_head_event_sequence": 46,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 66,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "2148159c8a0b988cc19dc551a161e19e832a77da2a990ab254951ed9c39a25b4"
+      }
+    },
+    {
+      "object_key": "narrowing-policy_scope",
+      "exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+      "object": {
+        "interface_version": "agents-os.effect-scope-narrowing-receipt.v0.1-r9",
+        "receipt_ref": "synthetic-f4-r9:narrowing:policy_scope",
+        "receipt_revision": 1,
+        "role": "POLICY_SCOPE",
+        "owner_kind": "POLICY_CANONICAL_WRITER",
+        "source_contract_ref": "synthetic-f4-r9:narrowing-contract:policy_scope",
+        "source_contract_fingerprint": "595b48205ec0fb510f26db84d3c71341e096602e072ed390efd31be4728a4eb3",
+        "source_input_ref": "synthetic-f4-r9:policy-assessment:m0-a",
+        "source_input_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+        "source_result_profile_ref": "synthetic-f4-r9:narrowing-result-profile:v1",
+        "source_result_profile_fingerprint": "45c7bb917763822ea41df9375707b6a74f8f02b75d3d10d9678e084656aad587",
+        "source_result": "CURRENT_SCOPE_CONSTRAINT",
+        "authority_atoms": [
+          {
+            "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+            "atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+            "operation_registry_ref": "synthetic-f4-r9:operation-registry:v1",
+            "operation_registry_fingerprint": "b5cc6ed4fb321047edf0a573c02659f45a549169986cdab00609dfd824573830",
+            "operation_kind": "F4_M0_SYNTHETIC_NOOP",
+            "resource_kind_registry_ref": "synthetic-f4-r9:resource-kind-registry:v1",
+            "resource_kind_registry_fingerprint": "c534012bd17aa9d9135f5372b6a1fc34a1fadb562256f5d080c490c89c8ab858",
+            "resource_kind": "SYNTHETIC_M0_RESOURCE",
+            "resource_ref": "synthetic-f4-r9:resource:a",
+            "constraint_ref": "synthetic-f4-r9:constraint:no-effect",
+            "constraint_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+            "authority_tuple_fingerprint": "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea",
+            "canonical_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb"
+          }
+        ],
+        "authority_atom_set_fingerprint": "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+        "owner_head_event_sequence": 47,
+        "evaluated_at_event_sequence": 57,
+        "resolved_at_watermark_event_sequence": 67,
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca"
+      }
+    },
+    {
+      "object_key": "currentness-narrowing-policy_scope",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object": {
+        "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+        "observation_ref": "synthetic-f4-r9:currentness:scope_narrowing_receipt:7",
+        "input_kind": "SCOPE_NARROWING_RECEIPT",
+        "input_ref": "synthetic-f4-r9:narrowing:policy_scope",
+        "input_fingerprint": "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca",
+        "canonical_writer_ref": "synthetic-f4-r9:canonical-writer:scope_narrowing_receipt:7",
+        "canonical_writer_fingerprint": "06219e9f98c74ba9390f9d81f4d63a6f84c44cbb3b4a75ad17e55c68b8947289",
+        "canonical_latest_pointer_ref": "synthetic-f4-r9:latest-pointer:scope_narrowing_receipt:7",
+        "observed_latest_input_ref": "synthetic-f4-r9:narrowing:policy_scope",
+        "observed_latest_input_fingerprint": "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca",
+        "observed_owner_head_event_sequence": 47,
+        "observed_latest_pointer_revision": 1,
+        "observed_at_event_sequence": 67,
+        "observation_result": "CURRENT",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "d7d5d48a43c6bf6308226c442e76a4480a39a3c8159189cf870249ce82b54bff"
+      }
+    },
+    {
+      "object_key": "intersection",
+      "exact_schema_name": "SyntheticAuthorityIntersectionAssessmentV0_1R9",
+      "object": {
+        "interface_version": "agents-os.synthetic-authority-intersection-assessment.v0.1-r9",
+        "assessment_ref": "synthetic-f4-r9:intersection:m0-a",
+        "required_scope_roles": [
+          "F1_TASK_SCOPE",
+          "F2_DELEGATION",
+          "F2_RESPONSIBILITY",
+          "F3_COMMAND",
+          "HOST_CAPABILITY_RESOURCE_SCOPE",
+          "JENN_EXACT_DECISION_SCOPE",
+          "POLICY_SCOPE"
+        ],
+        "present_scope_roles": [
+          "F1_TASK_SCOPE",
+          "F2_RESPONSIBILITY",
+          "HOST_CAPABILITY_RESOURCE_SCOPE",
+          "POLICY_SCOPE"
+        ],
+        "missing_scope_roles": [
+          "F2_DELEGATION",
+          "F3_COMMAND",
+          "JENN_EXACT_DECISION_SCOPE"
+        ],
+        "source_receipt_refs": [
+          "synthetic-f4-r9:receipt:f1_task_scope",
+          "synthetic-f4-r9:receipt:f2_responsibility",
+          "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+          "synthetic-f4-r9:narrowing:policy_scope"
+        ],
+        "source_receipt_fingerprints": [
+          "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c",
+          "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+          "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0",
+          "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca"
+        ],
+        "source_atom_set_fingerprints": [
+          "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+          "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+          "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98",
+          "e3839eb3346f1bc2345f6687f4ef9062418719a8532101a0eec754a9a9cd0d98"
+        ],
+        "intersection_tuple_fingerprints": [
+          "562958e76e612f4a1590033c5640b08b93bba5978f4e15a0a5ffe695dcdb65ea"
+        ],
+        "intersection_set_fingerprint": "b204c743f877c0de3bc8d582f4b0326ed172c19066aa710599e766cdaeab77af",
+        "result": "NOT_AUTHORITY_ELIGIBLE",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "27b6ef6f5665d8a5c0036f1eeeb70e374a3ed88f689ba661763cc6d6a25cefe1"
+      }
+    },
+    {
+      "object_key": "currentness-snapshot",
+      "exact_schema_name": "FinalAdmissionCurrentnessSnapshotV0_1R9",
+      "object": {
+        "interface_version": "agents-os.final-admission-currentness-snapshot.v0.1-r9",
+        "snapshot_ref": "synthetic-f4-r9:currentness-snapshot:m0-a",
+        "required_input_roles": [
+          "AUTHORIZATION_POLICY_ASSESSMENT",
+          "EFFECT_CONSTRAINT",
+          "F1_TASK_SCOPE",
+          "F2_ACTOR_BINDING",
+          "F2_DELEGATION",
+          "F2_RESPONSIBILITY",
+          "F3_COMMAND",
+          "HOST_CAPABILITY_RESOURCE_SCOPE",
+          "JENN_EXACT_DECISION",
+          "JENN_EXACT_DECISION_SCOPE",
+          "OPERATION_REGISTRY",
+          "PBL_ASSESSMENT",
+          "POLICY_SCOPE",
+          "RESOURCE_KIND_REGISTRY"
+        ],
+        "required_input_set_basis_refs": [
+          "synthetic-f4-r9:atom:noop:resource-a",
+          "synthetic-f4-r9:intersection:m0-a",
+          "synthetic-f4-r9:pbl-assessment:m0-a",
+          "synthetic-f4-r9:policy-assessment:m0-a",
+          "synthetic-f4-r9:receipt:f2_responsibility",
+          "synthetic-f4-r9:scope:m0-a"
+        ],
+        "required_input_set_basis_fingerprints": [
+          "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb",
+          "27b6ef6f5665d8a5c0036f1eeeb70e374a3ed88f689ba661763cc6d6a25cefe1",
+          "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775",
+          "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+          "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+          "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef"
+        ],
+        "required_input_set_basis_fingerprint": "323395760f303c84a095aaa51cfc7274a467cb29e9c608de792dfc24ac2b0feb",
+        "present_input_refs": [
+          "synthetic-f4-r9:constraint:no-effect",
+          "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+          "synthetic-f4-r9:narrowing:policy_scope",
+          "synthetic-f4-r9:operation-registry:v1",
+          "synthetic-f4-r9:pbl-assessment:m0-a",
+          "synthetic-f4-r9:policy-assessment:m0-a",
+          "synthetic-f4-r9:receipt:f1_task_scope",
+          "synthetic-f4-r9:receipt:f2_actor_binding",
+          "synthetic-f4-r9:receipt:f2_responsibility",
+          "synthetic-f4-r9:resource-kind-registry:v1"
+        ],
+        "missing_required_input_roles": [
+          "F2_DELEGATION",
+          "F3_COMMAND",
+          "JENN_EXACT_DECISION",
+          "JENN_EXACT_DECISION_SCOPE"
+        ],
+        "observation_refs": [
+          "synthetic-f4-r9:currentness:effect_constraint:10",
+          "synthetic-f4-r9:currentness:scope_narrowing_receipt:6",
+          "synthetic-f4-r9:currentness:scope_narrowing_receipt:7",
+          "synthetic-f4-r9:currentness:operation_registry:8",
+          "synthetic-f4-r9:currentness:pbl_assessment:4",
+          "synthetic-f4-r9:currentness:authorization_policy_assessment:5",
+          "synthetic-f4-r9:currentness:owner_receipt:1",
+          "synthetic-f4-r9:currentness:owner_receipt:2",
+          "synthetic-f4-r9:currentness:owner_receipt:3",
+          "synthetic-f4-r9:currentness:resource_kind_registry:9"
+        ],
+        "observation_fingerprints": [
+          "8ca755f67bac64c1dc5aa6b0d0fdd16b8695fe7d0746b5d3cb4d903f63996bbc",
+          "2148159c8a0b988cc19dc551a161e19e832a77da2a990ab254951ed9c39a25b4",
+          "d7d5d48a43c6bf6308226c442e76a4480a39a3c8159189cf870249ce82b54bff",
+          "d135bcdfe30d448450227de423bc5fa229d70b89b2e421b8b08a77476a4d75d1",
+          "13ac4c8c80f235fcb04dc4436a88a81b4dc7b8132bfb2d3feff8eb19b5292bb8",
+          "6722f7e1737e763f0494b50d6fee658641e04ae249a1349fdee27428f0100522",
+          "5f9e654f5f286b0d180bd05c40516c385dde065ee9550a65dc81e455769a9685",
+          "ab29abfa8fcf97b4f220f8ff99359efa99aad0b5bebdd379bc7dcb0209ac271b",
+          "90c835a72241e56a3af4950b839d813b31726dcf31662d27347e287b80392d09",
+          "788ae22842c9c77f72e93078450bc2f51474dc53b84a882e1d8c213da6a593a7"
+        ],
+        "observed_writer_head_event_sequences": [
+          40,
+          46,
+          47,
+          40,
+          40,
+          40,
+          11,
+          12,
+          13,
+          40
+        ],
+        "observation_set_fingerprint": "e8c166acc3db9e51a7aef5b883137bbe455d66d45198b19746cac3197a62dd51",
+        "final_transaction_ref": "synthetic-f4-r9:final-transaction:m0-a",
+        "final_transaction_fingerprint": "072b63f6b6dcb14c254c71f458f4c52836d4a0d3b05fbaf4c60b5801d80e4180",
+        "transaction_binding_rule": "EXACT_SAME_TRANSACTION",
+        "final_snapshot_event_sequence": 100,
+        "snapshot_result": "NOT_AUTHORITY_ELIGIBLE",
+        "environment": "SYNTHETIC_TEST",
+        "authority_eligible": false,
+        "canonical_fingerprint": "5d61084232c602f9c391ec73c345c6408e82b841a32e9228887f51306ea53352"
+      }
+    },
+    {
+      "object_key": "witness",
+      "exact_schema_name": "F4SyntheticHandoffConstructibilityWitnessV0_1R9",
+      "object": {
+        "interface_version": "agents-os.f4-synthetic-handoff-constructibility-witness.v0.1-r9",
+        "witness_ref": "synthetic-f4-r9:witness:m0-a",
+        "witness_namespace": "synthetic-f4-r9",
+        "environment": "SYNTHETIC_TEST",
+        "fingerprint_domain": "agents-os.f4-r9-synthetic-witness.v0.1",
+        "prospective_f3_requirement_ref": "synthetic-f4-r9:prospective-f3:closed-effect-intent-command",
+        "prospective_f3_requirement_fingerprint": "fa648fa36e0c3d505335dbb7390ea29ab466c44b440b22249152bacbf513b9a8",
+        "hypothetical_effect_atom_ref": "synthetic-f4-r9:atom:noop:resource-a",
+        "hypothetical_effect_atom_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb",
+        "intersection_assessment_ref": "synthetic-f4-r9:intersection:m0-a",
+        "intersection_assessment_fingerprint": "27b6ef6f5665d8a5c0036f1eeeb70e374a3ed88f689ba661763cc6d6a25cefe1",
+        "currentness_snapshot_ref": "synthetic-f4-r9:currentness-snapshot:m0-a",
+        "currentness_snapshot_fingerprint": "5d61084232c602f9c391ec73c345c6408e82b841a32e9228887f51306ea53352",
+        "reducer_trace_fingerprint": "1afb6e34edb52be69650ccd940cee940586410c4566a7cbdb4624eed78ffb9f7",
+        "claim_state": "FIXTURE_ONLY",
+        "authority_eligible": false,
+        "runtime_consumable": false,
+        "recovery_importable": false,
+        "physical_effect_boundary": "NOT_EXECUTABLE",
+        "terminal_outcome": "NOT_EXECUTED",
+        "external_effect_count": 0,
+        "provider_call_count": 0,
+        "raw_secret_count": 0,
+        "canonical_fingerprint": "8d64117ff0b28d1817e84e6e2400be786baa247b7eedfed8847467e1cfb77353"
+      }
+    }
+  ],
+  "canonical_symbol_table": {
+    "interface_version": "agents-os.cross-object-symbol-table.v0.1-r9",
+    "bindings": [
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:atom:noop:resource-a",
+        "target_exact_schema_name": "EffectAuthorityAtomV0_1R9",
+        "target_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb",
+        "target_inventory_pointer": "/object_store/2/object",
+        "canonical_fingerprint": "35514b723170616af97889e789852aa2a5cda5f3d39576a02fa782978191fdfc"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:constraint:no-effect",
+        "target_exact_schema_name": "EffectConstraintV0_1R9",
+        "target_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+        "target_inventory_pointer": "/object_store/1/object",
+        "canonical_fingerprint": "ffe95fae26a87cb32243b8ed0845ead3bf7c0d255d84e1ebab16c89d538350ef"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness-snapshot:m0-a",
+        "target_exact_schema_name": "FinalAdmissionCurrentnessSnapshotV0_1R9",
+        "target_fingerprint": "5d61084232c602f9c391ec73c345c6408e82b841a32e9228887f51306ea53352",
+        "target_inventory_pointer": "/object_store/22/object",
+        "canonical_fingerprint": "81f58038932d89c78c3564e1859b873ac3101760b3637b777e9d5ce639b56a80"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:authorization_policy_assessment:5",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "6722f7e1737e763f0494b50d6fee658641e04ae249a1349fdee27428f0100522",
+        "target_inventory_pointer": "/object_store/16/object",
+        "canonical_fingerprint": "d63902b6de0d3571e2779001155487e1d528327f4795a0a1d5a54e334732ef6a"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:effect_constraint:10",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "8ca755f67bac64c1dc5aa6b0d0fdd16b8695fe7d0746b5d3cb4d903f63996bbc",
+        "target_inventory_pointer": "/object_store/6/object",
+        "canonical_fingerprint": "7c469116c51da697bda9545966baf3a754ffce0500516d4e114d2de7d5f9ea3f"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:operation_registry:8",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "d135bcdfe30d448450227de423bc5fa229d70b89b2e421b8b08a77476a4d75d1",
+        "target_inventory_pointer": "/object_store/4/object",
+        "canonical_fingerprint": "a6b3aa38a6dd6eb0debe79c78956265818b37729f87681f1406a8de09c792742"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:owner_receipt:1",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "5f9e654f5f286b0d180bd05c40516c385dde065ee9550a65dc81e455769a9685",
+        "target_inventory_pointer": "/object_store/8/object",
+        "canonical_fingerprint": "0e907f3520e1d0b0b31ede338b3e9c69e913c9972e44cfb3c1074160498ab818"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:owner_receipt:2",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "ab29abfa8fcf97b4f220f8ff99359efa99aad0b5bebdd379bc7dcb0209ac271b",
+        "target_inventory_pointer": "/object_store/10/object",
+        "canonical_fingerprint": "54c78066c864bbc6bba050ee4263d959f075d5dee65ce90de71195d7363f10b3"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:owner_receipt:3",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "90c835a72241e56a3af4950b839d813b31726dcf31662d27347e287b80392d09",
+        "target_inventory_pointer": "/object_store/12/object",
+        "canonical_fingerprint": "8341dbeb4905e239f782840f33db2d7db6cf220fa1ecc633805f8d5a347357d4"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:pbl_assessment:4",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "13ac4c8c80f235fcb04dc4436a88a81b4dc7b8132bfb2d3feff8eb19b5292bb8",
+        "target_inventory_pointer": "/object_store/14/object",
+        "canonical_fingerprint": "9836ab4ab7fb9ed9fa119ab2bb8fe81a47c33e1445c8c7581675ce2a6eda3f74"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:resource_kind_registry:9",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "788ae22842c9c77f72e93078450bc2f51474dc53b84a882e1d8c213da6a593a7",
+        "target_inventory_pointer": "/object_store/5/object",
+        "canonical_fingerprint": "275baf33f01ee54ca5e326fad34749b0d32452b11ef038ad3ba21e6ce98fdd9b"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:scope_narrowing_receipt:6",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "2148159c8a0b988cc19dc551a161e19e832a77da2a990ab254951ed9c39a25b4",
+        "target_inventory_pointer": "/object_store/18/object",
+        "canonical_fingerprint": "fa5e2d425dcc5e8a045e71337521279df3bd2f9d62b451655dc003126bb1c8b1"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:currentness:scope_narrowing_receipt:7",
+        "target_exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+        "target_fingerprint": "d7d5d48a43c6bf6308226c442e76a4480a39a3c8159189cf870249ce82b54bff",
+        "target_inventory_pointer": "/object_store/20/object",
+        "canonical_fingerprint": "a42527323816134a9b5ce6952fb27b7f8737a5a5194125dbcbd8bc93f54e35b6"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:intersection:m0-a",
+        "target_exact_schema_name": "SyntheticAuthorityIntersectionAssessmentV0_1R9",
+        "target_fingerprint": "27b6ef6f5665d8a5c0036f1eeeb70e374a3ed88f689ba661763cc6d6a25cefe1",
+        "target_inventory_pointer": "/object_store/21/object",
+        "canonical_fingerprint": "ea2f0df01a0a9df262e2e9a2e7d991a58ec9502be6703a4ea4e8b0dbbec71781"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:narrowing:host_capability_resource_scope",
+        "target_exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+        "target_fingerprint": "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0",
+        "target_inventory_pointer": "/object_store/17/object",
+        "canonical_fingerprint": "733003efa1857d8a487ddf6cb147a4fe1ecbf4aef24b7455ccf993df34a1622e"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:narrowing:policy_scope",
+        "target_exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+        "target_fingerprint": "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca",
+        "target_inventory_pointer": "/object_store/19/object",
+        "canonical_fingerprint": "ce9692533536a1f814f395aa349a2f966790ecfa9148b59b3b7431211c932187"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:pbl-assessment:m0-a",
+        "target_exact_schema_name": "ProhibitedBoundaryAssessmentV0_1R9Final",
+        "target_fingerprint": "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775",
+        "target_inventory_pointer": "/object_store/13/object",
+        "canonical_fingerprint": "a28f0df35a4a9956336d60afc35728d8931cc9a9e76ffdd788553ec6a7f5f010"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:policy-assessment:m0-a",
+        "target_exact_schema_name": "EffectAuthorizationPolicyAssessmentV0_1R9",
+        "target_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+        "target_inventory_pointer": "/object_store/15/object",
+        "canonical_fingerprint": "aded27315bab9699787545b094bfb50e72752bb9eeb896d5c19518c980018ebb"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:prospective-f3:closed-effect-intent-command",
+        "target_exact_schema_name": "ProspectiveF3InterfaceRequirementV0_1R9",
+        "target_fingerprint": "fa648fa36e0c3d505335dbb7390ea29ab466c44b440b22249152bacbf513b9a8",
+        "target_inventory_pointer": "/object_store/0/object",
+        "canonical_fingerprint": "dbcc281f98e61b3269a5c8c12b01fcae6feea5c54b154fd20573e36bf1424043"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:receipt:f1_task_scope",
+        "target_exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+        "target_fingerprint": "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c",
+        "target_inventory_pointer": "/object_store/7/object",
+        "canonical_fingerprint": "bf1d82c9b7c81da6a0ad92e30a9f0ceeeab39f12c02c2fe22a2aec77a109480e"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:receipt:f2_actor_binding",
+        "target_exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+        "target_fingerprint": "e5ec7d9e794c18a34664c52716de68f618a9e00b6feb899d34da95b360f4fadd",
+        "target_inventory_pointer": "/object_store/9/object",
+        "canonical_fingerprint": "d71ef3a2d929f36201c2651287f98ca16f39c2c709aaab4f13bc86d114df566a"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:receipt:f2_responsibility",
+        "target_exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+        "target_fingerprint": "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+        "target_inventory_pointer": "/object_store/11/object",
+        "canonical_fingerprint": "47a195f5addddd6099387533baf0e57f1481aaac24f49cde7e2ed5dfcff0c9bd"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:scope:m0-a",
+        "target_exact_schema_name": "F4SyntheticExactEffectScopeV0_1R9",
+        "target_fingerprint": "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef",
+        "target_inventory_pointer": "/object_store/3/object",
+        "canonical_fingerprint": "eced01accdcc802a8256180a993b1f0ff5bdb52be121811065f0b52276d2f72a"
+      },
+      {
+        "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+        "symbol_ref": "synthetic-f4-r9:witness:m0-a",
+        "target_exact_schema_name": "F4SyntheticHandoffConstructibilityWitnessV0_1R9",
+        "target_fingerprint": "8d64117ff0b28d1817e84e6e2400be786baa247b7eedfed8847467e1cfb77353",
+        "target_inventory_pointer": "/object_store/23/object",
+        "canonical_fingerprint": "5ae2500a83f59d8dbc45655c9f26a7765c011f0c735bd1217b9e576ddd035df2"
+      }
+    ],
+    "binding_set_fingerprint": "1bf268a4d1f6049fede2693c19f0e861438168a7625d60700b80e576ea3ccb6e",
+    "canonical_fingerprint": "0e55e4107e5a1628df86b422dcd137f654b2fedca63ed869f3a4843407ccafed"
+  },
+  "nodes": [
+    {
+      "ordinal": 1,
+      "kind": "ProspectiveF3InterfaceRequirementV0_1R9",
+      "object_pointer": "/object_store/0/object",
+      "object_fingerprint": "fa648fa36e0c3d505335dbb7390ea29ab466c44b440b22249152bacbf513b9a8",
+      "depends_on_ordinals": [],
+      "node_fingerprint": "c2c19856a3b69688c659180a61adfa053851408168188e4fcfce33d2e2c55a91"
+    },
+    {
+      "ordinal": 2,
+      "kind": "EffectConstraintV0_1R9",
+      "object_pointer": "/object_store/1/object",
+      "object_fingerprint": "ef9d31bf79a5d084eb0d65969a5981fd12e38acc9d327218673be3ff6aed11ff",
+      "depends_on_ordinals": [],
+      "node_fingerprint": "6f8f664400c48271581bbe8ee005a6d26c0567d3202f990f2a7a9aad1ea9189b"
+    },
+    {
+      "ordinal": 3,
+      "kind": "EffectAuthorityAtomV0_1R9",
+      "object_pointer": "/object_store/2/object",
+      "object_fingerprint": "b4b673030f4825ebb01aeeb0737c65cf3197f8dd0fff01f951e60b41e3c01adb",
+      "depends_on_ordinals": [
+        2
+      ],
+      "node_fingerprint": "735cb3e1ce6cfa7b8187ca567923cf0e3d46e41da588c93e94f8f5a4d8723128"
+    },
+    {
+      "ordinal": 4,
+      "kind": "F4SyntheticExactEffectScopeV0_1R9",
+      "object_pointer": "/object_store/3/object",
+      "object_fingerprint": "349116e2194043f464b5b7729649298d9d2cdd48474dfc31779f4158f35caeef",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "7b91d5893e10623cefb217817aeb0ad24274187779e686dd15aab23b852ebda3"
+    },
+    {
+      "ordinal": 5,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/4/object",
+      "object_fingerprint": "d135bcdfe30d448450227de423bc5fa229d70b89b2e421b8b08a77476a4d75d1",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "9f5bb5dc27f686595ddffbb75c8cc9f0205c0ac8fe6eaf3feae11f7cdbf1a187"
+    },
+    {
+      "ordinal": 6,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/5/object",
+      "object_fingerprint": "788ae22842c9c77f72e93078450bc2f51474dc53b84a882e1d8c213da6a593a7",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "59977b82a330b4d74c8d3b0775ff6f826a2cd39bec5e3dd205cddc3ae53c7305"
+    },
+    {
+      "ordinal": 7,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/6/object",
+      "object_fingerprint": "8ca755f67bac64c1dc5aa6b0d0fdd16b8695fe7d0746b5d3cb4d903f63996bbc",
+      "depends_on_ordinals": [
+        2
+      ],
+      "node_fingerprint": "583246f01509f6a77d43f0bb83027c2c7ef1c4264a3d2b18229e493f4561ba39"
+    },
+    {
+      "ordinal": 8,
+      "kind": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object_pointer": "/object_store/7/object",
+      "object_fingerprint": "6dc097b20103632c7c0792a91843e040a911cfd4ae881991f72fd8fa58f4895c",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "bb33a04b741289ddc761ded3a4a16987f9e764fc3bcd7a7dc44b7a7437cd293d"
+    },
+    {
+      "ordinal": 9,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/8/object",
+      "object_fingerprint": "5f9e654f5f286b0d180bd05c40516c385dde065ee9550a65dc81e455769a9685",
+      "depends_on_ordinals": [
+        8
+      ],
+      "node_fingerprint": "896e93eb4d1c70a8af6866a22e8830655e636143accc883b56a6396c63ca7d4d"
+    },
+    {
+      "ordinal": 10,
+      "kind": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object_pointer": "/object_store/9/object",
+      "object_fingerprint": "e5ec7d9e794c18a34664c52716de68f618a9e00b6feb899d34da95b360f4fadd",
+      "depends_on_ordinals": [],
+      "node_fingerprint": "4acfd89dc415fe24f4236c347c178ee0fe008efdcd5e8673669f113d855a904f"
+    },
+    {
+      "ordinal": 11,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/10/object",
+      "object_fingerprint": "ab29abfa8fcf97b4f220f8ff99359efa99aad0b5bebdd379bc7dcb0209ac271b",
+      "depends_on_ordinals": [
+        10
+      ],
+      "node_fingerprint": "1febc24f6070fa3ec53cfdc6696d09132a4d92a8087187db95e2b1679c0b6b14"
+    },
+    {
+      "ordinal": 12,
+      "kind": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "object_pointer": "/object_store/11/object",
+      "object_fingerprint": "88b8a41b8e1d5d9f0e8bbde8764840e12430b34a18223a33a92fc7dc1c604a12",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "ce85aa595d124b82208166cea607a44d11105c0a4b94423db830081b2652614c"
+    },
+    {
+      "ordinal": 13,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/12/object",
+      "object_fingerprint": "90c835a72241e56a3af4950b839d813b31726dcf31662d27347e287b80392d09",
+      "depends_on_ordinals": [
+        12
+      ],
+      "node_fingerprint": "740380d2fa0559ce47e7004ed86e904837be8929cb57a8f1e9eddd9c973e1eec"
+    },
+    {
+      "ordinal": 14,
+      "kind": "ProhibitedBoundaryAssessmentV0_1R9Final",
+      "object_pointer": "/object_store/13/object",
+      "object_fingerprint": "7df0080bf90fec927012a2d1ba36803c18cd3536d6d3d736d264583c01b47775",
+      "depends_on_ordinals": [
+        4
+      ],
+      "node_fingerprint": "9d403bea4dcbf7276a19c9dfb0190dd95f2a646db5e06ef4c437782fff22b19b"
+    },
+    {
+      "ordinal": 15,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/14/object",
+      "object_fingerprint": "13ac4c8c80f235fcb04dc4436a88a81b4dc7b8132bfb2d3feff8eb19b5292bb8",
+      "depends_on_ordinals": [
+        14
+      ],
+      "node_fingerprint": "a88e1abd554a0956bb39e6294c9f5bdef32f0e30a60f1dba455aa7a33939309e"
+    },
+    {
+      "ordinal": 16,
+      "kind": "EffectAuthorizationPolicyAssessmentV0_1R9",
+      "object_pointer": "/object_store/15/object",
+      "object_fingerprint": "22f1e864c6213f22d77ee2225077c4878bb526f2644793a024c394143a774a44",
+      "depends_on_ordinals": [
+        4
+      ],
+      "node_fingerprint": "949fe460f90602273a87911cffb00da32b7bfe1f5a8ccc565f4db630514ce245"
+    },
+    {
+      "ordinal": 17,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/16/object",
+      "object_fingerprint": "6722f7e1737e763f0494b50d6fee658641e04ae249a1349fdee27428f0100522",
+      "depends_on_ordinals": [
+        16
+      ],
+      "node_fingerprint": "b711ba25cb1bf47af8b03aef1679db94716a754638c97661de4fb60cae8815f3"
+    },
+    {
+      "ordinal": 18,
+      "kind": "EffectScopeNarrowingReceiptV0_1R9",
+      "object_pointer": "/object_store/17/object",
+      "object_fingerprint": "169f30dd9e6d2800e1b2bf2de4745ea2f5a905c48d602e6f0ed23aa283d0cba0",
+      "depends_on_ordinals": [
+        3
+      ],
+      "node_fingerprint": "f4c27b2cccbdab9d8b0a166f61686d1c21108d925dc699d5e613ce4f7ba61dad"
+    },
+    {
+      "ordinal": 19,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/18/object",
+      "object_fingerprint": "2148159c8a0b988cc19dc551a161e19e832a77da2a990ab254951ed9c39a25b4",
+      "depends_on_ordinals": [
+        18
+      ],
+      "node_fingerprint": "6815561b33ccc241682fbd3f9a42580b5d7c22f9bbb22ac9519b21a067d6c3fb"
+    },
+    {
+      "ordinal": 20,
+      "kind": "EffectScopeNarrowingReceiptV0_1R9",
+      "object_pointer": "/object_store/19/object",
+      "object_fingerprint": "03ed08cfed603ca44d1ae9b6769f3166c96856e020073badb399090c97f564ca",
+      "depends_on_ordinals": [
+        3,
+        16
+      ],
+      "node_fingerprint": "78255ab1e37f23df17dd2e38a68a4942544f29068d5f0ce90b5cb17cf9cdec16"
+    },
+    {
+      "ordinal": 21,
+      "kind": "AuthorityInputCurrentnessObservationV0_1R9",
+      "object_pointer": "/object_store/20/object",
+      "object_fingerprint": "d7d5d48a43c6bf6308226c442e76a4480a39a3c8159189cf870249ce82b54bff",
+      "depends_on_ordinals": [
+        20
+      ],
+      "node_fingerprint": "250974cf640115f9773bfe3f4c05e1e47454dc57fb08e37e9cc753bc356e2ab7"
+    },
+    {
+      "ordinal": 22,
+      "kind": "SyntheticAuthorityIntersectionAssessmentV0_1R9",
+      "object_pointer": "/object_store/21/object",
+      "object_fingerprint": "27b6ef6f5665d8a5c0036f1eeeb70e374a3ed88f689ba661763cc6d6a25cefe1",
+      "depends_on_ordinals": [
+        8,
+        12,
+        18,
+        20
+      ],
+      "node_fingerprint": "856c42244939edde50cb62987844c982ade267a96691b39e5afb42fdfcc23867"
+    },
+    {
+      "ordinal": 23,
+      "kind": "FinalAdmissionCurrentnessSnapshotV0_1R9",
+      "object_pointer": "/object_store/22/object",
+      "object_fingerprint": "5d61084232c602f9c391ec73c345c6408e82b841a32e9228887f51306ea53352",
+      "depends_on_ordinals": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        21,
+        22
+      ],
+      "node_fingerprint": "085f7284586e4da7fb49a38de6bbd05d4b768465921d139e5316c044c289e0c3"
+    },
+    {
+      "ordinal": 24,
+      "kind": "F4SyntheticHandoffConstructibilityWitnessV0_1R9",
+      "object_pointer": "/object_store/23/object",
+      "object_fingerprint": "8d64117ff0b28d1817e84e6e2400be786baa247b7eedfed8847467e1cfb77353",
+      "depends_on_ordinals": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "node_fingerprint": "7a32b4247bf1165936c9a6ca132a1b275eb70d9aa754891843075b47d6fe7b09"
+    }
+  ],
+  "schema_inventory": [
+    {
+      "json_pointer": "/",
+      "exact_schema_name": "F4R9SyntheticNonAuthorityRoot",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "schema_version",
+        "contract_version",
+        "object_store",
+        "canonical_symbol_table",
+        "nodes",
+        "schema_inventory",
+        "assertions"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/0",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/0/object",
+      "exact_schema_name": "ProspectiveF3InterfaceRequirementV0_1R9",
+      "interface_version": "agents-os.prospective-f3-interface-requirement.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "requirement_ref",
+        "owner",
+        "required_interface_kind",
+        "required_effect_authority_atom_schema_fingerprint",
+        "required_intake_result",
+        "status",
+        "usable_in_runtime",
+        "synthetic_fixture_only",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/1",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/1/object",
+      "exact_schema_name": "EffectConstraintV0_1R9",
+      "interface_version": "agents-os.effect-constraint.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "constraint_ref",
+        "payload_schema_fingerprint",
+        "external_effect_allowed",
+        "provider_call_allowed",
+        "raw_secret_allowed",
+        "requires_human_presence",
+        "not_before_utc_ms",
+        "expires_at_utc_ms",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/2",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/2/object",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "atom_ref",
+        "operation_registry_ref",
+        "operation_registry_fingerprint",
+        "operation_kind",
+        "resource_kind_registry_ref",
+        "resource_kind_registry_fingerprint",
+        "resource_kind",
+        "resource_ref",
+        "constraint_ref",
+        "constraint_fingerprint",
+        "authority_tuple_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/3",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/3/object",
+      "exact_schema_name": "F4SyntheticExactEffectScopeV0_1R9",
+      "interface_version": "agents-os.f4-synthetic-exact-effect-scope.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "scope_ref",
+        "effect_authority_atom_ref",
+        "effect_authority_atom_fingerprint",
+        "effect_authority_tuple_fingerprint",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/4",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/4/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/5",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/5/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/6",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/6/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/7",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/7/object",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "receipt_ref",
+        "receipt_revision",
+        "role",
+        "owner_phase",
+        "owner_contract_ref",
+        "owner_contract_fingerprint",
+        "owner_result_profile_ref",
+        "owner_result_profile_fingerprint",
+        "responsibility_route",
+        "assessment_schema_name",
+        "assessment_ref",
+        "assessment_fingerprint",
+        "subject_schema_name",
+        "subject_ref",
+        "subject_revision",
+        "subject_fingerprint",
+        "owner_result",
+        "owner_head_event_sequence",
+        "assessed_at_event_sequence",
+        "resolved_at_watermark_event_sequence",
+        "owner_currentness",
+        "authority_atom_set_mode",
+        "authority_atoms",
+        "authority_atom_set_fingerprint",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/7/object/authority_atoms/0",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "atom_ref",
+        "operation_registry_ref",
+        "operation_registry_fingerprint",
+        "operation_kind",
+        "resource_kind_registry_ref",
+        "resource_kind_registry_fingerprint",
+        "resource_kind",
+        "resource_ref",
+        "constraint_ref",
+        "constraint_fingerprint",
+        "authority_tuple_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/8",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/8/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/9",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/9/object",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "receipt_ref",
+        "receipt_revision",
+        "role",
+        "owner_phase",
+        "owner_contract_ref",
+        "owner_contract_fingerprint",
+        "owner_result_profile_ref",
+        "owner_result_profile_fingerprint",
+        "responsibility_route",
+        "assessment_schema_name",
+        "assessment_ref",
+        "assessment_fingerprint",
+        "subject_schema_name",
+        "subject_ref",
+        "subject_revision",
+        "subject_fingerprint",
+        "owner_result",
+        "owner_head_event_sequence",
+        "assessed_at_event_sequence",
+        "resolved_at_watermark_event_sequence",
+        "owner_currentness",
+        "authority_atom_set_mode",
+        "authority_atoms",
+        "authority_atom_set_fingerprint",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/10",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/10/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/11",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/11/object",
+      "exact_schema_name": "UpstreamAuthorityAssessmentReceiptV0_1R9",
+      "interface_version": "agents-os.upstream-authority-assessment-receipt.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "receipt_ref",
+        "receipt_revision",
+        "role",
+        "owner_phase",
+        "owner_contract_ref",
+        "owner_contract_fingerprint",
+        "owner_result_profile_ref",
+        "owner_result_profile_fingerprint",
+        "responsibility_route",
+        "assessment_schema_name",
+        "assessment_ref",
+        "assessment_fingerprint",
+        "subject_schema_name",
+        "subject_ref",
+        "subject_revision",
+        "subject_fingerprint",
+        "owner_result",
+        "owner_head_event_sequence",
+        "assessed_at_event_sequence",
+        "resolved_at_watermark_event_sequence",
+        "owner_currentness",
+        "authority_atom_set_mode",
+        "authority_atoms",
+        "authority_atom_set_fingerprint",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/11/object/authority_atoms/0",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "atom_ref",
+        "operation_registry_ref",
+        "operation_registry_fingerprint",
+        "operation_kind",
+        "resource_kind_registry_ref",
+        "resource_kind_registry_fingerprint",
+        "resource_kind",
+        "resource_ref",
+        "constraint_ref",
+        "constraint_fingerprint",
+        "authority_tuple_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/12",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/12/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/13",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/13/object",
+      "exact_schema_name": "ProhibitedBoundaryAssessmentV0_1R9Final",
+      "interface_version": "agents-os.prohibited-boundary-assessment.v0.1-r9-final",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "assessment_ref",
+        "exact_effect_scope_ref",
+        "exact_effect_scope_fingerprint",
+        "prohibited_behavior_list_revision",
+        "evaluated_rule_set_fingerprint",
+        "matched_rule_ids",
+        "evaluation_result",
+        "evaluated_at_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/14",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/14/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/15",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/15/object",
+      "exact_schema_name": "EffectAuthorizationPolicyAssessmentV0_1R9",
+      "interface_version": "agents-os.effect-authorization-policy-assessment.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "assessment_ref",
+        "exact_effect_scope_ref",
+        "exact_effect_scope_fingerprint",
+        "policy_bundle_revision",
+        "authorization_requirement",
+        "assessed_at_event_sequence",
+        "result",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/16",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/16/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/17",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/17/object",
+      "exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+      "interface_version": "agents-os.effect-scope-narrowing-receipt.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "receipt_ref",
+        "receipt_revision",
+        "role",
+        "owner_kind",
+        "source_contract_ref",
+        "source_contract_fingerprint",
+        "source_input_ref",
+        "source_input_fingerprint",
+        "source_result_profile_ref",
+        "source_result_profile_fingerprint",
+        "source_result",
+        "authority_atoms",
+        "authority_atom_set_fingerprint",
+        "owner_head_event_sequence",
+        "evaluated_at_event_sequence",
+        "resolved_at_watermark_event_sequence",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/17/object/authority_atoms/0",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "atom_ref",
+        "operation_registry_ref",
+        "operation_registry_fingerprint",
+        "operation_kind",
+        "resource_kind_registry_ref",
+        "resource_kind_registry_fingerprint",
+        "resource_kind",
+        "resource_ref",
+        "constraint_ref",
+        "constraint_fingerprint",
+        "authority_tuple_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/18",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/18/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/19",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/19/object",
+      "exact_schema_name": "EffectScopeNarrowingReceiptV0_1R9",
+      "interface_version": "agents-os.effect-scope-narrowing-receipt.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "receipt_ref",
+        "receipt_revision",
+        "role",
+        "owner_kind",
+        "source_contract_ref",
+        "source_contract_fingerprint",
+        "source_input_ref",
+        "source_input_fingerprint",
+        "source_result_profile_ref",
+        "source_result_profile_fingerprint",
+        "source_result",
+        "authority_atoms",
+        "authority_atom_set_fingerprint",
+        "owner_head_event_sequence",
+        "evaluated_at_event_sequence",
+        "resolved_at_watermark_event_sequence",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/19/object/authority_atoms/0",
+      "exact_schema_name": "EffectAuthorityAtomV0_1R9",
+      "interface_version": "agents-os.effect-authority-atom.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "atom_ref",
+        "operation_registry_ref",
+        "operation_registry_fingerprint",
+        "operation_kind",
+        "resource_kind_registry_ref",
+        "resource_kind_registry_fingerprint",
+        "resource_kind",
+        "resource_ref",
+        "constraint_ref",
+        "constraint_fingerprint",
+        "authority_tuple_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/20",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/20/object",
+      "exact_schema_name": "AuthorityInputCurrentnessObservationV0_1R9",
+      "interface_version": "agents-os.authority-input-currentness-observation.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "observation_ref",
+        "input_kind",
+        "input_ref",
+        "input_fingerprint",
+        "canonical_writer_ref",
+        "canonical_writer_fingerprint",
+        "canonical_latest_pointer_ref",
+        "observed_latest_input_ref",
+        "observed_latest_input_fingerprint",
+        "observed_owner_head_event_sequence",
+        "observed_latest_pointer_revision",
+        "observed_at_event_sequence",
+        "observation_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/21",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/21/object",
+      "exact_schema_name": "SyntheticAuthorityIntersectionAssessmentV0_1R9",
+      "interface_version": "agents-os.synthetic-authority-intersection-assessment.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "assessment_ref",
+        "required_scope_roles",
+        "present_scope_roles",
+        "missing_scope_roles",
+        "source_receipt_refs",
+        "source_receipt_fingerprints",
+        "source_atom_set_fingerprints",
+        "intersection_tuple_fingerprints",
+        "intersection_set_fingerprint",
+        "result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/22",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/22/object",
+      "exact_schema_name": "FinalAdmissionCurrentnessSnapshotV0_1R9",
+      "interface_version": "agents-os.final-admission-currentness-snapshot.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "snapshot_ref",
+        "required_input_roles",
+        "required_input_set_basis_refs",
+        "required_input_set_basis_fingerprints",
+        "required_input_set_basis_fingerprint",
+        "present_input_refs",
+        "missing_required_input_roles",
+        "observation_refs",
+        "observation_fingerprints",
+        "observed_writer_head_event_sequences",
+        "observation_set_fingerprint",
+        "final_transaction_ref",
+        "final_transaction_fingerprint",
+        "transaction_binding_rule",
+        "final_snapshot_event_sequence",
+        "snapshot_result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/object_store/23",
+      "exact_schema_name": "ObjectStoreEntryV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "object_key",
+        "exact_schema_name",
+        "object"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/object_store/23/object",
+      "exact_schema_name": "F4SyntheticHandoffConstructibilityWitnessV0_1R9",
+      "interface_version": "agents-os.f4-synthetic-handoff-constructibility-witness.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "witness_ref",
+        "witness_namespace",
+        "environment",
+        "fingerprint_domain",
+        "prospective_f3_requirement_ref",
+        "prospective_f3_requirement_fingerprint",
+        "hypothetical_effect_atom_ref",
+        "hypothetical_effect_atom_fingerprint",
+        "intersection_assessment_ref",
+        "intersection_assessment_fingerprint",
+        "currentness_snapshot_ref",
+        "currentness_snapshot_fingerprint",
+        "reducer_trace_fingerprint",
+        "claim_state",
+        "authority_eligible",
+        "runtime_consumable",
+        "recovery_importable",
+        "physical_effect_boundary",
+        "terminal_outcome",
+        "external_effect_count",
+        "provider_call_count",
+        "raw_secret_count",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "SECTION10"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table",
+      "exact_schema_name": "CrossObjectSymbolTableV0_1R9",
+      "interface_version": "agents-os.cross-object-symbol-table.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "bindings",
+        "binding_set_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/0",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/1",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/2",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/3",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/4",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/5",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/6",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/7",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/8",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/9",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/10",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/11",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/12",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/13",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/14",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/15",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/16",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/17",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/18",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/19",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/20",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/21",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/22",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/canonical_symbol_table/bindings/23",
+      "exact_schema_name": "CanonicalSymbolBindingV0_1R9",
+      "interface_version": "agents-os.canonical-symbol-binding.v0.1-r9",
+      "fingerprint_field": "canonical_fingerprint",
+      "ordered_field_names": [
+        "interface_version",
+        "symbol_ref",
+        "target_exact_schema_name",
+        "target_fingerprint",
+        "target_inventory_pointer",
+        "canonical_fingerprint"
+      ],
+      "registry_kind": "NORMATIVE"
+    },
+    {
+      "json_pointer": "/nodes/0",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/1",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/2",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/3",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/4",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/5",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/6",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/7",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/8",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/9",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/10",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/11",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/12",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/13",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/14",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/15",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/16",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/17",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/18",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/19",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/20",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/21",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/22",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/nodes/23",
+      "exact_schema_name": "EvidenceNodeV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": "node_fingerprint",
+      "ordered_field_names": [
+        "ordinal",
+        "kind",
+        "object_pointer",
+        "object_fingerprint",
+        "depends_on_ordinals",
+        "node_fingerprint"
+      ],
+      "registry_kind": "WRAPPER"
+    },
+    {
+      "json_pointer": "/assertions",
+      "exact_schema_name": "SyntheticAssertionsV0_1R9",
+      "interface_version": null,
+      "fingerprint_field": null,
+      "ordered_field_names": [
+        "accepted_handoff_count",
+        "synthetic_constructibility_witness_count",
+        "runtime_consumable_count",
+        "external_effect_count",
+        "provider_call_count",
+        "raw_secret_count",
+        "terminal_outcome"
+      ],
+      "registry_kind": "WRAPPER"
+    }
+  ],
+  "assertions": {
+    "accepted_handoff_count": 0,
+    "synthetic_constructibility_witness_count": 1,
+    "runtime_consumable_count": 0,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  }
+}

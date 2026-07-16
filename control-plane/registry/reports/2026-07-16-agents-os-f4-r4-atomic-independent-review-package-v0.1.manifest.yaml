@@ -1,0 +1,118 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f4-r4-atomic-independent-review-package-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+integrity: {algorithm: SHA-256, digest_encoding: lowercase_hex, byte_scope: entire_regular_file, canonicalization: none, manifest_self_digest: external}
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R4_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 12
+  precedence: [R4_explicit_replacements, R3_other_explicit_replacements, R2_other_explicit_replacements, R1_all_other_clauses]
+  subjects:
+    - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md, sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3}
+    - {revision: R1, role: M0_A_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json, sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75}
+    - {revision: R1, role: M0_A_validator, path: control-plane/registry/validate-f4-m0a-witness.py, sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa}
+    - {revision: R2, role: totality_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md, sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705}
+    - {revision: R2, role: totality_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json, sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad}
+    - {revision: R2, role: totality_validator, path: control-plane/registry/validate-f4-r2-result-reason-totality.py, sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941}
+    - {revision: R3, role: PRESTART_and_start_disposition_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md, sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939}
+    - {revision: R3, role: PRESTART_and_start_disposition_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json, sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4}
+    - {revision: R3, role: PRESTART_and_start_disposition_validator, path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py, sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec}
+    - {revision: R4, role: no_fact_boundary_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r4-amendment.draft.md, sha256: 7c6034e037cfe2ff5d31b4c5f47bd2e584536cf9b8c8dbdda5b706512a03e79b}
+    - {revision: R4, role: no_fact_boundary_vectors, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r4-start-observation-no-fact-vectors-v0.1.json, sha256: 540e58e5ccd7a9d756016d44218b358d7dffc71e894447d95ba4b4f1eafd13ff}
+    - {revision: R4, role: no_fact_boundary_validator, path: control-plane/registry/validate-f4-r4-start-observation-no-fact.py, sha256: 2176b00aa8f207b230fac314e439902455d0170b955bd6ae512edfd3ae5a2155}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71}
+  - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: accepted_F1_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml, sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2}
+  - {role: frozen_F2_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml, sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1}
+  - {role: frozen_F2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml, sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1}
+  - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff}
+  - {role: immutable_F4_start_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-start-decision-v0.1.yaml, sha256: 00a1a1fe86c6e550a52f85b7638e6d4c39392f731486ddd4d20306e771ba33d8}
+
+review_and_amendment_lineage:
+  - {role: R1_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r1-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 29b695a5c882ae5571040ac0c5514cbaa4f40f96e7cd84639faf6f66c4c2ae54}
+  - {role: R1_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-full-atomic-independent-review.yaml, sha256: 8de188ef677113e288a5df1a0f73591e884c1fee04b5d167291eb9f4288263a0, result: BLOCK}
+  - {role: R1_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r1-independent-review-disposition-v0.1.yaml, sha256: fd2e0e39cb1044c77a61d1dfd6231311551d5d3fdd6c7ed0c999a426275533bf}
+  - {role: R2_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r2-result-reason-totality-closure-start-decision-v0.1.yaml, sha256: 30f45f8aa64c20455eb6cd2220189d2070790f68bf9b04b23893398885f13c2b}
+  - {role: R2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r2-atomic-independent-review-package-v0.1.manifest.yaml, sha256: cea14fa96266a0dcac86d9cdea97b533385b802825985d46a9d5c7eba9084b24}
+  - {role: R2_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r2-full-atomic-independent-review.yaml, sha256: df02df54a16f7f09db2575e304b7b1a210e43fdbd75af1a2a37f032c9a2b62d8, result: BLOCK}
+  - {role: R2_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r2-independent-review-disposition-v0.1.yaml, sha256: 0b27d29a64db16a468fa51e54d4bb97f931b6ebb600992bbb5c87a469d84d71b}
+  - {role: R3_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r3-host-prestart-start-disposition-totality-closure-start-decision-v0.1.yaml, sha256: 37eb8ae2b06277ef147a90b7b79b8f8462bef0e330ebb85fc68bd018f6cdb86e}
+  - {role: R3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f4-r3-atomic-independent-review-package-v0.1.manifest.yaml, sha256: de004a2263258bbc8335039e3a312d8a10a88f80473546f315b418c38fca2ba5}
+  - {role: R3_review, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r3-full-atomic-independent-review.yaml, sha256: 0d8914f751991eaa53cd3478668b5a6d047d5327e5dd80b593e935d2d73bbd4a, result: BLOCK}
+  - {role: R3_disposition, path: control-plane/registry/reviews/2026-07-16-agents-os-f4-r3-independent-review-disposition-v0.1.yaml, sha256: 63d258021fc101c7855e12b7649bd37d8b4bb6a2808bfeb0d6737ab71c6200b0}
+  - {role: R4_start, path: control-plane/registry/decisions/2026-07-16-agents-os-f4-r4-start-observation-no-fact-boundary-closure-start-decision-v0.1.yaml, sha256: c59b2664a4ca6293a77cfd4e8e5d540c0508c2e878bbf70e44135385d9f282ca}
+  - {role: R4_author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r4-start-observation-no-fact-boundary-closure-self-review.yaml, sha256: 6b6aa700d8a50fb0cb0d94304fd65eb290e3082406612915d80ef2f87f54b150}
+
+declared_input_count: 38
+validator_commands:
+  - python3 control-plane/registry/validate-f4-m0a-witness.py
+  - python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+  - python3 control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+  - python3 control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+required_review_questions:
+  - all_38_hashes_match_and_all_12_subjects_are_fully_read_unchanged
+  - R4_R3_R2_R1_precedence_is_unambiguous
+  - R3_blocker_is_closed_without_identity_or_authority_regression
+  - unresolved_acceptance_never_requires_an_acceptance_fingerprint
+  - every_no_fact_reason_has_one_legal_pair_and_null_fingerprint
+  - no_fact_is_non_persisted_non_authoritative_and_effect_free
+  - only_resolved_acceptance_enters_the_11_recheck_fact_reducer
+  - ACCEPTANCE_MISSING_is_illegal_as_a_fact_reason
+  - resolved_first_fact_and_replay_identity_remain_unique
+  - negative_over_unavailable_and_fixed_precedence_remain_total
+  - all_four_validators_reproduce_exact_PASS_outputs
+  - all_prior_Host_permit_admission_fence_writer_and_handoff_invariants_remain_closed
+  - no_F5_F6_implementation_runtime_provider_database_or_effect_authority_leaks
+required_adversarial_checks:
+  - reproducible_acceptance_absence_yields_no_fact
+  - unavailable_acceptance_lookup_yields_no_fact
+  - acceptance_integrity_conflict_yields_no_fact
+  - invalid_acceptance_ref_yields_no_fact
+  - no_fact_with_non_null_fingerprint_rejected
+  - resolved_without_fingerprint_rejected
+  - acceptance_missing_fact_reason_rejected
+  - resolved_acceptance_unavailable_recheck_yields_indeterminate_fact
+  - resolved_acceptance_negative_plus_unavailable_yields_negative_fact
+  - retry_no_fact_allocates_no_observation_identity_or_effect
+required_output_contract:
+  target_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r4-full-atomic-independent-review.yaml
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  no_finding_rule: PASS_NO_BLOCKER requires 38/38 hashes, 12/12 full subject reads, four validators PASS, all questions and adversarial checks PASS, and zero blocker, major, or unresolved ambiguity.
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_content_or_conclusion_may_be_read: false
+  prior_reviews_may_be_used_as_finding_lineage_only: true
+  presentation_package_may_be_used_as_authority: false
+  forbidden_inputs_accessed: false_required
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  F4_acceptance_ready: false
+  authority_after_pass: Jenn_only
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

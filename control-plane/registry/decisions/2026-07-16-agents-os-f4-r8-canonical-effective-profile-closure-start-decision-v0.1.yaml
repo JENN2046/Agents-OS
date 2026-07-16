@@ -1,0 +1,23 @@
+schema_version: agents-os.construction-start-decision.v0.1
+decision_id: agents-os-f4-r8-canonical-effective-profile-closure-start-v0.1
+date: 2026-07-16
+owner: Jenn
+agent_steward: Nobao
+status: STARTED
+scope:
+  phase: F4
+  revision: R8
+  allowed:
+    - close only the seven R7 independent-review blockers
+    - freeze one exact effective schema field-order and fingerprint-domain registry
+    - recompute every invocation-derived identity reference and fingerprint edge
+    - bind Host authentication to the exact Host-trust authenticator profile
+    - make authorization final-handoff and eligibility reducers total and constructible
+    - replace every ambiguous Host identity revision with explicit Actor and Host-trust revisions
+    - create a new offline complete-effective fixture validator manifest and fresh independent review
+  forbidden:
+    - modify R1-R7 or prior review bytes
+    - accept or freeze F4 automatically
+    - start F5/F6 or implementation/runtime/database/service/Host/provider/authentication/effect work
+    - commit push merge release deploy publish
+completion_gate: {required: fresh_full_atomic_hash_bound_independent_review_of_R1_through_R8, acceptance_authority: Jenn_only}

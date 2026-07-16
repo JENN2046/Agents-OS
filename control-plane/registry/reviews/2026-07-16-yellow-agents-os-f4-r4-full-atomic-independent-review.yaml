@@ -1,0 +1,213 @@
+schema_version: agents-os.independent-review.v0.1
+review_id: agents-os-f4-r4-full-atomic-independent-review-v0.1
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-16
+reviewed_at: 2026-07-16T19:31:13+08:00
+status: completed
+
+reviewed_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 12
+  precedence:
+    - R4_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+result: PASS_NO_BLOCKER
+requires_R5: false
+
+reviewer:
+  kind: fresh_independent_subagent
+  task_path: /root/f4_r4_fresh_independent_review
+  author_of_subjects: false
+  author_self_review_used_as_authority: false
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f4-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_sha256: 8f76122f36eb4df210585089720010bd7740516f5311f42bdcd764ebfa372ffe
+  actual_sha256: 8f76122f36eb4df210585089720010bd7740516f5311f42bdcd764ebfa372ffe
+  hash_match: true
+  authority: sole_review_authority
+
+input_integrity:
+  declared_input_count: 38
+  verified_input_count: 38
+  hash_matches: 38
+  hash_mismatches: 0
+  result: PASS
+  author_self_review:
+    content_read: false
+    hash_only_verified: true
+  presentation_package_read: false
+  forbidden_inputs_accessed: false
+
+atomic_subject_review:
+  declared_subject_count: 12
+  fully_read_subject_count: 12
+  initial_hash_matches: 12
+  final_hash_recheck_matches: 12
+  changed_during_review: 0
+  result: PASS
+
+validators:
+  required_count: 4
+  pass_count: 4
+  fail_count: 0
+  exact_outputs:
+    - command: python3 control-plane/registry/validate-f4-m0a-witness.py
+      exit_code: 0
+      result: PASS
+      exact_stdout: '{"acceptance_count": 1, "accepted_handoff_count": 1, "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R1_ATOMIC_BUNDLE", "edge_count": 36, "external_effect_count": 0, "fixture_canonical_sha256": "c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2", "interface_version": "agents-os.f4-m0a-witness.v0.1", "node_count": 14, "node_hashes_verified": 14, "provider_call_count": 0, "raw_secret_count": 0, "result": "PASS", "schema_fingerprints_verified": 22, "terminal_outcome": "NOT_EXECUTED"}'
+    - command: python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+      exit_code: 0
+      result: PASS
+      exact_stdout: '{"admission_case_count":6,"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R2_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"a6e14eaf85d456fce48cb9a89d31f7a61f7a316468562f2a869763d1c95baf65","fixture_file_sha256":"048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad","host_case_count":5,"negative_mutations_rejected":3,"permit_case_count":12,"provider_call_count":0,"raw_secret_count":0,"result":"PASS","total_case_count":23}'
+    - command: python3 control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+      exit_code: 0
+      result: PASS
+      exact_stdout: '{"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R3_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"f2f9872cc8dd5b0fea6436d748688c126b65a4065c6fadecaf62adbaf03ce124","fixture_file_sha256":"548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4","host_case_count":3,"negative_mutations_rejected":3,"provider_call_count":0,"raw_secret_count":0,"result":"PASS","start_disposition_case_count":10,"total_case_count":13}'
+    - command: python3 control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+      exit_code: 0
+      result: PASS
+      exact_stdout: '{"contract_version":"F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R4_ATOMIC_BUNDLE","external_effect_count":0,"fixture_canonical_sha256":"93cbed95d630e68746af98b765836ead8676c65ef2fc6df80e9038469a51e7bf","fixture_file_sha256":"540e58e5ccd7a9d756016d44218b358d7dffc71e894447d95ba4b4f1eafd13ff","negative_mutations_rejected":3,"preflight_case_count":5,"provider_call_count":0,"raw_secret_count":0,"reducer_case_count":4,"result":"PASS","total_case_count":9}'
+
+independent_exhaustive_checks:
+  preflight_cartesian:
+    outcome_reason_fingerprint_combinations: 20
+    legal_combinations: 5
+    illegal_combinations_rejected_by_closed_contract: 15
+    result: PASS
+  effective_11_recheck_reducer:
+    valid_normalized_tuples: 314928
+    tuples_reduced: 314928
+    unique_legal_result_reason_pairs: 10
+    negative_plus_unavailable_tuples: 305716
+    negative_plus_unavailable_reduced_to_negative: 305716
+    result: PASS
+
+R3_blocker_closure:
+  finding_id: F4-R3-FULL-ATOMIC-IR-B01
+  result: CLOSED
+  closure:
+    unresolved_acceptance_requires_fingerprint: false
+    unresolved_acceptance_allocates_observation_id: false
+    unresolved_acceptance_creates_fact: false
+    unresolved_acceptance_creates_handoff: false
+    unresolved_acceptance_creates_reservation: false
+    unresolved_acceptance_grants_authority: false
+    unresolved_acceptance_creates_effect: false
+    exact_acceptance_required_before_identity_derivation: true
+    ACCEPTANCE_MISSING_removed_from_effective_fact_enum: true
+    ACCEPTANCE_MISSING_removed_from_effective_fact_reducer: true
+  interface_replacement_judgment: >-
+    R4 Section 2 directly governs observeStartAuthority(acceptance_ref), names
+    the closed transport response, and limits canonical fact entry to
+    FACT_INPUT_RESOLVED / ACCEPTANCE_RESOLVED. Under the declared precedence,
+    this explicitly replaces the unresolved-reference portion of the R1
+    Section 14 output behavior; the resolved branch continues to the unchanged
+    R1 fact and atomic handoff output. No unresolved interface ambiguity remains.
+
+required_review_questions:
+  declared_count: 13
+  pass_count: 13
+  fail_count: 0
+  checks:
+    all_38_hashes_match_and_all_12_subjects_are_fully_read_unchanged: PASS
+    R4_R3_R2_R1_precedence_is_unambiguous: PASS
+    R3_blocker_is_closed_without_identity_or_authority_regression: PASS
+    unresolved_acceptance_never_requires_an_acceptance_fingerprint: PASS
+    every_no_fact_reason_has_one_legal_pair_and_null_fingerprint: PASS
+    no_fact_is_non_persisted_non_authoritative_and_effect_free: PASS
+    only_resolved_acceptance_enters_the_11_recheck_fact_reducer: PASS
+    ACCEPTANCE_MISSING_is_illegal_as_a_fact_reason: PASS
+    resolved_first_fact_and_replay_identity_remain_unique: PASS
+    negative_over_unavailable_and_fixed_precedence_remain_total: PASS
+    all_four_validators_reproduce_exact_PASS_outputs: PASS
+    all_prior_Host_permit_admission_fence_writer_and_handoff_invariants_remain_closed: PASS
+    no_F5_F6_implementation_runtime_provider_database_or_effect_authority_leaks: PASS
+
+required_adversarial_checks:
+  declared_count: 10
+  pass_count: 10
+  fail_count: 0
+  checks:
+    reproducible_acceptance_absence_yields_no_fact: PASS
+    unavailable_acceptance_lookup_yields_no_fact: PASS
+    acceptance_integrity_conflict_yields_no_fact: PASS
+    invalid_acceptance_ref_yields_no_fact: PASS
+    no_fact_with_non_null_fingerprint_rejected: PASS
+    resolved_without_fingerprint_rejected: PASS
+    acceptance_missing_fact_reason_rejected: PASS
+    resolved_acceptance_unavailable_recheck_yields_indeterminate_fact: PASS
+    resolved_acceptance_negative_plus_unavailable_yields_negative_fact: PASS
+    retry_no_fact_allocates_no_observation_identity_or_effect: PASS
+
+effective_contract_audit:
+  proof_DAG: PASS
+  M0_A_witness: PASS
+  M0_A_nodes: 14
+  M0_A_edges: 36
+  M0_A_schema_fingerprints: 22
+  M0_A_acceptances: 1
+  M0_A_handoffs: 1
+  M0_A_external_effect_count: 0
+  effective_adversarial_decisions_A1_A78: 78/78_PASS
+  effective_normative_invariants_I01_I64: 64/64_PASS
+  Host_authentication_PRESTART_and_negative_precedence: PASS
+  TaskPermit_currentness_mapping_and_totality: PASS
+  Host_local_admission_mapping_and_totality: PASS
+  fence_monotonicity_and_no_resurrection: PASS
+  Rust_canonical_single_writer: PASS
+  resolved_first_fact_identity_and_replay: PASS
+  successful_disposition_and_handoff_single_transaction: PASS
+  acceptance_and_disposition_do_not_prove_physical_effect: PASS
+  frozen_F1_F2_F3_authority_not_modified_or_reinterpreted: PASS
+
+mandatory_risk_counts:
+  identity_spoofing_blockers: 0
+  authority_expansion_blockers: 0
+  revocation_or_compromise_bypass_blockers: 0
+  fail_open_currentness_blockers: 0
+  dual_writer_blockers: 0
+  circular_proof_blockers: 0
+  crash_or_replay_ambiguity_blockers: 0
+  internal_contradiction_blockers: 0
+  implementation_or_downstream_authority_leakage_blockers: 0
+
+findings_summary:
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  unresolved_ambiguity_count: 0
+
+findings: []
+
+final_reduction:
+  result: PASS_NO_BLOCKER
+  F4_acceptance_ready_for_Jenn_decision: true
+  F4_accepted_by_this_review: false
+  F4_frozen_by_this_review: false
+  requires_R5: false
+  partial_acceptance: forbidden
+  recommendation: PREPARE_JENN_ONLY_ATOMIC_ACCEPT_AND_FREEZE_DECISION
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  Rust_implementation_authorized: false
+  JavaScript_implementation_authorized: false
+  database_authorized: false
+  runtime_activation_authorized: false
+  Resident_or_service_start_authorized: false
+  production_authentication_authorized: false
+  provider_host_or_effect_execution_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_created: false
+  push_performed: false
+  merge_performed: false

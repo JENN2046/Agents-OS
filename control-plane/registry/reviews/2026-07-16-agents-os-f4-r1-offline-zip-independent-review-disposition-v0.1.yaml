@@ -1,0 +1,38 @@
+schema_version: agents-os.review-finding-disposition.v0.1
+disposition_id: agents-os-f4-r1-offline-zip-independent-review-disposition-v0.1
+date: 2026-07-16
+review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r1-offline-zip-fresh-full-atomic-independent-review-v0.1.yaml
+review_result: BLOCK
+effective_next_revision: R5
+reason_R2_not_reused: workspace_R2_R3_R4_bytes_already_exist_and_remain_immutable
+
+dispositions:
+  - {finding_id: F4-R1-IR-B01, disposition: ACCEPTED_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-B02, disposition: ACCEPTED_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-B03, disposition: ACCEPTED_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-B04, disposition: ACCEPTED_PARTIALLY_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-B05, disposition: CLOSED_BY_EXISTING_R2_R3, evidence: deterministic_negative_over_unavailable_reason_precedence}
+  - {finding_id: F4-R1-IR-B06, disposition: ACCEPTED_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-M01, disposition: ACKNOWLEDGED_EVIDENCE_ROLE_LIMIT_NOT_CONTRACT_BLOCKER, evidence: validator_is_constructive_witness_and_independent_semantic_review_remains_required}
+  - {finding_id: F4-R1-IR-M02, disposition: ACCEPTED_OPEN_FOR_R5}
+  - {finding_id: F4-R1-IR-M03, disposition: CLOSED_BY_EXISTING_R4, evidence: closed_non_persisted_NO_FACT_preflight_before_observation_identity}
+
+package_disposition:
+  original_offline_zip_formal_pass_capable: false
+  reason: eight_of_thirteen_required_authority_inputs_absent
+  corrected_R5_offline_package_must_include_all_manifest_inputs: true
+
+effective_open_contract_findings: 6
+R4_pass_review_reopened_by_later_independent_evidence: true
+F4_freeze_gate_satisfied: false
+requires_R5: true
+
+non_authorization:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+  commit_push_merge_authorized: false
+

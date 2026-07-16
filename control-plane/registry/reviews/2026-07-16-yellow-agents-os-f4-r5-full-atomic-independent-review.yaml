@@ -1,0 +1,247 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r5-full-atomic-independent-review-v0.1
+date: 2026-07-16
+reviewer:
+  identity: Codex independent review agent
+  independence_basis:
+    - not_the_F4_R1_R5_author_run
+    - reviewed_fixed_manifest_bound_subject_bytes
+    - did_not_modify_any_subject
+    - did_not_read_R5_author_self_review_content
+    - prior_reviews_used_for_lineage_only
+    - did_not_execute_runtime_provider_database_host_or_effect_work
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 15
+  effective_precedence:
+    - R5_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+manifest:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f4-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  declared_sha256: 35c2dc3ff487ef902691b3e8bc4aec42f4e05f669acaa9dff1b7c07e6112878e
+  recomputed_sha256: 35c2dc3ff487ef902691b3e8bc4aec42f4e05f669acaa9dff1b7c07e6112878e
+  hash_match: true
+
+integrity:
+  declared_inputs: 35
+  hashes_verified: 35
+  hash_failures: 0
+  subjects_declared: 15
+  subjects_fully_read: 15
+  subjects_initial_hashes_match: 15
+  subjects_final_hashes_match: 15
+  subjects_changed_during_review: 0
+  author_self_review_hash_verified_without_content_read: true
+  forbidden_inputs_accessed: false
+
+validator_reproduction:
+  all_pass: true
+  validator_count: 5
+  validators:
+    - command: python3 control-plane/registry/validate-f4-m0a-witness.py
+      exit_code: 0
+      result: PASS
+      exact_counts:
+        node_count: 14
+        edge_count: 36
+        node_hashes_verified: 14
+        schema_fingerprints_verified: 22
+        acceptance_count: 1
+        accepted_handoff_count: 1
+        external_effect_count: 0
+        provider_call_count: 0
+        raw_secret_count: 0
+        terminal_outcome: NOT_EXECUTED
+      fixture_canonical_sha256: c2147e218b0048b67e7c5d0ed986c336cfd6e7f1ea08ad284475cb99739153a2
+    - command: python3 control-plane/registry/validate-f4-r2-result-reason-totality.py
+      exit_code: 0
+      result: PASS
+      total_case_count: 23
+      host_case_count: 5
+      permit_case_count: 12
+      admission_case_count: 6
+      negative_mutations_rejected: 3
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+    - command: python3 control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+      exit_code: 0
+      result: PASS
+      total_case_count: 13
+      host_case_count: 3
+      start_disposition_case_count: 10
+      negative_mutations_rejected: 3
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+    - command: python3 control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+      exit_code: 0
+      result: PASS
+      total_case_count: 9
+      preflight_case_count: 5
+      reducer_case_count: 4
+      negative_mutations_rejected: 3
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+    - command: python3 control-plane/registry/validate-f4-r5-cross-phase-authority-closure.py
+      exit_code: 0
+      result: PASS
+      total_case_count: 28
+      authorization_cases: 5
+      host_cases: 5
+      handoff_cases: 5
+      effect_boundary_cases: 6
+      grant_cases: 4
+      invocation_cases: 3
+      negative_mutations_rejected: 4
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+  evidence_role: constructive_fixed_fixture_evidence_only_not_contract_semantic_proof
+
+required_review_questions:
+  total: 13
+  pass: 8
+  block: 5
+  decisions:
+    all_35_hashes_match_and_all_15_subjects_are_fully_read_unchanged: PASS
+    R5_precedence_closes_the_six_open_findings_without_regressing_B05_or_M03: BLOCK
+    no_color_P3_or_caller_label_decides_authorization: PASS
+    single_policy_PBL_requirement_modes_are_total_and_prohibited_is_non_issuable: BLOCK
+    Host_trust_is_one_to_one_with_current_F2_EXECUTION_HOST_HOST_PROCESS_Binding: PASS
+    Host_transition_CAS_provisioning_compromise_and_recovery_are_closed: BLOCK
+    final_handoff_rechecks_all_permit_bound_F1_F2_F3_policy_PBL_Jenn_and_Host_authority: BLOCK
+    committed_revocation_blocks_without_waiting_for_fence_propagation: PASS
+    physical_boundary_requires_fresh_currentness_and_one_time_claim: PASS
+    capability_resource_vocabulary_source_and_containment_are_closed: BLOCK
+    v0_1_is_strictly_single_invocation: PASS
+    five_validators_are_constructive_evidence_only_and_reproduce_PASS: PASS
+    no_F5_start_or_implementation_runtime_provider_database_effect_authority_leaks: PASS
+
+required_adversarial_checks:
+  total: 9
+  pass: 9
+  block: 0
+  decisions:
+    RED_label_cannot_force_Jenn_requirement: PASS
+    Jenn_decision_cannot_override_prohibited_non_issuable: PASS
+    F2_Host_Actor_Principal_or_Binding_substitution_rejects: PASS
+    self_provisioned_or_non_CAS_Host_transition_rejects: PASS
+    source_revoked_before_fence_projection_blocks_handoff: PASS
+    stale_expired_unknown_or_second_physical_claim_calls_no_effect: PASS
+    unknown_operation_stale_definition_or_unproved_containment_rejects_or_is_indeterminate: PASS
+    max_invocations_two_or_ordinal_two_rejects: PASS
+    acceptance_missing_remains_no_fact_and_multi_negative_reason_remains_deterministic: PASS
+
+findings:
+  blocker: 5
+  major: 0
+  minor: 0
+  items:
+    - id: F4-R5-FULL-ATOMIC-IR-B01
+      severity: BLOCKER
+      title: Effect authorization replacement is not a canonical total function end to end
+      evidence:
+        - R5 says policy/PBL/basis unavailability is INDETERMINATE, but mode has only NO_SEPARATE_JENN_AUTHORIZATION_REQUIRED, EXACT_CURRENT_JENN_AUTHORIZATION_REQUIRED, and PROHIBITED_NON_ISSUABLE.
+        - When the policy-derived mode itself cannot be reproduced, the contract defines neither a no-object transport result nor one canonical mode/currentness/nullability tuple.
+        - PROHIBITED_NON_ISSUABLE does not freeze its sole legal currentness_result, so the same prohibited evidence can be fingerprinted with more than one schema-valid currentness value.
+        - R1 F4AcceptedEffectHandoffV0_1 still requires Jenn_authorization_binding_fingerprint; R5 replaces the permit binding but does not explicitly replace this downstream handoff field with effect_authorization_requirement_fingerprint.
+      impact: Cross-writer fingerprint divergence or an unconstructible handoff is possible even though every path is intended to fail closed.
+      required_R6_correction:
+        - define one canonical no-object outcome or one closed representation for policy/PBL/basis-unavailable mode derivation
+        - freeze the exact mode/currentness/Jenn-nullability tuple for every evidence class, including PROHIBITED_NON_ISSUABLE
+        - replace every downstream old Jenn binding field and expiry/currentness reference, including the accepted handoff field
+
+    - id: F4-R5-FULL-ATOMIC-IR-B02
+      severity: BLOCKER
+      title: F4 wording contradicts frozen F2 Actor compromise recovery semantics
+      evidence:
+        - Frozen F2 R7/R8 defines COMPROMISED -> RECOVER -> ACTIVE, and later R15-R19 preserves and assures RECOVER.
+        - R5 says F2 compromise is terminal for that Actor lineage and requires a new F2 EXECUTION_HOST Actor identity.
+        - R5 does not limit that statement to an F4-specific effect-trust eligibility rule, while R1 otherwise forbids reinterpretation of frozen F2 bytes.
+      impact: One recovered EXECUTION_HOST Actor can be ACTIVE under frozen F2 and simultaneously terminal under F4, so Host currentness is not uniquely decidable.
+      required_R6_correction:
+        - preserve frozen F2 RECOVER semantics explicitly
+        - if same-lineage recovery must remain ineligible for F4, define that as a separate F4 Host-trust eligibility predicate based on compromise history, without relabeling the F2 Actor lifecycle
+
+    - id: F4-R5-FULL-ATOMIC-IR-B03
+      severity: BLOCKER
+      title: FinalHandoffAuthorityAssessment has no exact integration position in the disposition fact
+      evidence:
+        - R5 says it adds FinalHandoffAuthorityAssessmentV0_1R5 as an input to HostWorkStartDispositionFactV0_1 but does not state the containing field name, whether the value or a ref/fingerprint pair is stored, or its exact field position.
+        - R1 fingerprinting is field-order-sensitive, and R3/R4 explicitly preserved the prior disposition field order.
+      impact: Two conforming writers can recheck the same authority yet serialize different disposition bytes and fingerprints; the handoff cannot prove one uniquely bound final assessment.
+      required_R6_correction:
+        - publish the complete effective HostWorkStartDispositionFact schema with the exact new field name, representation, order, and fingerprint coverage
+        - bind the accepted handoff explicitly or transitively to that exact assessment fingerprint
+
+    - id: F4-R5-FULL-ATOMIC-IR-B04
+      severity: BLOCKER
+      title: New grant source-set fingerprints have no canonical derivation
+      evidence:
+        - CapabilityGrantV0_1R5 adds source_authority_set_fingerprint and ResourceGrantV0_1R5 adds source_scope_set_fingerprint.
+        - R5 provides no domain separator or JCS input formula for either set fingerprint.
+        - R1 Section 3's general formula applies only to canonical_fingerprint, assessment_fingerprint, decision_fingerprint, and fact_fingerprint; its three named set formulas do not cover the two R5 fields.
+      impact: Capability/resource authority source closure can diverge across writers and the derived subset/containment proof is not hash-bound to one canonical source-set digest.
+      required_R6_correction:
+        - define exact domain-separated SHA-256/JCS formulas for both R5 set fingerprints
+        - freeze required source-role coverage and duplicate/order rules used by those formulas
+
+    - id: F4-R5-FULL-ATOMIC-IR-B05
+      severity: BLOCKER
+      title: The full M0-A witness no longer materializes the effective R5 schemas
+      evidence:
+        - The immutable R1 witness constructs HostIdentityRevisionV0_1, JennAuthorizationBindingV0_1, CapabilityGrantV0_1, and ResourceGrantV0_1.
+        - R5 replaces all four with R5 schemas and also adds final handoff authority evidence.
+        - The R5 focused validator tests 28 reduced vectors but does not construct the complete effective R5 permit, Host trust, disposition, and handoff DAG.
+      impact: All validators PASS, but the effective R5 atomic bundle lacks the machine-checkable complete constructive M0-A witness still required by the unreplaced R1 gate.
+      required_R6_correction:
+        - add a zero-effect full effective R5 M0-A fixture and deterministic validator covering every replaced schema and the final handoff binding
+        - retain the existing five validators as immutable historical and focused evidence only
+
+finding_taxonomy:
+  identity_spoofing_count: 0
+  authority_expansion_count: 0
+  revocation_or_compromise_bypass_count: 0
+  fail_open_currentness_count: 0
+  dual_writer_count: 0
+  circular_proof_count: 0
+  crash_or_replay_ambiguity_count: 0
+  cross_writer_fingerprint_divergence_count: 3
+  upstream_contract_conflict_count: 1
+  constructive_witness_gap_count: 1
+  implementation_or_downstream_authority_leak_count: 0
+
+result: BLOCK
+requires_R6: true
+
+gate_effects:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_host_database_or_effect_execution_authorized: false
+  commit_push_merge_performed: false
+
+next_action:
+  - create_narrow_F4_R6_amendment_for_the_five_blockers
+  - preserve_all_R1_R5_subjects_fixtures_validators_and_reviews_immutable
+  - create_a_new_full_atomic_hash_bound_manifest
+  - run_a_fresh_full_atomic_independent_review
+
+reviewer_attestation:
+  subjects_modified: false
+  partial_acceptance_performed: false
+  runtime_or_external_effects_performed: false
+  author_self_review_content_read: false

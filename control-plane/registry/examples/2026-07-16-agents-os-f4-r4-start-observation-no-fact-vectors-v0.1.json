@@ -1,0 +1,21 @@
+{
+  "schema_version": "agents-os.f4-r4-start-observation-no-fact-vectors.v0.1",
+  "contract_version": "F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R4_ATOMIC_BUNDLE",
+  "preflight_cases": [
+    {"id":"resolved","ref_state":"VALID_RESOLVED","expected_outcome":"FACT_INPUT_RESOLVED","expected_reason":"ACCEPTANCE_RESOLVED","fingerprint":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    {"id":"not-found","ref_state":"VALID_NOT_FOUND","expected_outcome":"NO_FACT","expected_reason":"ACCEPTANCE_NOT_FOUND","fingerprint":null},
+    {"id":"unavailable","ref_state":"VALID_LOOKUP_UNAVAILABLE","expected_outcome":"NO_FACT","expected_reason":"ACCEPTANCE_LOOKUP_UNAVAILABLE","fingerprint":null},
+    {"id":"conflict","ref_state":"VALID_INTEGRITY_CONFLICT","expected_outcome":"NO_FACT","expected_reason":"ACCEPTANCE_INTEGRITY_CONFLICT","fingerprint":null},
+    {"id":"invalid","ref_state":"INVALID","expected_outcome":"NO_FACT","expected_reason":"INVALID_ACCEPTANCE_REF","fingerprint":null}
+  ],
+  "reducer_cases": [
+    {"id":"all-pass","states":["PASS","PASS","PASS"],"expected_result":"START_AUTHORITY_CURRENT","expected_reason":"ALL_RECHECKS_PASS"},
+    {"id":"unavailable","states":["PASS","INDETERMINATE","PASS"],"expected_result":"INDETERMINATE","expected_reason":"OBSERVATION_UNAVAILABLE"},
+    {"id":"negative-over-unavailable","states":["INDETERMINATE","HOST_UNAUTHENTICATED","FENCED"],"expected_result":"NOT_STARTED","expected_reason":"HOST_UNAUTHENTICATED"},
+    {"id":"fence-over-expiry","states":["EXPIRED","FENCED","PASS"],"expected_result":"NOT_STARTED","expected_reason":"FENCED"}
+  ],
+  "forbidden_fact_reasons": ["ACCEPTANCE_MISSING"],
+  "expected_external_effect_count": 0,
+  "expected_provider_call_count": 0,
+  "expected_raw_secret_count": 0
+}

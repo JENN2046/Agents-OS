@@ -1,0 +1,129 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: 2026-07-16T17:06:51+08:00
+effective_at: 2026-07-16T17:06:51+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F3_R4_atomic_freeze_decision_package_section_6_A
+
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-freeze-decision-package-v0.1.md
+    sha256: 888dccbbabe99c799e03a9ea804da459ba4863ec16ca5b3f2b3d669fc362f5c6
+    section: 6_A
+  confirmation_text_received: >-
+    我确认执行 F3 R4 Atomic Freeze Decision Package v0.1 第 6 节 A 的全部 Exact decision text。
+
+acceptance_unit:
+  id: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 4
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R4_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 29
+
+accepted_subjects:
+  - revision: R1
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+  - revision: R2
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+    sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+  - revision: R3
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+    sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+  - revision: R4
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r4-amendment.draft.md
+    sha256: 17b933e2ddf063422d4d695b5f07542d00f34a4a20280765369d0949afcff6ad
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r4-full-atomic-independent-review.yaml
+    sha256: 19c14d0a926d76f89a460b8d596c573a49a8fa580739227847ac765b0e52d38b
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    requires_R5: false
+    acceptance_subject: false
+  - role: independent_review_decision_surface
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-freeze-decision-package-v0.1.md
+    sha256: 888dccbbabe99c799e03a9ea804da459ba4863ec16ca5b3f2b3d669fc362f5c6
+    acceptance_subject: false
+
+excluded_evidence_classes:
+  - manifest
+  - materialization
+  - author_self_review
+  - independent_review
+  - review_disposition
+  - receipt
+  - active_work_queue
+
+effects:
+  F3_contract_status: ACCEPTED_FROZEN
+  F3_atomic_freeze_gate: SATISFIED
+  additional_F3_amendment_required: false
+  requires_R5: false
+  F4_started: false
+  implementation_authorized: false
+  Rust_implementation_authorized: false
+  JavaScript_implementation_authorized: false
+  runtime_activation_authorized: false
+  Resident_start_authorized: false
+  database_change_authorized: false
+  index_or_cache_change_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  host_or_executor_execution_authorized: false
+  effect_execution_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: EXPLICIT_START_OF_F4_TASKPERMIT_IDENTITY_BOUND_HOST_AND_FENCE_EFFECT_ADMISSION_CONTRACT_CLOSURE
+  decision_owner: Jenn
+  automatic_transition: forbidden
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_and_subject_reverification_before_closeout: completed
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

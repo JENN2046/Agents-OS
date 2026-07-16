@@ -1,0 +1,284 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+record_id: agents-os-f4-r9-full-atomic-independent-review-2026-07-17
+record_type: FreshFullAtomicHashBoundIndependentReview
+status: final
+created_at: 2026-07-17T01:23:17+08:00
+
+reviewer:
+  identity: OpenAI Codex independent review agent
+  independence_basis:
+    - not_the_F4_R9_author_run
+    - restarted_from_the_fixed_manifest_and_fixed_subject_bytes
+    - did_not_modify_any_subject_authority_or_lineage_input
+    - did_not_use_prior_review_conclusions_as_semantic_evidence
+    - did_not_execute_runtime_host_provider_database_or_external_effects
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 29
+  effective_precedence:
+    - R9_Section_10_final_replacements
+    - R9_all_other_non_conflicting_clauses
+    - R8_explicit_replacements
+    - R7_explicit_replacements
+    - R6_explicit_replacements
+    - R5_explicit_replacements
+    - R4_explicit_replacements
+    - R3_explicit_replacements
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+  recomputed_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  result: PASS
+
+input_integrity:
+  declared_input_count: 47
+  verified_input_count: 47
+  mismatched_input_count: 0
+  subjects:
+    declared: 29
+    hash_verified: 29
+    completely_read: 29
+    modified: 0
+    result: PASS
+  authority_inputs:
+    declared: 13
+    hash_verified: 13
+    completely_read: 13
+    result: PASS
+  lineage_inputs:
+    declared: 5
+    hash_verified: 5
+    semantic_authority_used: false
+    treatment: hash_and_lineage_only
+    result: PASS
+  R9_author_self_review:
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f4-r9-synthetic-nonauthority-closure-self-review.yaml
+    expected_sha256: 28516967a7485397c66514ae088fbdbdd7a2f930b19afb2b4369f4a2e19bf365
+    recomputed_sha256: 28516967a7485397c66514ae088fbdbdd7a2f930b19afb2b4369f4a2e19bf365
+    content_or_conclusion_read: false
+    result: HASH_PASS_CONTENT_NOT_ACCESSED
+  forbidden_inputs_accessed: false
+
+deterministic_reproduction:
+  builder:
+    path: control-plane/registry/build-f4-r9-synthetic-nonauthority-m0a.py
+    imports_fixed_validator: false
+    output_path: temporary_file_outside_the_review_unit
+    fixed_fixture_path: control-plane/registry/examples/2026-07-16-agents-os-f4-r9-synthetic-nonauthority-m0a-witness-v0.1.json
+    rebuilt_fixture_sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+    fixed_fixture_sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+    byte_for_byte_equal: true
+    result: PASS
+  validator_independence:
+    validator_path: control-plane/registry/validate-f4-r9-synthetic-nonauthority-m0a.py
+    imports_builder: false
+    imports_historical_R9_validator: false
+    imports_F1_F2_or_F3_reducer: false
+    independent_schema_fingerprint_symbol_DAG_and_semantic_logic_present: true
+    result: PASS
+
+validator_reproduction:
+  total: 9
+  passed: 9
+  failed: 0
+  commands:
+    - validator: control-plane/registry/validate-f4-m0a-witness.py
+      result: PASS
+      fixture_file_sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+    - validator: control-plane/registry/validate-f4-r2-result-reason-totality.py
+      result: PASS
+      negative_mutations_rejected: 3
+    - validator: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+      result: PASS
+      negative_mutations_rejected: 3
+    - validator: control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+      result: PASS
+      negative_mutations_rejected: 3
+    - validator: control-plane/registry/validate-f4-r5-cross-phase-authority-closure.py
+      result: PASS
+      negative_mutations_rejected: 4
+    - validator: control-plane/registry/validate-f4-r6-full-effective-m0a.py
+      result: PASS
+    - validator: control-plane/registry/validate-f4-r7-complete-effective-m0a.py
+      result: PASS
+    - validator: control-plane/registry/validate-f4-r8-complete-effective-m0a.py
+      result: PASS
+      negative_mutations_rejected: 19
+    - validator: control-plane/registry/validate-f4-r9-synthetic-nonauthority-m0a.py
+      result: PASS_NO_BLOCKER
+      fixture_file_sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+      registered_normative_schema_count: 14
+      registered_wrapper_schema_count: 5
+      schema_occurrences_verified: 103
+      normative_fingerprints_verified: 53
+      dag_nodes_verified: 24
+      symbols_verified: 24
+      currentness_observation_count: 10
+      receipt_count: 3
+      narrowing_receipt_count: 2
+      intersection_tuple_count: 1
+      negative_mutations_rejected: 37
+      accepted_handoff_count: 0
+      runtime_consumable_count: 0
+      external_effect_count: 0
+      provider_call_count: 0
+      raw_secret_count: 0
+      terminal_outcome: NOT_EXECUTED
+  result: PASS
+
+independent_semantic_reproduction:
+  implementation: one_off_read_only_checker_not_importing_the_fixed_builder_or_validator
+  fixed_fixture_sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+  Section_10_fingerprints_independently_recomputed: 28
+  schema_occurrences_inspected: 103
+  object_store_count: 24
+  owner_receipt_count: 3
+  narrowing_receipt_count: 2
+  exact_atomic_intersection_tuple_count: 1
+  currentness_observation_count: 10
+  required_input_role_count: 14
+  missing_required_role_count: 4
+  required_input_basis_object_count: 6
+  accepted_handoff_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  independent_adversarial_mutations_executed: 18
+  independent_adversarial_mutations_rejected: 18
+  result: PASS
+
+precedence_and_boundary_assessment:
+  result: PASS
+  conclusions:
+    - R9_Section_10_explicitly_replaces_every_conflicting_R9_Sections_2_through_9_claim
+    - the_manifest_makes_Section_10_the_first_effective_precedence_layer
+    - R5_removes_color_and_P0_P3_labels_from_F4_authority_predicates
+    - Section_10_again_forbids_Actor_class_role_relationship_trust_urgency_history_Task_label_color_or_P0_P3_from_changing_effect_authority
+    - older_directional_Green_Yellow_Red_architecture_text_is_not_an_effective_R9_authority_input_or_permit_predicate
+    - no_active_R9_fixture_value_contains_GREEN_YELLOW_RED_P0_P1_P2_P3_TRUSTED_URGENT_or_HIGH_TRUST
+    - effective_R9_contains_no_positive_operational_handoff_and_cannot_issue_one_from_the_synthetic_fixture
+  second_permission_system_detected: false
+  actor_or_task_permission_level_classification_detected: false
+  unresolved_precedence_ambiguity: false
+
+required_review_questions:
+  all_47_hashes_match_and_all_29_subjects_are_fully_read_unchanged:
+    result: PASS
+    evidence: 47_of_47_hashes_match_29_of_29_subjects_completely_read_and_zero_subject_bytes_modified
+  Section_10_precedence_removes_every_conflicting_earlier_R9_authority_or_positive_handoff_claim_without_ambiguity:
+    result: PASS
+    evidence: explicit_Section_10_replacement_clause_plus_manifest_first_precedence_and_zero_positive_handoff_in_effective_fixture
+  R9_builder_and_validator_are_independent_and_rebuild_matches_the_fixed_fixture:
+    result: PASS
+    evidence: no_cross_imports_and_rebuilt_bytes_equal_fixed_fixture_sha256_47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+  fixture_contains_no_native_F1_F2_F3_subject_assessment_reducer_Command_or_accepted_operational_handoff:
+    result: PASS
+    evidence: strict_103_occurrence_inventory_and_recursive_closed_surface_check_find_no_forbidden_native_or_operational_schema
+  F4_consumes_owner_issued_receipts_and_never_constructs_or_reduces_upstream_authority:
+    result: PASS
+    evidence: three_synthetic_nonauthority_owner_receipts_only_no_native_upstream_object_or_owner_reducer_and_production_receipts_remain_owner_writer_dependencies
+  owner_receipts_hash_bind_complete_atom_sets_and_gate_only_binding_adds_no_atom:
+    result: PASS
+    evidence: F1_and_F2_responsibility_each_bind_one_complete_atom_F2_actor_binding_is_GATE_ONLY_with_the_canonical_empty_set_and_augmentation_rejects
+  operation_resource_constraint_registry_bound_tuple_identity_is_atomic_and_no_union_component_mix_or_Cartesian_expansion_exists:
+    result: PASS
+    evidence: full_six_component_tuple_fingerprint_is_intersected_as_one_value_and_both_fixed_and_independent_cross_pair_attacks_reject
+  Host_and_Policy_always_narrow_and_conditional_Jenn_decision_plus_scope_are_both_required_without_adding_upstream_authority:
+    result: PASS
+    evidence: Host_and_Policy_use_canonical_writer_narrowing_receipts_Jenn_decision_and_scope_are_two_missing_required_roles_and_no_narrowing_input_can_add_an_absent_upstream_tuple
+  PBL_is_veto_only_and_NO_PROHIBITED_MATCH_never_creates_authority_or_selects_the_Jenn_requirement:
+    result: PASS
+    evidence: PBL_NO_PROHIBITED_MATCH_coexists_with_separate_policy_EXACT_CURRENT_JENN_AUTHORIZATION_REQUIRED_and_the_fixture_remains_NOT_AUTHORITY_ELIGIBLE
+  ten_currentness_observations_fourteen_required_roles_four_missing_roles_six_basis_objects_and_exact_same_transaction_snapshot_are_complete_and_fail_closed:
+    result: PASS
+    evidence: independently_recomputed_10_14_4_6_counts_observation_set_basis_set_and_final_transaction_fingerprints
+  prospective_F3_requirement_is_unaccepted_synthetic_only_nonruntime_and_cannot_satisfy_F3_authority:
+    result: PASS
+    evidence: status_UNACCEPTED_DOWNSTREAM_REQUIREMENT_usable_in_runtime_false_synthetic_fixture_only_true_authority_eligible_false_and_F3_COMMAND_remains_missing
+  synthetic_namespace_environment_fingerprint_recovery_transaction_and_production_rejection_boundaries_are_nonconvertible:
+    result: PASS
+    evidence: domain_separated_synthetic_namespace_all_authority_inputs_false_nonruntime_nonrecovery_NOT_EXECUTABLE_and_production_requires_independent_canonical_writers
+  nine_validators_PASS_R9_rejects_37_fully_resigned_mutations_and_all_runtime_effect_provider_secret_counts_are_zero:
+    result: PASS
+    evidence: 9_of_9_validator_commands_pass_37_of_37_R9_fully_resigned_mutations_reject_and_all_effect_counts_are_zero
+  no_F5_F6_implementation_runtime_provider_database_Host_authentication_effect_or_delivery_authority_leaks:
+    result: PASS
+    evidence: contract_gate_and_fixture_are_synthetic_nonauthority_only_and_all_downstream_or_operational_authorization_flags_remain_false
+
+required_adversarial_checks:
+  old_or_indeterminate_owner_receipt_cannot_be_reinterpreted_as_current_by_F4:
+    result: PASS
+    evidence: exact_owner_result_and_currentness_matrix_rejects_ACTIVE_STALE_or_INDETERMINATE_even_after_resigning
+  Actor_class_role_relationship_trust_urgency_history_Task_label_color_or_P0_P3_cannot_change_effect_authority:
+    result: PASS
+    evidence: Section_10_normative_prohibition_recursive_closed_surface_and_ambient_label_mutations_reject
+  F4_created_projection_external_atom_or_owner_atom_augmentation_rejects_after_full_resigning:
+    result: PASS
+    evidence: projection_schema_absent_external_or_augmented_atoms_fail_exact_owner_receipt_and_canonical_atom_resolution
+  separate_operation_resource_intersection_cross_pair_union_wildcard_or_duplicate_alias_rejects:
+    result: PASS
+    evidence: only_complete_registry_bound_tuple_fingerprints_intersect_and_component_mix_cross_pair_wildcard_duplicate_or_union_paths_are_closed
+  missing_F2_delegation_F3_Command_or_either_Jenn_input_cannot_emit_CURRENT_permit_or_handoff:
+    result: PASS
+    evidence: baseline_witness_is_missing_F2_DELEGATION_F3_COMMAND_JENN_EXACT_DECISION_and_JENN_EXACT_DECISION_SCOPE_and_remains_NOT_AUTHORITY_ELIGIBLE_with_zero_handoff
+  stale_or_indeterminate_operation_registry_resource_registry_constraint_PBL_policy_receipt_or_narrowing_input_rejects:
+    result: PASS
+    evidence: every_required_input_has_a_canonical_writer_observation_and_stale_indeterminate_pointer_or_head_mutations_reject
+  PBL_NO_PROHIBITED_MATCH_with_missing_upstream_or_required_Jenn_inputs_remains_non_authority:
+    result: PASS
+    evidence: fixed_fixture_is_the_constructive_negative_case_and_cannot_be_changed_to_CURRENT_by_resigning
+  Jenn_decision_for_resource_A_cannot_narrow_or_authorize_resource_B:
+    result: PASS
+    evidence: exact_atomic_atom_copy_tuple_and_source_input_binding_reject_resource_substitution
+  synthetic_requirement_receipt_witness_snapshot_or_transaction_cannot_be_accepted_by_a_production_runtime_or_recovery_path:
+    result: PASS
+    evidence: namespace_domain_environment_authority_eligible_runtime_consumable_recovery_importable_and_canonical_writer_checks_are_jointly_fail_closed
+  required_input_basis_observation_set_writer_head_pointer_revision_or_final_transaction_mismatch_rejects:
+    result: PASS
+    evidence: all_parallel_arrays_and_hashes_recomputed_and_basis_removal_pointer_change_head_advance_and_transaction_split_reject
+  UNKNOWN_missing_conflicting_unavailable_or_future_watermark_input_never_defaults_to_pass:
+    result: PASS
+    evidence: closed_enums_total_watermark_order_and_CURRENT_only_observations_make_unknown_missing_conflicting_unavailable_or_future_inputs_non_issuable
+  nonzero_effect_provider_secret_runtime_recovery_or_accepted_handoff_count_rejects:
+    result: PASS
+    evidence: exact_assertion_profile_and_witness_boundaries_require_all_six_operational_counts_or_flags_to_remain_zero_or_false
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 0
+
+result: PASS_NO_BLOCKER
+requires_R10: false
+
+review_effects:
+  F4_accepted: false
+  F4_frozen: false
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_execution_authorized: false
+  host_activation_authorized: false
+  database_or_service_change_authorized: false
+  effect_or_delivery_execution_authorized: false
+  commit_push_merge_performed: false
+
+final_disposition:
+  semantic_review_result: PASS_NO_BLOCKER
+  Jenn_atomic_accept_or_freeze_decision_required: true
+  partial_acceptance: forbidden
+  automatic_downstream_transition: forbidden
+  real_positive_handoff_status: blocked_on_independently_accepted_owner_interfaces_and_current_production_receipts

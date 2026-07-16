@@ -1,0 +1,477 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f4-r7-full-atomic-independent-review-2026-07-16
+date: 2026-07-16
+
+reviewer:
+  identity: Codex GPT-5 independent review agent
+  independence_basis:
+    - not_the_F4_R1_R7_author_run
+    - reviewed_the_fixed_manifest_bound_subject_bytes_from_scratch
+    - did_not_modify_any_subject_fixture_validator_decision_or_manifest
+    - did_not_use_prior_review_conclusions_as_current_judgment
+    - did_not_read_the_R7_author_self_review_content_or_conclusion
+    - did_not_execute_runtime_provider_host_database_or_external_effects
+
+review_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R7_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 21
+  manifest_path: control-plane/registry/reports/2026-07-16-agents-os-f4-r7-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_declared: c578e1f3cd3cb05247ede2e3736a6afe8839d12317de89b77e4c372ce765dc44
+  manifest_sha256_recomputed: c578e1f3cd3cb05247ede2e3736a6afe8839d12317de89b77e4c372ce765dc44
+
+result: BLOCK
+requires_R8: true
+
+integrity:
+  declared_input_count: 39
+  verified_input_count: 39
+  matching_input_hash_count: 39
+  subject_hashes_matching: 21
+  authority_input_hashes_matching: 13
+  lineage_input_hashes_matching: 5
+  complete_subject_reads: 21
+  complete_authority_input_reads: 13
+  hash_mismatches: 0
+  missing_inputs: 0
+  duplicate_subject_paths: 0
+  author_self_review:
+    content_read: false
+    conclusion_read: false
+    fixed_byte_hash_only_verified: true
+
+subject_hash_verification:
+  R1_contract: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+  R1_fixture: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+  R1_validator: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+  R2_amendment: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+  R2_fixture: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+  R2_validator: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+  R3_amendment: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939
+  R3_fixture: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4
+  R3_validator: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec
+  R4_amendment: 7c6034e037cfe2ff5d31b4c5f47bd2e584536cf9b8c8dbdda5b706512a03e79b
+  R4_fixture: 540e58e5ccd7a9d756016d44218b358d7dffc71e894447d95ba4b4f1eafd13ff
+  R4_validator: 2176b00aa8f207b230fac314e439902455d0170b955bd6ae512edfd3ae5a2155
+  R5_amendment: 90715a14279af382d3286e5024bc6cd136447c7f7e42930ebb05aa7c381bb047
+  R5_fixture: 22650373a81dd71c3dafefb77e89b5d9fd483505b5e01892fa0f6d1cce766dd0
+  R5_validator: 3fc4c8eccb9fec430a63de4c355025b4a17b9605943531b34637776a3dbaf518
+  R6_amendment: 09af4b475e6ef66c0c5faa7ec60179cf0f6a0e111f96d9d1d2ef810311af1be5
+  R6_fixture: 3ecf13d4b1297dd041ee982f351e813523a79d29f253cb64c58d451f1860970f
+  R6_validator: 02be5f7ebf84be631659c27e3117fc5e983ada7edafed274eb435b491f0d6591
+  R7_amendment: bf0ec245382e1b9315faf946927464efc97223c4b2581761895cd4e09f6d533c
+  R7_complete_effective_fixture: 57141c7c470f4424c3bff43cf2d410550200309c27d3b400dba69257e019666b
+  R7_complete_effective_validator: 9bc7d2873813e499d11ab34d4804177fe2a74130744a678861cbe6dfb39c9840
+
+validator_reproduction:
+  R1:
+    result: PASS
+    node_count: 14
+    external_effect_count: 0
+    terminal_outcome: NOT_EXECUTED
+  R2:
+    result: PASS
+    total_case_count: 23
+    negative_mutations_rejected: 3
+  R3:
+    result: PASS
+    total_case_count: 13
+    negative_mutations_rejected: 3
+  R4:
+    result: PASS
+    total_case_count: 9
+    negative_mutations_rejected: 3
+  R5:
+    result: PASS
+    total_case_count: 28
+    negative_mutations_rejected: 4
+  R6:
+    result: PASS
+    effective_node_count: 14
+    external_effect_count: 0
+  R7:
+    result: PASS
+    node_count: 18
+    complete_effective_object_count_claimed: 17
+    authorization_vector_count: 8
+    effect_trust_eligibility_vector_count: 7
+    disposition_preceding_field_count: 28
+    external_effect_count: 0
+    terminal_outcome: NOT_EXECUTED
+  semantic_effect_of_command_PASS: insufficient_due_to_findings_below
+
+finding_counts:
+  blocker: 7
+  major: 0
+  minor: 0
+
+findings:
+  - id: F4-R7-FULL-ATOMIC-IR-B01
+    severity: blocker
+    class:
+      - canonical_identity_divergence
+      - dual_writer_risk
+      - M0_constructive_witness_failure
+      - internal_contradiction
+    title: R7 effective-object fingerprints do not use the still-effective R1 canonical fingerprint domain
+    evidence:
+      - >-
+        R1 Section 3 requires every F4 canonical, assessment, decision, and fact
+        fingerprint to use SHA256(JCS(["agents-os.f4-fingerprint.v0.1:" +
+        exact_schema_name, every preceding field value])). R5-R7 never replace
+        that general rule except for individually printed formulas such as the
+        R6 authority-source entry and R6 disposition.
+      - >-
+        R7 validator stamped() instead hashes [interface-version-like domain,
+        preceding values]. For example its TaskPermit uses
+        "agents-os.task-permit.v0.1-r7", not the R1 prefix plus a schema name.
+      - >-
+        The fixture TaskPermit actual fingerprint is
+        e1f6a122999e061cac2c67f1c6d3e1408b69f539ce48ea1521696671ec463bd5.
+        Recalculation with inherited schema name TaskPermitV0_1 yields
+        a2f73219209d7a2aafd56aa9522bdbf1f1a3a16c647900e6c9020a0f4eb27097;
+        using TaskPermitV0_1R7 yields
+        480c22a2d064ae003ade242ab23fc4a5f25f610fc07d7044fd0c8369d74c7aa7.
+        Neither equals the fixture.
+      - >-
+        The same independent mismatch exists for currentness: actual
+        450ec80af6a5d7d81336925ca6c6a065786090f3a51d39b85b1e86554b9ab08f,
+        inherited-profile candidates
+        18ce83949ed778e7b74a33f7b2bf8edd08cceb931fc9298827b0bed7e994a7f5
+        and 7adbc4a02fba0e8b662a581aebdcc8c9784a4ddbc5e048cf5c3eb44e064dbf0d.
+      - >-
+        The R7 handoff actual fingerprint is
+        2458570920f8c14ae476ef884efc409217679858a86f1154b7ef32435c01321b;
+        inherited-profile candidates are
+        f89c36fd8c90a906b7dc97654192059ce866bde7506d02e9007b8098f8b339e8
+        and d1de7212e992e93a7fa59d0324334ed35891f5dc4c25173e2b541405f607c3a2.
+    counterexample: >-
+      One writer follows R1 Section 3 while another follows the R7 validator;
+      identical semantic fields produce different canonical identities, so
+      replay, set fingerprints, acceptance, and handoff binding diverge.
+    required_correction:
+      - freeze one explicit exact schema-name-to-domain table for every R7 effective object
+      - make it an explicit R7 replacement if the R1 profile is intentionally changed
+      - recompute every nested and outer effective fingerprint from that one profile
+      - add independent negative vectors for each wrong domain or schema name
+
+  - id: F4-R7-FULL-ATOMIC-IR-B02
+    severity: blocker
+    class:
+      - identity_integrity
+      - replay_and_crash_ambiguity
+      - broken_semantic_DAG_edges
+      - M0_constructive_witness_failure
+    title: R7 changes the invocation identity but retains or invents non-derived acceptance, observation, and handoff identities and stale refs
+    evidence:
+      - >-
+        R1 Sections 9.3, 9.4, and 13 keep their explicit identity formulas under
+        R7. The R7 invocation fingerprint is
+        67932e6d5b97dd64d663dae3ccd361b46c3a0c56f876974887b66bd3ebbcfcf1.
+      - >-
+        Recomputed acceptance_id is
+        3d0b27203f6822dbfc90cf9de1afa8cbc9b9a26afee754c5a8b636f3e203e635,
+        but the fixture retains the R1 value
+        360314bc6183c19f51a094cc1a4a70db7124cf3011d2529939bcfff5e9e1cf49.
+      - >-
+        Recomputed observation_id from the R7 acceptance fingerprint and attempt
+        1 is dfdd8a3397f67b0949d6ebd81d2416739a25520aad7076e5712adc15f761fc4a,
+        but the fixture uses the non-derived string observation:m0:r7.
+      - >-
+        Recomputed handoff_id is
+        a5fd331cf6f980be5cdefe910c98a4de9c28c4a3a6be434471ee212a2a5f4323,
+        but the fixture retains R1 value
+        c18210d18e36e3c672314bb8aa254d972bb17760cb5284afe56f64dc2b568c29.
+      - >-
+        The activation transition and handoff point at the stale R1 acceptance
+        ref, the disposition points at acceptance:m0:r7, and the handoff's
+        start_disposition_ref points at the stale R1 observation identity. These
+        are not one exact acceptance/disposition chain.
+    counterexample: >-
+      Crash lookup by the contract-derived acceptance or handoff identity finds
+      no fixture fact, while lookup by the retained R1 identity returns bytes
+      bound to a different R7 invocation. Identical replay therefore has two
+      incompatible identity surfaces.
+    required_correction:
+      - recompute acceptance_id observation_id and handoff_id after every upstream R7 identity change
+      - derive all acceptance and disposition refs from those recomputed identities
+      - machine-check every inner ref-to-identity and ref-to-fingerprint edge, not only outer node dependencies
+      - add changed-upstream-identity mutations that require all downstream identities and refs to change
+
+  - id: F4-R7-FULL-ATOMIC-IR-B03
+    severity: blocker
+    class:
+      - host_authentication_bypass
+      - identity_spoofing
+      - M0_constructive_witness_failure
+      - internal_contradiction
+    title: The R7 fixture emits AUTHENTICATED/MATCH while the Host trust and authentication profiles differ
+    evidence:
+      - >-
+        R1 Section 5.2 and R5 Section 3 require exact current authenticator
+        profile matching. The R7 F4HostTrustRevision uses profile ref
+        auth-profile:m0 and fingerprint
+        e68d4e2749234bb92ac8941e9fa25b1f92f1f5c07018574a7e93c9e20b720647.
+      - >-
+        The R7 HostAuthenticationAssessment instead uses profile ref
+        auth-profile:m0-a:synthetic and fingerprint
+        8506ba41b693a82af5c27124b83c87c3ec9436fcb59afd5843ab62c4718236d2,
+        yet emits AUTHENTICATED / MATCH.
+      - >-
+        R7 validator build() copies these two R1 profile fields rather than the
+        R7 Host-trust fields, and validate() accepts the exact mismatch.
+    counterexample: >-
+      A response verified under profile B is accepted as authentication for a
+      Host-trust revision bound to profile A. This is the exact PROFILE_MISMATCH
+      path that the effective Host-authentication reducer must reject.
+    required_correction:
+      - bind HostAuthenticationAssessment profile ref and fingerprint exactly to F4HostTrustRevision
+      - derive REJECTED_PROFILE_MISMATCH for any mismatch
+      - add independent ref-only and fingerprint-only mismatch mutations
+
+  - id: F4-R7-FULL-ATOMIC-IR-B04
+    severity: blocker
+    class:
+      - authority_expansion
+      - fail_open_input_validation
+      - validator_contract_divergence
+    title: The R7 authorization reducer accepts unknown modes and mutually impossible decision tuples
+    evidence:
+      - >-
+        R7 Section 2 says invalid tuples reject, exact missing is mutually
+        exclusive with every present-decision predicate, and only the three
+        policy-derived modes are legal.
+      - >-
+        Direct independent execution of authorization_reduce with an unknown
+        mode, no negatives, and unavailable=false returns
+        REQUIREMENT / CURRENT / JENN_DECISION_CURRENT instead of rejecting.
+      - >-
+        authorization_reduce(EXACT,
+        [JENN_DECISION_MISSING,JENN_DECISION_REVOKED],false) returns a canonical
+        revoked requirement even though R7 declares missing and present-decision
+        predicates mutually exclusive and every other tuple non-canonical.
+      - >-
+        The reducer also returns immediately for NO_SEPARATE or PROHIBITED and
+        does not reject contradictory decision evidence. The eight vectors do
+        not cover these invalid tuples; the seven-field presence matrix is
+        metadata rather than seven materialized schema-valid rows.
+    counterexample: >-
+      A caller or faulty policy adapter supplies an unrecognized derived mode;
+      the validator's reducer treats it as the exact-Jenn positive branch and
+      can label the requirement CURRENT.
+    required_correction:
+      - reject every mode outside the exact closed enum before reduction
+      - model decision presence separately from negative candidates
+      - reject missing plus any present predicate and decision evidence on no-separate or prohibited modes
+      - materialize and validate every seven-field presence row plus invalid cross-products
+
+  - id: F4-R7-FULL-ATOMIC-IR-B05
+    severity: blocker
+    class:
+      - nondeterministic_reducer
+      - fail_open_currentness
+      - revocation_bypass
+      - cross_writer_divergence
+    title: FinalHandoffAuthorityAssessment still has no total result/reason reducer
+    evidence:
+      - >-
+        R5 Section 4 defines result CURRENT|REJECTED|INDETERMINATE and reasons
+        ALL_AUTHORITY_CURRENT|AUTHORITY_STALE|AUTHORITY_UNAVAILABLE|INTEGRITY_FAILURE,
+        but does not define normalized observations, negative-over-unavailable
+        ordering, integrity precedence, or a unique reason algorithm.
+      - >-
+        R6 only inserts the assessment ref/fingerprint into disposition and
+        handoff. R7 corrects the outer eligibility and authorization reducers
+        and the disposition fingerprint, but never replaces the internal final
+        authority assessment reducer.
+      - >-
+        The R7 fixture covers only the all-current row, so its validator cannot
+        prove the missing negative and unavailable cross-products.
+    counterexample: >-
+      At one watermark the Task authority is reproducibly stale, PBL bytes have
+      an integrity conflict, and Resident currentness is unavailable. One writer
+      can emit REJECTED/AUTHORITY_STALE, another REJECTED/INTEGRITY_FAILURE, and
+      a third INDETERMINATE/AUTHORITY_UNAVAILABLE without violating any printed
+      R5-R7 precedence rule.
+    required_correction:
+      - freeze the complete final-handoff normalized observation set
+      - define integrity then proven-negative then unavailable then all-current ordering
+      - define exact reason mapping and precedence for simultaneous negatives
+      - add full cross-product vectors and canonical fingerprint checks
+
+  - id: F4-R7-FULL-ATOMIC-IR-B06
+    severity: blocker
+    class:
+      - unavailable_branch_constructibility
+      - fail_open_currentness
+      - compromise_history_ambiguity
+    title: F4 effect-trust eligibility unavailable branches have no canonical field-presence or watermark representation
+    evidence:
+      - >-
+        R6 Section 3 requires non-null current F2 assessment and both F2/F4
+        compromise-history head refs/fingerprints in every eligibility object.
+        R7 Section 3 adds HISTORY_UNAVAILABLE and CURRENT_F2_INPUT_UNAVAILABLE
+        results, but adds neither nullable observation bindings, a no-object
+        resolution, nor an assessment watermark/event sequence.
+      - >-
+        The R7 vectors reduce booleans to result/reason only. They do not
+        materialize a complete eligibility object for either unavailable branch.
+    counterexample: >-
+      If the current F2 compromise-history head is unreadable, the writer cannot
+      populate the schema's required exact current head fingerprint. Reusing a
+      last-known head is not defined and has no watermark; inventing a head is an
+      integrity violation. Two writers can therefore emit different bytes or no
+      object for the same unavailable observation.
+    required_correction:
+      - choose a no-object resolution for unavailable eligibility or define explicit nullable observation bindings
+      - freeze a complete presence matrix for current and unavailable branches
+      - bind one exact assessment watermark/event sequence
+      - materialize all unavailable branches as complete objects in the witness
+
+  - id: F4-R7-FULL-ATOMIC-IR-B07
+    severity: blocker
+    class:
+      - host_identity_ambiguity
+      - stale_trust_bypass
+      - incomplete_effective_schema_replacement
+      - internal_contradiction
+    title: Downstream schemas retain an undefined Host identity revision after HostIdentityRevision was replaced by two distinct revisions
+    evidence:
+      - >-
+        R5 Section 3 replaces R1 HostIdentityRevision with F4HostTrustRevision,
+        which has both host_trust_revision and host_actor_identity_revision.
+      - >-
+        R7 explicitly replaces permit host_identity_ref/fingerprint with
+        host_trust_ref/fingerprint and says the R1 Host-identity-only field set
+        is removed, but the effective fixture retains
+        target_host_identity_revision, accepted_host_identity_revision,
+        observed_host_identity_revision, and owner_host_identity_revision.
+      - >-
+        No R5-R7 clause says whether those four values mean F2 Actor identity
+        revision or F4 Host-trust revision. The witness assigns 1 to both and
+        therefore hides the divergence.
+    counterexample: >-
+      F4 Host trust advances from revision 1 to 2 while the F2 EXECUTION_HOST
+      Actor identity remains revision 1. A writer interpreting the residual
+      field as Actor revision emits 1; a writer interpreting it as Host-trust
+      revision emits 2. Both bind different currentness and fingerprints.
+    required_correction:
+      - replace all four residual fields with explicit host_trust_revision fields
+      - add a separate host_actor_identity_revision only where it is independently required
+      - define exact equality checks and fingerprint positions at request acceptance disposition and handoff
+      - use an adversarial witness where Actor and Host-trust revisions differ
+
+required_review_questions:
+  all_39_hashes_match_and_all_21_subjects_are_fully_read_unchanged:
+    result: PASS
+    evidence: 39_of_39_hashes_and_21_of_21_subject_reads
+  authorization_reducer_is_total_for_concurrent_negatives_unavailable_and_exact_seven_field_presence:
+    result: BLOCK
+    finding_refs: [F4-R7-FULL-ATOMIC-IR-B04]
+  F4_effect_trust_eligibility_is_total_for_integrity_dual_history_nonactive_and_unavailable:
+    result: BLOCK
+    finding_refs: [F4-R7-FULL-ATOMIC-IR-B06]
+  disposition_has_exactly_28_preceding_fields_with_interface_version_first:
+    result: PASS
+    evidence: exact_28_field_order_recomputed_and_27_field_mutation_rejected
+  base_integrity_node_is_a_direct_dependency_of_every_effective_node:
+    result: PASS
+    evidence: 17_of_17_effective_nodes_directly_depend_on_node_1
+  every_required_effective_object_is_complete_not_a_delta:
+    result: BLOCK
+    finding_refs:
+      - F4-R7-FULL-ATOMIC-IR-B02
+      - F4-R7-FULL-ATOMIC-IR-B06
+      - F4-R7-FULL-ATOMIC-IR-B07
+  all_removed_fields_are_recursively_absent_from_effective_outputs:
+    result: BLOCK
+    finding_refs: [F4-R7-FULL-ATOMIC-IR-B07]
+    note: exact_six_named_removed_keys_and_ACCEPTANCE_MISSING_are_absent_but_the_undefined_R1_Host_identity_only_field_set_is_not_closed
+  all_nested_outer_fingerprints_edges_and_zero_effect_assertions_recompute:
+    result: BLOCK
+    finding_refs:
+      - F4-R7-FULL-ATOMIC-IR-B01
+      - F4-R7-FULL-ATOMIC-IR-B02
+      - F4-R7-FULL-ATOMIC-IR-B03
+    zero_effect_assertions: PASS
+  seven_validators_reproduce_PASS_and_prior_closures_do_not_regress:
+    result: BLOCK
+    validator_commands_reproduce_PASS: true
+    semantic_regression_refs:
+      - F4-R7-FULL-ATOMIC-IR-B01
+      - F4-R7-FULL-ATOMIC-IR-B02
+      - F4-R7-FULL-ATOMIC-IR-B03
+      - F4-R7-FULL-ATOMIC-IR-B04
+  no_F5_F6_implementation_runtime_provider_database_effect_authority_leaks:
+    result: PASS
+    evidence: contract_and_fixture_remain_zero_effect_and_non_authorizing
+
+required_adversarial_checks:
+  revoked_scope_mismatch_expired_and_unavailable_select_revoked:
+    result: PASS
+    observed: REQUIREMENT_REJECTED_JENN_DECISION_REVOKED
+  F2_and_F4_history_plus_unavailable_select_F2_history:
+    result: PASS
+    observed: INELIGIBLE_F2_COMPROMISE_HISTORY_PRESENT
+  integrity_plus_history_selects_integrity:
+    result: PASS
+    observed: INELIGIBLE_INTEGRITY_FAILURE
+  missing_interface_version_or_27_field_disposition_rejects:
+    result: PASS
+    independent_mutations_rejected: 2
+  any_effective_node_without_base_dependency_rejects:
+    result: PASS
+    independent_mutation_rejected: true
+  any_old_Jenn_color_bare_source_or_ACCEPTANCE_MISSING_field_rejects:
+    result: PASS
+    independent_mutations_rejected: 4
+  any_incomplete_permit_currentness_admission_acceptance_disposition_or_handoff_rejects:
+    result: PASS
+    independent_mutations_rejected: 6
+  changed_node_dependency_fingerprint_or_effect_count_rejects:
+    result: PASS
+    independent_mutations_rejected: 3
+
+independent_mutation_summary:
+  mutations_executed_in_memory: 16
+  mutations_rejected: 16
+  existing_files_modified_for_mutations: false
+
+safety_and_ambiguity_counts:
+  identity_spoofing_count: 2
+  authority_expansion_count: 2
+  host_authentication_bypass_count: 1
+  revocation_or_compromise_bypass_count: 2
+  fail_open_currentness_count: 3
+  dual_writer_or_cross_writer_divergence_count: 2
+  circular_proof_count: 0
+  crash_or_replay_ambiguity_count: 1
+  downstream_boundary_leak_count: 0
+  M0_constructive_witness_failure_count: 3
+  internal_contradiction_count: 4
+
+final_disposition:
+  F4_R7_fresh_full_atomic_independent_review: BLOCK
+  F4_accepted: false
+  F4_frozen: false
+  Jenn_acceptance_ready: false
+  requires_R8: true
+  partial_acceptance: forbidden
+  preserve_R1_R7_subject_bytes: true
+  next_action:
+    - create_narrow_R8_amendment_for_the_seven_findings
+    - rebuild_the_complete_effective_fixture_and_validator_from_one_explicit_canonical_profile
+    - run_a_new_fresh_full_atomic_hash_bound_independent_review
+
+non_authorization:
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  Resident_or_Host_start_authorized: false
+  provider_execution_authorized: false
+  external_effect_authorized: false
+  commit_push_merge_release_or_deploy_authorized: false

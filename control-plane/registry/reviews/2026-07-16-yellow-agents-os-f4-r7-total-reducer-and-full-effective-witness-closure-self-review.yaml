@@ -1,0 +1,30 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f4-r7-total-reducer-and-full-effective-witness-closure-self-review-v0.1
+date: 2026-07-16
+reviewed_unit: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R7_ATOMIC_BUNDLE
+reviewer: Nobao_subject_author
+independent: false
+result: PASS_FOR_INDEPENDENT_REVIEW_ONLY
+closure_matrix:
+  F4-R6-FULL-ATOMIC-IR-B01: fixed_rejected_precedence_negative_over_unavailable_and_exact_seven_field_presence_matrix
+  F4-R6-FULL-ATOMIC-IR-B02: complete_F4_only_integrity_history_currentness_lattice_and_precedence
+  F4-R6-FULL-ATOMIC-IR-B03: interface_version_is_value_1_of_exactly_28_disposition_preceding_fields
+  F4-R6-FULL-ATOMIC-IR-B04: base_integrity_node_plus_complete_effective_objects_with_removed_fields_recursively_absent
+R7_validator:
+  result: PASS
+  node_count: 18
+  base_integrity_node_count: 1
+  complete_effective_object_count: 17
+  node_hashes_verified: 18
+  authorization_vector_count: 8
+  effect_trust_eligibility_vector_count: 7
+  disposition_preceding_field_count: 28
+  removed_field_checks: 7
+  acceptance_count: 1
+  accepted_handoff_count: 1
+  terminal_outcome: NOT_EXECUTED
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+limitations: {author_review_is_independent: false, validator_is_full_semantic_review: false, F4_accepted: false, F4_frozen: false, F5_started: false, implementation_authorized: false}
+next_gate: fresh_full_atomic_hash_bound_independent_review_of_all_twenty_one_subjects

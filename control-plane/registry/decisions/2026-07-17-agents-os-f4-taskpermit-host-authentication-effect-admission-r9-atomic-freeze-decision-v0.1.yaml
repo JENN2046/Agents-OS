@@ -1,0 +1,159 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: 2026-07-17T01:33:43+08:00
+effective_at: 2026-07-17T01:33:43+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F4_R9_atomic_freeze_decision_package_section_6_A
+
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-freeze-decision-package-v0.1.md
+    sha256: bd37fa970583eec47554a023290dab9328de0efa08dcc90519e06d4208eca87a
+    section: 6_A
+  confirmation_text_received: >-
+    执行冻结决策包第 6 节 A 的完整 Exact decision text，正式冻结 F4 R9；到此停止 F4 修订。
+
+acceptance_unit:
+  id: F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 29
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R9_Section_10_final_replacements
+    - R9_other_nonconflicting_clauses
+    - R8_other_explicit_replacements
+    - R7_other_explicit_replacements
+    - R6_other_explicit_replacements
+    - R5_other_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 47
+
+accepted_subjects:
+  - {role: R1_contract, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md, sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3}
+  - {role: R1_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json, sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75}
+  - {role: R1_validator, path: control-plane/registry/validate-f4-m0a-witness.py, sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa}
+  - {role: R2_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md, sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705}
+  - {role: R2_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json, sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad}
+  - {role: R2_validator, path: control-plane/registry/validate-f4-r2-result-reason-totality.py, sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941}
+  - {role: R3_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md, sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939}
+  - {role: R3_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json, sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4}
+  - {role: R3_validator, path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py, sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec}
+  - {role: R4_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r4-amendment.draft.md, sha256: 7c6034e037cfe2ff5d31b4c5f47bd2e584536cf9b8c8dbdda5b706512a03e79b}
+  - {role: R4_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r4-start-observation-no-fact-vectors-v0.1.json, sha256: 540e58e5ccd7a9d756016d44218b358d7dffc71e894447d95ba4b4f1eafd13ff}
+  - {role: R4_validator, path: control-plane/registry/validate-f4-r4-start-observation-no-fact.py, sha256: 2176b00aa8f207b230fac314e439902455d0170b955bd6ae512edfd3ae5a2155}
+  - {role: R5_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r5-amendment.draft.md, sha256: 90715a14279af382d3286e5024bc6cd136447c7f7e42930ebb05aa7c381bb047}
+  - {role: R5_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r5-cross-phase-authority-closure-vectors-v0.1.json, sha256: 22650373a81dd71c3dafefb77e89b5d9fd483505b5e01892fa0f6d1cce766dd0}
+  - {role: R5_validator, path: control-plane/registry/validate-f4-r5-cross-phase-authority-closure.py, sha256: 3fc4c8eccb9fec430a63de4c355025b4a17b9605943531b34637776a3dbaf518}
+  - {role: R6_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r6-amendment.draft.md, sha256: 09af4b475e6ef66c0c5faa7ec60179cf0f6a0e111f96d9d1d2ef810311af1be5}
+  - {role: R6_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r6-full-effective-m0a-witness-v0.1.json, sha256: 3ecf13d4b1297dd041ee982f351e813523a79d29f253cb64c58d451f1860970f}
+  - {role: R6_validator, path: control-plane/registry/validate-f4-r6-full-effective-m0a.py, sha256: 02be5f7ebf84be631659c27e3117fc5e983ada7edafed274eb435b491f0d6591}
+  - {role: R7_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r7-amendment.draft.md, sha256: bf0ec245382e1b9315faf946927464efc97223c4b2581761895cd4e09f6d533c}
+  - {role: R7_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r7-complete-effective-m0a-witness-v0.1.json, sha256: 57141c7c470f4424c3bff43cf2d410550200309c27d3b400dba69257e019666b}
+  - {role: R7_validator, path: control-plane/registry/validate-f4-r7-complete-effective-m0a.py, sha256: 9bc7d2873813e499d11ab34d4804177fe2a74130744a678861cbe6dfb39c9840}
+  - {role: R8_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r8-amendment.draft.md, sha256: f483f8db5df3fc7e435c2a5acd8a3d29fff438f08b69ea3049543d0fded3bb0c}
+  - {role: R8_fixture_builder, path: control-plane/registry/build-f4-r8-complete-effective-m0a.py, sha256: dc65acd98ba06c08495c2531571a4ea8a73093a0aa8a28eb07a26b0b15c7206d}
+  - {role: R8_complete_effective_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r8-complete-effective-m0a-witness-v0.1.json, sha256: 49577e6acdddd321902ab9c7b9c6f3578c175ea66224cb919ba137ab985ad021}
+  - {role: R8_independent_semantic_validator, path: control-plane/registry/validate-f4-r8-complete-effective-m0a.py, sha256: 19ee60c6f5f46a710b8d9075e6c9295832b9107346bbc82a0193973e6e8c5301}
+  - {role: R9_amendment, path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r9-amendment.draft.md, sha256: 16b5eb0903cd84a90b1f01d55e8bfcebd7a1883a436fc4cea4c66f313d257224}
+  - {role: R9_synthetic_fixture_builder, path: control-plane/registry/build-f4-r9-synthetic-nonauthority-m0a.py, sha256: c42c7782e437f4eb5bd3aa587b71541dab39187c21a9955cabcb6963cf2f57b4}
+  - {role: R9_synthetic_nonauthority_fixture, path: control-plane/registry/examples/2026-07-16-agents-os-f4-r9-synthetic-nonauthority-m0a-witness-v0.1.json, sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab}
+  - {role: R9_independent_semantic_validator, path: control-plane/registry/validate-f4-r9-synthetic-nonauthority-m0a.py, sha256: d6e18b2ce4d18ed7ef34591d567a5ec7b7c0695deae44f4b1386bc9318621d09}
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f4-r9-full-atomic-independent-review.yaml
+    sha256: 376f7d3adcf55336b9419e785a92436f48dd0541b91d457a738a162429299667
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    unresolved_ambiguity_count: 0
+    requires_R10: false
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-freeze-decision-package-v0.1.md
+    sha256: bd37fa970583eec47554a023290dab9328de0efa08dcc90519e06d4208eca87a
+    acceptance_subject: false
+
+excluded_evidence_classes:
+  - manifest
+  - author_self_review
+  - independent_review
+  - review_disposition
+  - decision_package
+  - receipt
+  - active_work_queue
+
+effects:
+  F4_contract_status: ACCEPTED_FROZEN
+  F4_atomic_freeze_gate: SATISFIED
+  additional_F4_amendment_required: false
+  requires_R10: false
+  F4_revisions_stopped: true
+  positive_operational_handoff_authorized: false
+  real_positive_handoff_status: NON_ISSUABLE_PENDING_INDEPENDENTLY_ACCEPTED_OWNER_INTERFACES_AND_CURRENT_PRODUCTION_RECEIPTS
+  F5_started: false
+  F6_started: false
+  implementation_authorized: false
+  Rust_implementation_authorized: false
+  JavaScript_implementation_authorized: false
+  database_change_authorized: false
+  index_or_cache_change_authorized: false
+  Resident_start_authorized: false
+  Worker_start_authorized: false
+  Host_or_executor_start_authorized: false
+  dispatcher_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  device_file_process_or_physical_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: EXPLICIT_START_OF_F5_EFFECT_EXECUTION_CONTRACT_CLOSURE
+  decision_owner: Jenn
+  automatic_transition: forbidden
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_and_subject_reverification_before_closeout: completed
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

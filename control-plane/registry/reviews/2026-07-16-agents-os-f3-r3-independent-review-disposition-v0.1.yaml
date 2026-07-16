@@ -1,0 +1,63 @@
+schema_version: agents-os.review-findings-disposition.v0.1
+record_id: agents-os-f3-r3-independent-review-disposition-v0.1
+record_type: ReviewFindingsDisposition
+status: active
+date: 2026-07-16
+
+subjects:
+  precedence:
+    - R3_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+  R1:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+    bytes_modified: false
+  R2:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+    sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+    bytes_modified: false
+  R3:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+    sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+    bytes_modified: false
+
+review:
+  path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r3-full-atomic-independent-review.yaml
+  sha256: 33d31ddfaa90e7b9171461d4cd89f013fb13568ef7a645fec356fd44063b784e
+  result: BLOCK
+  blocker_count: 0
+  major_count: 4
+  minor_count: 0
+  requires_R4: true
+
+disposition:
+  method: NEW_ATOMIC_R4_NARROW_AMENDMENT
+  review_bytes_modified: false
+  R1_R2_R3_acceptance_ready: false
+  every_finding_accepted_for_correction: true
+  R4_start_decision:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-r4-four-finding-contract-closure-start-decision-v0.1.yaml
+  R4_amendment:
+    path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r4-amendment.draft.md
+
+finding_status:
+  F3-R3-FULL-ATOMIC-IR-M01: ACCEPTED_FOR_R4_RESTORE_LINEAGE_RETRY_CHAIN_CORRECTION
+  F3-R3-FULL-ATOMIC-IR-M02: ACCEPTED_FOR_R4_EFFECTIVE_BUNDLE_VERSION_BINDING_CORRECTION
+  F3-R3-FULL-ATOMIC-IR-M03: ACCEPTED_FOR_R4_ACTIVATION_COMMAND_TYPE_REGISTRY_CLOSURE
+  F3-R3-FULL-ATOMIC-IR-M04: ACCEPTED_FOR_R4_EXACT_SYNTHETIC_SCHEMA_MAPPING_CLOSURE
+
+next_gate: HASH_BOUND_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW_OF_F3_R1_R2_R3_R4
+
+boundaries:
+  F3_accepted: false
+  F3_frozen: false
+  F4_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  commit_performed: false
+  push_performed: false

@@ -1,0 +1,22 @@
+schema_version: agents-os.review-finding-disposition.v0.1
+disposition_id: agents-os-f4-r8-independent-review-disposition-v0.1
+date: 2026-07-16
+review_path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f4-r8-full-atomic-independent-review.yaml
+review_sha256: 219254fee8bfe9772f5728ad3764b9948f7f05d982e1b4eb333111dc0ecbd484
+review_result: BLOCK
+requires_R9: true
+dispositions:
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B01, disposition: ACCEPTED_FOR_R9_NORMATIVE_EFFECT_SCOPE_AND_RESOLUTION}
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B02, disposition: ACCEPTED_FOR_R9_MATERIALIZED_DEFINITION_REGISTRY_AND_SOURCE_PROJECTION_PROOFS}
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B03, disposition: ACCEPTED_FOR_R9_RESOLVED_FINAL_TIME_INTEGRITY_AND_FENCE_EVIDENCE}
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B04, disposition: ACCEPTED_FOR_R9_CANONICAL_F2_AND_COMPROMISE_HISTORY_EVIDENCE}
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B05, disposition: ACCEPTED_FOR_R9_EXACT_REVOCATION_OBSERVATION_AND_CONCURRENT_NEGATIVE_PRECEDENCE}
+  - {finding_id: F4-R8-FULL-ATOMIC-IR-B06, disposition: ACCEPTED_FOR_R9_EFFECTIVE_REDUCERS_EXPIRY_AND_CAUSAL_ORDER}
+audit_confirmed_supporting_gaps:
+  - complete_removed_field_and_value_enforcement
+  - strict_schema_discovery_types_nullability_and_shadow_object_rejection
+  - three_required_no_requirement_object_rows
+  - complete_event_and_same_transaction_causal_order
+  - resolvable_Host_trust_predecessor_transition_action_and_authority_basis
+  - full_resigned_mutation_family_coverage
+non_authorization: {F4_accepted: false, F4_frozen: false, F5_started: false, implementation_authorized: false, runtime_activation_authorized: false, provider_host_database_or_effect_execution_authorized: false, commit_push_merge_authorized: false}
