@@ -1,0 +1,71 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f5-r7-exact-accounting-type-closure-start-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_conditional_instruction_satisfied_by_fresh_R6_independent_review
+  statement_summary: >-
+    R7 was not preplanned and is allowed only for a new independent,
+    reproducible security counterexample. The fixed R6 review reproduced a
+    fully re-signed offline JSON instance whose boolean count values were
+    accepted as integers, so the condition is satisfied and R7 is limited to
+    exact serialized integer-type closure.
+
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+review_sha256: eb50e96a6309fcb7a2bafb28533b829a29d199135ad4975dbbabafa3c915f249
+disposition_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml
+disposition_sha256: 4b30533c31a12cbc97a8eeae84f29dbaca238e68cb2a6936db2ce5a2a98c4564
+
+trigger_evidence:
+  finding_count: 1
+  fully_resigned_counterexample_count: 1
+  finding: F5_R6_BLOCKER_001_JSON_BOOLEAN_ACCEPTED_AS_INTEGER_COUNT
+  rendered_counterexample_sha256: 79e949da2501d7acaecc5898b19caa461b54776e81e0cc71ca30b51bfa21e7fa
+  accepted_boolean_substitution_occurrences: 34
+  exact_count_occurrences_to_close: 37
+
+authorized_scope:
+  - require_exact_JSON_integer_type_for_every_Event_call_and_count_field
+  - reject_JSON_boolean_substitution_before_count_equality_or_mapping
+  - prove_all_37_fixed_count_occurrences_with_individual_fully_resigned_mutations
+  - preserve_R6_first_apply_and_R5_receipt_arm_semantics_unchanged
+  - update_only_the_corresponding_R7_amendment_builder_fixture_validator_and_review_surface
+  - bind_the_current_AGENTS_md_bytes_in_the_new_manifest
+  - perform_fresh_full_atomic_hash_bound_independent_review
+
+forbidden_scope:
+  - receipt_replay_semantic_change
+  - first_apply_result_or_accounting_semantic_change
+  - new_delivery_state
+  - new_receipt_type
+  - new_retry_model
+  - provider_transport
+  - database_layout
+  - Rust_implementation
+  - JavaScript_implementation
+  - production_authentication
+  - runtime_activation
+  - real_handoff_or_effect
+  - F6_semantics_or_start
+  - automatic_F5_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R8_preplanned: false
+  R8_allowed_only_for_new_independent_reproducible_security_counterexample: true
+  implementation_profile_question_does_not_trigger_R8: true
+  pass_route: STOP_F5_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R7_BYTES_AND_ROUTE_ONLY_NEW_REAL_SECURITY_FINDINGS
+
+authority_effect:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false

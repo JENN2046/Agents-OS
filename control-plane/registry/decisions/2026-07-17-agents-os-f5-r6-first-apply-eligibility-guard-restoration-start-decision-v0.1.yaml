@@ -1,0 +1,66 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f5-r6-first-apply-eligibility-guard-restoration-start-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_conditional_instruction_satisfied_by_fresh_R5_independent_review
+  statement_summary: >-
+    R6 was not preplanned and is allowed only for a new independent,
+    reproducible security counterexample. The fixed R5 review produced one
+    fully re-signed first-apply eligibility counterexample accepted by the R5
+    validator, so the condition is satisfied and R6 is limited to restoring
+    exactly the lost R4 guard.
+
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-full-atomic-independent-review.yaml
+review_sha256: e7d48414b3aaa7df7ee462534ceff82062894bae39d1fd06c374c5a713b86cf7
+disposition_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r5-independent-review-disposition-v0.1.yaml
+disposition_sha256: 562422bd7a11b538c42bbd492c94dd1a5de582c491462eb13ef7725cd0d99a29
+
+trigger_evidence:
+  finding_count: 1
+  fully_resigned_counterexample_count: 1
+  finding: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION
+  rendered_counterexample_sha256: c797d18dc819ec2818f30bcddd583a14bedf80e8757925d97135ace5cfeef114
+
+authorized_scope:
+  - restore_the_R4_first_apply_eligibility_guard
+  - require_eligible_proof_precondition_for_first_apply_Event_and_call_accounting
+  - reject_not_eligible_first_apply_with_zero_Event_and_call_deltas
+  - update_only_the_corresponding_R6_amendment_builder_fixture_validator_and_review_surface
+  - perform_fresh_full_atomic_hash_bound_independent_review
+
+forbidden_scope:
+  - receipt_replay_semantic_change
+  - new_delivery_state
+  - new_receipt_type
+  - new_retry_model
+  - provider_transport
+  - database_layout
+  - Rust_implementation
+  - JavaScript_implementation
+  - production_authentication
+  - runtime_activation
+  - real_handoff_or_effect
+  - F6_semantics_or_start
+  - automatic_F5_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R7_preplanned: false
+  R7_allowed_only_for_new_independent_reproducible_security_counterexample: true
+  implementation_profile_question_does_not_trigger_R7: true
+  pass_route: STOP_F5_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R6_BYTES_AND_ROUTE_ONLY_NEW_REAL_SECURITY_FINDINGS
+
+authority_effect:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false

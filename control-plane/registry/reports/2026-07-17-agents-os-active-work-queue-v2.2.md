@@ -1,0 +1,113 @@
+# AGENTS OS Active Work Queue v2.2
+
+Date: 2026-07-17  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md`
+
+## Purpose
+
+Current queue after the narrow F5 R6 first-apply guard restoration was fixed,
+all R1-R6 validators passed, the builder reproduced its fixture byte-for-byte,
+and the complete 56-input / 24-subject unit was hash-bound. Queues v0.1-v2.1
+remain byte-preserved history.
+
+This queue authorizes only a fresh full atomic independent review. It
+authorizes no F5 acceptance/freeze, F6, implementation, runtime, database,
+authentication, real handoff, provider/service/effect or Git delivery.
+
+## Current Facts
+
+```text
+F5_status=R6_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R6_ATOMIC_BUNDLE
+F5_subject_count=24
+F5_R5_independent_review_result=BLOCK
+F5_R5_blocker_count=1
+F5_R5_review_sha256=e7d48414b3aaa7df7ee462534ceff82062894bae39d1fd06c374c5a713b86cf7
+F5_R5_disposition_sha256=562422bd7a11b538c42bbd492c94dd1a5de582c491462eb13ef7725cd0d99a29
+F5_R6_start_decision_sha256=321fe3277391404c62223d2e9b7380b467e84d06889c05e62ca5809d62931a1f
+F5_R6_amendment_sha256=0c82ad7eccbcd10abbdf429bb78ec49dfb3f77565779f5b457d075ec24e444d8
+F5_R6_builder_sha256=f3c23180277fba76dd9c6cca93782b2b77413905c9df07576d3fffee182979f4
+F5_R6_fixture_sha256=853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8
+F5_R6_fixture_canonical_sha256=5447834426db9fbd49d1261f48bba788e3a546f585f289fe3966e720bb9da2b2
+F5_R6_validator_sha256=c694d6944d1dde3a0e5d2ac5c10b56e07950476946f7afa4c61f60df5ffa603a
+F5_R6_author_self_review_sha256=94a58f541e3cc2b677116a47fa128d05cffb0e187fb3a8403d351fd9fe13ec0e
+F5_R6_manifest_sha256=24e5381a4a98629666d3de99046ed9934101b7ee98a19ec222a78396b0826f7f
+F5_R6_review_package_sha256=c8949ad5a0b289a0aa9161852dd8f5e2d6d5224ee6e873099c52210367b52ba7
+F5_R6_manifest_verified_inputs=56
+F5_R6_independent_review_created=false
+F5_R7_preplanned=false
+F5_accepted=false
+F5_frozen=false
+F6_started=false
+accepted_real_handoff_count=0
+claim_event_count=0
+armed_dispatch_count=0
+runtime_consumable_count=0
+external_effect_count=0
+provider_call_count=0
+raw_secret_count=0
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+provider_host_or_effect_execution_authorized=false
+```
+
+## NOW
+
+### NOW-001: F5 R6 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+review_manifest=control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml
+review_manifest_sha256=24e5381a4a98629666d3de99046ed9934101b7ee98a19ec222a78396b0826f7f
+review_package=control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+review_package_sha256=c8949ad5a0b289a0aa9161852dd8f5e2d6d5224ee6e873099c52210367b52ba7
+subject_count=24
+declared_input_count=56
+required_questions=33
+required_adversarial_checks=33
+fixed_commands=7
+fresh_independent_reviewer_required=true
+author_self_review_content_forbidden=true
+author_self_review_hash_verification_allowed=true
+allowed_results=PASS_NO_BLOCKER|BLOCK
+execution_authorized=false
+```
+
+## NEXT
+
+```text
+PASS_NO_BLOCKER=stop_F5_revision_and_prepare_Jenn_only_atomic_freeze_decision_surface
+BLOCK=preserve_R1_R6_and_review_bytes_then_route_only_new_independent_reproducible_security_counterexamples
+R7_preplanned=false
+automatic_F5_acceptance_or_freeze=forbidden
+automatic_F6_start=forbidden
+```
+
+## BLOCKED
+
+```text
+self_attested_independent_review=forbidden
+partial_F5_acceptance=forbidden
+receipt_replay_semantic_change=forbidden
+new_delivery_state_receipt_type_retry_model_provider_implementation=forbidden
+runtime_authentication_real_handoff_service_effect=forbidden
+F6_start=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F5_R5_independent_review=BLOCK_1_BLOCKER
+F5_R5_finding_disposed_to_R6=1_OF_1
+F5_R6_author_surface=FIXED
+F5_R6_builder_reproduction=BYTE_EQUAL
+F5_R6_validator=PASS_11_FULLY_RESIGNED_MUTATIONS_REJECTED
+F5_R6_exact_R5_counterexample=REJECTED
+F5_R6_manifest=VERIFIED_56_OF_56
+active_work_queue_v0_1_through_v2_1=superseded_historical_bytes_preserved
+```

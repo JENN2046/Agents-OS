@@ -1,0 +1,96 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r3-seven-finding-closure-self-review-2026-07-17
+date: 2026-07-17
+reviewer: Nobao
+independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+may_substitute_for_independent_judgment: false
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  precedence: [R3_explicit_replacements, R2_all_other_clauses, R1_all_other_clauses]
+
+fixed_R3_subjects:
+  amendment:
+    path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md
+    sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd
+  builder:
+    path: control-plane/registry/build-f5-r3-seven-finding-closure.py
+    sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772
+  fixture:
+    path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+    sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876
+  validator:
+    path: control-plane/registry/validate-f5-r3-seven-finding-closure.py
+    sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273
+
+blocking_review:
+  path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+  sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d
+  result: BLOCK
+  requires_R3: true
+
+finding_closure_claims:
+  - finding_id: F5_R2_BLOCKER_001_VALIDATOR_ACCEPTS_FULLY_RESIGNED_SCHEMA_INVALID_VALUES
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [closed_root_and_object_inventories, recursive_NFC_safe_integer_no_float_validation, exact_type_enum_and_cross_field_rules, eight_fully_resigned_schema_invalid_mutations, duplicate_key_probe]
+  - finding_id: F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [25_cells_emit_only_COMPATIBLE_or_MISMATCH, separate_raw_currentness_reducer, APPLIED_HISTORY_ONLY_REJECTED_INDETERMINATE_REPLAYED_coverage]
+  - finding_id: F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [stored_and_submitted_request_bytes, recomputed_request_fingerprints, four_state_derived_relations, stored_first_accounting_returned_on_exact_replay]
+  - finding_id: F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [147_unordered_pair_IDs, 294_raw_ordering_trials, independent_reducer_execution, two_order_output_equality]
+  - finding_id: F5_R2_MAJOR_002_CANONICAL_INSTANCE_SET_VIOLATES_EFFECTIVE_SEMANTICS
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [schema_shapes_explicitly_nonoccurring, synthetic_scenario_reduces_NOT_EXECUTABLE, previous_plus_one_epoch, strict_lease_times, zero_claim_and_arm_events]
+  - finding_id: F5_R2_MAJOR_003_TRANSITION_PROOF_COUNT_IS_INTERNALLY_CONTRADICTORY
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [single_ten_state_inventory, exactly_100_ordered_trials, no_R3_121_claim]
+  - finding_id: F5_R2_MAJOR_004_DERIVED_ID_MUTATIONS_DO_NOT_MUTATE_THE_CANONICAL_OBJECT_GRAPH
+    author_disposition: CLOSED_IN_R3_FOR_INDEPENDENT_JUDGMENT
+    evidence: [six_formula_wrong_canonical_ID_or_token_mutations, dependent_ref_ID_and_fingerprint_propagation, section_and_root_resigning, independent_formula_rejection]
+
+validation:
+  R1_validator_result: PASS_NO_BLOCKER
+  R2_validator_result: PASS_NO_BLOCKER_but_superseded_for_seven_findings
+  R3_validator_result: PASS_NO_BLOCKER
+  schema_profile_count: 16
+  schema_shape_example_count: 16
+  precedence_unordered_pair_count: 147
+  precedence_ordering_trial_count: 294
+  arm_state_derivation_case_count: 4
+  receipt_compatibility_case_count: 25
+  receipt_currentness_case_count: 10
+  transition_state_count: 10
+  transition_case_count: 100
+  schema_invalid_resigned_mutations_rejected: 8
+  duplicate_key_probe_rejected: true
+  graph_level_identity_mutations_rejected: 6
+  proof_mutations_rejected: 6
+  builder_reproduction: BYTE_EQUAL
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+boundary:
+  second_permission_system_created: false
+  upstream_authority_recomputed: false
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  real_handoff_or_effect_execution_authorized: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_R1_PLUS_R2_PLUS_R3

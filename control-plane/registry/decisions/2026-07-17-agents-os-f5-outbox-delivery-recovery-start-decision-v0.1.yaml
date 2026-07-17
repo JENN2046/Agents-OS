@@ -1,0 +1,171 @@
+schema_version: agents-os.contract-unit-start-decision.v0.1
+record_id: agents-os-f5-outbox-delivery-recovery-start-decision-v0.1
+record_type: ContractUnitStartDecision
+status: active
+immutable: true
+created_at: 2026-07-17T03:17:42+08:00
+effective_at: 2026-07-17T03:17:42+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F5_OUTBOX_DELIVERY_RECOVERY_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: 启动 F5
+
+contract_unit:
+  id: F5
+  name: Outbox Delivery / Recovery
+  mode: ATOMIC_CONTRACT_CLOSURE
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+  implementation_profile_included: false
+  production_profile_included: false
+
+prerequisites:
+  phase_4_start:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  construction_readiness:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  F3_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+  F3_manifest:
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+  F4_freeze:
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+  F4_manifest:
+    path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+  mainline_basis:
+    branch: main
+    merge_commit: 606a5f1f0f6db886b0215b0668cf4e36d9c0d99a
+    tree: c31493c0e83862966d20580ebf610aa520bd3414
+
+direction_inputs:
+  workspace_governance:
+    path: AGENTS.md
+    sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  accepted_home_roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  accepted_home_roadmap_decision:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  accepted_resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+
+authorized_scope:
+  - immutable_OutboxIntent_identity_and_effect_id_idempotency_binding
+  - canonical_claim_lease_epoch_fencing_and_previous_plus_one_CAS
+  - exact_consumption_of_current_F4AcceptedEffectHandoff_without_authority_recomputation
+  - fresh_F4_owned_final_authority_assessment_at_the_physical_effect_boundary
+  - one_time_effect_boundary_claim_and_dispatch_arm_protocol
+  - transport_ACK_separation_from_effect_terminal_outcome
+  - safe_pre_arm_claim_and_lease_retry_only_and_no_automatic_physical_effect_retry
+  - dead_letter_reason_totality_without_treating_dead_letter_as_effect_failure
+  - duplicate_receipt_replay_changed_receipt_conflict_and_late_fact_accounting
+  - crash_window_recovery_reconciliation_and_fail_closed_startup_barrier
+  - synthetic_M0_A_constructibility_without_real_handoff_host_provider_secret_or_effect
+  - F5_author_self_review_and_fresh_hash_bound_independent_review_package
+  - Document_Registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+ownership_boundary:
+  F5_may:
+    - consume_fixed_F3_and_F4_refs_fingerprints_and_owner_results
+    - narrow_delivery_eligibility
+    - own_Outbox_delivery_recovery_state_and_reducers
+    - append_delivery_recovery_accounting_facts_through_the_canonical_writer
+  F5_must_not:
+    - reconstruct_or_reduce_F1_F2_F3_or_F4_authority
+    - issue_or_modify_a_TaskPermit
+    - create_expand_or_union_effect_authority
+    - classify_an_Actor_or_Task_by_permission_level_color_role_relationship_trust_or_urgency
+    - treat_PBL_no_match_as_positive_authority
+    - convert_synthetic_evidence_into_runtime_authority
+    - claim_exactly_once_external_effect_semantics
+
+deferred_scope:
+  F6:
+    owns: [Validation_requirement_current_decision_and_Task_completion_eligibility]
+    started: false
+  implementation_profile:
+    owns: [Rust_JavaScript_SQLite_schema_migration_index_cache_transport_adapter_crypto_key_storage_performance_and_tests]
+    authorized: false
+  production_profile:
+    owns: [real_host_provider_service_device_process_file_network_UI_credentials_and_external_effect]
+    authorized: false
+  owner_interface_amendments:
+    owns: [any_required_F3_or_F4_new_accepted_runtime_interface]
+    authorized: false
+
+authorized_outputs:
+  - F5_R1_contract_draft
+  - F5_R1_synthetic_fixture_builder
+  - F5_R1_synthetic_fixture
+  - F5_R1_offline_semantic_validator
+  - F5_R1_author_self_review
+  - F5_R1_hash_bound_independent_review_manifest_and_package
+  - F5_R1_registry_CURRENT_STATE_queue_and_receipt_projection
+  - correction_amendment_and_fresh_review_cycle_if_independent_findings_require_it
+  - Jenn_only_atomic_accept_freeze_decision_surface_after_valid_independent_PASS
+
+acceptance_boundary:
+  draft_or_author_review_accepts_F5: false
+  independent_review_accepts_F5: false
+  automatic_acceptance: forbidden
+  Jenn_atomic_decision_required: true
+  partial_acceptance: forbidden
+
+hard_boundaries:
+  modify_F1_F2_F3_or_F4_accepted_subject_bytes: forbidden
+  consume_a_real_F4_handoff: forbidden
+  claim_or_dispatch_a_real_Outbox_intent: forbidden
+  execute_query_or_reconcile_a_real_effect: forbidden
+  start_F6_F7_F8_F9_F10_F11: forbidden
+  implementation: forbidden
+  runtime_source_change: forbidden
+  Resident_Worker_Host_dispatcher_or_service_start: forbidden
+  database_creation_migration_or_live_access: forbidden
+  production_authentication_or_credential_change: forbidden
+  provider_process_file_network_device_or_UI_execution: forbidden
+  public_API_or_MCP_expansion: forbidden
+  secret_or_private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+  tag_release_deploy_or_publish: forbidden
+
+automatic_progression:
+  within_F5_contract_review_cycle: authorized
+  finding_disposition_and_narrow_amendment: authorized_when_evidence_bound
+  start_downstream_contract_or_implementation: forbidden
+
+effects:
+  F5_started: true
+  F5_status: CONTRACT_CLOSURE_ACTIVE
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  real_effect_execution_authorized: false
+
+next_gate:
+  name: F5_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

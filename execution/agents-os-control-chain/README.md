@@ -16,7 +16,7 @@ Task Producer -> Machine Preview -> Commander Decision -> Track Selector
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py validate
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/test-control-chain.py
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-queue-proposal --route-choice-preview-json /path/to/route-choice-preview.json --json
-PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-preview --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md --json
+PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-preview --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py reviewed-route-adoption-apply-gate --proposal-json /path/to/proposal.json --review-json /path/to/review.json --queue /path/to/queue.md --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-handoff-reconciliation --json
 PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-control-chain/control_chain.py route-choice-template-readiness --json

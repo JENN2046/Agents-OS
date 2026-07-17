@@ -1,0 +1,60 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f5-r4-three-finding-proof-closure-start-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_explicit_instruction
+  statement_summary: >-
+    R4 is required and is the last known-problem correction round; preserve the
+    fixed R3 subjects, manifest and review, reconcile governance state, then
+    correct exactly the three independently reproduced proof defects and run a
+    fresh full atomic review.
+
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+review_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+disposition_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml
+disposition_sha256: 9c5a8420c767d18b24b3b77213fc12b0ad2658759f93b7ae1605208728ed42a9
+
+authorized_scope:
+  - close_R3_root_section_row_and_cross_field_validation
+  - require_exact_effective_positive_safe_integer_profiles
+  - require_147_precedence_pairs_and_294_trials_with_exact_reverse_ordering
+  - bind_closed_complete_arm_request_payload_to_canonical_bytes_fingerprint_and_ID
+  - bind_exact_replay_to_stored_first_accounting_and_references
+  - update_only_the_corresponding_R4_builder_fixture_validator_and_review_surface
+  - perform_fresh_full_atomic_hash_bound_independent_review
+
+forbidden_scope:
+  - new_delivery_state
+  - new_receipt_type
+  - new_retry_model
+  - provider_transport
+  - database_layout
+  - Rust_implementation
+  - JavaScript_implementation
+  - production_authentication
+  - runtime_activation
+  - real_handoff_or_effect
+  - F6_semantics_or_start
+  - automatic_F5_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R5_preplanned: false
+  R5_allowed_only_for_new_independent_reproducible_security_counterexample: true
+  implementation_profile_question_does_not_trigger_R5: true
+  pass_route: STOP_F5_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R4_BYTES_AND_ROUTE_ONLY_NEW_REAL_SECURITY_FINDINGS
+
+authority_effect:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false

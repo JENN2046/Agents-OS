@@ -1,0 +1,90 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f5-r3-independent-review-disposition-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R3_ATOMIC_BUNDLE
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+review_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563
+review_result: BLOCK
+requires_R4: true
+R4_truly_required: true
+
+integrity:
+  declared_inputs_verified: 32_of_32
+  subjects_read: 12_of_12
+  fixed_commands_passed: 4_of_4
+  additional_fully_resigned_probes_rejected: 0_of_7
+  subject_bytes_modified_by_review: false
+
+finding_dispositions:
+  - finding_id: F5_R3_BLOCKER_001_CLOSED_SCHEMA_AND_CROSS_FIELD_VALIDATION_REMAINS_INCOMPLETE
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R4
+    R4_correction:
+      - close_root_section_and_row_inventories
+      - bind_exact_effective_field_types_before_fingerprint_check
+      - complete_arm_and_receipt_disposition_cross_field_matrices
+      - reject_fully_resigned_unknown_inventory_and_illegal_tuple_mutations
+
+  - finding_id: F5_R3_MAJOR_001_PRECEDENCE_PROOF_ACCEPTS_DUPLICATED_RAW_ORDERING
+    severity: major
+    disposition: ACCEPTED_REQUIRES_NARROW_R4
+    R4_correction:
+      - require_exactly_two_rows_per_unordered_case
+      - require_order_labels_1_and_2
+      - require_two_true_distinct_conditions_per_row
+      - require_order_2_to_be_exact_reverse_of_order_1
+      - require_equal_true_reason_sets_and_reducer_outputs
+      - reject_fully_resigned_duplicated_order_mutation
+
+  - finding_id: F5_R3_BLOCKER_002_ARM_REPLAY_DOES_NOT_BIND_CANONICAL_BYTES_OR_STORED_FIRST_ACCOUNTING
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R4
+    R4_correction:
+      - bind_closed_complete_arm_request_payload
+      - require_exact_canonical_UTF8_JSON_bytes
+      - recompute_request_fingerprint_and_request_ID_from_payload
+      - remove_caller_supplied_previous_accounting
+      - bind_exact_replay_totals_and_returned_references_to_stored_first_accounting
+      - reject_noncanonical_formula_wrong_and_accounting_divergence_mutations
+
+R2_seven_finding_lineage_after_R3_review:
+  closed: 3
+  not_closed: 3
+  original_counterexample_closed_but_new_cross_field_gap: 1
+
+R4_scope_limit:
+  allowed:
+    - R3_schema_profile_row_and_cross_field_validator_closure
+    - precedence_exact_reverse_constraint_and_attack
+    - arm_request_canonical_encoding_ID_fingerprint_and_stored_first_accounting
+    - corresponding_builder_fixture_validator_changes
+    - new_atomic_manifest_and_fresh_full_atomic_review
+  forbidden:
+    - new_delivery_state
+    - new_receipt_type
+    - new_retry_model
+    - provider_transport
+    - database_layout
+    - Rust_or_JavaScript_implementation
+    - production_authentication
+    - F6_semantics
+
+governance:
+  R1_R2_R3_subjects_immutable: true
+  R1_R2_R3_reviews_immutable: true
+  partial_acceptance: forbidden
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized_by_this_disposition: false
+
+next_gate: NARROW_F5_R4_THREE_FINDING_PROOF_CLOSURE_AND_FRESH_FULL_ATOMIC_REVIEW

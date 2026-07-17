@@ -2042,6 +2042,535 @@ start F5/F6, or authorize implementation, runtime, production authentication,
 provider, Host, database, service, physical effect, public API, MCP, commit,
 push, PR, merge, release, deploy, or publish work.
 
+## F5 Outbox Delivery / Recovery R1 Contract Closure Active (2026-07-17)
+
+Jenn explicitly started F5 after the frozen F3 and F4 durability set was merged
+and verified on `main`. The start is limited to semantic contract closure. The
+fixed R1 four-subject unit is ready for a fresh full atomic hash-bound
+independent review; it is not accepted or frozen.
+
+```yaml
+F5_started: true
+F5_status: CONTRACT_CLOSURE_ACTIVE
+F5_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml
+F5_start_decision_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e
+F5_R1_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE
+F5_R1_subject_count: 4
+F5_R1_contract_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+F5_R1_builder_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+F5_R1_fixture_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+F5_R1_validator_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+F5_R1_manifest: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml
+F5_R1_manifest_sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2
+F5_R1_manifest_verified_inputs: 16_16
+F5_R1_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F5_R1_independent_review_created: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+accepted_real_handoff_count: 0
+armed_dispatch_count: 0
+runtime_consumable_count: 0
+external_effect_count: 0
+provider_call_count: 0
+raw_secret_count: 0
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
+active_work_queue_sha256: 510c1e7fce938c5a425cec393a705d678da079041b35d02ba9d3f1f75ecf0565
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
+next_gate: F5_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+F5 R1 owns durable materialization, pre-arm claim/lease fencing, a one-time
+dispatch arm at the physical-effect seam, delivery accounting, reconciliation
+and crash recovery. It consumes current F4-owned assessments and does not
+recompute F1/F2/F3/F4 authority, classify Actor or Task permission levels, or
+create a second identity, policy or effect-authority system. Frozen F4 still
+makes real positive handoffs non-issuable; no real handoff, dispatch arm,
+provider call, service, database, runtime or physical effect was created.
+
+## F5 R2 Four-Finding Closure Ready For Independent Review (2026-07-17)
+
+The R1 fresh independent review completed with `BLOCK`: two blockers and two
+majors. Jenn accepted all four findings into a narrow R2 correction and
+requested a new fresh full atomic review. R1 bytes remain immutable.
+
+```yaml
+F5_status: R2_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R2_ATOMIC_BUNDLE
+F5_subject_count: 8
+F5_R1_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+F5_R1_independent_review_sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a
+F5_R1_independent_review_result: BLOCK
+F5_R1_blocker_count: 2
+F5_R1_major_count: 2
+F5_R1_requires_R2: true
+F5_R1_finding_disposition_sha256: 53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4
+F5_R2_start_decision_sha256: 9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428
+F5_R2_amendment_sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7
+F5_R2_builder_sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd
+F5_R2_fixture_sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f
+F5_R2_validator_sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c
+F5_R2_manifest: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F5_R2_manifest_sha256: 0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d
+F5_R2_manifest_verified_inputs: 24_24
+F5_R2_independent_review_created: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+accepted_real_handoff_count: 0
+armed_dispatch_count: 0
+runtime_consumable_count: 0
+external_effect_count: 0
+provider_call_count: 0
+raw_secret_count: 0
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md
+active_work_queue_sha256: 447a70948f7375c2c945f2dd40c083216eb87ac382c09323b144cc884f3ba86b
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md
+next_gate: F5_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R2 introduces no permission ladder. It adds a canonical arm-request replay
+relation, total reason precedence, a receipt-kind/status matrix and executable
+coverage for every effective schema, identity, transition and required attack.
+The fixed R2 proof remains synthetic and zero-effect.
+
+## F5 R3 Seven-Finding Closure Ready For Independent Review (2026-07-17)
+
+The R2 fresh full atomic independent review completed with `BLOCK`: three
+blockers and four majors. Jenn accepted the exact seven findings into a narrow
+R3 correction and requested another fresh full atomic review. All R1 and R2
+subject and review bytes remain immutable.
+
+```yaml
+F5_status: R3_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R3_ATOMIC_BUNDLE
+F5_subject_count: 12
+F5_R2_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+F5_R2_independent_review_sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d
+F5_R2_independent_review_result: BLOCK
+F5_R2_blocker_count: 3
+F5_R2_major_count: 4
+F5_R2_requires_R3: true
+F5_R2_finding_disposition_sha256: d4a9b616eb399d8533d4c3e5f74f174fd453f3500b370b826fb177b1b7b43abf
+F5_R3_start_decision_sha256: da1edd01df29a2d334cd06d6c54705646934187315274c920acb1d896fb2a9de
+F5_R3_amendment_sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd
+F5_R3_builder_sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772
+F5_R3_fixture_sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876
+F5_R3_validator_sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273
+F5_R3_manifest: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml
+F5_R3_manifest_sha256: b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563
+F5_R3_manifest_verified_inputs: 32_32
+F5_R3_independent_review_created: true
+F5_R3_independent_review_result: BLOCK
+F5_R3_independent_review_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+F5_R3_blocker_count: 2
+F5_R3_major_count: 1
+F5_R3_requires_R4: true
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+accepted_real_handoff_count: 0
+claim_event_count: 0
+armed_dispatch_count: 0
+runtime_consumable_count: 0
+external_effect_count: 0
+provider_call_count: 0
+raw_secret_count: 0
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+active_work_queue_sha256: ba82f068c78e3d04687b045ca7fcbada9bf7eb743accd6fa208278df513c2773
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+next_gate: F5_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R3 does not add a delivery capability or permission ladder. It replaces
+prefilled proof tables with raw-input reducers, separates receipt compatibility
+from currentness/application, performs 294 ordering trials and 100 transition
+trials, and rejects fully re-signed schema-invalid and coherent graph-level
+identity-formula mutations. The proof remains nonauthority and zero-effect.
+
+## F5 R3 Independent BLOCK And Narrow R4 Start (2026-07-17)
+
+The fixed R3 fresh full atomic hash-bound independent review completed against
+unchanged R1-R3 subjects and returned `BLOCK`: two blockers and one major. It
+verified 32/32 input hashes, fully read 12/12 subjects, passed all four fixed
+commands, and independently demonstrated seven fully re-signed counterexamples
+that the R3 validator incorrectly accepted. No permission ladder, upstream
+authority recomputation, real handoff, runtime or provider effect was found.
+
+Jenn accepted the three findings into a final known-problem R4 correction. R4
+is limited to closed proof inventories and cross-field matrices, exact reverse
+precedence trials, and canonical arm request / stored-first accounting binding.
+R1-R3 subjects, manifests and reviews remain immutable.
+
+```yaml
+F5_status: R4_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R4_ATOMIC_BUNDLE
+F5_subject_count: 16
+F5_R3_manifest_sha256: b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563
+F5_R3_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+F5_R3_independent_review_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+F5_R3_independent_review_result: BLOCK
+F5_R3_findings: {blocker: 2, major: 1, minor: 0, unresolved: 0}
+F5_R3_requires_R4: true
+F5_R3_finding_disposition: control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml
+F5_R3_finding_disposition_sha256: 9c5a8420c767d18b24b3b77213fc12b0ad2658759f93b7ae1605208728ed42a9
+F5_R4_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml
+F5_R4_start_decision_sha256: 9d8780b8527ca339d81f4fa470df4c3a27cda4179c0ab72ce8b46a5caff83440
+F5_R4_scope: EXACTLY_THREE_INDEPENDENTLY_REPRODUCED_PROOF_FINDINGS
+F5_R4_amendment_sha256: cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551
+F5_R4_builder_sha256: d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929
+F5_R4_fixture_sha256: af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d
+F5_R4_fixture_canonical_sha256: 803ae7e021b26ae6f02f2e13e95b4bba34d619558287aa86d7480a20cf1b62c2
+F5_R4_validator_sha256: 4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8
+F5_R4_author_self_review_sha256: 00aa323df98958b2f3ec46278954ec7bac4966cd13f3833534de210b31776cc7
+F5_R4_manifest: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml
+F5_R4_manifest_sha256: 5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4
+F5_R4_manifest_verified_inputs: 40_40
+F5_R4_review_package_sha256: ad52b48c0b1ec470413df97b693692f7e9ca666e1d9388a9e6577b4bbd7d138a
+F5_R4_independent_review_created: false
+F5_R5_preplanned: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+active_work_queue_sha256: ba82f068c78e3d04687b045ca7fcbada9bf7eb743accd6fa208278df513c2773
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+next_gate: F5_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R4 is not a delivery capability expansion. It changes only proof validation and
+the synthetic constructive witness. It cannot authorize F5 acceptance, F6,
+implementation, runtime, authentication, provider access or physical effects.
+
+## F5 R4 Independent BLOCK And Conditional R5 Start (2026-07-17)
+
+The fixed R4 fresh full atomic hash-bound independent review completed against
+unchanged R1-R4 subjects and returned `BLOCK`: two blockers, no major or minor
+findings. It verified 40/40 input hashes, fully read 16/16 subjects and 11/11
+authority inputs, passed all five fixed commands, and independently reproduced
+two fully re-signed counterexamples accepted by the R4 validator.
+
+The first counterexample proves that detached receipt `kind/status` fields were
+not bound into stored and submitted canonical receipt bytes. The second proves
+that the `LOOKUP_INDETERMINATE` arm branch returned before enforcing stored /
+submitted request identity equality. Both are proof-credibility defects within
+the already frozen F5 architecture direction; neither adds a permission ladder,
+delivery state, runtime authority or provider path.
+
+Jenn's prior R5 condition—new independent and reproducible security
+counterexample—has therefore been satisfied. R5 is active only for those two
+corrections. R1-R4 subjects, manifests and reviews remain immutable.
+
+```yaml
+F5_status: R5_NARROW_TWO_FINDING_BOUND_EVIDENCE_CLOSURE_ACTIVE
+F5_R4_manifest_sha256: 5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4
+F5_R4_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+F5_R4_independent_review_sha256: 1552ad833b4003d35e014ac6f8b8d69015851aa9212c2d665052d646867b9449
+F5_R4_independent_review_result: BLOCK
+F5_R4_findings: {blocker: 2, major: 0, minor: 0, unresolved: 0}
+F5_R4_requires_R5: true
+F5_R4_finding_disposition: control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml
+F5_R4_finding_disposition_sha256: 8a1a102433d8e618d94273a7fba2a9dede5a6315d2f298cc6f3c7ab3cf655e95
+F5_R5_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml
+F5_R5_start_decision_sha256: 659695c0d36e255de5afabe947a2a085d95a08d4d0d3ed6772c0c16409374897
+F5_R5_scope: EXACTLY_TWO_INDEPENDENTLY_REPRODUCED_BOUND_EVIDENCE_FINDINGS
+F5_R5_subject_count_planned: 4
+F5_R6_preplanned: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+active_work_queue_sha256: ec867acb3963dc1e5da9a52147b79834d39b1faeba4c3a15ebaf4292d555981e
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+next_gate: FIX_R5_BYTES_AND_CREATE_FRESH_FULL_ATOMIC_HASH_BOUND_REVIEW_SURFACE
+```
+
+## F5 R5 Bound Replay Evidence Closure Ready For Independent Review (2026-07-17)
+
+The narrow R5 four-subject correction is fixed. The complete R1-R5 atomic
+review unit contains 20 subjects and 48 hash-bound inputs. R5 binds the complete
+receipt payload, including `receipt_kind/effect_status`, into exact canonical
+UTF-8 bytes and their SHA-256; exact receipt replay now requires equal key,
+fingerprint and bytes. Arm stored/submitted request identity equality now runs
+after both records parse and bind but before any lookup-reproducibility branch.
+
+All R1-R5 validators pass. The R5 validator rejects 12/12 fully re-signed
+mutations, including the original R3 detached receipt override and the R4
+lookup-indeterminate/different-valid-request-identity counterexample. The R5
+builder reproduces the fixed fixture byte-for-byte.
+
+```yaml
+F5_status: R5_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R5_ATOMIC_BUNDLE
+F5_subject_count: 20
+F5_R5_amendment_sha256: ac6c001b745910ef9c9038ec5bb6b60fac6bd7f0e4ea7d6603db4e99b0b943e2
+F5_R5_builder_sha256: cbdd1d2f4a68179db71a6eb17803f2b7fe9cb76a79dacd769b4a2d55179cb0d6
+F5_R5_fixture_sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e
+F5_R5_fixture_canonical_sha256: c6c2f24fbb82c41667062892e9acbe61180a69a8d0803664a5dd41c08f693ff3
+F5_R5_validator_sha256: 3e3b89b2af8f15a3389c59785d361c25fc0974131af3065f13cbc2637db84378
+F5_R5_author_self_review_sha256: 86dcb7214504825458e4b69a2558f7f4aff41b5d3629d5a83702b27f6932723b
+F5_R5_manifest: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml
+F5_R5_manifest_sha256: 54e401c18d30c1462b2a6be90a4c72f2ddd3afa44167f634532b126a24715f38
+F5_R5_manifest_verified_inputs: 48_48
+F5_R5_review_package_sha256: b4a4a251434d054196d1bf06154dce9602aa20782d6b04e22cff27e128582c7e
+F5_R5_independent_review_created: false
+F5_R6_preplanned: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+accepted_real_handoff_count: 0
+claim_event_count: 0
+armed_dispatch_count: 0
+runtime_consumable_count: 0
+external_effect_count: 0
+provider_call_count: 0
+raw_secret_count: 0
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md
+active_work_queue_sha256: 702749a157f0c35a1c98b78d6d12bdd88a82a157123e63da25d204071284a4a1
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md
+next_gate: F5_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F5 R5 Independent BLOCK And R6 Ready For Review (2026-07-17)
+
+The fixed R5 fresh review returned `BLOCK` with one new blocker. It verified
+48/48 inputs, read 20/20 subjects and passed all six fixed commands. R5 closed
+both R4 findings, but its focused arm reducer omitted R4's first-apply
+eligibility guard. A fully re-signed `NOT_ELIGIBLE` first apply incorrectly
+remained `APPLIED` with one Event and one call authorization.
+
+The conditional R6 gate was therefore satisfied. R6 restores only that guard:
+eligible first apply is `APPLIED + 1/1`; not eligible is
+`REJECTED / FIRST_APPLY_NOT_ELIGIBLE + 0/0`. Receipt semantics are unchanged.
+The R6 validator rejects 11/11 fully re-signed mutations, including the exact
+R5 logic counterexample and inverse eligibility mutation. All R1-R6 validators
+pass and the R6 builder is byte-equal to the fixed fixture.
+
+```yaml
+F5_status: R6_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R6_ATOMIC_BUNDLE
+F5_subject_count: 24
+F5_R5_independent_review_sha256: e7d48414b3aaa7df7ee462534ceff82062894bae39d1fd06c374c5a713b86cf7
+F5_R5_independent_review_result: BLOCK
+F5_R5_findings: {blocker: 1, major: 0, minor: 0, unresolved: 0}
+F5_R5_disposition_sha256: 562422bd7a11b538c42bbd492c94dd1a5de582c491462eb13ef7725cd0d99a29
+F5_R6_start_decision_sha256: 321fe3277391404c62223d2e9b7380b467e84d06889c05e62ca5809d62931a1f
+F5_R6_amendment_sha256: 0c82ad7eccbcd10abbdf429bb78ec49dfb3f77565779f5b457d075ec24e444d8
+F5_R6_builder_sha256: f3c23180277fba76dd9c6cca93782b2b77413905c9df07576d3fffee182979f4
+F5_R6_fixture_sha256: 853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8
+F5_R6_fixture_canonical_sha256: 5447834426db9fbd49d1261f48bba788e3a546f585f289fe3966e720bb9da2b2
+F5_R6_validator_sha256: c694d6944d1dde3a0e5d2ac5c10b56e07950476946f7afa4c61f60df5ffa603a
+F5_R6_author_self_review_sha256: 94a58f541e3cc2b677116a47fa128d05cffb0e187fb3a8403d351fd9fe13ec0e
+F5_R6_manifest_sha256: 24e5381a4a98629666d3de99046ed9934101b7ee98a19ec222a78396b0826f7f
+F5_R6_manifest_verified_inputs: 56_56
+F5_R6_review_package_sha256: c8949ad5a0b289a0aa9161852dd8f5e2d6d5224ee6e873099c52210367b52ba7
+F5_R6_independent_review_created: false
+F5_R7_preplanned: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+active_work_queue_sha256: 9cf121471002e5633ef5f72e1360002b968fad65b4f434909bc4ea06d51e80ea
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+next_gate: F5_R6_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F5 R6 Independent BLOCK And R7 Ready For Review (2026-07-17)
+
+The fixed R6 fresh review returned `BLOCK` with one new blocker. It read all
+24/24 subjects and passed all seven fixed commands. The 24 subject hashes were
+unchanged. One authority input, `AGENTS.md`, changed after the R6 manifest was
+fixed; the R6 manifest remains immutable and the R7 manifest binds the current
+bytes.
+
+R6 closed the R5 first-apply eligibility finding, but its focused validator
+accepted JSON booleans as integer count values because Python equality treats
+`true == 1` and `false == 0`. The independent reviewer reproduced 34 accepted
+zero/one substitutions and the four-field fully re-signed counterexample.
+
+The conditional R7 gate was therefore satisfied. R7 changes only exact scalar
+typing: all 37 fixed count occurrences and all 37 corresponding evidence rows
+must be exact JSON integers, never booleans. The R7 validator rejects 37/37
+source substitutions, 37/37 evidence-row substitutions and the exact R6
+four-field mutation. All R1-R7 validators pass and the R7 builder is byte-equal
+to the fixed fixture.
+
+```yaml
+F5_status: R7_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R7_ATOMIC_BUNDLE
+F5_subject_count: 28
+F5_R6_independent_review_sha256: eb50e96a6309fcb7a2bafb28533b829a29d199135ad4975dbbabafa3c915f249
+F5_R6_independent_review_result: BLOCK
+F5_R6_findings: {blocker: 1, major: 0, minor: 0, unresolved: 0}
+F5_R6_subject_hashes: 24_24
+F5_R6_manifest_input_hashes: 55_56_due_to_post_fix_AGENTS_md_drift
+F5_R6_disposition_sha256: 4b30533c31a12cbc97a8eeae84f29dbaca238e68cb2a6936db2ce5a2a98c4564
+F5_R7_start_decision_sha256: 5b9a26f282a9ca7f816dfff6dbecef25861cf220861b7818e80ce44c52241a88
+F5_R7_amendment_sha256: 8c2c4a782215da132ea06ed8db0d20c26c4756f9471f533b6e6ce64192f70950
+F5_R7_builder_sha256: 7280f4658d2dd63c47074e9e12cfa3b1d00b1c47633a7ef821a494adf632d6eb
+F5_R7_fixture_sha256: 8819f12117f38bbde6f7cf489f1eb80a64fe4b819fd03540fd891083477fc775
+F5_R7_fixture_canonical_sha256: 343a13364cd08c7b6d190c2cf49df264a898c8626bfbbe7eacc2a4dfbe2dab06
+F5_R7_validator_sha256: ea67a2d4ece53debe43854f8a2378ca678f2a8faf6f957cea662991eb26af1a3
+F5_R7_author_self_review_sha256: c036b161b830eecc5a4c6ba16ae100519105851dbddfb67559c2ce2d75ec98b0
+F5_R7_manifest_sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+F5_R7_manifest_verified_inputs: 64_64
+F5_R7_review_package_sha256: 08489f54fbf74b4d40d2192978ba4f875523ad93d4f98af0cdd9d91b9d139d46
+F5_R7_exact_count_occurrences: 37
+F5_R7_source_boolean_mutations_rejected: 37_37
+F5_R7_evidence_boolean_mutations_rejected: 37_37
+F5_R7_exact_R6_counterexample_rejected: true
+F5_R7_independent_review_created: false
+F5_R8_preplanned: false
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+active_work_queue_sha256: 5665abd16b4c83c8d1ee26e2f749efee92ebb347ca1dabb5e5e2786521fec636
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+next_gate: F5_R7_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F5 R7 Independent PASS And Jenn Freeze Decision Ready (2026-07-17)
+
+The fixed R7 fresh full atomic review returned `PASS_NO_BLOCKER`. It verified
+64/64 bound inputs, fully read 28/28 subjects and 11/11 authority inputs, ran
+8/8 fixed commands, passed 38/38 questions and 38/38 independent conformance
+checks, and found all 18 prior findings closed.
+
+Independent reproduction rejected 37/37 source boolean substitutions, all
+34 zero/one substitutions, 37/37 R7 evidence-row substitutions and the exact
+four-field R6 counterexample. There are zero blockers, majors, minors and
+unresolved ambiguities. F5 revision is stopped at R7; R8 is not required.
+
+The Jenn-only atomic freeze decision package is ready. F5 remains not accepted
+and not frozen until Jenn chooses its Section 6 outcome. F6, implementation,
+runtime, database, authentication, provider/effect and Git delivery remain
+unauthorized.
+
+```yaml
+F5_status: R7_PASS_READY_FOR_JENN_ATOMIC_FREEZE_DECISION
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R7_ATOMIC_BUNDLE
+F5_subject_count: 28
+F5_R7_manifest_sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+F5_R7_independent_review_sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+F5_R7_independent_review_result: PASS_NO_BLOCKER
+F5_R7_findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+F5_R7_inputs_verified: 64_64
+F5_R7_subjects_fully_read: 28_28
+F5_R7_authority_inputs_fully_read: 11_11
+F5_R7_fixed_commands: 8_8
+F5_R7_required_questions: 38_38_PASS
+F5_R7_required_adversarial_checks: 38_38_PASS
+F5_R7_source_boolean_mutations_rejected: 37_37
+F5_R7_evidence_boolean_mutations_rejected: 37_37
+F5_R7_prior_findings_closed: 18_18
+F5_R7_freeze_decision_package: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md
+F5_R7_freeze_decision_package_sha256: ac77a52c5a1fb8257bf0d8d017dcbd4afb43ad523bf596184a0c757c4fb1d9fa
+F5_R8_required: false
+F5_revisions_stopped: true
+F5_accepted: false
+F5_frozen: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+active_work_queue_sha256: 9182bec558a6835df33c7ac5d3d5806b7af6c23f0273e01f5f286ec757521f9f
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+next_gate: JENN_F5_R7_ATOMIC_FREEZE_DECISION
+```
+
+## F5 R7 Accepted And Frozen (2026-07-17)
+
+Jenn explicitly confirmed Section 6 A's complete Exact decision text in the F5
+R7 Atomic Freeze Decision Package. The complete 28-subject R1-R7 atomic bundle
+is accepted and frozen under R7 through R1 precedence. Partial acceptance is
+forbidden and F5 revision is stopped at R7.
+
+Before the immutable decision record was created, the manifest SHA-256, all
+64 bound inputs, all 28 subjects and the fresh independent review SHA/result
+were recomputed and matched. All R1-R7 validators pass, the R7 builder is
+byte-equal to the fixed fixture, and all 37 source plus 37 evidence boolean
+substitutions remain rejected.
+
+The freeze is semantic contract closure only. It does not authorize a real
+delivery, physical call, implementation, runtime, database, authentication,
+provider/service/effect or Git delivery. F6 remains unstarted and requires a
+separate explicit Jenn decision.
+
+```yaml
+F5_status: ACCEPTED_FROZEN
+F5_acceptance_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R7_ATOMIC_BUNDLE
+F5_subject_count: 28
+F5_partial_acceptance: forbidden
+F5_manifest_sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+F5_manifest_verified_inputs: 64_64
+F5_subjects_verified: 28_28
+F5_independent_review_result: PASS_NO_BLOCKER
+F5_independent_review_sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+F5_freeze_decision: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+F5_freeze_decision_sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+F5_requires_R8: false
+F5_revisions_stopped: true
+real_delivery_authorized: false
+physical_call_authorized: false
+F6_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_host_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md
+active_work_queue_sha256: 776c22f30ee01c1b25de4f4e028da4bd78e2cc5de3c2623097d5cee2bedfe70f
+superseded_active_work_queue: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+consumer_explicit_current_queue_validation: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F6
+```
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.
@@ -2055,8 +2584,8 @@ push, PR, merge, release, deploy, or publish work.
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md`.
-- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F5 Effect Execution Contract Closure`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md`.
+- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F6`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.

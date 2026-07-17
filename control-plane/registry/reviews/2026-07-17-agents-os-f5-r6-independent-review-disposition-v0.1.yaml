@@ -1,0 +1,74 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f5-r6-independent-review-disposition-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R6_ATOMIC_BUNDLE
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+review_sha256: eb50e96a6309fcb7a2bafb28533b829a29d199135ad4975dbbabafa3c915f249
+manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: 24e5381a4a98629666d3de99046ed9934101b7ee98a19ec222a78396b0826f7f
+review_result: BLOCK
+requires_R7: true
+R7_truly_required: true
+
+integrity:
+  declared_inputs_available: 56_of_56
+  declared_inputs_hash_match: 55_of_56
+  subjects_hash_match_and_fully_read: 24_of_24
+  fixed_commands_passed: 7_of_7
+  R5_finding_closed_in_R6: 1_of_1
+  new_fully_resigned_counterexamples_reproduced: 1_of_1
+  subject_bytes_modified_by_review: false
+  authority_input_drift:
+    path: AGENTS.md
+    declared_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+    observed_sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    treatment: preserve_R6_manifest_immutable_and_bind_current_bytes_in_R7
+
+finding_dispositions:
+  - finding_id: F5_R6_BLOCKER_001_JSON_BOOLEAN_ACCEPTED_AS_INTEGER_COUNT
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R7
+    R7_correction:
+      - require_exact_JSON_integer_type_before_every_count_equality_or_mapping_check
+      - reject_JSON_boolean_for_every_integer_count_field
+      - cover_all_37_fixed_count_occurrences_and_all_34_prior_zero_or_one_occurrences
+      - include_fully_resigned_true_for_one_and_false_for_zero_negative_cases
+      - include_the_exact_four_field_fully_resigned_R6_counterexample
+
+R7_scope_limit:
+  allowed:
+    - exact_integer_type_profile_for_Event_call_and_other_count_fields
+    - corresponding_focused_builder_fixture_validator_and_negative_probes
+    - current_AGENTS_md_authority_hash_rebinding_in_the_new_manifest
+    - new_atomic_manifest_and_fresh_full_atomic_review
+  forbidden:
+    - receipt_replay_semantic_change
+    - first_apply_result_or_accounting_semantic_change
+    - new_delivery_state
+    - new_receipt_type
+    - new_retry_model
+    - provider_transport
+    - database_layout
+    - Rust_or_JavaScript_implementation
+    - production_authentication
+    - runtime_activation
+    - F6_semantics
+
+governance:
+  R1_R2_R3_R4_R5_R6_subjects_immutable: true
+  R1_R2_R3_R4_R5_R6_manifests_immutable: true
+  R1_R2_R3_R4_R5_R6_reviews_immutable: true
+  partial_acceptance: forbidden
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized_by_this_disposition: false
+
+next_gate: NARROW_F5_R7_EXACT_ACCOUNTING_TYPE_CLOSURE_AND_FRESH_FULL_ATOMIC_REVIEW

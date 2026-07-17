@@ -1,0 +1,74 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f5-r3-seven-finding-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-17T23:30:00+08:00
+effective_at: 2026-07-17T23:30:00+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  decision: START_F5_R3_NARROW_SEVEN_FINDING_CORRECTION
+  exact_current_instruction: 下一步就是制作窄范围 R3，并从固定新字节重新进行 fresh full atomic review。
+
+amendment_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R3_ATOMIC_BUNDLE
+  precedence: [R3_explicit_replacements, R2_all_other_clauses, R1_all_other_clauses]
+  fixed_prior_subject_count: 8
+  fixed_prior_subject_bytes: immutable
+  blocking_review:
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+    sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d
+    result: BLOCK
+    blocker_count: 3
+    major_count: 4
+    requires_R3: true
+  finding_disposition:
+    path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml
+    sha256: d4a9b616eb399d8533d4c3e5f74f174fd453f3500b370b826fb177b1b7b43abf
+
+required_scope:
+  - closed_recursive_schema_and_JCS_value_validation
+  - compatibility_separate_from_receipt_currentness
+  - stored_state_derived_arm_replay_relation
+  - exactly_294_precedence_ordering_trials
+  - semantically_valid_nonauthority_scenario_and_nonoccurring_shapes
+  - exactly_100_transition_pairs
+  - six_graph_level_identity_formula_mutations
+  - author_self_review
+  - fresh_full_atomic_hash_bound_independent_review
+
+design_constraints:
+  amendment_must_be_narrow: true
+  R1_and_R2_subject_bytes_immutable: true
+  F1_F2_F3_F4_accepted_or_frozen_bytes_immutable: true
+  no_Actor_or_Task_permission_classifier: true
+  no_second_identity_policy_or_effect_authority: true
+  synthetic_evidence_only: true
+  partial_acceptance: forbidden
+
+excluded_scope:
+  - new_delivery_capability
+  - provider_protocol
+  - database_layout
+  - Rust_or_runtime_implementation
+  - network_transport
+  - production_authentication
+  - F6_design_or_start
+  - real_F4_handoff_provider_or_external_effect_execution
+
+completion_effect:
+  F5_started: true
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  real_handoff_or_effect_execution_authorized: false
+
+next_gate:
+  name: F5_R3_AUTHOR_CLOSEOUT_AND_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn

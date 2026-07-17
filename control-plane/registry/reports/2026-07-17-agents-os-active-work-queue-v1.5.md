@@ -1,0 +1,113 @@
+# AGENTS OS Active Work Queue v1.5
+
+Date: 2026-07-17  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md`
+
+## Purpose
+
+Current queue after the F5 R1 fresh review returned two blockers and two majors
+and Jenn authorized the exact four-finding R2 correction plus another fresh
+full atomic review. Queues v0.1-v1.4 remain byte-preserved historical evidence.
+
+This queue authorizes no self-attested independent result, F5 acceptance or
+freeze, F6 start, implementation, runtime, database, authentication, real F4
+handoff, provider, service or physical effect.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F5_started=true
+F5_status=R2_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R2_ATOMIC_BUNDLE
+F5_subject_count=8
+F5_partial_acceptance=forbidden
+F5_R1_independent_review_result=BLOCK
+F5_R1_blocker_count=2
+F5_R1_major_count=2
+F5_R1_review_sha256=7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a
+F5_R1_disposition_sha256=53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4
+F5_R2_start_decision_sha256=9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428
+F5_R2_amendment_sha256=de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7
+F5_R2_builder_sha256=2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd
+F5_R2_fixture_sha256=61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f
+F5_R2_validator_sha256=3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c
+F5_R2_manifest_sha256=0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d
+F5_R2_manifest_verified_inputs=24
+F5_R2_independent_review_created=false
+F5_accepted=false
+F5_frozen=false
+F6_started=false
+accepted_real_handoff_count=0
+armed_dispatch_count=0
+runtime_consumable_count=0
+external_effect_count=0
+provider_call_count=0
+raw_secret_count=0
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+provider_host_or_effect_execution_authorized=false
+```
+
+## NOW
+
+### NOW-001: F5 R2 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+review_manifest=control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml
+review_manifest_sha256=0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d
+subject_count=8
+declared_input_count=24
+required_questions=24
+required_adversarial_checks=28
+allowed_results=PASS_NO_BLOCKER|BLOCK
+fresh_independent_reviewer_required=true
+author_may_claim_independence=false
+requires_jenn_decision=false
+execution_authorized=false
+```
+
+## NEXT
+
+```text
+BLOCK=preserve_R1_R2_and_review_bytes_then_route_exact_findings_to_R3_if_required
+PASS_NO_BLOCKER=prepare_Jenn_only_F5_atomic_freeze_decision_surface
+automatic_F5_acceptance_or_freeze=forbidden
+automatic_F6_start=forbidden
+automatic_implementation_or_runtime=forbidden
+```
+
+## BLOCKED
+
+```text
+self_attested_independent_review=forbidden
+partial_F5_acceptance=forbidden
+synthetic_evidence_as_production_authority=forbidden
+F5_recomputation_of_F1_F2_F3_or_F4_authority=forbidden
+Actor_Task_role_color_trust_urgency_or_P0_P3_permission_classification=forbidden
+positive_operational_handoff=NON_ISSUABLE
+F6_start=not_authorized
+implementation_runtime_database_authentication_provider_Host_effect=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_R2_package
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F5_R1_independent_review=BLOCK_2_BLOCKER_2_MAJOR
+F5_R1_findings_disposed_to_R2=4_OF_4
+F5_R2_author_surface=FIXED
+F5_R2_manifest=VERIFIED_24_OF_24
+F5_R1_validator=PASS
+F5_R2_validator=PASS_16_SCHEMAS_16_INSTANCES_6_IDS_147_PRECEDENCE_4_REPLAY_25_RECEIPT_100_TRANSITION_28_ATTACK_29_MUTATION
+F5_R2_builder_reproduction=BYTE_EQUAL
+active_work_queue_v0_1_through_v1_4=superseded_historical_bytes_preserved
+```

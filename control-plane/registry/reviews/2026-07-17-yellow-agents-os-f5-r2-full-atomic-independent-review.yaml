@@ -1,0 +1,560 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f5-r2-full-atomic-independent-review-2026-07-17
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-17
+result: BLOCK
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R2_ATOMIC_BUNDLE
+atomic_review_completed: true
+partial_review: false
+
+reviewer_identity_and_independence_basis:
+  reviewer_id: F5_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEWER
+  review_run_id: codex:/root/f5_r2_independent_review
+  author_of_subjects: false
+  fresh_judgment_from_fixed_bytes: true
+  prior_R1_review_used_as_finding_lineage_only: true
+  prior_or_author_conclusion_used_as_current_judgment: false
+  R2_author_self_review_file_content_read: false
+  R2_author_self_review_file_conclusion_read: false
+  R2_author_self_review_access_mode: SHA256_ONLY_WITHOUT_OPEN_OR_PARSE
+  independence_basis:
+    - separate_fresh_reviewer_run
+    - all_declared_input_hashes_recomputed_from_entire_regular_file_bytes
+    - all_eight_R1_plus_R2_subjects_read_completely
+    - all_authority_and_lineage_inputs_read_completely_except_R2_author_self_review_hash_only
+    - all_three_required_validator_and_builder_commands_reproduced_locally
+    - additional_in_memory_fully_resigned_counterexamples_executed_without_file_write
+    - all_required_questions_and_adversarial_checks_rejudged_from_fixed_bytes
+  forbidden_inputs_accessed: false
+
+exact_manifest_path_and_sha256:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d
+  byte_scope: entire_regular_file
+  canonicalization: none
+  presentation_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+  presentation_digest_bound_by_manifest: false
+
+every_input_hash_verified:
+  declared_input_count: 24
+  verified_input_count: 24
+  match_count: 24
+  mismatch_count: 0
+  all_match: true
+  inputs:
+    - {role: R1_normative_contract, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, declared_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f, actual_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f, match: true}
+    - {role: R1_deterministic_fixture_builder, path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, declared_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793, actual_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793, match: true}
+    - {role: R1_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, declared_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281, actual_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281, match: true}
+    - {role: R1_independent_semantic_validator, path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, declared_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f, actual_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f, match: true}
+    - {role: R2_normative_four_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, declared_sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7, actual_sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7, match: true}
+    - {role: R2_full_effective_fixture_builder, path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, declared_sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd, actual_sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd, match: true}
+    - {role: R2_full_effective_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, declared_sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f, actual_sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f, match: true}
+    - {role: R2_independent_full_effective_validator, path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py, declared_sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c, actual_sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c, match: true}
+    - {role: workspace_governance, path: AGENTS.md, declared_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9, actual_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9, match: true}
+    - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, declared_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d, actual_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d, match: true}
+    - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, declared_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b, actual_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b, match: true}
+    - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, declared_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e, actual_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e, match: true}
+    - {role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, declared_sha256: c4b352f44df16bb868529d13c37d569adddf7812d0b9f98f926a943b4ea486, actual_sha256: c4b352f44df16bb868529d13c37d569adddf7812d0b9f98f926a943b4ea486, match: true}
+    - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, declared_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670, actual_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670, match: true}
+    - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, declared_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529, actual_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529, match: true}
+    - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, declared_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff, actual_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff, match: true}
+    - {role: frozen_F4_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, declared_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2, actual_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2, match: true}
+    - {role: frozen_F4_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml, declared_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5, actual_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5, match: true}
+    - {role: immutable_F5_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml, declared_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e, actual_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e, match: true}
+    - {role: prior_R1_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, declared_sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2, actual_sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2, match: true}
+    - {role: prior_R1_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml, declared_sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a, actual_sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a, match: true}
+    - {role: R1_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml, declared_sha256: 53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4, actual_sha256: 53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4, match: true}
+    - {role: immutable_R2_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml, declared_sha256: 9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428, actual_sha256: 9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428, match: true}
+    - role: R2_author_self_review_not_independent
+      path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+      declared_sha256: 6f2dbd89cd8aa61a858a4b477cfa55a0ec46903de41f1329701adcd725a5d961
+      actual_sha256: 6f2dbd89cd8aa61a858a4b477cfa55a0ec46903de41f1329701adcd725a5d961
+      match: true
+      content_opened_or_parsed: false
+      conclusion_used: false
+
+all_eight_subject_hashes_and_bytes_reviewed_unchanged:
+  required_subject_count: 8
+  complete_read_count: 8
+  unchanged_hash_count: 8
+  all_complete_and_unchanged: true
+  subjects:
+    - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f, byte_count: 35800, lf_count: 900, complete_read: true}
+    - {revision: R1, role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793, byte_count: 27747, lf_count: 639, complete_read: true}
+    - {revision: R1, role: synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281, byte_count: 51865, lf_count: 1728, complete_read: true}
+    - {revision: R1, role: independent_semantic_validator, path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f, byte_count: 31446, lf_count: 519, complete_read: true}
+    - {revision: R2, role: normative_four_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7, byte_count: 16608, lf_count: 493, complete_read: true}
+    - {revision: R2, role: full_effective_fixture_builder, path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd, byte_count: 29227, lf_count: 318, complete_read: true}
+    - {revision: R2, role: full_effective_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f, byte_count: 108758, lf_count: 3626, complete_read: true}
+    - {revision: R2, role: independent_full_effective_validator, path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py, sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c, byte_count: 35843, lf_count: 394, complete_read: true}
+
+authority_and_lineage_read_completeness:
+  authority_inputs_declared: 11
+  authority_inputs_fully_read: 11
+  lineage_inputs_declared: 4
+  lineage_inputs_fully_read: 4
+  author_evidence_declared: 1
+  author_evidence_hash_verified_only: 1
+  author_evidence_content_read: 0
+  all_required_inputs_handled_under_constraints: true
+
+blocker_major_minor_and_unresolved_counts:
+  blocker_count: 3
+  major_count: 4
+  minor_count: 0
+  unresolved_ambiguity_count: 0
+  total_finding_count: 7
+
+finding_ids_with_exact_evidence_counterexample_and_required_correction:
+  - finding_id: F5_R2_BLOCKER_001_VALIDATOR_ACCEPTS_FULLY_RESIGNED_SCHEMA_INVALID_VALUES
+    severity: blocker
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        R2 amendment Section 2 lines 47-50 freezes NFC strings and safe integers
+        only. Validator canonical_bytes at lines 20-21 performs json.dumps with
+        sorted keys but performs neither NFC normalization/rejection nor a
+        recursive safe-integer/type validation.
+      - >-
+        validate_instances at validator lines 217-235 checks only field-set
+        equality, interface literals, fingerprints and a few selected fields;
+        it does not validate the declared scalar types, closed enums or
+        relational constraints for the 16 effective schemas. validate_root at
+        lines 321-324 hashes whatever root fields are present without enforcing
+        a closed root inventory.
+      - >-
+        An independent in-memory probe changed canonical objects, recomputed
+        their object fingerprints, re-signed the canonical_instances section
+        and root, and did not write files. Four probes returned PASS_NO_BLOCKER:
+        created_at_utc_ms=1000.5; receipt_kind=UNRECOGNIZED_KIND;
+        owner_host_id="e\u0301"; and an unknown root field.
+    counterexample: >-
+      A fully re-signed fixture containing a JSON float in a field declared
+      non_negative_safe_integer is accepted as PASS_NO_BLOCKER. The same is
+      true for an undeclared receipt-kind enum and a non-NFC stable reference.
+      Therefore a validator PASS does not prove the canonical JCS/schema
+      surface that R2 says it independently implements.
+    required_correction: >-
+      In R3, add a closed recursive value validator before hashing: reject
+      floats, out-of-range integers, non-NFC strings, unknown root/object fields
+      and unknown enum literals; validate every declared field type and every
+      normative cross-field relation. Add fully re-signed negative probes for
+      each class and require them to fail for semantic reasons, then rerun a
+      fresh atomic review.
+
+  - finding_id: F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED
+    severity: blocker
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        R2 amendment lines 346-359 defines only receipt-kind/status
+        compatibility and explicitly requires authenticated existing-effect
+        evidence for EFFECT_QUERY_RESULT. Lines 363-393 require dedup,
+        attestation, identity, epoch, fence, attempt and transition currentness
+        before APPLIED_CURRENT.
+      - >-
+        Builder receipt_matrix lines 266-267 and validator expected_receipts
+        lines 285-290 instead map every allowed kind/status pair directly to
+        expected=APPLIED. No attestation, identity, epoch, fence, attempt,
+        transition or existing-effect query input is present in these rows.
+      - >-
+        The fixed canonical receipt disposition is APPLIED_CURRENT with
+        current_projection_advanced=true, while its proof is not derived from a
+        complete currentness-reducer input.
+    counterexample: >-
+      EFFECT_QUERY_RESULT + NOT_EXECUTED is emitted as APPLIED solely because it
+      is an allowed matrix cell. The same row contains no authenticated source,
+      existing effect_id query, current epoch/fence/attempt or current
+      transition proof. This converts compatibility into authority to advance
+      a projection and bypasses the normative reducer prerequisites.
+    required_correction: >-
+      In R3, make the 25-cell matrix emit only COMPATIBLE or
+      RECEIPT_KIND_STATUS_MISMATCH. Add a separate executable receipt reducer
+      whose raw inputs cover dedup, source attestation, attempt/effect identity,
+      epoch, fences, attempt currentness and transition legality; derive exact
+      result, primary/reason codes, event/reconciliation/history/current-
+      projection booleans for positive, stale, invalid and indeterminate cases.
+
+  - finding_id: F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED
+    severity: blocker
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        Builder arm_replay_cases lines 256-263 accepts one of four preclassified
+        relation labels and attaches a fixed expected output. Validator
+        expected_replay lines 276-282 independently repeats the same label-to-
+        output table.
+      - >-
+        No replay proof row contains an existing arm-store lookup result,
+        existing request ID/fingerprint/bytes, submitted request
+        ID/fingerprint/bytes, stored first accounting or observed first/second
+        Event and call counts. The validator therefore cannot derive the
+        relation it claims to validate.
+      - >-
+        The fixed canonical instance demonstrates only a first-apply
+        disposition; it supplies no second transaction whose relation is
+        computed against the stored first arm.
+    counterexample: >-
+      Relabel a genuinely changed request as EXACT_DUPLICATE before it reaches
+      the table. The executable proof has no raw existing-versus-submitted
+      identity/fingerprint/bytes from which to detect that false label. It will
+      return REPLAYED with zero call based on the caller-provided relation
+      literal, so the original R1 arm-replay blocker is not executablely closed.
+    required_correction: >-
+      In R3, encode canonical stored-arm state plus submitted request bytes and
+      independently derive NO_EXISTING_ARM, EXACT_DUPLICATE,
+      CHANGED_BYTES_SAME_IDENTITY or LOOKUP_INDETERMINATE. Prove first apply
+      commits one Event and one call authorization, exact replay returns stored
+      accounting with zero additional Event/call, changed bytes conflict with
+      zero call, and unavailable lookup is indeterminate with zero call.
+
+  - finding_id: F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS
+    severity: major
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        R2 amendment lines 112-115 requires both orderings of raw input
+        construction for every unordered failure pair to produce the same
+        primary reason and sorted reason_codes.
+      - >-
+        Builder pairwise_cases lines 248-253 emits exactly one row per unordered
+        pair with active_reasons=[right,left] and a prefilled expected result.
+        Validator expected_pairwise lines 263-273 constructs the same one-order
+        row and compares equality; neither side runs a claim, lease or arm
+        reducer over raw failure booleans.
+      - >-
+        The 147 count is the unordered-pair count 66 claim + 15 lease + 66 arm.
+        It is not the required 294 raw-order executions and contains no result
+        derived independently from the row's expected fields.
+    counterexample: >-
+      An implementation can be correct for [later_reason, earlier_reason] and
+      order-dependent for [earlier_reason, later_reason]. Every fixed row still
+      passes because the second ordering is absent and expected_primary_reason
+      is copied from the same precedence constants used to build the row.
+    required_correction: >-
+      In R3, define independent claim, lease and arm reducers over raw boolean
+      conditions. For each of the 147 unordered pairs execute both input
+      permutations, derive all true sorted-unique reason_codes and the unique
+      normative primary reason, and report 294 successful ordering trials while
+      retaining 147 unordered-case identities.
+
+  - finding_id: F5_R2_MAJOR_002_CANONICAL_INSTANCE_SET_VIOLATES_EFFECTIVE_SEMANTICS
+    severity: major
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        R1 lines 290-296 requires claim_epoch to equal previous plus one. The
+        fixed canonical claim has claim_epoch=1 and
+        expected_previous_claim_epoch=1 while declaring CLAIMED_NEW.
+      - >-
+        R2 amendment lines 107-110 rejects renewal unless renewed_at is strictly
+        less than new_lease_expiry. The fixed canonical lease declares RENEWED
+        with renewed_at_utc_ms=1000 and new_lease_expiry_utc_ms=1000.
+      - >-
+        R1 lines 149-152 says a synthetic intent is never claimable. The fixed
+        cross-bound canonical objects nevertheless bind a synthetic,
+        authority_eligible=false intent to CLAIMED and ARMED_FIRST_APPLY
+        dispositions, including event_created=true and
+        physical_call_authorized=true, while the fixture assertion reports
+        armed_dispatch_count=0.
+      - >-
+        These values originate in builder sample_value/OVERRIDES lines 150-180;
+        validator validate_instances lines 217-235 accepts them because it
+        checks fingerprints and selected labels, not effective semantics.
+    counterexample: >-
+      The fixed R2 fixture itself is a hash-valid but semantically invalid
+      counterexample: the prior epoch is not prior, the renewed lease expires at
+      the renewal instant, and a nonclaimable synthetic intent is shown as
+      claimed and first-armed. All object fingerprints still recompute and the
+      validator reports PASS_NO_BLOCKER.
+    required_correction: >-
+      In R3, replace sample-value objects with semantically valid, explicitly
+      scoped scenarios. Enforce previous+1 epochs and strict lease-time bounds.
+      A synthetic nonauthority chain must reduce to NOT_EXECUTABLE and create no
+      arm fact/call authorization; if positive schema shapes are needed, label
+      them non-occurring shape examples and do not count them as canonical
+      semantic instances or zero-occurrence evidence.
+
+  - finding_id: F5_R2_MAJOR_003_TRANSITION_PROOF_COUNT_IS_INTERNALLY_CONTRADICTORY
+    severity: major
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        R2 amendment lines 416-434 defines ten states and says the executable
+        proof enumerates all 10x10 pairs. Builder, fixture, validator and
+        manifest consistently report 100 transition cases.
+      - >-
+        The same amendment at line 449 instead promises all 121 state-transition
+        pairs. No eleven-state set or 121-case interpretation is defined.
+    counterexample: >-
+      A reviewer cannot satisfy both normative statements: ten states produce
+      100 ordered pairs, not 121. Treating 121 as binding makes the fixture
+      incomplete; treating 100 as binding leaves a false executable-coverage
+      claim in the atomic contract.
+    required_correction: >-
+      In R3, replace 121 with 100 everywhere, bind the exact ten-state inventory
+      once, and make the manifest, amendment, fixture summary and validator use
+      that single count source.
+
+  - finding_id: F5_R2_MAJOR_004_DERIVED_ID_MUTATIONS_DO_NOT_MUTATE_THE_CANONICAL_OBJECT_GRAPH
+    severity: major
+    status: OPEN_REQUIRES_R3
+    exact_evidence:
+      - >-
+        Validator mutation_checks lines 361-362 performs the six derived-ID
+        mutations only by replacing a value in the detached
+        derived_identities proof map, then re-signing that section and root.
+      - >-
+        It does not mutate the corresponding ID/token in the canonical intent,
+        claim, request or arm object, update dependent refs/fingerprints, or
+        re-sign the affected canonical-instance graph. Rejection proves only
+        that a copied proof map must equal the unchanged objects.
+      - >-
+        By contrast, the manifest and amendment describe fully re-signed
+        semantic mutations for each protected identity family.
+    counterexample: >-
+      A defect in which a canonical object and every dependent reference are
+      consistently re-signed under a wrong identity formula is not exercised by
+      any of the six mutations. The current mutation changes only the detached
+      answer cell, so even a validator that merely mirrors the builder formula
+      will reject it without testing graph-level identity integrity.
+    required_correction: >-
+      In R3, for each of the six identity domains mutate the canonical object ID
+      or token, propagate the changed value through every dependent reference
+      and object fingerprint, re-sign every affected section and the root, and
+      require the independent formula validator to reject the fully coherent
+      but formula-wrong graph.
+
+all_24_required_question_results:
+  total: 24
+  pass_count: 14
+  fail_count: 10
+  results:
+    - {question: all_24_hashes_match_and_all_8_subjects_are_fully_read_unchanged, result: PASS, evidence: 24_of_24_hashes_match_and_8_of_8_complete_reads}
+    - {question: R2_precedence_is_unambiguous_and_R1_subject_bytes_remain_immutable, result: PASS, evidence: R2_explicit_replacements_then_R1_other_clauses_and_all_R1_hashes_match}
+    - {question: all_four_R1_findings_are_closed_without_regression, result: FAIL, evidence: all_four_dispositions_remain_NOT_CLOSED_under_findings_001_to_004}
+    - {question: arm_request_identity_and_fingerprint_are_canonical_and_caller_invariant, result: PASS, evidence: formula_binds_intent_fingerprint_invocation_fingerprint_and_attempt_ordinal_and_idempotency_key_is_effect_id, qualification: general_JCS_schema_validation_is_blocked_by_F5_R2_BLOCKER_001}
+    - {question: four_arm_replay_relations_are_total_and_exact_replay_has_zero_Event_and_zero_call, result: FAIL, evidence: F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED}
+    - {question: changed_arm_bytes_same_identity_cannot_be_rearmed_or_normalized_to_a_new_request, result: PASS, evidence: normative_request_identity_is_stable_and_changed_bytes_same_identity_maps_to_integrity_conflict, qualification: executable_relation_derivation_remains_blocked}
+    - {question: claim_lease_and_arm_precedence_are_normative_and_all_147_failure_pairs_reproduce, result: FAIL, evidence: F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS}
+    - {question: reason_codes_are_all_true_sorted_unique_and_primary_reason_is_unique, result: FAIL, evidence: fixed_rows_prefill_two_reason_outputs_without_running_raw_reducers}
+    - {question: all_25_receipt_kind_status_pairs_have_one_exact_decision, result: FAIL, evidence: F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED}
+    - {question: TRANSPORT_ACK_cannot_prove_SUCCEEDED_FAILED_or_NOT_EXECUTED, result: PASS, evidence: normative_and_executable_compatibility_matrix_rejects_all_three_pairs}
+    - {question: receipt_dedup_attestation_identity_epoch_fence_and_transition_precedence_is_total, result: FAIL, evidence: compatibility_rows_do_not_execute_the_normative_currentness_reducer}
+    - {question: old_epoch_or_stale_fence_receipts_cannot_advance_current_projection_or_Task, result: PASS, evidence: normative_precedence_rejects_epoch_or_fence_stale_and_explicitly_forbids_current_advancement, qualification: full_reducer_execution_is_missing_under_blocker_002}
+    - {question: all_16_effective_schema_instances_and_object_fingerprints_recompute, result: FAIL, evidence: fingerprints_recompute_but_instances_are_not_schema_or_semantically_valid_under_findings_001_and_002}
+    - {question: all_6_effective_derived_identity_formulas_recompute, result: PASS, evidence: six_formula_outputs_recomputed_from_canonical_objects_and_match}
+    - {question: all_100_state_pairs_are_closed_and_unlisted_transitions_reject, result: PASS, evidence: 100_pairs_reproduced_with_20_allowed_and_80_rejected, qualification: amendment_121_typo_is_F5_R2_MAJOR_003}
+    - {question: all_28_structured_adversarial_inputs_are_independently_reduced, result: PASS, evidence: validator_independent_adversarial_decision_processed_28_structured_inputs_without_builder_import}
+    - {question: all_29_fully_resigned_semantic_mutations_are_rejected, result: FAIL, evidence: 29_fixed_mutations_reject_but_four_additional_fully_resigned_schema_invalid_mutations_pass_and_six_ID_mutations_are_map_only}
+    - {question: R1_and_R2_builders_and_validators_are_independent_and_R2_rebuild_is_byte_equal, result: FAIL, evidence: byte_equality_and_no_import_pass_but_precedence_replay_and_receipt_proofs_are_mirrored_expected_tables_not_independent_semantic_reducers}
+    - {question: F5_consumes_F4_authority_without_recomputing_F1_F2_F3_or_F4, result: PASS, evidence: effective_contract_uses_frozen_owner_assessments_and_creates_no_upstream_reducer}
+    - {question: no_Actor_Task_color_role_relationship_trust_urgency_or_P0_P3_permission_classification_exists, result: PASS, evidence: no_local_delivery_authority_classifier_found_in_effective_subjects}
+    - {question: synthetic_evidence_remains_nonauthority_and_production_handoff_non_issuable, result: PASS, evidence: root_and_witness_authority_flags_false_and_real_handoff_count_zero, qualification: canonical_positive_synthetic_chain_is_semantically_inconsistent_under_major_002}
+    - {question: post_arm_retry_crash_UNKNOWN_dead_letter_and_reconciliation_boundaries_do_not_regress, result: PASS, evidence: both_crash_windows_reduce_to_UNKNOWN_no_retry_and_dead_letter_reconciliation_remain_nonauthorizing}
+    - {question: F6_implementation_runtime_database_authentication_provider_and_effect_boundaries_remain_closed, result: PASS, evidence: nonauthorization_and_all_mandatory_occurrence_counts_zero}
+    - {question: no_internal_contradiction_unmapped_relation_or_validator_overclaim_remains, result: FAIL, evidence: seven_open_findings_include_validator_overclaim_unmapped_raw_relations_and_121_vs_100_contradiction}
+
+all_28_required_adversarial_results:
+  total: 28
+  pass_count: 19
+  fail_count: 9
+  results:
+    - {check: first_arm_apply_creates_exactly_one_Event_and_one_call_authorization, result: FAIL, evidence: relation_is_preclassified_and_not_derived_from_empty_stored_arm_state}
+    - {check: exact_arm_duplicate_replays_first_accounting_with_zero_Event_and_zero_call, result: FAIL, evidence: F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED}
+    - {check: changed_arm_bytes_same_identity_reject_with_integrity_conflict, result: FAIL, evidence: fixed_label_maps_to_reject_but_existing_vs_submitted_bytes_are_absent}
+    - {check: arm_lookup_unavailable_is_INDETERMINATE_and_zero_call, result: FAIL, evidence: lookup_unavailable_is_a_supplied_label_not_a_derived_lookup_result}
+    - {check: each_claim_failure_pair_selects_normative_earlier_reason, result: FAIL, evidence: one_prefilled_order_per_pair_and_no_claim_reducer_execution}
+    - {check: each_lease_failure_pair_selects_normative_earlier_reason, result: FAIL, evidence: one_prefilled_order_per_pair_and_no_lease_reducer_execution}
+    - {check: each_arm_failure_pair_selects_normative_earlier_reason, result: FAIL, evidence: one_prefilled_order_per_pair_and_no_arm_reducer_execution}
+    - {check: TRANSPORT_ACK_plus_SUCCEEDED_rejects, result: PASS, decision: REJECTED_RECEIPT_KIND_STATUS_MISMATCH}
+    - {check: EFFECT_SUCCEEDED_plus_ACKED_ONLY_rejects, result: PASS, decision: REJECTED_RECEIPT_KIND_STATUS_MISMATCH}
+    - {check: EFFECT_QUERY_RESULT_plus_NOT_EXECUTED_is_matrix_valid_but_still_requires_current_authenticated_evidence, result: FAIL, evidence: fixed_matrix_emits_APPLIED_without_current_authenticated_evidence}
+    - {check: old_epoch_SUCCEEDED_is_history_only, result: PASS, decision: REJECT_CURRENT_ADVANCEMENT_RETAIN_HISTORY}
+    - {check: stale_fence_receipt_cannot_advance_projection, result: PASS, decision: REJECT_CURRENT_ADVANCEMENT}
+    - {check: invalid_transition_from_SUCCEEDED_rejects, result: PASS, decision: REJECTED_TRANSITION_INVALID}
+    - {check: all_six_derived_ID_mutations_reject_after_resigning, result: FAIL, evidence: six_proof_map_mutations_reject_but_zero_canonical_graph_ID_mutations_are_exercised}
+    - {check: all_sixteen_object_fingerprint_mutations_reject_after_resigning, result: PASS, decision: 16_of_16_rejected}
+    - {check: pairwise_precedence_mutation_rejects_after_resigning, result: PASS, decision: rejected, qualification: rejection_proves_table_equality_not_reducer_totality}
+    - {check: exact_replay_second_call_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: receipt_matrix_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: transition_matrix_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: adversarial_decision_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: synthetic_authority_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: schema_inventory_mutation_rejects_after_resigning, result: PASS, decision: rejected}
+    - {check: PBL_no_match_does_not_create_delivery_authority, result: PASS, decision: REJECT_NO_DELIVERY_AUTHORITY}
+    - {check: label_or_permission_lane_change_does_not_change_delivery_result, result: PASS, decision: LABELS_IGNORED}
+    - {check: caller_selected_idempotency_key_rejects, result: PASS, decision: REJECT_CALLER_KEY}
+    - {check: crash_after_arm_before_call_is_UNKNOWN_no_retry, result: PASS, decision: UNKNOWN_NO_RETRY}
+    - {check: crash_after_call_before_receipt_is_UNKNOWN_no_retry, result: PASS, decision: UNKNOWN_NO_RETRY}
+    - {check: any_nonzero_real_handoff_arm_runtime_effect_provider_or_secret_count_rejects, result: PASS, decision: REJECT}
+
+R1_and_R2_validator_results_and_exact_counts:
+  R1_validator:
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+    exit_code: 0
+    reported_result: PASS_NO_BLOCKER
+    schema_profile_count: 13
+    decision_vector_count: 64
+    recovery_vector_count: 8
+    negative_mutations_rejected: 15
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    runtime_consumable_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+    fixture_canonical_sha256: 63d7469c60ab4f27195c838bdaa93f203fc681db67fb79111408250d2b74fef9
+  R2_validator:
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+    exit_code: 0
+    reported_result: PASS_NO_BLOCKER
+    schema_profile_count: 16
+    canonical_instance_count: 16
+    derived_identity_count: 6
+    pairwise_precedence_case_count: 147
+    arm_replay_case_count: 4
+    receipt_compatibility_case_count: 25
+    transition_case_count: 100
+    adversarial_case_count: 28
+    negative_mutations_rejected: 29
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    runtime_consumable_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+    fixture_canonical_sha256: 9fafe36c7f8c186b86f669db2ee6547bafb95d4130308089691ffe9185f0b07a
+  count_reproduction_passed: true
+  reproduced_validator_PASS_is_sufficient_for_atomic_PASS: false
+
+builder_byte_equality_and_R2_fixture_hash:
+  command: >-
+    tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3
+    control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py
+    --output "$tmp" && cmp -s "$tmp"
+    control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+    && rm -f "$tmp"
+  exit_code: 0
+  byte_equal_to_fixed_fixture: true
+  fixed_fixture_whole_file_sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f
+  fixture_canonical_sha256: 9fafe36c7f8c186b86f669db2ee6547bafb95d4130308089691ffe9185f0b07a
+  R2_builder_source_sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd
+  R2_validator_source_sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c
+  builder_imports_validator: false
+  validator_imports_builder: false
+  semantic_independence_complete: false
+
+all_four_R1_finding_dispositions:
+  total: 4
+  closed_count: 0
+  not_closed_count: 4
+  dispositions:
+    - prior_finding_id: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+      R2_disposition: NOT_CLOSED
+      current_findings: [F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED]
+      reason: four_output_rows_exist_but_relation_is_not_derived_from_stored_and_submitted_request_bytes
+    - prior_finding_id: F5_R1_BLOCKER_002_VALIDATOR_CLAIM_EXCEEDS_EXECUTABLE_COVERAGE
+      R2_disposition: NOT_CLOSED
+      current_findings:
+        - F5_R2_BLOCKER_001_VALIDATOR_ACCEPTS_FULLY_RESIGNED_SCHEMA_INVALID_VALUES
+        - F5_R2_MAJOR_002_CANONICAL_INSTANCE_SET_VIOLATES_EFFECTIVE_SEMANTICS
+        - F5_R2_MAJOR_004_DERIVED_ID_MUTATIONS_DO_NOT_MUTATE_THE_CANONICAL_OBJECT_GRAPH
+      reason: fixed_counts_expand_but_schema_semantics_and_fully_resigned_graph_mutations_remain_unproved
+    - prior_finding_id: F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+      R2_disposition: NOT_CLOSED
+      current_findings: [F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS]
+      reason: normative_order_exists_but_executable_proof_is_a_one_order_mirrored_expected_table
+    - prior_finding_id: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+      R2_disposition: NOT_CLOSED
+      current_findings: [F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED]
+      reason: compatibility_is_present_but_it_bypasses_required_currentness_and_returns_APPLIED
+
+identity_authority_replay_receipt_transition_and_validator_coverage_counts:
+  effective_schema_profiles_declared: 16
+  canonical_instances_fingerprint_recomputed: 16
+  canonical_instances_full_schema_and_semantic_validation_passed: 0
+  known_semantically_invalid_fixed_instances_minimum: 2
+  derived_identity_formulas_recomputed: 6
+  fixed_derived_identity_mutations_rejected: 6
+  canonical_graph_derived_identity_mutations_exercised: 0
+  pairwise_precedence_unordered_cases:
+    claim: 66
+    lease: 15
+    arm: 66
+    total: 147
+  pairwise_raw_orderings_required: 294
+  pairwise_raw_orderings_encoded: 147
+  pairwise_independent_reducer_executions: 0
+  arm_relation_rows: 4
+  arm_relations_derived_from_stored_and_submitted_state: 0
+  receipt_cartesian_pairs: 25
+  receipt_compatible_pairs: 8
+  receipt_incompatible_pairs: 17
+  receipt_pairs_with_full_currentness_inputs: 0
+  transition_pairs: 100
+  transition_allowed_pairs: 20
+  transition_rejected_pairs: 80
+  structured_adversarial_cases: 28
+  fixed_fully_resigned_mutations_rejected: 29
+  independent_additional_fully_resigned_schema_mutations_run: 4
+  independent_additional_mutations_rejected: 0
+  independent_additional_mutations_accepted: 4
+  independent_mutation_probe_results:
+    - {mutation: float_created_at_utc_ms_1000_5, result: PASS_NO_BLOCKER}
+    - {mutation: unknown_receipt_kind, result: PASS_NO_BLOCKER}
+    - {mutation: non_NFC_owner_host_id, result: PASS_NO_BLOCKER}
+    - {mutation: unknown_root_field, result: PASS_NO_BLOCKER}
+  production_authority_created: 0
+  real_handoff_consumed: 0
+
+mandatory_zero_authority_runtime_effect_provider_secret_counts:
+  R1_fixture_assertions:
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    runtime_consumable_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+  R2_fixture_assertions:
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    runtime_consumable_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+  review_execution_counts:
+    real_handoff_consumption: 0
+    real_dispatch_arm: 0
+    runtime_or_service_start: 0
+    database_read_or_write: 0
+    external_effect_execution: 0
+    provider_call: 0
+    secret_or_private_state_access: 0
+
+decision_gate:
+  result: BLOCK
+  F5_acceptance_ready: false
+  automatic_acceptance: forbidden
+  authority_after_correction_and_fresh_pass: Jenn_only
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_push_PR_merge_performed: false
+
+required_next_action: >-
+  Produce narrow F5 R3 correction bytes for all seven findings, rebuild the
+  complete effective atomic subject set, bind a new manifest, and run another
+  fresh full atomic hash-bound independent review. Do not accept, freeze or
+  implement F5 from this review.
+
+requires_R3: true

@@ -1,0 +1,74 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f5-r4-independent-review-disposition-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R4_ATOMIC_BUNDLE
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+review_sha256: 1552ad833b4003d35e014ac6f8b8d69015851aa9212c2d665052d646867b9449
+manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: 5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4
+review_result: BLOCK
+requires_R5: true
+R5_truly_required: true
+
+integrity:
+  declared_inputs_verified: 40_of_40
+  subjects_read: 16_of_16
+  authority_inputs_read: 11_of_11
+  fixed_commands_passed: 5_of_5
+  original_R3_fully_resigned_probes_rejected: 6_of_7
+  new_fully_resigned_counterexamples_reproduced: 2_of_2
+  subject_bytes_modified_by_review: false
+
+finding_dispositions:
+  - finding_id: F5_R4_BLOCKER_001_EXACT_RECEIPT_REPLAY_KIND_STATUS_NOT_FINGERPRINT_BOUND
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R5
+    R5_correction:
+      - bind_receipt_kind_and_effect_status_into_closed_submitted_and_stored_canonical_receipt_bytes
+      - recompute_receipt_fingerprint_from_each_exact_canonical_record
+      - derive_replay_relation_only_after_bound_byte_and_fingerprint_comparison
+      - restore_the_original_R3_exact_receipt_replay_probe_without_substitution
+
+  - finding_id: F5_R4_BLOCKER_002_LOOKUP_INDETERMINATE_SKIPS_REQUEST_IDENTITY_EQUALITY
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R5
+    R5_correction:
+      - enforce_stored_and_submitted_request_ID_equality_after_both_records_parse_and_bind
+      - perform_identity_equality_before_lookup_reproducibility_branch_selection
+      - reject_a_fully_resigned_lookup_indeterminate_different_valid_identity_case
+
+R5_scope_limit:
+  allowed:
+    - canonical_receipt_record_binding_for_exact_replay
+    - unconditional_stored_submitted_arm_request_identity_equality
+    - corresponding_builder_fixture_validator_and_negative_probe_changes
+    - new_atomic_manifest_and_fresh_full_atomic_review
+  forbidden:
+    - new_delivery_state
+    - new_receipt_type
+    - new_retry_model
+    - provider_transport
+    - database_layout
+    - Rust_or_JavaScript_implementation
+    - production_authentication
+    - runtime_activation
+    - F6_semantics
+
+governance:
+  R1_R2_R3_R4_subjects_immutable: true
+  R1_R2_R3_R4_manifests_immutable: true
+  R1_R2_R3_R4_reviews_immutable: true
+  partial_acceptance: forbidden
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized_by_this_disposition: false
+
+next_gate: NARROW_F5_R5_TWO_FINDING_BOUND_EVIDENCE_CLOSURE_AND_FRESH_FULL_ATOMIC_REVIEW

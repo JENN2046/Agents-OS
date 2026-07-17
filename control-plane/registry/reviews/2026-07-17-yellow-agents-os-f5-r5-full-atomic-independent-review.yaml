@@ -1,0 +1,413 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f5-r5-full-atomic-independent-review-2026-07-17
+date: 2026-07-17
+result: BLOCK
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R5_ATOMIC_BUNDLE
+review_mode: fresh_full_atomic_hash_bound_independent_review
+atomic: true
+partial_review_performed: false
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_sha256: 54e401c18d30c1462b2a6be90a4c72f2ddd3afa44167f634532b126a24715f38
+  recomputed_sha256: 54e401c18d30c1462b2a6be90a4c72f2ddd3afa44167f634532b126a24715f38
+  match: true
+  presentation_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+
+reviewer_identity:
+  reviewer_id: codex_fresh_isolated_f5_r5_independent_reviewer
+  reviewer_role: fresh_full_atomic_independent_reviewer
+  authored_any_R1_R2_R3_R4_R5_subject: false
+  independence_basis:
+    - reviewer_was_assigned_as_a_fresh_isolated_reviewer_after_subject_bytes_were_fixed
+    - no_subject_manifest_prior_review_or_authority_input_was_modified
+    - prior_R1_R2_R3_R4_reviews_were_used_only_for_finding_lineage
+    - R5_author_self_review_was_verified_by_path_and_hash_only
+  R5_author_self_review_content_read: false
+  R5_author_self_review_conclusion_read: false
+  forbidden_input_accessed: false
+  Git_operation_performed: false
+
+input_hash_verification:
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  declared_count: 48
+  verified_count: 48
+  match_count: 48
+  mismatch_count: 0
+  unavailable_count: 0
+  entries:
+    - {index: 1, category: subject, role: normative_contract, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, manifest_declared_and_recomputed_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f, match: true}
+    - {index: 2, category: subject, role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, manifest_declared_and_recomputed_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793, match: true}
+    - {index: 3, category: subject, role: synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, manifest_declared_and_recomputed_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281, match: true}
+    - {index: 4, category: subject, role: independent_semantic_validator, path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, manifest_declared_and_recomputed_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f, match: true}
+    - {index: 5, category: subject, role: normative_four_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, manifest_declared_and_recomputed_sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7, match: true}
+    - {index: 6, category: subject, role: full_effective_fixture_builder, path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, manifest_declared_and_recomputed_sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd, match: true}
+    - {index: 7, category: subject, role: full_effective_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, manifest_declared_and_recomputed_sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f, match: true}
+    - {index: 8, category: subject, role: independent_full_effective_validator, path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py, manifest_declared_and_recomputed_sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c, match: true}
+    - {index: 9, category: subject, role: normative_seven_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md, manifest_declared_and_recomputed_sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd, match: true}
+    - {index: 10, category: subject, role: seven_finding_fixture_builder, path: control-plane/registry/build-f5-r3-seven-finding-closure.py, manifest_declared_and_recomputed_sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772, match: true}
+    - {index: 11, category: subject, role: seven_finding_closure_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json, manifest_declared_and_recomputed_sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876, match: true}
+    - {index: 12, category: subject, role: independent_seven_finding_validator, path: control-plane/registry/validate-f5-r3-seven-finding-closure.py, manifest_declared_and_recomputed_sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273, match: true}
+    - {index: 13, category: subject, role: normative_three_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md, manifest_declared_and_recomputed_sha256: cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551, match: true}
+    - {index: 14, category: subject, role: three_finding_fixture_builder, path: control-plane/registry/build-f5-r4-three-finding-proof-closure.py, manifest_declared_and_recomputed_sha256: d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929, match: true}
+    - {index: 15, category: subject, role: three_finding_proof_closure_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json, manifest_declared_and_recomputed_sha256: af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d, match: true}
+    - {index: 16, category: subject, role: independent_three_finding_validator, path: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py, manifest_declared_and_recomputed_sha256: 4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8, match: true}
+    - {index: 17, category: subject, role: normative_two_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md, manifest_declared_and_recomputed_sha256: ac6c001b745910ef9c9038ec5bb6b60fac6bd7f0e4ea7d6603db4e99b0b943e2, match: true}
+    - {index: 18, category: subject, role: bound_replay_evidence_fixture_builder, path: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py, manifest_declared_and_recomputed_sha256: cbdd1d2f4a68179db71a6eb17803f2b7fe9cb76a79dacd769b4a2d55179cb0d6, match: true}
+    - {index: 19, category: subject, role: bound_replay_evidence_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json, manifest_declared_and_recomputed_sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e, match: true}
+    - {index: 20, category: subject, role: independent_bound_replay_evidence_validator, path: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py, manifest_declared_and_recomputed_sha256: 3e3b89b2af8f15a3389c59785d361c25fc0974131af3065f13cbc2637db84378, match: true}
+    - {index: 21, category: authority, role: workspace_governance, path: AGENTS.md, manifest_declared_and_recomputed_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9, match: true}
+    - {index: 22, category: authority, role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, manifest_declared_and_recomputed_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d, match: true}
+    - {index: 23, category: authority, role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b, match: true}
+    - {index: 24, category: authority, role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, manifest_declared_and_recomputed_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e, match: true}
+    - {index: 25, category: authority, role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486, match: true}
+    - {index: 26, category: authority, role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, manifest_declared_and_recomputed_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670, match: true}
+    - {index: 27, category: authority, role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529, match: true}
+    - {index: 28, category: authority, role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff, match: true}
+    - {index: 29, category: authority, role: frozen_F4_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2, match: true}
+    - {index: 30, category: authority, role: frozen_F4_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5, match: true}
+    - {index: 31, category: authority, role: immutable_F5_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e, match: true}
+    - {index: 32, category: lineage, role: prior_R1_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2, match: true}
+    - {index: 33, category: lineage, role: prior_R1_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml, manifest_declared_and_recomputed_sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a, match: true}
+    - {index: 34, category: lineage, role: R1_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml, manifest_declared_and_recomputed_sha256: 53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4, match: true}
+    - {index: 35, category: lineage, role: immutable_R2_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: 9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428, match: true}
+    - {index: 36, category: lineage, role: prior_R2_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: 0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d, match: true}
+    - {index: 37, category: lineage, role: prior_R2_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml, manifest_declared_and_recomputed_sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d, match: true}
+    - {index: 38, category: lineage, role: R2_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml, manifest_declared_and_recomputed_sha256: d4a9b616eb399d8533d4c3e5f74f174fd453f3500b370b826fb177b1b7b43abf, match: true}
+    - {index: 39, category: lineage, role: immutable_R3_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: da1edd01df29a2d334cd06d6c54705646934187315274c920acb1d896fb2a9de, match: true}
+    - {index: 40, category: lineage, role: prior_R3_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563, match: true}
+    - {index: 41, category: lineage, role: prior_R3_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml, manifest_declared_and_recomputed_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718, match: true}
+    - {index: 42, category: lineage, role: R3_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml, manifest_declared_and_recomputed_sha256: 9c5a8420c767d18b24b3b77213fc12b0ad2658759f93b7ae1605208728ed42a9, match: true}
+    - {index: 43, category: lineage, role: immutable_R4_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: 9d8780b8527ca339d81f4fa470df4c3a27cda4179c0ab72ce8b46a5caff83440, match: true}
+    - {index: 44, category: lineage, role: prior_R4_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml, manifest_declared_and_recomputed_sha256: 5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4, match: true}
+    - {index: 45, category: lineage, role: prior_R4_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml, manifest_declared_and_recomputed_sha256: 1552ad833b4003d35e014ac6f8b8d69015851aa9212c2d665052d646867b9449, match: true}
+    - {index: 46, category: lineage, role: R4_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml, manifest_declared_and_recomputed_sha256: 8a1a102433d8e618d94273a7fba2a9dede5a6315d2f298cc6f3c7ab3cf655e95, match: true}
+    - {index: 47, category: lineage, role: immutable_R5_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml, manifest_declared_and_recomputed_sha256: 659695c0d36e255de5afabe947a2a085d95a08d4d0d3ed6772c0c16409374897, match: true}
+    - {index: 48, category: author_evidence_hash_only, role: R5_author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml, manifest_declared_and_recomputed_sha256: 86dcb7214504825458e4b69a2558f7f4aff41b5d3629d5a83702b27f6932723b, match: true}
+
+complete_read_verification:
+  subjects_expected: 20
+  subjects_fully_read: 20
+  subjects_unchanged: 20
+  authority_inputs_expected: 11
+  authority_inputs_fully_read: 11
+  subject_entries:
+    - {index: 1, revision: R1, bytes: 35800, lf_count: 900, fully_read: true}
+    - {index: 2, revision: R1, bytes: 27747, lf_count: 639, fully_read: true}
+    - {index: 3, revision: R1, bytes: 51865, lf_count: 1728, fully_read: true}
+    - {index: 4, revision: R1, bytes: 31446, lf_count: 519, fully_read: true}
+    - {index: 5, revision: R2, bytes: 16608, lf_count: 493, fully_read: true}
+    - {index: 6, revision: R2, bytes: 29227, lf_count: 318, fully_read: true}
+    - {index: 7, revision: R2, bytes: 108758, lf_count: 3626, fully_read: true}
+    - {index: 8, revision: R2, bytes: 35843, lf_count: 394, fully_read: true}
+    - {index: 9, revision: R3, bytes: 13405, lf_count: 402, fully_read: true}
+    - {index: 10, revision: R3, bytes: 46297, lf_count: 477, fully_read: true}
+    - {index: 11, revision: R3, bytes: 252232, lf_count: 9232, fully_read: true}
+    - {index: 12, revision: R3, bytes: 60001, lf_count: 627, fully_read: true}
+    - {index: 13, revision: R4, bytes: 17098, lf_count: 573, fully_read: true}
+    - {index: 14, revision: R4, bytes: 49584, lf_count: 551, fully_read: true}
+    - {index: 15, revision: R4, bytes: 266040, lf_count: 9291, fully_read: true}
+    - {index: 16, revision: R4, bytes: 77423, lf_count: 838, fully_read: true}
+    - {index: 17, revision: R5, bytes: 7313, lf_count: 222, fully_read: true}
+    - {index: 18, revision: R5, bytes: 23509, lf_count: 643, fully_read: true}
+    - {index: 19, revision: R5, bytes: 47649, lf_count: 447, fully_read: true}
+    - {index: 20, revision: R5, bytes: 36523, lf_count: 956, fully_read: true}
+  authority_entries:
+    - {index: 1, bytes: 25809, lf_count: 635, fully_read: true}
+    - {index: 2, bytes: 23757, lf_count: 920, fully_read: true}
+    - {index: 3, bytes: 3290, lf_count: 90, fully_read: true}
+    - {index: 4, bytes: 271643, lf_count: 6614, fully_read: true}
+    - {index: 5, bytes: 2856, lf_count: 84, fully_read: true}
+    - {index: 6, bytes: 10946, lf_count: 311, fully_read: true}
+    - {index: 7, bytes: 5131, lf_count: 129, fully_read: true}
+    - {index: 8, bytes: 13821, lf_count: 180, fully_read: true}
+    - {index: 9, bytes: 10748, lf_count: 159, fully_read: true}
+    - {index: 10, bytes: 15659, lf_count: 120, fully_read: true}
+    - {index: 11, bytes: 7646, lf_count: 171, fully_read: true}
+
+effective_precedence:
+  order: [R5_explicit_replacements, R4_other_explicit_replacements, R3_other_explicit_replacements, R2_other_explicit_replacements, R1_all_other_clauses]
+  fresh_full_semantic_review_performed: true
+  R5_delta_only_review: false
+
+finding_counts:
+  blocker_count: 1
+  major_count: 0
+  minor_count: 0
+  unresolved_count: 0
+  total_finding_count: 1
+
+findings:
+  - finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION
+    severity: blocker
+    title: R5 accepts NOT_ELIGIBLE as an armed first apply with one Event and one call authorization
+    lineage:
+      regresses_fixed_R4_behavior: true
+      new_independent_reproducible_counterexample: true
+      prior_finding_substitution: false
+    exact_evidence:
+      normative_R4_clause: >-
+        R4 Section 10 permits NO_EXISTING_ARM constructive first apply only with
+        ELIGIBLE_PROOF_PRECONDITION and models exactly one Event and one call authorization.
+      preserved_R4_builder_guard: control-plane/registry/build-f5-r4-three-finding-proof-closure.py:354
+      preserved_R4_validator_guard: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py:447
+      regressed_R5_builder_mapping: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py:406
+      regressed_R5_validator_mapping: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py:589
+      observation: >-
+        R5 validates first_apply_eligibility only as an enum, then maps every
+        NO_EXISTING_ARM input to APPLIED / ARMED_FIRST_APPLY with deltas 1 and 1.
+        The R4 fail-closed NOT_ELIGIBLE branch is absent in both R5 builder and validator.
+    counterexample:
+      base_case: ARM_IDENTITY_1_FIRST
+      mutation: >-
+        Change raw_input.first_apply_eligibility from ELIGIBLE_PROOF_PRECONDITION
+        to NOT_ELIGIBLE; retain derived APPLIED / ARMED_FIRST_APPLY,
+        modeled_event_delta=1 and modeled_call_authorization_delta=1.
+      resigning:
+        arm_identity_cases_fingerprint: 8dba9c8aa6483ec844591a86177922102bf063dd77d5ff74733af832f261959a
+        fixture_canonical_sha256: 6b6b2eacef701e692cacbc64103b46b74ac531276804feec03365238bb484647
+        rendered_counterexample_sha256: c797d18dc819ec2818f30bcddd583a14bedf80e8757925d97135ace5cfeef114
+      validator_result:
+        exit_code: 0
+        reported_result: PASS_NO_BLOCKER
+        accepted_counterexample: true
+      expected_deterministic_reduction: >-
+        NOT_ELIGIBLE must not produce APPLIED, an Event, or call authorization;
+        preserve the R4 REJECTED / FIRST_APPLY_NOT_ELIGIBLE / 0 / 0 behavior.
+    required_correction:
+      - restore_the_R4_first_apply_eligibility_guard_in_both_R5_builder_and_R5_validator
+      - require_ELIGIBLE_PROOF_PRECONDITION_for_NO_EXISTING_ARM_APPLIED
+      - derive_REJECTED_FIRST_APPLY_NOT_ELIGIBLE_with_zero_Event_and_call_deltas_otherwise
+      - add_this_exact_fully_resigned_offline_mutation_to_the_R6_negative_suite
+      - rerun_a_fresh_full_atomic_hash_bound_independent_review_from_new_fixed_bytes
+
+R4_finding_dispositions:
+  - finding_id: F5_R4_BLOCKER_001_EXACT_RECEIPT_REPLAY_KIND_STATUS_NOT_FINGERPRINT_BOUND
+    result: CLOSED_IN_R5
+    evidence: >-
+      Stored and submitted canonical serialized receipt records are independently
+      strict-decoded; receipt kind/status are payload-bound; exact replay requires
+      equal key, fingerprint and canonical bytes; the original detached override rejects.
+  - finding_id: F5_R4_BLOCKER_002_LOOKUP_INDETERMINATE_SKIPS_REQUEST_IDENTITY_EQUALITY
+    result: CLOSED_IN_R5
+    evidence: >-
+      Stored and submitted canonical arm request records parse and bind first;
+      request identity equality is enforced before lookup reproducibility;
+      a different valid identity under lookup indeterminate rejects.
+
+prior_finding_lineage:
+  preserved: true
+  prior_review_use: finding_lineage_only
+  finding_ids:
+    - F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    - F5_R1_BLOCKER_002_VALIDATOR_CLAIM_EXCEEDS_EXECUTABLE_COVERAGE
+    - F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+    - F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    - F5_R2_BLOCKER_001_VALIDATOR_ACCEPTS_FULLY_RESIGNED_SCHEMA_INVALID_VALUES
+    - F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED
+    - F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED
+    - F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS
+    - F5_R2_MAJOR_002_CANONICAL_INSTANCE_SET_VIOLATES_EFFECTIVE_SEMANTICS
+    - F5_R2_MAJOR_003_TRANSITION_PROOF_COUNT_IS_INTERNALLY_CONTRADICTORY
+    - F5_R2_MAJOR_004_DERIVED_ID_MUTATIONS_DO_NOT_MUTATE_THE_CANONICAL_OBJECT_GRAPH
+    - F5_R3_BLOCKER_001_CLOSED_SCHEMA_AND_CROSS_FIELD_VALIDATION_REMAINS_INCOMPLETE
+    - F5_R3_MAJOR_001_PRECEDENCE_PROOF_ACCEPTS_DUPLICATED_RAW_ORDERING
+    - F5_R3_BLOCKER_002_ARM_REPLAY_DOES_NOT_BIND_CANONICAL_BYTES_OR_STORED_FIRST_ACCOUNTING
+    - F5_R4_BLOCKER_001_EXACT_RECEIPT_REPLAY_KIND_STATUS_NOT_FINGERPRINT_BOUND
+    - F5_R4_BLOCKER_002_LOOKUP_INDETERMINATE_SKIPS_REQUEST_IDENTITY_EQUALITY
+
+fixed_commands:
+  expected_count: 6
+  executed_count: 6
+  exit_zero_count: 6
+  entries:
+    - command_index: 1
+      command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+      exit_code: 0
+      reported_result: PASS_NO_BLOCKER
+      exact_counts: {schema_profile_count: 13, decision_vector_count: 64, recovery_vector_count: 8, negative_mutations_rejected: 15}
+    - command_index: 2
+      command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+      exit_code: 0
+      reported_result: PASS_NO_BLOCKER
+      exact_counts: {schema_profile_count: 16, canonical_instance_count: 16, derived_identity_count: 6, pairwise_precedence_case_count: 147, arm_replay_case_count: 4, receipt_compatibility_case_count: 25, transition_case_count: 100, adversarial_case_count: 28, negative_mutations_rejected: 29}
+    - command_index: 3
+      command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r3-seven-finding-closure.py
+      exit_code: 0
+      reported_result: PASS_NO_BLOCKER
+      exact_counts: {schema_profile_count: 16, schema_shape_example_count: 16, precedence_unordered_pair_count: 147, precedence_ordering_trial_count: 294, arm_state_derivation_case_count: 4, receipt_compatibility_case_count: 25, receipt_currentness_case_count: 10, transition_case_count: 100, graph_level_identity_mutations_rejected: 6, proof_mutations_rejected: 6, schema_invalid_resigned_mutations_rejected: 8}
+    - command_index: 4
+      command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r4-three-finding-proof-closure.py
+      exit_code: 0
+      reported_result: PASS_NO_BLOCKER
+      exact_counts: {schema_profile_count: 16, schema_shape_example_count: 16, precedence_unordered_pair_count: 147, precedence_ordering_trial_count: 294, precedence_exact_reverse_pair_count: 147, arm_request_binding_mutations_rejected: 6, prior_R3_additional_probes_rejected: 7, graph_level_identity_mutations_rejected: 6, proof_mutations_rejected: 7, schema_invalid_resigned_mutations_rejected: 17, positive_type_mutations_rejected: 5}
+    - command_index: 5
+      command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py
+      exit_code: 0
+      reported_result: PASS_NO_BLOCKER
+      exact_counts: {receipt_replay_case_count: 5, arm_identity_case_count: 4, adversarial_case_count: 9, fully_resigned_mutations_rejected: 12, receipt_binding_mutations_rejected: 6, arm_identity_mutations_rejected: 2, closed_inventory_mutations_rejected: 4}
+    - command_index: 6
+      command: manifest_fixed_R5_builder_cmp_command
+      exit_code: 0
+      byte_equal: true
+      generated_sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e
+      fixed_fixture_sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e
+
+independent_attack_execution:
+  R4_additional_offline_mutations: {executed: 13, rejected: 13, accepted: 0}
+  R5_additional_offline_mutations: {executed: 17, rejected: 16, accepted: 1}
+  unexpected_accept_count: 1
+  accepted_counterexample_finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION
+
+required_review_questions:
+  expected_count: 36
+  pass_count: 35
+  fail_count: 1
+  results:
+    - {question: all_48_hashes_match_and_all_20_subjects_are_fully_read_unchanged, result: PASS}
+    - {question: effective_precedence_is_R5_then_R4_then_R3_then_R2_then_R1, result: PASS}
+    - {question: both_R4_blockers_are_closed_without_R1_R2_R3_R4_regression, result: FAIL, finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION}
+    - {question: strict_JSON_duplicate_key_and_recursive_value_validation_precede_fingerprint_trust, result: PASS}
+    - {question: root_section_row_nested_raw_and_payload_inventories_are_exact_and_closed, result: PASS}
+    - {question: R1_through_R4_schema_profiles_cross_field_matrices_and_graph_formulas_remain_valid, result: PASS}
+    - {question: all_147_precedence_pairs_294_trials_and_147_exact_reverses_remain_valid, result: PASS}
+    - {question: arm_request_payload_is_complete_canonical_and_formula_bound, result: PASS}
+    - {question: exact_arm_replay_totals_and_returned_refs_equal_stored_first_accounting, result: PASS}
+    - {question: receipt_replay_record_has_exactly_four_outer_fields, result: PASS}
+    - {question: receipt_payload_has_the_complete_closed_R1_receipt_evidence_inventory, result: PASS}
+    - {question: stored_and_submitted_receipts_are_independently_strictly_decoded, result: PASS}
+    - {question: receipt_bytes_equal_their_canonical_UTF8_JSON_encoding_byte_for_byte, result: PASS}
+    - {question: receipt_fingerprint_is_SHA256_of_the_exact_canonical_bytes, result: PASS}
+    - {question: outer_receipt_source_and_receipt_IDs_equal_the_bound_payload, result: PASS}
+    - {question: receipt_kind_and_effect_status_exist_only_in_the_bound_payload, result: PASS}
+    - {question: receipt_compatibility_and_currentness_use_only_bound_submitted_values, result: PASS}
+    - {question: exact_receipt_replay_requires_equal_key_equal_fingerprint_and_equal_bytes, result: PASS}
+    - {question: changed_bound_receipt_kind_status_or_other_field_is_not_exact_replay, result: PASS}
+    - {question: original_R3_detached_receipt_override_probe_rejects_after_full_resigning, result: PASS}
+    - {question: stored_and_submitted_arm_records_parse_and_bind_before_branch_selection, result: PASS}
+    - {question: stored_submitted_request_ID_equality_is_checked_whenever_stored_exists, result: PASS}
+    - {question: arm_request_identity_equality_precedes_lookup_reproducibility_branching, result: PASS}
+    - {question: lookup_indeterminate_with_a_different_valid_request_identity_rejects, result: PASS}
+    - {question: caller_supplied_receipt_relation_kind_status_or_arm_relation_is_absent, result: PASS}
+    - {question: all_R1_R2_R3_R4_R5_validator_commands_pass, result: PASS}
+    - {question: R5_builder_reproduces_fixed_R5_fixture_byte_for_byte, result: PASS}
+    - {question: R1_R2_R3_R4_subject_manifest_review_bytes_remain_unchanged, result: PASS}
+    - {question: all_prior_finding_lineage_is_preserved_and_no_BLOCK_evidence_is_deleted, result: PASS}
+    - {question: no_new_delivery_state_receipt_type_retry_model_or_provider_protocol_exists, result: PASS}
+    - {question: no_permission_ladder_or_Actor_Task_authority_classification_exists, result: PASS}
+    - {question: no_F1_F2_F3_F4_authority_reducer_is_recomputed_or_overridden, result: PASS}
+    - {question: synthetic_evidence_is_nonauthority_nonruntime_and_nonrecovery_importable, result: PASS}
+    - {question: all_real_handoff_claim_arm_runtime_effect_provider_and_secret_counts_are_zero, result: PASS}
+    - {question: F5_is_not_accepted_or_frozen_and_F6_is_not_started, result: PASS}
+    - {question: no_implementation_runtime_authentication_provider_or_Git_authorization_is_claimed, result: PASS}
+
+required_adversarial_checks:
+  expected_count: 46
+  pass_count: 45
+  fail_count: 1
+  results:
+    - {check: fully_resigned_float_or_unsafe_integer_or_non_NFC_or_duplicate_key_rejects, result: PASS}
+    - {check: fully_resigned_unknown_root_field_rejects, result: PASS}
+    - {check: fully_resigned_unknown_section_field_rejects, result: PASS}
+    - {check: fully_resigned_unknown_proof_row_field_rejects, result: PASS}
+    - {check: fully_resigned_unknown_nested_raw_field_rejects, result: PASS}
+    - {check: fully_resigned_unknown_canonical_payload_field_rejects, result: PASS}
+    - {check: fully_resigned_unknown_enum_or_wrong_scalar_type_rejects, result: PASS}
+    - {check: fully_resigned_positive_safe_integer_zero_rejects, result: PASS}
+    - {check: fully_resigned_illegal_arm_disposition_tuple_rejects, result: FAIL, finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION}
+    - {check: fully_resigned_illegal_receipt_disposition_tuple_rejects, result: PASS}
+    - {check: fully_resigned_duplicated_precedence_ordering_rejects, result: PASS}
+    - {check: missing_or_duplicate_precedence_order_label_rejects, result: PASS}
+    - {check: false_or_third_precedence_condition_rejects, result: PASS}
+    - {check: missing_expected_unordered_precedence_pair_rejects, result: PASS}
+    - {check: noncanonical_arm_request_bytes_reject, result: PASS}
+    - {check: arm_request_unknown_or_missing_payload_field_rejects, result: PASS}
+    - {check: wrong_arm_request_fingerprint_formula_rejects, result: PASS}
+    - {check: wrong_arm_attempt_ID_formula_rejects, result: PASS}
+    - {check: wrong_arm_request_ID_formula_rejects, result: PASS}
+    - {check: stored_and_submitted_arm_request_identity_mismatch_rejects, result: PASS}
+    - {check: lookup_indeterminate_different_valid_arm_request_identity_rejects, result: PASS}
+    - {check: caller_previous_Event_or_call_count_field_rejects, result: PASS}
+    - {check: exact_arm_replay_nonzero_delta_rejects, result: PASS}
+    - {check: exact_arm_replay_total_accounting_divergence_rejects, result: PASS}
+    - {check: exact_arm_replay_returned_reference_divergence_rejects, result: PASS}
+    - {check: stored_first_accounting_not_exactly_one_and_one_rejects, result: PASS}
+    - {check: each_coherent_graph_level_formula_wrong_mutation_rejects, result: PASS}
+    - {check: original_R3_detached_receipt_kind_status_override_rejects, result: PASS}
+    - {check: bound_submitted_receipt_kind_status_change_presented_as_exact_rejects, result: PASS}
+    - {check: bound_stored_receipt_bytes_change_presented_as_exact_rejects, result: PASS}
+    - {check: noncanonical_receipt_bytes_with_recomputed_fingerprint_rejects, result: PASS}
+    - {check: wrong_receipt_fingerprint_formula_rejects, result: PASS}
+    - {check: receipt_outer_source_ID_mismatch_rejects, result: PASS}
+    - {check: receipt_outer_receipt_ID_mismatch_rejects, result: PASS}
+    - {check: receipt_payload_unknown_or_missing_field_rejects, result: PASS}
+    - {check: receipt_payload_unknown_kind_or_status_rejects, result: PASS}
+    - {check: receipt_stored_submitted_dedup_key_mismatch_rejects, result: PASS}
+    - {check: receipt_exact_replay_with_fingerprint_difference_rejects, result: PASS}
+    - {check: receipt_exact_replay_with_byte_difference_rejects, result: PASS}
+    - {check: detached_receipt_kind_or_status_raw_field_rejects, result: PASS}
+    - {check: caller_supplied_receipt_relation_field_rejects, result: PASS}
+    - {check: unknown_R5_profile_field_rejects, result: PASS}
+    - {check: unknown_R5_summary_or_assertion_field_rejects, result: PASS}
+    - {check: synthetic_real_handoff_claim_arm_or_physical_call_occurrence_rejects, result: PASS}
+    - {check: any_nonzero_runtime_effect_provider_or_secret_count_rejects, result: PASS}
+    - {check: any_F5_freeze_F6_implementation_runtime_authentication_provider_or_Git_authorization_claim_rejects, result: PASS}
+
+proof_coverage:
+  receipt_record_outer_field_count: 4
+  receipt_payload_field_count: 19
+  receipt_replay_case_count: 5
+  arm_identity_case_count: 4
+  precedence_unordered_pair_count: 147
+  precedence_ordering_trial_count: 294
+  precedence_exact_reverse_pair_count: 147
+  graph_level_identity_formula_count: 6
+  transition_state_count: 10
+  transition_case_count: 100
+  receipt_compatibility_case_count: 25
+  receipt_currentness_case_count: 10
+  exact_receipt_replay_binding: equal_key_plus_equal_fingerprint_plus_equal_canonical_bytes
+  arm_identity_branch_order: parse_submitted_then_parse_stored_then_equal_identity_then_lookup_branch
+  prior_R1_R2_R3_R4_proof_regression_count: 1
+
+mandatory_zero_assertions:
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  recovery_importable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  real_provider_response_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+gate_and_authorization:
+  F5_acceptance_ready: false
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  R6_started: false
+  requires_R6: true
+  R6_truly_required: true
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_execution_authorized: false
+  real_handoff_authorized: false
+  real_claim_authorized: false
+  real_dispatch_arm_authorized: false
+  physical_effect_authorized: false
+  database_write_authorized: false
+  service_start_authorized: false
+  Git_commit_authorized: false
+  Git_push_authorized: false
+  Git_PR_authorized: false
+  Git_merge_authorized: false
+  Git_release_deploy_publish_or_tag_authorized: false
+
+review_effect:
+  preserve_fixed_R1_R2_R3_R4_R5_bytes: true
+  automatic_F5_acceptance_or_freeze: false
+  next_gate: NARROW_F5_R6_FIRST_APPLY_ELIGIBILITY_REDUCTION_REPAIR_AND_FRESH_FULL_ATOMIC_REVIEW

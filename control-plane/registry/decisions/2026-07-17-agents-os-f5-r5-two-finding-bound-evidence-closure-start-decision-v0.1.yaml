@@ -1,0 +1,65 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f5-r5-two-finding-bound-evidence-closure-start-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_conditional_instruction_satisfied_by_fresh_R4_independent_review
+  statement_summary: >-
+    R5 was not preplanned and is allowed only for a new independent,
+    reproducible security counterexample. The fixed R4 review produced two
+    fully re-signed counterexamples that the R4 validator accepted, so the
+    condition is satisfied and R5 is limited to closing exactly those defects.
+
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+review_sha256: 1552ad833b4003d35e014ac6f8b8d69015851aa9212c2d665052d646867b9449
+disposition_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml
+disposition_sha256: 8a1a102433d8e618d94273a7fba2a9dede5a6315d2f298cc6f3c7ab3cf655e95
+
+trigger_evidence:
+  finding_count: 2
+  fully_resigned_counterexample_count: 2
+  findings:
+    - F5_R4_BLOCKER_001_EXACT_RECEIPT_REPLAY_KIND_STATUS_NOT_FINGERPRINT_BOUND
+    - F5_R4_BLOCKER_002_LOOKUP_INDETERMINATE_SKIPS_REQUEST_IDENTITY_EQUALITY
+
+authorized_scope:
+  - bind_receipt_kind_and_effect_status_into_closed_canonical_receipt_records
+  - recompute_and_compare_stored_and_submitted_receipt_bytes_and_fingerprints
+  - require_arm_stored_submitted_request_identity_equality_before_lookup_branching
+  - update_only_the_corresponding_R5_amendment_builder_fixture_validator_and_review_surface
+  - perform_fresh_full_atomic_hash_bound_independent_review
+
+forbidden_scope:
+  - new_delivery_state
+  - new_receipt_type
+  - new_retry_model
+  - provider_transport
+  - database_layout
+  - Rust_implementation
+  - JavaScript_implementation
+  - production_authentication
+  - runtime_activation
+  - real_handoff_or_effect
+  - F6_semantics_or_start
+  - automatic_F5_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R6_preplanned: false
+  R6_allowed_only_for_new_independent_reproducible_security_counterexample: true
+  implementation_profile_question_does_not_trigger_R6: true
+  pass_route: STOP_F5_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R5_BYTES_AND_ROUTE_ONLY_NEW_REAL_SECURITY_FINDINGS
+
+authority_effect:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false

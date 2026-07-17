@@ -1,0 +1,67 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+record_id: agents-os-f5-r1-independent-review-disposition-v0.1
+record_type: IndependentReviewDisposition
+status: accepted_for_narrow_R2_correction
+immutable: true
+date: 2026-07-17
+
+authority:
+  authorized_by: Jenn
+  authority_source: current_conversation_instruction
+  exact_instruction: 针对上述四项制作 F5 R2，再进行 fresh full atomic review。
+
+review_binding:
+  path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+  sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a
+  result: BLOCK
+  blocker_count: 2
+  major_count: 2
+  minor_count: 0
+  unresolved_ambiguity_count: 3
+  requires_R2: true
+
+dispositions:
+  - finding_id: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    disposition: ACCEPT_FOR_R2
+    correction_scope:
+      - explicit_arm_request_identity_and_request_fingerprint
+      - FIRST_APPLY_EXACT_DUPLICATE_REPLAY_CHANGED_BYTES_SAME_IDENTITY_relation
+      - replay_returns_first_accounting_without_Event_or_physical_call
+  - finding_id: F5_R1_BLOCKER_002_VALIDATOR_CLAIM_EXCEEDS_EXECUTABLE_COVERAGE
+    disposition: ACCEPT_FOR_R2
+    correction_scope:
+      - canonical_instances_for_every_effective_schema
+      - independent_recomputation_of_all_object_fingerprints_and_five_derived_ID_domains
+      - complete_transition_replay_and_required_adversarial_vectors
+      - validator_claim_narrowed_to_executable_proof_surface
+  - finding_id: F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+    disposition: ACCEPT_FOR_R2
+    correction_scope:
+      - explicit_claim_lease_arm_precedence
+      - all_true_reason_codes_sorted_unique
+      - pairwise_precedence_exhaustion
+  - finding_id: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    disposition: ACCEPT_FOR_R2
+    correction_scope:
+      - total_receipt_kind_effect_status_matrix
+      - attestation_identity_epoch_fence_and_transition_preconditions
+      - ACK_cannot_imply_SUCCEEDED
+
+scope_boundary:
+  R1_subject_bytes: immutable
+  R1_review_bytes: immutable
+  F1_F2_F3_F4_accepted_or_frozen_bytes: immutable
+  partial_acceptance: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  production_authentication: forbidden
+  real_handoff_or_effect_execution: forbidden
+  provider_call: forbidden
+  secret_or_private_state_access: forbidden
+  F6_start: forbidden
+
+next_gate:
+  action: CREATE_F5_R2_NARROW_CORRECTION_AND_FRESH_FULL_ATOMIC_REVIEW
+  acceptance_or_freeze: Jenn_only_after_independent_PASS_NO_BLOCKER
