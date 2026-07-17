@@ -1,0 +1,63 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+record_id: agents-os-f5-r2-independent-review-disposition-v0.1
+record_type: IndependentReviewDisposition
+status: accepted_for_narrow_R3_correction
+immutable: true
+date: 2026-07-17
+
+authority:
+  authorized_by: Jenn
+  authority_source: current_conversation_instruction
+  exact_instruction: 下一步就是制作窄范围 R3，并从固定新字节重新进行 fresh full atomic review。
+
+review_binding:
+  path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+  sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d
+  result: BLOCK
+  blocker_count: 3
+  major_count: 4
+  minor_count: 0
+  unresolved_ambiguity_count: 0
+  requires_R3: true
+
+dispositions:
+  - finding_id: F5_R2_BLOCKER_001_VALIDATOR_ACCEPTS_FULLY_RESIGNED_SCHEMA_INVALID_VALUES
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [closed_recursive_pre_hash_value_validation, fully_resigned_invalid_value_mutations]
+  - finding_id: F5_R2_BLOCKER_002_RECEIPT_COMPATIBILITY_FALSELY_ESCALATES_TO_APPLIED
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [compatibility_only_matrix, raw_receipt_currentness_reducer]
+  - finding_id: F5_R2_BLOCKER_003_ARM_REPLAY_RELATION_REMAINS_DECLARATIVE_NOT_STATE_DERIVED
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [stored_and_submitted_request_state, derived_relation_and_first_accounting]
+  - finding_id: F5_R2_MAJOR_001_PAIRWISE_PRECEDENCE_PROOF_DOES_NOT_EXECUTE_BOTH_RAW_ORDERINGS
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [147_unordered_pairs, 294_raw_ordering_trials]
+  - finding_id: F5_R2_MAJOR_002_CANONICAL_INSTANCE_SET_VIOLATES_EFFECTIVE_SEMANTICS
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [nonauthority_scenario, nonoccurring_schema_shapes, valid_epoch_and_time_relations]
+  - finding_id: F5_R2_MAJOR_003_TRANSITION_PROOF_COUNT_IS_INTERNALLY_CONTRADICTORY
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [single_10_state_inventory, exactly_100_ordered_pairs]
+  - finding_id: F5_R2_MAJOR_004_DERIVED_ID_MUTATIONS_DO_NOT_MUTATE_THE_CANONICAL_OBJECT_GRAPH
+    disposition: ACCEPT_FOR_R3
+    correction_scope: [six_graph_level_formula_mutations, dependent_ref_and_fingerprint_propagation]
+
+scope_boundary:
+  R1_and_R2_subject_bytes: immutable
+  R1_and_R2_review_bytes: immutable
+  F1_F2_F3_F4_accepted_or_frozen_bytes: immutable
+  partial_acceptance: forbidden
+  implementation: forbidden
+  runtime_activation: forbidden
+  database_change: forbidden
+  service_start: forbidden
+  production_authentication: forbidden
+  real_handoff_or_effect_execution: forbidden
+  provider_call: forbidden
+  secret_or_private_state_access: forbidden
+  F6_start: forbidden
+
+next_gate:
+  action: CREATE_F5_R3_NARROW_SEVEN_FINDING_CORRECTION_AND_FRESH_FULL_ATOMIC_REVIEW
+  acceptance_or_freeze: Jenn_only_after_independent_PASS_NO_BLOCKER

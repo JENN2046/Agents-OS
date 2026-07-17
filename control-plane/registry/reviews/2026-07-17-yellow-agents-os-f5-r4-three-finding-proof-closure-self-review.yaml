@@ -1,0 +1,159 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r4-three-finding-proof-closure-self-review-2026-07-17
+date: 2026-07-17
+review_type: hash_bound_author_self_review_not_independent
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R4_ATOMIC_BUNDLE
+reviewer: Nobao_author_run
+independence: false
+
+result: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F5_acceptance_ready_claimed: false
+F5_frozen_claimed: false
+F6_started: false
+
+fixed_R4_subjects:
+  - role: R4_normative_three_finding_amendment
+    path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md
+    sha256: cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551
+  - role: R4_deterministic_fixture_builder
+    path: control-plane/registry/build-f5-r4-three-finding-proof-closure.py
+    sha256: d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929
+  - role: R4_synthetic_fixture
+    path: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+    sha256: af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d
+    fixture_canonical_sha256: 803ae7e021b26ae6f02f2e13e95b4bba34d619558287aa86d7480a20cf1b62c2
+  - role: R4_independent_semantic_validator
+    path: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py
+    sha256: 4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8
+
+immutable_R3_evidence_reverified:
+  R3_amendment_sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd
+  R3_builder_sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772
+  R3_fixture_sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876
+  R3_validator_sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273
+  R3_manifest_sha256: b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563
+  R3_independent_review_sha256: b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+  all_match_prior_fixed_bytes: true
+
+R3_finding_closure:
+  F5_R3_BLOCKER_001_CLOSED_SCHEMA_AND_CROSS_FIELD_VALIDATION_REMAINS_INCOMPLETE:
+    author_disposition: CLOSED_IN_R4_CANDIDATE
+    evidence:
+      - exact_root_section_row_and_object_inventories
+      - cross_field_validation_before_object_fingerprint_verification
+      - complete_arm_disposition_matrix
+      - complete_receipt_disposition_matrix
+      - four_positive_safe_integer_fields_are_exact
+      - fully_resigned_unknown_inventory_illegal_tuple_and_type_weakening_attacks_reject
+
+  F5_R3_MAJOR_001_PRECEDENCE_PROOF_ACCEPTS_DUPLICATED_RAW_ORDERING:
+    author_disposition: CLOSED_IN_R4_CANDIDATE
+    evidence:
+      - exact_147_pair_universe
+      - exact_294_trials
+      - exactly_two_rows_per_case
+      - exact_labels_1_and_2
+      - exact_two_true_distinct_reasons
+      - ordering_2_is_exact_reverse_for_147_of_147
+      - duplicated_order_fully_resigned_mutation_rejects
+
+  F5_R3_BLOCKER_002_ARM_REPLAY_DOES_NOT_BIND_CANONICAL_BYTES_OR_STORED_FIRST_ACCOUNTING:
+    author_disposition: CLOSED_IN_R4_CANDIDATE
+    evidence:
+      - closed_complete_request_payload
+      - byte_for_byte_canonical_encoding_check
+      - request_fingerprint_recomputed_from_canonical_bytes
+      - attempt_ID_and_request_ID_recomputed_from_payload
+      - caller_previous_accounting_removed
+      - exact_replay_totals_and_refs_derived_from_stored_first_accounting
+      - noncanonical_formula_accounting_and_reference_mutations_reject
+
+fixed_validation_commands:
+  - command: python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+    exit_code: 0
+  - command: python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+    exit_code: 0
+  - command: python3 control-plane/registry/validate-f5-r3-seven-finding-closure.py control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+    exit_code: 0
+  - command: python3 control-plane/registry/validate-f5-r4-three-finding-proof-closure.py control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+    exit_code: 0
+  - command: python3 control-plane/registry/build-f5-r4-three-finding-proof-closure.py --output TMP && cmp -s TMP control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+    exit_code: 0
+
+R4_validator_result:
+  result: PASS_NO_BLOCKER
+  schema_profile_count: 16
+  schema_shape_example_count: 16
+  precedence_unordered_pair_count: 147
+  precedence_ordering_trial_count: 294
+  precedence_exact_reverse_pair_count: 147
+  arm_state_derivation_case_count: 4
+  arm_request_formula_case_count: 4
+  receipt_compatibility_case_count: 25
+  receipt_currentness_case_count: 10
+  transition_state_count: 10
+  transition_case_count: 100
+  adversarial_case_count: 20
+  schema_invalid_resigned_mutations_rejected: 17
+  closed_inventory_cross_field_mutations_rejected: 4
+  positive_type_mutations_rejected: 5
+  graph_level_identity_mutations_rejected: 6
+  proof_mutations_rejected: 7
+  arm_request_binding_mutations_rejected: 6
+  prior_R3_additional_probes_rejected: 7
+  precedence_duplicated_order_mutation_rejected: true
+  duplicate_key_probe_rejected: true
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+author_review_questions:
+  closed_root_inventory_verified: PASS
+  closed_all_section_inventories_verified: PASS
+  closed_all_row_inventories_verified: PASS
+  semantic_validation_before_fingerprint_verified: PASS
+  exact_positive_field_profiles_verified: PASS
+  arm_disposition_matrix_verified: PASS
+  receipt_disposition_matrix_verified: PASS
+  exact_precedence_pair_universe_verified: PASS
+  exact_reverse_147_of_147_verified: PASS
+  canonical_arm_bytes_verified: PASS
+  arm_request_fingerprint_formula_verified: PASS
+  arm_attempt_and_request_ID_formulas_verified: PASS
+  stored_first_accounting_verified: PASS
+  prior_R3_seven_probes_rejected: PASS
+  builder_fixture_byte_equality: PASS
+  synthetic_nonauthority_boundary: PASS
+  second_permission_system_absent: PASS
+  upstream_authority_recomputation_absent: PASS
+  real_effect_leak_absent: PASS
+
+scope_confirmation:
+  new_delivery_state_added: false
+  new_receipt_type_added: false
+  new_retry_model_added: false
+  provider_transport_added: false
+  database_layout_added: false
+  Rust_or_JavaScript_implementation_added: false
+  production_authentication_added: false
+  F6_semantics_added: false
+
+governance:
+  author_review_is_independent: false
+  fresh_independent_review_required: true
+  partial_acceptance: forbidden
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_operations_performed: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_FIXED_R1_R4_BYTES

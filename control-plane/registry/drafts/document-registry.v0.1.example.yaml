@@ -21234,6 +21234,533 @@ documents:
     security_boundary: [local queue artifact only, no F3 start implementation runtime production authentication database service provider credential commit push release deploy publish or formal Memory authority]
     validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
 
+  - id: agents-os-f5-r5-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R5 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: blocked
+    scope: F5 R6 review evidence or author review surface
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r5-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R5 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: F5 R6 first-apply eligibility guard governance or proof artifact
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r5-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r5-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r5-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r6-first-apply-eligibility-guard-restoration-start-decision-v0.1
+    title: AGENTS OS F5 R6 First Apply Eligibility Guard Restoration Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: F5 R6 first-apply eligibility guard governance or proof artifact
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-restoration-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-restoration-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-restoration-start-decision-v0.1.yaml]}
+
+  - id: agents-os-active-work-queue-v2.1
+    title: AGENTS OS Active Work Queue v2.1
+    doc_type: review
+    status: superseded
+    scope: historical queue for the F5 R6 construction batch
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R6 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r6-first-apply-eligibility-guard
+    title: Build F5 R6 First Apply Eligibility Guard
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py]}
+
+  - id: agents-os-f5-r6-first-apply-eligibility-guard-v0.1
+    title: AGENTS OS F5 R6 First Apply Eligibility Guard v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json]}
+
+  - id: agents-os-validate-f5-r6-first-apply-eligibility-guard
+    title: Validate F5 R6 First Apply Eligibility Guard
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py]}
+
+  - id: agents-os-f5-r6-first-apply-eligibility-guard-self-review-v0.1
+    title: AGENTS OS F5 R6 First Apply Eligibility Guard Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: F5 R6 review evidence or author review surface
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-first-apply-eligibility-guard-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-first-apply-eligibility-guard-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-first-apply-eligibility-guard-self-review.yaml]}
+
+  - id: agents-os-f5-r6-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R6 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: F5 R6 first-apply eligibility guard governance or proof artifact
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r6-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R6 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: F5 R6 first-apply eligibility guard governance or proof artifact
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r6-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R6 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: F5 R6 first-apply eligibility guard governance or proof artifact
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v2.2
+    title: AGENTS OS Active Work Queue v2.2
+    doc_type: review
+    status: superseded
+    scope: historical queue for the F5 R6 fresh independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r6-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md]}
+
+  - id: agents-os-f5-r6-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R6 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: blocked
+    scope: immutable R6 fresh review evidence and R7 trigger
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r6-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [review bytes or manifest binding changes]}
+    security_boundary: [immutable review evidence, no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r6-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R6 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: finding disposition limiting F5 R7 to exact accounting type closure
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r6-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [finding evidence or R7 scope changes]}
+    security_boundary: [R7 type closure only, no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r7-exact-accounting-type-closure-start-decision-v0.1
+    title: AGENTS OS F5 R7 Exact Accounting Type Closure Start Decision v0.1
+    doc_type: decision_record
+    status: active
+    scope: immutable conditional start of the narrow F5 R7 correction
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reviews/2026-07-17-agents-os-f5-r6-independent-review-disposition-v0.1.yaml, control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [decision bytes or trigger evidence changes]}
+    security_boundary: [R7 type closure only, no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-start-decision-v0.1.yaml]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment
+    title: AGENTS OS F5 Outbox Delivery and Recovery v0.1 R7 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [subject bytes or upstream finding changes]}
+    security_boundary: [synthetic contract proof only, no runtime provider effect or implementation authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r7-exact-accounting-type-closure
+    title: Build F5 R7 Exact Accounting Type Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r7-exact-accounting-type-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r7-exact-accounting-type-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder or fixture bytes change]}
+    security_boundary: [offline synthetic fixture only, no runtime provider effect or external execution]
+    validation: {commands: [sha256sum control-plane/registry/build-f5-r7-exact-accounting-type-closure.py]}
+
+  - id: agents-os-f5-r7-exact-accounting-type-closure-v0.1
+    title: AGENTS OS F5 R7 Exact Accounting Type Closure v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture bytes or count inventory changes]}
+    security_boundary: [synthetic nonauthority nonruntime nonrecovery-importable, zero real effects]
+    validation: {commands: [sha256sum control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json]}
+
+  - id: agents-os-validate-f5-r7-exact-accounting-type-closure
+    title: Validate F5 R7 Exact Accounting Type Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator bytes or finding evidence changes]}
+    security_boundary: [offline synthetic validation only, no runtime provider effect or external write]
+    validation: {commands: [sha256sum control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py]}
+
+  - id: agents-os-f5-r7-exact-accounting-type-closure-self-review-v0.1
+    title: AGENTS OS F5 R7 Exact Accounting Type Closure Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author evidence for the R7 review surface, not independent judgment
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [subject or validation evidence changes]}
+    security_boundary: [author evidence only, cannot substitute for independent review]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-exact-accounting-type-closure-self-review.yaml]}
+
+  - id: agents-os-f5-r7-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R7 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: 64-input hash-bound R1-R7 atomic review manifest
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound input bytes or review scope changes]}
+    security_boundary: [no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r7-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R7 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic independent review instructions for R1-R7
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest digest or review procedure changes]}
+    security_boundary: [no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r7-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R7 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for the fixed R7 review surface
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [package evidence changes]}
+    security_boundary: [local evidence only, no F5 freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v2.3
+    title: AGENTS OS Active Work Queue v2.3
+    doc_type: review
+    status: superseded
+    scope: historical queue for the F5 R7 fresh independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.2.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [bound bytes review package or queue changes]}
+    security_boundary: [no acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md]}
+
+  - id: agents-os-f5-r7-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R7 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: accepted
+    scope: fresh full 64-input PASS_NO_BLOCKER review of the fixed 28-subject F5 R1 through R7 bundle
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [review bytes or bound manifest changes, a new finding or superseding Jenn decision appears]}
+    security_boundary: [independent semantic review evidence only, no F5 freeze F6 implementation runtime authentication provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r7-atomic-freeze-decision-package-v0.1
+    title: AGENTS OS F5 R7 Atomic Freeze Decision Package v0.1
+    doc_type: decision_record
+    status: superseded
+    scope: superseded Jenn decision surface consumed by the immutable F5 R7 freeze decision
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest review or subject bytes change, a superseding Jenn decision is created]}
+    security_boundary: [Jenn decision surface only, no F5 freeze F6 implementation runtime authentication provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v2.4
+    title: AGENTS OS Active Work Queue v2.4
+    doc_type: review
+    status: superseded
+    scope: historical queue that awaited Jenn atomic decision for F5 R7 freeze
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.3.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [Jenn decision or queue state changes]}
+    security_boundary: [Jenn F5 decision queue only, no automatic freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1
+    title: AGENTS OS F5 Outbox Delivery Recovery R7 Atomic Freeze Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn acceptance and semantic freeze of the exact 28-subject F5 R1 through R7 atomic bundle
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml, control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [decision manifest review or accepted subject bytes change, a superseding Jenn decision is created]}
+    security_boundary: [F5 semantic freeze only, no F6 implementation runtime authentication database provider delivery effect public API MCP or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml]}
+
+  - id: agents-os-f5-r7-atomic-freeze-closeout-v0.1-receipt
+    title: AGENTS OS F5 R7 Atomic Freeze Closeout Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for Jenn's F5 R7 atomic freeze decision registry state queue and validation projections
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    freshness: {level: high, review_trigger: [decision or queue hash changes, validation regresses, F6 starts]}
+    security_boundary: [F5 freeze closeout evidence only, no F6 implementation runtime authentication database provider delivery effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v2.5
+    title: AGENTS OS Active Work Queue v2.5
+    doc_type: review
+    status: active
+    scope: current queue awaiting Jenn explicit F6 start decision after F5 R7 atomic freeze
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.4.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r7-atomic-freeze-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [Jenn F6 decision or queue state changes]}
+    security_boundary: [Jenn F6 start queue only, no automatic F6 implementation runtime provider delivery effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md]}
+
   - id: agents-os-f2-r22-atomic-freeze-closeout-v0.1-receipt
     title: AGENTS OS F2 R22 Atomic Freeze Closeout v0.1 Receipt
     doc_type: receipt
@@ -22597,17 +23124,17 @@ documents:
   - id: agents-os-active-work-queue-v1.3
     title: AGENTS OS Active Work Queue v1.3
     doc_type: review
-    status: active
-    scope: current queue awaiting Jenn's explicit F5 contract-closure start decision after F4 R9 atomic freeze
+    status: superseded
+    scope: historical queue that awaited Jenn's explicit F5 contract-closure start decision after F4 R9 atomic freeze
     canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md
     owner: {human: Jenn, agent_steward: Nobao}
     source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md
     supersedes: [control-plane/registry/reports/2026-07-16-agents-os-active-work-queue-v1.2.md]
-    superseded_by: null
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
     related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml]
     last_reviewed: 2026-07-17
     review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f4-r9-atomic-freeze-closeout-v0.1.md
-    freshness: {level: critical, review_trigger: [Jenn starts F5, F4 freeze is superseded, queue scope changes]}
+    freshness: {level: critical, review_trigger: [historical bytes change, supersession projection changes]}
     security_boundary: [Jenn F5 start queue only, no automatic F5 F6 positive operational handoff implementation runtime authentication provider Host effect or Git authority]
     validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
 
@@ -23477,3 +24004,1023 @@ documents:
     freshness: {level: critical, review_trigger: [bound bytes change, a superseding Jenn decision is created]}
     security_boundary: [F4 semantic freeze lineage only, no positive operational handoff F5 F6 implementation runtime authentication provider Host effect or Git authority]
     validation: {commands: [sha256sum control-plane/registry/validate-f4-r9-synthetic-nonauthority-m0a.py]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-start-decision-v0.1
+    title: AGENTS OS F5 Outbox Delivery Recovery Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn decision starting F5 semantic contract closure after the frozen F3 and F4 mainline durability gate
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [decision bytes or frozen prerequisites change, a superseding Jenn decision is created]}
+    security_boundary: [F5 contract closure start only, no F5 acceptance F6 implementation runtime real handoff authentication provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r1-draft
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R1 Draft
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    freshness: {level: critical, review_trigger: [bound bytes independent review or upstream frozen authority changes]}
+    security_boundary: [synthetic contract closure only, no accepted real handoff implementation runtime database provider authentication or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md]}
+
+  - id: agents-os-build-f5-r1-synthetic-delivery-recovery
+    title: Build F5 R1 Synthetic Delivery Recovery
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder fixture validator or contract bytes change]}
+    security_boundary: [synthetic deterministic builder only, no runtime handoff provider secret database service or external effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py --output /tmp/f5-r1-synthetic-delivery-recovery.json]}
+
+  - id: agents-os-f5-r1-synthetic-delivery-recovery-v0.1
+    title: AGENTS OS F5 R1 Synthetic Delivery Recovery v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture builder validator or contract bytes change]}
+    security_boundary: [synthetic test namespace only, not a real F4 handoff claim arm receipt runtime record or production authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py]}
+
+  - id: agents-os-validate-f5-r1-synthetic-delivery-recovery
+    title: Validate F5 R1 Synthetic Delivery Recovery
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator fixture builder or contract bytes change]}
+    security_boundary: [offline deterministic validator only, no runtime handoff provider secret database service or external effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py]}
+
+  - id: agents-os-f5-r1-outbox-delivery-recovery-self-review-v0.1
+    title: AGENTS OS F5 R1 Outbox Delivery Recovery Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author non-independent self-review of the fixed four-subject F5 R1 atomic unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+    freshness: {level: critical, review_trigger: [any bound subject changes or fresh independent review is produced]}
+    security_boundary: [author evidence only and not independent judgment, no F5 acceptance freeze F6 implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml]}
+
+  - id: agents-os-f5-r1-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R1 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: canonical 16-input hash-bound manifest for fresh full review of the fixed four-subject F5 R1 atomic bundle
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.md, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest bound input or subject bytes change, independent result is created]}
+    security_boundary: [review binding only, no F5 acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r1-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R1 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic review instructions for the fixed four-subject F5 R1 bundle
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest review instructions or bound subject bytes change]}
+    security_boundary: [review instructions only, no F5 acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r1-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R1 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for F5 start R1 author construction review package governance projections and validation
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    freshness: {level: high, review_trigger: [package queue validation or Git delivery state changes]}
+    security_boundary: [local author evidence only, no independent PASS F5 acceptance freeze F6 implementation runtime effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v1.4
+    title: AGENTS OS Active Work Queue v1.4
+    doc_type: review
+    status: superseded
+    scope: historical queue for the completed F5 R1 fresh full atomic hash-bound independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [historical bytes change, supersession projection changes]}
+    security_boundary: [independent review queue only, no automatic F5 acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
+
+  - id: agents-os-f5-r1-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R1 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: accepted
+    scope: fresh full independent BLOCK review of the fixed four-subject F5 R1 atomic unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [review or bound R1 bytes change]}
+    security_boundary: [independent BLOCK evidence only, no F5 acceptance freeze F6 implementation runtime handoff provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r1-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R1 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: Jenn-authorized disposition of all four R1 findings into the narrow R2 correction
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [finding or R2 scope changes]}
+    security_boundary: [finding disposition only, no acceptance implementation runtime real handoff provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r2-four-finding-closure-start-decision-v0.1
+    title: AGENTS OS F5 R2 Four Finding Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn decision starting the exact four-finding F5 R2 correction
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [decision finding or subject bytes change]}
+    security_boundary: [F5 R2 semantic correction only, no F5 acceptance freeze F6 implementation runtime handoff or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R2 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [amendment subject or independent result changes]}
+    security_boundary: [synthetic semantic amendment only, no accepted production implementation runtime handoff provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r2-full-effective-delivery-recovery
+    title: Build F5 R2 Full Effective Delivery Recovery
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder fixture validator or amendment changes]}
+    security_boundary: [offline synthetic builder only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py --output /tmp/f5-r2.json]}
+
+  - id: agents-os-f5-r2-full-effective-delivery-recovery-v0.1
+    title: AGENTS OS F5 R2 Full Effective Delivery Recovery v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture builder validator or amendment changes]}
+    security_boundary: [synthetic nonauthority fixture only, not a real handoff arm receipt runtime record or production authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py]}
+
+  - id: agents-os-validate-f5-r2-full-effective-delivery-recovery
+    title: Validate F5 R2 Full Effective Delivery Recovery
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator fixture builder or amendment changes]}
+    security_boundary: [offline validator only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py]}
+
+  - id: agents-os-f5-r2-four-finding-closure-self-review-v0.1
+    title: AGENTS OS F5 R2 Four Finding Closure Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author non-independent self-review of the complete R1 plus R2 eight-subject unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [bound subject bytes or independent review changes]}
+    security_boundary: [author evidence only and not independent judgment, no F5 acceptance freeze F6 implementation runtime handoff or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-four-finding-closure-self-review.yaml]}
+
+  - id: agents-os-f5-r2-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R2 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: canonical 24-input hash-bound manifest for fresh full review of the eight-subject F5 R1 plus R2 atomic unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.md, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest input subject or independent result changes]}
+    security_boundary: [review binding only, no F5 acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r2-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R2 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic review instructions for the fixed F5 R1 plus R2 unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest instructions or bound subject bytes change]}
+    security_boundary: [review instructions only, no F5 acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r2-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R2 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for R2 author construction package governance projection and validation
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: high, review_trigger: [package queue validation or Git delivery changes]}
+    security_boundary: [author evidence only, no independent PASS F5 acceptance freeze F6 implementation runtime handoff effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v1.5
+    title: AGENTS OS Active Work Queue v1.5
+    doc_type: review
+    status: superseded
+    scope: current queue for the F5 R2 fresh full atomic hash-bound independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.4.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r2-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [independent review result decision package or queue changes]}
+    security_boundary: [independent review queue only, no automatic F5 acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
+
+  - id: agents-os-f5-r2-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R2 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: blocked
+    scope: fresh full atomic independent review returning three blockers and four majors for the R1 plus R2 unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [bound bytes finding disposition or later independent review changes]}
+    security_boundary: [review evidence only, no F5 acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r2-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R2 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable disposition routing exactly seven R2 findings into narrow R3 correction
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [R2 review or R3 scope changes]}
+    security_boundary: [finding routing only, no acceptance freeze implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r3-seven-finding-closure-start-decision-v0.1
+    title: AGENTS OS F5 R3 Seven Finding Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn decision starting only the seven-finding F5 R3 correction
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [authority scope or R3 subject changes]}
+    security_boundary: [R3 semantic correction only, no F5 acceptance freeze F6 implementation runtime provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R3 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [R1 R2 R3 subject authority or review changes]}
+    security_boundary: [contract proof only, no F5 freeze implementation runtime database provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r3-seven-finding-closure
+    title: Build F5 R3 Seven Finding Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r3-seven-finding-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r3-seven-finding-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json, control-plane/registry/validate-f5-r3-seven-finding-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder fixture validator or amendment changes]}
+    security_boundary: [offline synthetic builder only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f5-r3-seven-finding-closure.py --output /tmp/f5-r3.json]}
+
+  - id: agents-os-f5-r3-seven-finding-closure-v0.1
+    title: AGENTS OS F5 R3 Seven Finding Closure v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/build-f5-r3-seven-finding-closure.py, control-plane/registry/validate-f5-r3-seven-finding-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture builder validator or amendment changes]}
+    security_boundary: [nonauthority nonoccurring synthetic proof only, not real state runtime authority or effect evidence]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r3-seven-finding-closure.py]}
+
+  - id: agents-os-validate-f5-r3-seven-finding-closure
+    title: Validate F5 R3 Seven Finding Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r3-seven-finding-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r3-seven-finding-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator fixture builder or amendment changes]}
+    security_boundary: [offline validator only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r3-seven-finding-closure.py]}
+
+  - id: agents-os-f5-r3-seven-finding-closure-self-review-v0.1
+    title: AGENTS OS F5 R3 Seven Finding Closure Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author non-independent self-review of the complete R1 plus R2 plus R3 twelve-subject unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [bound subject bytes or independent review changes]}
+    security_boundary: [author evidence only and not independent judgment, no acceptance freeze F6 implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml]}
+
+  - id: agents-os-f5-r3-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R3 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: canonical 32-input hash-bound manifest for fresh review of the twelve-subject F5 R1 plus R2 plus R3 atomic unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.md, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest input subject or independent result changes]}
+    security_boundary: [review binding only, no acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r3-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R3 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic review instructions for the fixed F5 R1 plus R2 plus R3 unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest instructions or bound subject bytes change]}
+    security_boundary: [review instructions only, no acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r3-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R3 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for R3 author construction package governance projection and validation
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: high, review_trigger: [package queue validation or Git delivery changes]}
+    security_boundary: [author evidence only, no independent PASS acceptance freeze F6 implementation runtime effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v1.6
+    title: AGENTS OS Active Work Queue v1.6
+    doc_type: review
+    status: superseded
+    scope: current queue for the F5 R3 fresh full atomic hash-bound independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.5.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [independent review result decision package or queue changes]}
+    security_boundary: [independent review queue only, no automatic acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
+
+  - id: agents-os-f5-r3-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R3 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: blocked
+    scope: fresh full atomic independent review returning two blockers and one major for the fixed R1 through R3 unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [bound bytes finding disposition or later independent review changes]}
+    security_boundary: [review evidence only, no F5 acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r3-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R3 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable disposition routing exactly three R3 proof findings into narrow R4 correction
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [R3 review or R4 scope changes]}
+    security_boundary: [finding routing only, no acceptance freeze implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1
+    title: AGENTS OS F5 R4 Three Finding Proof Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn decision starting only the three-finding F5 R4 proof correction and fresh review
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-agents-os-f5-r3-independent-review-disposition-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [authority scope or R4 subject changes]}
+    security_boundary: [R4 proof correction only, no F5 acceptance freeze F6 implementation runtime provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml]}
+
+  - id: agents-os-active-work-queue-v1.7
+    title: AGENTS OS Active Work Queue v1.7
+    doc_type: review
+    status: superseded
+    scope: historical queue for the narrow F5 R4 three-finding construction batch
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [R4 subject package or queue changes]}
+    security_boundary: [construction queue only, no automatic acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R4 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [R1 R2 R3 R4 subject authority or review changes]}
+    security_boundary: [contract proof only, no F5 freeze implementation runtime database provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r4-three-finding-proof-closure
+    title: Build F5 R4 Three Finding Proof Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r4-three-finding-proof-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r4-three-finding-proof-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json, control-plane/registry/validate-f5-r4-three-finding-proof-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder fixture validator or amendment changes]}
+    security_boundary: [offline synthetic builder only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f5-r4-three-finding-proof-closure.py --output /tmp/f5-r4.json]}
+
+  - id: agents-os-f5-r4-three-finding-proof-closure-v0.1
+    title: AGENTS OS F5 R4 Three Finding Proof Closure v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/build-f5-r4-three-finding-proof-closure.py, control-plane/registry/validate-f5-r4-three-finding-proof-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture builder validator or amendment changes]}
+    security_boundary: [nonauthority nonoccurring synthetic proof only, not real state runtime authority or effect evidence]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r4-three-finding-proof-closure.py]}
+
+  - id: agents-os-validate-f5-r4-three-finding-proof-closure
+    title: Validate F5 R4 Three Finding Proof Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator fixture builder or amendment changes]}
+    security_boundary: [offline validator only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r4-three-finding-proof-closure.py]}
+
+  - id: agents-os-f5-r4-three-finding-proof-closure-self-review-v0.1
+    title: AGENTS OS F5 R4 Three Finding Proof Closure Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author non-independent self-review of the complete R1 through R4 sixteen-subject unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [bound subject bytes or independent review changes]}
+    security_boundary: [author evidence only and not independent judgment, no acceptance freeze F6 implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-three-finding-proof-closure-self-review.yaml]}
+
+  - id: agents-os-f5-r4-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R4 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: canonical 40-input hash-bound manifest for fresh review of the sixteen-subject F5 R1 through R4 atomic unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.md, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest input subject or independent result changes]}
+    security_boundary: [review binding only, no acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r4-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R4 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic review instructions for the fixed F5 R1 through R4 unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest instructions or bound subject bytes change]}
+    security_boundary: [review instructions only, no acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r4-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R4 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for R3 disposition R4 construction package governance projection and validation
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: high, review_trigger: [package queue validation or Git delivery changes]}
+    security_boundary: [author evidence only, no independent PASS acceptance freeze F6 implementation runtime effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v1.8
+    title: AGENTS OS Active Work Queue v1.8
+    doc_type: review
+    status: superseded
+    scope: historical queue for the F5 R4 fresh full atomic hash-bound independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [independent review result decision package or queue changes]}
+    security_boundary: [independent review queue only, no automatic acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}
+
+  - id: agents-os-f5-r4-full-atomic-independent-review-v0.1
+    title: AGENTS OS F5 R4 Full Atomic Independent Review v0.1
+    doc_type: review
+    status: blocked
+    scope: fresh full atomic independent review returning two reproducible blockers for the fixed R1 through R4 unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [bound bytes finding disposition or later independent review changes]}
+    security_boundary: [review evidence only, no F5 acceptance freeze F6 implementation runtime provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml]}
+
+  - id: agents-os-f5-r4-independent-review-disposition-v0.1
+    title: AGENTS OS F5 R4 Independent Review Disposition v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable disposition routing exactly two R4 bound-evidence findings into narrow R5 correction
+    canonical_path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [R4 review or R5 scope changes]}
+    security_boundary: [finding routing only, no acceptance freeze implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml]}
+
+  - id: agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1
+    title: AGENTS OS F5 R5 Two Finding Bound Evidence Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable conditional Jenn decision starting only the two-finding F5 R5 correction and fresh review
+    canonical_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-17-agents-os-f5-r4-independent-review-disposition-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [authority scope or R5 subject changes]}
+    security_boundary: [R5 proof correction only, no F5 acceptance freeze F6 implementation runtime provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml]}
+
+  - id: agents-os-active-work-queue-v1.9
+    title: AGENTS OS Active Work Queue v1.9
+    doc_type: review
+    status: superseded
+    scope: historical queue for the narrow F5 R5 two-finding construction batch
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.8.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [R5 subject package or queue changes]}
+    security_boundary: [construction queue only, no automatic acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md]}
+
+  - id: agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment
+    title: AGENTS OS F5 Outbox Delivery Recovery v0.1 R5 Amendment
+    doc_type: contract
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [R1 R2 R3 R4 R5 subject authority or review changes]}
+    security_boundary: [contract proof only, no F5 freeze implementation runtime database provider or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md]}
+
+  - id: agents-os-build-f5-r5-bound-replay-evidence-closure
+    title: Build F5 R5 Bound Replay Evidence Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json, control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [builder fixture validator or amendment changes]}
+    security_boundary: [offline synthetic builder only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py --output /tmp/f5-r5.json]}
+
+  - id: agents-os-f5-r5-bound-replay-evidence-closure-v0.1
+    title: AGENTS OS F5 R5 Bound Replay Evidence Closure v0.1
+    doc_type: example
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py, control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [fixture builder validator or amendment changes]}
+    security_boundary: [nonauthority nonoccurring synthetic proof only, not real state runtime authority or effect evidence]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py]}
+
+  - id: agents-os-validate-f5-r5-bound-replay-evidence-closure
+    title: Validate F5 R5 Bound Replay Evidence Closure
+    doc_type: reference
+    status: accepted
+    scope: accepted fixed F5 subject bound by the canonical R7 atomic manifest and immutable Jenn freeze decision
+    canonical_path: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md, control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [validator fixture builder or amendment changes]}
+    security_boundary: [offline validator only, no runtime handoff provider secret database service or effect]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py]}
+
+  - id: agents-os-f5-r5-bound-replay-evidence-closure-self-review-v0.1
+    title: AGENTS OS F5 R5 Bound Replay Evidence Closure Self Review v0.1
+    doc_type: review
+    status: accepted
+    scope: author non-independent self-review of the complete R1 through R5 twenty-subject unit
+    canonical_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r4-full-atomic-independent-review.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml
+    freshness: {level: critical, review_trigger: [bound subject bytes or independent review changes]}
+    security_boundary: [author evidence only and not independent judgment, no acceptance freeze F6 implementation runtime or effect authority]
+    validation: {commands: [sha256sum control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-bound-replay-evidence-closure-self-review.yaml]}
+
+  - id: agents-os-f5-r5-atomic-independent-review-package-v0.1-manifest
+    title: AGENTS OS F5 R5 Atomic Independent Review Package v0.1 Manifest
+    doc_type: registry
+    status: active
+    scope: canonical 48-input hash-bound manifest for fresh review of the twenty-subject F5 R1 through R5 atomic unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.md, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest input subject or independent result changes]}
+    security_boundary: [review binding only, no acceptance freeze F6 implementation runtime real handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml]}
+
+  - id: agents-os-f5-r5-atomic-independent-review-package-v0.1
+    title: AGENTS OS F5 R5 Atomic Independent Review Package v0.1
+    doc_type: review
+    status: active
+    scope: fresh full atomic review instructions for the fixed F5 R1 through R5 unit
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [manifest instructions or bound subject bytes change]}
+    security_boundary: [review instructions only, no acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-f5-r5-atomic-independent-review-package-v0.1-receipt
+    title: AGENTS OS F5 R5 Atomic Independent Review Package Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Yellow batch evidence for R4 disposition R5 construction package governance projection and validation
+    canonical_path: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: high, review_trigger: [package queue validation or Git delivery changes]}
+    security_boundary: [author evidence only, no independent PASS acceptance freeze F6 implementation runtime effect or Git authority]
+    validation: {commands: [sha256sum control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md]}
+
+  - id: agents-os-active-work-queue-v2.0
+    title: AGENTS OS Active Work Queue v2.0
+    doc_type: review
+    status: superseded
+    scope: historical queue for the F5 R5 fresh full atomic hash-bound independent review
+    canonical_path: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.0.md
+    supersedes: [control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.9.md]
+    superseded_by: control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.1.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-17-agents-os-f5-r5-two-finding-bound-evidence-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: 2026-07-17
+    review_by: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f5-r5-atomic-independent-review-package-v0.1.md
+    freshness: {level: critical, review_trigger: [independent review result decision package or queue changes]}
+    security_boundary: [independent review queue only, no automatic acceptance freeze F6 implementation runtime handoff provider effect or Git authority]
+    validation: {commands: [PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-machine/machine.py validate, PYTHONDONTWRITEBYTECODE=1 python3 execution/agents-os-dashboard/dashboard.py validate]}

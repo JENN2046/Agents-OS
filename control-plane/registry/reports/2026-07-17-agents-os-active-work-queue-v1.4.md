@@ -1,0 +1,114 @@
+# AGENTS OS Active Work Queue v1.4
+
+Date: 2026-07-17  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.3.md`
+
+## Purpose
+
+Current queue after Jenn explicitly started F5 Outbox Delivery / Recovery
+contract closure. Queue v1.3 and all earlier queues remain byte-preserved
+historical evidence.
+
+This queue starts only the F5 semantic contract line and places the fixed R1
+four-subject unit at fresh independent review. It does not accept or freeze
+F5, start F6, authorize a real F4 handoff, implementation, runtime, database,
+Resident, dispatcher, Worker, Host, authentication, credential, provider,
+service, physical effect, public API, MCP, Git delivery, release, deploy,
+publish, or Memory work.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F4_acceptance_unit=F4_TASKPERMIT_HOST_AUTHENTICATION_EFFECT_ADMISSION_V0_1_R9_ATOMIC_BUNDLE
+F4_manifest_sha256=8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+F4_real_positive_handoff_status=NON_ISSUABLE_PENDING_INDEPENDENTLY_ACCEPTED_OWNER_INTERFACES_AND_CURRENT_PRODUCTION_RECEIPTS
+F5_started=true
+F5_status=CONTRACT_CLOSURE_ACTIVE
+F5_start_decision_sha256=e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e
+F5_R1_acceptance_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE
+F5_R1_subject_count=4
+F5_R1_manifest_sha256=80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2
+F5_R1_manifest_verified_inputs=16
+F5_R1_author_self_review=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F5_R1_independent_review_created=false
+F5_accepted=false
+F5_frozen=false
+F6_started=false
+accepted_real_handoff_count=0
+armed_dispatch_count=0
+runtime_consumable_count=0
+external_effect_count=0
+provider_call_count=0
+raw_secret_count=0
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+database_change_authorized=false
+service_start_authorized=false
+provider_host_or_effect_execution_authorized=false
+commit_push_PR_merge_authorized=false
+```
+
+## NOW
+
+### NOW-001: F5 R1 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+review_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE
+atomic=true
+partial_review=forbidden
+subject_count=4
+declared_input_count=16
+allowed_results=PASS_NO_BLOCKER|BLOCK
+author_may_claim_independence=false
+real_handoff_or_effect_execution=forbidden
+```
+
+## NEXT
+
+```text
+if_BLOCK=create_narrow_F5_R2_amendment_and_repeat_fresh_full_atomic_review
+if_PASS_NO_BLOCKER=create_Jenn_only_F5_atomic_freeze_decision_package
+automatic_F5_acceptance_or_freeze=forbidden
+automatic_F6_start=forbidden
+automatic_implementation=forbidden
+automatic_runtime_or_effect_execution=forbidden
+```
+
+## BLOCKED
+
+```text
+partial_F5_acceptance=forbidden
+author_self_review_as_independent_review=forbidden
+synthetic_evidence_as_production_authority=forbidden
+F5_recomputation_of_F1_F2_F3_or_F4_authority=forbidden
+Actor_Task_color_role_trust_urgency_or_P0_P3_permission_classification=forbidden
+positive_operational_handoff_without_accepted_owner_interfaces_and_current_production_receipts=forbidden
+post_arm_automatic_retry_or_second_physical_claim=forbidden
+F6_start=not_authorized
+implementation_runtime_database_authentication_provider_Host_effect=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_F5_start
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F3_and_F4_durability_mainline_integration=VERIFIED
+F3_and_F4_mainline_merge_commit=606a5f1f0f6db886b0215b0668cf4e36d9c0d99a
+F4_R1_through_R9_atomic_bundle=ACCEPTED_FROZEN
+Jenn_F5_start_decision=RECORDED
+F5_R1_contract_builder_fixture_validator=FIXED_FOR_REVIEW
+F5_R1_manifest=VERIFIED_16_OF_16
+F5_R1_author_self_review=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F5_R1_validator=PASS_13_SCHEMAS_64_VECTORS_15_MUTATIONS_8_RECOVERY_WINDOWS_ZERO_EFFECT
+F5_R1_builder_reproduction=BYTE_EQUAL
+active_work_queue_v0_1_through_v1_3=superseded_historical_bytes_preserved
+```

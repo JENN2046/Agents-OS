@@ -1,0 +1,84 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r6-first-apply-eligibility-guard-self-review-2026-07-17
+date: 2026-07-17
+reviewer: Nobao_author_run
+independence: false
+result: PASS_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R6_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 24
+  effective_precedence:
+    - R6_explicit_replacement
+    - R5_other_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+R6_subjects:
+  - {role: normative_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md, sha256: 0c82ad7eccbcd10abbdf429bb78ec49dfb3f77565779f5b457d075ec24e444d8}
+  - {role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py, sha256: f3c23180277fba76dd9c6cca93782b2b77413905c9df07576d3fffee182979f4}
+  - {role: synthetic_nonauthority_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json, sha256: 853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8}
+  - {role: independent_semantic_validator, path: control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py, sha256: c694d6944d1dde3a0e5d2ac5c10b56e07950476946f7afa4c61f60df5ffa603a}
+
+finding_closure:
+  finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION
+  disposition: CLOSED_IN_AUTHOR_SURFACE_PENDING_INDEPENDENT_REVIEW
+  evidence:
+    - eligible_NO_EXISTING_ARM_derives_APPLIED_ARMED_FIRST_APPLY_one_Event_one_call
+    - NOT_ELIGIBLE_NO_EXISTING_ARM_derives_REJECTED_FIRST_APPLY_NOT_ELIGIBLE_zero_Event_zero_call
+    - exact_R5_fully_resigned_logic_counterexample_rejects
+    - inverse_eligibility_mutation_rejects
+    - replay_relations_other_than_NO_EXISTING_ARM_preserve_R4_R5_outcomes
+
+author_validation:
+  R1_validator: PASS_NO_BLOCKER
+  R2_validator: PASS_NO_BLOCKER
+  R3_validator: PASS_NO_BLOCKER
+  R4_validator: PASS_NO_BLOCKER
+  R5_validator: PASS_NO_BLOCKER
+  R6_validator: PASS_NO_BLOCKER
+  R6_builder_fixture_byte_equal: true
+  fully_resigned_R6_mutations_rejected: 11_of_11
+  exact_R5_counterexample_rejected: true
+  inverse_eligibility_mutation_rejected: true
+
+scope_review:
+  receipt_replay_semantic_change: false
+  new_delivery_state: false
+  new_receipt_type: false
+  new_retry_model: false
+  provider_transport: false
+  implementation: false
+  runtime_activation: false
+  production_authentication: false
+  F6_semantics_or_start: false
+  permission_ladder_or_actor_task_classification: false
+  upstream_authority_recomputation: false
+
+nonauthority_assertions:
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+governance:
+  R1_R2_R3_R4_R5_fixed_bytes_preserved: true
+  author_self_review_is_independent_review: false
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_R1_THROUGH_R6

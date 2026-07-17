@@ -1,0 +1,66 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f5-r5-independent-review-disposition-2026-07-17
+date: 2026-07-17
+owner: Jenn
+steward: Nobao
+
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R5_ATOMIC_BUNDLE
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r5-full-atomic-independent-review.yaml
+review_sha256: e7d48414b3aaa7df7ee462534ceff82062894bae39d1fd06c374c5a713b86cf7
+manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r5-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: 54e401c18d30c1462b2a6be90a4c72f2ddd3afa44167f634532b126a24715f38
+review_result: BLOCK
+requires_R6: true
+R6_truly_required: true
+
+integrity:
+  declared_inputs_verified: 48_of_48
+  subjects_read: 20_of_20
+  authority_inputs_read: 11_of_11
+  fixed_commands_passed: 6_of_6
+  R4_findings_closed_in_R5: 2_of_2
+  new_fully_resigned_counterexamples_reproduced: 1_of_1
+  subject_bytes_modified_by_review: false
+
+finding_dispositions:
+  - finding_id: F5_R5_BLOCKER_001_FIRST_APPLY_ELIGIBILITY_REDUCTION_REGRESSION
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R6
+    R6_correction:
+      - restore_R4_first_apply_eligibility_guard_in_the_effective_reducer
+      - require_ELIGIBLE_PROOF_PRECONDITION_for_NO_EXISTING_ARM_APPLIED
+      - derive_REJECTED_FIRST_APPLY_NOT_ELIGIBLE_with_zero_Event_and_call_deltas_otherwise
+      - include_the_exact_fully_resigned_R5_counterexample_in_the_R6_negative_suite
+
+R6_scope_limit:
+  allowed:
+    - first_apply_eligibility_deterministic_reducer_guard
+    - corresponding_focused_builder_fixture_validator_and_negative_probe
+    - new_atomic_manifest_and_fresh_full_atomic_review
+  forbidden:
+    - receipt_replay_semantic_change
+    - new_delivery_state
+    - new_receipt_type
+    - new_retry_model
+    - provider_transport
+    - database_layout
+    - Rust_or_JavaScript_implementation
+    - production_authentication
+    - runtime_activation
+    - F6_semantics
+
+governance:
+  R1_R2_R3_R4_R5_subjects_immutable: true
+  R1_R2_R3_R4_R5_manifests_immutable: true
+  R1_R2_R3_R4_R5_reviews_immutable: true
+  partial_acceptance: forbidden
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized_by_this_disposition: false
+
+next_gate: NARROW_F5_R6_FIRST_APPLY_ELIGIBILITY_GUARD_RESTORATION_AND_FRESH_FULL_ATOMIC_REVIEW

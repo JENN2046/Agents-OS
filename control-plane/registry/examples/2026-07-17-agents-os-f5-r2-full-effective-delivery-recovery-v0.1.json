@@ -1,0 +1,3626 @@
+{
+  "adversarial_cases": [
+    {
+      "check": "synthetic_handoff_or_witness_presented_to_production",
+      "expected_decision": "REJECT_SYNTHETIC_NONAUTHORITY",
+      "input": {
+        "authority_eligible": false,
+        "evidence_environment": "SYNTHETIC_TEST",
+        "target_environment": "PRODUCTION"
+      }
+    },
+    {
+      "check": "F4_handoff_ref_match_with_fingerprint_mismatch",
+      "expected_decision": "REJECT_INTEGRITY_FAILURE",
+      "input": {
+        "fingerprint_match": false,
+        "ref_match": true
+      }
+    },
+    {
+      "check": "F5_local_override_of_F4_REJECTED_or_INDETERMINATE",
+      "expected_decision": "REJECT_NO_LOCAL_OVERRIDE",
+      "input": {
+        "F4_result": "REJECTED",
+        "F5_requested_result": "CURRENT"
+      }
+    },
+    {
+      "check": "old_F4_assessment_reused_at_later_writer_head",
+      "expected_decision": "REJECT_AUTHORITY_STALE",
+      "input": {
+        "assessment_head": 10,
+        "writer_head": 11
+      }
+    },
+    {
+      "check": "observed_time_equal_to_expiry",
+      "expected_decision": "REJECT_EXPIRED_EXCLUSIVE_BOUND",
+      "input": {
+        "expiry_utc_ms": 1000,
+        "observed_at_utc_ms": 1000
+      }
+    },
+    {
+      "check": "dispatcher_label_without_current_F2_F3_assessments",
+      "expected_decision": "REJECT_CLAIMANT_UNAVAILABLE",
+      "input": {
+        "F2_current": false,
+        "F3_current": false,
+        "dispatcher_label": true
+      }
+    },
+    {
+      "check": "skipped_duplicate_or_stale_claim_epoch",
+      "expected_decision": "REJECT_CAS_OR_STALE_EPOCH",
+      "input": {
+        "previous_epoch": 3,
+        "submitted_epoch": 5
+      }
+    },
+    {
+      "check": "stale_claim_token_or_lease_CAS",
+      "expected_decision": "REJECT_TOKEN_OR_CAS_MISMATCH",
+      "input": {
+        "cas_match": false,
+        "token_match": false
+      }
+    },
+    {
+      "check": "lease_extension_beyond_authority_expiry",
+      "expected_decision": "REJECT_EXPIRY_BOUND",
+      "input": {
+        "authority_expiry": 1500,
+        "new_lease_expiry": 2000
+      }
+    },
+    {
+      "check": "second_claim_while_current_claim_active",
+      "expected_decision": "REJECT_CLAIM_ALREADY_ACTIVE",
+      "input": {
+        "current_claim_active": true
+      }
+    },
+    {
+      "check": "second_claim_or_arm_after_a_dispatch_arm_exists",
+      "expected_decision": "REJECT_DISPATCH_ALREADY_ARMED",
+      "input": {
+        "dispatch_arm_exists": true
+      }
+    },
+    {
+      "check": "exact_arm_replay_without_second_call",
+      "expected_decision": "REPLAY_FIRST_ACCOUNTING_ZERO_CALL",
+      "input": {
+        "replay_relation": "EXACT_DUPLICATE",
+        "requested_second_call": true
+      }
+    },
+    {
+      "check": "changed_arm_bytes_under_same_identity",
+      "expected_decision": "REJECT_REQUEST_BYTES_CONFLICT",
+      "input": {
+        "replay_relation": "CHANGED_BYTES_SAME_IDENTITY"
+      }
+    },
+    {
+      "check": "caller_selected_or_changed_idempotency_key",
+      "expected_decision": "REJECT_EFFECT_ID_MISMATCH",
+      "input": {
+        "effect_id": "bound-effect",
+        "supplied_key": "caller-key"
+      }
+    },
+    {
+      "check": "crash_after_arm_before_call",
+      "expected_decision": "UNKNOWN_NO_AUTOMATIC_RETRY",
+      "input": {
+        "arm_committed": true,
+        "call_started": false,
+        "certainty": false
+      }
+    },
+    {
+      "check": "crash_after_call_before_receipt",
+      "expected_decision": "UNKNOWN_NO_AUTOMATIC_RETRY",
+      "input": {
+        "call_started": true,
+        "certainty": false,
+        "receipt_present": false
+      }
+    },
+    {
+      "check": "ACK_treated_as_SUCCEEDED",
+      "expected_decision": "REJECT_RECEIPT_KIND_STATUS_MISMATCH",
+      "input": {
+        "effect_status": "SUCCEEDED",
+        "receipt_kind": "TRANSPORT_ACK"
+      }
+    },
+    {
+      "check": "FAILED_treated_as_NOT_EXECUTED",
+      "expected_decision": "REJECT_FAILED_MAY_HAVE_EFFECT",
+      "input": {
+        "attempt_outcome": "FAILED",
+        "claimed_effect_may_have_occurred": false
+      }
+    },
+    {
+      "check": "UNKNOWN_or_PRE_EFFECT_NOT_EXECUTED_marked_auto_retry_after_arm",
+      "expected_decision": "REJECT_AUTOMATIC_RETRY_FALSE",
+      "input": {
+        "arm_exists": true,
+        "attempt_outcome": "UNKNOWN",
+        "automatic_retry_eligible": true
+      }
+    },
+    {
+      "check": "dead_letter_treated_as_effect_failure_or_completion",
+      "expected_decision": "REJECT_ACCOUNTING_ONLY",
+      "input": {
+        "claimed_completion": true,
+        "dead_letter_present": true
+      }
+    },
+    {
+      "check": "changed_receipt_under_same_source_and_receipt_id",
+      "expected_decision": "REJECT_RECEIPT_BYTES_CONFLICT",
+      "input": {
+        "dedup_relation": "CHANGED_BYTES_SAME_KEY"
+      }
+    },
+    {
+      "check": "old_epoch_late_SUCCEEDED_advances_current_Task",
+      "expected_decision": "RETAIN_HISTORY_NO_CURRENT_ADVANCEMENT",
+      "input": {
+        "current_epoch": 2,
+        "receipt_epoch": 1,
+        "requested_current_advancement": true
+      }
+    },
+    {
+      "check": "reconciliation_opens_new_attempt_or_compensation",
+      "expected_decision": "REJECT_EXISTING_EFFECT_QUERY_ONLY",
+      "input": {
+        "reconciliation_creates_attempt": true
+      }
+    },
+    {
+      "check": "projection_rebuild_emits_claim_arm_Event_or_effect",
+      "expected_decision": "REJECT_ZERO_EFFECT_REBUILD_ONLY",
+      "input": {
+        "rebuild_emits_event": true
+      }
+    },
+    {
+      "check": "missing_recovery_barrier_allows_ordinary_claim",
+      "expected_decision": "REJECT_BARRIER_REQUIRED",
+      "input": {
+        "ordinary_claim_requested": true,
+        "recovery_barrier_complete": false
+      }
+    },
+    {
+      "check": "PBL_no_match_creates_delivery_authority",
+      "expected_decision": "REJECT_PBL_NOT_POSITIVE_AUTHORITY",
+      "input": {
+        "PBL_match": false,
+        "requested_allow": true,
+        "upstream_authority_current": false
+      }
+    },
+    {
+      "check": "permission_lane_or_role_label_changes_delivery_result",
+      "expected_decision": "REJECT_LABELS_NONAUTHORITATIVE",
+      "input": {
+        "authority_inputs_equal": true,
+        "delivery_result_changed": true,
+        "label_changed": true
+      }
+    },
+    {
+      "check": "any_nonzero_real_handoff_arm_runtime_effect_provider_or_secret_count",
+      "expected_decision": "REJECT_NONZERO_COUNT",
+      "input": {
+        "accepted_real_handoff_count": 0,
+        "armed_dispatch_count": 0,
+        "external_effect_count": 1,
+        "provider_call_count": 0,
+        "raw_secret_count": 0,
+        "runtime_consumable_count": 0
+      }
+    }
+  ],
+  "adversarial_cases_fingerprint": "20e2dcd7acf811e4aa906cfb4cb2897263c09f53f4e2a01e3f63eeb13368ac99",
+  "arm_replay_cases": [
+    {
+      "expected": {
+        "event_created": true,
+        "physical_call_authorized": true,
+        "primary_reason": "ARMED_FIRST_APPLY",
+        "result": "APPLIED"
+      },
+      "relation": "NO_EXISTING_ARM"
+    },
+    {
+      "expected": {
+        "event_created": false,
+        "physical_call_authorized": false,
+        "primary_reason": "EXACT_DUPLICATE_REPLAY",
+        "result": "REPLAYED"
+      },
+      "relation": "EXACT_DUPLICATE"
+    },
+    {
+      "expected": {
+        "event_created": false,
+        "physical_call_authorized": false,
+        "primary_reason": "REQUEST_BYTES_CONFLICT",
+        "result": "REJECTED"
+      },
+      "relation": "CHANGED_BYTES_SAME_IDENTITY"
+    },
+    {
+      "expected": {
+        "event_created": false,
+        "physical_call_authorized": false,
+        "primary_reason": "ARM_LOOKUP_UNAVAILABLE",
+        "result": "INDETERMINATE"
+      },
+      "relation": "LOOKUP_INDETERMINATE"
+    }
+  ],
+  "arm_replay_cases_fingerprint": "4e0fbd480ccc4bcc2e4036c8c83e789eaac744e43e5fdf764b03e91cb91c8440",
+  "assertions": {
+    "accepted_real_handoff_count": 0,
+    "armed_dispatch_count": 0,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "runtime_consumable_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "assertions_fingerprint": "f9c96993338530e05be101897a5e5dd663c1e786765b486a8b66317847d45d35",
+  "authority_eligible": false,
+  "canonical_instances": [
+    {
+      "object": {
+        "authority_eligible": false,
+        "canonical_fingerprint": "f5285affa2730fb7933a1beb7127d3db52cdffea251fd2262ddc594e7a66890a",
+        "completion_blocking": true,
+        "created_at_utc_ms": 1000,
+        "created_event_sequence": 0,
+        "delivery_profile_fingerprint": "a79e0a9436e8452f477017b65064a501bb96971b3997201a6ec3d95bc807a799",
+        "delivery_profile_ref": "synthetic-f5-r2:delivery_profile_ref",
+        "effect_fence_generation": 0,
+        "effect_id": "synthetic-f5-r2:effect_id",
+        "effect_scope_fingerprint": "f94ed72fe8b61c001fa449d3b6248cc60aa5b6bb796f855b985b672ebfee369c",
+        "effect_scope_ref": "synthetic-f5-r2:effect_scope_ref",
+        "environment": "SYNTHETIC_TEST",
+        "execution_epoch": 1,
+        "expected_result_contract_fingerprint": "abbf6179662105f2e06f116b6c64e8440ad85d1e5cacd6631f7c0c740f85a02e",
+        "expected_result_contract_ref": "synthetic-f5-r2:expected_result_contract_ref",
+        "host_fence_generation": 0,
+        "interface_version": "agents-os.f5-outbox-intent.v0.1-r1",
+        "invocation_identity_fingerprint": "303e0f125b5a2cfff8970ef55280147a750a54331534cf7ba49529f9a31f5033",
+        "outbox_intent_id": "d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8",
+        "outbox_intent_ref": "outbox-intent:d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8",
+        "owner_host_id": "synthetic-f5-r2:owner_host_id",
+        "source_handoff_event_sequence": 0,
+        "source_handoff_fingerprint": "cd66a526fa7712dd914218b7f0f0c320b89eda6681c347c24a0d56e61a7bf05a",
+        "source_handoff_ref": "synthetic-f5-r2:source_handoff_ref",
+        "start_authority_expires_at_utc_ms": 2000,
+        "task_fence_generation": 0
+      },
+      "schema_name": "F5OutboxIntentV0_1R1"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "d6a3f08ed84bd1a212a4d4e8a4af41f456cf078ca2cb9b37a8343328853e1829",
+        "interface_version": "agents-os.f5-enqueue-disposition.v0.1-r1",
+        "observed_at_utc_ms": 1000,
+        "observed_event_sequence": 0,
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "primary_reason": "SYNTHETIC_INPUT",
+        "reason_codes": [
+          "SYNTHETIC_INPUT"
+        ],
+        "result": "NOT_EXECUTABLE",
+        "source_handoff_fingerprint": "cd66a526fa7712dd914218b7f0f0c320b89eda6681c347c24a0d56e61a7bf05a",
+        "source_handoff_ref": "synthetic-f5-r2:source_handoff_ref"
+      },
+      "schema_name": "F5EnqueueDispositionV0_1R1"
+    },
+    {
+      "object": {
+        "assessed_at_event_sequence": 0,
+        "authority_eligible": false,
+        "canonical_fingerprint": "88cb4c7e5c9db31d3062c5c8af4433311a1872c51c787c06fb778fe42e62867e",
+        "dispatcher_actor_id": "synthetic-f5-r2:dispatcher_actor_id",
+        "dispatcher_actor_identity_fingerprint": "9de9ea6880ed0b1eb49e7376d7a166953aabc19f50f72f4975ee574038c28133",
+        "dispatcher_actor_identity_ref": "synthetic-f5-r2:dispatcher_actor_identity_ref",
+        "dispatcher_binding_assessment_fingerprint": "a50d15b7be3d7c61f5cf549fbd349b4d66b959186343b393212debb4e347c3b1",
+        "dispatcher_binding_assessment_ref": "synthetic-f5-r2:dispatcher_binding_assessment_ref",
+        "dispatcher_principal_fingerprint": "43e2574581b0f357f551cf124b30916b91c5aa6ba301a68c7caa9222f29d7e72",
+        "dispatcher_principal_id": "synthetic-f5-r2:dispatcher_principal_id",
+        "dispatcher_principal_ref": "synthetic-f5-r2:dispatcher_principal_ref",
+        "environment": "SYNTHETIC_TEST",
+        "interface_version": "agents-os.f5-dispatcher-claimant-assessment.v0.1-r1",
+        "owner_head_event_sequence": 0,
+        "resident_authority_epoch": 1,
+        "resident_continuity_assessment_fingerprint": "83a7384b14c7491bb8f183c8aeb8833c2b66c6bfc35c44354123964697657048",
+        "resident_continuity_assessment_ref": "synthetic-f5-r2:resident_continuity_assessment_ref",
+        "result": "CURRENT"
+      },
+      "schema_name": "F5DispatcherClaimantAssessmentV0_1R1"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "232807b10ede75ec0f8822099d752f2dbdfabf62344b4359eb7018069f46f25a",
+        "canonical_writer_head_event_sequence": 0,
+        "fresh_F4_assessment_fingerprint": "4e0f6e011e3d27762fc5864b4760f99792a5588b6d8fc9239b257608af7d260a",
+        "fresh_F4_assessment_ref": "synthetic-f5-r2:fresh_F4_assessment_ref",
+        "fresh_F4_assessment_result": "CURRENT",
+        "interface_version": "agents-os.f5-physical-boundary-authority-observation.v0.1-r1",
+        "observation_purpose": "CLAIM",
+        "observed_at_utc_ms": 1000,
+        "observed_effect_fence_generation": 0,
+        "observed_event_sequence": 0,
+        "observed_execution_epoch": 1,
+        "observed_host_fence_generation": 0,
+        "observed_host_id": "9996a66d1353a0056db7b6aa83946439873628c1b934842e9d4f1d6b337a0f7c",
+        "observed_task_fence_generation": 0,
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "primary_reason": "ALL_CURRENT",
+        "reason_codes": [],
+        "result": "CURRENT",
+        "source_handoff_fingerprint": "cd66a526fa7712dd914218b7f0f0c320b89eda6681c347c24a0d56e61a7bf05a",
+        "source_handoff_ref": "synthetic-f5-r2:source_handoff_ref"
+      },
+      "schema_name": "F5PhysicalBoundaryAuthorityObservationV0_1R1"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "1c912fcdd8053197ab0562af7a904392b013045e12d3f9bb24013b97337036ed",
+        "claim_authority_observation_fingerprint": "11a2f5bcd96274c287637fc5a3ba760e7012375efdc78060fd00c7dccb4d909e",
+        "claim_authority_observation_ref": "synthetic-f5-r2:claim_authority_observation_ref",
+        "claim_epoch": 1,
+        "claim_event_sequence": 0,
+        "claim_fencing_token": "d9b41b58c08e00e9197f94d8154ce0411f59f4452cbb6549ea021349e023ea73",
+        "claim_id": "4ad015a4008cf27b997f6158e6849e75e54dceeab0d52767436c3ea53a393712",
+        "claim_ref": "outbox-claim:4ad015a4008cf27b997f6158e6849e75e54dceeab0d52767436c3ea53a393712",
+        "claimant_assessment_fingerprint": "78a279bd435bfb1bbf51dd1c64ef3597f10e64009b364dca55c9aec505a85fc7",
+        "claimant_assessment_ref": "synthetic-f5-r2:claimant_assessment_ref",
+        "claimed_at_utc_ms": 1000,
+        "expected_previous_claim_epoch": 1,
+        "interface_version": "agents-os.f5-outbox-claim-fact.v0.1-r1",
+        "lease_expires_at_utc_ms": 1000,
+        "outbox_intent_fingerprint": "f5285affa2730fb7933a1beb7127d3db52cdffea251fd2262ddc594e7a66890a",
+        "outbox_intent_ref": "outbox-intent:d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8",
+        "primary_reason": "CLAIMED_NEW",
+        "reason_codes": [],
+        "result": "CLAIMED"
+      },
+      "schema_name": "F5OutboxClaimFactV0_1R1"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "fb1b35630bf71e504e5d62d3b4095598be854a8437fbbef103d7c0c55c524a95",
+        "claim_epoch": 1,
+        "claim_fencing_token": "synthetic-f5-r2:claim_fencing_token",
+        "claim_fingerprint": "4f3be21002299050e4d9eabd4c318a700db676523a8f36716a0605a34bd787ea",
+        "claim_ref": "synthetic-f5-r2:claim_ref",
+        "interface_version": "agents-os.f5-outbox-lease-fact.v0.1-r1",
+        "lease_fact_id": "436c51d9ef3bb2dbf5191d121f3f64ef932e705b09f32e4d7c7bf00edb38ec5f",
+        "new_lease_expiry_utc_ms": 1000,
+        "previous_lease_expiry_utc_ms": 1000,
+        "primary_reason": "RENEWED",
+        "reason_codes": [],
+        "renewal_event_sequence": 0,
+        "renewed_at_utc_ms": 1000,
+        "result": "RENEWED"
+      },
+      "schema_name": "F5OutboxLeaseFactV0_1R1"
+    },
+    {
+      "object": {
+        "attempt_id": "8012249527e928990d04aa14df1ff059bda087fe6d918fc152cf3f416b6fee98",
+        "attempt_ordinal": 1,
+        "canonical_fingerprint": "17e1ce33270ad2f104e6a0d84ba713e8fb5eb0b66acc99220e17dbd29646e7a9",
+        "claim_epoch": 1,
+        "claim_fencing_token": "d9b41b58c08e00e9197f94d8154ce0411f59f4452cbb6549ea021349e023ea73",
+        "claim_fingerprint": "1c912fcdd8053197ab0562af7a904392b013045e12d3f9bb24013b97337036ed",
+        "claim_ref": "outbox-claim:4ad015a4008cf27b997f6158e6849e75e54dceeab0d52767436c3ea53a393712",
+        "dispatch_arm_request_id": "166787c7617ed916fd1a0bedef3c321015f1f0f542f0ba8a89eda31881937633",
+        "idempotency_key": "synthetic-f5-r2:effect_id",
+        "interface_version": "agents-os.f5-dispatch-arm-request.v0.1-r2",
+        "invocation_identity_fingerprint": "303e0f125b5a2cfff8970ef55280147a750a54331534cf7ba49529f9a31f5033",
+        "outbox_intent_fingerprint": "f5285affa2730fb7933a1beb7127d3db52cdffea251fd2262ddc594e7a66890a",
+        "outbox_intent_ref": "outbox-intent:d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8",
+        "physical_boundary_observation_fingerprint": "c0cd372c7da1cb25b9325a7260dd6e34554a80d45f3a84e5e450f922b6d4c197",
+        "physical_boundary_observation_ref": "synthetic-f5-r2:physical_boundary_observation_ref",
+        "requested_at_utc_ms": 1000,
+        "requested_event_sequence": 0
+      },
+      "schema_name": "F5DispatchArmRequestV0_1R2"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "2b3ae4b3d7d27e79c02cdce02ddc51493753aaa6ec5cc8da135c4af2c55032f4",
+        "dispatch_arm_request_fingerprint": "17e1ce33270ad2f104e6a0d84ba713e8fb5eb0b66acc99220e17dbd29646e7a9",
+        "dispatch_arm_request_id": "166787c7617ed916fd1a0bedef3c321015f1f0f542f0ba8a89eda31881937633",
+        "event_created": true,
+        "first_arm_fingerprint": "ef1e081a110e7d3c5fe0fc5400a4b603efadee4960ff8bbcdded01cb0f280dfc",
+        "first_arm_ref": "dispatch-arm:dea9499fbc4cb949c11a8fab1496357638c3bebbcf035c24fead2168f6f25cf3",
+        "interface_version": "agents-os.f5-dispatch-arm-disposition.v0.1-r2",
+        "observed_event_sequence": 0,
+        "physical_call_authorized": true,
+        "primary_reason": "ARMED_FIRST_APPLY",
+        "reason_codes": [],
+        "replay_relation": "NO_EXISTING_ARM",
+        "result": "APPLIED"
+      },
+      "schema_name": "F5DispatchArmDispositionV0_1R2"
+    },
+    {
+      "object": {
+        "arm_transaction_fingerprint": "65bfb9decd6c4cc7dcb6e6dda86761ff88de21190c1a89e8f6a2be53f1083952",
+        "arm_transaction_ref": "synthetic-f5-r2:arm_transaction_ref",
+        "armed_at_utc_ms": 1000,
+        "armed_event_sequence": 0,
+        "attempt_id": "8012249527e928990d04aa14df1ff059bda087fe6d918fc152cf3f416b6fee98",
+        "attempt_ordinal": 1,
+        "canonical_fingerprint": "ef1e081a110e7d3c5fe0fc5400a4b603efadee4960ff8bbcdded01cb0f280dfc",
+        "claim_epoch": 1,
+        "claim_fencing_token": "d9b41b58c08e00e9197f94d8154ce0411f59f4452cbb6549ea021349e023ea73",
+        "claim_fingerprint": "1c912fcdd8053197ab0562af7a904392b013045e12d3f9bb24013b97337036ed",
+        "claim_ref": "outbox-claim:4ad015a4008cf27b997f6158e6849e75e54dceeab0d52767436c3ea53a393712",
+        "dispatch_arm_id": "dea9499fbc4cb949c11a8fab1496357638c3bebbcf035c24fead2168f6f25cf3",
+        "dispatch_arm_ref": "dispatch-arm:dea9499fbc4cb949c11a8fab1496357638c3bebbcf035c24fead2168f6f25cf3",
+        "dispatch_arm_request_fingerprint": "17e1ce33270ad2f104e6a0d84ba713e8fb5eb0b66acc99220e17dbd29646e7a9",
+        "dispatch_arm_request_id": "166787c7617ed916fd1a0bedef3c321015f1f0f542f0ba8a89eda31881937633",
+        "idempotency_key": "synthetic-f5-r2:effect_id",
+        "interface_version": "agents-os.f5-dispatch-arm-fact.v0.1-r2",
+        "outbox_intent_fingerprint": "f5285affa2730fb7933a1beb7127d3db52cdffea251fd2262ddc594e7a66890a",
+        "outbox_intent_ref": "outbox-intent:d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8",
+        "physical_boundary_observation_fingerprint": "c0cd372c7da1cb25b9325a7260dd6e34554a80d45f3a84e5e450f922b6d4c197",
+        "physical_boundary_observation_ref": "synthetic-f5-r2:physical_boundary_observation_ref"
+      },
+      "schema_name": "F5DispatchArmFactV0_1R2"
+    },
+    {
+      "object": {
+        "attempt_event_sequence": 0,
+        "attempt_id": "27d2dbbb721a0ea7a2fc1fd456129758b90d494e0c68780fc55d94cc0ce70ed4",
+        "attempt_ordinal": 1,
+        "attempt_ref": "synthetic-f5-r2:attempt_ref",
+        "automatic_retry_eligible": false,
+        "canonical_fingerprint": "7a3e7eb485d48570327f44ba0661eb6824ea5028ad2882d0c4693ba14dc929c1",
+        "dispatch_arm_fingerprint": "5cccf22fe2b6ec06e857dea0e97a6af150ddc80289d465a5a3228ed86ec3370f",
+        "dispatch_arm_ref": "synthetic-f5-r2:dispatch_arm_ref",
+        "effect_may_have_occurred": false,
+        "idempotency_key": "synthetic-f5-r2:idempotency_key",
+        "interface_version": "agents-os.f5-delivery-attempt-fact.v0.1-r1",
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "outcome": "PRE_EFFECT_NOT_EXECUTED",
+        "outcome_evidence_fingerprint": "9fe76ed4fc1f55e670b9ae434ed543a94ae7923b29b61307abfbedabf2dec3ab",
+        "outcome_evidence_ref": "synthetic-f5-r2:outcome_evidence_ref",
+        "returned_at_utc_ms": 1000,
+        "started_at_utc_ms": 1000,
+        "transport_profile_fingerprint": "0d99effd5dac6821a193b62c98af924703aebaa5261325c016b0c4d4e544de01",
+        "transport_profile_ref": "synthetic-f5-r2:transport_profile_ref"
+      },
+      "schema_name": "F5DeliveryAttemptFactV0_1R1"
+    },
+    {
+      "object": {
+        "attempt_fingerprint": "cede0f513204b74d13ac114fc887faea0ec708d8ff8ea17b053ec417991e2488",
+        "attempt_ref": "synthetic-f5-r2:attempt_ref",
+        "canonical_fingerprint": "e121e117f0902886c9a79da9e12d2bac24410fe10fdf2f8914138118e41e3e13",
+        "effect_fence_generation": 0,
+        "effect_id": "synthetic-f5-r2:effect_id",
+        "effect_status": "ACKED_ONLY",
+        "execution_epoch": 1,
+        "host_fence_generation": 0,
+        "interface_version": "agents-os.f5-delivery-receipt.v0.1-r1",
+        "invocation_identity_fingerprint": "303e0f125b5a2cfff8970ef55280147a750a54331534cf7ba49529f9a31f5033",
+        "observed_at_utc_ms": 1000,
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "receipt_id": "synthetic-f5-r2:receipt_id",
+        "receipt_kind": "TRANSPORT_ACK",
+        "received_at_utc_ms": 1000,
+        "source_attestation_fingerprint": "b6778109ce9cf25d0b40d89ccc7aa98d4a6af826ed96ef2d5dbba0227a7ae53e",
+        "source_attestation_ref": "synthetic-f5-r2:source_attestation_ref",
+        "source_id": "synthetic-f5-r2:source_id",
+        "source_receipt_revision": 1
+      },
+      "schema_name": "F5DeliveryReceiptV0_1R1"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "532fad8ac07c5624e0c443283ab10597a1d6e43d52efcb00b47ebbe8726fb092",
+        "current_projection_advanced": true,
+        "dedup_relation": "NEW",
+        "event_created": true,
+        "interface_version": "agents-os.f5-delivery-receipt-disposition.v0.1-r2",
+        "observed_event_sequence": 0,
+        "primary_reason": "APPLIED_CURRENT",
+        "reason_codes": [],
+        "receipt_fingerprint": "8fc6c27e0607bacf5cb5d266b0c07c9ae9ddc9d31a3df021105a0342176749d2",
+        "receipt_id": "synthetic-f5-r2:receipt_id",
+        "reconciliation_opened": false,
+        "result": "APPLIED",
+        "source_id": "synthetic-f5-r2:source_id",
+        "task_advancement_eligible": false
+      },
+      "schema_name": "F5DeliveryReceiptDispositionV0_1R2"
+    },
+    {
+      "object": {
+        "canonical_fingerprint": "a26355f551bdee43502730adbc3ab3968b2064fb98839aeae468aaa6b516a8dd",
+        "dead_letter_event_sequence": 0,
+        "dead_letter_id": "58644f75dac9b915121f93512dd4f44ee86ecfa4081a41260bc8f91d7c1072c3",
+        "dead_lettered_at_utc_ms": 1000,
+        "effect_outcome": "NOT_PROVEN",
+        "interface_version": "agents-os.f5-dead-letter-fact.v0.1-r1",
+        "last_attempt_fingerprint": "0e4604924c529dbdd999b514b412ec70785d9a037cecaf107df0707d39af77d8",
+        "last_attempt_ref": "synthetic-f5-r2:last_attempt_ref",
+        "last_claim_fingerprint": "4408853d5f9c329f850faddc84b743385d64940fe920eb60a107f9822c893c19",
+        "last_claim_ref": "synthetic-f5-r2:last_claim_ref",
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "reason": "INTEGRITY_FAILURE",
+        "reconciliation_required": true
+      },
+      "schema_name": "F5DeadLetterFactV0_1R1"
+    },
+    {
+      "object": {
+        "attempt_fingerprint": "cede0f513204b74d13ac114fc887faea0ec708d8ff8ea17b053ec417991e2488",
+        "attempt_ref": "synthetic-f5-r2:attempt_ref",
+        "canonical_fingerprint": "4bc04752ca714c583dd3fc48230519745ceb43e0631a46d196ca184ff7fd51f5",
+        "evidence_refs": [],
+        "evidence_set_fingerprint": "aa179602abb01868286c353d7eb75debfc5b22c924c0a5acbfcd0268363dff44",
+        "interface_version": "agents-os.f5-reconciliation-case.v0.1-r1",
+        "last_updated_event_sequence": 0,
+        "opened_event_sequence": 0,
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "owner_next_action": "HUMAN_REVIEW",
+        "reason": "INTEGRITY_RECOVERY",
+        "reconciliation_id": "66e62fd1eca68c2d957e3d743f42280a589d3e93ccaaaa821b96d85cf35e12f7",
+        "resolution": "NONE",
+        "status": "OPEN"
+      },
+      "schema_name": "F5ReconciliationCaseV0_1R1"
+    },
+    {
+      "object": {
+        "automatic_retry_eligible": false,
+        "completion_blocking": true,
+        "current_attempt_fingerprint": "31442bc2d5e24a3749aaa6a720b421098556f66847b17ec7472b4cdeaea8041e",
+        "current_attempt_ref": "synthetic-f5-r2:current_attempt_ref",
+        "current_claim_fingerprint": "fce4e7fd2eda361f1f0c31e08361ed765ccbce6d7c9cb9fa92e9c3ebae5a64b2",
+        "current_claim_ref": "synthetic-f5-r2:current_claim_ref",
+        "current_reconciliation_fingerprint": "4958212f1d46d7db51e1b3daa7341e0de35d3adbcce68b0003846f1f7d94559d",
+        "current_reconciliation_ref": "synthetic-f5-r2:current_reconciliation_ref",
+        "effect_outcome": "NOT_PROVEN",
+        "interface_version": "agents-os.f5-outbox-projection.v0.1-r1",
+        "last_event_sequence": 0,
+        "outbox_intent_fingerprint": "b883100a1797d37d778c93d7bb32d66a88ad153eb78b83f29d5a5d04728597a4",
+        "outbox_intent_ref": "synthetic-f5-r2:outbox_intent_ref",
+        "projection_fingerprint": "07705cfb6f4fb7b8deae84814cac6e9bc4e547091f5371a88ba32dbbdf1f6132",
+        "projection_version": 1,
+        "state": "PENDING"
+      },
+      "schema_name": "F5OutboxProjectionV0_1R1"
+    },
+    {
+      "object": {
+        "accepted_real_handoff_count": 0,
+        "armed_dispatch_count": 0,
+        "authority_eligible": false,
+        "canonical_fingerprint": "c4fe29affd53039e70ae0b3fe53af44412675662838aaf5102fcf437823a6565",
+        "environment": "SYNTHETIC_TEST",
+        "external_effect_count": 0,
+        "fingerprint_domain": "agents-os.f5-r2-full-effective-proof.v0.1",
+        "interface_version": "agents-os.f5-synthetic-delivery-recovery-witness.v0.1-r1",
+        "physical_effect_boundary": "NOT_EXECUTABLE",
+        "prospective_F4_handoff_requirement_fingerprint": "e5d2c51d92e9fafa83eb454d01abe4cd1c15f4dd0024399a37343b855fe4407e",
+        "prospective_F4_handoff_requirement_ref": "synthetic-f5-r2:prospective_F4_handoff_requirement_ref",
+        "provider_call_count": 0,
+        "raw_secret_count": 0,
+        "recovery_importable": false,
+        "runtime_consumable": false,
+        "terminal_outcome": "NOT_EXECUTED",
+        "vector_set_fingerprint": "0b7efa610885ebe497d26002b9e5d549d23e77b9710fcafa81c6369100d5c617",
+        "witness_namespace": "synthetic-f5-r2",
+        "witness_ref": "synthetic-f5-r2:witness"
+      },
+      "schema_name": "F5SyntheticDeliveryRecoveryWitnessV0_1R1"
+    }
+  ],
+  "canonical_instances_fingerprint": "70cb8308d2ef6dc3d4a160d3363965ecea7628218d911069aededb7552304af3",
+  "derived_identities": {
+    "attempt_id": "8012249527e928990d04aa14df1ff059bda087fe6d918fc152cf3f416b6fee98",
+    "claim_fencing_token": "d9b41b58c08e00e9197f94d8154ce0411f59f4452cbb6549ea021349e023ea73",
+    "claim_id": "4ad015a4008cf27b997f6158e6849e75e54dceeab0d52767436c3ea53a393712",
+    "dispatch_arm_id": "dea9499fbc4cb949c11a8fab1496357638c3bebbcf035c24fead2168f6f25cf3",
+    "dispatch_arm_request_id": "166787c7617ed916fd1a0bedef3c321015f1f0f542f0ba8a89eda31881937633",
+    "outbox_intent_id": "d2c335a9562d014750d7e148c860ff35de0da70b5b8d9c98d049b8c3939808d8"
+  },
+  "derived_identities_fingerprint": "cad4b06b10eab0f360663a5cc475b1dc12762e15c54126828a469c670d8df3a0",
+  "environment": "SYNTHETIC_TEST",
+  "fixture_canonical_sha256": "9fafe36c7f8c186b86f669db2ee6547bafb95d4130308089691ffe9185f0b07a",
+  "fixture_interface": "agents-os.f5-r2-full-effective-fixture.v0.1",
+  "pairwise_precedence_cases": [
+    {
+      "active_reasons": [
+        "SYNTHETIC_INPUT",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__SYNTHETIC_INPUT",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "TERMINAL_ALREADY_RECORDED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__TERMINAL_ALREADY_RECORDED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_ALREADY_ACTIVE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__CLAIM_ALREADY_ACTIVE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "INTENT_NOT_PENDING",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__INTENT_NOT_PENDING",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__CLAIMANT_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__AUTHORITY_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__EXPIRED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "CLAIM_INTEGRITY_FAILURE__CAS_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "TERMINAL_ALREADY_RECORDED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__TERMINAL_ALREADY_RECORDED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "SYNTHETIC_INPUT",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_ALREADY_ACTIVE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__CLAIM_ALREADY_ACTIVE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "INTENT_NOT_PENDING",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__INTENT_NOT_PENDING",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "INTENT_NOT_PENDING",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__CLAIMANT_STALE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__AUTHORITY_STALE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__EXPIRED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "CLAIM_SYNTHETIC_INPUT__CAS_MISMATCH",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_ALREADY_ACTIVE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__CLAIM_ALREADY_ACTIVE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "INTENT_NOT_PENDING",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__INTENT_NOT_PENDING",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "INTENT_NOT_PENDING",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__CLAIMANT_STALE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__AUTHORITY_STALE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__EXPIRED",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "CLAIM_TERMINAL_ALREADY_RECORDED__CAS_MISMATCH",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_ALREADY_ACTIVE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__CLAIM_ALREADY_ACTIVE",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "INTENT_NOT_PENDING",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__INTENT_NOT_PENDING",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__CLAIMANT_STALE",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__AUTHORITY_STALE",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__EXPIRED",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "CLAIM_DISPATCH_ALREADY_ARMED__CAS_MISMATCH",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "INTENT_NOT_PENDING",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__INTENT_NOT_PENDING",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__CLAIMANT_STALE",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__AUTHORITY_STALE",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__EXPIRED",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "CLAIM_ALREADY_ACTIVE",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "case_id": "CLAIM_CLAIM_ALREADY_ACTIVE__CAS_MISMATCH",
+      "expected_primary_reason": "CLAIM_ALREADY_ACTIVE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "CLAIM_ALREADY_ACTIVE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_STALE",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__CLAIMANT_STALE",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__AUTHORITY_STALE",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__EXPIRED",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "INTENT_NOT_PENDING"
+      ],
+      "case_id": "CLAIM_INTENT_NOT_PENDING__CAS_MISMATCH",
+      "expected_primary_reason": "INTENT_NOT_PENDING",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "INTENT_NOT_PENDING"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIMANT_UNAVAILABLE",
+        "CLAIMANT_STALE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_STALE__CLAIMANT_UNAVAILABLE",
+      "expected_primary_reason": "CLAIMANT_STALE",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "CLAIMANT_STALE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_STALE__AUTHORITY_STALE",
+      "expected_primary_reason": "CLAIMANT_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CLAIMANT_STALE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIMANT_STALE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_STALE__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "CLAIMANT_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIMANT_STALE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "CLAIMANT_STALE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_STALE__EXPIRED",
+      "expected_primary_reason": "CLAIMANT_STALE",
+      "expected_reason_codes": [
+        "CLAIMANT_STALE",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "CLAIMANT_STALE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "CLAIMANT_STALE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "CLAIMANT_STALE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_UNAVAILABLE__AUTHORITY_STALE",
+      "expected_primary_reason": "CLAIMANT_UNAVAILABLE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_UNAVAILABLE__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "CLAIMANT_UNAVAILABLE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_UNAVAILABLE__EXPIRED",
+      "expected_primary_reason": "CLAIMANT_UNAVAILABLE",
+      "expected_reason_codes": [
+        "CLAIMANT_UNAVAILABLE",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_CLAIMANT_UNAVAILABLE__CAS_MISMATCH",
+      "expected_primary_reason": "CLAIMANT_UNAVAILABLE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "CLAIMANT_UNAVAILABLE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_UNAVAILABLE",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "CLAIM_AUTHORITY_STALE__AUTHORITY_UNAVAILABLE",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "AUTHORITY_UNAVAILABLE"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "CLAIM_AUTHORITY_STALE__EXPIRED",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "CLAIM_AUTHORITY_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CAS_MISMATCH"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "AUTHORITY_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_AUTHORITY_UNAVAILABLE__EXPIRED",
+      "expected_primary_reason": "AUTHORITY_UNAVAILABLE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "AUTHORITY_UNAVAILABLE"
+      ],
+      "case_id": "CLAIM_AUTHORITY_UNAVAILABLE__CAS_MISMATCH",
+      "expected_primary_reason": "AUTHORITY_UNAVAILABLE",
+      "expected_reason_codes": [
+        "AUTHORITY_UNAVAILABLE",
+        "CAS_MISMATCH"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "case_id": "CLAIM_EXPIRED__CAS_MISMATCH",
+      "expected_primary_reason": "EXPIRED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "kind": "claim"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "LEASE_INTEGRITY_FAILURE__CLAIM_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "LEASE_INTEGRITY_FAILURE__TOKEN_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "LEASE_INTEGRITY_FAILURE__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "LEASE_INTEGRITY_FAILURE__EXPIRED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "LEASE_INTEGRITY_FAILURE__CAS_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "case_id": "LEASE_CLAIM_STALE__TOKEN_MISMATCH",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "CLAIM_STALE"
+      ],
+      "case_id": "LEASE_CLAIM_STALE__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "CLAIM_STALE"
+      ],
+      "case_id": "LEASE_CLAIM_STALE__EXPIRED",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "EXPIRED"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "case_id": "LEASE_CLAIM_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "DISPATCH_ALREADY_ARMED",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "LEASE_TOKEN_MISMATCH__DISPATCH_ALREADY_ARMED",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "LEASE_TOKEN_MISMATCH__EXPIRED",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "LEASE_TOKEN_MISMATCH__CAS_MISMATCH",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "LEASE_DISPATCH_ALREADY_ARMED__EXPIRED",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "DISPATCH_ALREADY_ARMED",
+        "EXPIRED"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "case_id": "LEASE_DISPATCH_ALREADY_ARMED__CAS_MISMATCH",
+      "expected_primary_reason": "DISPATCH_ALREADY_ARMED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "DISPATCH_ALREADY_ARMED"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "case_id": "LEASE_EXPIRED__CAS_MISMATCH",
+      "expected_primary_reason": "EXPIRED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "kind": "lease"
+    },
+    {
+      "active_reasons": [
+        "SYNTHETIC_INPUT",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__SYNTHETIC_INPUT",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TERMINAL_ALREADY_RECORDED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__TERMINAL_ALREADY_RECORDED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__CLAIM_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__TOKEN_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__AUTHORITY_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__FENCED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "FENCED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__EPOCH_STALE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__HOST_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "HOST_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__EXPIRED",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "INTEGRITY_FAILURE",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "case_id": "ARM_INTEGRITY_FAILURE__CAS_MISMATCH",
+      "expected_primary_reason": "INTEGRITY_FAILURE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "INTEGRITY_FAILURE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TERMINAL_ALREADY_RECORDED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__TERMINAL_ALREADY_RECORDED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "SYNTHETIC_INPUT",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__CLAIM_STALE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__TOKEN_MISMATCH",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "SYNTHETIC_INPUT",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__AUTHORITY_STALE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__FENCED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "FENCED",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__EPOCH_STALE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__HOST_MISMATCH",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "HOST_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__EXPIRED",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "OBSERVATION_UNAVAILABLE",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "case_id": "ARM_SYNTHETIC_INPUT__CAS_MISMATCH",
+      "expected_primary_reason": "SYNTHETIC_INPUT",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "SYNTHETIC_INPUT"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CLAIM_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__CLAIM_STALE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__TOKEN_MISMATCH",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "TERMINAL_ALREADY_RECORDED",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__AUTHORITY_STALE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__FENCED",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "FENCED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__EPOCH_STALE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__HOST_MISMATCH",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "HOST_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__EXPIRED",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "OBSERVATION_UNAVAILABLE",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "case_id": "ARM_TERMINAL_ALREADY_RECORDED__CAS_MISMATCH",
+      "expected_primary_reason": "TERMINAL_ALREADY_RECORDED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "TERMINAL_ALREADY_RECORDED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "TOKEN_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__TOKEN_MISMATCH",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__AUTHORITY_STALE",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CLAIM_STALE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__FENCED",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "FENCED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__EPOCH_STALE",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "EPOCH_STALE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__HOST_MISMATCH",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__EXPIRED",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "EXPIRED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CLAIM_STALE",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "case_id": "ARM_CLAIM_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "CLAIM_STALE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "CLAIM_STALE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "AUTHORITY_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__AUTHORITY_STALE",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__FENCED",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "FENCED",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__EPOCH_STALE",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__HOST_MISMATCH",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "HOST_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__EXPIRED",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "OBSERVATION_UNAVAILABLE",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "case_id": "ARM_TOKEN_MISMATCH__CAS_MISMATCH",
+      "expected_primary_reason": "TOKEN_MISMATCH",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "TOKEN_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "FENCED",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__FENCED",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "FENCED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__EPOCH_STALE",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "EPOCH_STALE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__HOST_MISMATCH",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__EXPIRED",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "EXPIRED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "AUTHORITY_STALE"
+      ],
+      "case_id": "ARM_AUTHORITY_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "AUTHORITY_STALE",
+      "expected_reason_codes": [
+        "AUTHORITY_STALE",
+        "CAS_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EPOCH_STALE",
+        "FENCED"
+      ],
+      "case_id": "ARM_FENCED__EPOCH_STALE",
+      "expected_primary_reason": "FENCED",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "FENCED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "FENCED"
+      ],
+      "case_id": "ARM_FENCED__HOST_MISMATCH",
+      "expected_primary_reason": "FENCED",
+      "expected_reason_codes": [
+        "FENCED",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "FENCED"
+      ],
+      "case_id": "ARM_FENCED__EXPIRED",
+      "expected_primary_reason": "FENCED",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "FENCED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "FENCED"
+      ],
+      "case_id": "ARM_FENCED__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "FENCED",
+      "expected_reason_codes": [
+        "FENCED",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "FENCED"
+      ],
+      "case_id": "ARM_FENCED__CAS_MISMATCH",
+      "expected_primary_reason": "FENCED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "FENCED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "HOST_MISMATCH",
+        "EPOCH_STALE"
+      ],
+      "case_id": "ARM_EPOCH_STALE__HOST_MISMATCH",
+      "expected_primary_reason": "EPOCH_STALE",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "EPOCH_STALE"
+      ],
+      "case_id": "ARM_EPOCH_STALE__EXPIRED",
+      "expected_primary_reason": "EPOCH_STALE",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "EXPIRED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "EPOCH_STALE"
+      ],
+      "case_id": "ARM_EPOCH_STALE__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "EPOCH_STALE",
+      "expected_reason_codes": [
+        "EPOCH_STALE",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "EPOCH_STALE"
+      ],
+      "case_id": "ARM_EPOCH_STALE__CAS_MISMATCH",
+      "expected_primary_reason": "EPOCH_STALE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "EPOCH_STALE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "EXPIRED",
+        "HOST_MISMATCH"
+      ],
+      "case_id": "ARM_HOST_MISMATCH__EXPIRED",
+      "expected_primary_reason": "HOST_MISMATCH",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "HOST_MISMATCH"
+      ],
+      "case_id": "ARM_HOST_MISMATCH__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "HOST_MISMATCH",
+      "expected_reason_codes": [
+        "HOST_MISMATCH",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "HOST_MISMATCH"
+      ],
+      "case_id": "ARM_HOST_MISMATCH__CAS_MISMATCH",
+      "expected_primary_reason": "HOST_MISMATCH",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "HOST_MISMATCH"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "OBSERVATION_UNAVAILABLE",
+        "EXPIRED"
+      ],
+      "case_id": "ARM_EXPIRED__OBSERVATION_UNAVAILABLE",
+      "expected_primary_reason": "EXPIRED",
+      "expected_reason_codes": [
+        "EXPIRED",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "case_id": "ARM_EXPIRED__CAS_MISMATCH",
+      "expected_primary_reason": "EXPIRED",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "EXPIRED"
+      ],
+      "kind": "arm"
+    },
+    {
+      "active_reasons": [
+        "CAS_MISMATCH",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "case_id": "ARM_OBSERVATION_UNAVAILABLE__CAS_MISMATCH",
+      "expected_primary_reason": "OBSERVATION_UNAVAILABLE",
+      "expected_reason_codes": [
+        "CAS_MISMATCH",
+        "OBSERVATION_UNAVAILABLE"
+      ],
+      "kind": "arm"
+    }
+  ],
+  "pairwise_precedence_cases_fingerprint": "9b28da7b22225a2bf150b9000ee830d92ed99f0992b1b2efca753f86f696619b",
+  "receipt_compatibility_cases": [
+    {
+      "effect_status": "ACKED_ONLY",
+      "expected": "APPLIED",
+      "receipt_kind": "TRANSPORT_ACK"
+    },
+    {
+      "effect_status": "SUCCEEDED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "TRANSPORT_ACK"
+    },
+    {
+      "effect_status": "FAILED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "TRANSPORT_ACK"
+    },
+    {
+      "effect_status": "UNKNOWN",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "TRANSPORT_ACK"
+    },
+    {
+      "effect_status": "NOT_EXECUTED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "TRANSPORT_ACK"
+    },
+    {
+      "effect_status": "ACKED_ONLY",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_SUCCEEDED"
+    },
+    {
+      "effect_status": "SUCCEEDED",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_SUCCEEDED"
+    },
+    {
+      "effect_status": "FAILED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_SUCCEEDED"
+    },
+    {
+      "effect_status": "UNKNOWN",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_SUCCEEDED"
+    },
+    {
+      "effect_status": "NOT_EXECUTED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_SUCCEEDED"
+    },
+    {
+      "effect_status": "ACKED_ONLY",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_FAILED"
+    },
+    {
+      "effect_status": "SUCCEEDED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_FAILED"
+    },
+    {
+      "effect_status": "FAILED",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_FAILED"
+    },
+    {
+      "effect_status": "UNKNOWN",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_FAILED"
+    },
+    {
+      "effect_status": "NOT_EXECUTED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_FAILED"
+    },
+    {
+      "effect_status": "ACKED_ONLY",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_STATUS_UNKNOWN"
+    },
+    {
+      "effect_status": "SUCCEEDED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_STATUS_UNKNOWN"
+    },
+    {
+      "effect_status": "FAILED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_STATUS_UNKNOWN"
+    },
+    {
+      "effect_status": "UNKNOWN",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_STATUS_UNKNOWN"
+    },
+    {
+      "effect_status": "NOT_EXECUTED",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_STATUS_UNKNOWN"
+    },
+    {
+      "effect_status": "ACKED_ONLY",
+      "expected": "REJECTED_RECEIPT_KIND_STATUS_MISMATCH",
+      "receipt_kind": "EFFECT_QUERY_RESULT"
+    },
+    {
+      "effect_status": "SUCCEEDED",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_QUERY_RESULT"
+    },
+    {
+      "effect_status": "FAILED",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_QUERY_RESULT"
+    },
+    {
+      "effect_status": "UNKNOWN",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_QUERY_RESULT"
+    },
+    {
+      "effect_status": "NOT_EXECUTED",
+      "expected": "APPLIED",
+      "receipt_kind": "EFFECT_QUERY_RESULT"
+    }
+  ],
+  "receipt_compatibility_cases_fingerprint": "249ceead34e3691155a35bbe47dbcc4cb9675b643f6b10e4c39841f34357b0b5",
+  "runtime_consumable": false,
+  "schema_profiles": [
+    {
+      "fields": [
+        "interface_version",
+        "outbox_intent_id",
+        "outbox_intent_ref",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "source_handoff_event_sequence",
+        "invocation_identity_fingerprint",
+        "effect_id",
+        "effect_scope_ref",
+        "effect_scope_fingerprint",
+        "expected_result_contract_ref",
+        "expected_result_contract_fingerprint",
+        "owner_host_id",
+        "execution_epoch",
+        "task_fence_generation",
+        "host_fence_generation",
+        "effect_fence_generation",
+        "start_authority_expires_at_utc_ms",
+        "completion_blocking",
+        "delivery_profile_ref",
+        "delivery_profile_fingerprint",
+        "created_at_utc_ms",
+        "created_event_sequence",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-outbox-intent.v0.1-r1",
+      "schema_name": "F5OutboxIntentV0_1R1",
+      "schema_profile_fingerprint": "d36a5b0a193a202811f31cdb8fac82b359991a8d42ee8d8a8c5bd8a36036a680"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "observed_at_utc_ms",
+        "observed_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-enqueue-disposition.v0.1-r1",
+      "schema_name": "F5EnqueueDispositionV0_1R1",
+      "schema_profile_fingerprint": "552394dbd48dfe718ecbe41d1592957bc1f1a847d7d6447c897251b3caebaa9a"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "dispatcher_actor_id",
+        "dispatcher_actor_identity_ref",
+        "dispatcher_actor_identity_fingerprint",
+        "dispatcher_principal_id",
+        "dispatcher_principal_ref",
+        "dispatcher_principal_fingerprint",
+        "dispatcher_binding_assessment_ref",
+        "dispatcher_binding_assessment_fingerprint",
+        "resident_authority_epoch",
+        "resident_continuity_assessment_ref",
+        "resident_continuity_assessment_fingerprint",
+        "owner_head_event_sequence",
+        "assessed_at_event_sequence",
+        "result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-dispatcher-claimant-assessment.v0.1-r1",
+      "schema_name": "F5DispatcherClaimantAssessmentV0_1R1",
+      "schema_profile_fingerprint": "17fdedda2372568b9eeead1a607776298197808f79d77fbb81950b78cd30b65c"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "observation_purpose",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "fresh_F4_assessment_ref",
+        "fresh_F4_assessment_fingerprint",
+        "fresh_F4_assessment_result",
+        "observed_task_fence_generation",
+        "observed_host_fence_generation",
+        "observed_effect_fence_generation",
+        "observed_execution_epoch",
+        "observed_host_id",
+        "observed_at_utc_ms",
+        "observed_event_sequence",
+        "canonical_writer_head_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-physical-boundary-authority-observation.v0.1-r1",
+      "schema_name": "F5PhysicalBoundaryAuthorityObservationV0_1R1",
+      "schema_profile_fingerprint": "2e7364ac0f5f7ea9d3117c6e40d03fdc6507a5e07233329d65c14f872ab319a4"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "claim_id",
+        "claim_ref",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "claim_epoch",
+        "expected_previous_claim_epoch",
+        "claimant_assessment_ref",
+        "claimant_assessment_fingerprint",
+        "claim_authority_observation_ref",
+        "claim_authority_observation_fingerprint",
+        "lease_expires_at_utc_ms",
+        "claim_fencing_token",
+        "claimed_at_utc_ms",
+        "claim_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-outbox-claim-fact.v0.1-r1",
+      "schema_name": "F5OutboxClaimFactV0_1R1",
+      "schema_profile_fingerprint": "08c0d32ebae61f3db4e7c4456a0094ed62a7af6e53b1c1423393e180948809c4"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "lease_fact_id",
+        "claim_ref",
+        "claim_fingerprint",
+        "claim_epoch",
+        "claim_fencing_token",
+        "previous_lease_expiry_utc_ms",
+        "new_lease_expiry_utc_ms",
+        "renewed_at_utc_ms",
+        "renewal_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-outbox-lease-fact.v0.1-r1",
+      "schema_name": "F5OutboxLeaseFactV0_1R1",
+      "schema_profile_fingerprint": "ddb840f79b8705a6b891dcf5f69c1972589a97148a9cb6bbfd0c0e8e7ebfd131"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "dispatch_arm_request_id",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "invocation_identity_fingerprint",
+        "claim_ref",
+        "claim_fingerprint",
+        "claim_epoch",
+        "claim_fencing_token",
+        "attempt_ordinal",
+        "attempt_id",
+        "idempotency_key",
+        "physical_boundary_observation_ref",
+        "physical_boundary_observation_fingerprint",
+        "requested_at_utc_ms",
+        "requested_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-dispatch-arm-request.v0.1-r2",
+      "schema_name": "F5DispatchArmRequestV0_1R2",
+      "schema_profile_fingerprint": "708a7fda8c6de0fd881830a433ba5603a46fe8c4e2145cdebaf2a324d04b9126"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "dispatch_arm_request_id",
+        "dispatch_arm_request_fingerprint",
+        "replay_relation",
+        "first_arm_ref",
+        "first_arm_fingerprint",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "event_created",
+        "physical_call_authorized",
+        "observed_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-dispatch-arm-disposition.v0.1-r2",
+      "schema_name": "F5DispatchArmDispositionV0_1R2",
+      "schema_profile_fingerprint": "05e6e77bf3f66b98561dfc0011420f04ba3196221df6f953495645288fc0cb0d"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "dispatch_arm_id",
+        "dispatch_arm_ref",
+        "dispatch_arm_request_id",
+        "dispatch_arm_request_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "claim_ref",
+        "claim_fingerprint",
+        "claim_epoch",
+        "claim_fencing_token",
+        "attempt_ordinal",
+        "attempt_id",
+        "idempotency_key",
+        "physical_boundary_observation_ref",
+        "physical_boundary_observation_fingerprint",
+        "armed_at_utc_ms",
+        "armed_event_sequence",
+        "arm_transaction_ref",
+        "arm_transaction_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-dispatch-arm-fact.v0.1-r2",
+      "schema_name": "F5DispatchArmFactV0_1R2",
+      "schema_profile_fingerprint": "e2b5e7d153843d7e873f4d1a03e347b894fd8f8c57b49126eb250838e7748ecf"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "attempt_id",
+        "attempt_ref",
+        "dispatch_arm_ref",
+        "dispatch_arm_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "attempt_ordinal",
+        "idempotency_key",
+        "transport_profile_ref",
+        "transport_profile_fingerprint",
+        "started_at_utc_ms",
+        "returned_at_utc_ms",
+        "outcome",
+        "outcome_evidence_ref",
+        "outcome_evidence_fingerprint",
+        "effect_may_have_occurred",
+        "automatic_retry_eligible",
+        "attempt_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-delivery-attempt-fact.v0.1-r1",
+      "schema_name": "F5DeliveryAttemptFactV0_1R1",
+      "schema_profile_fingerprint": "53f68d915e6b95c74a262772c71b529e096f5fd756978250dc6807b47760cb91"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "receipt_id",
+        "source_id",
+        "source_receipt_revision",
+        "attempt_ref",
+        "attempt_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "effect_id",
+        "invocation_identity_fingerprint",
+        "execution_epoch",
+        "host_fence_generation",
+        "effect_fence_generation",
+        "receipt_kind",
+        "effect_status",
+        "observed_at_utc_ms",
+        "received_at_utc_ms",
+        "source_attestation_ref",
+        "source_attestation_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-delivery-receipt.v0.1-r1",
+      "schema_name": "F5DeliveryReceiptV0_1R1",
+      "schema_profile_fingerprint": "c8a35d563f12a4c1b4b2bc029199f0ffd12e7250a4a68a594c82dc921b77a876"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "source_id",
+        "receipt_id",
+        "receipt_fingerprint",
+        "dedup_relation",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "event_created",
+        "reconciliation_opened",
+        "current_projection_advanced",
+        "task_advancement_eligible",
+        "observed_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-delivery-receipt-disposition.v0.1-r2",
+      "schema_name": "F5DeliveryReceiptDispositionV0_1R2",
+      "schema_profile_fingerprint": "35a9aecb8dfdd400eb55b45cc71e0ce30ca690aa78374045d3220ffe08e77d63"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "dead_letter_id",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "last_claim_ref",
+        "last_claim_fingerprint",
+        "last_attempt_ref",
+        "last_attempt_fingerprint",
+        "reason",
+        "effect_outcome",
+        "reconciliation_required",
+        "dead_lettered_at_utc_ms",
+        "dead_letter_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-dead-letter-fact.v0.1-r1",
+      "schema_name": "F5DeadLetterFactV0_1R1",
+      "schema_profile_fingerprint": "dd0d9ee826e6c53e934b5a3bda645f6514dcdbfef9d0b2cda1f484f6bd3195de"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "reconciliation_id",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "attempt_ref",
+        "attempt_fingerprint",
+        "reason",
+        "status",
+        "resolution",
+        "evidence_refs",
+        "evidence_set_fingerprint",
+        "owner_next_action",
+        "opened_event_sequence",
+        "last_updated_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-reconciliation-case.v0.1-r1",
+      "schema_name": "F5ReconciliationCaseV0_1R1",
+      "schema_profile_fingerprint": "d39c0b26f98622e4224faac3f3328472f58f8d13323c1c6ad399703139f21335"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "projection_version",
+        "last_event_sequence",
+        "state",
+        "current_claim_ref",
+        "current_claim_fingerprint",
+        "current_attempt_ref",
+        "current_attempt_fingerprint",
+        "current_reconciliation_ref",
+        "current_reconciliation_fingerprint",
+        "effect_outcome",
+        "automatic_retry_eligible",
+        "completion_blocking",
+        "projection_fingerprint"
+      ],
+      "fingerprint_field": "projection_fingerprint",
+      "interface_version": "agents-os.f5-outbox-projection.v0.1-r1",
+      "schema_name": "F5OutboxProjectionV0_1R1",
+      "schema_profile_fingerprint": "3500fece992a6acabc6f6ee6327875ad98f343d14d86ba4a0f616d7056e4278b"
+    },
+    {
+      "fields": [
+        "interface_version",
+        "witness_ref",
+        "witness_namespace",
+        "environment",
+        "fingerprint_domain",
+        "prospective_F4_handoff_requirement_ref",
+        "prospective_F4_handoff_requirement_fingerprint",
+        "vector_set_fingerprint",
+        "authority_eligible",
+        "runtime_consumable",
+        "recovery_importable",
+        "physical_effect_boundary",
+        "terminal_outcome",
+        "accepted_real_handoff_count",
+        "armed_dispatch_count",
+        "external_effect_count",
+        "provider_call_count",
+        "raw_secret_count",
+        "canonical_fingerprint"
+      ],
+      "fingerprint_field": "canonical_fingerprint",
+      "interface_version": "agents-os.f5-synthetic-delivery-recovery-witness.v0.1-r1",
+      "schema_name": "F5SyntheticDeliveryRecoveryWitnessV0_1R1",
+      "schema_profile_fingerprint": "2e4642517f2d791e5bcbf1a72c7996f558239c406ba904c31cd01c873aca2e1e"
+    }
+  ],
+  "schema_profiles_fingerprint": "50be4b64cd03fa383fd5abafbc4b2cef4844e9f218cb89a3c3d2e62ce8c379ea",
+  "summary": {
+    "adversarial_case_count": 28,
+    "arm_replay_case_count": 4,
+    "canonical_instance_count": 16,
+    "derived_identity_count": 6,
+    "pairwise_precedence_case_count": 147,
+    "receipt_compatibility_case_count": 25,
+    "schema_profile_count": 16,
+    "transition_case_count": 100
+  },
+  "summary_fingerprint": "0c05f6e6eadfe9d4420eee55b26092347c46753f7dc057d856a229d2b48f66e8",
+  "transition_cases": [
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "PENDING",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "PENDING",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "PENDING",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "CLAIMED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "CLAIMED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "CLAIMED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "CLAIMED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCH_ARMED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCHED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCHED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCHED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DISPATCHED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DISPATCHED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "ACKED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "ACKED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "ACKED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "ACKED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "SUCCEEDED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "FAILED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "FAILED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "UNKNOWN",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "UNKNOWN",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "ALLOWED",
+      "from_state": "DEAD_LETTERED",
+      "to_state": "RECONCILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "PENDING"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "CLAIMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "DISPATCH_ARMED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "DISPATCHED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "ACKED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "SUCCEEDED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "FAILED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "UNKNOWN"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "DEAD_LETTERED"
+    },
+    {
+      "expected": "REJECTED_TRANSITION_INVALID",
+      "from_state": "RECONCILED",
+      "to_state": "RECONCILED"
+    }
+  ],
+  "transition_cases_fingerprint": "0dfbd089c8dc8c3a05e659ded69e9f5550515d2fedcc5cd32ebe3743961d7bbd"
+}

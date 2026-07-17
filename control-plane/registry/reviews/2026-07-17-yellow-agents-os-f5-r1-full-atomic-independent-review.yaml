@@ -1,0 +1,609 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f5-r1-full-atomic-independent-review-2026-07-17
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-17
+result: BLOCK
+review_unit: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE
+atomic_review_completed: true
+partial_review: false
+
+reviewer_identity_and_independence_basis:
+  reviewer_id: F5_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEWER
+  review_run_id: codex:/root/f5_r1_independent_review
+  author_of_subjects: false
+  fresh_judgment_from_fixed_bytes: true
+  prior_or_author_conclusion_used_as_judgment: false
+  author_self_review_file_content_read: false
+  author_self_review_file_conclusion_read: false
+  author_self_review_access_mode: SHA256_ONLY_WITHOUT_OPEN_OR_PARSE
+  independence_basis:
+    - separate_fresh_reviewer_run
+    - all_declared_input_hashes_recomputed_from_entire_regular_file_bytes
+    - all_four_subjects_read_completely
+    - all_required_authority_inputs_read_completely_except_author_self_review_hash_only
+    - required_validator_and_builder_commands_reproduced_locally_without_runtime_or_effect_execution
+    - all_required_questions_and_adversarial_checks_rejudged_from_fixed_bytes
+  forbidden_inputs_accessed: false
+
+exact_manifest_path_and_sha256:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2
+  byte_scope: entire_regular_file
+  canonicalization: none
+  presentation_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.md
+  presentation_sha256_unbound_in_manifest: 5d8b7a6d0ba19b1cbad485437f101e9e5b545fd0c931acebe0b8373d0bcc34f6
+
+every_input_hash_verified:
+  declared_input_count: 16
+  verified_input_count: 16
+  match_count: 16
+  mismatch_count: 0
+  all_match: true
+  inputs:
+    - role: workspace_governance
+      path: AGENTS.md
+      declared_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      actual_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+      match: true
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+      declared_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+      actual_sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+      match: true
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+      declared_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+      actual_sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+      match: true
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+      declared_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+      actual_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+      match: true
+    - role: independent_semantic_validator
+      path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+      declared_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+      actual_sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+      match: true
+    - role: accepted_home_roadmap_subject
+      path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+      declared_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+      actual_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+      match: true
+    - role: accepted_home_roadmap_decision
+      path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+      declared_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+      actual_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+      match: true
+    - role: accepted_resident_architecture
+      path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+      declared_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      actual_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+      match: true
+    - role: phase_4_start_decision
+      path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+      declared_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      actual_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+      match: true
+    - role: construction_readiness_review
+      path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+      declared_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      actual_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+      match: true
+    - role: frozen_F3_decision
+      path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+      declared_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+      actual_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+      match: true
+    - role: frozen_F3_manifest
+      path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+      declared_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+      actual_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+      match: true
+    - role: frozen_F4_decision
+      path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+      declared_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+      actual_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+      match: true
+    - role: frozen_F4_manifest
+      path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml
+      declared_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+      actual_sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5
+      match: true
+    - role: immutable_F5_start_decision
+      path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml
+      declared_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e
+      actual_sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e
+      match: true
+    - role: author_self_review_not_independent
+      path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-outbox-delivery-recovery-self-review.yaml
+      declared_sha256: 60ca56e55b4b178f7169690649bfa4ea3942e24e0ff60fda12659b37b5a1ec22
+      actual_sha256: 60ca56e55b4b178f7169690649bfa4ea3942e24e0ff60fda12659b37b5a1ec22
+      match: true
+      content_opened_or_parsed: false
+      conclusion_used: false
+
+all_four_subject_hashes_and_bytes_reviewed_unchanged:
+  required_subject_count: 4
+  complete_read_count: 4
+  unchanged_hash_count: 4
+  all_complete_and_unchanged: true
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+      sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+      byte_count: 35800
+      lf_count: 900
+      complete_read: true
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+      sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+      byte_count: 27747
+      lf_count: 639
+      complete_read: true
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+      sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+      byte_count: 51865
+      lf_count: 1728
+      complete_read: true
+      read_method: nonoverlapping_line_chunks_after_whole_file_display_truncated
+    - role: independent_semantic_validator
+      path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+      sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+      byte_count: 31446
+      lf_count: 519
+      complete_read: true
+
+authority_input_read_completeness:
+  authority_inputs_declared: 11
+  authority_inputs_fully_read: 11
+  all_required_authority_inputs_fully_read: true
+  author_evidence_declared: 1
+  author_evidence_hash_verified_only: 1
+  author_evidence_content_read: 0
+
+blocker_major_minor_and_unresolved_counts:
+  blocker_count: 2
+  major_count: 2
+  minor_count: 0
+  unresolved_ambiguity_count: 3
+  total_finding_count: 4
+
+finding_ids_with_exact_evidence_counterexample_and_required_correction:
+  - finding_id: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    severity: blocker
+    status: OPEN_REQUIRES_R2
+    exact_evidence:
+      - >-
+        The normative contract at Section 4.7 lines 365-366 requires exact arm
+        replay to return the first arm accounting and changed bytes to be an
+        integrity failure; Section 13 lines 829-831 requires both adversarial
+        decisions independently.
+      - >-
+        The fixed ARM_DUPLICATE vector has only already_armed=true and
+        integrity=true and expects result=NOT_EXECUTABLE,
+        primary_reason=ALREADY_ARMED. The ARM_INTEGRITY vector instead has
+        already_armed=false and integrity=false. Neither vector carries an
+        exact-byte-versus-changed-byte relation for an existing arm identity.
+      - >-
+        Builder evaluate(arm) lines 345-384 and validator independent_reduce(arm)
+        lines 187-207 reduce only already_armed and a caller-precomputed
+        integrity boolean; they cannot derive exact replay versus changed bytes
+        under the same arm identity.
+    counterexample: >-
+      After one ARMED fact commits, submit the byte-identical arm request again.
+      The contract requires replay of the first accounting with no second call,
+      but the only fixed duplicate vector returns NOT_EXECUTABLE/ALREADY_ARMED.
+      Submit changed arm bytes under the same identity and the same reducer has
+      no canonical replay-relation input that deterministically distinguishes
+      that request from exact replay.
+    impact: >-
+      The one-time physical-effect seam lacks deterministic, hash-bound replay
+      semantics across the atomic contract, fixture and validator. Exact replay
+      and changed-byte conflict are required high-risk recovery cases.
+    required_correction: >-
+      Create R2 bytes that define an explicit arm request identity and canonical
+      replay relation, separate reducer disposition from the persisted first
+      ARMED fact, and add fixed independent vectors for FIRST_APPLY,
+      EXACT_DUPLICATE_REPLAY with no Event and no call, and
+      CHANGED_BYTES_SAME_IDENTITY with integrity conflict. Rebuild and freshly
+      validate the complete atomic bundle.
+
+  - finding_id: F5_R1_BLOCKER_002_VALIDATOR_CLAIM_EXCEEDS_EXECUTABLE_COVERAGE
+    severity: blocker
+    status: OPEN_REQUIRES_R2
+    exact_evidence:
+      - >-
+        Contract Section 14 lines 863-866 says the validator independently
+        computes all object fingerprints, derived identity formulas, transition
+        legality and negative mutations, and must reject a merely byte-equal but
+        semantically invalid fixture.
+      - >-
+        The validator contains schema field inventories and reducers only for
+        enqueue, claim, lease, arm, attempt, receipt dedup mode and recovery
+        window. Neither executable subject contains any of the five normative
+        derived-ID domains agents-os.f5-outbox-intent-id.v0.1,
+        agents-os.f5-outbox-claim-id.v0.1,
+        agents-os.f5-outbox-claim-fence.v0.1,
+        agents-os.f5-delivery-attempt-id.v0.1 or
+        agents-os.f5-dispatch-arm-id.v0.1.
+      - >-
+        The fixture contains field profiles rather than instances of the twelve
+        production schemas, so their object fingerprints, derived identities,
+        receipt-kind/status compatibility and state-transition legality cannot
+        be recomputed. The 15 mutations at validator lines 424-502 do not add
+        those absent checks.
+      - >-
+        Mandatory Section 13 attacks not independently encoded include lease
+        upper-bound comparison, exact-versus-changed arm replay, caller-selected
+        idempotency key, old-epoch terminal advancement, reconciliation attempt
+        creation, recovery-barrier bypass and PBL/role influence.
+    counterexample: >-
+      The current fixture can pass with no F5OutboxIntent, F5OutboxClaimFact,
+      F5DispatchArmFact or F5DeliveryReceipt object instance at all. Therefore
+      the validator reports PASS without ever recomputing outbox_intent_id,
+      claim_id, claim_fencing_token, attempt_id, dispatch_arm_id, the transition
+      table, or a receipt-kind/status pair. This directly falsifies the declared
+      validation surface even though the reported 13/64/15 counts reproduce.
+    impact: >-
+      Validator PASS is insufficient evidence for the semantic claims that the
+      acceptance unit itself says it validates. A byte-equal fixture and
+      mutually mirrored reducer tables can conceal central identity, replay and
+      transition errors.
+    required_correction: >-
+      R2 must either narrow the normative validator claim and review gate to the
+      actual limited witness surface, or preferably extend the deterministic
+      fixture with canonical instances and derived identities for every schema,
+      complete transition and replay vectors, and each mandatory adversarial
+      case. The independent validator must recompute those values without
+      importing builder logic and include fully resigned negative mutations.
+
+  - finding_id: F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+    severity: major
+    status: OPEN_REQUIRES_R2
+    exact_evidence:
+      - >-
+        Contract Section 6 lines 632-635 requires multiple failures to use the
+        fixed precedence declared by the relevant schema.
+      - >-
+        Sections 4.5, 4.6 and 4.7 lines 266-348 enumerate possible
+        primary_reason literals for claim, lease and arm but do not declare
+        their fixed precedence. Their literal order is not the order used by
+        builder lines 280-384 or validator lines 138-207.
+      - >-
+        Only one selected multi-failure vector exists for each of claim, lease
+        and arm, which does not totalize all simultaneous-failure combinations.
+    counterexample: >-
+      A claim with integrity=false and terminal=true has both
+      INTEGRITY_FAILURE and TERMINAL_ALREADY_RECORDED true. The executable
+      reducers choose INTEGRITY_FAILURE, while the schema provides no normative
+      precedence list and lists TERMINAL_ALREADY_RECORDED before
+      INTEGRITY_FAILURE in its enum surface. Two implementations can therefore
+      emit different primary reasons while each claims schema compliance.
+    impact: >-
+      Claim, lease and arm result/reason totality is an explicit required review
+      question and is not closed by the normative bytes.
+    required_correction: >-
+      Add explicit normative precedence lists for claim, lease and arm, align
+      builder and validator to those lists, and add pairwise or otherwise
+      complete multi-failure vectors proving the order and sorted full reason
+      sets.
+
+  - finding_id: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    severity: major
+    status: OPEN_REQUIRES_R2
+    exact_evidence:
+      - >-
+        Contract Section 4.8 lines 396-412 makes ACKED, SUCCEEDED, FAILED,
+        UNKNOWN and PRE_EFFECT_NOT_EXECUTED disjoint at attempt level and states
+        that ACKED is not completion.
+      - >-
+        Section 4.9 lines 430-431 declares receipt_kind and effect_status as two
+        independent enums but provides no allowed or rejected compatibility
+        matrix, including the polymorphic EFFECT_QUERY_RESULT case.
+      - >-
+        Builder and validator receipt reducers examine only NEW,
+        EXACT_DUPLICATE and CHANGED_SAME_KEY; no receipt vector contains
+        receipt_kind or effect_status.
+    counterexample: >-
+      A structurally schema-valid receipt with receipt_kind=TRANSPORT_ACK and
+      effect_status=SUCCEEDED passes the declared field enums. The prose says
+      ACK cannot prove completion, but the atomic bundle supplies no
+      deterministic receipt compatibility reducer or vector that rejects this
+      exact pair. EFFECT_QUERY_RESULT pairings are likewise unspecified.
+    impact: >-
+      ACK/FAILED/UNKNOWN/NOT_EXECUTED disjointness and the adversarial
+      ACK-to-SUCCEEDED rejection are not mechanically closed at the receipt
+      boundary.
+    required_correction: >-
+      Define a total receipt_kind by effect_status compatibility and evidence
+      table, including EFFECT_QUERY_RESULT, epoch/fence currentness and terminal
+      transition effects. Add positive and negative vectors and fully resigned
+      mutations for every allowed and forbidden pairing.
+
+required_review_questions: &required_review_question_results
+  total: 22
+  pass_count: 20
+  fail_count: 2
+  results:
+    - question: all_16_hashes_match_and_all_4_subjects_are_fully_read_unchanged
+      result: PASS
+      evidence: 16_of_16_hashes_match_and_4_of_4_complete_reads
+    - question: F5_consumes_F4_handoff_and_fresh_F4_assessment_without_recomputing_upstream_authority
+      result: PASS
+      evidence: contract_sections_1_2_4_4_and_7_bind_owner_results_only
+    - question: no_Actor_Task_color_role_relationship_trust_urgency_or_P0_P3_permission_classification_exists
+      result: PASS
+      evidence: contract_sections_1_4_4_12_and_fixture_profiles_contain_no_delivery_classifier
+    - question: no_second_identity_authority_canonical_writer_policy_evaluator_or_effect_authority_exists
+      result: PASS
+      evidence: F3_writer_remains_single_and_F5_owns_only_reducer_semantics
+    - question: real_positive_handoff_remains_non_issuable_and_synthetic_evidence_cannot_substitute
+      result: PASS
+      evidence: F4_freeze_decision_plus_contract_sections_2_and_11
+    - question: enqueue_is_deterministic_recoverable_and_zero_effect_when_handoff_to_intent_window_crashes
+      result: PASS
+      evidence: contract_sections_4_2_and_9_plus_recovery_vector
+    - question: claim_and_lease_CAS_epoch_fencing_and_reason_totality_are_closed
+      result: FAIL
+      evidence: F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+    - question: CLAIM_and_DISPATCH_ARM_use_distinct_fresh_F4_owned_observations
+      result: PASS
+      evidence: observation_purpose_is_fingerprint_bound_and_arm_requires_later_fresh_writer_head
+    - question: arm_is_one_time_committed_before_effect_and_cannot_be_rearmed_after_any_outcome
+      result: PASS
+      evidence: normative_one_time_consumption_and_no_rearm_are_explicit
+      qualification: replay_relation_is_separately_blocked_by_F5_R1_BLOCKER_001
+    - question: trusted_time_expiry_between_arm_and_call_fails_without_call_and_without_rearm
+      result: PASS
+      evidence: strict_pre_call_check_records_PRE_EFFECT_NOT_EXECUTED_and_consumption_remains
+    - question: stable_effect_id_is_the_only_idempotency_key_and_does_not_relax_no_retry
+      result: PASS
+      evidence: contract_sections_4_7_5_and_8
+    - question: ACK_FAILED_UNKNOWN_and_NOT_EXECUTED_semantics_are_disjoint
+      result: FAIL
+      evidence: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    - question: no_post_arm_outcome_including_PRE_EFFECT_NOT_EXECUTED_is_automatic_retry_eligible
+      result: PASS
+      evidence: all_six_attempt_vectors_false_and_two_retry_mutations_rejected
+    - question: dead_letter_is_accounting_not_effect_outcome_completion_or_replacement_authority
+      result: PASS
+      evidence: contract_sections_4_10_8_and_12
+    - question: receipt_duplicate_conflict_late_fact_and_epoch_rules_are_deterministic
+      result: PASS
+      evidence: exact_duplicate_replays_changed_bytes_conflict_old_epoch_cannot_advance
+      qualification: kind_status_compatibility_is_separately_open
+    - question: reconciliation_queries_existing_effect_identity_and_never_creates_an_attempt
+      result: PASS
+      evidence: contract_section_4_11_and_invariant_23
+    - question: all_eight_crash_windows_and_startup_recovery_barrier_are_fail_closed
+      result: PASS
+      evidence: 8_of_8_recovery_vectors_and_ten_step_barrier_reviewed
+    - question: projection_rebuild_is_deterministic_zero_effect_and_non_authoritative
+      result: PASS
+      evidence: contract_sections_4_12_9_10_and_12
+    - question: builder_and_validator_are_independent_and_rebuild_is_byte_equal
+      result: PASS
+      evidence: no_cross_import_or_shared_local_module_and_cmp_exit_0
+      qualification: semantic_coverage_is_separately_blocked_by_F5_R1_BLOCKER_002
+    - question: all_13_schema_profiles_64_vectors_and_15_mutations_reproduce
+      result: PASS
+      evidence: validator_reported_13_64_15_and_exit_0
+      qualification: declared_counts_do_not_cure_missing_semantic_surface
+    - question: no_real_handoff_arm_runtime_effect_provider_secret_database_or_service_occurrence_exists
+      result: PASS
+      evidence: fixture_and_review_execution_zero_counts
+    - question: no_F6_implementation_runtime_production_authentication_or_Git_authority_leaks
+      result: PASS
+      evidence: contract_section_15_and_start_decision_non_authorization
+
+required_adversarial_checks: &required_adversarial_check_results
+  total: 28
+  pass_count: 25
+  fail_count: 3
+  results:
+    - check: synthetic_handoff_or_witness_presented_to_production
+      result: PASS
+      decision: REJECT
+    - check: F4_handoff_ref_match_with_fingerprint_mismatch
+      result: PASS
+      decision: INTEGRITY_FAILURE
+    - check: F5_local_override_of_F4_REJECTED_or_INDETERMINATE
+      result: PASS
+      decision: REJECT_OR_INDETERMINATE_NEVER_CURRENT
+    - check: old_F4_assessment_reused_at_later_writer_head
+      result: PASS
+      decision: AUTHORITY_STALE
+    - check: observed_time_equal_to_expiry
+      result: PASS
+      decision: EXPIRED
+    - check: dispatcher_label_without_current_F2_F3_assessments
+      result: PASS
+      decision: CLAIMANT_UNAVAILABLE_OR_STALE
+    - check: skipped_duplicate_or_stale_claim_epoch
+      result: PASS
+      decision: CAS_MISMATCH_OR_STALE
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: stale_claim_token_or_lease_CAS
+      result: PASS
+      decision: TOKEN_MISMATCH_OR_CAS_MISMATCH
+    - check: lease_extension_beyond_authority_expiry
+      result: PASS
+      decision: REJECT
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: second_claim_while_current_claim_active
+      result: PASS
+      decision: CLAIM_ALREADY_ACTIVE
+    - check: second_claim_or_arm_after_a_dispatch_arm_exists
+      result: PASS
+      decision: DISPATCH_ALREADY_ARMED_OR_NO_SECOND_ARM
+    - check: exact_arm_replay_without_second_call
+      result: FAIL
+      evidence: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    - check: changed_arm_bytes_under_same_identity
+      result: FAIL
+      evidence: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    - check: caller_selected_or_changed_idempotency_key
+      result: PASS
+      decision: REJECT
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: crash_after_arm_before_call
+      result: PASS
+      decision: UNKNOWN_NO_AUTOMATIC_RETRY
+    - check: crash_after_call_before_receipt
+      result: PASS
+      decision: UNKNOWN_AWAIT_AUTHENTICATED_RECEIPT_OR_QUERY
+    - check: ACK_treated_as_SUCCEEDED
+      result: FAIL
+      evidence: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    - check: FAILED_treated_as_NOT_EXECUTED
+      result: PASS
+      decision: REJECT_FAILED_MEANS_EFFECT_MAY_HAVE_OCCURRED
+    - check: UNKNOWN_or_PRE_EFFECT_NOT_EXECUTED_marked_auto_retry_after_arm
+      result: PASS
+      decision: REJECT_AUTOMATIC_RETRY_FALSE
+    - check: dead_letter_treated_as_effect_failure_or_completion
+      result: PASS
+      decision: REJECT_ACCOUNTING_ONLY
+    - check: changed_receipt_under_same_source_and_receipt_id
+      result: PASS
+      decision: CONFLICT_OPEN_RECONCILIATION_NO_OVERWRITE
+    - check: old_epoch_late_SUCCEEDED_advances_current_Task
+      result: PASS
+      decision: RETAIN_HISTORY_BUT_REJECT_CURRENT_ADVANCEMENT
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: reconciliation_opens_new_attempt_or_compensation
+      result: PASS
+      decision: REJECT_USE_EXISTING_EFFECT_ID_ONLY
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: projection_rebuild_emits_claim_arm_Event_or_effect
+      result: PASS
+      decision: REJECT_ZERO_EFFECT_REBUILD_ONLY
+    - check: missing_recovery_barrier_allows_ordinary_claim
+      result: PASS
+      decision: REJECT_ORDINARY_CLAIM_BLOCKED_UNTIL_BARRIER_EVENT
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: PBL_no_match_creates_delivery_authority
+      result: PASS
+      decision: REJECT_PBL_IS_NOT_POSITIVE_AUTHORITY
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: permission_lane_or_role_label_changes_delivery_result
+      result: PASS
+      decision: REJECT_LABELS_ARE_NONAUTHORITATIVE
+      qualification: explicit_validator_vector_coverage_is_missing_under_F5_R1_BLOCKER_002
+    - check: any_nonzero_real_handoff_arm_runtime_effect_provider_or_secret_count
+      result: PASS
+      decision: REJECT
+
+all_required_question_and_adversarial_results:
+  required_review_questions: *required_review_question_results
+  required_adversarial_checks: *required_adversarial_check_results
+
+schema_vector_mutation_and_recovery_counts:
+  validator_result: PASS_NO_BLOCKER
+  validator_exit_code: 0
+  schema_profile_count:
+    expected: 13
+    actual: 13
+    match: true
+  decision_vector_count:
+    expected: 64
+    actual: 64
+    match: true
+  decision_vector_distribution:
+    enqueue: 9
+    claim: 15
+    lease: 8
+    arm: 15
+    attempt: 6
+    receipt: 3
+    recovery: 8
+  recovery_vector_count:
+    expected: 8
+    actual: 8
+    match: true
+  negative_mutations_rejected:
+    expected: 15
+    actual: 15
+    match: true
+  negative_or_fail_closed_vector_count: 44
+  count_reproduction_passed: true
+  count_reproduction_is_sufficient_for_overall_pass: false
+
+builder_byte_equality_and_fixture_hash:
+  builder_validator_share_imported_implementation_module: false
+  builder_imports_validator: false
+  validator_imports_builder: false
+  source_sha256_distinct: true
+  builder_reproduction_exit_code: 0
+  byte_equal_to_fixed_fixture: true
+  fixed_fixture_file_sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+  fixture_canonical_sha256_declared: 63d7469c60ab4f27195c838bdaa93f203fc681db67fb79111408250d2b74fef9
+  fixture_canonical_sha256_independently_recomputed: 63d7469c60ab4f27195c838bdaa93f203fc681db67fb79111408250d2b74fef9
+  fixture_canonical_sha256_match: true
+
+validator_commands:
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 python3
+      control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+    exit_code: 0
+    reported_result: PASS_NO_BLOCKER
+  - command: >-
+      tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3
+      control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+      --output "$tmp" && cmp -s "$tmp"
+      control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+      && rm -f "$tmp"
+    exit_code: 0
+    byte_equal: true
+
+mandatory_zero_authority_runtime_effect_provider_secret_counts:
+  fixture_assertions:
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    runtime_consumable_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    terminal_outcome: NOT_EXECUTED
+  synthetic_witness:
+    accepted_real_handoff_count: 0
+    armed_dispatch_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    authority_eligible: false
+    runtime_consumable: false
+    recovery_importable: false
+    physical_effect_boundary: NOT_EXECUTABLE
+    terminal_outcome: NOT_EXECUTED
+  review_execution_counts:
+    real_handoff_consumption: 0
+    real_dispatch_arm: 0
+    runtime_or_service_start: 0
+    database_read_or_write: 0
+    external_effect_execution: 0
+    provider_call: 0
+    secret_or_private_state_access: 0
+
+decision_gate:
+  result: BLOCK
+  F5_acceptance_ready: false
+  automatic_acceptance: forbidden
+  authority_after_correction_and_fresh_pass: Jenn_only
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_push_PR_merge_performed: false
+
+required_next_action: >-
+  Produce R2 correction bytes resolving every open finding, rebuild the full
+  atomic subject set, create a new hash-bound manifest, and run a fresh full
+  atomic independent review. Do not accept or freeze F5 from this result.
+
+requires_R2: true

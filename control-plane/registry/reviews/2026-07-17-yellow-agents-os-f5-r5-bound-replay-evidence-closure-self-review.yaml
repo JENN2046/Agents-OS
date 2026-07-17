@@ -1,0 +1,100 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r5-bound-replay-evidence-closure-self-review-2026-07-17
+date: 2026-07-17
+reviewer: Nobao_author_run
+independence: false
+result: PASS_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 20
+  effective_precedence:
+    - R5_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+R5_subjects:
+  - path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md
+    sha256: ac6c001b745910ef9c9038ec5bb6b60fac6bd7f0e4ea7d6603db4e99b0b943e2
+    role: normative_amendment
+  - path: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py
+    sha256: cbdd1d2f4a68179db71a6eb17803f2b7fe9cb76a79dacd769b4a2d55179cb0d6
+    role: deterministic_fixture_builder
+  - path: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json
+    sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e
+    role: synthetic_nonauthority_fixture
+  - path: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py
+    sha256: 3e3b89b2af8f15a3389c59785d361c25fc0974131af3065f13cbc2637db84378
+    role: independent_semantic_validator
+
+finding_closure:
+  - finding_id: F5_R4_BLOCKER_001_EXACT_RECEIPT_REPLAY_KIND_STATUS_NOT_FINGERPRINT_BOUND
+    disposition: CLOSED_IN_AUTHOR_SURFACE_PENDING_INDEPENDENT_REVIEW
+    evidence:
+      - complete_closed_receipt_payload_is_bound_into_exact_canonical_UTF8_bytes
+      - stored_and_submitted_receipt_records_are_independently_parsed_and_fingerprinted
+      - receipt_kind_and_effect_status_are_derived_only_from_the_bound_submitted_payload
+      - exact_replay_requires_identical_bound_bytes_and_fingerprints
+      - original_R3_detached_override_probe_rejects_after_full_resigning
+  - finding_id: F5_R4_BLOCKER_002_LOOKUP_INDETERMINATE_SKIPS_REQUEST_IDENTITY_EQUALITY
+    disposition: CLOSED_IN_AUTHOR_SURFACE_PENDING_INDEPENDENT_REVIEW
+    evidence:
+      - stored_and_submitted_records_parse_and_bind_before_branch_selection
+      - stored_submitted_request_ID_equality_is_unconditional_when_stored_exists
+      - identity_check_precedes_lookup_reproducibility_branch
+      - fully_valid_different_request_identity_rejects_under_lookup_indeterminate
+
+author_validation:
+  R1_validator: PASS_NO_BLOCKER
+  R2_validator: PASS_NO_BLOCKER
+  R3_validator: PASS_NO_BLOCKER
+  R4_validator: PASS_NO_BLOCKER
+  R5_validator: PASS_NO_BLOCKER
+  R5_builder_fixture_byte_equal: true
+  fully_resigned_R5_mutations_rejected: 12_of_12
+  receipt_binding_mutations_rejected: 6_of_6
+  arm_identity_mutations_rejected: 2_of_2
+  closed_inventory_mutations_rejected: 4_of_4
+  original_R3_receipt_probe_rejected: true
+  R4_lookup_indeterminate_different_identity_probe_rejected: true
+
+scope_review:
+  new_delivery_state: false
+  new_receipt_type: false
+  new_retry_model: false
+  provider_transport: false
+  database_layout: false
+  implementation: false
+  runtime_activation: false
+  production_authentication: false
+  F6_semantics_or_start: false
+  permission_ladder_or_actor_task_classification: false
+  upstream_authority_recomputation: false
+
+nonauthority_assertions:
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+governance:
+  R1_R2_R3_R4_fixed_bytes_preserved: true
+  author_self_review_is_independent_review: false
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_R1_THROUGH_R5

@@ -1,0 +1,170 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: 2026-07-17T19:59:03+08:00
+effective_at: 2026-07-17T19:59:03+08:00
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F5_R7_atomic_freeze_decision_package_section_6_A
+
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md
+    sha256: ac77a52c5a1fb8257bf0d8d017dcbd4afb43ad523bf596184a0c757c4fb1d9fa
+    section: 6_A
+  confirmation_text_received: >-
+    我确认执行 F5 R7 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+
+acceptance_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R7_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 28
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R7_explicit_replacement
+    - R6_other_explicit_replacements
+    - R5_other_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 64
+
+accepted_subjects:
+  - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f}
+  - {revision: R1, role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793}
+  - {revision: R1, role: synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281}
+  - {revision: R1, role: independent_semantic_validator, path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f}
+  - {revision: R2, role: normative_four_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7}
+  - {revision: R2, role: full_effective_fixture_builder, path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd}
+  - {revision: R2, role: full_effective_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f}
+  - {revision: R2, role: independent_full_effective_validator, path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py, sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c}
+  - {revision: R3, role: normative_seven_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md, sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd}
+  - {revision: R3, role: seven_finding_fixture_builder, path: control-plane/registry/build-f5-r3-seven-finding-closure.py, sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772}
+  - {revision: R3, role: seven_finding_closure_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json, sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876}
+  - {revision: R3, role: independent_seven_finding_validator, path: control-plane/registry/validate-f5-r3-seven-finding-closure.py, sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273}
+  - {revision: R4, role: normative_three_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md, sha256: cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551}
+  - {revision: R4, role: three_finding_fixture_builder, path: control-plane/registry/build-f5-r4-three-finding-proof-closure.py, sha256: d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929}
+  - {revision: R4, role: three_finding_proof_closure_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json, sha256: af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d}
+  - {revision: R4, role: independent_three_finding_validator, path: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py, sha256: 4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8}
+  - {revision: R5, role: normative_two_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md, sha256: ac6c001b745910ef9c9038ec5bb6b60fac6bd7f0e4ea7d6603db4e99b0b943e2}
+  - {revision: R5, role: bound_replay_evidence_fixture_builder, path: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py, sha256: cbdd1d2f4a68179db71a6eb17803f2b7fe9cb76a79dacd769b4a2d55179cb0d6}
+  - {revision: R5, role: bound_replay_evidence_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json, sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e}
+  - {revision: R5, role: independent_bound_replay_evidence_validator, path: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py, sha256: 3e3b89b2af8f15a3389c59785d361c25fc0974131af3065f13cbc2637db84378}
+  - {revision: R6, role: normative_first_apply_guard_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md, sha256: 0c82ad7eccbcd10abbdf429bb78ec49dfb3f77565779f5b457d075ec24e444d8}
+  - {revision: R6, role: first_apply_guard_fixture_builder, path: control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py, sha256: f3c23180277fba76dd9c6cca93782b2b77413905c9df07576d3fffee182979f4}
+  - {revision: R6, role: first_apply_guard_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json, sha256: 853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8}
+  - {revision: R6, role: independent_first_apply_guard_validator, path: control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py, sha256: c694d6944d1dde3a0e5d2ac5c10b56e07950476946f7afa4c61f60df5ffa603a}
+  - {revision: R7, role: normative_exact_accounting_type_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md, sha256: 8c2c4a782215da132ea06ed8db0d20c26c4756f9471f533b6e6ce64192f70950}
+  - {revision: R7, role: exact_accounting_type_fixture_builder, path: control-plane/registry/build-f5-r7-exact-accounting-type-closure.py, sha256: 7280f4658d2dd63c47074e9e12cfa3b1d00b1c47633a7ef821a494adf632d6eb}
+  - {revision: R7, role: exact_accounting_type_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json, sha256: 8819f12117f38bbde6f7cf489f1eb80a64fe4b819fd03540fd891083477fc775}
+  - {revision: R7, role: independent_exact_accounting_type_validator, path: control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py, sha256: ea67a2d4ece53debe43854f8a2378ca678f2a8faf6f957cea662991eb26af1a3}
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    unresolved_ambiguity_count: 0
+    prior_findings_closed: 18_of_18
+    requires_R8: false
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-freeze-decision-package-v0.1.md
+    sha256: ac77a52c5a1fb8257bf0d8d017dcbd4afb43ad523bf596184a0c757c4fb1d9fa
+    acceptance_subject: false
+
+frozen_semantic_boundary:
+  - outbox_intent_and_identity
+  - claim_lease_and_fencing
+  - delivery_attempt_identity
+  - receipt_compatibility_and_currentness
+  - exact_receipt_replay_from_bound_canonical_bytes
+  - dispatch_arm_replay_and_identity_prebranch_check
+  - stored_first_Event_and_call_accounting
+  - first_apply_eligibility_guard
+  - deterministic_precedence_and_transition_totality
+  - canonical_bytes_IDs_and_fingerprints
+  - exact_JSON_integer_count_typing_without_boolean_aliasing
+  - synthetic_nonauthority_nonruntime_nonrecovery_boundary
+
+excluded_evidence_classes:
+  - manifest
+  - author_self_review
+  - independent_review
+  - review_disposition
+  - decision_package
+  - receipt
+  - active_work_queue
+
+effects:
+  F5_contract_status: ACCEPTED_FROZEN
+  F5_atomic_freeze_gate: SATISFIED
+  additional_F5_amendment_required: false
+  requires_R8: false
+  F5_revisions_stopped: true
+  real_delivery_authorized: false
+  physical_call_authorized: false
+  F6_started: false
+  implementation_authorized: false
+  Rust_implementation_authorized: false
+  JavaScript_implementation_authorized: false
+  database_change_authorized: false
+  index_cache_or_queue_change_authorized: false
+  transport_or_provider_adapter_implementation_authorized: false
+  Resident_start_authorized: false
+  Worker_start_authorized: false
+  Host_or_executor_start_authorized: false
+  dispatcher_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  device_file_process_or_physical_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: EXPLICIT_JENN_START_DECISION_FOR_F6
+  decision_owner: Jenn
+  automatic_transition: forbidden
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_and_subject_reverification_before_closeout: completed
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

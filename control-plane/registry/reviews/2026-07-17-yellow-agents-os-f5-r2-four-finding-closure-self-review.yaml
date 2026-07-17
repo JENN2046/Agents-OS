@@ -1,0 +1,117 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r2-four-finding-closure-self-review-2026-07-17
+date: 2026-07-17
+reviewer: Nobao
+independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+may_substitute_for_independent_judgment: false
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  precedence: [R2_explicit_replacements, R1_all_other_clauses]
+
+fixed_R2_subjects:
+  amendment:
+    path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md
+    sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7
+  builder:
+    path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py
+    sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd
+  fixture:
+    path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+    sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f
+  validator:
+    path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+    sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c
+
+blocking_review:
+  path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml
+  sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a
+  result: BLOCK
+
+finding_closure:
+  - finding_id: F5_R1_BLOCKER_001_ARM_REPLAY_RELATION_NOT_CLOSED
+    author_disposition: CLOSED_IN_R2_FOR_INDEPENDENT_JUDGMENT
+    evidence:
+      - stable_dispatch_arm_request_id_and_fingerprint
+      - four_state_canonical_writer_replay_relation
+      - exact_duplicate_REPLAYED_zero_Event_zero_call
+      - changed_bytes_same_identity_REJECTED_conflict
+  - finding_id: F5_R1_BLOCKER_002_VALIDATOR_CLAIM_EXCEEDS_EXECUTABLE_COVERAGE
+    author_disposition: CLOSED_IN_R2_FOR_INDEPENDENT_JUDGMENT
+    evidence:
+      - 16_effective_schema_profiles
+      - 16_canonical_instances_with_recomputed_object_fingerprints
+      - 6_effective_derived_identity_formulas
+      - 147_pairwise_precedence_cases
+      - 4_arm_replay_cases
+      - 25_receipt_matrix_cases
+      - 100_transition_cases
+      - 28_structured_adversarial_cases
+      - validator_claim_narrowed_to_enumerated_surface
+  - finding_id: F5_R1_MAJOR_001_REASON_PRECEDENCE_NOT_NORMATIVELY_TOTAL
+    author_disposition: CLOSED_IN_R2_FOR_INDEPENDENT_JUDGMENT
+    evidence:
+      - explicit_claim_precedence
+      - explicit_lease_precedence
+      - explicit_arm_first_apply_precedence
+      - lexicographic_sorted_unique_reason_codes
+      - all_147_failure_pairs_reproduced
+  - finding_id: F5_R1_MAJOR_002_RECEIPT_KIND_STATUS_MATRIX_NOT_CLOSED
+    author_disposition: CLOSED_IN_R2_FOR_INDEPENDENT_JUDGMENT
+    evidence:
+      - total_5_by_5_compatibility_matrix
+      - canonical_receipt_disposition_schema
+      - dedup_attestation_identity_epoch_fence_transition_precedence
+      - TRANSPORT_ACK_plus_SUCCEEDED_rejected
+
+author_findings_closed_before_fixing_bytes:
+  - id: F5_R2_AUTHOR_001_TRANSITION_CARDINALITY
+    severity: major
+    correction: changed_incorrect_11_by_11_claim_to_exact_10_by_10_state_space
+  - id: F5_R2_AUTHOR_002_FIRST_APPLY_DISPOSITION_BINDING
+    severity: major
+    correction: first_apply_disposition_now_binds_the_arm_created_in_same_transaction
+  - id: F5_R2_AUTHOR_003_RECEIPT_DISPOSITION_SCHEMA
+    severity: major
+    correction: added_canonical_schema_instead_of_unbound_reducer_output
+  - id: F5_R2_AUTHOR_004_ARM_REQUEST_ID_EXECUTABLE_COVERAGE
+    severity: major
+    correction: proof_now_recomputes_six_effective_IDs_including_new_arm_request_ID
+  - id: F5_R2_AUTHOR_005_ADVERSARIAL_INPUTS
+    severity: major
+    correction: replaced_label_only_cases_with_structured_inputs_and_independent_decision_reduction
+
+validation:
+  R1_validator_result: PASS_NO_BLOCKER
+  R2_validator_result: PASS_NO_BLOCKER
+  schema_profile_count: 16
+  canonical_instance_count: 16
+  derived_identity_count: 6
+  pairwise_precedence_case_count: 147
+  arm_replay_case_count: 4
+  receipt_compatibility_case_count: 25
+  transition_case_count: 100
+  adversarial_case_count: 28
+  fully_resigned_negative_mutations_rejected: 29
+  builder_reproduction: BYTE_EQUAL
+  accepted_real_handoff_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+boundary:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  real_handoff_or_effect_execution_authorized: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_R1_PLUS_R2

@@ -1,0 +1,131 @@
+# AGENTS OS Active Work Queue v1.7
+
+Date: 2026-07-17  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.6.md`
+
+## Purpose
+
+Current queue after the fixed F5 R3 fresh full atomic independent review
+returned `BLOCK` with two blockers and one major, Jenn accepted all three real
+proof findings into one narrow R4, and explicitly prohibited scope expansion.
+Queues v0.1-v1.6 remain byte-preserved history.
+
+This queue authorizes no F5 acceptance or freeze, F6 start, implementation,
+runtime, database, production authentication, real handoff, provider, service
+or physical effect.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F5_started=true
+F5_status=R4_NARROW_THREE_FINDING_PROOF_CLOSURE_ACTIVE
+F5_acceptance_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R4_ATOMIC_BUNDLE
+F5_expected_subject_count=16
+F5_partial_acceptance=forbidden
+F5_R3_manifest_sha256=b7f7a3715bb807c06a6cac5b752bf6e63a65e0761ce16db3da83c53ed676b563
+F5_R3_independent_review_created=true
+F5_R3_independent_review_result=BLOCK
+F5_R3_blocker_count=2
+F5_R3_major_count=1
+F5_R3_review_sha256=b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+F5_R3_disposition_sha256=9c5a8420c767d18b24b3b77213fc12b0ad2658759f93b7ae1605208728ed42a9
+F5_R4_start_decision_sha256=9d8780b8527ca339d81f4fa470df4c3a27cda4179c0ab72ce8b46a5caff83440
+F5_R4_scope=EXACTLY_THREE_INDEPENDENTLY_REPRODUCED_PROOF_FINDINGS
+F5_R5_preplanned=false
+F5_accepted=false
+F5_frozen=false
+F6_started=false
+accepted_real_handoff_count=0
+claim_event_count=0
+armed_dispatch_count=0
+runtime_consumable_count=0
+external_effect_count=0
+provider_call_count=0
+raw_secret_count=0
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+provider_host_or_effect_execution_authorized=false
+```
+
+## NOW
+
+### NOW-001: F5 R4 Narrow Three-Finding Proof Closure And Fresh Full Atomic Review
+
+```text
+finding_1=closed_root_section_row_inventory_exact_types_complete_disposition_matrices
+finding_2=147_pairs_294_trials_order_2_exact_reverse_of_order_1
+finding_3=canonical_arm_payload_request_ID_fingerprint_and_stored_first_accounting
+allowed_R4_subjects=amendment|builder|fixture|validator
+required_next_surface=16_subject_atomic_manifest_and_fresh_full_atomic_review
+fresh_independent_reviewer_required=true
+author_may_claim_independence=false
+requires_jenn_decision=false
+execution_authorized=false
+```
+
+## Acceptance Candidate Conditions
+
+```text
+prior_7_additional_probes_rejected=7_OF_7
+unknown_root_section_row_fields_rejected=true
+disposition_cross_field_matrices_complete=true
+positive_safe_integer_profiles_exact=true
+precedence_unordered_pairs=147
+precedence_raw_trials=294
+precedence_exact_reverse_pairs=147_OF_147
+duplicated_order_mutation_rejected=true
+arm_request_bytes_are_canonical=true
+request_ID_recomputed_from_complete_payload=true
+request_fingerprint_recomputed_from_complete_payload=true
+exact_replay_totals_equal_stored_first_accounting=true
+noncanonical_formula_and_accounting_mutations_rejected=true
+fresh_full_atomic_review=PASS_NO_BLOCKER
+```
+
+## NEXT
+
+```text
+PASS_NO_BLOCKER=stop_F5_revision_and_prepare_Jenn_only_atomic_freeze_decision_surface
+BLOCK=preserve_R1_R2_R3_R4_and_review_bytes_then_route_only_new_independent_reproducible_security_counterexamples
+R5_preplanned=false
+implementation_profile_questions_do_not_trigger_R5=true
+automatic_F5_acceptance_or_freeze=forbidden
+automatic_F6_start=forbidden
+automatic_implementation_or_runtime=forbidden
+```
+
+## BLOCKED
+
+```text
+new_delivery_state_receipt_type_or_retry_model=forbidden
+provider_transport_database_layout_Rust_or_JavaScript_implementation=forbidden
+production_authentication_or_runtime_activation=forbidden
+self_attested_independent_review=forbidden
+partial_F5_acceptance=forbidden
+synthetic_evidence_as_production_authority=forbidden
+F5_recomputation_of_F1_F2_F3_or_F4_authority=forbidden
+Actor_Task_role_color_trust_urgency_or_P0_P3_permission_classification=forbidden
+positive_operational_handoff=NON_ISSUABLE
+F6_start=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_R4_package
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F5_R3_independent_review=BLOCK_2_BLOCKER_1_MAJOR
+F5_R3_manifest=VERIFIED_32_OF_32
+F5_R3_fixed_commands=PASS_4_OF_4
+F5_R3_additional_resigned_probes=INCORRECTLY_ACCEPTED_7_OF_7
+F5_R3_findings_disposed_to_R4=3_OF_3
+active_work_queue_v0_1_through_v1_6=superseded_historical_bytes_preserved
+```

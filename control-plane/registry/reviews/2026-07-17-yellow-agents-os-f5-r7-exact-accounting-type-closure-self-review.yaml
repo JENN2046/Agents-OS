@@ -1,0 +1,97 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r7-exact-accounting-type-closure-self-review-2026-07-17
+date: 2026-07-17
+reviewer: Nobao_author_run
+independence: false
+result: PASS_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R7_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 28
+  effective_precedence:
+    - R7_explicit_replacement
+    - R6_other_explicit_replacements
+    - R5_other_explicit_replacements
+    - R4_other_explicit_replacements
+    - R3_other_explicit_replacements
+    - R2_other_explicit_replacements
+    - R1_all_other_clauses
+
+R7_subjects:
+  - {role: normative_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md, sha256: 8c2c4a782215da132ea06ed8db0d20c26c4756f9471f533b6e6ce64192f70950}
+  - {role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r7-exact-accounting-type-closure.py, sha256: 7280f4658d2dd63c47074e9e12cfa3b1d00b1c47633a7ef821a494adf632d6eb}
+  - {role: synthetic_nonauthority_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json, sha256: 8819f12117f38bbde6f7cf489f1eb80a64fe4b819fd03540fd891083477fc775}
+  - {role: independent_semantic_validator, path: control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py, sha256: ea67a2d4ece53debe43854f8a2378ca678f2a8faf6f957cea662991eb26af1a3}
+
+finding_closure:
+  finding_id: F5_R6_BLOCKER_001_JSON_BOOLEAN_ACCEPTED_AS_INTEGER_COUNT
+  disposition: CLOSED_IN_AUTHOR_SURFACE_PENDING_INDEPENDENT_REVIEW
+  evidence:
+    - all_37_fixed_count_occurrences_require_exact_JSON_integer_type
+    - all_34_zero_or_one_occurrences_reject_true_or_false_substitution
+    - every_count_check_occurs_before_equality_mapping_or_internal_digest_trust
+    - exact_four_field_fully_resigned_R6_counterexample_rejects
+    - R7_evidence_rows_also_reject_boolean_integer_value_substitution
+
+authority_hash_reconciliation:
+  R6_declared_AGENTS_md_sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9
+  current_AGENTS_md_sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+  R6_manifest_modified: false
+  R7_manifest_must_bind_current_bytes: true
+
+author_validation:
+  R1_validator: PASS_NO_BLOCKER
+  R2_validator: PASS_NO_BLOCKER
+  R3_validator: PASS_NO_BLOCKER
+  R4_validator: PASS_NO_BLOCKER
+  R5_validator: PASS_NO_BLOCKER
+  R6_validator: PASS_NO_BLOCKER_WITH_KNOWN_R7_TYPE_REPLACEMENT
+  R7_validator: PASS_NO_BLOCKER
+  R7_builder_fixture_byte_equal: true
+  source_count_occurrences_checked: 37_of_37
+  fully_resigned_source_boolean_mutations_rejected: 37_of_37
+  prior_zero_or_one_boolean_mutations_rejected: 34_of_34
+  fully_resigned_evidence_row_boolean_mutations_rejected: 37_of_37
+  four_field_R6_counterexample_rejected: true
+  closed_inventory_mutations_rejected: 3_of_3
+  profile_boolean_as_integer_mutation_rejected: true
+
+scope_review:
+  receipt_replay_semantic_change: false
+  first_apply_result_or_accounting_semantic_change: false
+  new_delivery_state: false
+  new_receipt_type: false
+  new_retry_model: false
+  provider_transport: false
+  implementation: false
+  runtime_activation: false
+  production_authentication: false
+  F6_semantics_or_start: false
+  permission_ladder_or_actor_task_classification: false
+  upstream_authority_recomputation: false
+
+nonauthority_assertions:
+  accepted_real_handoff_count: 0
+  claim_event_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+governance:
+  R1_R2_R3_R4_R5_R6_fixed_bytes_preserved: true
+  author_self_review_is_independent_review: false
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_or_physical_effect_authorized: false
+  Git_delivery_authorized: false
+
+next_gate: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_OF_R1_THROUGH_R7

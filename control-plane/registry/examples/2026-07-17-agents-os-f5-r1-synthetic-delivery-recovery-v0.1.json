@@ -1,0 +1,1728 @@
+{
+  "interface_version": "agents-os.f5-r1-synthetic-fixture.v0.1",
+  "contract_version": "F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE",
+  "environment": "SYNTHETIC_TEST",
+  "fingerprint_domain": "agents-os.f5-r1-synthetic-witness.v0.1",
+  "schema_profiles": [
+    {
+      "schema_name": "F5OutboxIntentV0_1R1",
+      "interface_version": "agents-os.f5-outbox-intent.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "outbox_intent_id",
+        "outbox_intent_ref",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "source_handoff_event_sequence",
+        "invocation_identity_fingerprint",
+        "effect_id",
+        "effect_scope_ref",
+        "effect_scope_fingerprint",
+        "expected_result_contract_ref",
+        "expected_result_contract_fingerprint",
+        "owner_host_id",
+        "execution_epoch",
+        "task_fence_generation",
+        "host_fence_generation",
+        "effect_fence_generation",
+        "start_authority_expires_at_utc_ms",
+        "completion_blocking",
+        "delivery_profile_ref",
+        "delivery_profile_fingerprint",
+        "created_at_utc_ms",
+        "created_event_sequence",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "32f880db8aea2121a9479b20a253a058f2c6f8f47cbf8290b66e12b4ad1435d5"
+    },
+    {
+      "schema_name": "F5EnqueueDispositionV0_1R1",
+      "interface_version": "agents-os.f5-enqueue-disposition.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "observed_at_utc_ms",
+        "observed_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "d79fb12908e21b4b767304e8082a35f983f0ebb034df1822fde1e4cab7d7e17a"
+    },
+    {
+      "schema_name": "F5DispatcherClaimantAssessmentV0_1R1",
+      "interface_version": "agents-os.f5-dispatcher-claimant-assessment.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "dispatcher_actor_id",
+        "dispatcher_actor_identity_ref",
+        "dispatcher_actor_identity_fingerprint",
+        "dispatcher_principal_id",
+        "dispatcher_principal_ref",
+        "dispatcher_principal_fingerprint",
+        "dispatcher_binding_assessment_ref",
+        "dispatcher_binding_assessment_fingerprint",
+        "resident_authority_epoch",
+        "resident_continuity_assessment_ref",
+        "resident_continuity_assessment_fingerprint",
+        "owner_head_event_sequence",
+        "assessed_at_event_sequence",
+        "result",
+        "environment",
+        "authority_eligible",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "fba75286bad6686ab2eff6967dbbfefa4a63b272c9934d853f63b123dc3928d1"
+    },
+    {
+      "schema_name": "F5PhysicalBoundaryAuthorityObservationV0_1R1",
+      "interface_version": "agents-os.f5-physical-boundary-authority-observation.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "observation_purpose",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "source_handoff_ref",
+        "source_handoff_fingerprint",
+        "fresh_F4_assessment_ref",
+        "fresh_F4_assessment_fingerprint",
+        "fresh_F4_assessment_result",
+        "observed_task_fence_generation",
+        "observed_host_fence_generation",
+        "observed_effect_fence_generation",
+        "observed_execution_epoch",
+        "observed_host_id",
+        "observed_at_utc_ms",
+        "observed_event_sequence",
+        "canonical_writer_head_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "a188f3b09c784523d49d98303915ce929c8ae62ecdca37a6f0ee3e2d83826e6f"
+    },
+    {
+      "schema_name": "F5OutboxClaimFactV0_1R1",
+      "interface_version": "agents-os.f5-outbox-claim-fact.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "claim_id",
+        "claim_ref",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "claim_epoch",
+        "expected_previous_claim_epoch",
+        "claimant_assessment_ref",
+        "claimant_assessment_fingerprint",
+        "claim_authority_observation_ref",
+        "claim_authority_observation_fingerprint",
+        "lease_expires_at_utc_ms",
+        "claim_fencing_token",
+        "claimed_at_utc_ms",
+        "claim_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "b1ed92b3d62361ee30b00b3f9c90cfbe9bf2e4754b0a58cf669d1bcdd0a7d39d"
+    },
+    {
+      "schema_name": "F5OutboxLeaseFactV0_1R1",
+      "interface_version": "agents-os.f5-outbox-lease-fact.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "lease_fact_id",
+        "claim_ref",
+        "claim_fingerprint",
+        "claim_epoch",
+        "claim_fencing_token",
+        "previous_lease_expiry_utc_ms",
+        "new_lease_expiry_utc_ms",
+        "renewed_at_utc_ms",
+        "renewal_event_sequence",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "d22c3e1ff700a7bbf6cf3dd67f87299a1a5ae33435af471bb76c36cbaba012cd"
+    },
+    {
+      "schema_name": "F5DispatchArmFactV0_1R1",
+      "interface_version": "agents-os.f5-dispatch-arm-fact.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "dispatch_arm_id",
+        "dispatch_arm_ref",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "claim_ref",
+        "claim_fingerprint",
+        "claim_epoch",
+        "claim_fencing_token",
+        "attempt_ordinal",
+        "attempt_id",
+        "idempotency_key",
+        "physical_boundary_observation_ref",
+        "physical_boundary_observation_fingerprint",
+        "armed_at_utc_ms",
+        "armed_event_sequence",
+        "arm_transaction_ref",
+        "arm_transaction_fingerprint",
+        "result",
+        "primary_reason",
+        "reason_codes",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "1f7f828a5ca6fa1e2f29ef6af5baef770eb81ca063faf01a053dea7daaa4fab9"
+    },
+    {
+      "schema_name": "F5DeliveryAttemptFactV0_1R1",
+      "interface_version": "agents-os.f5-delivery-attempt-fact.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "attempt_id",
+        "attempt_ref",
+        "dispatch_arm_ref",
+        "dispatch_arm_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "attempt_ordinal",
+        "idempotency_key",
+        "transport_profile_ref",
+        "transport_profile_fingerprint",
+        "started_at_utc_ms",
+        "returned_at_utc_ms",
+        "outcome",
+        "outcome_evidence_ref",
+        "outcome_evidence_fingerprint",
+        "effect_may_have_occurred",
+        "automatic_retry_eligible",
+        "attempt_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "1c060fc57a44c0cb1e5eba2683f212c2e4e99910ca31c54ea7c41686c1d6d397"
+    },
+    {
+      "schema_name": "F5DeliveryReceiptV0_1R1",
+      "interface_version": "agents-os.f5-delivery-receipt.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "receipt_id",
+        "source_id",
+        "source_receipt_revision",
+        "attempt_ref",
+        "attempt_fingerprint",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "effect_id",
+        "invocation_identity_fingerprint",
+        "execution_epoch",
+        "host_fence_generation",
+        "effect_fence_generation",
+        "receipt_kind",
+        "effect_status",
+        "observed_at_utc_ms",
+        "received_at_utc_ms",
+        "source_attestation_ref",
+        "source_attestation_fingerprint",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "56bcbd814e3156cba2118b7c34d5c0caf5164ba87cade228e8a954d0b72804bc"
+    },
+    {
+      "schema_name": "F5DeadLetterFactV0_1R1",
+      "interface_version": "agents-os.f5-dead-letter-fact.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "dead_letter_id",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "last_claim_ref",
+        "last_claim_fingerprint",
+        "last_attempt_ref",
+        "last_attempt_fingerprint",
+        "reason",
+        "effect_outcome",
+        "reconciliation_required",
+        "dead_lettered_at_utc_ms",
+        "dead_letter_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "6c54276ae51364be2dbb554c241684d281e120156b516533b04b413e97f0c9b7"
+    },
+    {
+      "schema_name": "F5ReconciliationCaseV0_1R1",
+      "interface_version": "agents-os.f5-reconciliation-case.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "reconciliation_id",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "attempt_ref",
+        "attempt_fingerprint",
+        "reason",
+        "status",
+        "resolution",
+        "evidence_refs",
+        "evidence_set_fingerprint",
+        "owner_next_action",
+        "opened_event_sequence",
+        "last_updated_event_sequence",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "e3ceb006aedc3b1b0810cfb8e8aaedb7d8a8136bdf9bbdc3f4e940f338072f82"
+    },
+    {
+      "schema_name": "F5OutboxProjectionV0_1R1",
+      "interface_version": "agents-os.f5-outbox-projection.v0.1-r1",
+      "fingerprint_field": "projection_fingerprint",
+      "fields": [
+        "interface_version",
+        "outbox_intent_ref",
+        "outbox_intent_fingerprint",
+        "projection_version",
+        "last_event_sequence",
+        "state",
+        "current_claim_ref",
+        "current_claim_fingerprint",
+        "current_attempt_ref",
+        "current_attempt_fingerprint",
+        "current_reconciliation_ref",
+        "current_reconciliation_fingerprint",
+        "effect_outcome",
+        "automatic_retry_eligible",
+        "completion_blocking",
+        "projection_fingerprint"
+      ],
+      "schema_profile_fingerprint": "e188d9c47df287d0bd6c1ac1e17ece32e91c3722d459f315c7f671c54b33163b"
+    },
+    {
+      "schema_name": "F5SyntheticDeliveryRecoveryWitnessV0_1R1",
+      "interface_version": "agents-os.f5-synthetic-delivery-recovery-witness.v0.1-r1",
+      "fingerprint_field": "canonical_fingerprint",
+      "fields": [
+        "interface_version",
+        "witness_ref",
+        "witness_namespace",
+        "environment",
+        "fingerprint_domain",
+        "prospective_F4_handoff_requirement_ref",
+        "prospective_F4_handoff_requirement_fingerprint",
+        "vector_set_fingerprint",
+        "authority_eligible",
+        "runtime_consumable",
+        "recovery_importable",
+        "physical_effect_boundary",
+        "terminal_outcome",
+        "accepted_real_handoff_count",
+        "armed_dispatch_count",
+        "external_effect_count",
+        "provider_call_count",
+        "raw_secret_count",
+        "canonical_fingerprint"
+      ],
+      "schema_profile_fingerprint": "4f5587978e61b6764c72ab9f39722d8349a59ed0e4541f83a5b5a949f1e71987"
+    }
+  ],
+  "schema_profile_set_fingerprint": "7b2e9ca43f62b280b6c009443fed5421221f41115dd2c0cbc72949ee886f15f4",
+  "prospective_F4_handoff_requirement": {
+    "interface_version": "agents-os.f5-prospective-f4-handoff-requirement.v0.1-r1",
+    "requirement_ref": "synthetic-f5-r1:requirement:f4-handoff",
+    "owner": "F4",
+    "required_schema_name": "F4AcceptedEffectHandoffV0_1R9",
+    "required_interface_version": "agents-os.f4-accepted-effect-handoff.v0.1-r9",
+    "required_F4_manifest_sha256": "8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5",
+    "status": "UNAVAILABLE_FOR_REAL_POSITIVE_HANDOFF",
+    "usable_in_runtime": false,
+    "synthetic_fixture_only": true,
+    "authority_eligible": false,
+    "canonical_fingerprint": "a8a9761598d57cdd8a50226eed57559adc18e85fa1c72ed1cfbcfb7a44ee9dc5"
+  },
+  "decision_vectors": [
+    {
+      "vector_id": "ENQUEUE_NEW",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": false,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "ENQUEUED",
+        "primary_reason": "ENQUEUED_NEW",
+        "reason_codes": [
+          "ENQUEUED_NEW"
+        ]
+      },
+      "canonical_fingerprint": "13da1f9920ea7e836280a19c2a8e34846a88481fd7bfe1f9114b2135a7e981ef"
+    },
+    {
+      "vector_id": "ENQUEUE_REPLAY",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": false,
+        "available": true,
+        "identical_replay": true
+      },
+      "expected": {
+        "result": "ENQUEUED",
+        "primary_reason": "ENQUEUED_REPLAY",
+        "reason_codes": [
+          "ENQUEUED_REPLAY"
+        ]
+      },
+      "canonical_fingerprint": "278c979fa3a8537d57e6a1231fa1f843d7b228376e3b180b12856a5429aadb53"
+    },
+    {
+      "vector_id": "ENQUEUE_SYNTHETIC",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": true,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": false,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "SYNTHETIC_INPUT",
+        "reason_codes": [
+          "SYNTHETIC_INPUT"
+        ]
+      },
+      "canonical_fingerprint": "51f1ed6b0c26779e5ad4cc93ede35344a2e8020585c574c060ac3a949c39c99a"
+    },
+    {
+      "vector_id": "ENQUEUE_INVALID",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": false,
+        "already_consumed": false,
+        "expired": false,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "HANDOFF_INVALID",
+        "reason_codes": [
+          "HANDOFF_INVALID"
+        ]
+      },
+      "canonical_fingerprint": "1ee4d56fe978fa3c12809d7103fc3f88f0d3fb76299a31f914b389e9ba8d14fb"
+    },
+    {
+      "vector_id": "ENQUEUE_ALREADY_CONSUMED",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": true,
+        "expired": false,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "HANDOFF_ALREADY_CONSUMED",
+        "reason_codes": [
+          "HANDOFF_ALREADY_CONSUMED"
+        ]
+      },
+      "canonical_fingerprint": "a68580a18f19a5446ea94e738e1e30fa254ad1cd73a65e9fc931fa1ac7676436"
+    },
+    {
+      "vector_id": "ENQUEUE_EXPIRED",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": true,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "HANDOFF_EXPIRED",
+        "reason_codes": [
+          "HANDOFF_EXPIRED"
+        ]
+      },
+      "canonical_fingerprint": "cd2c2cf2ed02725d2678b74f7da7ed88ae39e06d3122540e8e7d35f31b56a092"
+    },
+    {
+      "vector_id": "ENQUEUE_UNAVAILABLE",
+      "kind": "enqueue",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": false,
+        "available": false,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "INDETERMINATE",
+        "primary_reason": "HANDOFF_UNAVAILABLE",
+        "reason_codes": [
+          "HANDOFF_UNAVAILABLE"
+        ]
+      },
+      "canonical_fingerprint": "580f5981d2ff5687f3c5fd2da68c4c803212c6a109c1faff6b7ed2f678ad93ef"
+    },
+    {
+      "vector_id": "ENQUEUE_INTEGRITY",
+      "kind": "enqueue",
+      "input": {
+        "integrity": false,
+        "synthetic": false,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": false,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "INTEGRITY_FAILURE",
+        "reason_codes": [
+          "INTEGRITY_FAILURE"
+        ]
+      },
+      "canonical_fingerprint": "029ef444b0b3c825f1c265cdfe4e3024fcb36daffec81125a659bcd743b60657"
+    },
+    {
+      "vector_id": "ENQUEUE_MULTI_FAILURE_PRECEDENCE",
+      "kind": "enqueue",
+      "input": {
+        "integrity": false,
+        "synthetic": true,
+        "handoff_valid": true,
+        "already_consumed": false,
+        "expired": true,
+        "available": true,
+        "identical_replay": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "INTEGRITY_FAILURE",
+        "reason_codes": [
+          "HANDOFF_EXPIRED",
+          "INTEGRITY_FAILURE",
+          "SYNTHETIC_INPUT"
+        ]
+      },
+      "canonical_fingerprint": "a9fbc71b171e6554357d94db513e8652b8fb4dd6d6d354d558876337b6f6a9e2"
+    },
+    {
+      "vector_id": "CLAIM_NEW",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "CLAIMED",
+        "primary_reason": "CLAIMED_NEW",
+        "reason_codes": [
+          "CLAIMED_NEW"
+        ]
+      },
+      "canonical_fingerprint": "37b7887b030e64be3a6e9c913695484c665f039e639414ccdd6a76590587c7ce"
+    },
+    {
+      "vector_id": "CLAIM_SAFE_RECLAIM",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "CLAIMED",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": true
+      },
+      "expected": {
+        "result": "CLAIMED",
+        "primary_reason": "CLAIMED_AFTER_SAFE_PRE_ARM_LEASE_EXPIRY",
+        "reason_codes": [
+          "CLAIMED_AFTER_SAFE_PRE_ARM_LEASE_EXPIRY"
+        ]
+      },
+      "canonical_fingerprint": "02bf930239d1cff71c1ce5e6d8412cff8a8f2a0ac2e757b771751e5c43e388a0"
+    },
+    {
+      "vector_id": "CLAIM_SYNTHETIC",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": true,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "SYNTHETIC_INPUT",
+        "reason_codes": [
+          "SYNTHETIC_INPUT"
+        ]
+      },
+      "canonical_fingerprint": "f73da498c3a6aa6c552009fd33d043fabad5a7c049f740aee1640a5f33d3e711"
+    },
+    {
+      "vector_id": "CLAIM_TERMINAL",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": true,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "TERMINAL_ALREADY_RECORDED",
+        "reason_codes": [
+          "TERMINAL_ALREADY_RECORDED"
+        ]
+      },
+      "canonical_fingerprint": "7e445574b9dff3f3aeadea92999b236ede1a48e326075a00c3f66a07d07dddb1"
+    },
+    {
+      "vector_id": "CLAIM_ALREADY_ACTIVE",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": true,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "CLAIM_ALREADY_ACTIVE",
+        "reason_codes": [
+          "CLAIM_ALREADY_ACTIVE"
+        ]
+      },
+      "canonical_fingerprint": "0ca2852d1dfe89b3a2909e80d53e82e43e52680a873ab2e02cd160c673398b04"
+    },
+    {
+      "vector_id": "CLAIM_AFTER_ARM",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": true,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "DISPATCH_ALREADY_ARMED",
+        "reason_codes": [
+          "DISPATCH_ALREADY_ARMED"
+        ]
+      },
+      "canonical_fingerprint": "c6599aca5e467e09893ceeb4573414640b26e07ae47e80d8b0a05fa8f90c051e"
+    },
+    {
+      "vector_id": "CLAIM_INTENT_NOT_PENDING",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "CLAIMED",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "INTENT_NOT_PENDING",
+        "reason_codes": [
+          "INTENT_NOT_PENDING"
+        ]
+      },
+      "canonical_fingerprint": "4fabcdd965a42fe96753de76bb65024f9afa6bf1e3e779898cd1470eab710849"
+    },
+    {
+      "vector_id": "CLAIM_CLAIMANT_STALE",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "STALE",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "CLAIMANT_STALE",
+        "reason_codes": [
+          "CLAIMANT_STALE"
+        ]
+      },
+      "canonical_fingerprint": "c6bdd3be29babf0590bdb156683d0a70f76dbb1f214d4087cf6ee6e2d63beae3"
+    },
+    {
+      "vector_id": "CLAIM_CLAIMANT_UNKNOWN",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "INDETERMINATE",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "INDETERMINATE",
+        "primary_reason": "CLAIMANT_UNAVAILABLE",
+        "reason_codes": [
+          "CLAIMANT_UNAVAILABLE"
+        ]
+      },
+      "canonical_fingerprint": "4f2be867c2b684702e1894d09dbdfdc9a33fd53c5cc4d09ba1c52a9d82db9a78"
+    },
+    {
+      "vector_id": "CLAIM_AUTHORITY_STALE",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "REJECTED",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "AUTHORITY_STALE",
+        "reason_codes": [
+          "AUTHORITY_STALE"
+        ]
+      },
+      "canonical_fingerprint": "56c2d3afb68b35b480965484709d6a2a492f568d0c0d17c7857bff1f5122547e"
+    },
+    {
+      "vector_id": "CLAIM_AUTHORITY_UNKNOWN",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "INDETERMINATE",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "INDETERMINATE",
+        "primary_reason": "AUTHORITY_UNAVAILABLE",
+        "reason_codes": [
+          "AUTHORITY_UNAVAILABLE"
+        ]
+      },
+      "canonical_fingerprint": "b7df5d892852c63c858c1ae96dc56cc951733edf06b8f5c3fa3ff571a62ca243"
+    },
+    {
+      "vector_id": "CLAIM_EXPIRED",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": true,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "EXPIRED",
+        "reason_codes": [
+          "EXPIRED"
+        ]
+      },
+      "canonical_fingerprint": "4b5187129911004c974bcd099bec6b0d35741b0832412ecc5fc7d7a11b261dc0"
+    },
+    {
+      "vector_id": "CLAIM_CAS_MISMATCH",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": false,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "CAS_MISMATCH",
+        "reason_codes": [
+          "CAS_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "9af85c9dac2376a8e386fbe8cad9ef7119cb492362cc7f3920f8ba8ac98b6be7"
+    },
+    {
+      "vector_id": "CLAIM_INTEGRITY",
+      "kind": "claim",
+      "input": {
+        "integrity": false,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": false,
+        "arm_exists": false,
+        "terminal": false,
+        "claimant_result": "CURRENT",
+        "authority_result": "CURRENT",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "INTEGRITY_FAILURE",
+        "reason_codes": [
+          "INTEGRITY_FAILURE"
+        ]
+      },
+      "canonical_fingerprint": "3570e53b9d48a84fa8528563a1e8a466b70be16f36fb29dafbba74b256741889"
+    },
+    {
+      "vector_id": "CLAIM_MULTI_FAILURE_PRECEDENCE",
+      "kind": "claim",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "state": "PENDING",
+        "active_claim": true,
+        "arm_exists": true,
+        "terminal": true,
+        "claimant_result": "CURRENT",
+        "authority_result": "REJECTED",
+        "expired": false,
+        "cas_match": true,
+        "safe_expired_reclaim": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "TERMINAL_ALREADY_RECORDED",
+        "reason_codes": [
+          "AUTHORITY_STALE",
+          "CLAIM_ALREADY_ACTIVE",
+          "DISPATCH_ALREADY_ARMED",
+          "TERMINAL_ALREADY_RECORDED"
+        ]
+      },
+      "canonical_fingerprint": "1b2c80781266d941622cddfa42bac3f013548eb3980d65fce8d26278b86d0348"
+    },
+    {
+      "vector_id": "LEASE_RENEW",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": true,
+        "arm_exists": false,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "RENEWED",
+        "primary_reason": "RENEWED",
+        "reason_codes": [
+          "RENEWED"
+        ]
+      },
+      "canonical_fingerprint": "2e27bb5eba86fc9ec8d080e98277fdba99302dc9db73b84315aa812a1a4d00b7"
+    },
+    {
+      "vector_id": "LEASE_CLAIM_STALE",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": false,
+        "token_match": true,
+        "arm_exists": false,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "CLAIM_STALE",
+        "reason_codes": [
+          "CLAIM_STALE"
+        ]
+      },
+      "canonical_fingerprint": "b19694dfd6141827d4e4b77180afeca82ff20b4715131f68aa6b71840d7afb88"
+    },
+    {
+      "vector_id": "LEASE_STALE_TOKEN",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": false,
+        "arm_exists": false,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "TOKEN_MISMATCH",
+        "reason_codes": [
+          "TOKEN_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "32c782ec4251a363a3a17f571ff4e6c1c71edf148c230e6c6bdb37cdad7dd74a"
+    },
+    {
+      "vector_id": "LEASE_AFTER_ARM",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": true,
+        "arm_exists": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "DISPATCH_ALREADY_ARMED",
+        "reason_codes": [
+          "DISPATCH_ALREADY_ARMED"
+        ]
+      },
+      "canonical_fingerprint": "480788f1aaa38e82bca816e236de87b6a0c5e69d7def202d752481c1696b5768"
+    },
+    {
+      "vector_id": "LEASE_EXPIRED",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": true,
+        "arm_exists": false,
+        "expired": true,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "EXPIRED",
+        "reason_codes": [
+          "EXPIRED"
+        ]
+      },
+      "canonical_fingerprint": "d32330b8c0ef2ce24d5890f603d21d397bced56e22a3e967a0a8c5b11798c5ca"
+    },
+    {
+      "vector_id": "LEASE_CAS_MISMATCH",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": true,
+        "arm_exists": false,
+        "expired": false,
+        "cas_match": false
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "CAS_MISMATCH",
+        "reason_codes": [
+          "CAS_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "7f9e8b1631a5e3d5cf0eef30eae16b4e6792e3fd65484e89e6f7ea532ce65b8c"
+    },
+    {
+      "vector_id": "LEASE_INTEGRITY",
+      "kind": "lease",
+      "input": {
+        "integrity": false,
+        "claim_current": true,
+        "token_match": true,
+        "arm_exists": false,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "INTEGRITY_FAILURE",
+        "reason_codes": [
+          "INTEGRITY_FAILURE"
+        ]
+      },
+      "canonical_fingerprint": "f4819e2f4c8f0dc71cf5a52054b261946f13d5cce15a5706c08c665eb59df7d5"
+    },
+    {
+      "vector_id": "LEASE_MULTI_FAILURE_PRECEDENCE",
+      "kind": "lease",
+      "input": {
+        "integrity": true,
+        "claim_current": true,
+        "token_match": false,
+        "arm_exists": true,
+        "expired": true,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "REJECTED",
+        "primary_reason": "TOKEN_MISMATCH",
+        "reason_codes": [
+          "DISPATCH_ALREADY_ARMED",
+          "EXPIRED",
+          "TOKEN_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "a9d20d2d9d4cbb48bf547a6bc53e47b80d4959ae4e6ed8e6fa85288605ca5146"
+    },
+    {
+      "vector_id": "ARM_CURRENT",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "ARMED",
+        "primary_reason": "ARMED",
+        "reason_codes": [
+          "ARMED"
+        ]
+      },
+      "canonical_fingerprint": "5d8ef0fe889fa4c7f7dd9335b734d0cb6211ed5cbd34804b1c39ea1f36edc422"
+    },
+    {
+      "vector_id": "ARM_SYNTHETIC",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": true,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "SYNTHETIC_INPUT",
+        "reason_codes": [
+          "SYNTHETIC_INPUT"
+        ]
+      },
+      "canonical_fingerprint": "893c2c42ed1ab830fdcdd4f279d24b7289ab6e8a6746da4f6931bc5dbb1129d2"
+    },
+    {
+      "vector_id": "ARM_TERMINAL",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": true,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "TERMINAL_ALREADY_RECORDED",
+        "reason_codes": [
+          "TERMINAL_ALREADY_RECORDED"
+        ]
+      },
+      "canonical_fingerprint": "3d07d3d12de72df7edc439d877855561c248feeb65b27e242ebec07eb98f8e4c"
+    },
+    {
+      "vector_id": "ARM_DUPLICATE",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": true,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "ALREADY_ARMED",
+        "reason_codes": [
+          "ALREADY_ARMED"
+        ]
+      },
+      "canonical_fingerprint": "234d85ff2e9efeeb516103e28ec55642f144c7153368cc8eba4550bfbb91b047"
+    },
+    {
+      "vector_id": "ARM_CLAIM_STALE",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": false,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "CLAIM_STALE",
+        "reason_codes": [
+          "CLAIM_STALE"
+        ]
+      },
+      "canonical_fingerprint": "e652e0aeca87e80a267d392f9d44cc2aec69409028571be65b8da2a1addcf373"
+    },
+    {
+      "vector_id": "ARM_AUTHORITY_STALE",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "REJECTED",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "AUTHORITY_STALE",
+        "reason_codes": [
+          "AUTHORITY_STALE"
+        ]
+      },
+      "canonical_fingerprint": "3e13a5db984227528af9439a906084d9ce83dcd87782b8a2ecb3e5cc67c968f2"
+    },
+    {
+      "vector_id": "ARM_AUTHORITY_UNKNOWN",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "INDETERMINATE",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "INDETERMINATE",
+        "primary_reason": "OBSERVATION_UNAVAILABLE",
+        "reason_codes": [
+          "OBSERVATION_UNAVAILABLE"
+        ]
+      },
+      "canonical_fingerprint": "9a4c9062d847892be0559550902de8176343e309f67437779eaed0f48151ced4"
+    },
+    {
+      "vector_id": "ARM_FENCED",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": true,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "FENCED",
+        "reason_codes": [
+          "FENCED"
+        ]
+      },
+      "canonical_fingerprint": "5a1bdaf7b7bd28a8e69b6d072b5d25df215f36aeb16d19f5be0c9a6567e680d3"
+    },
+    {
+      "vector_id": "ARM_EPOCH_STALE",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": false,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "EPOCH_STALE",
+        "reason_codes": [
+          "EPOCH_STALE"
+        ]
+      },
+      "canonical_fingerprint": "336c5b5206d58b2eaea708a1cdae90784adf6c9e7bfc8c6038699552430af9b1"
+    },
+    {
+      "vector_id": "ARM_HOST_MISMATCH",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": false,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "HOST_MISMATCH",
+        "reason_codes": [
+          "HOST_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "eb861b1dad40f98ffb4c0d94eddc40a3d81cca11e134b759154b72b3efd299c7"
+    },
+    {
+      "vector_id": "ARM_EXPIRED",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": true,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "EXPIRED",
+        "reason_codes": [
+          "EXPIRED"
+        ]
+      },
+      "canonical_fingerprint": "cb78a2acc7519c6c5ae2ca2e7865595dc153bbb166808082edc7bfd2ae43facf"
+    },
+    {
+      "vector_id": "ARM_TOKEN_MISMATCH",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": false,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "TOKEN_MISMATCH",
+        "reason_codes": [
+          "TOKEN_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "259c32143cfbae52bf361162845002b0c4e269ff4233b79bb19f0e4fe5571297"
+    },
+    {
+      "vector_id": "ARM_CAS_MISMATCH",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": false
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "CAS_MISMATCH",
+        "reason_codes": [
+          "CAS_MISMATCH"
+        ]
+      },
+      "canonical_fingerprint": "cfdbe6aa08c2e63d560b1b9041b2d4f7400e463a0c7658a649b306085b07c784"
+    },
+    {
+      "vector_id": "ARM_INTEGRITY",
+      "kind": "arm",
+      "input": {
+        "integrity": false,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "CURRENT",
+        "fenced": false,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": false,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "INTEGRITY_FAILURE",
+        "reason_codes": [
+          "INTEGRITY_FAILURE"
+        ]
+      },
+      "canonical_fingerprint": "53231dddaebde4f37a1b850a6dad8788ab41aed29e25c9f2d6922d7a554cf448"
+    },
+    {
+      "vector_id": "ARM_MULTI_FAILURE_PRECEDENCE",
+      "kind": "arm",
+      "input": {
+        "integrity": true,
+        "synthetic": false,
+        "claim_current": true,
+        "token_match": true,
+        "already_armed": false,
+        "terminal": false,
+        "authority_result": "REJECTED",
+        "fenced": true,
+        "epoch_match": true,
+        "host_match": true,
+        "expired": true,
+        "cas_match": true
+      },
+      "expected": {
+        "result": "NOT_EXECUTABLE",
+        "primary_reason": "AUTHORITY_STALE",
+        "reason_codes": [
+          "AUTHORITY_STALE",
+          "EXPIRED",
+          "FENCED"
+        ]
+      },
+      "canonical_fingerprint": "bc30680f5cec3f7d9a05352390c36f04c8ac849ac9ebdf1b32a539cfea4426cb"
+    },
+    {
+      "vector_id": "ATTEMPT_PRE_EFFECT_NOT_EXECUTED",
+      "kind": "attempt",
+      "input": {
+        "outcome": "PRE_EFFECT_NOT_EXECUTED",
+        "profile_retryable": true
+      },
+      "expected": {
+        "effect_may_have_occurred": false,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "c16f8bac5a2c24692bfbcf6d74bf6dfc895328e83aa365941085e1861fc48cb5"
+    },
+    {
+      "vector_id": "ATTEMPT_DISPATCHED",
+      "kind": "attempt",
+      "input": {
+        "outcome": "DISPATCHED",
+        "profile_retryable": false
+      },
+      "expected": {
+        "effect_may_have_occurred": true,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "23a58d793a4f195ac2da7290edeb1eac7077a9a66e2bdca2b8ff1a0024906064"
+    },
+    {
+      "vector_id": "ATTEMPT_ACKED",
+      "kind": "attempt",
+      "input": {
+        "outcome": "ACKED",
+        "profile_retryable": false
+      },
+      "expected": {
+        "effect_may_have_occurred": true,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "309d465fbec0744b04d475371615c8f20c48243abb108f1c82f3a4750e756ea9"
+    },
+    {
+      "vector_id": "ATTEMPT_SUCCEEDED",
+      "kind": "attempt",
+      "input": {
+        "outcome": "SUCCEEDED",
+        "profile_retryable": false
+      },
+      "expected": {
+        "effect_may_have_occurred": true,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "5f4f7b5dce0ed771e9752928e6454f08aeb63d462dcf0f41c8587eef670dfb22"
+    },
+    {
+      "vector_id": "ATTEMPT_FAILED",
+      "kind": "attempt",
+      "input": {
+        "outcome": "FAILED",
+        "profile_retryable": false
+      },
+      "expected": {
+        "effect_may_have_occurred": true,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "098f2003ef26f26536313b98dbe9a4cda154ff0014571c7fbbb00fac9ba878fe"
+    },
+    {
+      "vector_id": "ATTEMPT_UNKNOWN",
+      "kind": "attempt",
+      "input": {
+        "outcome": "UNKNOWN",
+        "profile_retryable": false
+      },
+      "expected": {
+        "effect_may_have_occurred": true,
+        "automatic_retry_eligible": false
+      },
+      "canonical_fingerprint": "0e75cc4ef1c54e4be09055c99dc16dba32b66b9ffbd12e52e12386a31479f55d"
+    },
+    {
+      "vector_id": "RECEIPT_NEW",
+      "kind": "receipt",
+      "input": {
+        "mode": "NEW"
+      },
+      "expected": {
+        "result": "APPLIED",
+        "event_created": true,
+        "reconciliation_opened": false
+      },
+      "canonical_fingerprint": "d65dc0adffbdf76e097d097d00e0a0201d7913ab49b77700763c21cd837c1850"
+    },
+    {
+      "vector_id": "RECEIPT_EXACT_DUPLICATE",
+      "kind": "receipt",
+      "input": {
+        "mode": "EXACT_DUPLICATE"
+      },
+      "expected": {
+        "result": "REPLAYED",
+        "event_created": false,
+        "reconciliation_opened": false
+      },
+      "canonical_fingerprint": "1527eea3d6af0fc923c56b35e1a415587c2b242d1bca7cf854a614eeaacd90f5"
+    },
+    {
+      "vector_id": "RECEIPT_CHANGED_SAME_KEY",
+      "kind": "receipt",
+      "input": {
+        "mode": "CHANGED_SAME_KEY"
+      },
+      "expected": {
+        "result": "CONFLICT",
+        "event_created": true,
+        "reconciliation_opened": true
+      },
+      "canonical_fingerprint": "d0f2e6480fd2bd70ed1e5c076d452fac60aa9a7e070a6b71258accee251e4a51"
+    },
+    {
+      "vector_id": "RECOVERY_HANDOFF_COMMITTED_INTENT_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "HANDOFF_COMMITTED_INTENT_ABSENT"
+      },
+      "expected": {
+        "decision": "DETERMINISTIC_ENQUEUE_NO_EFFECT"
+      },
+      "canonical_fingerprint": "e5ac9b9d98dce80dc03a1cde22204ae9773a3638cc52773cc305215372f14da3"
+    },
+    {
+      "vector_id": "RECOVERY_INTENT_COMMITTED_CLAIM_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "INTENT_COMMITTED_CLAIM_ABSENT"
+      },
+      "expected": {
+        "decision": "REMAIN_PENDING"
+      },
+      "canonical_fingerprint": "380012501083fc318fc9ab574f65466480535239415156b2aef1bd09cd685cf5"
+    },
+    {
+      "vector_id": "RECOVERY_CLAIM_COMMITTED_ARM_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "CLAIM_COMMITTED_ARM_ABSENT"
+      },
+      "expected": {
+        "decision": "RECLAIM_ONLY_AFTER_EXPIRY_AND_RECHECK"
+      },
+      "canonical_fingerprint": "c2217cd14c1e5b7c0261adf4d735b0cce1b42c1be0eac1d2772cf131e2329226"
+    },
+    {
+      "vector_id": "RECOVERY_ARM_COMMITTED_CALL_UNCERTAIN",
+      "kind": "recovery",
+      "input": {
+        "window": "ARM_COMMITTED_CALL_UNCERTAIN"
+      },
+      "expected": {
+        "decision": "UNKNOWN_NO_AUTOMATIC_RETRY"
+      },
+      "canonical_fingerprint": "cf086956cbfe9458b32fc3030daf140c371d4ac556f5ae8ff926f80fef9e0f21"
+    },
+    {
+      "vector_id": "RECOVERY_CALL_RETURNED_RECEIPT_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "CALL_RETURNED_RECEIPT_ABSENT"
+      },
+      "expected": {
+        "decision": "UNKNOWN_AWAIT_RECEIPT_OR_QUERY"
+      },
+      "canonical_fingerprint": "b1c6580d484987a4e8803958dba801300ce4991746a64cf65ae0feb7ce9ff38f"
+    },
+    {
+      "vector_id": "RECOVERY_RECEIPT_COMMITTED_PROJECTION_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "RECEIPT_COMMITTED_PROJECTION_ABSENT"
+      },
+      "expected": {
+        "decision": "REBUILD_PROJECTION_NO_EFFECT"
+      },
+      "canonical_fingerprint": "10bdef74238ffd01cf72455ace4098ba66a0be2d18e54282c877793ef774fac1"
+    },
+    {
+      "vector_id": "RECOVERY_DEAD_LETTER_PROJECTION_ABSENT",
+      "kind": "recovery",
+      "input": {
+        "window": "DEAD_LETTER_PROJECTION_ABSENT"
+      },
+      "expected": {
+        "decision": "REBUILD_WITH_OUTCOME_NOT_PROVEN"
+      },
+      "canonical_fingerprint": "9f7d1cd593d9ecc156f0f3f39578c761677a2cf41a00d7cbe6d1784fed2812e1"
+    },
+    {
+      "vector_id": "RECOVERY_RECONCILIATION_REPLY_LOST",
+      "kind": "recovery",
+      "input": {
+        "window": "RECONCILIATION_REPLY_LOST"
+      },
+      "expected": {
+        "decision": "REPLAY_FIRST_UPDATE"
+      },
+      "canonical_fingerprint": "5e479a0b221b15bee9efc1ca113cb75d2aa67c2f7cb27c8f558f6d7b73c04fdb"
+    }
+  ],
+  "synthetic_witness": {
+    "interface_version": "agents-os.f5-synthetic-delivery-recovery-witness.v0.1-r1",
+    "witness_ref": "synthetic-f5-r1:witness:delivery-recovery",
+    "witness_namespace": "synthetic-f5-r1",
+    "environment": "SYNTHETIC_TEST",
+    "fingerprint_domain": "agents-os.f5-r1-synthetic-witness.v0.1",
+    "prospective_F4_handoff_requirement_ref": "synthetic-f5-r1:requirement:f4-handoff",
+    "prospective_F4_handoff_requirement_fingerprint": "a8a9761598d57cdd8a50226eed57559adc18e85fa1c72ed1cfbcfb7a44ee9dc5",
+    "vector_set_fingerprint": "658076fd46592ca6bdd720c166b9545f616d8efd69d3c50f65e3d07de47b5f54",
+    "authority_eligible": false,
+    "runtime_consumable": false,
+    "recovery_importable": false,
+    "physical_effect_boundary": "NOT_EXECUTABLE",
+    "terminal_outcome": "NOT_EXECUTED",
+    "accepted_real_handoff_count": 0,
+    "armed_dispatch_count": 0,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "canonical_fingerprint": "bc80dd4ef7d1197bfb219f8b317be0682e304f4b520be49e72b931b07cfb22c9"
+  },
+  "assertions": {
+    "accepted_real_handoff_count": 0,
+    "armed_dispatch_count": 0,
+    "runtime_consumable_count": 0,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "summary": {
+    "schema_profile_count": 13,
+    "decision_vector_count": 64,
+    "recovery_vector_count": 8,
+    "negative_or_fail_closed_vector_count": 44
+  },
+  "fixture_canonical_sha256": "63d7469c60ab4f27195c838bdaa93f203fc681db67fb79111408250d2b74fef9"
+}

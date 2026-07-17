@@ -1,0 +1,153 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f5-r1-outbox-delivery-recovery-self-review-v0.1
+date: 2026-07-17
+reviewer:
+  identity: Nobao
+  role: F5_R1_author
+  independent: false
+  may_substitute_for_fresh_independent_review: false
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+      sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+      sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+      sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+    - role: independent_semantic_validator
+      path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+      sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 0
+
+author_findings_closed_before_hash_fix:
+  - id: F5-R1-ASR-01
+    severity: blocker
+    finding: >-
+      The initial retry wording allowed a second arm after a
+      PRE_EFFECT_NOT_EXECUTED attempt, conflicting with frozen F4 one-invocation
+      and one-physical-claim semantics.
+    correction: >-
+      R1 now permits automatic replay only for pre-arm enqueue, claim, lease,
+      and lost-reply work. Every post-arm outcome has
+      automatic_retry_eligible=false; replacement requires a new upstream F4
+      handoff.
+    status: CLOSED
+  - id: F5-R1-ASR-02
+    severity: major
+    finding: >-
+      The first claim schema did not fingerprint-bind the F4-owned currentness
+      observation consumed by the claim reducer.
+    correction: >-
+      Added exact claim observation ref/fingerprint and an observation_purpose
+      enum separating CLAIM from the later DISPATCH_ARM observation.
+    status: CLOSED
+  - id: F5-R1-ASR-03
+    severity: major
+    finding: >-
+      Claimant or authority INDETERMINATE originally collapsed into a stale
+      reason and did not preserve total fail-closed result semantics.
+    correction: >-
+      Added CLAIMANT_UNAVAILABLE and AUTHORITY_UNAVAILABLE with deterministic
+      precedence and INDETERMINATE results.
+    status: CLOSED
+  - id: F5-R1-ASR-04
+    severity: major
+    finding: >-
+      Safe expired-lease reclaim was described as a fictional transition back
+      to PENDING and the reducer rejected the realistic CLAIMED projection.
+    correction: >-
+      The reducer now accepts only an explicit expired pre-arm CLAIMED state,
+      advances claim epoch previous-plus-one, and never erases the prior fact.
+    status: CLOSED
+  - id: F5-R1-ASR-05
+    severity: major
+    finding: >-
+      An arm-time authority check alone did not state what happens when trusted
+      time expires between transaction commit and adapter invocation.
+    correction: >-
+      Added no-scheduling-gap and immediate trusted-time rules. Expiry skips
+      the adapter and records PRE_EFFECT_NOT_EXECUTED; restart or uncertainty
+      becomes UNKNOWN without re-arm.
+    status: CLOSED
+
+boundary_review:
+  consumes_F4_authority_without_recomputation: PASS
+  creates_no_permission_level_or_color_model: PASS
+  creates_no_second_identity_or_canonical_writer: PASS
+  creates_no_effect_authority: PASS
+  PBL_no_match_is_not_authority: PASS
+  synthetic_evidence_is_nonconvertible: PASS
+  no_positive_real_handoff_claim: PASS
+  no_exactly_once_external_effect_claim: PASS
+  one_physical_claim_per_F4_invocation: PASS
+  no_post_arm_automatic_retry: PASS
+  ACK_is_not_success: PASS
+  dead_letter_is_not_effect_outcome: PASS
+  projection_rebuild_is_zero_effect: PASS
+  F6_and_implementation_remain_separate: PASS
+
+validator_reproduction:
+  result: PASS_NO_BLOCKER
+  schema_profile_count: 13
+  decision_vector_count: 64
+  recovery_vector_count: 8
+  negative_mutations_rejected: 15
+  fixture_canonical_sha256: 63d7469c60ab4f27195c838bdaa93f203fc681db67fb79111408250d2b74fef9
+  accepted_real_handoff_count: 0
+  armed_dispatch_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+validation:
+  start_decision_yaml_parse: PASS
+  fixture_json_parse: PASS
+  builder_python_compile: PASS
+  validator_python_compile: PASS
+  builder_reproduction: BYTE_EQUAL
+  schema_profile_inventory: PASS_13_OF_13
+  decision_vector_inventory: PASS_64_OF_64
+  reason_precedence_vectors: PASS
+  crash_window_vectors: PASS_8_OF_8
+  fully_resigned_negative_mutations: PASS_15_OF_15_REJECTED
+  utf8_lf_no_bom: PASS
+  scoped_git_diff_check: PASS
+
+review_limitations:
+  - author_self_review_is_not_independent
+  - no_real_F4_handoff_exists_or_was_consumed
+  - no_runtime_database_host_dispatcher_provider_or_effect_was_executed
+  - validator_PASS_proves_only_fixed_synthetic_semantic_constructibility
+
+non_authorization:
+  F5_accepted: false
+  F5_frozen: false
+  F6_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_push_PR_merge_authorized: false
+
+next_gate:
+  name: F5_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  reviewer_must_be_independent_of_author_run: true
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]

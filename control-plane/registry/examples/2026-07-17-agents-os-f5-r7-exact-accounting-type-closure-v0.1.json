@@ -1,0 +1,368 @@
+{
+  "adversarial_profile": {
+    "individual_fully_resigned_boolean_substitution_count": 37,
+    "multi_field_R6_counterexample": {
+      "R6_independent_review_rendered_sha256": "79e949da2501d7acaecc5898b19caa461b54776e81e0cc71ca30b51bfa21e7fa",
+      "changed_non_digest_fields": 4,
+      "expected_R7_decision": "REJECT_WRONG_SCALAR_TYPE",
+      "mutated_json_pointers": [
+        "/arm_guard_cases/0/derived/modeled_event_delta",
+        "/arm_guard_cases/0/derived/modeled_call_authorization_delta",
+        "/arm_guard_cases/0/derived/total_event_count",
+        "/arm_guard_cases/0/derived/total_call_authorization_count"
+      ],
+      "recomputed_arm_guard_cases_fingerprint": "82dc7e3985c2b3a418f247cff1e8bdfa1e07e19b6bff0dc4cd2d4c47e7cdf697",
+      "recomputed_fixture_canonical_sha256": "2b4fce04c22ab5ec2b91265878e8e21db3d6a54956631d987540c3a644601d09",
+      "rendered_file_sha256": "7ea247d8b876f57d802df9f4bfcaf2a1a18002066137b544600a73838eb608c5",
+      "replacement_json_value": true,
+      "source_case_id": "FIRST_APPLY_1_ELIGIBLE"
+    },
+    "prior_independent_accepted_zero_or_one_substitution_count": 34,
+    "required_individual_result": "REJECT_WRONG_SCALAR_TYPE"
+  },
+  "adversarial_profile_fingerprint": "6b409d7b7dabf08bd2419a0c719786a8afa9b7c089ba98e6aa2af768153941b9",
+  "assertions": {
+    "R5_receipt_or_arm_semantics_changed": false,
+    "R6_first_apply_semantics_changed": false,
+    "accepted_real_handoff_count": 0,
+    "armed_dispatch_count": 0,
+    "claim_event_count": 0,
+    "external_effect_count": 0,
+    "provider_call_count": 0,
+    "raw_secret_count": 0,
+    "runtime_consumable_count": 0,
+    "synthetic_nonauthority": true,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "assertions_fingerprint": "7ea48633e56a44363a4983308e51e19312c3be61bbacfb1f4850bc95f006a194",
+  "authority_eligible": false,
+  "count_inventory": [
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/0/derived/modeled_event_delta",
+      "ordinal": 1,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/0/derived/modeled_call_authorization_delta",
+      "ordinal": 2,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/0/derived/total_event_count",
+      "ordinal": 3,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/0/derived/total_call_authorization_count",
+      "ordinal": 4,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/1/derived/modeled_event_delta",
+      "ordinal": 5,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/1/derived/modeled_call_authorization_delta",
+      "ordinal": 6,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/1/derived/total_event_count",
+      "ordinal": 7,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/1/derived/total_call_authorization_count",
+      "ordinal": 8,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/2/derived/modeled_event_delta",
+      "ordinal": 9,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/2/derived/modeled_call_authorization_delta",
+      "ordinal": 10,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/2/derived/total_event_count",
+      "ordinal": 11,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/2/derived/total_call_authorization_count",
+      "ordinal": 12,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/2/raw_input/stored_arm_state/committed_event_count",
+      "ordinal": 13,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/2/raw_input/stored_arm_state/committed_call_authorization_count",
+      "ordinal": 14,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/3/derived/modeled_event_delta",
+      "ordinal": 15,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/3/derived/modeled_call_authorization_delta",
+      "ordinal": 16,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/3/derived/total_event_count",
+      "ordinal": 17,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/3/derived/total_call_authorization_count",
+      "ordinal": 18,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/3/raw_input/stored_arm_state/committed_event_count",
+      "ordinal": 19,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/3/raw_input/stored_arm_state/committed_call_authorization_count",
+      "ordinal": 20,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/4/derived/modeled_event_delta",
+      "ordinal": 21,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 0,
+      "json_pointer": "/arm_guard_cases/4/derived/modeled_call_authorization_delta",
+      "ordinal": 22,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/4/derived/total_event_count",
+      "ordinal": 23,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "DERIVED_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/4/derived/total_call_authorization_count",
+      "ordinal": 24,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/4/raw_input/stored_arm_state/committed_event_count",
+      "ordinal": 25,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "STORED_FIRST_ACCOUNTING",
+      "integer_value": 1,
+      "json_pointer": "/arm_guard_cases/4/raw_input/stored_arm_state/committed_call_authorization_count",
+      "ordinal": 26,
+      "section": "arm_guard_cases"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/accepted_real_handoff_count",
+      "ordinal": 27,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/claim_event_count",
+      "ordinal": 28,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/armed_dispatch_count",
+      "ordinal": 29,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/runtime_consumable_count",
+      "ordinal": 30,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/external_effect_count",
+      "ordinal": 31,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/provider_call_count",
+      "ordinal": 32,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "NONAUTHORITY_ASSERTION_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/assertions/raw_secret_count",
+      "ordinal": 33,
+      "section": "assertions"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "PROOF_SUMMARY_COUNT",
+      "integer_value": 5,
+      "json_pointer": "/summary/arm_guard_case_count",
+      "ordinal": 34,
+      "section": "summary"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "PROOF_SUMMARY_COUNT",
+      "integer_value": 2,
+      "json_pointer": "/summary/first_apply_case_count",
+      "ordinal": 35,
+      "section": "summary"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "PROOF_SUMMARY_COUNT",
+      "integer_value": 6,
+      "json_pointer": "/summary/adversarial_case_count",
+      "ordinal": 36,
+      "section": "summary"
+    },
+    {
+      "expected_json_type": "INTEGER_NOT_BOOLEAN",
+      "field_class": "PROOF_SUMMARY_COUNT",
+      "integer_value": 0,
+      "json_pointer": "/summary/real_effect_count",
+      "ordinal": 37,
+      "section": "summary"
+    }
+  ],
+  "count_inventory_fingerprint": "a708579e092139cfcac7d1a7d2d33b1f7af383ef4ea10b8211b57730db99dacb",
+  "environment": "SYNTHETIC_TEST",
+  "exact_integer_profile": {
+    "boolean_is_integer": false,
+    "closed_count_occurrence_total": 37,
+    "float_is_integer": false,
+    "json_scalar_type": "INTEGER",
+    "maximum": 9007199254740991,
+    "minimum": 0,
+    "validation_order": "TYPE_BEFORE_EQUALITY_MAPPING_OR_DIGEST_TRUST",
+    "zero_or_one_occurrence_total": 34
+  },
+  "exact_integer_profile_fingerprint": "375a7107d0c9021ab67c4522f0a662c131682ef67d37a0512c7985808d41b155",
+  "fixture_canonical_sha256": "343a13364cd08c7b6d190c2cf49df264a898c8626bfbbe7eacc2a4dfbe2dab06",
+  "fixture_interface": "agents-os.f5-r7-exact-accounting-type-closure-fixture.v0.1",
+  "recovery_importable": false,
+  "runtime_consumable": false,
+  "source_binding": {
+    "file_sha256": "853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8",
+    "fixture_canonical_sha256": "5447834426db9fbd49d1261f48bba788e3a546f585f289fe3966e720bb9da2b2",
+    "fixture_interface": "agents-os.f5-r6-first-apply-eligibility-guard-fixture.v0.1",
+    "path": "control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json"
+  },
+  "source_binding_fingerprint": "8aa423c9d5f6c5c58cd4e9d36b92fed74f455dbfefcff7b99fff0c8b7f27ec73",
+  "summary": {
+    "count_occurrence_total": 37,
+    "individual_boolean_mutation_total": 37,
+    "real_effect_count": 0,
+    "zero_or_one_occurrence_total": 34
+  },
+  "summary_fingerprint": "428cc5953099767647c5a81296192f00179ce8ae8acf98b6b978101ae92a5e39"
+}

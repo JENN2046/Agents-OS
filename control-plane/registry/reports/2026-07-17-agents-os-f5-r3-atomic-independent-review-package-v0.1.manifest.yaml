@@ -1,0 +1,179 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f5-r3-atomic-independent-review-package-v0.1
+date: 2026-07-17
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R3_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 12
+  precedence: [R3_explicit_replacements, R2_all_other_clauses, R1_all_other_clauses]
+  subjects:
+    - {revision: R1, role: normative_contract, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md, sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f}
+    - {revision: R1, role: deterministic_fixture_builder, path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py, sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793}
+    - {revision: R1, role: synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json, sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281}
+    - {revision: R1, role: independent_semantic_validator, path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py, sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f}
+    - {revision: R2, role: normative_four_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md, sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7}
+    - {revision: R2, role: full_effective_fixture_builder, path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py, sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd}
+    - {revision: R2, role: full_effective_synthetic_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json, sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f}
+    - {revision: R2, role: independent_full_effective_validator, path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py, sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c}
+    - {revision: R3, role: normative_seven_finding_amendment, path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md, sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd}
+    - {revision: R3, role: seven_finding_fixture_builder, path: control-plane/registry/build-f5-r3-seven-finding-closure.py, sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772}
+    - {revision: R3, role: seven_finding_closure_fixture, path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json, sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876}
+    - {revision: R3, role: independent_seven_finding_validator, path: control-plane/registry/validate-f5-r3-seven-finding-closure.py, sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: e1394f5a385263f9b7caf8f12c00722b4d75ae774c601d4507d28ba968afa4c9}
+  - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff}
+  - {role: frozen_F4_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2}
+  - {role: frozen_F4_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f4-r9-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 8648cb687608b1151c81d01582a1fb7a19a5811a66224abe621a25188dc30dd5}
+  - {role: immutable_F5_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-start-decision-v0.1.yaml, sha256: e7d0baecfec931cc659ee910e9e53cf2eeb46a8b893e42d811db0471ba2f603e}
+
+review_and_amendment_lineage:
+  - {role: prior_R1_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r1-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 80a65c0f5b6e7668675a60a78a4b4c2fb1fc08d99b85de0ecd268ac41fd080d2}
+  - {role: prior_R1_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r1-full-atomic-independent-review.yaml, sha256: 7f19c21612aba636680f4b730a2e665371409e24a5707165a3a71084f480c00a, result: BLOCK, may_substitute_for_current_judgment: false}
+  - {role: R1_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r1-independent-review-disposition-v0.1.yaml, sha256: 53fa9e5052320d540b0bbc3273c7610054faa90efcabf3eddca90f6b801fb6e4}
+  - {role: immutable_R2_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r2-four-finding-closure-start-decision-v0.1.yaml, sha256: 9962b82e951ffc21c81a4d6a9f93a7b3b30919e3af01eb02bf8296578e989428}
+  - {role: prior_R2_manifest, path: control-plane/registry/reports/2026-07-17-agents-os-f5-r2-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 0a7c56a03adfa28fd50974766e5bff01d016dd9d18bed5c6b43abd25c40b7c7d}
+  - {role: prior_R2_fresh_full_atomic_independent_review, path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r2-full-atomic-independent-review.yaml, sha256: 9c4296dd144b52e7a32492c6b3c4565968ec68fda1f05d535e24cb9247e86e1d, result: BLOCK, may_substitute_for_current_judgment: false}
+  - {role: R2_finding_disposition, path: control-plane/registry/reviews/2026-07-17-agents-os-f5-r2-independent-review-disposition-v0.1.yaml, sha256: d4a9b616eb399d8533d4c3e5f74f174fd453f3500b370b826fb177b1b7b43abf}
+  - {role: immutable_R3_start_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-r3-seven-finding-closure-start-decision-v0.1.yaml, sha256: da1edd01df29a2d334cd06d6c54705646934187315274c920acb1d896fb2a9de}
+
+author_evidence:
+  - role: R3_author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-seven-finding-closure-self-review.yaml
+    sha256: 0c16b439c67cb5429950419095d49d708cc607ff546191d2fd90dbfe9e226a71
+    may_substitute_for_independent_judgment: false
+
+declared_input_count: 32
+
+validator_commands:
+  - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+  - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+  - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f5-r3-seven-finding-closure.py
+  - >-
+    tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3
+    control-plane/registry/build-f5-r3-seven-finding-closure.py --output "$tmp"
+    && cmp -s "$tmp"
+    control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+    && rm -f "$tmp"
+
+required_review_questions:
+  - all_32_hashes_match_and_all_12_subjects_are_fully_read_unchanged
+  - R3_precedence_is_exact_and_R1_R2_subject_bytes_remain_immutable
+  - all_seven_R2_findings_are_closed_without_regression
+  - recursive_validation_precedes_every_fingerprint_calculation_or_trust
+  - floats_unsafe_integers_non_NFC_unknown_fields_unknown_enums_wrong_types_and_cross_field_failures_reject_after_full_resigning
+  - duplicate_JSON_keys_reject_before_object_materialization
+  - nullable_rules_are_bound_to_exact_schema_and_field_pairs
+  - schema_shapes_are_nonoccurring_and_not_used_as_zero_occurrence_evidence
+  - synthetic_nonauthority_scenario_reduces_to_NOT_EXECUTABLE_with_zero_claim_arm_or_call
+  - claim_epoch_is_previous_plus_one_and_lease_time_bounds_are_strict
+  - all_147_unordered_precedence_pairs_execute_both_raw_orderings
+  - all_294_ordering_trials_derive_identical_primary_reason_reason_codes_and_result_per_pair
+  - arm_relation_is_derived_from_reproducible_stored_and_submitted_request_bytes
+  - exact_arm_replay_returns_stored_first_accounting_with_zero_additional_Event_or_call
+  - changed_arm_bytes_and_unavailable_lookup_have_zero_call_authorization
+  - receipt_compatibility_emits_only_COMPATIBLE_or_MISMATCH
+  - receipt_currentness_derives_dedup_attestation_identity_query_epoch_fence_attempt_and_transition_results
+  - stale_receipts_are_HISTORY_ONLY_and_cannot_advance_current_projection_or_Task
+  - EFFECT_QUERY_RESULT_requires_authenticated_existing_effect_query
+  - all_five_receipt_results_have_exact_Event_reconciliation_and_projection_flags
+  - exact_ten_state_inventory_produces_exactly_100_ordered_transition_trials
+  - each_of_six_graph_mutations_changes_canonical_ID_or_token_and_propagates_all_dependent_refs_IDs_and_fingerprints
+  - coherent_formula_wrong_graphs_reject_for_formula_error_not_detached_map_mismatch
+  - builders_and_validators_import_neither_each_other_nor_runtime_implementation
+  - no_Actor_Task_color_role_relationship_trust_urgency_or_P0_P3_permission_classification_exists
+  - no_F1_F2_F3_F4_authority_reducer_is_recomputed_or_overridden
+  - synthetic_evidence_remains_nonauthority_and_all_runtime_effect_provider_secret_counts_are_zero
+  - no_internal_contradiction_validator_overclaim_or_unmapped_reducer_state_remains
+
+required_adversarial_checks:
+  - fully_resigned_float_utc_value_rejects
+  - fully_resigned_integer_above_JSON_safe_range_rejects
+  - fully_resigned_non_NFC_reference_rejects
+  - fully_resigned_unknown_root_field_rejects
+  - fully_resigned_unknown_object_field_rejects
+  - fully_resigned_unknown_enum_rejects
+  - fully_resigned_wrong_scalar_type_rejects
+  - fully_resigned_claim_epoch_cross_field_failure_rejects
+  - duplicate_JSON_key_rejects
+  - compatibility_cell_cannot_emit_APPLIED_HISTORY_ONLY_Event_or_projection_advancement
+  - compatible_receipt_with_invalid_attestation_rejects
+  - compatible_receipt_with_unavailable_attestation_is_INDETERMINATE
+  - compatible_receipt_with_stale_epoch_is_HISTORY_ONLY
+  - compatible_receipt_with_invalid_transition_rejects
+  - unauthenticated_EFFECT_QUERY_RESULT_rejects
+  - exact_receipt_duplicate_replays_without_new_Event
+  - changed_receipt_bytes_open_reconciliation_without_projection_advancement
+  - receipt_lookup_unavailable_is_INDETERMINATE
+  - caller_supplied_arm_relation_field_is_not_an_input
+  - exact_arm_duplicate_is_derived_from_byte_equal_requests
+  - changed_request_bytes_under_same_request_ID_reject
+  - arm_lookup_unavailable_has_zero_additional_accounting
+  - first_apply_abstract_trial_has_one_modeled_Event_and_call_but_zero_fixture_occurrence
+  - reversed_raw_reason_order_cannot_change_precedence_output
+  - missing_second_order_trial_rejects
+  - 121_transition_claim_or_case_count_rejects
+  - synthetic_intent_claim_or_arm_occurrence_rejects
+  - each_of_six_coherent_graph_level_formula_wrong_mutations_rejects
+  - detached_identity_map_only_cannot_substitute_for_graph_mutation
+  - any_nonzero_real_handoff_claim_arm_runtime_effect_provider_or_secret_count_rejects
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  target_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r3-full-atomic-independent-review.yaml
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - result_and_review_unit
+    - exact_manifest_path_and_sha256
+    - reviewer_identity_and_independence_basis
+    - every_input_hash_verification_and_all_12_subject_reads
+    - blocker_major_minor_and_unresolved_counts
+    - finding_IDs_with_exact_evidence_counterexample_and_required_correction
+    - all_28_required_question_results
+    - all_30_required_adversarial_results
+    - all_four_validator_commands_and_exact_counts
+    - builder_byte_equality_and_fixture_hash
+    - all_seven_R2_finding_dispositions
+    - schema_precedence_arm_receipt_transition_graph_mutation_coverage_counts
+    - mandatory_zero_authority_runtime_effect_provider_secret_counts
+    - F5_acceptance_ready_F5_frozen_F6_started_and_authorization_booleans
+  no_finding_rule: PASS_NO_BLOCKER_only_when_blocker_major_minor_and_unresolved_are_all_zero
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_content_or_conclusion_may_be_read: false
+  author_self_review_hash_may_be_verified: true
+  prior_R1_or_R2_review_may_be_used_as_finding_lineage_only: true
+  prior_review_may_substitute_for_fresh_R1_plus_R2_plus_R3_judgment: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unknown_or_unavailable_required_input_result: BLOCK
+  forbidden_inputs_accessed: [state-private, secrets, credentials, tokens, cookies, provider_raw_response, private_raw_memory]
+  web_required: false
+  runtime_source_required: false
+  secrets_or_private_memory_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-17-agents-os-f5-r3-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: ac5c627c79a1384df659ada7882ff6f8ba526546a834e243bb5c5d4f2b383472

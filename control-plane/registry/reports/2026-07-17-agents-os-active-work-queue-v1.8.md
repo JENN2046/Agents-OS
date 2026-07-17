@@ -1,0 +1,128 @@
+# AGENTS OS Active Work Queue v1.8
+
+Date: 2026-07-17  
+Status: active  
+Owner: Jenn  
+Agent steward: Nobao  
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v1.7.md`
+
+## Purpose
+
+Current queue after the narrow F5 R4 three-finding proof correction was fixed,
+the R4 builder reproduced the fixture byte-for-byte, all R1-R4 validators
+passed, and the complete 40-input / 16-subject review unit was hash-bound.
+Queues v0.1-v1.7 remain byte-preserved history.
+
+This queue authorizes only a fresh full atomic independent review. It
+authorizes no F5 acceptance or freeze, F6 start, implementation, runtime,
+database, production authentication, real handoff, provider, service or
+physical effect.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F5_started=true
+F5_status=R4_READY_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F5_acceptance_unit=F5_OUTBOX_DELIVERY_RECOVERY_V0_1_R4_ATOMIC_BUNDLE
+F5_subject_count=16
+F5_partial_acceptance=forbidden
+F5_R3_independent_review_result=BLOCK
+F5_R3_blocker_count=2
+F5_R3_major_count=1
+F5_R3_review_sha256=b7430e788879dabc551d1121f214b6be63dea1ee857e29f3018e00a4b9998718
+F5_R3_disposition_sha256=9c5a8420c767d18b24b3b77213fc12b0ad2658759f93b7ae1605208728ed42a9
+F5_R4_start_decision_sha256=9d8780b8527ca339d81f4fa470df4c3a27cda4179c0ab72ce8b46a5caff83440
+F5_R4_amendment_sha256=cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551
+F5_R4_builder_sha256=d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929
+F5_R4_fixture_sha256=af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d
+F5_R4_fixture_canonical_sha256=803ae7e021b26ae6f02f2e13e95b4bba34d619558287aa86d7480a20cf1b62c2
+F5_R4_validator_sha256=4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8
+F5_R4_author_self_review_sha256=00aa323df98958b2f3ec46278954ec7bac4966cd13f3833534de210b31776cc7
+F5_R4_manifest_sha256=5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4
+F5_R4_review_package_sha256=ad52b48c0b1ec470413df97b693692f7e9ca666e1d9388a9e6577b4bbd7d138a
+F5_R4_manifest_verified_inputs=40
+F5_R4_independent_review_created=false
+F5_R5_preplanned=false
+F5_accepted=false
+F5_frozen=false
+F6_started=false
+accepted_real_handoff_count=0
+claim_event_count=0
+armed_dispatch_count=0
+runtime_consumable_count=0
+external_effect_count=0
+provider_call_count=0
+raw_secret_count=0
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+provider_host_or_effect_execution_authorized=false
+```
+
+## NOW
+
+### NOW-001: F5 R4 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+review_manifest=control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.manifest.yaml
+review_manifest_sha256=5321a45129c18e385314bbcabd034b23709185b61505a026b015873d6ec570e4
+review_package=control-plane/registry/reports/2026-07-17-agents-os-f5-r4-atomic-independent-review-package-v0.1.md
+review_package_sha256=ad52b48c0b1ec470413df97b693692f7e9ca666e1d9388a9e6577b4bbd7d138a
+subject_count=16
+declared_input_count=40
+required_questions=32
+required_adversarial_checks=40
+fixed_commands=5
+fresh_independent_reviewer_required=true
+author_self_review_content_forbidden=true
+author_self_review_hash_verification_allowed=true
+allowed_results=PASS_NO_BLOCKER|BLOCK
+requires_jenn_decision=false
+execution_authorized=false
+```
+
+## NEXT
+
+```text
+PASS_NO_BLOCKER=stop_F5_revision_and_prepare_Jenn_only_atomic_freeze_decision_surface
+BLOCK=preserve_R1_R2_R3_R4_and_review_bytes_then_route_only_new_independent_reproducible_security_counterexamples
+R5_preplanned=false
+implementation_profile_questions_do_not_trigger_R5=true
+automatic_F5_acceptance_or_freeze=forbidden
+automatic_F6_start=forbidden
+automatic_implementation_or_runtime=forbidden
+```
+
+## BLOCKED
+
+```text
+self_attested_independent_review=forbidden
+partial_F5_acceptance=forbidden
+new_delivery_state_receipt_type_or_retry_model=forbidden
+provider_transport_database_layout_Rust_or_JavaScript_implementation=forbidden
+production_authentication_or_runtime_activation=forbidden
+synthetic_evidence_as_production_authority=forbidden
+F5_recomputation_of_F1_F2_F3_or_F4_authority=forbidden
+Actor_Task_role_color_trust_urgency_or_P0_P3_permission_classification=forbidden
+positive_operational_handoff=NON_ISSUABLE
+F6_start=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_R4_package
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F5_R3_independent_review=BLOCK_2_BLOCKER_1_MAJOR
+F5_R3_findings_disposed_to_R4=3_OF_3
+F5_R4_author_surface=FIXED
+F5_R4_builder_reproduction=BYTE_EQUAL
+F5_R4_validator=PASS_16_SCHEMAS_147_PAIRS_294_TRIALS_147_REVERSES_4_ARM_25_COMPATIBILITY_10_CURRENTNESS_100_TRANSITIONS
+F5_R4_prior_R3_probes=REJECTED_7_OF_7
+F5_R4_manifest=VERIFIED_40_OF_40
+active_work_queue_v0_1_through_v1_7=superseded_historical_bytes_preserved
+```
