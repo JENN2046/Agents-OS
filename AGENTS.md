@@ -172,7 +172,7 @@ database write
 modifying .env, secrets, credentials, tokens, cookies, or provider / auth configuration
 reading or changing active runtime configuration that may contain secrets or provider authority
 unauthorized paid provider call
-real provider execution
+real provider execution, except the narrowly scoped CODEX_MEMORY standing authorization below
 real external Codex CLI subprocess / autonomous Codex runner invocation
 real external runner / executor workspace-write execution
 public MCP tool or schema expansion
@@ -186,6 +186,34 @@ irreversible external write
 PR merge that would trigger production deploy / release / package publish
 unconfirmed Memory / Activation
 high or critical risk in governance/SECURITY_BOUNDARIES.md
+```
+
+CODEX_MEMORY standing authorization:
+
+```text
+Jenn authorizes Nobao to use the existing vcp_codex_memory MCP surface without a separate per-task confirmation when the call is useful for a substantive task inside /home/jenn/AGENTS_OS_Workspace.
+This is a narrow standing exception to the P3a real-provider-execution boundary; it does not authorize any other provider, MCP server, runtime target, provider / auth configuration change, paid capability outside the existing configured memory runtime, or expansion of the public MCP surface.
+
+Allowed automatic tools are prepare_memory_context, search_memory, memory_overview, and audit_memory, only while they remain governed, read-only, bounded, and low-disclosure.
+At the start or resumption of a substantive task, Nobao should use the smallest relevant call when prior decisions, project continuity, user preferences, known risks, or unfinished work could materially improve the task.
+Do not call CODEX_MEMORY for greetings, casual conversation, simple self-contained questions, or tasks where recalled context would not materially help.
+
+Every recall must be scoped as narrowly as the available trusted context permits to the current project, workspace, task, and visibility boundary.
+Only governed projections may be consumed or reported; do not request, expose, print, summarize, copy, or persist raw private memory, raw provider output, provider payloads, secrets, tokens, credentials, filesystem paths, or raw audit rows.
+Do not perform broad or exploratory memory scans, cross-project recall, state-private/ access, live memory import / export / migration, or any attempt to bypass diary allowlists, scope filters, disclosure budgets, or adapter gates.
+
+The authorized read path may call the existing configured VCPToolBox native memory provider and may append the MCP bridge's required low-disclosure audit receipt.
+That audit side effect is authorized only when it contains no raw request, raw response, token material, private memory content, or provider payload, and it must not be described as a memory write or durable memory mutation.
+If the tool reports unexpected mutation, raw disclosure, a changed runtime target, missing governance binding, or any capability beyond this exception, stop and treat the action as P3.
+
+At task end, propose_memory_delta may be used without separate confirmation only to create a proposal-only candidate package when stable, reusable information has clear long-term value.
+It may not commit, activate, or durably write memory.
+Formal Memory / Activation, personal long-term user memory, controlled mutation, and durable write still require Jenn's current explicit request or the applicable confirmation entry point.
+
+CODEX_MEMORY is supporting evidence, not authority.
+Jenn's current instruction, repository facts, current code, validation results, and newer confirmed decisions take precedence over recalled context.
+Memory unavailability or an irrelevant result should not block an otherwise safe task; continue from local evidence and report the limitation only when material.
+Jenn may narrow or revoke this standing authorization at any time.
 ```
 
 Scoped file moves or renames are Yellow, not P3, when they are explicitly
