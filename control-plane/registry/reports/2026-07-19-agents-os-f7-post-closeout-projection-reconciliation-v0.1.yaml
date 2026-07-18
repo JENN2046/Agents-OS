@@ -1,0 +1,125 @@
+schema_version: agents-os.post-closeout-projection-reconciliation.v0.1
+report_id: agents-os-f7-post-closeout-projection-reconciliation-v0.1
+date: '2026-07-19'
+status: PASS
+owner: Jenn
+agent_steward: Nobao
+scope:
+  phase: F7
+  purpose: prove_and_accept_v4_8_as_projection_only_post_closeout_state
+  frozen_bundle_change_authorized: false
+  F8_start_authorized: false
+git_binding:
+  repository: JENN2046/Agents-OS
+  visibility: PRIVATE
+  baseline_PR14_merge: e22f356bfff59f817cd74e6fccfe3e80f0b52f01
+  current_pre_reconciliation_main: 78704d1e6287d1d1893e8aeb5a7aad87086eef64
+  baseline_is_ancestor_of_current: true
+  changed_path_count: 9
+  modified_existing_path_count: 7
+  added_projection_evidence_path_count: 2
+  deleted_path_count: 0
+  renamed_path_count: 0
+modified_projection_blobs:
+- path: CURRENT_STATE.md
+  classification: F7_DURABILITY_STATUS_AND_ACTIVE_QUEUE_PROJECTION
+  baseline_blob_oid: d83db33c24aa16edb73797a635df1207164de3a8
+  baseline_sha256: 18fa90170cf403f18d45952ec9a302d65a6c57477610c5f4b62db6e1bf75501c
+  current_blob_oid: 9576ee371e960f999a0976489d19fe98686c1a76
+  current_sha256: 650d403cdcc23390aa55db8fb51204b055cadcc9381bf654331af07a0a732f12
+  allowed_delta:
+  - record_PR14_mainline_durability_facts
+  - advance_current_queue_projection_from_v4_7_to_v4_8
+  - preserve_F8_started_false
+- path: control-plane/registry/drafts/document-registry.v0.1.example.yaml
+  classification: DOCUMENT_REGISTRY_POST_CLOSEOUT_PROJECTION
+  baseline_blob_oid: 2b7863b49bbdd718df864804756cc4f5c21622b6
+  baseline_sha256: 42e7890d6e33159aad7170e851c93bc6b005ba3556091412f7e75655caf6f160
+  current_blob_oid: 9639104d3e011c476512e3ec4f50898bb878fe61
+  current_sha256: 3b7ffe7cc2f4eec4c7dc2ec76df46f3bb842b89dceb43633155e975db7c203f6
+  allowed_delta:
+  - supersede_queue_v4_7_with_v4_8
+  - register_mainline_durability_receipt
+  - register_queue_v4_8
+- path: control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+  classification: FEDERATED_COUNT_PROJECTION
+  baseline_blob_oid: ac6aaab8253fd51bbfdc021f74042dff936c4fe5
+  baseline_sha256: b3b69d0db7ff919da4bf8f2f1cc181c7d34f9a011296b6e7731b52cccedfb5bc
+  current_blob_oid: c220144dcc2880a39772d87f935a5258386cc352
+  current_sha256: 8524e704429edee2b2a057367481dc8b011e983d9667c3aa8a8104358fdf46b9
+  allowed_delta:
+  - expected_document_count_909_to_911
+- path: execution/agents-os-control-chain/control_chain.py
+  classification: DEFAULT_QUEUE_POINTER_PROJECTION
+  baseline_blob_oid: 1cbf306b0c28e4c4cc4ae28e9d619350a0303f4a
+  baseline_sha256: f2582c9d2ce8bbba4d6ed01a80c0b1739c7b2a589512714c242d50a1a034ffcc
+  current_blob_oid: 3f08c8ff4400a9a74fd491ba5a0ca1512f2aa915
+  current_sha256: 4e584d5d60e74ade7cf04d85c3c4eda9831a679d98d74534f887587bd7b89007
+  allowed_delta: [DEFAULT_QUEUE_v4_7_to_v4_8_only]
+- path: execution/agents-os-dashboard/dashboard.py
+  classification: DEFAULT_QUEUE_POINTER_PROJECTION
+  baseline_blob_oid: 3dc500a6a13a8f8e4e7f6f9ff89299d010b1b01f
+  baseline_sha256: 969621230d56c057f321dca5bd0d51b1a223352cdcac45893cf18ee09075ad8d
+  current_blob_oid: e3fdf1222447a60f1c5b99c003e5198a3fcad661
+  current_sha256: 7a86f23c4930baf564d0193ea2e8b3b1b43dfa99d9f48d54b1659a298715d13a
+  allowed_delta: [DEFAULT_QUEUE_v4_7_to_v4_8_only]
+- path: execution/agents-os-machine/machine.py
+  classification: DEFAULT_QUEUE_POINTER_PROJECTION
+  baseline_blob_oid: 0c65d8a4cb408e198269de7502dc133cab5cf626
+  baseline_sha256: f42e15a6449e98bf25e8514b0156ecdee119b5e9ada5e0a6519ecb76126e6717
+  current_blob_oid: 46cee2fd693119f8bff679f80bd370cb3114b335
+  current_sha256: 1590cafb36f1bfff88ee78df89a1c4f05daef83af3b6d1fe634be1f0e8e18998
+  allowed_delta: [DEFAULT_QUEUE_v4_7_to_v4_8_only]
+- path: execution/agents-os-workbench/workbench.py
+  classification: DEFAULT_QUEUE_POINTER_PROJECTION
+  baseline_blob_oid: 09ecec78bb56be04bc0c9be3b5f832ac1068fb53
+  baseline_sha256: c913b78115d05712896f7bfdf9e17c8969b7e0d89147d1726c6df622e28426db
+  current_blob_oid: 792158ea7ede5cb2e0219e1a446c172a47e2c8c7
+  current_sha256: efe1a51ded12e0bbd0256904a44e757bd065676bf5e172411087c84b12d67311
+  allowed_delta: [DEFAULT_QUEUE_v4_7_to_v4_8_only]
+added_projection_evidence:
+- path: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f7-mainline-durability-closeout-v0.1.md
+  classification: MAINLINE_DURABILITY_EVIDENCE
+  current_blob_oid: 461799f995edb263dee239ba39372d6f9aff9c12
+  current_sha256: 615841e5432d173313dc24afe53f21cb35b244b4efc69eeebcaf9ce59245102c
+- path: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+  classification: POST_CLOSEOUT_ACTIVE_QUEUE_PROJECTION
+  current_blob_oid: 0be45de1736943ba9ac5e80f1b7cabf97d8c8cf4
+  current_sha256: 9659812dba5242b550b52cbbd54591b4b5c01ec1e90adbe364de17a9c29d4e0a
+frozen_authority_binding:
+  review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+  canonical_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+verification:
+  exact_git_diff_inventory: 7_modified_plus_2_added_PASS
+  manifest_inputs: 44/44_MATCH
+  frozen_subjects_at_baseline: 8/8_MATCH
+  frozen_subjects_at_current: 8/8_MATCH
+  frozen_subject_blobs_changed: 0
+  F7_contract_or_reducer_files_changed: 0
+  freeze_decision_changed: false
+  independent_review_changed: false
+  current_queue: v4.8
+  consumers_default_equal_explicit_v4_8: true
+  consumer_pointer_count: 4/4
+  Document_Registry_at_current: 911/911_PASS
+  Federated_Registry_at_current: 3/3_PASS
+  excluded_paths_committed: 0
+  F8_started: false
+  implementation_or_runtime_authority_expanded: false
+reconciled_acceptance:
+  F7_Git_objects_on_main: true
+  F7_mainline_integrated: true
+  F7_post_closeout_projection: v4.8_ACCEPTED
+  F7_durability_complete: true
+  F7_strict_v4_7_tree_requirement: SUPERSEDED_BY_PROJECTION_AWARE_CRITERIA
+  F8_started: false
+  F8_start_gate: AWAITING_JENN_EXPLICIT_START_DECISION
+result: PASS

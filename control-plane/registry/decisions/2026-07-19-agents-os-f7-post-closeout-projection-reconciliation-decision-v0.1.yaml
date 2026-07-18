@@ -1,0 +1,83 @@
+schema_version: agents-os.governance-decision-record.v0.1
+record_id: agents-os-f7-post-closeout-projection-reconciliation-decision-v0.1
+record_type: PostCloseoutProjectionReconciliationDecision
+status: accepted
+immutable: true
+created_at: '2026-07-19T02:03:23+08:00'
+effective_at: '2026-07-19T02:03:23+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_V4_8_AS_LEGITIMATE_POST_CLOSEOUT_PROJECTION
+  decision_source: explicit_current_conversation_instruction
+confirmation:
+  text_received: >-
+    接受 v4.8 为合法的 post-closeout 投影，并更新验收口径，创建一个很窄的
+    F7 Post-Closeout Projection Reconciliation；证明 PR14 的 7 个 blob 差异
+    仅为合法 post-closeout projections，接受 v4.8 为当前投影，不改变 F7
+    frozen bundle，不启动 F8。
+reconciliation_evidence:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f7-post-closeout-projection-reconciliation-v0.1.yaml
+  sha256: 3053099b372dfb5d476e8089c4caa7e6de579c7c1213e09807190d80ed3b8169
+  result: PASS
+git_binding:
+  baseline_PR14_merge: e22f356bfff59f817cd74e6fccfe3e80f0b52f01
+  accepted_post_closeout_projection_commit: 78704d1e6287d1d1893e8aeb5a7aad87086eef64
+  modified_projection_blobs: 7
+  added_projection_evidence_files: 2
+  frozen_subject_blobs_changed: 0
+frozen_bundle_binding:
+  review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+  subject_count: 8
+  manifest_path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  independent_review_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+  independent_review_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+  freeze_decision_path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+  freeze_decision_sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+accepted_projection_criteria:
+  canonical_current_queue: v4.8
+  consumers_default_equal_explicit_v4_8: true
+  consumer_count: 4
+  projection_change_allowlist:
+  - CURRENT_STATE.md
+  - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+  - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+  - execution/agents-os-control-chain/control_chain.py
+  - execution/agents-os-dashboard/dashboard.py
+  - execution/agents-os-machine/machine.py
+  - execution/agents-os-workbench/workbench.py
+  projection_evidence_additions:
+  - control-plane/registry/receipts/2026-07-19-yellow-agents-os-f7-mainline-durability-closeout-v0.1.md
+  - control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+supersession:
+  superseded_requirement: F7_STRICT_V4_7_FINAL_TREE_EQUALITY
+  replacement_requirement: >-
+    PR14 frozen-object integration remains hash-identical while later commits
+    may update only explicitly allowlisted governance and consumer projections,
+    with every projection commit independently scoped, reviewed and verified.
+effects:
+  F7_Git_objects_on_main: true
+  F7_mainline_integrated: true
+  F7_post_closeout_projection: v4.8_ACCEPTED
+  F7_durability_complete: true
+  F7_strict_v4_7_tree_requirement: SUPERSEDED_BY_PROJECTION_AWARE_CRITERIA
+  F7_frozen_bundle_changed: false
+  F7_R3_started: false
+  F8_started: false
+  F8_start_gate: AWAITING_JENN_EXPLICIT_START_DECISION
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_effect_execution_authorized: false
+next_gate:
+  name: EXPLICIT_JENN_START_DECISION_FOR_F8
+  decision_owner: Jenn
+  automatic_transition: forbidden
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_F7_frozen_subject_bytes: forbidden
+  edit_F7_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record

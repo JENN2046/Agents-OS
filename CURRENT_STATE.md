@@ -3065,6 +3065,43 @@ consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents
 next_gate: EXPLICIT_JENN_START_DECISION_FOR_F8
 ```
 
+## F7 Post-Closeout Projection Reconciliation (2026-07-19)
+
+Jenn accepted Active Work Queue v4.8 as the legitimate post-closeout
+projection after a byte-bound comparison of PR #14 merge `e22f356` with
+durability completion main `78704d1`. The exact diff was seven modified
+projection blobs and two added governance-evidence files. No frozen F7 subject
+or authority byte changed.
+
+```yaml
+F7_post_closeout_projection_reconciliation: PASS
+F7_projection_reconciliation_report: control-plane/registry/reports/2026-07-19-agents-os-f7-post-closeout-projection-reconciliation-v0.1.yaml
+F7_projection_reconciliation_report_sha256: 3053099b372dfb5d476e8089c4caa7e6de579c7c1213e09807190d80ed3b8169
+F7_projection_reconciliation_decision: control-plane/registry/decisions/2026-07-19-agents-os-f7-post-closeout-projection-reconciliation-decision-v0.1.yaml
+F7_projection_reconciliation_decision_sha256: c5b6bca2c16500fb9864a3709c9b3409030d45d7d3a5652b5a878d22174062cc
+F7_projection_reconciliation_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f7-post-closeout-projection-reconciliation-v0.1.md
+F7_projection_reconciliation_receipt_sha256: 035ecb6eecf336d406e29290597dbd6fc1a848f32558cdc937db9117dc96fe3b
+F7_projection_baseline_PR14_merge: e22f356bfff59f817cd74e6fccfe3e80f0b52f01
+F7_accepted_post_closeout_projection_commit: 78704d1e6287d1d1893e8aeb5a7aad87086eef64
+F7_projection_modified_blobs: 7
+F7_projection_added_evidence_files: 2
+F7_frozen_subject_blobs_changed: 0
+F7_Git_objects_on_main: true
+F7_mainline_integrated: true
+F7_post_closeout_projection: v4.8_ACCEPTED
+F7_durability_complete: true
+F7_strict_v4_7_tree_requirement: SUPERSEDED_BY_PROJECTION_AWARE_CRITERIA
+F8_started: false
+F8_start_gate: AWAITING_JENN_EXPLICIT_START_DECISION
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F8
+```
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.
