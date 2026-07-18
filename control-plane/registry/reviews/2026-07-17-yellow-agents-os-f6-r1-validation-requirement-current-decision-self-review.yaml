@@ -1,0 +1,203 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f6-r1-validation-requirement-current-decision-self-review-v0.1
+date: 2026-07-17
+reviewer:
+  identity: Nobao
+  role: F6_R1_author
+  independent: false
+  may_substitute_for_fresh_independent_review: false
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r1.draft.md
+      sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f6-r1-validation-current-decision.py
+      sha256: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-17-agents-os-f6-r1-validation-current-decision-v0.1.json
+      sha256: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+    - role: independent_offline_semantic_validator
+      path: control-plane/registry/validate-f6-r1-validation-current-decision.py
+      sha256: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 0
+
+author_findings_closed_before_hash_fix:
+  - id: F6-R1-ASR-01
+    severity: blocker
+    finding: >-
+      An early waiver shape bound a grant to the current Validation Set while
+      the current set also fingerprint-bound that grant, creating a circular
+      proof surface.
+    correction: >-
+      Waiver identity now binds an immutable base snapshot. A later
+      WAIVER_CHANGE snapshot binds the independently committed waiver head.
+      The validator recomputes the graph in base-snapshot, waiver, current-
+      snapshot topological order.
+    status: CLOSED
+  - id: F6-R1-ASR-02
+    severity: blocker
+    finding: >-
+      Evidence refs, evidence digest and currentness assessment could initially
+      be mutually self-consistent without proving that the assessment subject
+      was the exact evidence object consumed by the attempt.
+    correction: >-
+      Terminal attempts now require the assessment subject ref in evidence_refs
+      and exact equality between assessment subject_fingerprint and
+      evidence_digest. Candidate currentness likewise binds the exact candidate
+      commitment fingerprint.
+    status: CLOSED
+  - id: F6-R1-ASR-03
+    severity: major
+    finding: >-
+      Validation Set source bindings were hashed but were not initially proven
+      to contain the complete Requirement provenance set.
+    correction: >-
+      The contract and validator now require the duplicate-free exact union of
+      all current membership Requirement provenance, with omission,
+      substitution and conflicting fingerprints rejected.
+    status: CLOSED
+  - id: F6-R1-ASR-04
+    severity: major
+    finding: >-
+      Carry-forward fields were closed-schema but the equivalence fingerprint
+      and original fresh source relationship lacked a complete independent
+      derivation formula.
+    correction: >-
+      R1 now freezes the equivalence tuple and requires source equals root,
+      resolves to an earlier original FRESH_VALIDATION PASSED chain head for
+      the same Requirement, and rejects carry-forward chains, human acceptance
+      and effectful delivery evidence reuse.
+    status: CLOSED
+  - id: F6-R1-ASR-05
+    severity: major
+    finding: >-
+      The first mutation runner counted validator exceptions as successful
+      mutation rejection, which could hide a broken adversarial probe.
+    correction: >-
+      Mutation exceptions now fail the validator. All 30 root-re-signed probes
+      execute normally and are rejected by closed schema, stable-ID or semantic
+      validation.
+    status: CLOSED
+  - id: F6-R1-ASR-06
+    severity: blocker
+    finding: >-
+      An authority or F5 assessment could initially match the expected kind and
+      result while assessing a different validator contract or delivery subject.
+    correction: >-
+      Validation authority now binds the exact Requirement validator contract.
+      Effectful Requirements carry an exact delivery subject ref/fingerprint,
+      and the F5 APPLIED_CURRENT assessment must bind that subject. Non-effectful
+      Requirements reject every F5 delivery binding.
+    status: CLOSED
+  - id: F6-R1-ASR-07
+    severity: major
+    finding: >-
+      The completion witness used F5 CLEAR without distinguishing an F6
+      consumer requirement from an already accepted frozen F5 owner interface.
+    correction: >-
+      R1 now labels the F5 completion-blocking assessment as an
+      UNACCEPTED_OWNER_INTERFACE_REQUIREMENT with runtime_usable=false and
+      synthetic_fixture_only=true. A real eligibility decision remains
+      non-issuable until a separately accepted owner or implementation profile
+      materializes it from frozen F5 semantics.
+    status: CLOSED
+  - id: F6-R1-ASR-08
+    severity: blocker
+    finding: >-
+      Completion quiescence counts were initially fingerprinted only inside
+      the caller input, so a caller could re-sign zero counts without an
+      independently owned currentness assertion.
+    correction: >-
+      The exact Task context and all five counts now derive one completion-
+      guard subject fingerprint bound to a current accepted-owner assessment.
+      The interface is explicitly unaccepted, synthetic-only and nonruntime;
+      count changes without a new exact owner assessment are rejected.
+    status: CLOSED
+
+boundary_review:
+  consumes_F1_F3_F5_assessments_without_recomputing_upstream_reducers: PASS
+  creates_no_Actor_or_Task_permission_level_or_color_model: PASS
+  creates_no_second_identity_canonical_writer_effect_or_policy_authority: PASS
+  PBL_no_match_is_not_Validation_or_completion_authority: PASS
+  Run_success_is_not_Validation_PASS_or_Task_completion: PASS
+  F5_ACK_or_APPLIED_CURRENT_is_not_Validation_PASS: PASS
+  prospective_F5_completion_interface_is_explicitly_nonruntime_and_nonissuing: PASS
+  prospective_completion_guard_interface_binds_every_quiescence_count_and_is_nonissuing: PASS
+  missing_stale_unknown_conflicting_or_expired_evidence_is_fail_closed: PASS
+  carry_forward_only_monotonically_reuses_exact_original_evidence: PASS
+  waiver_is_not_PASS_and_all_waived_does_not_complete: PASS
+  synthetic_evidence_is_nonconvertible: PASS
+  atomic_completion_seam_creates_no_authority_in_R1: PASS
+  F7_and_implementation_remain_separate: PASS
+
+validator_reproduction:
+  result: PASS_NO_BLOCKER
+  normative_schema_count: 10
+  decision_vector_count: 54
+  requirement_case_count: 22
+  validation_set_case_count: 10
+  completion_case_count: 22
+  precedence_raw_trial_count: 342
+  negative_mutations_rejected: 32
+  graph_requirement_count: 4
+  graph_validation_set_count: 2
+  graph_attempt_revision_count: 6
+  graph_waiver_event_count: 1
+  fixture_canonical_sha256: 014c3154bd8d2f75f45b845901c6665211dce16a6580c8e7a4755692f335ccff
+  derived_eligible_case_count: 1
+  task_done_mutation_count: 0
+  accepted_real_task_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+validation:
+  fixture_json_parse: PASS
+  builder_python_compile: PASS
+  validator_python_compile: PASS
+  builder_reproduction: BYTE_EQUAL
+  normative_schema_inventory: PASS_10_OF_10
+  decision_vector_inventory: PASS_54_OF_54
+  reason_precedence_raw_trials: PASS_342_OF_342
+  fully_resigned_negative_mutations: PASS_32_OF_32_REJECTED_WITH_ZERO_EXCEPTIONS
+  positive_graph_independent_derivation: PASS
+  synthetic_zero_authority_and_effect_assertions: PASS
+  utf8_lf_no_bom: PASS
+
+review_limitations:
+  - author_self_review_is_not_independent
+  - no_real_Task_Run_Validation_Event_waiver_completion_or_effect_was_created
+  - no_runtime_database_resident_worker_host_validator_service_or_provider_was_executed
+  - validator_PASS_proves_only_fixed_synthetic_semantic_constructibility
+
+non_authorization:
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  real_Task_Run_Validation_mutation_authorized: false
+  commit_push_PR_merge_authorized: false
+
+next_gate:
+  name: F6_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  reviewer_must_be_independent_of_author_run: true
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]

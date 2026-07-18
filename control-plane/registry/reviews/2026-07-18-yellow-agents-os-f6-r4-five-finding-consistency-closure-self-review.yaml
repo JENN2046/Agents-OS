@@ -1,0 +1,67 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f6-r4-five-finding-consistency-closure-self-review-2026-07-18
+date: 2026-07-18
+reviewer: Nobao_author_run
+independence: false
+
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R4_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+partial_review: forbidden
+
+subject_hashes:
+  amendment: ae12f429533061beac78e59163345495cd161e6828d9fa5e375342d2c8f79abf
+  builder: 9ac2f1594afbed21510e11fd307a984d66df601b39183c16dc8e08a4dfcb258e
+  fixture: e63bf9fc2c1162672975538590ecce5ad7a1fa6e74679703d3134f820d9c2a47
+  validator: 4d0e238906a1c634bf12d30f775ba4ef323ab18f339ebd19826b39e97a344d6f
+
+finding_disposition_claims:
+  F6-R3-IR-B01: CLOSED_BY_EXACT_TASK_IDENTITY_DERIVATION
+  F6-R3-IR-B02: CLOSED_BY_RESOLVED_ASSESSMENT_REVISION_EQUALITY
+  F6-R3-IR-B03: CLOSED_BY_TRUSTED_TIME_DERIVED_WAIVER_CURRENTNESS
+  F6-R3-IR-B04: CLOSED_BY_EVIDENCE_REQUIREMENT_REVISION_CONTEXT_AND_F3_ASSESSMENT_BINDING
+  F6-R3-IR-B05: CLOSED_BY_STRICT_PREDECESSOR_AND_CARRY_EVENT_ORDER
+
+validation:
+  R1_fixed_mutations_rejected: 32_of_32
+  R1_independent_regressions_rejected: 18_of_18
+  R2_additional_negatives_rejected: 12_of_12
+  fixed_negative_total_rejected: 62_of_62
+  R2_coordinated_cases_rejected: 17_of_17
+  R3_independent_cases_rejected: 7_of_7
+  mutation_or_case_exceptions: 0
+  builder_byte_reproduction: PASS
+  task_identity_binding: PASS
+  assessment_revision_equality: PASS
+  TrustedTime_waiver_currentness: PASS
+  evidence_subject_binding: PASS
+  strict_Event_order: PASS
+
+proof_properties:
+  validator_derives_five_closure_inventories_from_inner_graph: true
+  validator_does_not_trust_outer_binding_labels: true
+  evidence_binding_includes_F3_assessment_ref_fingerprint_revision: true
+  R1_R2_R3_fixed_subjects_modified: false
+  second_permission_system_created: false
+  upstream_authority_recomputed: false
+  synthetic_fixture_runtime_usable: false
+
+occurrence_assertions:
+  accepted_real_task_count: 0
+  database_write_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  runtime_activation_count: 0
+  task_done_mutation_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+governance:
+  author_result_is_not_independent_acceptance: true
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+next_gate: F6_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

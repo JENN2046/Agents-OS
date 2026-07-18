@@ -1,0 +1,18 @@
+{
+  "schema_version": "agents-os.independent-consistency-cases.v0.1",
+  "review_unit": "F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R3_ATOMIC_BUNDLE",
+  "environment": "SYNTHETIC_TEST",
+  "fully_resigned": true,
+  "dependent_bindings_propagated": true,
+  "execution_exceptions": 0,
+  "cases": [
+    {"case_id":"F6-R3-IR-C01","finding_id":"F6-R3-IR-B01","change":"completion_task_id_rebound_to_another_Task","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C02","finding_id":"F6-R3-IR-B01","change":"REQ_A_all_revisions_rebound_to_another_Task_with_downstream_bindings","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C03","finding_id":"F6-R3-IR-B04","change":"evidence_validation_subject_changed_to_another_Requirement","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C04","finding_id":"F6-R3-IR-B02","change":"F5_consumer_revision_changed_to_nonexistent_revision","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C05","finding_id":"F6-R3-IR-B02","change":"all_consumer_assessment_revisions_detached_from_resolved_assessments","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C06","finding_id":"F6-R3-IR-B03","change":"TrustedTime_after_waiver_expiry_with_WAIVED_and_ELIGIBLE_preserved","expected":"REJECT","actual":"ACCEPT"},
+    {"case_id":"F6-R3-IR-C07","finding_id":"F6-R3-IR-B05","change":"carry_revision_Event_precedes_original_source_Event","expected":"REJECT","actual":"ACCEPT"}
+  ],
+  "summary": {"executed":7,"correctly_rejected":0,"incorrectly_accepted":7,"execution_exceptions":0}
+}

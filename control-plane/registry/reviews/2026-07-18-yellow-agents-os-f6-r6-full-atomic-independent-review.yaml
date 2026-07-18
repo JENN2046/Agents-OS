@@ -1,0 +1,209 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r6-full-atomic-independent-review-2026-07-18
+date: '2026-07-18'
+reviewer:
+  identity: Codex_external_fresh_independent_reviewer
+  reviewer_role: fresh_full_atomic_hash_bound_independent_reviewer
+  independence_basis:
+    - not_the_F6_R6_author_run
+    - did_not_modify_any_R1_through_R6_subject
+    - author_self_review_used_only_as_nonindependent_evidence
+    - manifest_hashes_zip_integrity_fixed_commands_and_R6_adversarial_cases_independently_recomputed
+  review_scope_limit: >-
+    This review evaluates the fixed synthetic proof package and its declared
+    governance boundary. It does not accept or freeze F6, start F7, or authorize
+    implementation, runtime activation, external effects, or Git delivery.
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R6_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 24
+  authority_input_count: 40
+  author_evidence_count: 1
+  declared_input_count: 65
+  precedence:
+    - R6_explicit_replacements
+    - R5_all_other_clauses
+    - R4_all_other_clauses
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+
+package_integrity:
+  canonical_manifest_path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_declared: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f
+  manifest_sha256_recomputed: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f
+  manifest_sha256_match: true
+  package_path: ops/packages/2026-07-18-agents-os-f6-r6-external-independent-review-package-v0.1.zip
+  package_sha256_declared: d5e55b895d6eccafe15adc4c6ce216ad69c09c851c2ab7ceea929077ca49af22
+  package_sha256_recomputed: d5e55b895d6eccafe15adc4c6ce216ad69c09c851c2ab7ceea929077ca49af22
+  package_sha256_match: true
+  manifest_hash_entries_declared: 65
+  manifest_hash_entries_recomputed: 65
+  all_65_hashes_match: true
+  R1_through_R5_fixed_inputs:
+    declared: 58
+    recomputed_unchanged: 58
+    result: PASS
+  zip:
+    entries: 68
+    duplicate_entries: 0
+    unsafe_paths: 0
+    crc: PASS
+    checksum_entries: 67
+    checksum_failures: 0
+    unlisted_payloads: 0
+    workspace_payload_mismatches: 0
+    layout:
+      manifest: MANIFEST.yaml
+      presentation_report: REVIEW-PACKAGE.md
+      hash_bound_payload_prefix: payload/
+  author_evidence:
+    path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r6-immutability-schema-totality-closure-self-review.yaml
+    sha256_declared: b2371777e6633846b3b272058ec54f7fcca297e1b06e263e3092283175e2126d
+    sha256_recomputed_match: true
+    independent_substitute: false
+
+fixed_commands:
+  required: 12
+  executed: 12
+  result: PASS
+  validators:
+    - {revision: R1, path: control-plane/registry/validate-f6-r1-validation-current-decision.py, result: PASS_NO_BLOCKER}
+    - {revision: R2, path: control-plane/registry/validate-f6-r2-ten-finding-proof-closure.py, result: PASS_NO_BLOCKER}
+    - {revision: R3, path: control-plane/registry/validate-f6-r3-eight-finding-semantic-closure.py, result: PASS_NO_BLOCKER}
+    - {revision: R4, path: control-plane/registry/validate-f6-r4-five-finding-consistency-closure.py, result: PASS_NO_BLOCKER}
+    - {revision: R5, path: control-plane/registry/validate-f6-r5-contextual-evidence-assessment-closure.py, result: PASS_NO_BLOCKER}
+    - {revision: R6, path: control-plane/registry/validate-f6-r6-immutability-schema-totality-closure.py, result: PASS_NO_BLOCKER}
+  deterministic_fixture_byte_reproduction:
+    method: canonical_builder_output_stream_compared_to_fixed_fixture_bytes
+    R1: PASS
+    R2: PASS
+    R3: PASS
+    R4: PASS
+    R5: PASS
+    R6: PASS
+
+validation_results:
+  prior_regression_floor:
+    fixed_negative_total: 62_of_62_REJECTED
+    R2_coordinated_cases: 17_of_17_REJECTED
+    R3_cases: 7_of_7_REJECTED
+    R4_context_replacement_case: 1_of_1_REJECTED
+    exceptions: 0
+  R6_validator:
+    result: PASS_NO_BLOCKER
+    R6_adversarial_cases: 11_of_11_REJECTED
+    same_revision_full_resign: 1_of_1_REJECTED
+    schema_totality_cases: 10_of_10_REJECTED
+    immutable_revision_history: PASS
+    contextual_assessment_schema_totality: PASS
+    fixture_canonical_sha256: 67e99e1b60f638e780ed9fd1acdd0d8665f5dcb5f7459919e6ba65e39003b9b2
+  occurrence_assertions:
+    accepted_real_task_count: 0
+    database_write_count: 0
+    external_effect_count: 0
+    provider_call_count: 0
+    raw_secret_count: 0
+    runtime_activation_count: 0
+    task_done_mutation_count: 0
+    terminal_outcome: NOT_EXECUTED
+  workspace_hygiene:
+    git_diff_check: PASS
+    preexisting_dirty_worktree: true
+    reviewed_hash_bound_inputs_match_current_workspace: true
+
+independent_adversarial_review:
+  result: PASS
+  method: >-
+    In-memory mutations were fully re-signed and re-rooted before validation;
+    no stale hash or unpropagated reference was used as the rejection cause.
+  probes:
+    - id: external_full_same_revision_resign
+      mutation: >-
+        Replaced candidate context, propagated R3/R4 consumers, rebuilt
+        contextual assessments and bindings with unchanged attempt and assessment
+        revisions, regenerated candidate-supplied immutable history, and re-rooted
+        R5 and R6.
+      expected_target_rejection: same_revision_attempt_and_contextual_assessment_mutation
+      result: PASS_REJECTED
+    - id: candidate_supplied_history_replacement
+      mutation: regenerated_immutable_history_from_the_mutated_candidate
+      expected_target_rejection: immutable_revision_history_does_not_match_fixed_R5_anchor
+      result: PASS_REJECTED
+    - id: unknown_contextual_binding_field
+      mutation: added_unknown_field_then_recomputed_R5_and_R6_roots
+      expected_target_rejection: contextual_binding_field_inventory_mismatch
+      result: PASS_REJECTED
+    - id: missing_assessed_subject_field
+      mutation: removed_requirement_fingerprint_then_recomputed_roots
+      expected_target_rejection: assessed_subject_field_inventory_mismatch
+      result: PASS_REJECTED
+    - id: integer_for_json_boolean
+      mutation: substituted_0_for_is_current_head_then_recomputed_roots
+      expected_target_rejection: is_current_head_must_be_JSON_boolean
+      result: PASS_REJECTED
+    - id: malformed_contextual_assessment
+      mutation: replaced_assessment_wrapper_with_null_then_recomputed_roots
+      expected_target_rejection: deterministic_BLOCK_without_uncaught_exception
+      result: PASS_REJECTED
+    - id: duplicate_JSON_key
+      mutation: duplicate_key_input_before_object_construction
+      expected_target_rejection: DuplicateKeyError
+      result: PASS_REJECTED
+    - id: float_JSON_value
+      mutation: floating_point_JSON_value_during_parse
+      expected_target_rejection: deterministic_parse_rejection
+      result: PASS_REJECTED
+    - id: nonfinite_JSON_value
+      mutation: NaN_JSON_value_during_parse
+      expected_target_rejection: deterministic_parse_rejection
+      result: PASS_REJECTED
+  probe_failures: 0
+
+prior_finding_disposition:
+  - finding_id: F6-R5-IR-B01
+    prior_severity: blocker
+    disposition: CLOSED_BY_R6
+    closure_evidence:
+      - fixed_R5_fixture_bytes_are_loaded_as_the_immutable_history_anchor
+      - same_revision_attempt_and_contextual_assessment_rows_must_equal_that_anchor
+      - independently_constructed_fully_resigned_candidate_and_history_rejected
+  - finding_id: F6-R5-IR-B02
+    prior_severity: blocker
+    disposition: CLOSED_BY_R6
+    closure_evidence:
+      - exact_wrapper_payload_assessed_subject_and_binding_field_inventories
+      - JSON_boolean_type_is_checked_without_integer_coercion
+      - duplicate_keys_floats_nonfinite_values_and_unsafe_integers_reject
+      - malformed_R5_input_returns_BLOCK_without_uncaught_exception
+  - finding_id: F6-R5-IR-B03
+    prior_severity: blocker
+    disposition: CLOSED_FOR_THIS_REVIEW_SURFACE
+    closure_evidence:
+      - all_65_manifest_bound_paths_hash_verified
+      - package_checksums_and_workspace_payload_mapping_verified
+      - all_12_required_manifest_commands_executed
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_contract_ambiguity: 0
+finding_details: []
+
+result: PASS_NO_BLOCKER
+governance:
+  independent_review_completed: true
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  Git_delivery_authorized: false
+  result_is_not_acceptance_or_freeze: true
+  next_gate: JENN_OWNED_F6_ACCEPTANCE_OR_FREEZE_DECISION

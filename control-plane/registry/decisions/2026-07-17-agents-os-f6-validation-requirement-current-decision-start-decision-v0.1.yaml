@@ -1,0 +1,188 @@
+schema_version: agents-os.contract-unit-start-decision.v0.1
+record_id: agents-os-f6-validation-requirement-current-decision-start-decision-v0.1
+record_type: ContractUnitStartDecision
+status: active
+immutable: true
+created_at: 2026-07-17T21:19:50+08:00
+effective_at: 2026-07-17T21:19:50+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: 启动 F6 Validation Requirement Current Decision Contract Closure。
+
+contract_unit:
+  id: F6
+  name: Validation Requirement Current Decision
+  mode: ATOMIC_CONTRACT_CLOSURE
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+  implementation_profile_included: false
+  production_profile_included: false
+
+prerequisites:
+  phase_4_start:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  construction_readiness:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  F1_acceptance:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  F3_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+  F3_manifest:
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+  F3_independent_review:
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r4-full-atomic-independent-review.yaml
+    sha256: 19c14d0a926d76f89a460b8d596c573a49a8fa580739227847ac765b0e52d38b
+    result: PASS_NO_BLOCKER
+  F5_freeze:
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+  F5_manifest:
+    path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+  F5_independent_review:
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+    result: PASS_NO_BLOCKER
+  F5_mainline_integration:
+    branch: main
+    merge_commit: 57523eea7cc6bf0579eebb250dfdbaa6e110e706
+  F5_mainline_durability_completion:
+    branch: main
+    merge_commit: f1c5f6e2d99217a43cede082bedb75b4fc31e8e7
+    tree: 1b5f69b0ee708c67588ccafdb5f9a306a6b86abb
+    manifest_inputs_verified: 64_64
+    frozen_subjects_verified: 28_28
+
+direction_inputs:
+  workspace_governance:
+    path: AGENTS.md
+    sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+  accepted_home_roadmap_subject:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  accepted_home_roadmap_decision:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  accepted_resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+
+authorized_scope:
+  - canonical_ValidationRequirement_identity_revision_source_and_provenance_boundary
+  - deterministic_current_ValidationRequirement_decision_reducer
+  - exact_binding_to_current_Task_lifecycle_completion_task_spec_result_and_requirement_revisions
+  - required_Validation_set_snapshot_currentness_and_supersession
+  - deterministic_reason_totality_and_fail_closed_INDETERMINATE_handling
+  - evidence_currentness_expiry_conflict_and_carry_forward_decision_boundary
+  - exact_Task_completion_eligibility_without_treating_Run_success_as_Task_completion
+  - current_completion_decision_binding_to_F1_success_criteria_and_F3_canonical_ledger_barrier
+  - monotonic_consumption_of_frozen_upstream_assessments_without_recomputing_their_authority
+  - synthetic_M0_A_constructibility_without_real_Task_Run_Validation_delivery_provider_secret_or_effect
+  - F6_author_self_review_and_fresh_hash_bound_independent_review_package
+  - Document_Registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+ownership_boundary:
+  F6_may:
+    - consume_fixed_F1_Task_Goal_and_success_criteria_refs_fingerprints_and_current_results
+    - consume_fixed_F3_Event_Command_current_read_barrier_and_canonical_writer_results
+    - consume_fixed_F5_delivery_recovery_refs_only_when_a_Validation_requirement_explicitly_binds_them
+    - narrow_Task_completion_eligibility
+    - own_current_ValidationRequirement_decision_and_Task_completion_eligibility_reducers
+  F6_must_not:
+    - reconstruct_or_reduce_F1_F2_F3_F4_or_F5_authority
+    - classify_an_Actor_or_Task_by_permission_level_color_role_relationship_trust_or_urgency
+    - treat_missing_unknown_expired_or_conflicting_evidence_as_pass
+    - treat_Run_success_or_delivery_ACK_as_Validation_PASS_or_Task_completion
+    - add_replace_lower_or_waive_a_Requirement_without_the_exact_upstream_authority_and_revision
+    - create_expand_union_or infer_Task_effect_or_execution_authority
+    - convert_synthetic_evidence_into_runtime_or_production_authority
+
+deferred_scope:
+  F7:
+    owns: [Home_Minimum_Semantics_and_Memory_Session_Artifact_Boundary]
+    started: false
+  implementation_profile:
+    owns: [Rust_JavaScript_SQLite_schema_migration_index_cache_validator_runtime_performance_and_tests]
+    authorized: false
+  production_profile:
+    owns: [real_Task_Run_Validation_host_provider_service_credentials_database_and_external_effect]
+    authorized: false
+  owner_interface_amendments:
+    owns: [any_required_F1_F3_or_F5_new_accepted_interface]
+    authorized: false
+
+authorized_outputs:
+  - F6_R1_contract_draft
+  - F6_R1_synthetic_fixture_builder
+  - F6_R1_synthetic_fixture
+  - F6_R1_offline_semantic_validator
+  - F6_R1_author_self_review
+  - F6_R1_hash_bound_independent_review_manifest_and_package
+  - F6_R1_registry_CURRENT_STATE_queue_and_receipt_projection
+  - correction_amendment_and_fresh_review_cycle_if_independent_findings_require_it
+  - Jenn_only_atomic_accept_freeze_decision_surface_after_valid_independent_PASS
+
+acceptance_boundary:
+  draft_or_author_review_accepts_F6: false
+  independent_review_accepts_F6: false
+  automatic_acceptance: forbidden
+  Jenn_atomic_decision_required: true
+  partial_acceptance: forbidden
+
+hard_boundaries:
+  modify_F1_F2_F3_F4_or_F5_accepted_or_frozen_subject_bytes: forbidden
+  synthesize_a_real_Validation_PASS_or_Task_completion: forbidden
+  mutate_a_real_Task_Run_Validation_or_Event: forbidden
+  execute_or_reconcile_a_real_delivery_or_effect: forbidden
+  start_F7_F8_F9_F10_or_F11: forbidden
+  implementation: forbidden
+  runtime_source_change: forbidden
+  Resident_Worker_Host_validator_or_service_start: forbidden
+  database_creation_migration_or_live_access: forbidden
+  production_authentication_or_credential_change: forbidden
+  provider_process_file_network_device_or_UI_execution: forbidden
+  public_API_or_MCP_expansion: forbidden
+  secret_or_private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+  tag_release_deploy_or_publish: forbidden
+
+automatic_progression:
+  within_F6_contract_review_cycle: authorized
+  finding_disposition_and_narrow_amendment: authorized_when_evidence_bound
+  start_downstream_contract_or_implementation: forbidden
+
+effects:
+  F6_started: true
+  F6_status: CONTRACT_CLOSURE_ACTIVE
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  real_Task_Run_Validation_mutation_authorized: false
+  real_effect_execution_authorized: false
+
+next_gate:
+  name: F6_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

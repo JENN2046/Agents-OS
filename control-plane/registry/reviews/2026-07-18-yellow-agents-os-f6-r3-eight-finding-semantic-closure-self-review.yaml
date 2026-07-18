@@ -1,0 +1,159 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f6-r3-eight-finding-semantic-closure-self-review-v0.1
+date: 2026-07-18
+reviewer:
+  identity: Nobao
+  role: F6_R3_author
+  independent: false
+  may_substitute_for_fresh_independent_review: false
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 4
+  R3_subject_count: 4
+  total_subject_count: 12
+  precedence: [R3_explicit_replacements, R2_all_other_clauses, R1_all_other_clauses]
+  R3_subjects:
+    - role: normative_amendment
+      path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r3-amendment.draft.md
+      sha256: ed638d59c3c7eeab594ddc9c21aa834c7ea49b08e8c312c5bdadbbce5b142fae
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f6-r3-eight-finding-semantic-closure.py
+      sha256: 40e9f77d868ec7b4a9053ce360284736ec9c46829b044e65226e60135653493b
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-18-agents-os-f6-r3-eight-finding-semantic-closure-v0.1.json
+      sha256: 86dfedec6d2e37a6aad83a6e2564a1403efac33ccb951d226cf40fbe513b128a
+    - role: offline_semantic_validator
+      path: control-plane/registry/validate-f6-r3-eight-finding-semantic-closure.py
+      sha256: dd90481b0cb32daf28d0a27c31146209bd5c981335dc41020540651f1457111f
+
+immutable_lineage:
+  R1_manifest_sha256: 65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+  R1_independent_review_sha256: a623f99adabc78ff5e2a43598e26107ad6c231964e82cba0f8ff66b138a7bae6
+  R2_manifest_sha256: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+  R2_independent_review_sha256: c6ea5ee5e390dec378c4627df7af99feaf9e5972b0df45bc54031ac933a654c3
+  R2_coordinated_probe_results_sha256: 8d3a79ff4de80addddb6f4d0e59d1ffc3c1f8b31fe08c8f901d027906e58d1da
+  R2_independent_review_disposition_sha256: 30121f5bc4288340c230ed612572db7df47e37c5b6a0d9dc7358acdd59af0b2a
+  R3_start_decision_sha256: 8736fd2faed03c34cbdb4ea96dfdf17b007625ffd3456e7d4a6136c072153737
+
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_ambiguity: 0
+
+finding_closure:
+  - finding_id: F6-R2-IR-B01
+    status: CLOSED_MACHINE_VERIFIABLE_SCHEMA_AND_MATRIX
+    evidence:
+      - ten_complete_schema_profiles_bind_types_enums_nullability_integer_ranges_and_nested_profiles
+      - every_normative_and_supporting_instance_has_a_closed_field_inventory
+      - Requirement_Set_and_completion_output_relations_are_independently_derived
+      - empty_completion_counts_unknown_source_kind_and_SATISFIED_plus_waiver_are_rejected
+  - finding_id: F6-R2-IR-B02
+    status: CLOSED_OWNER_ASSESSMENT_AND_CONTEXT_EXACTNESS
+    evidence:
+      - exact_F1_candidate_and_dependency_assessments_bind_every_attempt_Task_and_completion_consumer
+      - owner_phase_contract_subject_revision_result_head_barrier_and_watermark_are_checked
+      - missing_dependency_or_coordinated_context_replacement_is_rejected
+  - finding_id: F6-R2-IR-B03
+    status: CLOSED_EXACT_JENN_WAIVER_ROOT
+    evidence:
+      - Jenn_decision_binds_exact_Requirement_revision_and_CURRENT_ACCEPTED
+      - exact_GRANT_Command_WAIVER_COMMITTED_Event_and_F3_owner_assessment_are_typed_and_bound
+      - complete_decision_Command_Event_substitution_is_rejected
+  - finding_id: F6-R2-IR-B04
+    status: CLOSED_PROVENANCE_COMMAND_EVENT_GRAPH
+    evidence:
+      - source_kind_is_the_closed_R1_four_value_set
+      - source_Command_Event_and_owner_assessment_bind_the_exact_Requirement_revision
+      - all_supporting_object_groups_and_payload_fields_are_closed
+  - finding_id: F6-R2-IR-B05
+    status: CLOSED_TRUSTED_TIME_AND_TYPED_EVENT_ORDER
+    evidence:
+      - TrustedTime_resolves_the_exact_F3_barrier_and_cannot_observe_beyond_it
+      - Requirement_snapshot_waiver_attempt_assessment_and_barrier_edges_are_rederived
+      - Validation_Set_and_attempt_Commands_and_Events_bind_typed_subjects
+  - finding_id: F6-R2-IR-B06
+    status: CLOSED_EXACT_F5_SUBJECT_ASSESSMENT
+    evidence:
+      - effectful_Requirement_delivery_ref_revision_fingerprint_and_payload_equal_the_F5_assessment_subject
+      - F5_result_must_be_current_F5_owned_APPLIED_CURRENT
+      - F5_remains_supporting_evidence_only
+  - finding_id: F6-R2-IR-B07
+    status: CLOSED_EXACT_CARRY_SOURCE_AND_ROOT
+    evidence:
+      - source_and_root_ref_revision_fingerprint_resolve_to_one_original_fresh_PASSED_attempt
+      - the_original_source_cannot_itself_be_carry_forward
+      - revision_only_substitution_is_rejected
+  - finding_id: F6-R2-IR-M01
+    status: CLOSED_EVIDENCE_OBJECT_ASSESSMENT_AND_ATTEMPT_COMMITMENT
+    evidence:
+      - every_evidence_binding_resolves_an_exact_synthetic_object_and_F3_owned_assessment
+      - aggregate_assessment_equals_the_sorted_unique_complete_evidence_set
+      - attempt_commitment_and_typed_commit_Event_bind_context_predecessor_and_evidence_set
+      - add_delete_duplicate_and_reorder_cases_are_rejected_without_exceptions
+
+validator_reproduction:
+  result: PASS_NO_BLOCKER
+  normative_schema_count: 10
+  normative_instance_count: 40
+  positive_graph_count: 3
+  R1_fixed_mutations_rejected: 32
+  R1_independent_regressions_rejected: 18
+  R2_additional_negatives_rejected: 12
+  fixed_negative_total_rejected: 62
+  R2_independent_coordinated_probes_rejected: 17
+  mutation_exception_count: 0
+  fixture_canonical_sha256: 86dfedec6d2e37a6aad83a6e2564a1403efac33ccb951d226cf40fbe513b128a
+  derived_satisfied_count: 3
+  derived_waived_count: 1
+  derived_completion_eligible_count: 1
+  accepted_real_task_count: 0
+  task_done_mutation_count: 0
+  runtime_activation_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  database_write_count: 0
+  raw_secret_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+author_boundary_judgment:
+  consumes_owner_assessments_without_recomputing_owner_authority: true
+  creates_permission_level_or_second_identity_authority: false
+  F5_APPLIED_CURRENT_creates_Validation_PASS: false
+  synthetic_objects_are_production_authority: false
+  runtime_usable: false
+  real_Task_Run_Validation_Event_waiver_or_completion_occurrence: false
+  R1_or_R2_subject_bytes_modified: false
+
+known_review_focus:
+  - recompute_all_subject_authority_and_author_evidence_hashes
+  - confirm_all_17_prior_coordinated_cases_are_semantically_rejected
+  - update_all_dependent_objects_and_R3_closure_rows_in_new_independent_cases
+  - independently_check_owner_kind_phase_contract_and_subject_matrices
+  - independently_replace_Jenn_decision_Command_Event_and_waiver_together
+  - independently_change_provenance_source_Command_Event_and_assessment_together
+  - independently_change_TrustedTime_barrier_and_event_order_edges
+  - independently_change_F5_delivery_subject_and_assessment_together
+  - independently_change_carry_source_root_and_revisions_together
+  - independently_add_or_remove_evidence_objects_assessments_and_attempt_commitments
+  - confirm_synthetic_and_prospective_material_cannot_be_runtime_authority
+
+gate_and_authorization:
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_service_provider_or_effect_authorized: false
+  real_Task_Run_Validation_Event_waiver_or_completion_mutation_authorized: false
+  Git_delivery_authorized: false
+
+next_gate: F6_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

@@ -1,0 +1,96 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f6-r4-five-finding-consistency-closure-start-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_explicit_instruction_after_F6_R3_independent_BLOCK
+  statement_summary: >-
+    Jenn directed that R4 correct only five surfaces: one exact Task identity
+    across Task, Requirement, Validation Set, attempt, completion and the F1
+    Task assessment; exact equality between every consumer assessment revision
+    and its resolved assessment; waiver expiry and currentness derived from
+    TrustedTime; evidence subject binding to exact Requirement revision and
+    attempt context; and strict Event order for attempt predecessors and carry
+    sources. No other F6, F7, implementation or runtime scope is authorized.
+
+R3_manifest_path: control-plane/registry/reports/2026-07-18-agents-os-f6-r3-atomic-independent-review-package-v0.1.manifest.yaml
+R3_manifest_sha256: eee73506e6b4772ea095420aff153a96b3d54c4e5522d36451eb32eba3fc10ca
+R3_review_path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r3-full-atomic-independent-review.yaml
+R3_review_sha256: ffbd04f0ad11846e93d82cdd0009f7236f2883f392ab698e65ab870a59e18180
+R3_case_evidence_path: control-plane/registry/reviews/2026-07-18-f6-r3-independent-consistency-cases.json
+R3_case_evidence_sha256: c023ecbdd9aaff8e81a73120cbd18518f847b156c9aaf91f6bd5bf635201e443
+R3_disposition_path: control-plane/registry/reviews/2026-07-18-agents-os-f6-r3-independent-review-disposition-v0.1.yaml
+R3_disposition_sha256: a8cc8f0f8c5a863dd8bd4c4a22d4a1a61f98f7a133ac85a099b36131d0aa3722
+
+authorized_findings:
+  - F6-R3-IR-B01
+  - F6-R3-IR-B02
+  - F6-R3-IR-B03
+  - F6-R3-IR-B04
+  - F6-R3-IR-B05
+
+authorized_corrections:
+  - same_Task_identity_closure_across_all_F6_consumers_and_F1_assessment
+  - resolved_assessment_revision_equality_at_every_consumer
+  - TrustedTime_derived_waiver_validity
+  - exact_evidence_Requirement_revision_and_attempt_context_binding
+  - strict_attempt_predecessor_and_carry_source_Event_order
+
+authorized_subjects:
+  - R4_normative_amendment
+  - R4_deterministic_fixture_builder
+  - R4_synthetic_fixture
+  - R4_offline_semantic_validator
+  - R4_author_self_review_and_review_package_evidence
+
+R4_atomic_review_shape:
+  review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R4_ATOMIC_BUNDLE
+  R1_subject_count: 4
+  R2_subject_count: 4
+  R3_subject_count: 4
+  R4_subject_count: 4
+  total_subject_count: 16
+  precedence:
+    - R4_explicit_replacements
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+  partial_review: forbidden
+  fresh_full_atomic_hash_bound_independent_review: required
+
+regression_floor:
+  fixed_negative_total: 62_of_62_REJECTED
+  R2_coordinated_cases: 17_of_17_REJECTED
+  R3_independent_cases: 7_of_7_REJECTED
+  mutation_or_case_exceptions: 0
+
+forbidden_scope:
+  - edit_R1_R2_or_R3_fixed_subjects_reviews_manifests_or_decisions
+  - new_Validation_Task_waiver_evidence_delivery_or_completion_state
+  - F1_F3_or_F5_frozen_subject_modification
+  - F7_semantics_or_start
+  - Rust_JavaScript_database_service_provider_or_transport_implementation
+  - production_authentication
+  - runtime_activation
+  - real_Task_Run_Validation_Event_waiver_completion_or_effect_mutation
+  - automatic_F6_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R5_preplanned: false
+  R5_allowed_only_for_new_independent_reproducible_safety_counterexample: true
+  pass_route: STOP_F6_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R2_R3_R4_BYTES_AND_ROUTE_ONLY_NEW_REAL_SAFETY_FINDINGS
+
+authority_effect:
+  F6_R4_started: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  provider_database_service_or_physical_effect_authorized: false
+  Git_delivery_authorized: false

@@ -1,0 +1,140 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r5-full-atomic-independent-review-2026-07-18
+date: '2026-07-18'
+reviewer:
+  identity: OpenAI GPT-5.6 Thinking — fresh independent review execution
+  independence_basis:
+    - not_the_F6_R5_author_run
+    - did_not_modify_any_R1_through_R5_subject
+    - author_self_review_used_only_as_nonindependent_evidence
+    - independently_read_and_analyzed_the_accessible_R5_builder_validator_manifest_and_R4_blocker
+  limitation_note: >-
+    The current ColaMeta review surface refused direct reads of required draft and
+    fixture subjects and refused executor dispatch because the reviewed workspace
+    is intentionally dirty. Those limits are recorded as an integrity blocker and
+    are not treated as semantic evidence of PASS.
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 20
+  declared_input_count: 58
+  precedence:
+    - R5_explicit_replacements
+    - R4_all_other_clauses
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+
+package_integrity:
+  canonical_manifest_path: control-plane/registry/reports/2026-07-18-agents-os-f6-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_declared: bb506ba3213a68d4e12797ae142fc73ef0a49f32166802972b70dde662f8c43b
+  manifest_read: true
+  all_58_hashes_independently_recomputed: false
+  subjects_fully_read: false
+  authority_inputs_fully_read: false
+  unavailable_required_inputs:
+    - path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r5-amendment.draft.md
+      error: FILE_NOT_ALLOWED
+    - path: control-plane/registry/examples/2026-07-18-agents-os-f6-r5-contextual-evidence-assessment-closure-v0.1.json
+      error: FILE_NOT_ALLOWED
+  package_rule_applied: any_unavailable_or_unverified_required_input_produces_BLOCK
+
+fixed_commands:
+  required: 10
+  executed: 0
+  status: BLOCKED_BY_CURRENT_REVIEW_SURFACE
+  evidence:
+    - agent_dispatch_preflight: DIRTY_GIT_STATUS
+    - generic_target_file_validation_preview: only_git_diff_check_not_manifest_commands
+  judgment: fixed_validator_PASS_is_necessary_but_not_available_and_would_not_be_sufficient
+
+result: BLOCK
+requires_R6: true
+F6_revision_stop: false
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved_contract_ambiguity: 0
+
+finding_details:
+  - finding_id: F6-R5-IR-B01
+    severity: blocker
+    title: Fully coordinated same-revision re-sign is not rejected
+    observation: >-
+      The fixed R5 context_case changes the candidate and all R3/R4 consumers but
+      deliberately leaves contextual_evidence_assessments unchanged. It proves only
+      that a stale assessment is rejected. validate_contextual has no immutable
+      baseline comparison. A coordinated mutation can update each assessed_subject
+      to the new evidence, Requirement and attempt-context tuple, preserve the same
+      assessment_ref, assessment_revision and attempt_revision, recompute assessment
+      fingerprints, cascade predecessor fingerprints, update binding fingerprints and
+      recompute the R5 root. Every current-value comparison then succeeds.
+    target_semantic_incorrectly_accepted: true
+    stale_hash_or_unpropagated_reference: false
+    control_flow_basis:
+      - assessment_revision_is_only_compared_for_equality_with_attempt_revision
+      - no_rule_proves_revision_advance_after_subject_change
+      - no_fixed_prior_assessment_fingerprint_is_consulted
+      - the_fixed_context_case_does_not_resign_the_assessment
+    violated_required_adversarial_check: reuse_same_assessment_revision_for_new_attempt_context
+    narrow_correction:
+      - preserve_the_original_attempt_and_contextual_assessment_revision_as_immutable_history
+      - require_a_new_attempt_revision_and_new_assessment_revision_for_any_evidence_Requirement_or_context_change
+      - bind_each_new_revision_to_the_exact_predecessor_attempt_and_assessment_fingerprints
+      - add_a_fully_coordinated_in_place_resign_negative_case_and_require_target_semantic_rejection
+
+  - finding_id: F6-R5-IR-B02
+    severity: blocker
+    title: New contextual assessment schema is not closed or strictly typed
+    observation: >-
+      validate_contextual checks the five wrapper fields but never checks the exact
+      contextual-assessment payload field inventory. An unknown payload field is
+      accepted after dependent fingerprints are recomputed. The validator also uses
+      Python equality for boolean values, so JSON integers 1 and 0 can substitute for
+      true and false in is_current_head. Missing or malformed fields may raise an
+      uncaught exception instead of returning a deterministic semantic/schema BLOCK.
+    stale_hash_or_unpropagated_reference: false
+    reproducible_cases:
+      - add_unknown_payload_field_and_resign_all_dependents
+      - replace_is_current_head_booleans_with_1_and_0_and_resign
+      - remove_a_required_payload_field_and_observe_uncaught_validation_exception
+    narrow_correction:
+      - define_and_enforce_the_exact_payload_field_set
+      - enforce_exact_JSON_value_kinds_nullability_and_integer_ranges
+      - use_type_value_is_bool_for_boolean_fields
+      - reject_duplicate_JSON_keys_and_noncanonical_numeric_types
+      - catch_all_validation_shape_errors_and_return_BLOCK_without_exception
+
+  - finding_id: F6-R5-IR-B03
+    severity: blocker
+    title: Required atomic evidence could not be independently reproduced
+    observation: >-
+      The package itself requires all 58 hashes, all 20 subjects, all 37 authority
+      inputs, one author evidence file and all ten fixed commands. The current MCP
+      review surface denied required subject bytes and could not execute the exact
+      command set. Under the package contract this independently requires BLOCK.
+    semantic_revision_required_for_this_finding: false
+    narrow_correction:
+      - expose_all_manifest_bound_bytes_through_a_read_only_review_bundle_or_immutable_archive
+      - expose_one_exact_manifest_command_runner_without_requiring_a_clean_subject_workspace
+
+positive_findings:
+  - R5 correctly introduces an F3-owned contextual evidence assessment rather than accepting an outer mirror alone.
+  - The assessed subject includes evidence, Requirement, attempt revision and attempt context fingerprint.
+  - Owner contract, barrier, result, current-head and predecessor checks are present.
+  - The unchanged-assessment R4 context replacement is targeted by the fixed R5 test.
+  - No second permission system, runtime authority or real effect path is introduced by the reviewed code.
+
+governance:
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  Git_delivery_authorized: false
+  next_gate: F6_R6_NARROW_REVISION_FOR_SAME_REVISION_IMMUTABILITY_AND_SCHEMA_TOTALITY

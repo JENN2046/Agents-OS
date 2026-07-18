@@ -1,0 +1,130 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f6-r3-eight-finding-semantic-closure-start-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+
+decision_basis:
+  source: Jenn_current_explicit_instruction_after_F6_R2_independent_BLOCK
+  statement_summary: >-
+    Jenn provided the fixed external F6 R2 independent BLOCK and directed that
+    the next step close only its eight findings through a narrow R3. R3 must
+    preserve every fixed R1 and R2 byte, add no F7, implementation, runtime,
+    database, provider or production-authentication scope, and return to a
+    fresh full atomic hash-bound independent review.
+
+R2_manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f6-r2-atomic-independent-review-package-v0.1.manifest.yaml
+R2_manifest_sha256: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+R2_review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r2-full-atomic-independent-review.yaml
+R2_review_sha256: c6ea5ee5e390dec378c4627df7af99feaf9e5972b0df45bc54031ac933a654c3
+R2_probe_evidence_path: control-plane/registry/reviews/2026-07-18-f6-r2-independent-coordinated-probes.json
+R2_probe_evidence_sha256: 8d3a79ff4de80addddb6f4d0e59d1ffc3c1f8b31fe08c8f901d027906e58d1da
+R2_disposition_path: control-plane/registry/reviews/2026-07-18-agents-os-f6-r2-independent-review-disposition-v0.1.yaml
+R2_disposition_sha256: 30121f5bc4288340c230ed612572db7df47e37c5b6a0d9dc7358acdd59af0b2a
+
+trigger_evidence:
+  review_result: BLOCK
+  blocker_count: 7
+  major_count: 1
+  minor_count: 0
+  unresolved_count: 8
+  fixed_negative_cases_rejected: 62_of_62
+  independent_coordinated_probes_executed: 17
+  independent_coordinated_probes_rejected: 5
+  independent_coordinated_probes_incorrectly_accepted: 12
+  probe_execution_exceptions: 0
+  R3_truly_required: true
+
+authorized_proof_surfaces:
+  - id: S1_MACHINE_VERIFIABLE_SCHEMA_AND_OUTPUT_TOTALITY
+    findings: [F6-R2-IR-B01]
+    scope:
+      - constraints_bound_schema_profiles_for_all_ten_normative_schemas
+      - exact_quiescence_count_and_output_cross_field_matrices
+      - closed_provenance_source_kind_enum
+  - id: S2_OWNER_ASSESSMENT_AND_CONTEXT_EXACTNESS
+    findings: [F6-R2-IR-B02]
+    scope:
+      - mandatory_per_kind_owner_assessment_tuple
+      - exact_owner_phase_and_owner_contract_binding
+      - same_candidate_dependency_assessment_for_attempt_and_completion
+  - id: S3_WAIVER_PROVENANCE_AND_EVENT_ORDER_ROOT_CLOSURE
+    findings: [F6-R2-IR-B03, F6-R2-IR-B04, F6-R2-IR-B05]
+    scope:
+      - exact_Jenn_decision_Requirement_GRANT_Command_Event_and_owner_head_binding
+      - typed_provenance_source_Command_Event_and_owner_assessment_binding
+      - exact_TrustedTime_F3_barrier_and_cross_object_partial_order
+  - id: S4_F5_AND_CARRY_SOURCE_EXACTNESS
+    findings: [F6-R2-IR-B06, F6-R2-IR-B07]
+    scope:
+      - exact_F5_delivery_subject_assessment_ref_revision_fingerprint_payload_and_barrier
+      - exact_original_fresh_carry_source_and_root_ref_revision_fingerprint
+  - id: S5_EVIDENCE_OBJECT_ASSESSMENT_AND_REVISION_IMMUTABILITY
+    findings: [F6-R2-IR-M01]
+    scope:
+      - exact_per_evidence_object_and_assessment_binding
+      - immutable_attempt_revision_predecessor_on_evidence_set_change
+      - preserved_sorted_unique_enforcement
+
+authorized_subjects:
+  - R3_normative_amendment
+  - R3_deterministic_fixture_builder
+  - R3_synthetic_fixture
+  - R3_offline_semantic_validator
+  - R3_author_self_review_and_review_package_evidence
+
+R3_atomic_review_shape:
+  review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R3_ATOMIC_BUNDLE
+  R1_subject_count: 4
+  R2_subject_count: 4
+  R3_subject_count: 4
+  total_subject_count: 12
+  precedence:
+    - R3_explicit_replacements
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+  partial_review: forbidden
+  fresh_full_atomic_hash_bound_independent_review: required
+
+regression_floor:
+  R1_fixed_mutations: 32_of_32_REJECTED
+  R1_independent_regressions: 18_of_18_REJECTED
+  R2_additional_negatives: 12_of_12_REJECTED
+  fixed_total: 62_of_62_REJECTED
+  R2_independent_coordinated_probes: 17_of_17_REJECTED
+  mutation_or_probe_exceptions: 0
+
+forbidden_scope:
+  - edit_R1_or_R2_contract_builder_fixture_validator_self_review_or_manifest
+  - new_Validation_or_Task_states
+  - new_waiver_types_or_operations
+  - new_delivery_receipt_retry_or_evidence_classes
+  - F1_F3_or_F5_frozen_subject_modification
+  - F7_semantics_or_start
+  - Rust_JavaScript_database_or_service_implementation
+  - provider_transport_or_real_effect
+  - production_authentication
+  - runtime_activation
+  - real_Task_Run_Validation_Event_waiver_completion_or_effect_mutation
+  - automatic_F6_acceptance_or_freeze
+  - commit_push_PR_merge_release_deploy_publish_or_tag
+
+stop_rule:
+  R4_preplanned: false
+  R4_allowed_only_for_new_independent_reproducible_safety_counterexample: true
+  implementation_profile_question_does_not_trigger_R4: true
+  pass_route: STOP_F6_REVISION_AND_PREPARE_JENN_ONLY_ATOMIC_FREEZE_DECISION_SURFACE
+  block_route: PRESERVE_FIXED_R1_R2_R3_BYTES_AND_ROUTE_ONLY_NEW_REAL_SAFETY_FINDINGS
+
+authority_effect:
+  F6_R3_started: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_database_service_or_physical_effect_authorized: false
+  real_Task_Run_Validation_Event_waiver_or_completion_mutation_authorized: false
+  Git_delivery_authorized: false

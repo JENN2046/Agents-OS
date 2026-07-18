@@ -1,0 +1,54 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r4-full-atomic-independent-review-2026-07-18
+date: 2026-07-18
+reviewer:
+  identity: independent Codex window
+  independence_basis: [not_the_R4_author_run, reviewed_fixed_uploaded_bytes, did_not_modify_subjects, author_self_review_not_used_as_judgment]
+review_unit: {id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R4_ATOMIC_BUNDLE, atomic: true, partial_review: forbidden, subject_count: 16}
+result: BLOCK
+requires_R5: true
+findings: {blocker: 1, major: 0, minor: 0}
+integrity:
+  archive_sha256: 60f9eb7ccb0f5373de1dfee7267989aea230165c0ed81225460828a3dfbf4bd5
+  manifest_sha256: 22396132777538619620c6e1e5ceb4b03338d08b9792c60c266a6d744721bb93
+  declared_inputs_verified: 49_of_49
+  subjects_read: 16_of_16
+  authority_inputs_read: 32_of_32
+  author_evidence_read: 1_of_1
+  fixed_commands_passed: 8_of_8
+  fixed_negative_total_rejected: 62_of_62
+  R2_coordinated_cases_rejected: 17_of_17
+  R3_cases_rejected: 7_of_7
+  exceptions: 0
+finding_details:
+  - finding_id: F6-R4-IR-B01
+    severity: blocker
+    title: Evidence assessment does not commit the attempt context it assessed
+    observation: >-
+      A fully resigned coordinated case replaced the exact F1 candidate and
+      propagated the new candidate tuple through Task, every attempt context,
+      completion, all dependent objects and both R3 and R4 roots while retaining
+      every evidence assessment ref, revision and fingerprint. The validator
+      returned no errors even though attempt contexts changed and evidence
+      assessments did not.
+    target_semantic_incorrectly_accepted: true
+    stale_hash_or_unpropagated_reference: false
+    probe_exception: false
+    required_correction:
+      - evidence_assessment_subject_commits_evidence_ref_revision_fingerprint
+      - evidence_assessment_subject_commits_Requirement_id_revision_fingerprint
+      - evidence_assessment_subject_commits_attempt_context_fingerprint
+      - any_change_requires_new_assessment_and_new_attempt_revision
+scope_checks:
+  second_permission_system_found: false
+  upstream_authority_recomputation_found: false
+  synthetic_authority_leak_found: false
+  real_runtime_provider_database_or_effect_occurrence_found: false
+governance:
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+

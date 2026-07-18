@@ -1,0 +1,461 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r1-full-atomic-independent-review-v0.1
+review_type: fresh_full_atomic_hash_bound_independent_review
+date: 2026-07-17
+result: BLOCK
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+  atomic_review_completed: true
+  partial_review_performed: false
+  subject_count: 4
+  authority_input_count: 17
+  author_evidence_count: 1
+  declared_input_count: 22
+
+reviewer_identity_and_independence_basis:
+  reviewer: Codex fresh independent reviewer run /root/f6_r1_independent_review
+  author_run: false
+  subject_bytes_modified: false
+  files_created_modified_or_deleted_during_review: false
+  commit_push_or_external_write_performed: false
+  author_self_review_read_only_after_fresh_subject_judgment: true
+  author_self_review_conclusion_used: false
+  prior_reviews_substituted_for_current_judgment: false
+  network_runtime_or_provider_accessed: false
+  forbidden_inputs_accessed: false
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-17-agents-os-f6-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  expected_sha256: 65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+  actual_sha256: 65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+  status: MATCH
+
+input_verification:
+  every_input_hash_verified: true
+  verified_input_count: 22
+  hash_match_count: 22
+  hash_mismatch_count: 0
+  all_four_subjects_fully_read_unchanged: true
+  all_seventeen_authority_inputs_fully_read_unchanged: true
+  author_evidence_fully_read_after_fresh_judgment: true
+  subject_hashes:
+    normative_contract: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+    deterministic_fixture_builder: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+    synthetic_fixture: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+    independent_offline_semantic_validator: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+  author_self_review_sha256: d120b1a96584f702013a33f865e3f783e968567a6da765cd180b4965f5e4d691
+
+fixed_command_results:
+  - id: offline_validator
+    executed_exact_manifest_command: true
+    exit_code: 0
+    result: PASS_NO_BLOCKER
+    exact_counts:
+      normative_schema_count_reported: 10
+      decision_vector_count: 54
+      requirement_case_count: 22
+      validation_set_case_count: 10
+      completion_case_count: 22
+      precedence_raw_trial_count: 342
+      negative_mutations_rejected: 32
+      graph_requirement_count: 4
+      graph_validation_set_count: 2
+      graph_attempt_revision_count: 6
+      graph_waiver_event_count: 1
+  - id: builder_byte_equality
+    executed_exact_manifest_command: true
+    exit_code: 0
+    result: BYTE_IDENTICAL
+    built_byte_count: 288175
+    fixed_byte_count: 288175
+    temporary_file_deleted: true
+    workspace_file_created_or_modified: false
+fixed_command_summary: LITERAL_PASS_2_OF_2
+
+independent_integrity_reproduction:
+  fixture_canonical_sha256: 014c3154bd8d2f75f45b845901c6665211dce16a6580c8e7a4755692f335ccff
+  fixture_canonical_sha256_recomputed_independently: true
+  graph_fingerprint: 0421db9e455cdff0d2cf83f20cb49a3dd6a6b33227b026500d2c3cb2a790bc18
+  graph_fingerprint_recomputed_independently: true
+  duplicate_JSON_key_rejection: PASS
+  float_rejection: PASS
+  NFC_and_safe_integer_tree_validation_present: true
+  builder_imported_by_validator: false
+  fixed_builder_fixture_byte_equality: PASS
+
+independent_probe_accounting:
+  fixed_manifest_mutations:
+    executed: 32
+    rejected: 32
+    accepted: 0
+    mutation_exceptions_counted_as_rejection: false
+  additional_defect_probes:
+    executed: 18
+    rejected: 0
+    incorrectly_accepted: 18
+  additional_rejection_controls:
+    executed: 8
+    rejected: 8
+    accepted: 0
+  nonfinding_carry_forward_observation:
+    executed: 1
+    accepted: 1
+    finding_created: false
+  total_additional_probes:
+    executed: 27
+    accepted: 19
+    rejected: 8
+    accepted_confirmed_defects: 18
+    accepted_consistent_with_contract_interpretation: 1
+
+additional_defect_probe_details:
+  - id: F6-R1-IR-P01
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: PASSED_requirement_vector_authority_result_NOT_APPLICABLE
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    defect_layers: [fixture_vector_profile, validator_reducer]
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P02
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: FRESH_VALIDATION_vector_with_carry_forward_status_VALID
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    defect_layers: [fixture_vector_profile, validator_cross_field_matrix]
+    severity: major
+    may_change_Requirement_SATISFIED: false
+    may_change_Task_DONE: false
+  - id: F6-R1-IR-P03
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: TASK_CURRENTNESS_subject_revision_5_to_4
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P04
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: CANDIDATE_CURRENTNESS_subject_revision_9_to_8
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P05
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: DEPENDENCY_CURRENTNESS_subject_revision_9_to_8
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P06
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: F5_COMPLETION_CURRENTNESS_subject_revision_5_to_4
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P07
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: COMPLETION_GUARD_CURRENTNESS_subject_revision_5_to_4
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P08
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: VALIDATION_AUTHORITY_CURRENTNESS_subject_revision_1_to_999
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P09
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: Requirement_created_event_sequence_after_both_snapshot_freeze_events
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P10
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: waiver_Event_sequence_before_base_snapshot_freeze
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_WAIVED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P11
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: caller_selected_Jenn_waiver_decision_ref_and_arbitrary_fingerprint
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_WAIVED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P12
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: Requirement_revision_2_without_predecessor_object
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P13
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: Requirement_revision_2_with_boolean_true_as_supersedes_revision_1
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P14
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: current_PASSED_attempt_bound_to_stale_candidate_while_completion_uses_another_current_candidate
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P15
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: current_PASSED_attempt_bound_to_stale_dependency_while_completion_uses_another_current_closure
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P16
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: unassessed_extra_evidence_ref_added_to_PASSED_attempt
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: major
+    may_change_Requirement_SATISFIED: false
+    may_change_Task_DONE: false
+  - id: F6-R1-IR-P17
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED
+    mutation: caller_selected_JENN_EXPLICIT_provenance_ref_revision_and_fingerprint
+    validator_result: INCORRECTLY_ACCEPTED_WITH_ZERO_ERRORS
+    severity: blocker
+    may_change_Requirement_SATISFIED: true
+    may_change_Task_DONE: true
+  - id: F6-R1-IR-P18
+    execution_basis: ACTUALLY_EXECUTED_FULLY_RESIGNED_PAIR
+    mutation: same_F1_TASK_CURRENTNESS_assessment_used_with_ACTIVE_and_VERIFYING_lifecycle_values
+    validator_result: BOTH_LIFECYCLE_VARIANTS_ACCEPTED_WITH_ZERO_ERRORS
+    unchanged_task_assessment_fingerprint: 456e51f9d05f1c4338ea8ba1fdd7c6397190f504f2b27ff9f68c5b8c96416854
+    severity: blocker
+    may_change_Task_DONE: true
+
+additional_control_probes:
+  executed: 8
+  correctly_rejected: 8
+  probes:
+    - newer_PENDING_attempt_masked_by_older_PASS
+    - revoked_waiver_fallback_to_old_GRANT
+    - F5_APPLIED_CURRENT_attached_to_non_effectful_requirement_vector
+    - evidence_assessment_subject_digest_mismatch
+    - mixed_assessment_watermark
+    - prospective_interface_promoted_to_runtime_usable
+    - completion_count_changed_without_new_guard_assessment
+    - empty_requirement_provenance_and_incomplete_snapshot_union
+
+finding_counts:
+  blocker: 7
+  major: 2
+  minor: 1
+  unresolved: 0
+
+findings:
+  - id: F6-R1-IR-B01
+    severity: blocker
+    title: Task completion can combine PASSED attempts with a different current candidate or dependency context
+    evidence: >-
+      ValidationAttempt binds candidate and dependency refs, but Requirement
+      reduction never compares them with completion_input's exact current
+      candidate and dependency. Fully re-signed probes P14 and P15 remained
+      SATISFIED and ELIGIBLE with mutually different contexts.
+    required_correction:
+      - bind_each_attempt_to_the_exact_current_TaskCommitmentSnapshot_revision_ref_and_fingerprint
+      - bind_the_complete_dependency_authority_envelope
+      - require_every_current_PASSED_head_to_match_the_completion_context
+  - id: F6-R1-IR-B02
+    severity: blocker
+    title: F1-owned Task lifecycle is an unsigned caller field in the positive completion formula
+    evidence: >-
+      task_completion_context_fingerprint excludes task_lifecycle. The same
+      unchanged F1 TASK_CURRENTNESS assessment accepted both VERIFYING and
+      ACTIVE caller values after re-signing.
+    required_correction:
+      - consume_an_exact_F1_TaskCurrentState_or_TaskLifecycle_assessment
+      - bind_lifecycle_and_exact_state_revision_in_the_assessment_subject
+      - remove_unassessed_task_lifecycle_from_the_completion_formula
+  - id: F6-R1-IR-B03
+    severity: blocker
+    title: Opaque upstream assessment subject revisions are carried but never consumed
+    evidence: >-
+      Six independent fully re-signed subject_revision substitutions were
+      accepted, including validator authority revision 1 to 999.
+    required_correction:
+      - define_expected_subject_revision_for_every_owner_kind_pair
+      - compare_subject_revision_at_each_consumer
+      - reject_ref_fingerprint_matches_with_revision_mismatch
+  - id: F6-R1-IR-B04
+    severity: blocker
+    title: Waiver grant authenticity and current Jenn authority are caller-asserted
+    evidence: >-
+      An arbitrary caller-selected Jenn decision ref and fingerprint retained
+      CURRENT_ACCEPTED and produced an active WAIVED Requirement.
+    required_correction:
+      - bind_GRANT_to_exact_authenticated_F3_Command_and_committed_Event
+      - bind_exact_Jenn_authority_assessment_or_accepted_decision_bytes
+      - verify_current_binding_at_the_decision_barrier
+  - id: F6-R1-IR-B05
+    severity: blocker
+    title: Requirement provenance and revision lineage do not prove source authority or predecessor existence
+    evidence: >-
+      Revision 2 without a predecessor was accepted; boolean true was accepted
+      as predecessor revision 1; arbitrary JENN_EXPLICIT provenance was also
+      accepted after re-signing.
+    required_correction:
+      - validate_complete_Requirement_revision_chain
+      - require_actual_predecessor_object_and_fingerprint
+      - reject_boolean_as_integer
+      - bind_provenance_to_accepted_owner_assessment_and_authenticated_Command_Event
+  - id: F6-R1-IR-B06
+    severity: blocker
+    title: Cross-object Event causality is not closed
+    evidence: >-
+      Requirements created after snapshot freeze and a waiver Event before its
+      base snapshot were both accepted.
+    required_correction:
+      - enforce_Requirement_creation_before_containing_snapshot
+      - enforce_base_snapshot_before_waiver_Event
+      - enforce_waiver_head_before_consuming_snapshot
+      - enforce_current_snapshot_before_attempt
+  - id: F6-R1-IR-B07
+    severity: blocker
+    title: Claimed ten-schema closure and Requirement reducer totality are not actually proven
+    evidence: >-
+      The fixture contains no derived schema-profile inventory; the count 10 is
+      hard-coded. Canonical decision outputs are not closed-schema instantiated.
+      PASSED with NOT_APPLICABLE authority remained SATISFIED, and a
+      FRESH_VALIDATION row with VALID carry-forward was accepted.
+    required_correction:
+      - materialize_closed_instances_for_all_ten_normative_schemas
+      - derive_schema_count_from_validated_inventory
+      - require_PASSED_authority_result_CURRENT_ACCEPTED
+      - freeze_complete_cross_field_matrix
+  - id: F6-R1-IR-M01
+    severity: major
+    title: evidence_refs is not an exact assessed evidence set
+    evidence: >-
+      Adding an unassessed stable ref while retaining the original assessment
+      subject and digest was accepted.
+    required_correction:
+      - bind_sorted_unique_complete_evidence_refs_and_digests
+      - reject_extra_duplicate_unsorted_or_partially_assessed_evidence
+  - id: F6-R1-IR-M02
+    severity: major
+    title: Positive graph coverage omits canonical carry-forward and effectful F5-bound attempts
+    evidence: >-
+      The positive graph has zero carry-forward attempts and zero effectful
+      Requirements; only simplified pre-labeled vectors exercise those seams.
+    required_correction:
+      - add_graph_level_carry_forward_positive_and_chain_attack
+      - add_graph_level_effectful_F5_bound_positive_and_negative_cases
+  - id: F6-R1-IR-m01
+    severity: minor
+    title: Author self-review mutation count text is stale
+    evidence: >-
+      F6-R1-ASR-05 says 30 root-re-signed probes while the fixed validator,
+      manifest and later self-review fields report 32.
+    required_correction:
+      - record_as_historical_R1_count_error
+      - use_32_in_R2_without_editing_R1_self_review
+
+required_review_question_summary:
+  pass: 9
+  pass_with_graph_coverage_limit: 3
+  block: 8
+  blocked_surfaces:
+    - upstream_assessment_and_lifecycle_consumption
+    - caller_selected_Jenn_and_provenance_authority
+    - Requirement_lineage_and_source_closure
+    - attempt_candidate_dependency_cross_binding
+    - PASSED_authority_and_evidence_binding
+    - waiver_authenticity
+    - completion_totality_and_atomic_input_closure
+    - real_schema_inventory_and_cross_field_proof
+
+strict_R2_scope:
+  required:
+    - exact_F1_Task_lifecycle_and_TaskCurrentState_assessment_binding
+    - exact_candidate_and_dependency_binding_for_every_current_PASSED_attempt
+    - subject_revision_consumption_for_every_upstream_assessment_kind
+    - authenticated_Jenn_waiver_Command_Event_and_authority_binding
+    - complete_Requirement_revision_predecessor_history_and_exact_integer_typing
+    - authenticated_and_current_Requirement_provenance_source_binding
+    - complete_cross_object_Event_partial_order
+    - real_closed_instances_and_validation_for_all_ten_normative_schemas
+    - complete_Requirement_vector_cross_field_matrix
+    - exact_complete_evidence_ref_set_binding
+    - graph_level_carry_forward_and_effectful_F5_witnesses
+    - all_18_independent_defect_probes_as_regressions
+  forbidden_expansion:
+    - new_Validation_or_Task_states
+    - new_waiver_types
+    - new_delivery_or_receipt_semantics
+    - F1_F3_or_F5_frozen_subject_modification
+    - F7_semantics
+    - implementation_database_provider_transport_or_service_design
+    - production_authentication_or_runtime_activation
+    - real_Task_Run_Validation_Event_waiver_or_completion_mutation
+
+mandatory_zero_counts:
+  accepted_real_task_count: 0
+  task_done_mutation_count: 0
+  runtime_consumable_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  hash_mismatch_count: 0
+  fixed_command_failure_count: 0
+  forbidden_input_access_count: 0
+  file_write_count_during_review: 0
+  commit_push_merge_count: 0
+  unresolved_ambiguity_count: 0
+
+final_reduction:
+  manifest_hash: PASS
+  input_hashes: PASS_22_OF_22
+  subject_reads: PASS_4_OF_4
+  authority_reads: PASS_17_OF_17
+  author_evidence_reads: PASS_1_OF_1
+  fixed_commands: LITERAL_PASS_2_OF_2
+  fixed_mutations: PASS_32_OF_32_REJECTED
+  independent_defect_probes: FAIL_18_INCORRECTLY_ACCEPTED
+  blocker_count: 7
+  major_count: 2
+  minor_count: 1
+  unresolved_count: 0
+  result: BLOCK
+  requires_R2: true
+
+gate_and_authorization:
+  F6_R1_review_passed: false
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  real_Task_Run_Validation_Event_or_completion_mutation_authorized: false
+  commit_push_PR_merge_authorized: false
+
+next_action:
+  - preserve_R1_subject_manifest_and_review_bytes_immutable
+  - create_narrow_F6_R2_for_the_ten_findings
+  - rebuild_contract_fixture_builder_and_validator_as_one_new_atomic_unit
+  - run_a_new_fresh_full_atomic_hash_bound_independent_review
+
+forbidden:
+  - partial_acceptance
+  - F6_freeze
+  - F7_start
+  - implementation
+  - runtime_activation
+  - production_authentication
+  - real_Task_Run_Validation_Event_waiver_or_completion_mutation
+  - provider_effect_database_or_service_execution
