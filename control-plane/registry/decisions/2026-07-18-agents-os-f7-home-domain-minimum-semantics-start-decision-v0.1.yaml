@@ -1,0 +1,227 @@
+schema_version: agents-os.contract-unit-start-decision.v0.1
+record_id: agents-os-f7-home-domain-minimum-semantics-start-decision-v0.1
+record_type: ContractUnitStartDecision
+status: active
+immutable: true
+created_at: 2026-07-18T22:59:37+08:00
+effective_at: 2026-07-18T22:59:37+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F7_HOME_DOMAIN_MINIMUM_SEMANTICS_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: 启动 F7
+
+contract_unit:
+  id: F7
+  name: Home Domain Minimum Semantics
+  mode: ATOMIC_CONTRACT_CLOSURE
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+  implementation_profile_included: false
+  production_profile_included: false
+
+prerequisites:
+  phase_4_start:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  construction_readiness:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  foundational_direction_acceptance:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml
+    sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29
+  F6_freeze:
+    path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+    sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+  F6_manifest:
+    path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f
+  F6_independent_review:
+    path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r6-full-atomic-independent-review.yaml
+    sha256: 552b71de5ff01b0ca8ce1f8b5394a0b7ead8ea95ec6a2b2234a14886cafc036b
+    result: PASS_NO_BLOCKER
+  F6_mainline_integration:
+    branch: main
+    pull_request: 12
+    merge_commit: d41c94ba7d61f7513b2e90c658e3970a81ea20ab
+    manifest_inputs_verified: 65_65
+    frozen_subjects_verified: 24_24
+  F6_mainline_durability_closeout:
+    branch: main
+    pull_request: 13
+    merge_commit: 5373b5a8deca7c868ff13a5948c62d2b9356389d
+    receipt_path: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-mainline-durability-closeout-v0.1.md
+    receipt_sha256: b0ef45941f51cae6decfb21db765f2d693c5faf6e04dde220724a935561aaa43
+
+accepted_direction_inputs:
+  workspace_governance:
+    path: AGENTS.md
+    sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+  home_roadmap:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  home_roadmap_acceptance:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  life_core_authority_and_gap_map:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+  home_fact_authority_matrix:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+  home_domain_architecture_direction:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  high_privilege_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+
+frozen_contract_boundaries:
+  F1_acceptance:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  F2_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+  F2_manifest:
+    path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+  F3_freeze:
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+  F4_freeze:
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+  F5_freeze:
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+
+life_core_policy_inputs:
+  policy_index: {path: control-plane/policies/life-core/policy-index.json, sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044}
+  root_principles: {path: control-plane/policies/life-core/root-principles.md, sha256: 7a9bd33b99ae3173577b3e41fd359824936c516d27dd0b6f8aa6b3d0a4c34372}
+  house_rules: {path: control-plane/policies/life-core/house-rules.md, sha256: 9bfa8887723d4536da870079714bf3f6f45f2700d645d73719f08f0908483b1b}
+  memory_rules: {path: control-plane/policies/life-core/memory-rules.md, sha256: 1fabba2a8f9f7e88da130e2589e164b7dc5917e80e95983fc3a4df2051122235}
+  members_and_rooms: {path: control-plane/policies/life-core/members-and-rooms.md, sha256: beadc147d08e6f380566a2c3c1cc6a50ad6b9ecdb7b18e29475e85dbc9d00094}
+  a2a_relations: {path: control-plane/policies/life-core/a2a-relations.md, sha256: f04c1c52d549da79d05b23e6922d1a375d748bb4ac2d90e0c7817be66064e97a}
+  runtime_boundaries: {path: control-plane/policies/life-core/runtime-boundaries.md, sha256: 94c1b6fce3722c813a09abccdc47622dba9d04340ac2c35ee741bbaa3e2a73df}
+  growth_rules: {path: control-plane/policies/life-core/growth-rules.md, sha256: ce8dece3d6d35eb1f29383fee1694f5dece32b6af245a1e72337c0564f137793}
+  presence_and_sensing: {path: control-plane/policies/life-core/presence-and-sensing.md, sha256: 7a525db3cbcbf9952927a5e42a43f708488e228c4d4b3e1b3e525351261cf943}
+
+authorized_scope:
+  - minimum_Home_semantic_object_identity_revision_provenance_and_currentness
+  - identity_continuity_meaning_without_redefining_F2_canonical_identity
+  - formal_relationship_fact_vs_subjective_relationship_memory_boundary
+  - Session_content_vs_Life_Stream_candidate_boundary
+  - Memory_candidate_vs_formal_Memory_boundary
+  - Artifact_reference_content_and_evidence_boundary
+  - Presence_consent_vs_device_sensing_state_boundary
+  - reflection_growth_and_agent_community_minimum_semantics
+  - deterministic_candidate_promotion_rejection_and_INDETERMINATE_reducers
+  - unique_canonical_writer_map_for_each_F7_fact_class
+  - monotonic_consumption_of_frozen_upstream_facts_without_recomputation
+  - resolution_or_explicit_M0_exclusion_of_HD_M0_01_through_HD_M0_07
+  - synthetic_fixture_constructibility_with_no_private_or_real_Home_data
+  - F7_author_self_review_and_fresh_hash_bound_independent_review_package
+  - Document_Registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+ownership_boundary:
+  F7_may:
+    - define_Home_Domain_as_a_logical_bounded_context
+    - define_minimum_semantic_fact_classes_and_their_nonpromotion_rules
+    - bind_each_fact_class_to_one_existing_or_explicitly_deferred_canonical_writer
+    - consume_F2_identity_and_relationship_authority_without_reducing_it
+    - distinguish_transient_Session_candidate_Artifact_and_formal_Memory
+    - require_current_explicit_Presence_consent_before_any_future_sensing_path
+    - narrow_what_may_become_an_F8_or_Orchestrator_candidate
+  F7_must_not:
+    - create_a_second_permission_system_identity_authority_ledger_or_Task_writer
+    - classify_people_Actors_relationships_or_Tasks_by_permission_level
+    - let_relationship_trust_closeness_urgency_or_history_expand_authority
+    - turn_thought_conversation_Session_or_Life_Stream_content_into_a_Task
+    - turn_a_Memory_candidate_into_formal_or_long_term_Memory
+    - turn_Presence_into_continuous_sensing_recording_or_surveillance
+    - read_write_import_export_or_summarize_private_raw_memory
+    - define_F8_Command_or_Home_to_Orchestrator_transport
+    - create_runtime_database_service_provider_or_effect_authority
+
+deferred_scope:
+  F8:
+    owns: [Home_to_Orchestrator_minimum_interface_Command_candidate_handoff_and_rejection]
+    started: false
+  implementation_profile:
+    owns: [Rust_JavaScript_SQLite_schema_migration_index_cache_runtime_and_performance]
+    authorized: false
+  production_profile:
+    owns: [real_Home_Session_Memory_Presence_relationship_provider_device_and_effect_data]
+    authorized: false
+
+authorized_outputs:
+  - F7_R1_contract_draft
+  - F7_R1_synthetic_fixture_builder
+  - F7_R1_synthetic_fixture
+  - F7_R1_offline_semantic_validator
+  - F7_R1_author_self_review
+  - F7_R1_hash_bound_independent_review_manifest_and_package
+  - F7_R1_registry_CURRENT_STATE_queue_and_receipt_projection
+  - narrow_amendment_and_fresh_review_cycle_only_when_independent_findings_require_it
+  - Jenn_only_atomic_accept_freeze_decision_surface_after_valid_independent_PASS
+
+acceptance_boundary:
+  draft_or_author_review_accepts_F7: false
+  independent_review_accepts_F7: false
+  automatic_acceptance: forbidden
+  Jenn_atomic_decision_required: true
+  partial_acceptance: forbidden
+
+hard_boundaries:
+  modify_any_accepted_or_frozen_F1_through_F6_or_foundational_subject_bytes: forbidden
+  synthesize_real_identity_relationship_Session_Memory_Presence_Task_or_effect_facts: forbidden
+  start_F8_or_Phase_5: forbidden
+  implementation: forbidden
+  runtime_source_change: forbidden
+  database_creation_migration_or_live_access: forbidden
+  Resident_Worker_Host_service_or_provider_start: forbidden
+  sensing_recording_or_device_access: forbidden
+  production_authentication_or_credential_change: forbidden
+  public_API_or_MCP_expansion: forbidden
+  secret_or_private_raw_memory_access: forbidden
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+  tag_release_deploy_or_publish: forbidden
+
+automatic_progression:
+  within_F7_contract_review_cycle: authorized
+  finding_disposition_and_narrow_amendment: authorized_when_evidence_bound
+  start_F8_or_implementation: forbidden
+
+effects:
+  F7_started: true
+  F7_status: CONTRACT_CLOSURE_ACTIVE
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  real_Home_or_Memory_mutation_authorized: false
+  sensing_or_recording_authorized: false
+  real_effect_execution_authorized: false
+
+next_gate:
+  name: F7_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

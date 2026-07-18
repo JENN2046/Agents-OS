@@ -1,0 +1,68 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f7-r2-decision-case-inventory-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-19T00:00:00+08:00
+
+authority:
+  owner: Jenn
+  execution_basis:
+    path: control-plane/registry/decisions/2026-07-18-agents-os-f7-home-domain-minimum-semantics-start-decision-v0.1.yaml
+    sha256: a4188f28d2bac61111a78824e39d4b5d060bb3926013b658b4cbfe70c579a068
+    clause: automatic_progression.finding_disposition_and_narrow_amendment
+  independent_finding:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r1-codex-external-independent-review.yaml
+    sha256: 6e5a3bf3874a7c39a805be86cbea957548f0b46dd9b0d9c57b4c08fd656f0104
+    result: BLOCK
+  finding_disposition:
+    path: control-plane/registry/reviews/2026-07-19-agents-os-f7-r1-independent-review-disposition-v0.1.yaml
+    sha256: 9d439b91ad4ab36b516aeb2f1c89bbb1fc88d27afaff367cbb84c5f494b9fde9
+
+amendment:
+  contract_unit: F7
+  revision: R2
+  name: Decision Case Canonical Inventory Closure
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+
+exact_scope:
+  - bind_the_exact_20_case_ID_set_and_order
+  - bind_each_case_to_its_complete_raw_input
+  - derive_and_bind_each_exact_decision
+  - reject_fully_resigned_case_replacement
+  - reject_fully_resigned_case_rename
+  - reject_fully_resigned_case_reorder
+
+required_regressions:
+  - replace_C06_with_allowed_C01_semantics
+  - replace_C08_with_allowed_candidate_semantics
+  - rename_C06_to_C99
+  - swap_C06_and_C07
+
+immutability:
+  R1_subjects: preserve_exact_bytes
+  R1_manifest_sha256: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+
+forbidden_scope:
+  - new_or_changed_semantic_class
+  - new_or_changed_authority_profile
+  - new_or_changed_candidate_or_reducer_semantics
+  - permission_identity_Task_Command_Memory_or_ledger_authority
+  - F8_design
+  - implementation
+  - runtime_activation
+  - database_or_provider
+  - sensing_recording_or_real_effect
+  - private_raw_memory_access
+
+effects:
+  F7_status: R2_NARROW_CORRECTION_ACTIVE
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+next_gate: F7_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

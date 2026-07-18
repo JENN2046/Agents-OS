@@ -1,0 +1,152 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f7-r1-codex-external-independent-review-2026-07-19
+date: '2026-07-19'
+reviewer:
+  identity: Codex_external_fresh_independent_reviewer
+  reviewer_role: fresh_full_atomic_hash_bound_independent_reviewer
+  independence_basis:
+    - not_the_F7_R1_author_run
+    - did_not_modify_any_R1_subject_or_author_evidence
+    - author_self_review_used_only_as_nonindependent_evidence
+    - recomputed_all_manifest_bound_file_hashes
+    - executed_fixed_commands_and_independent_fully_resigned_mutations
+  review_scope_limit: >-
+    This review blocks the fixed R1 package on a reproducible semantic-integrity
+    failure. It does not accept or freeze F7, start F8, authorize implementation,
+    runtime activation, sensing, external effects, or Git delivery.
+
+review_unit:
+  id: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  authority_input_count: 31
+  author_evidence_count: 1
+  declared_input_count: 36
+
+package_integrity:
+  canonical_manifest_path: control-plane/registry/reports/2026-07-18-agents-os-f7-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_declared: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+  manifest_sha256_recomputed: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+  manifest_sha256_match: true
+  package_shape: hash_bound_pointer_bundle_no_file_copy
+  manifest_hash_entries_declared: 36
+  manifest_hash_entries_recomputed: 36
+  all_36_hashes_match: true
+  subjects:
+    declared: 4
+    recomputed_match: 4
+  authority_inputs:
+    declared: 31
+    recomputed_match: 31
+  author_evidence:
+    declared: 1
+    recomputed_match: 1
+    independent_substitute: false
+
+fixed_commands:
+  required: 3
+  executed: 3
+  result: PASS
+  validator:
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py
+    result: PASS
+    authority_profile_count: 20
+    decision_case_count: 20
+    candidate_revision_count: 2
+    gap_disposition_count: 7
+    author_adversarial_mutations_rejected: 31
+    fixture_root_fingerprint: 2a5dc56a38de8636a31887a4bc3a954844ed42413a505068d5d2fdd4cf435b54
+  deterministic_fixture_byte_reproduction:
+    method: builder_output_stream_compared_to_fixed_fixture_bytes
+    result: PASS
+  workspace_hygiene:
+    command: git diff --check
+    result: PASS
+    preexisting_dirty_worktree: true
+
+independent_adversarial_review:
+  method: >-
+    In-memory mutations were fully re-signed, section fingerprints were
+    recomputed, and root fingerprints were recomputed before validation. No
+    stale hash or unpropagated reference was used as the acceptance condition.
+  probes:
+    - id: whole_graph_authority_profile_replacement
+      result: PASS_REJECTED
+    - id: relationship_scope_expansion
+      result: PASS_REJECTED
+    - id: presence_policy_to_consent_promotion
+      result: PASS_REJECTED
+    - id: fully_resigned_same_revision_source_change
+      result: PASS_REJECTED
+    - id: identity_rewrite_claim_cannot_be_promoted
+      result: PASS_REJECTED
+    - id: bool_as_integer
+      result: PASS_REJECTED
+    - id: replace_C06_identity_rejection_with_allowed_C01_candidate_case
+      result: FAIL_ACCEPTED
+    - id: replace_C08_task_rejection_with_allowed_C01_candidate_case
+      result: FAIL_ACCEPTED
+    - id: rename_C06_to_C99
+      result: FAIL_ACCEPTED
+    - id: swap_C06_C07_order
+      result: FAIL_ACCEPTED
+  probe_failures: 4
+
+findings:
+  blocker: 1
+  major: 0
+  minor: 0
+  unresolved_contract_ambiguity: 0
+finding_details:
+  - finding_id: F7-R1-IR-B01
+    severity: blocker
+    title: decision_case_canonical_inventory_is_not_immutable_or_semantically_anchored
+    contract_requirement: >-
+      The normative contract requires the mandatory rejection and deferral
+      cases beginning at draft section 5.2.
+    evidence:
+      contract_required_case_surface: control-plane/registry/drafts/2026-07-18-agents-os-f7-home-domain-minimum-semantics-v0.1-r1.draft.md:192
+      incomplete_validator_surface: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:300
+      authority_profile_exact_anchor: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:297
+      candidate_history_exact_anchor: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:373
+      author_mutation_surface: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:458
+    reproduction: >-
+      Replace a required reject case with the complete allowed raw input and
+      derived decision of C01, or rename or reorder a required case. Re-sign
+      every decision row, section, and root. The current validator accepts the
+      resulting graph because it enforces only count, uniqueness, local
+      derivation, and fingerprints for decision_cases.
+    impact: >-
+      The package can retain 20 internally valid decision rows while deleting a
+      normative mandatory reject or defer proof. Therefore the claimed 20/20
+      decision-case coverage cannot establish the required F7 safety boundary.
+    required_correction:
+      - define_fixed_decision_case_canonical_anchors
+      - require_exact_case_ID_set_and_order
+      - require_exact_complete_raw_input_for_each_case
+      - independently_derive_and_require_the_exact_decision_for_each_case
+      - reject_fully_resigned_replacement_rename_and_reorder_regressions
+
+scope_assessment:
+  second_permission_system_found: false
+  upstream_authority_recomputation_found: false
+  real_Home_or_effect_execution_found: false
+  R2_scope_must_be_narrow: true
+
+result: BLOCK
+governance:
+  independent_review_completed: true
+  F7_acceptance_ready: false
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  Git_delivery_authorized: false
+  result_is_not_acceptance_or_freeze: true
+  next_gate: F7_R2_NARROW_DECISION_CASE_CANONICAL_INVENTORY_CLOSURE

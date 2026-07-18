@@ -1,0 +1,152 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-19T01:10:28+08:00'
+effective_at: '2026-07-19T01:10:28+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F7_R2_atomic_freeze_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-freeze-decision-package-v0.1.md
+    sha256: 6efd56f523b9dc1323a213a68ab0884cb1f83f967204afd6cbd13205dc1e3ea5
+    section: 6_A
+  confirmation_text_received: 我确认执行 F7 R2 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+acceptance_unit:
+  id: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 8
+  result: ACCEPTED_FROZEN
+  precedence:
+  - R2_explicit_replacements
+  - R1_all_other_clauses
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 44
+accepted_subjects:
+- revision: R1
+  role: normative_contract
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f7-home-domain-minimum-semantics-v0.1-r1.draft.md
+  sha256: 546480f5a14e5c70c30fc7232ec1eacd0d6105fdb20a90483c3baee094b8f254
+- revision: R1
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f7-r1-home-domain-minimum-semantics.py
+  sha256: 27e1574d77da9ae4da217823a93b2cdddc3c64410716169838fb716b1bb19507
+- revision: R1
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-18-agents-os-f7-r1-home-domain-minimum-semantics-v0.1.json
+  sha256: 8bda718fd580fa95124120b148699fae099a9eb9710ead53eeefc943f1864f01
+- revision: R1
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py
+  sha256: 0a488a14c739aa6ef97f9d524724e2317ac8dca5be4e853c3b2a52391ad455a3
+- revision: R2
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f7-home-domain-minimum-semantics-v0.1-r2-amendment.draft.md
+  sha256: 8935b258455c381236822fdba5a2de3156b2959432079da602d386acf8166b78
+- revision: R2
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f7-r2-decision-case-inventory-closure.py
+  sha256: 1d736aa76e1e1dc1ab9c7ebc9f9b2cf6e790ca9906ccf9f82710d92de15ac0aa
+- revision: R2
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f7-r2-decision-case-inventory-closure-v0.1.json
+  sha256: 002a86ccc5ad21b12fd655c9db49e071cb07c87e9c8f1bfc139b5da238ab8c00
+- revision: R2
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f7-r2-decision-case-inventory-closure.py
+  sha256: c8777a3c502712255e7f1c797f977d9782b1644925daf5a755463a56cb8d9c71
+supporting_evidence:
+- role: fresh_full_atomic_hash_bound_independent_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+  sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+  result: PASS_NO_BLOCKER
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  unresolved_ambiguity_count: 0
+  requires_R3: false
+  acceptance_subject: false
+- role: atomic_freeze_decision_surface
+  path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-freeze-decision-package-v0.1.md
+  sha256: 6efd56f523b9dc1323a213a68ab0884cb1f83f967204afd6cbd13205dc1e3ea5
+  acceptance_subject: false
+frozen_semantic_boundary:
+- closed_twenty_class_Home_Domain_semantic_inventory
+- exact_authority_profile_per_semantic_class
+- upstream_fact_Home_candidate_policy_deferred_owner_and_projection_separation
+- immutable_Home_candidate_revision_envelope
+- deterministic_nonpromotion_reducer_and_reason_precedence
+- exact_allowed_candidate_formations
+- identity_relationship_Session_Memory_Task_Command_sensing_and_policy_nonpromotion_boundaries
+- relationship_and_subjective_memory_non_authority_expansion
+- presence_policy_consent_and_physical_sensing_state_separation
+- exact_ordered_twenty_case_decision_inventory
+- synthetic_nonauthority_nonruntime_noneffectful_HD_M0_boundary
+excluded_evidence_classes:
+- manifest
+- author_self_review
+- independent_review
+- review_disposition
+- decision_package
+- receipt
+- active_work_queue
+effects:
+  F7_contract_status: ACCEPTED_FROZEN
+  F7_atomic_freeze_gate: SATISFIED
+  additional_F7_amendment_required: false
+  requires_R3: false
+  F7_revisions_stopped: true
+  F8_started: false
+  real_Home_fact_or_candidate_authorized: false
+  real_Memory_Task_Command_relationship_or_identity_mutation_authorized: false
+  sensing_or_recording_authorized: false
+  private_raw_Memory_access_authorized: false
+  implementation_authorized: false
+  Rust_Python_or_JavaScript_implementation_authorized: false
+  database_change_authorized: false
+  index_cache_or_queue_change_authorized: false
+  transport_or_provider_implementation_authorized: false
+  Resident_Worker_Host_or_executor_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  device_file_process_or_physical_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+next_gate:
+  name: F7_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F8
+  decision_owner: Jenn
+  automatic_transition: forbidden
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_and_subject_reverification_before_closeout: completed
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

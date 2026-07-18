@@ -1,0 +1,91 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f7-r1-full-atomic-independent-review-2026-07-19
+date: 2026-07-19
+reviewer:
+  identity: external_reviewer_user_supplied_record
+  attribution_limit: no_person_or_model_identity_was_supplied
+  independence_basis:
+    - reviewed_the_fixed_36_input_R1_bundle
+    - did_not_modify_review_subjects
+    - executed_fully_resigned_independent_attacks
+recording_basis:
+  source: Jenn_supplied_external_review_conclusion_in_current_conversation
+  exact_external_file_bytes_supplied: false
+  representation: faithful_structured_record_of_the_supplied_findings
+
+review_unit:
+  id: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  authority_input_count: 31
+  author_evidence_count: 1
+  declared_input_count: 36
+
+integrity:
+  manifest_path: control-plane/registry/reports/2026-07-18-agents-os-f7-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+  declared_input_hashes: 36_of_36_MATCH
+  fixed_validator: PASS
+  builder_byte_reproduction: PASS
+  git_diff_check: PASS
+
+result: BLOCK
+requires_R2: true
+findings:
+  blocker: 1
+  major: 0
+  minor: 0
+
+finding_details:
+  - finding_id: F7-R1-IR-B01
+    severity: blocker
+    title: decision_case_canonical_inventory_is_not_hash_bound_or_semantically_anchored
+    summary: >-
+      The validator checks only that decision_cases has 20 unique IDs and that
+      each retained row has a correct derived result. It does not require the
+      normative case IDs, exact order, complete raw inputs, or full mandatory
+      reject/defer coverage. A fully re-signed graph can therefore delete a
+      required safety case while retaining 20 internally valid rows.
+    evidence:
+      contract_required_case_surface: control-plane/registry/drafts/2026-07-18-agents-os-f7-home-domain-minimum-semantics-v0.1-r1.draft.md:192
+      incomplete_validator_surface: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:300
+      authority_profile_exact_anchor: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:297
+      candidate_history_exact_anchor: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:373
+      author_mutation_surface: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py:458
+    fully_resigned_cases_erroneously_accepted:
+      - replace_C06_identity_rewrite_rejection_with_allowed_C01_candidate_case
+      - replace_C08_session_to_Task_rejection_with_allowed_candidate_case
+      - rename_C06_to_C99
+      - swap_C06_and_C07_order
+    false_acceptance_cause:
+      - case_count_remains_20
+      - IDs_remain_unique_or_are_not_normatively_constrained
+      - retained_rows_remain_locally_derivable
+      - row_section_and_root_fingerprints_are_fully_resigned
+    required_correction:
+      - add_fixed_decision_case_canonical_anchors
+      - require_exact_case_ID_set_and_order
+      - require_exact_complete_raw_input_for_each_case
+      - independently_derive_and_require_the_exact_decision_for_each_case
+      - reject_the_four_fully_resigned_replacement_rename_and_reorder_attacks
+
+scope_assessment:
+  architecture_direction_invalid: false
+  second_permission_system_found: false
+  upstream_authority_recomputation_found: false
+  real_Home_or_effect_execution_found: false
+  R2_scope_must_be_narrow: true
+
+governance:
+  F7_acceptance_ready: false
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+
+next_gate: F7_R2_NARROW_DECISION_CASE_CANONICAL_INVENTORY_CLOSURE

@@ -1,0 +1,703 @@
+{
+  "schema_version": "agents-os.f7-home-domain-minimum-semantics-witness.v0.1",
+  "contract_id": "F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1",
+  "environment": "SYNTHETIC_TEST",
+  "domain_tag": "F7_R1_SYNTHETIC_NONAUTHORITY",
+  "runtime_usable": false,
+  "authority_profile": [
+    {
+      "semantic_class": "STABLE_IDENTITY_FACT",
+      "semantic_owner": "F2_IDENTITY_AUTHORITY",
+      "writer_status": "UPSTREAM_CANONICAL",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "cacfa684f6ff7cdc270f285321e6c03202a1e22332631dcb148efce75c8a3ba8"
+    },
+    {
+      "semantic_class": "IDENTITY_NARRATIVE",
+      "semantic_owner": "IDENTIFIED_AGENT_SELF_RECORD_CANDIDATE",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "281c1e0560894ab74a00c375a320f3022f1710b7a19839eea0f57cd9f1894fa7"
+    },
+    {
+      "semantic_class": "FORMAL_RELATIONSHIP_FACT",
+      "semantic_owner": "FUTURE_RESIDENT_HOME_RELATIONSHIP_REDUCER",
+      "writer_status": "TARGET_NOT_IMPLEMENTED",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "3d72deec3ab3e9ba672267891ced289b324abe6d8037977f32325f95895053b0"
+    },
+    {
+      "semantic_class": "SUBJECTIVE_RELATIONSHIP_MEMORY",
+      "semantic_owner": "IDENTIFIED_AGENT_SELF_RECORD_CANDIDATE",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "d7869858fcd467f7b55ced04223f62460c95466d25c14fc003ff26b6f040927a"
+    },
+    {
+      "semantic_class": "PRESENCE_POLICY",
+      "semantic_owner": "JENN_GOVERNED_POLICY",
+      "writer_status": "POLICY_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "38fa997e170408c692f08c5c9d68a4d1ca979e0349de5cc909df701a14c2d47b"
+    },
+    {
+      "semantic_class": "PRESENCE_CONSENT",
+      "semantic_owner": "FUTURE_AUTHENTICATED_CONSENT_AUTHORITY",
+      "writer_status": "TARGET_NOT_IMPLEMENTED",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "657796bff7e093b7e42d1c453721fcf4d209566456bb21d22f3d3e04802f638d"
+    },
+    {
+      "semantic_class": "DEVICE_SENSING_STATE",
+      "semantic_owner": "AUTHENTICATED_PHYSICAL_HOST_ACCEPTED_UPSTREAM",
+      "writer_status": "TARGET_NOT_IMPLEMENTED",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "336dd6a9d70017e7ad8a058304ee97a4d558ed512939e5579d2e7063d82ecb20"
+    },
+    {
+      "semantic_class": "SESSION_CONTENT",
+      "semantic_owner": "SESSION_HOST_TRANSIENT_AUTHORITY",
+      "writer_status": "DEFERRED_EXTERNAL_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "6c8e1416b0844f9eee341de4d876c0f844fd379746be7956a8d56e02f0f516f7"
+    },
+    {
+      "semantic_class": "LIFE_STREAM_CANDIDATE",
+      "semantic_owner": "EXACT_CANDIDATE_CREATOR",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "dc38c5bd5fb530c98a1fb462fd8893372490f2a4e01d0f27a7f19e8bdabfb044"
+    },
+    {
+      "semantic_class": "MEMORY_CONTENT",
+      "semantic_owner": "GOVERNED_VCP_NATIVE_MEMORY_AUTHORITY",
+      "writer_status": "DEFERRED_EXTERNAL_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "3ee69ff69fdb579993439529b74d9f0560ec61833c9af9ee385279435d1dc224"
+    },
+    {
+      "semantic_class": "MEMORY_ACCESS_AUTHORITY",
+      "semantic_owner": "FUTURE_GOVERNED_MEMORY_BRIDGE",
+      "writer_status": "DEFERRED_EXTERNAL_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "6e7aeab7e3b0c64a5d27120efe463ae16b3343e9bc72afdfeecc3134a7412fe0"
+    },
+    {
+      "semantic_class": "MEMORY_CANDIDATE",
+      "semantic_owner": "EXACT_CANDIDATE_CREATOR",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "3dee43cf345496cb5ec4d81628a9677112d5d4bc2f5290c81a930e95f40db85f"
+    },
+    {
+      "semantic_class": "INTENT_CANDIDATE",
+      "semantic_owner": "EXACT_CANDIDATE_CREATOR",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "f86639f3012bc7bd4958d1471cad49ab745068742a06fedf131180c91949fa21"
+    },
+    {
+      "semantic_class": "ORCHESTRATOR_COMMAND",
+      "semantic_owner": "F3_COMMAND_AUTHORITY",
+      "writer_status": "UPSTREAM_CANONICAL",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "d767ad81cb00c10d38fbcdaae7c6d1e78850bc9480ffc3b8e5b9cef732e41782"
+    },
+    {
+      "semantic_class": "GROWTH_EVENT",
+      "semantic_owner": "EXACT_EVENT_OBSERVER_CANDIDATE",
+      "writer_status": "HOME_CANDIDATE_WRITER",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "6caa1fae5548363dcbef356d6fe5d33285770e37427f9dbbf1e959592e82a72e"
+    },
+    {
+      "semantic_class": "BEHAVIOR_POLICY_REVISION",
+      "semantic_owner": "JENN_OR_ACCEPTED_DELEGATED_POLICY_AUTHORITY",
+      "writer_status": "POLICY_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "0dd09033764ce38d821bec5122c7dbb5827c7deddfec05fd8f449424d8e3716c"
+    },
+    {
+      "semantic_class": "AGENT_MEMBER_STATE",
+      "semantic_owner": "FUTURE_RESIDENT_HOME_MEMBER_REDUCER",
+      "writer_status": "TARGET_NOT_IMPLEMENTED",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "b36667e76a81b026f3b0db0e7cc40326d2064c5fffb630ffe8a0a48b40391a73"
+    },
+    {
+      "semantic_class": "ARTIFACT",
+      "semantic_owner": "CORRESPONDING_ARTIFACT_STORAGE_AUTHORITY",
+      "writer_status": "DEFERRED_EXTERNAL_AUTHORITY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "dd0a70ef1b94ffe9a412ca6a61bce2cb6ced6dcdf87b87773021d1c0d6cf61f1"
+    },
+    {
+      "semantic_class": "HOME_PROJECTION",
+      "semantic_owner": "DETERMINISTIC_PROJECTION_ONLY",
+      "writer_status": "PROJECTION_ONLY",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "ff638e5c770cc573f0a9c8f6775816b02763c8a0a925025a164313448372f05e"
+    },
+    {
+      "semantic_class": "TASK_CANONICAL_FACT",
+      "semantic_owner": "F1_F3_TASK_AUTHORITY",
+      "writer_status": "UPSTREAM_CANONICAL",
+      "may_trigger_action_alone": false,
+      "row_fingerprint": "44d751b80119091d6c43c04c61ff67ea39d546e120ee9f07e29e7753f5a65943"
+    }
+  ],
+  "decision_cases": [
+    {
+      "case_id": "C01",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "LIFE_STREAM_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "CANDIDATE_ACCEPTED",
+        "reason_codes": [
+          "VALID_HOME_CANDIDATE"
+        ],
+        "primary_reason": "VALID_HOME_CANDIDATE",
+        "action_authority": false
+      },
+      "row_fingerprint": "7a2fe1428e5a98a952884beb700972c6c4bc9725acbd79179ec9d2c278845020"
+    },
+    {
+      "case_id": "C02",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "CANDIDATE_ACCEPTED",
+        "reason_codes": [
+          "VALID_HOME_CANDIDATE"
+        ],
+        "primary_reason": "VALID_HOME_CANDIDATE",
+        "action_authority": false
+      },
+      "row_fingerprint": "8dee2838d6b3f4b29a09cf1fdebfd952461b6469903bb8769998881537d3020c"
+    },
+    {
+      "case_id": "C03",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "INTENT_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "CANDIDATE_ACCEPTED",
+        "reason_codes": [
+          "VALID_HOME_CANDIDATE"
+        ],
+        "primary_reason": "VALID_HOME_CANDIDATE",
+        "action_authority": false
+      },
+      "row_fingerprint": "fb433adcb05d9f0c570b25d5bf2a608a2409db523db3a593697985a6665ec7b7"
+    },
+    {
+      "case_id": "C04",
+      "raw_input": {
+        "source_class": "SUBJECTIVE_RELATIONSHIP_MEMORY",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "CANDIDATE_ACCEPTED",
+        "reason_codes": [
+          "VALID_HOME_CANDIDATE"
+        ],
+        "primary_reason": "VALID_HOME_CANDIDATE",
+        "action_authority": false
+      },
+      "row_fingerprint": "173e2d343583e0b13200ece693628d88f69e47603c9300b1d3ff758c7c16a77a"
+    },
+    {
+      "case_id": "C05",
+      "raw_input": {
+        "source_class": "GROWTH_EVENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "CANDIDATE_ACCEPTED",
+        "reason_codes": [
+          "VALID_HOME_CANDIDATE"
+        ],
+        "primary_reason": "VALID_HOME_CANDIDATE",
+        "action_authority": false
+      },
+      "row_fingerprint": "3e17ccdb880cbc015c040a7897ff1fb25ab9110657622c70fc37537bcba02fc7"
+    },
+    {
+      "case_id": "C06",
+      "raw_input": {
+        "source_class": "IDENTITY_NARRATIVE",
+        "target_class": "STABLE_IDENTITY_FACT",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "IDENTITY_NARRATIVE_CANNOT_REWRITE_IDENTITY"
+        ],
+        "primary_reason": "IDENTITY_NARRATIVE_CANNOT_REWRITE_IDENTITY",
+        "action_authority": false
+      },
+      "row_fingerprint": "4b044012104419a0e1589035c54eb66dfae809cfb61cb2707b6ec22da8dd7cae"
+    },
+    {
+      "case_id": "C07",
+      "raw_input": {
+        "source_class": "SUBJECTIVE_RELATIONSHIP_MEMORY",
+        "target_class": "FORMAL_RELATIONSHIP_FACT",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "DEFERRED",
+        "reason_codes": [
+          "TARGET_WRITER_NOT_IMPLEMENTED"
+        ],
+        "primary_reason": "TARGET_WRITER_NOT_IMPLEMENTED",
+        "action_authority": false
+      },
+      "row_fingerprint": "e6bd785832b111621e9738b8782fec568b66d185c0c755089ba2e709d6cfce3b"
+    },
+    {
+      "case_id": "C08",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "TASK_CANONICAL_FACT",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "SESSION_CANNOT_CREATE_TASK"
+        ],
+        "primary_reason": "SESSION_CANNOT_CREATE_TASK",
+        "action_authority": false
+      },
+      "row_fingerprint": "a05a6779f319b7476e403c883f6ed558d913059b84915fcdf690a864a0406be5"
+    },
+    {
+      "case_id": "C09",
+      "raw_input": {
+        "source_class": "MEMORY_CANDIDATE",
+        "target_class": "MEMORY_CONTENT",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "DEFERRED",
+        "reason_codes": [
+          "MEMORY_CANDIDATE_IS_NOT_MEMORY"
+        ],
+        "primary_reason": "MEMORY_CANDIDATE_IS_NOT_MEMORY",
+        "action_authority": false
+      },
+      "row_fingerprint": "86e81f7fd31209ca10fb3064d7f77803683d5301d4fe22e959c2ab06e422c1c0"
+    },
+    {
+      "case_id": "C10",
+      "raw_input": {
+        "source_class": "INTENT_CANDIDATE",
+        "target_class": "ORCHESTRATOR_COMMAND",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "DEFERRED",
+        "reason_codes": [
+          "TARGET_OUTSIDE_F7"
+        ],
+        "primary_reason": "TARGET_OUTSIDE_F7",
+        "action_authority": false
+      },
+      "row_fingerprint": "8027efe4f5184b251abee0845147b30448b30122b49ff2fb5d13e0bf1bed1019"
+    },
+    {
+      "case_id": "C11",
+      "raw_input": {
+        "source_class": "PRESENCE_CONSENT",
+        "target_class": "DEVICE_SENSING_STATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "DEFERRED",
+        "reason_codes": [
+          "TARGET_WRITER_NOT_IMPLEMENTED",
+          "PRESENCE_CONSENT_IS_NOT_SENSING_STATE"
+        ],
+        "primary_reason": "TARGET_WRITER_NOT_IMPLEMENTED",
+        "action_authority": false
+      },
+      "row_fingerprint": "270bc71c84a3befc343999cf0e1fca8d35f1eaf2337b8bb85fb5bb019b733f54"
+    },
+    {
+      "case_id": "C12",
+      "raw_input": {
+        "source_class": "GROWTH_EVENT",
+        "target_class": "BEHAVIOR_POLICY_REVISION",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "DEFERRED",
+        "reason_codes": [
+          "GROWTH_EVENT_IS_NOT_POLICY_REVISION"
+        ],
+        "primary_reason": "GROWTH_EVENT_IS_NOT_POLICY_REVISION",
+        "action_authority": false
+      },
+      "row_fingerprint": "8c6b7e05e51c819182f4dd04df40c75be7e14b86e0958c7be4343b59f860f319"
+    },
+    {
+      "case_id": "C13",
+      "raw_input": {
+        "source_class": "SUBJECTIVE_RELATIONSHIP_MEMORY",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": true,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "RELATIONSHIP_CANNOT_EXPAND_AUTHORITY"
+        ],
+        "primary_reason": "RELATIONSHIP_CANNOT_EXPAND_AUTHORITY",
+        "action_authority": false
+      },
+      "row_fingerprint": "2e55e2cf1282183d1da3624cf75eaac6fa66950d04dd4639e64ecfd53abe48ad"
+    },
+    {
+      "case_id": "C14",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "STALE",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "SOURCE_NOT_CURRENT"
+        ],
+        "primary_reason": "SOURCE_NOT_CURRENT",
+        "action_authority": false
+      },
+      "row_fingerprint": "93bced84aef565bb628fcce477cc891673d25ba7f6cf21ee8751da96d9618004"
+    },
+    {
+      "case_id": "C15",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "STALE",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "CREATOR_NOT_CURRENT"
+        ],
+        "primary_reason": "CREATOR_NOT_CURRENT",
+        "action_authority": false
+      },
+      "row_fingerprint": "d112ed76d728db665abb5548c6378314953a4f7ff8b70b1e0bab4694d386c388"
+    },
+    {
+      "case_id": "C16",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": null,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "EXPLICIT_CHOICE_MISSING"
+        ],
+        "primary_reason": "EXPLICIT_CHOICE_MISSING",
+        "action_authority": false
+      },
+      "row_fingerprint": "6c749ef02f3a02c69e0d662b5251054388ddcf421a935c93dc09fff511b6e5ed"
+    },
+    {
+      "case_id": "C17",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "UNKNOWN",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "INDETERMINATE",
+        "reason_codes": [
+          "UPSTREAM_CURRENTNESS_UNAVAILABLE"
+        ],
+        "primary_reason": "UPSTREAM_CURRENTNESS_UNAVAILABLE",
+        "action_authority": false
+      },
+      "row_fingerprint": "eb6530ec17ef2131bf086384aece1246b43959ea85817aeea4c998ef0f15126f"
+    },
+    {
+      "case_id": "C18",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": true,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "CANDIDATE_ONLY_NO_ACTION_AUTHORITY"
+        ],
+        "primary_reason": "CANDIDATE_ONLY_NO_ACTION_AUTHORITY",
+        "action_authority": false
+      },
+      "row_fingerprint": "7c73d782ab2ba6aeffefb430a0fa1da6374d9f950b09beeb126cd4a29c8fc9aa"
+    },
+    {
+      "case_id": "C19",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "MEMORY_CANDIDATE",
+        "source_currentness": "CURRENT",
+        "creator_currentness": "CURRENT",
+        "explicit_choice": true,
+        "relationship_authority_requested": false,
+        "action_authority_requested": false,
+        "runtime_target_requested": true
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "SYNTHETIC_DOMAIN_ONLY"
+        ],
+        "primary_reason": "SYNTHETIC_DOMAIN_ONLY",
+        "action_authority": false
+      },
+      "row_fingerprint": "70a9d3ef2d812e713d1b01df94d5425a208d20da4d799d5c315ed044b0324f64"
+    },
+    {
+      "case_id": "C20",
+      "raw_input": {
+        "source_class": "SESSION_CONTENT",
+        "target_class": "TASK_CANONICAL_FACT",
+        "source_currentness": "STALE",
+        "creator_currentness": "STALE",
+        "explicit_choice": null,
+        "relationship_authority_requested": false,
+        "action_authority_requested": true,
+        "runtime_target_requested": false
+      },
+      "claimed_decision": {
+        "result": "REJECTED",
+        "reason_codes": [
+          "SOURCE_NOT_CURRENT",
+          "CREATOR_NOT_CURRENT",
+          "EXPLICIT_CHOICE_MISSING",
+          "SESSION_CANNOT_CREATE_TASK",
+          "CANDIDATE_ONLY_NO_ACTION_AUTHORITY"
+        ],
+        "primary_reason": "SOURCE_NOT_CURRENT",
+        "action_authority": false
+      },
+      "row_fingerprint": "e934dd710d99a1becb99452b8b2bf967a4a51e75a962ead743daca025e03322a"
+    }
+  ],
+  "candidate_history": [
+    {
+      "candidate_id": "home-candidate-synthetic-001",
+      "candidate_revision": 1,
+      "predecessor_ref": null,
+      "predecessor_fingerprint": null,
+      "semantic_class": "MEMORY_CANDIDATE",
+      "creator_actor_assessment_ref": "synthetic://f2/actor-assessment/nobao@1",
+      "creator_actor_assessment_fingerprint": "4d515be006fd2ab8a3dc2a740d79d6a27435f894fdfa22ed9030bd877fbf4221",
+      "source_subject_ref": "synthetic://session/content/001",
+      "source_subject_revision": 1,
+      "source_subject_fingerprint": "81e7b75595b8baa901fcadb19209c79e351d5828c9f725b37bc09fa1ef8e844e",
+      "created_event_ref": "synthetic://event/candidate-1",
+      "created_event_fingerprint": "0f66fdba58660ba42d427e6c8ce520819905f3639a7909643480d713898f01c7",
+      "payload_commitment": "1afbf059d6ac4903c7c226b6c3214c0ff303c205ad5eeeed0eb343ac7c8b2697",
+      "candidate_fingerprint": "a1cf0683d435eb61225d5b516661fa5795e476dcf8564f9dced89308de868fff"
+    },
+    {
+      "candidate_id": "home-candidate-synthetic-001",
+      "candidate_revision": 2,
+      "predecessor_ref": "home-candidate-synthetic-001@1",
+      "predecessor_fingerprint": "a1cf0683d435eb61225d5b516661fa5795e476dcf8564f9dced89308de868fff",
+      "semantic_class": "MEMORY_CANDIDATE",
+      "creator_actor_assessment_ref": "synthetic://f2/actor-assessment/nobao@1",
+      "creator_actor_assessment_fingerprint": "4d515be006fd2ab8a3dc2a740d79d6a27435f894fdfa22ed9030bd877fbf4221",
+      "source_subject_ref": "synthetic://session/content/001",
+      "source_subject_revision": 2,
+      "source_subject_fingerprint": "c1c125592daa15672d630ba817c84bdf50b42eec482bada895f50c1094d4757a",
+      "created_event_ref": "synthetic://event/candidate-2",
+      "created_event_fingerprint": "27fb7e9600611f2c4ef24384148e3de925cfc02e36a31bb8acf687a91a947e44",
+      "payload_commitment": "1a0176a2a93f383490ade043984c5601f226bdfc0f50d7ec14dd84a836d41638",
+      "candidate_fingerprint": "c3901b5312fcb027448859165af6f2084447bd4573e4fea9718463e7ebaa9795"
+    }
+  ],
+  "gap_dispositions": [
+    {
+      "gap_id": "HD-M0-01",
+      "disposition": "RESOLVED_BY_F2_FROZEN_CONTRACT",
+      "row_fingerprint": "825cbcd2ea62460fd0f0b5c06e634d78a9e952ca19dffa4f81b75b93ad3d1b21"
+    },
+    {
+      "gap_id": "HD-M0-02",
+      "disposition": "RESOLVED_BY_F3_FROZEN_CONTRACT",
+      "row_fingerprint": "83b581597123ef3f673dd3394dd764c51f668bd84ac2a8ea9f69ae4eb380b63e"
+    },
+    {
+      "gap_id": "HD-M0-03",
+      "disposition": "F7_SEMANTIC_BOUNDARY_CANDIDATE_PENDING_ACCEPTANCE",
+      "row_fingerprint": "d51b07e8751d0427bda593ed1e55a3eda1685ddee267e8090588f34e3b3f5e0f"
+    },
+    {
+      "gap_id": "HD-M0-04",
+      "disposition": "DEFERRED_TO_GOVERNED_MEMORY_ACCESS_CONTRACT",
+      "row_fingerprint": "fdfe17e4f00cf9fecf2f88be11122aff8300483228b878931c67031182340b98"
+    },
+    {
+      "gap_id": "HD-M0-05",
+      "disposition": "DEFERRED_TO_F8_HOME_TO_ORCHESTRATOR_INTERFACE",
+      "row_fingerprint": "725c5bfb883326d3be1137af4d39021e8c1758c94636996153886edda0a299e1"
+    },
+    {
+      "gap_id": "HD-M0-06",
+      "disposition": "F7_SEMANTIC_BOUNDARY_CANDIDATE_NO_SENSING_IMPLEMENTATION",
+      "row_fingerprint": "ef9f7ebf0705f942e57a87e644a99a33174bf53adf1057646fab5af33d3e7caf"
+    },
+    {
+      "gap_id": "HD-M0-07",
+      "disposition": "F7_SEMANTIC_BOUNDARY_CANDIDATE_WRITER_TARGET_NOT_IMPLEMENTED",
+      "row_fingerprint": "c9b9422b62a341b0d5ec51b8b2421dab3442a2124086d7edd998f35e4a1bbbcd"
+    }
+  ],
+  "relationship_witness": {
+    "formal_mutation_available": false,
+    "subjective_memory_can_bind_other_party": false,
+    "relationship_can_expand_authority": false,
+    "target_status": "TARGET_NOT_IMPLEMENTED"
+  },
+  "presence_witness": {
+    "policy_creates_consent": false,
+    "consent_proves_sensing": false,
+    "sensing_authorizes_recording": false,
+    "sensing_creates_memory": false,
+    "sensor_or_recording_implementation_present": false
+  },
+  "boundary_assertions": {
+    "accepted_real_identity_count": 0,
+    "real_session_content_count": 0,
+    "private_raw_memory_count": 0,
+    "formal_memory_write_count": 0,
+    "real_relationship_mutation_count": 0,
+    "sensing_or_recording_count": 0,
+    "Task_or_Command_mutation_count": 0,
+    "database_write_count": 0,
+    "provider_call_count": 0,
+    "external_effect_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "section_fingerprints": {
+    "authority_profile": "d37ae687ccd6c5f97b4c5539b9f8a0629a4b4de37749524ea65e35dd6a4e58d4",
+    "decision_cases": "9a36b8a782406c81cb63e7377b35bfeedf0c2827a8268a4b889e51eb0852b5b7",
+    "candidate_history": "5daefc1bad09adaf9f58370a4277c1e5d2c52bfac7f1fd177a5b59a476bba7c1",
+    "gap_dispositions": "15ea8f4350369324d51d1527b7e82167ed3feaf6ff9057a72e52f096f0382e20",
+    "relationship_witness": "af53d137b6789024399cc316c26dc479dcd15c3c35404873a798b1ed7eb301f8",
+    "presence_witness": "f090964dec7501bf9b0aa03a4ec9663925edca969e54d1bd2002a6ecbd5673fb",
+    "boundary_assertions": "aeb604d59bc46c7a1d97b87b8d8ac50537efe962e4256b88a87bc11f86a82055"
+  },
+  "root_fingerprint": "2a5dc56a38de8636a31887a4bc3a954844ed42413a505068d5d2fdd4cf435b54"
+}
