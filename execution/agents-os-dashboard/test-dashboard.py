@@ -47,11 +47,11 @@ def main() -> int:
     check(summary["route_selection"]["queue_promotion_authorized"] is False, "route selection must not authorize queue promotion", failures)
     check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
     check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
-    check(summary["next_user_action"]["status"] == "none", "dashboard should not repeat the completed F6 start decision gate", failures)
-    check(summary["next_user_action"]["decision_owner"] is None, "active F6 contract closure should not claim a Jenn decision owner", failures)
-    check(summary["next_user_action"]["requires_jenn_decision"] is False, "active F6 contract closure should not require a new Jenn start decision", failures)
-    check(summary["next_user_action"]["accepted_route_ids"] == [], "active F6 contract closure should not surface route ids", failures)
-    check(summary["next_user_action"]["exact_confirmation_templates_available"] is False, "active F6 contract closure should not claim route confirmation templates", failures)
+    check(summary["next_user_action"]["status"] == "governance_decision_required", "dashboard should surface the Jenn-owned F7 start decision gate", failures)
+    check(summary["next_user_action"]["decision_owner"] == "Jenn", "F7 start decision owner should be Jenn", failures)
+    check(summary["next_user_action"]["requires_jenn_decision"] is True, "F7 start should require Jenn", failures)
+    check(summary["next_user_action"]["accepted_route_ids"] == [], "F7 start decision should not surface route ids", failures)
+    check(summary["next_user_action"]["exact_confirmation_templates_available"] is False, "F7 start decision should not claim route confirmation templates", failures)
     check(
         summary["next_user_action"]["active_queue_mutation_authorized"] is False,
         "next user action must not authorize active queue mutation",
