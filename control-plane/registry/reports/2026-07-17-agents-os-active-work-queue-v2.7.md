@@ -1,0 +1,115 @@
+# AGENTS OS Active Work Queue v2.7
+
+Date: 2026-07-17
+Status: active
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.6.md`
+
+## Purpose
+
+Current queue after author closeout of the fixed F6 R1 Validation Requirement
+Current Decision atomic bundle and its 22-input hash-bound review package.
+Queues v0.1-v2.6 remain byte-preserved historical evidence.
+
+This queue authorizes only a fresh full atomic independent review of the exact
+four R1 subjects and 17 authority inputs, plus evidence-bound finding
+disposition and governance projections. It does not authorize F6 acceptance or
+freeze, F7, implementation, runtime, database, Resident, Worker, Host,
+validator service, authentication, credential, provider, real
+Task/Run/Validation mutation, delivery, physical effect, public API, MCP,
+release, deploy, publish or formal Memory work.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F5_status=ACCEPTED_FROZEN
+F6_started=true
+F6_status=R1_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F6_start_decision_sha256=335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
+F6_R1_acceptance_unit=F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+F6_R1_subject_count=4
+F6_R1_manifest_input_count=22
+F6_R1_manifest_sha256=65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+F6_R1_fixture_canonical_sha256=014c3154bd8d2f75f45b845901c6665211dce16a6580c8e7a4755692f335ccff
+F6_R1_validator_result=PASS_NO_BLOCKER
+F6_R1_independent_review_created=false
+F6_R1_independent_review_result=NOT_RUN
+F6_accepted=false
+F6_frozen=false
+F7_started=false
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+database_change_authorized=false
+service_start_authorized=false
+provider_execution_authorized=false
+real_Task_Run_Validation_mutation_authorized=false
+real_effect_execution_authorized=false
+commit_push_PR_merge_authorized_by_F6_R1_package=false
+```
+
+## NOW
+
+### NOW-001: F6 R1 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+owner=independent_reviewer_not_the_F6_R1_author_run
+review_unit=F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+manifest=control-plane/registry/reports/2026-07-17-agents-os-f6-r1-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256=65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+subject_read_requirement=4_4_complete
+authority_input_read_requirement=17_17_complete
+declared_hash_requirement=22_22
+allowed_results=PASS_NO_BLOCKER_or_BLOCK
+partial_review=forbidden
+automatic_acceptance=false
+```
+
+## NEXT
+
+```text
+independent_result_BLOCK=create_evidence_bound_finding_disposition_and_only_a_narrow_required_R2
+independent_result_PASS_NO_BLOCKER=prepare_Jenn_only_atomic_freeze_decision_package
+Jenn_atomic_freeze_decision=required_before_F6_acceptance_or_freeze
+F7_start=requires_separate_later_Jenn_decision_after_F6_freeze_and_durability
+```
+
+## BLOCKED
+
+```text
+partial_F6_acceptance=forbidden
+automatic_F6_acceptance_or_freeze=forbidden
+F1_F2_F3_F4_F5_authority_recomputation=forbidden
+permission_level_or_Actor_Task_classification=forbidden
+Run_success_or_delivery_ACK_APPLIED_CURRENT_as_Validation_PASS=forbidden
+missing_unknown_expired_or_conflicting_evidence_as_pass=forbidden
+all_required_waived_or_empty_required_set_as_completion=forbidden
+synthetic_evidence_as_runtime_recovery_or_production_authority=forbidden
+real_Task_Run_Validation_Event_waiver_or_completion_mutation=forbidden
+F7_or_downstream_start=forbidden
+implementation_runtime_database_authentication_provider_effect=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_F6_R1_package
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F6_R1_normative_contract=FIXED_AUTHOR_SUBJECT
+F6_R1_deterministic_fixture_builder=FIXED_AUTHOR_SUBJECT
+F6_R1_synthetic_fixture=FIXED_AUTHOR_SUBJECT
+F6_R1_offline_semantic_validator=FIXED_AUTHOR_SUBJECT
+F6_R1_author_self_review=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW_NOT_INDEPENDENT
+F6_R1_builder_reproduction=BYTE_EQUAL
+F6_R1_schema_profiles=PASS_10_OF_10
+F6_R1_decision_vectors=PASS_54_OF_54
+F6_R1_precedence_raw_trials=PASS_342_OF_342
+F6_R1_fully_resigned_negative_mutations=PASS_32_OF_32_REJECTED_ZERO_EXCEPTIONS
+F6_R1_real_task_runtime_effect_provider_secret_counts=ZERO
+active_work_queue_v0_1_through_v2_6=superseded_historical_bytes_preserved
+```

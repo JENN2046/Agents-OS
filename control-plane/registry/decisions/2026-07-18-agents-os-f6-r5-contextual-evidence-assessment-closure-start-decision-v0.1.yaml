@@ -1,0 +1,36 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f6-r5-contextual-evidence-assessment-closure-start-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+decision_basis:
+  source: Jenn_supplied_F6_R4_independent_BLOCK_and_exact_R5_scope
+  statement_summary: >-
+    The supplied independent review requires one narrow R5 correction: an F3
+    evidence assessment must commit the evidence tuple, exact Requirement tuple
+    and attempt context fingerprint; any change invalidates the old assessment
+    and requires a new assessment and attempt revision.
+R4_manifest_sha256: 22396132777538619620c6e1e5ceb4b03338d08b9792c60c266a6d744721bb93
+R4_review_sha256: 852da403282eaff2226a63e3e2325b23a1637c8330d8d6cda28be5e9fe286791
+R4_case_sha256: 97348e9dbeb0c6fbc9d609e40151f11db47184ffe42495ba127c52de76289c72
+R4_disposition_sha256: 76ed7cc38a40a2c39ce94dbe5f652fde999a40417657703c21d9008c52908627
+authorized_finding: F6-R4-IR-B01
+authorized_correction:
+  - contextual_evidence_assessment_subject_tuple
+  - exact_F3_owner_contract_barrier_head_result_and_revision_binding
+  - old_assessment_rejected_after_context_or_Requirement_change
+  - new_attempt_revision_required_for_new_contextual_assessment
+atomic_review_shape:
+  review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R5_ATOMIC_BUNDLE
+  subject_count: 20
+  precedence: [R5_explicit_replacements, R4_all_other_clauses, R3_all_other_clauses, R2_all_other_clauses, R1_all_other_clauses]
+  partial_review: forbidden
+forbidden_scope: [edit_R1_R2_R3_R4_fixed_bytes, new_states, second_permission_system, upstream_authority_recomputation, F7, implementation, runtime, database, provider, production_authentication, real_effect, Git_delivery]
+authority_effect:
+  F6_R5_started: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false

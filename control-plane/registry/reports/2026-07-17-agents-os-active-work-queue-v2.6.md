@@ -1,0 +1,105 @@
+# AGENTS OS Active Work Queue v2.6
+
+Date: 2026-07-17
+Status: active
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md`
+
+## Purpose
+
+Current queue after Jenn explicitly started F6 Validation Requirement Current
+Decision Contract Closure. Queues v0.1-v2.5 remain byte-preserved historical
+evidence. F5 remains accepted and frozen; F6 may consume its fixed references
+but may not revise or recompute F5.
+
+This queue authorizes only F6 semantic contract closure, synthetic fixtures,
+offline validators, review evidence and governance projections. It does not
+authorize implementation, runtime, database, Resident, Worker, Host, validator
+service, authentication, credential, provider, real Task/Run/Validation
+mutation, delivery, physical effect, public API, MCP, release, deploy, publish
+or formal Memory work.
+
+## Current Facts
+
+```text
+F1_status=ACCEPTED
+F2_status=ACCEPTED_FROZEN
+F3_status=ACCEPTED_FROZEN
+F4_status=ACCEPTED_FROZEN
+F5_status=ACCEPTED_FROZEN
+F5_manifest_sha256=2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+F5_independent_review_sha256=edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+F5_freeze_decision_sha256=73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+F5_mainline_integration_merge_commit=57523eea7cc6bf0579eebb250dfdbaa6e110e706
+F5_mainline_durability_completion_commit=f1c5f6e2d99217a43cede082bedb75b4fc31e8e7
+F5_manifest_verified_inputs=64_64
+F5_subjects_verified=28_28
+F6_started=true
+F6_status=CONTRACT_CLOSURE_ACTIVE
+F6_start_decision_sha256=335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
+F6_accepted=false
+F6_frozen=false
+F7_started=false
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+database_change_authorized=false
+service_start_authorized=false
+provider_execution_authorized=false
+real_Task_Run_Validation_mutation_authorized=false
+real_effect_execution_authorized=false
+commit_push_PR_merge_authorized_by_F6_start=false
+```
+
+## NOW
+
+### NOW-001: F6 R1 Validation Requirement Current Decision Contract Closure
+
+```text
+owner=Nobao
+scope=semantic_contract_synthetic_fixture_offline_validator_and_review_surface
+requires_jenn_decision=false
+automatic_local_contract_progress=true
+automatic_acceptance=false
+implementation_authorized=false
+runtime_activation_authorized=false
+real_Task_Run_Validation_mutation_authorized=false
+effect_execution_authorized=false
+```
+
+## NEXT
+
+```text
+F6_R1_contract_draft=create_fixed_author_subject
+F6_R1_synthetic_fixture_and_validator=create_zero_runtime_evidence
+F6_R1_author_self_review=create_non_independent_evidence
+F6_R1_fresh_hash_bound_independent_review=required_before_any_acceptance_surface
+Jenn_atomic_freeze_decision=required_after_valid_independent_PASS
+```
+
+## BLOCKED
+
+```text
+partial_F6_acceptance=forbidden
+automatic_F6_acceptance_or_freeze=forbidden
+F1_F2_F3_F4_F5_authority_recomputation=forbidden
+permission_level_or_Actor_Task_classification=forbidden
+Run_success_or_delivery_ACK_as_Validation_PASS=forbidden
+missing_unknown_expired_or_conflicting_evidence_as_pass=forbidden
+synthetic_evidence_as_runtime_or_production_authority=forbidden
+real_Task_Run_Validation_mutation=forbidden
+F7_or_downstream_start=forbidden
+implementation_runtime_database_authentication_provider_effect=not_authorized
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized_by_F6_start_decision
+formal_Memory_or_private_raw_memory_access=not_authorized
+```
+
+## CLOSED
+
+```text
+F5_R1_through_R7_atomic_bundle=ACCEPTED_FROZEN
+F5_mainline_durability=VERIFIED_64_OF_64_INPUTS_AND_100_OF_100_BLOBS
+Jenn_explicit_F6_start_decision=RECORDED
+active_work_queue_v0_1_through_v2_5=superseded_historical_bytes_preserved
+```

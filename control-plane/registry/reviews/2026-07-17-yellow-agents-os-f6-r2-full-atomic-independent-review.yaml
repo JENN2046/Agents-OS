@@ -1,0 +1,530 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r2-full-atomic-independent-review-2026-07-18
+date: '2026-07-18'
+reviewer:
+  identity: OpenAI GPT-5.6 Thinking — fresh review execution
+  independence_basis:
+  - not_the_F6_R2_author_run
+  - reviewed_fixed_uploaded_bytes
+  - did_not_modify_subjects_or_manifest
+  - did_not_treat_author_self_review_as_independent_judgment
+  - no_participation_in_F6_R2_subject_authoring_in_this_execution
+  independence_note: The package author evidence uses the persona name Nobao. This conclusion is execution-independent, not
+    a claim of external human or organizational certification; this fresh run had no role in authoring the fixed R2 bytes.
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 4
+  subject_count: 8
+package_integrity:
+  canonical_manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f6-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+  manifest_sha256_expected: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+  manifest_sha256_verified: true
+  subject_hashes_verified: 8/8
+  authority_input_hashes_verified: 21/21
+  author_evidence_hashes_verified: 1/1
+  hashes_verified: 30/30
+  subjects_fully_read: 8/8
+  authority_inputs_fully_read: 21/21
+  author_evidence_fully_read: 1/1
+  fixed_bytes_modified_by_review: false
+fixed_commands:
+  R1_validator:
+    result: PASS
+    exit_status: 0
+    reported_R1_fixed_mutations_rejected: 32
+  R1_builder_fixture_byte_equality:
+    result: PASS
+    exit_status: 0
+  R2_validator:
+    result: PASS
+    exit_status: 0
+    reported_R1_independent_regressions_rejected: 18
+    reported_R2_additional_negatives_rejected: 12
+    mutation_exception_count: 0
+  R2_builder_fixture_byte_equality:
+    result: PASS
+    exit_status: 0
+  passed: 4/4
+  judgment: necessary_but_not_sufficient
+rejection_accounting:
+  R1_fixed_mutations:
+    executed: 32
+    rejected: 32
+  R1_independent_regressions:
+    executed: 18
+    rejected: 18
+  R2_additional_negatives:
+    executed: 12
+    rejected: 12
+  fixed_total:
+    executed: 62
+    rejected: 62
+  independent_coordinated_probes:
+    executed: 17
+    rejected: 5
+    unexpectedly_accepted: 12
+    execution_exceptions: 0
+  probe_evidence_path: 2026-07-18-f6-r2-independent-coordinated-probes.json
+independent_coordinated_probes:
+- id: IR-CONTEXT-01
+  objects_changed:
+  - TASK_CURRENT_STATE assessment
+  - all attempt contexts
+  - completion context
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: candidate/dependency owner assessment binding
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-WAIVER-01
+  objects_changed:
+  - Jenn decision
+  - waiver Command
+  - waiver Event
+  - waiver
+  - Jenn authority assessment
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: exact immutable Jenn decision and authenticated Command/Event root
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-GRAPH-BRANCH
+  objects_changed:
+  - Requirement revision graph
+  - dependent summaries/fingerprints
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: REJECT
+  rejection_layer: Requirement branch detection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors:
+  - 'requirement REQ-A: contiguous exact integer revisions required'
+  - 'requirement REQ-A: predecessor mismatch'
+  - 'requirement REQ-A: predecessor Event must precede revision Event'
+  - summary derived count mismatch
+  exception: null
+- id: IR-GRAPH-GAP
+  objects_changed:
+  - Requirement revision graph
+  - dependent summaries/fingerprints
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: REJECT
+  rejection_layer: Requirement gap/missing predecessor detection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors:
+  - 'requirement REQ-A: contiguous exact integer revisions required'
+  - 'requirement REQ-A: revision1 predecessor must be null'
+  - summary derived count mismatch
+  exception: null
+- id: IR-GRAPH-CYCLE
+  objects_changed:
+  - Requirement revision graph
+  - direct fingerprints/root
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: REJECT
+  rejection_layer: Requirement cycle/base-predecessor detection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors:
+  - '$.schema_profiles[7].instance: unresolved exact binding'
+  - 'requirement REQ-A: revision1 predecessor must be null'
+  - 'set: exact current membership required'
+  - 'set: exact current membership required'
+  - 'attempt ATTEMPT-A: Requirement binding'
+  - 'decision REQ-A: exact subject mismatch'
+  exception: null
+- id: IR-GRAPH-WRONG-SOURCE
+  objects_changed:
+  - provenance source
+  - Requirement binding
+  - owner assessment
+  - source closure
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: closed provenance source-kind and authority binding
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-EVIDENCE-ADD
+  objects_changed:
+  - evidence array
+  - set fingerprint
+  - assessment
+  - attempt and decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: extra unbound evidence rejection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-EVIDENCE-DELETE
+  objects_changed:
+  - evidence array
+  - set fingerprint
+  - assessment
+  - attempt and decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: missing evidence / immutable attempt revision
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-EVIDENCE-DUPLICATE
+  objects_changed:
+  - evidence array
+  - set fingerprint
+  - assessment
+  - attempt and decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: REJECT
+  rejection_layer: duplicate evidence rejection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors:
+  - 'attempt ATTEMPT-A: exact evidence set'
+  exception: null
+- id: IR-EVIDENCE-REORDER
+  objects_changed:
+  - evidence array
+  - set fingerprint
+  - assessment
+  - attempt and decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: REJECT
+  rejection_layer: unsorted evidence rejection
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors:
+  - 'attempt ATTEMPT-A: exact evidence set'
+  exception: null
+- id: IR-CARRY-REVISION
+  objects_changed:
+  - carry source revision tuple
+  - attempt and decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: carry source exact revision binding
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-F5-SUBJECT-FP
+  objects_changed:
+  - delivery subject
+  - effectful Requirement
+  - downstream decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: F5 assessment exact delivery subject fingerprint
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-DECISION-MATRIX
+  objects_changed:
+  - Requirement decision
+  - set decision
+  - completion
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: closed decision nullability/cross-field matrix
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-COMPLETION-COUNTS
+  objects_changed:
+  - completion guard
+  - completion decision
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: exact five-key quiescence count closure
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-MISSING-DEPENDENCY-ASSESSMENT
+  objects_changed:
+  - assessment inventory
+  - summary/root
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: mandatory dependency owner assessment consumption
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-TRUSTED-TIME
+  objects_changed:
+  - TrustedTime canonical instance
+  - schema profile
+  - root
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: trusted time exact barrier and event-order binding
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+- id: IR-OWNER-PHASE
+  objects_changed:
+  - Validation authority assessment
+  - dependent attempts/decisions
+  dependent_refs_and_fingerprints_propagated: true
+  execution_completed_without_exception: true
+  expected_result: REJECT
+  actual_result: ACCEPT
+  rejection_layer: owner phase and owner-contract exactness
+  rejected_only_because_of_stale_outer_hash: false
+  validator_errors: []
+  exception: null
+required_semantic_determinations:
+- id: 1
+  verified: false
+  evidence:
+  - F6-R2-IR-B01
+- id: 2
+  verified: false
+  evidence:
+  - F6-R2-IR-B02
+  - F6-R2-IR-M01
+- id: 3
+  verified: false
+  evidence:
+  - IR-CONTEXT-01
+  - F6-R2-IR-B02
+- id: 4
+  verified: false
+  evidence:
+  - IR-OWNER-PHASE
+  - F6-R2-IR-B02
+- id: 5
+  verified: false
+  evidence:
+  - IR-MISSING-DEPENDENCY-ASSESSMENT
+  - IR-OWNER-PHASE
+- id: 6
+  verified: false
+  evidence:
+  - IR-GRAPH-WRONG-SOURCE
+  - F6-R2-IR-B04
+- id: 7
+  verified: false
+  evidence:
+  - IR-WAIVER-01
+  - F6-R2-IR-B03
+- id: 8
+  verified: false
+  evidence:
+  - IR-TRUSTED-TIME
+  - F6-R2-IR-B05
+- id: 9
+  verified: false
+  evidence:
+  - IR-EVIDENCE-ADD
+  - IR-EVIDENCE-DELETE
+  - F6-R2-IR-M01
+- id: 10
+  verified: false
+  evidence:
+  - IR-CARRY-REVISION
+  - F6-R2-IR-B07
+- id: 11
+  verified: false
+  evidence:
+  - IR-F5-SUBJECT-FP
+  - F6-R2-IR-B06
+- id: 12
+  verified: false
+  evidence:
+  - IR-COMPLETION-COUNTS
+  - IR-MISSING-DEPENDENCY-ASSESSMENT
+  - F6-R2-IR-B02
+- id: 13
+  verified: true
+  evidence:
+  - environment=SYNTHETIC_TEST
+  - runtime_usable=false
+  - mandatory occurrence counts are zero
+- id: 14
+  verified: false
+  evidence:
+  - caller-selectable/replaceable assessment and waiver roots remain possible; see B02-B04
+result: BLOCK
+block_reason: NEW_INDEPENDENT_REPRODUCIBLE_CONTRACT_SAFETY_COUNTEREXAMPLES
+findings_summary:
+  blocker: 7
+  major: 1
+  minor: 0
+  unresolved: 8
+findings:
+- id: F6-R2-IR-B01
+  severity: blocker
+  affected_subjects: &id001
+  - control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r2-amendment.draft.md
+  - control-plane/registry/build-f6-r2-ten-finding-proof-closure.py
+  - control-plane/registry/examples/2026-07-17-agents-os-f6-r2-ten-finding-proof-closure-v0.1.json
+  - control-plane/registry/validate-f6-r2-ten-finding-proof-closure.py
+  rule_violated: 'R2 Amendment §3-§4, §11-§12 and external review semantic determination 1: each of the ten normative schemas
+    must bind closed fields, types, enums, nullability, integer ranges, canonical instances, and a complete cross-field matrix.'
+  reproducible_input_difference: IR-GRAPH-WRONG-SOURCE changed provenance source_kind to unknown ALIEN_SOURCE; IR-COMPLETION-COUNTS
+    replaced the required five zero counts with an empty object; IR-DECISION-MATRIX added a waiver head to a SATISFIED/VALIDATION_PASSED
+    decision. All dependent hashes and summaries were updated.
+  dependent_updates_completed: true
+  observed_result: All three contradictory inputs were ACCEPTED with zero validator errors. The schema profile rows contain
+    only field inventories and canonical-instance pointers; enum/nullability/scalar constraints are neither present in the
+    profile nor included in the validator's schema-profile hash.
+  required_correction: Materialize machine-verifiable type, enum, nullability, nested-object, integer-range, and cross-field
+    constraints for every R2 schema; include those constraints in schema_fingerprint; enforce exact five-key quiescence counts
+    and output nullability/matrix rules; reject unknown source kinds.
+  scope_limit: Do not add new Validation or Task states, waiver kinds, delivery semantics, runtime interfaces, database/provider
+    design, or F7 authority.
+- id: F6-R2-IR-B02
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §5-§6 and §15; external review determinations 3-5 and 12: owner assessments must bind the exact
+    subject/ref/revision/fingerprint/current head/barrier, and completion must consume the same owner-authorized candidate
+    and dependency context as every current PASSED attempt.'
+  reproducible_input_difference: IR-CONTEXT-01 replaced candidate and dependency tuples in the F1 Task assessment, every attempt
+    context, and completion while leaving the separate candidate/dependency currentness assessments on the original subjects.
+    IR-MISSING-DEPENDENCY-ASSESSMENT removed the dependency assessment. IR-OWNER-PHASE changed a Validation authority assessment
+    owner_phase from F3 to F1 while retaining the F3 owner contract.
+  dependent_updates_completed: true
+  observed_result: All three probes were ACCEPTED; completion remained ELIGIBLE. Candidate/dependency assessments are not
+    required or cross-bound, and owner_phase is not checked against the bound owner contract.
+  required_correction: Require an exact per-kind assessment tuple at each consumer, including owner phase/contract, subject
+    ref/revision/fingerprint, result, current head, and barrier; bind completion and every PASSED attempt to the same exact
+    candidate and dependency assessment refs/fingerprints; fail closed if either assessment is missing or mismatched.
+  scope_limit: Consume F1/F3/F5 authority only; do not reimplement those owners or create a second state/identity/completion
+    authority.
+- id: F6-R2-IR-B03
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §8 and external review determination 7: a waiver must bind the exact immutable Jenn decision,
+    exact Requirement revision, authenticated Command/Event, waivability, validity interval, and current owner assessment.'
+  reproducible_input_difference: IR-WAIVER-01 replaced the Jenn decision with bytes concerning REQ-A, replaced the waiver
+    Command and Event with unrelated operation/event semantics, then updated the waiver and owner assessment fingerprints
+    while leaving the waiver outcome on REQ-D.
+  dependent_updates_completed: true
+  observed_result: ACCEPT with zero validator errors and the REQ-D decision remained WAIVED. Supporting Jenn decision, Command,
+    and Event payload semantics are not validated against the waiver's Requirement and operation.
+  required_correction: Validate the Jenn decision payload against the exact waived Requirement/revision/result, validate Command
+    purpose and subject binding to that decision, validate Event kind and exact Command/subject binding, and anchor the current
+    immutable decision through a non-caller-selectable owner assessment/head relation.
+  scope_limit: Do not introduce new waiver operations or production authentication; close only the existing GRANT authority
+    graph.
+- id: F6-R2-IR-B04
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §7 and external review determination 6: Requirement predecessor, provenance, Command, Event,
+    and source-authority graphs must be complete and closed; unknown source kinds and unassessed/wrong sources must fail closed.'
+  reproducible_input_difference: IR-GRAPH-WRONG-SOURCE changed a provenance source and its owner assessment to the unknown
+    enum ALIEN_SOURCE and propagated the change through the Requirement and Validation Set source closure.
+  dependent_updates_completed: true
+  observed_result: ACCEPT with zero validator errors. Branch, gap, and cycle controls were rejected, but the source-kind enum
+    and supporting Command/Event provenance semantics are not closed.
+  required_correction: Freeze the allowed source-kind enum, validate supporting source payload schema, require each provenance
+    Command/Event ref/fingerprint to resolve to a correctly typed object, and verify Command purpose, Event kind, subject
+    binding, sequence, and owner assessment against the exact source.
+  scope_limit: Do not change frozen F1/F3/F5 subjects; validate only the existing provenance authority relations.
+- id: F6-R2-IR-B05
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §9 and §12; external review determination 8: the cross-object Event order and trusted evaluation/barrier
+    relation must be complete and executable, with missing, conflicting, or incomparable relations failing closed.'
+  reproducible_input_difference: IR-TRUSTED-TIME changed TrustedTime to an unresolved barrier ref/fingerprint and observed_event_sequence
+    999, beyond the fixed barrier high watermark, then updated its canonical-instance/profile/root fingerprints. IR-WAIVER-01
+    also replaced Command/Event semantics while retaining sequence labels.
+  dependent_updates_completed: true
+  observed_result: Both probes were ACCEPTED. TrustedTimeInput is structurally wrapped but not semantically consumed, and
+    Jenn-decision/Command/Event ordering and subject relations are not evaluated.
+  required_correction: Bind every decision and assessment to the exact TrustedTime and F3 barrier; validate trusted sequence
+    within the barrier; validate the full Requirement/snapshot/decision/Command/Event/attempt/evidence/evaluation partial
+    order from typed objects rather than hard-coded sequence 150.
+  scope_limit: No runtime clock or provider implementation is required; this correction is limited to the offline contract
+    and proof witness.
+- id: F6-R2-IR-B06
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §11 and §13; external review determination 11: an effectful Requirement must bind the exact
+    F5 delivery subject, and APPLIED_CURRENT is only supporting evidence tied to that exact subject.'
+  reproducible_input_difference: IR-F5-SUBJECT-FP changed the actual delivery subject bytes/fingerprint and propagated the
+    new fingerprint into the effectful Requirement while leaving the F5 owner assessment on the old subject fingerprint/payload.
+  dependent_updates_completed: true
+  observed_result: ACCEPT with zero validator errors. The validator compares F5 subject ref and revision but does not require
+    the assessment's subject fingerprint/payload to equal the Requirement-bound delivery object's fingerprint.
+  required_correction: At the effectful attempt consumer, compare F5 assessment subject_ref, subject_revision, and subject_fingerprint
+    directly to the exact Requirement delivery subject; validate its typed payload and current-head/barrier tuple before using
+    APPLIED_CURRENT.
+  scope_limit: Do not make F5 APPLIED_CURRENT create Validation PASSED and do not add delivery/runtime semantics.
+- id: F6-R2-IR-B07
+  severity: blocker
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §11 and §13; external review determination 10: carry-forward must resolve directly to the original
+    fresh PASSED attempt with an exact ref/revision/fingerprint tuple and cannot form a chain.'
+  reproducible_input_difference: IR-CARRY-REVISION changed source_attempt_revision to 999 and root_source_attempt_revision
+    to 998 while retaining the same source refs/fingerprints and re-signing every downstream object.
+  dependent_updates_completed: true
+  observed_result: ACCEPT with zero validator errors. The carry-source revision fields are never compared to the resolved
+    source attempt revision.
+  required_correction: Require source_attempt_revision and root_source_attempt_revision to equal the resolved original fresh
+    attempt revision; bind source and root tuples exactly and reject any revision mismatch before deriving PASSED.
+  scope_limit: Do not add new carry-forward methods or evidence semantics.
+- id: F6-R2-IR-M01
+  severity: major
+  affected_subjects: *id001
+  rule_violated: 'R2 Amendment §10 and external review determination 9: evidence_bindings must equal the sorted unique complete
+    evidence set actually assessed, including exact evidence and assessment bindings; extra or missing evidence must fail
+    closed.'
+  reproducible_input_difference: IR-EVIDENCE-ADD added an arbitrary unbound evidence row; IR-EVIDENCE-DELETE removed an evidence
+    row. In both cases the evidence-set fingerprint and exact-set assessment were synchronously updated under the same attempt
+    revision. Duplicate and reorder controls were also run.
+  dependent_updates_completed: true
+  observed_result: ADD and DELETE were ACCEPTED; DUPLICATE and REORDER were correctly REJECTED. Evidence rows contain no per-evidence
+    assessment ref/revision/fingerprint and are not resolved to evidence objects; the same attempt revision can be silently
+    redefined.
+  required_correction: Add exact per-evidence object and assessment bindings, resolve and validate each row, and require a
+    new immutable attempt revision/predecessor when the evidence set changes; preserve sorted-unique enforcement.
+  scope_limit: Do not introduce provider calls, human-acceptance authority, effect execution, or new evidence classes beyond
+    the existing contract.
+requires_R3: true
+F6_acceptance_ready: false
+F6_accepted: false
+F6_frozen: false
+F7_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_service_provider_or_effect_authorized: false
+real_Task_Run_Validation_Event_waiver_or_completion_mutation_authorized: false
+Git_delivery_authorized: false
+review_scope_statement: The BLOCK is based only on contract safety/determinism counterexamples in the fixed R2 proof surface.
+  No implementation, database, transport, performance, provider, production authentication, or F7 requirement is imposed.

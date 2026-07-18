@@ -1,0 +1,33 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f6-r5-contextual-evidence-assessment-closure-self-review-2026-07-18
+date: 2026-07-18
+reviewer: Nobao_author_run
+independence: false
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R5_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+subject_hashes:
+  amendment: c56d77dcb140aa8db3345725ca3088bc3c2c5622e85f1deba8bf756b336361ac
+  builder: f6a013f71af1ced1a10495f9124d9d2a32a619449c19fc1cf258a279b400d39f
+  fixture: 07b1f45c88438763eef169ad17903924cc6ecfcac382ecc41508ba1993a3bbc6
+  validator: f2082d2d88728bfda75a1da2d860d2ff78cbe6d3af2985ef45e5b6d6bae9b96d
+finding_disposition_claim:
+  F6-R4-IR-B01: CLOSED_BY_F3_CONTEXTUAL_EVIDENCE_ASSESSMENT
+validation:
+  fixed_negative_total: 62_of_62_REJECTED
+  R2_coordinated_cases: 17_of_17_REJECTED
+  R3_cases: 7_of_7_REJECTED
+  R4_context_replacement_case: 1_of_1_REJECTED_BY_TARGET_R5_SEMANTIC
+  exceptions: 0
+  builder_byte_reproduction: PASS
+proof_properties:
+  assessed_subject_commits_evidence_Requirement_and_attempt_context: true
+  assessment_resolves_exact_F3_owner_contract_and_barrier: true
+  assessment_revision_and_attempt_revision_are_equal: true
+  predecessor_and_current_head_lineage_is_closed: true
+  outer_inventory_alone_is_not_accepted_as_assessment: true
+  R1_through_R4_fixed_subjects_modified: false
+  second_permission_system_created: false
+  upstream_authority_recomputed: false
+occurrence_assertions: {accepted_real_task_count: 0, database_write_count: 0, external_effect_count: 0, provider_call_count: 0, raw_secret_count: 0, runtime_activation_count: 0, task_done_mutation_count: 0, terminal_outcome: NOT_EXECUTED}
+governance: {author_result_is_not_independent_acceptance: true, F6_accepted: false, F6_frozen: false, F7_started: false, implementation_authorized: false, runtime_activation_authorized: false}
+next_gate: F6_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

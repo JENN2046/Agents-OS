@@ -1,0 +1,119 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f6-r3-full-atomic-independent-review-2026-07-18
+date: 2026-07-18
+
+reviewer:
+  identity: Codex independent review agent
+  independence_basis:
+    - not_the_F6_R3_author_run
+    - reviewed_fixed_hash_bound_bytes
+    - did_not_modify_subjects_or_workspace
+    - used_only_synthetic_offline_consistency_cases
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 12
+
+result: BLOCK
+requires_R4: true
+
+findings:
+  blocker: 5
+  major: 0
+  minor: 0
+
+integrity:
+  manifest_sha256: eee73506e6b4772ea095420aff153a96b3d54c4e5522d36451eb32eba3fc10ca
+  archive_sha256: 3b2b4d1fe93adc97e27be7fb0e4bec0e6d4632adf5b460fd5971feed359d2a8e
+  archive_entries: 43
+  archive_checksums_verified: 42_of_42
+  duplicate_paths: false
+  path_traversal: false
+  symlinks: false
+  declared_inputs_verified: 40_of_40
+  subjects_read: 12_of_12
+  authority_inputs_read: 27_of_27
+  author_evidence_read: 1_of_1
+  fixed_commands_passed: 6_of_6
+
+independent_consistency_cases:
+  executed: 7
+  correctly_rejected: 0
+  incorrectly_accepted: 7
+  execution_exceptions: 0
+  fully_resigned: true
+  dependent_bindings_propagated: true
+
+finding_details:
+  - finding_id: F6-R3-IR-B01
+    severity: blocker
+    title: Task identity is not closed across the validation context
+    cases: [F6-R3-IR-C01, F6-R3-IR-C02]
+    observation: >-
+      Completion or all revisions of one Requirement can be rebound to another
+      Task, with dependent set, attempt, decision, Command, Event and outer
+      bindings updated, while the validator still derives SATISFIED or ELIGIBLE.
+    required_correction:
+      - bind_Task_Requirement_Validation_Set_attempt_and_completion_to_one_exact_Task_identity
+      - bind_that_identity_to_the_current_F1_TASK_CURRENT_STATE_assessment
+
+  - finding_id: F6-R3-IR-B02
+    severity: blocker
+    title: Consumer assessment revisions are not compared with resolved assessment revisions
+    cases: [F6-R3-IR-C04, F6-R3-IR-C05]
+    observation: >-
+      F1, F3, F5, provenance, waiver, evidence and completion consumer revision
+      fields can diverge from the assessment_revision of the resolved assessment,
+      including a nonexistent revision, without rejection.
+    required_correction:
+      - require_every_consumer_assessment_revision_to_equal_the_resolved_assessment_revision
+
+  - finding_id: F6-R3-IR-B03
+    severity: blocker
+    title: Waiver expiry is not derived from TrustedTime
+    cases: [F6-R3-IR-C06]
+    observation: >-
+      A TrustedTime sequence later than expires_at_sequence can coexist with
+      WAIVED and ELIGIBLE results and is accepted.
+    required_correction:
+      - derive_waiver_currentness_from_exact_TrustedTime_sequence
+      - reject_expired_or_not_yet_valid_waiver_results
+
+  - finding_id: F6-R3-IR-B04
+    severity: blocker
+    title: Evidence validation subject is not bound to the consuming Requirement
+    cases: [F6-R3-IR-C03]
+    observation: >-
+      An evidence object can name a different Requirement as validation_subject
+      while its original attempt remains accepted as PASSED.
+    required_correction:
+      - bind_evidence_validation_subject_to_exact_Requirement_revision_and_attempt_context
+
+  - finding_id: F6-R3-IR-B05
+    severity: blocker
+    title: Carry-forward Event order does not bind the carry revision after its source
+    cases: [F6-R3-IR-C07]
+    observation: >-
+      A carry-forward revision Event can precede its original source Event and
+      remain accepted.
+    required_correction:
+      - require_attempt_predecessor_Event_strict_order
+      - require_carry_source_Event_strictly_before_carry_revision_Event
+
+scope_checks:
+  second_permission_system_found: false
+  upstream_authority_recomputation_found: false
+  synthetic_authority_leak_found: false
+  real_runtime_provider_or_effect_occurrence_found: false
+
+governance:
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+

@@ -1,0 +1,58 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f6-r6-immutability-schema-totality-closure-self-review-2026-07-18
+date: 2026-07-18
+reviewer: Nobao_author_run
+independence: false
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R6_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+subject_hashes:
+  amendment: a19ff9b4863e9b08c5c24ef1c2b91d57851b928db01a3e7f6e0114d7fee92a82
+  builder: 6d4c4ed38a2612aad858858e3b2ca63a1708ea569ff527f9752271d240bc21ed
+  fixture: 67e99e1b60f638e780ed9fd1acdd0d8665f5dcb5f7459919e6ba65e39003b9b2
+  validator: e5b9f0661276c2062b3a04cf977e0f53e55aba476f15720e333ebabd8216b7f7
+finding_disposition_claim:
+  F6-R5-IR-B01: CLOSED_BY_FIXED_R5_HISTORY_ANCHOR_AND_SAME_REVISION_REJECTION
+  F6-R5-IR-B02: CLOSED_BY_CLOSED_STRICT_TOTAL_CONTEXTUAL_SCHEMA_VALIDATION
+  F6-R5-IR-B03: REVIEW_SURFACE_LIMITATION_NOT_R6_SEMANTIC_SCOPE
+validation:
+  fixed_negative_total: 62_of_62_REJECTED
+  R2_coordinated_cases: 17_of_17_REJECTED
+  R3_cases: 7_of_7_REJECTED
+  R4_context_replacement_case: 1_of_1_REJECTED
+  R6_adversarial_cases: 11_of_11_REJECTED
+  same_revision_full_resign: 1_of_1_REJECTED_BY_TARGET_R6_SEMANTIC
+  schema_totality_cases: 10_of_10_REJECTED_OR_STABLE_BLOCK
+  exceptions: 0
+  builder_byte_reproduction: PASS
+proof_properties:
+  immutable_history_resolves_from_fixed_R5_fixture_bytes: true
+  candidate_cannot_supply_or_replace_history_anchor: true
+  same_identity_revision_requires_exact_historical_object: true
+  inherited_attempt_lineage_requires_contiguous_exact_predecessor: true
+  contextual_assessment_lineage_requires_contiguous_exact_predecessor: true
+  closed_wrapper_payload_subject_binding_and_history_fields: true
+  strict_boolean_not_integer: true
+  floats_nonfinite_and_unsafe_integers_rejected: true
+  duplicate_JSON_keys_rejected_before_object_construction: true
+  malformed_input_returns_BLOCK_without_uncaught_exception: true
+  fingerprint_resigning_does_not_bypass_schema_or_history: true
+  R1_through_R5_fixed_subjects_modified: false
+  second_permission_system_created: false
+  upstream_authority_recomputed: false
+occurrence_assertions:
+  accepted_real_task_count: 0
+  database_write_count: 0
+  external_effect_count: 0
+  provider_call_count: 0
+  raw_secret_count: 0
+  runtime_activation_count: 0
+  task_done_mutation_count: 0
+  terminal_outcome: NOT_EXECUTED
+governance:
+  author_result_is_not_independent_acceptance: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+next_gate: F6_R6_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

@@ -2571,6 +2571,248 @@ consumer_explicit_current_queue_validation: control-plane/registry/reports/2026-
 next_gate: EXPLICIT_JENN_START_DECISION_FOR_F6
 ```
 
+## F6 Validation Requirement Current Decision Contract Closure R3 Review Gate (2026-07-18)
+
+Jenn explicitly started F6 after the complete F5 frozen lineage and its
+hash-bound authority inputs were durably verified on `main`. F6 owns the
+deterministic current Validation Requirement decision and Task completion
+eligibility boundary. It consumes fixed upstream results and must not rebuild
+F1/F2/F3/F4/F5 authority, create a permission ladder, or treat Run success or
+delivery acknowledgement as Validation PASS.
+
+```yaml
+F6_started: true
+F6_status: R3_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F6_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f6-validation-requirement-current-decision-start-decision-v0.1.yaml
+F6_start_decision_sha256: 335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
+F6_acceptance_authority: Jenn
+F6_partial_acceptance: forbidden
+F6_accepted: true
+F6_frozen: true
+F7_started: false
+F6_R1_acceptance_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+F6_R1_subject_count: 4
+F6_R1_normative_contract_sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+F6_R1_fixture_builder_sha256: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+F6_R1_synthetic_fixture_sha256: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+F6_R1_offline_validator_sha256: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+F6_R1_fixture_canonical_sha256: 014c3154bd8d2f75f45b845901c6665211dce16a6580c8e7a4755692f335ccff
+F6_R1_author_self_review_sha256: d120b1a96584f702013a33f865e3f783e968567a6da765cd180b4965f5e4d691
+F6_R1_manifest: control-plane/registry/reports/2026-07-17-agents-os-f6-r1-atomic-independent-review-package-v0.1.manifest.yaml
+F6_R1_manifest_sha256: 65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+F6_R1_manifest_inputs_verified: 22_22
+F6_R1_independent_review_created: true
+F6_R1_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r1-full-atomic-independent-review.yaml
+F6_R1_independent_review_sha256: a623f99adabc78ff5e2a43598e26107ad6c231964e82cba0f8ff66b138a7bae6
+F6_R1_independent_review_result: BLOCK
+F6_R1_findings: 7_BLOCKER_2_MAJOR_1_MINOR
+F6_R1_requires_R2: true
+F6_R1_disposition: control-plane/registry/reviews/2026-07-17-agents-os-f6-r1-independent-review-disposition-v0.1.yaml
+F6_R1_disposition_sha256: 4932da948be632c5d8b4737aad6a11b007e63ce77bcb1db50c378aae987959a0
+F6_R2_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f6-r2-ten-finding-proof-closure-start-decision-v0.1.yaml
+F6_R2_start_decision_sha256: 5ac6f833779062f60609b7c9094c6102fad4ab5e75076444447e1020d3a6e1c5
+F6_R2_started: true
+F6_R2_scope: FIVE_PROOF_SURFACES_TEN_FINDINGS
+F6_R2_atomic_subject_count: 8
+F6_R2_R1_subject_count: 4
+F6_R2_new_subject_count: 4
+F6_R2_amendment_sha256: 89d5ce9ab962d41d5996381196e6dcf6295e4d1d4727b7be96fd5f71bd1f0a40
+F6_R2_fixture_builder_sha256: 4144f1743c67c763594d8099defc86f93f3d1675ffafdf3dc809c077f1783cd2
+F6_R2_synthetic_fixture_sha256: aab2fa442b8c6f83c432e43d8fb0a90132c6a1c720a0e65be65341ed34bc7412
+F6_R2_offline_validator_sha256: b273299e5a6e9cc023d50bdbe88986e39615eb16a39937c0685f7e00757733eb
+F6_R2_fixture_canonical_sha256: aab2fa442b8c6f83c432e43d8fb0a90132c6a1c720a0e65be65341ed34bc7412
+F6_R2_author_self_review_sha256: fadf577c046a43fb002507a939b19bfe03fe53b7506ec9d48254b34d54ac3af1
+F6_R2_manifest: control-plane/registry/reports/2026-07-17-agents-os-f6-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F6_R2_manifest_sha256: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+F6_R2_manifest_inputs_verified: 30_30
+F6_R2_presentation: control-plane/registry/reports/2026-07-18-agents-os-f6-r2-atomic-independent-review-package-v0.1.md
+F6_R2_presentation_sha256: 8d4db801b0e5221cf56cdca842886832094b414f83627fb5eef85ffb9ce7b693
+F6_R2_author_validation_result: PASS_NO_BLOCKER
+F6_R2_R1_fixed_mutations_rejected: 32_32
+F6_R2_R1_independent_regressions_rejected: 18_18
+F6_R2_additional_negatives_rejected: 12_12
+F6_R2_independent_review_created: true
+F6_R2_independent_review: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r2-full-atomic-independent-review.yaml
+F6_R2_independent_review_sha256: c6ea5ee5e390dec378c4627df7af99feaf9e5972b0df45bc54031ac933a654c3
+F6_R2_independent_review_result: BLOCK
+F6_R2_findings: 7_BLOCKER_1_MAJOR
+F6_R2_requires_R3: true
+F6_R2_coordinated_probe_results_sha256: 8d3a79ff4de80addddb6f4d0e59d1ffc3c1f8b31fe08c8f901d027906e58d1da
+F6_R2_disposition: control-plane/registry/reviews/2026-07-18-agents-os-f6-r2-independent-review-disposition-v0.1.yaml
+F6_R2_disposition_sha256: 30121f5bc4288340c230ed612572db7df47e37c5b6a0d9dc7358acdd59af0b2a
+F6_R3_start_decision: control-plane/registry/decisions/2026-07-18-agents-os-f6-r3-eight-finding-semantic-closure-start-decision-v0.1.yaml
+F6_R3_start_decision_sha256: 8736fd2faed03c34cbdb4ea96dfdf17b007625ffd3456e7d4a6136c072153737
+F6_R3_started: true
+F6_R3_scope: FIVE_PROOF_SURFACES_EIGHT_FINDINGS
+F6_R3_atomic_subject_count: 12
+F6_R3_R1_subject_count: 4
+F6_R3_R2_subject_count: 4
+F6_R3_new_subject_count: 4
+F6_R3_amendment_sha256: ed638d59c3c7eeab594ddc9c21aa834c7ea49b08e8c312c5bdadbbce5b142fae
+F6_R3_fixture_builder_sha256: 40e9f77d868ec7b4a9053ce360284736ec9c46829b044e65226e60135653493b
+F6_R3_synthetic_fixture_sha256: 86dfedec6d2e37a6aad83a6e2564a1403efac33ccb951d226cf40fbe513b128a
+F6_R3_offline_validator_sha256: dd90481b0cb32daf28d0a27c31146209bd5c981335dc41020540651f1457111f
+F6_R3_author_self_review_sha256: 99ad2c9325d5a202e0599db4057a36a600e1432ac39295858925dcf657c4c729
+F6_R3_manifest: control-plane/registry/reports/2026-07-18-agents-os-f6-r3-atomic-independent-review-package-v0.1.manifest.yaml
+F6_R3_manifest_sha256: eee73506e6b4772ea095420aff153a96b3d54c4e5522d36451eb32eba3fc10ca
+F6_R3_manifest_inputs_verified: 40_40
+F6_R3_presentation: control-plane/registry/reports/2026-07-18-agents-os-f6-r3-atomic-independent-review-package-v0.1.md
+F6_R3_presentation_sha256: e834724b8f8f3826fc2921548ef58b2239394c0bc3d7df508005136ec59454be
+F6_R3_author_validation_result: PASS_NO_BLOCKER
+F6_R3_fixed_regressions_rejected: 62_62
+F6_R3_coordinated_regressions_rejected: 17_17
+F6_R3_mutation_exception_count: 0
+F6_R3_independent_review_created: true
+F6_R3_independent_review: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r3-full-atomic-independent-review.yaml
+F6_R3_independent_review_sha256: ffbd04f0ad11846e93d82cdd0009f7236f2883f392ab698e65ab870a59e18180
+F6_R3_independent_review_result: BLOCK
+F6_R3_findings: 5_BLOCKER_0_MAJOR_0_MINOR
+F6_R3_independent_cases: 7_EXECUTED_7_INCORRECTLY_ACCEPTED_0_EXCEPTIONS
+F6_R3_case_evidence_sha256: c023ecbdd9aaff8e81a73120cbd18518f847b156c9aaf91f6bd5bf635201e443
+F6_R3_disposition_sha256: a8cc8f0f8c5a863dd8bd4c4a22d4a1a61f98f7a133ac85a099b36131d0aa3722
+F6_R4_start_decision_sha256: 43f6efd78125cba748255e306175cb4e65ca5694d15ad8cfa7b8f8ac7549b235
+F6_R4_started: true
+F6_R4_scope: FIVE_FINDING_CONSISTENCY_CLOSURE
+F6_R4_atomic_subject_count: 16
+F6_R4_new_subject_count: 4
+F6_R4_amendment_sha256: ae12f429533061beac78e59163345495cd161e6828d9fa5e375342d2c8f79abf
+F6_R4_fixture_builder_sha256: 9ac2f1594afbed21510e11fd307a984d66df601b39183c16dc8e08a4dfcb258e
+F6_R4_synthetic_fixture_sha256: e63bf9fc2c1162672975538590ecce5ad7a1fa6e74679703d3134f820d9c2a47
+F6_R4_offline_validator_sha256: 4d0e238906a1c634bf12d30f775ba4ef323ab18f339ebd19826b39e97a344d6f
+F6_R4_author_self_review_sha256: 6e6e2a9f3506f49702b68d2f03a6ce8411d6dcb8fcd2c30316e085d4617711d7
+F6_R4_manifest: control-plane/registry/reports/2026-07-18-agents-os-f6-r4-atomic-independent-review-package-v0.1.manifest.yaml
+F6_R4_manifest_sha256: 22396132777538619620c6e1e5ceb4b03338d08b9792c60c266a6d744721bb93
+F6_R4_manifest_inputs_verified: 49_49
+F6_R4_presentation_sha256: 3e194c8fb0e51f1513bbff6fc83863f44c5529a6bd40868a2aead07d9ac79e38
+F6_R4_author_validation_result: PASS_NO_BLOCKER
+F6_R4_fixed_regressions_rejected: 62_62
+F6_R4_R2_coordinated_cases_rejected: 17_17
+F6_R4_R3_independent_cases_rejected: 7_7
+F6_R4_case_exception_count: 0
+F6_R4_independent_review_created: true
+F6_R4_independent_review_sha256: 852da403282eaff2226a63e3e2325b23a1637c8330d8d6cda28be5e9fe286791
+F6_R4_independent_review_result: BLOCK
+F6_R4_findings: 1_BLOCKER_0_MAJOR_0_MINOR
+F6_R4_context_case_sha256: 97348e9dbeb0c6fbc9d609e40151f11db47184ffe42495ba127c52de76289c72
+F6_R4_disposition_sha256: 76ed7cc38a40a2c39ce94dbe5f652fde999a40417657703c21d9008c52908627
+F6_R5_start_decision_sha256: 8a476628da2aca51daf2f9964215ae0e120cc3a04ad8723d1a9c10afc244a096
+F6_R5_started: true
+F6_R5_scope: CONTEXTUAL_EVIDENCE_ASSESSMENT_CLOSURE
+F6_R5_atomic_subject_count: 20
+F6_R5_new_subject_count: 4
+F6_R5_amendment_sha256: c56d77dcb140aa8db3345725ca3088bc3c2c5622e85f1deba8bf756b336361ac
+F6_R5_fixture_builder_sha256: f6a013f71af1ced1a10495f9124d9d2a32a619449c19fc1cf258a279b400d39f
+F6_R5_synthetic_fixture_sha256: 07b1f45c88438763eef169ad17903924cc6ecfcac382ecc41508ba1993a3bbc6
+F6_R5_offline_validator_sha256: f2082d2d88728bfda75a1da2d860d2ff78cbe6d3af2985ef45e5b6d6bae9b96d
+F6_R5_author_self_review_sha256: 7837e03b8509a107df7d5524559e2b912db59b1387a6b19a998db252817f52c3
+F6_R5_manifest_sha256: bb506ba3213a68d4e12797ae142fc73ef0a49f32166802972b70dde662f8c43b
+F6_R5_manifest_inputs_verified: 58_58
+F6_R5_presentation_sha256: 2c118ec2ff5c04fd7d8eec2cca9044ae6fbc3988c07f1af68a2bec34b079c638
+F6_R5_author_validation_result: PASS_NO_BLOCKER
+F6_R5_regressions_rejected: 62_PLUS_17_PLUS_7_PLUS_1
+F6_R5_case_exception_count: 0
+F6_R5_independent_review_created: true
+F6_R5_independent_review: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r5-full-atomic-independent-review.yaml
+F6_R5_independent_review_sha256: ce61ff0094729e6f1b7f88cdb5454cb638f198dd948be69fff57b3084cd60a91
+F6_R5_independent_review_result: BLOCK
+F6_R5_findings: 3_BLOCKER_0_MAJOR_0_MINOR
+F6_R5_semantic_findings_requiring_R6: 2
+F6_R5_review_surface_limitation_findings: 1
+F6_R5_local_manifest_hashes_verified: 58_58
+F6_R5_local_fixed_commands_passed: 10_10
+F6_R5_local_same_revision_resign_incorrectly_accepted: true
+F6_R5_local_unknown_payload_field_incorrectly_accepted: true
+F6_R5_local_integer_as_boolean_incorrectly_accepted: true
+F6_R5_local_malformed_required_field_uncaught_exception: true
+F6_R5_disposition: control-plane/registry/reviews/2026-07-18-agents-os-f6-r5-independent-review-disposition-v0.1.yaml
+F6_R5_disposition_sha256: 41d3a811587a3a3d2ceec781e4efb2e687f866eee84e9201393300e8b240e544
+F6_R6_required: true
+F6_R6_started: true
+F6_R6_scope: SAME_REVISION_IMMUTABLE_HISTORY_AND_CONTEXTUAL_SCHEMA_TOTALITY
+F6_R6_start_decision: control-plane/registry/decisions/2026-07-18-agents-os-f6-r6-immutability-schema-totality-closure-start-decision-v0.1.yaml
+F6_R6_start_decision_sha256: f647a4705dce337a14fa94a01e1606aa4abea42d9dfb07c79cc3975e6dcfbcd2
+F6_R6_atomic_subject_count: 24
+F6_R6_new_subject_count: 4
+F6_R6_amendment_sha256: a19ff9b4863e9b08c5c24ef1c2b91d57851b928db01a3e7f6e0114d7fee92a82
+F6_R6_fixture_builder_sha256: 6d4c4ed38a2612aad858858e3b2ca63a1708ea569ff527f9752271d240bc21ed
+F6_R6_synthetic_fixture_sha256: 67e99e1b60f638e780ed9fd1acdd0d8665f5dcb5f7459919e6ba65e39003b9b2
+F6_R6_offline_validator_sha256: e5b9f0661276c2062b3a04cf977e0f53e55aba476f15720e333ebabd8216b7f7
+F6_R6_author_self_review_sha256: b2371777e6633846b3b272058ec54f7fcca297e1b06e263e3092283175e2126d
+F6_R6_manifest: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-independent-review-package-v0.1.manifest.yaml
+F6_R6_manifest_sha256: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f
+F6_R6_manifest_inputs_verified: 65_65
+F6_R6_presentation_sha256: e14e330f6b14fcf40f1e9e747b975180bcc0d21f61063b3b3b43e2511bd4d1bf
+F6_R6_zip_sha256: d5e55b895d6eccafe15adc4c6ce216ad69c09c851c2ab7ceea929077ca49af22
+F6_R6_author_validation_result: PASS_NO_BLOCKER
+F6_R6_regressions_rejected: 62_PLUS_17_PLUS_7_PLUS_1_PLUS_11
+F6_R6_same_revision_full_resign_rejected: true
+F6_R6_schema_totality_cases_rejected: 10_10
+F6_R6_case_exception_count: 0
+F6_R6_independent_review_created: true
+F6_R6_independent_review: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r6-full-atomic-independent-review.yaml
+F6_R6_independent_review_sha256: 552b71de5ff01b0ca8ce1f8b5394a0b7ead8ea95ec6a2b2234a14886cafc036b
+F6_R6_independent_review_result: PASS_NO_BLOCKER
+F6_R6_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F6_R6_requires_R7: false
+F6_R6_freeze_decision_package: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-freeze-decision-package-v0.1.md
+F6_R6_freeze_decision_package_sha256: 18080a9a606c352595b2a056a8416bceca9db8171445e9a6587a07aa05aa863a
+F6_acceptance_ready: true
+F6_freeze_decision: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+F6_freeze_decision_sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+F6_contract_status: ACCEPTED_FROZEN
+F6_revisions_stopped: true
+F6_requires_R7: false
+F1_acceptance_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+F3_freeze_decision_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+F3_manifest_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+F5_freeze_decision_sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+F5_manifest_sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+F5_independent_review_sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+F5_mainline_integration_merge_commit: 57523eea7cc6bf0579eebb250dfdbaa6e110e706
+F5_mainline_durability_completion_commit: f1c5f6e2d99217a43cede082bedb75b4fc31e8e7
+F5_mainline_manifest_inputs_verified: 64_64
+F5_mainline_frozen_subjects_verified: 28_28
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+real_Task_Run_Validation_mutation_authorized: false
+real_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
+active_work_queue_sha256: 90b599543be9174470d97714bbdfde5f54a48bf65641905cb65c2bb7862e2d5b
+superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.0.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
+F6_start_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-validation-requirement-current-decision-start-v0.1.md
+F6_start_receipt_sha256: 05089b1fa30abc158214c2876bf9a9eb0dbafe9c617fc307fc9d3579370eb02b
+F6_R1_package_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-r1-atomic-independent-review-package-v0.1.md
+F6_R1_package_receipt_sha256: 8740f2cd52f661ec06df172737e4b11fcace2a3c2fde93230e27ec883847ba15
+F6_R2_package_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r1-block-r2-atomic-independent-review-package-v0.1.md
+F6_R2_package_receipt_sha256: 32b7c37d07e3ca2eb33520f4aa8f48e19971d3287411291c606608eced3e06a2
+F6_R3_package_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r2-block-r3-atomic-independent-review-package-v0.1.md
+F6_R3_package_receipt_sha256: 71b7bbdf02e3783798f9652c4f24f21128e50ec254069b86287cc238c62df148
+F6_R4_package_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r3-block-r4-atomic-independent-review-package-v0.1.md
+F6_R4_package_receipt_sha256: 536eabde6803ec9d5d2b85190a1a30f71a7bd249ea5eadbdeacf0d240d4cb3a6
+F6_R5_package_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r4-block-r5-atomic-independent-review-package-v0.1.md
+F6_R5_package_receipt_sha256: b4935179f2d6a2820e5e55425f5dd6c9e6f563d41a3592db4c653b3da6982a77
+F6_R5_block_reconciliation_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r5-block-governance-reconciliation-v0.1.md
+F6_R5_block_reconciliation_receipt_sha256: 40a217b721300417101d3e8a8694da56ae25386c7fcb1f3758cccf9763ffaade
+F6_R6_package_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r5-block-r6-atomic-independent-review-package-v0.1.md
+F6_R6_package_receipt_sha256: 52d2f0cb12ffc483dc38ae7ebd4766145854f8d7bdeb8e6d43a9661628a46548
+F6_R6_review_decision_surface_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r6-independent-review-decision-surface-v0.1.md
+F6_R6_review_decision_surface_receipt_sha256: e5d0af8ba97ecf11e17f4e591635daee3f51a7ac43af4cb0941879fa1a1c69aa
+F6_R6_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r6-atomic-freeze-closeout-v0.1.md
+F6_R6_freeze_closeout_receipt_sha256: 4239401c31aebcd540d1901d2941d55b6e2b8dfecb978234ac2373f5650a2f29
+next_gate: F6_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F7
+```
+
+Jenn accepted and froze the complete 24-subject F6 R1-R6 atomic bundle after a
+fresh full atomic independent `PASS_NO_BLOCKER` review. The frozen semantic
+contract does not authorize implementation, runtime or real Validation. F7
+remains unstarted and requires an independent Jenn decision after F6 Git
+durability closeout.
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.
@@ -2584,8 +2826,8 @@ next_gate: EXPLICIT_JENN_START_DECISION_FOR_F6
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.5.md`.
-- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F6`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md`.
+- The active work queue's current `NOW` item is `F6 Git durability closeout scope and delivery gate`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.

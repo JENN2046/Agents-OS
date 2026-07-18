@@ -1,0 +1,37 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f6-r4-independent-review-disposition-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R4_ATOMIC_BUNDLE
+manifest_sha256: 22396132777538619620c6e1e5ceb4b03338d08b9792c60c266a6d744721bb93
+review_path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r4-full-atomic-independent-review.yaml
+review_sha256: 852da403282eaff2226a63e3e2325b23a1637c8330d8d6cda28be5e9fe286791
+case_path: control-plane/registry/reviews/2026-07-18-f6-r4-independent-context-replacement-case.json
+case_sha256: 97348e9dbeb0c6fbc9d609e40151f11db47184ffe42495ba127c52de76289c72
+review_result: BLOCK
+requires_R5: true
+finding_dispositions:
+  - finding_id: F6-R4-IR-B01
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R5
+    R5_correction:
+      - F3_contextual_evidence_assessment_commits_evidence_Requirement_and_attempt_context_tuple
+      - exact_resolution_and_revision_fingerprint_equality
+      - context_change_invalidates_old_assessment_and_requires_new_attempt_revision
+R5_regression_floor:
+  fixed_negative_total: 62_of_62_REJECTED
+  R2_coordinated_cases: 17_of_17_REJECTED
+  R3_cases: 7_of_7_REJECTED
+  R4_context_replacement_case: 1_of_1_REJECTED
+  exceptions: 0
+scope_limit:
+  allowed: [single_finding_amendment_builder_fixture_validator_self_review_manifest_and_fresh_review]
+  forbidden: [new_states, new_permissions, F1_F3_F5_frozen_changes, F7, implementation, runtime, database, provider, production_authentication, real_effect, Git_delivery]
+governance:
+  R1_through_R4_fixed_subjects_immutable: true
+  partial_acceptance: forbidden
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+next_gate: JENN_OWNED_NARROW_F6_R5_START_DECISION

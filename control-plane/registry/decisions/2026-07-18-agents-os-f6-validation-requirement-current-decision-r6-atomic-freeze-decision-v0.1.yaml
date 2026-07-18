@@ -1,0 +1,219 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-18T22:18:00+08:00'
+effective_at: '2026-07-18T22:18:00+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F6_R6_atomic_freeze_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-freeze-decision-package-v0.1.md
+    sha256: 18080a9a606c352595b2a056a8416bceca9db8171445e9a6587a07aa05aa863a
+    section: 6_A
+  confirmation_text_received: 我确认执行 F6 R6 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+acceptance_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R6_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 24
+  result: ACCEPTED_FROZEN
+  precedence:
+  - R6_explicit_replacements
+  - R5_all_other_clauses
+  - R4_all_other_clauses
+  - R3_all_other_clauses
+  - R2_all_other_clauses
+  - R1_all_other_clauses
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 65
+accepted_subjects:
+- revision: R1
+  role: normative_contract
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r1.draft.md
+  sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+- revision: R1
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r1-validation-current-decision.py
+  sha256: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+- revision: R1
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-17-agents-os-f6-r1-validation-current-decision-v0.1.json
+  sha256: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+- revision: R1
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r1-validation-current-decision.py
+  sha256: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+- revision: R2
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r2-amendment.draft.md
+  sha256: 89d5ce9ab962d41d5996381196e6dcf6295e4d1d4727b7be96fd5f71bd1f0a40
+- revision: R2
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r2-ten-finding-proof-closure.py
+  sha256: 4144f1743c67c763594d8099defc86f93f3d1675ffafdf3dc809c077f1783cd2
+- revision: R2
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-17-agents-os-f6-r2-ten-finding-proof-closure-v0.1.json
+  sha256: aab2fa442b8c6f83c432e43d8fb0a90132c6a1c720a0e65be65341ed34bc7412
+- revision: R2
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r2-ten-finding-proof-closure.py
+  sha256: b273299e5a6e9cc023d50bdbe88986e39615eb16a39937c0685f7e00757733eb
+- revision: R3
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r3-amendment.draft.md
+  sha256: ed638d59c3c7eeab594ddc9c21aa834c7ea49b08e8c312c5bdadbbce5b142fae
+- revision: R3
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r3-eight-finding-semantic-closure.py
+  sha256: 40e9f77d868ec7b4a9053ce360284736ec9c46829b044e65226e60135653493b
+- revision: R3
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r3-eight-finding-semantic-closure-v0.1.json
+  sha256: 86dfedec6d2e37a6aad83a6e2564a1403efac33ccb951d226cf40fbe513b128a
+- revision: R3
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r3-eight-finding-semantic-closure.py
+  sha256: dd90481b0cb32daf28d0a27c31146209bd5c981335dc41020540651f1457111f
+- revision: R4
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r4-amendment.draft.md
+  sha256: ae12f429533061beac78e59163345495cd161e6828d9fa5e375342d2c8f79abf
+- revision: R4
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r4-five-finding-consistency-closure.py
+  sha256: 9ac2f1594afbed21510e11fd307a984d66df601b39183c16dc8e08a4dfcb258e
+- revision: R4
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r4-five-finding-consistency-closure-v0.1.json
+  sha256: e63bf9fc2c1162672975538590ecce5ad7a1fa6e74679703d3134f820d9c2a47
+- revision: R4
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r4-five-finding-consistency-closure.py
+  sha256: 4d0e238906a1c634bf12d30f775ba4ef323ab18f339ebd19826b39e97a344d6f
+- revision: R5
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r5-amendment.draft.md
+  sha256: c56d77dcb140aa8db3345725ca3088bc3c2c5622e85f1deba8bf756b336361ac
+- revision: R5
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r5-contextual-evidence-assessment-closure.py
+  sha256: f6a013f71af1ced1a10495f9124d9d2a32a619449c19fc1cf258a279b400d39f
+- revision: R5
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r5-contextual-evidence-assessment-closure-v0.1.json
+  sha256: 07b1f45c88438763eef169ad17903924cc6ecfcac382ecc41508ba1993a3bbc6
+- revision: R5
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r5-contextual-evidence-assessment-closure.py
+  sha256: f2082d2d88728bfda75a1da2d860d2ff78cbe6d3af2985ef45e5b6d6bae9b96d
+- revision: R6
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r6-amendment.draft.md
+  sha256: a19ff9b4863e9b08c5c24ef1c2b91d57851b928db01a3e7f6e0114d7fee92a82
+- revision: R6
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f6-r6-immutability-schema-totality-closure.py
+  sha256: 6d4c4ed38a2612aad858858e3b2ca63a1708ea569ff527f9752271d240bc21ed
+- revision: R6
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r6-immutability-schema-totality-closure-v0.1.json
+  sha256: 67e99e1b60f638e780ed9fd1acdd0d8665f5dcb5f7459919e6ba65e39003b9b2
+- revision: R6
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f6-r6-immutability-schema-totality-closure.py
+  sha256: e5b9f0661276c2062b3a04cf977e0f53e55aba476f15720e333ebabd8216b7f7
+supporting_evidence:
+- role: fresh_full_atomic_hash_bound_independent_review
+  path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r6-full-atomic-independent-review.yaml
+  sha256: 552b71de5ff01b0ca8ce1f8b5394a0b7ead8ea95ec6a2b2234a14886cafc036b
+  result: PASS_NO_BLOCKER
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  unresolved_ambiguity_count: 0
+  requires_R7: false
+  acceptance_subject: false
+- role: atomic_freeze_decision_surface
+  path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-freeze-decision-package-v0.1.md
+  sha256: 18080a9a606c352595b2a056a8416bceca9db8171445e9a6587a07aa05aa863a
+  acceptance_subject: false
+frozen_semantic_boundary:
+- Validation_Requirement_and_Validation_Set_revision_lineage
+- exact_evidence_set_and_attempt_context_binding
+- fresh_validation_and_carry_forward_roots
+- Jenn_waiver_currentness_without_PASS_substitution
+- F5_supporting_evidence_without_validation_authority_expansion
+- current_decision_reduction
+- atomic_Task_completion_eligibility_gate
+- F3_owned_contextual_evidence_assessment_binding
+- same_revision_immutable_history_anchor
+- closed_strict_total_contextual_assessment_schema
+- synthetic_nonauthority_nonruntime_nonrecovery_boundary
+excluded_evidence_classes:
+- manifest
+- author_self_review
+- independent_review
+- review_disposition
+- decision_package
+- receipt
+- active_work_queue
+effects:
+  F6_contract_status: ACCEPTED_FROZEN
+  F6_atomic_freeze_gate: SATISFIED
+  additional_F6_amendment_required: false
+  requires_R7: false
+  F6_revisions_stopped: true
+  F7_started: false
+  real_Task_completion_authorized: false
+  real_Validation_or_Event_authorized: false
+  implementation_authorized: false
+  Rust_Python_or_JavaScript_implementation_authorized: false
+  database_change_authorized: false
+  index_cache_or_queue_change_authorized: false
+  transport_or_provider_implementation_authorized: false
+  Resident_Worker_Host_or_executor_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  device_file_process_or_physical_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+next_gate:
+  name: F6_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F7
+  decision_owner: Jenn
+  automatic_transition: forbidden
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_and_subject_reverification_before_closeout: completed
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted
+

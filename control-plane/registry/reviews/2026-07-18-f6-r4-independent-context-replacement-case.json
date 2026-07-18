@@ -1,0 +1,16 @@
+{
+  "schema_version":"agents-os.independent-consistency-case.v0.1",
+  "review_unit":"F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R4_ATOMIC_BUNDLE",
+  "case_id":"F6-R4-IR-C01",
+  "finding_id":"F6-R4-IR-B01",
+  "environment":"SYNTHETIC_TEST",
+  "change":"replace_exact_F1_candidate_and_propagate_all_attempt_completion_R3_R4_bindings_while_preserving_evidence_assessments",
+  "fully_resigned":true,
+  "dependent_bindings_propagated":true,
+  "evidence_assessments_unchanged":true,
+  "attempt_contexts_changed":true,
+  "expected":"REJECT",
+  "actual":"ACCEPT",
+  "validator_errors":[],
+  "execution_exception":false
+}

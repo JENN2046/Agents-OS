@@ -1,0 +1,102 @@
+# AGENTS OS Active Work Queue v3.0
+
+Date: 2026-07-18
+Status: active
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-17-agents-os-active-work-queue-v2.9.md`
+
+## Purpose
+
+Current queue after the narrow F6 R2 ten-finding proof closure was fixed as an
+eight-subject, 30-input atomic review unit. Queues v0.1-v2.9 remain
+byte-preserved historical evidence.
+
+This queue authorizes only a fresh, full, atomic, hash-bound independent review
+of the fixed F6 R2 bundle. It does not authorize another author revision, F6
+acceptance or freeze, F7, implementation, runtime, database, provider, service,
+authentication, real Task/Run/Validation/Event/waiver/completion mutation,
+effect or Git delivery.
+
+## Current Facts
+
+```text
+F6_started=true
+F6_status=R2_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F6_R1_manifest_sha256=65b73b15dd0ad98c3263a8aa4932dbb13468ae6468de8213c44f3473e77f5e11
+F6_R1_independent_review_sha256=a623f99adabc78ff5e2a43598e26107ad6c231964e82cba0f8ff66b138a7bae6
+F6_R1_independent_review_result=BLOCK
+F6_R1_disposition_sha256=4932da948be632c5d8b4737aad6a11b007e63ce77bcb1db50c378aae987959a0
+F6_R2_start_decision_sha256=5ac6f833779062f60609b7c9094c6102fad4ab5e75076444447e1020d3a6e1c5
+F6_R2_started=true
+F6_R2_scope=five_proof_surfaces_ten_findings
+F6_R2_R1_subject_count=4
+F6_R2_new_subject_count=4
+F6_R2_atomic_subject_count=8
+F6_R2_declared_input_count=30
+F6_R2_manifest_sha256=ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+F6_R2_author_self_review_sha256=fadf577c046a43fb002507a939b19bfe03fe53b7506ec9d48254b34d54ac3af1
+F6_R2_author_validation_result=PASS_NO_BLOCKER
+F6_R2_manifest_inputs_verified=30_30
+F6_R2_independent_review_created=false
+F6_R2_independent_review_result=NOT_RUN
+F6_acceptance_ready=false
+F6_accepted=false
+F6_frozen=false
+F7_started=false
+implementation_authorized=false
+runtime_activation_authorized=false
+production_authentication_authorized=false
+database_change_authorized=false
+service_start_authorized=false
+provider_execution_authorized=false
+real_Task_Run_Validation_Event_waiver_completion_mutation_authorized=false
+Git_delivery_authorized=false
+```
+
+## NOW
+
+### NOW-001: F6 R2 Fresh Full Atomic Hash-Bound Independent Review
+
+```text
+owner=independent_reviewer
+review_unit=F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R2_ATOMIC_BUNDLE
+scope=8_fixed_subjects_plus_21_authority_inputs_plus_1_author_evidence
+hashes=30_30
+subject_reads=8_8
+authority_reads=21_21
+fixed_commands=4_4
+partial_review=forbidden
+allowed_results=PASS_NO_BLOCKER_or_BLOCK
+```
+
+## NEXT
+
+```text
+if_PASS_NO_BLOCKER=prepare_Jenn_owned_atomic_freeze_decision_package_only
+if_BLOCK=record_immutable_review_and_narrow_finding_disposition
+R3_preplanned=false
+```
+
+## BLOCKED
+
+```text
+edit_R1_or_R2_fixed_subjects_manifests_or_self_reviews=forbidden
+partial_F6_acceptance_or_freeze=forbidden
+new_Validation_Task_waiver_delivery_retry_or_runtime_semantics=forbidden
+F1_F3_F5_frozen_subject_change=forbidden
+F7_implementation_runtime_database_provider_service_effect=forbidden
+real_Task_Run_Validation_Event_waiver_completion_mutation=forbidden
+commit_push_PR_merge_release_deploy_publish_tag=not_authorized
+```
+
+## CLOSED
+
+```text
+F6_R1_independent_review=BLOCK_COMPLETE
+F6_R1_finding_disposition=COMPLETE_10_OF_10
+Jenn_owned_narrow_F6_R2_start_decision=ACCEPTED_COMPLETE
+F6_R2_author_construction=FIXED_COMPLETE
+F6_R2_author_self_review=PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+active_work_queue_v2_9=historical_author_construction_queue_preserved
+```

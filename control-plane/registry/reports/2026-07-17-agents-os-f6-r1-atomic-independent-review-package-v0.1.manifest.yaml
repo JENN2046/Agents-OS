@@ -1,0 +1,216 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f6-r1-atomic-independent-review-package-v0.1
+date: 2026-07-17
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  subjects:
+    - role: normative_contract
+      path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r1.draft.md
+      sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+    - role: deterministic_fixture_builder
+      path: control-plane/registry/build-f6-r1-validation-current-decision.py
+      sha256: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+    - role: synthetic_fixture
+      path: control-plane/registry/examples/2026-07-17-agents-os-f6-r1-validation-current-decision-v0.1.json
+      sha256: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+    - role: independent_offline_semantic_validator
+      path: control-plane/registry/validate-f6-r1-validation-current-decision.py
+      sha256: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+
+authority_inputs:
+  - role: workspace_governance
+    path: AGENTS.md
+    sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+  - role: accepted_home_roadmap_subject
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  - role: accepted_home_roadmap_decision
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  - role: accepted_resident_architecture
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  - role: phase_4_start_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  - role: construction_readiness_review
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  - role: accepted_F1_decision
+    path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+  - role: accepted_F1_R1_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+    sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+  - role: accepted_F1_R2_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+    sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+  - role: accepted_F1_R3_subject
+    path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+    sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+  - role: frozen_F3_decision
+    path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+  - role: frozen_F3_manifest
+    path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+  - role: frozen_F3_independent_review
+    path: control-plane/registry/reviews/2026-07-16-yellow-agents-os-f3-r4-full-atomic-independent-review.yaml
+    sha256: 19c14d0a926d76f89a460b8d596c573a49a8fa580739227847ac765b0e52d38b
+  - role: frozen_F5_decision
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+  - role: frozen_F5_manifest
+    path: control-plane/registry/reports/2026-07-17-agents-os-f5-r7-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2c867bcab4810f5625caa3cb7a649209e19fc53eab34d6ba16737dcce8d14031
+  - role: frozen_F5_independent_review
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f5-r7-full-atomic-independent-review.yaml
+    sha256: edcfb8cb4e2d8ff1cabe8a5e1ffaaacf44ed1844eb32444497851f2b5c03f334
+  - role: immutable_F6_start_decision
+    path: control-plane/registry/decisions/2026-07-17-agents-os-f6-validation-requirement-current-decision-start-decision-v0.1.yaml
+    sha256: 335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
+
+author_evidence:
+  - role: author_self_review_not_independent
+    path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r1-validation-requirement-current-decision-self-review.yaml
+    sha256: d120b1a96584f702013a33f865e3f783e968567a6da765cd180b4965f5e4d691
+    result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+    may_substitute_for_independent_judgment: false
+
+declared_input_count: 22
+
+validator_commands:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 python3
+    control-plane/registry/validate-f6-r1-validation-current-decision.py
+  - >-
+    tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3
+    control-plane/registry/build-f6-r1-validation-current-decision.py
+    --output "$tmp" >/dev/null && cmp -s "$tmp"
+    control-plane/registry/examples/2026-07-17-agents-os-f6-r1-validation-current-decision-v0.1.json
+    && rm -f "$tmp"
+
+required_review_questions:
+  - all_22_hashes_match_and_all_4_subjects_and_17_authority_inputs_are_fully_read_unchanged
+  - F6_consumes_F1_F3_F5_assessments_without_recomputing_their_reducers_or_authority
+  - no_Actor_Task_color_role_relationship_trust_urgency_or_P0_P3_permission_classification_exists
+  - no_second_identity_authority_canonical_writer_policy_evaluator_effect_authority_or_completion_authority_exists
+  - Requirement_identity_revision_provenance_and_Validation_Set_membership_source_closure_are_exact
+  - attempt_ID_revision_chain_latest_head_and_cross_binding_rules_are_deterministic_and_total
+  - PASSED_requires_current_authority_exact_evidence_freshness_and_current_binding
+  - carry_forward_is_derived_from_one_original_FRESH_PASSED_source_and_never_chained_human_or_effectful
+  - waiver_is_exact_Jenn_bound_current_and_never_becomes_PASSED_or_all_waived_completion
+  - F5_APPLIED_CURRENT_is_only_supporting_evidence_and_never_creates_Validation_PASS
+  - prospective_F5_completion_blocking_interface_is_explicitly_unaccepted_synthetic_only_and_nonruntime
+  - Run_success_ACK_PBL_no_match_plan_progress_UI_or_model_opinion_never_creates_PASS_or_DONE
+  - Requirement_Set_and_Task_completion_reducers_are_total_reason_deterministic_and_fail_closed
+  - Task_completion_requires_VERIFYING_current_candidate_satisfied_set_confirmed_dependencies_zero_nonterminal_work_and_CLEAR_F5_at_one_barrier
+  - atomic_completion_seam_cannot_commit_DONE_without_same_transaction_recheck_snapshot_Event_and_current_state
+  - synthetic_fixture_cannot_become_runtime_recovery_or_production_authority
+  - builder_and_validator_are_independent_and_rebuild_is_byte_equal
+  - all_10_schema_profiles_54_vectors_342_order_trials_and_32_mutations_reproduce
+  - no_real_Task_Run_Validation_Event_waiver_completion_runtime_effect_provider_secret_database_or_service_occurrence_exists
+  - no_F7_implementation_runtime_production_authentication_or_Git_authority_leaks
+
+required_adversarial_checks:
+  - stale_or_indeterminate_F3_read_barrier_or_mixed_assessment_watermark
+  - F6_reimplements_F1_Task_candidate_or_dependency_currentness
+  - F6_uses_role_color_trust_urgency_or_history_to_change_a_decision
+  - caller_selected_requirement_snapshot_attempt_waiver_or_event_ID_after_full_resigning
+  - Requirement_provenance_omitted_or_snapshot_source_union_incomplete
+  - old_favorable_PASS_masks_newer_PENDING_FAILED_ERROR_INCONCLUSIVE_or_CANCELLED
+  - attempt_revision_branch_gap_duplicate_or_invalid_transition
+  - evidence_assessment_ref_matches_but_subject_bytes_or_digest_do_not
+  - evidence_observation_in_future_or_expiry_at_trusted_time
+  - HUMAN_ACCEPTANCE_or_effectful_delivery_evidence_carried_forward
+  - carry_forward_source_is_another_carry_forward_or_not_original_PASSED
+  - F5_HISTORY_ONLY_INDETERMINATE_or_NOT_REQUIRED_passes_an_effectful_Requirement
+  - F5_APPLIED_CURRENT_is_attached_to_a_non_effectful_Requirement_or_used_as_PASS
+  - prospective_F5_completion_interface_is_misrepresented_as_frozen_runtime_usable_or_real_authority
+  - NON_WAIVABLE_requirement_granted_or_failed_attempt_waived
+  - waiver_chain_branch_gap_stale_Jenn_decision_expiry_or_old_grant_fallback
+  - empty_required_set_or_all_required_waived_labeled_satisfied
+  - stale_candidate_active_Task_nonterminal_work_control_intent_unknown_effect_or_nonconfirmed_dependency_labeled_eligible
+  - Run_SUCCEEDED_ACK_APPLIED_CURRENT_PBL_no_match_or_UI_state_labeled_eligible
+  - completion_decision_reused_after_concurrent_Task_result_requirement_waiver_or_effect_change
+  - synthetic_environment_changed_to_PRODUCTION_or_runtime_consumable_enabled_after_resigning
+  - completion_guard_counts_changed_without_a_new_exact_owner_assessment
+  - validator_mutation_exception_counted_as_successful_rejection
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  target_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r1-full-atomic-independent-review.yaml
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - exact_manifest_path_and_sha256
+    - every_input_hash_verified
+    - all_four_subjects_and_all_seventeen_authority_inputs_fully_read_unchanged
+    - blocker_major_minor_and_unresolved_counts
+    - finding_ids_with_exact_evidence_counterexample_and_required_correction
+    - every_required_question_and_adversarial_result
+    - schema_vector_precedence_mutation_and_graph_counts
+    - builder_byte_equality_and_fixture_canonical_hash
+    - mandatory_zero_authority_runtime_effect_provider_secret_counts
+    - requires_R2
+  no_finding_rule: >-
+    PASS_NO_BLOCKER is permitted only when every hash, complete subject and
+    authority read, question, adversarial check, schema profile, decision
+    vector, reversed-order trial, fully re-signed negative mutation, builder
+    equality and zero-authority/effect assertion reproduces with no blocker,
+    major or unresolved contract ambiguity.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_may_be_read_only_after_fresh_subject_judgment: true
+  author_self_review_may_substitute_for_current_judgment: false
+  prior_reviews_may_substitute_for_current_judgment: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unknown_or_unavailable_required_input_result: BLOCK
+  forbidden_inputs_accessed: false_required
+  web_required: false
+  runtime_source_required: false
+  secrets_or_private_memory_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-17-agents-os-f6-r1-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  F6_acceptance_ready: false
+  authority_after_pass: Jenn_only
+  automatic_acceptance: forbidden
+
+non_authorization:
+  F6_started: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_or_effect_execution_authorized: false
+  real_Task_Run_Validation_mutation_authorized: false
+  commit_push_PR_merge_performed: false

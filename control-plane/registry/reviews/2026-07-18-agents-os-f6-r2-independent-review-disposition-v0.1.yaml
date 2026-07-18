@@ -1,0 +1,160 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f6-r2-independent-review-disposition-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R2_ATOMIC_BUNDLE
+review_path: control-plane/registry/reviews/2026-07-17-yellow-agents-os-f6-r2-full-atomic-independent-review.yaml
+review_sha256: c6ea5ee5e390dec378c4627df7af99feaf9e5972b0df45bc54031ac933a654c3
+probe_evidence_path: control-plane/registry/reviews/2026-07-18-f6-r2-independent-coordinated-probes.json
+probe_evidence_sha256: 8d3a79ff4de80addddb6f4d0e59d1ffc3c1f8b31fe08c8f901d027906e58d1da
+probe_runner_path: control-plane/registry/reviews/f6_r2_independent_probe_runner.py
+probe_runner_sha256: f09eaeec009c401fa045e66ba03d3100bd9aacb5ff9594298a283e0c46e5fb31
+manifest_path: control-plane/registry/reports/2026-07-17-agents-os-f6-r2-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: ba0cd9b5b21b3bb6c2792aba55b4c6534e7d59bd145fc60952916bfc5ea0d7a3
+review_result: BLOCK
+requires_R3: true
+R3_truly_required: true
+
+integrity:
+  declared_inputs_verified: 30_of_30
+  subjects_read: 8_of_8
+  authority_inputs_read: 21_of_21
+  author_evidence_read: 1_of_1
+  fixed_commands_passed: 4_of_4
+  fixed_negative_cases_rejected: 62_of_62
+  independent_coordinated_probes_executed: 17
+  independent_coordinated_probes_rejected: 5
+  independent_coordinated_probes_incorrectly_accepted: 12
+  independent_coordinated_probe_exceptions: 0
+  local_probe_reproduction_match: 17_of_17
+  subject_bytes_modified_by_review: false
+
+proof_surface_mapping:
+  - surface_id: F6_R3_S1_MACHINE_VERIFIABLE_SCHEMA_AND_OUTPUT_TOTALITY
+    findings: [F6-R2-IR-B01]
+  - surface_id: F6_R3_S2_OWNER_ASSESSMENT_AND_CONTEXT_EXACTNESS
+    findings: [F6-R2-IR-B02]
+  - surface_id: F6_R3_S3_WAIVER_PROVENANCE_AND_EVENT_ORDER_ROOT_CLOSURE
+    findings: [F6-R2-IR-B03, F6-R2-IR-B04, F6-R2-IR-B05]
+  - surface_id: F6_R3_S4_F5_AND_CARRY_SOURCE_EXACTNESS
+    findings: [F6-R2-IR-B06, F6-R2-IR-B07]
+  - surface_id: F6_R3_S5_EVIDENCE_OBJECT_ASSESSMENT_AND_REVISION_IMMUTABILITY
+    findings: [F6-R2-IR-M01]
+
+finding_dispositions:
+  - finding_id: F6-R2-IR-B01
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - materialize_machine_verifiable_type_enum_nullability_nested_integer_and_cross_field_constraints_for_all_ten_schemas
+      - bind_constraints_into_each_schema_fingerprint
+      - enforce_exact_five_key_quiescence_counts
+      - enforce_complete_decision_output_nullability_and_result_reason_matrix
+      - reject_unknown_source_kinds
+  - finding_id: F6-R2-IR-B02
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - require_exact_per_kind_owner_assessment_tuple_at_every_consumer
+      - bind_owner_phase_and_owner_contract_to_each_assessment_kind
+      - bind_completion_and_every_current_PASSED_attempt_to_the_same_candidate_and_dependency_assessment_refs_and_fingerprints
+      - fail_closed_on_missing_or_mismatched_candidate_or_dependency_assessment
+  - finding_id: F6-R2-IR-B03
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - validate_Jenn_decision_payload_against_exact_waived_Requirement_revision_and_GRANT_result
+      - validate_waiver_Command_purpose_and_subject_binding
+      - validate_waiver_Event_kind_Command_subject_and_sequence_binding
+      - bind_current_immutable_decision_to_non_caller_selectable_owner_head
+  - finding_id: F6-R2-IR-B04
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - freeze_allowed_provenance_source_kind_enum
+      - validate_each_supporting_source_payload_schema
+      - resolve_each_provenance_Command_and_Event_to_correctly_typed_objects
+      - validate_purpose_kind_subject_sequence_and_owner_assessment_against_exact_source
+  - finding_id: F6-R2-IR-B05
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - bind_every_decision_and_assessment_to_exact_TrustedTime_and_F3_barrier
+      - require_trusted_sequence_within_barrier_high_watermark
+      - derive_complete_cross_object_partial_order_from_typed_objects
+      - remove_hard_coded_evaluation_sequence_as_proof
+  - finding_id: F6-R2-IR-B06
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - compare_F5_assessment_subject_ref_revision_and_fingerprint_to_exact_Requirement_delivery_subject
+      - validate_typed_delivery_payload_current_head_and_barrier_before_APPLIED_CURRENT_support
+  - finding_id: F6-R2-IR-B07
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - resolve_carry_source_and_root_to_original_fresh_attempt
+      - require_source_and_root_ref_revision_fingerprint_tuples_to_match_that_exact_attempt
+      - reject_any_revision_mismatch_before_PASSED_derivation
+  - finding_id: F6-R2-IR-M01
+    severity: major
+    disposition: ACCEPTED_REQUIRES_NARROW_R3
+    R3_correction:
+      - add_exact_per_evidence_object_and_owner_assessment_bindings
+      - resolve_and_validate_every_evidence_row
+      - require_new_immutable_attempt_revision_and_predecessor_when_evidence_set_changes
+      - preserve_sorted_unique_enforcement
+
+R3_regression_floor:
+  R1_fixed_mutations: 32_of_32_REJECTED
+  R1_independent_regressions: 18_of_18_REJECTED
+  R2_additional_negatives: 12_of_12_REJECTED
+  fixed_total: 62_of_62_REJECTED
+  R2_independent_coordinated_probes: 17_of_17_REJECTED
+  probe_execution_exceptions: 0
+  required_semantic_rejections:
+    - coordinated_candidate_dependency_context_replacement
+    - missing_dependency_owner_assessment
+    - owner_phase_owner_contract_mismatch
+    - substituted_Jenn_decision_Command_Event_and_waiver_root
+    - unknown_provenance_source_kind
+    - unresolved_or_beyond_barrier_TrustedTime
+    - changed_F5_delivery_subject_with_stale_owner_assessment
+    - changed_carry_source_and_root_revisions
+    - evidence_add_delete_duplicate_and_reorder
+    - contradictory_output_nullability_and_empty_completion_counts
+
+R3_scope_limit:
+  allowed:
+    - the_five_proof_surfaces_and_eight_finding_corrections_above
+    - corresponding_R3_amendment_builder_fixture_validator_and_author_self_review
+    - new_twelve_subject_atomic_manifest_and_fresh_full_atomic_review
+  forbidden:
+    - new_Validation_or_Task_states
+    - new_waiver_types_or_operations
+    - new_delivery_receipt_retry_or_evidence_classes
+    - F1_F3_or_F5_frozen_subject_changes
+    - F7_semantics
+    - implementation_database_provider_transport_or_service_design
+    - production_authentication_or_runtime_activation
+    - real_Task_Run_Validation_Event_waiver_completion_or_effect_mutation
+
+governance:
+  R1_four_subjects_immutable: true
+  R2_four_subjects_immutable: true
+  R1_and_R2_manifests_immutable: true
+  R1_and_R2_author_self_reviews_immutable: true
+  R2_independent_review_immutable_after_this_disposition: true
+  partial_acceptance: forbidden
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_database_or_physical_effect_authorized: false
+  Git_delivery_authorized_by_this_disposition: false
+
+next_gate: JENN_OWNED_NARROW_F6_R3_START_DECISION

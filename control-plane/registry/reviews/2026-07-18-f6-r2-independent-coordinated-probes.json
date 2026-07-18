@@ -1,0 +1,306 @@
+{
+  "schema_version": "agents-os.independent-coordinated-probes.v0.1",
+  "package_id": "agents-os-f6-r2-atomic-independent-review-package-v0.1",
+  "base_fixture_validated_without_errors": true,
+  "mechanical_propagation_note": "Author resign_all/reseal helpers used only to propagate hashes; semantic expectations and disposition are independent.",
+  "summary": {
+    "executed": 17,
+    "rejected": 5,
+    "unexpectedly_accepted": 12,
+    "execution_exceptions": 0
+  },
+  "probes": [
+    {
+      "id": "IR-CONTEXT-01",
+      "objects_changed": [
+        "TASK_CURRENT_STATE assessment",
+        "all attempt contexts",
+        "completion context"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "candidate/dependency owner assessment binding",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-WAIVER-01",
+      "objects_changed": [
+        "Jenn decision",
+        "waiver Command",
+        "waiver Event",
+        "waiver",
+        "Jenn authority assessment"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "exact immutable Jenn decision and authenticated Command/Event root",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-GRAPH-BRANCH",
+      "objects_changed": [
+        "Requirement revision graph",
+        "dependent summaries/fingerprints"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "REJECT",
+      "rejection_layer": "Requirement branch detection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [
+        "requirement REQ-A: contiguous exact integer revisions required",
+        "requirement REQ-A: predecessor mismatch",
+        "requirement REQ-A: predecessor Event must precede revision Event",
+        "summary derived count mismatch"
+      ],
+      "exception": null
+    },
+    {
+      "id": "IR-GRAPH-GAP",
+      "objects_changed": [
+        "Requirement revision graph",
+        "dependent summaries/fingerprints"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "REJECT",
+      "rejection_layer": "Requirement gap/missing predecessor detection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [
+        "requirement REQ-A: contiguous exact integer revisions required",
+        "requirement REQ-A: revision1 predecessor must be null",
+        "summary derived count mismatch"
+      ],
+      "exception": null
+    },
+    {
+      "id": "IR-GRAPH-CYCLE",
+      "objects_changed": [
+        "Requirement revision graph",
+        "direct fingerprints/root"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "REJECT",
+      "rejection_layer": "Requirement cycle/base-predecessor detection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [
+        "$.schema_profiles[7].instance: unresolved exact binding",
+        "requirement REQ-A: revision1 predecessor must be null",
+        "set: exact current membership required",
+        "set: exact current membership required",
+        "attempt ATTEMPT-A: Requirement binding",
+        "decision REQ-A: exact subject mismatch"
+      ],
+      "exception": null
+    },
+    {
+      "id": "IR-GRAPH-WRONG-SOURCE",
+      "objects_changed": [
+        "provenance source",
+        "Requirement binding",
+        "owner assessment",
+        "source closure"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "closed provenance source-kind and authority binding",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-EVIDENCE-ADD",
+      "objects_changed": [
+        "evidence array",
+        "set fingerprint",
+        "assessment",
+        "attempt and decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "extra unbound evidence rejection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-EVIDENCE-DELETE",
+      "objects_changed": [
+        "evidence array",
+        "set fingerprint",
+        "assessment",
+        "attempt and decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "missing evidence / immutable attempt revision",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-EVIDENCE-DUPLICATE",
+      "objects_changed": [
+        "evidence array",
+        "set fingerprint",
+        "assessment",
+        "attempt and decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "REJECT",
+      "rejection_layer": "duplicate evidence rejection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [
+        "attempt ATTEMPT-A: exact evidence set"
+      ],
+      "exception": null
+    },
+    {
+      "id": "IR-EVIDENCE-REORDER",
+      "objects_changed": [
+        "evidence array",
+        "set fingerprint",
+        "assessment",
+        "attempt and decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "REJECT",
+      "rejection_layer": "unsorted evidence rejection",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [
+        "attempt ATTEMPT-A: exact evidence set"
+      ],
+      "exception": null
+    },
+    {
+      "id": "IR-CARRY-REVISION",
+      "objects_changed": [
+        "carry source revision tuple",
+        "attempt and decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "carry source exact revision binding",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-F5-SUBJECT-FP",
+      "objects_changed": [
+        "delivery subject",
+        "effectful Requirement",
+        "downstream decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "F5 assessment exact delivery subject fingerprint",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-DECISION-MATRIX",
+      "objects_changed": [
+        "Requirement decision",
+        "set decision",
+        "completion"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "closed decision nullability/cross-field matrix",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-COMPLETION-COUNTS",
+      "objects_changed": [
+        "completion guard",
+        "completion decision"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "exact five-key quiescence count closure",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-MISSING-DEPENDENCY-ASSESSMENT",
+      "objects_changed": [
+        "assessment inventory",
+        "summary/root"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "mandatory dependency owner assessment consumption",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-TRUSTED-TIME",
+      "objects_changed": [
+        "TrustedTime canonical instance",
+        "schema profile",
+        "root"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "trusted time exact barrier and event-order binding",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    },
+    {
+      "id": "IR-OWNER-PHASE",
+      "objects_changed": [
+        "Validation authority assessment",
+        "dependent attempts/decisions"
+      ],
+      "dependent_refs_and_fingerprints_propagated": true,
+      "execution_completed_without_exception": true,
+      "expected_result": "REJECT",
+      "actual_result": "ACCEPT",
+      "rejection_layer": "owner phase and owner-contract exactness",
+      "rejected_only_because_of_stale_outer_hash": false,
+      "validator_errors": [],
+      "exception": null
+    }
+  ]
+}

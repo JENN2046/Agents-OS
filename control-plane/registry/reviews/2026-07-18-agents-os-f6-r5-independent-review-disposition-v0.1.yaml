@@ -1,0 +1,77 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f6-r5-independent-review-disposition-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R5_ATOMIC_BUNDLE
+manifest_sha256: bb506ba3213a68d4e12797ae142fc73ef0a49f32166802972b70dde662f8c43b
+review_path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r5-full-atomic-independent-review.yaml
+review_sha256: ce61ff0094729e6f1b7f88cdb5454cb638f198dd948be69fff57b3084cd60a91
+review_result: BLOCK
+requires_R6: true
+finding_dispositions:
+  - finding_id: F6-R5-IR-B01
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R6
+    locally_reproduced: true
+    reproduction_result: FULLY_COORDINATED_SAME_REVISION_RESIGN_INCORRECTLY_ACCEPTED
+    R6_correction:
+      - immutable_attempt_and_contextual_assessment_revision_history
+      - evidence_Requirement_or_context_change_requires_revision_advance
+      - exact_predecessor_attempt_and_assessment_fingerprint_binding
+      - fully_coordinated_same_revision_resign_regression
+  - finding_id: F6-R5-IR-B02
+    severity: blocker
+    disposition: ACCEPTED_REQUIRES_NARROW_R6
+    locally_reproduced: true
+    reproduction_result:
+      - UNKNOWN_PAYLOAD_FIELD_INCORRECTLY_ACCEPTED
+      - INTEGER_AS_BOOLEAN_INCORRECTLY_ACCEPTED
+      - MISSING_REQUIRED_FIELD_RAISES_UNCAUGHT_KEYERROR
+    R6_correction:
+      - closed_exact_payload_field_inventory
+      - strict_JSON_types_nullability_and_integer_ranges
+      - duplicate_key_and_noncanonical_numeric_rejection
+      - malformed_input_returns_deterministic_BLOCK_without_exception
+  - finding_id: F6-R5-IR-B03
+    severity: blocker
+    disposition: ACCEPTED_AS_REVIEW_SURFACE_LIMITATION_NOT_R6_SEMANTIC_SCOPE
+    semantic_revision_required: false
+    local_integrity_reproduction:
+      manifest_hashes_verified: 58_of_58
+      fixed_commands_passed: 10_of_10
+      command_exceptions: 0
+R6_regression_floor:
+  fixed_negative_total: 62_of_62_REJECTED
+  R2_coordinated_cases: 17_of_17_REJECTED
+  R3_cases: 7_of_7_REJECTED
+  R4_context_replacement_case: 1_of_1_REJECTED
+  R5_same_revision_resign_case: REQUIRED_REJECT
+  R5_schema_totality_cases: REQUIRED_REJECT_OR_STABLE_BLOCK
+  exceptions: 0
+scope_limit:
+  allowed:
+    - same_revision_immutable_history_closure
+    - contextual_assessment_schema_totality
+    - amendment_builder_fixture_validator_self_review_manifest_and_fresh_review
+  forbidden:
+    - new_states
+    - new_permissions
+    - F1_F3_F5_frozen_changes
+    - F7
+    - implementation
+    - runtime
+    - database
+    - provider
+    - production_authentication
+    - real_effect
+    - Git_delivery
+governance:
+  R1_through_R5_fixed_subjects_immutable: true
+  partial_acceptance: forbidden
+  F6_acceptance_ready: false
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  R6_started: false
+next_gate: JENN_OWNED_NARROW_F6_R6_START_DECISION

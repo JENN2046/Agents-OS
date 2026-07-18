@@ -1,0 +1,57 @@
+schema_version: agents-os.phase-amendment-start-decision.v0.1
+decision_id: agents-os-f6-r6-immutability-schema-totality-closure-start-2026-07-18
+date: 2026-07-18
+owner: Jenn
+steward: Nobao
+status: ACCEPTED_ACTIVE
+decision_basis:
+  source: Jenn_exact_F6_R6_start_confirmation
+  statement_summary: >-
+    Jenn starts a narrow F6 R6 limited to same-revision immutable-history
+    closure and contextual-assessment schema totality, preserving all R1-R5
+    fixed bytes and stopping at fresh full atomic independent review.
+R5_manifest_sha256: bb506ba3213a68d4e12797ae142fc73ef0a49f32166802972b70dde662f8c43b
+R5_review_sha256: ce61ff0094729e6f1b7f88cdb5454cb638f198dd948be69fff57b3084cd60a91
+R5_disposition_sha256: 41d3a811587a3a3d2ceec781e4efb2e687f866eee84e9201393300e8b240e544
+authorized_findings:
+  - F6-R5-IR-B01
+  - F6-R5-IR-B02
+authorized_correction:
+  - same_revision_immutable_history_closure
+  - contextual_assessment_schema_totality
+  - coordinated_same_revision_resign_negative_case
+  - closed_payload_and_binding_field_inventories
+  - strict_JSON_types_nullability_integer_ranges_and_duplicate_key_rejection
+  - malformed_input_returns_deterministic_BLOCK_without_exception
+atomic_review_shape:
+  review_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R6_ATOMIC_BUNDLE
+  subject_count: 24
+  precedence:
+    - R6_explicit_replacements
+    - R5_all_other_clauses
+    - R4_all_other_clauses
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+  partial_review: forbidden
+forbidden_scope:
+  - edit_R1_R2_R3_R4_R5_fixed_bytes
+  - new_states
+  - new_permissions
+  - second_permission_system
+  - upstream_authority_recomputation
+  - F7
+  - implementation
+  - runtime
+  - database
+  - provider
+  - production_authentication
+  - real_effect
+  - Git_delivery
+authority_effect:
+  F6_R6_started: true
+  F6_accepted: false
+  F6_frozen: false
+  F7_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
