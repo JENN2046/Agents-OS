@@ -3026,6 +3026,45 @@ consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents
 next_gate: F7_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F8
 ```
 
+## F7 Mainline Durability Closeout (2026-07-19)
+
+The exact 40-file F7 frozen lineage and necessary governance projections were
+delivered through private PR #14. The PR head is an ancestor of remote `main`,
+its tree equals the merge tree, and all 44 manifest inputs plus eight frozen
+subjects were reverified from `origin/main` bytes.
+
+```yaml
+F7_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN_AWAITING_JENN_F8_DECISION
+F7_mainline_repository: JENN2046/Agents-OS
+F7_mainline_pull_request: 14
+F7_mainline_scoped_commit: a216af5284f48b164f8a44102e21b195f41c5990
+F7_mainline_merge_commit: e22f356bfff59f817cd74e6fccfe3e80f0b52f01
+F7_mainline_changed_files: 40
+F7_mainline_excluded_path_matches: 0
+F7_mainline_manifest_inputs_verified: 44_44
+F7_mainline_frozen_subjects_verified: 8_8
+F7_mainline_manifest_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+F7_mainline_independent_review_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+F7_mainline_freeze_decision_sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+F7_mainline_durability_closeout_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f7-mainline-durability-closeout-v0.1.md
+F7_mainline_durability_closeout_receipt_sha256: 615841e5432d173313dc24afe53f21cb35b244b4efc69eeebcaf9ce59245102c
+F7_accepted: true
+F7_frozen: true
+F7_revisions_stopped: true
+requires_R3: false
+F8_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+active_work_queue_sha256: 9659812dba5242b550b52cbbd54591b4b5c01ec1e90adbe364de17a9c29d4e0a
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F8
+```
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.
@@ -3039,8 +3078,8 @@ next_gate: F7_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F8
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.7.md`.
-- The active work queue's current `NOW` item is `F7 Git durability closeout scope and delivery gate`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md`.
+- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F8`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
