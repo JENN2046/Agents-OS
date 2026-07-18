@@ -1,0 +1,90 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-f7-r2-atomic-independent-review-package-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: hash_bound_pointer_bundle_no_file_copy
+integrity: {algorithm: SHA-256, digest_encoding: lowercase_hex, byte_scope: entire_regular_file, canonicalization: none, manifest_self_digest: external, presentation_report_digest: excluded_to_avoid_digest_cycle}
+review_unit:
+  id: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 4
+  subject_count: 8
+  precedence: [R2_explicit_replacements, R1_all_other_clauses]
+  subjects:
+    - {role: R1_normative_contract, path: control-plane/registry/drafts/2026-07-18-agents-os-f7-home-domain-minimum-semantics-v0.1-r1.draft.md, sha256: 546480f5a14e5c70c30fc7232ec1eacd0d6105fdb20a90483c3baee094b8f254}
+    - {role: R1_deterministic_fixture_builder, path: control-plane/registry/build-f7-r1-home-domain-minimum-semantics.py, sha256: 27e1574d77da9ae4da217823a93b2cdddc3c64410716169838fb716b1bb19507}
+    - {role: R1_synthetic_fixture, path: control-plane/registry/examples/2026-07-18-agents-os-f7-r1-home-domain-minimum-semantics-v0.1.json, sha256: 8bda718fd580fa95124120b148699fae099a9eb9710ead53eeefc943f1864f01}
+    - {role: R1_offline_semantic_validator, path: control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py, sha256: 0a488a14c739aa6ef97f9d524724e2317ac8dca5be4e853c3b2a52391ad455a3}
+    - {role: R2_normative_amendment, path: control-plane/registry/drafts/2026-07-19-agents-os-f7-home-domain-minimum-semantics-v0.1-r2-amendment.draft.md, sha256: 8935b258455c381236822fdba5a2de3156b2959432079da602d386acf8166b78}
+    - {role: R2_deterministic_fixture_builder, path: control-plane/registry/build-f7-r2-decision-case-inventory-closure.py, sha256: 1d736aa76e1e1dc1ab9c7ebc9f9b2cf6e790ca9906ccf9f82710d92de15ac0aa}
+    - {role: R2_synthetic_fixture, path: control-plane/registry/examples/2026-07-19-agents-os-f7-r2-decision-case-inventory-closure-v0.1.json, sha256: 002a86ccc5ad21b12fd655c9db49e071cb07c87e9c8f1bfc139b5da238ab8c00}
+    - {role: R2_offline_semantic_validator, path: control-plane/registry/validate-f7-r2-decision-case-inventory-closure.py, sha256: c8777a3c502712255e7f1c797f977d9782b1644925daf5a755463a56cb8d9c71}
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5}
+  - {role: accepted_home_roadmap, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: accepted_life_core_authority_and_gap_map, path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md, sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19}
+  - {role: accepted_home_fact_authority_matrix, path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md, sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2}
+  - {role: accepted_home_domain_architecture_direction, path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md, sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71}
+  - {role: phase_4_start_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml, sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: foundational_direction_acceptance, path: control-plane/registry/decisions/2026-07-14-agents-os-foundational-direction-acceptance-decision-v0.1.yaml, sha256: ee8d6743fa2e7e022a8a7a09d009dc1cf5449e2cbbd168815be4e2d89ddd7c29}
+  - {role: F1_acceptance, path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml, sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2}
+  - {role: F2_freeze_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml, sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1}
+  - {role: F2_atomic_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml, sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1}
+  - {role: F3_freeze_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: F4_freeze_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2}
+  - {role: F5_freeze_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml, sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb}
+  - {role: F6_freeze_decision, path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml, sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890}
+  - {role: F6_atomic_manifest, path: control-plane/registry/reports/2026-07-18-agents-os-f6-r6-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 519939e743457773476ed1915781c314046f790ec1322361d4df42c47fd5dd9f}
+  - {role: F6_independent_review, path: control-plane/registry/reviews/2026-07-18-yellow-agents-os-f6-r6-full-atomic-independent-review.yaml, sha256: 552b71de5ff01b0ca8ce1f8b5394a0b7ead8ea95ec6a2b2234a14886cafc036b}
+  - {role: F6_mainline_durability_closeout, path: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-mainline-durability-closeout-v0.1.md, sha256: b0ef45941f51cae6decfb21db765f2d693c5faf6e04dde220724a935561aaa43}
+  - {role: life_core_policy_index, path: control-plane/policies/life-core/policy-index.json, sha256: 1c5e2904581532e23030ecefcc82071010f0c9d983959c0c768c6fcadf53b044}
+  - {role: life_core_root_principles, path: control-plane/policies/life-core/root-principles.md, sha256: 7a9bd33b99ae3173577b3e41fd359824936c516d27dd0b6f8aa6b3d0a4c34372}
+  - {role: life_core_house_rules, path: control-plane/policies/life-core/house-rules.md, sha256: 9bfa8887723d4536da870079714bf3f6f45f2700d645d73719f08f0908483b1b}
+  - {role: life_core_memory_rules, path: control-plane/policies/life-core/memory-rules.md, sha256: 1fabba2a8f9f7e88da130e2589e164b7dc5917e80e95983fc3a4df2051122235}
+  - {role: life_core_members_and_rooms, path: control-plane/policies/life-core/members-and-rooms.md, sha256: beadc147d08e6f380566a2c3c1cc6a50ad6b9ecdb7b18e29475e85dbc9d00094}
+  - {role: life_core_a2a_relations, path: control-plane/policies/life-core/a2a-relations.md, sha256: f04c1c52d549da79d05b23e6922d1a375d748bb4ac2d90e0c7817be66064e97a}
+  - {role: life_core_runtime_boundaries, path: control-plane/policies/life-core/runtime-boundaries.md, sha256: 94c1b6fce3722c813a09abccdc47622dba9d04340ac2c35ee741bbaa3e2a73df}
+  - {role: life_core_growth_rules, path: control-plane/policies/life-core/growth-rules.md, sha256: ce8dece3d6d35eb1f29383fee1694f5dece32b6af245a1e72337c0564f137793}
+  - {role: life_core_presence_and_sensing, path: control-plane/policies/life-core/presence-and-sensing.md, sha256: 7a525db3cbcbf9952927a5e42a43f708488e228c4d4b3e1b3e525351261cf943}
+  - {role: F7_start_decision, path: control-plane/registry/decisions/2026-07-18-agents-os-f7-home-domain-minimum-semantics-start-decision-v0.1.yaml, sha256: a4188f28d2bac61111a78824e39d4b5d060bb3926013b658b4cbfe70c579a068}
+  - {role: immutable_R1_manifest, path: control-plane/registry/reports/2026-07-18-agents-os-f7-r1-atomic-independent-review-package-v0.1.manifest.yaml, sha256: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c}
+  - {role: immutable_R1_external_independent_review_canonical_bytes, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r1-codex-external-independent-review.yaml, sha256: 6e5a3bf3874a7c39a805be86cbea957548f0b46dd9b0d9c57b4c08fd656f0104}
+  - {role: immutable_R1_finding_disposition, path: control-plane/registry/reviews/2026-07-19-agents-os-f7-r1-independent-review-disposition-v0.1.yaml, sha256: 9d439b91ad4ab36b516aeb2f1c89bbb1fc88d27afaff367cbb84c5f494b9fde9}
+  - {role: R2_start_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f7-r2-decision-case-inventory-closure-start-decision-v0.1.yaml, sha256: 8127c5ebfed81df5011d24cb786210420b213686b873d04d348668f3edcdbab8}
+author_evidence:
+  - {role: R2_author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-decision-case-inventory-closure-self-review.yaml, sha256: 0ec8afd7c0d1af28e7212cbf0f0cb655e151d705209049cceb283aa4c1cbdb25, result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW, may_substitute_for_independent_judgment: false}
+declared_input_count: 44
+validator_commands:
+  - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f7-r1-home-domain-minimum-semantics.py
+  - tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f7-r1-home-domain-minimum-semantics.py --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-18-agents-os-f7-r1-home-domain-minimum-semantics-v0.1.json && rm -f "$tmp"
+  - PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f7-r2-decision-case-inventory-closure.py
+  - tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f7-r2-decision-case-inventory-closure.py --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f7-r2-decision-case-inventory-closure-v0.1.json && rm -f "$tmp"
+  - git diff --check
+required_review_questions:
+  - all_44_hashes_match_and_all_8_subjects_35_authority_inputs_and_one_author_evidence_are_fully_read
+  - all_four_R1_subjects_remain_byte_identical
+  - exact_20_case_ID_set_order_complete_raw_inputs_and_derived_decisions_are_normatively_anchored
+  - C06_identity_rewrite_rejection_cannot_be_replaced_by_a_locally_valid_allowed_case
+  - C08_Session_to_Task_rejection_cannot_be_replaced_by_a_locally_valid_allowed_case
+  - C06_rename_and_C06_C07_reorder_are_rejected_after_full_graph_resigning
+  - R2_catalog_substitution_rename_reorder_and_unknown_fields_reject_after_resigning
+  - no_R1_semantic_authority_or_reducer_change_was_introduced
+  - synthetic_fixture_remains_runtime_unusable_and_has_zero_real_occurrences
+allowed_results: [PASS_NO_BLOCKER, BLOCK]
+governance:
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  Git_delivery_authorized: false

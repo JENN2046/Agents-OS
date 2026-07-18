@@ -2582,14 +2582,14 @@ delivery acknowledgement as Validation PASS.
 
 ```yaml
 F6_started: true
-F6_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN_AWAITING_JENN_F7_DECISION
+F6_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
 F6_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f6-validation-requirement-current-decision-start-decision-v0.1.yaml
 F6_start_decision_sha256: 335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
 F6_acceptance_authority: Jenn
 F6_partial_acceptance: forbidden
 F6_accepted: true
 F6_frozen: true
-F7_started: false
+F7_started: true
 F6_R1_acceptance_unit: F6_VALIDATION_REQUIREMENT_CURRENT_DECISION_V0_1_R1_ATOMIC_BUNDLE
 F6_R1_subject_count: 4
 F6_R1_normative_contract_sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
@@ -2786,10 +2786,10 @@ service_start_authorized: false
 provider_execution_authorized: false
 real_Task_Run_Validation_mutation_authorized: false
 real_effect_execution_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md
-active_work_queue_sha256: df0da5d5708238af70f6ad5ba54875bf1ce26e0dc9712194a11fbe35cb5bfff0
-superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md
+active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.3.md
+active_work_queue_sha256: ccf09cf9e9b2c59ce1975a4da6fcf6d050c0b6083dcdd0b359ad3760cdc790e4
+superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.3.md
 F6_start_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-validation-requirement-current-decision-start-v0.1.md
 F6_start_receipt_sha256: 05089b1fa30abc158214c2876bf9a9eb0dbafe9c617fc307fc9d3579370eb02b
 F6_R1_package_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-r1-atomic-independent-review-package-v0.1.md
@@ -2812,14 +2812,219 @@ F6_R6_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-18-yellow
 F6_R6_freeze_closeout_receipt_sha256: 4239401c31aebcd540d1901d2941d55b6e2b8dfecb978234ac2373f5650a2f29
 F6_mainline_durability_closeout_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-mainline-durability-closeout-v0.1.md
 F6_mainline_durability_closeout_receipt_sha256: b0ef45941f51cae6decfb21db765f2d693c5faf6e04dde220724a935561aaa43
-next_gate: EXPLICIT_JENN_START_DECISION_FOR_F7
+next_gate: F7_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
 ```
 
 Jenn accepted and froze the complete 24-subject F6 R1-R6 atomic bundle after a
 fresh full atomic independent `PASS_NO_BLOCKER` review. The frozen semantic
-contract does not authorize implementation, runtime or real Validation. F7
-remains unstarted and now awaits an independent Jenn start decision after F6
-Git durability was verified on private remote `main`.
+contract does not authorize implementation, runtime or real Validation. Jenn
+subsequently started F7 only after F6 Git durability was verified on private
+remote `main`.
+
+## F7 Home Domain Minimum Semantics Contract Closure Start (2026-07-18)
+
+Jenn explicitly started F7 as a logical Home Domain semantic contract. F7 may
+define minimum fact classes, unique-writer boundaries and nonpromotion rules;
+it may not create a Home runtime, second permission system, identity authority,
+ledger, Task writer or sensing path.
+
+```yaml
+F7_started: true
+F7_status: R1_AUTHOR_CONSTRUCTION_ACTIVE
+F7_start_decision: control-plane/registry/decisions/2026-07-18-agents-os-f7-home-domain-minimum-semantics-start-decision-v0.1.yaml
+F7_start_decision_sha256: a4188f28d2bac61111a78824e39d4b5d060bb3926013b658b4cbfe70c579a068
+F7_start_decision_bound_path_hashes: 29_29
+F7_acceptance_authority: Jenn
+F7_partial_acceptance: forbidden
+F7_accepted: false
+F7_frozen: false
+F8_started: false
+F7_start_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f7-home-domain-minimum-semantics-start-v0.1.md
+F7_start_receipt_sha256: a7b320fecbf61c5d80a8a62e0e84663c3a012edf329f314864665e47f2289485
+F7_home_domain_is_logical_bounded_context: true
+F7_second_permission_system: false
+F7_second_identity_authority: false
+F7_second_ledger: false
+F7_Task_writer: false
+relationship_or_trust_expands_authority: false
+Session_or_thought_automatically_becomes_Task: false
+Memory_candidate_automatically_becomes_formal_Memory: false
+Presence_authorizes_sensing_or_recording: false
+private_raw_memory_access_authorized: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+real_Home_or_Memory_mutation_authorized: false
+real_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.3.md
+active_work_queue_sha256: ccf09cf9e9b2c59ce1975a4da6fcf6d050c0b6083dcdd0b359ad3760cdc790e4
+next_gate: F7_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F7 R1 Fixed for Fresh Full Atomic Independent Review (2026-07-18)
+
+The author-side F7 R1 contract, deterministic builder, synthetic fixture and
+offline semantic validator are fixed by a 36-input manifest. The author
+self-review is nonindependent evidence only. F7 remains unaccepted and
+unfrozen, and F8 remains unstarted.
+
+```yaml
+F7_started: true
+F7_status: R1_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F7_R1_review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1_ATOMIC_BUNDLE
+F7_R1_subject_count: 4
+F7_R1_authority_input_count: 31
+F7_R1_author_evidence_count: 1
+F7_R1_declared_input_count: 36
+F7_R1_manifest: control-plane/registry/reports/2026-07-18-agents-os-f7-r1-atomic-independent-review-package-v0.1.manifest.yaml
+F7_R1_manifest_sha256: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+F7_R1_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F7_R1_independent_review_created: false
+F7_R1_independent_review_result: NOT_RUN
+F7_accepted: false
+F7_frozen: false
+F8_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+provider_execution_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.4.md
+active_work_queue_sha256: bee3fd45efa42c95dc659455dfb7983886bbe7923900ed6c7102d9adda655f56
+superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.3.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.4.md
+next_gate: F7_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F7 R1 BLOCK and R2 Decision-Case Inventory Closure (2026-07-19)
+
+The F7 R1 independent review returned `BLOCK`: the R1 validator allowed a
+fully re-signed graph to replace, rename or reorder mandatory decision cases.
+The finding was preserved and R2 closed only the canonical case-inventory gap.
+
+```yaml
+F7_started: true
+F7_status: R2_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F7_R1_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r1-codex-external-independent-review.yaml
+F7_R1_independent_review_sha256: 6e5a3bf3874a7c39a805be86cbea957548f0b46dd9b0d9c57b4c08fd656f0104
+F7_R1_independent_review_byte_count: 6233
+F7_R1_independent_review_encoding: ASCII_LF
+F7_R1_independent_review_result: BLOCK
+F7_R1_finding_count: 1_BLOCKER
+F7_R1_finding_disposition: control-plane/registry/reviews/2026-07-19-agents-os-f7-r1-independent-review-disposition-v0.1.yaml
+F7_R1_finding_disposition_sha256: 9d439b91ad4ab36b516aeb2f1c89bbb1fc88d27afaff367cbb84c5f494b9fde9
+F7_R2_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-f7-r2-decision-case-inventory-closure-start-decision-v0.1.yaml
+F7_R2_start_decision_sha256: 8127c5ebfed81df5011d24cb786210420b213686b873d04d348668f3edcdbab8
+F7_R2_review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+F7_R2_subject_count: 8
+F7_R2_authority_input_count: 35
+F7_R2_author_evidence_count: 1
+F7_R2_declared_input_count: 44
+F7_R2_manifest: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F7_R2_manifest_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+F7_R2_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F7_R2_independent_review_created: false
+F7_R2_independent_review_result: NOT_RUN
+F7_R1_fixed_subjects_unchanged: 4_4
+F7_R2_case_anchors: 20_20
+F7_R2_R1_regressions_rejected: 4_4
+F7_R2_catalog_mutations_rejected: 4_4
+F7_accepted: false
+F7_frozen: false
+F8_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.5.md
+active_work_queue_sha256: d645fafc030eb73280013e1923f05ffe7fcae78fec6cad91465810736678284f
+superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.4.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.5.md
+next_gate: F7_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F7 R2 Independent PASS and Jenn Atomic Decision Surface (2026-07-19)
+
+The canonical external F7 R2 review returned `PASS_NO_BLOCKER` after complete
+44-input verification, fixed-command reproduction and fourteen independent
+fully re-signed attacks. The R1 blocker is closed by R2. F7 remains unaccepted
+and unfrozen pending Jenn's exact atomic decision.
+
+```yaml
+F7_started: true
+F7_status: READY_FOR_JENN_ATOMIC_DECISION
+F7_R2_review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+F7_R2_subject_count: 8
+F7_R2_declared_input_count: 44
+F7_R2_manifest: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F7_R2_manifest_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+F7_R2_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+F7_R2_independent_review_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+F7_R2_independent_review_byte_count: 5973
+F7_R2_independent_review_encoding: ASCII_LF
+F7_R2_independent_review_result: PASS_NO_BLOCKER
+F7_R2_independent_attacks: 14_14_PASS
+F7_R2_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F7_R1_finding_disposition: CLOSED_BY_R2
+F7_R3_required: false
+F7_atomic_freeze_decision_package: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-freeze-decision-package-v0.1.md
+F7_atomic_freeze_decision_package_sha256: 6efd56f523b9dc1323a213a68ab0884cb1f83f967204afd6cbd13205dc1e3ea5
+F7_accepted: false
+F7_frozen: false
+F8_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+Git_delivery_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.6.md
+active_work_queue_sha256: 3dad1408b7627b8e554ff20afc4f4240551f1edcc5dc0c266f7deeb0cfc96474
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.5.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.6.md
+next_gate: JENN_OWNED_F7_ATOMIC_ACCEPTANCE_OR_FREEZE_DECISION
+```
+
+## F7 R2 Atomic Acceptance and Semantic Freeze (2026-07-19)
+
+Jenn explicitly confirmed Section 6 A's complete Exact decision text. The
+eight fixed F7 R1-R2 subjects are atomically accepted and frozen under R2 then
+R1 precedence. F7 revisions stop. F8 remains unstarted pending Git durability
+closeout and a separate Jenn start decision.
+
+```yaml
+F7_started: true
+F7_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+F7_acceptance_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+F7_subject_count: 8
+F7_manifest: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F7_manifest_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+F7_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+F7_independent_review_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+F7_freeze_decision: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+F7_freeze_decision_sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+F7_accepted: true
+F7_frozen: true
+F7_revisions_stopped: true
+requires_R3: false
+F8_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+Git_delivery_authorized_by_F7_freeze: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.7.md
+active_work_queue_sha256: 1ee32cdde4e3a897fe1e8fa03aeed268c89a067d66028a15d460035369a31078
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.6.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.7.md
+next_gate: F7_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F8
+```
 
 ## Stable Facts
 
@@ -2834,8 +3039,8 @@ Git durability was verified on private remote `main`.
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md`.
-- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F7 Home Domain Minimum Semantics`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.7.md`.
+- The active work queue's current `NOW` item is `F7 Git durability closeout scope and delivery gate`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.

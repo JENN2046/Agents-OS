@@ -1,0 +1,153 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f7-r2-codex-external-independent-review-2026-07-19
+date: '2026-07-19'
+reviewer:
+  identity: Codex_external_fresh_independent_reviewer
+  reviewer_role: fresh_full_atomic_hash_bound_independent_reviewer
+  independence_basis:
+    - not_the_F7_R2_author_run
+    - did_not_modify_any_R1_or_R2_review_subject
+    - author_self_review_used_only_as_nonindependent_evidence
+    - recomputed_all_manifest_bound_hashes
+    - ran_fixed_validators_and_builder_byte_reproductions
+    - constructed_independent_fully_resigned_R1_and_R2_attacks
+  review_scope_limit: >-
+    This review evaluates the fixed synthetic R1 plus R2 proof bundle. It does
+    not accept or freeze F7, start F8, authorize implementation, runtime
+    activation, sensing, provider calls, external effects, or Git delivery.
+
+review_unit:
+  id: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 4
+  subject_count: 8
+  authority_input_count: 35
+  author_evidence_count: 1
+  declared_input_count: 44
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+package_integrity:
+  canonical_manifest_path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256_declared_by_presentation_report: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  manifest_sha256_recomputed: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  manifest_sha256_match: true
+  manifest_stable_recheck: true
+  package_shape: hash_bound_pointer_bundle_no_file_copy
+  manifest_hash_entries_declared: 44
+  manifest_hash_entries_recomputed: 44
+  all_44_hashes_match: true
+  subjects:
+    declared: 8
+    fully_read_and_recomputed_match: 8
+  authority_inputs:
+    declared: 35
+    fully_read_and_recomputed_match: 35
+    total_bytes_read: 558941
+  author_evidence:
+    declared: 1
+    fully_read_and_recomputed_match: 1
+    independent_substitute: false
+  R1_fixed_subject_hashes_unchanged: 4_of_4_PASS
+
+fixed_commands:
+  verification_steps_required: 5
+  verification_steps_completed: 5
+  result: PASS
+  R1_validator:
+    result: PASS
+    authority_profile_count: 20
+    decision_case_count: 20
+    candidate_revision_count: 2
+    gap_disposition_count: 7
+    adversarial_mutations_rejected: 31
+    fixture_root_fingerprint: 2a5dc56a38de8636a31887a4bc3a954844ed42413a505068d5d2fdd4cf435b54
+  R1_builder_byte_reproduction:
+    result: PASS
+  R2_validator:
+    result: PASS
+    canonical_decision_case_anchors: 20
+    R1_fully_resigned_false_acceptances_closed: 4
+    R2_catalog_mutations_rejected: 4
+    total_R2_adversarial_cases_rejected: 9
+    fixture_root_fingerprint: 9887e100fea1d46a6a285c10bd4aef5f67c80d875b6be4af4312572480836ede
+  R2_builder_byte_reproduction:
+    result: PASS
+  workspace_hygiene:
+    git_diff_check: PASS
+    preexisting_dirty_worktree: true
+  execution_note: >-
+    The sandbox rejected only the manifest commands' trailing rm -f cleanup.
+    The same builder output and cmp byte-comparison steps ran successfully with
+    temporary files retained outside the workspace; no review subject changed.
+
+independent_adversarial_review:
+  method: >-
+    All mutations were constructed in memory. R1 decision rows, R2 anchors,
+    catalogue fingerprints, and root fingerprints were recomputed before
+    validation. For R1 catalog attacks the test also rebound the in-memory R2
+    fixture and test constants to the changed R1 graph, proving rejection came
+    from exact canonical inventory semantics rather than a stale SHA anchor.
+  probes:
+    - {id: baseline_pair, result: PASS_ACCEPTED}
+    - {id: replace_C06_with_allowed_C01, result: PASS_REJECTED_BY_CANONICAL_INVENTORY}
+    - {id: replace_C08_with_allowed_C01, result: PASS_REJECTED_BY_CANONICAL_INVENTORY}
+    - {id: rename_C06_to_C99, result: PASS_REJECTED_BY_CANONICAL_INVENTORY}
+    - {id: swap_C06_C07, result: PASS_REJECTED_BY_CANONICAL_INVENTORY}
+    - {id: replace_C13_relationship_rejection_with_allowed_C01, result: PASS_REJECTED_BY_CANONICAL_INVENTORY}
+    - {id: R2_anchor_substitution, result: PASS_REJECTED}
+    - {id: R2_anchor_rename, result: PASS_REJECTED}
+    - {id: R2_anchor_reorder, result: PASS_REJECTED}
+    - {id: R2_anchor_unknown_field, result: PASS_REJECTED}
+    - {id: R2_runtime_usable, result: PASS_REJECTED}
+    - {id: R2_nonzero_provider_count, result: PASS_REJECTED}
+    - {id: R1_authority_profile_expansion, result: PASS_REJECTED}
+    - {id: R2_duplicate_JSON_key, result: PASS_REJECTED}
+  total: 14
+  failures: 0
+
+prior_finding_disposition:
+  - finding_id: F7-R1-IR-B01
+    prior_severity: blocker
+    disposition: CLOSED_BY_R2
+    closure_evidence:
+      - fixed_exact_ordered_20_case_catalogue
+      - complete_raw_input_and_derived_decision_equality
+      - R1_row_and_R2_anchor_fingerprint_binding
+      - independent_fully_resigned_C06_C08_C13_replacement_rename_and_reorder_rejection
+
+scope_assessment:
+  R1_semantic_classes_changed: false
+  R1_authority_profiles_changed: false
+  R1_reducer_semantics_changed: false
+  second_permission_system_found: false
+  real_Home_or_effect_execution_found: false
+  runtime_usable: false
+  terminal_outcome: NOT_EXECUTED
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved_contract_ambiguity: 0
+finding_details: []
+
+result: PASS_NO_BLOCKER
+governance:
+  independent_review_completed: true
+  F7_acceptance_ready: false
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  Git_delivery_authorized: false
+  result_is_not_acceptance_or_freeze: true
+  next_gate: JENN_OWNED_F7_ATOMIC_ACCEPTANCE_OR_FREEZE_DECISION

@@ -1,0 +1,64 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f7-r2-decision-case-inventory-closure-self-review-2026-07-19
+date: 2026-07-19
+reviewer: Nobao_author_run
+independence: false
+review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+subject_hashes:
+  R2_normative_amendment: 8935b258455c381236822fdba5a2de3156b2959432079da602d386acf8166b78
+  R2_deterministic_builder: 1d736aa76e1e1dc1ab9c7ebc9f9b2cf6e790ca9906ccf9f82710d92de15ac0aa
+  R2_synthetic_fixture: 002a86ccc5ad21b12fd655c9db49e071cb07c87e9c8f1bfc139b5da238ab8c00
+  R2_offline_validator: c8777a3c502712255e7f1c797f977d9782b1644925daf5a755463a56cb8d9c71
+
+finding_disposition_claim:
+  F7-R1-IR-B01: CLOSED_BY_EXACT_ORDERED_DECISION_CASE_CATALOG_AND_REGRESSIONS
+
+validation:
+  R1_fixed_subject_hashes_unchanged: 4_of_4
+  canonical_case_anchors: 20_of_20
+  exact_case_ID_set_and_order: PASS
+  exact_complete_raw_inputs: PASS
+  independently_derived_decisions: 20_of_20
+  R1_independent_false_acceptance_regressions: 4_of_4_REJECTED_BY_R2_INVENTORY_SEMANTIC
+  R2_catalog_mutations: 4_of_4_REJECTED
+  duplicate_JSON_key: REJECTED
+  total_R2_adversarial_cases: 9_of_9_REJECTED
+  builder_byte_reproduction: PASS
+  validator_exceptions: 0
+  git_diff_check: PASS
+
+proof_properties:
+  count_and_uniqueness_are_not_sufficient: true
+  case_IDs_are_exact_and_ordered: true
+  raw_inputs_are_complete_and_exact: true
+  decisions_are_independently_derived: true
+  replacement_of_required_reject_or_defer_case_is_rejected: true
+  case_rename_is_rejected: true
+  case_reorder_is_rejected: true
+  fully_resigned_catalog_mutation_is_rejected: true
+  R1_semantic_classes_changed: false
+  R1_authority_profiles_changed: false
+  R1_reducer_semantics_changed: false
+  second_permission_system_created: false
+
+occurrence_assertions:
+  real_home_fact_count: 0
+  private_raw_memory_count: 0
+  sensing_or_recording_count: 0
+  Task_or_Command_mutation_count: 0
+  database_write_count: 0
+  provider_call_count: 0
+  external_effect_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+governance:
+  author_result_is_not_independent_acceptance: true
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+next_gate: F7_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

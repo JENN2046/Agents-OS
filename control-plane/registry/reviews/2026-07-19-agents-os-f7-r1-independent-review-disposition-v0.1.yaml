@@ -1,0 +1,62 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+record_id: agents-os-f7-r1-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: accepted_as_finding_evidence
+
+review_binding:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r1-codex-external-independent-review.yaml
+  sha256: 6e5a3bf3874a7c39a805be86cbea957548f0b46dd9b0d9c57b4c08fd656f0104
+  result: BLOCK
+  review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1_ATOMIC_BUNDLE
+  byte_count: 6233
+  encoding: ASCII
+  line_endings: LF
+  canonical_external_evidence: true
+
+noncanonical_transcription:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r1-full-atomic-independent-review.yaml
+  sha256: dd465eb29386088dd380147b20f384a27926abf919b4a93cf201746deb32ef50
+  role: conversation_supplied_finding_transcription_preserved_for_lineage_only
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-18-agents-os-f7-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: c86b8c17b93aa5e800bdf17e641666984c52cfc2e1006a90a38ad7dc61658c5c
+
+disposition:
+  F7-R1-IR-B01:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope:
+      - fixed_decision_case_canonical_anchors
+      - exact_case_ID_set_and_order
+      - exact_complete_raw_input_inventory
+      - independently_derived_exact_decisions
+      - four_fully_resigned_replacement_rename_and_reorder_regressions
+
+R2_scope:
+  allowed:
+    - R2_normative_amendment_for_decision_case_inventory_only
+    - R2_deterministic_catalog_builder_and_synthetic_fixture
+    - R2_offline_validator
+    - R2_author_self_review
+    - R1_plus_R2_atomic_hash_bound_review_package
+  forbidden:
+    - change_any_R1_fixed_byte
+    - add_or_change_semantic_classes
+    - add_or_change_writer_authority
+    - add_or_change_candidate_formation_or_reducer_semantics
+    - permission_identity_Task_Command_Memory_or_ledger_authority
+    - F8_semantics
+    - implementation_runtime_database_provider_sensing_or_effect
+
+governance:
+  F7_acceptance_ready: false
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+next_gate: F7_R2_NARROW_DECISION_CASE_CANONICAL_INVENTORY_CLOSURE

@@ -1,0 +1,75 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f7-r1-home-domain-minimum-semantics-self-review-2026-07-18
+date: 2026-07-18
+reviewer: Nobao_author_run
+independence: false
+review_unit: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R1_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+subject_hashes:
+  normative_contract: 546480f5a14e5c70c30fc7232ec1eacd0d6105fdb20a90483c3baee094b8f254
+  deterministic_fixture_builder: 27e1574d77da9ae4da217823a93b2cdddc3c64410716169838fb716b1bb19507
+  synthetic_fixture: 8bda718fd580fa95124120b148699fae099a9eb9710ead53eeefc943f1864f01
+  offline_semantic_validator: 0a488a14c739aa6ef97f9d524724e2317ac8dca5be4e853c3b2a52391ad455a3
+
+validation:
+  fixed_fixture_result: PASS
+  authority_profiles_verified: 20_of_20
+  decision_cases_independently_derived: 20_of_20
+  candidate_revisions_verified: 2_of_2
+  HD_M0_dispositions_verified: 7_of_7
+  fully_resigned_adversarial_mutations_rejected: 31_of_31
+  duplicate_JSON_keys_rejected: true
+  validator_exceptions: 0
+  builder_byte_reproduction: PASS
+  git_diff_check: PASS
+
+proof_properties:
+  Home_is_logical_bounded_context_only: true
+  each_semantic_class_has_one_exact_authority_profile: true
+  relationship_or_trust_expands_authority: false
+  identity_narrative_rewrites_F2_identity: false
+  Session_content_creates_Task: false
+  Memory_candidate_creates_formal_Memory: false
+  Intent_candidate_creates_F3_Command: false
+  Presence_consent_creates_sensing_or_recording: false
+  Growth_event_creates_policy_revision: false
+  candidate_result_creates_action_authority: false
+  projection_has_canonical_write_authority: false
+  upstream_F1_through_F6_reducers_recomputed: false
+  fixed_synthetic_history_anchor_enforced: true
+  same_revision_resign_with_changed_payload_rejected: true
+  closed_root_section_row_and_nested_fields: true
+  strict_JSON_types_and_NFC_enforced: true
+
+occurrence_assertions:
+  accepted_real_identity_count: 0
+  real_session_content_count: 0
+  private_raw_memory_count: 0
+  formal_memory_write_count: 0
+  real_relationship_mutation_count: 0
+  sensing_or_recording_count: 0
+  Task_or_Command_mutation_count: 0
+  database_write_count: 0
+  provider_call_count: 0
+  external_effect_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+review_limitations:
+  author_review_is_independent: false
+  author_result_accepts_F7: false
+  author_result_freezes_F7: false
+  implementation_or_runtime_readiness_proven: false
+  production_Home_or_Memory_profile_proven: false
+
+governance:
+  F7_accepted: false
+  F7_frozen: false
+  F8_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  sensing_or_recording_authorized: false
+  private_raw_memory_access_authorized: false
+
+next_gate: F7_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
