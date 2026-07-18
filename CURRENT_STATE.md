@@ -2571,7 +2571,7 @@ consumer_explicit_current_queue_validation: control-plane/registry/reports/2026-
 next_gate: EXPLICIT_JENN_START_DECISION_FOR_F6
 ```
 
-## F6 Validation Requirement Current Decision Contract Closure R6 Frozen Durability Gate (2026-07-18)
+## F6 Validation Requirement Current Decision Contract Closure R6 Mainline Durable (2026-07-18)
 
 Jenn explicitly started F6 after the complete F5 frozen lineage and its
 hash-bound authority inputs were durably verified on `main`. F6 owns the
@@ -2582,7 +2582,7 @@ delivery acknowledgement as Validation PASS.
 
 ```yaml
 F6_started: true
-F6_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+F6_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN_AWAITING_JENN_F7_DECISION
 F6_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f6-validation-requirement-current-decision-start-decision-v0.1.yaml
 F6_start_decision_sha256: 335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
 F6_acceptance_authority: Jenn
@@ -2762,6 +2762,12 @@ F6_freeze_decision_sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215
 F6_contract_status: ACCEPTED_FROZEN
 F6_revisions_stopped: true
 F6_requires_R7: false
+F6_mainline_pull_request: 12
+F6_mainline_scoped_commit: 24e2f4ae8ecb6c403fb48f6572a86ea662c687e7
+F6_mainline_projection_reconciliation_commit: c0650e7cf9ff9e0429f41792317413aef20c9ab4
+F6_mainline_merge_commit: d41c94ba7d61f7513b2e90c658e3970a81ea20ab
+F6_mainline_manifest_inputs_verified: 65_65
+F6_mainline_frozen_subjects_verified: 24_24
 F1_acceptance_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
 F3_freeze_decision_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
 F3_manifest_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
@@ -2780,10 +2786,10 @@ service_start_authorized: false
 provider_execution_authorized: false
 real_Task_Run_Validation_mutation_authorized: false
 real_effect_execution_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
-active_work_queue_sha256: 90b599543be9174470d97714bbdfde5f54a48bf65641905cb65c2bb7862e2d5b
-superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.0.md
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
+active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md
+active_work_queue_sha256: df0da5d5708238af70f6ad5ba54875bf1ce26e0dc9712194a11fbe35cb5bfff0
+superseded_active_work_queue: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md
 F6_start_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-validation-requirement-current-decision-start-v0.1.md
 F6_start_receipt_sha256: 05089b1fa30abc158214c2876bf9a9eb0dbafe9c617fc307fc9d3579370eb02b
 F6_R1_package_receipt: control-plane/registry/receipts/2026-07-17-yellow-agents-os-f6-r1-atomic-independent-review-package-v0.1.md
@@ -2804,14 +2810,16 @@ F6_R6_review_decision_surface_receipt: control-plane/registry/receipts/2026-07-1
 F6_R6_review_decision_surface_receipt_sha256: e5d0af8ba97ecf11e17f4e591635daee3f51a7ac43af4cb0941879fa1a1c69aa
 F6_R6_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-r6-atomic-freeze-closeout-v0.1.md
 F6_R6_freeze_closeout_receipt_sha256: 4239401c31aebcd540d1901d2941d55b6e2b8dfecb978234ac2373f5650a2f29
-next_gate: F6_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_START_DECISION_FOR_F7
+F6_mainline_durability_closeout_receipt: control-plane/registry/receipts/2026-07-18-yellow-agents-os-f6-mainline-durability-closeout-v0.1.md
+F6_mainline_durability_closeout_receipt_sha256: b0ef45941f51cae6decfb21db765f2d693c5faf6e04dde220724a935561aaa43
+next_gate: EXPLICIT_JENN_START_DECISION_FOR_F7
 ```
 
 Jenn accepted and froze the complete 24-subject F6 R1-R6 atomic bundle after a
 fresh full atomic independent `PASS_NO_BLOCKER` review. The frozen semantic
 contract does not authorize implementation, runtime or real Validation. F7
-remains unstarted and requires an independent Jenn decision after F6 Git
-durability closeout.
+remains unstarted and now awaits an independent Jenn start decision after F6
+Git durability was verified on private remote `main`.
 
 ## Stable Facts
 
@@ -2826,8 +2834,8 @@ durability closeout.
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.1.md`.
-- The active work queue's current `NOW` item is `F6 Git durability closeout scope and delivery gate`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-18-agents-os-active-work-queue-v4.2.md`.
+- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F7 Home Domain Minimum Semantics`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
