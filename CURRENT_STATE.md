@@ -2571,7 +2571,7 @@ consumer_explicit_current_queue_validation: control-plane/registry/reports/2026-
 next_gate: EXPLICIT_JENN_START_DECISION_FOR_F6
 ```
 
-## F6 Validation Requirement Current Decision Contract Closure R3 Review Gate (2026-07-18)
+## F6 Validation Requirement Current Decision Contract Closure R6 Frozen Durability Gate (2026-07-18)
 
 Jenn explicitly started F6 after the complete F5 frozen lineage and its
 hash-bound authority inputs were durably verified on `main`. F6 owns the
@@ -2582,7 +2582,7 @@ delivery acknowledgement as Validation PASS.
 
 ```yaml
 F6_started: true
-F6_status: R3_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F6_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
 F6_start_decision: control-plane/registry/decisions/2026-07-17-agents-os-f6-validation-requirement-current-decision-start-decision-v0.1.yaml
 F6_start_decision_sha256: 335c838830fce9d6f48dedfcdd5bd07c2be5eacba1a3ec61962305fccae6f30f
 F6_acceptance_authority: Jenn
