@@ -1,0 +1,118 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f8-r3-owner-commitment-candidate-history-closure-self-review-v0.1
+date: '2026-07-19'
+owner: Jenn
+reviewer: Nobao_author_run
+independence: false
+may_substitute_for_independent_judgment: false
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R3_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+atomic_inventory:
+  subjects: 12
+  authority_inputs: 35
+  author_evidence: 2
+  declared_inputs: 49
+
+subject_hashes:
+  R3_amendment:
+    path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+    sha256: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+  R3_builder:
+    path: control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+    sha256: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+  R3_fixture:
+    path: control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+    sha256: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+  R3_validator:
+    path: control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+    sha256: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+
+immutability_checks:
+  R1_subjects: 4/4_UNCHANGED
+  R1_manifest_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+  R2_subjects: 4/4_UNCHANGED
+  R2_manifest_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+  R1_or_R2_review_reopened: false
+
+author_validation:
+  R1_validator: PASS
+  R1_builder_byte_reproduction: PASS
+  R2_validator: PASS
+  R2_builder_byte_reproduction: PASS
+  R3_validator: PASS
+  R3_builder_byte_reproduction: PASS
+  R3_schema_profiles: 7/7
+  R3_owner_assessments: 7/7
+  R3_owner_commitments: 7/7
+  R3_canonical_candidate_history: 2/2
+  R3_candidate_formation_cases: 2/2
+  R3_acknowledgement_cases: 6/6
+  R3_regressions: 12/12_PASS
+  parser_probes: 4/4_REJECTED
+  whitespace_files: 4/4_PASS
+  validator_exceptions: 0
+  terminal_outcome: NOT_EXECUTED
+
+finding_disposition_claims:
+  F8-R2-B01:
+    status: CLOSED_CLAIMED
+    evidence:
+      - same_revision_assessment_rewrite_with_consumer_propagation_rejected
+      - same_revision_assessment_and_owner_commitment_rewrite_rejected_by_trusted_owner_source
+      - F8_reads_owner_commitment_but_does_not_recompute_owner_result
+  F8-R2-B02:
+    status: CLOSED_CLAIMED
+    evidence:
+      - acknowledgement_resolves_candidate_from_canonical_history_first
+      - candidate_absent_from_history_is_indeterminate
+      - caller_added_phantom_candidate_rejected_by_trusted_history_source
+  F8-R2-B03:
+    status: OUT_OF_SCOPE_WITHDRAWN_CONTRACT_MISREAD
+    evidence:
+      - equality_watermark_positive
+      - higher_watermark_positive
+      - lower_watermark_indeterminate
+      - field_renamed_minimum_trusted_event_sequence
+  F8-R2-B04:
+    status: CLOSED_CLAIMED_BY_DOWNLOADABLE_COMPLETE_R3_ARCHIVE
+    evidence:
+      - both_immutable_R1_and_R2_manifests_are_hash_bound_authority_inputs
+      - all_declared_inputs_are_mapped_into_the_plain_archive
+      - all_fixed_commands_run_without_a_Git_worktree
+
+authority_boundary_review:
+  consumes_owner_commitments: true
+  issues_owner_commitments: false
+  recomputes_upstream_results: false
+  implements_upstream_lineage_reducer: false
+  second_permission_system: false
+  second_identity_authority: false
+  second_Task_authority: false
+  second_Command_authority: false
+  synthetic_anchors_runtime_usable: false
+  command_authority: false
+  task_write_authority: false
+  effect_authority: false
+
+occurrence_counts:
+  real_Home: 0
+  real_Command: 0
+  real_Task_write: 0
+  runtime_activation: 0
+  database_write: 0
+  provider_call: 0
+  production_authentication: 0
+  private_Memory_read: 0
+  sensing_or_recording: 0
+  external_effect: 0
+
+governance:
+  F8_R3_started: true
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  next_gate: F8_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

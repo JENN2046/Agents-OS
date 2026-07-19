@@ -1,0 +1,176 @@
+{
+  "attacks": [
+    {
+      "attack_id": "A01",
+      "description": "same id/revision F7 STALE/current=false -> CURRENT_ACCEPTED/current=true; re-sign row, consumer, assessment-set and candidate",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": true,
+      "notes": "baseline=('REJECTED', 'UPSTREAM_ASSESSMENT_NOT_CURRENT'); propagated_candidate_fingerprint=9e0243ad1893f852ea153b27b4fa6d1527951e2a1006bf516bedf5ad6bc683de",
+      "observed_result": "CANDIDATE_FORMED",
+      "rejection_class": "favorable_invalid_path"
+    },
+    {
+      "attack_id": "A02",
+      "description": "same id/revision F3 INDETERMINATE -> SYNTHETIC_TEST_COMMITTED; re-sign row and acknowledgement consumer",
+      "expected_security_result": "ACKNOWLEDGED_INDETERMINATE",
+      "favorable_invalid_path": true,
+      "notes": "baseline=('ACKNOWLEDGED_INDETERMINATE', 'F3_OWNER_REPORTED_INDETERMINATE')",
+      "observed_result": "ACKNOWLEDGED_COMMITTED",
+      "rejection_class": "favorable_invalid_path"
+    },
+    {
+      "attack_id": "A03",
+      "description": "acknowledge a candidate revision/fingerprint absent from handoff_candidate_history; fully self-consistent re-sign",
+      "expected_security_result": "ACKNOWLEDGED_INDETERMINATE",
+      "favorable_invalid_path": true,
+      "notes": "derive_ack has no candidate-history lookup",
+      "observed_result": "ACKNOWLEDGED_COMMITTED",
+      "rejection_class": "favorable_invalid_path"
+    },
+    {
+      "attack_id": "A04",
+      "description": "change owner event watermark and fully re-sign while acknowledgement trusted watermark remains 100",
+      "expected_security_result": "ACKNOWLEDGED_INDETERMINATE",
+      "favorable_invalid_path": true,
+      "notes": "implementation checks row watermark >= acknowledgement watermark, not exact equality",
+      "observed_result": "ACKNOWLEDGED_COMMITTED",
+      "rejection_class": "favorable_invalid_path"
+    },
+    {
+      "attack_id": "A05",
+      "description": "rewrite row but keep old consumer fingerprint",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "ASSESSMENT_FINGERPRINT_MISMATCH",
+      "observed_result": "REJECTED",
+      "rejection_class": "stale_hash_or_unpropagated_ref"
+    },
+    {
+      "attack_id": "A06",
+      "description": "rewrite row+consumer but keep old candidate assessment_set_fingerprint",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "expected assessment-set differs from stale candidate commitment",
+      "observed_result": "REJECTED",
+      "rejection_class": "stale_hash_or_unpropagated_ref"
+    },
+    {
+      "attack_id": "A07",
+      "description": "created_event_ref integer with all dependent hashes re-signed",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "strict string stable_ref",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A08",
+      "description": "delete assessment consumer role",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "exact role inventory mismatch",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A09",
+      "description": "add unknown assessment consumer role",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "exact role inventory mismatch",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A10",
+      "description": "duplicate assessment consumer JSON key",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "duplicate-key parser rejection",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A11",
+      "description": "reorder assessment_set_fingerprint member list",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "canonical CONSUMER_ROLES ordering changes digest",
+      "observed_result": "REJECTED",
+      "rejection_class": "stale_hash_or_unpropagated_ref"
+    },
+    {
+      "attack_id": "A12",
+      "description": "remove/change assessment_set_fingerprint member",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "candidate commitment mismatch",
+      "observed_result": "REJECTED",
+      "rejection_class": "stale_hash_or_unpropagated_ref"
+    },
+    {
+      "attack_id": "A13",
+      "description": "schema-invalid unknown field with fixture anchors disabled",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "exact field sets reject unknowns",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A14",
+      "description": "partial-null assessment consumer tuple",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "null assessment requires all-null tuple",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A15",
+      "description": "required_intake_results historical order COMMITTED, INDETERMINATE, REJECTED",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "exact normative list mismatch",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A16",
+      "description": "change acknowledgement candidate revision without changing owner subject revision",
+      "expected_security_result": "ACKNOWLEDGED_INDETERMINATE",
+      "favorable_invalid_path": false,
+      "notes": "F3_OUTCOME_SUBJECT_MISMATCH",
+      "observed_result": "ACKNOWLEDGED_INDETERMINATE",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A17",
+      "description": "change acknowledgement context but do not align it with candidate tuple",
+      "expected_security_result": "ACKNOWLEDGED_INDETERMINATE",
+      "favorable_invalid_path": false,
+      "notes": "F3_OUTCOME_SUBJECT_MISMATCH",
+      "observed_result": "ACKNOWLEDGED_INDETERMINATE",
+      "rejection_class": "target_contract_semantic"
+    },
+    {
+      "attack_id": "A18",
+      "description": "stable_ref boolean/integer/null variants with anchors disabled",
+      "expected_security_result": "REJECTED",
+      "favorable_invalid_path": false,
+      "notes": "strict type and nonempty checks",
+      "observed_result": "REJECTED",
+      "rejection_class": "target_contract_semantic"
+    }
+  ],
+  "favorable_invalid_path_count": 4,
+  "independent_fully_resigned_attack_count": 18,
+  "probe_scope": "independent semantic model extracted from R2 builder and validator read-only source",
+  "rejection_class_counts": {
+    "favorable_invalid_path": 4,
+    "stale_hash_or_unpropagated_ref": 4,
+    "target_contract_semantic": 10
+  },
+  "review_unit": "F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R2_ATOMIC_BUNDLE",
+  "schema_version": "agents-os.f8-r2-independent-attack-results.v0.1"
+}

@@ -1,0 +1,71 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: agents-os-f8-r4-consumer-nullability-totality-start-decision-v0.1
+date: '2026-07-19'
+owner: Jenn
+status: accepted
+
+decision:
+  start_F8_R4: true
+  next_state: F8_R4_STARTED_STRICT_SCOPE
+  acceptance_or_freeze_granted: false
+  Phase_5A_started: false
+
+authorization_basis:
+  source: Jenn current explicit confirmation
+  exact_scope:
+    - AssessmentConsumerV0_1R3 six-field all-null or all-non-null totality
+    - all-null fail-closed resolution
+    - inherited R2 H01 optional Jenn exact-decision compatibility
+
+bound_inputs:
+  R3_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+  R3_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-nobao-independent-review.yaml
+    sha256: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+  R3_attack_results:
+    path: control-plane/registry/reviews/f8_r3_independent_attack_results.json
+    sha256: 9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551
+  R3_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r3-independent-review-disposition-v0.1.yaml
+    sha256: b2b255fd1f3661f34120b58ccf82825ebcb3ce8ec19a67cb1fc4a6214c18db4e
+  current_queue:
+    path: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.6.md
+    sha256: 4702b7b26dfed05941d49674dc33113e64c375570b2d032a3f889e5831d97a15
+
+required_R4_semantics:
+  accepted_consumer_shapes:
+    - ALL_SIX_NULL
+    - ALL_SIX_NON_NULL_AND_PROFILE_VALID
+  rejected_consumer_shapes:
+    - EVERY_MIXED_NULL_COMBINATION
+  all_null_resolution:
+    owner_lookup_performed: false
+    assessment_result_interpreted: false
+    outcome: FAIL_CLOSED_UNAVAILABLE_EVIDENCE
+  inherited_R2_H01:
+    optional_jenn_exact_decision_consumer: ALL_SIX_NULL
+    expected_handoff_result: CANDIDATE_FORMED
+
+immutable_inputs:
+  R1_subjects_and_manifest: unchanged
+  R2_subjects_and_manifest: unchanged
+  R3_subjects_and_manifest: unchanged
+  prior_reviews_reopened: false
+
+forbidden:
+  - permission_identity_Task_or_Command_authority_expansion
+  - upstream_reducer_recomputation
+  - Phase_5A_start
+  - implementation_or_runtime_activation
+  - database_provider_or_production_authentication
+  - private_Memory_access
+  - sensing_or_recording
+  - real_effect
+  - automatic_F8_acceptance_or_freeze
+
+stop_condition:
+  stop_at: F8_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  independent_result_required_before_next_decision: true
+

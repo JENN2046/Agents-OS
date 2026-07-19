@@ -1,0 +1,81 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f8-r1-home-to-orchestrator-minimum-interface-self-review-2026-07-19
+date: 2026-07-19
+reviewer: Nobao_author_run
+independence: false
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R1_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+subject_hashes:
+  normative_contract: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+  deterministic_fixture_builder: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+  synthetic_fixture: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+  offline_semantic_validator: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+
+validation:
+  fixed_fixture_result: PASS
+  schema_profiles_verified: 10_of_10
+  upstream_assessments_verified: 25_of_25
+  handoff_cases_independently_derived: 25_of_25
+  handoff_candidate_revisions_verified: 2_of_2
+  acknowledgement_cases_independently_derived: 6_of_6
+  fully_resigned_adversarial_mutations_rejected: 41_of_41
+  duplicate_JSON_key_NaN_and_Infinity_rejected: 3_of_3
+  validator_exceptions: 0
+  builder_byte_reproduction: PASS
+  git_diff_check: PASS
+
+proof_properties:
+  F8_output_is_nonauthoritative_candidate_only: true
+  F8_mints_F3_Command: false
+  F8_mints_authentication_or_intake: false
+  F8_creates_Task_or_effect_authority: false
+  prospective_F3_requirement_is_unaccepted_and_runtime_unusable: true
+  upstream_F1_through_F7_reducers_recomputed: false
+  assessment_revision_equals_resolved_owner_revision: true
+  assessment_subject_and_context_exact_binding: true
+  assessment_watermark_not_behind_trusted_event_sequence: true
+  Jenn_exact_decision_required_only_from_owner_requirement: true
+  PBL_no_match_is_sufficient_permission: false
+  relationship_or_trust_expands_authority: false
+  case_inventory_ID_order_and_complete_raw_inputs_anchored: true
+  same_revision_assessment_rewrite_rejected: true
+  same_revision_handoff_candidate_rewrite_rejected: true
+  acknowledgement_derived_only_from_F3_owner_assessment: true
+  closed_root_section_row_and_nested_fields: true
+  strict_JSON_types_NFC_safe_integer_and_duplicate_key_rejection: true
+  synthetic_and_production_domains_separated: true
+
+occurrence_assertions:
+  real_home_fact_count: 0
+  real_task_count: 0
+  real_command_count: 0
+  private_raw_memory_count: 0
+  runtime_activation_count: 0
+  database_write_count: 0
+  provider_call_count: 0
+  sensing_or_recording_count: 0
+  external_effect_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+review_limitations:
+  author_review_is_independent: false
+  author_result_accepts_F8: false
+  author_result_freezes_F8: false
+  F3_command_type_or_registry_accepted: false
+  implementation_or_runtime_readiness_proven: false
+  production_Home_or_Orchestrator_profile_proven: false
+
+governance:
+  F8_started: true
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  sensing_or_recording_authorized: false
+  private_raw_memory_access_authorized: false
+  provider_or_effect_execution_authorized: false
+
+next_gate: F8_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

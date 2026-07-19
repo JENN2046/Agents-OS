@@ -1,0 +1,3 @@
+7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338  2026-07-19-yellow-agents-os-f8-r3-nobao-independent-review.yaml
+9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551  f8_r3_independent_attack_results.json
+dc102ed5d6e88b4054d829647fe869527af3895272c0d652ebee241aab22a7e4  f8_r3_independent_review_probe.py

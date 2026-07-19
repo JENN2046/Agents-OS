@@ -1,0 +1,128 @@
+[
+  {
+    "index": 1,
+    "command": "if test -f validator/validate-f8-r1-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r1-witness.py fixture/F8-R1-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py; fi",
+    "returncode": 0,
+    "duration_seconds": 2.749,
+    "stdout": "{\"acknowledgement_cases_verified\": 6, \"candidate_revisions_verified\": 2, \"errors\": [], \"external_effect_count\": 0, \"fully_resigned_mutations_rejected\": \"41/41\", \"handoff_cases_verified\": 25, \"mutation_failures\": [], \"parser_probes_rejected\": \"3/3\", \"provider_call_count\": 0, \"real_command_count\": 0, \"result\": \"PASS\", \"root_fingerprint\": \"5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8\", \"schema_profiles_verified\": 10, \"terminal_outcome\": \"NOT_EXECUTED\", \"upstream_assessments_verified\": 25}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 2,
+    "command": "if test -f validator/build-f8-r1-witness.py; then tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r1-witness.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" fixture/F8-R1-synthetic-witness.json && rm -f \"$tmp\"; else tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json && rm -f \"$tmp\"; fi",
+    "returncode": 0,
+    "duration_seconds": 2.164,
+    "stdout": "",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 3,
+    "command": "if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py; fi",
+    "returncode": 0,
+    "duration_seconds": 3.461,
+    "stdout": "{\"R2_regression_failures\": [], \"R2_target_regressions_passed\": \"17/17\", \"acknowledgement_cases_verified\": 9, \"candidate_revisions_verified\": 2, \"errors\": [], \"external_effect_count\": 0, \"fully_resigned_mutations_rejected\": \"41/41\", \"handoff_cases_verified\": 25, \"mutation_failures\": [], \"parser_probes_rejected\": \"3/3\", \"provider_call_count\": 0, \"real_command_count\": 0, \"result\": \"PASS\", \"root_fingerprint\": \"4382b1d47cb6937f09a693f5ec6615eade2dce35a966458a00cf2394b2669e06\", \"schema_profiles_verified\": 10, \"terminal_outcome\": \"NOT_EXECUTED\", \"upstream_assessments_verified\": 28}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 4,
+    "command": "if test -f validator/build-f8-r2-witness.py; then tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r2-witness.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" fixture/F8-R2-synthetic-witness.json && rm -f \"$tmp\"; else tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json && rm -f \"$tmp\"; fi",
+    "returncode": 0,
+    "duration_seconds": 2.076,
+    "stdout": "",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 5,
+    "command": "if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py --check-whitespace subjects/F8-R2-amendment.md validator/build-f8-r2-witness.py validator/validate-f8-r2-witness.py fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json; fi",
+    "returncode": 0,
+    "duration_seconds": 2.129,
+    "stdout": "{\"errors\": [], \"files_checked\": 4, \"result\": \"PASS\"}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 6,
+    "command": "if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py; fi",
+    "returncode": 0,
+    "duration_seconds": 2.141,
+    "stdout": "{\"R3_regressions\": \"12/12_PASS\", \"acknowledgement_cases_verified\": 6, \"candidate_formation_cases_verified\": 2, \"canonical_candidate_history_verified\": 2, \"errors\": [], \"external_effect_count\": 0, \"owner_assessments_verified\": 7, \"owner_commitments_verified\": 7, \"parser_probes\": \"4/4_REJECTED\", \"provider_call_count\": 0, \"real_command_count\": 0, \"result\": \"PASS\", \"root_fingerprint\": \"e4b0a6ae16c33ca12b5841b7ffda8b22b029aadc7a378804ae1053f85e8732c8\", \"schema_profiles_verified\": 7, \"terminal_outcome\": \"NOT_EXECUTED\"}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 7,
+    "command": "if test -f validator/build-f8-r3-witness.py; then tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r3-witness.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" fixture/F8-R3-synthetic-witness.json && rm -f \"$tmp\"; else tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json && rm -f \"$tmp\"; fi",
+    "returncode": 0,
+    "duration_seconds": 2.169,
+    "stdout": "",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 8,
+    "command": "if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py --check-whitespace subjects/F8-R3-amendment.md validator/build-f8-r3-witness.py validator/validate-f8-r3-witness.py fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json; fi",
+    "returncode": 0,
+    "duration_seconds": 2.288,
+    "stdout": "{\"errors\": [], \"files_checked\": 4, \"result\": \"PASS\"}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 9,
+    "command": "if test -f validator/validate-f8-r4-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r4-witness.py fixture/F8-R4-synthetic-witness.json --r2-fixture fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r4-consumer-nullability-totality.py --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json; fi",
+    "returncode": 0,
+    "duration_seconds": 1.961,
+    "stdout": "{\"R4_regressions\": \"20/20_PASS\", \"acknowledgement_all_null_cases\": 1, \"consumer_shape_positive_cases\": 2, \"errors\": [], \"external_effect_count\": 0, \"formation_all_null_cases\": 1, \"inherited_R2_H01_compatibility_cases\": 1, \"mixed_null_negative_cases\": 62, \"owner_store_lookup_count_for_all_null\": 0, \"parser_probes\": \"4/4_REJECTED\", \"provider_call_count\": 0, \"result\": \"PASS\", \"root_fingerprint\": \"46529816c1f2a4eb82cc2df18a8239a8291488ac6a92224b15ef335786bf7b30\", \"schema_profiles_verified\": 3, \"terminal_outcome\": \"NOT_EXECUTED\"}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 10,
+    "command": "if test -f validator/build-f8-r4-witness.py; then tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r4-witness.py --r2-fixture fixture/F8-R2-synthetic-witness.json --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" fixture/F8-R4-synthetic-witness.json && rm -f \"$tmp\"; else tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r4-consumer-nullability-totality.py --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json && rm -f \"$tmp\"; fi",
+    "returncode": 0,
+    "duration_seconds": 1.922,
+    "stdout": "",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 11,
+    "command": "if test -f validator/validate-f8-r4-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r4-witness.py --check-whitespace subjects/F8-R4-amendment.md validator/build-f8-r4-witness.py validator/validate-f8-r4-witness.py fixture/F8-R4-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r4-consumer-nullability-totality.py --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r4-amendment.md control-plane/registry/build-f8-r4-consumer-nullability-totality.py control-plane/registry/validate-f8-r4-consumer-nullability-totality.py control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json; fi",
+    "returncode": 0,
+    "duration_seconds": 1.987,
+    "stdout": "{\"errors\": [], \"files_checked\": 4, \"result\": \"PASS\"}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 12,
+    "command": "if test -f validator/validate-f8-r5-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r5-witness.py fixture/F8-R5-synthetic-witness.json --r2-fixture fixture/F8-R2-synthetic-witness.json --r2-validator validator/validate-f8-r2-witness.py; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py; fi",
+    "returncode": 0,
+    "duration_seconds": 2.096,
+    "stdout": "{\"H01_cases_verified\": 1, \"all_null_optional_consumers_verified\": 1, \"errors\": [], \"fixture_canonical_sha256\": \"e9bfa0c9a7cd4ae74dc3e92df20fa3e252b0f179f9fb30566769d71998c287a1\", \"merged_R2_R3_R4_derivation_verified\": true, \"non_null_owner_commitments_verified\": 7, \"parser_failures\": 0, \"parser_probes\": 3, \"regression_failures\": 0, \"regression_probes\": 15, \"result\": \"PASS\", \"runtime_usable\": false, \"schema_profiles_verified\": 3, \"stable_ref_internal_space_positive_verified\": true, \"terminal_outcome\": \"NOT_EXECUTED\", \"trusted_owner_source_anchor_verified\": true}\n",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 13,
+    "command": "if test -f validator/build-f8-r5-witness.py; then tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r5-witness.py --r2-fixture fixture/F8-R2-synthetic-witness.json --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" fixture/F8-R5-synthetic-witness.json && rm -f \"$tmp\"; else tmp=\"$(mktemp)\" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json --output \"$tmp\" >/dev/null && cmp -s \"$tmp\" control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json && rm -f \"$tmp\"; fi",
+    "returncode": 0,
+    "duration_seconds": 2.247,
+    "stdout": "",
+    "stderr": "",
+    "pass": true
+  },
+  {
+    "index": 14,
+    "command": "if test -f validator/validate-f8-r5-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r5-witness.py --check-whitespace subjects/F8-R5-amendment.md validator/build-f8-r5-witness.py validator/validate-f8-r5-witness.py fixture/F8-R5-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r5-amendment.md control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json; fi",
+    "returncode": 0,
+    "duration_seconds": 2.082,
+    "stdout": "{\"errors\": [], \"files_checked\": 4, \"result\": \"PASS\"}\n",
+    "stderr": "",
+    "pass": true
+  }
+]

@@ -1,0 +1,74 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-start-decision-v0.1
+date: '2026-07-19'
+owner: Jenn
+status: accepted
+
+decision:
+  start_F8_R5: true
+  next_state: F8_R5_STARTED_STRICT_SCOPE
+  acceptance_or_freeze_granted: false
+  Phase_5A_started: false
+
+authorization_basis:
+  source: Jenn current explicit confirmation
+  exact_scope:
+    - bind every non-null R2 H01 upgraded-consumer owner-commitment tuple to an independently verifiable R3 immutable owner source
+    - rederive H01 through merged R2 assessment R3 exact owner-commitment and R4 nullability semantics
+    - restore inherited stable_ref strict JSON string nonempty NFC semantics without an internal-whitespace prohibition
+    - add non-NFC negative and NFC internal-space positive regressions
+
+bound_inputs:
+  R4_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+  R4_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r4-nobao-independent-review.yaml
+    sha256: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+  R4_attack_results:
+    path: control-plane/registry/reviews/f8_r4_independent_attack_results.json
+    sha256: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+  R4_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r4-independent-review-disposition-v0.1.yaml
+    sha256: 8877b0e3e8c23a34731769a6bca48086f5f543dbdd53b7c564f1172f1e60691c
+  current_queue:
+    path: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.9.md
+    sha256: d7fa6b440c315c18143580b94851efc842ebe3f386368fa59b65810da4ecf25f
+
+required_R5_semantics:
+  H01_owner_commitment_resolution:
+    every_non_null_consumer_resolves_exact_owner_source: true
+    exact_commitment_ref_revision_fingerprint_required: true
+    same_revision_rewrite_fail_closed: true
+  H01_merged_derivation:
+    R2_assessment_semantics_consumed: true
+    R3_owner_commitment_resolution_consumed: true
+    R4_nullability_semantics_consumed: true
+    caller_claimed_result_trusted: false
+  stable_ref:
+    strict_JSON_string: true
+    nonempty: true
+    NFC_normalized: true
+    internal_whitespace_forbidden: false
+
+immutable_inputs:
+  R1_subjects_and_manifest: unchanged
+  R2_subjects_and_manifest: unchanged
+  R3_subjects_and_manifest: unchanged
+  R4_subjects_and_manifest: unchanged
+  prior_reviews_reopened: false
+
+forbidden:
+  - permission_identity_Task_or_Command_authority_expansion
+  - upstream_reducer_recomputation
+  - Phase_5A_start
+  - implementation_or_runtime_activation
+  - database_provider_or_production_authentication
+  - private_Memory_access
+  - sensing_or_recording
+  - real_effect
+  - automatic_F8_acceptance_or_freeze
+
+stop_condition:
+  stop_at: F8_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  independent_result_required_before_next_decision: true

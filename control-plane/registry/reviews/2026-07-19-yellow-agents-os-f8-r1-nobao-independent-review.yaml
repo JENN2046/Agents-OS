@@ -1,0 +1,190 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f8-r1-nobao-independent-review-2026-07-19
+date: '2026-07-19'
+reviewer:
+  identity: Nobao_fresh_independent_reviewer
+  reviewer_role: fresh_full_atomic_hash_bound_independent_reviewer
+  independence_basis:
+  - not_the_F8_R1_author_run
+  - did_not_modify_any_manifest_bound_review_subject
+  - author_self_review_used_only_as_nonindependent_evidence
+  - recomputed_all_26_manifest_bound_input_hashes
+  - ran_the_fixed_validator_and_builder_byte_reproduction
+  - constructed_23_independent_coordinated_attacks
+  review_scope_limit: This review evaluates the fixed F8 R1 review package. It does not accept or freeze F8, start
+    Phase 5A, authorize implementation, runtime activation, production authentication, private-memory access, sensing,
+    provider calls, external effects, or Git delivery.
+review_unit:
+  id: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  authority_input_count: 21
+  author_evidence_count: 1
+  declared_input_count: 26
+package_integrity:
+  uploaded_archive: 2026-07-19-agents-os-f8-r1-review-package-v0.1.zip
+  uploaded_archive_sha256: b74051489a3e3c784f6de07dbb72bc904ff05b71e861851472574268befa608f
+  manifest_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+  archive_entry_count: 33
+  archive_path_traversal_or_symlink_found: false
+  package_checksums_verified: 33/33
+  manifest_inputs_verified: 26/26
+  all_four_subject_bytes_reviewed_unchanged: true
+fixed_commands:
+  semantic_validator:
+    result: PASS
+    exit_code: 0
+    schema_profiles_verified: 10/10
+    upstream_assessments_verified: 25/25
+    handoff_cases_verified: 25/25
+    candidate_revisions_verified: 2/2
+    acknowledgement_cases_verified: 6/6
+    author_mutations_rejected: 41/41
+    parser_probes_rejected: 3/3
+  builder_byte_reproduction:
+    result: PASS
+    builder_exit_code: 0
+    cmp_exit_code: 0
+    root_fingerprint: 5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8
+  git_diff_check:
+    result: BLOCK_NOT_REPRODUCIBLE_AS_DECLARED_FROM_ARCHIVE
+    raw_archive_exit_code: 129
+    raw_archive_reason: The offline archive contains no Git working tree.
+    reconstructed_intent_to_add_exit_code: 2
+    reconstructed_findings:
+    - F8 contract lines 3-5 contain trailing whitespace
+    - F8 review presentation lines 3-5 contain trailing whitespace
+    - three upstream files contain a new blank line at EOF under the reconstructed check
+independent_adversarial_review:
+  attack_count: 23
+  expected_behavior_count: 20
+  favorable_invalid_path_count: 3
+  favorable_invalid_paths:
+  - A21_same_revision_stale_assessment_rewrite
+  - A22_ack_wrong_subject_revision_and_stale_watermark
+  - A23_candidate_created_event_ref_integer
+  attack_results_artifact: f8_r1_independent_attack_results.json
+findings:
+  blocker_count: 4
+  major_count: 2
+  minor_count: 0
+  items:
+  - finding_id: F8-R1-B01
+    severity: BLOCKER
+    title: Normative F3 intake-result order contradicts the fixture and validator
+    evidence:
+    - 'subjects/F8-R1-contract.md lines 124-127: COMMITTED, REJECTED, INDETERMINATE'
+    - 'validator/build-f8-r1-witness.py line 620: COMMITTED, INDETERMINATE, REJECTED'
+    - validator/validate-f8-r1-witness.py line 484 enforces the builder order
+    - fixture/F8-R1-synthetic-witness.json lines 2251-2254 uses the builder order
+    impact: The hash-bound four-subject atomic unit contains two different exact normative values for the same ordered
+      JSON array. R1 therefore has an internal contradiction and cannot be accepted atomically.
+    required_fix: Choose one canonical order, amend the contract/builder/fixture/validator consistently, regenerate
+      hashes, and submit F8 R2 for fresh full review.
+  - finding_id: F8-R1-B02
+    severity: BLOCKER
+    title: Same-revision owner-assessment rewrite is not bound by the interface
+    evidence:
+    - 'subjects/F8-R1-contract.md lines 107-109: consumers bind only assessment_id and expected_assessment_revision'
+    - 'validator/build-f8-r1-witness.py lines 383-401: assessment_set_fingerprint hashes only role, assessment_id,
+      and revision'
+    - Independent attack A21 rewrote A-F7-STALE at revision 1 to CURRENT_ACCEPTED/current-head and re-signed it
+    - The reducer returned CANDIDATE_FORMED while the consumer remained assessment_id=A-F7-STALE, revision=1
+    impact: The exact assessment bytes/fingerprint consumed by F8 are not committed by the consumer or candidate.
+      Static fixture anchors catch the packaged mutation, but the normative interface itself cannot detect a same-revision
+      rewrite. Exact-current upstream evidence is therefore not closed.
+    required_fix: Add expected_assessment_fingerprint (or an equivalent immutable owner-event commitment) to every
+      consumer, include exact row fingerprints in assessment_set_fingerprint, and validate them before interpreting
+      results.
+  - finding_id: F8-R1-B03
+    severity: BLOCKER
+    title: F3 acknowledgement can report committed from non-exact current evidence
+    evidence:
+    - subjects/F8-R1-contract.md lines 325-348 requires an exact current F3-owner assessment for the same candidate
+    - validator/validate-f8-r1-witness.py lines 432-449 does not check subject_revision, context_fingerprint, or
+      based_on_event_sequence
+    - Independent attack A22 set subject_revision=999 and based_on_event_sequence=1 while retaining is_current_head=true
+    - The acknowledgement reducer still returned ACKNOWLEDGED_COMMITTED
+    impact: A malformed or stale F3 outcome assessment can be projected as committed. The output remains nonauthoritative,
+      but it violates the contract's exact-current evidence rule and can misstate F3 state.
+    required_fix: Bind the exact candidate revision, define and compare an acknowledgement trusted-event watermark,
+      close context nullability by assessment kind, and return ACKNOWLEDGED_INDETERMINATE on any mismatch.
+  - finding_id: F8-R1-B04
+    severity: BLOCKER
+    title: Declared schema totality is masked by fixture anchors
+    evidence:
+    - subjects/F8-R1-contract.md lines 291-310 declares created_event_ref as stable_ref
+    - subjects/F8-R1-contract.md lines 371-374 claims types/enums/nullability reject before fingerprints are trusted
+    - validator/validate-f8-r1-witness.py lines 554-574 does not type-check created_event_ref or several other stable_ref
+      fields
+    - Independent full-graph attack A23 changed created_event_ref to integer 17, fully re-signed the graph, and
+      passed validate_fixture(..., enforce_anchors=False) with zero errors
+    impact: The validator proves equality to a fixed fixture, not the claimed closed schema. Invalid typed objects
+      are rejected only by hardcoded history anchors, contrary to the required target-schema rejection rule.
+    required_fix: Implement explicit type, nonempty stable-ref, enum, nullability, and cross-field checks for every
+      schema field; add coordinated tests that disable inventory anchors and require the target schema error.
+  - finding_id: F8-R1-M01
+    severity: MAJOR
+    title: The review manifest omits two accepted direction inputs named by the immutable F8 start decision
+    evidence:
+    - governance/F8-start-decision.yaml lines 63-81 lists resident_architecture and high_privilege_architecture
+      as accepted_direction_inputs
+    - MANIFEST.yaml lines 28-49 does not declare either document as an authority input
+    impact: The offline reviewer cannot verify the F8 contract against all direction inputs that the start decision
+      itself names.
+    required_fix: Add both exact bytes/hashes to the R2 authority input set, or add a new explicit governance decision
+      explaining why they are superseded and not review inputs.
+  - finding_id: F8-R1-M02
+    severity: MAJOR
+    title: The third manifest command is not independently reproducible from the offline package
+    evidence:
+    - MANIFEST.yaml line 59 requires git diff --check
+    - Running it in the extracted archive exits 129 because no .git working tree is included
+    - A reconstructed intent-to-add working tree exits 2 and reports trailing whitespace/new blank lines
+    impact: The required command result cannot be reproduced exactly from the supplied review package, so the author
+      PASS claim is not independently established.
+    required_fix: Replace the environment-dependent command with a deterministic file-list whitespace validator,
+      or include a documented reproducible Git baseline.
+required_counts:
+  second_permission_system_count: 0
+  second_identity_Task_or_Command_authority_count: 0
+  upstream_authority_recomputation_count: 0
+  PBL_permission_shortcut_count: 0
+  assessment_revision_or_subject_binding_bypass_count: 2
+  synthetic_to_production_leak_count: 0
+  dual_writer_count: 0
+  circular_proof_count: 1
+  fail_open_currentness_count: 2
+  acknowledgement_spoofing_count: 1
+  schema_totality_count: 1
+  downstream_boundary_leak_count: 0
+  M0_B_interface_impossibility_count: 0
+  internal_contradiction_count: 1
+  independent_fully_resigned_attack_count: 23
+positive_findings:
+- All 26 declared manifest input hashes match.
+- The archive is safe to extract and all 33 package checksums match.
+- The fixed semantic validator passes its own 41 mutations and 3 parser probes.
+- The builder reproduces the fixture byte-for-byte.
+- F8 outputs keep command_authority, task_write_authority, effect_authority, and runtime_usable false.
+- The prospective F3 requirement remains owner=F3, unaccepted, synthetic-only, and runtime-unusable.
+- No real Home, Task, Command, memory, runtime, database, provider, sensing, or effect occurrence is present.
+result: BLOCK
+requires_R2: true
+governance:
+  independent_review_completed: true
+  F8_acceptance_ready: false
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_effect_execution_authorized: false
+  Git_delivery_authorized: false
+  next_gate: F8_R2_NARROW_AMENDMENT_AND_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

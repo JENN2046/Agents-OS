@@ -1,0 +1,102 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f8-r4-consumer-nullability-totality-self-review-v0.1
+date: '2026-07-19'
+owner: Jenn
+reviewer: Nobao_author_run
+independence: false
+may_substitute_for_independent_judgment: false
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R4_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+subject_hashes:
+  R4_amendment:
+    path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r4-amendment.md
+    sha256: bf8cbd2ba83ab2bf9ea3275bcdb156b3dd79858f96d554fc933a4364e03f0082
+  R4_builder:
+    path: control-plane/registry/build-f8-r4-consumer-nullability-totality.py
+    sha256: 6110ed5654328b96b7945ec61332de4a941c86e4cb17c3da54952fedc170a24f
+  R4_fixture:
+    path: control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json
+    sha256: 775cdc15a134a98985325b728b5c356db880c0d97e428c688170971ff789e08b
+  R4_validator:
+    path: control-plane/registry/validate-f8-r4-consumer-nullability-totality.py
+    sha256: 6227bd9902d13a5463a237ba65f9dd669d2a82861395ffa57a3dcb048743420d
+
+immutability_checks:
+  R1_subjects: 4/4_UNCHANGED
+  R1_manifest_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+  R2_subjects: 4/4_UNCHANGED
+  R2_manifest_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+  R3_subjects: 4/4_UNCHANGED
+  R3_manifest_sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+  prior_review_units_reopened: false
+
+author_validation:
+  R1_validator: PASS
+  R1_builder_byte_reproduction: PASS
+  R2_validator: PASS
+  R2_builder_byte_reproduction: PASS
+  R3_validator: PASS
+  R3_builder_byte_reproduction: PASS
+  R4_validator: PASS
+  R4_builder_byte_reproduction: PASS
+  R4_schema_profiles: 3/3
+  legal_consumer_shapes: 2/2
+  mixed_null_combinations_rejected: 62/62
+  formation_all_null_fail_closed: PASS
+  acknowledgement_all_null_fail_closed: PASS
+  all_null_owner_store_lookups: 0
+  inherited_R2_H01_optional_Jenn_decision: CANDIDATE_FORMED
+  R4_regressions: 20/20_PASS
+  parser_probes: 4/4_REJECTED
+  additional_fully_resigned_target_mutations: 4/4_REJECTED
+  whitespace_files: 4/4_PASS
+  validator_exceptions: 0
+  terminal_outcome: NOT_EXECUTED
+
+finding_disposition_claim:
+  F8-R3-B01:
+    status: CLOSED_CLAIMED
+    evidence:
+      - validate_consumer accepts exactly ALL_NULL or profile-valid ALL_NON_NULL
+      - all 62 mixed-null masks are rejected
+      - resolve_consumer recognizes ALL_NULL before owner lookup
+      - required formation and acknowledgement consumers fail closed
+      - immutable R2 H01 down-projection remains exact and CANDIDATE_FORMED
+
+authority_boundary_review:
+  consumes_owner_commitments: true
+  issues_owner_commitments: false
+  recomputes_upstream_results: false
+  implements_upstream_lineage_reducer: false
+  second_permission_system: false
+  second_identity_authority: false
+  second_Task_authority: false
+  second_Command_authority: false
+  synthetic_fixture_runtime_usable: false
+  command_authority: false
+  task_write_authority: false
+  effect_authority: false
+
+occurrence_counts:
+  real_Home: 0
+  real_Command: 0
+  real_Task_write: 0
+  runtime_activation: 0
+  database_write: 0
+  provider_call: 0
+  production_authentication: 0
+  private_Memory_read: 0
+  sensing_or_recording: 0
+  external_effect: 0
+
+governance:
+  F8_R4_started: true
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  next_gate: F8_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+

@@ -1,0 +1,991 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f8-r3-nobao-fresh-full-atomic-independent-review-2026-07-19
+date: '2026-07-19'
+reviewer: Nobao / GPT-5.6 Thinking
+independence:
+  independent: true
+  basis:
+  - Exact uploaded ZIP read directly from the conversation sandbox.
+  - Fresh extraction into a new temporary directory.
+  - All declared input hashes independently recomputed from archive bytes.
+  - Both author self-reviews read only after fixed-byte inventory verification and not used as a conclusion.
+  - Independent coordinated re-signing probe written separately from the author validator regression suite.
+  author_self_review_substituted_for_judgment: false
+  prior_review_substituted_for_current_judgment: false
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R3_ATOMIC_BUNDLE
+review_mode: fresh_full_atomic_hash_bound_independent_review
+result: BLOCK
+result_basis:
+- F8-R3-B01_NORMATIVE_ALL_NULL_CONSUMER_FORM_REJECTED_BY_R3_VALIDATOR
+- MERGED_R2_BASE_CANDIDATE_PATH_DEPENDS_ON_OPTIONAL_ALL_NULL_JENN_DECISION_CONSUMER
+- R3_SEMANTIC_OWNER_COMMITMENT_AND_CANDIDATE_HISTORY_BLOCKERS_OTHERWISE_CLOSED
+- ATOMIC_INTEGRITY_AND_OFFLINE_REPRODUCTION_COMPLETE
+artifact_integrity:
+  zip:
+    uploaded_path: /mnt/data/2026-07-19-agents-os-f8-r3-review-package-v0.1.zip
+    workspace_declared_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-review-package-v0.1.zip
+    expected_sha256: 4e5d82dc78e8e91cfe0efa2fa5eb2ca185f9a49c1c6d16b0890bca2b3e2002ef
+    independently_computed_sha256: 4e5d82dc78e8e91cfe0efa2fa5eb2ca185f9a49c1c6d16b0890bca2b3e2002ef
+    confirmed: true
+    entry_count: 53
+    compressed_bytes: 328861
+    uncompressed_bytes: 1265530
+    maximum_single_entry_compression_ratio: 13.771287
+  manifest:
+    archive_path: F8-R3-review-package/MANIFEST.yaml
+    workspace_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    independently_computed_sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    confirmed: true
+    strict_yaml_duplicate_key_check: PASS
+  package_metadata_sha256:
+    ARCHIVE_MAP.yaml: adf58669a411303e10e5b5c34dc211690bd44929f77851c1c8ba350a17e341cf
+    CHECKSUMS.sha256: 17a7e4baeacfcddac8228aba90a5a673bd9bf237db7c96954e588fe6994e1a3b
+    MANIFEST.yaml: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    REVIEW_PACKAGE.md: fe57d2d78b220a4df844e0e7b9960ba42fed3cdbcf79925c5a25456ce819e1f8
+zip_safety:
+  duplicate_exact_paths: 0
+  duplicate_NFC_paths: 0
+  casefold_collisions: 0
+  absolute_paths: 0
+  backslash_paths: 0
+  traversal_paths: 0
+  symlinks: 0
+  control_or_NUL_path_characters: 0
+  CRC: PASS
+  forbidden_secret_private_state_paths: 0
+  git_directory_present_after_extraction: false
+  result: PASS
+checksums:
+  checksum_file: CHECKSUMS.sha256
+  declared_entries: 52
+  unique_paths: 52
+  matched: 52
+  mismatched: 0
+  covers_all_archive_files_except_checksum_file_itself: true
+  unsafe_checksum_paths: 0
+  result: PASS
+archive_map:
+  path: ARCHIVE_MAP.yaml
+  declared_input_count: 49
+  mapping_count: 49
+  subjects: 12
+  authority_inputs: 35
+  author_evidence: 2
+  missing_manifest_mappings: 0
+  extra_mappings: 0
+  strict_yaml_duplicate_key_check: PASS
+  result: PASS
+declared_inputs:
+  declared_count: 49
+  listed_count: 49
+  archive_mapped_count: 49
+  independently_hash_verified_count: 49
+  fully_read_count: 49
+  total_bytes_read: 1216633
+  total_lines_read: 26966
+  subjects:
+    declared: 12
+    hash_verified: 12
+    fully_read: 12
+  authority_inputs:
+    declared: 35
+    hash_verified: 35
+    fully_read: 35
+  author_evidence:
+    declared: 2
+    hash_verified: 2
+    fully_read: 2
+    used_as_substitute_for_independent_judgment: false
+  all_49_hashes_match: true
+  all_49_fully_read: true
+  entries:
+  - category: subject
+    role: R1_normative_contract
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r1.draft.md
+    archive_path: subjects/F8-R1-contract.md
+    expected_sha256: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    independently_computed_sha256: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    hash_match: true
+    fully_read: true
+    bytes_read: 17452
+    line_count: 495
+    parse_status: utf8_full_text_read
+  - category: subject
+    role: R1_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py
+    archive_path: validator/build-f8-r1-witness.py
+    expected_sha256: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    independently_computed_sha256: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    hash_match: true
+    fully_read: true
+    bytes_read: 32678
+    line_count: 699
+    parse_status: python_ast_parse_pass
+  - category: subject
+    role: R1_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json
+    archive_path: fixture/F8-R1-synthetic-witness.json
+    expected_sha256: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    independently_computed_sha256: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    hash_match: true
+    fully_read: true
+    bytes_read: 118658
+    line_count: 2807
+    parse_status: strict_json_parse_pass
+  - category: subject
+    role: R1_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py
+    archive_path: validator/validate-f8-r1-witness.py
+    expected_sha256: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+    independently_computed_sha256: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+    hash_match: true
+    fully_read: true
+    bytes_read: 47300
+    line_count: 741
+    parse_status: python_ast_parse_pass
+  - category: subject
+    role: R2_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md
+    archive_path: subjects/F8-R2-amendment.md
+    expected_sha256: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+    independently_computed_sha256: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+    hash_match: true
+    fully_read: true
+    bytes_read: 9204
+    line_count: 254
+    parse_status: utf8_full_text_read
+  - category: subject
+    role: R2_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py
+    archive_path: validator/build-f8-r2-witness.py
+    expected_sha256: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+    independently_computed_sha256: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+    hash_match: true
+    fully_read: true
+    bytes_read: 36253
+    line_count: 763
+    parse_status: python_ast_parse_pass
+  - category: subject
+    role: R2_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+    archive_path: fixture/F8-R2-synthetic-witness.json
+    expected_sha256: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+    independently_computed_sha256: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+    hash_match: true
+    fully_read: true
+    bytes_read: 146857
+    line_count: 3143
+    parse_status: strict_json_parse_pass
+  - category: subject
+    role: R2_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+    archive_path: validator/validate-f8-r2-witness.py
+    expected_sha256: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+    independently_computed_sha256: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+    hash_match: true
+    fully_read: true
+    bytes_read: 58479
+    line_count: 973
+    parse_status: python_ast_parse_pass
+  - category: subject
+    role: R3_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+    archive_path: subjects/F8-R3-amendment.md
+    expected_sha256: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+    independently_computed_sha256: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+    hash_match: true
+    fully_read: true
+    bytes_read: 11105
+    line_count: 301
+    parse_status: utf8_full_text_read
+  - category: subject
+    role: R3_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+    archive_path: validator/build-f8-r3-witness.py
+    expected_sha256: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+    independently_computed_sha256: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+    hash_match: true
+    fully_read: true
+    bytes_read: 19292
+    line_count: 460
+    parse_status: python_ast_parse_pass
+  - category: subject
+    role: R3_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+    archive_path: fixture/F8-R3-synthetic-witness.json
+    expected_sha256: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+    independently_computed_sha256: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+    hash_match: true
+    fully_read: true
+    bytes_read: 24589
+    line_count: 561
+    parse_status: strict_json_parse_pass
+  - category: subject
+    role: R3_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+    archive_path: validator/validate-f8-r3-witness.py
+    expected_sha256: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+    independently_computed_sha256: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+    hash_match: true
+    fully_read: true
+    bytes_read: 54650
+    line_count: 1023
+    parse_status: python_ast_parse_pass
+  - category: authority_input
+    role: workspace_governance
+    source_path: AGENTS.md
+    archive_path: upstream/AGENTS.md
+    expected_sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    independently_computed_sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    hash_match: true
+    fully_read: true
+    bytes_read: 29027
+    line_count: 663
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: accepted_home_roadmap_subject
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    expected_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    independently_computed_sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    hash_match: true
+    fully_read: true
+    bytes_read: 23757
+    line_count: 920
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: accepted_home_roadmap_decision
+    source_path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    expected_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+    independently_computed_sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+    hash_match: true
+    fully_read: true
+    bytes_read: 3290
+    line_count: 90
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: accepted_home_architecture_direction
+    source_path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    expected_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    independently_computed_sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    hash_match: true
+    fully_read: true
+    bytes_read: 25422
+    line_count: 820
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: accepted_resident_architecture
+    source_path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    archive_path: upstream/control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    expected_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    independently_computed_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    hash_match: true
+    fully_read: true
+    bytes_read: 271643
+    line_count: 6614
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: accepted_high_privilege_architecture
+    source_path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    archive_path: upstream/control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    expected_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    independently_computed_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    hash_match: true
+    fully_read: true
+    bytes_read: 16617
+    line_count: 483
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: life_core_authority_and_gap_map
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    expected_sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    independently_computed_sha256: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    hash_match: true
+    fully_read: true
+    bytes_read: 16964
+    line_count: 467
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: home_fact_authority_matrix
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    expected_sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    independently_computed_sha256: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    hash_match: true
+    fully_read: true
+    bytes_read: 10442
+    line_count: 108
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: phase_4_start_decision
+    source_path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    expected_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    independently_computed_sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    hash_match: true
+    fully_read: true
+    bytes_read: 2856
+    line_count: 84
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: construction_readiness_review
+    source_path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    archive_path: upstream/control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    expected_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    independently_computed_sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    hash_match: true
+    fully_read: true
+    bytes_read: 10946
+    line_count: 311
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: accepted_F1_decision
+    source_path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    expected_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    independently_computed_sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    hash_match: true
+    fully_read: true
+    bytes_read: 2927
+    line_count: 72
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F2_decision
+    source_path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    independently_computed_sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    hash_match: true
+    fully_read: true
+    bytes_read: 9029
+    line_count: 182
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F2_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    expected_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    independently_computed_sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    hash_match: true
+    fully_read: true
+    bytes_read: 13791
+    line_count: 181
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F3_decision
+    source_path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+    independently_computed_sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+    hash_match: true
+    fully_read: true
+    bytes_read: 5131
+    line_count: 129
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F3_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+    independently_computed_sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+    hash_match: true
+    fully_read: true
+    bytes_read: 13821
+    line_count: 180
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F4_decision
+    source_path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+    independently_computed_sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+    hash_match: true
+    fully_read: true
+    bytes_read: 10748
+    line_count: 159
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F5_decision
+    source_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+    independently_computed_sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+    hash_match: true
+    fully_read: true
+    bytes_read: 11422
+    line_count: 170
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F6_decision
+    source_path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+    independently_computed_sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+    hash_match: true
+    fully_read: true
+    bytes_read: 10210
+    line_count: 219
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F7_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    expected_sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+    independently_computed_sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+    hash_match: true
+    fully_read: true
+    bytes_read: 6761
+    line_count: 152
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F7_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    independently_computed_sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    hash_match: true
+    fully_read: true
+    bytes_read: 12102
+    line_count: 90
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: frozen_F7_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    expected_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    independently_computed_sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    hash_match: true
+    fully_read: true
+    bytes_read: 5973
+    line_count: 153
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_F8_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1.yaml
+    expected_sha256: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+    independently_computed_sha256: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+    hash_match: true
+    fully_read: true
+    bytes_read: 9340
+    line_count: 194
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_F8_start_queue
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+    expected_sha256: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+    independently_computed_sha256: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+    hash_match: true
+    fully_read: true
+    bytes_read: 2897
+    line_count: 76
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: immutable_R1_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    independently_computed_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    hash_match: true
+    fully_read: true
+    bytes_read: 11835
+    line_count: 154
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_R2_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    independently_computed_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    hash_match: true
+    fully_read: true
+    bytes_read: 14115
+    line_count: 122
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_R1_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+    expected_sha256: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    independently_computed_sha256: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    hash_match: true
+    fully_read: true
+    bytes_read: 10512
+    line_count: 190
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_R1_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r1_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r1_independent_attack_results.json
+    expected_sha256: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    independently_computed_sha256: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    hash_match: true
+    fully_read: true
+    bytes_read: 6615
+    line_count: 241
+    parse_status: strict_json_parse_pass
+  - category: authority_input
+    role: immutable_R1_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r1-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r1-independent-review-disposition-v0.1.yaml
+    expected_sha256: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+    independently_computed_sha256: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+    hash_match: true
+    fully_read: true
+    bytes_read: 3588
+    line_count: 94
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: R2_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1.yaml
+    expected_sha256: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+    independently_computed_sha256: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+    hash_match: true
+    fully_read: true
+    bytes_read: 3577
+    line_count: 83
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_R2_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-nobao-independent-review.yaml
+    expected_sha256: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    independently_computed_sha256: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    hash_match: true
+    fully_read: true
+    bytes_read: 25607
+    line_count: 503
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: immutable_R2_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r2_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r2_independent_attack_results.json
+    expected_sha256: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+    independently_computed_sha256: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+    hash_match: true
+    fully_read: true
+    bytes_read: 7346
+    line_count: 176
+    parse_status: strict_json_parse_pass
+  - category: authority_input
+    role: immutable_R2_independent_probe
+    source_path: control-plane/registry/reviews/f8_r2_independent_review_probe.py
+    archive_path: upstream/control-plane/registry/reviews/f8_r2_independent_review_probe.py
+    expected_sha256: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+    independently_computed_sha256: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+    hash_match: true
+    fully_read: true
+    bytes_read: 15511
+    line_count: 253
+    parse_status: python_ast_parse_pass
+  - category: authority_input
+    role: immutable_R2_review_output_checksums
+    source_path: control-plane/registry/reviews/2026-07-19-f8-r2-independent-review-SHA256SUMS.txt
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-f8-r2-independent-review-SHA256SUMS.txt
+    expected_sha256: 1ee7d1d51b85f4d904245e96ce80858da1d5562c45ea578e4ff7f1f5f9e291cc
+    independently_computed_sha256: 1ee7d1d51b85f4d904245e96ce80858da1d5562c45ea578e4ff7f1f5f9e291cc
+    hash_match: true
+    fully_read: true
+    bytes_read: 334
+    line_count: 3
+    parse_status: utf8_full_text_read
+  - category: authority_input
+    role: immutable_R2_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r2-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r2-independent-review-disposition-v0.1.yaml
+    expected_sha256: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+    independently_computed_sha256: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+    hash_match: true
+    fully_read: true
+    bytes_read: 5019
+    line_count: 111
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: authority_input
+    role: R3_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-start-decision-v0.1.yaml
+    expected_sha256: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+    independently_computed_sha256: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+    hash_match: true
+    fully_read: true
+    bytes_read: 2366
+    line_count: 70
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: author_evidence
+    role: R2_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-evidence-currentness-schema-closure-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r2-evidence-currentness-schema-closure-self-review.yaml
+    expected_sha256: d8f87a39dd25895bf4c104ad9a836a84aad51b1cbe690f68d21abec7b8f4d877
+    independently_computed_sha256: d8f87a39dd25895bf4c104ad9a836a84aad51b1cbe690f68d21abec7b8f4d877
+    hash_match: true
+    fully_read: true
+    bytes_read: 4435
+    line_count: 111
+    parse_status: strict_yaml_duplicate_key_check_pass
+  - category: author_evidence
+    role: R3_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-owner-commitment-candidate-history-closure-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r3-owner-commitment-candidate-history-closure-self-review.yaml
+    expected_sha256: fa8cb758b490e4306bfb9807eae20ea6c2205dcda4707d3b57464cab27572070
+    independently_computed_sha256: fa8cb758b490e4306bfb9807eae20ea6c2205dcda4707d3b57464cab27572070
+    hash_match: true
+    fully_read: true
+    bytes_read: 4140
+    line_count: 118
+    parse_status: strict_yaml_duplicate_key_check_pass
+historical_immutability:
+  R1_manifest:
+    expected_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    computed_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    match: true
+  R2_manifest:
+    expected_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    computed_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    match: true
+  R1_subjects_unchanged: 4/4
+  R2_subjects_unchanged: 4/4
+  prior_subject_path_hash_mismatches: 0
+  result: PASS
+fixed_commands:
+  execution_root: plain extracted F8-R3-review-package directory
+  git_directory_present: false
+  command_count: 8
+  passed: 8
+  failed: 0
+  result: 8/8_PASS
+  commands:
+  - index: 1
+    command: if test -f validator/validate-f8-r1-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r1-witness.py
+      fixture/F8-R1-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py;
+      fi
+    return_code: 0
+    result: PASS
+    stdout: '{"acknowledgement_cases_verified": 6, "candidate_revisions_verified": 2, "errors": [], "external_effect_count":
+      0, "fully_resigned_mutations_rejected": "41/41", "handoff_cases_verified": 25, "mutation_failures": [], "parser_probes_rejected":
+      "3/3", "provider_call_count": 0, "real_command_count": 0, "result": "PASS", "root_fingerprint": "5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8",
+      "schema_profiles_verified": 10, "terminal_outcome": "NOT_EXECUTED", "upstream_assessments_verified": 25}'
+    stdout_json:
+      acknowledgement_cases_verified: 6
+      candidate_revisions_verified: 2
+      errors: []
+      external_effect_count: 0
+      fully_resigned_mutations_rejected: 41/41
+      handoff_cases_verified: 25
+      mutation_failures: []
+      parser_probes_rejected: 3/3
+      provider_call_count: 0
+      real_command_count: 0
+      result: PASS
+      root_fingerprint: 5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8
+      schema_profiles_verified: 10
+      terminal_outcome: NOT_EXECUTED
+      upstream_assessments_verified: 25
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 2
+    command: if test -f validator/build-f8-r1-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r1-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R1-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py --output
+      "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json
+      && rm -f "$tmp"; fi
+    return_code: 0
+    result: PASS
+    stdout: ''
+    stdout_json: null
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 3
+    command: if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py
+      fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py;
+      fi
+    return_code: 0
+    result: PASS
+    stdout: '{"R2_regression_failures": [], "R2_target_regressions_passed": "17/17", "acknowledgement_cases_verified": 9,
+      "candidate_revisions_verified": 2, "errors": [], "external_effect_count": 0, "fully_resigned_mutations_rejected": "41/41",
+      "handoff_cases_verified": 25, "mutation_failures": [], "parser_probes_rejected": "3/3", "provider_call_count": 0, "real_command_count":
+      0, "result": "PASS", "root_fingerprint": "4382b1d47cb6937f09a693f5ec6615eade2dce35a966458a00cf2394b2669e06", "schema_profiles_verified":
+      10, "terminal_outcome": "NOT_EXECUTED", "upstream_assessments_verified": 28}'
+    stdout_json:
+      R2_regression_failures: []
+      R2_target_regressions_passed: 17/17
+      acknowledgement_cases_verified: 9
+      candidate_revisions_verified: 2
+      errors: []
+      external_effect_count: 0
+      fully_resigned_mutations_rejected: 41/41
+      handoff_cases_verified: 25
+      mutation_failures: []
+      parser_probes_rejected: 3/3
+      provider_call_count: 0
+      real_command_count: 0
+      result: PASS
+      root_fingerprint: 4382b1d47cb6937f09a693f5ec6615eade2dce35a966458a00cf2394b2669e06
+      schema_profiles_verified: 10
+      terminal_outcome: NOT_EXECUTED
+      upstream_assessments_verified: 28
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 4
+    command: if test -f validator/build-f8-r2-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r2-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R2-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py --output
+      "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+      && rm -f "$tmp"; fi
+    return_code: 0
+    result: PASS
+    stdout: ''
+    stdout_json: null
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 5
+    command: if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py
+      --check-whitespace subjects/F8-R2-amendment.md validator/build-f8-r2-witness.py validator/validate-f8-r2-witness.py
+      fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md
+      control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json; fi
+    return_code: 0
+    result: PASS
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}'
+    stdout_json:
+      errors: []
+      files_checked: 4
+      result: PASS
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 6
+    command: if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py
+      fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py;
+      fi
+    return_code: 0
+    result: PASS
+    stdout: '{"R3_regressions": "12/12_PASS", "acknowledgement_cases_verified": 6, "candidate_formation_cases_verified": 2,
+      "canonical_candidate_history_verified": 2, "errors": [], "external_effect_count": 0, "owner_assessments_verified": 7,
+      "owner_commitments_verified": 7, "parser_probes": "4/4_REJECTED", "provider_call_count": 0, "real_command_count": 0,
+      "result": "PASS", "root_fingerprint": "e4b0a6ae16c33ca12b5841b7ffda8b22b029aadc7a378804ae1053f85e8732c8", "schema_profiles_verified":
+      7, "terminal_outcome": "NOT_EXECUTED"}'
+    stdout_json:
+      R3_regressions: 12/12_PASS
+      acknowledgement_cases_verified: 6
+      candidate_formation_cases_verified: 2
+      canonical_candidate_history_verified: 2
+      errors: []
+      external_effect_count: 0
+      owner_assessments_verified: 7
+      owner_commitments_verified: 7
+      parser_probes: 4/4_REJECTED
+      provider_call_count: 0
+      real_command_count: 0
+      result: PASS
+      root_fingerprint: e4b0a6ae16c33ca12b5841b7ffda8b22b029aadc7a378804ae1053f85e8732c8
+      schema_profiles_verified: 7
+      terminal_outcome: NOT_EXECUTED
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 7
+    command: if test -f validator/build-f8-r3-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r3-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R3-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+      && rm -f "$tmp"; fi
+    return_code: 0
+    result: PASS
+    stdout: ''
+    stdout_json: null
+    stderr: ''
+    plain_extracted_archive_no_git: true
+  - index: 8
+    command: if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py
+      --check-whitespace subjects/F8-R3-amendment.md validator/build-f8-r3-witness.py validator/validate-f8-r3-witness.py
+      fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+      control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json; fi
+    return_code: 0
+    result: PASS
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}'
+    stdout_json:
+      errors: []
+      files_checked: 4
+      result: PASS
+    stderr: ''
+    plain_extracted_archive_no_git: true
+independent_probe:
+  coordinated_probe_count: 53
+  independent_fully_resigned_attack_count: 49
+  positive_control_count: 4
+  parser_probe_count: 4
+  favorable_invalid_path_count: 0
+  contract_mismatch_probe_count: 2
+  uncaught_exception_count: 0
+  unexpected_probe_failure_count: 0
+  stale_hash_or_unpropagated_ref_rejections_used_as_findings: 0
+  target_contract_or_trusted_source_rejections: 40
+  schema_valid_fail_closed_adversarial_inputs: 7
+  positive_controls: 4
+  result: BLOCK_DUE_TO_NEW_CONTRACT_MISMATCH
+  attack_results_artifact: f8_r3_independent_attack_results.json
+  probe_artifact: f8_r3_independent_review_probe.py
+R2_finding_closure:
+  F8-R2-B01:
+    result: CLOSED
+    evidence:
+    - A01 row-only propagation fails closed against immutable commitment.
+    - A02 full assessment+commitment rewrite is rejected by trusted owner-source anchor.
+    - A03/A04 repeat the same closure for F3 outcome assessments.
+  F8-R2-B02:
+    result: CLOSED
+    evidence:
+    - A10 absent candidate fails closed.
+    - A11 caller-added phantom with F3 and commitment propagation is rejected.
+    - A12 canonical candidate rewrite with all dependencies is rejected.
+  F8-R2-B03:
+    result: REMAINS_WITHDRAWN_AS_CONTRACT_MISREAD
+    evidence: A16 equality and A17 higher watermark both pass; A18 lower watermark fails closed.
+  F8-R2-B04:
+    result: CLOSED
+    evidence: Exact ZIP available and hashed; 49/49 input hashes/full reads; ZIP safety and 8/8 archive commands complete.
+required_review_questions:
+- question: all_49_hashes_match_and_all_12_subjects_35_authority_inputs_and_two_author_evidence_files_are_fully_read
+  result: PASS
+  evidence: 49/49 exact SHA-256 matches; 49/49 full-byte UTF-8 reads; 12/12 subjects, 35/35 authority inputs, 2/2 author evidence.
+- question: all_R1_and_R2_subjects_and_both_prior_manifests_remain_byte_identical
+  result: PASS
+  evidence: R1 manifest 920ea2... and R2 manifest b17955... match exact historical hashes; 8/8 prior subject paths and hashes
+    match.
+- question: owner_assessment_result_is_interpreted_only_after_exact_owner_issued_immutable_commitment_resolution
+  result: PASS_WITH_NEW_NULLABILITY_BLOCKER
+  evidence: A01-A09/A53 show source commitment closure works for non-null consumers; A49/A52 show the normative all-null consumer
+    form is rejected before fail-closed projection.
+- question: same_revision_assessment_and_commitment_full_resigning_cannot_change_a_favorable_result
+  result: PASS
+  evidence: A02 and A04 derive internally favorable rows but complete validation rejects OWNER_COMMITMENT_NOT_TRUSTED; favorable_invalid_path_count=0.
+- question: F8_does_not_recompute_or_issue_any_F1_F2_F3_policy_or_Jenn_owner_assessment_or_commitment
+  result: PASS
+  evidence: R3 is synthetic nonauthority proof only; no runtime, provider, database or authority issuance path exists.
+- question: synthetic_trusted_owner_anchors_are_test_only_and_cannot_become_runtime_authority
+  result: PASS
+  evidence: All runtime/authority flags and occurrence counts remain false/zero; A36-A48 reject elevations.
+- question: acknowledgement_resolves_exact_candidate_tuple_from_canonical_history_before_F3_outcome
+  result: PASS
+  evidence: A10-A15 and A24-A27 verify missing, rewritten and caller-added candidate paths fail closed or are rejected by
+    trusted history.
+- question: phantom_candidate_absent_from_or_added_only_to_caller_graph_cannot_commit
+  result: PASS
+  evidence: A10 returns ACKNOWLEDGED_INDETERMINATE; A11 can derive committed only inside rewritten graph but full validation
+    rejects trusted source mismatch.
+- question: minimum_watermark_equality_and_higher_values_pass_and_lower_value_fails_closed
+  result: PASS
+  evidence: A16 equality and A17 higher are favorable valid; A18 lower is ACKNOWLEDGED_INDETERMINATE.
+- question: F8_R2_B03_remains_withdrawn_and_R3_does_not_change_minimum_watermark_to_equality
+  result: PASS
+  evidence: Independent positive control confirms higher owner watermark remains valid.
+- question: all_eight_fixed_commands_reproduce_in_workspace_and_plain_extracted_archive_without_Git
+  result: PASS
+  evidence: 8/8 fixed commands returned 0 in plain extracted archive; .git absent.
+- question: all_12_R3_regressions_and_4_parser_probes_pass_without_exception
+  result: PASS
+  evidence: Fixed validator reports 12/12 and 4/4; independent probe adds 53 coordinated probes and 4 parser probes with zero
+    uncaught exceptions.
+- question: no_second_permission_identity_Task_Command_or_upstream_reducer_exists
+  result: PASS
+  evidence: No authority-bearing or runtime-use path found; all authority elevations rejected.
+- question: no_real_Home_Task_Command_private_Memory_runtime_database_provider_sensing_or_effect_occurrence_exists
+  result: PASS
+  evidence: Boundary assertions zero; independent A40-A48 reject every nonzero occurrence.
+- question: inherited_R2_all_or_none_consumer_nullability_and_R1_interface_possibility_remain_satisfied
+  result: BLOCK
+  evidence: R3 amendment permits all six consumer fields null, while validate_consumer requires stable refs/integers/hashes
+    for all six. A49/A52 reproduce; R2 H01 valid CANDIDATE_FORMED baseline uses an all-null optional Jenn-decision consumer.
+findings:
+- id: F8-R3-B01
+  severity: blocker
+  title: R3 validator contradicts the normative all-or-none nullable AssessmentConsumerV0_1R3 contract
+  status: OPEN
+  exact_evidence:
+  - path: subjects/F8-R3-amendment.md
+    lines: 83-113
+    fact: AssessmentConsumerV0_1R3 permits all six fields null or all six non-null; missing evidence must fail closed.
+  - path: validator/validate-f8-r3-witness.py
+    lines: 622-631
+    fact: validate_consumer unconditionally requires stable refs, positive integers, and hashes for every field and has no
+      all-null branch.
+  - path: fixture/F8-R2-synthetic-witness.json
+    lines: 279-315
+    fact: The valid H01 CANDIDATE_FORMED baseline contains an optional jenn_exact_decision consumer with all three R2 fields
+      null.
+  - probe: A49
+    fact: A fully re-signed all-six-null formation consumer derives INDETERMINATE but is rejected by six primitive validation
+      errors.
+  - probe: A52
+    fact: A fully re-signed all-six-null acknowledgement consumer derives ACKNOWLEDGED_INDETERMINATE but is rejected by six
+      primitive validation errors.
+  counterexample:
+    consumer:
+      assessment_id: null
+      expected_assessment_revision: null
+      expected_assessment_fingerprint: null
+      owner_commitment_ref: null
+      expected_owner_commitment_revision: null
+      expected_owner_commitment_fingerprint: null
+    normative_expected_behavior: schema-valid missing evidence followed by fail-closed INDETERMINATE projection
+    actual_validator_behavior: 'schema rejection: stable_ref, positive integer and SHA-256 required for all six fields'
+  impact:
+  - R3 explicitly replaces the R2 consumer schema globally, not only for F7/F3 fixture rows.
+  - The ordinary R2 no-exact-Jenn-decision candidate path depends on a nullable optional consumer.
+  - The eight fixed commands miss the contradiction because R2 and R3 validators operate separate fixtures instead of an integrated
+    upgraded H01 path.
+  - The current R3 subject bytes therefore do not preserve the inherited minimum-interface possibility contract.
+  correction_required:
+  - Update validate_consumer to accept exactly all-null or all-non-null tuples and reject every mixed tuple.
+  - Resolve an all-null tuple directly to missing/unavailable evidence and a stable fail-closed result before any owner-store
+    lookup.
+  - Add positive all-null formation and acknowledgement witnesses.
+  - Add mixed-null negative regressions.
+  - Add an integrated R2 H01 upgraded-to-R3 regression that retains CANDIDATE_FORMED with the optional Jenn-decision consumer
+    all-null.
+  - Rebuild and hash-bind new subject, fixture, validator, manifest and review ZIP bytes for R4.
+finding_counts:
+  blocker: 1
+  major: 0
+  minor: 0
+requires_R4: true
+authority_and_occurrence_counts:
+  second_permission_system_count: 0
+  second_identity_authority_count: 0
+  second_Task_authority_count: 0
+  second_Command_authority_count: 0
+  upstream_owner_reducer_recomputation_count: 0
+  synthetic_to_runtime_authority_path_count: 0
+  real_Home_count: 0
+  real_Task_write_count: 0
+  real_Command_count: 0
+  runtime_activation_count: 0
+  database_write_count: 0
+  provider_call_count: 0
+  production_authentication_count: 0
+  private_raw_Memory_read_count: 0
+  sensing_or_recording_count: 0
+  external_effect_count: 0
+governance:
+  F8_R3_independent_review_result: BLOCK
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_or_provider_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  real_effect_authorized: false
+  commit_or_push_performed: false
+  review_package_subjects_modified: false
+  next_gate: F8_R4_NARROW_NULLABILITY_INTEGRATION_CLOSURE_THEN_FRESH_FULL_ATOMIC_REVIEW
+output_self_digest: external_via_SHA256SUMS

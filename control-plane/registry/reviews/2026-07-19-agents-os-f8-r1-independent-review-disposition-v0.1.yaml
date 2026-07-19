@@ -1,0 +1,94 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+record_id: agents-os-f8-r1-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: accepted_as_finding_evidence
+
+review_binding:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+  sha256: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+  result: BLOCK
+  review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R1_ATOMIC_BUNDLE
+  byte_count: 10512
+  encoding: ASCII
+  line_endings: LF
+  canonical_external_evidence: true
+
+supporting_evidence:
+  coordinated_attacks:
+    path: control-plane/registry/reviews/f8_r1_independent_attack_results.json
+    sha256: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    attack_count: 23
+    favorable_invalid_path_count: 3
+  review_summary:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-independent-review-summary.md
+    sha256: 24f7542211cdd531d35f2344edfce7425886a6b77d7bc84c2c2ca110d6ee03bb
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+
+disposition:
+  F8-R1-B01:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [canonical_required_intake_result_order]
+  F8-R1-B02:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [exact_assessment_fingerprint_consumption, fingerprint_bound_assessment_set]
+  F8-R1-B03:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [exact_candidate_revision, F3_outcome_subject_context_and_watermark_currentness]
+  F8-R1-B04:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [closed_total_schema_validation_independent_of_fixture_anchors]
+  F8-R1-M01:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [resident_and_high_privilege_architecture_manifest_inputs]
+  F8-R1-M02:
+    accepted: true
+    status: OPEN_REQUIRES_R2
+    correction_scope: [offline_deterministic_whitespace_validation]
+
+reporting_reconciliation:
+  package_checksum_count:
+    original_review_value: 33/33
+    precise_interpretation: 32_payload_checksums_plus_the_CHECKSUMS_file_independently_hashed
+    affects_BLOCK_result: false
+  circular_proof_count:
+    original_review_value: 1
+    disposition_value: 0
+    basis: no_independent_circular_proof_finding_or_reproducible_cycle_was_reported
+    affects_BLOCK_result: false
+
+R2_scope:
+  allowed:
+    - one_canonical_required_intake_result_order
+    - assessment_consumer_expected_fingerprint_and_owner_resolved_exact_match
+    - assessment_set_fingerprint_over_exact_resolved_assessment_fingerprints
+    - exact_current_F3_acknowledgement_subject_revision_context_and_watermark
+    - complete_schema_type_enum_nullability_and_cross_field_validation
+    - two_missing_accepted_direction_inputs_in_the_atomic_manifest
+    - deterministic_offline_file_whitespace_validator
+    - four_new_R2_subjects_and_R1_plus_R2_atomic_review_package
+  forbidden:
+    - change_any_R1_fixed_subject_or_manifest_byte
+    - permission_identity_Task_or_Command_authority
+    - Phase_5A
+    - implementation_runtime_database_provider_or_production_authentication
+    - private_Memory_sensing_recording_or_real_effect
+
+governance:
+  F8_R1_review_result: BLOCK
+  requires_R2: true
+  F8_acceptance_ready: false
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+
+next_gate: JENN_EXPLICIT_F8_R2_NARROW_CORRECTION_START_DECISION

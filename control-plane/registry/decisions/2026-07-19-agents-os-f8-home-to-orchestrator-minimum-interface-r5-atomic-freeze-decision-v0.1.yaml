@@ -1,0 +1,206 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-19T18:12:51+08:00'
+effective_at: '2026-07-19T18:12:51+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE
+  decision_source: explicit_current_conversation_confirmation_of_F8_R5_atomic_freeze_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-freeze-decision-package-v0.1.md
+    sha256: bb5a9126eb610f9d1bb3172e11654bb56ecde772176f279f5473a04f4e657086
+    section: 6_A
+  confirmation_text_received: 我确认执行 F8 R5 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+acceptance_unit:
+  id: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 20
+  result: ACCEPTED_FROZEN
+  precedence:
+  - R5_explicit_replacements
+  - R4_explicit_replacements
+  - R3_explicit_replacements
+  - R2_explicit_replacements
+  - R1_all_other_clauses
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_input_count: 73
+accepted_subjects:
+- revision: R1
+  role: normative_contract
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r1.draft.md
+  sha256: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+- revision: R1
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py
+  sha256: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+- revision: R1
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json
+  sha256: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+- revision: R1
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py
+  sha256: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+- revision: R2
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md
+  sha256: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+- revision: R2
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py
+  sha256: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+- revision: R2
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+  sha256: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+- revision: R2
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+  sha256: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+- revision: R3
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+  sha256: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+- revision: R3
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+  sha256: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+- revision: R3
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+  sha256: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+- revision: R3
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+  sha256: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+- revision: R4
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r4-amendment.md
+  sha256: bf8cbd2ba83ab2bf9ea3275bcdb156b3dd79858f96d554fc933a4364e03f0082
+- revision: R4
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f8-r4-consumer-nullability-totality.py
+  sha256: 6110ed5654328b96b7945ec61332de4a941c86e4cb17c3da54952fedc170a24f
+- revision: R4
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json
+  sha256: 775cdc15a134a98985325b728b5c356db880c0d97e428c688170971ff789e08b
+- revision: R4
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f8-r4-consumer-nullability-totality.py
+  sha256: 6227bd9902d13a5463a237ba65f9dd669d2a82861395ffa57a3dcb048743420d
+- revision: R5
+  role: normative_amendment
+  path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r5-amendment.md
+  sha256: 127b52e21c3b0d8f401f18b489d9a1ac2d6d0696c7e2147c7d6ea54afcec2df1
+- revision: R5
+  role: deterministic_fixture_builder
+  path: control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py
+  sha256: 3322f34cef2bada3096100605a0e1f31bdf319910d1ac0799404abc51d26dad2
+- revision: R5
+  role: synthetic_fixture
+  path: control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json
+  sha256: 3d5638e92123a4ec6bb8b4302166256d8e4cd9b80b665a7beb1bdf2cb17895e0
+- revision: R5
+  role: offline_semantic_validator
+  path: control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py
+  sha256: 7618e0769231539075b8ac420d32537a8f25ad4c03808ec7f8a45091d8328995
+supporting_evidence:
+- role: fresh_full_atomic_hash_bound_independent_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+  sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+  result: PASS_NO_BLOCKER
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  requires_R6: false
+  acceptance_subject: false
+- role: atomic_freeze_decision_surface
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-freeze-decision-package-v0.1.md
+  sha256: bb5a9126eb610f9d1bb3172e11654bb56ecde772176f279f5473a04f4e657086
+  acceptance_subject: false
+frozen_semantic_boundary:
+- Home_handoff_candidate_formation_without_direct_Task_or_Command_mutation
+- exact_upstream_owner_assessment_consumption
+- immutable_owner_commitment_resolution
+- canonical_candidate_history_resolution_before_acknowledgement
+- minimum_trusted_event_sequence_currentness_semantics
+- AssessmentConsumer_all_null_or_all_non_null_totality
+- all_null_fail_closed_resolution_before_owner_lookup
+- exact_H01_owner_commitment_binding
+- merged_R2_R3_R4_R5_H01_derivation
+- stable_ref_strict_JSON_string_nonempty_NFC_without_internal_space_ban
+- synthetic_nonauthority_nonruntime_noneffectful_boundary
+excluded_evidence_classes:
+- manifest
+- author_self_review
+- independent_review
+- attack_results
+- probe
+- review_disposition
+- decision_package
+- receipt
+- active_work_queue
+effects:
+  F8_contract_status: ACCEPTED_FROZEN
+  F8_atomic_freeze_gate: SATISFIED
+  additional_F8_amendment_required: false
+  requires_R6: false
+  F8_revisions_stopped: true
+  Phase_5A_started: false
+  real_Home_Task_or_Command_authorized: false
+  second_permission_or_identity_authority_authorized: false
+  private_raw_Memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  implementation_authorized: false
+  Rust_Python_or_JavaScript_implementation_authorized: false
+  database_change_authorized: false
+  index_cache_or_queue_implementation_authorized: false
+  transport_or_provider_implementation_authorized: false
+  Resident_Worker_Host_or_executor_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_or_key_change_authorized: false
+  cryptography_profile_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  device_file_process_or_physical_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+next_gate:
+  name: F8_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_PHASE_5A_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_and_subject_reverification_before_closeout: completed
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted
