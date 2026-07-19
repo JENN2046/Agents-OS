@@ -3783,6 +3783,50 @@ next_gate: F8_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_PHASE_5A_START_DECISION
 The freeze does not authorize Git delivery or Phase 5A. The next work block is
 an exact F8 Git durability closeout scope followed by a separate Jenn decision.
 
+## F8 Mainline Durability Complete (2026-07-19)
+
+The complete F8 frozen lineage was integrated through PR #17. The canonical
+manifest, all 73 bound inputs, all twenty frozen subjects, the independent
+review and the immutable freeze decision were re-read from `origin/main` at the
+merge commit and matched their accepted hashes.
+
+```yaml
+F8_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN_AWAITING_JENN_PHASE_5A_DECISION
+F8_mainline_scoped_commit: fc153556c29f21af264d809874ebc3bcf66f4b6b
+F8_mainline_pull_request: https://github.com/JENN2046/Agents-OS/pull/17
+F8_mainline_integration_merge_commit: 8852d14e6afdfca16e5cc48d446f9a8c85671a43
+F8_mainline_scoped_files: 102
+F8_excluded_paths_committed: 0
+F8_mainline_manifest_inputs: 73/73_MATCH
+F8_mainline_frozen_subjects: 20/20_MATCH
+F8_mainline_review_sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+F8_mainline_freeze_decision_sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d
+F8_mainline_durability_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-mainline-durability-closeout-v0.1.md
+F8_mainline_durability_receipt_sha256: 815dead7e428e1919791d67ca304309138ef160324e773c11e754f67089a9c08
+F8_Git_objects_on_main: true
+F8_mainline_integrated: true
+F8_durability_complete: true
+F8_accepted: true
+F8_frozen: true
+F8_revisions_stopped: true
+requires_R6: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.4.md
+active_work_queue_sha256: d6227a4321a54528b9fae960b514f4c6f0597d1dad7c60d52fee7dc3c7a057db
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.4.md
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+database_or_provider_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+real_effect_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_START_DECISION
+```
+
+The only open gate is Jenn's separate Phase 5A decision. F8 durability does not
+start implementation or create runtime authority.
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
