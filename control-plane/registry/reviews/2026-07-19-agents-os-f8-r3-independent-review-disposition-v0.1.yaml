@@ -1,0 +1,91 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f8-r3-independent-review-disposition-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R3_ATOMIC_BUNDLE
+review_result: BLOCK
+requires_R4: true
+R4_started: false
+
+bound_review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-nobao-independent-review.yaml
+  sha256: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+bound_attack_results:
+  path: control-plane/registry/reviews/f8_r3_independent_attack_results.json
+  sha256: 9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551
+bound_probe:
+  path: control-plane/registry/reviews/f8_r3_independent_review_probe.py
+  sha256: dc102ed5d6e88b4054d829647fe869527af3895272c0d652ebee241aab22a7e4
+bound_checksums:
+  path: control-plane/registry/reviews/2026-07-19-f8-r3-independent-review-SHA256SUMS.txt
+  sha256: 26e607c1a45aca23821b0b9eff2a6884f5a5d45e2d06060d21739a726cacacc5
+
+integrity_disposition:
+  ZIP_sha256_match: true
+  manifest_sha256_match: true
+  archive_safety: PASS
+  checksums: 52/52_MATCH
+  manifest_inputs: 49/49_MATCH_AND_FULLY_READ
+  subjects: 12/12
+  authority_inputs: 35/35
+  author_evidence: 2/2_NONINDEPENDENT
+  prior_manifests: 2/2_IMMUTABLE
+  prior_subjects: 8/8_IMMUTABLE
+  offline_fixed_commands: 8/8_PASS
+
+semantic_disposition:
+  F8-R3-B01:
+    external_severity: blocker
+    disposition: ACCEPTED_REPRODUCIBLE_CONTRACT_VALIDATOR_CONTRADICTION
+    safety_bypass_found: false
+    favorable_invalid_path_found: false
+    basis:
+      - R3 normative AssessmentConsumerV0_1R3 requires all six fields null or all six fields non-null
+      - validate_consumer unconditionally applies non-null primitive profiles to all six fields
+      - resolve_consumer has no all-null unavailable-evidence branch
+      - inherited optional Jenn exact-decision consumption requires the legal all-null form
+    reproduced_from_fixed_bytes:
+      contract_all_null_clause: true
+      validator_all_null_acceptance: false
+      resolver_all_null_fail_closed_branch: false
+    consequence: legal_optional_consumer_inputs_are_structurally_rejected_before_fail_closed_derivation
+
+R3_closure_results_preserved:
+  immutable_owner_assessment_revision_commitment: CLOSED_BY_R3
+  canonical_candidate_history_resolution: CLOSED_BY_R3
+  minimum_watermark_semantics: PRESERVED_GREATER_THAN_OR_EQUAL
+  F8_R2_B03: WITHDRAWN_NOT_REOPENED
+  independent_fully_resigned_attacks: 49
+  favorable_invalid_paths: 0
+
+R4_candidate_scope_if_Jenn_starts:
+  - accept_exactly_all_null_or_all_non_null_consumer_tuples
+  - reject_every_mixed_null_consumer_tuple
+  - map_all_null_consumer_to_missing_or_unavailable_evidence_before_owner_lookup
+  - add_all_null_formation_and_acknowledgement_fail_closed_positive_witnesses
+  - add_mixed_null_negative_regressions
+  - preserve_R2_H01_optional_Jenn_decision_all_null_candidate_formation
+
+scope_exclusions:
+  - no_change_to_R1_R2_R3_fixed_bytes
+  - no_permission_identity_Task_or_Command_authority
+  - no_upstream_reducer_recomputation
+  - no_Phase_5A
+  - no_implementation_runtime_database_provider_or_production_authentication
+  - no_private_Memory_sensing_recording_or_real_effect
+
+governance:
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_or_provider_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  real_effect_authorized: false
+  next_gate: JENN_EXPLICIT_F8_R4_NARROW_START_DECISION
+

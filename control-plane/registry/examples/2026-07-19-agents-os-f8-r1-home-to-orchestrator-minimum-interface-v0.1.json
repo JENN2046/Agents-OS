@@ -1,0 +1,2807 @@
+{
+  "acknowledgement_cases": [
+    {
+      "case_id": "A01",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_NOT_SUBMITTED",
+        "reason_codes": [
+          "F3_OWNER_REPORTED_NOT_SUBMITTED"
+        ],
+        "result": "NOT_SUBMITTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-NOT-SUBMITTED",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "e44f97531bd998c5ac35b39c2cc8a1c80770b819331d929eb30805b715c9689a"
+    },
+    {
+      "case_id": "A02",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_SYNTHETIC_COMMITTED",
+        "reason_codes": [
+          "F3_OWNER_REPORTED_SYNTHETIC_COMMITTED"
+        ],
+        "result": "ACKNOWLEDGED_COMMITTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-COMMITTED",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "1cd727f5d44d74722ba81706d43bb50075f54489641a9a46dabbf962fcb6820f"
+    },
+    {
+      "case_id": "A03",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_REJECTED",
+        "reason_codes": [
+          "F3_OWNER_REPORTED_REJECTED"
+        ],
+        "result": "ACKNOWLEDGED_REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-REJECTED",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "159eac060789fca4488e8f41c66bcf4e065d1eae1907cf46a2476177bbac77fa"
+    },
+    {
+      "case_id": "A04",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_INDETERMINATE",
+        "reason_codes": [
+          "F3_OWNER_REPORTED_INDETERMINATE"
+        ],
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-INDETERMINATE",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "83a7e3f86efa4b0bc38bbde06058f24a9d51bf8dba69837f4ea3c585e3c783c8"
+    },
+    {
+      "case_id": "A05",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OUTCOME_NOT_CURRENT",
+        "reason_codes": [
+          "F3_OUTCOME_NOT_CURRENT"
+        ],
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-STALE",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "dc4c55c33372567ed1d3829597fb8ea3042ed76eabe9d4b15db3e63054cdb35f"
+    },
+    {
+      "case_id": "A06",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OUTCOME_SUBJECT_MISMATCH",
+        "reason_codes": [
+          "F3_OUTCOME_SUBJECT_MISMATCH"
+        ],
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_assessment_id": "A-F3-OUTCOME-MISMATCH",
+        "expected_assessment_revision": 1,
+        "handoff_candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2"
+      },
+      "row_fingerprint": "c85bd822e7cd1b9004dc93bd13439c562e2bb305a80544f73f568594bd16daa0"
+    }
+  ],
+  "boundary_assertions": {
+    "database_write_count": 0,
+    "external_effect_count": 0,
+    "private_raw_memory_count": 0,
+    "provider_call_count": 0,
+    "real_command_count": 0,
+    "real_home_fact_count": 0,
+    "real_task_count": 0,
+    "runtime_activation_count": 0,
+    "sensing_or_recording_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "contract_id": "F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R1",
+  "domain_tag": "F8_R1_SYNTHETIC_NONAUTHORITY",
+  "environment": "SYNTHETIC_TEST",
+  "handoff_candidate_history": [
+    {
+      "assessment_set_fingerprint": "0c8dfe6d142814ccd7cbdd437d8235a7a948f5335dce040a416c4e4f46104324",
+      "candidate_fingerprint": "a258b96db9166b58e717fa4a73d2681e05dcfa4dfcebbbe2b4f2e32c29c18262",
+      "command_authority": false,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "created_event_fingerprint": "197dbd1d1f6e0e07dad510fe2f82d438eeb1dc794448b5c05047bae5529346f1",
+      "created_event_ref": "synthetic://f8/event/handoff-candidate-1",
+      "handoff_candidate_id": "synthetic://f8/handoff-candidate/001",
+      "handoff_candidate_revision": 1,
+      "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+      "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+      "intent_candidate_revision": 2,
+      "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+      "predecessor_fingerprint": null,
+      "predecessor_ref": null,
+      "runtime_usable": false,
+      "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "target_revision": 1
+    },
+    {
+      "assessment_set_fingerprint": "0c8dfe6d142814ccd7cbdd437d8235a7a948f5335dce040a416c4e4f46104324",
+      "candidate_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "command_authority": false,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "created_event_fingerprint": "95d8695abf3f3aab69b3bfc20f582a01bf41676e39a96a61455332ab3cc3fc36",
+      "created_event_ref": "synthetic://f8/event/handoff-candidate-2",
+      "handoff_candidate_id": "synthetic://f8/handoff-candidate/001",
+      "handoff_candidate_revision": 2,
+      "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+      "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+      "intent_candidate_revision": 2,
+      "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+      "predecessor_fingerprint": "a258b96db9166b58e717fa4a73d2681e05dcfa4dfcebbbe2b4f2e32c29c18262",
+      "predecessor_ref": "synthetic://f8/handoff-candidate/001@1",
+      "runtime_usable": false,
+      "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "target_revision": 1
+    }
+  ],
+  "handoff_cases": [
+    {
+      "case_id": "H01",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE",
+        "reason_codes": [
+          "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE"
+        ],
+        "result": "CANDIDATE_FORMED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "313dce503749f0cd0b5d8fb38739fcf6a45f41fd75b014b02a526aa02ef2279c"
+    },
+    {
+      "case_id": "H02",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "INTENT_SEMANTIC_CLASS_MISMATCH",
+        "reason_codes": [
+          "INTENT_SEMANTIC_CLASS_MISMATCH",
+          "CONTEXT_FINGERPRINT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "SESSION_CONTENT",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "4128177be0834530f440b8ef121e0e95511dbab4873a1a83b024f3ffc909bb2a"
+    },
+    {
+      "case_id": "H03",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "EXPLICIT_ACTION_CHOICE_MISSING",
+        "reason_codes": [
+          "EXPLICIT_ACTION_CHOICE_MISSING",
+          "CONTEXT_FINGERPRINT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": false,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "907f7aaeb448777fce009e69bc9c3f7e0df5010e8c736da6f606c7bd3c99da99"
+    },
+    {
+      "case_id": "H04",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "DIRECT_TASK_WRITE_FORBIDDEN",
+        "reason_codes": [
+          "DIRECT_TASK_WRITE_FORBIDDEN"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": true,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "dc30385acaa4b7e63737392b4740f23ee2ce31e2d7d60da7f9429d90f9a00803"
+    },
+    {
+      "case_id": "H05",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "DIRECT_COMMAND_COMMIT_FORBIDDEN",
+        "reason_codes": [
+          "DIRECT_COMMAND_COMMIT_FORBIDDEN"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": true,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "84307039f4bcc5695f40e8a00c3039a1540a5ac9a849b8d11c2d9e3223ea8bca"
+    },
+    {
+      "case_id": "H06",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "EFFECT_EXECUTION_FORBIDDEN",
+        "reason_codes": [
+          "EFFECT_EXECUTION_FORBIDDEN"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": true,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "7ccc69a5dc11ceb10f2505912651e383a1bad2059ac562a6c042426928b4fbd3"
+    },
+    {
+      "case_id": "H07",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "RELATIONSHIP_OR_TRUST_CANNOT_EXPAND_AUTHORITY",
+        "reason_codes": [
+          "RELATIONSHIP_OR_TRUST_CANNOT_EXPAND_AUTHORITY"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": true,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "c2b77d9382a17eaeea2310d11ec12a479f8aa3090fc631707bbc49e844d3a9c7"
+    },
+    {
+      "case_id": "H08",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "PBL_NO_MATCH_IS_NOT_PERMISSION",
+        "reason_codes": [
+          "PBL_NO_MATCH_IS_NOT_PERMISSION"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": true,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "4e53715bfceb56aede312a9dbe4000dedf5b7b78e90cc5b55cce78e9fe60fc4b"
+    },
+    {
+      "case_id": "H09",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "UPSTREAM_CURRENTNESS_UNAVAILABLE",
+        "reason_codes": [
+          "UPSTREAM_CURRENTNESS_UNAVAILABLE"
+        ],
+        "result": "INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-UNKNOWN",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "6bce71e04f656830c51bfd77036976a59815d42cca6b5eb14a37b47d1ddc688d"
+    },
+    {
+      "case_id": "H10",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "UPSTREAM_ASSESSMENT_NOT_CURRENT",
+        "reason_codes": [
+          "UPSTREAM_ASSESSMENT_NOT_CURRENT",
+          "F7_INTENT_NOT_CURRENT"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-STALE",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "e48354370b8b4aa2a0bcd462c9f9c472ef270941a86560f79677209b52a16407"
+    },
+    {
+      "case_id": "H11",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ACTOR_IDENTITY_NOT_ACTIVE",
+        "reason_codes": [
+          "ACTOR_IDENTITY_NOT_ACTIVE"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-INACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "32fa674fae51c5578c6acac80ba5fbda470d3ccae977429bcb8079772a0f660a"
+    },
+    {
+      "case_id": "H12",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "PRINCIPAL_BINDING_NOT_ACTIVE",
+        "reason_codes": [
+          "PRINCIPAL_BINDING_NOT_ACTIVE"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-INACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "51dfe05bb3529ff5fb668e8d1f8fd97fcd297c750b540cdd27e95ae15796e930"
+    },
+    {
+      "case_id": "H13",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "RESPONSIBILITY_NOT_ACTIVE",
+        "reason_codes": [
+          "RESPONSIBILITY_NOT_ACTIVE"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-INACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "46b3a0601c65639c74f8fac17953382d852f8b200c412ffe32c88c169e980635"
+    },
+    {
+      "case_id": "H14",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_SUBJECT_OR_CONTEXT_MISMATCH",
+        "reason_codes": [
+          "ASSESSMENT_SUBJECT_OR_CONTEXT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-MISMATCH",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "259ecf9dbc983853a5a8260132a49fe3631cdf184a551fd9de2a7e11fe26da7f"
+    },
+    {
+      "case_id": "H15",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "UPSTREAM_CURRENTNESS_UNAVAILABLE",
+        "reason_codes": [
+          "UPSTREAM_CURRENTNESS_UNAVAILABLE"
+        ],
+        "result": "INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-UNKNOWN",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "ccfbfbee0bccca25ad1da89f744fd508f43fa02fde53c3a873e1a4e017ef2550"
+    },
+    {
+      "case_id": "H16",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "PBL_PROHIBITED",
+        "reason_codes": [
+          "PBL_PROHIBITED"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-PROHIBITED",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "dd3388f3dc3f67ac140a8093168d891cb68322b27d53801e2397a472c6a613ff"
+    },
+    {
+      "case_id": "H17",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "EXACT_JENN_DECISION_MISSING_OR_INVALID",
+        "reason_codes": [
+          "EXACT_JENN_DECISION_MISSING_OR_INVALID"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-REQUIRED",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "1abd285ceb26a21cf177eb422be15e0fd8c236910ecc2b22d05b3dd66b168b18"
+    },
+    {
+      "case_id": "H18",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_SUBJECT_OR_CONTEXT_MISMATCH",
+        "reason_codes": [
+          "ASSESSMENT_SUBJECT_OR_CONTEXT_MISMATCH",
+          "EXACT_JENN_DECISION_MISSING_OR_INVALID"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": "A-JDECISION-MISMATCH",
+            "expected_assessment_revision": 1
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-REQUIRED",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "61096de1b51dfa2d8676f415b8f5ea1105249c08902a421ab2949a7065822599"
+    },
+    {
+      "case_id": "H19",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "TARGET_KIND_OUTSIDE_F8",
+        "reason_codes": [
+          "TARGET_KIND_OUTSIDE_F8",
+          "CONTEXT_FINGERPRINT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "TASK_CANONICAL_FACT",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "31561d7649800c39c45fc22829eb1d4eac2856efbf1b373d5ec1d9b54ba8b871"
+    },
+    {
+      "case_id": "H20",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "CONTEXT_FINGERPRINT_MISMATCH",
+        "reason_codes": [
+          "CONTEXT_FINGERPRINT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "7834bb24acb95e4784cb55842cdf635092b4b8bf13c65724954271a59999d10b",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "9f3e6f0520c15b49611570f1fb749373c682bc13a4bead5e0baf8114b104d835"
+    },
+    {
+      "case_id": "H21",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_INTERFACE_REQUIREMENT_UNACCEPTED",
+        "reason_codes": [
+          "F3_INTERFACE_REQUIREMENT_UNACCEPTED"
+        ],
+        "result": "DEFERRED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": true,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "53525c5427349a41053d7980c20acb64daaf28e1e7fc05d7fe946efc036ab660"
+    },
+    {
+      "case_id": "H22",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_REVISION_MISMATCH",
+        "reason_codes": [
+          "ASSESSMENT_REVISION_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 2
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "c897be6dc5f0b184767007c43bbbaa4092c1ba343816c0ba56022ec0ad3c5b68"
+    },
+    {
+      "case_id": "H23",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "CONTEXT_FINGERPRINT_MISMATCH",
+        "reason_codes": [
+          "CONTEXT_FINGERPRINT_MISMATCH",
+          "ASSESSMENT_SUBJECT_OR_CONTEXT_MISMATCH"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "95053ad0a26f1881606aab605e33650194abaf929465de3ff6bc0d468dd2d9ce",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "0ad125e2eb915f790006af4cc8b909edc4601790755ab0e9e858e8f713e5152c"
+    },
+    {
+      "case_id": "H24",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "SYNTHETIC_DOMAIN_VIOLATION",
+        "reason_codes": [
+          "SYNTHETIC_DOMAIN_VIOLATION"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": true,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "b0905fa418d14900a4debee028839dc6db19f1e0e66b9c138bcb675bc8a350a6"
+    },
+    {
+      "case_id": "H25",
+      "claimed_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_WATERMARK_BEHIND",
+        "reason_codes": [
+          "ASSESSMENT_WATERMARK_BEHIND"
+        ],
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "assessment_consumers": {
+          "actor_identity": {
+            "assessment_id": "A-ACTOR-BEHIND",
+            "expected_assessment_revision": 1
+          },
+          "f3_readiness": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_revision": 1
+          },
+          "f7_intent_currentness": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_revision": 1
+          },
+          "jenn_exact_decision": {
+            "assessment_id": null,
+            "expected_assessment_revision": null
+          },
+          "jenn_requirement": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_revision": 1
+          },
+          "pbl_currentness": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_revision": 1
+          },
+          "principal_binding": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_revision": 1
+          },
+          "responsibility": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_revision": 1
+          }
+        },
+        "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+        "creator_actor_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+        "creator_actor_ref": "synthetic://f2/actor/nobao",
+        "creator_actor_revision": 1,
+        "direct_command_commit_requested": false,
+        "direct_task_write_requested": false,
+        "effect_execution_requested": false,
+        "environment": "SYNTHETIC_TEST",
+        "explicit_action_choice": true,
+        "intent_candidate_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+        "intent_candidate_ref": "synthetic://f7/intent-candidate/001",
+        "intent_candidate_revision": 2,
+        "intent_semantic_class": "INTENT_CANDIDATE",
+        "payload_commitment": "f1171fc555afe2d8148022aceb95397f29ac9ec1bf58c8a66bd5a0e510acae9e",
+        "payload_schema_fingerprint": "a4f2f685f8d0b0c500016cb58d9a120e7dc1a43715240f5dae88df4a0b91ad2e",
+        "payload_schema_ref": "synthetic://f8/schema/home-intent-payload/v0.1",
+        "pbl_no_match_used_as_sufficient": false,
+        "principal_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+        "principal_ref": "synthetic://f2/principal/nobao-session",
+        "principal_revision": 1,
+        "production_profile_requested": false,
+        "relationship_or_trust_used_as_authority": false,
+        "runtime_usable_requested": false,
+        "target_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+        "target_kind": "ORCHESTRATOR_INTAKE_CANDIDATE",
+        "target_ref": "synthetic://orchestrator/intake-scope/home-intent",
+        "target_revision": 1,
+        "trusted_event_sequence": 100
+      },
+      "row_fingerprint": "3cad2422685e32e2c8640ce4914dd7bf81dead15fc290fd152bc9b1f31509488"
+    }
+  ],
+  "prospective_f3_interface_requirement": {
+    "F8_may_commit_intake": false,
+    "F8_may_mint_authentication": false,
+    "F8_may_mint_command": false,
+    "owner": "F3",
+    "required_F3_contract": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+    "required_intake_results": [
+      "COMMITTED",
+      "INDETERMINATE",
+      "REJECTED"
+    ],
+    "required_submission_interface": "agents-os.command-submission.v0.1",
+    "requirement_id": "F3_HOME_INTENT_HANDOFF_COMMAND_TYPE",
+    "row_fingerprint": "daedc6726e661a0694254a4c5e3352a90209ac2eb041f68be4af88af6d3a2dc1",
+    "status": "UNACCEPTED_DOWNSTREAM_REQUIREMENT",
+    "synthetic_fixture_only": true,
+    "usable_in_runtime": false
+  },
+  "root_fingerprint": "5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8",
+  "runtime_usable": false,
+  "schema_inventory": [
+    {
+      "exact_fields": [
+        "assessment_id",
+        "assessment_revision",
+        "owner_contract",
+        "assessment_kind",
+        "subject_ref",
+        "subject_revision",
+        "subject_fingerprint",
+        "context_fingerprint",
+        "result",
+        "based_on_event_sequence",
+        "is_current_head",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "628b7d0aae721d07f4fe3b5c7b46c8834e79c826ad6b2424bf627930b05fca3a",
+      "schema_name": "UpstreamOwnerAssessmentV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "assessment_id",
+        "expected_assessment_revision"
+      ],
+      "row_fingerprint": "2a41bb22e36fed3292f20974b0a1a20525751d761e787620f2c3ebf9a12ffbdb",
+      "schema_name": "AssessmentConsumerV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "environment",
+        "intent_candidate_ref",
+        "intent_candidate_revision",
+        "intent_candidate_fingerprint",
+        "intent_semantic_class",
+        "creator_actor_ref",
+        "creator_actor_revision",
+        "creator_actor_fingerprint",
+        "principal_ref",
+        "principal_revision",
+        "principal_fingerprint",
+        "target_kind",
+        "target_ref",
+        "target_revision",
+        "target_fingerprint",
+        "payload_schema_ref",
+        "payload_schema_fingerprint",
+        "payload_commitment",
+        "explicit_action_choice",
+        "direct_task_write_requested",
+        "direct_command_commit_requested",
+        "effect_execution_requested",
+        "relationship_or_trust_used_as_authority",
+        "pbl_no_match_used_as_sufficient",
+        "production_profile_requested",
+        "runtime_usable_requested",
+        "trusted_event_sequence",
+        "context_fingerprint",
+        "assessment_consumers"
+      ],
+      "row_fingerprint": "6f0f30b4eef9326ae70f54fb0eb7803e6dcacfc0914ac4d054ecb270b3dd3d42",
+      "schema_name": "HomeIntentHandoffRawInputV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "result",
+        "reason_codes",
+        "primary_reason",
+        "command_authority",
+        "task_write_authority",
+        "effect_authority",
+        "runtime_usable",
+        "F3_recheck_required",
+        "F3_command_ref",
+        "F3_intake_ref"
+      ],
+      "row_fingerprint": "df2ce45a25712a927906ce982de9ce683c5cab344e6e9a043d31610b89445bbb",
+      "schema_name": "HomeIntentHandoffDecisionV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "case_id",
+        "raw_input",
+        "claimed_decision",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "6653eea9d3525b482a9896de4c494eba079bf313f474743436e3c603579c93ef",
+      "schema_name": "HomeIntentHandoffDecisionCaseV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "handoff_candidate_id",
+        "handoff_candidate_revision",
+        "predecessor_ref",
+        "predecessor_fingerprint",
+        "intent_candidate_ref",
+        "intent_candidate_revision",
+        "intent_candidate_fingerprint",
+        "target_ref",
+        "target_revision",
+        "target_fingerprint",
+        "payload_commitment",
+        "context_fingerprint",
+        "assessment_set_fingerprint",
+        "created_event_ref",
+        "created_event_fingerprint",
+        "runtime_usable",
+        "command_authority",
+        "candidate_fingerprint"
+      ],
+      "row_fingerprint": "41588611e0780c40eba5c240ed89b73029bdc77fb317bf0701d6c650cd5bf9bf",
+      "schema_name": "HomeIntentHandoffCandidateRevisionV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "requirement_id",
+        "owner",
+        "status",
+        "usable_in_runtime",
+        "synthetic_fixture_only",
+        "required_F3_contract",
+        "required_submission_interface",
+        "required_intake_results",
+        "F8_may_mint_command",
+        "F8_may_mint_authentication",
+        "F8_may_commit_intake",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "4a5ec1b1aaa59fc4582d4acf78253d23a31a018be2f27e356fb787e0e3b3cd6e",
+      "schema_name": "ProspectiveF3HomeIntentInterfaceRequirementV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "handoff_candidate_ref",
+        "handoff_candidate_fingerprint",
+        "F3_outcome_assessment_id",
+        "expected_assessment_revision"
+      ],
+      "row_fingerprint": "69d820d786c900df630feea1ac9e93995057bdd4246d80edfda9eb51cde38640",
+      "schema_name": "HomeIntentHandoffAcknowledgementRawInputV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "result",
+        "reason_codes",
+        "primary_reason",
+        "command_authority",
+        "task_write_authority",
+        "effect_authority",
+        "runtime_usable"
+      ],
+      "row_fingerprint": "cb3d9dac7178851bb116224863a8bcda43e457b2fa9532a264291c1554861528",
+      "schema_name": "HomeIntentHandoffAcknowledgementDecisionV0_1",
+      "unknown_fields_policy": "REJECT"
+    },
+    {
+      "exact_fields": [
+        "real_home_fact_count",
+        "real_task_count",
+        "real_command_count",
+        "private_raw_memory_count",
+        "runtime_activation_count",
+        "database_write_count",
+        "provider_call_count",
+        "sensing_or_recording_count",
+        "external_effect_count",
+        "terminal_outcome"
+      ],
+      "row_fingerprint": "adbff0de5c2638c3ba2a6f66563f07f39afec11eeff039a2a36de369a57e809b",
+      "schema_name": "BoundaryAssertionsV0_1",
+      "unknown_fields_policy": "REJECT"
+    }
+  ],
+  "schema_version": "agents-os.f8-r1.synthetic-nonauthority-witness.v0.1",
+  "section_fingerprints": {
+    "acknowledgement_cases": "71b9a2a2b705260266db1555893e8dc0c85cf30c45ce31aea1e84206b72055a2",
+    "boundary_assertions": "679e4fe9dab13c3bf1d2609fc99f0feafe71376fda244c50f276ce62dc81c6db",
+    "handoff_candidate_history": "ebedf84505fa9cf2b42046c06515551c186514d23ea3a1489575d7fc5c7c6688",
+    "handoff_cases": "6de8a62d7ebaf2e06a003519f083e723db5d3697e5876c9491b17d595d7cf41e",
+    "prospective_f3_interface_requirement": "7ae8920399f3de2acf00cf11a1f2924fdb69b76ee58df6798a51be34c7b3f83b",
+    "schema_inventory": "eaf8c3b0185cb1a0fd849f3ff863c78528ba7bb257e497825a397bdc7e97312f",
+    "upstream_assessments": "b73b902060303054244e91d5e3567062ca3681236bd3ec2377eff3121e713f11"
+  },
+  "upstream_assessments": [
+    {
+      "assessment_id": "A-F7-CURRENT",
+      "assessment_kind": "F7_INTENT_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F7",
+      "result": "CURRENT_ACCEPTED",
+      "row_fingerprint": "5eec405b2eb3a0f20fba4288bf1fe05bed80c54c174c3e13d0c728ad70da4397",
+      "subject_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+      "subject_ref": "synthetic://f7/intent-candidate/001",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F7-STALE",
+      "assessment_kind": "F7_INTENT_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": false,
+      "owner_contract": "F7",
+      "result": "STALE",
+      "row_fingerprint": "1abdc6e2a75789926849b97e8d2f77145097baca4a9ec353e15103d730ec7e19",
+      "subject_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+      "subject_ref": "synthetic://f7/intent-candidate/001",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F7-UNKNOWN",
+      "assessment_kind": "F7_INTENT_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F7",
+      "result": "INDETERMINATE",
+      "row_fingerprint": "a9e750aaf84063fd2eb29618e364557cd29b6575dfaf2a189a56a4c6a62332fd",
+      "subject_fingerprint": "75051290437c52fe75b0d41839fc6f0fae8dcb50dad16650a7bf2d9335ee70fe",
+      "subject_ref": "synthetic://f7/intent-candidate/001",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-ACTOR-ACTIVE",
+      "assessment_kind": "F2_ACTOR_IDENTITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "ACTIVE",
+      "row_fingerprint": "449bad01367f8ddbad76d859b29e3e669808f47c63fef54be95515d6df18de4b",
+      "subject_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+      "subject_ref": "synthetic://f2/actor/nobao",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-ACTOR-INACTIVE",
+      "assessment_kind": "F2_ACTOR_IDENTITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "INACTIVE",
+      "row_fingerprint": "a14cac7c3b1acd6bd9c47a77f4411a68c6e0ee007b3d43adca837a8be9abc254",
+      "subject_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+      "subject_ref": "synthetic://f2/actor/nobao",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-ACTOR-BEHIND",
+      "assessment_kind": "F2_ACTOR_IDENTITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 99,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "ACTIVE",
+      "row_fingerprint": "e207e44f1b58965bfc472e234ade8cd334b3ddd6aaa875d88a9ec1c39c7ee51e",
+      "subject_fingerprint": "6ec7d7e90a3acd3f6c5a946d7a7a0455a618c45487c0c36732a22217bace62a4",
+      "subject_ref": "synthetic://f2/actor/nobao",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-PRINCIPAL-ACTIVE",
+      "assessment_kind": "F2_PRINCIPAL_BINDING",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "ACTIVE",
+      "row_fingerprint": "1380ac8c50815d455ae990d9abe3ec8e26040dfe03a7dee358043752d30062ac",
+      "subject_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+      "subject_ref": "synthetic://f2/principal/nobao-session",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-PRINCIPAL-INACTIVE",
+      "assessment_kind": "F2_PRINCIPAL_BINDING",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "INACTIVE",
+      "row_fingerprint": "431b2168aeafcfaf1f3a046a65c8083ae3cc65ebe96a6112645d90c63dac62ae",
+      "subject_fingerprint": "439f43cbc2d3d8701f7f9ed0c0a84fc063fed556d5dbb00ffc188e4952dd7af4",
+      "subject_ref": "synthetic://f2/principal/nobao-session",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-RESP-ACTIVE",
+      "assessment_kind": "F2_RESPONSIBILITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "ACTIVE",
+      "row_fingerprint": "60b7fe175b702f6df4b368b9edbe4dc8512f3c1e715aec4d997cc6a23cc8ba54",
+      "subject_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "subject_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-RESP-INACTIVE",
+      "assessment_kind": "F2_RESPONSIBILITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "INACTIVE",
+      "row_fingerprint": "e25eefa7b0ca0758bc0373e211e71b5943a249b1c56cc0f959bbe1f01f559c92",
+      "subject_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "subject_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-RESP-MISMATCH",
+      "assessment_kind": "F2_RESPONSIBILITY",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "fef79e51bbe9867a2739fdf831d8cbbe53c80519655b6dbe0227dd41cd9a77e8",
+      "is_current_head": true,
+      "owner_contract": "F2",
+      "result": "ACTIVE",
+      "row_fingerprint": "83dcd8c191ddf6645ff2284d487af29542ef46222644cf6f972798d473c50cc8",
+      "subject_fingerprint": "55a435afa28abf3b0e7360410d2562aa525142e6d3afaf9f2092dca91715d4c6",
+      "subject_ref": "synthetic://orchestrator/intake-scope/other",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-F3-READY",
+      "assessment_kind": "F3_RESIDENT_READINESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "READY_CONTINUOUS",
+      "row_fingerprint": "e352073ee52fedd95f8bd1d85b3b150bbbb728d48313c18457f721bb89408c6d",
+      "subject_fingerprint": "3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff",
+      "subject_ref": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+      "subject_revision": 4
+    },
+    {
+      "assessment_id": "A-F3-UNKNOWN",
+      "assessment_kind": "F3_RESIDENT_READINESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "INDETERMINATE",
+      "row_fingerprint": "cad3bc00a04a8804c8ce0ce5759e8df4e428a989f8d8c0c524e6efd83810294c",
+      "subject_fingerprint": "3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff",
+      "subject_ref": "F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE",
+      "subject_revision": 4
+    },
+    {
+      "assessment_id": "A-PBL-CLEAR",
+      "assessment_kind": "PBL_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "POLICY",
+      "result": "CURRENT_NO_MATCH",
+      "row_fingerprint": "dce5192e48c282f2a9ec5ba5615cd8f40a9c859218de5177e6f461deac245817",
+      "subject_fingerprint": "de1e86e26b30844a9688f541ebe6b99c456be06c5cfef5ebb1845360be666b3d",
+      "subject_ref": "agents-os.prohibited-behavior-list.current",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-PBL-PROHIBITED",
+      "assessment_kind": "PBL_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "POLICY",
+      "result": "PROHIBITED",
+      "row_fingerprint": "70f27ba3069666e7f4d2d9c08e471f39864416081377c5d06f070125fabc5e50",
+      "subject_fingerprint": "de1e86e26b30844a9688f541ebe6b99c456be06c5cfef5ebb1845360be666b3d",
+      "subject_ref": "agents-os.prohibited-behavior-list.current",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-JREQ-NONE",
+      "assessment_kind": "JENN_REQUIREMENT",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "is_current_head": true,
+      "owner_contract": "POLICY",
+      "result": "NO_EXACT_DECISION_REQUIRED",
+      "row_fingerprint": "7cb69d6956b829141bfa94ed810d7d0adb3866b57338d298baa7cb470af6627f",
+      "subject_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "subject_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-JREQ-REQUIRED",
+      "assessment_kind": "JENN_REQUIREMENT",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "is_current_head": true,
+      "owner_contract": "POLICY",
+      "result": "EXACT_DECISION_REQUIRED",
+      "row_fingerprint": "97fcac87d4377f90773eae9adf6aa12783a6402ec45e58238efee3f2357c8d8b",
+      "subject_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "subject_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-JDECISION-CURRENT",
+      "assessment_kind": "JENN_EXACT_DECISION",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "25dec4cbba1a741c750a1f4a93b45f597d8fc18b8005f990a7631405c4a27156",
+      "is_current_head": true,
+      "owner_contract": "JENN_DECISION",
+      "result": "CURRENT_ACCEPTED",
+      "row_fingerprint": "5fd17df47dae2b7bf0f4b227b5ba3123380256138de665281c5d8cd55fe4dd0b",
+      "subject_fingerprint": "9e245f9109e975421152c18e3d38432025134ee6b9bd7062b0ea36b9b5be2f62",
+      "subject_ref": "synthetic://orchestrator/intake-scope/home-intent",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-JDECISION-MISMATCH",
+      "assessment_kind": "JENN_EXACT_DECISION",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "fef79e51bbe9867a2739fdf831d8cbbe53c80519655b6dbe0227dd41cd9a77e8",
+      "is_current_head": true,
+      "owner_contract": "JENN_DECISION",
+      "result": "CURRENT_ACCEPTED",
+      "row_fingerprint": "cdb7184a2aed1daea8421a144a7707a3efb52633d42d78a5d30774616885d20d",
+      "subject_fingerprint": "55a435afa28abf3b0e7360410d2562aa525142e6d3afaf9f2092dca91715d4c6",
+      "subject_ref": "synthetic://orchestrator/intake-scope/other",
+      "subject_revision": 1
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-NOT-SUBMITTED",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "NOT_SUBMITTED",
+      "row_fingerprint": "b45d2cfb0cf383deca08b5dce9125a4ba4d276d4d355b5b0a40de2fe875c47aa",
+      "subject_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-COMMITTED",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "972afc55fb882ca854b59b6280eab5cf973ead17ca7bf3c7b6e22894b74991b6",
+      "subject_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-REJECTED",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "REJECTED",
+      "row_fingerprint": "417858decc7f808f51e63abd51b6def6241b3752181cbc55333ce2f827d8a345",
+      "subject_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-INDETERMINATE",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "INDETERMINATE",
+      "row_fingerprint": "46c135bd87c6cfee1d62291a46c8353dc694b7ec7bc3fe822630823b74dfbdaa",
+      "subject_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-STALE",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": false,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "7ce5fdbd225cb81d39813e23382059f0bd9b8aa083d50621faa4d0b2a412bf72",
+      "subject_fingerprint": "dae3fc758e15c295528587b35b48b0780e443120bd1136db18bcd17e24caf3f3",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-OUTCOME-MISMATCH",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "982c718d7f0cec7593d2f6b3a6233560e513ab29c6ee2c5cb56615494296d7b9",
+      "subject_fingerprint": "795ecc65ee42e7a03a4c6c922cce15be181756bb13e78c8efc40bb8100a1d832",
+      "subject_ref": "synthetic://f8/handoff-candidate/other@1",
+      "subject_revision": 1
+    }
+  ]
+}

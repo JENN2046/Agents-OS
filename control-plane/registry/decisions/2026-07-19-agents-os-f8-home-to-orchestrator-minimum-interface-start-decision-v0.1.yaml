@@ -1,0 +1,194 @@
+schema_version: agents-os.contract-unit-start-decision.v0.1
+record_id: agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1
+record_type: ContractUnitStartDecision
+status: active
+immutable: true
+created_at: 2026-07-19T02:12:24+08:00
+effective_at: 2026-07-19T02:12:24+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: EXPLICIT_START_OF_F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_CONTRACT_CLOSURE
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: 启动 F8
+
+contract_unit:
+  id: F8
+  name: Home-to-Orchestrator Minimum Interface
+  mode: ATOMIC_CONTRACT_CLOSURE
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+  implementation_profile_included: false
+  production_profile_included: false
+
+prerequisites:
+  phase_4_start:
+    path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    sha256: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+  F7_freeze:
+    path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+  F7_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    frozen_subject_count: 8
+    declared_input_count: 44
+  F7_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    result: PASS_NO_BLOCKER
+  F7_mainline_integration:
+    repository: JENN2046/Agents-OS
+    branch: main
+    pull_request: 14
+    merge_commit: e22f356bfff59f817cd74e6fccfe3e80f0b52f01
+  F7_mainline_durability:
+    completion_commit: 78704d1e6287d1d1893e8aeb5a7aad87086eef64
+    receipt_path: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f7-mainline-durability-closeout-v0.1.md
+    receipt_sha256: 615841e5432d173313dc24afe53f21cb35b244b4efc69eeebcaf9ce59245102c
+    manifest_inputs_verified: 44_44
+    frozen_subjects_verified: 8_8
+  F7_post_closeout_projection_reconciliation:
+    current_main_commit: ccb64b2f3bd995ff226b64e228e529928771ea5f
+    report_path: control-plane/registry/reports/2026-07-19-agents-os-f7-post-closeout-projection-reconciliation-v0.1.yaml
+    report_sha256: 3053099b372dfb5d476e8089c4caa7e6de579c7c1213e09807190d80ed3b8169
+    decision_path: control-plane/registry/decisions/2026-07-19-agents-os-f7-post-closeout-projection-reconciliation-decision-v0.1.yaml
+    decision_sha256: c5b6bca2c16500fb9864a3709c9b3409030d45d7d3a5652b5a878d22174062cc
+    accepted_projection: v4.8
+    result: PASS
+
+accepted_direction_inputs:
+  workspace_governance:
+    path: AGENTS.md
+    sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+  home_roadmap:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  home_roadmap_acceptance:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  home_domain_architecture_direction:
+    path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    sha256: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+  resident_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  high_privilege_architecture:
+    path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+
+upstream_consumption_rule:
+  consume_frozen_F1_through_F7_facts_and_assessments: true
+  recompute_upstream_authority: false
+  reinterpret_upstream_result: false
+  synthesize_missing_upstream_authority: false
+  unknown_stale_missing_or_conflicting_input: fail_closed
+  favorable_result_requires_exact_current_hash_bound_inputs: true
+
+authorized_scope:
+  - logical_Home_candidate_to_Orchestrator_candidate_interface
+  - exact_input_output_ref_revision_fingerprint_and_currentness_envelopes
+  - Home_candidate_eligibility_rejection_and_INDETERMINATE_semantics
+  - Command_candidate_handoff_rejection_and_nonpromotion_rules
+  - deterministic_monotonic_scope_intersection_without_authority_expansion
+  - exact_binding_to_F7_Home_semantic_fact_class_and_current_revision
+  - exact_binding_to_current_F1_Task_F2_authority_F3_Resident_and_Command_assessments_when_applicable
+  - preserve_F3_as_the_only_canonical_Command_authority_and_writer
+  - preserve_F4_as_the_only_effect_admission_contract
+  - preserve_F5_as_the_only_delivery_recovery_contract
+  - preserve_F6_as_the_only_validation_requirement_current_decision_contract
+  - synthetic_fixture_constructibility_with_no_private_or_real_Home_data
+  - F8_author_self_review_and_fresh_hash_bound_independent_review_package
+  - Document_Registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+ownership_boundary:
+  F8_may:
+    - define_a_logical_nonruntime_interface_between_F7_Home_candidates_and_Orchestrator_intake_candidates
+    - define_exact_candidate_handoff_rejection_and_INDETERMINATE_records
+    - verify_refs_hashes_revisions_current_heads_watermarks_and_closed_result_sets
+    - consume_upstream_owner_assessments_without_becoming_their_second_reducer
+    - monotonically_narrow_candidate_scope
+    - require_F3_owned_intake_before_any_candidate_can_become_a_committed_Command
+    - require_synthetic_test_namespace_domain_separation_and_runtime_unusable_markers
+  F8_must_not:
+    - create_a_second_permission_system_identity_authority_Task_authority_or_Command_authority
+    - classify_people_Actors_relationships_Tasks_or_candidates_by_permission_level
+    - use_Green_Yellow_Red_P3_relationship_trust_urgency_or_history_to_decide_authority
+    - treat_PBL_no_match_as_sufficient_permission
+    - mint_commit_or_execute_an_ORCHESTRATOR_COMMAND
+    - bypass_F3_intake_replay_or_Command_currentness
+    - recompute_F1_F2_F3_F4_F5_F6_or_F7_owner_assessments
+    - turn_Home_Session_Memory_Presence_relationship_or_Artifact_content_into_a_Task_or_Command
+    - read_write_import_export_or_summarize_private_raw_memory
+    - create_runtime_transport_database_queue_service_provider_sensing_recording_or_effect_authority
+
+authorized_outputs:
+  - F8_R1_contract_draft
+  - F8_R1_synthetic_fixture_builder
+  - F8_R1_synthetic_fixture
+  - F8_R1_offline_semantic_validator
+  - F8_R1_author_self_review
+  - F8_R1_hash_bound_independent_review_manifest_and_package
+  - F8_R1_registry_CURRENT_STATE_queue_and_receipt_projection
+  - narrow_amendment_and_fresh_review_cycle_only_when_independent_findings_require_it
+  - Jenn_only_atomic_accept_freeze_decision_surface_after_valid_independent_PASS
+
+acceptance_boundary:
+  draft_or_author_review_accepts_F8: false
+  independent_review_accepts_F8: false
+  automatic_acceptance: forbidden
+  Jenn_atomic_decision_required: true
+  partial_acceptance: forbidden
+
+hard_boundaries:
+  modify_any_accepted_or_frozen_F1_through_F7_subject_bytes: forbidden
+  create_real_Home_Task_Command_identity_relationship_Memory_Presence_or_effect_facts: forbidden
+  start_Phase_5A_or_implementation: forbidden
+  runtime_source_change: forbidden
+  database_creation_migration_or_live_access: forbidden
+  Resident_Worker_Host_service_or_provider_start: forbidden
+  sensing_recording_or_device_access: forbidden
+  production_authentication_or_credential_change: forbidden
+  public_API_or_MCP_expansion: forbidden
+  secret_private_raw_memory_or_provider_raw_response_access: forbidden
+  real_effect_execution: forbidden
+  commit: not_authorized_by_this_decision
+  push_PR_or_merge: not_authorized_by_this_decision
+  tag_release_deploy_or_publish: forbidden
+
+automatic_progression:
+  within_F8_contract_review_cycle: authorized
+  finding_disposition_and_narrow_amendment: authorized_when_evidence_bound
+  start_Phase_5A_or_implementation: forbidden
+
+effects:
+  F7_accepted: true
+  F7_frozen: true
+  F7_durability_complete: true
+  F8_started: true
+  F8_status: CONTRACT_CLOSURE_ACTIVE
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  database_change_authorized: false
+  service_start_authorized: false
+  provider_execution_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  real_Home_or_Memory_mutation_authorized: false
+  real_effect_execution_authorized: false
+
+next_gate:
+  name: F8_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_decision_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

@@ -1,0 +1,93 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f8-r5-independent-review-disposition-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+review_result: PASS_NO_BLOCKER
+requires_R6: false
+R6_started: false
+revision_stop: true
+
+bound_manifest:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+bound_offline_archive:
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-review-package-v0.1.zip
+  sha256: 5766a2cbfbf03983bdb97c27f601940f99aaac688033bc3cf441fcfe567a6ff5
+bound_review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+  sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+bound_attack_results:
+  path: control-plane/registry/reviews/f8_r5_independent_attack_results.json
+  sha256: c306d7d7839f380ebc1d51b8495b006074d1c7206507368b010cd7e4fabcf25d
+bound_probe:
+  path: control-plane/registry/reviews/f8_r5_independent_review_probe.py
+  sha256: 26002ca0e98ee6ae59e91de58d822c24550878a15f64ab8232b28aeda944ad4a
+bound_checksums:
+  path: control-plane/registry/reviews/2026-07-19-f8-r5-independent-review-SHA256SUMS.txt
+  sha256: 7f49c7ec4d4b461b7067466467337e8a3f05666bff5e51ee9ce5f90707830124
+bound_fixed_command_results:
+  path: control-plane/registry/reviews/f8_r5_fixed_commands.json
+  sha256: 24a49accf5e38fa66f877e5e9a1489712ddfd9e524882bfe87700851221e96a3
+bound_input_hash_rows:
+  path: control-plane/registry/reviews/f8_r5_input_hash_rows.json
+  sha256: 40f4d84e7ca84fb68eb88e4149cc909fdac3db1f9995a763215a634d00c2bace
+bound_R3_fresh_replay_results:
+  path: control-plane/registry/reviews/f8_r3_fresh_replay_results.json
+  sha256: 102d8a84fd9a5af6aa6921e78b94ffefe47f9f1490ae7bd5a869298af88f3142
+
+integrity_disposition:
+  ZIP_entries: 77
+  duplicate_paths: 0
+  symlinks: 0
+  unsafe_paths: 0
+  CRC: PASS
+  archive_checksums: 76/76_MATCH
+  manifest_inputs: 73/73_MATCH_AND_FULLY_READ
+  subjects: 20/20
+  authority_inputs: 49/49
+  author_evidence: 4/4_NONINDEPENDENT
+  prior_manifests: 4/4_IMMUTABLE
+  offline_fixed_commands: 14/14_PASS
+  bytes_fully_read: 1753097
+  lines_fully_read: 38933
+
+semantic_disposition:
+  findings:
+    blocker: 0
+    major: 0
+    minor: 0
+  coordinated_probe_count: 139
+  independent_fully_resigned_attack_count: 126
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  uncaught_exception_count: 0
+  R4_B01_exact_H01_owner_commitment_binding: CLOSED_BY_R5
+  R4_B02_inherited_stable_ref_profile: CLOSED_BY_R5
+  H01_merged_R2_R3_R4_R5_derivation: PASS
+  optional_Jenn_exact_decision_all_null_zero_lookup: PASS
+  stable_ref_NFC_internal_space: ACCEPTED
+  stable_ref_non_NFC: REJECTED
+  second_permission_identity_Task_or_Command_authority: false
+  upstream_authority_recomputed: false
+  synthetic_evidence_runtime_usable: false
+  real_Home_private_Memory_runtime_database_provider_sensing_or_effect: false
+
+acceptance_disposition:
+  F8_atomic_freeze_gate: SATISFIED_FOR_JENN_DECISION
+  automatic_acceptance: forbidden
+  partial_acceptance: forbidden
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  next_gate: JENN_F8_R5_ATOMIC_FREEZE_DECISION
+
+scope_exclusions:
+  - no_R6_without_new_independent_reproducible_blocker
+  - no_Phase_5A
+  - no_implementation_runtime_database_provider_or_production_authentication
+  - no_private_Memory_sensing_recording_or_real_effect
+  - no_Git_delivery_from_this_disposition
+

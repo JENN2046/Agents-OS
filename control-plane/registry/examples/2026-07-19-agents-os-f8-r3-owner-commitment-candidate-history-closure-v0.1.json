@@ -1,0 +1,561 @@
+{
+  "acknowledgement_cases": [
+    {
+      "case_id": "ACK01",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_SYNTHETIC_COMMITTED",
+        "result": "ACKNOWLEDGED_COMMITTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-EQUAL",
+          "expected_assessment_fingerprint": "2864ed3846104c655c7f333de0e336a8d4c2a8d4af34cd1ae862861a35888164",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "149c917a83039acb745df16788e62665b83e025b83b9aad10d9227fc35c3189c",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-equal@1"
+        },
+        "handoff_candidate_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+        "handoff_candidate_revision": 2,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "20774e04f814465630e67d12b5368956aad60184f27d3bb98e1d8f637f2d3484"
+    },
+    {
+      "case_id": "ACK02",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_SYNTHETIC_COMMITTED",
+        "result": "ACKNOWLEDGED_COMMITTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-HIGHER",
+          "expected_assessment_fingerprint": "269fb65aaaebb64de2786ae657550887712972b0248dc0bebf5f956c7c432a72",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "5d7c6b251057db9d732ff5a1fe74781de3f11bdc10ae78e554e8d978cdd2fb95",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-higher@1"
+        },
+        "handoff_candidate_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+        "handoff_candidate_revision": 2,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "32e75a6c6ae219d0f89a0536baea8518406f7e80636d9db4f10875394637a983"
+    },
+    {
+      "case_id": "ACK03",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OUTCOME_WATERMARK_BEHIND",
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-BEHIND",
+          "expected_assessment_fingerprint": "7bcd99ee82b11c448828b9b44b5150944bfca39ab4e14c09590755e28733fe89",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "ec7e6753d5345c57720212c211fbf3f280214a7653f49b89cabbf12e4b6218a4",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-behind@1"
+        },
+        "handoff_candidate_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+        "handoff_candidate_revision": 2,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "42b55546f3b3b616842289b29844fc559a478af6d36dc0301ba68e8d1250707f"
+    },
+    {
+      "case_id": "ACK04",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F3_OWNER_REPORTED_INDETERMINATE",
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-INDETERMINATE",
+          "expected_assessment_fingerprint": "3c7e3cfdc935e891e0406cda8c990d7968117d49dceff617e4e3a1acb6b6ced7",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "984945907dab9be55d47414f3b722c5bea97a104f9b4d90ec8d41a671889180b",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-indeterminate@1"
+        },
+        "handoff_candidate_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+        "handoff_candidate_revision": 2,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "f3c4bd728aa5a94e07a11dadbe3e63a314d47c792bf54bcfa3dcb251ba283df9"
+    },
+    {
+      "case_id": "ACK05",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "CANDIDATE_HISTORY_MISSING",
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-PHANTOM",
+          "expected_assessment_fingerprint": "0356e1635fb1d9f5c912c510536253fddd950974d52013235bf46db686976481",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "96519a633f1b0ac244358fb9146a3af2c20c6709163366ad36820d7d6547844d",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-phantom@1"
+        },
+        "handoff_candidate_fingerprint": "1bde22af4841eae4d6dc448c40e5b47f79fe5312ded646bda5fcd3501ca34182",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/phantom@9",
+        "handoff_candidate_revision": 9,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "f0e1d4bac9d399396a464ffc1a5ef294b3d3a01d85881787e51638e925c88912"
+    },
+    {
+      "case_id": "ACK06",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "CANDIDATE_HISTORY_FINGERPRINT_MISMATCH",
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": "A-F3-EQUAL",
+          "expected_assessment_fingerprint": "2864ed3846104c655c7f333de0e336a8d4c2a8d4af34cd1ae862861a35888164",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "149c917a83039acb745df16788e62665b83e025b83b9aad10d9227fc35c3189c",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/a-f3-equal@1"
+        },
+        "handoff_candidate_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+        "handoff_candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+        "handoff_candidate_revision": 2,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "d6ab34fd2ce1fc35cdd41ff8a0a297d772ace6da33d85d096d18d98490abcd24"
+    }
+  ],
+  "boundary_assertions": {
+    "database_write_count": 0,
+    "external_effect_count": 0,
+    "private_memory_read_count": 0,
+    "production_auth_count": 0,
+    "provider_call_count": 0,
+    "real_command_count": 0,
+    "real_task_write_count": 0,
+    "runtime_activation_count": 0,
+    "sensing_or_recording_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "candidate_formation_cases": [
+    {
+      "assessment_consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "cb762ebbe4ef684c6a2274da0fe4e33db9c30835a9f17cdf32e554a1b996bb4c",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "3b49d8b1897d82d20998c89c98f6e189b38d9facefe94e292808b994b5d2143b",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://f7/assessment-commitment/a-f7-current@1"
+      },
+      "case_id": "CF01",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE",
+        "result": "CANDIDATE_FORMED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "minimum_trusted_event_sequence": 100,
+      "row_fingerprint": "fc95bb2e3108ceea6dfe959fe886dd459bbce16cde5b39bf626132edd399cb6d"
+    },
+    {
+      "assessment_consumer": {
+        "assessment_id": "A-F7-STALE",
+        "expected_assessment_fingerprint": "6df4cc712d0113d2eb7567842c60d958c6fa2439b1b329cb7baefb548ba48f21",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "de7b257456b2b0c0c82ddfc54ed06c8d3113f7254b86f6f1ef0fa7190bf36e89",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://f7/assessment-commitment/a-f7-stale@1"
+      },
+      "case_id": "CF02",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "F7_INTENT_NOT_CURRENT",
+        "result": "REJECTED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "minimum_trusted_event_sequence": 100,
+      "row_fingerprint": "d50d01ad48ad487fdc8d6b54cb670ae2312d54514279b9b6799bacdc82055fd8"
+    }
+  ],
+  "canonical_candidate_history": [
+    {
+      "candidate_fingerprint": "e86dae2e491389db4687a298766c5f8993ea206e760c3a28a6661a8709f27381",
+      "candidate_id": "synthetic://f8/handoff-candidate/001",
+      "candidate_ref": "synthetic://f8/handoff-candidate/001@1",
+      "candidate_revision": 1,
+      "command_authority": false,
+      "predecessor_fingerprint": null,
+      "predecessor_ref": null,
+      "runtime_usable": false
+    },
+    {
+      "candidate_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+      "candidate_id": "synthetic://f8/handoff-candidate/001",
+      "candidate_ref": "synthetic://f8/handoff-candidate/001@2",
+      "candidate_revision": 2,
+      "command_authority": false,
+      "predecessor_fingerprint": "e86dae2e491389db4687a298766c5f8993ea206e760c3a28a6661a8709f27381",
+      "predecessor_ref": "synthetic://f8/handoff-candidate/001@1",
+      "runtime_usable": false
+    }
+  ],
+  "contract_id": "F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R3_ATOMIC_BUNDLE",
+  "domain_tag": "agents-os.f8-r3.owner-commitment-candidate-history.v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "owner_assessment_revision_commitments": [
+    {
+      "assessment_fingerprint": "cb762ebbe4ef684c6a2274da0fe4e33db9c30835a9f17cdf32e554a1b996bb4c",
+      "assessment_id": "A-F7-CURRENT",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "3b49d8b1897d82d20998c89c98f6e189b38d9facefe94e292808b994b5d2143b",
+      "commitment_ref": "synthetic://f7/assessment-commitment/a-f7-current@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "8ee2a71bc0dfd494be633ec62ab5aa5f6069635432ced08e944b6e2c6b31baa1",
+      "issued_event_ref": "synthetic://f7/event/assessment-a-f7-current-r1",
+      "issued_event_sequence": 100,
+      "owner_contract": "F7",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "6df4cc712d0113d2eb7567842c60d958c6fa2439b1b329cb7baefb548ba48f21",
+      "assessment_id": "A-F7-STALE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "de7b257456b2b0c0c82ddfc54ed06c8d3113f7254b86f6f1ef0fa7190bf36e89",
+      "commitment_ref": "synthetic://f7/assessment-commitment/a-f7-stale@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "93116a528b187216604cf6ca673e6563d84a032c11665f07e225774d0be1fa0c",
+      "issued_event_ref": "synthetic://f7/event/assessment-a-f7-stale-r1",
+      "issued_event_sequence": 100,
+      "owner_contract": "F7",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "2864ed3846104c655c7f333de0e336a8d4c2a8d4af34cd1ae862861a35888164",
+      "assessment_id": "A-F3-EQUAL",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "149c917a83039acb745df16788e62665b83e025b83b9aad10d9227fc35c3189c",
+      "commitment_ref": "synthetic://f3/assessment-commitment/a-f3-equal@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "074cad6b9f70a8c7859c438af11118c5352458eb86930d3ef9293bad5ff18f2d",
+      "issued_event_ref": "synthetic://f3/event/assessment-a-f3-equal-r1",
+      "issued_event_sequence": 100,
+      "owner_contract": "F3",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "269fb65aaaebb64de2786ae657550887712972b0248dc0bebf5f956c7c432a72",
+      "assessment_id": "A-F3-HIGHER",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "5d7c6b251057db9d732ff5a1fe74781de3f11bdc10ae78e554e8d978cdd2fb95",
+      "commitment_ref": "synthetic://f3/assessment-commitment/a-f3-higher@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "5cc542dcc41e42c8715526c3de4ae8ebd549a66c8964b697874afa4393873361",
+      "issued_event_ref": "synthetic://f3/event/assessment-a-f3-higher-r1",
+      "issued_event_sequence": 301,
+      "owner_contract": "F3",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "7bcd99ee82b11c448828b9b44b5150944bfca39ab4e14c09590755e28733fe89",
+      "assessment_id": "A-F3-BEHIND",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "ec7e6753d5345c57720212c211fbf3f280214a7653f49b89cabbf12e4b6218a4",
+      "commitment_ref": "synthetic://f3/assessment-commitment/a-f3-behind@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "4dc618244382924393a3d2b4e880b420b484dab7fd51d5f8467c7d1c09a08e91",
+      "issued_event_ref": "synthetic://f3/event/assessment-a-f3-behind-r1",
+      "issued_event_sequence": 99,
+      "owner_contract": "F3",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "3c7e3cfdc935e891e0406cda8c990d7968117d49dceff617e4e3a1acb6b6ced7",
+      "assessment_id": "A-F3-INDETERMINATE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "984945907dab9be55d47414f3b722c5bea97a104f9b4d90ec8d41a671889180b",
+      "commitment_ref": "synthetic://f3/assessment-commitment/a-f3-indeterminate@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "b868979671a5236da58db0d8981eaad3f29cb69b4a70095145ed9a27326a80d9",
+      "issued_event_ref": "synthetic://f3/event/assessment-a-f3-indeterminate-r1",
+      "issued_event_sequence": 100,
+      "owner_contract": "F3",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    },
+    {
+      "assessment_fingerprint": "0356e1635fb1d9f5c912c510536253fddd950974d52013235bf46db686976481",
+      "assessment_id": "A-F3-PHANTOM",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "96519a633f1b0ac244358fb9146a3af2c20c6709163366ad36820d7d6547844d",
+      "commitment_ref": "synthetic://f3/assessment-commitment/a-f3-phantom@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "a5653b8c7565e141b26d768450f9844637043a14aa06f0edf16a73087acf147c",
+      "issued_event_ref": "synthetic://f3/event/assessment-a-f3-phantom-r1",
+      "issued_event_sequence": 100,
+      "owner_contract": "F3",
+      "predecessor_commitment_fingerprint": null,
+      "predecessor_commitment_ref": null
+    }
+  ],
+  "owner_assessments": [
+    {
+      "assessment_id": "A-F7-CURRENT",
+      "assessment_kind": "F7_INTENT_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": true,
+      "owner_contract": "F7",
+      "result": "CURRENT_ACCEPTED",
+      "row_fingerprint": "cb762ebbe4ef684c6a2274da0fe4e33db9c30835a9f17cdf32e554a1b996bb4c",
+      "subject_fingerprint": "3507a0447c88919caf10fb8db24465ff2d3b28984fe0991a88d83e629b4cebb7",
+      "subject_ref": "synthetic://f7/intent-candidate/001",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F7-STALE",
+      "assessment_kind": "F7_INTENT_CURRENTNESS",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": null,
+      "is_current_head": false,
+      "owner_contract": "F7",
+      "result": "STALE",
+      "row_fingerprint": "6df4cc712d0113d2eb7567842c60d958c6fa2439b1b329cb7baefb548ba48f21",
+      "subject_fingerprint": "3507a0447c88919caf10fb8db24465ff2d3b28984fe0991a88d83e629b4cebb7",
+      "subject_ref": "synthetic://f7/intent-candidate/001",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-EQUAL",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "edc308b4f95397ae8e5c6105fd3b33e58c47016d9dc5be4c542ff788e38a4cc4",
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "2864ed3846104c655c7f333de0e336a8d4c2a8d4af34cd1ae862861a35888164",
+      "subject_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-HIGHER",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 301,
+      "context_fingerprint": "edc308b4f95397ae8e5c6105fd3b33e58c47016d9dc5be4c542ff788e38a4cc4",
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "269fb65aaaebb64de2786ae657550887712972b0248dc0bebf5f956c7c432a72",
+      "subject_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-BEHIND",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 99,
+      "context_fingerprint": "edc308b4f95397ae8e5c6105fd3b33e58c47016d9dc5be4c542ff788e38a4cc4",
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "7bcd99ee82b11c448828b9b44b5150944bfca39ab4e14c09590755e28733fe89",
+      "subject_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-INDETERMINATE",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "edc308b4f95397ae8e5c6105fd3b33e58c47016d9dc5be4c542ff788e38a4cc4",
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "INDETERMINATE",
+      "row_fingerprint": "3c7e3cfdc935e891e0406cda8c990d7968117d49dceff617e4e3a1acb6b6ced7",
+      "subject_fingerprint": "58e993c20fbf5afb49cb76eadbbf4aabeaf03d55dedc12d58cc48eb929a93540",
+      "subject_ref": "synthetic://f8/handoff-candidate/001@2",
+      "subject_revision": 2
+    },
+    {
+      "assessment_id": "A-F3-PHANTOM",
+      "assessment_kind": "F3_INTAKE_OUTCOME",
+      "assessment_revision": 1,
+      "based_on_event_sequence": 100,
+      "context_fingerprint": "d100c1f68a36e86432dc98798e5967084036ec0c6b7e189adf2f1a45e38eb189",
+      "is_current_head": true,
+      "owner_contract": "F3",
+      "result": "SYNTHETIC_TEST_COMMITTED",
+      "row_fingerprint": "0356e1635fb1d9f5c912c510536253fddd950974d52013235bf46db686976481",
+      "subject_fingerprint": "1bde22af4841eae4d6dc448c40e5b47f79fe5312ded646bda5fcd3501ca34182",
+      "subject_ref": "synthetic://f8/handoff-candidate/phantom@9",
+      "subject_revision": 9
+    }
+  ],
+  "root_fingerprint": "e4b0a6ae16c33ca12b5841b7ffda8b22b029aadc7a378804ae1053f85e8732c8",
+  "runtime_usable": false,
+  "schema_inventory": [
+    {
+      "closed": true,
+      "field_names": [
+        "assessment_id",
+        "assessment_revision",
+        "owner_contract",
+        "assessment_kind",
+        "subject_ref",
+        "subject_revision",
+        "subject_fingerprint",
+        "context_fingerprint",
+        "result",
+        "based_on_event_sequence",
+        "is_current_head",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "1311a4a99ab79eedd83ab966d0f81bf22bc186409660587db056602c2852c086",
+      "schema_name": "OwnerAssessmentV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "commitment_ref",
+        "commitment_revision",
+        "owner_contract",
+        "assessment_id",
+        "assessment_revision",
+        "assessment_fingerprint",
+        "predecessor_commitment_ref",
+        "predecessor_commitment_fingerprint",
+        "issued_event_ref",
+        "issued_event_sequence",
+        "issued_event_fingerprint",
+        "commitment_fingerprint"
+      ],
+      "row_fingerprint": "521a1ea2de90192012a4d3a5e5a9050f73b1cedf972a360d482f6ca2eb886fd7",
+      "schema_name": "OwnerAssessmentRevisionCommitmentV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "assessment_id",
+        "expected_assessment_revision",
+        "expected_assessment_fingerprint",
+        "owner_commitment_ref",
+        "expected_owner_commitment_revision",
+        "expected_owner_commitment_fingerprint"
+      ],
+      "row_fingerprint": "4bb947156280220091b6aa7c510165c7a2c8e58fad8861123771caf4f798e9a4",
+      "schema_name": "AssessmentConsumerV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "candidate_id",
+        "candidate_ref",
+        "candidate_revision",
+        "predecessor_ref",
+        "predecessor_fingerprint",
+        "runtime_usable",
+        "command_authority",
+        "candidate_fingerprint"
+      ],
+      "row_fingerprint": "4bb4c47977e63a46dbc58b0f2891178723ebbfabf80da7a9992bd989e63b572a",
+      "schema_name": "CanonicalCandidateHistoryEntryV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "case_id",
+        "minimum_trusted_event_sequence",
+        "assessment_consumer",
+        "claimed_decision",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "3e2addcae1e79f2f3157574ee42cee342217db9fdc53716d42442e6d6c2a3943",
+      "schema_name": "CandidateFormationCaseV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "case_id",
+        "raw_input",
+        "claimed_decision",
+        "row_fingerprint"
+      ],
+      "row_fingerprint": "e640fdcc42139d56aaf21ea6d13b805a1546b9702d91185615ae51024bf23b82",
+      "schema_name": "HomeIntentHandoffAcknowledgementCaseV0_1R3"
+    },
+    {
+      "closed": true,
+      "field_names": [
+        "real_command_count",
+        "real_task_write_count",
+        "runtime_activation_count",
+        "database_write_count",
+        "provider_call_count",
+        "production_auth_count",
+        "private_memory_read_count",
+        "sensing_or_recording_count",
+        "external_effect_count",
+        "terminal_outcome"
+      ],
+      "row_fingerprint": "eaaab3fbc6fb6d043e9d77843c72f46c2701be282b2102db216711d01dc60147",
+      "schema_name": "BoundaryAssertionsV0_1R3"
+    }
+  ],
+  "schema_version": "agents-os.f8-r3-owner-commitment-candidate-history-witness.v0.1",
+  "section_fingerprints": {
+    "acknowledgement_cases": "10859f466dc5b9dc8994379bbf117a1b9c7611579b695f0d71847255cced4046",
+    "boundary_assertions": "ac935a85232cc165a59dfac63f02de5970bd4f941b9a61194d34aa380ac5b4b0",
+    "candidate_formation_cases": "726e554e3ba646dd9a0370b1f0889ce634bdbe815e8c3f70fea3368505c18167",
+    "canonical_candidate_history": "106326ddb869953266a680dc6d997f1511c0170e37cec5aa1ffd83e207fde6c9",
+    "owner_assessment_revision_commitments": "5cb83e7ffbd1471cd08d42be21566ae6325bd0fd7e1b957b2bc924e7c6f048b2",
+    "owner_assessments": "0d2a397ab4cdeb3142925447c64de188e8814429d607ffed739cd3fcfb4acd8c",
+    "schema_inventory": "3b44991104e94a823b65e57f54a9d7f61d8220a42ef2ad7ec478f844aa67d55a"
+  }
+}

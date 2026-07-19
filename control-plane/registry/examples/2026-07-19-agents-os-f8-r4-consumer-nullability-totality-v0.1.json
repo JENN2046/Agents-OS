@@ -1,0 +1,1181 @@
+{
+  "acknowledgement_all_null_cases": [
+    {
+      "case_id": "ACK-ALL-NULL",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_CONSUMER_UNAVAILABLE",
+        "reason_codes": [
+          "ASSESSMENT_CONSUMER_UNAVAILABLE"
+        ],
+        "result": "ACKNOWLEDGED_INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "raw_input": {
+        "F3_outcome_consumer": {
+          "assessment_id": null,
+          "expected_assessment_fingerprint": null,
+          "expected_assessment_revision": null,
+          "expected_owner_commitment_fingerprint": null,
+          "expected_owner_commitment_revision": null,
+          "owner_commitment_ref": null
+        },
+        "handoff_candidate_fingerprint": "66803e4a9edbcce8e49d27e25354c75529f3ac4bbac91d0565cc4068e95f1279",
+        "handoff_candidate_ref": "synthetic://f8/r4/candidate/001@1",
+        "handoff_candidate_revision": 1,
+        "minimum_trusted_event_sequence": 100
+      },
+      "row_fingerprint": "8079a8900e9fce8be64260bfe65b83fa7f4ec0947af59bfc76a114242506d64a"
+    }
+  ],
+  "boundary_assertions": {
+    "database_write_count": 0,
+    "external_effect_count": 0,
+    "private_Memory_read_count": 0,
+    "production_authentication_count": 0,
+    "provider_call_count": 0,
+    "real_Command_count": 0,
+    "real_Home_count": 0,
+    "runtime_usable_count": 0,
+    "sensing_or_recording_count": 0,
+    "task_write_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "canonical_candidate_history": [
+    {
+      "candidate_fingerprint": "66803e4a9edbcce8e49d27e25354c75529f3ac4bbac91d0565cc4068e95f1279",
+      "candidate_ref": "synthetic://f8/r4/candidate/001@1",
+      "candidate_revision": 1,
+      "command_authority": false,
+      "runtime_usable": false
+    }
+  ],
+  "consumer_shape_positive_cases": [
+    {
+      "case_id": "CS-ALL-NULL",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "ALL_NULL",
+      "expected_valid": true,
+      "row_fingerprint": "a604d5522efb018be08f34c72b6dd54ce6a64e1a7ad9a2dcc48a1508bb9e22e6"
+    },
+    {
+      "case_id": "CS-ALL-NON-NULL",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "ALL_NON_NULL",
+      "expected_valid": true,
+      "row_fingerprint": "a5984ac3738dabe3335dec88a60e5211f8adcdfbb6c0b2e4da3ec27bc6d98592"
+    }
+  ],
+  "contract_id": "F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R4",
+  "domain_tag": "agents-os:f8-r4-consumer-nullability-totality:v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "formation_all_null_cases": [
+    {
+      "assessment_consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "case_id": "FORMATION-ALL-NULL",
+      "claimed_decision": {
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "ASSESSMENT_CONSUMER_UNAVAILABLE",
+        "reason_codes": [
+          "ASSESSMENT_CONSUMER_UNAVAILABLE"
+        ],
+        "result": "INDETERMINATE",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "minimum_trusted_event_sequence": 100,
+      "row_fingerprint": "367a3059bd8fe7071a0e0cf9f406b506660263798ad64f1c7320300c39b0906f"
+    }
+  ],
+  "inherited_R2_H01_compatibility_cases": [
+    {
+      "claimed_result": "CANDIDATE_FORMED",
+      "downprojected_consumer_inventory_fingerprint": "e2465f5f53df7a795501c6c532d982289a81034d49e566625bd5fb92a66f6585",
+      "row_fingerprint": "0fbb246c2e8ab379472180df394a21cb9cc9baffdbb4418a914ef7c2bf513cab",
+      "source_case_id": "H01",
+      "source_consumer_inventory_fingerprint": "e2465f5f53df7a795501c6c532d982289a81034d49e566625bd5fb92a66f6585",
+      "source_result": "CANDIDATE_FORMED",
+      "source_row_fingerprint": "867b7f110b5ee7c34c314850f20ff488a8574c77164ded7d06736b6b3b085787",
+      "upgraded_consumers": {
+        "actor_identity": {
+          "assessment_id": "A-ACTOR-ACTIVE",
+          "expected_assessment_fingerprint": "916e54ec748a09d19de659b9a1097e6513ee7fba63e934e1bb7ff650d5454ab2",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "b051226f872e9ef52f9c8fc117a2eca08194495e1dc379882e9ecb8b8437ba3a",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/actor_identity/assessment-commitment@1"
+        },
+        "f3_readiness": {
+          "assessment_id": "A-F3-READY",
+          "expected_assessment_fingerprint": "137fcb5a7321923a339452c87c7caef0dad4735c8a2cc7c0d48b8deae88ee5e8",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "f10352a6bad7afee2785d2961e74144dbeacc10462c4b1055ae38b36e61077c8",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/f3_readiness/assessment-commitment@1"
+        },
+        "f7_intent_currentness": {
+          "assessment_id": "A-F7-CURRENT",
+          "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+        },
+        "jenn_exact_decision": {
+          "assessment_id": null,
+          "expected_assessment_fingerprint": null,
+          "expected_assessment_revision": null,
+          "expected_owner_commitment_fingerprint": null,
+          "expected_owner_commitment_revision": null,
+          "owner_commitment_ref": null
+        },
+        "jenn_requirement": {
+          "assessment_id": "A-JREQ-NONE",
+          "expected_assessment_fingerprint": "e53734933433c564f8d2cab9f773b754bc7dfb3714a2d3451297a2ae0c0ce207",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "95d2440ad8f5cc6bfeeb5ca1e018b121854ecb5aa82d9deca71497fdeb5a1d10",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/jenn_requirement/assessment-commitment@1"
+        },
+        "pbl_currentness": {
+          "assessment_id": "A-PBL-CLEAR",
+          "expected_assessment_fingerprint": "4291cb480ae1470f4215a690cb4f345e8ab0c1b64410ef8e48b72f16f62efdc9",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "4f428936b93c543369ab87b3e0892091ea9d9ae9c1cf0d17f31bca0f207fd2c4",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/pbl_currentness/assessment-commitment@1"
+        },
+        "principal_binding": {
+          "assessment_id": "A-PRINCIPAL-ACTIVE",
+          "expected_assessment_fingerprint": "edabdfef642525eb9037af9f764ff040dc613b2161fe2ceb2f20d88450ecc039",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "e20dfe46582260d50beec90c20cb4e4fac2ec243f788d22d4a11200396f366b4",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/principal_binding/assessment-commitment@1"
+        },
+        "responsibility": {
+          "assessment_id": "A-RESP-ACTIVE",
+          "expected_assessment_fingerprint": "10943831ea4dcc6101d70a43fe8b8d1b73c1c0f656008f52988feb082b68d144",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "277aa3068759d769aa01ff128d506fed6a810909bb50bb270afca334cee5606f",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://owner/responsibility/assessment-commitment@1"
+        }
+      }
+    }
+  ],
+  "mixed_null_negative_cases": [
+    {
+      "case_id": "MN-01",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 1,
+      "row_fingerprint": "e0e8f5db1bf73f4a8480de6c371aa5b014e27a660848d87cb10f639cfa4db2cf"
+    },
+    {
+      "case_id": "MN-02",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 2,
+      "row_fingerprint": "a557e2d59c61f9453e59a77e917081e58ff2ec563a6151728979b25f384aa211"
+    },
+    {
+      "case_id": "MN-03",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 3,
+      "row_fingerprint": "27c20e023eaa883e73cfbb9b879f575ead82e70feacaceefe6b236ae72d3fdc8"
+    },
+    {
+      "case_id": "MN-04",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 4,
+      "row_fingerprint": "e8172da6cca7fa017cb0e74afe20a5154ee2cb320db182bf62d9f76a3281fe44"
+    },
+    {
+      "case_id": "MN-05",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 5,
+      "row_fingerprint": "663f6194eb93e9d5a313d6bc021f2c4a1112afdca88b98240b51d94f5b914f24"
+    },
+    {
+      "case_id": "MN-06",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 6,
+      "row_fingerprint": "d8687159163f0b204898033864944477e3d4540c0127aec14e9e882a00793670"
+    },
+    {
+      "case_id": "MN-07",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 7,
+      "row_fingerprint": "760aab66c79c4c9d5519e77ad7a0012a457c43893d67ee7d9b7c9dc3634151d4"
+    },
+    {
+      "case_id": "MN-08",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 8,
+      "row_fingerprint": "b66960d300bc4327ae3183e4dd4b7fee98f0039afebf56dcadf3a6615f67ce9e"
+    },
+    {
+      "case_id": "MN-09",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 9,
+      "row_fingerprint": "847df05856c5f1c7f0d24f0fc3660de8572cd2bff84301e4174abe8162b9917e"
+    },
+    {
+      "case_id": "MN-10",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 10,
+      "row_fingerprint": "edfeff5cc02768dd3a22252a2595fbd6679668e7c02210a4da031c991d0f907f"
+    },
+    {
+      "case_id": "MN-11",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 11,
+      "row_fingerprint": "484047de5dca81893c04671742dfc592178bc23750f9a674c9ba2e7f718a0a66"
+    },
+    {
+      "case_id": "MN-12",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 12,
+      "row_fingerprint": "7c369b74052f72ac4d33ef96512c78ce469e4373aa8e54c06a1e8671c211a1c0"
+    },
+    {
+      "case_id": "MN-13",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 13,
+      "row_fingerprint": "6f8841521f435ae02718606ab8ae384d4412eee79b901a5286afdb0f52826274"
+    },
+    {
+      "case_id": "MN-14",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 14,
+      "row_fingerprint": "e22b0db0c500176177a648fcc1e68ac75373c8426d2cb6acb694581e23842ad8"
+    },
+    {
+      "case_id": "MN-15",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 15,
+      "row_fingerprint": "c97e9697eb3e8406e4fe98edae97c7d1b4065cc5355374a15c2fefc75d6c2138"
+    },
+    {
+      "case_id": "MN-16",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 16,
+      "row_fingerprint": "7efcbb3cb98b0db9707c006099faf24f4f175e06b808e488ccbb1df7c3832a90"
+    },
+    {
+      "case_id": "MN-17",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 17,
+      "row_fingerprint": "dcd1915c4194c0afa9c7429d42ea857060a7563f3f3609e6f630a048269ac383"
+    },
+    {
+      "case_id": "MN-18",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 18,
+      "row_fingerprint": "dd8223479b6293a1add450dcdb4744850c87defa14ac0c773504ae8352e6b692"
+    },
+    {
+      "case_id": "MN-19",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 19,
+      "row_fingerprint": "ea82bececd5c258bfe4823e8750635ff3cbf9328fbe9bfa320b587c37864e6dc"
+    },
+    {
+      "case_id": "MN-20",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 20,
+      "row_fingerprint": "298a37c4b2dbee77c9e23d33042382f51b2957a4f66cd89e05cb5b5465a79a8e"
+    },
+    {
+      "case_id": "MN-21",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 21,
+      "row_fingerprint": "5244f8c0bfc926d46b42ad6c5b12568dee59513423f6a5980f131136ba9af862"
+    },
+    {
+      "case_id": "MN-22",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 22,
+      "row_fingerprint": "e2a47fcb8f3b670d67695238ebdcba180550a8dbc7b31f5ee5e99687783997b3"
+    },
+    {
+      "case_id": "MN-23",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 23,
+      "row_fingerprint": "a647b84ec6efc03898e6f54182e09addc122075308fca3df00eddd3d0e201505"
+    },
+    {
+      "case_id": "MN-24",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 24,
+      "row_fingerprint": "dc4c7019e5272de49db4ef866424549330aea2ae7afeaebea77994efe7bfef5c"
+    },
+    {
+      "case_id": "MN-25",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 25,
+      "row_fingerprint": "0314624b42dcd5058a57351b422d9ffe5766a0aff2af06dce98ae3142ec75bc3"
+    },
+    {
+      "case_id": "MN-26",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 26,
+      "row_fingerprint": "67235bbf5ed77fe04757e8ccba4238e3a4240d4e7ddb3f486b91b708dee9654b"
+    },
+    {
+      "case_id": "MN-27",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 27,
+      "row_fingerprint": "44cc3a37c021c0762062005bef2380dc939701f5ea911858d5b4c9586f4a9e39"
+    },
+    {
+      "case_id": "MN-28",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 28,
+      "row_fingerprint": "7df18a42f2b68d07c1dd5a2f9576bc577d2baa1b315ebf3322fbb8f8ac30dc50"
+    },
+    {
+      "case_id": "MN-29",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 29,
+      "row_fingerprint": "23bfd3ca43cfc9671a040102da42aa88707a5f16d6e178409df8a8edebf32fe0"
+    },
+    {
+      "case_id": "MN-30",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 30,
+      "row_fingerprint": "8096849083e7e1d6115e7efa0c8c7b528759b4882e4dbb27da36bb1dad4dfd87"
+    },
+    {
+      "case_id": "MN-31",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": "cb9f89bbcd3185d9b602b372ea614e095e658bba074b52a6bc4e9aadeae72eec",
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 31,
+      "row_fingerprint": "1976d34432cdd34517c5713db055231e36558e6aefe04d6a15cdea66b299cffa"
+    },
+    {
+      "case_id": "MN-32",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 32,
+      "row_fingerprint": "ca3d955180f97dd35e77deb27505431bcd9a5f08d38ae02f81600eb1747dc6fb"
+    },
+    {
+      "case_id": "MN-33",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 33,
+      "row_fingerprint": "155746e13e369d812a0c2c13068dbaf9dda0609d015ad91a443af0ae84791ce5"
+    },
+    {
+      "case_id": "MN-34",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 34,
+      "row_fingerprint": "ae43d21d137e528802cf799192498869b621452e034776711701f27124e27158"
+    },
+    {
+      "case_id": "MN-35",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 35,
+      "row_fingerprint": "c50590d595d2f53d79ad869dcf44da7520791ad15a1ebbe700d4614dbf4e59a1"
+    },
+    {
+      "case_id": "MN-36",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 36,
+      "row_fingerprint": "564b062300b2f40676722509935012889d4ade1a447639b0395fd378c884bfc6"
+    },
+    {
+      "case_id": "MN-37",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 37,
+      "row_fingerprint": "0d64c799d2ae864d240e19d7b0035b7367cfb288d20285bdd40839de0551e9cd"
+    },
+    {
+      "case_id": "MN-38",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 38,
+      "row_fingerprint": "3e967bca0976c20e39a0bf50a188a8b1af616806b9f42f845a17b9c267671318"
+    },
+    {
+      "case_id": "MN-39",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 39,
+      "row_fingerprint": "750f81f3308f6c4eafb35761b34a112bda5c7d9bd8a2b7b21dc271f23cd351d8"
+    },
+    {
+      "case_id": "MN-40",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 40,
+      "row_fingerprint": "b6042e4d51edcb463b2d408e1d8cfef3e58d4ccef838019f13e63441edd386f7"
+    },
+    {
+      "case_id": "MN-41",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 41,
+      "row_fingerprint": "ebb93769b851564a90c932525b4333592c2601dbf5b824bfb29ec6ff821d8ad4"
+    },
+    {
+      "case_id": "MN-42",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 42,
+      "row_fingerprint": "218b5c3992e7ac67b78eabb4b59fdcb213a249bf85203231ce78c0fef29a3549"
+    },
+    {
+      "case_id": "MN-43",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 43,
+      "row_fingerprint": "3419b30e21cb4682ad9ce5e61514307b1076c80f5fc0c13e63c5677b1036b3fd"
+    },
+    {
+      "case_id": "MN-44",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 44,
+      "row_fingerprint": "abff926775ad9c5ec1d4a829cd3af0b033bfd8e43731eca88c1293e5f8c0dbc4"
+    },
+    {
+      "case_id": "MN-45",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 45,
+      "row_fingerprint": "9cbd83169b60282e89cee2c13ff561d54eb8eb832a23d639321d5b35d59ea2cd"
+    },
+    {
+      "case_id": "MN-46",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 46,
+      "row_fingerprint": "fdf1a132e50f902d035d4d0a47d36e64b43de671b4390a8e21540866f922455c"
+    },
+    {
+      "case_id": "MN-47",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": 1,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 47,
+      "row_fingerprint": "a6971cdf9e0c9f4177f627fc440030bef70b37625ea2b9a5322e93a52a8d41a0"
+    },
+    {
+      "case_id": "MN-48",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 48,
+      "row_fingerprint": "b0a8ad32971463d264bcd0d04e94d03b8f2ae62f090648a3016eb450cf268b05"
+    },
+    {
+      "case_id": "MN-49",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 49,
+      "row_fingerprint": "961ac18a81cc4ad8c27acaaba3a9ea0bb268c48a40fd85398f0fc1674e640775"
+    },
+    {
+      "case_id": "MN-50",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 50,
+      "row_fingerprint": "b2ef1b219a8ce15be298b9de0f5d7ad4f95de2669e3da1f93f9f66950805df03"
+    },
+    {
+      "case_id": "MN-51",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 51,
+      "row_fingerprint": "f4f165b526eebf5309461b5d29ae6e44fbd6ddfbb13f4730c88343239faa2ca6"
+    },
+    {
+      "case_id": "MN-52",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 52,
+      "row_fingerprint": "15713ab3aa4f83ba82f345990dbc160327fe4ea7b540295c539da07ec9592633"
+    },
+    {
+      "case_id": "MN-53",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 53,
+      "row_fingerprint": "cda43bdf61bd9c753372eb46e0953c7e0e711f1798d514f79077beba05c37ebd"
+    },
+    {
+      "case_id": "MN-54",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 54,
+      "row_fingerprint": "35d0adb5210fdc5c662b0ce5473c8530f72f9fe4db29f149c8c5cddb65904335"
+    },
+    {
+      "case_id": "MN-55",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": "synthetic://owner/f7_intent_currentness/assessment-commitment@1"
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 55,
+      "row_fingerprint": "cdb5fce13012bd9ce230b5cfcb5658e0dcff096961fa99563dec01b24a42737a"
+    },
+    {
+      "case_id": "MN-56",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 56,
+      "row_fingerprint": "9198a0734743714000d6f7bb31409addeb316f7af9152ea30ca3aa558b484d2a"
+    },
+    {
+      "case_id": "MN-57",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 57,
+      "row_fingerprint": "6999861f276471769beffb302b1e25e29c442fc2b9133a3b7ec68c25303ab859"
+    },
+    {
+      "case_id": "MN-58",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 58,
+      "row_fingerprint": "420b6f3384f03228dc571b81b345deebccd6981645b6385cd17668fca6f14c2b"
+    },
+    {
+      "case_id": "MN-59",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 59,
+      "row_fingerprint": "60e346624ca352c9b060dfeaaf40c65b7582bd1a6a1614c0433a800f1f80468e"
+    },
+    {
+      "case_id": "MN-60",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 60,
+      "row_fingerprint": "1a0c767c56a211f439135529e2d21bbb0236366e57bc56beaadf5d9a0f0c5e94"
+    },
+    {
+      "case_id": "MN-61",
+      "consumer": {
+        "assessment_id": null,
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": 1,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 61,
+      "row_fingerprint": "b7b39ed0ac8520bba0fca9db854f4cf3166e1a71d3f16bca36993dd2f9f5a1b7"
+    },
+    {
+      "case_id": "MN-62",
+      "consumer": {
+        "assessment_id": "A-F7-CURRENT",
+        "expected_assessment_fingerprint": null,
+        "expected_assessment_revision": null,
+        "expected_owner_commitment_fingerprint": null,
+        "expected_owner_commitment_revision": null,
+        "owner_commitment_ref": null
+      },
+      "expected_shape": "MIXED_NULL_INVALID",
+      "expected_valid": false,
+      "null_mask": 62,
+      "row_fingerprint": "26a6f49e52411a2459d7d2cad6b29f55acf20dd8720476631af13ea04b667611"
+    }
+  ],
+  "root_fingerprint": "46529816c1f2a4eb82cc2df18a8239a8291488ac6a92224b15ef335786bf7b30",
+  "runtime_usable": false,
+  "schema_inventory": [
+    {
+      "closed": true,
+      "fields": [
+        "assessment_id",
+        "expected_assessment_revision",
+        "expected_assessment_fingerprint",
+        "owner_commitment_ref",
+        "expected_owner_commitment_revision",
+        "expected_owner_commitment_fingerprint"
+      ],
+      "legal_shapes": [
+        "ALL_NULL",
+        "ALL_NON_NULL"
+      ],
+      "schema_fingerprint": "a5846117a8948ec327b9574a0911294080a400768191a79568f324e802b04dac",
+      "schema_id": "AssessmentConsumerV0_1R4"
+    },
+    {
+      "closed": true,
+      "fields": [
+        "assessment",
+        "resolution",
+        "owner_store_lookup_performed",
+        "assessment_result_interpreted",
+        "authority_created"
+      ],
+      "schema_fingerprint": "21c01ebe46fd9b1ece31a5abe29702434e427bfa631b5bcaace054fed2cbbe72",
+      "schema_id": "ConsumerResolutionV0_1R4"
+    },
+    {
+      "closed": true,
+      "fields": [
+        "source_case_id",
+        "source_row_fingerprint",
+        "source_result",
+        "source_consumer_inventory_fingerprint",
+        "upgraded_consumers",
+        "downprojected_consumer_inventory_fingerprint",
+        "claimed_result"
+      ],
+      "schema_fingerprint": "cc4350b55f37427182c3ad987d73b8732bfb01eead5d928e848cfadea45a9bfb",
+      "schema_id": "InheritedR2H01CompatibilityV0_1R4"
+    }
+  ],
+  "schema_version": "agents-os.f8-r4-consumer-nullability-totality-witness.v0.1",
+  "section_fingerprints": {
+    "acknowledgement_all_null_cases": "3686f582177adac67863fe5565b78adceecb2e27b5236ff42eaafb61a820cc2f",
+    "boundary_assertions": "9f50a7fba4961cceacf67a897b3b5a85bc867d21d5fbc3a42d4b8969bec2f789",
+    "canonical_candidate_history": "035807324e640e0696e043f4d87efe6bc287ea3262b4d2e52ccb0dac7312c10d",
+    "consumer_shape_positive_cases": "861c3993de5addc43e1a773e8b5a42193f682a82bc5d68b2abbebeb2764242e4",
+    "formation_all_null_cases": "403f5b424d93cd9b1c5fdf978c780a7585adb4dc4edb712c138f9ef7c53591de",
+    "inherited_R2_H01_compatibility_cases": "57d7ad207a823ecb686c73731d9762163aa684b7974e6df87f6c3f920f4c3173",
+    "mixed_null_negative_cases": "8e5d312dceb8317942a8f420549b8c4a2671db7c6ec2ccf3e2257407a365beee",
+    "schema_inventory": "e0feea4cfa2a456917faf9ce2b2aa45c2f2caa956fe8676be3677f248f3e7213"
+  }
+}

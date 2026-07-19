@@ -1,0 +1,111 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f8-r2-evidence-currentness-schema-closure-self-review-2026-07-19
+date: 2026-07-19
+reviewer: Nobao_author_run
+independence: false
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R2_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+R1_immutability:
+  manifest_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+  subjects_unchanged: 4_of_4
+  subject_hashes:
+    - 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    - f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    - 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    - af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+
+R2_subject_hashes:
+  normative_amendment: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+  deterministic_fixture_builder: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+  synthetic_fixture: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+  offline_semantic_validator: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+
+R1_finding_disposition:
+  finding_count: 6
+  closed_claimed: 6_of_6
+  F8-R1-B01:
+    status: CLOSED_CLAIMED
+    evidence: canonical_required_intake_results_COMMITTED_REJECTED_INDETERMINATE
+  F8-R1-B02:
+    status: CLOSED_CLAIMED
+    evidence: consumer_and_candidate_set_bind_exact_resolved_assessment_fingerprint
+  F8-R1-B03:
+    status: CLOSED_CLAIMED
+    evidence: acknowledgement_binds_candidate_revision_subject_context_fingerprint_and_watermark
+  F8-R1-B04:
+    status: CLOSED_CLAIMED
+    evidence: target_schema_validation_passes_and_rejects_with_fixture_anchors_disabled
+  F8-R1-M01:
+    status: CLOSED_CLAIMED
+    evidence: R2_manifest_adds_both_accepted_architecture_direction_inputs
+  F8-R1-M02:
+    status: CLOSED_CLAIMED
+    evidence: package_local_four_file_whitespace_check_requires_no_Git_worktree
+
+validation:
+  fixed_fixture_result: PASS
+  schema_profiles_verified: 10_of_10
+  upstream_assessments_verified: 28_of_28
+  handoff_cases_independently_derived: 25_of_25
+  handoff_candidate_revisions_verified: 2_of_2
+  acknowledgement_cases_independently_derived: 9_of_9
+  R1_inherited_fully_resigned_mutations_rejected: 41_of_41
+  R2_target_regressions_passed: 17_of_17
+  total_author_negative_checks: 58_of_58
+  duplicate_JSON_key_NaN_and_Infinity_rejected: 3_of_3
+  validator_exceptions: 0
+  builder_byte_reproduction: PASS
+  deterministic_offline_whitespace_check: 4_of_4_PASS
+
+proof_properties:
+  required_intake_results_unique_order: [COMMITTED, REJECTED, INDETERMINATE]
+  consumer_binds_exact_assessment_fingerprint: true
+  assessment_set_binds_exact_resolved_row_fingerprints: true
+  same_revision_rewrite_with_old_consumer_fingerprint_rejected: true
+  acknowledgement_subject_revision_exact: true
+  acknowledgement_context_exact: true
+  acknowledgement_watermark_current: true
+  acknowledgement_assessment_fingerprint_exact: true
+  schema_totality_independent_of_fixture_anchors: true
+  created_event_ref_integer_rejected_at_target_schema: true
+  F8_output_is_nonauthoritative_candidate_only: true
+  F8_mints_F3_Command_or_authentication: false
+  F8_creates_Task_or_effect_authority: false
+  upstream_owner_reducer_recomputed: false
+  second_permission_system_created: false
+
+authority_input_closure:
+  resident_architecture_sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+  high_privilege_architecture_sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+  both_to_be_bound_by_R2_manifest: true
+
+occurrence_assertions:
+  real_home_fact_count: 0
+  real_task_count: 0
+  real_command_count: 0
+  private_raw_memory_count: 0
+  runtime_activation_count: 0
+  database_write_count: 0
+  provider_call_count: 0
+  sensing_or_recording_count: 0
+  external_effect_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+review_limitations:
+  author_review_is_independent: false
+  author_result_accepts_or_freezes_F8: false
+  implementation_or_runtime_readiness_proven: false
+
+governance:
+  F8_started: true
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_effect_execution_authorized: false
+
+next_gate: F8_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

@@ -1,0 +1,438 @@
+{
+  "boundary_assertions": {
+    "database_write_count": 0,
+    "external_effect_count": 0,
+    "private_Memory_read_count": 0,
+    "production_authentication_count": 0,
+    "provider_call_count": 0,
+    "real_Command_count": 0,
+    "real_Home_count": 0,
+    "runtime_usable_count": 0,
+    "sensing_or_recording_count": 0,
+    "task_write_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "contract_id": "F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5",
+  "domain_tag": "agents-os:f8-r5-h01-owner-commitment-stable-ref-closure:v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "merged_H01_derivation_cases": [
+    {
+      "derived_decision": {
+        "F3_command_ref": null,
+        "F3_intake_ref": null,
+        "F3_recheck_required": true,
+        "command_authority": false,
+        "effect_authority": false,
+        "primary_reason": "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE",
+        "reason_codes": [
+          "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE"
+        ],
+        "result": "CANDIDATE_FORMED",
+        "runtime_usable": false,
+        "task_write_authority": false
+      },
+      "downprojected_consumer_inventory_fingerprint": "3810d067c075762622a842d289fde1fcdacfc61e44cefdc24e644143a620c7cf",
+      "owner_commitment_resolutions": [
+        {
+          "consumer": {
+            "assessment_id": "A-ACTOR-ACTIVE",
+            "expected_assessment_fingerprint": "916e54ec748a09d19de659b9a1097e6513ee7fba63e934e1bb7ff650d5454ab2",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "46a92670de10070886f498fd1b882d2420d78ba108750356ae5d7a487c219142",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-actor_identity@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "46a92670de10070886f498fd1b882d2420d78ba108750356ae5d7a487c219142",
+          "resolved_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-actor_identity@1",
+          "resolved_commitment_revision": 1,
+          "role": "actor_identity",
+          "row_fingerprint": "e1671cf520216b542d5d595f1e98c9f16d1a31399dfb232ab9b5615ed99b9be5"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-F3-READY",
+            "expected_assessment_fingerprint": "137fcb5a7321923a339452c87c7caef0dad4735c8a2cc7c0d48b8deae88ee5e8",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "bae84d47996b3c97cbb50f1d1283fa8f5e4a5e311f8362d6ea096954037e43d4",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://f3/assessment-commitment/r5-h01-f3_readiness@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "bae84d47996b3c97cbb50f1d1283fa8f5e4a5e311f8362d6ea096954037e43d4",
+          "resolved_commitment_ref": "synthetic://f3/assessment-commitment/r5-h01-f3_readiness@1",
+          "resolved_commitment_revision": 1,
+          "role": "f3_readiness",
+          "row_fingerprint": "184053612f846941482697c7211b658eda18f2c10988a75d0256ceca1bcf8f6f"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-F7-CURRENT",
+            "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "957f90ae9b6e61e5fc9cdf9192b58d46c2df8976e5f331cdc65439ce755ec3ca",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://f7/assessment-commitment/r5-h01-f7_intent_currentness@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "957f90ae9b6e61e5fc9cdf9192b58d46c2df8976e5f331cdc65439ce755ec3ca",
+          "resolved_commitment_ref": "synthetic://f7/assessment-commitment/r5-h01-f7_intent_currentness@1",
+          "resolved_commitment_revision": 1,
+          "role": "f7_intent_currentness",
+          "row_fingerprint": "beb366a275e2ca3eb8750f3ca0f9900b314d73ce85c97cdf106de4da5234a5e3"
+        },
+        {
+          "consumer": {
+            "assessment_id": null,
+            "expected_assessment_fingerprint": null,
+            "expected_assessment_revision": null,
+            "expected_owner_commitment_fingerprint": null,
+            "expected_owner_commitment_revision": null,
+            "owner_commitment_ref": null
+          },
+          "owner_lookup_performed": false,
+          "resolution": "OPTIONAL_ALL_NULL_NO_LOOKUP",
+          "resolved_commitment_fingerprint": null,
+          "resolved_commitment_ref": null,
+          "resolved_commitment_revision": null,
+          "role": "jenn_exact_decision",
+          "row_fingerprint": "50dff062519fd21cac3137304f5f82fc108e5312660674693621cc25b6e3362c"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-JREQ-NONE",
+            "expected_assessment_fingerprint": "e53734933433c564f8d2cab9f773b754bc7dfb3714a2d3451297a2ae0c0ce207",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "2f6b194f7eec4c547ebe450584cbcd4083078da2cbf15a1050577fbe14b3af16",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-jenn_requirement@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "2f6b194f7eec4c547ebe450584cbcd4083078da2cbf15a1050577fbe14b3af16",
+          "resolved_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-jenn_requirement@1",
+          "resolved_commitment_revision": 1,
+          "role": "jenn_requirement",
+          "row_fingerprint": "1d2370a0c601b4cdc840952c5f3029a0ee7eb69b754d57b6268ff0dda69d9835"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-PBL-CLEAR",
+            "expected_assessment_fingerprint": "4291cb480ae1470f4215a690cb4f345e8ab0c1b64410ef8e48b72f16f62efdc9",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "958b65b41938ecdc3972a5b21a03fb2c632f99abd2e7efbcf6ac33e4274cc231",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-pbl_currentness@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "958b65b41938ecdc3972a5b21a03fb2c632f99abd2e7efbcf6ac33e4274cc231",
+          "resolved_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-pbl_currentness@1",
+          "resolved_commitment_revision": 1,
+          "role": "pbl_currentness",
+          "row_fingerprint": "9fff81c60c62518f124305d6c4be2c2c30078d5d1eeb6105443c3d89a4c076ae"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-PRINCIPAL-ACTIVE",
+            "expected_assessment_fingerprint": "edabdfef642525eb9037af9f764ff040dc613b2161fe2ceb2f20d88450ecc039",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "d1b58217bd39bfb85411981641969b3e73dc6881a8d43e52a395994ebcf107b3",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-principal_binding@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "d1b58217bd39bfb85411981641969b3e73dc6881a8d43e52a395994ebcf107b3",
+          "resolved_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-principal_binding@1",
+          "resolved_commitment_revision": 1,
+          "role": "principal_binding",
+          "row_fingerprint": "8045aeb5e8bee770822707e5284a23f08c1f0c73eb7d96d1c1ec0ee6102a7bb7"
+        },
+        {
+          "consumer": {
+            "assessment_id": "A-RESP-ACTIVE",
+            "expected_assessment_fingerprint": "10943831ea4dcc6101d70a43fe8b8d1b73c1c0f656008f52988feb082b68d144",
+            "expected_assessment_revision": 1,
+            "expected_owner_commitment_fingerprint": "0f85f16892e858b8b7da22b279ebb786e5d6c1b3bf95b5161ace10c70fd75bca",
+            "expected_owner_commitment_revision": 1,
+            "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-responsibility@1"
+          },
+          "owner_lookup_performed": true,
+          "resolution": "EXACT_TRUSTED_OWNER_COMMITMENT",
+          "resolved_commitment_fingerprint": "0f85f16892e858b8b7da22b279ebb786e5d6c1b3bf95b5161ace10c70fd75bca",
+          "resolved_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-responsibility@1",
+          "resolved_commitment_revision": 1,
+          "role": "responsibility",
+          "row_fingerprint": "ebd9c66bfd0340c4fe27d3b583c2db6fdd5de7418a8993ca8136b5213575f0cc"
+        }
+      ],
+      "row_fingerprint": "2d02995ec28c2be793c844d9fb5a376097302f6c1105e2b663b18cc3bad6db77",
+      "source_case_id": "H01",
+      "source_consumer_inventory_fingerprint": "3810d067c075762622a842d289fde1fcdacfc61e44cefdc24e644143a620c7cf",
+      "source_raw_input_fingerprint": "ab3d9f8086c1810ba1d4817e78bc52228125f4a3b195fac6ae16d6bfb95bc0d2",
+      "source_row_fingerprint": "867b7f110b5ee7c34c314850f20ff488a8574c77164ded7d06736b6b3b085787",
+      "trusted_owner_source_anchor": "79fbc671c0852b990f2c605dc7c77733ff9e150087e2e30cc910eada638cdbaa",
+      "upgraded_consumers": {
+        "actor_identity": {
+          "assessment_id": "A-ACTOR-ACTIVE",
+          "expected_assessment_fingerprint": "916e54ec748a09d19de659b9a1097e6513ee7fba63e934e1bb7ff650d5454ab2",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "46a92670de10070886f498fd1b882d2420d78ba108750356ae5d7a487c219142",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-actor_identity@1"
+        },
+        "f3_readiness": {
+          "assessment_id": "A-F3-READY",
+          "expected_assessment_fingerprint": "137fcb5a7321923a339452c87c7caef0dad4735c8a2cc7c0d48b8deae88ee5e8",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "bae84d47996b3c97cbb50f1d1283fa8f5e4a5e311f8362d6ea096954037e43d4",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f3/assessment-commitment/r5-h01-f3_readiness@1"
+        },
+        "f7_intent_currentness": {
+          "assessment_id": "A-F7-CURRENT",
+          "expected_assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "957f90ae9b6e61e5fc9cdf9192b58d46c2df8976e5f331cdc65439ce755ec3ca",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f7/assessment-commitment/r5-h01-f7_intent_currentness@1"
+        },
+        "jenn_exact_decision": {
+          "assessment_id": null,
+          "expected_assessment_fingerprint": null,
+          "expected_assessment_revision": null,
+          "expected_owner_commitment_fingerprint": null,
+          "expected_owner_commitment_revision": null,
+          "owner_commitment_ref": null
+        },
+        "jenn_requirement": {
+          "assessment_id": "A-JREQ-NONE",
+          "expected_assessment_fingerprint": "e53734933433c564f8d2cab9f773b754bc7dfb3714a2d3451297a2ae0c0ce207",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "2f6b194f7eec4c547ebe450584cbcd4083078da2cbf15a1050577fbe14b3af16",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-jenn_requirement@1"
+        },
+        "pbl_currentness": {
+          "assessment_id": "A-PBL-CLEAR",
+          "expected_assessment_fingerprint": "4291cb480ae1470f4215a690cb4f345e8ab0c1b64410ef8e48b72f16f62efdc9",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "958b65b41938ecdc3972a5b21a03fb2c632f99abd2e7efbcf6ac33e4274cc231",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-pbl_currentness@1"
+        },
+        "principal_binding": {
+          "assessment_id": "A-PRINCIPAL-ACTIVE",
+          "expected_assessment_fingerprint": "edabdfef642525eb9037af9f764ff040dc613b2161fe2ceb2f20d88450ecc039",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "d1b58217bd39bfb85411981641969b3e73dc6881a8d43e52a395994ebcf107b3",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-principal_binding@1"
+        },
+        "responsibility": {
+          "assessment_id": "A-RESP-ACTIVE",
+          "expected_assessment_fingerprint": "10943831ea4dcc6101d70a43fe8b8d1b73c1c0f656008f52988feb082b68d144",
+          "expected_assessment_revision": 1,
+          "expected_owner_commitment_fingerprint": "0f85f16892e858b8b7da22b279ebb786e5d6c1b3bf95b5161ace10c70fd75bca",
+          "expected_owner_commitment_revision": 1,
+          "owner_commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-responsibility@1"
+        }
+      }
+    }
+  ],
+  "root_fingerprint": "71c4e68283c7671a44f8a9de1ee00afee196cb901a205ae153f094c7198eaaa2",
+  "runtime_usable": false,
+  "schema_inventory": [
+    {
+      "closed": true,
+      "fields": [
+        "role",
+        "owner_contract",
+        "commitment_ref",
+        "commitment_revision",
+        "assessment_id",
+        "assessment_revision",
+        "assessment_fingerprint",
+        "issued_event_ref",
+        "issued_event_sequence",
+        "issued_event_fingerprint",
+        "commitment_fingerprint"
+      ],
+      "schema_fingerprint": "3146ab8c54484da2c1e3a03be808dc0b8568674db79d84ef92c79a76e411ae0c",
+      "schema_id": "TrustedH01OwnerCommitmentV0_1R5"
+    },
+    {
+      "closed": true,
+      "fields": [
+        "role",
+        "consumer",
+        "resolved_commitment_ref",
+        "resolved_commitment_revision",
+        "resolved_commitment_fingerprint",
+        "resolution",
+        "owner_lookup_performed",
+        "row_fingerprint"
+      ],
+      "schema_fingerprint": "21ffdeb35dd0bcd778c9207a45a346d89f2e97e07c8b3acf58d3e23d34298078",
+      "schema_id": "H01OwnerCommitmentResolutionV0_1R5"
+    },
+    {
+      "closed": true,
+      "fields": [
+        "source_case_id",
+        "source_row_fingerprint",
+        "source_raw_input_fingerprint",
+        "source_consumer_inventory_fingerprint",
+        "trusted_owner_source_anchor",
+        "upgraded_consumers",
+        "owner_commitment_resolutions",
+        "downprojected_consumer_inventory_fingerprint",
+        "derived_decision",
+        "row_fingerprint"
+      ],
+      "schema_fingerprint": "9cedac052fdda4152729a38990fbd754fc0b138a227f363701f9077f93255891",
+      "schema_id": "MergedR2R3R4H01DerivationV0_1R5"
+    }
+  ],
+  "schema_version": "agents-os.f8-r5-h01-owner-commitment-stable-ref-closure-witness.v0.1",
+  "section_fingerprints": {
+    "boundary_assertions": "a4de9e078821f23d15e586f876ff429506d28b22ae7fa798e53398af79579b18",
+    "merged_H01_derivation_cases": "9fa28f2435573e9624f9674d47c3169e0fbf222c66165018ce26b1a949aae6ae",
+    "schema_inventory": "969b36035891fdd051cee13be8567b17d1895802992e092bfae039255d2ff9f4",
+    "stable_ref_vectors": "cfa16cf3fcdfc3bd9f5ea4e3d7d2caa28827eb2744eeb151677acb443c94ffcb",
+    "trusted_H01_owner_commitment_source": "7ba0dcd730222d6021e310cad5c41398cd84f67a9a2aa3c12d1339bd5c059e1a"
+  },
+  "stable_ref_vectors": [
+    {
+      "case_id": "SR-NFC-INTERNAL-SPACE",
+      "codepoints": null,
+      "expected_valid": true,
+      "input_kind": "LITERAL",
+      "literal_value": "synthetic://owner commitment/h01",
+      "row_fingerprint": "54273aa96ca8247d950dceb0108a5123e0fd043c9152d459fc119fe9227e3b66"
+    },
+    {
+      "case_id": "SR-NON-NFC-CODEPOINTS",
+      "codepoints": [
+        115,
+        121,
+        110,
+        116,
+        104,
+        101,
+        116,
+        105,
+        99,
+        58,
+        47,
+        47,
+        99,
+        97,
+        102,
+        101,
+        769
+      ],
+      "expected_valid": false,
+      "input_kind": "CODEPOINTS",
+      "literal_value": null,
+      "row_fingerprint": "272447a7fc5568aecabbf2d5bbd822c325f0f351d3242c501b3074bb05b1aaf1"
+    }
+  ],
+  "trusted_H01_owner_commitment_source": [
+    {
+      "assessment_fingerprint": "916e54ec748a09d19de659b9a1097e6513ee7fba63e934e1bb7ff650d5454ab2",
+      "assessment_id": "A-ACTOR-ACTIVE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "46a92670de10070886f498fd1b882d2420d78ba108750356ae5d7a487c219142",
+      "commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-actor_identity@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "2eec0311265710a143ff33ac98c28e19cbb0027e5995563a17e89f00d95d740a",
+      "issued_event_ref": "synthetic://f2/event/r5-h01-actor_identity-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "F2",
+      "role": "actor_identity"
+    },
+    {
+      "assessment_fingerprint": "137fcb5a7321923a339452c87c7caef0dad4735c8a2cc7c0d48b8deae88ee5e8",
+      "assessment_id": "A-F3-READY",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "bae84d47996b3c97cbb50f1d1283fa8f5e4a5e311f8362d6ea096954037e43d4",
+      "commitment_ref": "synthetic://f3/assessment-commitment/r5-h01-f3_readiness@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "04210e0235fc5c884eb177fde327a951fecf75153a8ea3ac9db6050187838ad5",
+      "issued_event_ref": "synthetic://f3/event/r5-h01-f3_readiness-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "F3",
+      "role": "f3_readiness"
+    },
+    {
+      "assessment_fingerprint": "bb2c684e7028ece39ef864a10c8740513567f825be826e1a747a245153d8d861",
+      "assessment_id": "A-F7-CURRENT",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "957f90ae9b6e61e5fc9cdf9192b58d46c2df8976e5f331cdc65439ce755ec3ca",
+      "commitment_ref": "synthetic://f7/assessment-commitment/r5-h01-f7_intent_currentness@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "b1bb31278f363521d9ff96cc6a7892cbf09e54a7c4ae29938c38f81e224bd2dc",
+      "issued_event_ref": "synthetic://f7/event/r5-h01-f7_intent_currentness-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "F7",
+      "role": "f7_intent_currentness"
+    },
+    {
+      "assessment_fingerprint": "e53734933433c564f8d2cab9f773b754bc7dfb3714a2d3451297a2ae0c0ce207",
+      "assessment_id": "A-JREQ-NONE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "2f6b194f7eec4c547ebe450584cbcd4083078da2cbf15a1050577fbe14b3af16",
+      "commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-jenn_requirement@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "9a9f97268f558988c68cab1ce10d3ee7cc10ffa21b55beebafcd17eb66c7e325",
+      "issued_event_ref": "synthetic://policy/event/r5-h01-jenn_requirement-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "POLICY",
+      "role": "jenn_requirement"
+    },
+    {
+      "assessment_fingerprint": "4291cb480ae1470f4215a690cb4f345e8ab0c1b64410ef8e48b72f16f62efdc9",
+      "assessment_id": "A-PBL-CLEAR",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "958b65b41938ecdc3972a5b21a03fb2c632f99abd2e7efbcf6ac33e4274cc231",
+      "commitment_ref": "synthetic://policy/assessment-commitment/r5-h01-pbl_currentness@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "9a752eee496f4965c4ac15af9304b6db114cca270fd56abf61f2907fea559d12",
+      "issued_event_ref": "synthetic://policy/event/r5-h01-pbl_currentness-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "POLICY",
+      "role": "pbl_currentness"
+    },
+    {
+      "assessment_fingerprint": "edabdfef642525eb9037af9f764ff040dc613b2161fe2ceb2f20d88450ecc039",
+      "assessment_id": "A-PRINCIPAL-ACTIVE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "d1b58217bd39bfb85411981641969b3e73dc6881a8d43e52a395994ebcf107b3",
+      "commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-principal_binding@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "7c50548651efc9728ba742c718bdbc602a50f84bde2d7ce8907a2da2a2f0c119",
+      "issued_event_ref": "synthetic://f2/event/r5-h01-principal_binding-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "F2",
+      "role": "principal_binding"
+    },
+    {
+      "assessment_fingerprint": "10943831ea4dcc6101d70a43fe8b8d1b73c1c0f656008f52988feb082b68d144",
+      "assessment_id": "A-RESP-ACTIVE",
+      "assessment_revision": 1,
+      "commitment_fingerprint": "0f85f16892e858b8b7da22b279ebb786e5d6c1b3bf95b5161ace10c70fd75bca",
+      "commitment_ref": "synthetic://f2/assessment-commitment/r5-h01-responsibility@1",
+      "commitment_revision": 1,
+      "issued_event_fingerprint": "36e88e3068917d2adeca9a794c11b6ee9f67d14885077ff7647f48356b430d52",
+      "issued_event_ref": "synthetic://f2/event/r5-h01-responsibility-commitment",
+      "issued_event_sequence": 100,
+      "owner_contract": "F2",
+      "role": "responsibility"
+    }
+  ]
+}

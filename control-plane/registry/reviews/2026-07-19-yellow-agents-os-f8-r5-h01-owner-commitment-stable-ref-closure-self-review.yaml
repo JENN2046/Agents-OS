@@ -1,0 +1,103 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-self-review-v0.1
+date: '2026-07-19'
+reviewer: Nobao
+independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+scope:
+  R1_subjects: 4
+  R2_subjects: 4
+  R3_subjects: 4
+  R4_subjects: 4
+  R5_subjects: 4
+  total_subjects: 20
+  R1_R4_fixed_bytes_modified: false
+
+R5_subjects:
+  - role: R5_normative_amendment
+    path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r5-amendment.md
+    sha256: 127b52e21c3b0d8f401f18b489d9a1ac2d6d0696c7e2147c7d6ea54afcec2df1
+  - role: R5_deterministic_fixture_builder
+    path: control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py
+    sha256: 3322f34cef2bada3096100605a0e1f31bdf319910d1ac0799404abc51d26dad2
+  - role: R5_synthetic_fixture
+    path: control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json
+    sha256: 3d5638e92123a4ec6bb8b4302166256d8e4cd9b80b665a7beb1bdf2cb17895e0
+  - role: R5_offline_validator
+    path: control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py
+    sha256: 7618e0769231539075b8ac420d32537a8f25ad4c03808ec7f8a45091d8328995
+
+R4_finding_disposition:
+  F8-R4-B01:
+    author_claim: CLOSED
+    evidence:
+      - seven non-null H01 consumers resolve exact commitment ref revision and fingerprint
+      - trusted owner-source inventory is pinned by validator constant 79fbc671c0852b990f2c605dc7c77733ff9e150087e2e30cc910eada638cdbaa
+      - source plus consumer coordinated rewrite is rejected after full re-signing
+      - fixed R2 reducer derives the final decision; claimed_result is not trusted
+  F8-R4-B02:
+    author_claim: CLOSED
+    evidence:
+      - stable_ref requires strict string nonempty and NFC only
+      - non-NFC mutation is rejected after full re-signing
+      - nonempty NFC stable ref containing an internal space is accepted
+      - no internal-whitespace prohibition remains
+
+constructive_witness:
+  schema_profiles: 3
+  H01_cases: 1
+  non_null_H01_consumers: 7
+  all_null_H01_consumers: 1
+  exact_owner_commitment_resolutions: 7
+  trusted_owner_source_anchor_verified: true
+  merged_R2_R3_R4_derivation_verified: true
+  stable_ref_internal_space_positive_verified: true
+  runtime_usable: false
+  terminal_outcome: NOT_EXECUTED
+
+author_regressions:
+  fully_resigned_or_direct_R5_probes: 15/15_PASS
+  probe_exceptions: 0
+  covered:
+    - commitment_ref_substitution
+    - commitment_revision_substitution
+    - commitment_fingerprint_substitution
+    - commitment_tuple_cross_role
+    - coordinated_source_and_consumer_rewrite
+    - source_row_delete_duplicate_reorder
+    - claimed_result_change
+    - assessment_tuple_change_with_fixed_commitment
+    - non_NFC_stable_ref
+    - NFC_internal_space_positive
+    - stable_ref_primitive_profiles
+  parser_probes: 3/3_PASS
+  builder_byte_reproduction: PASS
+  whitespace_validation: PASS
+
+authority_review:
+  second_permission_system_found: false
+  upstream_reducer_recomputed_by_F8_contract: false
+  fixed_R2_reducer_consumed_by_offline_proof: true
+  caller_authored_commitment_accepted_as_owner_source: false
+  synthetic_owner_source_runtime_usable: false
+  real_Home_or_Command_created: false
+  real_effect_or_provider_execution: false
+
+limitations:
+  - author self-review is not independent review
+  - trusted owner anchors are synthetic offline proof constants only
+  - no implementation runtime database provider authentication sensing private Memory or effect was exercised
+
+governance:
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_effect_execution_authorized: false
+  next_gate: F8_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

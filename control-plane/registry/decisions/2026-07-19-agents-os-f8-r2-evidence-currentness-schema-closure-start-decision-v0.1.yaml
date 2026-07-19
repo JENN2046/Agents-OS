@@ -1,0 +1,83 @@
+schema_version: agents-os.contract-amendment-start-decision.v0.1
+record_id: agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1
+record_type: ContractAmendmentStartDecision
+status: active
+immutable: true
+created_at: 2026-07-19T00:00:00+08:00
+
+authority:
+  owner: Jenn
+  exact_confirmation_received: >-
+    I confirm starting F8 R2, strictly limited to closing the four blockers and
+    two majors from the F8 R1 independent review; preserve the four F8 R1
+    subjects and original manifest bytes unchanged, do not start Phase 5A, and
+    do not authorize implementation, runtime, database, provider, production
+    authentication, private Memory, sensing, or real effects.
+  independent_finding:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+    sha256: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    result: BLOCK
+  finding_disposition:
+    path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r1-independent-review-disposition-v0.1.yaml
+    sha256: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+
+amendment:
+  contract_unit: F8
+  revision: R2
+  name: Evidence Currentness and Schema Totality Closure
+  started: true
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+
+exact_scope:
+  - canonicalize_required_intake_results_order_across_all_R2_subjects
+  - bind_each_assessment_consumer_to_exact_resolved_assessment_fingerprint
+  - bind_assessment_set_fingerprint_to_exact_resolved_assessment_fingerprints
+  - close_F3_acknowledgement_candidate_revision_subject_context_and_watermark
+  - validate_every_schema_field_type_enum_nullability_and_cross_field_rule_before_fingerprint_trust
+  - add_resident_and_high_privilege_architecture_to_R2_manifest_authority_inputs
+  - replace_git_dependent_whitespace_check_with_deterministic_offline_file_validator
+
+required_regressions:
+  - same_revision_stale_assessment_rewrite_with_new_row_fingerprint_and_old_consumer_commitment
+  - acknowledgement_wrong_subject_revision
+  - acknowledgement_watermark_behind_trusted_sequence
+  - acknowledgement_context_mismatch
+  - integer_created_event_ref_after_full_graph_resigning_with_fixture_anchors_disabled
+  - unknown_wrong_type_enum_nullability_and_cross_field_schema_mutations
+  - required_intake_results_wrong_order
+
+immutability:
+  R1_subjects: preserve_exact_bytes
+  R1_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+  R1_subject_hashes:
+    - 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    - f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    - 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    - af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+
+forbidden_scope:
+  - permission_or_permission_level_system
+  - identity_Principal_Binding_Task_or_Command_authority
+  - F1_through_F7_owner_reducer_reimplementation
+  - accepted_F3_Command_type_or_runtime_intake
+  - Phase_5A
+  - implementation
+  - runtime_activation
+  - database_or_provider
+  - production_authentication
+  - private_Memory_access
+  - sensing_or_recording
+  - real_Home_Task_Command_or_effect
+
+effects:
+  F8_status: R2_NARROW_CORRECTION_ACTIVE
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+
+next_gate: F8_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

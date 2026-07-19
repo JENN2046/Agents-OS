@@ -1,0 +1,241 @@
+[
+  {
+    "name": "A01_root_runtime_usable_true",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "$: synthetic domain boundary mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A02_prospective_status_accepted",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "prospective_f3_interface_requirement: normative values mismatch",
+      "prospective_f3_interface_requirement: fingerprint mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A03_prospective_runtime_usable_true",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "prospective_f3_interface_requirement: normative values mismatch",
+      "prospective_f3_interface_requirement: fingerprint mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A04_nonzero_real_command",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "boundary_assertions.real_command_count: must be integer zero"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A05_handoff_command_authority_true",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases[0]: command_authority must be false",
+      "handoff_cases[0]: claimed decision not independently derived"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A06_handoff_task_authority_true",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases[0]: task_write_authority must be false",
+      "handoff_cases[0]: claimed decision not independently derived"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A07_handoff_effect_authority_true",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases[0]: effect_authority must be false",
+      "handoff_cases[0]: claimed decision not independently derived"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A08_unknown_root_field",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "$: fields mismatch missing=[] extra=['unknown_root']"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A09_integer_as_boolean",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases[0].raw_input.explicit_action_choice: strict boolean required",
+      "handoff_cases[0]: claimed decision not independently derived",
+      "handoff_cases: canonical ID/order/raw inventory mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A10_float_payload",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "$.handoff_cases[0].raw_input.payload_commitment: floats are forbidden",
+      "handoff_cases[0].raw_input.payload_commitment: lowercase SHA-256 required",
+      "handoff_cases[0]: claimed decision not independently derived",
+      "handoff_cases: canonical ID/order/raw inventory mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A11_case_delete",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases: expected 25 rows",
+      "handoff_cases: canonical ID/order/raw inventory mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A12_case_reorder",
+    "mode": "full_graph_resigned",
+    "accepted": false,
+    "errors": [
+      "handoff_cases: canonical ID/order/raw inventory mismatch"
+    ],
+    "expected_reject": true,
+    "outcome_ok": true
+  },
+  {
+    "name": "A13_current_head_watermark_behind",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "REJECTED",
+    "reason_codes": [
+      "ASSESSMENT_WATERMARK_BEHIND"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A14_wrong_assessment_revision",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "REJECTED",
+    "reason_codes": [
+      "ASSESSMENT_REVISION_MISMATCH"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A15_PBL_no_match_as_permission",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "REJECTED",
+    "reason_codes": [
+      "PBL_NO_MATCH_IS_NOT_PERMISSION"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A16_relationship_trust_as_authority",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "REJECTED",
+    "reason_codes": [
+      "RELATIONSHIP_OR_TRUST_CANNOT_EXPAND_AUTHORITY"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A17_exact_Jenn_decision_missing",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "REJECTED",
+    "reason_codes": [
+      "EXACT_JENN_DECISION_MISSING_OR_INVALID"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A18_ack_wrong_candidate_subject",
+    "mode": "resigned_ack_reducer_attack",
+    "derived_result": "ACKNOWLEDGED_INDETERMINATE",
+    "reason_codes": [
+      "F3_OUTCOME_SUBJECT_MISMATCH"
+    ],
+    "expected": "ACKNOWLEDGED_INDETERMINATE",
+    "outcome_ok": true
+  },
+  {
+    "name": "A19_ack_wrong_assessment_revision",
+    "mode": "resigned_ack_reducer_attack",
+    "derived_result": "ACKNOWLEDGED_INDETERMINATE",
+    "reason_codes": [
+      "F3_OUTCOME_REVISION_MISMATCH"
+    ],
+    "expected": "ACKNOWLEDGED_INDETERMINATE",
+    "outcome_ok": true
+  },
+  {
+    "name": "A20_production_profile_deferred",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "DEFERRED",
+    "reason_codes": [
+      "F3_INTERFACE_REQUIREMENT_UNACCEPTED"
+    ],
+    "expected": "DEFERRED",
+    "outcome_ok": true
+  },
+  {
+    "name": "A21_same_revision_stale_assessment_rewrite",
+    "mode": "resigned_reducer_attack",
+    "derived_result": "CANDIDATE_FORMED",
+    "reason_codes": [
+      "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE"
+    ],
+    "expected": "REJECTED",
+    "outcome_ok": false
+  },
+  {
+    "name": "A22_ack_wrong_subject_revision_and_stale_watermark",
+    "mode": "resigned_ack_reducer_attack",
+    "derived_result": "ACKNOWLEDGED_COMMITTED",
+    "reason_codes": [
+      "F3_OWNER_REPORTED_SYNTHETIC_COMMITTED"
+    ],
+    "expected": "ACKNOWLEDGED_INDETERMINATE",
+    "outcome_ok": false
+  },
+  {
+    "name": "A23_candidate_created_event_ref_integer",
+    "mode": "full_graph_resigned_anchorless",
+    "accepted": true,
+    "errors": [],
+    "expected_reject": true,
+    "outcome_ok": false
+  }
+]

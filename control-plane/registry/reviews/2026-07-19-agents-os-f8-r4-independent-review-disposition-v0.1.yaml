@@ -1,0 +1,102 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: agents-os-f8-r4-independent-review-disposition-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R4_ATOMIC_BUNDLE
+review_result: BLOCK
+requires_R5: true
+R5_started: false
+
+bound_review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r4-nobao-independent-review.yaml
+  sha256: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+bound_attack_results:
+  path: control-plane/registry/reviews/f8_r4_independent_attack_results.json
+  sha256: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+bound_probe:
+  path: control-plane/registry/reviews/f8_r4_independent_review_probe.py
+  sha256: 5405e30b0992ada0b5d43e98fccba84c5fba1253098af2d5ac43285c41b37ed2
+bound_checksums:
+  path: control-plane/registry/reviews/2026-07-19-f8-r4-independent-review-SHA256SUMS.txt
+  sha256: 1b30319ed76ff301057e3a32c1325283c3343f27ddfe31cbd090eecba319039e
+
+integrity_disposition:
+  ZIP_sha256_match: true
+  manifest_sha256_match: true
+  archive_safety: PASS
+  checksums: 64/64_MATCH
+  manifest_inputs: 61/61_MATCH_AND_FULLY_READ
+  subjects: 16/16
+  authority_inputs: 42/42
+  author_evidence: 3/3_NONINDEPENDENT
+  prior_manifests: 3/3_IMMUTABLE
+  prior_subjects: 12/12_IMMUTABLE
+  offline_fixed_commands: 11/11_PASS
+
+semantic_disposition:
+  F8-R4-B01:
+    external_severity: blocker
+    disposition: ACCEPTED_REPRODUCIBLE_FAVORABLE_INVALID_PATH
+    basis:
+      - R4 validates all-non-null upgraded consumer shape and exact R2 three-field down-projection
+      - R4 does not resolve the three owner-commitment fields against the corresponding immutable R3 owner source
+      - R4 accepts a fully re-signed arbitrary owner-commitment tuple while retaining CANDIDATE_FORMED
+    reproduced_from_fixed_bytes:
+      exact_owner_commitment_source_resolution: false
+      merged_R2_R3_R4_H01_derivation: false
+      fully_resigned_attack_id: R4-A63
+      favorable_invalid_path: true
+    consequence: H01_can_claim_candidate_formation_without_exact_owner_commitment_binding
+  F8-R4-B02:
+    external_severity: blocker
+    disposition: ACCEPTED_REPRODUCIBLE_INHERITED_PROFILE_DRIFT
+    basis:
+      - inherited R2 stable_ref is strict JSON string nonempty and NFC normalized
+      - R4 validator omits NFC normalization and adds an unauthorized no-whitespace condition
+      - a non-NFC ref is accepted and a nonempty NFC ref containing internal space is rejected after full re-signing
+    reproduced_from_fixed_bytes:
+      non_NFC_attack_id: R4-A64
+      non_NFC_illegal_value_accepted: true
+      NFC_internal_space_attack_id: R4-A65
+      NFC_internal_space_legal_value_rejected: true
+    consequence: R4_both_accepts_contract_invalid_input_and_over_rejects_contract_legal_input
+
+R4_closure_results_preserved:
+  all_null_and_all_non_null_totality: CLOSED_BY_R4
+  mixed_null_masks_rejected: 62/62
+  all_null_resolves_before_owner_lookup: true
+  formation_all_null_result: INDETERMINATE
+  acknowledgement_all_null_result: ACKNOWLEDGED_INDETERMINATE
+  inherited_R2_H01_first_three_field_projection: PRESERVED
+  inherited_R3_non_null_attacks_replayed: 51/51_PASS
+
+R5_candidate_scope_if_Jenn_starts:
+  - bind_every_non_null_H01_owner_commitment_tuple_to_exact_immutable_R3_owner_source_or_fixed_trusted_anchor
+  - derive_H01_through_merged_R2_assessment_R3_owner_commitment_and_R4_nullability_rules
+  - reject_fully_resigned_commitment_ref_revision_or_fingerprint_substitution
+  - restore_stable_ref_to_strict_JSON_string_nonempty_NFC_without_whitespace_prohibition
+  - add_non_NFC_negative_regression
+  - add_nonempty_NFC_internal_space_positive_regression
+
+scope_exclusions:
+  - no_change_to_R1_R2_R3_R4_fixed_bytes_or_manifests
+  - no_permission_identity_Task_or_Command_authority
+  - no_upstream_reducer_recomputation
+  - no_Phase_5A
+  - no_implementation_runtime_database_provider_or_production_authentication
+  - no_private_Memory_sensing_recording_or_real_effect
+
+governance:
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_or_provider_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  real_effect_authorized: false
+  next_gate: JENN_EXPLICIT_F8_R5_NARROW_START_DECISION

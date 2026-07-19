@@ -1,0 +1,1103 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-f8-r5-nobao-fresh-full-atomic-independent-review-2026-07-19
+date: '2026-07-19'
+reviewer: Nobao_independent_review_run
+independence: true
+review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+review_mode: fresh_full_atomic_hash_bound_independent_review
+result: PASS_NO_BLOCKER
+requires_R6: false
+integrity:
+  zip:
+    path: 2026-07-19-agents-os-f8-r5-review-package-v0.1.zip
+    sha256: 5766a2cbfbf03983bdb97c27f601940f99aaac688033bc3cf441fcfe567a6ff5
+    expected_sha256: 5766a2cbfbf03983bdb97c27f601940f99aaac688033bc3cf441fcfe567a6ff5
+    match: true
+    entry_count: 77
+    duplicate_paths: 0
+    absolute_or_backslash_or_traversal_paths: 0
+    symlinks: 0
+    CRC: PASS
+  manifest:
+    external_path: 2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: MANIFEST.yaml
+    sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+    expected_sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+    match: true
+    external_equals_archive_bytes: true
+  review_package_report:
+    external_sha256: 8c70b864602991d35a520e9c74a57521d5b4d4a8781b9c6dba3fe07e443faf56
+    archive_sha256: 8c70b864602991d35a520e9c74a57521d5b4d4a8781b9c6dba3fe07e443faf56
+    external_equals_archive_bytes: true
+  checksums:
+    result: 76/76_MATCH
+    count: 76
+  archive_map:
+    declared_mappings: 73
+    result: 73/73_MATCH
+  plain_extracted_archive_has_git_directory: false
+full_read_and_input_hashes:
+  manifest_inputs: 73/73_MATCH_AND_FULLY_READ
+  subjects_fully_read: 20/20
+  authority_inputs_fully_read: 49/49
+  author_evidence_read: 4/4
+  author_evidence_conclusion_adopted: false
+  total_bytes_fully_read: 1753097
+  total_lines_fully_read: 38933
+  R1_R4_prior_manifests:
+  - role: immutable_R1_manifest
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    match: true
+  - role: immutable_R2_manifest
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    match: true
+  - role: immutable_R3_manifest
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    match: true
+  - role: immutable_R4_manifest
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+    match: true
+  inputs:
+  - group: subject
+    role: R1_normative_contract
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r1.draft.md
+    archive_path: subjects/F8-R1-contract.md
+    expected: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    map_sha: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    actual: 50ee798352114c507127a849fac96c4e881ffea093ec575c6131f2f8fe35d7bf
+    bytes: 17452
+    lines: 495
+    match: true
+  - group: subject
+    role: R1_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py
+    archive_path: validator/build-f8-r1-witness.py
+    expected: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    map_sha: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    actual: f7780877140ee972ca49e08a008174336b71d22544742ac55e5a74dbd49979cb
+    bytes: 32678
+    lines: 699
+    match: true
+  - group: subject
+    role: R1_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json
+    archive_path: fixture/F8-R1-synthetic-witness.json
+    expected: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    map_sha: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    actual: 2f826d52812e10fc4df9e3ff34eefac1b8abc85a3170afc01d978064792e2c13
+    bytes: 118658
+    lines: 2807
+    match: true
+  - group: subject
+    role: R1_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py
+    archive_path: validator/validate-f8-r1-witness.py
+    expected: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+    map_sha: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+    actual: af9a48f7f656f59f1436a5bd5d57e08e9a894632892e9dbea060dd0785aed96b
+    bytes: 47300
+    lines: 741
+    match: true
+  - group: subject
+    role: R2_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md
+    archive_path: subjects/F8-R2-amendment.md
+    expected: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+    map_sha: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+    actual: 35117e948530721cc78692e6612a6f0c84bee57a9a3ef3f511780b02be6821ea
+    bytes: 9204
+    lines: 254
+    match: true
+  - group: subject
+    role: R2_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py
+    archive_path: validator/build-f8-r2-witness.py
+    expected: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+    map_sha: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+    actual: 410732ffa221f1198d5798f04c106577032db5ec34b928856d3dacec9f7e10fe
+    bytes: 36253
+    lines: 763
+    match: true
+  - group: subject
+    role: R2_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+    archive_path: fixture/F8-R2-synthetic-witness.json
+    expected: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+    map_sha: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+    actual: 36d60ffc0ff0b184c7d306b6293601a3661a22affe1cab8b00da609cb280f501
+    bytes: 146857
+    lines: 3143
+    match: true
+  - group: subject
+    role: R2_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+    archive_path: validator/validate-f8-r2-witness.py
+    expected: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+    map_sha: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+    actual: 9ac243f7aecc0519da5b5bb7266cd604260894861f2c4a3edf98039adbaba65d
+    bytes: 58479
+    lines: 973
+    match: true
+  - group: subject
+    role: R3_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+    archive_path: subjects/F8-R3-amendment.md
+    expected: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+    map_sha: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+    actual: b1e93e8062297e47e9ac8689745d2e96eb13d35774860221f2a2d8457c8f8c37
+    bytes: 11105
+    lines: 301
+    match: true
+  - group: subject
+    role: R3_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+    archive_path: validator/build-f8-r3-witness.py
+    expected: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+    map_sha: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+    actual: 7ec6d0ea022a22f23641ede78ca72b884ddc3e4bec0e18079ad2b5d4c08c5294
+    bytes: 19292
+    lines: 460
+    match: true
+  - group: subject
+    role: R3_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+    archive_path: fixture/F8-R3-synthetic-witness.json
+    expected: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+    map_sha: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+    actual: 80916e422606d830514123368f612b58f0aeef9d7bd0e84713b2e388c4f53c62
+    bytes: 24589
+    lines: 561
+    match: true
+  - group: subject
+    role: R3_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+    archive_path: validator/validate-f8-r3-witness.py
+    expected: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+    map_sha: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+    actual: 7fd63cd58ffbac64dd4fe6730bc2c08d077c85604de8573ea5d5332684c715a4
+    bytes: 54650
+    lines: 1023
+    match: true
+  - group: subject
+    role: R4_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r4-amendment.md
+    archive_path: subjects/F8-R4-amendment.md
+    expected: bf8cbd2ba83ab2bf9ea3275bcdb156b3dd79858f96d554fc933a4364e03f0082
+    map_sha: bf8cbd2ba83ab2bf9ea3275bcdb156b3dd79858f96d554fc933a4364e03f0082
+    actual: bf8cbd2ba83ab2bf9ea3275bcdb156b3dd79858f96d554fc933a4364e03f0082
+    bytes: 5445
+    lines: 166
+    match: true
+  - group: subject
+    role: R4_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r4-consumer-nullability-totality.py
+    archive_path: validator/build-f8-r4-witness.py
+    expected: 6110ed5654328b96b7945ec61332de4a941c86e4cb17c3da54952fedc170a24f
+    map_sha: 6110ed5654328b96b7945ec61332de4a941c86e4cb17c3da54952fedc170a24f
+    actual: 6110ed5654328b96b7945ec61332de4a941c86e4cb17c3da54952fedc170a24f
+    bytes: 10151
+    lines: 274
+    match: true
+  - group: subject
+    role: R4_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json
+    archive_path: fixture/F8-R4-synthetic-witness.json
+    expected: 775cdc15a134a98985325b728b5c356db880c0d97e428c688170971ff789e08b
+    map_sha: 775cdc15a134a98985325b728b5c356db880c0d97e428c688170971ff789e08b
+    actual: 775cdc15a134a98985325b728b5c356db880c0d97e428c688170971ff789e08b
+    bytes: 49849
+    lines: 1181
+    match: true
+  - group: subject
+    role: R4_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r4-consumer-nullability-totality.py
+    archive_path: validator/validate-f8-r4-witness.py
+    expected: 6227bd9902d13a5463a237ba65f9dd669d2a82861395ffa57a3dcb048743420d
+    map_sha: 6227bd9902d13a5463a237ba65f9dd669d2a82861395ffa57a3dcb048743420d
+    actual: 6227bd9902d13a5463a237ba65f9dd669d2a82861395ffa57a3dcb048743420d
+    bytes: 27983
+    lines: 554
+    match: true
+  - group: subject
+    role: R5_normative_amendment
+    source_path: control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r5-amendment.md
+    archive_path: subjects/F8-R5-amendment.md
+    expected: 127b52e21c3b0d8f401f18b489d9a1ac2d6d0696c7e2147c7d6ea54afcec2df1
+    map_sha: 127b52e21c3b0d8f401f18b489d9a1ac2d6d0696c7e2147c7d6ea54afcec2df1
+    actual: 127b52e21c3b0d8f401f18b489d9a1ac2d6d0696c7e2147c7d6ea54afcec2df1
+    bytes: 6601
+    lines: 206
+    match: true
+  - group: subject
+    role: R5_deterministic_fixture_builder
+    source_path: control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py
+    archive_path: validator/build-f8-r5-witness.py
+    expected: 3322f34cef2bada3096100605a0e1f31bdf319910d1ac0799404abc51d26dad2
+    map_sha: 3322f34cef2bada3096100605a0e1f31bdf319910d1ac0799404abc51d26dad2
+    actual: 3322f34cef2bada3096100605a0e1f31bdf319910d1ac0799404abc51d26dad2
+    bytes: 11445
+    lines: 281
+    match: true
+  - group: subject
+    role: R5_synthetic_fixture
+    source_path: control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json
+    archive_path: fixture/F8-R5-synthetic-witness.json
+    expected: 3d5638e92123a4ec6bb8b4302166256d8e4cd9b80b665a7beb1bdf2cb17895e0
+    map_sha: 3d5638e92123a4ec6bb8b4302166256d8e4cd9b80b665a7beb1bdf2cb17895e0
+    actual: 3d5638e92123a4ec6bb8b4302166256d8e4cd9b80b665a7beb1bdf2cb17895e0
+    bytes: 21805
+    lines: 438
+    match: true
+  - group: subject
+    role: R5_offline_semantic_validator
+    source_path: control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py
+    archive_path: validator/validate-f8-r5-witness.py
+    expected: 7618e0769231539075b8ac420d32537a8f25ad4c03808ec7f8a45091d8328995
+    map_sha: 7618e0769231539075b8ac420d32537a8f25ad4c03808ec7f8a45091d8328995
+    actual: 7618e0769231539075b8ac420d32537a8f25ad4c03808ec7f8a45091d8328995
+    bytes: 35648
+    lines: 792
+    match: true
+  - group: authority_input
+    role: workspace_governance
+    source_path: AGENTS.md
+    archive_path: upstream/AGENTS.md
+    expected: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    map_sha: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    actual: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+    bytes: 29027
+    lines: 663
+    match: true
+  - group: authority_input
+    role: accepted_home_roadmap_subject
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    expected: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    map_sha: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    actual: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+    bytes: 23757
+    lines: 920
+    match: true
+  - group: authority_input
+    role: accepted_home_roadmap_decision
+    source_path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    expected: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+    map_sha: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+    actual: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+    bytes: 3290
+    lines: 90
+    match: true
+  - group: authority_input
+    role: accepted_home_architecture_direction
+    source_path: control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-14-agents-os-home-domain-architecture-direction-v0.1.draft.md
+    expected: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    map_sha: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    actual: 0eecdea38bf1659be6ab61e61cfe88876907b955383f603b089cef626bb9b8bb
+    bytes: 25422
+    lines: 820
+    match: true
+  - group: authority_input
+    role: accepted_resident_architecture
+    source_path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    archive_path: upstream/control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+    expected: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    map_sha: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    actual: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+    bytes: 271643
+    lines: 6614
+    match: true
+  - group: authority_input
+    role: accepted_high_privilege_architecture
+    source_path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    archive_path: upstream/control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+    expected: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    map_sha: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    actual: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+    bytes: 16617
+    lines: 483
+    match: true
+  - group: authority_input
+    role: life_core_authority_and_gap_map
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-life-core-authority-and-gap-map-v0.1.draft.md
+    expected: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    map_sha: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    actual: 5eaff7b1c45f177d5ca0fc33860c808f3700bd32d49a6eaf54336b1186e29a19
+    bytes: 16964
+    lines: 467
+    match: true
+  - group: authority_input
+    role: home_fact_authority_matrix
+    source_path: control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    archive_path: upstream/control-plane/registry/drafts/2026-07-13-agents-os-home-fact-authority-matrix-v0.1.draft.md
+    expected: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    map_sha: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    actual: 54ab38d6ca66ccaf45bdacdc531cc043c6b134cf7468e8d281fe8e61a37a99d2
+    bytes: 10442
+    lines: 108
+    match: true
+  - group: authority_input
+    role: phase_4_start_decision
+    source_path: control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-14-agents-os-phase-4-foundation-contract-closure-start-decision-v0.1.yaml
+    expected: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    map_sha: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    actual: c4b352f44df16bb868529d13c37d569adddfdf7812d0b9f98f926a943b4ea486
+    bytes: 2856
+    lines: 84
+    match: true
+  - group: authority_input
+    role: construction_readiness_review
+    source_path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    archive_path: upstream/control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    expected: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    map_sha: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    actual: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+    bytes: 10946
+    lines: 311
+    match: true
+  - group: authority_input
+    role: accepted_F1_decision
+    source_path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+    expected: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    map_sha: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    actual: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+    bytes: 2927
+    lines: 72
+    match: true
+  - group: authority_input
+    role: frozen_F2_decision
+    source_path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+    expected: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    map_sha: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    actual: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+    bytes: 9029
+    lines: 182
+    match: true
+  - group: authority_input
+    role: frozen_F2_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+    expected: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    map_sha: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    actual: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+    bytes: 13791
+    lines: 181
+    match: true
+  - group: authority_input
+    role: frozen_F3_decision
+    source_path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+    expected: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+    map_sha: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+    actual: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+    bytes: 5131
+    lines: 129
+    match: true
+  - group: authority_input
+    role: frozen_F3_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+    map_sha: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+    actual: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+    bytes: 13821
+    lines: 180
+    match: true
+  - group: authority_input
+    role: frozen_F4_decision
+    source_path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+    expected: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+    map_sha: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+    actual: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+    bytes: 10748
+    lines: 159
+    match: true
+  - group: authority_input
+    role: frozen_F5_decision
+    source_path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+    expected: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+    map_sha: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+    actual: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+    bytes: 11422
+    lines: 170
+    match: true
+  - group: authority_input
+    role: frozen_F6_decision
+    source_path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+    expected: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+    map_sha: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+    actual: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+    bytes: 10210
+    lines: 219
+    match: true
+  - group: authority_input
+    role: frozen_F7_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    expected: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+    map_sha: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+    actual: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+    bytes: 6761
+    lines: 152
+    match: true
+  - group: authority_input
+    role: frozen_F7_atomic_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    map_sha: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    actual: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+    bytes: 12102
+    lines: 90
+    match: true
+  - group: authority_input
+    role: frozen_F7_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    expected: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    map_sha: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    actual: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    bytes: 5973
+    lines: 153
+    match: true
+  - group: authority_input
+    role: immutable_F8_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1.yaml
+    expected: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+    map_sha: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+    actual: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+    bytes: 9340
+    lines: 194
+    match: true
+  - group: authority_input
+    role: immutable_F8_start_queue
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+    expected: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+    map_sha: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+    actual: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+    bytes: 2897
+    lines: 76
+    match: true
+  - group: authority_input
+    role: immutable_R1_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    map_sha: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    actual: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+    bytes: 11835
+    lines: 154
+    match: true
+  - group: authority_input
+    role: immutable_R2_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    map_sha: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    actual: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+    bytes: 14115
+    lines: 122
+    match: true
+  - group: authority_input
+    role: immutable_R1_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+    expected: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    map_sha: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    actual: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+    bytes: 10512
+    lines: 190
+    match: true
+  - group: authority_input
+    role: immutable_R1_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r1_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r1_independent_attack_results.json
+    expected: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    map_sha: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    actual: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+    bytes: 6615
+    lines: 241
+    match: true
+  - group: authority_input
+    role: immutable_R1_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r1-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r1-independent-review-disposition-v0.1.yaml
+    expected: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+    map_sha: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+    actual: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+    bytes: 3588
+    lines: 94
+    match: true
+  - group: authority_input
+    role: R2_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1.yaml
+    expected: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+    map_sha: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+    actual: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+    bytes: 3577
+    lines: 83
+    match: true
+  - group: authority_input
+    role: immutable_R2_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-nobao-independent-review.yaml
+    expected: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    map_sha: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    actual: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    bytes: 25607
+    lines: 503
+    match: true
+  - group: authority_input
+    role: immutable_R2_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r2_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r2_independent_attack_results.json
+    expected: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+    map_sha: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+    actual: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+    bytes: 7346
+    lines: 176
+    match: true
+  - group: authority_input
+    role: immutable_R2_independent_probe
+    source_path: control-plane/registry/reviews/f8_r2_independent_review_probe.py
+    archive_path: upstream/control-plane/registry/reviews/f8_r2_independent_review_probe.py
+    expected: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+    map_sha: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+    actual: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+    bytes: 15511
+    lines: 253
+    match: true
+  - group: authority_input
+    role: immutable_R2_review_output_checksums
+    source_path: control-plane/registry/reviews/2026-07-19-f8-r2-independent-review-SHA256SUMS.txt
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-f8-r2-independent-review-SHA256SUMS.txt
+    expected: 1ee7d1d51b85f4d904245e96ce80858da1d5562c45ea578e4ff7f1f5f9e291cc
+    map_sha: 1ee7d1d51b85f4d904245e96ce80858da1d5562c45ea578e4ff7f1f5f9e291cc
+    actual: 1ee7d1d51b85f4d904245e96ce80858da1d5562c45ea578e4ff7f1f5f9e291cc
+    bytes: 334
+    lines: 3
+    match: true
+  - group: authority_input
+    role: immutable_R2_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r2-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r2-independent-review-disposition-v0.1.yaml
+    expected: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+    map_sha: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+    actual: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+    bytes: 5019
+    lines: 111
+    match: true
+  - group: authority_input
+    role: R3_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-start-decision-v0.1.yaml
+    expected: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+    map_sha: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+    actual: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+    bytes: 2366
+    lines: 70
+    match: true
+  - group: authority_input
+    role: immutable_R3_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    map_sha: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    actual: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+    bytes: 18424
+    lines: 231
+    match: true
+  - group: authority_input
+    role: immutable_R3_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-nobao-independent-review.yaml
+    expected: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+    map_sha: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+    actual: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+    bytes: 52736
+    lines: 991
+    match: true
+  - group: authority_input
+    role: immutable_R3_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r3_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r3_independent_attack_results.json
+    expected: 9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551
+    map_sha: 9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551
+    actual: 9aea2802b5dacec67fd700759fc8462e459b7b889eca3c44e2b552ad072b3551
+    bytes: 41732
+    lines: 1154
+    match: true
+  - group: authority_input
+    role: immutable_R3_independent_probe
+    source_path: control-plane/registry/reviews/f8_r3_independent_review_probe.py
+    archive_path: upstream/control-plane/registry/reviews/f8_r3_independent_review_probe.py
+    expected: dc102ed5d6e88b4054d829647fe869527af3895272c0d652ebee241aab22a7e4
+    map_sha: dc102ed5d6e88b4054d829647fe869527af3895272c0d652ebee241aab22a7e4
+    actual: dc102ed5d6e88b4054d829647fe869527af3895272c0d652ebee241aab22a7e4
+    bytes: 42866
+    lines: 1068
+    match: true
+  - group: authority_input
+    role: immutable_R3_review_output_checksums
+    source_path: control-plane/registry/reviews/2026-07-19-f8-r3-independent-review-SHA256SUMS.txt
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-f8-r3-independent-review-SHA256SUMS.txt
+    expected: 26e607c1a45aca23821b0b9eff2a6884f5a5d45e2d06060d21739a726cacacc5
+    map_sha: 26e607c1a45aca23821b0b9eff2a6884f5a5d45e2d06060d21739a726cacacc5
+    actual: 26e607c1a45aca23821b0b9eff2a6884f5a5d45e2d06060d21739a726cacacc5
+    bytes: 334
+    lines: 3
+    match: true
+  - group: authority_input
+    role: immutable_R3_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r3-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r3-independent-review-disposition-v0.1.yaml
+    expected: b2b255fd1f3661f34120b58ccf82825ebcb3ce8ec19a67cb1fc4a6214c18db4e
+    map_sha: b2b255fd1f3661f34120b58ccf82825ebcb3ce8ec19a67cb1fc4a6214c18db4e
+    actual: b2b255fd1f3661f34120b58ccf82825ebcb3ce8ec19a67cb1fc4a6214c18db4e
+    bytes: 3668
+    lines: 91
+    match: true
+  - group: authority_input
+    role: R4_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-start-decision-v0.1.yaml
+    expected: f072881ba56f637b71fd965fce00ee8cdfd3cf7acc6df456030282f7f0839365
+    map_sha: f072881ba56f637b71fd965fce00ee8cdfd3cf7acc6df456030282f7f0839365
+    actual: f072881ba56f637b71fd965fce00ee8cdfd3cf7acc6df456030282f7f0839365
+    bytes: 2651
+    lines: 71
+    match: true
+  - group: authority_input
+    role: immutable_R4_manifest
+    source_path: control-plane/registry/reports/2026-07-19-agents-os-f8-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    archive_path: upstream/control-plane/registry/reports/2026-07-19-agents-os-f8-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    expected: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+    map_sha: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+    actual: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+    bytes: 23292
+    lines: 334
+    match: true
+  - group: authority_input
+    role: immutable_R4_external_independent_review
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r4-nobao-independent-review.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r4-nobao-independent-review.yaml
+    expected: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+    map_sha: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+    actual: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+    bytes: 56970
+    lines: 1070
+    match: true
+  - group: authority_input
+    role: immutable_R4_independent_attacks
+    source_path: control-plane/registry/reviews/f8_r4_independent_attack_results.json
+    archive_path: upstream/control-plane/registry/reviews/f8_r4_independent_attack_results.json
+    expected: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+    map_sha: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+    actual: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+    bytes: 92756
+    lines: 2490
+    match: true
+  - group: authority_input
+    role: immutable_R4_independent_probe
+    source_path: control-plane/registry/reviews/f8_r4_independent_review_probe.py
+    archive_path: upstream/control-plane/registry/reviews/f8_r4_independent_review_probe.py
+    expected: 5405e30b0992ada0b5d43e98fccba84c5fba1253098af2d5ac43285c41b37ed2
+    map_sha: 5405e30b0992ada0b5d43e98fccba84c5fba1253098af2d5ac43285c41b37ed2
+    actual: 5405e30b0992ada0b5d43e98fccba84c5fba1253098af2d5ac43285c41b37ed2
+    bytes: 16573
+    lines: 188
+    match: true
+  - group: authority_input
+    role: immutable_R4_review_output_checksums
+    source_path: control-plane/registry/reviews/2026-07-19-f8-r4-independent-review-SHA256SUMS.txt
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-f8-r4-independent-review-SHA256SUMS.txt
+    expected: 1b30319ed76ff301057e3a32c1325283c3343f27ddfe31cbd090eecba319039e
+    map_sha: 1b30319ed76ff301057e3a32c1325283c3343f27ddfe31cbd090eecba319039e
+    actual: 1b30319ed76ff301057e3a32c1325283c3343f27ddfe31cbd090eecba319039e
+    bytes: 334
+    lines: 3
+    match: true
+  - group: authority_input
+    role: immutable_R4_finding_disposition
+    source_path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r4-independent-review-disposition-v0.1.yaml
+    archive_path: upstream/control-plane/registry/reviews/2026-07-19-agents-os-f8-r4-independent-review-disposition-v0.1.yaml
+    expected: 8877b0e3e8c23a34731769a6bca48086f5f543dbdd53b7c564f1172f1e60691c
+    map_sha: 8877b0e3e8c23a34731769a6bca48086f5f543dbdd53b7c564f1172f1e60691c
+    actual: 8877b0e3e8c23a34731769a6bca48086f5f543dbdd53b7c564f1172f1e60691c
+    bytes: 4445
+    lines: 102
+    match: true
+  - group: authority_input
+    role: R5_start_decision
+    source_path: control-plane/registry/decisions/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-start-decision-v0.1.yaml
+    archive_path: upstream/control-plane/registry/decisions/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-start-decision-v0.1.yaml
+    expected: f3c1863e66d4f2a619f5276495284c3a3c8f81628e6b48d7390b3eaaf000951d
+    map_sha: f3c1863e66d4f2a619f5276495284c3a3c8f81628e6b48d7390b3eaaf000951d
+    actual: f3c1863e66d4f2a619f5276495284c3a3c8f81628e6b48d7390b3eaaf000951d
+    bytes: 3060
+    lines: 74
+    match: true
+  - group: author_evidence
+    role: R2_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-evidence-currentness-schema-closure-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r2-evidence-currentness-schema-closure-self-review.yaml
+    expected: d8f87a39dd25895bf4c104ad9a836a84aad51b1cbe690f68d21abec7b8f4d877
+    map_sha: d8f87a39dd25895bf4c104ad9a836a84aad51b1cbe690f68d21abec7b8f4d877
+    actual: d8f87a39dd25895bf4c104ad9a836a84aad51b1cbe690f68d21abec7b8f4d877
+    bytes: 4435
+    lines: 111
+    match: true
+  - group: author_evidence
+    role: R3_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r3-owner-commitment-candidate-history-closure-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r3-owner-commitment-candidate-history-closure-self-review.yaml
+    expected: fa8cb758b490e4306bfb9807eae20ea6c2205dcda4707d3b57464cab27572070
+    map_sha: fa8cb758b490e4306bfb9807eae20ea6c2205dcda4707d3b57464cab27572070
+    actual: fa8cb758b490e4306bfb9807eae20ea6c2205dcda4707d3b57464cab27572070
+    bytes: 4140
+    lines: 118
+    match: true
+  - group: author_evidence
+    role: R4_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r4-consumer-nullability-totality-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r4-consumer-nullability-totality-self-review.yaml
+    expected: e018bf1a82094cad926d3a2bc9fd9ce7edebc76c90308dd62651419e366634d5
+    map_sha: e018bf1a82094cad926d3a2bc9fd9ce7edebc76c90308dd62651419e366634d5
+    actual: e018bf1a82094cad926d3a2bc9fd9ce7edebc76c90308dd62651419e366634d5
+    bytes: 3630
+    lines: 102
+    match: true
+  - group: author_evidence
+    role: R5_author_self_review_not_independent
+    source_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-self-review.yaml
+    archive_path: reviews/2026-07-19-yellow-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-self-review.yaml
+    expected: 3c83d615d4cd7d26311b8fb468a96035c317cb6e67658a27e62d9e36019c3ea2
+    map_sha: 3c83d615d4cd7d26311b8fb468a96035c317cb6e67658a27e62d9e36019c3ea2
+    actual: 3c83d615d4cd7d26311b8fb468a96035c317cb6e67658a27e62d9e36019c3ea2
+    bytes: 4066
+    lines: 103
+    match: true
+fixed_commands:
+  result: 14/14_PASS
+  plain_archive_without_git: true
+  commands:
+  - index: 1
+    command: if test -f validator/validate-f8-r1-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r1-witness.py
+      fixture/F8-R1-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r1-home-to-orchestrator-minimum-interface.py;
+      fi
+    returncode: 0
+    duration_seconds: 2.749
+    stdout: '{"acknowledgement_cases_verified": 6, "candidate_revisions_verified": 2, "errors": [], "external_effect_count":
+      0, "fully_resigned_mutations_rejected": "41/41", "handoff_cases_verified": 25, "mutation_failures": [], "parser_probes_rejected":
+      "3/3", "provider_call_count": 0, "real_command_count": 0, "result": "PASS", "root_fingerprint": "5f1789b368569635d3b9ba3e99d9cdf452bb8e1980c0afd35c8b852391ed82d8",
+      "schema_profiles_verified": 10, "terminal_outcome": "NOT_EXECUTED", "upstream_assessments_verified": 25}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 2
+    command: if test -f validator/build-f8-r1-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r1-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R1-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r1-home-to-orchestrator-minimum-interface.py --output
+      "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r1-home-to-orchestrator-minimum-interface-v0.1.json
+      && rm -f "$tmp"; fi
+    returncode: 0
+    duration_seconds: 2.164
+    stdout: ''
+    stderr: ''
+    pass: true
+  - index: 3
+    command: if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py
+      fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py;
+      fi
+    returncode: 0
+    duration_seconds: 3.461
+    stdout: '{"R2_regression_failures": [], "R2_target_regressions_passed": "17/17", "acknowledgement_cases_verified": 9,
+      "candidate_revisions_verified": 2, "errors": [], "external_effect_count": 0, "fully_resigned_mutations_rejected": "41/41",
+      "handoff_cases_verified": 25, "mutation_failures": [], "parser_probes_rejected": "3/3", "provider_call_count": 0, "real_command_count":
+      0, "result": "PASS", "root_fingerprint": "4382b1d47cb6937f09a693f5ec6615eade2dce35a966458a00cf2394b2669e06", "schema_profiles_verified":
+      10, "terminal_outcome": "NOT_EXECUTED", "upstream_assessments_verified": 28}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 4
+    command: if test -f validator/build-f8-r2-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r2-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R2-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py --output
+      "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+      && rm -f "$tmp"; fi
+    returncode: 0
+    duration_seconds: 2.076
+    stdout: ''
+    stderr: ''
+    pass: true
+  - index: 5
+    command: if test -f validator/validate-f8-r2-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r2-witness.py
+      --check-whitespace subjects/F8-R2-amendment.md validator/build-f8-r2-witness.py validator/validate-f8-r2-witness.py
+      fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r2-amendment.md
+      control-plane/registry/build-f8-r2-evidence-currentness-schema-closure.py control-plane/registry/validate-f8-r2-evidence-currentness-schema-closure.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json; fi
+    returncode: 0
+    duration_seconds: 2.129
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 6
+    command: if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py
+      fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py;
+      fi
+    returncode: 0
+    duration_seconds: 2.141
+    stdout: '{"R3_regressions": "12/12_PASS", "acknowledgement_cases_verified": 6, "candidate_formation_cases_verified": 2,
+      "canonical_candidate_history_verified": 2, "errors": [], "external_effect_count": 0, "owner_assessments_verified": 7,
+      "owner_commitments_verified": 7, "parser_probes": "4/4_REJECTED", "provider_call_count": 0, "real_command_count": 0,
+      "result": "PASS", "root_fingerprint": "e4b0a6ae16c33ca12b5841b7ffda8b22b029aadc7a378804ae1053f85e8732c8", "schema_profiles_verified":
+      7, "terminal_outcome": "NOT_EXECUTED"}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 7
+    command: if test -f validator/build-f8-r3-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r3-witness.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R3-synthetic-witness.json && rm -f "$tmp"; else tmp="$(mktemp)"
+      && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py
+      --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json
+      && rm -f "$tmp"; fi
+    returncode: 0
+    duration_seconds: 2.169
+    stdout: ''
+    stderr: ''
+    pass: true
+  - index: 8
+    command: if test -f validator/validate-f8-r3-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r3-witness.py
+      --check-whitespace subjects/F8-R3-amendment.md validator/build-f8-r3-witness.py validator/validate-f8-r3-witness.py
+      fixture/F8-R3-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r3-amendment.md
+      control-plane/registry/build-f8-r3-owner-commitment-candidate-history-closure.py control-plane/registry/validate-f8-r3-owner-commitment-candidate-history-closure.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r3-owner-commitment-candidate-history-closure-v0.1.json; fi
+    returncode: 0
+    duration_seconds: 2.288
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 9
+    command: if test -f validator/validate-f8-r4-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r4-witness.py
+      fixture/F8-R4-synthetic-witness.json --r2-fixture fixture/F8-R2-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1
+      python3 control-plane/registry/validate-f8-r4-consumer-nullability-totality.py --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json;
+      fi
+    returncode: 0
+    duration_seconds: 1.961
+    stdout: '{"R4_regressions": "20/20_PASS", "acknowledgement_all_null_cases": 1, "consumer_shape_positive_cases": 2, "errors":
+      [], "external_effect_count": 0, "formation_all_null_cases": 1, "inherited_R2_H01_compatibility_cases": 1, "mixed_null_negative_cases":
+      62, "owner_store_lookup_count_for_all_null": 0, "parser_probes": "4/4_REJECTED", "provider_call_count": 0, "result":
+      "PASS", "root_fingerprint": "46529816c1f2a4eb82cc2df18a8239a8291488ac6a92224b15ef335786bf7b30", "schema_profiles_verified":
+      3, "terminal_outcome": "NOT_EXECUTED"}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 10
+    command: if test -f validator/build-f8-r4-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r4-witness.py
+      --r2-fixture fixture/F8-R2-synthetic-witness.json --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R4-synthetic-witness.json
+      && rm -f "$tmp"; else tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r4-consumer-nullability-totality.py
+      --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+      --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json
+      && rm -f "$tmp"; fi
+    returncode: 0
+    duration_seconds: 1.922
+    stdout: ''
+    stderr: ''
+    pass: true
+  - index: 11
+    command: if test -f validator/validate-f8-r4-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r4-witness.py
+      --check-whitespace subjects/F8-R4-amendment.md validator/build-f8-r4-witness.py validator/validate-f8-r4-witness.py
+      fixture/F8-R4-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r4-consumer-nullability-totality.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r4-amendment.md
+      control-plane/registry/build-f8-r4-consumer-nullability-totality.py control-plane/registry/validate-f8-r4-consumer-nullability-totality.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r4-consumer-nullability-totality-v0.1.json; fi
+    returncode: 0
+    duration_seconds: 1.987
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 12
+    command: if test -f validator/validate-f8-r5-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r5-witness.py
+      fixture/F8-R5-synthetic-witness.json --r2-fixture fixture/F8-R2-synthetic-witness.json --r2-validator validator/validate-f8-r2-witness.py;
+      else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py;
+      fi
+    returncode: 0
+    duration_seconds: 2.096
+    stdout: '{"H01_cases_verified": 1, "all_null_optional_consumers_verified": 1, "errors": [], "fixture_canonical_sha256":
+      "e9bfa0c9a7cd4ae74dc3e92df20fa3e252b0f179f9fb30566769d71998c287a1", "merged_R2_R3_R4_derivation_verified": true, "non_null_owner_commitments_verified":
+      7, "parser_failures": 0, "parser_probes": 3, "regression_failures": 0, "regression_probes": 15, "result": "PASS", "runtime_usable":
+      false, "schema_profiles_verified": 3, "stable_ref_internal_space_positive_verified": true, "terminal_outcome": "NOT_EXECUTED",
+      "trusted_owner_source_anchor_verified": true}
+
+      '
+    stderr: ''
+    pass: true
+  - index: 13
+    command: if test -f validator/build-f8-r5-witness.py; then tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 validator/build-f8-r5-witness.py
+      --r2-fixture fixture/F8-R2-synthetic-witness.json --output "$tmp" >/dev/null && cmp -s "$tmp" fixture/F8-R5-synthetic-witness.json
+      && rm -f "$tmp"; else tmp="$(mktemp)" && PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py
+      --r2-fixture control-plane/registry/examples/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-v0.1.json
+      --output "$tmp" >/dev/null && cmp -s "$tmp" control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json
+      && rm -f "$tmp"; fi
+    returncode: 0
+    duration_seconds: 2.247
+    stdout: ''
+    stderr: ''
+    pass: true
+  - index: 14
+    command: if test -f validator/validate-f8-r5-witness.py; then PYTHONDONTWRITEBYTECODE=1 python3 validator/validate-f8-r5-witness.py
+      --check-whitespace subjects/F8-R5-amendment.md validator/build-f8-r5-witness.py validator/validate-f8-r5-witness.py
+      fixture/F8-R5-synthetic-witness.json; else PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py
+      --check-whitespace control-plane/registry/drafts/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-v0.1-r5-amendment.md
+      control-plane/registry/build-f8-r5-h01-owner-commitment-stable-ref-closure.py control-plane/registry/validate-f8-r5-h01-owner-commitment-stable-ref-closure.py
+      control-plane/registry/examples/2026-07-19-agents-os-f8-r5-h01-owner-commitment-stable-ref-closure-v0.1.json; fi
+    returncode: 0
+    duration_seconds: 2.082
+    stdout: '{"errors": [], "files_checked": 4, "result": "PASS"}
+
+      '
+    stderr: ''
+    pass: true
+semantic_review:
+  exact_owner_source_binding:
+    result: PASS
+    non_null_H01_consumers_resolved: 7/7
+    optional_Jenn_exact_decision: ALL_NULL
+    optional_owner_lookup_count: 0
+    trusted_owner_source_anchor: 79fbc671c0852b990f2c605dc7c77733ff9e150087e2e30cc910eada638cdbaa
+    caller_controlled_source_consumer_resolution_and_graph_anchor_rewrite: REJECTED_BY_FIXED_IMMUTABLE_ANCHOR
+    commitment_ref_revision_fingerprint_and_cross_role_substitutions: REJECTED_BY_EXACT_TARGET_SEMANTICS
+  merged_H01_derivation:
+    result: PASS
+    fixed_R2_fixture_hash_verified: true
+    fixed_R2_validator_hash_verified: true
+    source_H01_row_and_raw_input_bound: true
+    R4_nullability_applied: true
+    R3_style_commitment_resolution_applied: true
+    fixed_R2_derive_case_result: CANDIDATE_FORMED
+    caller_claimed_decision_substitution: REJECTED
+    runtime_usable: false
+    command_authority: false
+    task_write_authority: false
+    effect_authority: false
+  stable_ref:
+    result: PASS
+    profile: type(value) is str AND nonempty AND NFC(value)==value
+    NFC_internal_space: ACCEPTED
+    NFC_all_whitespace_nonempty: ACCEPTED
+    non_NFC: REJECTED
+    empty_integer_null: REJECTED
+    extra_internal_whitespace_prohibition_found: false
+  inherited_closure_replay:
+    R3_fresh_replay_total_records: 53
+    R3_fully_resigned_attacks: 49
+    R3_parser_probes: 4/4_REJECTED
+    R3_applicable_records: 51/51_PASS
+    R3_superseded_nullability_contract_mismatch_probes:
+    - attack_id: A49
+      title: all-six-null formation consumer required by R3
+    - attack_id: A52
+      title: all-six-null acknowledgement consumer required by R3
+    R3_favorable_invalid_path_count: 0
+    R4_mixed_null_patterns: 62/62_REJECTED
+    R4_all_null_optional_zero_lookup: PASS
+independent_attacks:
+  current_R5:
+    coordinated_probe_count: 139
+    favorable_invalid_path_count: 0
+    fixed_input_attack_count: 2
+    independent_fully_resigned_attack_count: 126
+    legal_input_over_rejection_count: 0
+    parser_probe_count: 4
+    positive_control_count: 7
+    stale_hash_rejection_count: 0
+    uncaught_exception_count: 0
+    unexpected_probe_failure_count: 0
+  inherited_R3_fresh_replay:
+    contract_mismatch_probe_count: 2
+    coordinated_probe_count: 53
+    favorable_invalid_path_count: 0
+    independent_fully_resigned_attack_count: 49
+    new_contract_mismatch_found: true
+    parser_probe_count: 4
+    positive_control_count: 4
+    semantic_blockers_closed: true
+    uncaught_exception_count: 0
+    unexpected_probe_failure_count: 0
+  independent_fully_resigned_attack_count: 175
+  applicable_fully_resigned_attack_count: 173
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  stale_hash_or_unpropagated_dependency_rejection_count: 0
+  uncaught_exception_count: 0
+authority_and_safety:
+  second_permission_authority_created: false
+  second_identity_authority_created: false
+  Task_authority_created: false
+  Command_authority_created: false
+  upstream_owner_result_recomputed_instead_of_consumed: false
+  fixed_R2_reducer_used_only_as_hash_verified_offline_derivation: true
+  caller_authored_commitment_accepted_as_owner_evidence: false
+  synthetic_evidence_runtime_or_production_usable: false
+  real_Home_data_accessed: false
+  private_Memory_accessed: false
+  sensing_or_recording_performed: false
+  production_authentication_performed: false
+  database_or_provider_called: false
+  real_effect_performed: false
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  items: []
+decision_basis:
+- All 73 hash-bound inputs were fully read and independently matched.
+- All 14 fixed commands passed in a plain extracted archive without .git.
+- Exact trusted owner-source commitment binding survives coordinated full re-signing attacks.
+- H01 CANDIDATE_FORMED is independently rederived by the fixed hash-verified R2 reducer after R4 nullability and exact commitment
+  checks.
+- The inherited stable_ref definition is restored without a whitespace prohibition.
+- No favorable invalid path, legal-input over-rejection, stale-hash-only proof, exception, or authority-boundary breach was
+  found.
+governance:
+  F8_R5_independent_review_result: PASS_NO_BLOCKER
+  F8_accepted: false
+  F8_frozen: false
+  Phase_5A_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_or_provider_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  sensing_or_recording_authorized: false
+  real_effect_authorized: false
+  Git_delivery_authorized: false
+  commit_or_push_performed: false
+  review_subjects_modified: false

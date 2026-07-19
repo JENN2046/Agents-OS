@@ -3102,6 +3102,156 @@ active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-wo
 next_gate: EXPLICIT_JENN_START_DECISION_FOR_F8
 ```
 
+## F8 Home-to-Orchestrator Minimum Interface Started (2026-07-19)
+
+Jenn explicitly started F8 after the F7 frozen bundle, independent review,
+mainline durability and post-closeout projection reconciliation were hash-bound
+and verified. F8 is contract closure only: it defines a logical candidate
+handoff and rejection interface, consumes frozen upstream assessments without
+recomputing them, and stops before F3 Command commitment or any runtime effect.
+
+```yaml
+F7_accepted: true
+F7_frozen: true
+F7_durability_complete: true
+F7_post_closeout_projection: v4.8_ACCEPTED
+F8_started: true
+F8_status: R1_AUTHOR_CONSTRUCTION_ACTIVE
+F8_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-start-decision-v0.1.yaml
+F8_start_decision_sha256: 67b5d258f44457e383bd69a04f05ccafea815b89547f92f03f75f5bd283404ba
+F8_start_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-home-to-orchestrator-minimum-interface-start-v0.1.md
+F8_start_receipt_sha256: c2966e2287a316623e0dc6c774edd59ad3da33a12ef89a04bb44c051599225d8
+F8_acceptance_authority: Jenn
+F8_partial_acceptance: forbidden
+F8_accepted: false
+F8_frozen: false
+F8_second_permission_system: false
+F8_second_identity_Task_or_Command_authority: false
+F8_upstream_authority_recomputation: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+database_change_authorized: false
+service_start_authorized: false
+provider_execution_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+real_Home_or_Memory_mutation_authorized: false
+real_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+active_work_queue_sha256: 31eb3b3e6449e1b5e3861758781b50db80092020708f64857c55068a7b79bd0e
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+next_gate: F8_R1_AUTHOR_CLOSEOUT_AND_FRESH_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F8 R1 Fixed for Fresh Full Atomic Independent Review (2026-07-19)
+
+The four F8 R1 subjects are fixed under a 26-input atomic manifest. The
+synthetic witness forms only a nonauthoritative handoff candidate and preserves
+F3 as the sole Command authentication, intake, commitment, rejection and replay
+authority. The author self-review is nonindependent evidence only.
+
+```yaml
+F8_started: true
+F8_status: R1_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F8_R1_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R1_ATOMIC_BUNDLE
+F8_R1_subject_count: 4
+F8_R1_authority_input_count: 21
+F8_R1_author_evidence_count: 1
+F8_R1_declared_input_count: 26
+F8_R1_manifest: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.manifest.yaml
+F8_R1_manifest_sha256: 920ea2bcbc65b9af41df8eb70ea42d1e20ef7cb4a74b58e2d06d5d984e17a482
+F8_R1_review_package: control-plane/registry/reports/2026-07-19-agents-os-f8-r1-atomic-independent-review-package-v0.1.md
+F8_R1_review_package_sha256: b3db18afd09bd977d77d9995146c93fc5128ef5964914cbc620f8b29ab5a8384
+F8_R1_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F8_R1_independent_review_created: false
+F8_R1_independent_review_result: NOT_RUN
+F8_R1_validator: PASS
+F8_R1_fully_resigned_mutations: 41_41_REJECTED
+F8_R1_parser_probes: 3_3_REJECTED
+F8_R1_builder_byte_reproduction: PASS
+F8_R1_package_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-r1-atomic-independent-review-package-v0.1.md
+F8_R1_package_receipt_sha256: 2610453a59a1bf6ba8c9d8e45a8e0525bbe3e5cf6c04978d1655604daf04d6cc
+F8_accepted: false
+F8_frozen: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.0.md
+active_work_queue_sha256: b6bfbdbcbeb3bf3916d87fa49c25dfb2b21034f523525620b26650152dfa1812
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.9.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.0.md
+next_gate: F8_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## F8 R1 Independent BLOCK and R2 Narrow Start (2026-07-19)
+
+The canonical external R1 review and 23 coordinated attacks were preserved at
+their original bytes. The four blockers and two majors were accepted as
+finding evidence. Jenn explicitly started a narrow R2 and prohibited any
+expansion into Phase 5A, implementation, runtime or real-world authority.
+
+```yaml
+F8_R1_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r1-nobao-independent-review.yaml
+F8_R1_independent_review_sha256: 4cd577695c9753bb9d89cfcc9d7a3f36e27158b5df54b5381048d222a5e99139
+F8_R1_independent_review_result: BLOCK
+F8_R1_findings: 4_BLOCKER_2_MAJOR
+F8_R1_attack_results_sha256: d31b3a8c45bc4bfe64aebd8ca2a6eca35b37723e424559fcfa9ad1f93e66311b
+F8_R1_finding_disposition_sha256: 0233cb3bd71fb7d65b8c5fc1568967e49a66977d776eb6d0f657de99697b217e
+F8_R1_subjects_unchanged: 4/4
+F8_R2_started: true
+F8_R2_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-f8-r2-evidence-currentness-schema-closure-start-decision-v0.1.yaml
+F8_R2_start_decision_sha256: 86f0cef5a5583239ad2874acce820264dd0c0e15ec61a139b563712b802a4886
+F8_accepted: false
+F8_frozen: false
+Phase_5A_started: false
+```
+
+## F8 R2 Fixed for Fresh Full Atomic Independent Review (2026-07-19)
+
+The four immutable R1 subjects and four new R2 subjects are fixed as one
+37-input atomic unit. R2 claims closure of exact assessment fingerprint
+binding, F3 acknowledgement currentness, anchor-independent schema totality,
+the two missing architecture inputs and offline whitespace reproducibility.
+
+```yaml
+F8_status: R2_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+F8_R2_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R2_ATOMIC_BUNDLE
+F8_R2_subject_count: 8
+F8_R2_authority_input_count: 28
+F8_R2_author_evidence_count: 1
+F8_R2_declared_input_count: 37
+F8_R2_manifest: control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+F8_R2_manifest_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+F8_R2_review_package_sha256: cf0cce1df1fac01576ed75b4887d83e798b6b575823e6c49e9c8d296b10314cf
+F8_R2_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+F8_R2_independent_review_created: false
+F8_R2_independent_review_result: NOT_RUN
+F8_R2_fixed_commands: 5/5_PASS
+F8_R2_inherited_mutations: 41/41_REJECTED
+F8_R2_target_regressions: 17/17_PASS
+F8_R2_parser_probes: 3/3_REJECTED
+F8_R2_package_receipt_sha256: 5067b8dc42b57616edef2661202e17f7749a4ffc9ca0b2f7572e94f101e6878d
+F8_accepted: false
+F8_frozen: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+provider_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.2.md
+active_work_queue_sha256: 35d2b57a93812efbbcafc5932fedf82e66cf14616329ff9a0252d6625b2b8170
+superseded_active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.2.md
+next_gate: F8_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
 ## Stable Facts
 
 - Canonical root exists: `/home/jenn/AGENTS_OS_Workspace`.
@@ -3115,8 +3265,8 @@ next_gate: EXPLICIT_JENN_START_DECISION_FOR_F8
 - The historical reading notes draft is tracked at `labs/agents-os-reading-notes-draft.md`; it is not active authority.
 - Current tracked Git files have Notion page URLs redacted in the Git copy.
 - The root Git repository is private-local by default. External push is blocked until a separate private-history review or history-scrub gate because local history has contained private Notion page URLs and working synthesis material.
-- The active work queue is recorded at `control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v4.8.md`.
-- The active work queue's current `NOW` item is `Awaiting Jenn Explicit Start Decision For F8`.
+- The active work queue is recorded at `control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v5.0.md`.
+- The active work queue's current `NOW` item is `F8 R1 Fresh Full Atomic Hash-Bound Independent Review`.
 - Route Selection Pause Handoff v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-selection-pause-handoff-v0.1.md`.
 - The pause handoff records the prior stop-state before Jenn selected a route; it is historical evidence, not current queue state.
 - Route A Selection Activation v0.1 exists at `control-plane/registry/reports/2026-07-07-agents-os-route-a-selection-activation-v0.1.md`.
@@ -3438,6 +3588,200 @@ Do not externally push the root Git history without private-history review or hi
 Run docctl status/doctor after any governance edits.
 Next active route: No Active Automatic Construction Item.
 ```
+
+## F8 R5 Fixed for Fresh Full Atomic Review (2026-07-19)
+
+The external F8 R4 review output remains preserved byte-for-byte. Jenn started
+narrow R5, and the new author surface is fixed for fresh full atomic review.
+
+```yaml
+F8_status: R5_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+F8_R2_manifest_sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+F8_R2_external_review_sha256: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+F8_R2_attack_results_sha256: 818876db74725b43fbca15b43b3da23e7562057cd603b8eceb648a92dab42527
+F8_R2_probe_sha256: 4f9c9c43517cea666542640eeff1746d29973e5fff2c337cb2e4affb0aece2ec
+F8_R2_disposition_sha256: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+F8_R2_reconciliation_receipt_sha256: e563ab5c99e36e7626d05b9e444fad12d305f1e856a4e8500f4abe397ef7ae30
+F8_R2_independent_review_result: BLOCK
+requires_R3: true
+accepted_semantic_blockers:
+  - immutable_owner_assessment_revision_commitment_missing
+  - acknowledgement_candidate_history_resolution_missing
+rejected_finding:
+  id: F8-R2-B03
+  reason: fixed_contract_explicitly_uses_minimum_watermark_greater_than_or_equal
+review_completeness_blocker: accepted_not_a_subject_defect
+F8_R3_start_decision_sha256: bec12ca5d0fa910308242ed9d4a4d7d65e55d395401fae272fdeee8275031f9a
+F8_R3_manifest_sha256: 485d62b70cd39dbe3ab62c2fadefb1c544c8b4d275b30d6d719b5d10a9c1cb1e
+F8_R3_offline_archive: control-plane/registry/reports/2026-07-19-agents-os-f8-r3-review-package-v0.1.zip
+F8_R3_offline_archive_sha256: 4e5d82dc78e8e91cfe0efa2fa5eb2ca185f9a49c1c6d16b0890bca2b3e2002ef
+F8_R3_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R3_ATOMIC_BUNDLE
+F8_R3_subjects: 12
+F8_R3_authority_inputs: 35
+F8_R3_author_evidence: 2
+F8_R3_declared_inputs: 49
+F8_R3_independent_review_created: true
+F8_R3_independent_review_sha256: 7d3451a8166b55e7d277eade0eebe5f61de964fe596829a372a9ff248e944338
+F8_R3_independent_review_result: BLOCK
+F8_R3_blockers: 1
+F8_R3_major: 0
+F8_R3_minor: 0
+F8_R3_favorable_invalid_paths: 0
+F8_R3_disposition_sha256: b2b255fd1f3661f34120b58ccf82825ebcb3ce8ec19a67cb1fc4a6214c18db4e
+F8_R3_reconciliation_receipt_sha256: 1821219f27509258cb49e2419385cd51a3377263220789860fc653025e3a3373
+requires_R4: true
+F8_R4_start_decision_sha256: f072881ba56f637b71fd965fce00ee8cdfd3cf7acc6df456030282f7f0839365
+F8_R4_manifest_sha256: bae62380982fdfa57b81c5349897bee6edde6161c357c869018cc77e6247effb
+F8_R4_offline_archive: control-plane/registry/reports/2026-07-19-agents-os-f8-r4-review-package-v0.1.zip
+F8_R4_offline_archive_sha256: 7ca711b6dba70a0ca94d9ca63faa4be112c4a3ed93c09b3a1d075a4b65906127
+F8_R4_author_package_receipt_sha256: e4114906db3fb1901dcd1f27c45fa15c2596c03580d2e8f3e9b618dfa2d5c5c8
+F8_R4_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R4_ATOMIC_BUNDLE
+F8_R4_subjects: 16
+F8_R4_authority_inputs: 42
+F8_R4_author_evidence: 3
+F8_R4_declared_inputs: 61
+F8_R4_independent_review_created: true
+F8_R4_independent_review_sha256: 77b16f35d6798d42bbf50043d22185eb7ef2ab9b58e5c78a60008b9fe3e22d11
+F8_R4_attack_results_sha256: eeac0ac0808bf602922744f3691f3e78d5065f68cff1c79c5978b81dcca50434
+F8_R4_probe_sha256: 5405e30b0992ada0b5d43e98fccba84c5fba1253098af2d5ac43285c41b37ed2
+F8_R4_checksums_sha256: 1b30319ed76ff301057e3a32c1325283c3343f27ddfe31cbd090eecba319039e
+F8_R4_independent_review_result: BLOCK
+F8_R4_blockers: 2
+F8_R4_major: 0
+F8_R4_minor: 0
+F8_R4_favorable_invalid_paths: 1
+F8_R4_invalid_paths_accepted: 1
+F8_R4_legal_inputs_over_rejected: 1
+F8_R4_disposition_sha256: 8877b0e3e8c23a34731769a6bca48086f5f543dbdd53b7c564f1172f1e60691c
+F8_R4_reconciliation_receipt_sha256: 2be1eb19a5919c0dc62f8f71ee3fa152b440321ecb0c260f7c47ed3b2a4461d4
+requires_R5: true
+R5_started: true
+F8_R5_start_decision_sha256: f3c1863e66d4f2a619f5276495284c3a3c8f81628e6b48d7390b3eaaf000951d
+F8_R5_manifest_sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+F8_R5_offline_archive: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-review-package-v0.1.zip
+F8_R5_offline_archive_sha256: 5766a2cbfbf03983bdb97c27f601940f99aaac688033bc3cf441fcfe567a6ff5
+F8_R5_author_package_receipt_sha256: 8a40980d216e6e1b3bf32c19659a36f8665ff7c925dac9f9d4b779195dbcfd6e
+F8_R5_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+F8_R5_subjects: 20
+F8_R5_authority_inputs: 49
+F8_R5_author_evidence: 4
+F8_R5_declared_inputs: 73
+F8_R5_independent_review_created: false
+F8_R5_independent_review_result: NOT_RUN
+R4_started: true
+F8_R2_B03_in_scope: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.1.md
+active_work_queue_sha256: f08d8835493cf9667c94019530c4fa0125ae58531d42e96f796c4af9c5bfe60d
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.1.md
+R3_started: true
+F8_accepted: false
+F8_frozen: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+database_or_provider_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+real_effect_authorized: false
+```
+
+R5 binds all seven non-null H01 consumers to a fixed trusted owner-source
+anchor, applies R4 all-null/all-non-null semantics, and invokes the fixed
+hash-verified R2 reducer to derive `CANDIDATE_FORMED` rather than trusting a
+fixture claim. It restores `stable_ref` to strict string, nonempty and NFC,
+without an internal-whitespace prohibition. R1-R4 bytes remain immutable. The
+next and only gate is a fresh full atomic hash-bound independent review of the
+73-input bundle; no F8 acceptance, freeze, Phase 5A start or implementation
+authority follows from the author-side PASS.
+
+## F8 R5 PASS Ready for Jenn Atomic Freeze Decision (2026-07-19)
+
+The complete external F8 R5 review output is preserved byte-for-byte. Its
+checksums, 73 manifest inputs and fourteen fixed commands were independently
+verified. The review returned `PASS_NO_BLOCKER`, requires no R6 and closes the
+R4 H01 owner-commitment and inherited `stable_ref` findings. This satisfies
+the semantic freeze gate but does not itself accept or freeze F8.
+
+```yaml
+F8_status: READY_FOR_JENN_R5_ATOMIC_FREEZE_DECISION
+F8_R5_review_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+F8_R5_manifest_sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+F8_R5_offline_archive_sha256: 5766a2cbfbf03983bdb97c27f601940f99aaac688033bc3cf441fcfe567a6ff5
+F8_R5_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+F8_R5_independent_review_sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+F8_R5_attack_results_sha256: c306d7d7839f380ebc1d51b8495b006074d1c7206507368b010cd7e4fabcf25d
+F8_R5_probe_sha256: 26002ca0e98ee6ae59e91de58d822c24550878a15f64ab8232b28aeda944ad4a
+F8_R5_checksums_sha256: 7f49c7ec4d4b461b7067466467337e8a3f05666bff5e51ee9ce5f90707830124
+F8_R5_independent_review_result: PASS_NO_BLOCKER
+F8_R5_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+F8_R5_favorable_invalid_paths: 0
+F8_R5_legal_inputs_over_rejected: 0
+requires_R6: false
+F8_revision_stop: true
+F8_R5_disposition_sha256: d6c1dac41b80fa650511227484447f3c6fd593c0087be903bab0da5b740468af
+F8_R5_atomic_freeze_decision_package: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-freeze-decision-package-v0.1.md
+F8_R5_atomic_freeze_decision_package_sha256: bb5a9126eb610f9d1bb3172e11654bb56ecde772176f279f5473a04f4e657086
+F8_R5_decision_surface_receipt_sha256: ca424a041a8235e2189eb7c4a76e5fd5fbe783342f1d6394201b93c1ff4e5d2b
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.2.md
+active_work_queue_sha256: 88c9f81a7c72a18d848030e043930620c7770977d5dac2abe914d932c95f1092
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.2.md
+F8_atomic_freeze_gate: SATISFIED_FOR_JENN_DECISION
+F8_accepted: false
+F8_frozen: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+database_or_provider_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+real_effect_authorized: false
+next_gate: JENN_F8_R5_ATOMIC_FREEZE_DECISION
+```
+
+The only current action is Jenn's exact atomic decision. No R6 is preplanned.
+Phase 5A remains a separate post-freeze and post-durability Jenn-owned gate.
+
+## F8 R5 Accepted and Frozen (2026-07-19)
+
+Jenn confirmed Section 6 A's complete Exact decision text. The immutable
+decision atomically accepts and freezes only the twenty R1-R5 subjects under
+the manifest's declared precedence. All evidence and governance projections
+remain outside the acceptance unit.
+
+```yaml
+F8_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+F8_acceptance_unit: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+F8_subject_count: 20
+F8_manifest_sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+F8_independent_review_sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+F8_freeze_decision: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml
+F8_freeze_decision_sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d
+F8_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-r5-atomic-freeze-closeout-v0.1.md
+F8_freeze_closeout_receipt_sha256: 4f533798d490987b7643d4204bd849c1ba47af001086e2fcfa4c07ab5dd027e7
+F8_accepted: true
+F8_frozen: true
+F8_revisions_stopped: true
+requires_R6: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.3.md
+active_work_queue_sha256: ec950e669d0e2aadb3029bfc233055ca80880adda6a3f2bfe914d70c2dd8d115
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.3.md
+F8_Git_durability: pending
+F8_mainline_integrated: false
+Phase_5A_started: false
+implementation_authorized: false
+runtime_activation_authorized: false
+database_or_provider_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+sensing_or_recording_authorized: false
+real_effect_authorized: false
+next_gate: F8_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_PHASE_5A_START_DECISION
+```
+
+The freeze does not authorize Git delivery or Phase 5A. The next work block is
+an exact F8 Git durability closeout scope followed by a separate Jenn decision.
 
 ## Safety Notes
 

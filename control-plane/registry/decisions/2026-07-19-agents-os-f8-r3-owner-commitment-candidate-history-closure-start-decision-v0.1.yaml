@@ -1,0 +1,70 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: agents-os-f8-r3-owner-commitment-candidate-history-closure-start-decision-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+status: accepted_start_decision
+
+decision:
+  start_F8_R3: true
+  next_state: F8_R3_STARTED_STRICT_SCOPE
+  acceptance_or_freeze_granted: false
+  Phase_5A_started: false
+
+evidence_binding:
+  R2_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: b179557dfc7c74ab60d345933d5c5e4eebb9c9418c27091a35a19611be5e2a96
+  R2_external_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r2-nobao-independent-review.yaml
+    sha256: 4c6edef44e7f12e7eb905233e11c952932a7ce3ef843aca6230256d1e28f08f4
+    result: BLOCK
+  R2_disposition:
+    path: control-plane/registry/reviews/2026-07-19-agents-os-f8-r2-independent-review-disposition-v0.1.yaml
+    sha256: 5592c88ddeee1f7fc4b69c3317e8a2f06cf4107104d3df7a6231ad460f45ffca
+
+strict_scope:
+  - consume_owner_issued_immutable_assessment_revision_commitment
+  - do_not_recompute_any_upstream_owner_reducer
+  - resolve_exact_candidate_tuple_from_canonical_candidate_history_before_acknowledgement
+  - preserve_based_on_event_sequence_greater_than_or_equal_to_minimum_trusted_event_sequence
+  - remove_watermark_naming_ambiguity_only
+  - produce_downloadable_complete_atomic_review_archive
+  - run_fresh_full_atomic_hash_bound_independent_review
+
+finding_scope:
+  included:
+    - F8-R2-B01
+    - F8-R2-B02
+    - F8-R2-B04_REVIEW_PACKAGE_ACCESSIBILITY_ONLY
+  excluded:
+    - F8-R2-B03_WITHDRAWN_AS_CONTRACT_MISREAD
+
+immutability:
+  R1_subjects_and_manifest: preserve_exact_bytes
+  R2_subjects_and_manifest: preserve_exact_bytes
+  reopen_R1_or_R2_review_unit: forbidden
+
+forbidden:
+  - authority_expansion
+  - second_permission_system
+  - second_identity_authority
+  - second_Task_authority
+  - second_Command_authority
+  - upstream_reducer_reimplementation
+  - Phase_5A
+  - implementation
+  - runtime
+  - database
+  - provider
+  - production_authentication
+  - private_Memory
+  - sensing_or_recording
+  - real_effect
+  - automatic_F8_acceptance_or_freeze
+
+stop_rule:
+  stop_at: F8_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  independent_result_required: true
+  automatic_acceptance: false
+  automatic_freeze: false
