@@ -5344,9 +5344,9 @@ Phase_5A_M0A_Git_objects_on_main: true
 Phase_5A_M0A_mainline_integrated: true
 Phase_5A_M0A_durability_complete: true
 Phase_5A_M0A_durability_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-mainline-durability-closeout-v0.1.md
-Phase_5A_M0A_durability_closeout_receipt_sha256: fc08a3355402eff782c7899a4c01b8cdb409cd7add5a4190ac9d94bc0207f625
+Phase_5A_M0A_durability_closeout_receipt_sha256: 7d2f81c6966dd0a163b5c3e3e5aabc2e242f5e9186f92fe2df6b8d694e371515
 active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md
-active_work_queue_sha256: 2485cf246497c963b863c35b9e435c4559c9d7e86b35bbde4333f56f1d492b99
+active_work_queue_sha256: 1c99caa851bbcfe49a5948c02f1064979a2609e35fa66829d5f7285e25baa9f3
 consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md
 current_work_package: JENN_EXPLICIT_PHASE_5B_START_DECISION_GATE
 Phase_5B_started: false

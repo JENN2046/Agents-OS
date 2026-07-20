@@ -87,7 +87,7 @@ mainline_validation:
   local_main_equals_origin_main_before_projection: true
 queue_projection:
   path: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md
-  sha256: 2485cf246497c963b863c35b9e435c4559c9d7e86b35bbde4333f56f1d492b99
+  sha256: 1c99caa851bbcfe49a5948c02f1064979a2609e35fa66829d5f7285e25baa9f3
 ```
 
 ## Boundary

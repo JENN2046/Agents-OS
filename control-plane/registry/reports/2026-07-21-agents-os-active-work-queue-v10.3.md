@@ -47,6 +47,8 @@ Phase_5B_started: false
 ```text
 Phase_5A_M0A_mainline_durability=PASS
 required_next=Jenn_explicit_Phase_5B_start_decision
+requires_jenn_decision=true
+decision_owner=Jenn
 automatic_Phase_5B_transition=forbidden
 ```
 
