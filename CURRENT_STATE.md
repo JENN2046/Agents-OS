@@ -4707,6 +4707,54 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP2_DUAL_START_AND_WRONG_THREAD_TESTS
 ```
 
+## Phase 5A M0-A WP2 Complete, WP3 Current (2026-07-20)
+
+WP2 established the synthetic Resident ownership boundary without entering
+ledger v1 semantics: one OS lock, immutable identity/incarnation/epoch
+descriptors, one Rust ledger thread, one SQLite connection and deterministic
+cleanup. Dual-process lock contention, duplicate writer and wrong-thread paths
+fail closed. The direct predecessor gate now permits WP3 Ledger v1 only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP3_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP2_source_commit: a1824a8863dc11d7bb3067e94fdd9703d3cf5c5e
+WP2_package_manifest_commit: bd35e517c424d66aedfd41b9151b8696ee9483f1
+WP2_source_commit_payload: 40/40_BYTE_EQUAL
+WP2_content_tree_sha256: cc6af0a1ba38ce501de4ff6c3d5b2b7788b186a9dd81060c9e963d149d5bf658
+WP2_package_manifest_sha256: 38f7ec261b7b5e0911742d41717fe24b47165bf7747c66d43c53ea57cf1cb4a3
+WP2_rustfmt_check: PASS
+WP2_cargo_test_locked: 12/12_PASS
+WP2_clippy_all_targets_D_warnings: PASS
+WP2_dual_process_lock_contention: REJECTED
+WP2_duplicate_writer: REJECTED
+WP2_wrong_thread_write: REJECTED
+WP2_authoritative_SQLite_connections: 1
+WP2_cleanup_and_reacquisition: PASS
+WP2_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp2-resident-ownership-closeout-v0.1.md
+WP2_closeout_receipt_sha256: 698601ac5ab17225fb90e804774b7c274727e5951012bea1a9035060efc84cf2
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.0.md
+active_work_queue_sha256: f485def8b22e08a4550f38409ce7b6d07d17f9d41ff86b98d6f461b326ff0512
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.0.md
+current_work_package: WP3_LEDGER_V1
+WP3_start_condition_satisfied: true
+WP4_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP3_TRANSACTION_AND_INTEGRITY_TESTS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
