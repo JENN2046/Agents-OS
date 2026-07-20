@@ -5391,3 +5391,41 @@ provider_sensing_or_real_effect_authorized: false
 current_work_package: PHASE_5B_M0B_PLAN_R1_AUTHOR_PACKAGE
 next_gate: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
 ```
+
+## Phase 5B M0-B Plan R1 Fixed for Independent Review (2026-07-21)
+
+The four-subject implementation-plan bundle, deterministic synthetic witness,
+offline validator and author self-review are fixed as one hash-bound review
+unit. No implementation source, database, runtime, VCPToolBox activation,
+private Memory, provider, sensing or real-effect surface was opened.
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_plan_status: R1_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R1_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+Phase_5B_R1_subjects: 4
+Phase_5B_R1_authority_inputs: 29
+Phase_5B_R1_author_evidence: 4
+Phase_5B_R1_manifest_inputs: 37
+Phase_5B_R1_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+Phase_5B_R1_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R1_independent_review_created: false
+Phase_5B_R1_independent_review_result: NOT_RUN
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.5.md
+active_work_queue_sha256: fc990b79008dcfd1396fa4b7e5b73d22c1e093f0172a951e0e729304393a8948
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.5.md
+current_work_package: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```

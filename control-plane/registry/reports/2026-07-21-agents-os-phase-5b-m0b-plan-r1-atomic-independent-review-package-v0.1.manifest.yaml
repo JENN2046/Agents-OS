@@ -1,0 +1,175 @@
+schema_version: agents-os.hash-bound-review-manifest.v0.1
+package_id: agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  subjects:
+    - {ordinal: 1, role: implementation_plan, path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-implementation-plan-v0.1-r1.md, sha256: 88c2bd24c4c1beea470ec734a381c7d73310425844bd9d84ef98741878768634}
+    - {ordinal: 2, role: exact_build_profile, path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml, sha256: e213b302fbc3737b20a414b707626a1438ea464da59d2acb24f424582f7d5a60}
+    - {ordinal: 3, role: contract_traceability_matrix, path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-contract-traceability-matrix-v0.1-r1.yaml, sha256: 6302ecf424e13580f1207006928a49e605030cecc78c7778a4410e6ce2367726}
+    - {ordinal: 4, role: validation_privacy_fault_injection_profile, path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-validation-privacy-fault-injection-profile-v0.1-r1.yaml, sha256: 668d0ee361c6aff79f6b0062dd558c587c76a4e98dd70c202356d6ef407571a8}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5}
+  - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff}
+  - {role: frozen_F7_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml, sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a}
+  - {role: frozen_F7_manifest, path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml, sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35}
+  - {role: frozen_F7_independent_review, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml, sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647}
+  - {role: frozen_F8_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml, sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d}
+  - {role: frozen_F8_manifest, path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml, sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672}
+  - {role: frozen_F8_independent_review, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml, sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f}
+  - {role: frozen_Phase_5A_plan_decision, path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml, sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e}
+  - {role: frozen_Phase_5A_plan_manifest, path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml, sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3}
+  - {role: frozen_Phase_5A_plan_independent_review, path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml, sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7}
+  - {role: Phase_5A_implementation_start_decision, path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-v0.1.yaml, sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3}
+  - {role: Phase_5A_mainline_durability_receipt, path: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-mainline-durability-closeout-v0.1.md, sha256: 7d2f81c6966dd0a163b5c3e3e5aabc2e242f5e9186f92fe2df6b8d694e371515}
+  - {role: immutable_Phase_5B_plan_start_decision, path: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-closure-start-decision-v0.1.yaml, sha256: 1d0aad8fdc4956f49b81fd639781a6dba87e2c00fc61c94f602301645dbe1fc0}
+  - {role: Phase_5A_package_manifest, path: extensions/agents-os-resident/package-manifest.json, sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495}
+  - {role: Phase_5A_Cargo_profile, path: extensions/agents-os-resident/Cargo.toml, sha256: 169290f190394ebfc557495581029925fb2d5b1f0397b7138ec09812d5d376a0}
+  - {role: Phase_5A_Rust_root, path: extensions/agents-os-resident/src/lib.rs, sha256: 8db0f37b9d4b2ff365bca724d7844a13a90917e2609cddd948f12fe9a80e1457}
+  - {role: Phase_5A_SQLite_schema, path: extensions/agents-os-resident/src/ledger/schema.rs, sha256: 72b86c2cdf629553c3adbcc1bd84c74fa6e21f4b13874f83c32e2a384f6f1983}
+  - {role: Phase_5A_transaction_owner, path: extensions/agents-os-resident/src/ledger/transaction.rs, sha256: 6a6acb0b8fdb6332b1044785d438207181ed6f12cd9649546094fbc31b5bb3ae}
+  - {role: Phase_5A_reducer_inventory, path: extensions/agents-os-resident/src/reducers/mod.rs, sha256: d087348636c92e8f200a307ef399ec0b80a67b44929caf62302ddea7954791eb}
+  - {role: Phase_5A_NAPI_frame, path: extensions/agents-os-resident/src/napi_frame.rs, sha256: 3a1f4ee9be7d44de588cafce8b42f1377a1cc7eb69206b27273d87f775c9031a}
+  - {role: Phase_5A_integrated_witness, path: extensions/agents-os-resident/tests/synthetic_m0a.rs, sha256: 207b09bc2625f257cd38bd91699dd4e13f1b0e38777ffd89a3df6f6ea09c9440}
+  - {role: Phase_5A_package_documentation, path: extensions/agents-os-resident/README.md, sha256: e56133f53e8d59d3502f571545e339803b187bb2533b77d473097b6ede4fb953}
+
+author_evidence:
+  - {role: deterministic_witness_builder, path: control-plane/registry/build-phase-5b-m0b-plan-r1-witness.py, sha256: 5e355cff91cab0e727487881b423c70b1e8b4dfed73d9a8a65caa0d4976bfe0e, may_substitute_for_independent_judgment: false}
+  - {role: synthetic_constructive_witness, path: control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r1-synthetic-witness-v0.1.json, sha256: d10eb93cccaef0709b1f14555f790b8fae786d5e7681b75e3d66f2ac59ae6c71, runtime_usable: false}
+  - {role: offline_witness_validator, path: control-plane/registry/validate-phase-5b-m0b-plan-r1-witness.py, sha256: b8cfcef137fd9e1d0f5559a7074feb2da6bf47559188b51fc44564d23f555926, may_substitute_for_independent_judgment: false}
+  - {role: author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-author-self-review-v0.1.yaml, sha256: 087aca041a7f18a3e96594234f0f212fa36ba4810d536ff63bc7f81fc44bbe5c, result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW, may_substitute_for_independent_judgment: false}
+
+declared_subject_count: 4
+declared_authority_input_count: 29
+declared_author_evidence_count: 4
+declared_total_input_count: 37
+
+validator_commands:
+  - python3 -c "import pathlib,yaml; [yaml.safe_load(pathlib.Path(p).read_text()) for p in ['control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml','control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-contract-traceability-matrix-v0.1-r1.yaml','control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-validation-privacy-fault-injection-profile-v0.1-r1.yaml','control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-author-self-review-v0.1.yaml']]"
+  - python3 control-plane/registry/validate-phase-5b-m0b-plan-r1-witness.py control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r1-synthetic-witness-v0.1.json --self-test
+  - sh -c 't=$(mktemp); python3 control-plane/registry/build-phase-5b-m0b-plan-r1-witness.py "$t" >/dev/null && cmp "$t" control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r1-synthetic-witness-v0.1.json; r=$?; rm -f "$t"; exit $r'
+  - python3 -c "from pathlib import Path; ps=[Path(p) for p in ['control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-implementation-plan-v0.1-r1.md','control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml','control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-contract-traceability-matrix-v0.1-r1.yaml','control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-validation-privacy-fault-injection-profile-v0.1-r1.yaml','control-plane/registry/build-phase-5b-m0b-plan-r1-witness.py','control-plane/registry/validate-phase-5b-m0b-plan-r1-witness.py']]; bad=[(str(p),i+1) for p in ps for i,line in enumerate(p.read_text().splitlines()) if line.rstrip()!=line]; assert not bad,bad"
+
+required_review_questions:
+  - all_37_declared_inputs_match_and_are_fully_read
+  - four_subjects_form_one_complete_nonpartial_buildable_M0B_plan
+  - plan_freeze_cannot_automatically_start_implementation
+  - future_work_extends_the_existing_agents_os_resident_package_without_a_second_plugin_service_or_writer
+  - Phase_5A_five_method_NAPI_single_writer_single_connection_and_zero_VCPToolBox_core_diff_are_preserved
+  - ordinary_conversation_and_thought_cannot_create_Goal_Task_or_candidate_without_exact_explicit_choice
+  - Session_ephemeral_discard_and_remain_paths_make_zero_canonical_writes
+  - F7_candidate_revisions_are_candidate_only_immutable_low_disclosure_and_exactly_predecessor_bound
+  - Memory_Candidate_cannot_become_formal_Memory_and_Home_cannot_write_Task_state
+  - F8_owner_commitments_and_canonical_candidate_history_are_consumed_without_recomputing_upstream_authority
+  - relationship_trust_role_urgency_history_or_PBL_no_match_never_expands_authority
+  - Home_and_F8_cannot_authenticate_commit_or_replay_a_Command
+  - only_F3_can_commit_reject_and_replay_the_implementation_only_synthetic_Command
+  - synthetic_F3_Command_definition_cannot_satisfy_the_future_production_compatibility_requirement
+  - schema_v2_tables_transactions_replay_and_crash_windows_are_decision_complete
+  - raw_Session_content_private_Memory_provider_responses_and_credentials_cannot_enter_Ledger_or_diagnostics
+  - exact_28_case_catalog_and_30_fully_resigned_mutations_are_semantically_valid
+  - validator_derives_results_and_does_not_merely_trust_claimed_labels_or_fixture_equality
+  - no_implementation_database_runtime_provider_private_Memory_sensing_or_real_effect_is_authorized_or_performed
+  - no_internal_contradiction_implementation_impossibility_unowned_decision_or_boundary_escape_remains
+
+independent_adversarial_minimum:
+  - replace_a_required_no_promotion_case_with_a_locally_valid_favorable_case_and_fully_resign
+  - make_an_implicit_branch_or_promotion_favorable_and_fully_resign
+  - change_candidate_or_handoff_content_at_the_same_revision_with_coordinated_history_resigning
+  - substitute_an_F8_owner_commitment_source_consumer_resolution_and_local_anchor_together
+  - create_a_phantom_candidate_outside_canonical_history
+  - make_Home_write_Task_or_F3_Command_rows
+  - mark_the_synthetic_Command_definition_production_usable
+  - add_raw_content_private_Memory_provider_or_credential_fields_and_fully_resign
+  - add_a_sixth_NAPI_method_second_writer_second_SQLite_connection_or_sidecar
+  - let_INDETERMINATE_restart_or_F3_outcome_retry_automatically
+  - change_schema_v2_transaction_ownership_or_leave_a_crash_window_unowned
+  - set_any_implementation_runtime_database_VCPToolBox_private_Memory_provider_sensing_or_effect_authority_true
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - exact_manifest_path_and_sha256
+    - archive_sha256_entry_count_safety_and_checksum_results
+    - all_37_hashes_and_full_reads
+    - four_subject_hashes_and_atomicity
+    - four_validator_commands_and_results
+    - blocker_major_minor_counts
+    - finding_ids_with_exact_subject_section_and_reproducible_evidence
+    - independent_fully_resigned_attack_count
+    - favorable_invalid_path_count
+    - legal_input_over_rejection_count
+    - second_permission_identity_Task_Command_or_effect_authority_count
+    - synthetic_to_production_leak_count
+    - private_content_or_Ledger_disclosure_count
+    - NAPI_SQLite_writer_or_VCPToolBox_boundary_escape_count
+    - crash_replay_or_automatic_promotion_gap_count
+    - automatic_implementation_start_count
+    - requires_R2
+  no_finding_rule: >-
+    PASS_NO_BLOCKER is permitted only when every declared byte is available and
+    matched, every question is answered from the fixed unit, all commands pass,
+    independent coordinated fully re-signed attacks find no favorable invalid
+    path or legal-input over-rejection, and no blocker remains.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_may_be_relied_on_as_conclusion: false
+  hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unavailable_required_input_result: BLOCK
+  validator_mismatch_result: BLOCK
+  runtime_or_provider_execution_required: false
+  secrets_private_memory_or_active_config_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  plan_freeze_ready: false
+  authority_after_pass: Jenn_only
+  automatic_freeze: forbidden
+  automatic_implementation_start: forbidden
+
+non_authorization:
+  independent_review_result_created: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  source_modification_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
+  Git_delivery_authorized: false

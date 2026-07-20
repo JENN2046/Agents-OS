@@ -1,0 +1,229 @@
+schema_version: agents-os.m0b-contract-traceability-matrix.v0.1-r1
+matrix_id: PHASE_5B_M0B_HOME_TO_ACTION_CONTRACT_TO_IMPLEMENTATION_TRACEABILITY_V0_1_R1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+rules:
+  frozen_contract_subjects_are_modified: false
+  every_runtime_decision_has_one_semantic_owner: true
+  implementation_may_recompute_upstream_authority_outside_owner_reducer: false
+  favorable_results_require_exact_current_hash_bound_inputs: true
+  missing_stale_conflicting_unknown_or_unreproducible_input: fail_closed
+  projection_or_candidate_may_create_authority: false
+  synthetic_fixture_may_become_production_authority: false
+  raw_private_content_may_enter_canonical_Ledger: false
+
+requirements:
+  - id: M0B-ROADMAP-01
+    source: Home_Domain_Construction_Roadmap_R3_section_11
+    obligation: session_has_four_nonautomatic_top_level_branches
+    owner: Phase_5B_session_boundary_reducer
+    future_modules:
+      - home/session_boundary
+    persistence:
+      EPHEMERAL_ONLY: zero_canonical_writes
+      DISCARD: zero_canonical_writes
+      REMAIN_IN_SESSION: zero_canonical_writes
+      PROPOSE_LIFE_STREAM_CANDIDATE: candidate_Event_head_atomic_transaction
+    tests:
+      - each_branch_requires_exact_closed_choice
+      - absence_or_unknown_choice_is_INDETERMINATE
+      - no_promotion_branches_leave_ledger_unchanged
+
+  - id: M0B-ROADMAP-02
+    source: Home_Domain_Construction_Roadmap_R3_section_11
+    obligation: ordinary_conversation_or_thought_creates_no_Goal_or_Task
+    owner: F1_for_Goal_and_Task_Phase_5B_for_nonpromotion
+    future_modules:
+      - home/session_boundary
+    forbidden_rows:
+      - Goal
+      - Task
+      - plan_membership
+      - task_completion
+    tests:
+      - ordinary_conversation_zero_Goal_Task_writes
+      - ordinary_thought_zero_Goal_Task_writes
+      - direct_Task_write_request_rejected_before_transaction
+
+  - id: M0B-F7-01
+    source: F7_HOME_DOMAIN_MINIMUM_SEMANTICS_V0_1_R2_ATOMIC_BUNDLE
+    obligation: implement_only_the_three_F7_candidate_classes_needed_by_M0B
+    owner: F7_semantics_consumed_by_Phase_5B_candidate_reducer
+    future_modules:
+      - home/candidate
+    rows:
+      - home_candidate_revision
+      - home_candidate_head
+      - event
+    tests:
+      - exact_allowed_source_target_pairs_only
+      - candidate_only_no_action_authority
+      - unknown_semantic_class_rejected
+      - same_revision_rewrite_rejected
+
+  - id: M0B-F7-02
+    source: F7_sections_5_8_and_R2_case_inventory
+    obligation: Memory_Candidate_never_becomes_Memory_and_Session_never_becomes_Task
+    owner: governed_Memory_and_F1_remain_external
+    future_modules:
+      - home/candidate
+    forbidden_rows:
+      - memory_content
+      - memory_access_authority
+      - Task
+    tests:
+      - memory_candidate_has_zero_formal_Memory_writes
+      - Session_to_Task_rejected
+      - candidate_payload_is_commitment_only
+
+  - id: M0B-F7-03
+    source: F7_sections_6_and_7
+    obligation: relationship_presence_or_sensing_never_expands_authority
+    owner: upstream_policy_and_future_target_reducers
+    future_modules:
+      - home/session_boundary
+      - home/candidate
+    tests:
+      - relationship_as_authority_rejected
+      - presence_or_sensing_input_outside_profile_rejected
+      - PBL_no_match_alone_cannot_form_handoff
+
+  - id: M0B-F8-01
+    source: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+    obligation: form_only_a_nonauthoritative_handoff_from_exact_current_owner_commitments
+    owner: F8_handoff_reducer_consumed_without_reimplementation
+    future_modules:
+      - home/handoff
+    rows:
+      - home_handoff_link
+      - event
+    tests:
+      - owner_commitment_ref_revision_fingerprint_exact_match
+      - canonical_candidate_history_exact_match
+      - phantom_candidate_rejected
+      - stale_or_unavailable_assessment_fails_closed
+      - minimum_event_watermark_enforced
+
+  - id: M0B-F8-02
+    source: F8_sections_1_4_6_7_and_R3_R5_amendments
+    obligation: Home_and_F8_do_not_mint_authentication_Command_Task_or_effect_authority
+    owner: F3_F1_F4_remain_external_owners
+    future_modules:
+      - home/handoff
+    tests:
+      - direct_Command_commit_rejected
+      - direct_Task_write_rejected
+      - effect_execution_rejected
+      - caller_owned_commitment_cannot_replace_owner_source
+
+  - id: M0B-F3-01
+    source: F3_RESIDENT_SINGLETON_NAPI_IDENTITY_CONTINUITY_V0_1_R4_ATOMIC_BUNDLE
+    obligation: only_F3_authenticates_commits_rejects_and_replays_the_synthetic_Command
+    owner: existing_F3_command_intake_reducer
+    future_modules:
+      - home/handoff
+      - reducers/command_intake
+    rows:
+      - command_definition
+      - inbox_command
+      - command_envelope
+      - replay_index
+      - event
+    tests:
+      - adapter_calls_existing_execute_command_only
+      - synthetic_principal_authentication_required
+      - exact_replay_returns_F3_first_result
+      - different_bytes_same_Command_id_is_protocol_conflict
+      - F3_REJECTED_or_INDETERMINATE_does_not_retry
+
+  - id: M0B-F3-02
+    source: F8_ProspectiveF3HomeIntentInterfaceRequirementV0_1
+    obligation: synthetic_command_definition_does_not_satisfy_future_production_compatibility
+    owner: F3_future_compatibility_decision
+    future_modules:
+      - home/handoff
+    tests:
+      - non_SYNTHETIC_TEST_profile_rejected
+      - production_registry_usable_flag_forbidden
+      - prospective_requirement_remains_unaccepted
+
+  - id: M0B-M0A-01
+    source: Phase_5A_M0A_ACCEPTED_IMPLEMENTATION
+    obligation: retain_single_writer_single_connection_and_closed_NAPI_surface
+    owner: existing_Resident_and_Ledger
+    future_modules:
+      - resident/ledger_thread
+      - ledger/transaction
+      - napi_frame
+    tests:
+      - all_Phase_5A_tests_regression_pass
+      - five_NAPI_methods_unchanged
+      - no_second_connection_thread_or_sidecar
+      - VCPToolBox_core_diff_zero
+
+  - id: M0B-LEDGER-01
+    source: Phase_5A_plan_and_implementation_atomicity_rules
+    obligation: candidate_Event_head_and_handoff_Event_are_atomic_and_recoverable
+    owner: existing_Rust_ledger_thread
+    future_modules:
+      - ledger/schema
+      - ledger/transaction
+      - home/candidate
+      - home/handoff
+    rows:
+      - home_candidate_revision
+      - home_candidate_head
+      - home_handoff_link
+      - event
+    tests:
+      - candidate_crash_window_matrix
+      - handoff_crash_window_matrix
+      - rollback_has_no_partial_rows_or_pointer
+      - restart_replay_has_no_duplicate_candidate_handoff_or_Command
+
+  - id: M0B-PRIVACY-01
+    source: F7_section_8_and_Roadmap_M0_isolation_boundary
+    obligation: persist_only_low_disclosure_commitments_and_refs
+    owner: Phase_5B_input_decoder_and_Ledger_schema
+    future_modules:
+      - home/session_boundary
+      - ledger/schema
+    tests:
+      - raw_content_field_rejected
+      - recursive_secret_private_content_key_scan
+      - database_text_scan_finds_no_fixture_content
+      - diagnostic_output_does_not_echo_raw_input
+
+  - id: M0B-BOUNDARY-01
+    source: Phase_5B_start_decision
+    obligation: plan_freeze_does_not_start_implementation_or_runtime
+    owner: Jenn
+    tests:
+      - all_authorization_flags_false
+      - implementation_requires_later_exact_Jenn_decision
+      - runtime_activation_remains_separate
+
+forbidden_implementation_shortcuts:
+  - accept_raw_Session_text_into_Command_or_Ledger
+  - infer_candidate_or_intent_from_content_without_explicit_choice
+  - treat_Memory_Candidate_as_formal_Memory
+  - let_Home_write_Goal_Task_Command_permit_delivery_or_validation_rows
+  - reimplement_F2_F3_F7_F8_owner_reducers_in_Phase_5B
+  - accept_caller_supplied_currentness_owner_commitment_or_authority_result
+  - treat_relationship_trust_role_urgency_history_or_PBL_no_match_as_authority
+  - create_second_plugin_service_sidecar_database_writer_or_NAPI_method
+  - retry_INDETERMINATE_or_ambiguous_F3_outcome_automatically
+  - make_synthetic_Command_type_production_usable
+  - modify_VCPToolBox_core_or_enable_plugin_manifest
+
+completion_definition:
+  requirement_rows: 13
+  every_requirement_has_owner_module_persistence_and_tests: required
+  every_favorable_path_has_negative_replay_and_crash_coverage: required
+  all_Phase_5A_regressions_pass: required
+  integrated_synthetic_branch_witness_passes_twice_and_after_restart: required
+  real_private_provider_sensing_runtime_or_effect_occurrences: 0
+  unimplemented_matrix_row_result: M0B_INCOMPLETE
+  matrix_change_after_freeze: requires_new_atomic_review_and_Jenn_decision
