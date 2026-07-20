@@ -4974,6 +4974,68 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP7_TWO_CLEAN_RUNS_BYTE_IDENTICAL_RESTART_REPLAY_ZERO_REAL_OCCURRENCES
 ```
 
+## Phase 5A M0-A WP7 Complete, Implementation Closeout Current (2026-07-21)
+
+WP7 activated the remaining frozen synthetic Goal/Task Command and integrated
+the completed WP0-WP6 surfaces without adding a table, N-API method, authority
+or runtime path. One fixed Goal binds exactly three synthetic Task identities.
+The four closed Command types produce a deterministic four-Event chain, one
+completed validation Task and one non-executable nonauthority Outbox intent.
+
+Two clean temporary SQLite runs produced the same canonical root and Event
+fingerprints. After shutdown and restart, all four exact Commands returned the
+original response bytes with zero added rows. External call, Host dispatch,
+provider, network, private Memory, sensing, runtime activation and real-effect
+occurrence counts remained zero. The next current work is the bounded Phase 5A
+M0-A implementation closeout; Phase 5B remains unstarted.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CLOSEOUT_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+WP7_source_commit_payload: 40/40_BYTE_EQUAL
+WP7_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+WP7_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+WP7_planned_source_inventory: 41/41_MATCH
+WP7_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+WP7_clean_runs: 2/2_BYTE_EQUAL_ROOT_AND_EVENTS
+WP7_restart_replay: 4/4_BYTE_EQUAL_ZERO_ADDITIONS
+WP7_cargo_test_locked: 41/41_PASS
+WP7_clippy_all_targets_D_warnings: PASS
+WP7_release_build_locked: PASS
+WP7_Node_ABI_flow: 4/4_FIRST_RUN_AND_RESTART_BYTE_EQUAL
+WP7_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP7_real_occurrence_count: 0
+WP7_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-wp7-integrated-witness-closeout-v0.1.md
+WP7_closeout_receipt_sha256: adea7400c95bfa3aa18c612cf0f4eea7d21cdb2869156b86acc34cd3286314ff
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.5.md
+active_work_queue_sha256: b551883f04a38bdb857d855ae2452912618349f759eb1f16bde53394d94510c5
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.5.md
+current_work_package: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
+Phase_5A_M0A_implementation_closeout_condition_satisfied: true
+Phase_5B_started: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
