@@ -4664,6 +4664,49 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP1_FIXED_F1_F6_CANONICAL_VECTORS
 ```
 
+## Phase 5A M0-A WP1 Complete, WP2 Current (2026-07-20)
+
+WP1 implemented the frozen integer-only canonical JSON and SHA-256 primitive
+layer. Strict negative cases, fixed canonical bytes and six F1-F6 domain
+vectors pass under the exact Rust 1.96.1 lock. The direct predecessor gate now
+permits WP2 Resident ownership only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP2_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP1_implementation_commit: 055275a46d226f9b4b473ca91538a0da1c69fa34
+WP1_F1_F6_vector_commit: b5abb6af8d038b46d2380c9340f2033945054feb
+WP1_package_manifest_commit: 113de0c25090b90de27ffd53e11add688abc1d78
+WP1_source_commit_payload: 40/40_BYTE_EQUAL
+WP1_content_tree_sha256: f5e1e90e0f2deb9ed11442421fa28871832f700ac8937f9fb57c9f30282af971
+WP1_package_manifest_sha256: ce63edf10a02106fb48886ef9db31da552a3939d67fea431757abd6b5910a087
+WP1_rustfmt_check: PASS
+WP1_cargo_test_locked: 8/8_PASS
+WP1_clippy_all_targets_D_warnings: PASS
+WP1_fixed_F1_F6_domain_vectors: 6/6_MATCH
+WP1_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp1-canonical-primitives-closeout-v0.1.md
+WP1_closeout_receipt_sha256: 09d989b456eca841717f6a764c26f3b40438d767aca9f6ec4f7e9ab88105a301
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.9.md
+active_work_queue_sha256: 61e7e42c5d75f6dc427581c1c2e69a590ffaa0f7d1234a4934758d1a772dadb2
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.9.md
+current_work_package: WP2_RESIDENT_OWNERSHIP
+WP2_start_condition_satisfied: true
+WP3_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP2_DUAL_START_AND_WRONG_THREAD_TESTS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
