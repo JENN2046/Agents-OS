@@ -19,6 +19,16 @@ Phase_5A_implementation_started: false
 implementation_authorized: false
 ```
 
+## NOW
+
+### NOW-001: Construct the narrow Phase 5A M0-A Plan R4 author package
+
+Create only the R4 contract, synthetic fixture, offline validator, author
+self-review and hash-bound independent review package needed to close the three
+accepted R3 findings. Preserve R1-R3 bytes and stop at fresh full atomic
+independent review; do not accept or freeze the plan and do not start
+implementation.
+
 ## CLOSED
 
 ```text
