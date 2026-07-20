@@ -11,6 +11,12 @@ pub struct LedgerCounts {
     pub pointers: u64,
     pub inbox_commands: u64,
     pub replay_rows: u64,
+    pub outbox_intents: u64,
+    pub outbox_claims: u64,
+    pub delivery_attempts: u64,
+    pub dispatch_arms: u64,
+    pub delivery_receipts: u64,
+    pub first_apply_guards: u64,
 }
 
 pub fn counts(connection: &Connection) -> Result<LedgerCounts, LedgerError> {
@@ -20,6 +26,12 @@ pub fn counts(connection: &Connection) -> Result<LedgerCounts, LedgerError> {
         pointers: count(connection, "current_fact_pointer")?,
         inbox_commands: count(connection, "inbox_command")?,
         replay_rows: count(connection, "replay_index")?,
+        outbox_intents: count(connection, "outbox_intent")?,
+        outbox_claims: count(connection, "outbox_claim")?,
+        delivery_attempts: count(connection, "delivery_attempt")?,
+        dispatch_arms: count(connection, "dispatch_arm")?,
+        delivery_receipts: count(connection, "delivery_receipt")?,
+        first_apply_guards: count(connection, "first_apply_guard")?,
     })
 }
 

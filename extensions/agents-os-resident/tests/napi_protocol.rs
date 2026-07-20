@@ -55,7 +55,7 @@ fn illegal_frames_and_forged_principal_are_rejected_before_ledger_access() {
 }
 
 #[test]
-fn query_is_closed_and_reserved_methods_are_inert() {
+fn query_and_wp5_delivery_methods_are_closed_and_fail_without_mutation() {
     let root = tempfile::tempdir().expect("temporary synthetic root");
     let kernel = kernel(root.path());
     let boundary = CommandBoundary::synthetic(&kernel);
@@ -73,14 +73,52 @@ fn query_is_closed_and_reserved_methods_are_inert() {
     );
 
     let before = kernel.ledger_counts().unwrap();
-    for method in [
-        MethodId::ClaimOutbox,
-        MethodId::AcknowledgeOutbox,
-        MethodId::Reconcile,
+    for (method, payload) in [
+        (
+            MethodId::ClaimOutbox,
+            json!({
+                "effect_fence_generation":1,
+                "effect_scope_fingerprint":"d".repeat(64),
+                "environment":"SYNTHETIC_TEST",
+                "expected_previous_claim_epoch":0,
+                "fence_currentness_assessment_fingerprint":"a".repeat(64),
+                "fence_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:fence",
+                "fence_currentness_result":"CURRENT_ACCEPTED",
+                "host_authentication_assessment_fingerprint":"b".repeat(64),
+                "host_authentication_assessment_ref":"assessment:SYNTHETIC_TEST:host",
+                "host_authentication_result":"CURRENT_ACCEPTED",
+                "host_fence_generation":1,
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                "permit_currentness_assessment_fingerprint":"c".repeat(64),
+                "permit_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:permit",
+                "permit_currentness_result":"CURRENT_ACCEPTED",
+                "task_fence_generation":1,
+                "trusted_time_utc_ms":1
+            }),
+        ),
+        (
+            MethodId::AcknowledgeOutbox,
+            json!({
+                "effect_status":"UNKNOWN",
+                "environment":"SYNTHETIC_TEST",
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                "receipt_id":"receipt:SYNTHETIC_TEST:missing",
+                "receipt_kind":"EFFECT_STATUS_UNKNOWN",
+                "source_id":"source:SYNTHETIC_TEST:missing"
+            }),
+        ),
+        (
+            MethodId::Reconcile,
+            json!({
+                "environment":"SYNTHETIC_TEST",
+                "observed_at_utc_ms":1,
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing"
+            }),
+        ),
     ] {
-        let request = request_bytes(method, "request:SYNTHETIC_TEST:reserved", json!({})).unwrap();
+        let request = request_bytes(method, "request:SYNTHETIC_TEST:reserved", payload).unwrap();
         let response = boundary.invoke(method, &request).unwrap();
-        assert_eq!(response.disposition, Disposition::ContractNotActive);
+        assert_eq!(response.disposition, Disposition::Rejected);
     }
     assert_eq!(kernel.ledger_counts().unwrap(), before);
     kernel.shutdown().expect("shutdown");

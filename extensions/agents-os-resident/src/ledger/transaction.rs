@@ -297,7 +297,7 @@ pub(super) fn validate_canonical(bytes: &[u8], fingerprint: &str) -> Result<(), 
     Ok(())
 }
 
-pub(super) fn validate_ref(value: &str) -> Result<(), LedgerError> {
+pub(crate) fn validate_ref(value: &str) -> Result<(), LedgerError> {
     if value.is_empty() || !value.nfc().eq(value.chars()) {
         return Err(LedgerError::InvalidInput(
             "stable references must be nonempty Unicode NFC strings",
@@ -306,7 +306,7 @@ pub(super) fn validate_ref(value: &str) -> Result<(), LedgerError> {
     Ok(())
 }
 
-pub(super) fn validate_hash(value: &str) -> Result<(), LedgerError> {
+pub(crate) fn validate_hash(value: &str) -> Result<(), LedgerError> {
     if value.len() != 64
         || !value
             .bytes()

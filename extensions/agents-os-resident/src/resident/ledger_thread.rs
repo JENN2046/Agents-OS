@@ -9,12 +9,14 @@ use rusqlite::Connection;
 
 use crate::ledger::recovery::{self, LedgerCounts};
 use crate::ledger::replay::{
-    self, ReplayObservation, RequestIdentity, TerminalIntake, TerminalIntakeObservation,
+    self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
+    TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
 };
 use crate::ledger::schema::{self, SchemaSnapshot};
 use crate::ledger::transaction::{
     self, CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
 };
+use crate::reducers::effect_admission::SyntheticOutboxIntent;
 
 use super::{ResidentError, SyntheticOwnership};
 
@@ -46,6 +48,15 @@ enum LedgerCommand {
     TerminalIndeterminate {
         intake: TerminalIntake,
         response: Sender<Result<TerminalIntakeObservation, String>>,
+    },
+    TerminalSyntheticOutbox {
+        intake: TerminalOutboxIntake,
+        fault: OutboxEnqueueFault,
+        response: Sender<Result<TerminalOutboxObservation, String>>,
+    },
+    ResolveSyntheticOutbox {
+        intent_ref: String,
+        response: Sender<Result<Option<SyntheticOutboxIntent>, String>>,
     },
     Counts(Sender<Result<LedgerCounts, String>>),
     Shutdown(Sender<()>),
@@ -144,6 +155,28 @@ impl LedgerThread {
         intake: TerminalIntake,
     ) -> Result<TerminalIntakeObservation, ResidentError> {
         self.request(|response| LedgerCommand::TerminalIndeterminate { intake, response })
+    }
+
+    pub(super) fn terminal_synthetic_outbox(
+        &self,
+        intake: TerminalOutboxIntake,
+        fault: OutboxEnqueueFault,
+    ) -> Result<TerminalOutboxObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalSyntheticOutbox {
+            intake,
+            fault,
+            response,
+        })
+    }
+
+    pub(super) fn resolve_synthetic_outbox(
+        &self,
+        intent_ref: String,
+    ) -> Result<Option<SyntheticOutboxIntent>, ResidentError> {
+        self.request(|response| LedgerCommand::ResolveSyntheticOutbox {
+            intent_ref,
+            response,
+        })
     }
 
     pub(super) fn counts(&self) -> Result<LedgerCounts, ResidentError> {
@@ -263,6 +296,26 @@ fn run(
             LedgerCommand::TerminalIndeterminate { intake, response } => {
                 let _ = response.send(
                     replay::terminal_indeterminate(&mut connection, &intake)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::TerminalSyntheticOutbox {
+                intake,
+                fault,
+                response,
+            } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_outbox(&mut connection, &intake, fault)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::ResolveSyntheticOutbox {
+                intent_ref,
+                response,
+            } => {
+                let _ = response.send(
+                    schema::verify_schema(&connection)
+                        .and_then(|_| replay::resolve_synthetic_outbox(&connection, &intent_ref))
                         .map_err(|error| error.to_string()),
                 );
             }

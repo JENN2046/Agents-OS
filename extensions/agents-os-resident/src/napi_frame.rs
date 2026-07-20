@@ -5,22 +5,30 @@ use serde_json::{Value, json};
 use crate::canonical::fingerprint::sha256_hex;
 use crate::canonical::jcs::{canonicalize_json, to_jcs_bytes};
 use crate::canonical::types::{CanonicalError, CanonicalValue, parse_strict_json};
-use crate::ledger::replay::{TerminalIntake, TerminalIntakeObservation};
+use crate::ledger::replay::{
+    OutboxEnqueueFault, TerminalIntake, TerminalIntakeObservation, TerminalOutboxIntake,
+    TerminalOutboxObservation,
+};
 use crate::reducers::command_intake::{CommandIntakeError, validate_submission};
+use crate::reducers::effect_admission::SyntheticOutboxIntent;
+use crate::reducers::{authority_assessment, outbox_claim};
 use crate::resident::{ResidentError, ResidentKernel};
 
 pub const REQUEST_INTERFACE_VERSION: &str = "agents-os.napi-request-frame.v0.1";
 pub const RESPONSE_INTERFACE_VERSION: &str = "agents-os.napi-response-frame.v0.1";
 pub const COMMAND_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.execute-command-request.v0.1";
 pub const QUERY_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.execute-query-request.v0.1";
-pub const INACTIVE_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.contract-inactive-request.v0.1";
+pub const CLAIM_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.claim-outbox-request.v0.1";
+pub const ACK_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.acknowledge-outbox-request.v0.1";
+pub const RECONCILE_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.reconcile-request.v0.1";
 pub const RESULT_SCHEMA_REF: &str = "agents-os.m0a.boundary-result.v0.1";
 
 const COMMAND_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["authentication_assertion","canonical_command"],"type":"object"}"#;
 const QUERY_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"environment":{"const":"SYNTHETIC_TEST"},"query_id":{"const":"LEDGER_COUNTS"}},"required":["environment","query_id"],"type":"object"}"#;
-const INACTIVE_REQUEST_SCHEMA: &[u8] =
-    br#"{"additionalProperties":false,"properties":{},"required":[],"type":"object"}"#;
-const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"events":{"type":"integer"},"facts":{"type":"integer"},"inbox_commands":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"}},"required":["events","facts","inbox_commands","pointers","replay_rows"],"type":"object"},"low_disclosure_result_code":{"enum":["COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","PROTOCOL_CONFLICT","QUERY_OK"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
+const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_fence_generation","effect_scope_fingerprint","environment","expected_previous_claim_epoch","fence_currentness_assessment_fingerprint","fence_currentness_assessment_ref","fence_currentness_result","host_authentication_assessment_fingerprint","host_authentication_assessment_ref","host_authentication_result","host_fence_generation","outbox_intent_ref","permit_currentness_assessment_fingerprint","permit_currentness_assessment_ref","permit_currentness_result","task_fence_generation","trusted_time_utc_ms"]}"#;
+const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"]}"#;
+const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["environment","observed_at_utc_ms","outbox_intent_ref"]}"#;
+const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MethodId {
@@ -64,9 +72,11 @@ impl MethodId {
                 sha256_hex(COMMAND_REQUEST_SCHEMA),
             ),
             Self::ExecuteQuery => (QUERY_REQUEST_SCHEMA_REF, sha256_hex(QUERY_REQUEST_SCHEMA)),
-            Self::ClaimOutbox | Self::AcknowledgeOutbox | Self::Reconcile => (
-                INACTIVE_REQUEST_SCHEMA_REF,
-                sha256_hex(INACTIVE_REQUEST_SCHEMA),
+            Self::ClaimOutbox => (CLAIM_REQUEST_SCHEMA_REF, sha256_hex(CLAIM_REQUEST_SCHEMA)),
+            Self::AcknowledgeOutbox => (ACK_REQUEST_SCHEMA_REF, sha256_hex(ACK_REQUEST_SCHEMA)),
+            Self::Reconcile => (
+                RECONCILE_REQUEST_SCHEMA_REF,
+                sha256_hex(RECONCILE_REQUEST_SCHEMA),
             ),
         }
     }
@@ -212,15 +222,9 @@ impl<'a> CommandBoundary<'a> {
     ) -> Result<NapiResponseFrame, FrameError> {
         let request = parse_request(request_bytes, expected_method)?;
         match request.method_id {
-            MethodId::ClaimOutbox | MethodId::AcknowledgeOutbox | MethodId::Reconcile => {
-                request.payload.require_exact_fields(&[])?;
-                response(
-                    &request,
-                    Disposition::ContractNotActive,
-                    "CONTRACT_NOT_ACTIVE",
-                    None,
-                )
-            }
+            MethodId::ClaimOutbox => self.claim_outbox(&request),
+            MethodId::AcknowledgeOutbox => self.acknowledge_outbox(&request),
+            MethodId::Reconcile => self.reconcile(&request),
             MethodId::ExecuteQuery => self.execute_query(&request),
             MethodId::ExecuteCommand => self.execute_command(&request),
         }
@@ -248,7 +252,13 @@ impl<'a> CommandBoundary<'a> {
             Some(json!({
                 "events": counts.events,
                 "facts": counts.facts,
+                "first_apply_guards": counts.first_apply_guards,
                 "inbox_commands": counts.inbox_commands,
+                "outbox_claims": counts.outbox_claims,
+                "outbox_intents": counts.outbox_intents,
+                "delivery_attempts": counts.delivery_attempts,
+                "dispatch_arms": counts.dispatch_arms,
+                "delivery_receipts": counts.delivery_receipts,
                 "pointers": counts.pointers,
                 "replay_rows": counts.replay_rows
             })),
@@ -271,9 +281,50 @@ impl<'a> CommandBoundary<'a> {
             );
         };
 
-        // WP4 deliberately does not implement any domain reducer. A valid and
-        // authenticated synthetic Command therefore receives a persisted,
-        // terminal INDETERMINATE result. Exact retries return those same bytes.
+        if command.command_type_id == "M0_SYNTHETIC_ENQUEUE_MOCK_EFFECT" {
+            let intent_ref = SyntheticOutboxIntent::intent_ref_for_command(
+                &command.command_id,
+                &command.canonical_command_fingerprint,
+            )
+            .map_err(|error| {
+                FrameError::Resident(ResidentError::LedgerOperation(error.to_string()))
+            })?;
+            let first_response = response(
+                request,
+                Disposition::Indeterminate,
+                "SYNTHETIC_OUTBOX_NOT_EXECUTABLE",
+                Some(json!({"outbox_intent_ref": intent_ref})),
+            )?;
+            let observation = kernel.terminal_synthetic_outbox_intake(
+                TerminalOutboxIntake {
+                    command_id: command.command_id,
+                    command_type_id: command.command_type_id,
+                    command_type_revision: command.command_type_revision,
+                    canonical_command_bytes: command.canonical_command_bytes,
+                    canonical_command_fingerprint: command.canonical_command_fingerprint,
+                    request_bytes: request.canonical_bytes.clone(),
+                    request_fingerprint: sha256_hex(&request.canonical_bytes),
+                    response_bytes: first_response.canonical_bytes.clone(),
+                    response_fingerprint: sha256_hex(&first_response.canonical_bytes),
+                },
+                OutboxEnqueueFault::None,
+            );
+            return match observation {
+                Ok(TerminalOutboxObservation::FirstTerminal { .. }) => Ok(first_response),
+                Ok(TerminalOutboxObservation::Replayed { response_bytes, .. }) => {
+                    replay_response(response_bytes, Disposition::Indeterminate)
+                }
+                Err(ResidentError::LedgerOperation(message))
+                    if message.contains("request identity conflicts") =>
+                {
+                    response(request, Disposition::Rejected, "PROTOCOL_CONFLICT", None)
+                }
+                Err(error) => Err(error.into()),
+            };
+        }
+
+        // Domain reducers owned by WP1/WP6 remain inactive. Their valid
+        // synthetic Commands retain the WP4 terminal result and replay tuple.
         let first_response = response(
             request,
             Disposition::Indeterminate,
@@ -292,16 +343,7 @@ impl<'a> CommandBoundary<'a> {
         match observation {
             Ok(TerminalIntakeObservation::FirstTerminal) => Ok(first_response),
             Ok(TerminalIntakeObservation::Replayed { response_bytes }) => {
-                let response_value = parse_strict_json(&response_bytes)?;
-                if to_jcs_bytes(&response_value) != response_bytes {
-                    return Err(FrameError::Invalid(
-                        "stored replay response is noncanonical",
-                    ));
-                }
-                Ok(NapiResponseFrame {
-                    canonical_bytes: response_bytes,
-                    disposition: Disposition::Indeterminate,
-                })
+                replay_response(response_bytes, Disposition::Indeterminate)
             }
             Err(ResidentError::LedgerOperation(message))
                 if message.contains("request identity conflicts") =>
@@ -311,6 +353,198 @@ impl<'a> CommandBoundary<'a> {
             Err(error) => Err(error.into()),
         }
     }
+
+    fn claim_outbox(&self, request: &NapiRequestFrame) -> Result<NapiResponseFrame, FrameError> {
+        const FIELDS: [&str; 17] = [
+            "effect_fence_generation",
+            "effect_scope_fingerprint",
+            "environment",
+            "expected_previous_claim_epoch",
+            "fence_currentness_assessment_fingerprint",
+            "fence_currentness_assessment_ref",
+            "fence_currentness_result",
+            "host_authentication_assessment_fingerprint",
+            "host_authentication_assessment_ref",
+            "host_authentication_result",
+            "host_fence_generation",
+            "outbox_intent_ref",
+            "permit_currentness_assessment_fingerprint",
+            "permit_currentness_assessment_ref",
+            "permit_currentness_result",
+            "task_fence_generation",
+            "trusted_time_utc_ms",
+        ];
+        request.payload.require_exact_fields(&FIELDS)?;
+        require_string(&request.payload, "environment", "SYNTHETIC_TEST")?;
+        let intent_ref = require_ref(&request.payload, "outbox_intent_ref")?;
+        for name in [
+            "fence_currentness_assessment_ref",
+            "host_authentication_assessment_ref",
+            "permit_currentness_assessment_ref",
+        ] {
+            require_ref(&request.payload, name)?;
+        }
+        for name in [
+            "effect_scope_fingerprint",
+            "fence_currentness_assessment_fingerprint",
+            "host_authentication_assessment_fingerprint",
+            "permit_currentness_assessment_fingerprint",
+        ] {
+            require_hash(&request.payload, name)?;
+        }
+        let fence_result = require_owner_result(&request.payload, "fence_currentness_result")?;
+        let host_result = require_owner_result(&request.payload, "host_authentication_result")?;
+        let permit_result = require_owner_result(&request.payload, "permit_currentness_result")?;
+        let expected_previous_claim_epoch =
+            require_nonnegative_integer(&request.payload, "expected_previous_claim_epoch")?;
+        let trusted_time_utc_ms =
+            require_nonnegative_integer(&request.payload, "trusted_time_utc_ms")?;
+        let task_fence_generation =
+            require_nonnegative_integer(&request.payload, "task_fence_generation")?;
+        let host_fence_generation =
+            require_nonnegative_integer(&request.payload, "host_fence_generation")?;
+        let effect_fence_generation =
+            require_nonnegative_integer(&request.payload, "effect_fence_generation")?;
+        let Some(kernel) = self.kernel else {
+            return response(
+                request,
+                Disposition::ContractNotActive,
+                "INTENT_NOT_FOUND",
+                None,
+            );
+        };
+        let Some(intent) = kernel.resolve_synthetic_outbox(intent_ref)? else {
+            return response(request, Disposition::Rejected, "INTENT_NOT_FOUND", None);
+        };
+        let owner_bool = |result| match authority_assessment::consume_owner_result(result) {
+            authority_assessment::ConsumerResult::Current => Some(true),
+            authority_assessment::ConsumerResult::Rejected => Some(false),
+            authority_assessment::ConsumerResult::Indeterminate => None,
+        };
+        let permit_current = owner_bool(permit_result);
+        let fence_current = owner_bool(fence_result);
+        let decision = outbox_claim::reduce_claim(outbox_claim::ClaimInputs {
+            integrity_valid: true,
+            synthetic_input: true,
+            intent_pending: true,
+            arm_absent: true,
+            claimant_current: owner_bool(host_result),
+            authority_current: match (permit_current, fence_current) {
+                (Some(false), _) | (_, Some(false)) => Some(false),
+                (Some(true), Some(true)) => Some(true),
+                _ => None,
+            },
+            exact_effect_scope: require_hash(&request.payload, "effect_scope_fingerprint")?
+                == intent.effect_scope_fingerprint,
+            fences_current: task_fence_generation == intent.task_fence_generation
+                && host_fence_generation == intent.host_fence_generation
+                && effect_fence_generation == intent.effect_fence_generation,
+            unexpired: trusted_time_utc_ms < intent.created_event_sequence.saturating_add(1),
+            expected_previous_claim_epoch,
+            current_claim_epoch: 0,
+        });
+        debug_assert!(!decision.event_created);
+        response(
+            request,
+            Disposition::Rejected,
+            if decision.primary_reason == "SYNTHETIC_INPUT" {
+                "SYNTHETIC_INPUT_NOT_EXECUTABLE"
+            } else {
+                "CLAIM_NOT_EXECUTABLE"
+            },
+            None,
+        )
+    }
+
+    fn acknowledge_outbox(
+        &self,
+        request: &NapiRequestFrame,
+    ) -> Result<NapiResponseFrame, FrameError> {
+        request.payload.require_exact_fields(&[
+            "effect_status",
+            "environment",
+            "outbox_intent_ref",
+            "receipt_id",
+            "receipt_kind",
+            "source_id",
+        ])?;
+        require_string(&request.payload, "environment", "SYNTHETIC_TEST")?;
+        let intent_ref = require_ref(&request.payload, "outbox_intent_ref")?;
+        require_ref(&request.payload, "receipt_id")?;
+        require_ref(&request.payload, "source_id")?;
+        let receipt_kind = require_string_value(field(&request.payload, "receipt_kind")?)?;
+        let effect_status = require_string_value(field(&request.payload, "effect_status")?)?;
+        if !crate::reducers::delivery_receipt::compatible(receipt_kind, effect_status) {
+            return Err(FrameError::Invalid(
+                "receipt kind and status are incompatible",
+            ));
+        }
+        let Some(kernel) = self.kernel else {
+            return response(
+                request,
+                Disposition::ContractNotActive,
+                "INTENT_NOT_FOUND",
+                None,
+            );
+        };
+        if kernel.resolve_synthetic_outbox(intent_ref)?.is_none() {
+            return response(request, Disposition::Rejected, "INTENT_NOT_FOUND", None);
+        }
+        response(
+            request,
+            Disposition::Rejected,
+            "NO_APPLICABLE_RECEIPT",
+            None,
+        )
+    }
+
+    fn reconcile(&self, request: &NapiRequestFrame) -> Result<NapiResponseFrame, FrameError> {
+        request.payload.require_exact_fields(&[
+            "environment",
+            "observed_at_utc_ms",
+            "outbox_intent_ref",
+        ])?;
+        require_string(&request.payload, "environment", "SYNTHETIC_TEST")?;
+        require_nonnegative_integer(&request.payload, "observed_at_utc_ms")?;
+        let intent_ref = require_ref(&request.payload, "outbox_intent_ref")?;
+        let Some(kernel) = self.kernel else {
+            return response(
+                request,
+                Disposition::ContractNotActive,
+                "INTENT_NOT_FOUND",
+                None,
+            );
+        };
+        if kernel.resolve_synthetic_outbox(intent_ref)?.is_none() {
+            return response(request, Disposition::Rejected, "INTENT_NOT_FOUND", None);
+        }
+        let decision = crate::reducers::reconcile::reconcile(
+            crate::reducers::reconcile::RecoveryState::PendingNoArm,
+        );
+        debug_assert_eq!(decision.external_call_count, 0);
+        response(
+            request,
+            Disposition::Indeterminate,
+            "NO_RECONCILIATION_REQUIRED",
+            None,
+        )
+    }
+}
+
+fn replay_response(
+    response_bytes: Vec<u8>,
+    disposition: Disposition,
+) -> Result<NapiResponseFrame, FrameError> {
+    let response_value = parse_strict_json(&response_bytes)?;
+    if to_jcs_bytes(&response_value) != response_bytes {
+        return Err(FrameError::Invalid(
+            "stored replay response is noncanonical",
+        ));
+    }
+    Ok(NapiResponseFrame {
+        canonical_bytes: response_bytes,
+        disposition,
+    })
 }
 
 fn response(
@@ -382,6 +616,42 @@ fn require_ref<'a>(value: &'a CanonicalValue, name: &str) -> Result<&'a str, Fra
     }
 }
 
+fn require_hash<'a>(value: &'a CanonicalValue, name: &str) -> Result<&'a str, FrameError> {
+    let value = require_string_value(field(value, name)?)?;
+    if value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+    {
+        Ok(value)
+    } else {
+        Err(FrameError::Invalid("fingerprint must be lowercase SHA-256"))
+    }
+}
+
+fn require_nonnegative_integer(value: &CanonicalValue, name: &str) -> Result<u64, FrameError> {
+    match field(value, name)? {
+        CanonicalValue::Integer(value) if *value >= 0 => Ok(*value as u64),
+        _ => Err(FrameError::Invalid(
+            "count and time values must be nonnegative safe integers",
+        )),
+    }
+}
+
+fn require_owner_result(
+    value: &CanonicalValue,
+    name: &str,
+) -> Result<authority_assessment::OwnerAssessmentResult, FrameError> {
+    match require_string_value(field(value, name)?)? {
+        "CURRENT_ACCEPTED" => Ok(authority_assessment::OwnerAssessmentResult::CurrentAccepted),
+        "REJECTED" => Ok(authority_assessment::OwnerAssessmentResult::Rejected),
+        "INDETERMINATE" => Ok(authority_assessment::OwnerAssessmentResult::Indeterminate),
+        _ => Err(FrameError::Invalid(
+            "owner assessment result is outside the closed enum",
+        )),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -417,7 +687,38 @@ mod tests {
                 MethodId::ExecuteQuery => {
                     json!({"environment":"SYNTHETIC_TEST","query_id":"LEDGER_COUNTS"})
                 }
-                _ => json!({}),
+                MethodId::ClaimOutbox => json!({
+                    "effect_fence_generation":1,
+                    "effect_scope_fingerprint":"d".repeat(64),
+                    "environment":"SYNTHETIC_TEST",
+                    "expected_previous_claim_epoch":0,
+                    "fence_currentness_assessment_fingerprint":"a".repeat(64),
+                    "fence_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:fence",
+                    "fence_currentness_result":"CURRENT_ACCEPTED",
+                    "host_authentication_assessment_fingerprint":"b".repeat(64),
+                    "host_authentication_assessment_ref":"assessment:SYNTHETIC_TEST:host",
+                    "host_authentication_result":"CURRENT_ACCEPTED",
+                    "host_fence_generation":1,
+                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                    "permit_currentness_assessment_fingerprint":"c".repeat(64),
+                    "permit_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:permit",
+                    "permit_currentness_result":"CURRENT_ACCEPTED",
+                    "task_fence_generation":1,
+                    "trusted_time_utc_ms":1
+                }),
+                MethodId::AcknowledgeOutbox => json!({
+                    "effect_status":"UNKNOWN",
+                    "environment":"SYNTHETIC_TEST",
+                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                    "receipt_id":"receipt:SYNTHETIC_TEST:missing",
+                    "receipt_kind":"EFFECT_STATUS_UNKNOWN",
+                    "source_id":"source:SYNTHETIC_TEST:missing"
+                }),
+                MethodId::Reconcile => json!({
+                    "environment":"SYNTHETIC_TEST",
+                    "observed_at_utc_ms":1,
+                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing"
+                }),
             };
             let bytes = request_bytes(method, "command:SYNTHETIC_TEST:inactive", payload).unwrap();
             let response = boundary.invoke(method, &bytes).unwrap();

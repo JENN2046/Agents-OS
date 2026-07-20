@@ -9,12 +9,14 @@ use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
 use crate::ledger::recovery::LedgerCounts;
 use crate::ledger::replay::{
-    ReplayObservation, RequestIdentity, TerminalIntake, TerminalIntakeObservation,
+    OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
+    TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
 };
 use crate::ledger::schema::SchemaSnapshot;
 use crate::ledger::transaction::{
     CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
 };
+use crate::reducers::effect_admission::SyntheticOutboxIntent;
 
 pub mod ledger_thread;
 pub mod lock;
@@ -356,6 +358,27 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .terminal_indeterminate(intake)
+    }
+
+    pub fn terminal_synthetic_outbox_intake(
+        &self,
+        intake: TerminalOutboxIntake,
+        fault: OutboxEnqueueFault,
+    ) -> Result<TerminalOutboxObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_synthetic_outbox(intake, fault)
+    }
+
+    pub fn resolve_synthetic_outbox(
+        &self,
+        intent_ref: impl Into<String>,
+    ) -> Result<Option<SyntheticOutboxIntent>, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .resolve_synthetic_outbox(intent_ref.into())
     }
 
     pub fn ledger_counts(&self) -> Result<LedgerCounts, ResidentError> {
