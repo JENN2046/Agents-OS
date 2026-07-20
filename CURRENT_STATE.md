@@ -4481,6 +4481,57 @@ install dependencies, modify or start VCPToolBox, enable a plugin, access
 private raw Memory or `state-private/`, activate runtime, call a provider or
 perform a real effect.
 
+## Phase 5A M0-A Plan Mainline Durability Complete (2026-07-20)
+
+PR #19 integrated the complete frozen Plan R1-R8 lineage into private `main`.
+The merge tree equals the final PR head tree. The canonical manifest, all 227
+workspace-bound inputs, all 55 frozen subjects, the independent review and the
+freeze decision were re-read from `origin/main` at the merge commit and matched
+their accepted hashes.
+
+```yaml
+Phase_5A_status: M0A_PLAN_ACCEPTED_FROZEN_DURABLE_AWAITING_JENN_IMPLEMENTATION_START_DECISION
+Phase_5A_mode: PLAN_FROZEN_IMPLEMENTATION_NOT_STARTED
+Phase_5A_plan_mainline_pull_request: https://github.com/JENN2046/Agents-OS/pull/19
+Phase_5A_plan_mainline_PR_head: 79f7f6ddbff8d39a1dcc90a7c9a37a8f4ea928fb
+Phase_5A_plan_mainline_integration_merge_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+Phase_5A_plan_mainline_scoped_files: 148
+Phase_5A_plan_excluded_paths_committed: 0
+Phase_5A_plan_mainline_workspace_inputs: 227/227_MATCH
+Phase_5A_plan_mainline_frozen_subjects: 55/55_MATCH
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+Phase_5A_plan_mainline_durability_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-mainline-durability-closeout-v0.1.md
+Phase_5A_plan_mainline_durability_receipt_sha256: 3353898a79d30a7e765a67d7c6c34fad493767bb7c66f1e2b792a15f2a889d6e
+Phase_5A_plan_Git_objects_on_main: true
+Phase_5A_plan_mainline_integrated: true
+Phase_5A_plan_durability_complete: true
+Phase_5A_plan_accepted: true
+Phase_5A_plan_frozen: true
+Phase_5A_plan_revisions_stopped: true
+requires_R9: false
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.5.md
+active_work_queue_sha256: cb8956c5290b6d9fe13facb222d11ee5902d20478c1ed650eeebb51c5f94c27b
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.5.md
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_IMPLEMENTATION_START_DECISION
+```
+
+The seven sealed VCPToolBox source-file hashes matched during the independent
+R8 review. Their upstream Git object membership at commit
+`555b3b538f6eb736e530c2912de678c5941f9985` remains an implementation-start
+preflight condition. No implementation work has started.
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
