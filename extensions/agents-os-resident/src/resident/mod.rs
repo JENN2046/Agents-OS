@@ -7,6 +7,12 @@ use unicode_normalization::UnicodeNormalization;
 
 use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
+use crate::ledger::recovery::LedgerCounts;
+use crate::ledger::replay::{ReplayObservation, RequestIdentity};
+use crate::ledger::schema::SchemaSnapshot;
+use crate::ledger::transaction::{
+    CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
+};
 
 pub mod ledger_thread;
 pub mod lock;
@@ -33,6 +39,8 @@ pub enum ResidentError {
     ThreadSpawn(#[source] std::io::Error),
     #[error("ledger thread startup failed: {0}")]
     LedgerStartup(String),
+    #[error("ledger operation failed: {0}")]
+    LedgerOperation(String),
     #[error("ledger thread is not available")]
     LedgerUnavailable,
     #[error("SQLite operation failed: {0}")]
@@ -301,6 +309,50 @@ impl ResidentKernel {
             .health_snapshot()
     }
 
+    pub fn initialize_ledger_v1(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .initialize_schema()
+    }
+
+    pub fn verify_ledger_v1(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .verify_schema()
+    }
+
+    pub fn advance_fact(
+        &self,
+        fact: CanonicalFactInput,
+        expected: PointerExpectation,
+        event: EventInput,
+        fault: TransactionFault,
+    ) -> Result<FactAdvanceResult, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .advance_fact(fact, expected, event, fault)
+    }
+
+    pub fn register_or_resolve_request(
+        &self,
+        request: RequestIdentity,
+    ) -> Result<ReplayObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .register_or_resolve(request)
+    }
+
+    pub fn ledger_counts(&self) -> Result<LedgerCounts, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .counts()
+    }
+
     pub fn assert_current_thread_is_ledger_owner(&self) -> Result<(), ResidentError> {
         self.ledger
             .as_ref()
@@ -353,6 +405,49 @@ fn digest(value: serde_json::Value) -> Result<String, ResidentError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::canonical::fingerprint::canonical_fingerprint;
+    use crate::ledger::replay::ReplayObservation;
+    use crate::ledger::transaction::{FactPredecessor, TransactionFault};
+
+    fn canonical(value: &[u8]) -> (Vec<u8>, String) {
+        (
+            value.to_vec(),
+            canonical_fingerprint(value).expect("canonical fingerprint"),
+        )
+    }
+
+    fn fact(revision: u64, predecessor: Option<FactPredecessor>) -> CanonicalFactInput {
+        let (canonical_bytes, fingerprint) =
+            canonical(format!(r#"{{"revision":{revision},"state":"RECOVERING"}}"#).as_bytes());
+        CanonicalFactInput {
+            kind: "RESIDENT_LIFECYCLE".to_owned(),
+            logical_id: SYNTHETIC_RESIDENT_ID.to_owned(),
+            revision,
+            fact_ref: format!("fact:resident-lifecycle:{revision}"),
+            subject_ref: SYNTHETIC_RESIDENT_ID.to_owned(),
+            subject_revision: revision,
+            canonical_bytes,
+            fingerprint,
+            predecessor,
+        }
+    }
+
+    fn event(sequence: u64, revision: u64, predecessor: Option<String>) -> EventInput {
+        let (canonical_bytes, fingerprint) = canonical(
+            format!(r#"{{"event_sequence":{sequence},"revision":{revision}}}"#).as_bytes(),
+        );
+        EventInput {
+            sequence,
+            event_id: format!("event:resident-lifecycle:{revision}"),
+            kind: "RESIDENT_LIFECYCLE_ADVANCED".to_owned(),
+            aggregate_ref: SYNTHETIC_RESIDENT_ID.to_owned(),
+            aggregate_revision: revision,
+            command_id: None,
+            canonical_bytes,
+            fingerprint,
+            predecessor_fingerprint: predecessor,
+        }
+    }
 
     #[test]
     fn authority_epochs_are_contiguous_and_incarnations_are_immutable() {
@@ -427,5 +522,130 @@ mod tests {
         let second = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
             .expect("lock reacquisition after cleanup");
         second.shutdown().expect("second deterministic shutdown");
+    }
+
+    #[test]
+    fn wp3_schema_replay_and_atomic_fact_cas_are_ledger_thread_owned() {
+        let root = tempfile::tempdir().expect("temporary synthetic root");
+        let ownership = SyntheticOwnership::genesis("incarnation:SYNTHETIC_TEST:wp3", b"wp3-nonce")
+            .expect("ownership");
+        let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+            .expect("kernel");
+        let schema = kernel.initialize_ledger_v1().expect("schema");
+        assert_eq!(schema.tables.len(), 18);
+        assert_eq!(schema.triggers.len(), 2);
+        assert_eq!(kernel.verify_ledger_v1().expect("verify"), schema);
+
+        let request = RequestIdentity::new("command:SYNTHETIC_TEST:1", br#"{"x":1}"#.to_vec());
+        assert_eq!(
+            kernel
+                .register_or_resolve_request(request.clone())
+                .expect("first request"),
+            ReplayObservation::FirstSeen
+        );
+        assert_eq!(
+            kernel
+                .register_or_resolve_request(request.clone())
+                .expect("exact retry"),
+            ReplayObservation::Pending {
+                intake_state: "RECEIVED".to_owned()
+            }
+        );
+        let conflict = RequestIdentity::new(request.command_id.clone(), br#"{"x":2}"#.to_vec());
+        assert!(matches!(
+            kernel.register_or_resolve_request(conflict),
+            Err(ResidentError::LedgerOperation(message)) if message.contains("request identity conflicts")
+        ));
+
+        let first_fact = fact(1, None);
+        let first_event = event(1, 1, None);
+        let first = kernel
+            .advance_fact(
+                first_fact.clone(),
+                PointerExpectation::Absent,
+                first_event.clone(),
+                TransactionFault::None,
+            )
+            .expect("first fact");
+        assert_eq!(first.pointer_version, 1);
+
+        let predecessor = FactPredecessor {
+            revision: 1,
+            fact_ref: first_fact.fact_ref.clone(),
+            fingerprint: first_fact.fingerprint.clone(),
+        };
+        let second_fact = fact(2, Some(predecessor));
+        let second_event = event(2, 2, Some(first_event.fingerprint.clone()));
+        let expected = PointerExpectation::Exact {
+            revision: 1,
+            fact_ref: first_fact.fact_ref.clone(),
+            fingerprint: first_fact.fingerprint.clone(),
+            pointer_version: 1,
+        };
+        assert!(matches!(
+            kernel.advance_fact(
+                second_fact.clone(),
+                expected.clone(),
+                second_event.clone(),
+                TransactionFault::AfterPointerCasBeforeEvent,
+            ),
+            Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+        ));
+        let after_crash = kernel.ledger_counts().expect("counts after rollback");
+        assert_eq!(after_crash.events, 1);
+        assert_eq!(after_crash.facts, 1);
+        assert_eq!(after_crash.pointers, 1);
+
+        let second = kernel
+            .advance_fact(
+                second_fact.clone(),
+                expected.clone(),
+                second_event.clone(),
+                TransactionFault::None,
+            )
+            .expect("second fact");
+        assert_eq!(second.pointer_version, 2);
+        let stale_predecessor = FactPredecessor {
+            revision: 2,
+            fact_ref: second_fact.fact_ref.clone(),
+            fingerprint: second_fact.fingerprint.clone(),
+        };
+        let stale_expected = PointerExpectation::Exact {
+            revision: 2,
+            fact_ref: second_fact.fact_ref.clone(),
+            fingerprint: second_fact.fingerprint.clone(),
+            pointer_version: 1,
+        };
+        assert!(matches!(
+            kernel.advance_fact(
+                fact(3, Some(stale_predecessor)),
+                stale_expected,
+                event(3, 3, Some(second_event.fingerprint.clone())),
+                TransactionFault::None,
+            ),
+            Err(ResidentError::LedgerOperation(message)) if message.contains("compare-and-set failed")
+        ));
+        assert!(
+            kernel
+                .advance_fact(
+                    fact(
+                        2,
+                        Some(FactPredecessor {
+                            revision: 1,
+                            fact_ref: first_fact.fact_ref,
+                            fingerprint: first_fact.fingerprint,
+                        })
+                    ),
+                    expected,
+                    event(3, 2, Some("0".repeat(64))),
+                    TransactionFault::None,
+                )
+                .is_err()
+        );
+        let counts = kernel.ledger_counts().expect("final counts");
+        assert_eq!((counts.events, counts.facts, counts.pointers), (2, 2, 1));
+        assert_eq!(counts.inbox_commands, 1);
+        assert_eq!(counts.replay_rows, 0);
+        kernel.shutdown().expect("shutdown");
     }
 }

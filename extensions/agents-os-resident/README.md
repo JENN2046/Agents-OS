@@ -9,11 +9,16 @@ at commit `555b3b538f6eb736e530c2912de678c5941f9985`. The projection must retain
 `plugin-manifest.json.block`; an enabled `plugin-manifest.json` is forbidden.
 
 WP0 establishes the deterministic package layout and WP1 establishes strict
-canonical JSON/JCS/SHA-256 primitives. WP2 adds only the synthetic Resident
+canonical JSON/JCS/SHA-256 primitives. WP2 adds the synthetic Resident
 ownership boundary: an OS-exclusive lock, immutable identity/incarnation/epoch
 descriptors, one Rust ledger thread, one SQLite connection opened only under a
 test-created temporary directory, and deterministic shutdown/join behavior.
 
-WP2 does not create the ledger v1 schema, admit a Command, enable the plugin,
-start VCPToolBox, call a provider, read private Memory, or perform a real
-effect.
+WP3 adds the frozen ledger v1 storage boundary behind that same thread and
+connection: the exact 18-table inventory, the two authorized immutable-history
+triggers, a compiled schema seal, Event/fact/current-pointer atomic CAS, crash
+rollback injection, and Inbox request-identity/replay observation. WP3 does not
+admit a Command or expose any of these operations through N-API.
+
+The package still does not enable the plugin, start VCPToolBox, call a provider,
+read private Memory, or perform a real effect.

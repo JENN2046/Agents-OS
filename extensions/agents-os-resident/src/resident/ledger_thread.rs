@@ -7,6 +7,13 @@ use std::time::Duration;
 
 use rusqlite::Connection;
 
+use crate::ledger::recovery::{self, LedgerCounts};
+use crate::ledger::replay::{self, ReplayObservation, RequestIdentity};
+use crate::ledger::schema::{self, SchemaSnapshot};
+use crate::ledger::transaction::{
+    self, CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
+};
+
 use super::{ResidentError, SyntheticOwnership};
 
 const LEDGER_THREAD_NAME: &str = "agents-os-m0a-ledger";
@@ -27,7 +34,23 @@ pub struct LedgerSnapshot {
 
 enum LedgerCommand {
     Health(Sender<Result<LedgerSnapshot, String>>),
+    InitializeSchema(Sender<Result<SchemaSnapshot, String>>),
+    VerifySchema(Sender<Result<SchemaSnapshot, String>>),
+    AdvanceFact(Box<AdvanceFactCommand>),
+    RegisterOrResolve {
+        request: RequestIdentity,
+        response: Sender<Result<ReplayObservation, String>>,
+    },
+    Counts(Sender<Result<LedgerCounts, String>>),
     Shutdown(Sender<()>),
+}
+
+struct AdvanceFactCommand {
+    fact: CanonicalFactInput,
+    expected: PointerExpectation,
+    event: EventInput,
+    fault: TransactionFault,
+    response: Sender<Result<FactAdvanceResult, String>>,
 }
 
 pub(super) struct LedgerThread {
@@ -77,6 +100,58 @@ impl LedgerThread {
         }
     }
 
+    pub(super) fn initialize_schema(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.request(LedgerCommand::InitializeSchema)
+    }
+
+    pub(super) fn verify_schema(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.request(LedgerCommand::VerifySchema)
+    }
+
+    pub(super) fn advance_fact(
+        &self,
+        fact: CanonicalFactInput,
+        expected: PointerExpectation,
+        event: EventInput,
+        fault: TransactionFault,
+    ) -> Result<FactAdvanceResult, ResidentError> {
+        self.request(|response| {
+            LedgerCommand::AdvanceFact(Box::new(AdvanceFactCommand {
+                fact,
+                expected,
+                event,
+                fault,
+                response,
+            }))
+        })
+    }
+
+    pub(super) fn register_or_resolve(
+        &self,
+        request: RequestIdentity,
+    ) -> Result<ReplayObservation, ResidentError> {
+        self.request(|response| LedgerCommand::RegisterOrResolve { request, response })
+    }
+
+    pub(super) fn counts(&self) -> Result<LedgerCounts, ResidentError> {
+        self.request(LedgerCommand::Counts)
+    }
+
+    fn request<T>(
+        &self,
+        command: impl FnOnce(Sender<Result<T, String>>) -> LedgerCommand,
+    ) -> Result<T, ResidentError> {
+        let (response_tx, response_rx) = mpsc::channel();
+        self.sender
+            .send(command(response_tx))
+            .map_err(|_| ResidentError::LedgerUnavailable)?;
+        match response_rx.recv() {
+            Ok(Ok(result)) => Ok(result),
+            Ok(Err(message)) => Err(ResidentError::LedgerOperation(message)),
+            Err(_) => Err(ResidentError::LedgerUnavailable),
+        }
+    }
+
     pub(super) fn assert_current_thread_is_owner(&self) -> Result<(), ResidentError> {
         if thread::current().id() == self.owner_thread_id {
             Ok(())
@@ -116,7 +191,7 @@ fn run(
     commands: Receiver<LedgerCommand>,
     startup: SyncSender<Result<ThreadId, String>>,
 ) {
-    let connection = match open_connection(&database_path) {
+    let mut connection = match open_connection(&database_path) {
         Ok(connection) => connection,
         Err(error) => {
             let _ = startup.send(Err(error.to_string()));
@@ -134,6 +209,38 @@ fn run(
                 let result = health_snapshot(&connection, &ownership, owner_thread_id)
                     .map_err(|error| error.to_string());
                 let _ = response.send(result);
+            }
+            LedgerCommand::InitializeSchema(response) => {
+                let _ = response.send(
+                    schema::initialize_v1(&mut connection).map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::VerifySchema(response) => {
+                let _ = response
+                    .send(schema::verify_schema(&connection).map_err(|error| error.to_string()));
+            }
+            LedgerCommand::AdvanceFact(command) => {
+                let AdvanceFactCommand {
+                    fact,
+                    expected,
+                    event,
+                    fault,
+                    response,
+                } = *command;
+                let _ = response.send(
+                    transaction::advance_fact(&mut connection, &fact, &expected, &event, fault)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::RegisterOrResolve { request, response } => {
+                let _ = response.send(
+                    replay::register_or_resolve(&mut connection, &request)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::Counts(response) => {
+                let _ =
+                    response.send(recovery::counts(&connection).map_err(|error| error.to_string()));
             }
             LedgerCommand::Shutdown(response) => {
                 drop(connection);
