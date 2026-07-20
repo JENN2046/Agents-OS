@@ -1,0 +1,97 @@
+# AGENTS OS Active Work Queue v8.6
+
+Date: 2026-07-20
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.5.md`
+
+## Current Facts
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_FROZEN_IMPLEMENTATION_NOT_STARTED
+Phase_5A_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
+Phase_5A_implementation_start_preflight: PASS
+Phase_5A_implementation_start_decision_surface: READY_FOR_JENN_DECISION
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 55
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+Phase_5A_plan_mainline_integration_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+Phase_5A_plan_durability_projection_commit: 710ad9b01a4ae9eb28972d40dae24e0cc12cc652
+implementation_start_preflight_sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344
+implementation_start_decision_package_sha256: acaf9feec80768124e62a1f5438102784355faba12609deddcd3fd1b0a836574
+sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+sealed_VCPToolBox_git_objects: 7/7_MATCH
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_or_write_authorized: false
+clean_VCPToolBox_worktree_creation_authorized: false
+plugin_materialization_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+```
+
+## NOW
+
+### NOW-001: Jenn Phase 5A M0-A implementation start decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
+Review and choose exactly one outcome from Section 6 of:
+
+```text
+control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-package-v0.1.md
+```
+
+No implementation action is authorized until Jenn executes Section 6 A's
+complete Exact decision text.
+
+## NEXT
+
+```text
+Jenn_executes_Section_6_A=create_immutable_start_decision_and_project_WP0
+Jenn_defers_or_revises=remain_at_decision_gate
+Jenn_rejects=record_rejection_without_implementation
+automatic_transition=forbidden
+```
+
+## BLOCKED
+
+```text
+automatic_implementation_start=forbidden
+Rust_JavaScript_NAPI_source_creation=forbidden
+dependency_installation_or_toolchain_mutation=forbidden
+SQLite_database_creation_or_write=forbidden
+clean_VCPToolBox_worktree_or_plugin_materialization=forbidden
+VCPToolBox_change_start_or_plugin_enablement=forbidden
+runtime_auth_provider_private_Memory_sensing_or_real_effect=forbidden
+implementation_push_PR_merge_release_or_publish=forbidden
+```
+
+## CLOSED
+
+```text
+Phase_5A_plan_R8_atomic_freeze=COMPLETE
+Phase_5A_plan_Git_durability=COMPLETE
+sealed_VCPToolBox_upstream_commit_membership=PASS
+sealed_VCPToolBox_blob_path_and_hash_verification=7/7_PASS
+implementation_start_preflight=PASS
+implementation_start_decision_package=READY
+active_work_queue_v8_5=superseded_historical_bytes_preserved
+```
+
+This queue is a Jenn-only decision surface. It does not authorize source,
+dependency, database, VCPToolBox, plugin, runtime, authentication, provider,
+Memory, sensing, recording or effect work.

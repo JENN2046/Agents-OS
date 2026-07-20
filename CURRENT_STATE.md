@@ -4529,8 +4529,97 @@ next_gate: JENN_EXPLICIT_PHASE_5A_M0A_IMPLEMENTATION_START_DECISION
 
 The seven sealed VCPToolBox source-file hashes matched during the independent
 R8 review. Their upstream Git object membership at commit
-`555b3b538f6eb736e530c2912de678c5941f9985` remains an implementation-start
-preflight condition. No implementation work has started.
+`555b3b538f6eb736e530c2912de678c5941f9985` was subsequently verified by the
+implementation-start preflight below. No implementation work has started.
+
+## Phase 5A M0-A Ready For Jenn Implementation Start Decision (2026-07-20)
+
+The final read-only preflight proved that all seven sealed VCPToolBox files are
+exact Git blobs in commit `555b3b538f6eb736e530c2912de678c5941f9985`, and
+that the sealed commit remains an ancestor of current upstream `main`. The
+existing dirty `runtime/VCPToolBox` checkout was not used as source evidence
+and was not fetched, checked out, reset, cleaned or modified.
+
+```yaml
+Phase_5A_status: M0A_READY_FOR_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+Phase_5A_mode: PLAN_FROZEN_IMPLEMENTATION_NOT_STARTED
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+Phase_5A_plan_mainline_integration_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+Phase_5A_plan_durability_projection_commit: 710ad9b01a4ae9eb28972d40dae24e0cc12cc652
+implementation_start_preflight: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-preflight-v0.1.yaml
+implementation_start_preflight_sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344
+implementation_start_preflight_result: PASS
+sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+observed_current_upstream_main: ee2c3a8d90223c920d0e04d38d008c34ac1a3194
+sealed_commit_is_ancestor_of_current_upstream_main: true
+sealed_VCPToolBox_git_objects: 7/7_MATCH
+implementation_start_decision_package: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-package-v0.1.md
+implementation_start_decision_package_sha256: acaf9feec80768124e62a1f5438102784355faba12609deddcd3fd1b0a836574
+implementation_start_decision_surface_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-implementation-start-decision-surface-v0.1.md
+implementation_start_decision_surface_receipt_sha256: 9fa8c0446aeb4ae2911808f5b4c516acdbe99ceb86b5d1d7e94d860cd1396c15
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.6.md
+active_work_queue_sha256: d3a1adb6a929935c08d822d72ddc6b2627b78b3c9a5659bc37807e327fea90e7
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.6.md
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_or_write_authorized: false
+clean_VCPToolBox_worktree_creation_authorized: false
+plugin_materialization_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+automatic_transition: forbidden
+next_gate: JENN_EXECUTES_IMPLEMENTATION_START_DECISION_PACKAGE_SECTION_6
+```
+
+## Phase 5A M0-A Implementation Started At WP0 (2026-07-20)
+
+Jenn executed Section 6 A of the implementation-start decision package. The
+immutable decision authorizes the frozen M0-A implementation sequence and
+projects WP0 as the current work package. This start closeout itself created no
+implementation source, dependency installation, database file, compatibility
+worktree, plugin materialization or runtime occurrence.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_STARTED_WP0
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+implementation_start_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-v0.1.yaml
+implementation_start_decision_sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3
+implementation_start_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-implementation-start-closeout-v0.1.md
+implementation_start_closeout_receipt_sha256: d6aa1d0dbd7b554768195e1471bad65135475ec19957348978d2cff40d50d923
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.7.md
+active_work_queue_sha256: 1f5108ed007031cfa8714caf76f331bc889c156a90d88225991ae31984d016b6
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.7.md
+Phase_5A_implementation_started: true
+implementation_authorized: true
+current_work_package: WP0_REPRODUCIBLE_SKELETON
+source_authority_root: extensions/agents-os-resident
+WP0_start_authorized: true
+WP1_through_WP7_conditionally_authorized: true
+dependency_installation_authorized: exact_project_local_pinned_only
+temporary_synthetic_SQLite_database_authorized: true
+clean_linked_VCPToolBox_worktree_authorized: true
+blocked_plugin_materialization_authorized: true
+VCPToolBox_core_change_authorized: false
+VCPToolBox_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+implementation_branch_push_PR_merge_authorized: false
+next_gate: WP0_FROZEN_ADVANCEMENT_CONDITIONS
+```
 
 ## Safety Notes
 

@@ -1,0 +1,130 @@
+schema_version: agents-os.implementation-start-preflight.v0.1
+preflight_id: PHASE_5A_M0A_IMPLEMENTATION_START_PREFLIGHT_V0_1
+date: '2026-07-20'
+observed_at: '2026-07-20T20:50:23+08:00'
+owner: Jenn
+agent_steward: Nobao
+result: PASS
+decision_readiness: READY_FOR_JENN_IMPLEMENTATION_START_DECISION
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+  independent_review_path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml
+  independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+  freeze_decision_path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml
+  freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+  frozen_subjects_verified_on_main: 55/55_MATCH
+  workspace_inputs_verified_on_main: 227/227_MATCH
+  plan_mainline_integration_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+  durability_projection_merge_commit: 710ad9b01a4ae9eb28972d40dae24e0cc12cc652
+
+upstream_repository:
+  declared_repository: lioensky/VCPToolBox
+  verified_remote_url: https://github.com/lioensky/VCPToolBox
+  sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_commit_type: commit
+  sealed_commit_parent: 9208a9135a7b121a0cc7f70bf2752ad8556d55ae
+  sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  current_remote_main: ee2c3a8d90223c920d0e04d38d008c34ac1a3194
+  sealed_commit_is_ancestor_of_current_remote_main: true
+  local_tracking_ref_at_preflight_start: 555b3b538f6eb736e530c2912de678c5941f9985
+  fresh_bare_remote_verifier_used: true
+  fresh_bare_verifier_filter: blob:none
+  checkout_created: false
+  target_worktree_bytes_consumed: false
+  target_worktree_modified: false
+
+sealed_git_objects:
+  - role: VCPToolBox_root_instructions
+    git_path: AGENTS.md
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: 28f22b4de495a63f14ede8fe72698278c877cb8d
+    byte_count: 8544
+    sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b
+    manifest_match: true
+  - role: VCPToolBox_plugin_instructions
+    git_path: Plugin/AGENTS.md
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: c2d23c041033b1f7d46b9dc3bdb2ba738566c872
+    byte_count: 2931
+    sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4
+    manifest_match: true
+  - role: VCPToolBox_plugin_ecosystem
+    git_path: docs/PLUGIN_ECOSYSTEM.md
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506
+    byte_count: 42647
+    sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65
+    manifest_match: true
+  - role: existing_Rust_NAPI_instructions
+    git_path: rust-vexus-lite/AGENTS.md
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: 0fad4dba9bcbaa2452a362910b01e6275e5c352e
+    byte_count: 1186
+    sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494
+    manifest_match: true
+  - role: existing_Rust_NAPI_Cargo_profile
+    git_path: rust-vexus-lite/Cargo.toml
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde
+    byte_count: 860
+    sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9
+    manifest_match: true
+  - role: existing_Rust_NAPI_package_profile
+    git_path: rust-vexus-lite/package.json
+    mode: '100644'
+    git_object_type: blob
+    blob_oid: 232a95ef206e6ffab0cdff959826faaa10f6fedb
+    byte_count: 614
+    sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c
+    manifest_match: true
+  - role: VCPToolBox_actual_direct_ABI_owner_Plugin_js
+    git_path: Plugin.js
+    mode: '100755'
+    git_object_type: blob
+    blob_oid: 5fd77cea37c30ef432f23d9627d05aba862b9744
+    byte_count: 114593
+    sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+    manifest_match: true
+
+verification_summary:
+  declared_external_source_inputs: 7
+  git_tree_membership_verified: 7/7
+  blob_type_verified: 7/7
+  local_clone_and_fresh_remote_blob_oid_match: 7/7
+  local_clone_and_fresh_remote_bytes_match: 7/7
+  manifest_sha256_match: 7/7
+  failures: 0
+
+dirty_worktree_boundary:
+  existing_runtime_VCPToolBox_worktree_dirty: true
+  existing_changes_read_or_adopted: false
+  existing_changes_modified_or_cleaned: false
+  existing_worktree_may_be_used_for_implementation: false
+  future_clean_linked_worktree_required_by_frozen_plan: true
+
+non_authorization:
+  implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_or_write_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_or_state_private_access_authorized: false
+  provider_sensing_recording_or_real_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_push_PR_merge_tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5A_M0A_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
