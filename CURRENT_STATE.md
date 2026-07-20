@@ -5138,6 +5138,43 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
 
+## Phase 5A M0-A PR #21 Pending Inbox Finding Closed (2026-07-21)
+
+The fresh Codex review of `4c588c75fb3046593861a35929ddc55ba2667e13`
+found that an exact request registered as `RECEIVED` could not be finalized by
+the WP5 or shared WP6/WP7 terminal paths. Those paths now advance the exact
+pending row in the same immediate SQLite transaction, while conflicting or
+malformed request identity remains fail-closed. Restart replay returns the
+stored response with zero additions. The frozen Plan R1-R8 subjects remain
+byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 6/6
+corrected_source_commit: 57989ca28102ed72873f45093c839693b9b760ae
+corrected_package_manifest_commit: 021813f8ba85b4a09961dcb40a8f336bc3bd01a6
+Phase_5A_M0A_content_tree_sha256: a620146a65190a51d8ded058a1a771cdba824836b8c263298f523521b46fd18c
+Phase_5A_M0A_package_manifest_sha256: 8d4f66048869218ec1ab0bcc2575f88becd0d7096405170e140770fedb538e15
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.5.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: bf85ce1c7e9287e45a738fd2acd4fa0fdd381529925c00fad2576841e4b79c46
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.1.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
 ## Phase 5A M0-A PR #21 Payload Schema Finding Closed (2026-07-21)
 
 The fresh Codex review of `15c40f57fa949d07ffb09e9d1d196cf9b15e18ec`
