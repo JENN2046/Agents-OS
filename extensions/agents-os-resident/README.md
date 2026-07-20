@@ -59,7 +59,7 @@ four-Event chain, one completed validation Task, and one non-executable mock
 effect intent. A read-only ledger projection hashes every immutable identity
 tuple and canonical byte digest into one root. Two independent clean databases
 produce the fixed root
-`0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5`;
+`da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff`;
 shutdown/restart replay returns the original four response byte strings with
 zero added rows. The mock-effect count denotes the synthetic nonauthority
 intent only: external call, Host dispatch, provider, network, real Task,

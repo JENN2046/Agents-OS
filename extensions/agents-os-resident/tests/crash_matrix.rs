@@ -9,7 +9,8 @@ use agents_os_resident::ledger::replay::{
 use agents_os_resident::napi_frame::{MethodId, request_bytes};
 use agents_os_resident::reducers::command_intake::{submission_value, validate_submission};
 use agents_os_resident::resident::{
-    ResidentError, ResidentKernel, ResidentKernelConfig, SyntheticOwnership,
+    ResidentError, ResidentKernel, ResidentKernelConfig, SYNTHETIC_DATABASE_FILENAME,
+    SyntheticOwnership,
 };
 
 fn kernel(root: &std::path::Path, suffix: &str) -> ResidentKernel {
@@ -83,6 +84,8 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
     let root = tempfile::tempdir().expect("temporary synthetic root");
     let kernel = kernel(root.path(), "crash");
     let input = intake("command:SYNTHETIC_TEST:wp5-crash");
+    let expected_command_bytes = input.canonical_command_bytes.clone();
+    let expected_command_fingerprint = input.canonical_command_fingerprint.clone();
     assert!(matches!(
         kernel.terminal_synthetic_outbox_intake(
             input.clone(),
@@ -134,6 +137,21 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
     ));
     assert_eq!(kernel.ledger_counts().unwrap(), committed);
     kernel.shutdown().expect("shutdown");
+
+    let connection = rusqlite::Connection::open_with_flags(
+        root.path().join(SYNTHETIC_DATABASE_FILENAME),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .expect("read-only envelope inspection");
+    let stored: (Vec<u8>, String) = connection
+        .query_row(
+            "SELECT canonical_bytes,envelope_fingerprint FROM command_envelope WHERE command_id=?1",
+            ["command:SYNTHETIC_TEST:wp5-crash"],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .expect("stored canonical command envelope");
+    assert_eq!(stored.0, expected_command_bytes);
+    assert_eq!(stored.1, expected_command_fingerprint);
 }
 
 #[test]

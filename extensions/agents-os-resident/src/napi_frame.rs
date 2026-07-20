@@ -454,7 +454,7 @@ impl<'a> CommandBoundary<'a> {
             return response(
                 request,
                 Disposition::ContractNotActive,
-                "INTENT_NOT_FOUND",
+                "CONTRACT_NOT_ACTIVE",
                 None,
             );
         };
@@ -528,7 +528,7 @@ impl<'a> CommandBoundary<'a> {
             return response(
                 request,
                 Disposition::ContractNotActive,
-                "INTENT_NOT_FOUND",
+                "CONTRACT_NOT_ACTIVE",
                 None,
             );
         };
@@ -556,7 +556,7 @@ impl<'a> CommandBoundary<'a> {
             return response(
                 request,
                 Disposition::ContractNotActive,
-                "INTENT_NOT_FOUND",
+                "CONTRACT_NOT_ACTIVE",
                 None,
             );
         };
@@ -768,9 +768,11 @@ mod tests {
             let bytes = request_bytes(method, "command:SYNTHETIC_TEST:inactive", payload).unwrap();
             let response = boundary.invoke(method, &bytes).unwrap();
             assert_eq!(response.disposition, Disposition::ContractNotActive);
+            let value = response.as_json_value().unwrap();
+            assert_eq!(value["result"]["runtime_usable"], false);
             assert_eq!(
-                response.as_json_value().unwrap()["result"]["runtime_usable"],
-                false
+                value["result"]["low_disclosure_result_code"],
+                "CONTRACT_NOT_ACTIVE"
             );
         }
     }

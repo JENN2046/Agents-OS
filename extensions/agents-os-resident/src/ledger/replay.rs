@@ -537,7 +537,7 @@ pub fn terminal_synthetic_outbox(
     )?;
     transaction.execute(
         "INSERT INTO command_envelope(envelope_id,command_id,command_type_id,command_type_revision,canonical_bytes,envelope_fingerprint,created_event_sequence) VALUES(?1,?2,?3,1,?4,?5,?6)",
-        params![envelope_id, intake.command_id, intake.command_type_id, intake.request_bytes, intake.request_fingerprint, as_i64(event_sequence)?],
+        params![envelope_id, intake.command_id, intake.command_type_id, intake.canonical_command_bytes, intake.canonical_command_fingerprint, as_i64(event_sequence)?],
     )?;
     transaction.execute(
         "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_id,canonical_bytes,event_fingerprint,predecessor_event_fingerprint) VALUES(?1,?2,'F5_SYNTHETIC_OUTBOX_RECORDED',?3,1,?4,?5,?6,?7)",
