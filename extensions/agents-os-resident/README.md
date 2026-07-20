@@ -66,5 +66,11 @@ intent only: external call, Host dispatch, provider, network, real Task,
 real Command, real effect, private Memory, sensing and runtime activation
 counts remain zero.
 
+The inert CommonJS compatibility entry point loads the fixed Linux x64 N-API
+binary lazily inside `processToolCall` before dispatching its closed three-field
+frame. Loading the source module alone therefore remains inert, while an actual
+tool call cannot reach an undeclared native binding. The wrapper still exports
+only `initialize`, `processToolCall`, and `shutdown`.
+
 The package still does not enable the plugin, start VCPToolBox, call a provider,
 read private Memory, dispatch to a mock or real Host, or perform an effect.

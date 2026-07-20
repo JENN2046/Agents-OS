@@ -11,6 +11,7 @@ function projectArgs(args) {
 }
 async function processToolCall(args) {
   const nativeFrame = projectArgs(args);
+  const residentNative = require('./agents-os-resident.linux-x64-gnu.node');
   return residentNative.execute_command(nativeFrame);
 }
 async function shutdown() {
