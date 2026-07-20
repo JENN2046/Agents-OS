@@ -4755,6 +4755,58 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP3_TRANSACTION_AND_INTEGRITY_TESTS
 ```
 
+## Phase 5A M0-A WP3 Complete, WP4 Current (2026-07-20)
+
+WP3 established the frozen ledger v1 storage boundary behind the sole WP2
+ledger thread and SQLite connection: 18 exact STRICT tables, two authorized
+canonical-fact immutability triggers, a compiled schema seal, atomic
+Event/fact/current-pointer CAS, crash rollback, and exact Inbox request replay
+identity. The direct predecessor gate now permits WP4 Command boundary only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP4_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP3_source_commit: dbccc5147b6ac3bd89da0e6b8c540270d9fa886e
+WP3_package_manifest_commit: 79e0ac1105fb37ed8ba196a7f4c488e079f101e9
+WP3_source_commit_payload: 40/40_BYTE_EQUAL
+WP3_content_tree_sha256: 17897f62dc884896f490dea9b13840785013fa208d0fd0eade50a1c678507d6a
+WP3_package_manifest_sha256: 9440959c28091eec7544d2701bd07ef7ae8be72a076280dd5ad07096826a3d7f
+WP3_SQLite_schema_version: 1
+WP3_SQLite_schema_fingerprint: 0c5a61574a891c7cee0559f18c4bc45f70c6f24a91b65e0b826c9fd15e779f48
+WP3_table_inventory: 18/18_MATCH
+WP3_trigger_inventory: 2/2_MATCH
+WP3_rustfmt_check: PASS
+WP3_cargo_test_locked: 17/17_PASS
+WP3_clippy_all_targets_D_warnings: PASS
+WP3_release_build_locked: PASS
+WP3_crash_rollback: PASS_ZERO_PARTIAL_ROWS
+WP3_stale_pointer_CAS: REJECTED
+WP3_request_identity_substitution: REJECTED
+WP3_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp3-ledger-v1-closeout-v0.1.md
+WP3_closeout_receipt_sha256: 286e6b7261458ae5804f9699e7af98f1099e280a3f6ec45973337253c4917f20
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.1.md
+active_work_queue_sha256: eec38fcf5f9aae4b4fea8d3f299cb8cb5098a0492eaa0542baf2686291a51b02
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.1.md
+current_work_package: WP4_COMMAND_BOUNDARY
+WP4_start_condition_satisfied: true
+WP5_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP4_NODE_ABI_ILLEGAL_INPUT_AND_REPLAY_TESTS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
