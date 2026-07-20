@@ -4503,7 +4503,7 @@ Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36
 Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
 Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
 Phase_5A_plan_mainline_durability_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-mainline-durability-closeout-v0.1.md
-Phase_5A_plan_mainline_durability_receipt_sha256: 3353898a79d30a7e765a67d7c6c34fad493767bb7c66f1e2b792a15f2a889d6e
+Phase_5A_plan_mainline_durability_receipt_sha256: e5302e2cfc6b338cc9afcce3a84ea473bc644b6111cef86229e6b583cf6c1337
 Phase_5A_plan_Git_objects_on_main: true
 Phase_5A_plan_mainline_integrated: true
 Phase_5A_plan_durability_complete: true
@@ -4512,7 +4512,7 @@ Phase_5A_plan_frozen: true
 Phase_5A_plan_revisions_stopped: true
 requires_R9: false
 active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.5.md
-active_work_queue_sha256: cb8956c5290b6d9fe13facb222d11ee5902d20478c1ed650eeebb51c5f94c27b
+active_work_queue_sha256: ddae93155588f04cc9930ffcf17976044116dd4e72f93a3657bcc063e65c4dd1
 consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.5.md
 Phase_5A_implementation_started: false
 implementation_authorized: false

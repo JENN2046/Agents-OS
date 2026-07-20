@@ -42,6 +42,11 @@ provider_sensing_or_real_effect_authorized: false
 
 ### NOW-001: Await Jenn explicit Phase 5A M0-A implementation start decision
 
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
 The complete frozen Phase 5A M0-A plan is durable on private `main` and its
 mainline blobs match the accepted manifest. Implementation may start only after
 a separate current Jenn decision binding the frozen plan evidence and merge

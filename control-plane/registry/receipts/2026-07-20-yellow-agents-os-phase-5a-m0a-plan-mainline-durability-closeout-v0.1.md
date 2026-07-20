@@ -77,7 +77,7 @@ Dashboard: PASS
 Control_Chain: PASS
 Workbench: PASS
 default_queue_projection: v8.5
-queue_v8_5_sha256: cb8956c5290b6d9fe13facb222d11ee5902d20478c1ed650eeebb51c5f94c27b
+queue_v8_5_sha256: ddae93155588f04cc9930ffcf17976044116dd4e72f93a3657bcc063e65c4dd1
 excluded_paths_committed: 0
 PR_review_threads_resolved: 3/3
 remote_main_contains_complete_frozen_scope: true
