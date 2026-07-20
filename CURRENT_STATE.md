@@ -5317,3 +5317,44 @@ private_raw_memory_access_authorized: false
 provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
+
+## Phase 5A M0-A Mainline Durability Closed (2026-07-21)
+
+PR #21 merged the exact current-head reviewed implementation into `main`.
+The merge tree equals the reviewed PR head tree. The package manifest,
+41-file inventory, 40-file source payload, content-tree digest, direct
+entrypoint digest and blocked plugin-manifest digest were recomputed from the
+`origin/main` Git objects. No excluded private, raw-memory, provider-response
+or workbench-record path entered the merge.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_DURABLE_ON_MAIN_AWAITING_JENN_PHASE_5B_START_DECISION
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 7/7
+PR_21_current_head_review_result: PASS_NO_BLOCKER
+PR_21_head: 3101a8dd5e97f956cd9e75c072ba53a8b3c60949
+PR_21_merge_commit: aca78788406e57165a55323df97e0aaed438083a
+corrected_source_commit: 369fa92e168508b71e03158a27bd8598a7aeb385
+corrected_package_manifest_commit: 8cd1e78a6e7b788f3461fd0f66d55a86b59af55d
+Phase_5A_M0A_package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+Phase_5A_M0A_content_tree_sha256: 4c8b3cba4ce23e018c1b79a2fd8a221b48af18b6961c07f629c74e3a662a909d
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_Git_objects_on_main: true
+Phase_5A_M0A_mainline_integrated: true
+Phase_5A_M0A_durability_complete: true
+Phase_5A_M0A_durability_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-mainline-durability-closeout-v0.1.md
+Phase_5A_M0A_durability_closeout_receipt_sha256: fc08a3355402eff782c7899a4c01b8cdb409cd7add5a4190ac9d94bc0207f625
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md
+active_work_queue_sha256: 2485cf246497c963b863c35b9e435c4559c9d7e86b35bbde4333f56f1d492b99
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_START_DECISION_GATE
+Phase_5B_started: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_START_DECISION
+```
