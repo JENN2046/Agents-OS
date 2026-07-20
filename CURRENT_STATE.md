@@ -4914,6 +4914,66 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP6_DISAGREEMENT_COMPLETION_CAS_REPLAY_AND_CRASH_TESTS
 ```
 
+## Phase 5A M0-A WP6 Complete, WP7 Current (2026-07-21)
+
+WP6 implemented the frozen synthetic F6 current-decision consumer and atomic
+completion seam behind the sole Rust ledger thread and SQLite connection. The
+fixed validation projection binds the accepted F6 R6 manifest, freeze decision
+and synthetic witness, preserves owner-issued assessment results without
+recomputing upstream reducers, and records the validation decision plus
+completion guard at one Event barrier. Completion re-reads the exact same-Task
+facts and pointers, checks all five quiescence counts, and commits the
+completion fact, pointer, Event, completion row and replay tuple atomically.
+
+Disagreement, missing or mismatched evidence, unresolved synthetic Outbox
+state, changed replay bytes, second completion and the injected
+pointer-before-Event crash all fail closed with zero partial completion rows.
+The direct predecessor gate now permits only WP7's integrated synthetic M0-A
+witness.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP7_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP6_source_commit: ee529abfaeff34a84196f5e493655f45c216cfd5
+WP6_package_manifest_commit: 6851df482be825d195de6036016f0a77e59e78a9
+WP6_source_commit_payload: 40/40_BYTE_EQUAL
+WP6_content_tree_sha256: 62e2c6035eac3bfed14d09ec89360e999cc66e6dbcef2f5a1df8a7ed835aedc8
+WP6_package_manifest_sha256: 2326bd3cccdf0b4d94a2f67881840ab25fff9cb0c281851b276b3ea6922c23b1
+WP6_planned_source_inventory: 41/41_MATCH
+WP6_cargo_test_locked: 39/39_PASS
+WP6_clippy_all_targets_D_warnings: PASS
+WP6_release_build_locked: PASS
+WP6_Node_ABI_flow: PASS_VALIDATION_REPLAY_COMPLETION_REPLAY
+WP6_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP6_validation_and_guard_barrier: ONE_SHARED_EVENT
+WP6_completion_atomicity: PASS_ALL_OR_ZERO
+WP6_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-wp6-validation-and-completion-closeout-v0.1.md
+WP6_closeout_receipt_sha256: 7f52b5c2dde758d7a2038de95f4ee6d8cdb0e9d70c268e86dcc3791e14ccbe65
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.4.md
+active_work_queue_sha256: b855a94aa5b36d2ad3add7fd29c77426db9d28757742b83a1861e7f99222b9e1
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.4.md
+current_work_package: WP7_INTEGRATED_M0A_WITNESS
+WP7_start_condition_satisfied: true
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP7_TWO_CLEAN_RUNS_BYTE_IDENTICAL_RESTART_REPLAY_ZERO_REAL_OCCURRENCES
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
