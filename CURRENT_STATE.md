@@ -4529,11 +4529,791 @@ next_gate: JENN_EXPLICIT_PHASE_5A_M0A_IMPLEMENTATION_START_DECISION
 
 The seven sealed VCPToolBox source-file hashes matched during the independent
 R8 review. Their upstream Git object membership at commit
-`555b3b538f6eb736e530c2912de678c5941f9985` remains an implementation-start
-preflight condition. No implementation work has started.
+`555b3b538f6eb736e530c2912de678c5941f9985` was subsequently verified by the
+implementation-start preflight below. No implementation work has started.
+
+## Phase 5A M0-A Ready For Jenn Implementation Start Decision (2026-07-20)
+
+The final read-only preflight proved that all seven sealed VCPToolBox files are
+exact Git blobs in commit `555b3b538f6eb736e530c2912de678c5941f9985`, and
+that the sealed commit remains an ancestor of current upstream `main`. The
+existing dirty `runtime/VCPToolBox` checkout was not used as source evidence
+and was not fetched, checked out, reset, cleaned or modified.
+
+```yaml
+Phase_5A_status: M0A_READY_FOR_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+Phase_5A_mode: PLAN_FROZEN_IMPLEMENTATION_NOT_STARTED
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+Phase_5A_plan_mainline_integration_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+Phase_5A_plan_durability_projection_commit: 710ad9b01a4ae9eb28972d40dae24e0cc12cc652
+implementation_start_preflight: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-preflight-v0.1.yaml
+implementation_start_preflight_sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344
+implementation_start_preflight_result: PASS
+sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+observed_current_upstream_main: ee2c3a8d90223c920d0e04d38d008c34ac1a3194
+sealed_commit_is_ancestor_of_current_upstream_main: true
+sealed_VCPToolBox_git_objects: 7/7_MATCH
+implementation_start_decision_package: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-package-v0.1.md
+implementation_start_decision_package_sha256: acaf9feec80768124e62a1f5438102784355faba12609deddcd3fd1b0a836574
+implementation_start_decision_surface_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-implementation-start-decision-surface-v0.1.md
+implementation_start_decision_surface_receipt_sha256: 9fa8c0446aeb4ae2911808f5b4c516acdbe99ceb86b5d1d7e94d860cd1396c15
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.6.md
+active_work_queue_sha256: d3a1adb6a929935c08d822d72ddc6b2627b78b3c9a5659bc37807e327fea90e7
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.6.md
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_or_write_authorized: false
+clean_VCPToolBox_worktree_creation_authorized: false
+plugin_materialization_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+automatic_transition: forbidden
+next_gate: JENN_EXECUTES_IMPLEMENTATION_START_DECISION_PACKAGE_SECTION_6
+```
+
+## Phase 5A M0-A Implementation Started At WP0 (2026-07-20)
+
+Jenn executed Section 6 A of the implementation-start decision package. The
+immutable decision authorizes the frozen M0-A implementation sequence and
+projects WP0 as the current work package. This start closeout itself created no
+implementation source, dependency installation, database file, compatibility
+worktree, plugin materialization or runtime occurrence.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_STARTED_WP0
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+implementation_start_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-v0.1.yaml
+implementation_start_decision_sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3
+implementation_start_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-implementation-start-closeout-v0.1.md
+implementation_start_closeout_receipt_sha256: d6aa1d0dbd7b554768195e1471bad65135475ec19957348978d2cff40d50d923
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.7.md
+active_work_queue_sha256: 1f5108ed007031cfa8714caf76f331bc889c156a90d88225991ae31984d016b6
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.7.md
+Phase_5A_implementation_started: true
+implementation_authorized: true
+current_work_package: WP0_REPRODUCIBLE_SKELETON
+source_authority_root: extensions/agents-os-resident
+WP0_start_authorized: true
+WP1_through_WP7_conditionally_authorized: true
+dependency_installation_authorized: exact_project_local_pinned_only
+temporary_synthetic_SQLite_database_authorized: true
+clean_linked_VCPToolBox_worktree_authorized: true
+blocked_plugin_materialization_authorized: true
+VCPToolBox_core_change_authorized: false
+VCPToolBox_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+implementation_branch_push_PR_merge_authorized: false
+next_gate: WP0_FROZEN_ADVANCEMENT_CONDITIONS
+```
+
+## Phase 5A M0-A WP0 Complete, WP1 Current (2026-07-20)
+
+WP0 established the exact 41-file external package skeleton and proved that its
+source and clean-worktree install projections produce the same deterministic
+content-tree digest. The package remains blocked and runtime-unusable. The
+direct predecessor gate now permits WP1 canonical primitives only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP1_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+source_authority_root: extensions/agents-os-resident
+WP0_status: PASS_COMPLETE
+WP0_source_payload_commit: 313aebfe8f12f131bb5c661dd8926df23052491f
+WP0_package_manifest_commit: c93e295461a8100debbfb4042d09bc05dc2d2ae0
+WP0_planned_source_inventory: 41/41_MATCH
+WP0_source_payload_at_bound_commit: 40/40_BYTE_EQUAL
+WP0_content_tree_sha256: a7a3145e4267064c02b3c80fd9f13b9f3eb3ba3dfaf48793dbcb89afe2124fe8
+WP0_installed_tree_sha256: a7a3145e4267064c02b3c80fd9f13b9f3eb3ba3dfaf48793dbcb89afe2124fe8
+WP0_package_manifest_sha256: 4f95b1bd4056deaba15b38701f4dda7bd09f871a5b87ad050a2cfbf7a8f35327
+WP0_lock_reproduction: 2/2_BYTE_EQUAL
+WP0_VCPToolBox_core_diff: ZERO
+WP0_enabled_plugin_manifest_present: false
+WP0_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp0-reproducible-skeleton-closeout-v0.1.md
+WP0_closeout_receipt_sha256: 4fb1806d31c26aba6ef778957b88a2d3664e6631b02ab671a5442a73917f66e5
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.8.md
+active_work_queue_sha256: d6118e354660111507939f3ee05b75221ca168779f1f31cf8626999c6b6261c9
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.8.md
+current_work_package: WP1_CANONICAL_PRIMITIVES
+WP1_start_condition_satisfied: true
+WP2_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP1_FIXED_F1_F6_CANONICAL_VECTORS
+```
+
+## Phase 5A M0-A WP1 Complete, WP2 Current (2026-07-20)
+
+WP1 implemented the frozen integer-only canonical JSON and SHA-256 primitive
+layer. Strict negative cases, fixed canonical bytes and six F1-F6 domain
+vectors pass under the exact Rust 1.96.1 lock. The direct predecessor gate now
+permits WP2 Resident ownership only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP2_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP1_implementation_commit: 055275a46d226f9b4b473ca91538a0da1c69fa34
+WP1_F1_F6_vector_commit: b5abb6af8d038b46d2380c9340f2033945054feb
+WP1_package_manifest_commit: 113de0c25090b90de27ffd53e11add688abc1d78
+WP1_source_commit_payload: 40/40_BYTE_EQUAL
+WP1_content_tree_sha256: f5e1e90e0f2deb9ed11442421fa28871832f700ac8937f9fb57c9f30282af971
+WP1_package_manifest_sha256: ce63edf10a02106fb48886ef9db31da552a3939d67fea431757abd6b5910a087
+WP1_rustfmt_check: PASS
+WP1_cargo_test_locked: 8/8_PASS
+WP1_clippy_all_targets_D_warnings: PASS
+WP1_fixed_F1_F6_domain_vectors: 6/6_MATCH
+WP1_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp1-canonical-primitives-closeout-v0.1.md
+WP1_closeout_receipt_sha256: 09d989b456eca841717f6a764c26f3b40438d767aca9f6ec4f7e9ab88105a301
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.9.md
+active_work_queue_sha256: 61e7e42c5d75f6dc427581c1c2e69a590ffaa0f7d1234a4934758d1a772dadb2
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.9.md
+current_work_package: WP2_RESIDENT_OWNERSHIP
+WP2_start_condition_satisfied: true
+WP3_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP2_DUAL_START_AND_WRONG_THREAD_TESTS
+```
+
+## Phase 5A M0-A WP2 Complete, WP3 Current (2026-07-20)
+
+WP2 established the synthetic Resident ownership boundary without entering
+ledger v1 semantics: one OS lock, immutable identity/incarnation/epoch
+descriptors, one Rust ledger thread, one SQLite connection and deterministic
+cleanup. Dual-process lock contention, duplicate writer and wrong-thread paths
+fail closed. The direct predecessor gate now permits WP3 Ledger v1 only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP3_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP2_source_commit: a1824a8863dc11d7bb3067e94fdd9703d3cf5c5e
+WP2_package_manifest_commit: bd35e517c424d66aedfd41b9151b8696ee9483f1
+WP2_source_commit_payload: 40/40_BYTE_EQUAL
+WP2_content_tree_sha256: cc6af0a1ba38ce501de4ff6c3d5b2b7788b186a9dd81060c9e963d149d5bf658
+WP2_package_manifest_sha256: 38f7ec261b7b5e0911742d41717fe24b47165bf7747c66d43c53ea57cf1cb4a3
+WP2_rustfmt_check: PASS
+WP2_cargo_test_locked: 12/12_PASS
+WP2_clippy_all_targets_D_warnings: PASS
+WP2_dual_process_lock_contention: REJECTED
+WP2_duplicate_writer: REJECTED
+WP2_wrong_thread_write: REJECTED
+WP2_authoritative_SQLite_connections: 1
+WP2_cleanup_and_reacquisition: PASS
+WP2_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp2-resident-ownership-closeout-v0.1.md
+WP2_closeout_receipt_sha256: 698601ac5ab17225fb90e804774b7c274727e5951012bea1a9035060efc84cf2
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.0.md
+active_work_queue_sha256: f485def8b22e08a4550f38409ce7b6d07d17f9d41ff86b98d6f461b326ff0512
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.0.md
+current_work_package: WP3_LEDGER_V1
+WP3_start_condition_satisfied: true
+WP4_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP3_TRANSACTION_AND_INTEGRITY_TESTS
+```
+
+## Phase 5A M0-A WP3 Complete, WP4 Current (2026-07-20)
+
+WP3 established the frozen ledger v1 storage boundary behind the sole WP2
+ledger thread and SQLite connection: 18 exact STRICT tables, two authorized
+canonical-fact immutability triggers, a compiled schema seal, atomic
+Event/fact/current-pointer CAS, crash rollback, and exact Inbox request replay
+identity. The direct predecessor gate now permits WP4 Command boundary only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP4_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP3_source_commit: dbccc5147b6ac3bd89da0e6b8c540270d9fa886e
+WP3_package_manifest_commit: 79e0ac1105fb37ed8ba196a7f4c488e079f101e9
+WP3_source_commit_payload: 40/40_BYTE_EQUAL
+WP3_content_tree_sha256: 17897f62dc884896f490dea9b13840785013fa208d0fd0eade50a1c678507d6a
+WP3_package_manifest_sha256: 9440959c28091eec7544d2701bd07ef7ae8be72a076280dd5ad07096826a3d7f
+WP3_SQLite_schema_version: 1
+WP3_SQLite_schema_fingerprint: 0c5a61574a891c7cee0559f18c4bc45f70c6f24a91b65e0b826c9fd15e779f48
+WP3_table_inventory: 18/18_MATCH
+WP3_trigger_inventory: 2/2_MATCH
+WP3_rustfmt_check: PASS
+WP3_cargo_test_locked: 17/17_PASS
+WP3_clippy_all_targets_D_warnings: PASS
+WP3_release_build_locked: PASS
+WP3_crash_rollback: PASS_ZERO_PARTIAL_ROWS
+WP3_stale_pointer_CAS: REJECTED
+WP3_request_identity_substitution: REJECTED
+WP3_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp3-ledger-v1-closeout-v0.1.md
+WP3_closeout_receipt_sha256: 286e6b7261458ae5804f9699e7af98f1099e280a3f6ec45973337253c4917f20
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.1.md
+active_work_queue_sha256: eec38fcf5f9aae4b4fea8d3f299cb8cb5098a0492eaa0542baf2686291a51b02
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.1.md
+current_work_package: WP4_COMMAND_BOUNDARY
+WP4_start_condition_satisfied: true
+WP5_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP4_NODE_ABI_ILLEGAL_INPUT_AND_REPLAY_TESTS
+```
+
+## Phase 5A M0-A WP4 Complete, WP5 Current (2026-07-20)
+
+WP4 established the exact five-method Node-API boundary, canonical F3 frames,
+the closed synthetic Command registry, fixed synthetic principal verification,
+read-only query projection and exact terminal replay. It deliberately did not
+claim a domain mutation: until their owning work packages exist, valid
+synthetic Commands close as persisted `INDETERMINATE`. The direct predecessor
+gate now permits WP5 Permit and Outbox only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP5_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP4_source_commit: 88334aa2573587902ef25610f7c5541d6dec02f0
+WP4_package_manifest_commit: 6690b1c768c9ff59242b0e7307c7a18cdc75d623
+WP4_source_commit_payload: 40/40_BYTE_EQUAL
+WP4_content_tree_sha256: a4d2cc5b25d35fa24061460fb7188336511758548409997f05148531d2f29d17
+WP4_package_manifest_sha256: c7f827250e17c7c81f1a88806c842f38851b50c7ddfcffc3944a4f2bb0bb734f
+WP4_planned_source_inventory: 41/41_MATCH
+WP4_NAPI_exports: 5/5_EXACT
+WP4_cargo_test_locked: 23/23_PASS
+WP4_clippy_all_targets_D_warnings: PASS
+WP4_release_build_locked: PASS
+WP4_Node_ABI_ledger_replay: PASS
+WP4_exact_replay_additions: 0_Event_0_Inbox_0_Replay
+WP4_changed_bytes_same_command_id: PROTOCOL_CONFLICT
+WP4_reserved_methods: 3/3_CONTRACT_NOT_ACTIVE
+WP4_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp4-command-boundary-closeout-v0.1.md
+WP4_closeout_receipt_sha256: be420b08ec71546a540b9e8c6a3aa36402c772dbdec40d623ca7698f902b70ae
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.2.md
+active_work_queue_sha256: 3380dd237ea77b8b1421b99f77725d95d1cd7ba6b3498e49531a4a76af858d05
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.2.md
+current_work_package: WP5_PERMIT_AND_OUTBOX
+WP5_start_condition_satisfied: true
+WP6_and_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP5_PERMIT_FENCE_CLAIM_REPLAY_AND_CRASH_TESTS
+```
+
+## Phase 5A M0-A WP5 Complete, WP6 Current (2026-07-20)
+
+WP5 established the synthetic F4-to-F5 persistence seam: a closed,
+production-incompatible Outbox intent, exact scope and fence comparison,
+permit-currentness owner-result consumption, deterministic claim/lease and
+receipt/recovery reducers, atomic enqueue, crash rollback and exact replay.
+The synthetic intent is never authority-eligible or claimable. The test path
+created one intent and zero claims, attempts, arms, receipts, Host calls or
+effects. The direct predecessor gate now permits WP6 Validation and Completion
+only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP6_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP5_source_commit: 757aa2cbf1cc105cc26469bd5228b3e932c90494
+WP5_package_manifest_commit: 5d8b4e69287afb204c89c2b5eb65bdab1a8cd42d
+WP5_source_commit_payload: 40/40_BYTE_EQUAL
+WP5_content_tree_sha256: 96f5d8ef09891ebd561ccf176fd903e5d06a42633340d553aa6e651384c90232
+WP5_package_manifest_sha256: bed25506e29aef9012e0318e46880a5858cc62b153d977718fc4b2935a300ede
+WP5_planned_source_inventory: 41/41_MATCH
+WP5_cargo_test_locked: 32/32_PASS
+WP5_clippy_all_targets_D_warnings: PASS
+WP5_release_build_locked: PASS
+WP5_Node_ABI_flow: 7/7_PASS
+WP5_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP5_persisted_test_counts: 1_Event_1_Inbox_1_Outbox_0_Claim_0_Attempt_0_Arm_0_Receipt_0_Guard
+WP5_mock_or_real_Host_call_count: 0
+WP5_effect_occurrence_count: 0
+WP5_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp5-permit-and-outbox-closeout-v0.1.md
+WP5_closeout_receipt_sha256: 84442bee45ab1aa178f2e394325f1e4419366da3bdb9172dcd90676101b674e2
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.3.md
+active_work_queue_sha256: 03dbb8110f290780ded927859b67c944cda66b07c73f6ba7cf2d54ed9f60f3ac
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.3.md
+current_work_package: WP6_VALIDATION_AND_COMPLETION
+WP6_start_condition_satisfied: true
+WP7_direct_predecessor_gate_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP6_DISAGREEMENT_COMPLETION_CAS_REPLAY_AND_CRASH_TESTS
+```
+
+## Phase 5A M0-A WP6 Complete, WP7 Current (2026-07-21)
+
+WP6 implemented the frozen synthetic F6 current-decision consumer and atomic
+completion seam behind the sole Rust ledger thread and SQLite connection. The
+fixed validation projection binds the accepted F6 R6 manifest, freeze decision
+and synthetic witness, preserves owner-issued assessment results without
+recomputing upstream reducers, and records the validation decision plus
+completion guard at one Event barrier. Completion re-reads the exact same-Task
+facts and pointers, checks all five quiescence counts, and commits the
+completion fact, pointer, Event, completion row and replay tuple atomically.
+
+Disagreement, missing or mismatched evidence, unresolved synthetic Outbox
+state, changed replay bytes, second completion and the injected
+pointer-before-Event crash all fail closed with zero partial completion rows.
+The direct predecessor gate now permits only WP7's integrated synthetic M0-A
+witness.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP7_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP6_source_commit: ee529abfaeff34a84196f5e493655f45c216cfd5
+WP6_package_manifest_commit: 6851df482be825d195de6036016f0a77e59e78a9
+WP6_source_commit_payload: 40/40_BYTE_EQUAL
+WP6_content_tree_sha256: 62e2c6035eac3bfed14d09ec89360e999cc66e6dbcef2f5a1df8a7ed835aedc8
+WP6_package_manifest_sha256: 2326bd3cccdf0b4d94a2f67881840ab25fff9cb0c281851b276b3ea6922c23b1
+WP6_planned_source_inventory: 41/41_MATCH
+WP6_cargo_test_locked: 39/39_PASS
+WP6_clippy_all_targets_D_warnings: PASS
+WP6_release_build_locked: PASS
+WP6_Node_ABI_flow: PASS_VALIDATION_REPLAY_COMPLETION_REPLAY
+WP6_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP6_validation_and_guard_barrier: ONE_SHARED_EVENT
+WP6_completion_atomicity: PASS_ALL_OR_ZERO
+WP6_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-wp6-validation-and-completion-closeout-v0.1.md
+WP6_closeout_receipt_sha256: 7f52b5c2dde758d7a2038de95f4ee6d8cdb0e9d70c268e86dcc3791e14ccbe65
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.4.md
+active_work_queue_sha256: b855a94aa5b36d2ad3add7fd29c77426db9d28757742b83a1861e7f99222b9e1
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.4.md
+current_work_package: WP7_INTEGRATED_M0A_WITNESS
+WP7_start_condition_satisfied: true
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP7_TWO_CLEAN_RUNS_BYTE_IDENTICAL_RESTART_REPLAY_ZERO_REAL_OCCURRENCES
+```
+
+## Phase 5A M0-A WP7 Complete, Implementation Closeout Current (2026-07-21)
+
+WP7 activated the remaining frozen synthetic Goal/Task Command and integrated
+the completed WP0-WP6 surfaces without adding a table, N-API method, authority
+or runtime path. One fixed Goal binds exactly three synthetic Task identities.
+The four closed Command types produce a deterministic four-Event chain, one
+completed validation Task and one non-executable nonauthority Outbox intent.
+
+Two clean temporary SQLite runs produced the same canonical root and Event
+fingerprints. After shutdown and restart, all four exact Commands returned the
+original response bytes with zero added rows. External call, Host dispatch,
+provider, network, private Memory, sensing, runtime activation and real-effect
+occurrence counts remained zero. The next current work is the bounded Phase 5A
+M0-A implementation closeout; Phase 5B remains unstarted.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CLOSEOUT_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+WP7_source_commit_payload: 40/40_BYTE_EQUAL
+WP7_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+WP7_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+WP7_planned_source_inventory: 41/41_MATCH
+WP7_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+WP7_clean_runs: 2/2_BYTE_EQUAL_ROOT_AND_EVENTS
+WP7_restart_replay: 4/4_BYTE_EQUAL_ZERO_ADDITIONS
+WP7_cargo_test_locked: 41/41_PASS
+WP7_clippy_all_targets_D_warnings: PASS
+WP7_release_build_locked: PASS
+WP7_Node_ABI_flow: 4/4_FIRST_RUN_AND_RESTART_BYTE_EQUAL
+WP7_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP7_real_occurrence_count: 0
+WP7_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-wp7-integrated-witness-closeout-v0.1.md
+WP7_closeout_receipt_sha256: adea7400c95bfa3aa18c612cf0f4eea7d21cdb2869156b86acc34cd3286314ff
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.5.md
+active_work_queue_sha256: b551883f04a38bdb857d855ae2452912618349f759eb1f16bde53394d94510c5
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.5.md
+current_work_package: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
+Phase_5A_M0A_implementation_closeout_condition_satisfied: true
+Phase_5B_started: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
+```
+
+## Phase 5A M0-A Implementation Complete, Git Durability Gate Current (2026-07-21)
+
+The complete WP0-WP7 lineage was freshly verified against the frozen package
+manifest and implementation commits. The 41-file inventory, exact 40-file
+source-commit payload and content-tree digest match. The Rust, N-API, SQLite,
+crash/replay and R6 AST/dataflow validation ladder passed without changing the
+frozen package bytes.
+
+Phase 5A M0-A implementation is locally complete but is not yet durable on
+`main`. The current gate awaits a separate Jenn delivery scope for exact Git
+review, private branch push, PR, merge and remote blob verification. Phase 5B
+has not started.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_COMPLETE_AWAITING_GIT_DURABILITY
+Phase_5A_mode: M0A_IMPLEMENTATION_COMPLETE
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+Phase_5A_M0A_implementation_closeout: PASS_COMPLETE
+implementation_lineage_tip_before_closeout_governance: aa10de8b845c89172e0ae98397a4b24c0c066ad3
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+Phase_5A_M0A_planned_source_inventory: 41/41_MATCH
+Phase_5A_M0A_source_commit_payload: 40/40_BYTE_EQUAL
+Phase_5A_M0A_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+Phase_5A_M0A_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+Phase_5A_M0A_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+Phase_5A_M0A_cargo_test_locked_offline: 41/41_PASS
+Phase_5A_M0A_clippy_all_targets_D_warnings: PASS
+Phase_5A_M0A_release_and_NAPI_build: PASS
+Phase_5A_M0A_Node_restart_replay: 4/4_BYTE_EQUAL
+Phase_5A_M0A_R6_validator: PASS_NO_BLOCKER_35_CASES
+Phase_5A_M0A_real_occurrence_count: 0
+Phase_5A_M0A_implementation_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-implementation-closeout-v0.1.md
+Phase_5A_M0A_implementation_closeout_receipt_sha256: 6d873772fdfabf34688f1d9eb31321f39981423896dbaa567881940135522894
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.6.md
+active_work_queue_sha256: 9dd036e2b379cfd089c4a75538549bc83a0b25431db7b65303f78579c96a209f
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.6.md
+current_work_package: PHASE_5A_M0A_GIT_DURABILITY_DELIVERY_GATE
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+implementation_delivery_authorized: false
+Phase_5B_started: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: AWAITING_JENN_SEPARATE_PHASE_5A_M0A_GIT_DELIVERY_SCOPE
+```
 
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
 - This snapshot did not read secrets, tokens, cookies, provider raw responses, or private raw memory.
 - This snapshot did not start VCPToolBox services. It recorded the runtime integration contract after previous timeboxed localhost observations and the controlled local-use handoff. It did not run executor, call providers, modify auth/provider/runtime configuration, output cookies, push, deploy, publish, tag, or perform destructive cleanup.
+
+## Phase 5A M0-A PR #21 Review Corrections Closed (2026-07-21)
+
+PR #21 received two actionable Codex findings. Both are now closed locally:
+the Outbox command envelope stores the exact canonical Command tuple, and the
+inactive delivery methods report `CONTRACT_NOT_ACTIVE` consistently. The
+historical implementation closeout receipt and queue v9.6 remain immutable;
+the corrected package is rebound by a new disposition receipt and queue v9.7.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 2/2
+corrected_source_commit: 877525647f5558fb0d1b7792acda4df595a550e4
+corrected_package_manifest_commit: df968f235b3f6854494e88394c07dce84658348c
+Phase_5A_M0A_content_tree_sha256: bb59e41a54a771f62a84b2fd74dd78645056a113fe7fee8a204fd3f4bcc86104
+Phase_5A_M0A_package_manifest_sha256: 79d5f5e6f1c2654fc919c4c10b85352f1d2f5a742219034723440d0aae5622bc
+Phase_5A_M0A_integrated_root_sha256: da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.1.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 67502292c89af57efd735b84f7b964329870636643c8de4906e616c4e254797e
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.7.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
+## Phase 5A M0-A PR #21 Exact WP5 Replay Finding Closed (2026-07-21)
+
+The fresh Codex review of `df1f9d7c263040e991b9911aa7a1941e1793ed22`
+found that the WP5 replay branch accepted stored response bytes that were
+canonical and self-hashing but not equal to the deterministic intake response.
+The branch now requires the exact stored request fingerprint, response
+fingerprint and response bytes before replay. The frozen Plan R1-R8 subjects
+remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 7/7
+corrected_source_commit: 369fa92e168508b71e03158a27bd8598a7aeb385
+corrected_package_manifest_commit: 8cd1e78a6e7b788f3461fd0f66d55a86b59af55d
+Phase_5A_M0A_content_tree_sha256: 4c8b3cba4ce23e018c1b79a2fd8a221b48af18b6961c07f629c74e3a662a909d
+Phase_5A_M0A_package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.6.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: ecf25f12caaefd20a48065673747f3533fe663218deb201f790ef483acb69e42
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.2.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
+## Phase 5A M0-A PR #21 Pending Inbox Finding Closed (2026-07-21)
+
+The fresh Codex review of `4c588c75fb3046593861a35929ddc55ba2667e13`
+found that an exact request registered as `RECEIVED` could not be finalized by
+the WP5 or shared WP6/WP7 terminal paths. Those paths now advance the exact
+pending row in the same immediate SQLite transaction, while conflicting or
+malformed request identity remains fail-closed. Restart replay returns the
+stored response with zero additions. The frozen Plan R1-R8 subjects remain
+byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 6/6
+corrected_source_commit: 57989ca28102ed72873f45093c839693b9b760ae
+corrected_package_manifest_commit: 021813f8ba85b4a09961dcb40a8f336bc3bd01a6
+Phase_5A_M0A_content_tree_sha256: a620146a65190a51d8ded058a1a771cdba824836b8c263298f523521b46fd18c
+Phase_5A_M0A_package_manifest_sha256: 8d4f66048869218ec1ab0bcc2575f88becd0d7096405170e140770fedb538e15
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.5.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: bf85ce1c7e9287e45a738fd2acd4fa0fdd381529925c00fad2576841e4b79c46
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.1.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
+## Phase 5A M0-A PR #21 Payload Schema Finding Closed (2026-07-21)
+
+The fresh Codex review of `15c40f57fa949d07ffb09e9d1d196cf9b15e18ec`
+found that four advertised payload schemas rejected the same legal frames
+accepted by their native parsers. The schemas now publish exact closed
+top-level property inventories and matching primitive constraints. Five known
+valid method payloads are checked against the advertised documents. The frozen
+Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 5/5
+corrected_source_commit: 44e7dd46391f83061d218a226bc7024b88504458
+corrected_package_manifest_commit: 31fc1770659ac6a2bce89054a46be930c79bdd2e
+Phase_5A_M0A_content_tree_sha256: 01d17cd723276ae7bc50f10d9b0eb023b75c6f5a9007303058019e6474146b16
+Phase_5A_M0A_package_manifest_sha256: aa57b6be31f572da83b680e6cec31a0b41189fb7b7fdf6e83791c40361e8a83f
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.4.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 60a83e4c97f14a90fa162d8406364d73c02e35512d8ad22ca35b864d2f2fe648
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.0.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.0.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
+## Phase 5A M0-A PR #21 Ledger Ownership Finding Closed (2026-07-21)
+
+The fresh Codex review of `2f208f72ac0bc733a87b3e345cf10506420721d0`
+found that resident ownership was not durably bound to the ledger. The first
+open now atomically persists the exact resident identity, incarnation,
+authority epoch and ownership Event; every reopen verifies that tuple before
+the ledger becomes usable. A substituted incarnation or nonce against the same
+root is rejected. The frozen Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 4/4
+corrected_source_commit: d30d477fe34baddee6476f648917a62b1424f424
+corrected_package_manifest_commit: a7ba1a849e7ddcbd853fb6981b1c437be07d6902
+Phase_5A_M0A_content_tree_sha256: 855f3be03c375601bf49fb9cd716601373efba9e41b53bcb98f8a0b199bc95fb
+Phase_5A_M0A_package_manifest_sha256: b788b85d3a35cc96e3594318a60606a9410d640f6cbc84687aab10776ea56f0b
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: 15a24bde4885aba2663325b47f8772f8782e6b7114787d5bb831fec65d1102d5
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.3.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 6fc961c381bbc4c965aaa19142560cf5a00be1ca7190fdd5f5710fe2cfe96da9
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.9.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.9.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
+## Phase 5A M0-A PR #21 Native Binding Finding Closed (2026-07-21)
+
+The fresh Codex review of `d848a3c` found that the compatibility entry point
+called an undeclared native binding. The implementation now lazily loads the
+fixed Linux x64 N-API binary inside `processToolCall`, preserving the exact
+three CommonJS exports, three projected fields and single `execute_command`
+dispatch. The frozen Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 3/3
+corrected_source_commit: c29bf6db5ecbfaa05b765fa2206171d3b4ee9c04
+corrected_package_manifest_commit: 01d5765eff8e88dac60e219ee7fc70525f3ee18b
+Phase_5A_M0A_content_tree_sha256: 7cd9f00b72ca30564bf05855f0a5f9a077518d3b6a3b7208839dc82639fc7661
+Phase_5A_M0A_package_manifest_sha256: 6e9ce3d4b20e47a17e0b43872259f4a389906700b3236cc36b091c85733a0441
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.2.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: ec51242a7530126c314751286bcb4862d8b0f6da50db2e9bf3842429eb99fd91
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.8.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```

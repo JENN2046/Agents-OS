@@ -1,0 +1,108 @@
+# AGENTS OS Active Work Queue v9.6
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.5.md`
+
+## Current Facts
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: M0A_IMPLEMENTATION_COMPLETE_AWAITING_GIT_DURABILITY
+Phase_5A_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_implementation_start_decision_sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3
+Phase_5A_implementation_started: true
+implementation_authorized: true
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+Phase_5A_M0A_implementation_closeout: PASS_COMPLETE
+implementation_lineage_tip_before_closeout_governance: aa10de8b845c89172e0ae98397a4b24c0c066ad3
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+Phase_5A_M0A_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+Phase_5A_M0A_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+Phase_5A_M0A_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+Phase_5A_M0A_implementation_closeout_receipt_sha256: 6d873772fdfabf34688f1d9eb31321f39981423896dbaa567881940135522894
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+current_work_package: PHASE_5A_M0A_GIT_DURABILITY_DELIVERY_GATE
+implementation_delivery_authorized: false
+VCPToolBox_core_change_authorized: false
+VCPToolBox_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+Phase_5B_started: false
+```
+
+## NOW
+
+### NOW-001: Await Jenn separate Phase 5A M0-A Git durability delivery scope
+
+```text
+requires_jenn_delivery_scope=true
+delivery_owner=Jenn
+```
+
+The local implementation and its deterministic closeout have passed. A future
+delivery scope may authorize an exact branch/commit review, safe private branch
+push, PR, mainline integration and remote blob/hash verification. This queue
+does not itself authorize any of those external Git actions.
+
+## NEXT
+
+```text
+Jenn_exact_Git_delivery_scope=prepare_scoped_durability_surface
+Git_mainline_durability_PASS=await_Jenn_explicit_Phase_5B_start_decision
+no_delivery_scope=remain_at_gate
+automatic_transition=forbidden
+```
+
+## BLOCKED
+
+```text
+automatic_push_PR_or_merge=forbidden
+Phase_5B_before_Phase_5A_mainline_durability=forbidden
+upstream_F1_F2_F3_F4_F5_F6_F7_F8_authority_recomputation=forbidden
+second_permission_identity_Task_Command_validation_or_effect_authority=forbidden
+physical_or_mock_Host_dispatch=forbidden
+VCPToolBox_core_change_or_start=forbidden
+plugin_enablement=forbidden
+production_or_existing_database=forbidden
+runtime_auth_private_Memory_provider_sensing_or_real_effect=forbidden
+release_deploy_publish_tag=forbidden
+```
+
+## CLOSED
+
+```text
+Phase_5A_plan_R8_atomic_freeze=COMPLETE
+Phase_5A_plan_Git_durability=COMPLETE
+Jenn_implementation_start_decision=ACCEPTED
+WP0_REPRODUCIBLE_SKELETON=PASS_COMPLETE
+WP1_CANONICAL_PRIMITIVES=PASS_COMPLETE
+WP2_RESIDENT_OWNERSHIP=PASS_COMPLETE
+WP3_LEDGER_V1=PASS_COMPLETE
+WP4_COMMAND_BOUNDARY=PASS_COMPLETE
+WP5_PERMIT_AND_OUTBOX=PASS_COMPLETE
+WP6_VALIDATION_AND_COMPLETION=PASS_COMPLETE
+WP7_INTEGRATED_M0A_WITNESS=PASS_COMPLETE
+PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT=PASS_COMPLETE
+active_work_queue_v9_5=superseded_historical_bytes_preserved
+```
+
+This queue is a Jenn-owned delivery gate. It does not start Phase 5B or grant
+runtime, provider, authentication, Memory, sensing or effect authority.

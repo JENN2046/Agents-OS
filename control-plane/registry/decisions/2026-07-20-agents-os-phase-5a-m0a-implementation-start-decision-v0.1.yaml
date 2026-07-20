@@ -1,0 +1,162 @@
+schema_version: agents-os.implementation-start-decision-record.v0.1
+record_id: agents-os-phase-5a-m0a-implementation-start-decision-v0.1
+record_type: ImplementationStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-20T21:04:42+08:00'
+effective_at: '2026-07-20T21:04:42+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_FROZEN_PHASE_5A_M0A_IMPLEMENTATION
+  decision_source: explicit_current_conversation_confirmation_of_implementation_start_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-package-v0.1.md
+    sha256: acaf9feec80768124e62a1f5438102784355faba12609deddcd3fd1b0a836574
+    section: 6_A
+  confirmation_text_received: 我确认执行 Phase 5A M0-A Implementation Start Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+  atomic: true
+  partial_interpretation: forbidden
+  subject_count: 55
+  precedence:
+  - R8_explicit_replacements
+  - R7_all_other_clauses
+  - R6_all_other_clauses
+  - R5_all_other_clauses
+  - R4_all_other_clauses
+  - R3_all_other_clauses
+  - R2_all_other_clauses
+  - R1_all_other_clauses
+  manifest:
+    path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml
+    sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+    result: PASS_NO_BLOCKER
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml
+    sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+  plan_mainline_integration_commit: 35639321aa76a77c57713a54c9753102f1b8fea9
+  durability_projection_merge_commit: 710ad9b01a4ae9eb28972d40dae24e0cc12cc652
+
+implementation_start_preflight:
+  path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-preflight-v0.1.yaml
+  sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344
+  result: PASS
+  repository: lioensky/VCPToolBox
+  sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  sealed_commit_is_ancestor_of_current_upstream_main: true
+  sealed_git_objects_verified: 7/7_MATCH
+
+implementation_authority:
+  source_authority_root: extensions/agents-os-resident
+  implementation_task_branch_required: true
+  scoped_local_commits_authorized: true
+  work_packages:
+  - WP0_REPRODUCIBLE_SKELETON
+  - WP1_CANONICAL_PRIMITIVES
+  - WP2_RESIDENT_OWNERSHIP
+  - WP3_LEDGER_V1
+  - WP4_COMMAND_BOUNDARY
+  - WP5_PERMIT_AND_OUTBOX
+  - WP6_VALIDATION_COMPLETION
+  - WP7_INTEGRATED_M0A_WITNESS
+  advancement_rule: direct_predecessor_frozen_condition_must_pass
+  skip_or_parallel_advancement: forbidden
+  scope_expansion_on_failure: forbidden
+  repair_inside_frozen_scope: authorized
+
+authorized_after_start_closeout:
+  Phase_5A_implementation_started: true
+  implementation_authorized: true
+  WP0_start_authorized: true
+  WP1_through_WP7_conditionally_authorized: true
+  Rust_JavaScript_NAPI_source_and_tests: true
+  exact_project_local_toolchain_and_pinned_dependency_installation: true
+  deterministic_offline_debug_and_release_builds: true
+  synthetic_test_temporary_SQLite_database_creation_write_recovery_and_delete: true
+  clean_linked_VCPToolBox_worktree_at_sealed_commit: true
+  blocked_AGENTSOSResident_plugin_materialization_for_compatibility_tests: true
+  SYNTHETIC_TEST_mock_only_execution: true
+  deterministic_validation_reports_and_receipts: true
+
+required_implementation_boundaries:
+  current_dirty_runtime_VCPToolBox_worktree_untouched: true
+  VCPToolBox_core_diff: zero
+  install_target: Plugin/AGENTSOSResident
+  install_manifest: plugin-manifest.json.block
+  enabled_plugin_manifest: forbidden
+  source_of_truth_remains_extensions_package: true
+  temporary_SQLite_database_only: true
+  authoritative_SQLite_connections: 1
+  Rust_ledger_writers: 1
+  production_domain_compatible: false
+  runtime_usable: false
+
+not_authorized:
+  VCPToolBox_core_change_authorized: false
+  VCPToolBox_start_authorized: false
+  plugin_enablement_authorized: false
+  active_runtime_configuration_read_or_change_authorized: false
+  production_database_or_existing_database_use_authorized: false
+  production_authentication_credentials_keys_cookies_or_cryptography_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  provider_raw_response_access_authorized: false
+  real_Task_Command_Host_Resident_sensing_recording_provider_or_effect_authorized: false
+  network_listener_HTTP_gRPC_sidecar_external_Rust_daemon_or_Tokio_authorized: false
+  second_supervisor_writer_or_SQLite_connection_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  Phase_5B_or_production_migration_authorized: false
+  VCPToolBox_fork_push_or_publication_authorized: false
+  implementation_branch_push_PR_or_merge_authorized: false
+  tag_release_deploy_or_package_publish_authorized: false
+  external_Codex_or_executor_runner_authorized: false
+
+start_closeout:
+  decision_record_created: true
+  implementation_source_creation_during_closeout: forbidden
+  dependency_installation_during_closeout: forbidden
+  database_creation_during_closeout: forbidden
+  plugin_materialization_during_closeout: forbidden
+  runtime_start_during_closeout: forbidden
+  required_projections:
+  - CURRENT_STATE
+  - Active_Work_Queue
+  - Document_Registry
+  - Federated_Document_Registry
+  - Machine_Dashboard_Control_Chain_Workbench_defaults
+  - implementation_start_receipt
+
+next_gate:
+  name: PHASE_5A_M0A_WP0_REPRODUCIBLE_SKELETON
+  automatic_progress_inside_frozen_scope: true
+  WP0_exit_condition:
+  - source_tree_hash_reproduces
+  - install_tree_hash_reproduces
+  - blocked_manifest_only
+  - VCPToolBox_core_diff_zero
+  - no_runtime_database_provider_or_real_effect_occurrence
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_frozen_plan_subjects: forbidden
+  edit_bound_preflight_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  derived_registry_current_state_queue_and_receipt_updates: permitted

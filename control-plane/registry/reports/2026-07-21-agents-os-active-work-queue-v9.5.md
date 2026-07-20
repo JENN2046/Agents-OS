@@ -1,0 +1,106 @@
+# AGENTS OS Active Work Queue v9.5
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.4.md`
+
+## Current Facts
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_implementation_start_decision_sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+WP7_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+WP7_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+WP7_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+WP7_closeout_receipt_sha256: adea7400c95bfa3aa18c612cf0f4eea7d21cdb2869156b86acc34cd3286314ff
+current_work_package: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
+source_authority_root: extensions/agents-os-resident
+VCPToolBox_core_change_authorized: false
+VCPToolBox_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+implementation_push_PR_merge_authorized: false
+Phase_5B_started: false
+```
+
+## NOW
+
+### NOW-001: Phase 5A M0-A Implementation Closeout
+
+Perform only the deterministic implementation closeout for the completed
+WP0-WP7 lineage: verify the exact source and package-manifest commits, reproduce
+the 41-file content tree and fixed WP7 integrated root, rerun the closed local
+validation ladder, and prepare a scoped durability/review surface.
+
+This closeout may create governance evidence and a local scoped commit. It may
+not push, open or merge a PR without a separate current delivery instruction,
+and it may not start Phase 5B or any runtime-facing work.
+
+## NEXT
+
+```text
+Phase_5A_M0A_implementation_closeout_PASS=await_separate_Git_delivery_scope
+Git_mainline_durability_PASS=await_Jenn_explicit_Phase_5B_start_decision
+closeout_failure=repair_only_inside_frozen_Phase_5A_scope
+scope_expansion=stop_for_new_Jenn_decision
+```
+
+## BLOCKED
+
+```text
+Phase_5B_start_before_Phase_5A_closeout_and_mainline_durability=forbidden
+upstream_F1_F2_F3_F4_F5_F6_authority_recomputation=forbidden
+second_permission_identity_Task_Command_validation_or_effect_authority=forbidden
+physical_or_mock_Host_dispatch=forbidden
+second_SQLite_connection_or_writer=forbidden
+schema_or_NAPI_method_expansion=forbidden
+VCPToolBox_core_change_or_existing_dirty_worktree_use=forbidden
+VCPToolBox_start_or_plugin_enablement=forbidden
+production_or_existing_database=forbidden
+runtime_auth_private_Memory_provider_sensing_or_real_effect=forbidden
+implementation_branch_push_PR_merge_without_separate_scope=forbidden
+release_deploy_publish=forbidden
+```
+
+## CLOSED
+
+```text
+Phase_5A_plan_R8_atomic_freeze=COMPLETE
+Phase_5A_plan_Git_durability=COMPLETE
+Jenn_implementation_start_decision=ACCEPTED
+WP0_REPRODUCIBLE_SKELETON=PASS_COMPLETE
+WP1_CANONICAL_PRIMITIVES=PASS_COMPLETE
+WP2_RESIDENT_OWNERSHIP=PASS_COMPLETE
+WP3_LEDGER_V1=PASS_COMPLETE
+WP4_COMMAND_BOUNDARY=PASS_COMPLETE
+WP5_PERMIT_AND_OUTBOX=PASS_COMPLETE
+WP6_VALIDATION_AND_COMPLETION=PASS_COMPLETE
+WP7_INTEGRATED_M0A_WITNESS=PASS_COMPLETE
+active_work_queue_v9_4=superseded_historical_bytes_preserved
+```
+
+This queue authorizes only the local deterministic Phase 5A implementation
+closeout. It does not authorize implementation delivery, Phase 5B, runtime
+activation, mock or real effect execution, or provider interaction.
