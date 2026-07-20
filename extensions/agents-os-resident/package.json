@@ -1,0 +1,24 @@
+{
+  "name": "agents-os-resident",
+  "version": "0.0.0-m0a",
+  "private": true,
+  "description": "Synthetic-only blocked AGENTS OS Phase 5A M0-A resident",
+  "main": "index.js",
+  "engines": {
+    "node": "22.23.1",
+    "npm": "10.9.8"
+  },
+  "scripts": {
+    "build:debug": "napi build --platform",
+    "build:release": "napi build --platform --release"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "3.7.3"
+  },
+  "napi": {
+    "binaryName": "agents-os-resident",
+    "targets": [
+      "x86_64-unknown-linux-gnu"
+    ]
+  }
+}

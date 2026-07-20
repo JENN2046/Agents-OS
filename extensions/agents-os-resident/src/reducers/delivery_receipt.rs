@@ -1,0 +1,1 @@
+//! Delivery receipt currentness consumer.

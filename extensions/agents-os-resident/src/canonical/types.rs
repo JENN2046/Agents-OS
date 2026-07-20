@@ -1,0 +1,1 @@
+//! Closed canonical value types.
