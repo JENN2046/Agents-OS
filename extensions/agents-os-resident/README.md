@@ -51,5 +51,20 @@ Disagreement, unavailable evidence, cross-Task bindings, unresolved synthetic
 Outbox state, stale CAS, changed replay bytes and injected pre-Event crashes
 all fail closed with zero partial completion rows.
 
+WP7 activates the remaining frozen synthetic Goal/Task Command and closes the
+integrated witness without adding an interface, table, authority, or runtime
+path. One immutable Goal projection binds exactly three fixed synthetic Task
+identities. The four closed Command types then produce a deterministic
+four-Event chain, one completed validation Task, and one non-executable mock
+effect intent. A read-only ledger projection hashes every immutable identity
+tuple and canonical byte digest into one root. Two independent clean databases
+produce the fixed root
+`0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5`;
+shutdown/restart replay returns the original four response byte strings with
+zero added rows. The mock-effect count denotes the synthetic nonauthority
+intent only: external call, Host dispatch, provider, network, real Task,
+real Command, real effect, private Memory, sensing and runtime activation
+counts remain zero.
+
 The package still does not enable the plugin, start VCPToolBox, call a provider,
 read private Memory, dispatch to a mock or real Host, or perform an effect.

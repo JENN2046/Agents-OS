@@ -29,7 +29,7 @@ const QUERY_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"propertie
 const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_fence_generation","effect_scope_fingerprint","environment","expected_previous_claim_epoch","fence_currentness_assessment_fingerprint","fence_currentness_assessment_ref","fence_currentness_result","host_authentication_assessment_fingerprint","host_authentication_assessment_ref","host_authentication_result","host_fence_generation","outbox_intent_ref","permit_currentness_assessment_fingerprint","permit_currentness_assessment_ref","permit_currentness_result","task_fence_generation","trusted_time_utc_ms"]}"#;
 const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"]}"#;
 const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["environment","observed_at_utc_ms","outbox_intent_ref"]}"#;
-const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"},"task_completions":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE","TASK_COMPLETED_SYNTHETIC","VALIDATION_CURRENT_DECISION_RECORDED"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
+const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"},"task_completions":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","GOAL_AND_TASKS_CREATED_SYNTHETIC","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE","TASK_COMPLETED_SYNTHETIC","VALIDATION_CURRENT_DECISION_RECORDED"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MethodId {
@@ -325,13 +325,14 @@ impl<'a> CommandBoundary<'a> {
             };
         }
 
-        if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION"
+        if command.command_type_id == "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS"
+            || command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION"
             || command.command_type_id == "M0_SYNTHETIC_COMPLETE_TASK"
         {
-            let code = if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
-                "VALIDATION_CURRENT_DECISION_RECORDED"
-            } else {
-                "TASK_COMPLETED_SYNTHETIC"
+            let code = match command.command_type_id.as_str() {
+                "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS" => "GOAL_AND_TASKS_CREATED_SYNTHETIC",
+                "M0_SYNTHETIC_RECORD_VALIDATION" => "VALIDATION_CURRENT_DECISION_RECORDED",
+                _ => "TASK_COMPLETED_SYNTHETIC",
             };
             let first_response = response(request, Disposition::Committed, code, None)?;
             let intake = TerminalValidationCompletionIntake {
@@ -345,10 +346,14 @@ impl<'a> CommandBoundary<'a> {
                 response_bytes: first_response.canonical_bytes.clone(),
                 response_fingerprint: sha256_hex(&first_response.canonical_bytes),
             };
-            let observation = if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
-                kernel.terminal_synthetic_validation_intake(intake, ValidationCompletionFault::None)
-            } else {
-                kernel.terminal_synthetic_completion_intake(intake, ValidationCompletionFault::None)
+            let observation = match command.command_type_id.as_str() {
+                "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS" => {
+                    kernel.terminal_synthetic_goal_plan_intake(intake)
+                }
+                "M0_SYNTHETIC_RECORD_VALIDATION" => kernel
+                    .terminal_synthetic_validation_intake(intake, ValidationCompletionFault::None),
+                _ => kernel
+                    .terminal_synthetic_completion_intake(intake, ValidationCompletionFault::None),
             };
             return match observation {
                 Ok(TerminalValidationCompletionObservation::FirstTerminal) => Ok(first_response),
@@ -364,8 +369,7 @@ impl<'a> CommandBoundary<'a> {
             };
         }
 
-        // WP1 remains inactive. Its valid synthetic Command retains the WP4
-        // terminal result and replay tuple.
+        // No other Command type exists in the closed registry.
         let first_response = response(
             request,
             Disposition::Indeterminate,

@@ -13,7 +13,7 @@ fn kernel(root: &std::path::Path) -> ResidentKernel {
 }
 
 #[test]
-fn valid_pre_reducer_intake_is_terminal_and_exactly_replayable() {
+fn wp7_goal_plan_intake_is_terminal_and_exactly_replayable() {
     let root = tempfile::tempdir().expect("temporary synthetic root");
     let kernel = kernel(root.path());
     let boundary = CommandBoundary::synthetic(&kernel);
@@ -28,20 +28,36 @@ fn valid_pre_reducer_intake_is_terminal_and_exactly_replayable() {
     let first = boundary
         .invoke(MethodId::ExecuteCommand, &first_request)
         .expect("first intake");
-    assert_eq!(first.disposition, Disposition::Indeterminate);
+    assert_eq!(first.disposition, Disposition::Committed);
     assert_eq!(
         first.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
-        "COMMAND_INDETERMINATE"
+        "GOAL_AND_TASKS_CREATED_SYNTHETIC"
     );
     let first_counts = kernel.ledger_counts().expect("first counts");
     assert_eq!(first_counts.inbox_commands, 1);
     assert_eq!(first_counts.replay_rows, 1);
-    assert_eq!(first_counts.events, 0);
+    assert_eq!(first_counts.events, 1);
+    assert_eq!(first_counts.facts, 4);
+    assert_eq!(first_counts.pointers, 4);
 
     let replay = boundary
         .invoke(MethodId::ExecuteCommand, &first_request)
         .expect("exact replay");
     assert_eq!(replay.canonical_bytes, first.canonical_bytes);
+    assert_eq!(kernel.ledger_counts().unwrap(), first_counts);
+
+    let second_goal_id = "command:SYNTHETIC_TEST:wp7-second-goal-plan";
+    let second_goal = request_bytes(
+        MethodId::ExecuteCommand,
+        second_goal_id,
+        submission_value(second_goal_id, COMMAND_TYPE_IDS[0]).expect("second submission"),
+    )
+    .expect("second request");
+    assert!(
+        boundary
+            .invoke(MethodId::ExecuteCommand, &second_goal)
+            .is_err()
+    );
     assert_eq!(kernel.ledger_counts().unwrap(), first_counts);
 
     let conflict_request = request_bytes(

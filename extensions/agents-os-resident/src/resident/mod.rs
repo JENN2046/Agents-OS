@@ -7,7 +7,7 @@ use unicode_normalization::UnicodeNormalization;
 
 use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
-use crate::ledger::recovery::LedgerCounts;
+use crate::ledger::recovery::{IntegratedWitness, LedgerCounts};
 use crate::ledger::replay::{
     OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
@@ -394,6 +394,16 @@ impl ResidentKernel {
             .terminal_synthetic_validation(intake, fault)
     }
 
+    pub fn terminal_synthetic_goal_plan_intake(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_synthetic_goal_plan(intake)
+    }
+
     pub fn terminal_synthetic_completion_intake(
         &self,
         intake: TerminalValidationCompletionIntake,
@@ -410,6 +420,13 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .counts()
+    }
+
+    pub fn integrated_witness(&self) -> Result<IntegratedWitness, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .integrated_witness()
     }
 
     pub fn assert_current_thread_is_ledger_owner(&self) -> Result<(), ResidentError> {

@@ -6,6 +6,7 @@ use crate::canonical::fingerprint::sha256_hex;
 use crate::canonical::jcs::canonicalize_json;
 use crate::reducers::command_intake::{COMMAND_TYPE_IDS, command_schema_fingerprint};
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
+use crate::reducers::goal_plan::{SYNTHETIC_GOAL_REF, SYNTHETIC_GOAL_REVISION};
 use crate::reducers::task_completion::{
     CompletionInputs, CompletionResult, QuiescenceCounts, reduce_completion,
 };
@@ -119,6 +120,77 @@ pub struct TerminalValidationCompletionIntake {
 pub enum TerminalValidationCompletionObservation {
     FirstTerminal,
     Replayed { response_bytes: Vec<u8> },
+}
+
+/// Atomically records the fixed F1-shaped synthetic Goal, success criteria,
+/// Plan revision, and exact three-Task membership.  The four facts share one
+/// Event and are never runtime-usable.
+pub fn terminal_synthetic_goal_plan(
+    connection: &mut Connection,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<TerminalValidationCompletionObservation, LedgerError> {
+    validate_committed_synthetic_intake(
+        intake,
+        "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS",
+        "GOAL_AND_TASKS_CREATED_SYNTHETIC",
+    )?;
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    super::schema::verify_schema(&transaction)?;
+    verify_registry(&transaction)?;
+    if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
+        transaction.commit()?;
+        return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
+    }
+
+    let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
+    let material = crate::reducers::goal_plan::synthetic_material(event_sequence)?;
+    for fact in &material.facts {
+        require_pointer_absent(&transaction, fact.kind, fact.logical_id)?;
+    }
+    insert_committed_intake(&transaction, intake, event_sequence)?;
+    for fact in &material.facts {
+        insert_genesis_fact(
+            &transaction,
+            fact.kind,
+            fact.logical_id,
+            fact.fact_ref,
+            SYNTHETIC_GOAL_REF,
+            SYNTHETIC_GOAL_REVISION,
+            &fact.canonical_bytes,
+            &fact.fingerprint,
+            event_sequence,
+        )?;
+        insert_genesis_pointer(
+            &transaction,
+            fact.kind,
+            fact.logical_id,
+            fact.fact_ref,
+            &fact.fingerprint,
+            event_sequence,
+        )?;
+    }
+    let event_kind = "F1_SYNTHETIC_GOAL_AND_TASKS_CREATED";
+    let event_bytes = event_bytes(
+        event_sequence,
+        event_kind,
+        SYNTHETIC_GOAL_REF,
+        &intake.command_id,
+    )?;
+    insert_event(
+        &transaction,
+        event_sequence,
+        "event:f1-goal-plan:SYNTHETIC_TEST:m0a",
+        event_kind,
+        SYNTHETIC_GOAL_REF,
+        SYNTHETIC_GOAL_REVISION,
+        &intake.command_id,
+        &event_bytes,
+        &predecessor_event_fingerprint,
+    )?;
+    insert_committed_replay(&transaction, intake)?;
+    require_no_foreign_key_violations(&transaction, "WP7 Goal/Task materialization")?;
+    transaction.commit()?;
+    Ok(TerminalValidationCompletionObservation::FirstTerminal)
 }
 
 pub fn ensure_closed_synthetic_registry(connection: &mut Connection) -> Result<(), LedgerError> {
@@ -503,7 +575,11 @@ pub fn terminal_synthetic_validation(
     intake: &TerminalValidationCompletionIntake,
     fault: ValidationCompletionFault,
 ) -> Result<TerminalValidationCompletionObservation, LedgerError> {
-    validate_validation_completion_intake(intake, "M0_SYNTHETIC_RECORD_VALIDATION")?;
+    validate_committed_synthetic_intake(
+        intake,
+        "M0_SYNTHETIC_RECORD_VALIDATION",
+        "VALIDATION_CURRENT_DECISION_RECORDED",
+    )?;
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     super::schema::verify_schema(&transaction)?;
     verify_registry(&transaction)?;
@@ -596,7 +672,11 @@ pub fn terminal_synthetic_completion(
     intake: &TerminalValidationCompletionIntake,
     fault: ValidationCompletionFault,
 ) -> Result<TerminalValidationCompletionObservation, LedgerError> {
-    validate_validation_completion_intake(intake, "M0_SYNTHETIC_COMPLETE_TASK")?;
+    validate_committed_synthetic_intake(
+        intake,
+        "M0_SYNTHETIC_COMPLETE_TASK",
+        "TASK_COMPLETED_SYNTHETIC",
+    )?;
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     super::schema::verify_schema(&transaction)?;
     verify_registry(&transaction)?;
@@ -751,9 +831,10 @@ struct CurrentFact {
 
 type CurrentFactRow = (i64, String, String, i64, Vec<u8>, String, i64);
 
-fn validate_validation_completion_intake(
+fn validate_committed_synthetic_intake(
     intake: &TerminalValidationCompletionIntake,
     expected_type: &str,
+    expected_code: &str,
 ) -> Result<(), LedgerError> {
     validate_ref(&intake.command_id)?;
     validate_ref(&intake.command_type_id)?;
@@ -770,20 +851,20 @@ fn validate_validation_completion_intake(
         || sha256_hex(&intake.response_bytes) != intake.response_fingerprint
     {
         return Err(LedgerError::InvalidInput(
-            "synthetic validation/completion intake is not the exact canonical WP6 shape",
+            "synthetic committed intake is not the exact canonical M0-A shape",
         ));
     }
     let request: serde_json::Value = serde_json::from_slice(&intake.request_bytes)
-        .map_err(|_| LedgerError::InvalidInput("WP6 request is not JSON"))?;
+        .map_err(|_| LedgerError::InvalidInput("M0-A request is not JSON"))?;
     let embedded_command = request
         .get("payload")
         .and_then(|value| value.get("canonical_command"))
         .ok_or(LedgerError::InvalidInput(
-            "WP6 request does not contain the canonical Command",
+            "M0-A request does not contain the canonical Command",
         ))?;
     let embedded_command_bytes =
         canonicalize_json(&serde_json::to_vec(embedded_command).map_err(|_| {
-            LedgerError::InvalidInput("WP6 embedded Command serialization failed")
+            LedgerError::InvalidInput("M0-A embedded Command serialization failed")
         })?)?;
     if request.get("method_id").and_then(serde_json::Value::as_str) != Some("execute_command")
         || request
@@ -801,16 +882,11 @@ fn validate_validation_completion_intake(
             != Some(expected_type)
     {
         return Err(LedgerError::InvalidInput(
-            "WP6 request and canonical Command are not exactly bound",
+            "M0-A request and canonical Command are not exactly bound",
         ));
     }
     let response: serde_json::Value = serde_json::from_slice(&intake.response_bytes)
-        .map_err(|_| LedgerError::InvalidInput("WP6 response is not JSON"))?;
-    let expected_code = if expected_type == "M0_SYNTHETIC_RECORD_VALIDATION" {
-        "VALIDATION_CURRENT_DECISION_RECORDED"
-    } else {
-        "TASK_COMPLETED_SYNTHETIC"
-    };
+        .map_err(|_| LedgerError::InvalidInput("M0-A response is not JSON"))?;
     if response
         .get("disposition")
         .and_then(serde_json::Value::as_str)
@@ -831,7 +907,7 @@ fn validate_validation_completion_intake(
             != Some(false)
     {
         return Err(LedgerError::InvalidInput(
-            "WP6 response is not the exact committed runtime-unusable result",
+            "M0-A response is not the exact committed runtime-unusable result",
         ));
     }
     Ok(())

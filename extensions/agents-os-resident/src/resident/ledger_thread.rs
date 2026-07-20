@@ -7,7 +7,7 @@ use std::time::Duration;
 
 use rusqlite::Connection;
 
-use crate::ledger::recovery::{self, LedgerCounts};
+use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts};
 use crate::ledger::replay::{
     self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
@@ -56,6 +56,10 @@ enum LedgerCommand {
         fault: OutboxEnqueueFault,
         response: Sender<Result<TerminalOutboxObservation, String>>,
     },
+    TerminalSyntheticGoalPlan {
+        intake: TerminalValidationCompletionIntake,
+        response: Sender<Result<TerminalValidationCompletionObservation, String>>,
+    },
     ResolveSyntheticOutbox {
         intent_ref: String,
         response: Sender<Result<Option<SyntheticOutboxIntent>, String>>,
@@ -71,6 +75,7 @@ enum LedgerCommand {
         response: Sender<Result<TerminalValidationCompletionObservation, String>>,
     },
     Counts(Sender<Result<LedgerCounts, String>>),
+    IntegratedWitness(Sender<Result<IntegratedWitness, String>>),
     Shutdown(Sender<()>),
 }
 
@@ -181,6 +186,13 @@ impl LedgerThread {
         })
     }
 
+    pub(super) fn terminal_synthetic_goal_plan(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalSyntheticGoalPlan { intake, response })
+    }
+
     pub(super) fn resolve_synthetic_outbox(
         &self,
         intent_ref: String,
@@ -217,6 +229,10 @@ impl LedgerThread {
 
     pub(super) fn counts(&self) -> Result<LedgerCounts, ResidentError> {
         self.request(LedgerCommand::Counts)
+    }
+
+    pub(super) fn integrated_witness(&self) -> Result<IntegratedWitness, ResidentError> {
+        self.request(LedgerCommand::IntegratedWitness)
     }
 
     fn request<T>(
@@ -355,6 +371,12 @@ fn run(
                         .map_err(|error| error.to_string()),
                 );
             }
+            LedgerCommand::TerminalSyntheticGoalPlan { intake, response } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_goal_plan(&mut connection, &intake)
+                        .map_err(|error| error.to_string()),
+                );
+            }
             LedgerCommand::TerminalSyntheticValidation {
                 intake,
                 fault,
@@ -379,6 +401,13 @@ fn run(
                 let result = schema::verify_schema(&connection)
                     .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
                     .and_then(|_| recovery::counts(&connection))
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
+            }
+            LedgerCommand::IntegratedWitness(response) => {
+                let result = schema::verify_schema(&connection)
+                    .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
+                    .and_then(|_| recovery::integrated_witness(&connection))
                     .map_err(|error| error.to_string());
                 let _ = response.send(result);
             }

@@ -3,6 +3,8 @@ use agents_os_resident::reducers::command_intake::{submission_value, validate_su
 use agents_os_resident::resident::{ResidentKernel, ResidentKernelConfig, SyntheticOwnership};
 use serde_json::json;
 
+use agents_os_resident::ledger::recovery::IntegratedWitness;
+
 fn kernel(root: &std::path::Path) -> ResidentKernel {
     let ownership = SyntheticOwnership::genesis(
         "incarnation:SYNTHETIC_TEST:wp5-boundary",
@@ -278,4 +280,115 @@ fn wp6_completion_is_blocked_by_unresolved_synthetic_effect() {
     assert_eq!(kernel.ledger_counts().unwrap(), before);
     assert_eq!(before.task_completions, 0);
     kernel.shutdown().expect("shutdown");
+}
+
+fn integrated_command(command_id: &str, command_type: &str) -> Vec<u8> {
+    request_bytes(
+        MethodId::ExecuteCommand,
+        command_id,
+        submission_value(command_id, command_type).expect("fixed submission"),
+    )
+    .expect("fixed request")
+}
+
+fn run_integrated_clean_and_restart(root: &std::path::Path) -> IntegratedWitness {
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:wp7-integrated",
+        b"wp7-integrated-nonce",
+    )
+    .expect("ownership");
+    let requests = [
+        integrated_command(
+            "command:SYNTHETIC_TEST:wp7-goal-plan",
+            "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS",
+        ),
+        integrated_command(
+            "command:SYNTHETIC_TEST:wp7-validation",
+            "M0_SYNTHETIC_RECORD_VALIDATION",
+        ),
+        integrated_command(
+            "command:SYNTHETIC_TEST:wp7-completion",
+            "M0_SYNTHETIC_COMPLETE_TASK",
+        ),
+        integrated_command(
+            "command:SYNTHETIC_TEST:wp7-effect-intent",
+            "M0_SYNTHETIC_ENQUEUE_MOCK_EFFECT",
+        ),
+    ];
+
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root, ownership.clone()))
+        .expect("first kernel");
+    kernel.initialize_ledger_v1().expect("ledger v1");
+    let first_responses = {
+        let boundary = CommandBoundary::synthetic(&kernel);
+        requests
+            .iter()
+            .map(|request| {
+                boundary
+                    .invoke(MethodId::ExecuteCommand, request)
+                    .expect("first integrated command")
+                    .canonical_bytes
+            })
+            .collect::<Vec<_>>()
+    };
+    let first_witness = kernel.integrated_witness().expect("first root witness");
+    let first_counts = kernel.ledger_counts().expect("first counts");
+    assert_eq!(first_witness.synthetic_goal_count, 1);
+    assert_eq!(first_witness.synthetic_task_count, 3);
+    assert_eq!(first_witness.mock_effect_count, 1);
+    assert_eq!(first_witness.external_call_count, 0);
+    assert_eq!(first_witness.real_occurrence_count, 0);
+    assert!(!first_witness.runtime_usable);
+    kernel.shutdown().expect("first shutdown");
+
+    let restarted = ResidentKernel::start(ResidentKernelConfig::synthetic(root, ownership))
+        .expect("restarted kernel");
+    restarted.initialize_ledger_v1().expect("existing ledger");
+    let replayed_responses = {
+        let boundary = CommandBoundary::synthetic(&restarted);
+        requests
+            .iter()
+            .map(|request| {
+                boundary
+                    .invoke(MethodId::ExecuteCommand, request)
+                    .expect("restart replay")
+                    .canonical_bytes
+            })
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(replayed_responses, first_responses);
+    assert_eq!(
+        restarted.ledger_counts().expect("restart counts"),
+        first_counts
+    );
+    assert_eq!(
+        restarted.integrated_witness().expect("restart root"),
+        first_witness
+    );
+    restarted.shutdown().expect("restart shutdown");
+    first_witness
+}
+
+#[test]
+fn wp7_two_clean_runs_are_byte_identical_and_restart_replay_is_zero_addition() {
+    let first_root = tempfile::tempdir().expect("first temporary synthetic root");
+    let second_root = tempfile::tempdir().expect("second temporary synthetic root");
+    let first = run_integrated_clean_and_restart(first_root.path());
+    let second = run_integrated_clean_and_restart(second_root.path());
+    assert_eq!(first.canonical_bytes, second.canonical_bytes);
+    assert_eq!(first.root_fingerprint, second.root_fingerprint);
+    assert_eq!(first.event_fingerprints, second.event_fingerprints);
+    assert_eq!(
+        first.root_fingerprint,
+        "0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5"
+    );
+    assert_eq!(
+        first.event_fingerprints,
+        [
+            "2bb3f4d3bb3db285e23ec280b5f4449a25d01f95519c4e22f795dc10aefa1d37",
+            "195f795e77e12409f70db6481ec868f6ed0eab4b59de2c257adebacefd372982",
+            "cc5ccfda25026d4b484616b2649b2ec7e6352f240bef06526460b404ff8b7881",
+            "4bdb5f9f461f935bd562b0b0a927b4bda0d0eafaf4f5ce309f841e37b2c85686",
+        ]
+    );
 }
