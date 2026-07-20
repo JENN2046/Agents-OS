@@ -4456,6 +4456,9 @@ Phase_5A_plan_independent_review: control-plane/registry/reviews/2026-07-20-yell
 Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
 Phase_5A_plan_freeze_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml
 Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.4.md
+active_work_queue_sha256: 61f14d1df836e1786340be02c5beb8ecf15bb4a3b4b2028d6b719e326ef9fd62
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.4.md
 Phase_5A_plan_accepted: true
 Phase_5A_plan_frozen: true
 Phase_5A_plan_revisions_stopped: true
