@@ -380,7 +380,7 @@ fn wp7_two_clean_runs_are_byte_identical_and_restart_replay_is_zero_addition() {
     assert_eq!(first.event_fingerprints, second.event_fingerprints);
     assert_eq!(
         first.root_fingerprint,
-        "15a24bde4885aba2663325b47f8772f8782e6b7114787d5bb831fec65d1102d5"
+        "fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650"
     );
     assert_eq!(
         first.event_fingerprints,

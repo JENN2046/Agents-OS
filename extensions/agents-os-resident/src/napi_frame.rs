@@ -24,11 +24,11 @@ pub const ACK_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.acknowledge-outbox-reque
 pub const RECONCILE_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.reconcile-request.v0.1";
 pub const RESULT_SCHEMA_REF: &str = "agents-os.m0a.boundary-result.v0.1";
 
-const COMMAND_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["authentication_assertion","canonical_command"],"type":"object"}"#;
+const COMMAND_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"authentication_assertion":{"type":"object"},"canonical_command":{"type":"object"}},"required":["authentication_assertion","canonical_command"],"type":"object"}"#;
 const QUERY_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"environment":{"const":"SYNTHETIC_TEST"},"query_id":{"const":"LEDGER_COUNTS"}},"required":["environment","query_id"],"type":"object"}"#;
-const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_fence_generation","effect_scope_fingerprint","environment","expected_previous_claim_epoch","fence_currentness_assessment_fingerprint","fence_currentness_assessment_ref","fence_currentness_result","host_authentication_assessment_fingerprint","host_authentication_assessment_ref","host_authentication_result","host_fence_generation","outbox_intent_ref","permit_currentness_assessment_fingerprint","permit_currentness_assessment_ref","permit_currentness_result","task_fence_generation","trusted_time_utc_ms"]}"#;
-const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"]}"#;
-const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["environment","observed_at_utc_ms","outbox_intent_ref"]}"#;
+const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"effect_fence_generation":{"minimum":0,"type":"integer"},"effect_scope_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"environment":{"const":"SYNTHETIC_TEST"},"expected_previous_claim_epoch":{"minimum":0,"type":"integer"},"fence_currentness_assessment_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"fence_currentness_assessment_ref":{"minLength":1,"type":"string"},"fence_currentness_result":{"enum":["CURRENT_ACCEPTED","REJECTED","INDETERMINATE"]},"host_authentication_assessment_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"host_authentication_assessment_ref":{"minLength":1,"type":"string"},"host_authentication_result":{"enum":["CURRENT_ACCEPTED","REJECTED","INDETERMINATE"]},"host_fence_generation":{"minimum":0,"type":"integer"},"outbox_intent_ref":{"minLength":1,"type":"string"},"permit_currentness_assessment_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"permit_currentness_assessment_ref":{"minLength":1,"type":"string"},"permit_currentness_result":{"enum":["CURRENT_ACCEPTED","REJECTED","INDETERMINATE"]},"task_fence_generation":{"minimum":0,"type":"integer"},"trusted_time_utc_ms":{"minimum":0,"type":"integer"}},"required":["effect_fence_generation","effect_scope_fingerprint","environment","expected_previous_claim_epoch","fence_currentness_assessment_fingerprint","fence_currentness_assessment_ref","fence_currentness_result","host_authentication_assessment_fingerprint","host_authentication_assessment_ref","host_authentication_result","host_fence_generation","outbox_intent_ref","permit_currentness_assessment_fingerprint","permit_currentness_assessment_ref","permit_currentness_result","task_fence_generation","trusted_time_utc_ms"],"type":"object"}"#;
+const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"effect_status":{"enum":["ACKED_ONLY","SUCCEEDED","FAILED","UNKNOWN","NOT_EXECUTED"]},"environment":{"const":"SYNTHETIC_TEST"},"outbox_intent_ref":{"minLength":1,"type":"string"},"receipt_id":{"minLength":1,"type":"string"},"receipt_kind":{"enum":["TRANSPORT_ACK","EFFECT_SUCCEEDED","EFFECT_FAILED","EFFECT_STATUS_UNKNOWN","EFFECT_QUERY_RESULT"]},"source_id":{"minLength":1,"type":"string"}},"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"],"type":"object"}"#;
+const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"environment":{"const":"SYNTHETIC_TEST"},"observed_at_utc_ms":{"minimum":0,"type":"integer"},"outbox_intent_ref":{"minLength":1,"type":"string"}},"required":["environment","observed_at_utc_ms","outbox_intent_ref"],"type":"object"}"#;
 const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"},"task_completions":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","GOAL_AND_TASKS_CREATED_SYNTHETIC","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE","TASK_COMPLETED_SYNTHETIC","VALIDATION_CURRENT_DECISION_RECORDED"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -67,18 +67,17 @@ impl MethodId {
     }
 
     fn request_schema(self) -> (&'static str, String) {
+        let (schema_ref, schema) = self.request_schema_document();
+        (schema_ref, sha256_hex(schema))
+    }
+
+    fn request_schema_document(self) -> (&'static str, &'static [u8]) {
         match self {
-            Self::ExecuteCommand => (
-                COMMAND_REQUEST_SCHEMA_REF,
-                sha256_hex(COMMAND_REQUEST_SCHEMA),
-            ),
-            Self::ExecuteQuery => (QUERY_REQUEST_SCHEMA_REF, sha256_hex(QUERY_REQUEST_SCHEMA)),
-            Self::ClaimOutbox => (CLAIM_REQUEST_SCHEMA_REF, sha256_hex(CLAIM_REQUEST_SCHEMA)),
-            Self::AcknowledgeOutbox => (ACK_REQUEST_SCHEMA_REF, sha256_hex(ACK_REQUEST_SCHEMA)),
-            Self::Reconcile => (
-                RECONCILE_REQUEST_SCHEMA_REF,
-                sha256_hex(RECONCILE_REQUEST_SCHEMA),
-            ),
+            Self::ExecuteCommand => (COMMAND_REQUEST_SCHEMA_REF, COMMAND_REQUEST_SCHEMA),
+            Self::ExecuteQuery => (QUERY_REQUEST_SCHEMA_REF, QUERY_REQUEST_SCHEMA),
+            Self::ClaimOutbox => (CLAIM_REQUEST_SCHEMA_REF, CLAIM_REQUEST_SCHEMA),
+            Self::AcknowledgeOutbox => (ACK_REQUEST_SCHEMA_REF, ACK_REQUEST_SCHEMA),
+            Self::Reconcile => (RECONCILE_REQUEST_SCHEMA_REF, RECONCILE_REQUEST_SCHEMA),
         }
     }
 }
@@ -702,6 +701,94 @@ mod tests {
     use super::*;
     use crate::reducers::command_intake::{COMMAND_TYPE_IDS, submission_value};
 
+    fn valid_payload(method: MethodId, request_id: &str) -> Value {
+        match method {
+            MethodId::ExecuteCommand => submission_value(request_id, COMMAND_TYPE_IDS[0]).unwrap(),
+            MethodId::ExecuteQuery => {
+                json!({"environment":"SYNTHETIC_TEST","query_id":"LEDGER_COUNTS"})
+            }
+            MethodId::ClaimOutbox => json!({
+                "effect_fence_generation":1,
+                "effect_scope_fingerprint":"d".repeat(64),
+                "environment":"SYNTHETIC_TEST",
+                "expected_previous_claim_epoch":0,
+                "fence_currentness_assessment_fingerprint":"a".repeat(64),
+                "fence_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:fence",
+                "fence_currentness_result":"CURRENT_ACCEPTED",
+                "host_authentication_assessment_fingerprint":"b".repeat(64),
+                "host_authentication_assessment_ref":"assessment:SYNTHETIC_TEST:host",
+                "host_authentication_result":"CURRENT_ACCEPTED",
+                "host_fence_generation":1,
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                "permit_currentness_assessment_fingerprint":"c".repeat(64),
+                "permit_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:permit",
+                "permit_currentness_result":"CURRENT_ACCEPTED",
+                "task_fence_generation":1,
+                "trusted_time_utc_ms":1
+            }),
+            MethodId::AcknowledgeOutbox => json!({
+                "effect_status":"UNKNOWN",
+                "environment":"SYNTHETIC_TEST",
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
+                "receipt_id":"receipt:SYNTHETIC_TEST:missing",
+                "receipt_kind":"EFFECT_STATUS_UNKNOWN",
+                "source_id":"source:SYNTHETIC_TEST:missing"
+            }),
+            MethodId::Reconcile => json!({
+                "environment":"SYNTHETIC_TEST",
+                "observed_at_utc_ms":1,
+                "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing"
+            }),
+        }
+    }
+
+    fn assert_schema_accepts_known_payload(schema_bytes: &[u8], payload: &Value) {
+        let schema: Value = serde_json::from_slice(schema_bytes).expect("schema JSON");
+        assert_eq!(schema["type"], "object");
+        assert_eq!(schema["additionalProperties"], false);
+        let properties = schema["properties"].as_object().expect("properties");
+        let payload = payload.as_object().expect("payload object");
+        let mut property_names = properties.keys().collect::<Vec<_>>();
+        property_names.sort();
+        let mut payload_names = payload.keys().collect::<Vec<_>>();
+        payload_names.sort();
+        assert_eq!(property_names, payload_names);
+        let required = schema["required"].as_array().expect("required");
+        assert_eq!(required.len(), payload.len());
+        for (name, value) in payload {
+            assert!(required.iter().any(|required| required == name));
+            let property = &properties[name];
+            if let Some(expected) = property.get("const") {
+                assert_eq!(value, expected);
+            }
+            if let Some(allowed) = property.get("enum").and_then(Value::as_array) {
+                assert!(allowed.contains(value));
+            }
+            match property.get("type").and_then(Value::as_str) {
+                Some("object") => assert!(value.is_object()),
+                Some("string") => assert!(value.is_string()),
+                Some("integer") => assert!(value.as_i64().is_some()),
+                None => {}
+                other => panic!("unsupported schema type in test: {other:?}"),
+            }
+            if property.get("minimum").is_some() {
+                assert!(value.as_i64().expect("integer") >= 0);
+            }
+            if property.get("minLength").is_some() {
+                assert!(!value.as_str().expect("string").is_empty());
+            }
+            if property.get("pattern").is_some() {
+                let value = value.as_str().expect("hash string");
+                assert_eq!(value.len(), 64);
+                assert!(
+                    value
+                        .bytes()
+                        .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+                );
+            }
+        }
+    }
+
     #[test]
     fn request_frames_are_canonical_closed_and_method_bound() {
         let bytes = request_bytes(MethodId::Reconcile, "request:SYNTHETIC_TEST:1", json!({}))
@@ -724,48 +811,9 @@ mod tests {
     fn inactive_boundary_has_exactly_five_methods_and_never_becomes_runtime_usable() {
         let boundary = CommandBoundary::inactive();
         for method in MethodId::ALL {
-            let payload = match method {
-                MethodId::ExecuteCommand => {
-                    submission_value("command:SYNTHETIC_TEST:inactive", COMMAND_TYPE_IDS[0])
-                        .unwrap()
-                }
-                MethodId::ExecuteQuery => {
-                    json!({"environment":"SYNTHETIC_TEST","query_id":"LEDGER_COUNTS"})
-                }
-                MethodId::ClaimOutbox => json!({
-                    "effect_fence_generation":1,
-                    "effect_scope_fingerprint":"d".repeat(64),
-                    "environment":"SYNTHETIC_TEST",
-                    "expected_previous_claim_epoch":0,
-                    "fence_currentness_assessment_fingerprint":"a".repeat(64),
-                    "fence_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:fence",
-                    "fence_currentness_result":"CURRENT_ACCEPTED",
-                    "host_authentication_assessment_fingerprint":"b".repeat(64),
-                    "host_authentication_assessment_ref":"assessment:SYNTHETIC_TEST:host",
-                    "host_authentication_result":"CURRENT_ACCEPTED",
-                    "host_fence_generation":1,
-                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
-                    "permit_currentness_assessment_fingerprint":"c".repeat(64),
-                    "permit_currentness_assessment_ref":"assessment:SYNTHETIC_TEST:permit",
-                    "permit_currentness_result":"CURRENT_ACCEPTED",
-                    "task_fence_generation":1,
-                    "trusted_time_utc_ms":1
-                }),
-                MethodId::AcknowledgeOutbox => json!({
-                    "effect_status":"UNKNOWN",
-                    "environment":"SYNTHETIC_TEST",
-                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing",
-                    "receipt_id":"receipt:SYNTHETIC_TEST:missing",
-                    "receipt_kind":"EFFECT_STATUS_UNKNOWN",
-                    "source_id":"source:SYNTHETIC_TEST:missing"
-                }),
-                MethodId::Reconcile => json!({
-                    "environment":"SYNTHETIC_TEST",
-                    "observed_at_utc_ms":1,
-                    "outbox_intent_ref":"outbox-intent:SYNTHETIC_TEST:missing"
-                }),
-            };
-            let bytes = request_bytes(method, "command:SYNTHETIC_TEST:inactive", payload).unwrap();
+            let request_id = "command:SYNTHETIC_TEST:inactive";
+            let payload = valid_payload(method, request_id);
+            let bytes = request_bytes(method, request_id, payload).unwrap();
             let response = boundary.invoke(method, &bytes).unwrap();
             assert_eq!(response.disposition, Disposition::ContractNotActive);
             let value = response.as_json_value().unwrap();
@@ -773,6 +821,17 @@ mod tests {
             assert_eq!(
                 value["result"]["low_disclosure_result_code"],
                 "CONTRACT_NOT_ACTIVE"
+            );
+        }
+    }
+
+    #[test]
+    fn advertised_payload_schemas_accept_every_known_valid_method_payload() {
+        for method in MethodId::ALL {
+            let (_, schema) = method.request_schema_document();
+            assert_schema_accepts_known_payload(
+                schema,
+                &valid_payload(method, "command:SYNTHETIC_TEST:schema"),
             );
         }
     }

@@ -55,11 +55,11 @@ WP7 activates the remaining frozen synthetic Goal/Task Command and closes the
 integrated witness without adding an interface, table, authority, or runtime
 path. One immutable Goal projection binds exactly three fixed synthetic Task
 identities. The four closed Command types then produce a deterministic
-four-Event chain, one completed validation Task, and one non-executable mock
+five-Event chain, one completed validation Task, and one non-executable mock
 effect intent. A read-only ledger projection hashes every immutable identity
 tuple and canonical byte digest into one root. Two independent clean databases
 produce the fixed root
-`15a24bde4885aba2663325b47f8772f8782e6b7114787d5bb831fec65d1102d5`;
+`fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650`;
 shutdown/restart replay returns the original four response byte strings with
 zero added rows. The mock-effect count denotes the synthetic nonauthority
 intent only: external call, Host dispatch, provider, network, real Task,
