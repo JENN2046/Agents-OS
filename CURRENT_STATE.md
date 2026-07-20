@@ -5138,6 +5138,42 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
 
+## Phase 5A M0-A PR #21 Exact WP5 Replay Finding Closed (2026-07-21)
+
+The fresh Codex review of `df1f9d7c263040e991b9911aa7a1941e1793ed22`
+found that the WP5 replay branch accepted stored response bytes that were
+canonical and self-hashing but not equal to the deterministic intake response.
+The branch now requires the exact stored request fingerprint, response
+fingerprint and response bytes before replay. The frozen Plan R1-R8 subjects
+remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 7/7
+corrected_source_commit: 369fa92e168508b71e03158a27bd8598a7aeb385
+corrected_package_manifest_commit: 8cd1e78a6e7b788f3461fd0f66d55a86b59af55d
+Phase_5A_M0A_content_tree_sha256: 4c8b3cba4ce23e018c1b79a2fd8a221b48af18b6961c07f629c74e3a662a909d
+Phase_5A_M0A_package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.6.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: ecf25f12caaefd20a48065673747f3533fe663218deb201f790ef483acb69e42
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.2.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
 ## Phase 5A M0-A PR #21 Pending Inbox Finding Closed (2026-07-21)
 
 The fresh Codex review of `4c588c75fb3046593861a35929ddc55ba2667e13`
