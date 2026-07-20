@@ -5358,3 +5358,36 @@ private_raw_memory_access_authorized: false
 provider_sensing_or_real_effect_authorized: false
 next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_START_DECISION
 ```
+
+## Phase 5B M0-B Plan Closure Started (2026-07-21)
+
+Jenn explicitly started Phase 5B. The current authorized surface is the
+implementation plan and build profile closure for the M0 Home-to-Action
+Boundary. Phase 5B implementation remains outside the current authority.
+
+```yaml
+Phase_5A_M0A_durability_complete: true
+Phase_5A_main_commit: 1b604c6ad5a3a6b225ce2ae8ff39271a7b80eaa8
+Phase_5B_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-closure-start-decision-v0.1.yaml
+Phase_5B_start_decision_sha256: 1d0aad8fdc4956f49b81fd639781a6dba87e2c00fc61c94f602301645dbe1fc0
+Phase_5B_start_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-closure-start-v0.1.md
+Phase_5B_start_receipt_sha256: 78000c6b12f33243a63117dbc7ea87cc44f2b443d705f1209409566ca856de7b
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.4.md
+active_work_queue_sha256: 25e76138ecd09ad2bd2a31daf3ed9d5e13f116097b9ccf7d96841e38e6caadd0
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.4.md
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_plan_status: M0B_PLAN_R1_AUTHOR_CONSTRUCTION_ACTIVE
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+current_work_package: PHASE_5B_M0B_PLAN_R1_AUTHOR_PACKAGE
+next_gate: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```

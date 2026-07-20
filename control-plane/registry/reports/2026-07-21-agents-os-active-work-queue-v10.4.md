@@ -1,0 +1,101 @@
+# AGENTS OS Active Work Queue v10.4
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.3.md`
+
+## Current Facts
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: M0A_IMPLEMENTATION_DURABLE_ON_MAIN
+Phase_5A_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
+Phase_5A_implementation_started: true
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+Phase_5A_M0A_Git_objects_on_main: true
+Phase_5A_M0A_mainline_integrated: true
+Phase_5A_M0A_durability_complete: true
+Phase_5A_main_commit: 1b604c6ad5a3a6b225ce2ae8ff39271a7b80eaa8
+Phase_5B_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-closure-start-decision-v0.1.yaml
+Phase_5B_start_decision_sha256: 1d0aad8fdc4956f49b81fd639781a6dba87e2c00fc61c94f602301645dbe1fc0
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_plan_status: M0B_PLAN_R1_AUTHOR_CONSTRUCTION_ACTIVE
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+current_work_package: PHASE_5B_M0B_PLAN_R1_AUTHOR_PACKAGE
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+```
+
+## NOW
+
+### NOW-001: Construct Phase 5B M0-B Plan R1 atomic author package
+
+```text
+phase=Phase_5B_M0B
+mode=PLAN_CLOSURE_ONLY
+scope=implementation_plan_build_profile_traceability_validation_privacy_profile
+upstream_inputs=F7_F8_frozen_semantics_plus_Phase_5A_M0A_durable_outputs
+evidence_profile=synthetic_sanitized_nonruntime_only
+requires_jenn_decision=false
+execution_authorized=false
+automatic_plan_freeze=forbidden
+automatic_implementation_start=forbidden
+```
+
+Create the four-subject plan bundle, deterministic author evidence, self-review
+and hash-bound independent-review package. Preserve all frozen inputs and stop
+at Fresh Full Atomic Independent Review.
+
+## NEXT
+
+```text
+author_package_fixed=PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+independent_PASS_NO_BLOCKER=prepare_Jenn_only_atomic_plan_freeze_decision_surface
+independent_BLOCK=record_findings_and_require_Jenn_decision_for_narrow_amendment
+plan_frozen_plus_new_Jenn_decision=implementation_may_start_only_within_that_exact_scope
+```
+
+## BLOCKED
+
+```text
+automatic_plan_acceptance_or_freeze=forbidden
+automatic_Phase_5B_implementation_start=forbidden
+modify_F1_through_F8_or_Phase_5A_frozen_bytes=forbidden
+upstream_authority_recomputation=forbidden
+second_permission_identity_Task_Command_validation_or_effect_authority=forbidden
+Rust_JavaScript_NAPI_SQL_or_plugin_source_change=forbidden
+database_creation_or_migration=forbidden
+VCPToolBox_core_change_start_or_plugin_enablement=forbidden
+runtime_or_service_start=forbidden
+production_authentication_or_credentials=forbidden
+private_raw_memory_or_state_private_access=forbidden
+real_Session_Home_Life_Stream_Memory_Task_Command_or_effect=forbidden
+provider_network_sensing_recording_device_or_real_effect=forbidden
+release_deploy_publish_tag=forbidden
+```
+
+## CLOSED
+
+```text
+Phase_5A_plan_R8_atomic_freeze=COMPLETE
+Phase_5A_plan_Git_durability=COMPLETE
+Jenn_Phase_5A_implementation_start_decision=ACCEPTED
+Phase_5A_WP0_WP7=PASS_COMPLETE
+Phase_5A_M0A_mainline_durability=COMPLETE
+Jenn_Phase_5B_start_decision=ACCEPTED_FOR_PLAN_CLOSURE_ONLY
+active_work_queue_v10_3=superseded_historical_bytes_preserved
+```
+
+This queue starts Phase 5B plan closure only. It does not freeze the plan or
+authorize implementation, runtime, VCPToolBox activation, database work,
+provider use, authentication, private Memory, sensing or any real effect.

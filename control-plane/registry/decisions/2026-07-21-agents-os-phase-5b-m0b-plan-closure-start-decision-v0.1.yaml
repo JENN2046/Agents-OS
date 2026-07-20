@@ -1,0 +1,131 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-phase-5b-m0b-plan-closure-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-21T05:13:07+08:00
+effective_at: 2026-07-21T05:13:07+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5B_M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE_ONLY
+  decision_source: exact_current_conversation_instruction
+  confirmation_text_received: "启动 Phase 5B。"
+
+phase:
+  id: Phase_5B
+  name: M0 Home-to-Action Boundary
+  mode: IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+  started: true
+  implementation_started: false
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+
+prerequisites:
+  Home_domain_construction_roadmap:
+    path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+    sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+  Home_domain_construction_roadmap_acceptance:
+    path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+    sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+  Construction_Readiness_Review:
+    path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+    sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+  F7_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+  F7_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f7-r2-codex-external-independent-review.yaml
+    sha256: 79d84b9231490d61a93c88574d2e6be6ef25a128f407c9c9c81a63136fb44647
+    result: PASS_NO_BLOCKER
+  F7_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+  F8_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+  F8_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+    sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+    result: PASS_NO_BLOCKER
+  F8_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml
+    sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d
+  Phase_5A_plan_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml
+    sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+  Phase_5A_implementation_start_decision:
+    path: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-implementation-start-decision-v0.1.yaml
+    sha256: def97074d4e87931f945701d612d4bd3da4727c5a92e842ceb8aaeffef9bf7b3
+  Phase_5A_mainline_durability:
+    repository: JENN2046/Agents-OS
+    branch: main
+    main_commit: 1b604c6ad5a3a6b225ce2ae8ff39271a7b80eaa8
+    receipt_path: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-mainline-durability-closeout-v0.1.md
+    receipt_sha256: 7d2f81c6966dd0a163b5c3e3e5aabc2e242f5e9186f92fe2df6b8d694e371515
+    package_manifest_path: extensions/agents-os-resident/package-manifest.json
+    package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+
+authorized_scope:
+  - create_four_subject_M0B_implementation_plan_and_build_profile_atomic_bundle
+  - bind_F7_Home_and_F8_handoff_semantics_to_future_Phase_5B_implementation
+  - bind_Phase_5A_M0A_outputs_as_consumed_implementation_prerequisites
+  - define_synthetic_Session_content_branching_and_explicit_promotion_rules
+  - define_nonautomatic_Life_Stream_Memory_Candidate_intent_and_Command_boundaries
+  - define_low_disclosure_Ledger_references_without_private_content
+  - define_exact_F8_to_F3_authenticated_Command_seam_without_recomputing_authority
+  - define_synthetic_only_validation_privacy_replay_recovery_and_fault_injection_profile
+  - author_self_review_and_fresh_full_atomic_hash_bound_independent_review_package
+  - governance_registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+authorized_outputs:
+  - Phase_5B_M0B_Implementation_Plan
+  - Phase_5B_M0B_Build_Profile
+  - Phase_5B_M0B_Contract_Traceability_Matrix
+  - Phase_5B_M0B_Validation_Privacy_And_Fault_Injection_Profile
+  - nonindependent_author_self_review
+  - hash_bound_independent_review_manifest_and_package
+  - package_receipt_and_governance_projection
+  - Jenn_only_atomic_plan_freeze_decision_surface_after_independent_PASS
+
+hard_boundaries:
+  create_or_modify_Rust_JavaScript_NAPI_SQL_or_plugin_source: forbidden
+  create_database_or_migration: forbidden
+  modify_start_or_enable_VCPToolBox: forbidden
+  install_dependency_or_toolchain: forbidden
+  runtime_activation: forbidden
+  production_authentication_or_credentials: forbidden
+  private_raw_memory_or_state_private_access: forbidden
+  real_Session_Home_Life_Stream_Memory_Task_Command_or_effect: forbidden
+  provider_network_sensing_recording_device_or_real_effect: forbidden
+  modify_F1_through_F8_or_Phase_5A_frozen_subject_bytes: forbidden
+  second_permission_identity_Task_Command_or_effect_authority: forbidden
+  upstream_authority_recomputation: forbidden
+  automatic_plan_freeze: forbidden
+  automatic_implementation_start_after_plan_freeze: forbidden
+  tag_release_deploy_or_publish: forbidden
+
+effects:
+  Phase_5A_M0A_durability_complete: true
+  Phase_5B_started: true
+  Phase_5B_mode: PLAN_CLOSURE_ONLY
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  VCPToolBox_source_change_authorized: false
+  private_raw_memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
+
+next_gate:
+  name: PHASE_5B_M0B_PLAN_R1_AUTHOR_PACKAGE_AND_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_plan_freeze_owner: Jenn
+  implementation_start_after_freeze_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record
