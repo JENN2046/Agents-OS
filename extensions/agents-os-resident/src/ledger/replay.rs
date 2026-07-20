@@ -469,15 +469,18 @@ pub fn terminal_synthetic_outbox(
         if fingerprint != intake.request_fingerprint || bytes != intake.request_bytes {
             return Err(LedgerError::ReplayIdentityConflict);
         }
-        let stored: Option<(String, Vec<u8>, i64, i64)> = transaction
+        let stored: Option<(String, String, Vec<u8>, i64, i64)> = transaction
             .query_row(
-                "SELECT response_fingerprint,response_bytes,first_event_count,first_external_call_count FROM replay_index WHERE command_id=?1",
+                "SELECT request_fingerprint,response_fingerprint,response_bytes,first_event_count,first_external_call_count FROM replay_index WHERE command_id=?1",
                 [&intake.command_id],
-                |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+                |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?, row.get(4)?)),
             )
             .optional()?;
-        if let Some((stored_fingerprint, stored_bytes, events, calls)) = stored {
+        if let Some((stored_request, stored_fingerprint, stored_bytes, events, calls)) = stored {
             if state != "INDETERMINATE"
+                || stored_request != intake.request_fingerprint
+                || stored_fingerprint != intake.response_fingerprint
+                || stored_bytes != intake.response_bytes
                 || sha256_hex(&stored_bytes) != stored_fingerprint
                 || canonicalize_json(&stored_bytes)? != stored_bytes
                 || !(events == 0 || events == 1)

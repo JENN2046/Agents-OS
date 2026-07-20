@@ -116,7 +116,7 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
     assert_eq!(committed.delivery_receipts, 0);
 
     let replay = kernel
-        .terminal_synthetic_outbox_intake(input, OutboxEnqueueFault::None)
+        .terminal_synthetic_outbox_intake(input.clone(), OutboxEnqueueFault::None)
         .expect("lost response replay");
     assert!(matches!(
         replay,
@@ -124,6 +124,16 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
             intent: Some(_),
             ..
         }
+    ));
+    assert_eq!(kernel.ledger_counts().unwrap(), committed);
+
+    let mut changed_response = input.clone();
+    changed_response.response_bytes =
+        br#"{"disposition":"INDETERMINATE","runtime_usable":false,"x":1}"#.to_vec();
+    changed_response.response_fingerprint = sha256_hex(&changed_response.response_bytes);
+    assert!(matches!(
+        kernel.terminal_synthetic_outbox_intake(changed_response, OutboxEnqueueFault::None),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("stored WP5 replay accounting is not exact")
     ));
     assert_eq!(kernel.ledger_counts().unwrap(), committed);
 
