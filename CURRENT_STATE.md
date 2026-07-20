@@ -5103,3 +5103,37 @@ next_gate: AWAITING_JENN_SEPARATE_PHASE_5A_M0A_GIT_DELIVERY_SCOPE
 - This snapshot did not read `state-private/`.
 - This snapshot did not read secrets, tokens, cookies, provider raw responses, or private raw memory.
 - This snapshot did not start VCPToolBox services. It recorded the runtime integration contract after previous timeboxed localhost observations and the controlled local-use handoff. It did not run executor, call providers, modify auth/provider/runtime configuration, output cookies, push, deploy, publish, tag, or perform destructive cleanup.
+
+## Phase 5A M0-A PR #21 Review Corrections Closed (2026-07-21)
+
+PR #21 received two actionable Codex findings. Both are now closed locally:
+the Outbox command envelope stores the exact canonical Command tuple, and the
+inactive delivery methods report `CONTRACT_NOT_ACTIVE` consistently. The
+historical implementation closeout receipt and queue v9.6 remain immutable;
+the corrected package is rebound by a new disposition receipt and queue v9.7.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 2/2
+corrected_source_commit: 877525647f5558fb0d1b7792acda4df595a550e4
+corrected_package_manifest_commit: df968f235b3f6854494e88394c07dce84658348c
+Phase_5A_M0A_content_tree_sha256: bb59e41a54a771f62a84b2fd74dd78645056a113fe7fee8a204fd3f4bcc86104
+Phase_5A_M0A_package_manifest_sha256: 79d5f5e6f1c2654fc919c4c10b85352f1d2f5a742219034723440d0aae5622bc
+Phase_5A_M0A_integrated_root_sha256: da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.1.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 67502292c89af57efd735b84f7b964329870636643c8de4906e616c4e254797e
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.7.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
