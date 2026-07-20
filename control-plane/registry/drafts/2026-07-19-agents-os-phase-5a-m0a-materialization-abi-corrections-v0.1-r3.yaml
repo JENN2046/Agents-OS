@@ -1,0 +1,112 @@
+schema_version: agents-os.m0a-materialization-abi-corrections.v0.1
+profile_id: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R3
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+
+digest_replacement:
+  replaces_R2_installed_tree_digest_ambiguity: true
+  source_content_tree:
+    inventory: R2_planned_source_inventory_minus_package_manifest.json
+    relative_path_root: extensions/agents-os-resident
+    leaf_encoding: exact_R2_content_tree_leaf_record_encoding
+    ordering: ascending_UTF8_NFC_relative_path_bytes
+    mode_rules: exact_R2_file_policy
+    exclusions: [package-manifest.json]
+  installed_projection_tree:
+    inventory: exact_installed_copy_of_R2_planned_source_inventory_minus_package_manifest.json
+    relative_path_root: Plugin/AGENTSOSResident
+    prefix_before_leaf_encoding: stripped
+    leaf_encoding: exact_R2_content_tree_leaf_record_encoding
+    ordering: ascending_UTF8_NFC_relative_path_bytes
+    mode_rules: exact_R2_file_policy
+    exclusions: [package-manifest.json]
+  equality:
+    installed_tree_sha256_equals_content_tree_sha256: true
+    compared_preimages_must_be_byte_identical: true
+  package_manifest:
+    excluded_from_both_tree_digests: true
+    verified_separately_by: package_manifest_sha256
+    self_digest_cycle: forbidden
+  blocked_plugin_manifest:
+    included_in_both_tree_digests: true
+    verified_separately_by: blocked_plugin_manifest_sha256
+  direct_entrypoint:
+    included_in_both_tree_digests: true
+    verified_separately_by: direct_entrypoint_sha256
+
+direct_ABI_replacement:
+  VCP_manager_outer_call:
+    owner: VCPToolBox_Plugin_manager
+    signature: processToolCall(toolName, toolArgs, requestIp = null)
+    exported_by_AGENTSOSResident_index_js: false
+  plugin_module:
+    owner: extensions/agents-os-resident/index.js
+    module_system: CommonJS
+    exact_exports_in_order:
+      - initialize
+      - processToolCall
+      - shutdown
+    signatures:
+      initialize:
+        async: true
+        positional_arguments: [config, dependencies]
+        may_start_runtime: false
+      processToolCall:
+        async: true
+        positional_arguments: [args]
+        argument_count: 1
+        args_type: JSON_safe_plain_object
+        output_type: JSON_safe_plain_object
+      shutdown:
+        async: true
+        positional_arguments: []
+    forbidden_exports:
+      - processMessages
+      - processToolCall_toolName_toolArgs_requestIp
+      - systemPromptPlaceholder
+      - database_handle
+      - provider_handle
+      - start_server
+  manager_to_module_projection:
+    input: toolArgs
+    output: args
+    toolName_used_only_for_manager_plugin_selection: true
+    requestIp_forwarded_to_module: false
+    no_authority_created_by_projection: true
+  module_to_NAPI:
+    allowed_methods:
+      - execute_command
+      - execute_query
+      - claim_outbox
+      - acknowledge_outbox
+      - reconcile
+    method_selected_from_closed_synthetic_command_mapping: true
+    caller_supplied_native_method_name: forbidden
+    callbacks_executable_objects_paths_credentials_provider_handles: forbidden
+
+projection_receipt_replacement:
+  installed_tree_sha256_scope: installed_projection_tree_as_defined_above
+  content_tree_sha256_scope: source_content_tree_as_defined_above
+  package_manifest_sha256_scope: exact_package_manifest_bytes
+  blocked_plugin_manifest_sha256_scope: exact_blocked_manifest_bytes
+  direct_entrypoint_sha256_scope: exact_index_js_bytes
+  all_five_digests_required: true
+  unknown_or_mismatch: BLOCK
+
+fixed_negative_cases:
+  - include_package_manifest_in_only_one_tree
+  - retain_install_prefix_in_leaf_path
+  - change_file_mode_or_symlink_policy
+  - self_declared_installed_tree_digest
+  - export_manager_three_argument_signature_from_module
+  - forward_requestIp_into_module
+  - export_processMessages
+  - enable_plugin_manifest
+
+governance:
+  materialization_authorized: false
+  VCPToolBox_change_authorized: false
+  plugin_enablement_authorized: false
+  runtime_start_authorized: false

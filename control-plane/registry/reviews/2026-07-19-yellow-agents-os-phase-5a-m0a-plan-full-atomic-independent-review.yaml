@@ -1,0 +1,298 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-phase-5a-m0a-plan-full-atomic-independent-review-2026-07-19
+date: 2026-07-19
+
+reviewer:
+  identity: Codex_independent_subagent_phase5a_plan_review
+  independence_basis:
+    - not_the_author_run
+    - did_not_participate_in_subject_creation
+    - reviewed_fixed_ZIP_bytes_from_scratch
+    - did_not_modify_workspace_subjects_governance_or_Git
+    - author_self_review_was_read_as_evidence_only
+
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+
+result: BLOCK
+requires_R2: true
+
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  archive:
+    path: /tmp/2026-07-19-agents-os-phase-5a-m0a-plan-independent-review-package-v0.1.zip
+    declared_sha256: efdb8132a832a3ede90c3d027fa27045514b8bbb0552a94e5b8e04b801afd757
+    computed_sha256: efdb8132a832a3ede90c3d027fa27045514b8bbb0552a94e5b8e04b801afd757
+    sha256_match: true
+    entry_count: 36
+    duplicate_paths: 0
+    absolute_or_traversal_or_backslash_paths: 0
+    symlinks: 0
+    CRC: PASS
+    checksums: 35/35_MATCH
+  manifest:
+    canonical_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.manifest.yaml
+    declared_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+    computed_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+    sha256_match: true
+  archive_map:
+    entries: 32
+    manifest_inputs: 32
+    matched: 32/32
+    duplicate_roles: 0
+    duplicate_archive_paths: 0
+  full_reads:
+    subjects: 4/4
+    workspace_authority_inputs: 21/21
+    external_source_inputs: 6/6
+    author_evidence: 1/1
+    total: 32/32
+    bytes: 642338
+    lines: 15075
+  external_source_commit_reproduction:
+    repository: runtime/VCPToolBox_git_object_database_read_only
+    commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    commit_object_available: true
+    archive_files_equal_git_show: 6/6
+    working_tree_files_consumed_as_authority: false
+    VCPToolBox_files_modified_by_review: false
+
+subject_hashes:
+  implementation_plan: 40b8aa4b745d0262369bbefeac3a12367df99e56c67a62e2ba3b208404acc94f
+  exact_build_profile: e6f2d4e6fea62453a4ecb290e15f48c862a0bc55c829d26e106cae7eaf5f7868
+  contract_traceability_matrix: 85a333265336050223f01c30690e8964bd8870c815a6970ecbf8a9c6e417f612
+  validation_and_fault_injection_profile: 3ff0536cb55b44cd3fabcfac981f3aaed02ea13f125791d5ad7e1e219545858e
+  atomicity: HASH_MATCHED_BUT_SEMANTIC_FREEZE_BLOCKED
+
+fixed_commands:
+  results:
+  - id: YAML_subject_parse
+    result: PASS
+    return_code: 0
+  - id: document_registry_validation
+    result: PASS
+    return_code: 0
+    detail: 1021/1021_PASS
+  - id: federated_document_registry_validation
+    result: PASS
+    return_code: 0
+    detail: 3/3_PASS
+  - id: git_diff_check
+    result: PASS
+    return_code: 0
+  summary: 4/4_PASS
+
+independent_adversarial_review:
+  coordinated_plan_mutation_count: 24
+  declared_boundary_mutations_rejected: 24/24
+  favorable_invalid_path_count_within_explicit_declared_boundaries: 0
+  probe_results_path: /tmp/2026-07-19-phase5a-m0a-plan-independent-probes.json
+  probe_results_sha256: 8e9ccc923c24d4b63549514dc0d04bad3636298787965c97201f4abedfed12f0
+  probe_script_path: /tmp/phase5a_m0a_plan_independent_probe.py
+  probe_script_sha256: a730b401a84fe88a9d9f45f4b47b0c7f208d26994e009b96520460d566fb5e8d
+  covered_mutations:
+    - source_moved_into_VCPToolBox_core
+    - unbound_install_target
+    - enabled_plugin_manifest
+    - VCPToolBox_core_diff
+    - public_fork_push
+    - sixth_NAPI_method
+    - NAPI_path_SQL_callback_escape
+    - second_ledger_thread_or_SQLite_connection
+    - read_pool_or_JavaScript_writer
+    - production_database_or_hidden_busy_retry
+    - F1_F6_trace_row_removal
+    - F7_runtime_implementation
+    - synthetic_to_production_authority
+    - UNKNOWN_automatic_retry
+    - provider_private_memory_real_Task_occurrence
+    - automatic_implementation_start
+
+finding_details:
+  - finding_id: PHASE5A-M0A-PLAN-IR-B01
+    severity: blocker
+    title: F1_through_F6_exact_contract_traceability_cannot_be_verified_from_the_fixed_review_unit
+    affected_subject:
+      path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml
+      sections:
+        - lines_15_130_units
+        - lines_151_155_completion_definition
+    evidence:
+      - The six accepted or frozen decisions enumerate 110 F1-through-F6 acceptance subjects in total.
+      - The archive contains zero of those 110 canonical subject byte streams; decisions and selected manifests contain paths and hashes, not the normative clauses needed for traceability review.
+      - Only the F2 and F3 manifests are included. The F1, F4, F5 and F6 canonical manifests are absent from the declared authority inputs.
+      - The F5 freeze decision exposes 12 frozen semantic boundary classes, while the matrix provides four aggregate M0 behavior labels and no one-to-one clause disposition.
+      - The F6 freeze decision exposes 11 frozen semantic boundary classes, while the matrix provides three aggregate M0 behavior labels and no one-to-one clause disposition.
+      - The F4 freeze decision does not summarize its 29-subject effective semantic boundary, so its three matrix behavior labels cannot be checked against the fixed contract from this package.
+    counterexample: >-
+      An implementation can satisfy every row currently present in the matrix
+      while omitting F5 dispatch-arm/first-apply semantics or F6 requirement
+      lineage/contextual-assessment immutability. The package supplies no
+      clause-level inventory that would classify the omission as M0A_INCOMPLETE.
+    impact: >-
+      The manifest's required question that every F1-through-F6 contract has
+      code, SQL, behavior and test ownership cannot be answered from the fixed
+      bytes. Freezing this matrix would therefore freeze an unverified subset,
+      not the exact engineering scope.
+    required_correction:
+      - Bind the canonical F1-through-F6 manifests and all M0-applicable normative subject bytes into R2.
+      - Create a complete clause or closed semantic-inventory mapping with IMPLEMENT_IN_M0A or EXCLUDED_FROM_M0A dispositions.
+      - For every implemented item bind exact module, persistent row or explicit no-persistence result, reducer owner, positive test, negative test, replay test and crash test where applicable.
+
+  - finding_id: PHASE5A-M0A-PLAN-IR-B02
+    severity: blocker
+    title: The_fixed_SQLite_inventory_does_not_close_the_canonical_fact_assessment_snapshot_and_delivery_model
+    affected_subjects:
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml
+        sections:
+          - lines_110_143_sqlite
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-implementation-plan-v0.1.md
+        sections:
+          - lines_118_141_persistence_and_recovery
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml
+        sections:
+          - lines_91_130_F5_F6
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml
+        sections:
+          - lines_80_102_crash_matrix
+    evidence:
+      - The build profile freezes a closed-looking list of 15 tables but includes no goal, task, run, validation or generic immutable canonical-fact table.
+      - The plan states that assessment and snapshot rows are immutable, but neither appears in the table inventory or immutable_row_classes.
+      - No target relation or row-class contract is defined for current_fact_pointer.
+      - F5 freezes delivery attempt identity, dispatch-arm replay, stored-first accounting and first-apply eligibility, but the table inventory and crash matrix expose only outbox_intent, outbox_claim and delivery_receipt and have no dispatch-arm persistence boundary.
+      - F6 freezes Requirement and Validation Set lineage, attempt context, waiver currentness, carry-forward roots, contextual assessments and same-revision history, but the exact inventory gives them no persistent row ownership or explicit event-only encoding.
+    counterexample: >-
+      Two implementations both satisfy the listed table names: one stores all
+      omitted immutable objects as opaque Event payloads and points current_fact_pointer
+      to Event; another adds hidden assessment, snapshot, attempt and dispatch-arm
+      tables. They have materially different recovery, foreign-key and immutability
+      behavior, yet the frozen plan cannot distinguish them. If the table list is
+      exhaustive, several named plan rows are unrepresentable; if it is not
+      exhaustive, the exact schema scope is not frozen.
+    impact: >-
+      WP3, WP5 and WP6 cannot begin from one reviewable persistence contract,
+      and the requested exact engineering range is either internally incomplete
+      or open to unreviewed schema expansion.
+    required_correction:
+      - Define whether the table inventory is exhaustive.
+      - Bind every M0A canonical row class to an exact table or to a defined generic immutable-fact encoding.
+      - Freeze primary identities, predecessor/current-head bindings, immutable versus mutable columns, current-pointer target and same-transaction CAS ownership.
+      - Add explicit dispatch-arm, first-apply and F6 attempt/context/waiver/carry-forward persistence and crash-window mappings, whether as dedicated or generic rows.
+
+  - finding_id: PHASE5A-M0A-PLAN-IR-B03
+    severity: blocker
+    title: External_source_materialization_and_blocked_plugin_overlay_are_not_yet_exactly_hash_bound
+    affected_subjects:
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml
+        sections:
+          - lines_9_39_source_and_installation
+      - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-implementation-plan-v0.1.md
+        sections:
+          - lines_39_71_source_and_runtime_ownership
+          - line_80_WP0
+    evidence:
+      - The plan requires source_commit, package_manifest_sha256 and content_tree_sha256 but names no binding file or schema.
+      - No canonical tree-hash algorithm fixes path normalization, file ordering, executable bits, symlink policy, empty directories or exclusion semantics.
+      - The exact plugin-manifest.json.block payload is absent. VCPToolBox's fixed plugin contract requires at least name, pluginType, entryPoint and communication; only pluginType and protocol are fixed here.
+      - The JavaScript direct hybridservice entrypoint and lifecycle exports are not identified, so the blocked overlay cannot be reproduced or compatibility-checked from the plan.
+      - The zero-core-diff rule does not define the exact clean-worktree comparison that distinguishes the one allowed install overlay from any other untracked or modified path.
+    counterexample: >-
+      Two different copied trees can each carry three self-declared hashes and
+      a blocked manifest while using different entrypoints, file modes, symlink
+      targets or tree canonicalization. Both satisfy the current prose, but only
+      one may match the reviewed source or VCPToolBox direct-plugin contract.
+    impact: >-
+      The central external-source and upstream-trackability boundary is a policy
+      intention but not yet a reproducible engineering artifact. WP0 therefore
+      cannot be frozen as an exact materialization boundary.
+    required_correction:
+      - Freeze the external package file inventory and deterministic package-manifest schema.
+      - Freeze content-tree hashing and path, mode, symlink and exclusion rules.
+      - Include the exact blocked VCPToolBox manifest payload and direct JavaScript entrypoint/lifecycle contract.
+      - Define the clean linked-worktree core-diff command and its single allowed install-overlay path.
+
+review_question_summary:
+  all_32_declared_inputs_match_and_are_fully_read: PASS
+  four_subjects_form_one_complete_nonpartial_engineering_plan: BLOCK
+  plan_freeze_cannot_automatically_start_implementation: PASS
+  external_source_plus_in_process_plugin_model_matches_accepted_Resident_architecture: PASS_DIRECTION_ONLY_BLOCK_EXACT_MATERIALIZATION
+  source_authority_remains_outside_VCPToolBox: PASS
+  install_overlay_is_exactly_hash_bound: BLOCK
+  VCPToolBox_core_diff_zero_and_dirty_worktree_unused: PASS_AS_BOUNDARY
+  blocked_manifest_prevents_discovery_or_activation: PASS_AS_NAMING_BOUNDARY
+  five_method_NAPI_surface_closed: PASS
+  one_thread_one_connection_no_read_pool: PASS
+  SQLite_tables_transactions_and_current_pointer_cover_M0A: BLOCK
+  every_F1_through_F6_contract_has_code_SQL_behavior_and_test_ownership: BLOCK
+  F7_and_F8_phase_gate_only: PASS
+  second_permission_identity_Task_Command_or_host_authority_found: false
+  synthetic_to_production_leak_found: false
+  UNKNOWN_automatic_retry_found: false
+  toolchain_and_dependency_literals_locked: PASS_PLAN_LEVEL
+  automatic_implementation_start_found: false
+
+mandatory_counts:
+  implementation_scope_gap_count: 3
+  architecture_or_contract_conflict_count: 1
+  VCPToolBox_core_or_upstream_tracking_risk_count: 1
+  second_permission_identity_Task_Command_or_host_authority_count: 0
+  synthetic_to_production_leak_count: 0
+  NAPI_boundary_escape_count: 0
+  SQLite_boundary_escape_or_undefined_persistence_count: 1
+  crash_replay_UNKNOWN_or_completion_gap_count: 1
+  automatic_implementation_start_count: 0
+
+confirmed_safe_direction:
+  VCPToolBox_core_modification_authorized: false
+  external_Jenn_owned_source_model: preserved
+  public_fork_push_authorized: false
+  sidecar_or_network_transport_authorized: false
+  NAPI_method_count: 5
+  authoritative_SQLite_connection_count: 1
+  Rust_ledger_thread_count: 1
+  database_scope: synthetic_temporary_only
+  real_runtime_provider_memory_sensing_or_effect_occurrence: false
+  second_Jenn_implementation_decision_required: true
+
+R2_scope_limit:
+  - complete_hash_bound_F1_F6_M0A_traceability_inventory
+  - exact_SQLite_row_class_and_transaction_ownership_closure
+  - exact_external_package_materialization_and_blocked_plugin_overlay_contract
+  - update_only_the_four_plan_subjects_and_new_R2_review_evidence_required_by_these_findings
+
+forbidden_R2_expansion:
+  - Rust_or_JavaScript_implementation
+  - dependency_or_toolchain_installation
+  - database_creation
+  - VCPToolBox_core_change_or_start
+  - plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+
+governance:
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_or_push_performed: false
+
+terminal_disposition: >-
+  Integrity and explicit safety boundaries pass, but the exact F1-F6 mapping,
+  persistence ownership and external materialization boundary are not closed.
+  The plan cannot enter Jenn atomic freeze decision in its current bytes.

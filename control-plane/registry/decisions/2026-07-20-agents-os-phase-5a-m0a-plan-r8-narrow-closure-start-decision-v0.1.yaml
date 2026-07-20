@@ -1,0 +1,58 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5A_M0A_PLAN_R8_NARROW_CLOSURE_START_DECISION_V0_1
+date: 2026-07-20
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5A_M0A_PLAN_R8_STRICT_SCOPE
+authorization_basis:
+  Jenn_exact_text: 启动严格限于这两个 blocker 的 Plan R8。
+  received_in_current_session: true
+bound_inputs:
+  R7_manifest:
+    path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r7-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+  R7_independent_review:
+    path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r7-full-atomic-independent-review.yaml
+    sha256: 5daeec19f0c50e5d87df4577043b27ae447e01fe643e2aa0850ade99c104fc18
+  R7_case_results:
+    path: control-plane/registry/reviews/2026-07-20-agents-os-phase-5a-m0a-plan-r7-codex-independent-case-results.json
+    sha256: 89ab92f9312a3f75c90d1d918a9b3dc2837cb31851c5e038f26bca5871dcda3b
+  R7_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r7-finding-disposition-v0.1.yaml
+    sha256: 81a8461ca44274e54e2f90e8bd636436e01c2cb5b5f1abbe5ba9faac2242e979
+strict_scope:
+  - exact_closed_effective_boundary_key_contract
+  - exact_F3_RECOVERING_prestate_ownership_Event_binding
+required_regressions:
+  - every_effective_boundary_key_is_accepted_only_by_exact_allowlist_or_equivalent_recursive_closed_schema
+  - implementation_frozen_true_is_rejected_after_profile_inventory_and_witness_rebuild
+  - unknown_missing_added_or_renamed_boundary_keys_are_rejected_by_target_semantics
+  - RECOVERING_fact_created_event_sequence_equals_exact_ownership_Event_sequence
+  - current_pointer_updated_event_sequence_equals_exact_ownership_Event_sequence
+  - lifecycle_Event_sequence_2_substitution_is_rejected
+  - valid_sequence_1_prestate_can_atomically_append_READY_revision_2
+  - pointer_predecessor_and_rollback_regressions_remain_closed
+immutable_lineage:
+  R1_R2_R3_R4_R5_R6_R7_subjects_may_change: false
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  R7_manifest_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+stop_condition:
+  - create_R8_contract_fixture_validator_author_self_review_and_hash_bound_package
+  - stop_at_fresh_full_atomic_independent_review
+forbidden:
+  - plan_freeze
+  - implementation_start
+  - Rust_JavaScript_NAPI_or_SQLite_implementation
+  - database_file_creation_or_write
+  - dependency_installation
+  - VCPToolBox_change_start_or_plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+  - commit_push_or_merge

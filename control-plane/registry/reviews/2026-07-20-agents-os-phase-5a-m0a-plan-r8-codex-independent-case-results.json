@@ -1,0 +1,337 @@
+{
+  "schema_version": "AGENTS_OS_INDEPENDENT_CASE_RESULTS_V0_1",
+  "review_id": "PHASE_5A_M0A_PLAN_R8_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_CODEX_2026_07_20",
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE",
+  "result": "PASS_NO_BLOCKER",
+  "requires_R9": false,
+  "findings": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "favorable_invalid_path_count": 0,
+  "legal_input_over_rejection_count": 0,
+  "package_binding": {
+    "zip_filename": "2026-07-20-agents-os-phase-5a-m0a-plan-r8-independent-review-package-v0.1.zip",
+    "zip_sha256_declared": "691dd8626b8743d2c4840a3414bbd98fa63fffe72590c14c98a19dd18ebf91fc",
+    "zip_sha256_recomputed": "691dd8626b8743d2c4840a3414bbd98fa63fffe72590c14c98a19dd18ebf91fc",
+    "manifest_filename": "MANIFEST.yaml",
+    "manifest_sha256_declared": "f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3",
+    "manifest_sha256_recomputed": "f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3"
+  },
+  "package_integrity": {
+    "zip_entries": 238,
+    "crc": "PASS",
+    "unsafe_paths": 0,
+    "duplicate_archive_members": 0,
+    "symlink_members": 0,
+    "checksums_sha256": {
+      "rows": 237,
+      "malformed_rows": 0,
+      "missing_payloads": 0,
+      "hash_mismatches": 0,
+      "unlisted_payloads": 0,
+      "result": "PASS"
+    },
+    "archive_map": {
+      "input_count": 234,
+      "entries": 234,
+      "duplicate_archive_paths": 0,
+      "duplicate_manifest_paths": 0,
+      "missing_entries": 0,
+      "byte_count_mismatches": 0,
+      "sha256_mismatches": 0,
+      "result": "PASS"
+    },
+    "extracted_without_dot_git": true
+  },
+  "manifest_input_verification": {
+    "subjects": {
+      "declared": 55,
+      "sha256_matched": 55,
+      "content_bytes_read": 55
+    },
+    "authority_inputs": {
+      "declared": 171,
+      "sha256_matched": 171,
+      "content_bytes_read": 171
+    },
+    "author_evidence": {
+      "declared": 1,
+      "sha256_matched": 1,
+      "content_bytes_read": 1,
+      "used_as_review_conclusion": false
+    },
+    "external_vcptoolbox_sources": {
+      "declared": 7,
+      "sealed_content_sha256_matched": 7,
+      "declared_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+      "git_object_membership_proof": "NOT_PROVABLE_FROM_DOT_GIT_FREE_SEALED_ARCHIVE"
+    },
+    "total": {
+      "declared": 234,
+      "sha256_matched": 234,
+      "content_bytes_read": 234
+    }
+  },
+  "fixed_command_results": [
+    {
+      "id": "R5_fixed_lineage_closure",
+      "result": "PASS_NO_BLOCKER",
+      "self_test_mutations": 7
+    },
+    {
+      "id": "R6_six_finding_closure",
+      "result": "PASS_NO_BLOCKER",
+      "sqlite_cases": "13/13",
+      "fixed_case_count": 35,
+      "self_test_mutations": 11
+    },
+    {
+      "id": "R6_builder_byte_reproduction",
+      "result": "PASS",
+      "cmp": "IDENTICAL"
+    },
+    {
+      "id": "R7_two_finding_closure",
+      "result": "PASS_NO_BLOCKER",
+      "sqlite_cases": "9/9",
+      "fixed_case_count": 71,
+      "self_test_mutations": 62
+    },
+    {
+      "id": "R7_builder_byte_reproduction",
+      "result": "PASS",
+      "cmp": "IDENTICAL"
+    },
+    {
+      "id": "R8_two_finding_closure",
+      "result": "PASS_NO_BLOCKER",
+      "complete_key_path_rows": "232/232",
+      "complete_key_path_inventory_sha256": "b0e6e94a83b9ad13917abf2e9dacb8397735e89ca29c642a990a9f26a03d84fb",
+      "sqlite_cases": "13/13",
+      "fixed_case_count": 19,
+      "self_test_mutations": 6
+    },
+    {
+      "id": "R8_builder_byte_reproduction",
+      "result": "PASS",
+      "cmp": "IDENTICAL"
+    },
+    {
+      "id": "R1_R2_R3_R4_R5_R6_R7_fixed_lineage",
+      "result": "PASS_BY_DECLARED_COVERAGE",
+      "covered_by": [
+        "R5_fixed_lineage_closure",
+        "R6_six_finding_closure",
+        "R7_two_finding_closure",
+        "R8_fixed_hashes"
+      ]
+    },
+    {
+      "id": "no_trailing_whitespace_in_55_subjects",
+      "result": "PASS",
+      "subjects_scanned": 55,
+      "violations": 0
+    }
+  ],
+  "coordinated_closed_key_and_source_seal_attacks": [
+    {
+      "case": "implementation_frozen_true",
+      "mutation": "Added implementation_frozen: true to semantic_owner_R7, updated the editable sealed commitment, rebuilt the complete inventory and witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes",
+        "derived key-row count and inventory digest"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "neutral_unknown_key",
+      "mutation": "Added neutral_unknown_key: false and rebuilt editable commitment, inventory and witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes",
+        "derived key-row count and inventory digest"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "remove_runtime_usable",
+      "mutation": "Removed runtime_usable and rebuilt editable commitment, inventory and witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes",
+        "derived key-row count and inventory digest"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false,
+      "self_test_note": "The optional self-test assumes the baseline key exists and raises KeyError after validate() has already completed. Direct target validation without --self-test returned the listed semantic/immutable rejection; the exception was not accepted as evidence."
+    },
+    {
+      "case": "rename_runtime_usable",
+      "mutation": "Renamed runtime_usable to runtime_available and rebuilt editable commitment, inventory and witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes",
+        "derived key inventory digest"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false,
+      "self_test_note": "The optional self-test has the same invalid-baseline KeyError. Direct target validation without --self-test returned the listed semantic/immutable rejection; the exception was not accepted as evidence."
+    },
+    {
+      "case": "change_runtime_usable_same_path",
+      "mutation": "Changed runtime_usable from false to true and rebuilt editable commitment and witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "replace_sealed_source_commitment",
+      "mutation": "Replaced semantic_owner_R7 commitment in the R8 contract and rebuilt the witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R8 contract hash",
+        "exact sealed source commitments"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "reorder_or_replace_contract_source_alias",
+      "mutation": "Reordered and, in a separate clone, replaced source aliases in the R8 contract, then rebuilt the witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R8 contract hash",
+        "exact source alias inventory"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "fully_propagated_builder_and_alias_reorder",
+      "mutation": "Reordered source aliases in both the R8 contract and builder, recalculated the changed 232-row inventory digest, then rebuilt the witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R8 contract hash",
+        "immutable R8 builder hash",
+        "exact source alias inventory",
+        "fixed inventory digest"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    },
+    {
+      "case": "reorder_source_mapping_keys",
+      "mutation": "Reordered runtime_usable and implementation_authorized in the source bytes, updated the editable source commitment, and rebuilt the witness.",
+      "result": "BLOCK",
+      "rejection_basis": [
+        "immutable R7 source hash",
+        "immutable R8 contract hash",
+        "sealed source bytes"
+      ],
+      "witness_exact_builder_object_failure": false,
+      "probe_exception": false
+    }
+  ],
+  "independent_lifecycle_attacks": [
+    {
+      "case": "RECOVERING_fact_and_pointer_sequence_2",
+      "valid_recovering": false,
+      "commit_ready": false,
+      "result": "BLOCK"
+    },
+    {
+      "case": "RECOVERING_fact_sequence_2_pointer_sequence_1",
+      "valid_recovering": false,
+      "commit_ready": false,
+      "result": "BLOCK"
+    },
+    {
+      "case": "RECOVERING_fact_sequence_1_pointer_sequence_2",
+      "valid_recovering": false,
+      "commit_ready": false,
+      "result": "BLOCK"
+    },
+    {
+      "case": "exact_sequence_1_positive_prestate",
+      "valid_recovering": true,
+      "commit_ready": true,
+      "ready_revision": 2,
+      "exact_RECOVERING_predecessor": true,
+      "pointer": [
+        2,
+        "resident-lifecycle:resident:A:2",
+        2
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "missing_lifecycle_pointer",
+      "valid_recovering": false,
+      "commit_ready": false,
+      "result": "BLOCK"
+    },
+    {
+      "case": "noncanonical_RECOVERING_bytes",
+      "valid_recovering": false,
+      "commit_ready": false,
+      "result": "BLOCK"
+    },
+    {
+      "case": "READY_event_and_fact_rollback_before_pointer",
+      "post_rollback_current_revision": 1,
+      "post_rollback_fact_created_event_sequence": 1,
+      "post_rollback_pointer_updated_event_sequence": 1,
+      "residual_ready_event_and_fact_counts": [
+        0,
+        0
+      ],
+      "result": "PASS"
+    }
+  ],
+  "immutable_lineage_attack": {
+    "mutation": "Changed the sealed R7 independent-review manifest in an isolated clone.",
+    "result": "BLOCK",
+    "rejection_basis": "fixed hash mismatch for control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r7-atomic-independent-review-package-v0.1.manifest.yaml",
+    "probe_exception": false
+  },
+  "schema_and_non_authorization_review": {
+    "effective_tables": "18/18",
+    "r8_added_tables": [],
+    "schema_totality": "R6 inherited validator 13/13 PASS",
+    "legal_positive_prestate_over_rejected": false,
+    "database_connection": "sqlite3.connect(:memory:)",
+    "database_file_created": false,
+    "second_permission_system": false,
+    "runtime_started": false,
+    "provider_called": false,
+    "private_memory_read": false,
+    "real_effect_occurrence_count": 0,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "reviewer_actions": {
+    "workspace_modified": false,
+    "package_subjects_modified": false,
+    "manifest_modified": false,
+    "queue_registry_or_git_modified": false,
+    "runtime_database_file_provider_or_real_effect_started": false,
+    "isolated_temporary_clones_used_for_attacks": true
+  }
+}

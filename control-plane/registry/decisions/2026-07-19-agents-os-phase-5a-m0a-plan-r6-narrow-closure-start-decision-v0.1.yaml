@@ -1,0 +1,48 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5A_M0A_PLAN_R6_NARROW_CLOSURE_START_DECISION_V0_1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5A_M0A_PLAN_R6_STRICT_SCOPE
+authorization_basis:
+  Jenn_exact_text: 启动窄范围 Plan R6。
+  received_in_current_session: true
+bound_inputs:
+  R5_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R5_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r5-full-atomic-independent-review.yaml
+    sha256: 63dea5223d92cfb4c748c125f445970eb87a7e4090fd8e864d937f58b81dc92d
+  R5_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r5-finding-disposition-v0.1.yaml
+    sha256: 14b0fdd96406eaaa9501557f128946a0f415569539b308e7995e3146c959f215
+strict_scope:
+  - F5_exact_authorization_subject_and_replay_identity_binding
+  - F3_frozen_COMMIT_content_hash_tuple_and_READY_transition_validation
+  - inherited_NAPI_method_and_export_surface_consistency
+  - nonauthorization_boundary_flags_semantic_enforcement
+  - same_revision_relational_immutability
+  - duplicate_key_rejecting_structured_input_totality
+immutable_lineage:
+  R1_R2_R3_R4_R5_subjects_may_change: false
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+stop_condition:
+  - create_R6_contract_fixture_validator_author_self_review_and_hash_bound_package
+  - stop_at_fresh_full_atomic_independent_review
+forbidden:
+  - plan_freeze
+  - implementation_start
+  - Rust_JavaScript_NAPI_or_SQLite_implementation
+  - database_creation_or_write
+  - dependency_installation
+  - VCPToolBox_change_start_or_plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+  - commit_push_or_merge

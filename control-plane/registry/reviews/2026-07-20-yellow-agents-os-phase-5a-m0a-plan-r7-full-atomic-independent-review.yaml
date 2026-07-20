@@ -1,0 +1,182 @@
+schema_version: AGENTS_OS_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+review_id: PHASE_5A_M0A_PLAN_R7_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_CODEX_2026_07_20
+reviewer:
+  role: external_independent_reviewer
+  implementation_author: false
+  author_self_review_adopted_as_conclusion: false
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R7_ATOMIC_BUNDLE
+  mode: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  partial_acceptance: forbidden
+  allowed_conclusions:
+    - PASS_NO_BLOCKER
+    - BLOCK
+package_binding:
+  zip:
+    filename: 2026-07-20-agents-os-phase-5a-m0a-plan-r7-independent-review-package-v0.1.zip
+    declared_sha256: b7f421b99e031182414ab429ee6421c125be7d11865e321969940d549b06d92a
+    recomputed_sha256: b7f421b99e031182414ab429ee6421c125be7d11865e321969940d549b06d92a
+    sha256_match: true
+  manifest:
+    filename: MANIFEST.yaml
+    declared_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+    recomputed_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+    sha256_match: true
+package_integrity:
+  zip_entries: 224
+  crc: PASS
+  unsafe_paths: 0
+  duplicate_archive_members: 0
+  symlink_members: 0
+  checksums_sha256:
+    entries: 223
+    malformed_entries: 0
+    missing_payloads: 0
+    hash_mismatches: 0
+    unlisted_payloads: 0
+    result: PASS
+  archive_map:
+    input_count: 220
+    duplicate_archive_paths: 0
+    duplicate_manifest_paths: 0
+    missing_entries: 0
+    byte_count_mismatches: 0
+    sha256_mismatches: 0
+    result: PASS
+  extraction:
+    isolated_directory: /tmp/phase5a-r7-review.q17icZ
+    dot_git_present: false
+manifest_input_verification:
+  subjects:
+    declared: 49
+    sha256_matched: 49
+    content_bytes_read: 49
+  authority_inputs:
+    declared: 163
+    sha256_matched: 163
+    content_bytes_read: 163
+  author_evidence:
+    declared: 1
+    sha256_matched: 1
+    content_bytes_read: 1
+    conclusion_source: not_used
+  external_vcptoolbox_sources:
+    declared: 7
+    sealed_content_sha256_matched: 7
+    declared_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    git_object_membership_proof: unavailable_from_dot_git_free_sealed_archive
+  total:
+    declared: 220
+    sha256_matched: 220
+    content_bytes_read: 220
+fixed_commands_in_dot_git_free_extraction:
+  R5_fixed_lineage_closure:
+    result: PASS_NO_BLOCKER
+    self_test_mutations: 7
+  R6_six_finding_closure:
+    result: PASS_NO_BLOCKER
+    sqlite_cases: 13/13
+    fixed_case_count: 35
+    self_test_mutations: 11
+  R6_builder_byte_reproduction:
+    build: PASS
+    cmp: IDENTICAL
+  R7_two_finding_closure:
+    result: PASS_NO_BLOCKER
+    sqlite_cases: 9/9
+    boundary_inventory_rows: 56/56
+    boundary_inventory_sha256: f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c
+    fixed_case_count: 71
+    self_test_mutations: 62
+  R7_builder_byte_reproduction:
+    build: PASS
+    cmp: IDENTICAL
+  R1_R2_R3_R4_R5_R6_fixed_lineage:
+    result: PASS_BY_DECLARED_COVERAGE
+    covered_by:
+      - R5_fixed_lineage_closure
+      - R6_six_finding_closure
+  no_trailing_whitespace_in_49_subjects:
+    result: PASS
+    violations: 0
+independent_semantic_assessment:
+  claimed_r7_closure_1_complete_plan_only_boundary_inventory: NOT_CLOSED
+  claimed_r7_closure_2_exact_recovering_to_ready_atomic_transition: NOT_CLOSED
+candidate_A_fully_propagated_unknown_key_escape:
+  mutation:
+    source: R7_semantic_owner_profile
+    added_key: implementation_frozen
+    added_value: true
+    profile_and_witness_rebuilt: true
+  observed:
+    rebuilt_semantic_owner_profile_sha256: 32a066d301e7a700df841108bc4b818cde4333edb4db50359c516e3d10c9803a
+    implementation_frozen_in_56_row_inventory: false
+    r7_validator_result: PASS_NO_BLOCKER
+    r7_validator_errors: []
+  validator_cause:
+    unknown_boundary_classifier_only_rejects_suffixes:
+      - _authorized
+      - _usable
+      - _modified
+      - _created
+      - _enabled
+      - _called
+      - _read
+      - _started
+      - _allowed
+      - _permission
+      - _authority
+    missing_suffix: _frozen
+    r7_owner_profile_hash_is_a_fixed_hash_input: false
+  required_result: BLOCK
+  actual_result: PASS_NO_BLOCKER
+candidate_B_inherited_ownership_event_binding:
+  inherited_R5_contract:
+    source: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r5.yaml
+    path: transaction_replacements.F3_RECOVERING_startup.exact_shared_bindings
+    requirements:
+      - RECOVERING_fact.created_event_sequence_equals_ownership_Event_sequence
+      - current_pointer.updated_event_sequence_equals_ownership_Event_sequence
+  observed_r7_prestate:
+    ownership_event_sequence: 1
+    recovering_fact_created_event_sequence: 2
+    current_pointer_updated_event_sequence: 2
+    valid_recovering: true
+    commit_ready: true
+    packaged_r7_validator_result: PASS_NO_BLOCKER
+  required_result: BLOCK
+  actual_result: READY_revision_2_committed
+findings:
+  - id: PHASE5A_R7_IR_B01
+    severity: BLOCKER
+    title: Closed boundary key contract permits implementation_frozen escape
+    evidence: candidate_A_fully_propagated_unknown_key_escape
+    impact: A new effective plan-only boundary field can be set true and accepted after a complete internal profile and witness rebuild.
+    required_correction: Reject every unlisted effective boundary key by an exact allowlist or equivalent recursive closed-schema mechanism, bind the corrected source inputs, and add a fully propagated implementation_frozen regression.
+  - id: PHASE5A_R7_IR_B02
+    severity: BLOCKER
+    title: RECOVERING lifecycle provenance is not bound to the inherited ownership Event
+    evidence: candidate_B_inherited_ownership_event_binding
+    impact: READY revision 2 can be committed from a RECOVERING revision 1 prestate that violates the frozen R5 ownership-event provenance contract.
+    required_correction: Preserve or explicitly revise the inherited R5 contract. Under the present frozen lineage, require both RECOVERING fact created_event_sequence and current pointer updated_event_sequence to equal the exact ownership Event sequence before READY can commit, then add a sequence-2 negative regression.
+raw_case_results:
+  path: /tmp/2026-07-20-agents-os-phase-5a-m0a-plan-r7-codex-independent-case-results.json
+  sha256: 89ab92f9312a3f75c90d1d918a9b3dc2837cb31851c5e038f26bca5871dcda3b
+decision:
+  result: BLOCK
+  requires_followup_revision: true
+  accepted: false
+  frozen: false
+  implementation_started: false
+  partial_acceptance: false
+  rationale: Two independent, fully reproduced counterexamples invalidate both narrow R7 closure claims.
+non_actions:
+  workspace_modified: false
+  subjects_modified: false
+  manifest_modified: false
+  queue_modified: false
+  registry_modified: false
+  git_modified: false
+  implementation_or_runtime_started: false
+  database_file_created: false
+  vcptoolbox_provider_or_real_effect_started: false

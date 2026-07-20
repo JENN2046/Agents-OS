@@ -1,0 +1,340 @@
+schema_version: agents-os.m0a-exact-persistence-profile.v0.1
+profile_id: PHASE_5A_M0A_EXACT_PERSISTENCE_PROFILE_R2
+date: 2026-07-19
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+
+database_boundary:
+  inventory_is_exhaustive: true
+  table_count: 18
+  views: forbidden
+  triggers: forbidden
+  virtual_tables: forbidden
+  attached_databases: forbidden
+  hidden_tables: forbidden
+  authoritative_connections: 1
+  read_pool: forbidden
+  location: synthetic_test_temporary_directory_only
+  journal_mode: DELETE
+  synchronous: EXTRA
+  foreign_keys: true
+  begin_mode: IMMEDIATE
+  busy_retry: forbidden
+  schema_versions: [0, 1]
+
+tables_in_creation_order:
+  - schema_metadata
+  - resident_identity
+  - resident_incarnation
+  - resident_authority_epoch
+  - command_definition
+  - inbox_command
+  - command_envelope
+  - replay_index
+  - event
+  - canonical_fact
+  - current_fact_pointer
+  - outbox_intent
+  - outbox_claim
+  - delivery_attempt
+  - dispatch_arm
+  - delivery_receipt
+  - first_apply_guard
+  - task_completion
+
+exact_schema_sql: |-
+  CREATE TABLE schema_metadata (
+    singleton_id INTEGER PRIMARY KEY CHECK(singleton_id = 1),
+    schema_version INTEGER NOT NULL CHECK(schema_version IN (0,1)),
+    schema_fingerprint TEXT NOT NULL CHECK(length(schema_fingerprint) = 64)
+  ) STRICT;
+  CREATE TABLE resident_identity (
+    resident_id TEXT PRIMARY KEY,
+    identity_revision INTEGER NOT NULL CHECK(identity_revision > 0),
+    identity_fingerprint TEXT NOT NULL CHECK(length(identity_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0)
+  ) STRICT;
+  CREATE TABLE resident_incarnation (
+    incarnation_id TEXT PRIMARY KEY,
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    incarnation_revision INTEGER NOT NULL CHECK(incarnation_revision > 0),
+    process_nonce_fingerprint TEXT NOT NULL CHECK(length(process_nonce_fingerprint) = 64),
+    state TEXT NOT NULL CHECK(state IN ('STARTING','READY','STOPPED','COMPROMISED')),
+    created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0)
+  ) STRICT;
+  CREATE TABLE resident_authority_epoch (
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    authority_epoch INTEGER NOT NULL CHECK(authority_epoch > 0),
+    epoch_fingerprint TEXT NOT NULL CHECK(length(epoch_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0),
+    PRIMARY KEY(resident_id, authority_epoch)
+  ) STRICT;
+  CREATE TABLE command_definition (
+    command_type_id TEXT NOT NULL,
+    command_type_revision INTEGER NOT NULL CHECK(command_type_revision > 0),
+    schema_fingerprint TEXT NOT NULL CHECK(length(schema_fingerprint) = 64),
+    synthetic_only INTEGER NOT NULL CHECK(synthetic_only IN (0,1)),
+    PRIMARY KEY(command_type_id, command_type_revision)
+  ) STRICT;
+  CREATE TABLE inbox_command (
+    command_id TEXT PRIMARY KEY,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    intake_state TEXT NOT NULL CHECK(intake_state IN ('RECEIVED','COMMITTED','REJECTED','INDETERMINATE')),
+    first_event_sequence INTEGER,
+    CHECK((intake_state = 'RECEIVED' AND first_event_sequence IS NULL) OR
+          (intake_state <> 'RECEIVED' AND first_event_sequence IS NOT NULL))
+  ) STRICT;
+  CREATE TABLE command_envelope (
+    envelope_id TEXT PRIMARY KEY,
+    command_id TEXT NOT NULL REFERENCES inbox_command(command_id),
+    command_type_id TEXT NOT NULL,
+    command_type_revision INTEGER NOT NULL,
+    canonical_bytes BLOB NOT NULL,
+    envelope_fingerprint TEXT NOT NULL CHECK(length(envelope_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0),
+    FOREIGN KEY(command_type_id, command_type_revision)
+      REFERENCES command_definition(command_type_id, command_type_revision)
+  ) STRICT;
+  CREATE TABLE replay_index (
+    command_id TEXT PRIMARY KEY REFERENCES inbox_command(command_id),
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    response_fingerprint TEXT NOT NULL CHECK(length(response_fingerprint) = 64),
+    response_bytes BLOB NOT NULL,
+    first_event_count INTEGER NOT NULL CHECK(first_event_count >= 0),
+    first_external_call_count INTEGER NOT NULL CHECK(first_external_call_count >= 0)
+  ) STRICT;
+  CREATE TABLE event (
+    event_sequence INTEGER PRIMARY KEY CHECK(event_sequence > 0),
+    event_id TEXT NOT NULL UNIQUE,
+    event_kind TEXT NOT NULL,
+    aggregate_ref TEXT NOT NULL,
+    aggregate_revision INTEGER NOT NULL CHECK(aggregate_revision > 0),
+    command_id TEXT REFERENCES inbox_command(command_id),
+    canonical_bytes BLOB NOT NULL,
+    event_fingerprint TEXT NOT NULL UNIQUE CHECK(length(event_fingerprint) = 64),
+    predecessor_event_fingerprint TEXT CHECK(predecessor_event_fingerprint IS NULL OR length(predecessor_event_fingerprint) = 64)
+  ) STRICT;
+  CREATE TABLE canonical_fact (
+    fact_ref TEXT NOT NULL,
+    fact_revision INTEGER NOT NULL CHECK(fact_revision > 0),
+    fact_kind TEXT NOT NULL,
+    logical_id TEXT NOT NULL,
+    subject_ref TEXT NOT NULL,
+    subject_revision INTEGER NOT NULL CHECK(subject_revision > 0),
+    canonical_bytes BLOB NOT NULL,
+    fact_fingerprint TEXT NOT NULL UNIQUE CHECK(length(fact_fingerprint) = 64),
+    predecessor_fact_ref TEXT,
+    predecessor_fact_revision INTEGER,
+    predecessor_fact_fingerprint TEXT,
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    PRIMARY KEY(fact_ref, fact_revision),
+    CHECK((predecessor_fact_ref IS NULL AND predecessor_fact_revision IS NULL AND predecessor_fact_fingerprint IS NULL) OR
+          (predecessor_fact_ref IS NOT NULL AND predecessor_fact_revision IS NOT NULL AND predecessor_fact_revision > 0 AND length(predecessor_fact_fingerprint) = 64))
+  ) STRICT;
+  CREATE TABLE current_fact_pointer (
+    fact_kind TEXT NOT NULL,
+    logical_id TEXT NOT NULL,
+    current_fact_ref TEXT NOT NULL,
+    current_fact_revision INTEGER NOT NULL CHECK(current_fact_revision > 0),
+    current_fact_fingerprint TEXT NOT NULL CHECK(length(current_fact_fingerprint) = 64),
+    pointer_version INTEGER NOT NULL CHECK(pointer_version > 0),
+    updated_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    PRIMARY KEY(fact_kind, logical_id),
+    FOREIGN KEY(current_fact_ref, current_fact_revision)
+      REFERENCES canonical_fact(fact_ref, fact_revision)
+  ) STRICT;
+  CREATE TABLE outbox_intent (
+    intent_id TEXT PRIMARY KEY,
+    intent_revision INTEGER NOT NULL CHECK(intent_revision > 0),
+    effect_scope_fingerprint TEXT NOT NULL CHECK(length(effect_scope_fingerprint) = 64),
+    canonical_bytes BLOB NOT NULL,
+    intent_fingerprint TEXT NOT NULL UNIQUE CHECK(length(intent_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence)
+  ) STRICT;
+  CREATE TABLE outbox_claim (
+    claim_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_epoch INTEGER NOT NULL CHECK(claim_epoch > 0),
+    lease_expires_trusted_sequence INTEGER NOT NULL CHECK(lease_expires_trusted_sequence > 0),
+    claim_fingerprint TEXT NOT NULL UNIQUE CHECK(length(claim_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    UNIQUE(intent_id, claim_epoch)
+  ) STRICT;
+  CREATE TABLE delivery_attempt (
+    attempt_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_id TEXT NOT NULL REFERENCES outbox_claim(claim_id),
+    attempt_revision INTEGER NOT NULL CHECK(attempt_revision > 0),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    attempt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(attempt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    UNIQUE(intent_id, attempt_revision)
+  ) STRICT;
+  CREATE TABLE dispatch_arm (
+    arm_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE REFERENCES delivery_attempt(attempt_id),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    first_event_ref TEXT NOT NULL,
+    first_event_fingerprint TEXT NOT NULL CHECK(length(first_event_fingerprint) = 64),
+    first_event_count INTEGER NOT NULL CHECK(first_event_count >= 0),
+    first_external_call_count INTEGER NOT NULL CHECK(first_external_call_count >= 0),
+    arm_fingerprint TEXT NOT NULL UNIQUE CHECK(length(arm_fingerprint) = 64),
+    armed_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence)
+  ) STRICT;
+  CREATE TABLE delivery_receipt (
+    receipt_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL REFERENCES delivery_attempt(attempt_id),
+    receipt_revision INTEGER NOT NULL CHECK(receipt_revision > 0),
+    receipt_state TEXT NOT NULL CHECK(receipt_state IN ('APPLIED_CURRENT','HISTORY_ONLY','REJECTED','INDETERMINATE','UNKNOWN')),
+    canonical_bytes BLOB NOT NULL,
+    receipt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(receipt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    UNIQUE(attempt_id, receipt_revision)
+  ) STRICT;
+  CREATE TABLE first_apply_guard (
+    intent_id TEXT PRIMARY KEY REFERENCES outbox_intent(intent_id),
+    winning_attempt_id TEXT NOT NULL UNIQUE REFERENCES delivery_attempt(attempt_id),
+    winning_receipt_id TEXT NOT NULL UNIQUE REFERENCES delivery_receipt(receipt_id),
+    guard_fingerprint TEXT NOT NULL UNIQUE CHECK(length(guard_fingerprint) = 64),
+    applied_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence)
+  ) STRICT;
+  CREATE TABLE task_completion (
+    task_ref TEXT NOT NULL,
+    task_revision INTEGER NOT NULL CHECK(task_revision > 0),
+    completion_revision INTEGER NOT NULL CHECK(completion_revision > 0),
+    completion_fact_ref TEXT NOT NULL,
+    completion_fact_revision INTEGER NOT NULL CHECK(completion_fact_revision > 0),
+    completion_fact_fingerprint TEXT NOT NULL CHECK(length(completion_fact_fingerprint) = 64),
+    completion_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence),
+    PRIMARY KEY(task_ref, task_revision, completion_revision),
+    FOREIGN KEY(completion_fact_ref, completion_fact_revision)
+      REFERENCES canonical_fact(fact_ref, fact_revision)
+  ) STRICT;
+
+immutable_tables:
+  - resident_identity
+  - resident_incarnation
+  - resident_authority_epoch
+  - command_definition
+  - command_envelope
+  - replay_index
+  - event
+  - canonical_fact
+  - outbox_intent
+  - outbox_claim
+  - delivery_attempt
+  - dispatch_arm
+  - delivery_receipt
+  - first_apply_guard
+  - task_completion
+mutable_tables_with_exact_columns:
+  schema_metadata: [schema_version, schema_fingerprint]
+  inbox_command: [intake_state, first_event_sequence]
+  current_fact_pointer:
+    - current_fact_ref
+    - current_fact_revision
+    - current_fact_fingerprint
+    - pointer_version
+    - updated_event_sequence
+
+canonical_fact_kind_inventory:
+  F1:
+    - GOAL_SPECIFICATION
+    - SUCCESS_CRITERIA_SET
+    - PLAN_REVISION
+    - PLAN_MEMBERSHIP
+    - TASK_STATE_ASSESSMENT
+  F2:
+    - ACTOR_IDENTITY_ASSESSMENT
+    - PRINCIPAL_ASSESSMENT
+    - ACTOR_PRINCIPAL_BINDING_ASSESSMENT
+    - RESPONSIBILITY_ASSESSMENT
+    - ASSIGNMENT_ASSESSMENT
+    - DELEGATION_ASSESSMENT
+    - AUTHORITY_CURRENTNESS_ASSESSMENT
+    - REVOCATION_PROPAGATION_ASSESSMENT
+  F3:
+    - RESIDENT_CONTINUITY_ASSESSMENT
+    - COMMAND_INTAKE_ASSESSMENT
+  F4:
+    - TASK_PERMIT
+    - HOST_AUTHENTICATION_ASSESSMENT
+    - HOST_WORK_ACCEPTANCE
+    - START_AUTHORITY_CURRENT
+    - EFFECT_HANDOFF
+    - FENCE_CURRENTNESS_ASSESSMENT
+  F5:
+    - RECEIPT_COMPATIBILITY_ASSESSMENT
+    - RECEIPT_CURRENTNESS_ASSESSMENT
+    - RECONCILIATION_DECISION
+  F6:
+    - VALIDATION_REQUIREMENT
+    - VALIDATION_SET
+    - VALIDATION_ATTEMPT_CONTEXT
+    - VALIDATION_EVIDENCE_ASSESSMENT
+    - WAIVER_CURRENTNESS_ASSESSMENT
+    - CARRY_FORWARD_ROOT
+    - VALIDATION_CURRENT_DECISION
+    - COMPLETION_GUARD_ASSESSMENT
+
+dedicated_row_class_mapping:
+  COMMAND_DEFINITION: command_definition
+  COMMAND_INBOX: inbox_command
+  COMMAND_ENVELOPE: command_envelope
+  COMMAND_REPLAY_RESULT: replay_index
+  EVENT: event
+  OUTBOX_INTENT: outbox_intent
+  OUTBOX_CLAIM: outbox_claim
+  DELIVERY_ATTEMPT: delivery_attempt
+  DISPATCH_ARM_AND_STORED_FIRST_ACCOUNTING: dispatch_arm
+  DELIVERY_RECEIPT: delivery_receipt
+  FIRST_APPLY_ELIGIBILITY: first_apply_guard
+  TASK_COMPLETION: task_completion
+
+transaction_owners:
+  command_intake:
+    writes: [inbox_command, command_envelope, event, replay_index]
+    atomicity: one_BEGIN_IMMEDIATE_commit_or_zero_rows
+  canonical_fact_advance:
+    writes: [event, canonical_fact, current_fact_pointer]
+    atomicity: insert_fact_and_event_plus_pointer_CAS_or_zero_rows
+  outbox_enqueue:
+    writes: [event, outbox_intent]
+    atomicity: one_BEGIN_IMMEDIATE_commit_or_zero_rows
+  outbox_claim:
+    writes: [event, outbox_claim]
+    atomicity: exact_current_claim_epoch_CAS_or_zero_rows
+  dispatch_arm:
+    writes: [event, delivery_attempt, dispatch_arm]
+    atomicity: prebranch_replay_check_then_first_arm_once_or_exact_stored_replay
+  receipt_apply:
+    writes: [event, delivery_receipt, first_apply_guard, canonical_fact, current_fact_pointer]
+    atomicity: compatibility_currentness_and_first_apply_guard_same_transaction
+  task_completion:
+    writes: [event, canonical_fact, current_fact_pointer, task_completion]
+    atomicity: recheck_all_current_inputs_and_DONE_CAS_same_transaction
+
+crash_windows:
+  - before_BEGIN: zero_rows_restart_safe
+  - after_BEGIN_before_first_write: rollback_zero_rows
+  - after_event_before_pointer_CAS: rollback_all_rows
+  - after_dispatch_arm_before_mock_call: restart_reads_arm_and_returns_stored_first_accounting_without_new_call
+  - after_mock_call_before_receipt: reconcile_to_UNKNOWN_no_automatic_retry
+  - after_receipt_before_first_apply_guard: rollback_receipt_and_guard
+  - after_commit_before_response: replay_index_or_dispatch_arm_returns_first_committed_result
+  - completion_after_recheck_before_DONE: rollback_event_fact_pointer_and_completion
+
+forbidden:
+  - opaque_Event_payload_without_canonical_fact_kind
+  - caller_supplied_table_name
+  - dynamic_schema_expansion
+  - JavaScript_SQL
+  - second_connection
+  - hidden_retry
+  - production_database

@@ -1,0 +1,298 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-phase-5a-m0a-plan-r4-full-atomic-independent-review-2026-07-19
+date: 2026-07-19
+
+reviewer:
+  identity: Codex_independent_subagent_phase5a_plan_r4_review
+  independence_basis:
+    - not_the_R1_R2_R3_or_R4_author_run
+    - did_not_participate_in_subject_creation
+    - reviewed_fixed_R4_ZIP_bytes_from_scratch
+    - did_not_modify_workspace_subjects_governance_Git_or_VCPToolBox
+    - author_self_review_read_as_evidence_only
+
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  subject_count: 25
+
+result: BLOCK
+requires_R5: true
+
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  archive:
+    path: /tmp/2026-07-19-agents-os-phase-5a-m0a-plan-r4-independent-review-package-v0.1.zip
+    declared_sha256: 6a9c64da5313ac6b9e7d5add1b966dfaafad111710e1b45e1e9ad6fd848c18ab
+    computed_sha256: 6a9c64da5313ac6b9e7d5add1b966dfaafad111710e1b45e1e9ad6fd848c18ab
+    sha256_match: true
+    entry_count: 180
+    duplicate_paths: 0
+    absolute_traversal_dot_segment_or_backslash_paths: 0
+    symlinks: 0
+    CRC: PASS
+    fully_decompressed_bytes: 6436254
+    checksums: 179/179_MATCH
+    package_dot_git_entries: 0
+  manifest:
+    canonical_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    declared_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+    computed_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+    archive_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+    archive_equals_canonical_workspace_bytes: true
+  archive_map:
+    entries: 176
+    manifest_inputs: 176
+    exact_order_role_path_and_hash_match: 176/176
+  full_reads:
+    subjects: 25/25
+    workspace_authority_inputs: 143/143
+    author_evidence: 1/1
+    fixed_VCP_git_objects: 7/7
+    total: 176/176
+    bytes: 6293388
+    lines: 119090
+  canonical_sources:
+    archive_input_hash_and_size_match: 176/176
+    canonical_source_bytes_equal_archive: 176/176
+    workspace_payload_equal_archive: 169/169
+    fixed_VCP_git_objects_equal_archive: 7/7
+    VCP_repository: runtime/VCPToolBox_git_object_database_read_only
+    VCP_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    VCP_worktree_files_consumed_as_authority: false
+    VCPToolBox_files_modified_by_review: false
+  immutable_lineage:
+    R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+    R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+    R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+    R1_R2_R3_manifests_match: 3/3
+    R1_R2_R3_subjects_match: 18/18
+
+fixed_validation:
+  R4_semantic_and_effective_SQLite_closure: PASS
+  author_validator_SQLite_cases: 10/10_PASS
+  author_validator_fixed_mutations: 11/11_REJECTED
+  builder_byte_reproduction: PASS
+  no_trailing_whitespace_in_25_subjects: PASS
+  fixed_command_categories: 4/4_PASS
+  fixed_Plugin_js_sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+  terminal_outcome: NOT_EXECUTED
+  limitation: >-
+    The fixed validator checks selected DDL strings, ten author-selected SQLite
+    cases, manifest identity and policy labels. It does not evaluate the
+    coordinated variants below and does not execute an AST/dataflow validator
+    over a future index.js source.
+
+independent_execution:
+  database_scope: sqlite_in_memory_only
+  workspace_or_real_database_created: false
+  effective_DDL_materialized: PASS
+  effective_table_count: 18/18
+  effective_foreign_key_check: PASS
+  case_count: 29
+  expected_or_boundary_passes: 23
+  legal_positive_cases: 5/5_ACCEPTED
+  target_semantic_negative_cases: 14/14_REJECTED
+  old_hash_or_missing_propagation_cases: 4/4_REJECTED
+  legal_input_over_rejections: 0
+  favorable_invalid_coordinated_variants: 6/6_ACCEPTED
+  uncaught_exceptions: 0
+  case_results_path: /tmp/2026-07-19-phase5a-m0a-plan-r4-independent-case-results.json
+  case_results_sha256: b07483eadf09faf68dd0cb1c8bbf7512305ac05ced585022d63ee0415676a764
+  case_script_path: /tmp/phase5a_m0a_plan_r4_independent_review.py
+  case_script_sha256: caf1e0b053c051e4e30a138a40f9f0d11f09c5ffd589d09926d4e5748a626442
+  confirmed_positive_surfaces:
+    - effective_18_table_DDL_executes_in_isolated_memory
+    - genesis_epoch_1_and_exact_N_plus_1_restart_commit
+    - epoch_gap_fork_same_revision_wrong_previous_incarnation_and_missing_Event_are_rejected
+    - F5_lease_kind_and_logical_identity_are_exact
+    - F5_attempt_arm_request_ID_fingerprint_and_bytes_are_exact
+    - F5_receipt_attempt_intent_claim_guard_cross_substitutions_are_rejected
+    - F5_stored_first_counts_zero_or_multiple_are_rejected
+    - distinct_legal_intents_and_binary_request_bytes_are_not_over_rejected
+    - fixed_Plugin_js_owner_is_hash_bound_and_contains_actual_two_value_call
+    - closed_blocked_manifest_absence_plus_Plugin_js_boolean_coercion_makes_requiresAdmin_false
+
+finding_details:
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B01
+    severity: blocker
+    title: F3_Event_witness_and_incarnation_transaction_bindings_remain_non_executable
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r4.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r4.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r4-amendment.draft.md
+      - control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+    evidence:
+      - >-
+        R4 added exact epoch predecessor and incarnation foreign keys, and the
+        independent negative cases confirm gap, fork, same revision, wrong
+        immediate incarnation and missing Event rejection.
+      - >-
+        The epoch and incarnation rows nevertheless reference Event only by
+        event_sequence. R4 freezes no exact Event kind, aggregate, ID,
+        fingerprint or canonical-byte equality for the named ownership Event.
+        Coordinated variants X01 and X02 commit an unrelated Event while all
+        incarnation, epoch, RECOVERING fact and current pointer rows are present.
+      - >-
+        The READY transaction uses the label
+        recheck_exact_witness_COMMIT_epoch_incarnation_and_Event, but freezes no
+        persisted witness observation relation or exact lookup/equality
+        predicate. X03 commits READY after RECOVERING without any witness COMMIT
+        object represented or referenced by the 18-table graph.
+      - >-
+        The DDL excludes only reuse of the immediately previous incarnation.
+        X04 commits epoch 3 with the old epoch-1 incarnation after epoch 2 used
+        another incarnation. The step name insert_new_resident_incarnation is
+        not accompanied by an exact uniqueness/precondition definition that
+        makes this coordinated variant total.
+    counterexample: >-
+      Two implementations can follow the ordered step labels while differing
+      on what qualifies as the ownership Event, how a witness COMMIT is
+      reobserved, and whether any historical incarnation may be reused. One can
+      accept X01-X04 and another can reject them; the fixed plan does not select
+      one executable behavior.
+    impact: >-
+      The claimed all-or-zero F3 transaction and READY witness barrier cannot be
+      reproduced from the exact persistence and transaction profile. A
+      favorable lifecycle projection can be assembled from individually valid
+      but semantically substituted rows.
+    required_correction:
+      - Freeze the exact ownership Event identity and equality bindings used by incarnation, epoch, lifecycle fact and pointer.
+      - Freeze an executable witness-COMMIT observation relation and equality predicate for READY.
+      - Reject reuse of every historical incarnation, not only the immediate predecessor, or freeze an equivalent total transaction precondition.
+      - Add X01-X04 as fixed coordinated negative regressions.
+
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B02
+    severity: blocker
+    title: F5_stored_first_Event_and_call_authorization_provenance_is_not_exact
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r4.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r4.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r4-amendment.draft.md
+    evidence:
+      - >-
+        R4 correctly requires committed_event_count=1 and
+        committed_call_authorization_count=1, and the independent cases reject
+        both zero and multiple counts.
+      - >-
+        dispatch_arm.first_event_ref/fingerprint may name any valid Event and is
+        not required to equal armed_event_sequence or an exact first-arm Event
+        tuple. X05 commits an unrelated Event as the stored first Event.
+      - >-
+        first_call_authorization_ref/revision/fingerprint references a unique
+        canonical_fact tuple but stores and constrains neither fact_kind nor
+        logical_id. X06 commits an UNRELATED_FACT for another logical identity
+        as the stored first call authorization.
+      - >-
+        The transaction profile states exact replay additions are zero but has
+        only ordered-step labels; no fixed coordinated regression checks that
+        replay returns the exact stored Event/call identities while adding zero.
+    counterexample: >-
+      A first apply can store counts of one while the stored reference tuples
+      identify unrelated valid rows. Exact replay can then faithfully return
+      those substituted tuples and still satisfy the count checks.
+    impact: >-
+      R4 closes numeric accounting but not the identity/provenance part of the
+      declared arm tuple. The stored-first result remains favorable while not
+      identifying the Event and call authorization created for that apply.
+    required_correction:
+      - Bind first_event_ref/fingerprint to the exact arm Event and armed_event_sequence.
+      - Bind call authorization to its exact kind and logical identity as well as ref/revision/fingerprint.
+      - Add coordinated first-apply and exact-replay cases that prove stored identities and zero additions together.
+
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B03
+    severity: blocker
+    title: The_future_index_js_AST_and_dataflow_proof_is_policy_only_and_not_executable
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-materialization-abi-corrections-v0.1-r4.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r4-amendment.draft.md
+      - control-plane/registry/validate-phase5a-m0a-plan-r4-closure.py
+    confirmed_closed_portion:
+      fixed_Plugin_js_hash_bound: true
+      actual_manager_call: serviceModule.processToolCall(pluginSpecificArgs, directContext)
+      actual_manager_positional_value_count: 2
+      blocked_manifest_requiresAdmin_effective_value: false
+    evidence:
+      - >-
+        R4 correctly declares text search insufficient and unknown or
+        unprovable as BLOCK. It also lists forbidden sources and sinks.
+      - >-
+        The static probe is only named future_index_js_AST_and_dataflow_validator.
+        No parser/version, exact args whitelist fields, lexical binding and
+        alias rules, destructuring/computed-property rules, interprocedural
+        call/closure rules, exact sink matchers or proof algorithm is fixed.
+      - >-
+        The negative cases are labels without fixed JavaScript source fixtures
+        and expected validator outputs. No validator command consumes a future
+        index.js; the fixed R4 validator only checks policy strings and the
+        fixed Plugin.js text.
+      - >-
+        Consequently no reproducible result proves that arguments[1], aliases,
+        requestIp, sourceNode, signal, decryptedAuthCode or another context path
+        cannot reach N-API arguments, reducers, fingerprints, logs, receipts,
+        errors or returned output.
+    counterexample: >-
+      Multiple future validators can satisfy the owner label while disagreeing
+      on aliases, closures, object spreads, computed properties and helper
+      calls. A shallow validator and a sounder validator therefore produce
+      different results for the same index.js while both conform to the fixed
+      R4 text.
+    impact: >-
+      The real two-value manager invocation is now accurately modeled and hash
+      bound, but the nonauthority directContext separation cannot be verified
+      at implementation review from this plan. The package's own
+      unknown_or_unprovable rule therefore requires BLOCK.
+    required_correction:
+      - Freeze an executable AST/dataflow validator contract and command.
+      - Freeze the exact args whitelist and all source-to-sink propagation rules.
+      - Bind positive and negative JavaScript fixtures covering aliases, closures, spreads, computed properties and helper calls.
+      - Require the validator to consume exact future index.js bytes and fail closed on unsupported syntax or unknown flow.
+
+confirmed_safe_boundaries:
+  fixed_Plugin_js_owner_hash_bound: true
+  actual_two_value_manager_invocation_acknowledged: true
+  requiresAdmin_effective_false_and_hash_bound_by_closed_manifest_profile: true
+  second_permission_identity_Task_Command_or_host_authority_found: false
+  upstream_reducer_reimplementation_authorized: false
+  VCPToolBox_core_change_authorized: false
+  plugin_enablement_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_implementation_started: false
+  runtime_or_provider_started: false
+  private_memory_sensing_or_real_effect_found: false
+  automatic_plan_freeze_found: false
+  automatic_implementation_start_found: false
+
+governance:
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_or_push_performed: false
+  review_subjects_modified: false
+  next_gate: JENN_EXPLICIT_PHASE_5A_PLAN_R5_NARROW_CORRECTION_DECISION
+
+terminal_disposition: >-
+  Package integrity, all fixed commands, effective DDL materialization, the core
+  R4 F3 predecessor constraints, the core R4 F5 request/receipt/count bindings,
+  fixed Plugin.js ownership, the actual two-value call and effective
+  requiresAdmin=false all pass. Fresh coordinated cases nevertheless accept
+  six favorable invalid graphs, and the future index.js AST/dataflow proof is
+  not executable from the fixed plan. The atomic result is BLOCK. Plan R4 is
+  not frozen, implementation remains unstarted and unauthorized, and a narrow
+  R5 requires Jenn's explicit decision.

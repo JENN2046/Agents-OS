@@ -1,0 +1,30 @@
+schema_version: agents-os.m0a-semantic-owner-corrections.v0.1
+profile_id: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R7
+date: '2026-07-20'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R6
+replacement_rows:
+  - obligation_id: F3_incarnation_and_authority_epoch
+    module_owner: resident/ledger_thread
+    reducer_or_boundary_owner: F3_frozen_witness_COMMIT_and_RECOVERING_to_READY_consumer
+    transaction_owner: exact_current_witness_and_RECOVERING_revision_1_then_READY_revision_2_Event_fact_pointer
+    persistence_owner: resident_authority_epoch+canonical_fact(F3_WITNESS_COMMIT)+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer+event
+    invariant: READY revision 2 is appended only from exact immutable RECOVERING revision 1 and exact current witness bytes; Event fact and pointer advance commit all-or-zero
+    positive_test: positive/F3_exact_RECOVERING_revision_1_to_READY_revision_2
+    negative_test: negative/F3_empty_history_stale_pointer_or_wrong_predecessor_rejected
+    replay_test: replay/F3_READY_revision_2_identity_and_predecessor_stable
+    crash_test: crash/F3_READY_Event_fact_pointer_rollback_preserves_RECOVERING_revision_1
+effective_inventory_rules:
+  base: R6_63_effective_rows
+  replace_exactly_these_obligation_ids:
+    - F3_incarnation_and_authority_epoch
+  add_obligation_ids: 0
+  remove_obligation_ids: 0
+  effective_obligation_count: 63
+governance:
+  creates_new_semantic_authority: false
+  recomputes_F3_or_F5_authority: false
+  runtime_usable: false
+  implementation_authorized: false

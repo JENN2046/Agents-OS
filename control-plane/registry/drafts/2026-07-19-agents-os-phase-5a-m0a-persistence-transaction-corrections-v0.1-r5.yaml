@@ -1,0 +1,161 @@
+schema_version: agents-os.m0a-persistence-transaction-corrections.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R5
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R4
+
+effective_schema:
+  table_inventory_remains_exhaustive: true
+  effective_table_count: 18
+  added_tables: []
+  removed_tables: []
+  replace_R4_or_inherited_tables:
+    - event
+    - resident_incarnation
+    - resident_authority_epoch
+    - dispatch_arm
+
+replacement_schema_sql: |-
+  CREATE TABLE event (
+    event_sequence INTEGER PRIMARY KEY CHECK(event_sequence > 0),
+    event_id TEXT NOT NULL UNIQUE,
+    event_kind TEXT NOT NULL,
+    aggregate_ref TEXT NOT NULL,
+    aggregate_revision INTEGER NOT NULL CHECK(aggregate_revision > 0),
+    command_id TEXT REFERENCES inbox_command(command_id) DEFERRABLE INITIALLY DEFERRED,
+    canonical_bytes BLOB NOT NULL,
+    event_fingerprint TEXT NOT NULL UNIQUE CHECK(length(event_fingerprint) = 64),
+    predecessor_event_fingerprint TEXT CHECK(predecessor_event_fingerprint IS NULL OR length(predecessor_event_fingerprint) = 64),
+    UNIQUE(event_id, event_fingerprint),
+    UNIQUE(event_sequence, event_id, event_fingerprint, event_kind, aggregate_ref, aggregate_revision)
+  ) STRICT;
+  CREATE TABLE resident_incarnation (
+    incarnation_id TEXT PRIMARY KEY,
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    incarnation_revision INTEGER NOT NULL CHECK(incarnation_revision > 0),
+    process_nonce_fingerprint TEXT NOT NULL CHECK(length(process_nonce_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL,
+    created_event_id TEXT NOT NULL CHECK(created_event_id = 'event:f3-ownership:' || resident_id || ':' || incarnation_revision),
+    created_event_fingerprint TEXT NOT NULL CHECK(length(created_event_fingerprint) = 64),
+    created_event_kind TEXT NOT NULL CHECK(created_event_kind = 'RESIDENT_OWNERSHIP_STARTED'),
+    created_event_aggregate_ref TEXT NOT NULL CHECK(created_event_aggregate_ref = resident_id),
+    created_event_aggregate_revision INTEGER NOT NULL CHECK(created_event_aggregate_revision = incarnation_revision),
+    UNIQUE(resident_id, incarnation_revision),
+    UNIQUE(incarnation_id, resident_id),
+    UNIQUE(incarnation_id, resident_id, incarnation_revision),
+    FOREIGN KEY(created_event_sequence, created_event_id, created_event_fingerprint, created_event_kind, created_event_aggregate_ref, created_event_aggregate_revision)
+      REFERENCES event(event_sequence, event_id, event_fingerprint, event_kind, aggregate_ref, aggregate_revision)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE resident_authority_epoch (
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    authority_epoch INTEGER NOT NULL CHECK(authority_epoch > 0),
+    epoch_fingerprint TEXT NOT NULL UNIQUE CHECK(length(epoch_fingerprint) = 64),
+    expected_previous_authority_epoch INTEGER,
+    previous_authority_epoch_fingerprint TEXT,
+    authority_generation INTEGER NOT NULL CHECK(authority_generation > 0),
+    witness_reservation_ref TEXT NOT NULL,
+    witness_reservation_fingerprint TEXT NOT NULL CHECK(length(witness_reservation_fingerprint) = 64),
+    incarnation_id TEXT NOT NULL,
+    incarnation_revision INTEGER NOT NULL CHECK(incarnation_revision = authority_epoch),
+    previous_incarnation_id TEXT,
+    restore_decision_ref TEXT,
+    restore_decision_fingerprint TEXT,
+    ownership_event_sequence INTEGER NOT NULL,
+    ownership_event_id TEXT NOT NULL CHECK(ownership_event_id = 'event:f3-ownership:' || resident_id || ':' || authority_epoch),
+    ownership_event_fingerprint TEXT NOT NULL CHECK(length(ownership_event_fingerprint) = 64),
+    ownership_event_kind TEXT NOT NULL CHECK(ownership_event_kind = 'RESIDENT_OWNERSHIP_STARTED'),
+    ownership_event_aggregate_ref TEXT NOT NULL CHECK(ownership_event_aggregate_ref = resident_id),
+    ownership_event_aggregate_revision INTEGER NOT NULL CHECK(ownership_event_aggregate_revision = authority_epoch),
+    canonical_bytes BLOB NOT NULL,
+    PRIMARY KEY(resident_id, authority_epoch),
+    UNIQUE(resident_id, authority_epoch, incarnation_id, epoch_fingerprint),
+    UNIQUE(resident_id, incarnation_id),
+    FOREIGN KEY(incarnation_id, resident_id, incarnation_revision) REFERENCES resident_incarnation(incarnation_id, resident_id, incarnation_revision) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(resident_id, expected_previous_authority_epoch, previous_incarnation_id, previous_authority_epoch_fingerprint)
+      REFERENCES resident_authority_epoch(resident_id, authority_epoch, incarnation_id, epoch_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(ownership_event_sequence, ownership_event_id, ownership_event_fingerprint, ownership_event_kind, ownership_event_aggregate_ref, ownership_event_aggregate_revision)
+      REFERENCES event(event_sequence, event_id, event_fingerprint, event_kind, aggregate_ref, aggregate_revision)
+      DEFERRABLE INITIALLY DEFERRED,
+    CHECK((authority_epoch = 1 AND expected_previous_authority_epoch IS NULL AND previous_authority_epoch_fingerprint IS NULL AND previous_incarnation_id IS NULL) OR
+          (authority_epoch > 1 AND expected_previous_authority_epoch = authority_epoch - 1 AND length(previous_authority_epoch_fingerprint) = 64 AND previous_incarnation_id IS NOT NULL AND previous_incarnation_id <> incarnation_id)),
+    CHECK((restore_decision_ref IS NULL AND restore_decision_fingerprint IS NULL) OR
+          (restore_decision_ref IS NOT NULL AND length(restore_decision_fingerprint) = 64))
+  ) STRICT;
+  CREATE TABLE dispatch_arm (
+    arm_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE,
+    intent_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    attempt_revision INTEGER NOT NULL CHECK(attempt_revision > 0),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    first_event_sequence INTEGER NOT NULL,
+    first_event_ref TEXT NOT NULL CHECK(first_event_ref = 'event:f5-dispatch-arm:' || arm_id),
+    first_event_fingerprint TEXT NOT NULL CHECK(length(first_event_fingerprint) = 64),
+    first_event_kind TEXT NOT NULL CHECK(first_event_kind = 'F5_DISPATCH_ARMED'),
+    first_event_aggregate_ref TEXT NOT NULL CHECK(first_event_aggregate_ref = intent_id),
+    first_event_aggregate_revision INTEGER NOT NULL CHECK(first_event_aggregate_revision = attempt_revision),
+    first_call_authorization_kind TEXT NOT NULL CHECK(first_call_authorization_kind = 'F5_CALL_AUTHORIZATION'),
+    first_call_authorization_logical_id TEXT NOT NULL CHECK(first_call_authorization_logical_id = intent_id),
+    first_call_authorization_ref TEXT NOT NULL CHECK(first_call_authorization_ref = 'call-auth:' || arm_id),
+    first_call_authorization_revision INTEGER NOT NULL CHECK(first_call_authorization_revision > 0),
+    first_call_authorization_fingerprint TEXT NOT NULL CHECK(length(first_call_authorization_fingerprint) = 64),
+    committed_event_count INTEGER NOT NULL CHECK(committed_event_count = 1),
+    committed_call_authorization_count INTEGER NOT NULL CHECK(committed_call_authorization_count = 1),
+    arm_fingerprint TEXT NOT NULL UNIQUE CHECK(length(arm_fingerprint) = 64),
+    armed_event_sequence INTEGER NOT NULL CHECK(armed_event_sequence = first_event_sequence),
+    FOREIGN KEY(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      REFERENCES delivery_attempt(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_event_sequence, first_event_ref, first_event_fingerprint, first_event_kind, first_event_aggregate_ref, first_event_aggregate_revision)
+      REFERENCES event(event_sequence, event_id, event_fingerprint, event_kind, aggregate_ref, aggregate_revision)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_call_authorization_kind, first_call_authorization_logical_id, first_call_authorization_revision, first_call_authorization_ref, first_call_authorization_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+
+transaction_replacements:
+  F3_RECOVERING_startup:
+    exact_Event_tuple: [event_sequence, event_id, event_fingerprint, RESIDENT_OWNERSHIP_STARTED, resident_id, authority_epoch]
+    exact_shared_bindings:
+      - incarnation.created_Event_tuple_equals_ownership_Event_tuple
+      - epoch.ownership_Event_tuple_equals_ownership_Event_tuple
+      - RECOVERING_fact.created_event_sequence_equals_ownership_Event_sequence
+      - current_pointer.updated_event_sequence_equals_ownership_Event_sequence
+    historical_incarnation_precondition: NOT_EXISTS resident_authority_epoch WHERE resident_id = input.resident_id AND incarnation_id = input.incarnation_id
+    commit: all_or_zero
+  F3_READY_after_witness:
+    resolve_exact_witness: canonical_fact(fact_kind=F3_WITNESS_COMMIT,logical_id=resident_id,subject_ref=witness_reservation_ref,subject_revision=authority_epoch)
+    witness_currentness: exact_current_fact_pointer_and_created_event_sequence_gte_ownership_event_sequence
+    recheck_exact_tuple: [resident_id, authority_epoch, incarnation_id, epoch_fingerprint, ownership_event_sequence, ownership_event_id, ownership_event_fingerprint]
+    commit: READY_fact_pointer_Event_all_or_zero
+  F5_first_apply_and_replay:
+    first_apply_exact_Event: event(F5_DISPATCH_ARMED,intent_id,attempt_revision)
+    first_apply_exact_authorization: canonical_fact(F5_CALL_AUTHORIZATION,intent_id,attempt_revision,attempt_id)
+    stored_counts: {Event: 1, call_authorization: 1}
+    exact_replay_returns: [first_event_sequence, first_event_ref, first_event_fingerprint, first_call_authorization_kind, first_call_authorization_logical_id, first_call_authorization_ref, first_call_authorization_revision, first_call_authorization_fingerprint]
+    exact_replay_additions: {Event: 0, call_authorization: 0}
+
+fixed_SQLite_cases:
+  positive:
+    - F3_exact_ownership_Event_and_witness_READY
+    - F5_exact_first_apply_and_replay
+  negative:
+    - F3_unrelated_Event_tuple
+    - F3_READY_without_exact_witness
+    - F3_historical_incarnation_reuse
+    - F5_unrelated_first_Event
+    - F5_wrong_call_authorization_kind
+    - F5_wrong_call_authorization_logical_id
+    - F5_replay_identity_substitution
+
+governance:
+  database_file_created: false
+  SQLite_scope: isolated_in_memory_only
+  implementation_authorized: false

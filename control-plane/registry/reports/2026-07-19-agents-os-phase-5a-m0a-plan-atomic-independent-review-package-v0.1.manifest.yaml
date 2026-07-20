@@ -1,0 +1,157 @@
+schema_version: agents-os.hash-bound-review-manifest.v0.1
+package_id: agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  subjects:
+    - {ordinal: 1, role: implementation_plan, path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-implementation-plan-v0.1.md, sha256: 40b8aa4b745d0262369bbefeac3a12367df99e56c67a62e2ba3b208404acc94f}
+    - {ordinal: 2, role: exact_build_profile, path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml, sha256: e6f2d4e6fea62453a4ecb290e15f48c862a0bc55c829d26e106cae7eaf5f7868}
+    - {ordinal: 3, role: contract_traceability_matrix, path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml, sha256: 85a333265336050223f01c30690e8964bd8870c815a6970ecbf8a9c6e417f612}
+    - {ordinal: 4, role: validation_and_fault_injection_profile, path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml, sha256: 3ff0536cb55b44cd3fabcfac981f3aaed02ea13f125791d5ad7e1e219545858e}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5}
+  - {role: accepted_home_roadmap_subject, path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md, sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d}
+  - {role: accepted_home_roadmap_decision, path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml, sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b}
+  - {role: accepted_resident_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md, sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e}
+  - {role: accepted_high_privilege_architecture, path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md, sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71}
+  - {role: construction_readiness_review, path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md, sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670}
+  - {role: accepted_F1_decision, path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml, sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2}
+  - {role: frozen_F2_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml, sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1}
+  - {role: frozen_F2_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml, sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1}
+  - {role: frozen_F3_decision, path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml, sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529}
+  - {role: frozen_F3_manifest, path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff}
+  - {role: frozen_F4_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml, sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2}
+  - {role: frozen_F5_decision, path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml, sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb}
+  - {role: frozen_F6_decision, path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml, sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890}
+  - {role: frozen_F7_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml, sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a}
+  - {role: frozen_F7_manifest, path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml, sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35}
+  - {role: frozen_F8_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml, sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d}
+  - {role: frozen_F8_manifest, path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml, sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672}
+  - {role: frozen_F8_independent_review, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml, sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f}
+  - {role: F8_mainline_durability_receipt, path: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-mainline-durability-closeout-v0.1.md, sha256: 815dead7e428e1919791d67ca304309138ef160324e773c11e754f67089a9c08}
+  - {role: immutable_Phase_5A_plan_start_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-closure-start-decision-v0.1.yaml, sha256: 371fdd0d5c58174331751cb5fc04eb8b7606efc9ee6f23a4dd3dddca5d48bcb3}
+
+external_source_inputs:
+  repository: lioensky/VCPToolBox
+  commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  file_count: 6
+  files:
+    - {role: VCPToolBox_root_instructions, git_path: AGENTS.md, sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b}
+    - {role: VCPToolBox_plugin_instructions, git_path: Plugin/AGENTS.md, sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4}
+    - {role: VCPToolBox_plugin_ecosystem, git_path: docs/PLUGIN_ECOSYSTEM.md, sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65}
+    - {role: existing_Rust_NAPI_instructions, git_path: rust-vexus-lite/AGENTS.md, sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494}
+    - {role: existing_Rust_NAPI_Cargo_profile, git_path: rust-vexus-lite/Cargo.toml, sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9}
+    - {role: existing_Rust_NAPI_package_profile, git_path: rust-vexus-lite/package.json, sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c}
+
+author_evidence:
+  - {role: author_self_review_not_independent, path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-build-profile-self-review-v0.1.yaml, sha256: ea3cc5bcefe614b94798cb1219043ed16272b574bddd04cc41656804fa51de16, result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW, may_substitute_for_independent_judgment: false}
+
+declared_workspace_input_count: 26
+declared_external_source_input_count: 6
+declared_total_input_count: 32
+
+validator_commands:
+  - python3 -c "import pathlib,yaml; [yaml.safe_load(pathlib.Path(p).read_text()) for p in ['control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml','control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml','control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml']]"
+  - python3 control-plane/registry/validate-document-registry.py
+  - python3 control-plane/registry/validate-federated-document-registry.py
+  - git diff --check
+
+required_review_questions:
+  - all_32_declared_inputs_match_and_are_fully_read
+  - four_subjects_form_one_complete_nonpartial_engineering_plan
+  - plan_freeze_cannot_automatically_start_implementation
+  - external_source_plus_in_process_plugin_model_matches_accepted_Resident_architecture
+  - source_authority_remains_outside_VCPToolBox_and_install_overlay_is_hash_bound
+  - VCPToolBox_core_diff_is_zero_and_current_dirty_runtime_worktree_is_never_used
+  - blocked_manifest_prevents_plugin_discovery_or_activation
+  - five_method_NAPI_surface_is_closed_and_has_no_lifecycle_or_path_escape
+  - one_ledger_thread_one_SQLite_connection_and_no_read_pool_are_complete
+  - SQLite_tables_transactions_immutable_rows_and_current_pointer_CAS_cover_M0A
+  - every_F1_through_F6_contract_has_code_SQL_behavior_and_test_ownership
+  - F7_and_F8_remain_phase_gate_only_and_are_not_implemented_in_M0A
+  - no_second_permission_identity_Command_Task_or_host_authority_is_created
+  - PBL_no_match_relationship_role_lane_urgency_or_history_never_expands_authority
+  - synthetic_command_registry_cannot_become_production_F3_registry_or_runtime_authority
+  - UNKNOWN_never_automatically_retries_and_every_delivery_crash_window_is_covered
+  - toolchain_dependency_versions_and_lock_requirements_are_reproducible
+  - no_public_fork_push_runtime_activation_database_provider_private_memory_sensing_or_real_effect_is_authorized
+  - no_internal_contradiction_implementation_impossibility_or_unowned_decision_remains
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - exact_manifest_path_and_sha256
+    - all_32_hashes_and_full_reads
+    - four_subject_hashes_and_atomicity
+    - four_validator_commands_and_results
+    - blocker_major_minor_counts
+    - finding_ids_with_exact_subject_section_and_evidence
+    - implementation_scope_gap_count
+    - architecture_or_contract_conflict_count
+    - VCPToolBox_core_or_upstream_tracking_risk_count
+    - second_permission_identity_Task_Command_or_host_authority_count
+    - synthetic_to_production_leak_count
+    - NAPI_or_SQLite_boundary_escape_count
+    - crash_replay_UNKNOWN_or_completion_gap_count
+    - automatic_implementation_start_count
+    - independent_adversarial_plan_mutation_count
+    - requires_R2
+  no_finding_rule: >-
+    PASS_NO_BLOCKER is permitted only when every declared byte is available and
+    matched, all questions are answered from the fixed unit, all commands pass,
+    independent coordinated plan mutations find no unsafe or undecided path,
+    and no blocker remains.
+
+reviewer_constraints:
+  author_may_claim_independence: false
+  author_self_review_may_be_relied_on_as_conclusion: false
+  source_hash_mismatch_result: BLOCK
+  partial_subject_review_result: BLOCK
+  unavailable_external_source_input_result: BLOCK
+  validator_mismatch_result: BLOCK
+  runtime_or_provider_execution_required: false
+  secrets_private_memory_or_active_config_required: false
+
+presentation:
+  report_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.md
+  report_sha256_bound_here: false
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  plan_freeze_ready: false
+  authority_after_pass: Jenn_only
+  automatic_freeze: forbidden
+  automatic_implementation_start: forbidden
+
+non_authorization:
+  independent_review_result_created: false
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_or_effect_execution_authorized: false
+  Git_delivery_authorized: false

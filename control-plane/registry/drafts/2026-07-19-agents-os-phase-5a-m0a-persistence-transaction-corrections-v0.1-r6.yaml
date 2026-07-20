@@ -1,0 +1,154 @@
+schema_version: agents-os.m0a-persistence-transaction-corrections.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R6
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R5
+
+effective_schema:
+  table_inventory_remains_exhaustive: true
+  effective_table_count: 18
+  added_tables: []
+  removed_tables: []
+  replace_R5_or_inherited_tables:
+    - canonical_fact
+    - dispatch_arm
+
+replacement_schema_sql: |-
+  CREATE TABLE canonical_fact (
+    fact_kind TEXT NOT NULL,
+    logical_id TEXT NOT NULL,
+    fact_revision INTEGER NOT NULL CHECK(fact_revision > 0),
+    fact_ref TEXT NOT NULL,
+    subject_ref TEXT NOT NULL,
+    subject_revision INTEGER NOT NULL CHECK(subject_revision > 0),
+    canonical_bytes BLOB NOT NULL,
+    fact_fingerprint TEXT NOT NULL CHECK(length(fact_fingerprint) = 64),
+    predecessor_fact_revision INTEGER,
+    predecessor_fact_ref TEXT,
+    predecessor_fact_fingerprint TEXT,
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(fact_kind, logical_id, fact_revision),
+    UNIQUE(fact_ref, fact_revision),
+    UNIQUE(fact_ref, fact_revision, fact_fingerprint),
+    UNIQUE(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint),
+    UNIQUE(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint, subject_ref, subject_revision),
+    CHECK((fact_revision = 1 AND predecessor_fact_revision IS NULL AND predecessor_fact_ref IS NULL AND predecessor_fact_fingerprint IS NULL) OR
+          (fact_revision > 1 AND predecessor_fact_revision = fact_revision - 1 AND predecessor_fact_ref IS NOT NULL AND length(predecessor_fact_fingerprint) = 64)),
+    FOREIGN KEY(fact_kind, logical_id, predecessor_fact_revision, predecessor_fact_ref, predecessor_fact_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE dispatch_arm (
+    arm_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE,
+    intent_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    attempt_revision INTEGER NOT NULL CHECK(attempt_revision > 0),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    first_event_sequence INTEGER NOT NULL,
+    first_event_ref TEXT NOT NULL CHECK(first_event_ref = 'event:f5-dispatch-arm:' || arm_id),
+    first_event_fingerprint TEXT NOT NULL CHECK(length(first_event_fingerprint) = 64),
+    first_event_kind TEXT NOT NULL CHECK(first_event_kind = 'F5_DISPATCH_ARMED'),
+    first_event_aggregate_ref TEXT NOT NULL CHECK(first_event_aggregate_ref = intent_id),
+    first_event_aggregate_revision INTEGER NOT NULL CHECK(first_event_aggregate_revision = attempt_revision),
+    first_call_authorization_kind TEXT NOT NULL CHECK(first_call_authorization_kind = 'F5_CALL_AUTHORIZATION'),
+    first_call_authorization_logical_id TEXT NOT NULL CHECK(first_call_authorization_logical_id = intent_id),
+    first_call_authorization_ref TEXT NOT NULL CHECK(first_call_authorization_ref = 'call-auth:' || arm_id),
+    first_call_authorization_revision INTEGER NOT NULL CHECK(first_call_authorization_revision > 0),
+    first_call_authorization_fingerprint TEXT NOT NULL CHECK(length(first_call_authorization_fingerprint) = 64),
+    first_call_authorization_subject_ref TEXT NOT NULL CHECK(first_call_authorization_subject_ref = attempt_id),
+    first_call_authorization_subject_revision INTEGER NOT NULL CHECK(first_call_authorization_subject_revision = attempt_revision),
+    committed_event_count INTEGER NOT NULL CHECK(committed_event_count = 1),
+    committed_call_authorization_count INTEGER NOT NULL CHECK(committed_call_authorization_count = 1),
+    arm_fingerprint TEXT NOT NULL UNIQUE CHECK(length(arm_fingerprint) = 64),
+    armed_event_sequence INTEGER NOT NULL CHECK(armed_event_sequence = first_event_sequence),
+    FOREIGN KEY(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      REFERENCES delivery_attempt(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_event_sequence, first_event_ref, first_event_fingerprint, first_event_kind, first_event_aggregate_ref, first_event_aggregate_revision)
+      REFERENCES event(event_sequence, event_id, event_fingerprint, event_kind, aggregate_ref, aggregate_revision)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_call_authorization_kind, first_call_authorization_logical_id, first_call_authorization_revision, first_call_authorization_ref, first_call_authorization_fingerprint, first_call_authorization_subject_ref, first_call_authorization_subject_revision)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint, subject_ref, subject_revision)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+
+immutable_trigger_sql: |-
+  CREATE TRIGGER canonical_fact_no_update
+  BEFORE UPDATE ON canonical_fact
+  BEGIN
+    SELECT RAISE(ABORT, 'canonical_fact_immutable');
+  END;
+  CREATE TRIGGER canonical_fact_no_delete
+  BEFORE DELETE ON canonical_fact
+  BEGIN
+    SELECT RAISE(ABORT, 'canonical_fact_immutable');
+  END;
+
+transaction_replacements:
+  F3_READY_after_frozen_witness:
+    parse: strict_duplicate_rejecting_JSON
+    canonical_bytes: exact_JCS_equivalent_UTF8_encoding_for_closed_fixture_profile
+    fingerprint: SHA256_of_exact_canonical_bytes
+    exact_decoded_tuple:
+      - resident_id
+      - authority_epoch
+      - incarnation_id
+      - epoch_fingerprint
+      - witness_reservation_ref
+      - witness_reservation_fingerprint
+      - ownership_event_sequence
+      - ownership_event_id
+      - ownership_event_fingerprint
+    currentness: exact_current_F3_WITNESS_COMMIT_pointer
+    commit: READY_Event_fact_pointer_all_or_zero
+  F5_first_apply_and_exact_replay:
+    authorization_subject_ref: equals_attempt_id
+    authorization_subject_revision: equals_attempt_revision
+    authorization_composite_FK_includes_subject_tuple: true
+    replay_read_only: true
+    returned_identity_fields:
+      - first_event_sequence
+      - first_event_ref
+      - first_event_fingerprint
+      - first_call_authorization_kind
+      - first_call_authorization_logical_id
+      - first_call_authorization_ref
+      - first_call_authorization_revision
+      - first_call_authorization_fingerprint
+      - first_call_authorization_subject_ref
+      - first_call_authorization_subject_revision
+    before_after_count_equality_required: true
+    exact_replay_additions: {Event: 0, call_authorization: 0}
+  canonical_fact_history:
+    update: ABORT
+    delete: ABORT
+    append_new_revision: exact_predecessor_INSERT_only
+
+fixed_SQLite_cases:
+  positive:
+    - F3_exact_witness_bytes_tuple_RECOVERING_to_READY
+    - F5_exact_subject_bound_first_apply
+    - F5_exact_replay_zero_additions
+    - canonical_fact_append_revision_two
+  negative:
+    - F3_witness_bad_digest
+    - F3_witness_tuple_substitution
+    - F3_witness_duplicate_key
+    - F5_authorization_subject_ref_substitution
+    - F5_authorization_subject_revision_substitution
+    - F5_replay_identity_substitution
+    - canonical_fact_same_revision_update
+    - canonical_fact_coordinated_pointer_update
+    - canonical_fact_delete
+
+governance:
+  database_file_created: false
+  SQLite_scope: isolated_in_memory_only
+  runtime_usable: false
+  implementation_authorized: false
+

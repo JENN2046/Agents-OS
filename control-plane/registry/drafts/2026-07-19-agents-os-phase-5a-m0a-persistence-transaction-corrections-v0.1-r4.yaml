@@ -1,0 +1,197 @@
+schema_version: agents-os.m0a-persistence-transaction-corrections.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R4
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R3
+
+effective_schema:
+  table_inventory_remains_exhaustive: true
+  effective_table_count: 18
+  added_tables: []
+  removed_tables: []
+  replace_R3_or_inherited_tables:
+    - resident_incarnation
+    - resident_authority_epoch
+    - outbox_claim
+    - delivery_attempt
+    - dispatch_arm
+    - first_apply_guard
+    - delivery_receipt
+
+replacement_schema_sql: |-
+  CREATE TABLE resident_incarnation (
+    incarnation_id TEXT PRIMARY KEY,
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    incarnation_revision INTEGER NOT NULL CHECK(incarnation_revision > 0),
+    process_nonce_fingerprint TEXT NOT NULL CHECK(length(process_nonce_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(resident_id, incarnation_revision),
+    UNIQUE(incarnation_id, resident_id)
+  ) STRICT;
+  CREATE TABLE resident_authority_epoch (
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    authority_epoch INTEGER NOT NULL CHECK(authority_epoch > 0),
+    epoch_fingerprint TEXT NOT NULL UNIQUE CHECK(length(epoch_fingerprint) = 64),
+    expected_previous_authority_epoch INTEGER,
+    previous_authority_epoch_fingerprint TEXT,
+    authority_generation INTEGER NOT NULL CHECK(authority_generation > 0),
+    witness_reservation_ref TEXT NOT NULL,
+    witness_reservation_fingerprint TEXT NOT NULL CHECK(length(witness_reservation_fingerprint) = 64),
+    incarnation_id TEXT NOT NULL,
+    previous_incarnation_id TEXT,
+    restore_decision_ref TEXT,
+    restore_decision_fingerprint TEXT,
+    ownership_started_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    canonical_bytes BLOB NOT NULL,
+    PRIMARY KEY(resident_id, authority_epoch),
+    UNIQUE(resident_id, authority_epoch, incarnation_id, epoch_fingerprint),
+    FOREIGN KEY(incarnation_id, resident_id) REFERENCES resident_incarnation(incarnation_id, resident_id) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(resident_id, expected_previous_authority_epoch, previous_incarnation_id, previous_authority_epoch_fingerprint)
+      REFERENCES resident_authority_epoch(resident_id, authority_epoch, incarnation_id, epoch_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED,
+    CHECK((authority_epoch = 1 AND expected_previous_authority_epoch IS NULL AND previous_authority_epoch_fingerprint IS NULL AND previous_incarnation_id IS NULL) OR
+          (authority_epoch > 1 AND expected_previous_authority_epoch = authority_epoch - 1 AND length(previous_authority_epoch_fingerprint) = 64 AND previous_incarnation_id IS NOT NULL AND previous_incarnation_id <> incarnation_id)),
+    CHECK((restore_decision_ref IS NULL AND restore_decision_fingerprint IS NULL) OR
+          (restore_decision_ref IS NOT NULL AND length(restore_decision_fingerprint) = 64))
+  ) STRICT;
+  CREATE TABLE outbox_claim (
+    claim_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_epoch INTEGER NOT NULL CHECK(claim_epoch > 0),
+    lease_expires_at_utc TEXT NOT NULL CHECK(lease_expires_at_utc GLOB '????-??-??T??:??:??*Z'),
+    lease_fact_kind TEXT NOT NULL CHECK(lease_fact_kind = 'OUTBOX_CLAIM_LEASE'),
+    lease_fact_logical_id TEXT NOT NULL CHECK(lease_fact_logical_id = intent_id),
+    lease_fact_ref TEXT NOT NULL,
+    lease_fact_revision INTEGER NOT NULL CHECK(lease_fact_revision > 0),
+    lease_fact_fingerprint TEXT NOT NULL CHECK(length(lease_fact_fingerprint) = 64),
+    claim_fingerprint TEXT NOT NULL UNIQUE CHECK(length(claim_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(intent_id, claim_epoch),
+    UNIQUE(claim_id, intent_id),
+    FOREIGN KEY(lease_fact_kind, lease_fact_logical_id, lease_fact_revision, lease_fact_ref, lease_fact_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE delivery_attempt (
+    attempt_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_id TEXT NOT NULL,
+    attempt_revision INTEGER NOT NULL CHECK(attempt_revision > 0),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    attempt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(attempt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(intent_id, attempt_revision),
+    UNIQUE(intent_id, attempt_id),
+    UNIQUE(attempt_id, intent_id, claim_id),
+    UNIQUE(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes),
+    FOREIGN KEY(claim_id, intent_id) REFERENCES outbox_claim(claim_id, intent_id) DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE dispatch_arm (
+    arm_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE,
+    intent_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    first_event_ref TEXT NOT NULL,
+    first_event_fingerprint TEXT NOT NULL CHECK(length(first_event_fingerprint) = 64),
+    first_call_authorization_ref TEXT NOT NULL,
+    first_call_authorization_revision INTEGER NOT NULL CHECK(first_call_authorization_revision > 0),
+    first_call_authorization_fingerprint TEXT NOT NULL CHECK(length(first_call_authorization_fingerprint) = 64),
+    committed_event_count INTEGER NOT NULL CHECK(committed_event_count = 1),
+    committed_call_authorization_count INTEGER NOT NULL CHECK(committed_call_authorization_count = 1),
+    arm_fingerprint TEXT NOT NULL UNIQUE CHECK(length(arm_fingerprint) = 64),
+    armed_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      REFERENCES delivery_attempt(attempt_id, intent_id, claim_id, request_id, request_fingerprint, request_bytes)
+      DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_event_ref, first_event_fingerprint) REFERENCES event(event_id, event_fingerprint) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_call_authorization_ref, first_call_authorization_revision, first_call_authorization_fingerprint)
+      REFERENCES canonical_fact(fact_ref, fact_revision, fact_fingerprint) DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE first_apply_guard (
+    intent_id TEXT PRIMARY KEY REFERENCES outbox_intent(intent_id),
+    winning_attempt_id TEXT NOT NULL UNIQUE,
+    winning_claim_id TEXT NOT NULL,
+    guard_revision INTEGER NOT NULL CHECK(guard_revision = 1),
+    guard_fingerprint TEXT NOT NULL UNIQUE CHECK(length(guard_fingerprint) = 64),
+    acquired_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(intent_id, winning_attempt_id, winning_claim_id, guard_fingerprint),
+    FOREIGN KEY(winning_attempt_id, intent_id, winning_claim_id)
+      REFERENCES delivery_attempt(attempt_id, intent_id, claim_id) DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE delivery_receipt (
+    source_id TEXT NOT NULL,
+    receipt_id TEXT NOT NULL,
+    attempt_id TEXT NOT NULL,
+    intent_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    receipt_revision INTEGER NOT NULL CHECK(receipt_revision > 0),
+    first_apply_guard_fingerprint TEXT NOT NULL,
+    receipt_state TEXT NOT NULL CHECK(receipt_state IN ('APPLIED_CURRENT','HISTORY_ONLY','REJECTED','INDETERMINATE','UNKNOWN')),
+    canonical_bytes BLOB NOT NULL,
+    receipt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(receipt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(source_id, receipt_id),
+    UNIQUE(source_id, receipt_id, receipt_revision),
+    FOREIGN KEY(attempt_id, intent_id, claim_id) REFERENCES delivery_attempt(attempt_id, intent_id, claim_id) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(intent_id, attempt_id, claim_id, first_apply_guard_fingerprint)
+      REFERENCES first_apply_guard(intent_id, winning_attempt_id, winning_claim_id, guard_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+
+transaction_replacements:
+  resident_incarnation_epoch_RECOVERING_then_witness_bound_READY:
+    precondition: current lock plus exact RESERVED witness for intended epoch N_plus_1
+    epoch_transaction_steps:
+      - BEGIN_IMMEDIATE
+      - insert_new_resident_incarnation
+      - insert_exact_next_resident_authority_epoch
+      - insert_RECOVERING_lifecycle_fact
+      - pointer_CAS
+      - crash_injection_after_pointer_CAS_before_Event
+      - insert_ownership_Event
+      - validate_deferred_FKs
+      - COMMIT
+    between_transactions: durably_commit_exact_F3_witness_then_reobserve_same_epoch_and_incarnation
+    ready_transaction_steps:
+      - BEGIN_IMMEDIATE
+      - recheck_exact_witness_COMMIT_epoch_incarnation_and_Event
+      - insert_READY_lifecycle_fact
+      - pointer_CAS
+      - insert_READY_Event
+      - validate_deferred_FKs
+      - COMMIT
+    any_unknown_or_mismatch: INDETERMINATE_no_READY
+  outbox_claim_exact_lease_fact:
+    required_equality: lease_fact_kind=OUTBOX_CLAIM_LEASE AND lease_fact_logical_id=intent_id
+  dispatch_arm_and_first_apply_exact_request:
+    required_equality: arm_attempt_intent_claim_request_ID_fingerprint_bytes=selected_delivery_attempt_exact_tuple
+    first_stored_counts: {Event: 1, call_authorization: 1}
+    exact_replay_additional_counts: {Event: 0, call_authorization: 0}
+  receipt_apply_exact_attempt_guard:
+    required_equality: receipt_attempt_intent_claim_guard=existing_winning_guard_exact_tuple
+
+fixed_SQLite_cases:
+  positive:
+    - F3_genesis_epoch_1_with_incarnation_and_Event
+    - F3_restart_epoch_N_plus_1_exact_prior_incarnation
+    - F5_exact_lease_attempt_guard_arm_receipt_graph
+  negative:
+    - F3_epoch_gap
+    - F3_wrong_previous_incarnation
+    - F3_missing_ownership_Event
+    - F5_unrelated_lease_fact_kind_or_intent
+    - F5_arm_request_tuple_mismatch
+    - F5_receipt_cross_intent_guard
+    - F5_zero_stored_first_Event_or_call_count
+
+governance:
+  database_file_creation_authorized: false
+  in_memory_validation_only: true
+  implementation_authorized: false

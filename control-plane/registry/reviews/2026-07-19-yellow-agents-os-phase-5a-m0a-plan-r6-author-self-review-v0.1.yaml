@@ -1,0 +1,68 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R6_ATOMIC_BUNDLE
+date: 2026-07-19
+reviewer:
+  identity: Nobao_author_run
+  independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+partial_acceptance: forbidden
+subjects:
+  R1: 4
+  R2: 7
+  R3: 7
+  R4: 7
+  R5: 8
+  R6: 9
+  total: 42
+R6_subject_hashes:
+  amendment: 8b8996de74a0580846b4c1a814b4736865c59c57a60ba703a4582535453f8f6a
+  semantic_owner: b776d913370cbce76c82c497e1b8f307f43123712b43864927797c8b835a8ac9
+  persistence: c7ee70f591c854a4cd5b0b4c1b245f967064f5b1f4b5ccdb082e227c8539df61
+  materialization_ABI: 5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e
+  structured_input_totality: 14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660
+  builder: 83067fe8b08ed19327d573d14531c8412063900d0c73358447c812b181b1cbd0
+  witness: 1f97aa2b274f2db101d355d25f5854567ad4ecf6d263d4bf3f43a3aec5ddba8c
+  JavaScript_fixture: 06517ae19cf58687eaf089ecc482e25bdc4333d7f0db784f699dd07bb5503774
+  validator: 6a67088b15970989e4a2ce426cb415030fe53bddd89d51d184eda5782003db77
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R1_R2_R3_R4_R5_subject_bytes_changed: false
+R5_finding_disposition:
+  B1_F5_authorization_subject_and_replay_identity_gap: CLOSED_CLAIMED
+  B2_F3_witness_commit_content_and_tuple_gap: CLOSED_CLAIMED
+  B3_R5_wrapper_inherited_ABI_inconsistency: CLOSED_CLAIMED
+  B4_boundary_flags_not_semantically_closed: CLOSED_CLAIMED
+  B5_same_revision_rewrite_not_relationally_rejected: CLOSED_CLAIMED
+  B6_duplicate_key_totality_gap: CLOSED_CLAIMED
+author_validation:
+  effective_tables: 18/18
+  SQLite_cases: 13/13
+  JavaScript_AST_cases: 15/15
+  structured_input_cases: 7/7
+  total_fixed_cases: 35/35
+  self_test_mutations_rejected: 11/11
+  builder_byte_reproduction: PASS
+  database_file_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED
+author_review_limit:
+  independent_review_created: false
+  independent_review_result: NOT_RUN
+  author_result_does_not_accept_or_freeze_plan: true
+  author_result_does_not_start_implementation: true
+governance:
+  Plan_R6_started: true
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

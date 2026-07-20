@@ -1,0 +1,632 @@
+schema_version: agents-os.review-package-manifest.v0.1
+package_id: agents-os-phase-5a-m0a-plan-r4-atomic-independent-review-package-v0.1
+date: '2026-07-19'
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_independent_review
+package_shape: complete_offline_hash_bound_bundle
+integrity:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  review_mode: fresh_full_atomic_hash_bound_independent_review
+  atomic: true
+  partial_review: forbidden
+  precedence:
+  - R4_explicit_replacements
+  - R3_all_other_clauses
+  - R2_all_other_clauses
+  - R1_all_other_clauses
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  subject_count: 25
+  subjects:
+  - role: R1_implementation_plan
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-implementation-plan-v0.1.md
+    sha256: 40b8aa4b745d0262369bbefeac3a12367df99e56c67a62e2ba3b208404acc94f
+  - role: R1_exact_build_profile
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml
+    sha256: e6f2d4e6fea62453a4ecb290e15f48c862a0bc55c829d26e106cae7eaf5f7868
+  - role: R1_contract_traceability_matrix
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml
+    sha256: 85a333265336050223f01c30690e8964bd8870c815a6970ecbf8a9c6e417f612
+  - role: R1_validation_fault_profile
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml
+    sha256: 3ff0536cb55b44cd3fabcfac981f3aaed02ea13f125791d5ad7e1e219545858e
+  - role: R2_normative_amendment
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r2-amendment.draft.md
+    sha256: 777066d039319bdc74cb487b07d23ccd983d18c0a13a29172674e04d37ffd78e
+  - role: R2_contract_obligation_inventory
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-closed-contract-obligation-inventory-v0.1-r2.yaml
+    sha256: b822a483f1983aa92ef1b69c15e21dff3565beb99e00132e13ceeed11cb67698
+  - role: R2_exact_persistence_profile
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-exact-persistence-profile-v0.1-r2.yaml
+    sha256: c0385ea331925bd93507bee9606d1ed58eb2fa5aa3816c997438acd70ed0f555
+  - role: R2_external_materialization_profile
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-external-materialization-profile-v0.1-r2.yaml
+    sha256: 531125fa0603c61e82681df8aceb6d08d2802c6bd42138e00734396d8642a080
+  - role: R2_deterministic_closure_witness_builder
+    path: control-plane/registry/build-phase5a-m0a-plan-r2-closure-witness.py
+    sha256: bb0b96f545f0cc5e47db39a5c62535bf8354174d5db4b7ceeb61b90925f8e6e2
+  - role: R2_closure_witness
+    path: control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r2-closure-witness-v0.1.json
+    sha256: 7637502aeecaf46be84185590b5ad82cb0c2950a7f58e2c98a94ab490c25067e
+  - role: R2_offline_validator
+    path: control-plane/registry/validate-phase5a-m0a-plan-r2-closure.py
+    sha256: 600755c8d8e7bf8c776e0874b5654957bc21fc903dc7791d35449f142fd2e149
+  - role: R3_normative_amendment
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r3-amendment.draft.md
+    sha256: b9379c67ce1f304add904a660688c876c41c95aa95f26ecb6be6c28708ca087d
+  - role: R3_semantic_owner_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r3.yaml
+    sha256: e8d3b211d8c7beb1255f3896f39fc3b596f735daaf2c190f4bfeffe03ac49424
+  - role: R3_persistence_transaction_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r3.yaml
+    sha256: ff6ab98781e4ba0f3cba26138e1c112c03f3223b2db2563890f37d23db0aad76
+  - role: R3_materialization_ABI_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-materialization-abi-corrections-v0.1-r3.yaml
+    sha256: 8a04a0094a2568ffe1d81c05b402bfb9ba4e477dfcbe37de90b64cf7bbdce17f
+  - role: R3_deterministic_witness_builder
+    path: control-plane/registry/build-phase5a-m0a-plan-r3-closure-witness.py
+    sha256: 444b6381aac31e39624a6d684b7fc5a885cddea33b9d995f1bba0db1a454cdde
+  - role: R3_closure_witness
+    path: control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r3-closure-witness-v0.1.json
+    sha256: 14578eb742fb49c2b5461274c4b42ec4b67e3ab5b5a9a9c2cd262dacc0509635
+  - role: R3_offline_validator
+    path: control-plane/registry/validate-phase5a-m0a-plan-r3-closure.py
+    sha256: 62394d29d3fa3cb74977117642100a8e7ecf84f1ca3ba5e049bdf22eeeb8b6c8
+  - role: R4_normative_amendment
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r4-amendment.draft.md
+    sha256: 8ec541965cbd539ecc4b2ffe1f0bc1b6f1df2b8745d9460ea5e41b2daa1eab19
+  - role: R4_semantic_owner_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r4.yaml
+    sha256: cf8b24e8bd70831be2dff82c15980dd6303fa03641157ab08de2f12999e0b227
+  - role: R4_persistence_transaction_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r4.yaml
+    sha256: 57fb9503bae53eb5c376e59d104534e351c43b22c9ee679cc8b06c9c45a2453a
+  - role: R4_materialization_ABI_corrections
+    path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-materialization-abi-corrections-v0.1-r4.yaml
+    sha256: b33ac13cd69832f7cfb2e612fa411f54c533bad2246641aa8543fd1aa9f1be04
+  - role: R4_deterministic_witness_builder
+    path: control-plane/registry/build-phase5a-m0a-plan-r4-closure-witness.py
+    sha256: cd248b9b185b1fefc33b87a0e645340308c0ef694419d786c02429eded39bd5b
+  - role: R4_closure_witness
+    path: control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r4-closure-witness-v0.1.json
+    sha256: 7a5e325c2fd92449462c015396a5eda819a3cd7283994e9ba9e77248e49fb866
+  - role: R4_offline_validator
+    path: control-plane/registry/validate-phase5a-m0a-plan-r4-closure.py
+    sha256: 44e100c443338dd0d59d61204f29aac0dbdd4cb628add0a1ea55626eedcd894e
+authority_inputs:
+- role: R1_workspace_governance
+  path: AGENTS.md
+  sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5
+- role: R1_accepted_home_roadmap_subject
+  path: control-plane/registry/drafts/2026-07-13-agents-os-home-domain-construction-roadmap-r3.draft.md
+  sha256: 871358a2f06eb71b10f7c5feee2fc99df065d397735aada7107eb485d967b72d
+- role: R1_accepted_home_roadmap_decision
+  path: control-plane/registry/decisions/2026-07-13-agents-os-home-domain-construction-roadmap-r3-acceptance-decision-v0.1.yaml
+  sha256: a31dbe751c3edd027065f118a860dd66eec7eb2947a8ba5e5e00e319f334350b
+- role: R1_accepted_resident_architecture
+  path: control-plane/registry/decisions/2026-07-12-agents-os-resident-operating-architecture-v0.1.md
+  sha256: 12e8984ad24f67d58d26ef9debf605317b0761a6e4f0181ade328567af52373e
+- role: R1_accepted_high_privilege_architecture
+  path: control-plane/registry/decisions/2026-07-12-agents-os-vcp-high-privilege-architecture-v0.1.md
+  sha256: 9b3a8ecf80ab1a8c7cba120f46d0ec70bab437040dda3c7a468cbe5623875a71
+- role: R1_construction_readiness_review
+  path: control-plane/registry/reviews/2026-07-14-yellow-agents-os-construction-readiness-review-v0.1.md
+  sha256: 8159c32d359243b81250f639c7e267619e59176a682cad2afee9bd28ed74d670
+- role: R1_accepted_F1_decision
+  path: control-plane/registry/decisions/2026-07-14-agents-os-f1-goal-spec-plan-membership-acceptance-decision-v0.1.yaml
+  sha256: e49e572055b8e367d38cc70297f5ee144482f4023c62aa46e74de35d999977b2
+- role: R1_frozen_F2_decision
+  path: control-plane/registry/decisions/2026-07-16-agents-os-f2-actor-identity-delegation-r22-atomic-freeze-decision-v0.1.yaml
+  sha256: bf0fa804d8fd58ac6dfd4e5bb775d3b831ccc5b91443d6dbeac50c5414de97a1
+- role: R1_frozen_F2_manifest
+  path: control-plane/registry/reports/2026-07-16-agents-os-f2-r22-atomic-freeze-review-package-v0.1.manifest.yaml
+  sha256: 95bed046e98737efd86bd73f528594620a137d03ed179dd95bbb98a537cc11d1
+- role: R1_frozen_F3_decision
+  path: control-plane/registry/decisions/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-r4-atomic-freeze-decision-v0.1.yaml
+  sha256: f692ef1a1af8ac15f40c8af696f486240b73a3ddf391633078e31f17eaf62529
+- role: R1_frozen_F3_manifest
+  path: control-plane/registry/reports/2026-07-16-agents-os-f3-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 3075cda63fcb2c7937cb800a3bc09cc830d17e2f98b899828db15e09ab9f79ff
+- role: R1_frozen_F4_decision
+  path: control-plane/registry/decisions/2026-07-17-agents-os-f4-taskpermit-host-authentication-effect-admission-r9-atomic-freeze-decision-v0.1.yaml
+  sha256: 1f8cb1a9306175c5d1777e60804c90a0c91d3234d074aaa09d599e25440d79c2
+- role: R1_frozen_F5_decision
+  path: control-plane/registry/decisions/2026-07-17-agents-os-f5-outbox-delivery-recovery-r7-atomic-freeze-decision-v0.1.yaml
+  sha256: 73270ad50c639be792f252e55befcf93c3dcc3edfffc74cb11c7c0fd212d7dbb
+- role: R1_frozen_F6_decision
+  path: control-plane/registry/decisions/2026-07-18-agents-os-f6-validation-requirement-current-decision-r6-atomic-freeze-decision-v0.1.yaml
+  sha256: 6bbe48030f6a739d683253f40b4ae122671ac801761eb7a752215c1b84920890
+- role: R1_frozen_F7_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-f7-home-domain-minimum-semantics-r2-atomic-freeze-decision-v0.1.yaml
+  sha256: f16d527fa41aa3a4036206d2efb80236936438caac0c25005f80f12d8fea922a
+- role: R1_frozen_F7_manifest
+  path: control-plane/registry/reports/2026-07-19-agents-os-f7-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: d2fc34cd8df70d1a960e373606f6c53468e6020b8a8087b551561ebf6a032d35
+- role: R1_frozen_F8_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml
+  sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d
+- role: R1_frozen_F8_manifest
+  path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+- role: R1_frozen_F8_independent_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+  sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+- role: R1_F8_mainline_durability_receipt
+  path: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-mainline-durability-closeout-v0.1.md
+  sha256: 815dead7e428e1919791d67ca304309138ef160324e773c11e754f67089a9c08
+- role: R1_immutable_Phase_5A_plan_start_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-closure-start-decision-v0.1.yaml
+  sha256: 371fdd0d5c58174331751cb5fc04eb8b7606efc9ee6f23a4dd3dddca5d48bcb3
+- role: R1_manifest
+  path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+- role: R1_independent_BLOCK_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-full-atomic-independent-review.yaml
+  sha256: 68d0fd5a5c6abb63c9b59fec980596aa9bb34adc566115f7cffa1ae9fb02ab48
+- role: R1_finding_disposition
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r1-finding-disposition-v0.1.yaml
+  sha256: f1cc7d243c955a1b15c2de3128b6a7cd8ede8eaf1206c448b5e69f0d302429a3
+- role: R2_start_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r2-narrow-closure-start-decision-v0.1.yaml
+  sha256: 6cdd851d6664b731e889019bfe1a6a7b0c64a4400ab83440f3aeef6ed15bfa31
+- role: F1_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-14-agents-os-goal-specification-success-criteria-plan-membership-v0.1.draft.md
+  sha256: 08dcc4cd2c6662e1f408cecb4f51107e50ad15e236b2ec965b898619324aecb8
+- role: F1_canonical_subject_2
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r2-amendment.draft.md
+  sha256: 081732383e50773052503a07314d37982a9e1023759582e59a9ed4a3724617bb
+- role: F1_canonical_subject_3
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f1-goal-spec-plan-membership-v0.1-r3-amendment.draft.md
+  sha256: 2f0f5c57889b9286715db997f79b67841c9574f2f0f950f6e8a362e11cb1697b
+- role: F2_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-14-agents-os-actor-identity-delegation-v0.1.draft.md
+  sha256: 639e255417be99613cbe768c3b22edec7d5e1303d5a006e2c5dd70ceb1e83f2b
+- role: F2_canonical_subject_2
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r2-amendment.draft.md
+  sha256: 8df5e63b9170491c8ea0e764ee6a297035164160bee976674c073f5bf921edcd
+- role: F2_canonical_subject_3
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r3-amendment.draft.md
+  sha256: d4c7e2e59a71911e47b62dd1ecddc7f56e1292841ceb7181c4d08346f7a0a9db
+- role: F2_canonical_subject_4
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r4-amendment.draft.md
+  sha256: a60a6a75c24b0fca68cb87e6e2f576f542f0f4a20caf12adbebb136ad9f51f59
+- role: F2_canonical_subject_5
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r5-amendment.draft.md
+  sha256: cf568eac5aa06b785ad047d41e2f22e7223e625840a3d96eccfcd9a1434b57be
+- role: F2_canonical_subject_6
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r6-amendment.draft.md
+  sha256: bed38cf83a2d15da3c11383b9b1ec264a3bf390f6d9fc0931f45d2d8c0e94932
+- role: F2_canonical_subject_7
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r7-amendment.draft.md
+  sha256: 343881f2292fbb3c09b0cc572b0d9a9c8f77eef1e4b5957134de31796228187c
+- role: F2_canonical_subject_8
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r8-amendment.draft.md
+  sha256: 861b5ac20d170466d0ecdcc7f1bdf5aeaf50f01a7431dbea3b027b66bce1fde3
+- role: F2_canonical_subject_9
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r9-amendment.draft.md
+  sha256: 438eae729291ddefebbc7f0f25c17575e54c34e6c3e6699b633b28759d295a94
+- role: F2_canonical_subject_10
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r10-amendment.draft.md
+  sha256: b8ec2014cd2117b4eca92bb8962f0cbd92cf5550023320d268d2a31a28d0adf8
+- role: F2_canonical_subject_11
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r11-amendment.draft.md
+  sha256: baa7cd2962c45a5c4f31da759ddc25d2a7d8b2ad3b67b6f43c1776c8ce0d3ea6
+- role: F2_canonical_subject_12
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r12-amendment.draft.md
+  sha256: 4f6baae88d419ad321a8de875703c08df4608ec8d6dc95305174fe58a617e82a
+- role: F2_canonical_subject_13
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r13-amendment.draft.md
+  sha256: e1bbebbb45b01709951a2cb03fd95d2b9f93ddb687285ce432994ed5c1ad52ce
+- role: F2_canonical_subject_14
+  path: control-plane/registry/drafts/2026-07-14-agents-os-f2-actor-identity-delegation-v0.1-r14-amendment.draft.md
+  sha256: 19f624306eaa349404ef0669fbf69b97a6f45cff5b47cdc25160035b0cd77190
+- role: F2_canonical_subject_15
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r15-amendment.draft.md
+  sha256: b6e705312dcbb986999326aefd3b75e6299ba31e66733103cd94fd8711a71ad2
+- role: F2_canonical_subject_16
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r16-amendment.draft.md
+  sha256: b3381201ba2839387844957c8df5ffe8851ff45506b67999b1ff60d56441134a
+- role: F2_canonical_subject_17
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r17-amendment.draft.md
+  sha256: 3ee7bfc99fb2888d8f9994c2e2d36a039f8da1112db39b876544636bafedf1c8
+- role: F2_canonical_subject_18
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r18-amendment.draft.md
+  sha256: 1baf807dcff8fee1d3e0f64a121bbc88c338c53488b1bcf58b2f7af959a0e222
+- role: F2_canonical_subject_19
+  path: control-plane/registry/drafts/2026-07-15-agents-os-f2-actor-identity-delegation-v0.1-r19-amendment.draft.md
+  sha256: d26c2a42264789fcd6ae7587ebbe65e15f8c1773188922428f61a723368965b3
+- role: F2_canonical_subject_20
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r20-final-freeze-closure-amendment.draft.md
+  sha256: cad4f293dee172d793db19c9cec0e6148116d44e6b659b3f2ed528a409f5772b
+- role: F2_canonical_subject_21
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r21-verified-core-constructibility-amendment.draft.md
+  sha256: 81faf12bb2af9921cc14f85920ea1db10bb5c58fb2ba906ae9f838a6071bcffc
+- role: F2_canonical_subject_22
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f2-actor-identity-delegation-v0.1-r22-synthetic-derived-subject-assurance-closure-amendment.draft.md
+  sha256: 78dd353fe35659669ed10b403d9b266937d91a5f455e13321ef5a9036330f365
+- role: F3_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+  sha256: e439b3178984ac28ae584a961e2e0dc2248002592f0fb571e5e0db05d117a70e
+- role: F3_canonical_subject_2
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+  sha256: 4cd066dacf0f73d21566640a25c5cf5e90ca800ed4a793827c5088936703b236
+- role: F3_canonical_subject_3
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r3-amendment.draft.md
+  sha256: 8a25b247a0618ab06ef6186464405b9d137bf68967a9952647986562cb93244c
+- role: F3_canonical_subject_4
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r4-amendment.draft.md
+  sha256: 17b933e2ddf063422d4d695b5f07542d00f34a4a20280765369d0949afcff6ad
+- role: F4_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r1.draft.md
+  sha256: 3378396108f090469984facb8ddcb238ae122be9cab71afe2f8c3bd1cd577db3
+- role: F4_canonical_subject_2
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-m0a-witness-v0.1.json
+  sha256: e13f501ebf5d120778a9971f9d5884764b8635a557dc2fa387f3adfb0873fd75
+- role: F4_canonical_subject_3
+  path: control-plane/registry/validate-f4-m0a-witness.py
+  sha256: a39b860c627124c0c0304a5bca51bda6fa806d0f7c778078706e60c9235e89aa
+- role: F4_canonical_subject_4
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r2-amendment.draft.md
+  sha256: 30cdbf0acb348d4c0c933f95bdcf51c7f3a6326ad678d8fca1f19faf4c85f705
+- role: F4_canonical_subject_5
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r2-result-reason-totality-vectors-v0.1.json
+  sha256: 048dfdb4856db9324d7e71c55525d447747849ff4dc87d04a5cdf093bfb261ad
+- role: F4_canonical_subject_6
+  path: control-plane/registry/validate-f4-r2-result-reason-totality.py
+  sha256: 519ce90b04e0084bcc23e4682f6032518f7051d43267bff44d4ca06e60a08941
+- role: F4_canonical_subject_7
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r3-amendment.draft.md
+  sha256: 4a65021d5c15640531aa59c3641f1ef1ab6dae86421a4ebfc4f6a3af25dd9939
+- role: F4_canonical_subject_8
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r3-prestart-start-disposition-totality-vectors-v0.1.json
+  sha256: 548ddc2c59d88a6732b7e7efeacbc671d6ce25a3b846c2807627b40908abdce4
+- role: F4_canonical_subject_9
+  path: control-plane/registry/validate-f4-r3-prestart-start-disposition-totality.py
+  sha256: 12522f69e8d7661f40ddd1d603bb80476af205e9856056bdde16f6f47d4845ec
+- role: F4_canonical_subject_10
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r4-amendment.draft.md
+  sha256: 7c6034e037cfe2ff5d31b4c5f47bd2e584536cf9b8c8dbdda5b706512a03e79b
+- role: F4_canonical_subject_11
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r4-start-observation-no-fact-vectors-v0.1.json
+  sha256: 540e58e5ccd7a9d756016d44218b358d7dffc71e894447d95ba4b4f1eafd13ff
+- role: F4_canonical_subject_12
+  path: control-plane/registry/validate-f4-r4-start-observation-no-fact.py
+  sha256: 2176b00aa8f207b230fac314e439902455d0170b955bd6ae512edfd3ae5a2155
+- role: F4_canonical_subject_13
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r5-amendment.draft.md
+  sha256: 90715a14279af382d3286e5024bc6cd136447c7f7e42930ebb05aa7c381bb047
+- role: F4_canonical_subject_14
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r5-cross-phase-authority-closure-vectors-v0.1.json
+  sha256: 22650373a81dd71c3dafefb77e89b5d9fd483505b5e01892fa0f6d1cce766dd0
+- role: F4_canonical_subject_15
+  path: control-plane/registry/validate-f4-r5-cross-phase-authority-closure.py
+  sha256: 3fc4c8eccb9fec430a63de4c355025b4a17b9605943531b34637776a3dbaf518
+- role: F4_canonical_subject_16
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r6-amendment.draft.md
+  sha256: 09af4b475e6ef66c0c5faa7ec60179cf0f6a0e111f96d9d1d2ef810311af1be5
+- role: F4_canonical_subject_17
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r6-full-effective-m0a-witness-v0.1.json
+  sha256: 3ecf13d4b1297dd041ee982f351e813523a79d29f253cb64c58d451f1860970f
+- role: F4_canonical_subject_18
+  path: control-plane/registry/validate-f4-r6-full-effective-m0a.py
+  sha256: 02be5f7ebf84be631659c27e3117fc5e983ada7edafed274eb435b491f0d6591
+- role: F4_canonical_subject_19
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r7-amendment.draft.md
+  sha256: bf0ec245382e1b9315faf946927464efc97223c4b2581761895cd4e09f6d533c
+- role: F4_canonical_subject_20
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r7-complete-effective-m0a-witness-v0.1.json
+  sha256: 57141c7c470f4424c3bff43cf2d410550200309c27d3b400dba69257e019666b
+- role: F4_canonical_subject_21
+  path: control-plane/registry/validate-f4-r7-complete-effective-m0a.py
+  sha256: 9bc7d2873813e499d11ab34d4804177fe2a74130744a678861cbe6dfb39c9840
+- role: F4_canonical_subject_22
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r8-amendment.draft.md
+  sha256: f483f8db5df3fc7e435c2a5acd8a3d29fff438f08b69ea3049543d0fded3bb0c
+- role: F4_canonical_subject_23
+  path: control-plane/registry/build-f4-r8-complete-effective-m0a.py
+  sha256: dc65acd98ba06c08495c2531571a4ea8a73093a0aa8a28eb07a26b0b15c7206d
+- role: F4_canonical_subject_24
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r8-complete-effective-m0a-witness-v0.1.json
+  sha256: 49577e6acdddd321902ab9c7b9c6f3578c175ea66224cb919ba137ab985ad021
+- role: F4_canonical_subject_25
+  path: control-plane/registry/validate-f4-r8-complete-effective-m0a.py
+  sha256: 19ee60c6f5f46a710b8d9075e6c9295832b9107346bbc82a0193973e6e8c5301
+- role: F4_canonical_subject_26
+  path: control-plane/registry/drafts/2026-07-16-agents-os-f4-taskpermit-host-authentication-effect-admission-v0.1-r9-amendment.draft.md
+  sha256: 16b5eb0903cd84a90b1f01d55e8bfcebd7a1883a436fc4cea4c66f313d257224
+- role: F4_canonical_subject_27
+  path: control-plane/registry/build-f4-r9-synthetic-nonauthority-m0a.py
+  sha256: c42c7782e437f4eb5bd3aa587b71541dab39187c21a9955cabcb6963cf2f57b4
+- role: F4_canonical_subject_28
+  path: control-plane/registry/examples/2026-07-16-agents-os-f4-r9-synthetic-nonauthority-m0a-witness-v0.1.json
+  sha256: 47cfb5f9eeea3a0eba35215a32ac3bed5558ce2ff2b32ef8262d4ac77f31e0ab
+- role: F4_canonical_subject_29
+  path: control-plane/registry/validate-f4-r9-synthetic-nonauthority-m0a.py
+  sha256: d6e18b2ce4d18ed7ef34591d567a5ec7b7c0695deae44f4b1386bc9318621d09
+- role: F5_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r1.draft.md
+  sha256: 96a04ae8fd83006255bf7cb5fc3902bfd07b50e22d01736bb3a36b531766e79f
+- role: F5_canonical_subject_2
+  path: control-plane/registry/build-f5-r1-synthetic-delivery-recovery.py
+  sha256: 5b67f302b7ec40ceb6b59aa23e62340adbfdf661aea0f058c13fa3a89cd51793
+- role: F5_canonical_subject_3
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r1-synthetic-delivery-recovery-v0.1.json
+  sha256: 3fcc7a8358c165224c2e5e66ed947e80939c67afbb3154150acb5e2b695a3281
+- role: F5_canonical_subject_4
+  path: control-plane/registry/validate-f5-r1-synthetic-delivery-recovery.py
+  sha256: 83934d2045b68b492b12fec2f973b8d7b3e3a82492b9454336ae6dcb15d5296f
+- role: F5_canonical_subject_5
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r2-amendment.draft.md
+  sha256: de34f32e4c41df935c7b0c3ed0cb359fa0955bf97b55179f204c77f0264e7fd7
+- role: F5_canonical_subject_6
+  path: control-plane/registry/build-f5-r2-full-effective-delivery-recovery.py
+  sha256: 2cfea3077b5d5679af63f38f73ec1c57e74c481f580b0e5ad22aba049c1748bd
+- role: F5_canonical_subject_7
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r2-full-effective-delivery-recovery-v0.1.json
+  sha256: 61ea4514578dcb3287960277f2893c5db4dcfc9427c99199824f8e0ff9251b3f
+- role: F5_canonical_subject_8
+  path: control-plane/registry/validate-f5-r2-full-effective-delivery-recovery.py
+  sha256: 3eb000c61d74a8a835e3833d4b8c357cf5bdfda8eb11e6666ac5736588da932c
+- role: F5_canonical_subject_9
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md
+  sha256: 75d27c4df210cc8c795775915a7136d1cd3b41c7d3b8b8fca250638a931c29fd
+- role: F5_canonical_subject_10
+  path: control-plane/registry/build-f5-r3-seven-finding-closure.py
+  sha256: c3076be26895fe6800d17ee1c1415b741ee1ba55679cebfa06a5f2d71e0bf772
+- role: F5_canonical_subject_11
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r3-seven-finding-closure-v0.1.json
+  sha256: 9ed97230126e66a793a61f88cfdc8ae5ed9888f2928e3a06a5642b81f7d8e876
+- role: F5_canonical_subject_12
+  path: control-plane/registry/validate-f5-r3-seven-finding-closure.py
+  sha256: 39dbcf7aa82cd0837f0dd2d32714257140bfcdb93c71933836a6b61d23c8d273
+- role: F5_canonical_subject_13
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md
+  sha256: cff826048f5c4d3a24cf4044c65d656fc3fa1aa43247c09bb3c96ca9ee97d551
+- role: F5_canonical_subject_14
+  path: control-plane/registry/build-f5-r4-three-finding-proof-closure.py
+  sha256: d126b37b5fb2ff76dce1d0ab0dc98def18b03ba093535992a2e71e66dec50929
+- role: F5_canonical_subject_15
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r4-three-finding-proof-closure-v0.1.json
+  sha256: af65bbfc1c2d8089810b29b53c215de31bde1128135ae4c2cf79c78df4d4ad7d
+- role: F5_canonical_subject_16
+  path: control-plane/registry/validate-f5-r4-three-finding-proof-closure.py
+  sha256: 4fd61f1919c86d3f8c067942adf179873310efe117f2b11c3a3637b22ab113d8
+- role: F5_canonical_subject_17
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r5-amendment.draft.md
+  sha256: ac6c001b745910ef9c9038ec5bb6b60fac6bd7f0e4ea7d6603db4e99b0b943e2
+- role: F5_canonical_subject_18
+  path: control-plane/registry/build-f5-r5-bound-replay-evidence-closure.py
+  sha256: cbdd1d2f4a68179db71a6eb17803f2b7fe9cb76a79dacd769b4a2d55179cb0d6
+- role: F5_canonical_subject_19
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r5-bound-replay-evidence-closure-v0.1.json
+  sha256: 28d4b78269aced7b8cb4d0b535065711afb6c9c0f2b393eef5e13be812887a4e
+- role: F5_canonical_subject_20
+  path: control-plane/registry/validate-f5-r5-bound-replay-evidence-closure.py
+  sha256: 3e3b89b2af8f15a3389c59785d361c25fc0974131af3065f13cbc2637db84378
+- role: F5_canonical_subject_21
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md
+  sha256: 0c82ad7eccbcd10abbdf429bb78ec49dfb3f77565779f5b457d075ec24e444d8
+- role: F5_canonical_subject_22
+  path: control-plane/registry/build-f5-r6-first-apply-eligibility-guard.py
+  sha256: f3c23180277fba76dd9c6cca93782b2b77413905c9df07576d3fffee182979f4
+- role: F5_canonical_subject_23
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r6-first-apply-eligibility-guard-v0.1.json
+  sha256: 853dda58e07fa88c460b4da7f177d70a4cf3efc62484a0a4c435e464f80889e8
+- role: F5_canonical_subject_24
+  path: control-plane/registry/validate-f5-r6-first-apply-eligibility-guard.py
+  sha256: c694d6944d1dde3a0e5d2ac5c10b56e07950476946f7afa4c61f60df5ffa603a
+- role: F5_canonical_subject_25
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r7-amendment.draft.md
+  sha256: 8c2c4a782215da132ea06ed8db0d20c26c4756f9471f533b6e6ce64192f70950
+- role: F5_canonical_subject_26
+  path: control-plane/registry/build-f5-r7-exact-accounting-type-closure.py
+  sha256: 7280f4658d2dd63c47074e9e12cfa3b1d00b1c47633a7ef821a494adf632d6eb
+- role: F5_canonical_subject_27
+  path: control-plane/registry/examples/2026-07-17-agents-os-f5-r7-exact-accounting-type-closure-v0.1.json
+  sha256: 8819f12117f38bbde6f7cf489f1eb80a64fe4b819fd03540fd891083477fc775
+- role: F5_canonical_subject_28
+  path: control-plane/registry/validate-f5-r7-exact-accounting-type-closure.py
+  sha256: ea67a2d4ece53debe43854f8a2378ca678f2a8faf6f957cea662991eb26af1a3
+- role: F6_canonical_subject_1
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r1.draft.md
+  sha256: 2b388a3ae37a0b8bfd265c8a6856d73abdcfd5fd5bf48b25a240c263416fd332
+- role: F6_canonical_subject_2
+  path: control-plane/registry/build-f6-r1-validation-current-decision.py
+  sha256: bed7131c45e2d5fad7999d76c9ed5b96f1bf19e97e8081135691e7fa9ef054af
+- role: F6_canonical_subject_3
+  path: control-plane/registry/examples/2026-07-17-agents-os-f6-r1-validation-current-decision-v0.1.json
+  sha256: de45548ad8836c337bd5c978c37da116306734fe50dde4d0361b365679713f5e
+- role: F6_canonical_subject_4
+  path: control-plane/registry/validate-f6-r1-validation-current-decision.py
+  sha256: 1401e7ef5a586a6be903472a058fc2f50ac10fa4e5af92d6b992d8899279ae10
+- role: F6_canonical_subject_5
+  path: control-plane/registry/drafts/2026-07-17-agents-os-f6-validation-requirement-current-decision-v0.1-r2-amendment.draft.md
+  sha256: 89d5ce9ab962d41d5996381196e6dcf6295e4d1d4727b7be96fd5f71bd1f0a40
+- role: F6_canonical_subject_6
+  path: control-plane/registry/build-f6-r2-ten-finding-proof-closure.py
+  sha256: 4144f1743c67c763594d8099defc86f93f3d1675ffafdf3dc809c077f1783cd2
+- role: F6_canonical_subject_7
+  path: control-plane/registry/examples/2026-07-17-agents-os-f6-r2-ten-finding-proof-closure-v0.1.json
+  sha256: aab2fa442b8c6f83c432e43d8fb0a90132c6a1c720a0e65be65341ed34bc7412
+- role: F6_canonical_subject_8
+  path: control-plane/registry/validate-f6-r2-ten-finding-proof-closure.py
+  sha256: b273299e5a6e9cc023d50bdbe88986e39615eb16a39937c0685f7e00757733eb
+- role: F6_canonical_subject_9
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r3-amendment.draft.md
+  sha256: ed638d59c3c7eeab594ddc9c21aa834c7ea49b08e8c312c5bdadbbce5b142fae
+- role: F6_canonical_subject_10
+  path: control-plane/registry/build-f6-r3-eight-finding-semantic-closure.py
+  sha256: 40e9f77d868ec7b4a9053ce360284736ec9c46829b044e65226e60135653493b
+- role: F6_canonical_subject_11
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r3-eight-finding-semantic-closure-v0.1.json
+  sha256: 86dfedec6d2e37a6aad83a6e2564a1403efac33ccb951d226cf40fbe513b128a
+- role: F6_canonical_subject_12
+  path: control-plane/registry/validate-f6-r3-eight-finding-semantic-closure.py
+  sha256: dd90481b0cb32daf28d0a27c31146209bd5c981335dc41020540651f1457111f
+- role: F6_canonical_subject_13
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r4-amendment.draft.md
+  sha256: ae12f429533061beac78e59163345495cd161e6828d9fa5e375342d2c8f79abf
+- role: F6_canonical_subject_14
+  path: control-plane/registry/build-f6-r4-five-finding-consistency-closure.py
+  sha256: 9ac2f1594afbed21510e11fd307a984d66df601b39183c16dc8e08a4dfcb258e
+- role: F6_canonical_subject_15
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r4-five-finding-consistency-closure-v0.1.json
+  sha256: e63bf9fc2c1162672975538590ecce5ad7a1fa6e74679703d3134f820d9c2a47
+- role: F6_canonical_subject_16
+  path: control-plane/registry/validate-f6-r4-five-finding-consistency-closure.py
+  sha256: 4d0e238906a1c634bf12d30f775ba4ef323ab18f339ebd19826b39e97a344d6f
+- role: F6_canonical_subject_17
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r5-amendment.draft.md
+  sha256: c56d77dcb140aa8db3345725ca3088bc3c2c5622e85f1deba8bf756b336361ac
+- role: F6_canonical_subject_18
+  path: control-plane/registry/build-f6-r5-contextual-evidence-assessment-closure.py
+  sha256: f6a013f71af1ced1a10495f9124d9d2a32a619449c19fc1cf258a279b400d39f
+- role: F6_canonical_subject_19
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r5-contextual-evidence-assessment-closure-v0.1.json
+  sha256: 07b1f45c88438763eef169ad17903924cc6ecfcac382ecc41508ba1993a3bbc6
+- role: F6_canonical_subject_20
+  path: control-plane/registry/validate-f6-r5-contextual-evidence-assessment-closure.py
+  sha256: f2082d2d88728bfda75a1da2d860d2ff78cbe6d3af2985ef45e5b6d6bae9b96d
+- role: F6_canonical_subject_21
+  path: control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r6-amendment.draft.md
+  sha256: a19ff9b4863e9b08c5c24ef1c2b91d57851b928db01a3e7f6e0114d7fee92a82
+- role: F6_canonical_subject_22
+  path: control-plane/registry/build-f6-r6-immutability-schema-totality-closure.py
+  sha256: 6d4c4ed38a2612aad858858e3b2ca63a1708ea569ff527f9752271d240bc21ed
+- role: F6_canonical_subject_23
+  path: control-plane/registry/examples/2026-07-18-agents-os-f6-r6-immutability-schema-totality-closure-v0.1.json
+  sha256: 67e99e1b60f638e780ed9fd1acdd0d8665f5dcb5f7459919e6ba65e39003b9b2
+- role: F6_canonical_subject_24
+  path: control-plane/registry/validate-f6-r6-immutability-schema-totality-closure.py
+  sha256: e5b9f0661276c2062b3a04cf977e0f53e55aba476f15720e333ebabd8216b7f7
+- role: R2_manifest
+  path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+- role: R2_independent_BLOCK_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r2-full-atomic-independent-review.yaml
+  sha256: 7d8b6305a469aa1153cb74d61c385065528dfd546b9019279f1f219fe1462dad
+- role: R2_finding_disposition
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r2-finding-disposition-v0.1.yaml
+  sha256: 6c57a9cbd7a3f5feece6dfec1c35162e65e3f7a70ebf31fc333704a6ed805ffc
+- role: R3_start_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r3-narrow-closure-start-decision-v0.1.yaml
+  sha256: 7dac252889d1b1a692f020600099daa8516a07e40d02dee210899638d0124d45
+- role: R3_manifest
+  path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+- role: R3_independent_BLOCK_review
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r3-full-atomic-independent-review.yaml
+  sha256: 961236bccb73f423346023d331908929673d84aa3da7989985cf61c00260e673
+- role: R3_finding_disposition
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r3-finding-disposition-v0.1.yaml
+  sha256: 9b906df5fd5d06cf772ac62ebddda6c614a06af19af4276245ac5180d96ff119
+- role: R4_start_decision
+  path: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r4-narrow-closure-start-decision-v0.1.yaml
+  sha256: 1d166481e3fe37050b64e0f32d578ec3318d7136536760bca268254efd1cf6e2
+external_source_inputs:
+  repository: lioensky/VCPToolBox
+  commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  file_count: 7
+  files:
+  - role: VCPToolBox_root_instructions
+    git_path: AGENTS.md
+    sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b
+  - role: VCPToolBox_plugin_instructions
+    git_path: Plugin/AGENTS.md
+    sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4
+  - role: VCPToolBox_plugin_ecosystem
+    git_path: docs/PLUGIN_ECOSYSTEM.md
+    sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65
+  - role: existing_Rust_NAPI_instructions
+    git_path: rust-vexus-lite/AGENTS.md
+    sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494
+  - role: existing_Rust_NAPI_Cargo_profile
+    git_path: rust-vexus-lite/Cargo.toml
+    sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9
+  - role: existing_Rust_NAPI_package_profile
+    git_path: rust-vexus-lite/package.json
+    sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c
+  - role: VCPToolBox_actual_direct_ABI_owner_Plugin_js
+    git_path: Plugin.js
+    sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+author_evidence:
+- role: R4_author_self_review_nonindependent
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r4-author-self-review-v0.1.yaml
+  sha256: 2924fa96ed7304e70766cca8e1088ec9dec216fe0c9a46b4bb13aa1c8e46cae9
+  independence: false
+declared_workspace_input_count: 169
+declared_external_source_input_count: 7
+declared_total_input_count: 176
+validator_commands:
+- id: R4_semantic_and_effective_SQLite_closure
+  working_directory: package_root_without_dot_git
+  argv:
+  - python3
+  - workspace/control-plane/registry/validate-phase5a-m0a-plan-r4-closure.py
+  - workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r4-closure-witness-v0.1.json
+  - upstream/vcptoolbox/Plugin.js
+  - --self-test
+- id: R4_builder_byte_reproduction
+  working_directory: package_root_without_dot_git
+  argv:
+  - python3
+  - workspace/control-plane/registry/build-phase5a-m0a-plan-r4-closure-witness.py
+  - /tmp/phase5a-r4-review-rebuilt.json
+  then_argv:
+  - cmp
+  - /tmp/phase5a-r4-review-rebuilt.json
+  - workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r4-closure-witness-v0.1.json
+- id: R1_R2_R3_fixed_lineage
+  covered_by: R4_semantic_and_effective_SQLite_closure
+- id: no_trailing_whitespace_in_25_subjects
+  validator: independent_file_level_scan
+required_review_questions:
+- all_176_inputs_match_and_are_fully_read
+- R1_R2_R3_subjects_and_manifests_remain_exact_bytes
+- effective_18_table_DDL_executes_in_isolated_memory
+- F3_genesis_restart_epoch_gap_fork_wrong_incarnation_and_missing_Event_are_total
+- F3_epoch_transaction_writes_incarnation_epoch_RECOVERING_fact_pointer_and_Event_all_or_zero
+- F3_READY_requires_exact_postcommit_witness_observation
+- F5_claim_lease_fact_kind_and_logical_identity_are_exact
+- F5_arm_request_ID_fingerprint_and_bytes_equal_selected_attempt
+- F5_receipt_attempt_intent_claim_and_guard_are_one_exact_tuple
+- F5_stored_first_Event_and_call_counts_are_exactly_one_and_replay_additions_zero
+- fixed_Plugin_js_is_manifest_bound_at_exact_commit
+- actual_two_value_manager_invocation_is_acknowledged
+- directContext_cannot_affect_NAPI_reducers_fingerprints_logs_errors_receipts_or_output
+- requiresAdmin_remains_false
+- no_second_authority_runtime_or_implementation_boundary
+- no_automatic_plan_freeze_or_implementation_start
+required_output_contract:
+  allowed_results:
+  - PASS_NO_BLOCKER
+  - BLOCK
+  partial_acceptance: forbidden
+  PASS_requires_zero_blocker_major_minor_or_unresolved_ambiguity: true
+  independent_effective_DDL_coordinated_graph_and_ABI_dataflow_cases_required: true
+  fresh_review_must_not_adopt_author_self_review: true
+decision_gate:
+  PASS_does_not_accept_or_freeze_plan: true
+  Jenn_atomic_plan_freeze_decision_required_after_PASS: true
+  plan_freeze_does_not_start_implementation: true
+  separate_Jenn_implementation_decision_required: true
+non_authorization:
+  implementation: false
+  dependency_installation: false
+  database_file_creation: false
+  VCPToolBox_change_or_start: false
+  plugin_enablement: false
+  runtime_activation: false
+  production_authentication: false
+  provider_private_memory_sensing_or_real_effect: false
+  commit_push_merge: false

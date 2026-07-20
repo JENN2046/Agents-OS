@@ -1,0 +1,65 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R7_ATOMIC_BUNDLE
+date: 2026-07-20
+reviewer:
+  identity: Nobao_author_run
+  independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+partial_acceptance: forbidden
+subjects:
+  R1: 4
+  R2: 7
+  R3: 7
+  R4: 7
+  R5: 8
+  R6: 9
+  R7: 7
+  total: 49
+R7_subject_hashes:
+  amendment: f8f19b5e33624863d9e6bdb6d4c8a86a6a546e92e9fc71b293038ce317919cf0
+  semantic_owner: 52fd5aad32d2ce7a31a918101191e03a6d2f9e5a93cac1581bb52ff0e11cf7a9
+  persistence: b545a5182b1519a3f03634b29f91f1486a900a06d9f8bc5c7657007447091de5
+  boundary_inventory: d72a036f1ed9275abebd771ec5c0fd75ed37838e03343388dbdfe74c07ea2f97
+  builder: 2447b5fd895ca4b941ffa9f48ae2b426bfe837771694a287473ed295b789e58a
+  witness: 7ee333f71f25bd0449b1f4a788d0b07a706a0cc6ba219039560e4832467c01d4
+  validator: 5a03e0308e61d696564a770cd0a4f8a4ad987add5fc78b20be03193e8c5add0f
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  R1_R2_R3_R4_R5_R6_subject_bytes_changed: false
+R6_finding_disposition:
+  PHASE5A_M0A_PLAN_R6_IR_B01: CLOSED_CLAIMED_BY_DERIVED_BOUNDARY_INVENTORY
+  PHASE5A_M0A_PLAN_R6_IR_B02: CLOSED_CLAIMED_BY_ACTUAL_RECOVERING_REV1_TO_READY_REV2_TRANSACTION
+author_validation:
+  effective_tables: 18/18
+  boundary_inventory_rows: 56/56
+  boundary_inventory_sha256: f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c
+  SQLite_cases: 9/9
+  fixed_case_count: 71/71
+  self_test_mutations_rejected: 62/62
+  builder_byte_reproduction: PASS
+  R6_fixed_lineage_validator: PASS_NO_BLOCKER
+  database_file_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED
+author_review_limit:
+  independent_review_created: false
+  independent_review_result: NOT_RUN
+  author_result_does_not_accept_or_freeze_plan: true
+  author_result_does_not_start_implementation: true
+governance:
+  Plan_R7_started: true
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

@@ -1,0 +1,43 @@
+schema_version: agents-os.m0a-semantic-owner-corrections.v0.1
+profile_id: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R5
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R4
+
+replacement_rows:
+  - obligation_id: F3_incarnation_and_authority_epoch
+    module_owner: resident/ledger_thread
+    reducer_or_boundary_owner: F3_resident_lifecycle_consumer
+    transaction_owner: resident_exact_ownership_Event_RECOVERING_then_exact_witness_COMMIT_READY
+    persistence_owner: event(RESIDENT_OWNERSHIP_STARTED)+resident_incarnation+resident_authority_epoch+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer+canonical_fact(F3_WITNESS_COMMIT)
+    invariant: one exact ownership Event tuple binds incarnation epoch RECOVERING fact and pointer; no historical incarnation reuse; READY rechecks the exact epoch tuple and current witness COMMIT fact
+    positive_test: positive/F3_exact_ownership_Event_then_witness_READY
+    negative_test: negative/F3_substituted_Event_missing_witness_or_historical_incarnation_reuse_rejected
+    replay_test: replay/F3_exact_Event_epoch_incarnation_witness_tuple_replays
+    crash_test: crash/F3_RECOVERING_and_READY_transactions_each_all_or_zero
+  - obligation_id: F5_stored_first_Event_and_call_accounting
+    module_owner: ledger/replay
+    reducer_or_boundary_owner: F5_stored_first_identity_and_accounting_reducer
+    transaction_owner: dispatch_arm_exact_Event_and_call_authorization_first_apply
+    persistence_owner: dispatch_arm(exact_F5_DISPATCH_ARMED_Event_tuple+exact_F5_CALL_AUTHORIZATION_fact_tuple+counts_1)
+    invariant: first apply stores exact Event and authorization identities with counts one; replay returns the same tuples and adds zero
+    positive_test: positive/F5_exact_stored_first_identity_and_counts
+    negative_test: negative/F5_unrelated_Event_or_authorization_identity_rejected
+    replay_test: replay/F5_exact_stored_first_tuple_zero_additions
+    crash_test: crash/F5_arm_and_stored_first_tuple_commit_before_call
+
+effective_inventory_rules:
+  base: R4_6_replacement_rows
+  replace_exactly_these_obligation_ids:
+    - F3_incarnation_and_authority_epoch
+    - F5_stored_first_Event_and_call_accounting
+  add_obligation_ids: 0
+  remove_obligation_ids: 0
+  effective_obligation_count: 63
+
+governance:
+  creates_new_semantic_owner: false
+  reimplements_F3_or_F5_reducer: false
+  implementation_authorized: false

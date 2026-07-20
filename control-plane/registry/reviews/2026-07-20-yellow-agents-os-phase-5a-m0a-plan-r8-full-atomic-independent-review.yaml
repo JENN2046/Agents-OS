@@ -1,0 +1,198 @@
+schema_version: AGENTS_OS_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+review_id: PHASE_5A_M0A_PLAN_R8_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_CODEX_2026_07_20
+reviewer:
+  role: external_independent_reviewer
+  implementation_author: false
+  author_self_review_adopted_as_conclusion: false
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+  mode: FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  partial_acceptance: forbidden
+  allowed_conclusions:
+    - PASS_NO_BLOCKER
+    - BLOCK
+package_binding:
+  zip:
+    filename: 2026-07-20-agents-os-phase-5a-m0a-plan-r8-independent-review-package-v0.1.zip
+    declared_sha256: 691dd8626b8743d2c4840a3414bbd98fa63fffe72590c14c98a19dd18ebf91fc
+    recomputed_sha256: 691dd8626b8743d2c4840a3414bbd98fa63fffe72590c14c98a19dd18ebf91fc
+    sha256_match: true
+  manifest:
+    filename: MANIFEST.yaml
+    declared_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+    recomputed_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+    sha256_match: true
+package_integrity:
+  zip_entries: 238
+  crc: PASS
+  unsafe_paths: 0
+  duplicate_archive_members: 0
+  symlink_members: 0
+  checksums_sha256:
+    entries: 237
+    malformed_entries: 0
+    missing_payloads: 0
+    hash_mismatches: 0
+    unlisted_payloads: 0
+    result: PASS
+  archive_map:
+    declared_input_count: 234
+    entries: 234
+    duplicate_archive_paths: 0
+    duplicate_manifest_paths: 0
+    missing_entries: 0
+    byte_count_mismatches: 0
+    sha256_mismatches: 0
+    result: PASS
+  extraction:
+    isolated_directory: /tmp/phase5a-r8-review.BvVSqF
+    dot_git_present: false
+manifest_input_review:
+  subjects:
+    declared: 55
+    sha256_matched: 55
+    content_bytes_read: 55
+  authority_inputs:
+    declared: 171
+    sha256_matched: 171
+    content_bytes_read: 171
+  author_evidence:
+    declared: 1
+    sha256_matched: 1
+    content_bytes_read: 1
+    used_as_conclusion: false
+  external_vcptoolbox_sources:
+    declared: 7
+    sealed_content_sha256_matched: 7
+    declared_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    upstream_git_object_membership: not_provable_from_dot_git_free_sealed_archive
+  total:
+    declared: 234
+    sha256_matched: 234
+    content_bytes_read: 234
+fixed_commands_in_dot_git_free_extraction:
+  R5_fixed_lineage_closure:
+    result: PASS_NO_BLOCKER
+    self_test_mutations: 7
+  R6_six_finding_closure:
+    result: PASS_NO_BLOCKER
+    sqlite_cases: 13/13
+    fixed_case_count: 35
+    self_test_mutations: 11
+  R6_builder_byte_reproduction:
+    result: PASS
+    cmp: IDENTICAL
+  R7_two_finding_closure:
+    result: PASS_NO_BLOCKER
+    sqlite_cases: 9/9
+    fixed_case_count: 71
+    self_test_mutations: 62
+  R7_builder_byte_reproduction:
+    result: PASS
+    cmp: IDENTICAL
+  R8_two_finding_closure:
+    result: PASS_NO_BLOCKER
+    complete_key_path_rows: 232/232
+    complete_key_path_inventory_sha256: b0e6e94a83b9ad13917abf2e9dacb8397735e89ca29c642a990a9f26a03d84fb
+    sqlite_cases: 13/13
+    fixed_case_count: 19
+    self_test_mutations: 6
+  R8_builder_byte_reproduction:
+    result: PASS
+    cmp: IDENTICAL
+  R1_R2_R3_R4_R5_R6_R7_fixed_lineage:
+    result: PASS_BY_DECLARED_COVERAGE
+    covered_by:
+      - R5_fixed_lineage_closure
+      - R6_six_finding_closure
+      - R7_two_finding_closure
+      - R8_fixed_hashes
+  no_trailing_whitespace_in_55_subjects:
+    result: PASS
+    violations: 0
+independent_coordinated_attacks:
+  closed_key_and_source_seal:
+    implementation_frozen_true_with_rebuilt_commitment_inventory_and_witness: PASS_REJECTED
+    neutral_unknown_key_with_rebuilt_commitment_inventory_and_witness: PASS_REJECTED
+    removed_key_with_rebuilt_commitment_inventory_and_witness: PASS_REJECTED
+    renamed_key_with_rebuilt_commitment_inventory_and_witness: PASS_REJECTED
+    same_key_path_changed_value_with_rebuilt_commitment_and_witness: PASS_REJECTED
+    replaced_sealed_source_commitment_with_rebuilt_witness: PASS_REJECTED
+    reordered_or_replaced_contract_source_alias_with_rebuilt_witness: PASS_REJECTED
+    builder_and_source_alias_reordered_with_recalculated_232_row_inventory_and_rebuilt_witness: PASS_REJECTED
+    reordered_source_mapping_keys_with_rebuilt_commitment_and_witness: PASS_REJECTED
+    rejection_sources:
+      - immutable_R1_to_R7_or_R8_fixed_input
+      - exact_sealed_source_bytes
+      - exact_source_alias_contract
+      - exact_key_path_inventory_row_count_or_digest
+    witness_staleness_used_as_conclusion: false
+    probe_exception_used_as_conclusion: false
+  inherited_lifecycle_semantics:
+    RECOVERING_fact_and_pointer_sequence_2: PASS_REJECTED
+    RECOVERING_fact_sequence_2_pointer_sequence_1: PASS_REJECTED
+    RECOVERING_fact_sequence_1_pointer_sequence_2: PASS_REJECTED
+    exact_sequence_1_prestate:
+      valid_recovering: true
+      commit_ready: true
+      ready_revision: 2
+      exact_RECOVERING_revision_1_predecessor: true
+      pointer_revision: 2
+    missing_pointer: PASS_REJECTED
+    noncanonical_RECOVERING_bytes: PASS_REJECTED
+    injected_READY_event_and_fact_then_rollback:
+      preserved_current_revision: 1
+      preserved_fact_created_event_sequence: 1
+      preserved_pointer_updated_event_sequence: 1
+      residual_READY_event_count: 0
+      residual_READY_fact_count: 0
+      result: PASS
+  immutable_lineage:
+    mutation: changed_R7_independent_review_manifest_in_isolated_clone
+    result: PASS_REJECTED
+    rejection: fixed_hash_mismatch
+probe_exception_handling:
+  removed_or_renamed_key_under_optional_self_test: stable_KeyError_in_test_harness
+  target_validation_without_optional_self_test: semantic_and_immutable_rejection_without_exception
+  finding: none
+  rationale: The self-test exception was not used as rejection evidence. The target validator independently returned BLOCK from fixed source, source-seal and key-inventory conditions.
+schema_and_boundary_review:
+  effective_tables: 18/18
+  r8_added_tables: []
+  inherited_schema_totality_R6: 13/13_PASS
+  legal_sequence_1_prestate_over_rejected: false
+  database_connection: sqlite3.connect_colon_memory
+  database_file_created: false
+  second_permission_system: false
+  runtime_started: false
+  provider_called: false
+  private_memory_read: false
+  real_effect_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED
+raw_case_results:
+  path: /tmp/2026-07-20-agents-os-phase-5a-m0a-plan-r8-codex-independent-case-results.json
+  sha256: a28971754c4a4cb5012c2e57e3831b15a9cfafae2badde5b97fb9609093e96eb
+decision:
+  result: PASS_NO_BLOCKER
+  requires_R9: false
+  findings:
+    blocker: 0
+    major: 0
+    minor: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  accepted: false
+  frozen: false
+  implementation_started: false
+  partial_acceptance: false
+  rationale: All fixed package checks and commands reproduced. Fully propagated independent attacks found no accepted invalid path and no legal positive path was over-rejected.
+non_actions:
+  workspace_modified: false
+  subjects_modified: false
+  manifest_modified: false
+  queue_modified: false
+  registry_modified: false
+  git_modified: false
+  implementation_or_runtime_started: false
+  database_file_created: false
+  vcptoolbox_provider_or_real_effect_started: false

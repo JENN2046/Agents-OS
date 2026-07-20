@@ -1,0 +1,58 @@
+schema_version: agents-os.m0a-materialization-abi-corrections.v0.1
+profile_id: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R5
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R4
+
+fixed_future_wrapper:
+  path: control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-future-index-js-safe-wrapper-v0.1.js
+  sha256: a0a38766a3fa32953402bcf7499b599e0140003be6eee94638f26fd1de4a6440
+  classification: SYNTHETIC_PLAN_FIXTURE
+  runtime_usable: false
+
+validator_contract:
+  validator_id: PHASE_5A_M0A_FUTURE_INDEX_JS_CLOSED_AST_DATAFLOW_VALIDATOR_V0_1
+  parser_version: agents-os.javascript-closed-subset-ast.v0.1
+  command: python3 workspace/control-plane/registry/validate-phase5a-m0a-plan-r5-closure.py workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r5-closure-witness-v0.1.json workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-future-index-js-safe-wrapper-v0.1.js --self-test
+  exact_source_sha256_required: true
+  unsupported_syntax_result: BLOCK
+  unknown_token_result: BLOCK
+  unknown_flow_result: BLOCK
+  parse_ambiguity_result: BLOCK
+  exact_formal_parameters:
+    projectArgs: [args]
+    processToolCall: [args]
+  allowed_args_fields: [commandRef, commandFingerprint, payload]
+  allowed_calls:
+    - projectArgs(args)
+    - residentNative.process(nativeFrame)
+  allowed_sink: residentNative.process_argument_0
+  admitted_flow: args_allowed_fields_to_closed_object_to_nativeFrame_to_allowed_sink
+  forbidden_sources: [arguments, second_formal, rest_parameter, requestIp, sourceNode, signal, decryptedAuthCode, directContext, context_alias]
+  forbidden_constructs: [computed_property, object_spread, array_spread, closure_capture, helper_call, dynamic_call, eval, Function_constructor]
+  forbidden_sinks: [logs, receipts, errors, returned_context, reducer_authority, fingerprints, NAPI_extra_arguments]
+
+fixed_source_cases:
+  positive:
+    - exact_safe_wrapper
+  negative:
+    - second_formal_parameter
+    - arguments_index_one
+    - rest_parameter
+    - direct_requestIp
+    - context_alias
+    - closure_capture
+    - object_spread
+    - computed_property
+    - helper_call
+    - extra_native_argument
+    - returned_context
+    - unsupported_optional_chaining
+
+governance:
+  actual_Plugin_js_owner_remains_R4_hash_bound: true
+  VCPToolBox_modified: false
+  JavaScript_implementation_created: false
+  implementation_authorized: false

@@ -1,0 +1,53 @@
+schema_version: agents-os.m0a-semantic-owner-corrections.v0.1
+profile_id: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R6
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R5
+replacement_rows:
+  - obligation_id: F3_incarnation_and_authority_epoch
+    module_owner: resident/ledger_thread
+    reducer_or_boundary_owner: F3_frozen_witness_COMMIT_and_READY_transition_consumer
+    transaction_owner: exact_current_witness_bytes_hash_tuple_then_READY_fact_pointer_Event
+    persistence_owner: resident_authority_epoch+canonical_fact(F3_WITNESS_COMMIT)+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer+event
+    invariant: READY is derived only from exact canonical witness bytes whose digest and complete epoch tuple match, then committed as immutable fact pointer and Event all-or-zero
+    positive_test: positive/F3_exact_witness_bytes_tuple_RECOVERING_to_READY
+    negative_test: negative/F3_graph_local_label_bad_digest_or_tuple_rejected
+    replay_test: replay/F3_READY_current_fact_identity_stable
+    crash_test: crash/F3_READY_fact_pointer_Event_all_or_zero
+  - obligation_id: F5_stored_first_Event_and_call_accounting
+    module_owner: ledger/replay
+    reducer_or_boundary_owner: F5_exact_authorization_subject_and_zero_addition_replay_consumer
+    transaction_owner: dispatch_arm_exact_Event_and_full_authorization_tuple_first_apply
+    persistence_owner: dispatch_arm(exact_Event+authorization_kind+logical_id+revision+ref+fingerprint+subject_ref+subject_revision+counts)
+    invariant: authorization subject equals delivery attempt identity; exact replay returns the complete stored tuple and changes neither Event nor authorization count
+    positive_test: positive/F5_exact_subject_bound_first_apply_and_zero_addition_replay
+    negative_test: negative/F5_authorization_subject_substitution_rejected
+    replay_test: replay/F5_before_after_counts_and_complete_identity_equal
+    crash_test: crash/F5_arm_and_full_stored_first_tuple_all_or_zero
+  - obligation_id: external_materialization
+    module_owner: extensions/agents-os-resident
+    reducer_or_boundary_owner: fixed_CommonJS_export_and_inherited_NAPI_method_validator
+    transaction_owner: none_plan_only
+    persistence_owner: none_plan_only
+    invariant: exact exports are initialize processToolCall shutdown; only inherited execute_command receives the closed projected frame; all boundary flags remain false
+    positive_test: positive/exact_inert_wrapper_and_execute_command_flow
+    negative_test: negative/sixth_method_export_drift_or_boundary_true_rejected
+    replay_test: replay/exact_source_bytes_build_same_AST
+    crash_test: not_applicable_no_runtime
+effective_inventory_rules:
+  base: R5_63_effective_rows
+  replace_exactly_these_obligation_ids:
+    - F3_incarnation_and_authority_epoch
+    - F5_stored_first_Event_and_call_accounting
+    - external_materialization
+  add_obligation_ids: 0
+  remove_obligation_ids: 0
+  effective_obligation_count: 63
+governance:
+  creates_new_semantic_authority: false
+  recomputes_F3_or_F5_authority: false
+  runtime_usable: false
+  implementation_authorized: false
+

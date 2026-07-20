@@ -1,0 +1,46 @@
+{
+  "ABI_closure": {
+    "ABI_fingerprint": "732a027290ecbb14fb95b5290966444f5d0026cd53117f8725b76be74fd23785",
+    "actual_manager_value_count": 2,
+    "fixed_owner_path": "Plugin.js",
+    "fixed_owner_sha256": "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2",
+    "forbidden_source_count": 11,
+    "formal_business_argument_count": 1
+  },
+  "authority_boundary": {
+    "VCPToolBox_change_authorized": false,
+    "database_file_created": false,
+    "implementation_authorized": false,
+    "runtime_activation_authorized": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "environment": "SYNTHETIC_PLAN_VALIDATION",
+  "immutable_lineage": {
+    "R1_R2_R3_subject_count": 18,
+    "R1_manifest_sha256": "01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef",
+    "R2_manifest_sha256": "48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26",
+    "R3_manifest_sha256": "d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49"
+  },
+  "persistence_closure": {
+    "R4_replacement_table_count": 7,
+    "R4_replacement_table_fingerprint": "4a279d4247ecf4118b2c48b0c9be4727fa411478c7f2d7455c484fccc6065823",
+    "effective_table_count": 18,
+    "fixed_SQLite_negative_count": 7,
+    "fixed_SQLite_positive_count": 3,
+    "transaction_fingerprint": "d52e4025daee5208dc98c7ac0ce283c3d69db9665e73e922a2bfe1d672249242"
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE",
+  "root_fingerprint": "ad94d2934c5e02852f10855fabceee9ac4fe69e1fd8a86c136e50d49344c31d9",
+  "schema_version": "agents-os.m0a-plan-r4-closure-witness.v0.1",
+  "semantic_owner_closure": {
+    "effective_obligation_count": 63,
+    "replacement_ID_fingerprint": "d7b4b7cfa3a2f931c4c2878324cf1dd2c64a03a591057594e7367f1ba0be7299",
+    "replacement_count": 6
+  },
+  "subject_hashes": {
+    "amendment": "8ec541965cbd539ecc4b2ffe1f0bc1b6f1df2b8745d9460ea5e41b2daa1eab19",
+    "materialization_ABI_corrections": "b33ac13cd69832f7cfb2e612fa411f54c533bad2246641aa8543fd1aa9f1be04",
+    "persistence_transaction_corrections": "57fb9503bae53eb5c376e59d104534e351c43b22c9ee679cc8b06c9c45a2453a",
+    "semantic_owner_corrections": "cf8b24e8bd70831be2dff82c15980dd6303fa03641157ab08de2f12999e0b227"
+  }
+}

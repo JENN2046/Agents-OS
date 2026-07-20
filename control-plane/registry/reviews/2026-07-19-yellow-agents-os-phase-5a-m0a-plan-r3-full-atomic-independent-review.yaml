@@ -1,0 +1,291 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-phase-5a-m0a-plan-r3-full-atomic-independent-review-2026-07-19
+date: 2026-07-19
+
+reviewer:
+  identity: Codex_independent_subagent_phase5a_plan_r3_review
+  independence_basis:
+    - not_the_R1_R2_or_R3_author_run
+    - did_not_participate_in_subject_creation
+    - reviewed_fixed_ZIP_bytes_from_scratch
+    - did_not_modify_workspace_subjects_governance_Git_or_VCPToolBox
+    - author_self_review_read_as_evidence_only
+
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  subject_count: 18
+
+result: BLOCK
+requires_R4: true
+
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  archive:
+    path: /tmp/2026-07-19-agents-os-phase-5a-m0a-plan-r3-independent-review-package-v0.1.zip
+    declared_sha256: 0a6ef57ad5acb71f9977960dc9b16df3eee73d677d73b09a68e3f806c029bac0
+    computed_sha256: 0a6ef57ad5acb71f9977960dc9b16df3eee73d677d73b09a68e3f806c029bac0
+    sha256_match: true
+    entry_count: 168
+    duplicate_paths: 0
+    absolute_or_traversal_or_backslash_paths: 0
+    symlinks: 0
+    CRC: PASS
+    checksums: 167/167_MATCH
+  manifest:
+    canonical_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    declared_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+    computed_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+    archive_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+    sha256_match: true
+  archive_map:
+    entries: 164
+    manifest_inputs: 164
+    exact_order_role_path_and_hash_match: 164/164
+  full_reads:
+    subjects: 18/18
+    workspace_authority_inputs: 139/139
+    external_source_inputs: 6/6
+    author_evidence: 1/1
+    total: 164/164
+    bytes: 6070705
+    lines: 115036
+  canonical_sources:
+    workspace_payload_equal_archive: 158/158
+    fixed_VCP_git_objects_equal_archive: 6/6
+    VCP_repository: runtime/VCPToolBox_git_object_database_read_only
+    VCP_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    current_VCP_HEAD_equals_fixed_commit: true
+    VCP_worktree_files_consumed_as_authority: false
+    VCPToolBox_files_modified_by_review: false
+  immutable_lineage:
+    R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+    R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+    R1_R2_manifests_match: 2/2
+    R1_R2_subjects_match: 11/11
+
+fixed_validation:
+  package_has_no_dot_git: true
+  R3_semantic_closure: PASS
+  R3_fixed_mutations: 16/16_REJECTED
+  builder_byte_reproduction: PASS
+  R1_R2_fixed_lineage: PASS
+  YAML_JSON_and_SQL_statement_structure: PASS
+  subject_trailing_whitespace: 0
+  fixed_command_categories: 5/5_PASS
+  validator_claims:
+    semantic_owner_replacements: 11/11
+    effective_tables: 18/18
+    database_occurrence_count: 0
+    terminal_outcome: NOT_EXECUTED
+  limitation: >-
+    The fixed validator validates fixed byte identity, declared inventories and selected string
+    predicates. It does not execute the effective SQLite DDL or prove the cross-table and ABI-owner
+    semantics described by the plan.
+
+independent_execution:
+  database_scope: sqlite_in_memory_only
+  workspace_or_real_database_created: false
+  effective_DDL_materialized: PASS
+  effective_table_count: 18/18
+  replacement_table_count: 10/10
+  initial_foreign_key_check: PASS
+  case_count: 31
+  expected_or_boundary_passes: 23
+  contract_incomplete_or_invalid_paths: 8
+  accepted_invalid_SQL_graphs: 5
+  structural_or_ABI_contradictions: 3
+  uncaught_exceptions: 0
+  case_results_path: /tmp/2026-07-19-phase5a-m0a-plan-r3-independent-case-results.json
+  case_results_sha256: 0c69bab82c5594dddfda2db1333f5d7dd854d0b19273245d43f08604a0758158
+  case_script_path: /tmp/phase5a_m0a_plan_r3_independent_cases.py
+  case_script_sha256: 41f3a0f8a538d648f6ed6af2b0eed986e6bae666e2bf0117947abc4091f5213e
+  confirmed_positive_surfaces:
+    - effective_18_table_DDL_executes
+    - admitted_command_seven_relation_transaction_commits_all_rows
+    - deferred_pointer_before_Event_commit_succeeds_only_when_Event_arrives
+    - missing_deferred_Event_rolls_back_to_zero_rows
+    - canonical_fact_same_revision_duplicate_rejected
+    - canonical_fact_revision_gap_and_wrong_predecessor_rejected
+    - current_pointer_cross_identity_and_fingerprint_substitution_rejected
+    - cross_Task_completion_fact_rejected
+    - first_apply_second_winner_and_cross_intent_winner_rejected
+    - receipt_identity_is_source_id_plus_receipt_id
+    - source_and_installed_digest_preimages_equal_after_prefix_strip
+    - package_manifest_exclusion_and_mode_sensitivity_are_deterministic
+
+finding_details:
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B01
+    severity: blocker
+    title: F3_incarnation_and_authority_epoch_persistence_and_transaction_ownership_are_not_closed
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-exact-persistence-profile-v0.1-r2.yaml
+      - control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+    evidence:
+      - >-
+        Frozen F3 ResidentAuthorityEpoch requires resident identity and fingerprint, authority epoch,
+        exact expected predecessor epoch, incarnation ID, previous incarnation ID, ownership-started
+        Event sequence and its canonical fingerprint.
+      - >-
+        The effective schema inherits resident_authority_epoch unchanged from R2. It stores only
+        resident_id, authority_epoch, epoch_fingerprint and created_event_sequence. It has no
+        incarnation identity, predecessor epoch, previous incarnation or Event foreign key.
+      - >-
+        Independent SQLite case X06 committed epoch 1 followed by epoch 3 and accepted a nonexistent
+        created_event_sequence 999. Thus the table permits a gap and a provenance-free authority epoch.
+      - >-
+        The R3 owner row assigns F3_incarnation_and_authority_epoch to resident_lifecycle_advance,
+        but that transaction's ordered steps contain neither an incarnation insert nor an authority
+        epoch insert. Case X07 reproduces this exact owner/transaction mismatch.
+    counterexample: >-
+      Two process incarnations can be present while the same resident_authority_epoch rows remain
+      byte-identical under either assignment of epochs to incarnations. The persistence mapping is
+      non-injective: restart recovery cannot prove which incarnation owns the current epoch. A gap
+      from epoch 1 to 3 and a nonexistent ownership Event also commit successfully.
+    impact: >-
+      F3's dual gate cannot be reconstructed or validated from the exact persistence profile. READY
+      may be projected without proof that the current epoch belongs to the live incarnation, so the
+      11 semantic-owner replacements are not closed.
+    required_correction:
+      - Replace resident_authority_epoch within the same closed 18-table inventory with the exact frozen incarnation, predecessor and Event commitments.
+      - Freeze one transaction owner that writes the new incarnation, exact next authority epoch, lifecycle fact, current pointer and Event atomically where F3 requires them together.
+      - Add positive restart and negative gap, fork, wrong-incarnation and missing-Event SQLite cases.
+
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B02
+    severity: blocker
+    title: F5_exact_cross_table_bindings_and_stored_first_accounting_remain_underdetermined
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r3-amendment.draft.md
+      - control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md
+    evidence:
+      - >-
+        Case X01 committed a receipt for attempt A2/intent I2 while binding the first-apply guard
+        fingerprint for attempt A1/intent I1. The receipt relation has no exact composite binding to
+        the winning attempt and intent.
+      - >-
+        Case X02 committed a dispatch_arm whose request ID, fingerprint and bytes differ from its
+        referenced delivery_attempt. The two records are related only by attempt/intent/claim IDs.
+      - >-
+        Case X03 committed an outbox claim whose lease tuple references an unrelated canonical fact
+        kind and logical identity rather than OUTBOX_CLAIM_LEASE for the same intent.
+      - >-
+        Frozen F5 constructive first apply is exactly one Event and one call authorization. Case X04
+        committed a dispatch arm with both committed counts equal to zero even while carrying a
+        non-null Event and call-authorization tuple; the DDL permits any nonnegative counts.
+      - >-
+        The transaction steps use labels such as exact_identity_prebranch_check and
+        validate_source_receipt_attempt_currentness but freeze no exact equality predicates that
+        close these admitted graphs. The fixed validator never executes any of them.
+    counterexample: >-
+      Two implementations can both follow the named transaction steps while one validates only the
+      listed foreign keys and accepts the four graphs above, and another performs the missing tuple
+      equalities. The plan does not select one behavior even though its owner rows claim exact guard,
+      request, lease and stored-first semantics.
+    impact: >-
+      The plan can persist a favorable receipt or arm assembled from unrelated valid rows and can
+      replay zero stored-first accounting for a purported first apply. R2 B01/B02 are therefore not
+      fully closed by the R3 exact persistence surface.
+    required_correction:
+      - Bind receipt, attempt, intent and first-apply guard as one exact tuple or freeze an equivalent total reducer predicate before insert.
+      - Bind dispatch_arm request identity and canonical bytes to the selected delivery_attempt exactly.
+      - Bind the claim lease fact to kind OUTBOX_CLAIM_LEASE and the exact intent logical identity.
+      - Require first-apply committed Event and call-authorization counts to equal one, while exact replay adds zero.
+      - Add the four coordinated SQLite cases as fixed negative regressions.
+
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B03
+    severity: blocker
+    title: The_claimed_one_value_VCP_manager_to_module_projection_conflicts_with_the_fixed_base_implementation
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-materialization-abi-corrections-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-external-materialization-profile-v0.1-r2.yaml
+      - upstream/vcptoolbox/docs/PLUGIN_ECOSYSTEM.md
+    evidence:
+      - >-
+        R3 states that only toolArgs crosses from the manager into index.js and that requestIp is not
+        forwarded to the module.
+      - >-
+        At the exact fixed VCP base commit 555b3b538f6eb736e530c2912de678c5941f9985,
+        Plugin.js SHA-256 be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+        invokes serviceModule.processToolCall(pluginSpecificArgs, directContext). directContext is
+        constructed with requestIp, sourceNode and pluginName and later receives an abort signal.
+      - >-
+        JavaScript passes the second value even when the function declares one formal argument; it
+        remains accessible through arguments[1]. A one-argument spelling does not make the R3
+        no-forwarding claim true.
+      - >-
+        Plugin.js, the actual ABI owner, is absent from the six manifest-bound VCP inputs. The fixed
+        documents show the outer helper receiving direct context but cannot prove the helper-to-module
+        projection claimed by R3. Independent case A04 confirms the fixed-source contradiction.
+    impact: >-
+      WP0 can produce an index.js based on a false call-boundary model. It may accidentally consume
+      request context as authority or fail a later ABI audit, and R2 B03 remains open despite the
+      corrected formal processToolCall(args) spelling.
+    required_correction:
+      - Add fixed Plugin.js bytes at the VCP base commit to the hash-bound authority inputs.
+      - State the actual two-value manager invocation and freeze directContext as ignored nonauthority input that is never forwarded to N-API or reducers.
+      - Keep processToolCall(args) as the module's one formal business argument only if the contract explicitly handles the manager's extra argument.
+      - Add a static or executable ABI probe proving that requestIp, sourceNode, signal and any auth context cannot affect the native request frame.
+
+confirmed_safe_boundaries:
+  second_permission_identity_Task_Command_or_host_authority_found: false
+  upstream_reducer_reimplementation_authorized: false
+  VCPToolBox_core_change_authorized: false
+  plugin_enablement_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_implementation_started: false
+  runtime_or_provider_started: false
+  private_memory_sensing_or_real_effect_found: false
+  automatic_plan_freeze_found: false
+  automatic_implementation_start_found: false
+  workspace_implementation_path_present: false
+
+governance:
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_or_push_performed: false
+  review_subjects_modified: false
+  next_gate: JENN_EXPLICIT_PHASE_5A_PLAN_R4_NARROW_CORRECTION_DECISION
+
+R4_scope_limit:
+  - F3_authority_epoch_incarnation_predecessor_Event_and_transaction_owner_closure
+  - F5_exact_receipt_guard_request_lease_and_stored_first_cross_table_closure
+  - VCP_actual_manager_to_module_projection_and_hash_bound_ABI_owner_closure
+
+forbidden_R4_expansion:
+  - Rust_or_JavaScript_implementation
+  - NAPI_build_or_dependency_installation
+  - database_creation
+  - VCPToolBox_materialization_change_or_start
+  - plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+
+terminal_disposition: >-
+  Package integrity, fixed commands, digest preimage rules, many relational constraints and all
+  nonauthorization boundaries pass. The effective independent DDL and fixed VCP implementation
+  evidence nevertheless reproduce three blocker groups: F3 authority-epoch ownership is not
+  representable or transactionally owned, F5 exact cross-table/stored-first bindings admit favorable
+  invalid graphs, and the manager-to-module projection contradicts the fixed VCP call path. The plan
+  cannot be frozen and implementation cannot start. A narrow R4 is required.

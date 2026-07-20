@@ -3827,6 +3827,657 @@ next_gate: JENN_EXPLICIT_PHASE_5A_START_DECISION
 The only open gate is Jenn's separate Phase 5A decision. F8 durability does not
 start implementation or create runtime authority.
 
+## Phase 5A M0-A Plan Closure Started (2026-07-19)
+
+Jenn explicitly started Phase 5A in plan-closure-only mode. The exact
+Implementation Plan, Build Profile, F1-F6 traceability matrix and validation /
+fault-injection profile form one four-subject atomic unit. The package is fixed
+for fresh full atomic hash-bound independent review.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_status: M0A_PLAN_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-closure-start-decision-v0.1.yaml
+Phase_5A_start_decision_sha256: 371fdd0d5c58174331751cb5fc04eb8b7606efc9ee6f23a4dd3dddca5d48bcb3
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 4
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+The source ownership model is external Jenn-owned source plus future in-process
+VCPToolBox hybridservice installation. No Rust, JavaScript, N-API or SQLite
+implementation exists in this work block. A later plan freeze still requires a
+second exact Jenn decision before WP0 implementation may begin.
+
+## Phase 5A M0-A Plan R2 Narrow Closure Fixed (2026-07-19)
+
+The R1 fresh independent review returned `BLOCK` with three plan-freeze
+findings. Jenn explicitly started a narrow R2. The R1 four subjects and R1
+manifest remain immutable; R2 closes only canonical contract ownership,
+persistence ownership and external materialization precision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R1_review_result: BLOCK
+Phase_5A_plan_R1_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-full-atomic-independent-review.yaml
+Phase_5A_plan_R1_review_sha256: 68d0fd5a5c6abb63c9b59fec980596aa9bb34adc566115f7cffa1ae9fb02ab48
+Phase_5A_plan_R2_started: true
+Phase_5A_plan_R2_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r2-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R2_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 11
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.6.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.6.md
+next_gate: PHASE_5A_M0A_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R2 author evidence reports `110/110` canonical F1-F6 subjects, 63 closed M0-A
+obligations, 18 exhaustive SQLite tables, 41 planned external-source files and
+12/12 rejected fixed mutations. These are author claims pending fresh
+independent review. No source implementation, database or plugin tree exists.
+
+## Phase 5A M0-A Plan R3 Narrow Closure Fixed (2026-07-19)
+
+The R2 fresh independent review returned `BLOCK` with three blockers in owner
+semantics, effective persistence/transaction consistency and materialization
+ABI precision. Jenn explicitly started narrow Plan R3. R1/R2 subjects and
+manifests remain immutable.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R2_review_result: BLOCK
+Phase_5A_plan_R2_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r2-full-atomic-independent-review.yaml
+Phase_5A_plan_R2_review_sha256: 7d8b6305a469aa1153cb74d61c385065528dfd546b9019279f1f219fe1462dad
+Phase_5A_plan_R3_started: true
+Phase_5A_plan_R3_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r3-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R3_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 18
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.7.md
+next_gate: PHASE_5A_M0A_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+R3 author evidence reports 11 exact owner replacements, an effective 18-table
+contract, 12 persistence negatives, eight materialization negatives and 16
+coordinated fixed mutations. No database or implementation occurrence exists.
+
+## Phase 5A M0-A Plan R3 Independent Review Block Reconciled (2026-07-19)
+
+The Plan R3 fresh full atomic independent review returned `BLOCK` with three
+blockers. Its original YAML was preserved byte-for-byte, the findings were
+disposed without changing R1-R3 subjects, and governance now stops at Jenn's
+explicit Plan R4 start decision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R3_review_result: BLOCK
+Phase_5A_plan_R3_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r3-full-atomic-independent-review.yaml
+Phase_5A_plan_R3_review_sha256: 961236bccb73f423346023d331908929673d84aa3da7989985cf61c00260e673
+Phase_5A_plan_R3_findings: 3_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_R3_finding_disposition: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r3-finding-disposition-v0.1.yaml
+Phase_5A_plan_R4_started: false
+Phase_5A_status: M0A_PLAN_R3_BLOCK_RECONCILED_AWAITING_JENN_R4_START_DECISION
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v6.8.md
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R4_START_DECISION
+```
+
+The three accepted findings are limited to F3 incarnation/authority-epoch
+persistence and transaction ownership, F5 exact cross-table/stored-first
+bindings, and the actual VCP manager-to-module `directContext` projection. No
+R4 subject, implementation, database or VCPToolBox change was created.
+
+## Phase 5A M0-A Plan R4 Narrow Closure Fixed (2026-07-19)
+
+Jenn explicitly started Plan R4 after the R3 independent `BLOCK`. R4 is
+strictly limited to F3 incarnation/authority-epoch persistence, F5 exact
+cross-table/stored-first bindings and the actual VCP `directContext` call
+boundary. R1–R3 bytes remain immutable.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R3_review_result: BLOCK
+Phase_5A_plan_R4_started: true
+Phase_5A_plan_R4_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r4-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R4_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 25
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.0.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.0.md
+next_gate: PHASE_5A_M0A_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+Author evidence reports 18/18 effective tables, 10/10 isolated in-memory
+SQLite cases, 11/11 fixed mutations and exact fixed `Plugin.js` owner bytes.
+These remain author claims pending independent review. No implementation or
+database file exists.
+
+## Phase 5A M0-A Plan R4 Independent Review Block Reconciled (2026-07-19)
+
+The Plan R4 fresh full atomic independent review returned `BLOCK` with three
+blockers. Its original YAML was preserved byte-for-byte, the findings were
+disposed without changing R1–R4 subjects, and governance now stops at Jenn's
+explicit Plan R5 start decision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R4_review_result: BLOCK
+Phase_5A_plan_R4_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r4-full-atomic-independent-review.yaml
+Phase_5A_plan_R4_review_sha256: 38d7000d568c1f97028bc38689960e7026c0f79d07e77944e4d69856e64ee79f
+Phase_5A_plan_R4_findings: 3_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_R4_finding_disposition: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r4-finding-disposition-v0.1.yaml
+Phase_5A_plan_R5_started: false
+Phase_5A_status: M0A_PLAN_R4_BLOCK_RECONCILED_AWAITING_JENN_R5_START_DECISION
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.1.md
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R5_START_DECISION
+```
+
+The three accepted findings are limited to exact F3 ownership Event and READY
+witness persistence, exact F5 stored-first Event/call-authorization provenance,
+and an executable fail-closed `index.js` AST/dataflow validation contract. No
+R5 subject, implementation, database or VCPToolBox change was created.
+
+## Phase 5A M0-A Plan R5 Narrow Closure Started (2026-07-19)
+
+Jenn explicitly started Plan R5. Its scope is exactly the three accepted Plan
+R4 blockers; R1–R4 subjects and manifests remain immutable.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R4_review_result: BLOCK
+Phase_5A_plan_R5_started: true
+Phase_5A_plan_R5_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r5-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R5_STARTED_STRICT_SCOPE
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.2.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.2.md
+next_gate: PHASE_5A_M0A_PLAN_R5_AUTHOR_PACKAGE
+```
+
+## Phase 5A M0-A Plan R5 Narrow Closure Fixed (2026-07-19)
+
+Plan R5 is fixed as a 33-subject R1–R5 atomic bundle. It closes only exact F3
+ownership/witness persistence, exact F5 stored-first provenance and an
+executable fail-closed future `index.js` AST/dataflow validation contract.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R4_review_result: BLOCK
+Phase_5A_plan_R5_started: true
+Phase_5A_status: M0A_PLAN_R5_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 33
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.3.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-19-agents-os-active-work-queue-v7.3.md
+next_gate: PHASE_5A_M0A_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+Author evidence reports 18/18 effective tables, 8/8 SQLite cases, 13/13
+closed-parser/dataflow cases and 7/7 rejected fixed mutations. No database file,
+plugin implementation, VCPToolBox change or runtime occurrence exists.
+
+## Phase 5A M0-A Plan R5 Independent Review Block Reconciled (2026-07-19)
+
+The fresh full atomic independent review of the fixed 33-subject R1–R5 bundle
+returned `BLOCK`. The original review bytes are preserved and all six blockers
+are recorded in a non-accepting finding disposition. Plan R6 has not started and
+requires Jenn's explicit decision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R5_started: true
+Phase_5A_plan_R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+Phase_5A_plan_R5_independent_review: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r5-full-atomic-independent-review.yaml
+Phase_5A_plan_R5_independent_review_sha256: 63dea5223d92cfb4c748c125f445970eb87a7e4090fd8e864d937f58b81dc92d
+Phase_5A_plan_R5_independent_review_result: BLOCK
+Phase_5A_plan_R5_findings: 6_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_R5_disposition: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r5-finding-disposition-v0.1.yaml
+Phase_5A_plan_R5_disposition_sha256: 14b0fdd96406eaaa9501557f128946a0f415569539b308e7995e3146c959f215
+Phase_5A_plan_R6_started: false
+Phase_5A_status: M0A_PLAN_R5_BLOCK_RECONCILED_AWAITING_JENN_R6_START_DECISION
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R6_START_DECISION
+```
+
+The six accepted disposition scopes do not pre-authorize Plan R6. No R6
+subject, implementation source, database file, plugin change or runtime event
+exists in this reconciliation block.
+
+## Phase 5A M0-A Plan R6 Narrow Closure Started (2026-07-19)
+
+Jenn explicitly started Plan R6 with scope limited to the six accepted R5
+blockers. R1–R5 subjects and manifests remain immutable.
+
+```yaml
+Phase_5A_plan_R6_started: true
+Phase_5A_plan_R6_start_decision: control-plane/registry/decisions/2026-07-19-agents-os-phase-5a-m0a-plan-r6-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_plan_R6_start_decision_sha256: e7fa64d934e6c2f58275f9ef013c60aea98cab1fcb9495177b6eb46022ff8a33
+Phase_5A_status: M0A_PLAN_R6_STARTED_STRICT_SCOPE
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R6_AUTHOR_PACKAGE
+```
+
+## Phase 5A M0-A Plan R6 Narrow Closure Fixed (2026-07-19)
+
+Plan R6 is fixed as a 42-subject R1–R6 atomic bundle. Its nine new subjects
+close only the six R5 blockers through exact F3/F5 bindings, immutable-history
+triggers, inherited ABI consistency, boundary enforcement and duplicate-key
+totality. These remain author claims pending independent review.
+
+```yaml
+Phase_5A_plan_R6_started: true
+Phase_5A_status: M0A_PLAN_R6_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R6_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 42
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r6-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+Phase_5A_plan_offline_archive_sha256: 1de9457555581f9c790cc588eef83c2662db023d70508d3a6d2efe5372f90032
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R6_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+No Rust, N-API, SQLite database, plugin implementation, VCPToolBox change or
+runtime occurrence exists in this Plan R6 author package.
+
+## Phase 5A M0-A Plan R6 Independent Review Block Reconciled (2026-07-20)
+
+The fresh full atomic independent review of the fixed 42-subject R1–R6 bundle
+returned `BLOCK`. The original review bytes are preserved and both blockers are
+recorded in a non-accepting finding disposition. Plan R7 has not started and
+requires Jenn's explicit decision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R6_started: true
+Phase_5A_plan_R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+Phase_5A_plan_R6_independent_review: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r6-full-atomic-independent-review.yaml
+Phase_5A_plan_R6_independent_review_sha256: 6b6d890d8656e920b564d192eb0fc508c4ecdc2ab6449cec3aa5efa662ea3336
+Phase_5A_plan_R6_independent_review_result: BLOCK
+Phase_5A_plan_R6_findings: 2_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_R6_disposition: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r6-finding-disposition-v0.1.yaml
+Phase_5A_plan_R6_disposition_sha256: f0354a9466e098c3c55173c43c68047c427bd5d92eb89486d78f8c72cf49fafd
+Phase_5A_plan_R7_started: false
+Phase_5A_status: M0A_PLAN_R6_BLOCK_RECONCILED_AWAITING_JENN_R7_START_DECISION
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R7_START_DECISION
+```
+
+The two accepted disposition scopes do not pre-authorize Plan R7. No R7
+subject, implementation source, database file, plugin change or runtime event
+exists in this reconciliation block.
+
+## Phase 5A M0-A Plan R7 Narrow Closure Started (2026-07-20)
+
+Jenn explicitly started Plan R7. Its scope is limited to the two accepted R6
+blockers: complete semantic enforcement of every planning boundary flag and an
+actual immutable `RECOVERING revision 1` to `READY revision 2` transaction.
+R1–R6 subjects and manifests remain immutable.
+
+```yaml
+Phase_5A_plan_R7_started: true
+Phase_5A_plan_R7_start_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r7-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R7_STARTED_STRICT_SCOPE
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R7_AUTHOR_PACKAGE
+```
+
+This decision does not create implementation source, a database file, a plugin
+change, a runtime occurrence or any effect authority.
+
+## Phase 5A M0-A Plan R7 Narrow Closure Fixed (2026-07-20)
+
+Plan R7 is fixed as a 49-subject R1–R7 atomic bundle. Its seven new subjects
+close only the two R6 blockers through a recursively derived boundary inventory
+and an actual immutable RECOVERING revision 1 to READY revision 2 transaction.
+These remain author claims pending independent review.
+
+```yaml
+Phase_5A_plan_R7_started: true
+Phase_5A_status: M0A_PLAN_R7_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R7_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 49
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r7-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+Phase_5A_plan_offline_archive_sha256: b7f421b99e031182414ab429ee6421c125be7d11865e321969940d549b06d92a
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R7_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+No Rust, N-API, SQLite database, plugin implementation, VCPToolBox change or
+runtime occurrence exists in this Plan R7 author package.
+
+## Phase 5A M0-A Plan R7 Independent Review Block Reconciled (2026-07-20)
+
+The fresh full atomic independent review of the fixed 49-subject R1–R7 bundle
+returned `BLOCK`. The original review and case-result bytes are preserved, and
+both blockers are recorded in a non-accepting finding disposition. Plan R8 has
+not started and requires Jenn's explicit decision.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R7_started: true
+Phase_5A_plan_R7_manifest_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+Phase_5A_plan_R7_independent_review: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r7-full-atomic-independent-review.yaml
+Phase_5A_plan_R7_independent_review_sha256: 5daeec19f0c50e5d87df4577043b27ae447e01fe643e2aa0850ade99c104fc18
+Phase_5A_plan_R7_independent_review_result: BLOCK
+Phase_5A_plan_R7_findings: 2_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_R7_case_results: control-plane/registry/reviews/2026-07-20-agents-os-phase-5a-m0a-plan-r7-codex-independent-case-results.json
+Phase_5A_plan_R7_case_results_sha256: 89ab92f9312a3f75c90d1d918a9b3dc2837cb31851c5e038f26bca5871dcda3b
+Phase_5A_plan_R7_disposition: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r7-finding-disposition-v0.1.yaml
+Phase_5A_plan_R7_disposition_sha256: 81a8461ca44274e54e2f90e8bd636436e01c2cb5b5f1abbe5ba9faac2242e979
+Phase_5A_plan_R8_started: false
+Phase_5A_status: M0A_PLAN_R7_BLOCK_RECONCILED_AWAITING_JENN_R8_START_DECISION
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R8_START_DECISION
+```
+
+The two accepted disposition scopes do not pre-authorize Plan R8. No R8
+subject, implementation source, database file, plugin change, runtime event,
+commit, push, or merge exists in this reconciliation block.
+
+## Phase 5A M0-A Plan R8 Narrow Closure Started (2026-07-20)
+
+Jenn explicitly started Plan R8. Its scope is limited to the two accepted R7
+blockers: an exact closed effective boundary-key contract and exact binding of
+the inherited RECOVERING fact and pointer to the ownership Event. R1–R7
+subjects and manifests remain immutable.
+
+```yaml
+Phase_5A_plan_R8_started: true
+Phase_5A_plan_R8_start_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-narrow-closure-start-decision-v0.1.yaml
+Phase_5A_status: M0A_PLAN_R8_STARTED_STRICT_SCOPE
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R8_AUTHOR_PACKAGE
+```
+
+This decision does not create implementation source, a database file, a plugin
+change, a runtime occurrence or any effect authority.
+
+## Phase 5A M0-A Plan R8 Narrow Closure Fixed (2026-07-20)
+
+Plan R8 is fixed as a 55-subject R1–R8 atomic bundle. Its six new subjects
+close only the two R7 blockers through exact effective-source commitments, a
+complete recursive key-path inventory and exact RECOVERING ownership-Event
+binding. These remain author claims pending independent review.
+
+```yaml
+Phase_5A_plan_R8_started: true
+Phase_5A_status: M0A_PLAN_R8_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 55
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_offline_archive_sha256: 691dd8626b8743d2c4840a3414bbd98fa63fffe72590c14c98a19dd18ebf91fc
+Phase_5A_plan_independent_review_created: false
+Phase_5A_plan_independent_review_result: NOT_RUN
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_or_effect_execution_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R8_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+No Rust, N-API, SQLite database, plugin implementation, VCPToolBox change or
+runtime occurrence exists in this Plan R8 author package.
+
+## Phase 5A M0-A Plan R8 Independent Review Passed / Freeze Decision Surface Ready (2026-07-20)
+
+The fresh full atomic hash-bound independent review of the fixed 55-subject
+R1-R8 bundle returned `PASS_NO_BLOCKER`. The exact external review and case
+results are preserved, and the result is reconciled to a Jenn-only atomic plan
+freeze decision surface. The plan has not been accepted or frozen, and
+implementation has not started.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_CLOSURE_ONLY
+Phase_5A_plan_R8_started: true
+Phase_5A_plan_review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 55
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_independent_review_result: PASS_NO_BLOCKER
+Phase_5A_plan_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+Phase_5A_plan_requires_R9: false
+Phase_5A_status: M0A_PLAN_R8_READY_FOR_JENN_ATOMIC_FREEZE_DECISION
+Phase_5A_plan_freeze_decision_package: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-package-v0.1.md
+Phase_5A_plan_accepted: false
+Phase_5A_plan_frozen: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: JENN_EXPLICIT_PHASE_5A_M0A_PLAN_R8_ATOMIC_FREEZE_DECISION
+```
+
+The independent review verified the seven sealed VCPToolBox source-file hashes.
+Because the offline archive intentionally contained no `.git`, upstream Git
+object membership remains an implementation-start preflight condition and is
+not part of this plan-freeze decision surface.
+
+## Phase 5A M0-A Plan R8 Accepted and Frozen (2026-07-20)
+
+Jenn explicitly confirmed execution of Section 6 A's complete Exact decision
+text. The 55-subject R1-R8 implementation-plan/build-profile bundle is now
+atomically accepted and frozen under the manifest precedence. Partial
+acceptance is forbidden, R9 is not required, and implementation remains a
+separate Jenn-owned decision after Git durability closeout.
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: PLAN_FROZEN_IMPLEMENTATION_NOT_STARTED
+Phase_5A_plan_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+Phase_5A_plan_acceptance_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+Phase_5A_plan_subject_count: 55
+Phase_5A_plan_manifest: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5A_plan_manifest_sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+Phase_5A_plan_independent_review: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml
+Phase_5A_plan_independent_review_sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+Phase_5A_plan_freeze_decision: control-plane/registry/decisions/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1.yaml
+Phase_5A_plan_freeze_decision_sha256: db3aad1623a62ddab3735a086e4af6773cfd1b71103a43030ab01be010688e1e
+Phase_5A_plan_accepted: true
+Phase_5A_plan_frozen: true
+Phase_5A_plan_revisions_stopped: true
+requires_R9: false
+Phase_5A_implementation_started: false
+implementation_authorized: false
+dependency_installation_authorized: false
+database_creation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PHASE_5A_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+```
+
+The freeze does not create Rust, JavaScript, N-API or SQLite implementation,
+install dependencies, modify or start VCPToolBox, enable a plugin, access
+private raw Memory or `state-private/`, activate runtime, call a provider or
+perform a real effect.
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.

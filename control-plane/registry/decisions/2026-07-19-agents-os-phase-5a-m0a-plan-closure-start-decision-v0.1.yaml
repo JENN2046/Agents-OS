@@ -1,0 +1,123 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-phase-5a-m0a-plan-closure-start-decision-v0.1
+record_type: PhaseStartDecision
+status: active
+immutable: true
+created_at: 2026-07-19T19:10:01+08:00
+effective_at: 2026-07-19T19:10:01+08:00
+
+authority:
+  authorized_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5A_M0A_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE_ONLY
+  decision_source: exact_current_conversation_instruction_and_confirmed_design_choices
+  confirmation_text_received: >-
+    Start Phase 5A; first create and review the Phase 5A M0-A Implementation
+    Plan / Build Profile, freeze the exact engineering scope, and only then
+    begin Rust, N-API and temporary SQLite implementation.
+
+phase:
+  id: Phase_5A
+  name: M0 Deterministic Orchestrator Core
+  mode: IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+  started: true
+  implementation_started: false
+  acceptance_authority: Jenn
+  partial_acceptance: forbidden
+
+prerequisites:
+  F8_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672
+  F8_independent_review:
+    path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-f8-r5-nobao-independent-review.yaml
+    sha256: 713358f67cd763bf86d6a6d7f36e2ef3befc04f2ee73ee7667e1629ae271353f
+    result: PASS_NO_BLOCKER
+  F8_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml
+    sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d
+  F8_mainline_integration:
+    repository: JENN2046/Agents-OS
+    branch: main
+    merge_commit: 8852d14e6afdfca16e5cc48d446f9a8c85671a43
+  F8_durability:
+    completion_commit: 4a4ef5de198ae03459b8a842c54d75c49069d880
+    receipt_path: control-plane/registry/receipts/2026-07-19-yellow-agents-os-f8-mainline-durability-closeout-v0.1.md
+    receipt_sha256: 815dead7e428e1919791d67ca304309138ef160324e773c11e754f67089a9c08
+
+confirmed_engineering_choices:
+  source_authority: extensions/agents-os-resident
+  runtime_install_target: VCPToolBox/Plugin/AGENTSOSResident
+  ownership_model: JENN_OWNED_EXTERNAL_SOURCE_PACKAGE
+  runtime_model: IN_PROCESS_HYBRIDSERVICE_PLUS_RUST_NAPI
+  sidecar_process: forbidden
+  VCPToolBox_core_modification: forbidden
+  install_manifest_state: plugin-manifest.json.block
+  VCPToolBox_base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_current_dirty_worktree_use: forbidden
+  VCPToolBox_clean_linked_worktree_required_for_future_install_tests: true
+  source_delivery_before_separate_decision: LOCAL_TASK_BRANCH_ONLY
+  public_fork_push: forbidden
+  implementation_requires_second_Jenn_decision: true
+
+authorized_scope:
+  - create_four_subject_M0A_implementation_plan_and_build_profile_atomic_bundle
+  - bind_F1_through_F6_frozen_semantics_to_future_code_SQL_and_tests
+  - consume_F7_and_F8_only_as_completed_phase_gate_inputs
+  - define_exact_source_ownership_install_overlay_and_upstream_tracking_rules
+  - define_exact_Rust_Node_NAPI_SQLite_dependency_and_lock_profile
+  - define_closed_NAPI_surface_and_synthetic_only_M0_command_registry
+  - define_single_writer_transaction_replay_recovery_and_UNKNOWN_test_profile
+  - author_self_review_and_fresh_full_atomic_hash_bound_independent_review_package
+  - governance_registry_CURRENT_STATE_queue_receipt_and_consumer_projection
+
+authorized_outputs:
+  - Phase_5A_M0A_Implementation_Plan
+  - Phase_5A_M0A_Build_Profile
+  - Phase_5A_M0A_Contract_Traceability_Matrix
+  - Phase_5A_M0A_Validation_And_Fault_Injection_Profile
+  - nonindependent_author_self_review
+  - hash_bound_independent_review_manifest_and_package
+  - package_receipt_and_governance_projection
+  - Jenn_only_atomic_plan_freeze_decision_surface_after_independent_PASS
+
+hard_boundaries:
+  create_or_modify_Rust_JavaScript_NAPI_SQL_or_plugin_source: forbidden
+  create_database_or_migration: forbidden
+  modify_or_start_VCPToolBox: forbidden
+  enable_plugin_or_rename_blocked_manifest: forbidden
+  install_dependency_or_toolchain: forbidden
+  runtime_activation: forbidden
+  production_authentication_or_credentials: forbidden
+  private_raw_memory_or_state_private_access: forbidden
+  provider_network_sensing_recording_or_real_effect: forbidden
+  modify_F1_through_F8_frozen_subject_bytes: forbidden
+  automatic_plan_freeze: forbidden
+  automatic_implementation_start_after_plan_freeze: forbidden
+  public_repository_push: forbidden
+  tag_release_deploy_or_publish: forbidden
+
+effects:
+  F8_accepted: true
+  F8_frozen: true
+  F8_durability_complete: true
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_change_authorized: false
+  VCPToolBox_source_change_authorized: false
+  provider_or_effect_execution_authorized: false
+
+next_gate:
+  name: PHASE_5A_M0A_PLAN_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_acceptance: forbidden
+  final_plan_freeze_owner: Jenn
+  implementation_start_after_freeze_owner: Jenn
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

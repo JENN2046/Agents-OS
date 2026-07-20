@@ -1,0 +1,87 @@
+schema_version: agents-os.m0a-semantic-owner-corrections.v0.1
+profile_id: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R4
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R3
+
+replacement_rows:
+  - obligation_id: F3_incarnation_and_authority_epoch
+    module_owner: resident/ledger_thread
+    reducer_or_boundary_owner: F3_resident_lifecycle_consumer
+    transaction_owner: resident_incarnation_epoch_RECOVERING_then_witness_bound_READY
+    persistence_owner: resident_incarnation+resident_authority_epoch+event+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer
+    invariant: new incarnation exact next authority epoch RECOVERING fact pointer and ownership Event commit atomically; READY requires later exact witness COMMIT observation
+    positive_test: positive/F3_restart_incarnation_epoch_N_plus_1
+    negative_test: negative/F3_epoch_gap_fork_wrong_incarnation_or_missing_Event_rejected
+    replay_test: replay/F3_exact_incarnation_epoch_tuple_replays
+    crash_test: crash/F3_incarnation_epoch_RECOVERING_fact_pointer_Event_all_or_zero
+  - obligation_id: F5_claim_lease_and_fencing
+    module_owner: reducers/outbox_claim
+    reducer_or_boundary_owner: F5_claim_lease_reducer
+    transaction_owner: outbox_claim_exact_lease_fact
+    persistence_owner: outbox_claim+canonical_fact(OUTBOX_CLAIM_LEASE exact_intent_logical_id)+current_fact_pointer+event
+    invariant: claim binds exact intent and OUTBOX_CLAIM_LEASE fact tuple; unrelated kind or logical identity cannot commit
+    positive_test: positive/F5_exact_claim_lease_fact
+    negative_test: negative/F5_unrelated_kind_or_intent_lease_fact_rejected
+    replay_test: replay/F5_exact_claim_revision_replays
+    crash_test: crash/F5_claim_lease_fact_pointer_Event_all_or_zero
+  - obligation_id: F5_receipt_compatibility_and_currentness
+    module_owner: reducers/delivery_receipt
+    reducer_or_boundary_owner: F5_receipt_currentness_reducer
+    transaction_owner: receipt_apply_exact_attempt_guard
+    persistence_owner: delivery_receipt(source_id_receipt_id_attempt_intent_claim_guard)+first_apply_guard+canonical_fact+current_fact_pointer+event
+    invariant: receipt binds one exact attempt intent claim and the guard naming that same winning attempt and claim
+    positive_test: positive/F5_receipt_exact_winner_tuple
+    negative_test: negative/F5_cross_intent_attempt_claim_or_guard_rejected
+    replay_test: replay/F5_exact_source_receipt_tuple_replays
+    crash_test: crash/F5_receipt_fact_pointer_Event_all_or_zero
+  - obligation_id: F5_dispatch_arm_replay_and_identity_prebranch_check
+    module_owner: mock_host/dispatch
+    reducer_or_boundary_owner: F5_dispatch_arm_prebranch_reducer
+    transaction_owner: dispatch_arm_and_first_apply_exact_request
+    persistence_owner: delivery_attempt+dispatch_arm(exact_attempt_intent_claim_request_ID_fingerprint_bytes)+first_apply_guard+event
+    invariant: arm request tuple equals selected attempt request tuple before branch and before any call
+    positive_test: positive/F5_exact_request_arm
+    negative_test: negative/F5_arm_request_ID_fingerprint_or_bytes_mismatch_rejected
+    replay_test: replay/F5_exact_arm_returns_stored_first_tuple
+    crash_test: crash/F5_arm_commit_before_call_is_restart_safe
+  - obligation_id: F5_stored_first_Event_and_call_accounting
+    module_owner: ledger/replay
+    reducer_or_boundary_owner: F5_stored_first_accounting_reducer
+    transaction_owner: dispatch_arm_and_first_apply_exact_request
+    persistence_owner: dispatch_arm(first_Event_ref_fingerprint_count_1+first_call_authorization_ref_revision_fingerprint_count_1)
+    invariant: first apply stores exactly one Event and one call authorization; exact replay adds zero and returns stored values
+    positive_test: positive/F5_first_accounting_exactly_one_each
+    negative_test: negative/F5_zero_or_multiple_stored_first_counts_rejected
+    replay_test: replay/F5_stored_first_accounting_exact_zero_additions
+    crash_test: crash/F5_lost_response_replays_same_stored_first_tuple
+  - obligation_id: F5_first_apply_eligibility_guard
+    module_owner: reducers/outbox_claim
+    reducer_or_boundary_owner: F5_first_apply_eligibility_reducer
+    transaction_owner: dispatch_arm_and_first_apply_exact_request
+    persistence_owner: first_apply_guard(intent_id_winning_attempt_id_winning_claim_id_guard_fingerprint_acquired_Event)
+    invariant: immutable winner tuple is committed before call and every receipt must bind that same tuple
+    positive_test: positive/F5_first_attempt_claim_tuple_wins
+    negative_test: negative/F5_second_or_cross_claim_attempt_cannot_reuse_guard
+    replay_test: replay/F5_exact_guard_tuple_replays
+    crash_test: crash/F5_guard_and_arm_committed_call_not_started_restart_safe
+
+effective_inventory_rules:
+  base: R3_11_replacement_rows
+  replace_exactly_these_obligation_ids:
+    - F3_incarnation_and_authority_epoch
+    - F5_claim_lease_and_fencing
+    - F5_receipt_compatibility_and_currentness
+    - F5_dispatch_arm_replay_and_identity_prebranch_check
+    - F5_stored_first_Event_and_call_accounting
+    - F5_first_apply_eligibility_guard
+  add_obligation_ids: 0
+  remove_obligation_ids: 0
+  effective_obligation_count: 63
+
+governance:
+  creates_new_semantic_owner: false
+  reimplements_F3_or_F5_reducer: false
+  implementation_authorized: false

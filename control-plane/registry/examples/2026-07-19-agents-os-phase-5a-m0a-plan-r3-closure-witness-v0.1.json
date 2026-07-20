@@ -1,0 +1,42 @@
+{
+  "authority_boundary": {
+    "VCPToolBox_change_authorized": false,
+    "database_creation_authorized": false,
+    "implementation_authorized": false,
+    "runtime_activation_authorized": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "environment": "SYNTHETIC_PLAN_VALIDATION",
+  "materialization_closure": {
+    "materialization_fingerprint": "fa9c47f129aab44c3201658307b2fbfabd7758db6faa2dcaf8cc0b52fb3a595b",
+    "module_export_count": 3,
+    "package_manifest_excluded_from_both": true,
+    "processToolCall_argument_count": 1,
+    "source_and_installed_preimage_identical_required": true
+  },
+  "persistence_closure": {
+    "effective_table_count": 18,
+    "effective_table_fingerprint": "15367ebdde991d252477c944e127913b86ca6a986d9cf731f4ef318eec99f232",
+    "fixed_negative_count": 12,
+    "inherited_table_count": 8,
+    "replacement_table_count": 10,
+    "transaction_fingerprint": "7e628873048a5e4396b55c7a72c1b2206ff95f57ac2c7f10e084f27dd228561e",
+    "transaction_owner_count": 7
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE",
+  "root_fingerprint": "6e5f93451fce1a833d8f8188f5a53c7b391a39c1ec7c0f59d9f25d7e35d46459",
+  "schema_version": "agents-os.m0a-plan-r3-closure-witness.v0.1",
+  "semantic_owner_closure": {
+    "added_obligations": 0,
+    "effective_obligation_count": 63,
+    "removed_obligations": 0,
+    "replacement_ID_fingerprint": "202b57f3f03fd8e28158195bee8417aea9bd0ea20b316caa9ec3bc4e83defad8",
+    "replacement_count": 11
+  },
+  "subject_hashes": {
+    "amendment": "b9379c67ce1f304add904a660688c876c41c95aa95f26ecb6be6c28708ca087d",
+    "materialization_ABI_corrections": "8a04a0094a2568ffe1d81c05b402bfb9ba4e477dfcbe37de90b64cf7bbdce17f",
+    "persistence_transaction_corrections": "ff6ab98781e4ba0f3cba26138e1c112c03f3223b2db2563890f37d23db0aad76",
+    "semantic_owner_corrections": "e8d3b211d8c7beb1255f3896f39fc3b596f735daaf2c190f4bfeffe03ac49424"
+  }
+}
