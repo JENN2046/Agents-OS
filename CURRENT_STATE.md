@@ -4859,6 +4859,61 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP5_PERMIT_FENCE_CLAIM_REPLAY_AND_CRASH_TESTS
 ```
 
+## Phase 5A M0-A WP5 Complete, WP6 Current (2026-07-20)
+
+WP5 established the synthetic F4-to-F5 persistence seam: a closed,
+production-incompatible Outbox intent, exact scope and fence comparison,
+permit-currentness owner-result consumption, deterministic claim/lease and
+receipt/recovery reducers, atomic enqueue, crash rollback and exact replay.
+The synthetic intent is never authority-eligible or claimable. The test path
+created one intent and zero claims, attempts, arms, receipts, Host calls or
+effects. The direct predecessor gate now permits WP6 Validation and Completion
+only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP6_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP5_source_commit: 757aa2cbf1cc105cc26469bd5228b3e932c90494
+WP5_package_manifest_commit: 5d8b4e69287afb204c89c2b5eb65bdab1a8cd42d
+WP5_source_commit_payload: 40/40_BYTE_EQUAL
+WP5_content_tree_sha256: 96f5d8ef09891ebd561ccf176fd903e5d06a42633340d553aa6e651384c90232
+WP5_package_manifest_sha256: bed25506e29aef9012e0318e46880a5858cc62b153d977718fc4b2935a300ede
+WP5_planned_source_inventory: 41/41_MATCH
+WP5_cargo_test_locked: 32/32_PASS
+WP5_clippy_all_targets_D_warnings: PASS
+WP5_release_build_locked: PASS
+WP5_Node_ABI_flow: 7/7_PASS
+WP5_R6_AST_and_dataflow_validator: PASS_NO_BLOCKER_35_CASES
+WP5_persisted_test_counts: 1_Event_1_Inbox_1_Outbox_0_Claim_0_Attempt_0_Arm_0_Receipt_0_Guard
+WP5_mock_or_real_Host_call_count: 0
+WP5_effect_occurrence_count: 0
+WP5_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp5-permit-and-outbox-closeout-v0.1.md
+WP5_closeout_receipt_sha256: 84442bee45ab1aa178f2e394325f1e4419366da3bdb9172dcd90676101b674e2
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.3.md
+active_work_queue_sha256: 03dbb8110f290780ded927859b67c944cda66b07c73f6ba7cf2d54ed9f60f3ac
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.3.md
+current_work_package: WP6_VALIDATION_AND_COMPLETION
+WP6_start_condition_satisfied: true
+WP7_direct_predecessor_gate_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP6_DISAGREEMENT_COMPLETION_CAS_REPLAY_AND_CRASH_TESTS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
