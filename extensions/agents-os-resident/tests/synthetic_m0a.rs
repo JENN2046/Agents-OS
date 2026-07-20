@@ -171,7 +171,7 @@ fn wp6_records_validation_then_completes_exactly_once_with_exact_replay() {
         "VALIDATION_CURRENT_DECISION_RECORDED"
     );
     let after_validation = kernel.ledger_counts().unwrap();
-    assert_eq!(after_validation.events, 1);
+    assert_eq!(after_validation.events, 2);
     assert_eq!(after_validation.facts, 2);
     assert_eq!(after_validation.pointers, 2);
     assert_eq!(after_validation.task_completions, 0);
@@ -216,7 +216,7 @@ fn wp6_records_validation_then_completes_exactly_once_with_exact_replay() {
         "TASK_COMPLETED_SYNTHETIC"
     );
     let completed = kernel.ledger_counts().unwrap();
-    assert_eq!(completed.events, 2);
+    assert_eq!(completed.events, 3);
     assert_eq!(completed.facts, 3);
     assert_eq!(completed.pointers, 3);
     assert_eq!(completed.inbox_commands, 2);
@@ -380,15 +380,16 @@ fn wp7_two_clean_runs_are_byte_identical_and_restart_replay_is_zero_addition() {
     assert_eq!(first.event_fingerprints, second.event_fingerprints);
     assert_eq!(
         first.root_fingerprint,
-        "da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff"
+        "15a24bde4885aba2663325b47f8772f8782e6b7114787d5bb831fec65d1102d5"
     );
     assert_eq!(
         first.event_fingerprints,
         [
-            "2bb3f4d3bb3db285e23ec280b5f4449a25d01f95519c4e22f795dc10aefa1d37",
-            "195f795e77e12409f70db6481ec868f6ed0eab4b59de2c257adebacefd372982",
-            "cc5ccfda25026d4b484616b2649b2ec7e6352f240bef06526460b404ff8b7881",
-            "4bdb5f9f461f935bd562b0b0a927b4bda0d0eafaf4f5ce309f841e37b2c85686",
+            "ea504f235d6ce6c64d2ba4afc2ecf088b3b408f0f7f6bcced642e5a6de1e6e07",
+            "056908bc2b32638fbb82fec0b22185e7f5d5b6f2515b418ba78f5e5307ecbeac",
+            "4ff065f8ef3dd5ae49cdab3e87fef63fdafb82654ca5cf5b8aab4458e7db9b63",
+            "d854e893e0213b97acc9f5fdcee6e6bcbe1ee4736b13dca5586217d1153bab91",
+            "03c7aed5c9e4b8be6ef785aa41e5cccc1bf762e21c9952f31cea018176ebac7c",
         ]
     );
 }

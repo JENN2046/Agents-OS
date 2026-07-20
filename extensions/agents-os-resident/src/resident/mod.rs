@@ -266,6 +266,24 @@ impl SyntheticOwnership {
     pub fn epoch(&self) -> &ResidentAuthorityEpoch {
         &self.epoch
     }
+
+    #[cfg(test)]
+    fn ownership_event_fingerprint(&self) -> Result<String, ResidentError> {
+        digest(json!({
+            "aggregate_ref": self.identity.resident_id,
+            "aggregate_revision": self.epoch.authority_epoch,
+            "command_id": null,
+            "event_id": format!(
+                "event:f3-ownership:{}:{}",
+                self.identity.resident_id, self.epoch.authority_epoch
+            ),
+            "event_kind": "RESIDENT_OWNERSHIP_STARTED",
+            "event_sequence": self.epoch.authority_epoch,
+            "incarnation_id": self.incarnation.incarnation_id,
+            "predecessor_event_fingerprint": self.epoch.previous_authority_epoch_fingerprint,
+            "runtime_usable": false
+        }))
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -595,6 +613,16 @@ mod tests {
         assert_eq!(snapshot.busy_timeout_ms, 0);
         first.shutdown().expect("deterministic shutdown");
 
+        let substituted = SyntheticOwnership::genesis(
+            "incarnation:SYNTHETIC_TEST:kernel-substituted",
+            b"different-nonce",
+        )
+        .expect("substituted ownership");
+        assert!(matches!(
+            ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), substituted)),
+            Err(ResidentError::LedgerStartup(message)) if message.contains("stored Resident ownership")
+        ));
+
         let second = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
             .expect("lock reacquisition after cleanup");
         second.shutdown().expect("second deterministic shutdown");
@@ -605,6 +633,9 @@ mod tests {
         let root = tempfile::tempdir().expect("temporary synthetic root");
         let ownership = SyntheticOwnership::genesis("incarnation:SYNTHETIC_TEST:wp3", b"wp3-nonce")
             .expect("ownership");
+        let ownership_event_fingerprint = ownership
+            .ownership_event_fingerprint()
+            .expect("ownership Event fingerprint");
         let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
             .expect("kernel");
         let schema = kernel.initialize_ledger_v1().expect("schema");
@@ -634,7 +665,7 @@ mod tests {
         ));
 
         let first_fact = fact(1, None);
-        let first_event = event(1, 1, None);
+        let first_event = event(2, 1, Some(ownership_event_fingerprint));
         let first = kernel
             .advance_fact(
                 first_fact.clone(),
@@ -651,7 +682,7 @@ mod tests {
             fingerprint: first_fact.fingerprint.clone(),
         };
         let second_fact = fact(2, Some(predecessor));
-        let second_event = event(2, 2, Some(first_event.fingerprint.clone()));
+        let second_event = event(3, 2, Some(first_event.fingerprint.clone()));
         let expected = PointerExpectation::Exact {
             revision: 1,
             fact_ref: first_fact.fact_ref.clone(),
@@ -668,7 +699,7 @@ mod tests {
             Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
         ));
         let after_crash = kernel.ledger_counts().expect("counts after rollback");
-        assert_eq!(after_crash.events, 1);
+        assert_eq!(after_crash.events, 2);
         assert_eq!(after_crash.facts, 1);
         assert_eq!(after_crash.pointers, 1);
 
@@ -696,7 +727,7 @@ mod tests {
             kernel.advance_fact(
                 fact(3, Some(stale_predecessor)),
                 stale_expected,
-                event(3, 3, Some(second_event.fingerprint.clone())),
+                event(4, 3, Some(second_event.fingerprint.clone())),
                 TransactionFault::None,
             ),
             Err(ResidentError::LedgerOperation(message)) if message.contains("compare-and-set failed")
@@ -713,13 +744,13 @@ mod tests {
                         })
                     ),
                     expected,
-                    event(3, 2, Some("0".repeat(64))),
+                    event(4, 2, Some("0".repeat(64))),
                     TransactionFault::None,
                 )
                 .is_err()
         );
         let counts = kernel.ledger_counts().expect("final counts");
-        assert_eq!((counts.events, counts.facts, counts.pointers), (2, 2, 1));
+        assert_eq!((counts.events, counts.facts, counts.pointers), (3, 2, 1));
         assert_eq!(counts.inbox_commands, 1);
         assert_eq!(counts.replay_rows, 0);
         kernel.shutdown().expect("shutdown");

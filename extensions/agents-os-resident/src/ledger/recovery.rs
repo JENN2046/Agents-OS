@@ -62,7 +62,7 @@ pub fn counts(connection: &Connection) -> Result<LedgerCounts, LedgerError> {
 /// into the root together with its stored identity tuple.
 pub fn integrated_witness(connection: &Connection) -> Result<IntegratedWitness, LedgerError> {
     let counts = counts(connection)?;
-    if counts.events != 4
+    if counts.events != 5
         || counts.facts != 7
         || counts.pointers != 7
         || counts.inbox_commands != 4
@@ -99,6 +99,7 @@ pub fn integrated_witness(connection: &Connection) -> Result<IntegratedWitness, 
         })?
         .collect::<Result<Vec<_>, _>>()?;
     let expected_event_kinds = [
+        "RESIDENT_OWNERSHIP_STARTED",
         "F1_SYNTHETIC_GOAL_AND_TASKS_CREATED",
         "F6_SYNTHETIC_VALIDATION_RECORDED",
         "F6_SYNTHETIC_TASK_COMPLETED",

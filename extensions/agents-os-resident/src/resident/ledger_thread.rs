@@ -5,8 +5,12 @@ use std::sync::mpsc::{self, Receiver, Sender, SyncSender};
 use std::thread::{self, JoinHandle, ThreadId};
 use std::time::Duration;
 
-use rusqlite::Connection;
+use rusqlite::{Connection, TransactionBehavior, params};
+use serde_json::{Value, json};
 
+use crate::canonical::fingerprint::canonical_fingerprint;
+use crate::canonical::jcs::canonicalize_json;
+use crate::ledger::LedgerError;
 use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts};
 use crate::ledger::replay::{
     self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
@@ -297,6 +301,13 @@ fn run(
         }
     };
     let owner_thread_id = thread::current().id();
+    let startup_result = schema::initialize_v1(&mut connection)
+        .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
+        .and_then(|_| replay::ensure_closed_synthetic_registry(&mut connection));
+    if let Err(error) = startup_result {
+        let _ = startup.send(Err(error.to_string()));
+        return;
+    }
     if startup.send(Ok(owner_thread_id)).is_err() {
         return;
     }
@@ -309,9 +320,10 @@ fn run(
                 let _ = response.send(result);
             }
             LedgerCommand::InitializeSchema(response) => {
-                let result = schema::initialize_v1(&mut connection)
+                let result = schema::verify_schema(&connection)
                     .and_then(|snapshot| {
-                        replay::ensure_closed_synthetic_registry(&mut connection)?;
+                        bind_or_verify_ownership(&mut connection, &ownership)?;
+                        replay::verify_closed_synthetic_registry(&connection)?;
                         Ok(snapshot)
                     })
                     .map_err(|error| error.to_string());
@@ -320,6 +332,7 @@ fn run(
             LedgerCommand::VerifySchema(response) => {
                 let result = schema::verify_schema(&connection)
                     .and_then(|snapshot| {
+                        bind_or_verify_ownership(&mut connection, &ownership)?;
                         replay::verify_closed_synthetic_registry(&connection)?;
                         Ok(snapshot)
                     })
@@ -399,6 +412,7 @@ fn run(
             }
             LedgerCommand::Counts(response) => {
                 let result = schema::verify_schema(&connection)
+                    .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
                     .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
                     .and_then(|_| recovery::counts(&connection))
                     .map_err(|error| error.to_string());
@@ -406,6 +420,7 @@ fn run(
             }
             LedgerCommand::IntegratedWitness(response) => {
                 let result = schema::verify_schema(&connection)
+                    .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
                     .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
                     .and_then(|_| recovery::integrated_witness(&connection))
                     .map_err(|error| error.to_string());
@@ -433,6 +448,160 @@ fn open_connection(database_path: &PathBuf) -> Result<Connection, ResidentError>
     connection.pragma_update(None, "synchronous", "EXTRA")?;
     connection.pragma_update(None, "foreign_keys", "ON")?;
     Ok(connection)
+}
+
+fn bind_or_verify_ownership(
+    connection: &mut Connection,
+    ownership: &SyntheticOwnership,
+) -> Result<(), LedgerError> {
+    let resident_id = ownership.identity().resident_id();
+    let identity_revision = ownership.identity().identity_revision();
+    let identity_fingerprint = ownership.identity().identity_fingerprint();
+    let incarnation_id = ownership.incarnation().incarnation_id();
+    let incarnation_revision = ownership.incarnation().incarnation_revision();
+    let process_nonce_fingerprint = ownership.incarnation().process_nonce_fingerprint();
+    let authority_epoch = ownership.epoch().authority_epoch();
+    let epoch_fingerprint = ownership.epoch().epoch_fingerprint();
+    let previous_epoch = ownership.epoch().expected_previous_authority_epoch();
+    let previous_epoch_fingerprint = ownership.epoch().previous_authority_epoch_fingerprint();
+    let previous_incarnation_id = ownership.epoch().previous_incarnation_id();
+    let event_sequence = authority_epoch;
+    let event_id = format!("event:f3-ownership:{resident_id}:{authority_epoch}");
+    let event_kind = "RESIDENT_OWNERSHIP_STARTED";
+    let event_bytes = canonical_json_bytes(&json!({
+        "aggregate_ref": resident_id,
+        "aggregate_revision": authority_epoch,
+        "command_id": null,
+        "event_id": event_id,
+        "event_kind": event_kind,
+        "event_sequence": event_sequence,
+        "incarnation_id": incarnation_id,
+        "predecessor_event_fingerprint": previous_epoch_fingerprint,
+        "runtime_usable": false
+    }))?;
+    let event_fingerprint = canonical_fingerprint(&event_bytes)?;
+    let witness_reservation_ref =
+        format!("reservation:SYNTHETIC_TEST:{resident_id}:{authority_epoch}");
+    let witness_reservation_bytes = canonical_json_bytes(&json!([
+        "agents-os.synthetic-witness-reservation.v0.1",
+        {
+            "authority_epoch": authority_epoch,
+            "incarnation_id": incarnation_id,
+            "resident_id": resident_id,
+            "runtime_usable": false
+        }
+    ]))?;
+    let witness_reservation_fingerprint = canonical_fingerprint(&witness_reservation_bytes)?;
+    let epoch_bytes = canonical_json_bytes(&json!([
+        "agents-os.synthetic-resident-authority-epoch.v0.1",
+        {
+            "authority_epoch": authority_epoch,
+            "authority_generation": authority_epoch,
+            "expected_previous_authority_epoch": previous_epoch,
+            "incarnation_id": incarnation_id,
+            "incarnation_revision": incarnation_revision,
+            "previous_authority_epoch_fingerprint": previous_epoch_fingerprint,
+            "previous_incarnation_id": previous_incarnation_id,
+            "process_nonce_fingerprint": process_nonce_fingerprint,
+            "resident_id": resident_id
+        }
+    ]))?;
+    if canonical_fingerprint(&epoch_bytes)? != epoch_fingerprint {
+        return Err(LedgerError::SchemaMismatch(
+            "synthetic ownership epoch bytes do not match the supplied fingerprint".to_owned(),
+        ));
+    }
+
+    let identity_count: i64 =
+        connection.query_row("SELECT COUNT(*) FROM resident_identity", [], |row| {
+            row.get(0)
+        })?;
+    let incarnation_count: i64 =
+        connection.query_row("SELECT COUNT(*) FROM resident_incarnation", [], |row| {
+            row.get(0)
+        })?;
+    let epoch_count: i64 =
+        connection.query_row("SELECT COUNT(*) FROM resident_authority_epoch", [], |row| {
+            row.get(0)
+        })?;
+    if (identity_count, incarnation_count, epoch_count) == (0, 0, 0) {
+        let event_count: i64 =
+            connection.query_row("SELECT COUNT(*) FROM event", [], |row| row.get(0))?;
+        if authority_epoch != 1
+            || previous_epoch.is_some()
+            || previous_epoch_fingerprint.is_some()
+            || previous_incarnation_id.is_some()
+            || event_count != 0
+        {
+            return Err(LedgerError::SchemaMismatch(
+                "a new ledger requires the exact genesis ownership tuple".to_owned(),
+            ));
+        }
+        let tx = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        tx.execute(
+            "INSERT INTO resident_identity(resident_id,identity_revision,identity_fingerprint,created_event_sequence) VALUES(?1,?2,?3,?4)",
+            params![resident_id, identity_revision as i64, identity_fingerprint, event_sequence as i64],
+        )?;
+        tx.execute(
+            "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_id,canonical_bytes,event_fingerprint,predecessor_event_fingerprint) VALUES(?1,?2,?3,?4,?5,NULL,?6,?7,NULL)",
+            params![event_sequence as i64, event_id, event_kind, resident_id, authority_epoch as i64, event_bytes, event_fingerprint],
+        )?;
+        tx.execute(
+            "INSERT INTO resident_incarnation(incarnation_id,resident_id,incarnation_revision,process_nonce_fingerprint,created_event_sequence,created_event_id,created_event_fingerprint,created_event_kind,created_event_aggregate_ref,created_event_aggregate_revision) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
+            params![incarnation_id, resident_id, incarnation_revision as i64, process_nonce_fingerprint, event_sequence as i64, event_id, event_fingerprint, event_kind, resident_id, authority_epoch as i64],
+        )?;
+        tx.execute(
+            "INSERT INTO resident_authority_epoch(resident_id,authority_epoch,epoch_fingerprint,expected_previous_authority_epoch,previous_authority_epoch_fingerprint,authority_generation,witness_reservation_ref,witness_reservation_fingerprint,incarnation_id,incarnation_revision,previous_incarnation_id,restore_decision_ref,restore_decision_fingerprint,ownership_event_sequence,ownership_event_id,ownership_event_fingerprint,ownership_event_kind,ownership_event_aggregate_ref,ownership_event_aggregate_revision,canonical_bytes) VALUES(?1,?2,?3,NULL,NULL,?4,?5,?6,?7,?8,NULL,NULL,NULL,?9,?10,?11,?12,?13,?14,?15)",
+            params![resident_id, authority_epoch as i64, epoch_fingerprint, authority_epoch as i64, witness_reservation_ref, witness_reservation_fingerprint, incarnation_id, incarnation_revision as i64, event_sequence as i64, event_id, event_fingerprint, event_kind, resident_id, authority_epoch as i64, epoch_bytes],
+        )?;
+        let violations: i64 =
+            tx.query_row("SELECT COUNT(*) FROM pragma_foreign_key_check", [], |row| {
+                row.get(0)
+            })?;
+        if violations != 0 {
+            return Err(LedgerError::SchemaMismatch(
+                "ownership binding failed deferred foreign-key validation".to_owned(),
+            ));
+        }
+        tx.commit()?;
+    }
+
+    let exact_identity: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM resident_identity WHERE resident_id=?1 AND identity_revision=?2 AND identity_fingerprint=?3 AND created_event_sequence=?4",
+        params![resident_id, identity_revision as i64, identity_fingerprint, event_sequence as i64],
+        |row| row.get(0),
+    )?;
+    let exact_incarnation: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM resident_incarnation WHERE incarnation_id=?1 AND resident_id=?2 AND incarnation_revision=?3 AND process_nonce_fingerprint=?4 AND created_event_sequence=?5 AND created_event_id=?6 AND created_event_fingerprint=?7 AND created_event_kind=?8 AND created_event_aggregate_ref=?9 AND created_event_aggregate_revision=?10",
+        params![incarnation_id, resident_id, incarnation_revision as i64, process_nonce_fingerprint, event_sequence as i64, event_id, event_fingerprint, event_kind, resident_id, authority_epoch as i64],
+        |row| row.get(0),
+    )?;
+    let exact_epoch: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM resident_authority_epoch WHERE resident_id=?1 AND authority_epoch=?2 AND epoch_fingerprint=?3 AND expected_previous_authority_epoch IS ?4 AND previous_authority_epoch_fingerprint IS ?5 AND authority_generation=?6 AND witness_reservation_ref=?7 AND witness_reservation_fingerprint=?8 AND incarnation_id=?9 AND incarnation_revision=?10 AND previous_incarnation_id IS ?11 AND restore_decision_ref IS NULL AND restore_decision_fingerprint IS NULL AND ownership_event_sequence=?12 AND ownership_event_id=?13 AND ownership_event_fingerprint=?14 AND ownership_event_kind=?15 AND ownership_event_aggregate_ref=?16 AND ownership_event_aggregate_revision=?17 AND canonical_bytes=?18",
+        params![resident_id, authority_epoch as i64, epoch_fingerprint, previous_epoch.map(|v| v as i64), previous_epoch_fingerprint, authority_epoch as i64, witness_reservation_ref, witness_reservation_fingerprint, incarnation_id, incarnation_revision as i64, previous_incarnation_id, event_sequence as i64, event_id, event_fingerprint, event_kind, resident_id, authority_epoch as i64, epoch_bytes],
+        |row| row.get(0),
+    )?;
+    let exact_event: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM event WHERE event_sequence=?1 AND event_id=?2 AND event_kind=?3 AND aggregate_ref=?4 AND aggregate_revision=?5 AND command_id IS NULL AND canonical_bytes=?6 AND event_fingerprint=?7 AND predecessor_event_fingerprint IS ?8",
+        params![event_sequence as i64, event_id, event_kind, resident_id, authority_epoch as i64, event_bytes, event_fingerprint, previous_epoch_fingerprint],
+        |row| row.get(0),
+    )?;
+    if identity_count > 1
+        || incarnation_count > 1
+        || epoch_count > 1
+        || (exact_identity, exact_incarnation, exact_epoch, exact_event) != (1, 1, 1, 1)
+    {
+        return Err(LedgerError::SchemaMismatch(
+            "stored Resident ownership does not equal the supplied immutable tuple".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+fn canonical_json_bytes(value: &Value) -> Result<Vec<u8>, LedgerError> {
+    let encoded = serde_json::to_vec(value)
+        .map_err(|_| LedgerError::InvalidInput("ownership JSON serialization failed"))?;
+    Ok(canonicalize_json(&encoded)?)
 }
 
 fn health_snapshot(

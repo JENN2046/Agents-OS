@@ -36,7 +36,7 @@ fn wp7_goal_plan_intake_is_terminal_and_exactly_replayable() {
     let first_counts = kernel.ledger_counts().expect("first counts");
     assert_eq!(first_counts.inbox_commands, 1);
     assert_eq!(first_counts.replay_rows, 1);
-    assert_eq!(first_counts.events, 1);
+    assert_eq!(first_counts.events, 2);
     assert_eq!(first_counts.facts, 4);
     assert_eq!(first_counts.pointers, 4);
 

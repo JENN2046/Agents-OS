@@ -94,7 +94,7 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
         Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
     ));
     let rolled_back = kernel.ledger_counts().expect("rollback counts");
-    assert_eq!(rolled_back.events, 0);
+    assert_eq!(rolled_back.events, 1);
     assert_eq!(rolled_back.inbox_commands, 0);
     assert_eq!(rolled_back.outbox_intents, 0);
     assert_eq!(rolled_back.replay_rows, 0);
@@ -107,7 +107,7 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
     };
     assert_eq!(intent.intent_revision, 1);
     let committed = kernel.ledger_counts().expect("committed counts");
-    assert_eq!(committed.events, 1);
+    assert_eq!(committed.events, 2);
     assert_eq!(committed.inbox_commands, 1);
     assert_eq!(committed.outbox_intents, 1);
     assert_eq!(committed.replay_rows, 1);
