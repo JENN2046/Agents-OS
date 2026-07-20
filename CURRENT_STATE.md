@@ -4621,6 +4621,49 @@ implementation_branch_push_PR_merge_authorized: false
 next_gate: WP0_FROZEN_ADVANCEMENT_CONDITIONS
 ```
 
+## Phase 5A M0-A WP0 Complete, WP1 Current (2026-07-20)
+
+WP0 established the exact 41-file external package skeleton and proved that its
+source and clean-worktree install projections produce the same deterministic
+content-tree digest. The package remains blocked and runtime-unusable. The
+direct predecessor gate now permits WP1 canonical primitives only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP1_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+source_authority_root: extensions/agents-os-resident
+WP0_status: PASS_COMPLETE
+WP0_source_payload_commit: 313aebfe8f12f131bb5c661dd8926df23052491f
+WP0_package_manifest_commit: c93e295461a8100debbfb4042d09bc05dc2d2ae0
+WP0_planned_source_inventory: 41/41_MATCH
+WP0_source_payload_at_bound_commit: 40/40_BYTE_EQUAL
+WP0_content_tree_sha256: a7a3145e4267064c02b3c80fd9f13b9f3eb3ba3dfaf48793dbcb89afe2124fe8
+WP0_installed_tree_sha256: a7a3145e4267064c02b3c80fd9f13b9f3eb3ba3dfaf48793dbcb89afe2124fe8
+WP0_package_manifest_sha256: 4f95b1bd4056deaba15b38701f4dda7bd09f871a5b87ad050a2cfbf7a8f35327
+WP0_lock_reproduction: 2/2_BYTE_EQUAL
+WP0_VCPToolBox_core_diff: ZERO
+WP0_enabled_plugin_manifest_present: false
+WP0_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp0-reproducible-skeleton-closeout-v0.1.md
+WP0_closeout_receipt_sha256: 4fb1806d31c26aba6ef778957b88a2d3664e6631b02ab671a5442a73917f66e5
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.8.md
+active_work_queue_sha256: d6118e354660111507939f3ee05b75221ca168779f1f31cf8626999c6b6261c9
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v8.8.md
+current_work_package: WP1_CANONICAL_PRIMITIVES
+WP1_start_condition_satisfied: true
+WP2_through_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP1_FIXED_F1_F6_CANONICAL_VECTORS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
