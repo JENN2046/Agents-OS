@@ -2,9 +2,9 @@ use agents_os_resident::canonical::fingerprint::sha256_hex;
 use agents_os_resident::canonical::jcs::canonicalize_json;
 use agents_os_resident::canonical::types::parse_strict_json;
 use agents_os_resident::ledger::replay::{
-    OutboxEnqueueFault, TerminalOutboxIntake, TerminalOutboxObservation,
-    TerminalValidationCompletionIntake, TerminalValidationCompletionObservation,
-    ValidationCompletionFault,
+    OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalOutboxIntake,
+    TerminalOutboxObservation, TerminalValidationCompletionIntake,
+    TerminalValidationCompletionObservation, ValidationCompletionFault,
 };
 use agents_os_resident::napi_frame::{MethodId, request_bytes};
 use agents_os_resident::reducers::command_intake::{submission_value, validate_submission};
@@ -55,10 +55,10 @@ fn wp6_intake(command_id: &str, command_type_id: &str) -> TerminalValidationComp
             "disposition": "COMMITTED",
             "request_id": command_id,
             "result": {
-                "low_disclosure_result_code": if command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
-                    "VALIDATION_CURRENT_DECISION_RECORDED"
-                } else {
-                    "TASK_COMPLETED_SYNTHETIC"
+                "low_disclosure_result_code": match command_type_id {
+                    "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS" => "GOAL_AND_TASKS_CREATED_SYNTHETIC",
+                    "M0_SYNTHETIC_RECORD_VALIDATION" => "VALIDATION_CURRENT_DECISION_RECORDED",
+                    _ => "TASK_COMPLETED_SYNTHETIC",
                 },
                 "runtime_usable": false
             }
@@ -152,6 +152,104 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
         .expect("stored canonical command envelope");
     assert_eq!(stored.0, expected_command_bytes);
     assert_eq!(stored.1, expected_command_fingerprint);
+}
+
+#[test]
+fn pending_wp5_inbox_request_is_finalized_and_restart_replays_without_additions() {
+    let root = tempfile::tempdir().expect("temporary synthetic root");
+    let input = intake("command:SYNTHETIC_TEST:wp5-pending");
+    let first_counts = {
+        let kernel = kernel(root.path(), "wp5-pending");
+        assert_eq!(
+            kernel
+                .register_or_resolve_request(RequestIdentity::new(
+                    input.command_id.clone(),
+                    input.request_bytes.clone(),
+                ))
+                .expect("register pending request"),
+            ReplayObservation::FirstSeen
+        );
+        assert!(matches!(
+            kernel
+                .terminal_synthetic_outbox_intake(input.clone(), OutboxEnqueueFault::None)
+                .expect("finalize pending request"),
+            TerminalOutboxObservation::FirstTerminal { .. }
+        ));
+        let counts = kernel.ledger_counts().expect("finalized counts");
+        assert_eq!(counts.inbox_commands, 1);
+        assert_eq!(counts.replay_rows, 1);
+        assert_eq!(counts.outbox_intents, 1);
+        kernel.shutdown().expect("first shutdown");
+        counts
+    };
+
+    let restarted = kernel(root.path(), "wp5-pending");
+    assert!(matches!(
+        restarted
+            .terminal_synthetic_outbox_intake(input.clone(), OutboxEnqueueFault::None)
+            .expect("restart replay"),
+        TerminalOutboxObservation::Replayed {
+            intent: Some(_),
+            ..
+        }
+    ));
+    assert_eq!(restarted.ledger_counts().unwrap(), first_counts);
+    let conflict = RequestIdentity::new(input.command_id, br#"{"changed":true}"#.to_vec());
+    assert!(matches!(
+        restarted.register_or_resolve_request(conflict),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("request identity conflicts")
+    ));
+    assert_eq!(restarted.ledger_counts().unwrap(), first_counts);
+    restarted.shutdown().expect("restart shutdown");
+}
+
+#[test]
+fn pending_committed_inbox_request_is_finalized_and_restart_replays_without_additions() {
+    let root = tempfile::tempdir().expect("temporary synthetic root");
+    let input = wp6_intake(
+        "command:SYNTHETIC_TEST:goal-plan-pending",
+        "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS",
+    );
+    let first_counts = {
+        let kernel = kernel(root.path(), "goal-plan-pending");
+        assert_eq!(
+            kernel
+                .register_or_resolve_request(RequestIdentity::new(
+                    input.command_id.clone(),
+                    input.request_bytes.clone(),
+                ))
+                .expect("register pending request"),
+            ReplayObservation::FirstSeen
+        );
+        assert!(matches!(
+            kernel
+                .terminal_synthetic_goal_plan_intake(input.clone())
+                .expect("finalize pending committed request"),
+            TerminalValidationCompletionObservation::FirstTerminal
+        ));
+        let counts = kernel.ledger_counts().expect("finalized counts");
+        assert_eq!(counts.inbox_commands, 1);
+        assert_eq!(counts.replay_rows, 1);
+        assert_eq!(counts.events, 2);
+        kernel.shutdown().expect("first shutdown");
+        counts
+    };
+
+    let restarted = kernel(root.path(), "goal-plan-pending");
+    assert!(matches!(
+        restarted
+            .terminal_synthetic_goal_plan_intake(input.clone())
+            .expect("restart replay"),
+        TerminalValidationCompletionObservation::Replayed { .. }
+    ));
+    assert_eq!(restarted.ledger_counts().unwrap(), first_counts);
+    let conflict = RequestIdentity::new(input.command_id, br#"{"changed":true}"#.to_vec());
+    assert!(matches!(
+        restarted.register_or_resolve_request(conflict),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("request identity conflicts")
+    ));
+    assert_eq!(restarted.ledger_counts().unwrap(), first_counts);
+    restarted.shutdown().expect("restart shutdown");
 }
 
 #[test]

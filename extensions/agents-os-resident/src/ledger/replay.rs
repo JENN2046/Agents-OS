@@ -465,7 +465,7 @@ pub fn terminal_synthetic_outbox(
             |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
         )
         .optional()?;
-    if let Some((fingerprint, bytes, state)) = existing {
+    let pending_inbox = if let Some((fingerprint, bytes, state)) = existing {
         if fingerprint != intake.request_fingerprint || bytes != intake.request_bytes {
             return Err(LedgerError::ReplayIdentityConflict);
         }
@@ -476,37 +476,43 @@ pub fn terminal_synthetic_outbox(
                 |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
             )
             .optional()?;
-        let Some((stored_fingerprint, stored_bytes, events, calls)) = stored else {
+        if let Some((stored_fingerprint, stored_bytes, events, calls)) = stored {
+            if state != "INDETERMINATE"
+                || sha256_hex(&stored_bytes) != stored_fingerprint
+                || canonicalize_json(&stored_bytes)? != stored_bytes
+                || !(events == 0 || events == 1)
+                || calls != 0
+            {
+                return Err(LedgerError::InvalidInput(
+                    "stored WP5 replay accounting is not exact",
+                ));
+            }
+            let intent = find_intent_for_command(
+                &transaction,
+                &intake.command_id,
+                &intake.canonical_command_fingerprint,
+            )?;
+            if (events == 1) != intent.is_some() {
+                return Err(LedgerError::InvalidInput(
+                    "stored replay accounting and Outbox occurrence disagree",
+                ));
+            }
+            transaction.commit()?;
+            return Ok(TerminalOutboxObservation::Replayed {
+                response_bytes: stored_bytes,
+                intent,
+            });
+        }
+
+        if state != "RECEIVED" {
             return Err(LedgerError::InvalidInput(
-                "existing Inbox row has no terminal replay tuple",
-            ));
-        };
-        if state != "INDETERMINATE"
-            || sha256_hex(&stored_bytes) != stored_fingerprint
-            || canonicalize_json(&stored_bytes)? != stored_bytes
-            || !(events == 0 || events == 1)
-            || calls != 0
-        {
-            return Err(LedgerError::InvalidInput(
-                "stored WP5 replay accounting is not exact",
+                "existing WP5 Inbox row has neither a pending nor terminal replay state",
             ));
         }
-        let intent = find_intent_for_command(
-            &transaction,
-            &intake.command_id,
-            &intake.canonical_command_fingerprint,
-        )?;
-        if (events == 1) != intent.is_some() {
-            return Err(LedgerError::InvalidInput(
-                "stored replay accounting and Outbox occurrence disagree",
-            ));
-        }
-        transaction.commit()?;
-        return Ok(TerminalOutboxObservation::Replayed {
-            response_bytes: stored_bytes,
-            intent,
-        });
-    }
+        true
+    } else {
+        false
+    };
 
     let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
     let intent = SyntheticOutboxIntent::from_command(
@@ -531,10 +537,22 @@ pub fn terminal_synthetic_outbox(
     let event_id = format!("event:f5-outbox:{}", intent.intent_id);
     let envelope_id = format!("envelope:SYNTHETIC_TEST:{}", intake.command_id);
 
-    transaction.execute(
-        "INSERT INTO inbox_command(command_id,request_fingerprint,request_bytes,intake_state,first_event_sequence) VALUES(?1,?2,?3,'INDETERMINATE',?4)",
-        params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
-    )?;
+    if pending_inbox {
+        transaction.execute(
+            "UPDATE inbox_command SET intake_state='INDETERMINATE',first_event_sequence=?4 WHERE command_id=?1 AND request_fingerprint=?2 AND request_bytes=?3 AND intake_state='RECEIVED' AND first_event_sequence IS NULL",
+            params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
+        )?;
+        if transaction.changes() != 1 {
+            return Err(LedgerError::InvalidInput(
+                "pending WP5 Inbox row could not be finalized exactly once",
+            ));
+        }
+    } else {
+        transaction.execute(
+            "INSERT INTO inbox_command(command_id,request_fingerprint,request_bytes,intake_state,first_event_sequence) VALUES(?1,?2,?3,'INDETERMINATE',?4)",
+            params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
+        )?;
+    }
     transaction.execute(
         "INSERT INTO command_envelope(envelope_id,command_id,command_type_id,command_type_revision,canonical_bytes,envelope_fingerprint,created_event_sequence) VALUES(?1,?2,?3,1,?4,?5,?6)",
         params![envelope_id, intake.command_id, intake.command_type_id, intake.canonical_command_bytes, intake.canonical_command_fingerprint, as_i64(event_sequence)?],
@@ -938,9 +956,13 @@ fn existing_committed_replay(
         )
         .optional()?;
     let Some((stored_request, stored_response, stored_bytes, events, calls)) = stored else {
-        return Err(LedgerError::InvalidInput(
-            "committed WP6 Inbox row has no immutable replay tuple",
-        ));
+        return if state == "RECEIVED" {
+            Ok(None)
+        } else {
+            Err(LedgerError::InvalidInput(
+                "committed M0-A Inbox row has neither a pending nor immutable replay state",
+            ))
+        };
     };
     if state != "COMMITTED"
         || stored_request != intake.request_fingerprint
@@ -964,9 +986,15 @@ fn insert_committed_intake(
     event_sequence: u64,
 ) -> Result<(), LedgerError> {
     transaction.execute(
-        "INSERT INTO inbox_command(command_id,request_fingerprint,request_bytes,intake_state,first_event_sequence) VALUES(?1,?2,?3,'COMMITTED',?4)",
+        "UPDATE inbox_command SET intake_state='COMMITTED',first_event_sequence=?4 WHERE command_id=?1 AND request_fingerprint=?2 AND request_bytes=?3 AND intake_state='RECEIVED' AND first_event_sequence IS NULL",
         params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
     )?;
+    if transaction.changes() == 0 {
+        transaction.execute(
+            "INSERT INTO inbox_command(command_id,request_fingerprint,request_bytes,intake_state,first_event_sequence) VALUES(?1,?2,?3,'COMMITTED',?4)",
+            params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
+        )?;
+    }
     let envelope_id = format!("envelope:SYNTHETIC_TEST:{}", intake.command_id);
     transaction.execute(
         "INSERT INTO command_envelope(envelope_id,command_id,command_type_id,command_type_revision,canonical_bytes,envelope_fingerprint,created_event_sequence) VALUES(?1,?2,?3,1,?4,?5,?6)",
