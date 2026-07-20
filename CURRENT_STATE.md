@@ -5137,3 +5137,38 @@ private_raw_memory_access_authorized: false
 provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
+
+## Phase 5A M0-A PR #21 Native Binding Finding Closed (2026-07-21)
+
+The fresh Codex review of `d848a3c` found that the compatibility entry point
+called an undeclared native binding. The implementation now lazily loads the
+fixed Linux x64 N-API binary inside `processToolCall`, preserving the exact
+three CommonJS exports, three projected fields and single `execute_command`
+dispatch. The frozen Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 3/3
+corrected_source_commit: c29bf6db5ecbfaa05b765fa2206171d3b4ee9c04
+corrected_package_manifest_commit: 01d5765eff8e88dac60e219ee7fc70525f3ee18b
+Phase_5A_M0A_content_tree_sha256: 7cd9f00b72ca30564bf05855f0a5f9a077518d3b6a3b7208839dc82639fc7661
+Phase_5A_M0A_package_manifest_sha256: 6e9ce3d4b20e47a17e0b43872259f4a389906700b3236cc36b091c85733a0441
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: da3a739102f2f16a0f94db05cb172a7045a06a1012788a27b03ca3fcfbfd51ff
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.2.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: ec51242a7530126c314751286bcb4862d8b0f6da50db2e9bf3842429eb99fd91
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.8.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
