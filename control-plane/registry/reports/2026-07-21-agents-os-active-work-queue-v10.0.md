@@ -1,0 +1,91 @@
+# AGENTS OS Active Work Queue v10.0
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.9.md`
+
+## Current Facts
+
+```yaml
+Phase_5A_started: true
+Phase_5A_mode: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN
+Phase_5A_implementation_started: true
+implementation_authorized: true
+WP0_WP7_status: PASS_COMPLETE
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 5/5
+corrected_source_commit: 44e7dd46391f83061d218a226bc7024b88504458
+corrected_package_manifest_commit: 31fc1770659ac6a2bce89054a46be930c79bdd2e
+Phase_5A_M0A_content_tree_sha256: 01d17cd723276ae7bc50f10d9b0eb023b75c6f5a9007303058019e6474146b16
+Phase_5A_M0A_package_manifest_sha256: aa57b6be31f572da83b680e6cec31a0b41189fb7b7fdf6e83791c40361e8a83f
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+PR_21_review_finding_disposition_v0_4_sha256: 60a83e4c97f14a90fa162d8406364d73c02e35512d8ad22ca35b864d2f2fe648
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+Phase_5B_started: false
+```
+
+## NOW
+
+### NOW-001: Complete PR #21 current-head independent review and delivery
+
+```text
+review_findings_closed=5/5
+required_next=current_head_Codex_re_review
+review_pass_and_clean_scope=merge_then_verify_origin_main
+```
+
+The five review findings are corrected and locally validated. Push the exact
+corrected head, resolve the current thread, obtain a fresh Codex review of that
+head, and merge only after the review surface remains clean.
+
+## NEXT
+
+```text
+PR_21_current_head_review_PASS=merge_and_remote_blob_hash_verification
+Phase_5A_M0A_mainline_durability_PASS=await_Jenn_explicit_Phase_5B_start_decision
+new_actionable_finding=narrow_fix_and_repeat_review
+automatic_Phase_5B_transition=forbidden
+```
+
+## BLOCKED
+
+```text
+merge_before_current_head_review=forbidden
+Phase_5B_before_Phase_5A_mainline_durability=forbidden
+upstream_authority_recomputation=forbidden
+second_permission_identity_Task_Command_validation_or_effect_authority=forbidden
+physical_or_mock_Host_dispatch=forbidden
+VCPToolBox_core_change_or_start=forbidden
+plugin_enablement=forbidden
+production_or_existing_database=forbidden
+runtime_auth_private_Memory_provider_sensing_or_real_effect=forbidden
+release_deploy_publish_tag=forbidden
+```
+
+## CLOSED
+
+```text
+Phase_5A_plan_R8_atomic_freeze=COMPLETE
+Phase_5A_plan_Git_durability=COMPLETE
+Jenn_implementation_start_decision=ACCEPTED
+WP0_WP7=PASS_COMPLETE
+PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT=CORRECTED_PASS
+PR_21_review_findings=5/5_CLOSED
+active_work_queue_v9_9=superseded_historical_bytes_preserved
+```
+
+This queue does not start Phase 5B or grant runtime, provider,
+authentication, Memory, sensing or effect authority.

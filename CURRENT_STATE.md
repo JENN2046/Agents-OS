@@ -5138,6 +5138,42 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
 
+## Phase 5A M0-A PR #21 Payload Schema Finding Closed (2026-07-21)
+
+The fresh Codex review of `15c40f57fa949d07ffb09e9d1d196cf9b15e18ec`
+found that four advertised payload schemas rejected the same legal frames
+accepted by their native parsers. The schemas now publish exact closed
+top-level property inventories and matching primitive constraints. Five known
+valid method payloads are checked against the advertised documents. The frozen
+Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 5/5
+corrected_source_commit: 44e7dd46391f83061d218a226bc7024b88504458
+corrected_package_manifest_commit: 31fc1770659ac6a2bce89054a46be930c79bdd2e
+Phase_5A_M0A_content_tree_sha256: 01d17cd723276ae7bc50f10d9b0eb023b75c6f5a9007303058019e6474146b16
+Phase_5A_M0A_package_manifest_sha256: aa57b6be31f572da83b680e6cec31a0b41189fb7b7fdf6e83791c40361e8a83f
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: fd153ca175aee104b59af73d3cd31acfa74416567831dba00c42de2f88eb7650
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.4.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 60a83e4c97f14a90fa162d8406364d73c02e35512d8ad22ca35b864d2f2fe648
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.0.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.0.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
 ## Phase 5A M0-A PR #21 Ledger Ownership Finding Closed (2026-07-21)
 
 The fresh Codex review of `2f208f72ac0bc733a87b3e345cf10506420721d0`
