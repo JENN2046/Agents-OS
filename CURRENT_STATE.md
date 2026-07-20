@@ -5036,6 +5036,68 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: PHASE_5A_M0A_IMPLEMENTATION_CLOSEOUT
 ```
 
+## Phase 5A M0-A Implementation Complete, Git Durability Gate Current (2026-07-21)
+
+The complete WP0-WP7 lineage was freshly verified against the frozen package
+manifest and implementation commits. The 41-file inventory, exact 40-file
+source-commit payload and content-tree digest match. The Rust, N-API, SQLite,
+crash/replay and R6 AST/dataflow validation ladder passed without changing the
+frozen package bytes.
+
+Phase 5A M0-A implementation is locally complete but is not yet durable on
+`main`. The current gate awaits a separate Jenn delivery scope for exact Git
+review, private branch push, PR, merge and remote blob verification. Phase 5B
+has not started.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_COMPLETE_AWAITING_GIT_DURABILITY
+Phase_5A_mode: M0A_IMPLEMENTATION_COMPLETE
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+Phase_5A_M0A_implementation_closeout: PASS_COMPLETE
+implementation_lineage_tip_before_closeout_governance: aa10de8b845c89172e0ae98397a4b24c0c066ad3
+WP7_source_commit: 805815536bbd1ceb0b146cd918b3a8ef1ff8f973
+WP7_package_manifest_commit: 793bc48c10a5b1b05bbf883a7b1152b5af1d48a6
+Phase_5A_M0A_planned_source_inventory: 41/41_MATCH
+Phase_5A_M0A_source_commit_payload: 40/40_BYTE_EQUAL
+Phase_5A_M0A_content_tree_sha256: 124166004c064bdc95bee296f6faca99364e97b917308617191f0f2f77d4c8f2
+Phase_5A_M0A_package_manifest_sha256: 171aa986715c73392bcf40818d1dd962a5226cac7b8dcb94207e4e17c8007f71
+Phase_5A_M0A_integrated_root_sha256: 0787aaab936bf33cb1e4a5875fad7687191017f1476892e38eedeed46a41a6c5
+Phase_5A_M0A_cargo_test_locked_offline: 41/41_PASS
+Phase_5A_M0A_clippy_all_targets_D_warnings: PASS
+Phase_5A_M0A_release_and_NAPI_build: PASS
+Phase_5A_M0A_Node_restart_replay: 4/4_BYTE_EQUAL
+Phase_5A_M0A_R6_validator: PASS_NO_BLOCKER_35_CASES
+Phase_5A_M0A_real_occurrence_count: 0
+Phase_5A_M0A_implementation_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-implementation-closeout-v0.1.md
+Phase_5A_M0A_implementation_closeout_receipt_sha256: 6d873772fdfabf34688f1d9eb31321f39981423896dbaa567881940135522894
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.6.md
+active_work_queue_sha256: 9dd036e2b379cfd089c4a75538549bc83a0b25431db7b65303f78579c96a209f
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.6.md
+current_work_package: PHASE_5A_M0A_GIT_DURABILITY_DELIVERY_GATE
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+implementation_delivery_authorized: false
+Phase_5B_started: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: AWAITING_JENN_SEPARATE_PHASE_5A_M0A_GIT_DELIVERY_SCOPE
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
