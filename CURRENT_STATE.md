@@ -4807,6 +4807,58 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: WP4_NODE_ABI_ILLEGAL_INPUT_AND_REPLAY_TESTS
 ```
 
+## Phase 5A M0-A WP4 Complete, WP5 Current (2026-07-20)
+
+WP4 established the exact five-method Node-API boundary, canonical F3 frames,
+the closed synthetic Command registry, fixed synthetic principal verification,
+read-only query projection and exact terminal replay. It deliberately did not
+claim a domain mutation: until their owning work packages exist, valid
+synthetic Commands close as persisted `INDETERMINATE`. The direct predecessor
+gate now permits WP5 Permit and Outbox only.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_WP5_CURRENT
+Phase_5A_mode: M0A_IMPLEMENTATION
+Phase_5A_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5a-m0a-wp0
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP4_source_commit: 88334aa2573587902ef25610f7c5541d6dec02f0
+WP4_package_manifest_commit: 6690b1c768c9ff59242b0e7307c7a18cdc75d623
+WP4_source_commit_payload: 40/40_BYTE_EQUAL
+WP4_content_tree_sha256: a4d2cc5b25d35fa24061460fb7188336511758548409997f05148531d2f29d17
+WP4_package_manifest_sha256: c7f827250e17c7c81f1a88806c842f38851b50c7ddfcffc3944a4f2bb0bb734f
+WP4_planned_source_inventory: 41/41_MATCH
+WP4_NAPI_exports: 5/5_EXACT
+WP4_cargo_test_locked: 23/23_PASS
+WP4_clippy_all_targets_D_warnings: PASS
+WP4_release_build_locked: PASS
+WP4_Node_ABI_ledger_replay: PASS
+WP4_exact_replay_additions: 0_Event_0_Inbox_0_Replay
+WP4_changed_bytes_same_command_id: PROTOCOL_CONFLICT
+WP4_reserved_methods: 3/3_CONTRACT_NOT_ACTIVE
+WP4_closeout_receipt: control-plane/registry/receipts/2026-07-20-yellow-agents-os-phase-5a-m0a-wp4-command-boundary-closeout-v0.1.md
+WP4_closeout_receipt_sha256: be420b08ec71546a540b9e8c6a3aa36402c772dbdec40d623ca7698f902b70ae
+active_work_queue: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.2.md
+active_work_queue_sha256: 3380dd237ea77b8b1421b99f77725d95d1cd7ba6b3498e49531a4a76af858d05
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-20-agents-os-active-work-queue-v9.2.md
+current_work_package: WP5_PERMIT_AND_OUTBOX
+WP5_start_condition_satisfied: true
+WP6_and_WP7_direct_predecessor_gates_satisfied: false
+implementation_branch_push_PR_merge_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: WP5_PERMIT_FENCE_CLAIM_REPLAY_AND_CRASH_TESTS
+```
+
 ## Safety Notes
 
 - This snapshot did not read `state-private/`.
