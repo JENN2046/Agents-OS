@@ -20,5 +20,14 @@ triggers, a compiled schema seal, Event/fact/current-pointer atomic CAS, crash
 rollback injection, and Inbox request-identity/replay observation. WP3 does not
 admit a Command or expose any of these operations through N-API.
 
+WP4 adds the closed five-method Node-API boundary, strict canonical F3 request
+and response frames, the four-definition synthetic-only Command registry,
+deterministic synthetic principal verification, read-only ledger counts, and
+atomic terminal replay for Commands whose domain reducer is not active yet.
+The inherited CommonJS wrapper remains byte-identical to the frozen safe
+projection. `claim_outbox`, `acknowledge_outbox`, and `reconcile` remain
+`CONTRACT_NOT_ACTIVE`; WP4 does not claim a successful domain mutation.
+
 The package still does not enable the plugin, start VCPToolBox, call a provider,
-read private Memory, or perform a real effect.
+read private Memory, implement F4 admission or Outbox dispatch, or perform a
+real effect.

@@ -8,7 +8,9 @@ use std::time::Duration;
 use rusqlite::Connection;
 
 use crate::ledger::recovery::{self, LedgerCounts};
-use crate::ledger::replay::{self, ReplayObservation, RequestIdentity};
+use crate::ledger::replay::{
+    self, ReplayObservation, RequestIdentity, TerminalIntake, TerminalIntakeObservation,
+};
 use crate::ledger::schema::{self, SchemaSnapshot};
 use crate::ledger::transaction::{
     self, CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
@@ -40,6 +42,10 @@ enum LedgerCommand {
     RegisterOrResolve {
         request: RequestIdentity,
         response: Sender<Result<ReplayObservation, String>>,
+    },
+    TerminalIndeterminate {
+        intake: TerminalIntake,
+        response: Sender<Result<TerminalIntakeObservation, String>>,
     },
     Counts(Sender<Result<LedgerCounts, String>>),
     Shutdown(Sender<()>),
@@ -133,6 +139,13 @@ impl LedgerThread {
         self.request(|response| LedgerCommand::RegisterOrResolve { request, response })
     }
 
+    pub(super) fn terminal_indeterminate(
+        &self,
+        intake: TerminalIntake,
+    ) -> Result<TerminalIntakeObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalIndeterminate { intake, response })
+    }
+
     pub(super) fn counts(&self) -> Result<LedgerCounts, ResidentError> {
         self.request(LedgerCommand::Counts)
     }
@@ -211,13 +224,22 @@ fn run(
                 let _ = response.send(result);
             }
             LedgerCommand::InitializeSchema(response) => {
-                let _ = response.send(
-                    schema::initialize_v1(&mut connection).map_err(|error| error.to_string()),
-                );
+                let result = schema::initialize_v1(&mut connection)
+                    .and_then(|snapshot| {
+                        replay::ensure_closed_synthetic_registry(&mut connection)?;
+                        Ok(snapshot)
+                    })
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
             }
             LedgerCommand::VerifySchema(response) => {
-                let _ = response
-                    .send(schema::verify_schema(&connection).map_err(|error| error.to_string()));
+                let result = schema::verify_schema(&connection)
+                    .and_then(|snapshot| {
+                        replay::verify_closed_synthetic_registry(&connection)?;
+                        Ok(snapshot)
+                    })
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
             }
             LedgerCommand::AdvanceFact(command) => {
                 let AdvanceFactCommand {
@@ -238,9 +260,18 @@ fn run(
                         .map_err(|error| error.to_string()),
                 );
             }
+            LedgerCommand::TerminalIndeterminate { intake, response } => {
+                let _ = response.send(
+                    replay::terminal_indeterminate(&mut connection, &intake)
+                        .map_err(|error| error.to_string()),
+                );
+            }
             LedgerCommand::Counts(response) => {
-                let _ =
-                    response.send(recovery::counts(&connection).map_err(|error| error.to_string()));
+                let result = schema::verify_schema(&connection)
+                    .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
+                    .and_then(|_| recovery::counts(&connection))
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
             }
             LedgerCommand::Shutdown(response) => {
                 drop(connection);

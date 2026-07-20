@@ -8,7 +8,9 @@ use unicode_normalization::UnicodeNormalization;
 use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
 use crate::ledger::recovery::LedgerCounts;
-use crate::ledger::replay::{ReplayObservation, RequestIdentity};
+use crate::ledger::replay::{
+    ReplayObservation, RequestIdentity, TerminalIntake, TerminalIntakeObservation,
+};
 use crate::ledger::schema::SchemaSnapshot;
 use crate::ledger::transaction::{
     CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
@@ -344,6 +346,16 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .register_or_resolve(request)
+    }
+
+    pub fn terminal_indeterminate_intake(
+        &self,
+        intake: TerminalIntake,
+    ) -> Result<TerminalIntakeObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_indeterminate(intake)
     }
 
     pub fn ledger_counts(&self) -> Result<LedgerCounts, ResidentError> {
