@@ -5138,6 +5138,42 @@ provider_sensing_or_real_effect_authorized: false
 next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
 ```
 
+## Phase 5A M0-A PR #21 Ledger Ownership Finding Closed (2026-07-21)
+
+The fresh Codex review of `2f208f72ac0bc733a87b3e345cf10506420721d0`
+found that resident ownership was not durably bound to the ledger. The first
+open now atomically persists the exact resident identity, incarnation,
+authority epoch and ownership Event; every reopen verifies that tuple before
+the ledger becomes usable. A substituted incarnation or nonce against the same
+root is rejected. The frozen Plan R1-R8 subjects remain byte-identical.
+
+```yaml
+Phase_5A_status: M0A_IMPLEMENTATION_CORRECTED_AWAITING_CURRENT_HEAD_REVIEW
+Phase_5A_M0A_implementation_closeout: CORRECTED_PASS
+PR_21_review_findings_closed: 4/4
+corrected_source_commit: d30d477fe34baddee6476f648917a62b1424f424
+corrected_package_manifest_commit: a7ba1a849e7ddcbd853fb6981b1c437be07d6902
+Phase_5A_M0A_content_tree_sha256: 855f3be03c375601bf49fb9cd716601373efba9e41b53bcb98f8a0b199bc95fb
+Phase_5A_M0A_package_manifest_sha256: b788b85d3a35cc96e3594318a60606a9410d640f6cbc84687aab10776ea56f0b
+Phase_5A_M0A_direct_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+Phase_5A_M0A_integrated_root_sha256: 15a24bde4885aba2663325b47f8772f8782e6b7114787d5bb831fec65d1102d5
+Phase_5A_M0A_PR21_disposition_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5a-m0a-pr21-review-finding-disposition-v0.3.md
+Phase_5A_M0A_PR21_disposition_receipt_sha256: 6fc961c381bbc4c965aaa19142560cf5a00be1ca7190fdd5f5710fe2cfe96da9
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.9.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v9.9.md
+current_work_package: PHASE_5A_M0A_PR21_CURRENT_HEAD_REVIEW_GATE
+PR_21_current_head_review_pending: true
+Phase_5A_M0A_Git_objects_on_main: false
+Phase_5A_M0A_mainline_integrated: false
+Phase_5A_M0A_durability_complete: false
+Phase_5B_started: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+next_gate: PR_21_CURRENT_HEAD_CODEX_RE_REVIEW
+```
+
 ## Phase 5A M0-A PR #21 Native Binding Finding Closed (2026-07-21)
 
 The fresh Codex review of `d848a3c` found that the compatibility entry point
