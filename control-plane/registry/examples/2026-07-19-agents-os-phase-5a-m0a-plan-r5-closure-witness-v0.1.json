@@ -1,0 +1,287 @@
+{
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE",
+  "root_fingerprint": "6d450e074dd1d67f63c21d020932cafc8ca360e3f9060a3b6cc7f87a5ae08096",
+  "schema_version": "agents-os.phase5a-m0a-plan-r5-closure-witness.v0.1",
+  "section_fingerprints": {
+    "ast_dataflow": "352ce8e1fe711cd514a5d23f09ee4639b652743cd5b9334d66c87112d21ef429",
+    "boundary": "10ebb48d0c350f368bee0028750797a8b1ecad448b1548751f654b6665a05d55",
+    "fixed_sources": "860c84760e74269eb582359688a9aca4a008d07d61d73577da32a7c36c35406c",
+    "lineage": "e8a2ff7b1734b585552a98eb6cb3b434d07be9759ac2564be618b1bf3736b2b4",
+    "persistence": "ca7dd590b504a056b0a37540deaa5d73702bb7cbf8ccd851c46f1f2d22c4bee2",
+    "semantic_owner_replacements": "4b552db307310e25a1653760ff23fd255b7875e17db4582dafc8a671d53a9ac9"
+  },
+  "sections": {
+    "ast_dataflow": {
+      "contract": {
+        "admitted_flow": "args_allowed_fields_to_closed_object_to_nativeFrame_to_allowed_sink",
+        "allowed_args_fields": [
+          "commandRef",
+          "commandFingerprint",
+          "payload"
+        ],
+        "allowed_calls": [
+          "projectArgs(args)",
+          "residentNative.process(nativeFrame)"
+        ],
+        "allowed_sink": "residentNative.process_argument_0",
+        "command": "python3 workspace/control-plane/registry/validate-phase5a-m0a-plan-r5-closure.py workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-plan-r5-closure-witness-v0.1.json workspace/control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-future-index-js-safe-wrapper-v0.1.js --self-test",
+        "exact_formal_parameters": {
+          "processToolCall": [
+            "args"
+          ],
+          "projectArgs": [
+            "args"
+          ]
+        },
+        "exact_source_sha256_required": true,
+        "forbidden_constructs": [
+          "computed_property",
+          "object_spread",
+          "array_spread",
+          "closure_capture",
+          "helper_call",
+          "dynamic_call",
+          "eval",
+          "Function_constructor"
+        ],
+        "forbidden_sinks": [
+          "logs",
+          "receipts",
+          "errors",
+          "returned_context",
+          "reducer_authority",
+          "fingerprints",
+          "NAPI_extra_arguments"
+        ],
+        "forbidden_sources": [
+          "arguments",
+          "second_formal",
+          "rest_parameter",
+          "requestIp",
+          "sourceNode",
+          "signal",
+          "decryptedAuthCode",
+          "directContext",
+          "context_alias"
+        ],
+        "parse_ambiguity_result": "BLOCK",
+        "parser_version": "agents-os.javascript-closed-subset-ast.v0.1",
+        "unknown_flow_result": "BLOCK",
+        "unknown_token_result": "BLOCK",
+        "unsupported_syntax_result": "BLOCK",
+        "validator_id": "PHASE_5A_M0A_FUTURE_INDEX_JS_CLOSED_AST_DATAFLOW_VALIDATOR_V0_1"
+      },
+      "safe_source_sha256": "a0a38766a3fa32953402bcf7499b599e0140003be6eee94638f26fd1de4a6440",
+      "source_cases": [
+        {
+          "case_id": "exact_safe_wrapper",
+          "expected": "ACCEPT",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "second_formal_parameter",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args, directContext) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "arguments_index_one",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  const ctx = arguments[1];\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "rest_parameter",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args, ...rest) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "direct_requestIp",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.requestIp\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "context_alias",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const directContext = arguments[1];\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "closure_capture",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  const leak = () => arguments[1];\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "object_spread",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    ...args\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "computed_property",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args['payload']\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "helper_call",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction helper(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "extra_native_argument",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame, arguments[1]);\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "returned_context",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return arguments[1];\n}\n\nmodule.exports = { processToolCall };\n"
+        },
+        {
+          "case_id": "unsupported_optional_chaining",
+          "expected": "BLOCK",
+          "source": "'use strict';\n\nfunction projectArgs(args) {\n  return {\n    commandRef: args.commandRef,\n    commandFingerprint: args.commandFingerprint,\n    payload: args?.payload\n  };\n}\n\nasync function processToolCall(args) {\n  const nativeFrame = projectArgs(args);\n  return residentNative.process(nativeFrame);\n}\n\nmodule.exports = { processToolCall };\n"
+        }
+      ]
+    },
+    "boundary": {
+      "VCPToolBox_change_occurrence_count": 0,
+      "database_file_occurrence_count": 0,
+      "implementation_authorized": false,
+      "runtime_usable": false,
+      "synthetic_only": true,
+      "terminal_outcome": "NOT_EXECUTED"
+    },
+    "fixed_sources": {
+      "abi": {
+        "path": "control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-materialization-abi-corrections-v0.1-r5.yaml",
+        "sha256": "edc65f2a32fa2a1d8ca4472341d1cc8096fd7fb7c59fccad9fbb841d13d97ca2"
+      },
+      "amendment": {
+        "path": "control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-plan-v0.1-r5-amendment.draft.md",
+        "sha256": "606a58cb1bcf03754a0a3786b34f410586ccc8360ac32ce8ec67a5adcca02d0c"
+      },
+      "owners": {
+        "path": "control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-semantic-owner-corrections-v0.1-r5.yaml",
+        "sha256": "fb42556a0c84b35cffb575fbdd4ca09e837478d4aaeba63799e2ff2e69fdf8b1"
+      },
+      "persistence": {
+        "path": "control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-persistence-transaction-corrections-v0.1-r5.yaml",
+        "sha256": "8e3cf49cdcb1b84cdb3cd77bf49468d858150687a887dffc5b11c35c64588948"
+      },
+      "safe_index_js": {
+        "path": "control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-future-index-js-safe-wrapper-v0.1.js",
+        "sha256": "a0a38766a3fa32953402bcf7499b599e0140003be6eee94638f26fd1de4a6440"
+      }
+    },
+    "lineage": {
+      "R1_manifest_sha256": "01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef",
+      "R2_manifest_sha256": "48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26",
+      "R3_manifest_sha256": "d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49",
+      "R4_manifest_sha256": "0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58",
+      "R4_review_sha256": "38d7000d568c1f97028bc38689960e7026c0f79d07e77944e4d69856e64ee79f"
+    },
+    "persistence": {
+      "effective_table_count": 18,
+      "fixed_SQLite_cases": {
+        "negative": [
+          "F3_unrelated_Event_tuple",
+          "F3_READY_without_exact_witness",
+          "F3_historical_incarnation_reuse",
+          "F5_unrelated_first_Event",
+          "F5_wrong_call_authorization_kind",
+          "F5_wrong_call_authorization_logical_id",
+          "F5_replay_identity_substitution"
+        ],
+        "positive": [
+          "F3_exact_ownership_Event_and_witness_READY",
+          "F5_exact_first_apply_and_replay"
+        ]
+      },
+      "replacement_tables": [
+        "event",
+        "resident_incarnation",
+        "resident_authority_epoch",
+        "dispatch_arm"
+      ],
+      "transactions": {
+        "F3_READY_after_witness": {
+          "commit": "READY_fact_pointer_Event_all_or_zero",
+          "recheck_exact_tuple": [
+            "resident_id",
+            "authority_epoch",
+            "incarnation_id",
+            "epoch_fingerprint",
+            "ownership_event_sequence",
+            "ownership_event_id",
+            "ownership_event_fingerprint"
+          ],
+          "resolve_exact_witness": "canonical_fact(fact_kind=F3_WITNESS_COMMIT,logical_id=resident_id,subject_ref=witness_reservation_ref,subject_revision=authority_epoch)",
+          "witness_currentness": "exact_current_fact_pointer_and_created_event_sequence_gte_ownership_event_sequence"
+        },
+        "F3_RECOVERING_startup": {
+          "commit": "all_or_zero",
+          "exact_Event_tuple": [
+            "event_sequence",
+            "event_id",
+            "event_fingerprint",
+            "RESIDENT_OWNERSHIP_STARTED",
+            "resident_id",
+            "authority_epoch"
+          ],
+          "exact_shared_bindings": [
+            "incarnation.created_Event_tuple_equals_ownership_Event_tuple",
+            "epoch.ownership_Event_tuple_equals_ownership_Event_tuple",
+            "RECOVERING_fact.created_event_sequence_equals_ownership_Event_sequence",
+            "current_pointer.updated_event_sequence_equals_ownership_Event_sequence"
+          ],
+          "historical_incarnation_precondition": "NOT_EXISTS resident_authority_epoch WHERE resident_id = input.resident_id AND incarnation_id = input.incarnation_id"
+        },
+        "F5_first_apply_and_replay": {
+          "exact_replay_additions": {
+            "Event": 0,
+            "call_authorization": 0
+          },
+          "exact_replay_returns": [
+            "first_event_sequence",
+            "first_event_ref",
+            "first_event_fingerprint",
+            "first_call_authorization_kind",
+            "first_call_authorization_logical_id",
+            "first_call_authorization_ref",
+            "first_call_authorization_revision",
+            "first_call_authorization_fingerprint"
+          ],
+          "first_apply_exact_Event": "event(F5_DISPATCH_ARMED,intent_id,attempt_revision)",
+          "first_apply_exact_authorization": "canonical_fact(F5_CALL_AUTHORIZATION,intent_id,attempt_revision,attempt_id)",
+          "stored_counts": {
+            "Event": 1,
+            "call_authorization": 1
+          }
+        }
+      }
+    },
+    "semantic_owner_replacements": [
+      {
+        "crash_test": "crash/F3_RECOVERING_and_READY_transactions_each_all_or_zero",
+        "invariant": "one exact ownership Event tuple binds incarnation epoch RECOVERING fact and pointer; no historical incarnation reuse; READY rechecks the exact epoch tuple and current witness COMMIT fact",
+        "module_owner": "resident/ledger_thread",
+        "negative_test": "negative/F3_substituted_Event_missing_witness_or_historical_incarnation_reuse_rejected",
+        "obligation_id": "F3_incarnation_and_authority_epoch",
+        "persistence_owner": "event(RESIDENT_OWNERSHIP_STARTED)+resident_incarnation+resident_authority_epoch+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer+canonical_fact(F3_WITNESS_COMMIT)",
+        "positive_test": "positive/F3_exact_ownership_Event_then_witness_READY",
+        "reducer_or_boundary_owner": "F3_resident_lifecycle_consumer",
+        "replay_test": "replay/F3_exact_Event_epoch_incarnation_witness_tuple_replays",
+        "transaction_owner": "resident_exact_ownership_Event_RECOVERING_then_exact_witness_COMMIT_READY"
+      },
+      {
+        "crash_test": "crash/F5_arm_and_stored_first_tuple_commit_before_call",
+        "invariant": "first apply stores exact Event and authorization identities with counts one; replay returns the same tuples and adds zero",
+        "module_owner": "ledger/replay",
+        "negative_test": "negative/F5_unrelated_Event_or_authorization_identity_rejected",
+        "obligation_id": "F5_stored_first_Event_and_call_accounting",
+        "persistence_owner": "dispatch_arm(exact_F5_DISPATCH_ARMED_Event_tuple+exact_F5_CALL_AUTHORIZATION_fact_tuple+counts_1)",
+        "positive_test": "positive/F5_exact_stored_first_identity_and_counts",
+        "reducer_or_boundary_owner": "F5_stored_first_identity_and_accounting_reducer",
+        "replay_test": "replay/F5_exact_stored_first_tuple_zero_additions",
+        "transaction_owner": "dispatch_arm_exact_Event_and_call_authorization_first_apply"
+      }
+    ]
+  }
+}

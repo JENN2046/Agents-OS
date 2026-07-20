@@ -1,0 +1,75 @@
+schema_version: agents-os.m0a-persistence-ownership-event-closure.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_OWNERSHIP_EVENT_CLOSURE_R8
+date: '2026-07-20'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R7
+
+effective_schema:
+  inherited_R7_table_count: 18
+  added_tables: []
+  removed_tables: []
+  database_file_created: false
+
+replacement:
+  F3_RECOVERING_revision_1_prestate:
+    ownership_Event_tuple_fields:
+      - event_sequence
+      - event_id
+      - event_fingerprint
+      - event_kind
+      - aggregate_ref
+      - aggregate_revision
+    ownership_Event_kind: RESIDENT_OWNERSHIP_STARTED
+    RECOVERING_fact:
+      state: RECOVERING
+      revision: 1
+      created_event_sequence_relation: EXACTLY_EQUALS_OWNERSHIP_EVENT_SEQUENCE
+    current_pointer:
+      revision: 1
+      updated_event_sequence_relation: EXACTLY_EQUALS_OWNERSHIP_EVENT_SEQUENCE
+    positive_ownership_event_sequence: 1
+    substituted_sequence_2_result: BLOCK
+  F3_RECOVERING_to_READY_revision_2:
+    transaction_mode: BEGIN_IMMEDIATE
+    pretransaction_recheck: exact_ownership_Event_RECOVERING_fact_pointer_and_witness
+    in_transaction_recheck: exact_ownership_Event_RECOVERING_fact_pointer_and_witness
+    commit_writes:
+      Event: exactly_1_RESIDENT_READY
+      lifecycle_fact: READY_revision_2_with_exact_RECOVERING_revision_1_predecessor
+      lifecycle_pointer: exact_compare_and_swap_revision_1_to_2
+    atomicity: Event_READY_fact_revision_2_pointer_or_zero
+
+fixed_cases:
+  positive:
+    - ownership_Event_sequence_1_binds_RECOVERING_fact_and_pointer
+    - valid_sequence_1_prestate_commits_READY_revision_2
+    - READY_revision_2_has_exact_RECOVERING_revision_1_predecessor
+    - current_pointer_advances_revision_1_to_revision_2
+  negative:
+    - RECOVERING_fact_and_pointer_sequence_2_substitution
+    - RECOVERING_fact_sequence_2_pointer_sequence_1
+    - RECOVERING_fact_sequence_1_pointer_sequence_2
+    - direct_READY_revision_1_from_empty_history
+    - stale_lifecycle_pointer
+    - noncanonical_RECOVERING_bytes
+    - wrong_predecessor_tuple
+    - duplicate_READY_revision_2
+  crash:
+    - READY_Event_fact_pointer_rollback_all_or_zero
+
+governance:
+  creates_new_semantic_authority: false
+  recomputes_F3_or_F5_authority: false
+  plan_frozen: false
+  runtime_usable: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  production_authentication_authorized: false
+  database_file_created: false
+  provider_called: false
+  private_Memory_read: false
+  sensing_started: false
+  real_effect_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED

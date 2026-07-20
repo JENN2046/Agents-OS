@@ -1,0 +1,155 @@
+schema_version: agents-os.m0a-contract-traceability-matrix.v0.1
+matrix_id: PHASE_5A_M0A_F1_F6_CONTRACT_TO_IMPLEMENTATION_TRACEABILITY_V0_1
+date: 2026-07-19
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+rules:
+  frozen_contract_subjects_are_modified: false
+  implementation_may_recompute_upstream_authority_outside_owning_reducer: false
+  every_favorable_result_requires_exact_current_hash_bound_inputs: true
+  unknown_missing_stale_conflicting_or_unreproducible_input: fail_closed
+  projections_may_create_authority: false
+  synthetic_fixture_may_become_production_authority: false
+
+units:
+  F1:
+    authority: Goal Specification Success Criteria Plan Membership
+    implementation_modules:
+      - canonical/goal
+      - ledger/current_fact
+      - reducers/goal_plan
+    database_rows:
+      - event
+      - current_fact_pointer
+    M0_behaviors:
+      - synthetic_goal_and_three_task_membership_commit
+      - aggregate_version_compare_and_set
+      - plan_membership_cannot_write_Task_lifecycle
+    tests:
+      - stale_goal_aggregate_version_rejected_without_partial_write
+      - duplicate_identical_command_replays_first_result
+      - plan_change_cannot_implicitly_complete_or_cancel_Task
+  F2:
+    authority: Actor Identity Principal Binding Responsibility Delegation
+    implementation_modules:
+      - canonical/actor_context
+      - reducers/authority_assessment
+    database_rows:
+      - event
+      - current_fact_pointer
+    M0_behaviors:
+      - consume_synthetic_hash_bound_current_assessments
+      - reject_wrong_subject_revision_or_command_fingerprint
+      - prohibit_relationship_role_or_lane_based_permission
+    tests:
+      - inactive_actor_or_binding_rejected
+      - wrong_command_authentication_binding_rejected
+      - PBL_no_match_alone_cannot_authorize
+  F3:
+    authority: Resident Singleton NAPI Identity Continuity Command Intake Replay
+    implementation_modules:
+      - resident/lock
+      - resident/ledger_thread
+      - napi/frame
+      - reducers/command_intake
+      - ledger/replay
+    database_rows:
+      - resident_identity
+      - resident_incarnation
+      - resident_authority_epoch
+      - command_definition
+      - inbox_command
+      - command_envelope
+      - replay_index
+      - event
+    M0_behaviors:
+      - one_process_kernel_handle
+      - one_OS_exclusive_writer_lock
+      - five_closed_NAPI_methods
+      - exact_identical_replay_and_different_bytes_conflict
+    tests:
+      - two_process_start_race_has_exactly_one_ready_writer
+      - unknown_method_version_schema_or_field_rejected_before_ledger
+      - command_id_reuse_with_different_bytes_is_protocol_conflict
+  F4:
+    authority: TaskPermit Host Authentication Effect Admission
+    implementation_modules:
+      - reducers/effect_admission
+      - mock_host/admission
+    database_rows:
+      - event
+      - outbox_intent
+    M0_behaviors:
+      - consume_exact_current_permit_host_and_fence_assessments
+      - monotonically_narrow_effect_scope
+      - no_permission_level_or_second_host_identity_model
+    tests:
+      - stale_permit_host_epoch_or_fence_rejected
+      - cross_grant_cartesian_scope_expansion_rejected
+      - absent_required_Jenn_exact_decision_rejected
+  F5:
+    authority: Outbox Delivery Recovery
+    implementation_modules:
+      - reducers/outbox_claim
+      - reducers/delivery_receipt
+      - reducers/reconcile
+      - mock_host/dispatch
+    database_rows:
+      - outbox_intent
+      - outbox_claim
+      - delivery_receipt
+      - event
+    M0_behaviors:
+      - claim_lease_attempt_and_receipt_are_transaction_bound
+      - accepted_then_lost_becomes_UNKNOWN
+      - UNKNOWN_never_automatically_retries
+      - restart_reconcile_is_idempotent
+    tests:
+      - every_claim_dispatch_receipt_crash_window
+      - exact_duplicate_arm_returns_first_accounting
+      - same_revision_request_rewrite_rejected
+      - reconcile_cannot_create_duplicate_effect
+  F6:
+    authority: Validation Requirement Current Decision Task Completion
+    implementation_modules:
+      - reducers/validation_current_decision
+      - reducers/task_completion
+    database_rows:
+      - validation_decision
+      - task_completion
+      - event
+      - current_fact_pointer
+    M0_behaviors:
+      - current_requirement_decision_derived_from_exact_evidence_context
+      - F5_APPLIED_CURRENT_is_supporting_evidence_not_validation_PASS
+      - completion_rechecks_all_current_inputs_in_one_transaction
+    tests:
+      - newer_FAILED_or_PENDING_cannot_be_masked_by_old_PASSED
+      - waiver_cannot_forge_PASSED_or_complete_all_waived_task
+      - completion_CAS_race_fails_without_partial_DONE
+
+phase_gate_only_inputs:
+  F7:
+    runtime_module_in_M0A: none
+    reason: Home semantics belong to M0_B
+  F8:
+    runtime_module_in_M0A: none
+    reason: Home_to_Orchestrator interface belongs to M0_B
+
+forbidden_implementation_shortcuts:
+  - hardcode_expected_fixture_and_treat_equality_as_contract_proof
+  - accept_caller_supplied_currentness_or_authority_result
+  - union_independent_grants_to_create_new_resource_operation_pair
+  - treat_PBL_no_match_as_permission
+  - allow_JavaScript_or_projection_to_write_canonical_state
+  - infer_authority_from_relationship_role_urgency_history_or_success
+  - accept_same_revision_resigned_history_without_immutable_predecessor
+  - retry_UNKNOWN_or_ambiguous_effect_automatically
+  - expose_real_database_path_or_secret_through_NAPI_frames
+
+completion_definition:
+  every_F1_through_F6_behavior_has_code_SQL_and_test_owner: required
+  every_favorable_path_has_negative_and_replay_case: required
+  unimplemented_matrix_row_result: M0A_INCOMPLETE
+  matrix_change_after_freeze: requires_new_atomic_review_and_Jenn_decision

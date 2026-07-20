@@ -1,0 +1,138 @@
+schema_version: agents-os.phase5a-m0a-plan-r6-independent-review.v0.1
+review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R6_ATOMIC_BUNDLE
+review_mode: fresh_full_atomic_hash_bound_independent_review
+result: BLOCK
+partial_acceptance: forbidden
+blocker_count: 2
+archive_binding:
+  path: /tmp/2026-07-19-agents-os-phase-5a-m0a-plan-r6-independent-review-package-v0.1.zip
+  sha256_claimed: 1de9457555581f9c790cc588eef83c2662db023d70508d3a6d2efe5372f90032
+  sha256_observed: 1de9457555581f9c790cc588eef83c2662db023d70508d3a6d2efe5372f90032
+  bytes: 1503751
+manifest_binding:
+  path: /home/jenn/AGENTS_OS_Workspace/control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r6-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256_claimed: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  sha256_observed: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  embedded_byte_equal_external: true
+archive_safety:
+  members: 210
+  regular_files: 210
+  directories: 0
+  unsafe_paths: 0
+  raw_duplicate_paths: 0
+  normalized_duplicate_paths: 0
+  special_or_symlink_entries: 0
+  encrypted_entries: 0
+  crc_failures: 0
+  compression_methods: {deflate: 210}
+  compressed_member_bytes: 1443897
+  uncompressed_bytes: 6717782
+  aggregate_compression_ratio: 4.65
+  extracted_dot_git_entries: 0
+input_verification:
+  declared_inputs: 206
+  subjects: 42
+  authority_inputs: 156
+  nonindependent_author_evidence: 1
+  fixed_VCP_git_objects: 7
+  archive_map_entries_verified: 206
+  checksum_entries_verified: 209
+  fully_read_and_UTF8_decoded_bytes: 6550772
+  workspace_inputs_byte_equal_current: 199
+  fixed_git_objects_byte_equal_commit_555b3b538f6eb736e530c2912de678c5941f9985: 7
+  strict_duplicate_free_YAML_inputs: 55
+  strict_duplicate_and_nonfinite_free_JSON_inputs: 28
+  subject_trailing_whitespace_findings: 0
+effective_contract:
+  precedence: [R6_explicit_replacements, R5_all_other_clauses, R4_all_other_clauses, R3_all_other_clauses, R2_all_other_clauses, R1_all_other_clauses]
+  effective_tables: 18
+  effective_obligations: 63
+  R6_added_tables: 0
+  R6_removed_tables: 0
+  second_authority_runtime_database_or_implementation_boundary_found: false
+fixed_reproduction:
+  R5:
+    result: PASS_NO_BLOCKER
+    case_count: 21
+    passed: 21
+    effective_tables: 18
+    self_test_mutations: 7
+  R6:
+    result: PASS_NO_BLOCKER
+    fixed_case_count: 35
+    SQLite: 13/13
+    JavaScript_AST: 15/15
+    structured_input: 7/7
+    self_test_mutations: 11/11
+  builder:
+    byte_equal: true
+    rebuilt_sha256: 1f97aa2b274f2db101d355d25f5854567ad4ecf6d263d4bf3f43a3aec5ddba8c
+  database_files_created: 0
+independent_cases:
+  total: 37
+  expected_behavior_passed: 26
+  contract_failures: 11
+  logical_blockers_represented: 2
+  declared_fixed_case_counts_executed: {SQLite: 13, JavaScript_AST: 15, structured_input: 7}
+  favorable:
+    - F5 exact authorization subject_ref and subject_revision reject fully referenced substitutions
+    - F5 replay returns all 10 stored identity fields and changes Event/call-authorization counts by zero
+    - F3 exact canonical bytes, SHA-256, duplicate rejection and full nine-field epoch tuple are enforced
+    - graph-local or caller-supplied good evidence cannot replace bad immutable F3 witness bytes
+    - canonical_fact UPDATE, DELETE and coordinated pointer rewrite abort on canonical_fact_immutable
+    - exact predecessor revision-2 append and pointer advance remain constructible
+    - exact CommonJS export order and execute_command one-argument three-field projection pass an execution probe
+    - duplicate/malformed/unknown-tag YAML and duplicate/malformed/nonfinite JSON block stably
+findings:
+  - id: PHASE5A-M0A-PLAN-R6-IR-B01
+    disposition: BLOCKER
+    title: nonauthorization_boundary_flags_remain_semantically_incomplete
+    target_semantic_result: ACCEPTED_INVALID
+    stale_digest_or_missing_reference_result: not_applicable_fully_rebuilt_validator_graph
+    evidence:
+      exact_prior_blocker_field: materialization_ABI.governance.implementation_authorized
+      mutation: false_to_true_boolean
+      mutated_profile_sha256: d1e1aded1e322a93e572cf460b8d074dc0742d9d53541bb03b7da3bd6ccd041b
+      rebuilt_witness_sha256: e6c2a98607be6542866a304d2672e8f5fb26a9c1030cd0ba22cc2d34b1d59765
+      witness_profile_fingerprint_equals_mutated_profile_sha256: true
+      validator_result: PASS_NO_BLOCKER
+      validator_errors: 0
+    additional_unchecked_false_boolean_paths:
+      - owner.governance.runtime_usable
+      - owner.governance.implementation_authorized
+      - persistence.governance.runtime_usable
+      - persistence.governance.implementation_authorized
+      - abi.fixed_future_wrapper.runtime_usable
+      - abi.governance.runtime_usable
+      - totality.governance.runtime_usable
+      - totality.governance.implementation_authorized
+    contract_conflict: R6 requires every planning boundary field to be a strict false boolean, and R5 B4 explicitly required semantic rejection of governance implementation authorization
+  - id: PHASE5A-M0A-PLAN-R6-IR-B02
+    disposition: BLOCKER
+    title: declared_F3_RECOVERING_to_READY_transition_is_not_executed_and_cannot_commit
+    target_semantic_result: DECLARED_POSITIVE_CASE_NOT_CONSTRUCTIBLE
+    stale_digest_or_missing_reference_result: not_applicable_fresh_in_memory_exact_witness_graph
+    evidence:
+      fixed_case_prestate_RESIDENT_LIFECYCLE_facts: 0
+      fixed_case_prestate_RESIDENT_LIFECYCLE_pointers: 0
+      fixed_case_poststate_READY_revision: 1
+      fixed_case_poststate_READY_Event_fact_pointer: 1/1/1
+      actual_valid_RECOVERING_revision_1_and_pointer_present: true
+      exact_witness_bytes_digest_tuple_valid: true
+      consumer_result: REJECT_UNIQUE_constraint_failed
+    cause: commit_ready always inserts RESIDENT_LIFECYCLE revision 1 with no predecessor and INSERTs a new pointer; it does not append READY revision 2 from the inherited immutable RECOVERING revision 1
+    contract_conflict: R6 names the positive test F3_exact_witness_bytes_tuple_RECOVERING_to_READY and inherits the R5 RECOVERING startup transaction and append-only canonical_fact history
+boundary_status:
+  workspace_modified: false
+  governance_modified: false
+  git_modified: false
+  VCPToolBox_modified_or_started: false
+  database_file_created: false
+  implementation_or_runtime_started: false
+  provider_network_sensing_private_memory_or_effect_started: false
+  commit_push_merge: false
+  evidence_written_only_under: /tmp/phase5a-r6-independent-review.7hz0wc
+decision_gate:
+  plan_accepted_or_frozen: false
+  implementation_authorized: false
+  required_disposition: repair_and_fresh_full_atomic_hash_bound_independent_review

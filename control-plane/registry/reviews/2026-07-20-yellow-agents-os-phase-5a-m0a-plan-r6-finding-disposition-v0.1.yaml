@@ -1,0 +1,61 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r6-independent-review-disposition-v0.1
+date: 2026-07-20
+owner: Jenn
+agent_steward: Nobao
+status: R6_BLOCK_RECONCILED_R7_DECISION_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r6-full-atomic-independent-review.yaml
+  sha256: 6b6d890d8656e920b564d192eb0fc508c4ecdc2ab6449cec3aa5efa662ea3336
+  result: BLOCK
+  findings: {blocker: 2, major: 0, minor: 0, unresolved: 0}
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  R5_subject_count: 8
+  R6_subject_count: 9
+  total_subject_count: 42
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-R6-IR-B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R7
+    closure_scope: complete_nonauthorization_boundary_flag_semantic_inventory
+    required_regressions:
+      - every_normative_boundary_boolean_is_inventory_derived
+      - every_boundary_boolean_requires_strict_false
+      - ABI_governance_implementation_authorized_true_rejected
+      - nested_owner_persistence_ABI_totality_and_fixture_flags_covered
+      - fully_rebuilt_profile_and_witness_cannot_hide_true_flag
+  - finding_id: PHASE5A-M0A-PLAN-R6-IR-B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R7
+    closure_scope: actual_F3_RECOVERING_revision_1_to_READY_revision_2_transition
+    required_regressions:
+      - prestate_contains_immutable_RECOVERING_revision_1_and_current_pointer
+      - exact_witness_bytes_digest_and_nine_field_tuple_current
+      - READY_is_revision_2_with_exact_RECOVERING_predecessor
+      - current_pointer_advances_from_revision_1_to_revision_2
+      - READY_Event_fact_pointer_commit_all_or_zero
+      - direct_READY_revision_1_from_empty_lifecycle_history_rejected
+governance:
+  R7_started: false
+  R7_requires_Jenn_explicit_start: true
+  R7_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

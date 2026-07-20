@@ -1,0 +1,248 @@
+schema_version: agents-os.external-package-materialization-profile.v0.1
+profile_id: PHASE_5A_M0A_AGENTS_OS_RESIDENT_MATERIALIZATION_R2
+date: 2026-07-19
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+
+source:
+  canonical_root: extensions/agents-os-resident
+  ownership: JENN_OWNED_EXTERNAL_SOURCE_PACKAGE
+  source_commit_at_materialization: required_exact_git_commit
+  public_fork: forbidden
+  install_tree_is_source_of_truth: false
+
+VCPToolBox_projection:
+  repository: lioensky/VCPToolBox
+  base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  install_root: Plugin/AGENTSOSResident
+  allowed_overlay_glob: Plugin/AGENTSOSResident/**
+  blocked_manifest_path: Plugin/AGENTSOSResident/plugin-manifest.json.block
+  enabled_manifest_path: Plugin/AGENTSOSResident/plugin-manifest.json
+  enabled_manifest_must_not_exist: true
+  core_tracked_diff_must_be_empty: true
+  current_dirty_runtime_worktree_is_not_authority: true
+
+planned_source_inventory_is_closed: true
+planned_source_inventory:
+  - Cargo.lock
+  - Cargo.toml
+  - README.md
+  - build.rs
+  - index.js
+  - package-lock.json
+  - package-manifest.json
+  - package.json
+  - plugin-manifest.json.block
+  - rust-toolchain.toml
+  - src/canonical/fingerprint.rs
+  - src/canonical/jcs.rs
+  - src/canonical/mod.rs
+  - src/canonical/types.rs
+  - src/ledger/mod.rs
+  - src/ledger/recovery.rs
+  - src/ledger/replay.rs
+  - src/ledger/schema.rs
+  - src/ledger/transaction.rs
+  - src/lib.rs
+  - src/mock_host/admission.rs
+  - src/mock_host/dispatch.rs
+  - src/mock_host/mod.rs
+  - src/napi_frame.rs
+  - src/reducers/authority_assessment.rs
+  - src/reducers/command_intake.rs
+  - src/reducers/delivery_receipt.rs
+  - src/reducers/effect_admission.rs
+  - src/reducers/goal_plan.rs
+  - src/reducers/mod.rs
+  - src/reducers/outbox_claim.rs
+  - src/reducers/reconcile.rs
+  - src/reducers/task_completion.rs
+  - src/reducers/validation_current_decision.rs
+  - src/resident/ledger_thread.rs
+  - src/resident/lock.rs
+  - src/resident/mod.rs
+  - tests/crash_matrix.rs
+  - tests/napi_protocol.rs
+  - tests/replay_and_idempotency.rs
+  - tests/synthetic_m0a.rs
+inventory_count: 41
+
+file_policy:
+  allowed_types: [regular_file]
+  symlink: forbidden
+  hardlink_alias: forbidden
+  directory_entry_in_digest: false
+  empty_directory: forbidden
+  path_encoding: UTF-8
+  path_normalization: NFC
+  path_separator: /
+  absolute_path: forbidden
+  dot_segment: forbidden
+  backslash: forbidden
+  duplicate_path: forbidden
+  ordering: ascending_UTF8_path_bytes
+  allowed_modes: ['100644', '100755']
+  executable_paths:
+    - index.js
+  all_other_modes: '100644'
+
+content_tree_hash:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  inventory_source: planned_source_inventory_minus_package_manifest
+  excluded_from_tree:
+    - package-manifest.json
+  no_implicit_exclusions: true
+  leaf_file_sha256_scope: exact_regular_file_bytes
+  leaf_record_encoding: >-
+    ASCII(decimal_utf8_path_byte_length) || ':' || UTF8_NFC(relative_path) || NUL ||
+    ASCII(mode) || NUL || ASCII(decimal_file_byte_length) || NUL ||
+    ASCII(lowercase_file_sha256) || LF
+  tree_preimage: ordered_concatenation_of_leaf_record_encoding
+  tree_digest: SHA256(tree_preimage)
+
+package_manifest:
+  path: package-manifest.json
+  schema: agents-os.external-package-manifest.v0.1
+  encoding: canonical_JSON_UTF8_no_BOM_no_trailing_newline
+  canonicalization:
+    object_keys: sorted_lexicographically_by_UTF8_bytes
+    arrays: preserve_declared_order
+    whitespace: none
+    strings: NFC
+    numbers: safe_integer_only
+    duplicate_keys: forbidden
+  exact_fields:
+    - schema_version
+    - package_name
+    - source_commit
+    - VCPToolBox_base_commit
+    - install_root
+    - file_inventory
+    - content_tree_sha256
+    - blocked_plugin_manifest_sha256
+    - direct_entrypoint_sha256
+  fixed_values:
+    schema_version: agents-os.external-package-manifest.v0.1
+    package_name: agents-os-resident
+    VCPToolBox_base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    install_root: Plugin/AGENTSOSResident
+    file_inventory: exact_planned_source_inventory
+  manifest_sha256_scope: exact_package_manifest_bytes
+
+blocked_plugin_manifest:
+  path: plugin-manifest.json.block
+  encoding: canonical_JSON_UTF8_no_BOM_no_trailing_newline
+  exact_value:
+    manifestVersion: 1.0.0
+    name: AGENTSOSResident
+    version: 0.0.0-m0a
+    displayName: AGENTS OS Resident (Blocked M0-A)
+    description: Synthetic-only blocked Phase 5A M0-A resident; not runtime usable.
+    author: Jenn
+    pluginType: hybridservice
+    entryPoint:
+      script: index.js
+    communication:
+      protocol: direct
+      timeout: 60000
+    capabilities:
+      systemPromptPlaceholders: []
+      invocationCommands: []
+  forbidden_fields:
+    - distributed
+    - service_port
+    - provider
+    - credentials
+    - configSchema
+
+direct_entrypoint:
+  path: index.js
+  module_system: CommonJS
+  imports_native_binary_from: ./agents-os-resident.linux-x64-gnu.node
+  native_binary_committed: false
+  exact_exports:
+    - initialize
+    - shutdown
+    - processToolCall
+  initialize_signature: async_initialize_config_dependencies
+  shutdown_signature: async_shutdown_no_arguments
+  processToolCall_signature: async_processToolCall_toolName_toolArgs_requestIp_optional
+  initialize_may_start_runtime: false
+  processMessages_exported: false
+  system_prompt_placeholder_exported: false
+  network_listener: forbidden
+  child_process: forbidden
+  direct_SQLite_access: forbidden
+  direct_provider_access: forbidden
+
+materialization_receipt:
+  schema: agents-os.external-materialization-receipt.v0.1
+  required_fields:
+    - source_commit
+    - package_manifest_sha256
+    - content_tree_sha256
+    - blocked_plugin_manifest_sha256
+    - direct_entrypoint_sha256
+    - VCPToolBox_base_commit
+    - install_root
+    - installed_tree_sha256
+    - tracked_core_diff_result
+    - overlay_path_validation_result
+  installed_tree_sha256_must_equal_content_tree_sha256: true
+
+clean_linked_worktree_validation:
+  preconditions:
+    - linked_worktree_HEAD_equals_VCPToolBox_base_commit
+    - git_status_before_materialization_is_empty
+  commands:
+    tracked_core_diff:
+      - git
+      - diff
+      - --exit-code
+      - 555b3b538f6eb736e530c2912de678c5941f9985
+      - --
+      - .
+      - ':(exclude)Plugin/AGENTSOSResident/**'
+    tracked_core_index_diff:
+      - git
+      - diff
+      - --cached
+      - --exit-code
+      - 555b3b538f6eb736e530c2912de678c5941f9985
+      - --
+      - .
+      - ':(exclude)Plugin/AGENTSOSResident/**'
+    untracked_paths:
+      - git
+      - status
+      - --porcelain=v1
+      - --untracked-files=all
+    projection_tree_validation: independent_materialization_validator_required
+  allowed_post_materialization_status_prefix: '?? Plugin/AGENTSOSResident/'
+  any_other_status_line: BLOCK
+
+excluded_outputs:
+  - node_modules/**
+  - target/**
+  - '*.node'
+  - '*.db'
+  - '*.db-journal'
+  - '*.db-wal'
+  - '*.db-shm'
+  - logs/**
+  - tmp/**
+  - .env
+  - .env.*
+  - credentials/**
+  - tokens/**
+  - state-private/**
+  - memory/**
+
+governance:
+  profile_authorizes_materialization: false
+  profile_authorizes_VCPToolBox_change: false
+  profile_authorizes_plugin_enablement: false
+  profile_authorizes_runtime_start: false
+  materialization_requires_separate_Jenn_implementation_decision: true

@@ -1,0 +1,137 @@
+schema_version: agents-os.m0a-validation-fault-injection-profile.v0.1
+profile_id: PHASE_5A_M0A_VALIDATION_AND_FAULT_INJECTION_PROFILE_V0_1
+date: 2026-07-19
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+test_environment:
+  profile: SYNTHETIC_TEST
+  network: forbidden
+  provider: forbidden
+  active_runtime_config: forbidden
+  production_credentials: forbidden
+  private_raw_memory: forbidden
+  state_private: forbidden
+  database: per_test_temporary_directory
+  VCPToolBox_server_start: forbidden
+  plugin_manifest_state: blocked
+  deterministic_clock_and_principals: required
+
+validation_layers:
+  - id: L1
+    name: canonical_primitives
+    required: true
+    cases:
+      - duplicate_JSON_keys_rejected
+      - float_NaN_Infinity_and_unsafe_integer_rejected
+      - non_NFC_string_rejected
+      - unknown_field_enum_type_and_nullability_rejected
+      - canonical_bytes_and_SHA256_match_fixed_vectors
+  - id: L2
+    name: reducer_semantics
+    required: true
+    cases:
+      - every_favorable_F1_F6_path
+      - every_closed_reason_and_precedence_path
+      - UNKNOWN_missing_stale_and_conflicting_inputs_fail_closed
+      - relationship_role_lane_or_history_never_changes_authority
+  - id: L3
+    name: singleton_and_NAPI
+    required: true
+    cases:
+      - two_process_lock_race_exactly_one_READY
+      - wrong_thread_and_second_connection_write_rejected
+      - five_methods_only
+      - frame_schema_and_request_response_correlation
+      - cleanup_hook_closes_connection_and_releases_lock
+  - id: L4
+    name: SQLite_atomicity
+    required: true
+    cases:
+      - current_state_Event_Inbox_Outbox_commit_together
+      - rollback_leaves_no_partial_rows_or_pointer_advance
+      - immutable_rows_cannot_be_updated
+      - foreign_key_and_unique_constraints_match_Rust_reducer
+  - id: L5
+    name: delivery_and_recovery
+    required: true
+    cases:
+      - accepted_then_lost_becomes_UNKNOWN
+      - UNKNOWN_no_automatic_retry
+      - exact_replay_returns_first_accounting
+      - restart_reconcile_creates_no_duplicate_effect
+  - id: L6
+    name: completion_boundary
+    required: true
+    cases:
+      - current_validation_disagreement_is_deterministic
+      - old_PASSED_does_not_mask_newer_FAILED_or_PENDING
+      - F5_receipt_alone_does_not_create_Validation_PASS
+      - completion_rechecks_candidate_requirements_dependencies_and_outbox_blocker_atomically
+  - id: L7
+    name: package_and_host_compatibility
+    required: true
+    cases:
+      - source_and_install_content_tree_hashes_match
+      - VCPToolBox_core_diff_is_zero
+      - blocked_manifest_is_not_discovered
+      - no_committed_binary_target_node_modules_database_or_log
+
+crash_matrix:
+  mechanism: subprocess_failpoint_and_forced_exit
+  failpoints:
+    - before_BEGIN_IMMEDIATE
+    - after_inbox_insert
+    - after_authority_recheck
+    - after_current_fact_insert_before_pointer_CAS
+    - after_pointer_CAS_before_Event
+    - after_Event_before_Outbox
+    - after_Outbox_before_COMMIT
+    - after_COMMIT_before_response
+    - after_claim_commit_before_mock_dispatch
+    - after_mock_accept_before_receipt
+    - after_receipt_before_ack_response
+  required_post_restart_invariants:
+    - quick_check_PASS
+    - foreign_key_check_empty
+    - no_partial_transaction_visible
+    - replay_returns_original_committed_result_when_commit_occurred
+    - uncommitted_command_can_be_submitted_once
+    - effect_occurrence_count_at_most_one
+    - ambiguous_dispatch_is_UNKNOWN
+    - UNKNOWN_not_requeued_automatically
+
+integrated_witness:
+  synthetic_goal_count: 1
+  synthetic_task_count: 3
+  real_task_count: 0
+  real_command_count: 0
+  mock_effect_count: 1
+  provider_call_count: 0
+  network_call_count: 0
+  private_memory_read_count: 0
+  sensing_or_recording_count: 0
+  runtime_activation_count: 0
+  expected_terminal_state: NOT_ACTIVATED
+  repeatability:
+    clean_run_count: 2
+    same_input_produces_same_canonical_Event_and_root_hashes: required
+    restart_run_produces_no_duplicate_effect: required
+
+acceptance:
+  all_layers_pass: required
+  all_crash_failpoints_pass: required
+  all_traceability_rows_covered: required
+  exceptions: 0
+  flaky_retry_to_obtain_PASS: forbidden
+  skipped_required_case: M0A_INCOMPLETE
+  favorable_result_with_unknown_input: forbidden
+  author_self_review_substitutes_for_independent_review: false
+
+non_authorization:
+  implementation_started: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_start_authorized: false
+  plugin_enablement_authorized: false
+  provider_or_effect_execution_authorized: false

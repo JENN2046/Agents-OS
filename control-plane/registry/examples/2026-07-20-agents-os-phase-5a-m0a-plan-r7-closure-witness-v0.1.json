@@ -1,0 +1,469 @@
+{
+  "boundary": {
+    "JavaScript_implementation_created": false,
+    "VCPToolBox_modified": false,
+    "database_file_created": false,
+    "dependency_installation_authorized": false,
+    "implementation_authorized": false,
+    "plan_frozen": false,
+    "plugin_enabled": false,
+    "private_Memory_read": false,
+    "production_authentication_authorized": false,
+    "provider_called": false,
+    "real_effect_occurrence_count": 0,
+    "runtime_usable": false,
+    "sensing_started": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "boundary_inventory": {
+    "inventory_sha256": "f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c",
+    "row_count": 56,
+    "rows": [
+      {
+        "expected_type": "string",
+        "expected_value": "NOT_EXECUTED",
+        "key": "terminal_outcome",
+        "pointer": "/closed_key_contract/exact_string_values/terminal_outcome",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "dependency_installation_authorized",
+        "pointer": "/governance/dependency_installation_authorized",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "plan_frozen",
+        "pointer": "/governance/plan_frozen",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "production_authentication_authorized",
+        "pointer": "/governance/production_authentication_authorized",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "boundary_inventory_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "initialized",
+        "pointer": "/effective_ABI_replacement/initialize/fixed_result/initialized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "inputs_forwarded",
+        "pointer": "/effective_ABI_replacement/initialize/inputs_forwarded",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "may_start_runtime",
+        "pointer": "/effective_ABI_replacement/initialize/may_start_runtime",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/fixed_future_wrapper/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "JavaScript_implementation_created",
+        "pointer": "/governance/JavaScript_implementation_created",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "VCPToolBox_modified",
+        "pointer": "/governance/VCPToolBox_modified",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": true,
+        "key": "actual_Plugin_js_owner_remains_R4_hash_bound",
+        "pointer": "/governance/actual_Plugin_js_owner_remains_R4_hash_bound",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "plugin_enabled",
+        "pointer": "/governance/plugin_enabled",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "database_file_created",
+        "pointer": "/governance/database_file_created",
+        "source": "persistence_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "persistence_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "persistence_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "persistence_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "persistence_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "creates_new_semantic_authority",
+        "pointer": "/governance/creates_new_semantic_authority",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "recomputes_F3_or_F5_authority",
+        "pointer": "/governance/recomputes_F3_or_F5_authority",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "VCPToolBox_modified",
+        "pointer": "/governance/VCPToolBox_modified",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "database_file_created",
+        "pointer": "/governance/database_file_created",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "plugin_enabled",
+        "pointer": "/governance/plugin_enabled",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "private_Memory_read",
+        "pointer": "/governance/private_Memory_read",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "provider_called",
+        "pointer": "/governance/provider_called",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "integer",
+        "expected_value": 0,
+        "key": "real_effect_occurrence_count",
+        "pointer": "/governance/real_effect_occurrence_count",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "sensing_started",
+        "pointer": "/governance/sensing_started",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "JavaScript_implementation_created",
+        "pointer": "/JavaScript_implementation_created",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "VCPToolBox_modified",
+        "pointer": "/VCPToolBox_modified",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "database_file_created",
+        "pointer": "/database_file_created",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "dependency_installation_authorized",
+        "pointer": "/dependency_installation_authorized",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "plan_frozen",
+        "pointer": "/plan_frozen",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "plugin_enabled",
+        "pointer": "/plugin_enabled",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "private_Memory_read",
+        "pointer": "/private_Memory_read",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "production_authentication_authorized",
+        "pointer": "/production_authentication_authorized",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "provider_called",
+        "pointer": "/provider_called",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "integer",
+        "expected_value": 0,
+        "key": "real_effect_occurrence_count",
+        "pointer": "/real_effect_occurrence_count",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "boolean",
+        "expected_value": false,
+        "key": "sensing_started",
+        "pointer": "/sensing_started",
+        "source": "witness_boundary_R7"
+      },
+      {
+        "expected_type": "string",
+        "expected_value": "NOT_EXECUTED",
+        "key": "terminal_outcome",
+        "pointer": "/terminal_outcome",
+        "source": "witness_boundary_R7"
+      }
+    ]
+  },
+  "expected_case_counts": {
+    "SQLite": 9,
+    "boundary": 62,
+    "total": 71
+  },
+  "f3_transition": {
+    "atomic_writes": [
+      "RESIDENT_READY_Event",
+      "READY_revision_2_fact",
+      "lifecycle_pointer_1_to_2"
+    ],
+    "authority_epoch": 1,
+    "direct_READY_revision_1_from_empty_history": "BLOCK",
+    "poststate": {
+      "canonical_bytes_utf8": "{\"authority_epoch\":1,\"lifecycle\":\"READY\",\"resident_id\":\"resident:A\"}",
+      "fact_ref": "resident-lifecycle:resident:A:2",
+      "fingerprint": "9588578d897631fdc18df1d6d61ad26a4609cc6d0221939c9e1a525c04370500",
+      "pointer_revision": 2,
+      "predecessor_fingerprint": "63bbf0f53bca3a12af5d072a57ac9102c63327c4d52fb5e04abaee6efc7f5ee6",
+      "predecessor_ref": "resident-lifecycle:resident:A:1",
+      "predecessor_revision": 1,
+      "revision": 2,
+      "state": "READY"
+    },
+    "prestate": {
+      "canonical_bytes_utf8": "{\"authority_epoch\":1,\"lifecycle\":\"RECOVERING\",\"resident_id\":\"resident:A\"}",
+      "fact_ref": "resident-lifecycle:resident:A:1",
+      "fingerprint": "63bbf0f53bca3a12af5d072a57ac9102c63327c4d52fb5e04abaee6efc7f5ee6",
+      "pointer_revision": 1,
+      "revision": 1,
+      "state": "RECOVERING"
+    },
+    "resident_id": "resident:A",
+    "rollback_preserves_revision": 1
+  },
+  "precedence": [
+    "R7_explicit_replacements",
+    "R6_all_other_clauses",
+    "R5_all_other_clauses",
+    "R4_all_other_clauses",
+    "R3_all_other_clauses",
+    "R2_all_other_clauses",
+    "R1_all_other_clauses"
+  ],
+  "profile_fingerprints": {
+    "boundary_inventory_R7": "d72a036f1ed9275abebd771ec5c0fd75ed37838e03343388dbdfe74c07ea2f97",
+    "materialization_ABI_R6": "5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e",
+    "persistence_R7": "b545a5182b1519a3f03634b29f91f1486a900a06d9f8bc5c7657007447091de5",
+    "semantic_owner_R7": "52fd5aad32d2ce7a31a918101191e03a6d2f9e5a93cac1581bb52ff0e11cf7a9",
+    "structured_input_totality_R6": "14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660"
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R7_ATOMIC_BUNDLE",
+  "schema_version": "agents-os.phase5a-m0a-plan-r7-closure-witness.v0.1"
+}

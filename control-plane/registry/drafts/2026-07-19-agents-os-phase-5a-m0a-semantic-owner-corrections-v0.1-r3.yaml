@@ -1,0 +1,134 @@
+schema_version: agents-os.m0a-semantic-owner-corrections.v0.1
+profile_id: PHASE_5A_M0A_SEMANTIC_OWNER_CORRECTIONS_R3
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+replacement_is_closed: true
+
+replacement_rows:
+  - obligation_id: F3_incarnation_and_authority_epoch
+    module_owner: resident/ledger_thread
+    reducer_or_boundary_owner: F3_resident_lifecycle_consumer
+    transaction_owner: resident_lifecycle_advance
+    persistence_owner: resident_incarnation+resident_authority_epoch+event+canonical_fact(RESIDENT_LIFECYCLE)+current_fact_pointer
+    invariant: immutable incarnation identity plus contiguous canonical lifecycle facts using only COLD_RECOVERING_READY_DRAINING_STOPPED_INDETERMINATE
+    positive_test: positive/F3_resident_lifecycle_contiguous_transition
+    negative_test: negative/F3_unknown_or_COMPROMISED_lifecycle_rejected
+    replay_test: replay/F3_exact_lifecycle_revision_replays
+    crash_test: crash/F3_lifecycle_fact_event_pointer_atomic
+  - obligation_id: F3_intake_and_event_atomicity
+    module_owner: reducers/command_intake
+    reducer_or_boundary_owner: F3_command_intake_reducer
+    transaction_owner: admitted_command_commit
+    persistence_owner: inbox_command+command_envelope+canonical_fact+current_fact_pointer+event+replay_index+optional_outbox_intent
+    invariant: admitted Command commits Inbox Envelope facts Current State Event replay and ledger-only intent all-or-zero
+    positive_test: positive/F3_admitted_command_single_transaction
+    negative_test: negative/F3_any_failed_owner_rolls_back_every_row
+    replay_test: replay/F3_committed_command_returns_first_atomic_result
+    crash_test: crash/F3_each_internal_write_boundary_commits_all_or_zero
+  - obligation_id: F3_exact_replay_or_conflict
+    module_owner: ledger/replay
+    reducer_or_boundary_owner: F3_command_replay_prebranch
+    transaction_owner: admitted_command_commit
+    persistence_owner: inbox_command+replay_index+event
+    invariant: request ID and canonical bytes determine exact replay or protocol conflict before new facts
+    positive_test: positive/F3_first_request_commits
+    negative_test: negative/F3_same_ID_different_bytes_conflict_zero_writes
+    replay_test: replay/F3_same_ID_same_bytes_returns_first_result
+    crash_test: crash/F3_response_loss_after_commit_replays_first_result
+  - obligation_id: F5_claim_lease_and_fencing
+    module_owner: reducers/outbox_claim
+    reducer_or_boundary_owner: F5_claim_lease_reducer
+    transaction_owner: outbox_claim
+    persistence_owner: outbox_claim+canonical_fact(OUTBOX_CLAIM_LEASE)+current_fact_pointer+event
+    invariant: UTC lease fact and claim epoch advance atomically and stale claimant cannot arm
+    positive_test: positive/F5_current_claim_and_lease
+    negative_test: negative/F5_expired_or_stale_claim_rejected
+    replay_test: replay/F5_exact_claim_revision_replays
+    crash_test: crash/F5_claim_lease_fact_pointer_atomic
+  - obligation_id: F5_receipt_compatibility_and_currentness
+    module_owner: reducers/delivery_receipt
+    reducer_or_boundary_owner: F5_receipt_currentness_reducer
+    transaction_owner: receipt_apply
+    persistence_owner: delivery_receipt(source_id_receipt_id)+canonical_fact+current_fact_pointer+event
+    invariant: receipt identity is source_id plus receipt_id and binds existing first-apply guard
+    positive_test: positive/F5_current_compatible_receipt
+    negative_test: negative/F5_cross_source_or_guard_mismatch_rejected
+    replay_test: replay/F5_exact_source_receipt_identity_replays
+    crash_test: crash/F5_receipt_fact_pointer_atomic
+  - obligation_id: F5_dispatch_arm_replay_and_identity_prebranch_check
+    module_owner: mock_host/dispatch
+    reducer_or_boundary_owner: F5_dispatch_arm_prebranch_reducer
+    transaction_owner: dispatch_arm_and_first_apply
+    persistence_owner: delivery_attempt+dispatch_arm+first_apply_guard+event
+    invariant: exact request identity is checked before branch and first-apply guard is acquired before any call
+    positive_test: positive/F5_first_arm_acquires_guard
+    negative_test: negative/F5_different_attempt_or_request_rejected_before_call
+    replay_test: replay/F5_exact_arm_returns_stored_first_tuple
+    crash_test: crash/F5_arm_commit_before_call_is_restart_safe
+  - obligation_id: F5_stored_first_Event_and_call_accounting
+    module_owner: ledger/replay
+    reducer_or_boundary_owner: F5_stored_first_accounting_reducer
+    transaction_owner: dispatch_arm_and_first_apply
+    persistence_owner: dispatch_arm(first_Event_ref_fingerprint_first_call_authorization_ref_fingerprint_committed_counts)
+    invariant: exact duplicate returns stored first Event and call-authorization identities and counts with zero additions
+    positive_test: positive/F5_first_accounting_persisted
+    negative_test: negative/F5_caller_supplied_previous_counts_rejected
+    replay_test: replay/F5_stored_first_accounting_exact
+    crash_test: crash/F5_lost_response_replays_stored_first_accounting
+  - obligation_id: F5_first_apply_eligibility_guard
+    module_owner: reducers/outbox_claim
+    reducer_or_boundary_owner: F5_first_apply_eligibility_reducer
+    transaction_owner: dispatch_arm_and_first_apply
+    persistence_owner: first_apply_guard(intent_id_winning_attempt_id_guard_fingerprint_acquired_Event)
+    invariant: one immutable winner per intent is committed before call and does not depend on receipt
+    positive_test: positive/F5_first_attempt_wins_before_call
+    negative_test: negative/F5_second_attempt_cannot_win
+    replay_test: replay/F5_winning_attempt_guard_replays
+    crash_test: crash/F5_guard_committed_call_not_started_restart_safe
+  - obligation_id: F6_Validation_Requirement_and_Validation_Set_revision_lineage
+    module_owner: reducers/validation_current_decision
+    reducer_or_boundary_owner: F6_lineage_consumer
+    transaction_owner: canonical_fact_advance
+    persistence_owner: canonical_fact+current_fact_pointer+event
+    invariant: same kind logical identity has one contiguous revision and exact predecessor tuple
+    positive_test: positive/F6_contiguous_unique_lineage
+    negative_test: negative/F6_branch_gap_cross_identity_predecessor_rejected
+    replay_test: replay/F6_same_revision_same_bytes_replays
+    crash_test: crash/F6_fact_pointer_Event_atomic
+  - obligation_id: F6_same_revision_immutable_history_anchor
+    module_owner: reducers/validation_current_decision
+    reducer_or_boundary_owner: F6_immutable_history_consumer
+    transaction_owner: canonical_fact_advance
+    persistence_owner: canonical_fact_unique_kind_logical_revision+exact_predecessor_foreign_key
+    invariant: same revision content rewrite is impossible and next revision binds exact previous fingerprint
+    positive_test: positive/F6_new_revision_exact_predecessor
+    negative_test: negative/F6_same_revision_resign_and_predecessor_substitution_rejected
+    replay_test: replay/F6_exact_fact_tuple_replays
+    crash_test: crash/F6_predecessor_and_successor_commit_atomic
+  - obligation_id: F6_atomic_Task_completion_eligibility_gate
+    module_owner: reducers/task_completion
+    reducer_or_boundary_owner: F6_completion_gate_reducer
+    transaction_owner: task_completion
+    persistence_owner: task_completion+canonical_fact(TASK_COMPLETION)+current_fact_pointer+event
+    invariant: task_ref equals completion logical identity and exact fact tuple while all current inputs are rechecked
+    positive_test: positive/F6_same_Task_completion
+    negative_test: negative/F6_cross_Task_completion_fact_rejected
+    replay_test: replay/F6_exact_completion_revision_replays
+    crash_test: crash/F6_completion_fact_pointer_Event_all_or_zero
+
+effective_inventory_rules:
+  base_inventory: R2_63_obligations
+  replace_exactly_these_obligation_ids: 11
+  add_obligation_ids: 0
+  remove_obligation_ids: 0
+  effective_obligation_count: 63
+  every_replacement_field_is_normative: true
+  nonempty_string_is_not_sufficient_without_semantic_match: true
+
+forbidden:
+  - split_admitted_command_success_across_transactions
+  - first_apply_guard_created_after_call_or_receipt
+  - caller_supplied_stored_first_accounting
+  - lineage_without_unique_contiguous_predecessor_binding

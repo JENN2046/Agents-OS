@@ -1,0 +1,60 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: phase-5a-m0a-plan-r4-author-self-review-v0.1
+date: 2026-07-19
+reviewer: Nobao_author_run
+independent: false
+review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+subject_count:
+  R1: 4
+  R2: 7
+  R3: 7
+  R4: 7
+  total: 25
+R4_subject_hashes:
+  amendment: 8ec541965cbd539ecc4b2ffe1f0bc1b6f1df2b8745d9460ea5e41b2daa1eab19
+  semantic_owner_corrections: cf8b24e8bd70831be2dff82c15980dd6303fa03641157ab08de2f12999e0b227
+  persistence_transaction_corrections: 57fb9503bae53eb5c376e59d104534e351c43b22c9ee679cc8b06c9c45a2453a
+  materialization_ABI_corrections: b33ac13cd69832f7cfb2e612fa411f54c533bad2246641aa8543fd1aa9f1be04
+  witness_builder: cd248b9b185b1fefc33b87a0e645340308c0ef694419d786c02429eded39bd5b
+  witness: 7a5e325c2fd92449462c015396a5eda819a3cd7283994e9ba9e77248e49fb866
+  offline_validator: 44e100c443338dd0d59d61204f29aac0dbdd4cb628add0a1ea55626eedcd894e
+R3_findings_author_disposition:
+  PHASE5A-M0A-PLAN-R3-IR-B01: CLOSED_CLAIMED
+  PHASE5A-M0A-PLAN-R3-IR-B02: CLOSED_CLAIMED
+  PHASE5A-M0A-PLAN-R3-IR-B03: CLOSED_CLAIMED
+author_validation:
+  R1_R2_R3_fixed_manifests: 3/3
+  semantic_owner_replacements: 6/6
+  effective_tables_materialized_in_memory: 18/18
+  R4_replacement_tables: 7/7
+  SQLite_cases: 10/10
+  SQLite_positive_cases: 3/3
+  SQLite_negative_cases: 7/7
+  fixed_mutations_rejected: 11/11
+  fixed_Plugin_js_sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+  builder_byte_reproduction: PASS
+  database_file_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED
+independent_review_must_attack:
+  - epoch_same_or_gap_or_fork_with_all_dependent_rows_resigned
+  - prior_epoch_fingerprint_and_previous_incarnation_cross_binding
+  - ownership_Event_substitution
+  - receipt_attempt_intent_claim_guard_coordinated_substitution
+  - dispatch_arm_request_ID_fingerprint_bytes_coordinated_substitution
+  - lease_fact_kind_and_logical_identity_substitution
+  - stored_first_counts_zero_or_multiple
+  - Plugin_js_owner_omission_or_wrong_commit
+  - arguments_1_or_context_alias_dataflow_into_native_frame
+  - requiresAdmin_or_decrypted_auth_path
+boundaries:
+  plan_frozen: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  Phase_5B_started: false
+  commit_push_merge_authorized: false
+next_gate: PHASE_5A_M0A_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

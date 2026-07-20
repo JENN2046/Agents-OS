@@ -1,0 +1,252 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: agents-os-phase-5a-m0a-plan-r2-full-atomic-independent-review-2026-07-19
+date: 2026-07-19
+
+reviewer:
+  identity: Codex_independent_subagent_phase5a_plan_r2_review
+  independence_basis:
+    - not_the_R1_or_R2_author_run
+    - did_not_participate_in_subject_creation
+    - reviewed_fixed_ZIP_bytes_from_scratch
+    - did_not_modify_workspace_subjects_governance_or_Git
+    - author_self_review_read_as_evidence_only
+
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 7
+  subject_count: 11
+
+result: BLOCK
+requires_R3: true
+
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  archive:
+    path: /tmp/2026-07-19-agents-os-phase-5a-m0a-plan-r2-independent-review-package-v0.1.zip
+    declared_sha256: a154cc9afe6c2d470a4d957da7ea092d80b0dc90ca0c0500d9650d13df62d520
+    computed_sha256: a154cc9afe6c2d470a4d957da7ea092d80b0dc90ca0c0500d9650d13df62d520
+    sha256_match: true
+    entry_count: 157
+    duplicate_paths: 0
+    absolute_or_traversal_or_backslash_paths: 0
+    symlinks: 0
+    CRC: PASS
+    checksums: 156/156_MATCH
+  manifest:
+    canonical_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    declared_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+    computed_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+    sha256_match: true
+  archive_map:
+    entries: 153
+    manifest_inputs: 153
+    matched: 153/153
+  full_reads:
+    subjects: 11/11
+    workspace_authority_inputs: 135/135
+    external_source_inputs: 6/6
+    author_evidence: 1/1
+    total: 153/153
+    bytes: 5965194
+    lines: 113134
+  canonical_F1_F6_subjects:
+    count: 110/110
+    hash_match: 110/110
+    fully_read: 110/110
+  fixed_VCP_git_objects:
+    repository: runtime/VCPToolBox_git_object_database_read_only
+    commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    commit_object_available: true
+    archive_files_equal_git_show: 6/6
+    working_tree_files_consumed_as_authority: false
+    VCPToolBox_files_modified_by_review: false
+
+fixed_validation:
+  no_git_offline_package: true
+  R2_semantic_closure: PASS
+  R2_fixed_mutations: 12/12_REJECTED
+  builder_byte_reproduction: PASS
+  YAML_and_JSON_parse: PASS
+  subject_trailing_whitespace: 0
+  fixed_command_categories: 5/5_PASS
+  validator_claims:
+    canonical_subjects: 110/110
+    obligations: 63
+    tables: 18
+    source_inventory: 41
+    terminal_outcome: NOT_EXECUTED
+  limitation: fixed_validation_proves_fixed_profile_self_consistency_not_cross_contract_semantic_consistency
+
+independent_consistency_cases:
+  case_count: 10
+  expected_boundary_passes: 1
+  reproducible_contract_contradictions: 9
+  case_results_path: /tmp/2026-07-19-phase5a-m0a-plan-r2-independent-case-results.json
+  case_results_sha256: f6a3122b41933a190b15c0b4fe2cff42204dc54e661b104469800a17dc6ea990
+  case_script_path: /tmp/phase5a_m0a_plan_r2_independent_cases.py
+  case_script_sha256: 1f0eca216136358354a0b3535dffa4138c6a43df355162448057780317dbb520
+
+finding_details:
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B01
+    severity: blocker
+    title: The_63_item_closed_obligation_inventory_contains_false_or_incomplete_persistence_ownership
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-closed-contract-obligation-inventory-v0.1-r2.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-exact-persistence-profile-v0.1-r2.yaml
+      - control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r2-amendment.draft.md
+      - control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r4-amendment.draft.md
+    evidence:
+      - >-
+        Frozen F3 R2 lines 409-412 requires one admitted-command transaction to commit context,
+        envelope, intake, replay, canonical domain facts, Current State, Event and any admitted
+        ledger-only intent. The R2 obligation at lines 1035-1047 assigns only
+        inbox_command+command_envelope+replay_index+event.
+      - >-
+        The exact persistence profile lines 300-309 makes command_intake,
+        canonical_fact_advance and outbox_enqueue three separate BEGIN IMMEDIATE transaction owners.
+        No single owner implements the atomic obligation claimed by the inventory.
+      - >-
+        Frozen F5 R4 lines 441-455 and 474-483 requires stored first call-authorization ref,
+        fingerprint and committed count. The dispatch_arm row at R2 persistence lines 177-189
+        contains none of those three fields, while the obligation claims exact ownership.
+    counterexample: >-
+      A conforming implementation can commit Inbox/replay/Event under command_intake and crash
+      before the separately owned canonical_fact/current-pointer or outbox transactions. It satisfies
+      the declared transaction-owner lists while violating the frozen F3 atomic result. Likewise an
+      implementation of the declared dispatch_arm columns cannot return the frozen stored first
+      call-authorization identity.
+    impact: >-
+      The 63 rows are not a closed executable mapping from the 110 canonical subjects. B01 is not
+      closed even though all owner fields are nonempty and all subject hashes match.
+    required_correction:
+      - Make each obligation owner semantically complete, not merely nonempty.
+      - Bind admitted F3 intake, canonical facts, Current State, Event and ledger-only intent to one transaction owner.
+      - Bind every F5 stored-first output to exact persisted fields and replay ownership.
+
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B02
+    severity: blocker
+    title: The_18_table_exact_persistence_and_crash_contract_is_internally_incompatible_with_frozen_F3_F5_F6_semantics
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-exact-persistence-profile-v0.1-r2.yaml
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml
+      - control-plane/registry/drafts/2026-07-16-agents-os-f3-resident-singleton-napi-identity-continuity-v0.1-r1.draft.md
+      - control-plane/registry/drafts/2026-07-17-agents-os-f5-outbox-delivery-recovery-v0.1-r6-amendment.draft.md
+      - control-plane/registry/drafts/2026-07-18-agents-os-f6-validation-requirement-current-decision-v0.1-r6-amendment.draft.md
+    evidence:
+      - >-
+        Frozen F3 lifecycle is COLD->RECOVERING->READY->DRAINING->STOPPED with INDETERMINATE.
+        R2 resident_incarnation.state permits STARTING, READY, STOPPED, COMPROMISED instead and the
+        table is declared immutable, so neither the frozen enum nor its transitions are representable.
+      - >-
+        Frozen F5 first-apply is decided at dispatch arm before the physical call and receipt.
+        R2 first_apply_guard requires a non-null winning_receipt_id and is written only by
+        receipt_apply, after a receipt exists.
+      - >-
+        canonical_fact permits two fact_ref values for one fact_kind/logical_id/revision and has no
+        predecessor FK, continuity or same-identity constraint. current_fact_pointer binds only
+        ref/revision, not kind/logical_id/fingerprint. These relations do not enforce frozen F6
+        unique contiguous lineage and exact current-head identity.
+      - >-
+        Immutable R1 fault profile lines 83-90 requires after_pointer_CAS_before_Event, while the
+        immediate Event foreign keys and R2 crash profile lines 323-331 require Event before pointer
+        CAS. The atomic R1+R2 subjects specify incompatible write orders.
+    counterexample: >-
+      The declared exact relations admit a current VALIDATION_SET pointer that references a
+      VALIDATION_REQUIREMENT fact, a completion row for one Task that references another Task's fact,
+      and a first-apply guard that pairs one intent with another attempt/receipt. Conversely, the
+      required first-apply guard cannot be inserted at the frozen pre-call arm boundary because its
+      receipt does not yet exist.
+    impact: >-
+      Two materially different implementations can satisfy the table names and transaction labels,
+      while the frozen lifecycle, lineage, first-apply and crash semantics cannot all be satisfied.
+      This directly prevents an exact implementation-plan freeze.
+    required_correction:
+      - Align the exact F3 lifecycle storage and transition ownership with the frozen lifecycle.
+      - Persist first-apply at the arm boundary without a future receipt dependency.
+      - Close fact predecessor, same-revision uniqueness, kind/logical identity, pointer fingerprint and Task bindings.
+      - Freeze one write order shared by the immutable R1 crash profile and R2 transaction model.
+
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B03
+    severity: blocker
+    title: External_materialization_still_has_two_non_equivalent_digest_and_entrypoint_interpretations
+    affected_subjects:
+      - control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-external-materialization-profile-v0.1-r2.yaml
+      - upstream/vcptoolbox/docs/PLUGIN_ECOSYSTEM.md
+    evidence:
+      - >-
+        content_tree_hash lines 90-103 explicitly excludes package-manifest.json. The receipt at
+        lines 180-193 requires installed_tree_sha256 to equal content_tree_sha256, but defines no
+        installed-tree inventory, exclusion set, leaf encoding, file-mode scope or treatment of the
+        package manifest.
+      - >-
+        The profile freezes the plugin export as processToolCall(toolName, toolArgs, requestIp).
+        The fixed VCP module examples export processToolCall(args); the three-argument signature in
+        the VCP document belongs to the outer Plugin manager method, not the plugin module example.
+    counterexample: >-
+      One materializer hashes the installed projection with the same package-manifest exclusion as
+      the source content tree; another hashes every installed regular file including the package
+      manifest. The profile gives no installed-tree algorithm to choose between them. Separately, an
+      index.js following the frozen three-argument module signature and one following the fixed VCP
+      one-argument module contract have different argument semantics while each can be defended from
+      one section of the current text.
+    impact: >-
+      WP0 still cannot produce one uniquely reproducible receipt and one uniquely compatible direct
+      entrypoint from the frozen plan. B03 is therefore not fully closed.
+    required_correction:
+      - Define installed_tree_sha256 with the exact same or explicitly different inventory and leaf algorithm.
+      - Distinguish the Plugin manager call signature from the plugin module export signature and freeze the VCP-compatible module ABI.
+
+confirmed_safe_boundaries:
+  second_permission_identity_Task_Command_or_host_authority_found: false
+  upstream_reducer_reimplementation_authorized: false
+  VCPToolBox_core_change_authorized: false
+  plugin_enablement_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_implementation_started: false
+  runtime_or_provider_started: false
+  private_memory_sensing_or_real_effect_found: false
+  automatic_plan_freeze_found: false
+  automatic_implementation_start_found: false
+
+governance:
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_or_effect_execution_authorized: false
+  commit_or_push_performed: false
+  next_gate: JENN_EXPLICIT_PHASE_5A_PLAN_R3_NARROW_CORRECTION_DECISION
+
+R3_scope_limit:
+  - obligation_owner_semantic_completeness_for_the_reproduced_F3_and_F5_gaps
+  - exact_persistence_transaction_lineage_lifecycle_first_apply_and_crash_order_closure
+  - installed_tree_digest_scope_and_VCP_direct_module_signature_closure
+
+forbidden_R3_expansion:
+  - Rust_or_JavaScript_implementation
+  - NAPI_build_or_dependency_installation
+  - database_creation
+  - VCPToolBox_materialization_change_or_start
+  - plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+
+terminal_disposition: >-
+  Package integrity, fixed commands and nonauthorization boundaries pass. The three R1 closure
+  surfaces remain semantically incomplete because the obligation ownership, exact persistence model
+  and materialization ABI/digest contract still admit non-equivalent implementations or contain
+  mutually unsatisfiable requirements. Phase 5A plan freeze and implementation remain forbidden.

@@ -1,0 +1,74 @@
+schema_version: agents-os.m0a-materialization-abi-corrections.v0.1
+profile_id: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R6
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R5
+
+fixed_future_wrapper:
+  path: control-plane/registry/examples/2026-07-19-agents-os-phase-5a-m0a-future-index-js-inherited-abi-wrapper-v0.1.js
+  sha256: 06517ae19cf58687eaf089ecc482e25bdc4333d7f0db784f699dd07bb5503774
+  classification: SYNTHETIC_PLAN_FIXTURE
+  runtime_usable: false
+
+effective_ABI_replacement:
+  exact_exports_in_order: [initialize, processToolCall, shutdown]
+  initialize:
+    async: true
+    parameters: [config, dependencies]
+    inputs_forwarded: false
+    may_start_runtime: false
+    fixed_result: {initialized: false}
+  processToolCall:
+    async: true
+    parameters: [args]
+    projected_fields: [commandRef, commandFingerprint, payload]
+    native_method: execute_command
+    native_argument_count: 1
+  shutdown:
+    async: true
+    parameters: []
+    fixed_result: {shutdown: true}
+  inherited_allowed_native_methods: [execute_command, execute_query, claim_outbox, acknowledge_outbox, reconcile]
+  sixth_native_method: forbidden
+  caller_selected_native_method: forbidden
+
+validator_contract:
+  validator_id: PHASE_5A_M0A_FUTURE_INDEX_JS_INHERITED_ABI_VALIDATOR_V0_1
+  parser_version: agents-os.javascript-closed-subset-ast.v0.2
+  exact_source_sha256_required: true
+  unsupported_syntax_result: BLOCK
+  unknown_token_result: BLOCK
+  unknown_flow_result: BLOCK
+  exact_exports_required: true
+  exact_execute_command_flow_required: true
+  forbidden_native_methods: [process]
+  forbidden_constructs: [second_formal, arguments, rest_parameter, context_alias, closure_capture, object_spread, computed_property, helper_call, dynamic_call, eval, Function_constructor, extra_export]
+
+fixed_source_cases:
+  positive:
+    - exact_inherited_ABI_wrapper
+  negative:
+    - residentNative_process_sixth_method
+    - missing_initialize_export
+    - missing_shutdown_export
+    - reordered_exports
+    - second_processToolCall_parameter
+    - arguments_access
+    - context_alias
+    - object_spread
+    - computed_property
+    - helper_call
+    - extra_native_argument
+    - runtime_start_in_initialize
+    - forwarded_initialize_input
+    - extra_export
+
+governance:
+  actual_Plugin_js_owner_remains_R4_hash_bound: true
+  VCPToolBox_modified: false
+  JavaScript_implementation_created: false
+  plugin_enabled: false
+  runtime_usable: false
+  implementation_authorized: false

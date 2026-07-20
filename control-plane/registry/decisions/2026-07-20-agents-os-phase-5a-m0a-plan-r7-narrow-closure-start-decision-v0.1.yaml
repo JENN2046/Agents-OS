@@ -1,0 +1,53 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5A_M0A_PLAN_R7_NARROW_CLOSURE_START_DECISION_V0_1
+date: 2026-07-20
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5A_M0A_PLAN_R7_STRICT_SCOPE
+authorization_basis:
+  Jenn_exact_text: 启动 R7
+  received_in_current_session: true
+bound_inputs:
+  R6_manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r6-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  R6_independent_review:
+    path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r6-full-atomic-independent-review.yaml
+    sha256: 6b6d890d8656e920b564d192eb0fc508c4ecdc2ab6449cec3aa5efa662ea3336
+  R6_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r6-finding-disposition-v0.1.yaml
+    sha256: f0354a9466e098c3c55173c43c68047c427bd5d92eb89486d78f8c72cf49fafd
+strict_scope:
+  - complete_nonauthorization_boundary_flag_semantic_inventory
+  - actual_F3_RECOVERING_revision_1_to_READY_revision_2_transition
+required_regressions:
+  - every_normative_boundary_boolean_is_inventory_derived_and_strict_false
+  - fully_rebuilt_profile_and_witness_with_any_true_boundary_is_rejected
+  - prestate_contains_immutable_RECOVERING_revision_1_and_current_pointer
+  - READY_is_revision_2_with_exact_RECOVERING_predecessor
+  - current_pointer_advances_revision_1_to_revision_2
+  - READY_Event_fact_pointer_commit_is_all_or_zero
+  - direct_READY_revision_1_from_empty_lifecycle_history_is_rejected
+immutable_lineage:
+  R1_R2_R3_R4_R5_R6_subjects_may_change: false
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+stop_condition:
+  - create_R7_contract_fixture_validator_author_self_review_and_hash_bound_package
+  - stop_at_fresh_full_atomic_independent_review
+forbidden:
+  - plan_freeze
+  - implementation_start
+  - Rust_JavaScript_NAPI_or_SQLite_implementation
+  - database_file_creation_or_write
+  - dependency_installation
+  - VCPToolBox_change_start_or_plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - provider_private_memory_sensing_or_real_effect
+  - Phase_5B_semantics
+  - commit_push_or_merge

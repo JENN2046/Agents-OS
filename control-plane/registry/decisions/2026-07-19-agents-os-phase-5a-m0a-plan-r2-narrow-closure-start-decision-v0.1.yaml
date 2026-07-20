@@ -1,0 +1,59 @@
+schema_version: agents-os.start-decision-record.v0.1
+record_id: agents-os-phase-5a-m0a-plan-r2-narrow-closure-start-decision-v0.1
+record_type: StartDecisionRecord
+status: active
+immutable: true
+created_at: '2026-07-19T23:30:00+08:00'
+effective_at: '2026-07-19T23:30:00+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision_source: current_conversation_explicit_narrow_R2_start
+  exact_text: >-
+    启动窄范围 Plan R2，关闭上述三个 plan-freeze blocker；不能开始 Rust、N-API、SQLite 或插件实现。
+R1_binding:
+  manifest_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  independent_review_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-full-atomic-independent-review.yaml
+  independent_review_sha256: 68d0fd5a5c6abb63c9b59fec980596aa9bb34adc566115f7cffa1ae9fb02ab48
+  result: BLOCK
+authorized_scope:
+  - complete_hash_bound_F1_F6_canonical_subject_and_clause_ownership_inventory
+  - exhaustive_SQLite_row_class_transaction_and_crash_window_ownership
+  - exact_external_package_materialization_blocked_manifest_and_direct_entrypoint_contract
+  - deterministic_offline_witness_validator_author_self_review_and_hash_bound_review_package
+required_outputs:
+  - R2_normative_amendment
+  - R2_contract_obligation_inventory
+  - R2_exact_persistence_profile
+  - R2_external_materialization_profile
+  - R2_deterministic_closure_witness_builder
+  - R2_closure_witness
+  - R2_offline_validator
+  - R2_author_self_review
+  - R1_R2_atomic_manifest_and_downloadable_review_ZIP
+hard_boundaries:
+  R1_subjects_and_manifest_immutable: true
+  Rust_or_JavaScript_implementation: forbidden
+  NAPI_native_module_build: forbidden
+  dependency_or_toolchain_installation: forbidden
+  SQLite_database_creation: forbidden
+  VCPToolBox_core_or_plugin_tree_change: forbidden
+  VCPToolBox_start_or_plugin_enablement: forbidden
+  runtime_activation: forbidden
+  production_authentication: forbidden
+  provider_private_memory_sensing_or_real_effect: forbidden
+  Phase_5B_semantics: forbidden
+effects:
+  Phase_5A_started: true
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_R2_started: true
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  commit_or_push_authorized_by_this_decision: false
+next_gate:
+  name: PHASE_5A_M0A_PLAN_R2_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_progression: forbidden

@@ -1,0 +1,92 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r5-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: R5_BLOCK_RECONCILED_R6_DECISION_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r5-full-atomic-independent-review.yaml
+  sha256: 63dea5223d92cfb4c748c125f445970eb87a7e4090fd8e864d937f58b81dc92d
+  result: BLOCK
+  findings: {blocker: 6, major: 0, minor: 0, unresolved: 0}
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  R5_subject_count: 8
+  total_subject_count: 33
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B01
+    source_id: B1_F5_authorization_subject_and_replay_identity_gap
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: F5_exact_authorization_subject_and_replay_identity_binding
+    required_regressions:
+      - dispatch_arm_binds_exact_authorization_subject_ref_and_revision
+      - mismatched_delivery_attempt_and_authorization_subject_rejected
+      - replay_returns_exact_stored_identities
+      - replay_additional_Event_and_call_counts_equal_zero
+      - declared_replay_identity_substitution_case_is_actually_executed
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B02
+    source_id: B2_F3_witness_commit_content_and_tuple_gap
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: F3_frozen_COMMIT_content_hash_tuple_and_READY_transition_validation
+    required_regressions:
+      - witness_canonical_bytes_digest_equals_fact_fingerprint
+      - reservation_epoch_incarnation_and_ownership_sequence_tuple_exact
+      - mismatched_graph_local_witness_label_rejected
+      - RECOVERING_to_READY_writes_are_exercised
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B03
+    source_id: B3_R5_wrapper_inherited_ABI_inconsistency
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: inherited_NAPI_method_and_export_surface_consistency
+    required_regressions:
+      - wrapper_calls_only_the_effective_allowed_native_method_set
+      - effective_initialize_processToolCall_shutdown_exports_are_explicit
+      - no_undeclared_sixth_native_method
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B04
+    source_id: B4_boundary_flags_not_semantically_closed
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: nonauthorization_boundary_flags_semantic_enforcement
+    required_regressions:
+      - runtime_usable_true_rejected
+      - implementation_authorized_true_rejected
+      - VCPToolBox_modified_true_rejected
+      - JavaScript_implementation_created_true_rejected
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B05
+    source_id: B5_same_revision_rewrite_not_relationally_rejected
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: same_revision_relational_immutability
+    required_regressions:
+      - canonical_fact_same_revision_content_update_rejected
+      - coordinated_pointer_update_does_not_enable_rewrite
+      - append_new_revision_with_exact_predecessor_remains_constructible
+  - finding_id: PHASE5A-M0A-PLAN-R5-IR-B06
+    source_id: B6_duplicate_key_totality_gap
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R6
+    closure_scope: duplicate_key_rejecting_structured_input_totality
+    required_regressions:
+      - duplicate_YAML_key_rejected_before_semantic_validation
+      - duplicate_JSON_key_rejected_before_semantic_validation
+      - no_last_key_wins_authority_or_boundary_field
+governance:
+  R6_started: false
+  R6_requires_Jenn_explicit_start: true
+  R6_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

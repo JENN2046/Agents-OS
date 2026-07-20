@@ -1,0 +1,178 @@
+schema_version: agents-os.m0a-build-profile.v0.1
+profile_id: PHASE_5A_M0A_DETERMINISTIC_ORCHESTRATOR_BUILD_PROFILE_V0_1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+source:
+  authority_root: extensions/agents-os-resident
+  ownership: JENN_OWNED_EXTERNAL_SOURCE_PACKAGE
+  install_target: Plugin/AGENTSOSResident
+  install_target_is_source_of_truth: false
+  VCPToolBox_repository: lioensky/VCPToolBox
+  VCPToolBox_base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  clean_linked_worktree_required: true
+  current_dirty_runtime_worktree_must_remain_untouched: true
+  public_fork_push: forbidden
+
+installation:
+  manifest_filename: plugin-manifest.json.block
+  enabled_manifest_forbidden: true
+  plugin_type: hybridservice
+  communication_protocol: direct
+  separate_daemon: false
+  network_listener: false
+  VCPToolBox_core_diff_expected: zero
+  copied_tree_must_bind:
+    - source_commit
+    - package_manifest_sha256
+    - content_tree_sha256
+  excluded_outputs:
+    - node_modules
+    - target
+    - native_node_binary
+    - SQLite_database
+    - test_temporary_files
+    - logs
+    - credentials
+
+toolchain:
+  rust:
+    version: 1.96.1
+    edition: "2024"
+    profile: exact_project_local_rust_toolchain_toml
+    unsafe_code_in_our_crate: forbidden
+    panic: unwind
+  node:
+    version: 22.23.1
+  npm:
+    version: 10.9.8
+  napi_cli:
+    package: "@napi-rs/cli"
+    version: 3.7.3
+
+rust_dependencies:
+  napi: {version: 3.10.5}
+  napi_derive: {package: napi-derive, version: 3.5.10}
+  napi_build: {package: napi-build, version: 2.3.2, kind: build}
+  rusqlite: {version: 0.40.1, features: [bundled, backup]}
+  serde: {version: 1.0.229, features: [derive]}
+  serde_json: {version: 1.0.150}
+  thiserror: {version: 2.0.19}
+  sha2: {version: 0.11.0}
+  unicode_normalization: {package: unicode-normalization, version: 0.1.25}
+  fs4: {version: 1.1.0}
+  tempfile: {version: 3.27.0, kind: dev}
+  transitive_resolution: exact_Cargo_lock_required
+
+forbidden_dependencies_and_transports:
+  - tokio
+  - axum
+  - sqlx
+  - HTTP
+  - gRPC
+  - stdio_IPC
+  - external_Rust_daemon
+  - second_supervisor
+  - second_SQLite_connection
+
+napi:
+  frame_encoding: canonical_UTF8_JSON
+  request_schema: agents-os.napi-request-frame.v0.1
+  response_schema: agents-os.napi-response-frame.v0.1
+  methods:
+    - execute_command
+    - execute_query
+    - claim_outbox
+    - acknowledge_outbox
+    - reconcile
+  sixth_method: forbidden
+  JavaScript_direct_SQL_or_database_handle: forbidden
+  callbacks_or_executable_objects_in_frames: forbidden
+  filesystem_paths_in_frames: forbidden
+  credentials_or_provider_handles_in_frames: forbidden
+  ledger_thread_owns_all_reducer_and_SQL_execution: true
+  node_environment_cleanup_hook_required: true
+
+concurrency:
+  process_kernel_handles: 1
+  OS_exclusive_resident_lock: required
+  Rust_ledger_threads: 1
+  authoritative_SQLite_connections: 1
+  read_pool: forbidden
+  JavaScript_database_access: forbidden
+  transaction_may_await_JavaScript_or_external_IO: false
+  wrong_thread_write_result: REJECTED
+  duplicate_writer_result: NOT_READY
+
+sqlite:
+  location: synthetic_test_temporary_directory_only
+  caller_path_in_NAPI_frame: forbidden
+  begin_mode: IMMEDIATE
+  journal_mode: DELETE
+  synchronous: EXTRA
+  foreign_keys: true
+  busy_retry: forbidden
+  schema_versions: [0, 1]
+  production_migration: forbidden
+  tables:
+    - schema_metadata
+    - resident_identity
+    - resident_incarnation
+    - resident_authority_epoch
+    - command_definition
+    - inbox_command
+    - command_envelope
+    - replay_index
+    - event
+    - current_fact_pointer
+    - outbox_intent
+    - outbox_claim
+    - delivery_receipt
+    - validation_decision
+    - task_completion
+  immutable_row_classes:
+    - command_envelope
+    - event
+    - outbox_intent
+    - delivery_receipt
+    - validation_decision
+    - task_completion
+  current_pointer_update: compare_and_set_in_same_transaction_as_event
+
+synthetic_profile:
+  environment: SYNTHETIC_TEST
+  production_domain_compatible: false
+  deterministic_test_principals_only: true
+  synthetic_credentials_only: true
+  active_host_identity: forbidden
+  active_Jenn_credential: forbidden
+  real_Task_or_Command: forbidden
+  private_memory: forbidden
+  provider_call: forbidden
+  real_effect: forbidden
+  command_type_ids:
+    - M0_SYNTHETIC_CREATE_GOAL_AND_TASKS
+    - M0_SYNTHETIC_RECORD_VALIDATION
+    - M0_SYNTHETIC_ENQUEUE_MOCK_EFFECT
+    - M0_SYNTHETIC_COMPLETE_TASK
+
+build_outputs:
+  commit_native_binary: false
+  commit_target_directory: false
+  commit_node_modules: false
+  debug_build_for_tests: permitted_after_implementation_start
+  release_build_for_offline_validation: permitted_after_implementation_start
+  cross_platform_release: deferred
+  M0_target: x86_64_unknown_linux_gnu
+
+authorization:
+  this_profile_authorizes_implementation: false
+  this_profile_authorizes_dependency_installation: false
+  this_profile_authorizes_database_creation: false
+  this_profile_authorizes_VCPToolBox_start: false
+  this_profile_authorizes_plugin_enablement: false
+  this_profile_authorizes_runtime_activation: false
+  implementation_requires_separate_Jenn_decision_after_atomic_freeze: true

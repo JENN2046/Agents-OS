@@ -1,0 +1,189 @@
+{
+  "schema_version": "AGENTS_OS_INDEPENDENT_CASE_RESULTS_V0_1",
+  "review_id": "PHASE_5A_M0A_PLAN_R7_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW_CODEX_2026_07_20",
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R7_ATOMIC_BUNDLE",
+  "result": "BLOCK",
+  "package_binding": {
+    "zip_filename": "2026-07-20-agents-os-phase-5a-m0a-plan-r7-independent-review-package-v0.1.zip",
+    "zip_sha256_declared": "b7f421b99e031182414ab429ee6421c125be7d11865e321969940d549b06d92a",
+    "zip_sha256_recomputed": "b7f421b99e031182414ab429ee6421c125be7d11865e321969940d549b06d92a",
+    "manifest_filename": "MANIFEST.yaml",
+    "manifest_sha256_declared": "d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299",
+    "manifest_sha256_recomputed": "d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299"
+  },
+  "package_integrity": {
+    "zip_entries": 224,
+    "zip_crc": "PASS",
+    "unsafe_paths": 0,
+    "duplicate_archive_members": 0,
+    "symlink_members": 0,
+    "checksums_sha256": {
+      "rows": 223,
+      "malformed_rows": 0,
+      "missing_payloads": 0,
+      "hash_mismatches": 0,
+      "unlisted_payloads": 0,
+      "result": "PASS"
+    },
+    "archive_map": {
+      "input_count": 220,
+      "archive_path_duplicates": 0,
+      "manifest_path_duplicates": 0,
+      "missing_entries": 0,
+      "byte_count_mismatches": 0,
+      "sha256_mismatches": 0,
+      "result": "PASS"
+    },
+    "extracted_without_dot_git": true
+  },
+  "manifest_inputs": {
+    "subjects": {
+      "declared": 49,
+      "sha256_matched": 49,
+      "content_bytes_read": 49
+    },
+    "authority_inputs": {
+      "declared": 163,
+      "sha256_matched": 163,
+      "content_bytes_read": 163
+    },
+    "author_evidence": {
+      "declared": 1,
+      "sha256_matched": 1,
+      "content_bytes_read": 1,
+      "used_as_review_conclusion": false
+    },
+    "external_source_inputs": {
+      "declared": 7,
+      "sealed_content_sha256_matched": 7,
+      "declared_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+      "git_repository_object_membership": "NOT_PROVABLE_FROM_DOT_GIT_FREE_SEALED_ARCHIVE"
+    },
+    "total": {
+      "declared": 220,
+      "sha256_matched": 220,
+      "content_bytes_read": 220
+    }
+  },
+  "fixed_command_results": [
+    {
+      "id": "R5_fixed_lineage_closure",
+      "result": "PASS_NO_BLOCKER",
+      "self_test_mutations": 7
+    },
+    {
+      "id": "R6_six_finding_closure",
+      "result": "PASS_NO_BLOCKER",
+      "sqlite_cases": "13/13",
+      "fixed_case_count": 35,
+      "self_test_mutations": 11
+    },
+    {
+      "id": "R6_builder_byte_reproduction",
+      "result": "PASS",
+      "cmp": "IDENTICAL"
+    },
+    {
+      "id": "R7_two_finding_closure",
+      "result": "PASS_NO_BLOCKER",
+      "sqlite_cases": "9/9",
+      "boundary_inventory_rows": "56/56",
+      "boundary_inventory_sha256": "f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c",
+      "fixed_case_count": 71,
+      "self_test_mutations": 62
+    },
+    {
+      "id": "R7_builder_byte_reproduction",
+      "result": "PASS",
+      "cmp": "IDENTICAL"
+    },
+    {
+      "id": "R1_R2_R3_R4_R5_R6_fixed_lineage",
+      "result": "PASS_BY_DECLARED_COVERAGE",
+      "covered_by": [
+        "R5_fixed_lineage_closure",
+        "R6_six_finding_closure"
+      ]
+    },
+    {
+      "id": "no_trailing_whitespace_in_49_subjects",
+      "result": "PASS",
+      "subjects_scanned": 49,
+      "violations": 0
+    }
+  ],
+  "independent_cases": [
+    {
+      "case_id": "PHASE5A_R7_IR_B01",
+      "candidate": "A",
+      "title": "implementation_frozen bypasses the claimed closed boundary key contract",
+      "method": [
+        "Copied only the sealed workspace to an isolated temporary directory.",
+        "Added implementation_frozen: true to the R7 semantic-owner profile.",
+        "Rebuilt the R7 witness from that modified profile so the semantic-owner profile SHA-256 and witness were internally consistent.",
+        "Ran the R7 validator with the rebuilt witness and --self-test."
+      ],
+      "relevant_validator_logic": {
+        "unknown_key_classifier": "Only unclassified keys ending in _authorized, _usable, _modified, _created, _enabled, _called, _read, _started, _allowed, _permission, _authority, ending in _occurrence_count, or named terminal_outcome are rejected.",
+        "missing_classification": "implementation_frozen does not match any rejected suffix.",
+        "r7_owner_profile_hash_is_fixed_input": false
+      },
+      "observed": {
+        "rebuilt_semantic_owner_profile_sha256": "32a066d301e7a700df841108bc4b818cde4333edb4db50359c516e3d10c9803a",
+        "boundary_inventory_rows": "56/56",
+        "boundary_inventory_sha256": "f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c",
+        "implementation_frozen_in_inventory": false,
+        "validator_result": "PASS_NO_BLOCKER",
+        "validator_errors": []
+      },
+      "required_disposition": "BLOCK",
+      "actual_disposition": "ACCEPTED_BY_VALIDATOR",
+      "finding": "BLOCKER_CONFIRMED",
+      "impact": "R7 does not establish a complete plan-only boundary inventory. A newly introduced effective boundary field can be set true and survive a fully rebuilt profile/witness chain without rejection."
+    },
+    {
+      "case_id": "PHASE5A_R7_IR_B02",
+      "candidate": "B",
+      "title": "RECOVERING prestate violates inherited ownership-event binding and is accepted before READY revision 2 commit",
+      "method": [
+        "Read the frozen R5 F3_RECOVERING_startup exact shared bindings.",
+        "Constructed the R7 transition prestate with the packaged R7 validator functions.",
+        "Read the ownership Event sequence, RECOVERING canonical-fact created_event_sequence, and lifecycle current-pointer updated_event_sequence.",
+        "Called valid_recovering and commit_ready against that prestate."
+      ],
+      "inherited_contract": {
+        "source": "R5 persistence transaction corrections, F3_RECOVERING_startup.exact_shared_bindings",
+        "required": [
+          "RECOVERING_fact.created_event_sequence_equals_ownership_Event_sequence",
+          "current_pointer.updated_event_sequence_equals_ownership_Event_sequence"
+        ]
+      },
+      "observed": {
+        "ownership_event_sequence": 1,
+        "recovering_fact_created_event_sequence": 2,
+        "current_pointer_updated_event_sequence": 2,
+        "valid_recovering": true,
+        "commit_ready": true,
+        "full_r7_fixed_validator": "PASS_NO_BLOCKER"
+      },
+      "required_disposition": "BLOCK",
+      "actual_disposition": "ACCEPTED_BY_VALIDATOR_AND_COMMITTED_TO_READY_REVISION_2",
+      "finding": "BLOCKER_CONFIRMED",
+      "impact": "The claimed exact RECOVERING revision 1 predecessor is not tied to the inherited F3 ownership Event tuple. R7 can commit READY revision 2 from a prestate that violates the frozen R5 provenance condition."
+    }
+  ],
+  "atomic_decision": {
+    "accepted": false,
+    "frozen": false,
+    "implementation_started": false,
+    "partial_acceptance": false,
+    "reason": "Two independently reproduced blockers invalidate both stated R7 closure claims."
+  },
+  "reviewer_actions": {
+    "workspace_modified": false,
+    "package_subjects_modified": false,
+    "manifest_modified": false,
+    "queue_registry_or_git_modified": false,
+    "runtime_database_provider_or_real_effect_started": false
+  }
+}

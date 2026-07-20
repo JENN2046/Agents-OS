@@ -1,0 +1,53 @@
+schema_version: agents-os.m0a-boundary-inventory.v0.1
+profile_id: PHASE_5A_M0A_BOUNDARY_INVENTORY_R7
+date: '2026-07-20'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+source_aliases_in_order:
+  - semantic_owner_R7
+  - persistence_R7
+  - materialization_ABI_R6
+  - structured_input_totality_R6
+  - boundary_inventory_R7
+  - witness_boundary_R7
+closed_key_contract:
+  strict_false_boolean_keys:
+    - runtime_usable
+    - implementation_authorized
+    - database_file_created
+    - VCPToolBox_modified
+    - JavaScript_implementation_created
+    - plugin_enabled
+    - provider_called
+    - private_Memory_read
+    - sensing_started
+    - creates_new_semantic_authority
+    - recomputes_F3_or_F5_authority
+    - inputs_forwarded
+    - may_start_runtime
+    - initialized
+    - plan_frozen
+    - dependency_installation_authorized
+    - production_authentication_authorized
+  strict_true_boolean_keys:
+    - actual_Plugin_js_owner_remains_R4_hash_bound
+  strict_zero_integer_keys:
+    - real_effect_occurrence_count
+  exact_string_values:
+    terminal_outcome: NOT_EXECUTED
+derivation:
+  traversal: recursive_mapping_and_sequence_JSON_Pointer
+  rows: source_alias+pointer+key+expected_type+expected_value
+  ordering: source_alias_order_then_pointer_UTF8_lexicographic
+  fingerprint: SHA256_of_canonical_JSON_rows
+  expected_inventory_sha256: f99df49b82052bd1a515599b5b8e86f45d0428367b100308fa9c7c718c9ff09c
+  unknown_boundary_key_result: BLOCK
+  missing_or_additional_inventory_row_result: BLOCK
+  favorable_or_wrong_type_value_result: BLOCK
+governance:
+  plan_frozen: false
+  runtime_usable: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  production_authentication_authorized: false

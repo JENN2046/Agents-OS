@@ -1,0 +1,55 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r1-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: R1_BLOCK_ACCEPTED_R2_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-full-atomic-independent-review.yaml
+  sha256: 68d0fd5a5c6abb63c9b59fec980596aa9bb34adc566115f7cffa1ae9fb02ab48
+  result: BLOCK
+  blocker_count: 3
+  major_count: 0
+  minor_count: 0
+R1_immutable:
+  manifest:
+    path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  subjects:
+    - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-implementation-plan-v0.1.md
+      sha256: 40b8aa4b745d0262369bbefeac3a12367df99e56c67a62e2ba3b208404acc94f
+    - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-build-profile-v0.1.yaml
+      sha256: e6f2d4e6fea62453a4ecb290e15f48c862a0bc55c829d26e106cae7eaf5f7868
+    - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-contract-traceability-matrix-v0.1.yaml
+      sha256: 85a333265336050223f01c30690e8964bd8870c815a6970ecbf8a9c6e417f612
+    - path: control-plane/registry/drafts/2026-07-19-agents-os-phase-5a-m0a-validation-fault-injection-profile-v0.1.yaml
+      sha256: 3ff0536cb55b44cd3fabcfac981f3aaed02ea13f125791d5ad7e1e219545858e
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-IR-B01
+    disposition: ACCEPTED_FOR_NARROW_R2
+    closure_subjects:
+      - R2_normative_amendment
+      - R2_contract_obligation_inventory
+      - R2_closure_witness
+      - R2_offline_validator
+  - finding_id: PHASE5A-M0A-PLAN-IR-B02
+    disposition: ACCEPTED_FOR_NARROW_R2
+    closure_subjects:
+      - R2_normative_amendment
+      - R2_exact_persistence_profile
+      - R2_closure_witness
+      - R2_offline_validator
+  - finding_id: PHASE5A-M0A-PLAN-IR-B03
+    disposition: ACCEPTED_FOR_NARROW_R2
+    closure_subjects:
+      - R2_normative_amendment
+      - R2_external_materialization_profile
+      - R2_closure_witness
+      - R2_offline_validator
+governance:
+  R1_partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  R2_may_modify_R1_bytes: false
+  Phase_5B_started: false
+

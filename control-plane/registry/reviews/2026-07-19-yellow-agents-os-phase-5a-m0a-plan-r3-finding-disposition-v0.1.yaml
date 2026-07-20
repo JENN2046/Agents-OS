@@ -1,0 +1,58 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r3-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: R3_BLOCK_RECONCILED_R4_DECISION_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r3-full-atomic-independent-review.yaml
+  sha256: 961236bccb73f423346023d331908929673d84aa3da7989985cf61c00260e673
+  result: BLOCK
+  findings: {blocker: 3, major: 0, minor: 0, unresolved: 0}
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  total_subject_count: 18
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R4
+    closure_scope: F3_incarnation_authority_epoch_exact_persistence_and_transaction_owner
+    required_regressions:
+      - valid_restart_incarnation_and_exact_next_epoch
+      - epoch_gap_and_fork_rejected
+      - wrong_incarnation_rejected
+      - missing_ownership_Event_rejected
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R4
+    closure_scope: F5_exact_cross_table_binding_and_stored_first_accounting
+    required_regressions:
+      - receipt_guard_cross_intent_rejected
+      - dispatch_arm_request_mismatch_rejected
+      - unrelated_claim_lease_fact_rejected
+      - first_apply_counts_must_equal_one
+  - finding_id: PHASE5A-M0A-PLAN-R3-IR-B03
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R4
+    closure_scope: actual_VCP_manager_to_module_directContext_projection
+    required_regressions:
+      - bind_fixed_Plugin_js_owner_bytes
+      - model_actual_two_value_manager_invocation
+      - prove_directContext_is_nonauthority_and_not_forwarded_to_native_or_reducers
+governance:
+  R4_started: false
+  R4_requires_Jenn_explicit_start: true
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

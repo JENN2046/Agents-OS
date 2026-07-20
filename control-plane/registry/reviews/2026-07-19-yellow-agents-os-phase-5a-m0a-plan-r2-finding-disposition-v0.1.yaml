@@ -1,0 +1,33 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r2-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: R2_BLOCK_ACCEPTED_R3_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r2-full-atomic-independent-review.yaml
+  sha256: 7d8b6305a469aa1153cb74d61c385065528dfd546b9019279f1f219fe1462dad
+  result: BLOCK
+  findings: {blocker: 3, major: 0, minor: 0, unresolved: 0}
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R1_subject_count: 4
+  R2_subject_count: 7
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B01
+    disposition: ACCEPTED_FOR_NARROW_R3
+    closure: obligation_owner_semantic_completeness
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B02
+    disposition: ACCEPTED_FOR_NARROW_R3
+    closure: persistence_transaction_lineage_lifecycle_first_apply_and_crash_order
+  - finding_id: PHASE5A-M0A-PLAN-R2-IR-B03
+    disposition: ACCEPTED_FOR_NARROW_R3
+    closure: installed_tree_digest_scope_and_VCP_direct_module_signature
+governance:
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  R3_requires_Jenn_start: true
+

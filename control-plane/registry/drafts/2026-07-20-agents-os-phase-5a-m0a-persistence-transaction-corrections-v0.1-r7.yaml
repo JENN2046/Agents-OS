@@ -1,0 +1,61 @@
+schema_version: agents-os.m0a-persistence-transaction-corrections.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R7
+date: '2026-07-20'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R6
+
+effective_schema:
+  table_inventory_remains_exhaustive: true
+  effective_table_count: 18
+  added_tables: []
+  removed_tables: []
+  inherited_R6_schema_sha256: c7ee70f591c854a4cd5b0b4c1b245f967064f5b1f4b5ccdb082e227c8539df61
+
+transaction_replacement:
+  F3_RECOVERING_to_READY:
+    transaction_mode: BEGIN_IMMEDIATE
+    required_prestate:
+      lifecycle_fact_kind: RESIDENT_LIFECYCLE
+      lifecycle_state: RECOVERING
+      lifecycle_revision: 1
+      lifecycle_pointer_revision: 1
+      witness_fact_kind: F3_WITNESS_COMMIT
+      witness_currentness: exact_current_pointer
+      witness_bytes: exact_canonical_UTF8
+      witness_fingerprint: SHA256_of_exact_bytes
+      witness_epoch_tuple_fields: 9
+    commit_writes:
+      Event: exactly_1_RESIDENT_READY
+      lifecycle_fact:
+        state: READY
+        revision: 2
+        predecessor_revision: 1
+        predecessor_tuple: exact_RECOVERING_ref_and_fingerprint
+      lifecycle_pointer: exact_compare_and_swap_revision_1_to_2
+    atomicity: Event_READY_fact_revision_2_pointer_or_zero
+    empty_lifecycle_history_result: BLOCK
+    direct_READY_revision_1_result: BLOCK
+    stale_pointer_result: BLOCK
+    wrong_predecessor_result: BLOCK
+
+fixed_SQLite_cases:
+  positive:
+    - F3_exact_RECOVERING_revision_1_to_READY_revision_2
+    - F3_READY_revision_2_exact_predecessor
+    - F3_current_pointer_advances_1_to_2
+  negative:
+    - F3_direct_READY_revision_1_from_empty_history
+    - F3_stale_lifecycle_pointer
+    - F3_RECOVERING_noncanonical_bytes
+    - F3_wrong_predecessor_tuple
+    - F3_duplicate_READY_revision_2
+  crash:
+    - F3_Event_fact_pointer_rollback_all_or_zero
+
+governance:
+  database_file_created: false
+  SQLite_scope: isolated_in_memory_only
+  runtime_usable: false
+  implementation_authorized: false

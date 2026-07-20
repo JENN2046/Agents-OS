@@ -1,0 +1,67 @@
+schema_version: agents-os.m0a-closed-key-contract.v0.1
+profile_id: PHASE_5A_M0A_CLOSED_KEY_CONTRACT_R8
+date: '2026-07-20'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_BOUNDARY_INVENTORY_R7
+
+source_aliases_in_order:
+  - semantic_owner_R7
+  - persistence_ownership_R8
+  - materialization_ABI_R6
+  - structured_input_totality_R6
+  - boundary_contract_R8
+  - witness_boundary_R8
+
+coverage_modes:
+  semantic_owner_R7: CONTENT_SEALED_AND_COMPLETE_KEY_PATH_INVENTORIED
+  persistence_ownership_R8: CONTENT_SEALED_AND_COMPLETE_KEY_PATH_INVENTORIED
+  materialization_ABI_R6: CONTENT_SEALED_AND_COMPLETE_KEY_PATH_INVENTORIED
+  structured_input_totality_R6: CONTENT_SEALED_AND_COMPLETE_KEY_PATH_INVENTORIED
+  boundary_contract_R8: EXACT_CLOSED_OBJECT_AND_COMPLETE_KEY_PATH_INVENTORIED
+  witness_boundary_R8: EXACT_CLOSED_OBJECT_AND_COMPLETE_KEY_PATH_INVENTORIED
+
+sealed_source_commitments:
+  semantic_owner_R7: 52fd5aad32d2ce7a31a918101191e03a6d2f9e5a93cac1581bb52ff0e11cf7a9
+  persistence_ownership_R8: 9a2eef546f4e73981dd0229a840f178b9a810640a40ab0fc415084dba3116146
+  materialization_ABI_R6: 5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e
+  structured_input_totality_R6: 14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660
+
+complete_key_path_contract:
+  traversal: recursive_mapping_keys_as_RFC6901_JSON_Pointers
+  sequence_handling: recurse_into_every_index
+  row_shape: source_alias+pointer+key
+  ordering: source_alias_order_then_pointer_UTF8_lexicographic
+  expected_row_count: 232
+  expected_inventory_sha256: b0e6e94a83b9ad13917abf2e9dacb8397735e89ca29c642a990a9f26a03d84fb
+  missing_additional_renamed_or_reordered_source_result: BLOCK
+  missing_additional_or_renamed_key_path_result: BLOCK
+  changed_sealed_source_byte_result: BLOCK
+  caller_rebuilt_profile_result: BLOCK
+
+explicit_regressions:
+  - implementation_frozen_true_with_rebuilt_profile_and_witness
+  - unknown_neutral_key_with_rebuilt_inventory
+  - renamed_boundary_key
+  - removed_existing_key
+  - changed_value_without_key_path_change
+  - reordered_or_replaced_source_alias
+
+governance:
+  creates_new_semantic_authority: false
+  recomputes_F3_or_F5_authority: false
+  plan_frozen: false
+  runtime_usable: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  production_authentication_authorized: false
+  database_file_created: false
+  VCPToolBox_modified: false
+  JavaScript_implementation_created: false
+  plugin_enabled: false
+  provider_called: false
+  private_Memory_read: false
+  sensing_started: false
+  real_effect_occurrence_count: 0
+  terminal_outcome: NOT_EXECUTED

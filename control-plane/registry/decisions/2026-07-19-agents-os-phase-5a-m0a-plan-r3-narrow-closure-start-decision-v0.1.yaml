@@ -1,0 +1,50 @@
+schema_version: agents-os.start-decision-record.v0.1
+record_id: agents-os-phase-5a-m0a-plan-r3-narrow-closure-start-decision-v0.1
+record_type: StartDecisionRecord
+status: active
+immutable: true
+created_at: '2026-07-19T23:55:00+08:00'
+effective_at: '2026-07-19T23:55:00+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision_source: current_conversation_explicit_Plan_R3_start
+  exact_text: 启动 Plan R3。
+R2_binding:
+  manifest_path: control-plane/registry/reports/2026-07-19-agents-os-phase-5a-m0a-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  independent_review_path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r2-full-atomic-independent-review.yaml
+  independent_review_sha256: 7d8b6305a469aa1153cb74d61c385065528dfd546b9019279f1f219fe1462dad
+  result: BLOCK
+authorized_scope:
+  - obligation_owner_semantic_completeness
+  - persistence_transaction_lineage_lifecycle_first_apply_and_crash_order
+  - installed_tree_digest_scope_and_VCP_direct_module_signature
+required_outputs:
+  - R3_normative_amendment
+  - R3_transaction_and_persistence_correction_profile
+  - R3_materialization_ABI_correction_profile
+  - R3_semantic_owner_correction_inventory
+  - R3_deterministic_witness_builder_fixture_validator
+  - R3_author_self_review_and_full_atomic_review_package
+hard_boundaries:
+  R1_and_R2_subjects_manifests_immutable: true
+  Rust_JavaScript_NAPI_or_plugin_implementation: forbidden
+  dependency_or_toolchain_installation: forbidden
+  SQLite_database_creation: forbidden
+  VCPToolBox_change_start_or_plugin_enablement: forbidden
+  runtime_activation: forbidden
+  production_authentication: forbidden
+  provider_private_memory_sensing_or_real_effect: forbidden
+  Phase_5B_semantics: forbidden
+effects:
+  Phase_5A_mode: PLAN_CLOSURE_ONLY
+  Phase_5A_plan_R3_started: true
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  commit_or_push_authorized_by_this_decision: false
+next_gate:
+  name: PHASE_5A_M0A_PLAN_R3_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_progression: forbidden

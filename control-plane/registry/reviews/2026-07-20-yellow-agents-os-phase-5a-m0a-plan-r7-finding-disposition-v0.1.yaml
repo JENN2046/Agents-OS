@@ -1,0 +1,65 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r7-independent-review-disposition-v0.1
+date: 2026-07-20
+owner: Jenn
+agent_steward: Nobao
+status: R7_BLOCK_RECONCILED_R8_DECISION_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r7-full-atomic-independent-review.yaml
+  sha256: 5daeec19f0c50e5d87df4577043b27ae447e01fe643e2aa0850ade99c104fc18
+  result: BLOCK
+  findings: {blocker: 2, major: 0, minor: 0, unresolved: 0}
+case_results:
+  path: control-plane/registry/reviews/2026-07-20-agents-os-phase-5a-m0a-plan-r7-codex-independent-case-results.json
+  sha256: 89ab92f9312a3f75c90d1d918a9b3dc2837cb31851c5e038f26bca5871dcda3b
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R5_manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  R6_manifest_sha256: 98a6f73bf96fdbd168169173c42a9a57eafe81151d27b88820534467dc4a2167
+  R7_manifest_sha256: d929a86317ecd2d9140645f1c1c8dd267cb982acfda3aa2a7830415a5917e299
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  R5_subject_count: 8
+  R6_subject_count: 9
+  R7_subject_count: 7
+  total_subject_count: 49
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A_R7_IR_B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R8
+    closure_scope: exact_closed_effective_boundary_key_contract
+    required_regressions:
+      - effective_boundary_key_vocabulary_is_exactly_closed_or_recursively_closed_by_schema
+      - implementation_frozen_true_is_rejected_after_profile_inventory_and_witness_rebuild
+      - unknown_missing_added_or_renamed_boundary_keys_are_rejected_by_target_semantics
+      - caller_or_profile_self_declaration_cannot_expand_the_boundary_vocabulary
+  - finding_id: PHASE5A_R7_IR_B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R8
+    closure_scope: exact_F3_RECOVERING_prestate_ownership_Event_binding
+    required_regressions:
+      - RECOVERING_fact_created_event_sequence_equals_exact_ownership_Event_sequence
+      - current_pointer_updated_event_sequence_equals_exact_ownership_Event_sequence
+      - validator_parses_and_compares_the_complete_required_Event_binding
+      - lifecycle_Event_sequence_2_substitution_is_rejected
+      - valid_sequence_1_prestate_can_atomically_append_READY_revision_2
+      - pointer_predecessor_and_rollback_regressions_remain_closed
+governance:
+  R8_started: false
+  R8_requires_Jenn_explicit_start: true
+  R8_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

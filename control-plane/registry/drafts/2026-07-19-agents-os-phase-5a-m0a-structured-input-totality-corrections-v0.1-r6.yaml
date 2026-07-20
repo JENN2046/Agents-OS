@@ -1,0 +1,44 @@
+schema_version: agents-os.m0a-structured-input-totality-corrections.v0.1
+profile_id: PHASE_5A_M0A_STRUCTURED_INPUT_TOTALITY_CORRECTIONS_R6
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+loader_contract:
+  YAML:
+    duplicate_mapping_key_result: BLOCK
+    unknown_tag_result: BLOCK
+    malformed_input_result: BLOCK
+    last_key_wins: forbidden
+  JSON:
+    duplicate_object_key_result: BLOCK
+    NaN_or_Infinity_result: BLOCK
+    malformed_input_result: BLOCK
+    last_key_wins: forbidden
+  validation_order:
+    - decode_with_duplicate_rejection
+    - closed_schema_and_type_validation
+    - canonical_encoding_and_fingerprint_validation
+    - semantic_validation
+  uncaught_exception_result: forbidden
+fixed_cases:
+  positive:
+    - unique_key_R6_YAML_profiles
+    - unique_key_R6_JSON_witness
+  negative:
+    - duplicate_YAML_schema_version
+    - duplicate_YAML_implementation_authorized
+    - duplicate_JSON_schema_version
+    - duplicate_JSON_nested_authorization
+    - JSON_NaN
+governance:
+  database_file_created: false
+  runtime_usable: false
+  implementation_authorized: false
+  VCPToolBox_modified: false
+  plugin_enabled: false
+  provider_called: false
+  private_Memory_read: false
+  sensing_started: false
+  real_effect_occurrence_count: 0
+

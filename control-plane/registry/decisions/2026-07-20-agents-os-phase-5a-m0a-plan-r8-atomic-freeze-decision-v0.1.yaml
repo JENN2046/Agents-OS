@@ -1,0 +1,139 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-20T12:47:07+08:00'
+effective_at: '2026-07-20T12:47:07+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_PLAN
+  decision_source: explicit_current_conversation_confirmation_of_Plan_R8_atomic_freeze_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-package-v0.1.md
+    sha256: b28a5123f88b30d970d92420658cb00ef896b189e1bd0c2c22116d917fa569d0
+    section: 6_A
+  confirmation_text_received: 确认执行该决策包第 6 节 A 的完整 Exact decision text。
+acceptance_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 55
+  result: ACCEPTED_FROZEN
+  precedence:
+  - R8_explicit_replacements
+  - R7_all_other_clauses
+  - R6_all_other_clauses
+  - R5_all_other_clauses
+  - R4_all_other_clauses
+  - R3_all_other_clauses
+  - R2_all_other_clauses
+  - R1_all_other_clauses
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: f6b00bb0a19bb464122d44839e4f8987b0a68aea0794d0a36e9e29bec1de96b3
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_workspace_input_count: 227
+  verified_external_source_input_count: 7
+  verified_total_input_count: 234
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 55
+  subject_hashes_verified: 55/55_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+supporting_evidence:
+- role: fresh_full_atomic_hash_bound_independent_review
+  path: control-plane/registry/reviews/2026-07-20-yellow-agents-os-phase-5a-m0a-plan-r8-full-atomic-independent-review.yaml
+  sha256: c4ee54e47287a8fb17a131663409ea261748e6c5ee0b1577f65975a066aa7cf7
+  result: PASS_NO_BLOCKER
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  requires_R9: false
+  acceptance_subject: false
+- role: independent_case_results
+  path: control-plane/registry/reviews/2026-07-20-agents-os-phase-5a-m0a-plan-r8-codex-independent-case-results.json
+  sha256: a28971754c4a4cb5012c2e57e3831b15a9cfafae2badde5b97fb9609093e96eb
+  acceptance_subject: false
+- role: atomic_freeze_decision_surface
+  path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-plan-r8-atomic-freeze-decision-package-v0.1.md
+  sha256: b28a5123f88b30d970d92420658cb00ef896b189e1bd0c2c22116d917fa569d0
+  acceptance_subject: false
+frozen_plan_boundary:
+- exact_M0A_implementation_and_build_scope
+- closed_contract_obligation_and_traceability_inventories
+- exact_persistence_transaction_and_recovery_plan
+- semantic_owner_and_materialization_ABI_correction_profiles
+- structured_input_totality_and_inherited_ABI_constraints
+- recursively_closed_effective_boundary_key_contract_and_source_seals
+- exact_F3_RECOVERING_fact_and_pointer_ownership_Event_binding
+- deterministic_synthetic_witness_validator_and_negative_regression_boundary
+- nonimplementation_nonruntime_nondatabase_file_noneffect_boundary
+excluded_evidence_classes:
+- manifest
+- author_self_review
+- independent_review
+- case_results
+- review_disposition
+- decision_package
+- receipt
+- active_work_queue
+- registry_projection
+effects:
+  Phase_5A_plan_status: ACCEPTED_FROZEN
+  Phase_5A_plan_atomic_freeze_gate: SATISFIED
+  additional_plan_amendment_required: false
+  requires_R9: false
+  plan_revisions_stopped: true
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_implementation_authorized: false
+  dependency_installation_authorized: false
+  toolchain_mutation_authorized: false
+  database_file_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  Resident_Worker_Host_executor_or_service_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_key_or_cryptography_change_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_real_effect_execution_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+next_gate:
+  name: PHASE_5A_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  implementation_start_precondition:
+  - frozen_plan_objects_verified_on_main
+  - sealed_VCPToolBox_sources_verified_against_declared_upstream_git_commit
+  - separate_exact_Jenn_implementation_start_decision
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_and_subject_reverification_before_closeout: completed
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

@@ -1,0 +1,54 @@
+{
+  "authority_boundary": {
+    "VCPToolBox_change_authorized": false,
+    "database_creation_authorized": false,
+    "implementation_authorized": false,
+    "real_effect_authorized": false,
+    "runtime_activation_authorized": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "contract_closure": {
+    "canonical_subject_count": 110,
+    "canonical_subject_set_fingerprint": "020468dfb6a767c5d7e83cc1259369258b9d1392e4d6ae89ba021d18f6ea294e",
+    "obligation_count": 63,
+    "obligation_set_fingerprint": "7bf85857c3901dcce067e2a4d516edbae69be7bde514bf2a974c03a1445ad996",
+    "owner_field_count_per_obligation": 8,
+    "phase_subject_counts": {
+      "F1": 3,
+      "F2": 22,
+      "F3": 4,
+      "F4": 29,
+      "F5": 28,
+      "F6": 24
+    },
+    "unmapped_obligation_count": 0
+  },
+  "environment": "SYNTHETIC_PLAN_VALIDATION",
+  "materialization_closure": {
+    "allowed_overlay_glob": "Plugin/AGENTSOSResident/**",
+    "blocked_manifest_fingerprint": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+    "direct_entrypoint_fingerprint": "be7e893e479d0bbfd842ad315478c318cfbd4a7c612e5b671a3ebee35f542055",
+    "planned_source_inventory_count": 41,
+    "planned_source_inventory_fingerprint": "d9a9b667e818f78dfbe5aedc547a9186cca2edee5d520c9a74b98c25bc1600b6",
+    "tree_hash_algorithm": "SHA-256"
+  },
+  "persistence_closure": {
+    "canonical_fact_kind_count": 32,
+    "canonical_fact_kind_fingerprint": "16cf5c3124a3e9c1bbdd2114833bacd949f0a8dc9846a18e6ee88fa679d748d1",
+    "crash_window_count": 8,
+    "dedicated_row_class_count": 12,
+    "inventory_is_exhaustive": true,
+    "table_count": 18,
+    "table_set_fingerprint": "4c05e93fa0064488eb933cb7f2eab33aa929d19802a49d29b2b6489d32acb767",
+    "transaction_owner_count": 7
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE",
+  "root_fingerprint": "be35835e8b51be2034f148aa9ef58de154a4e56c3a734c5b5adef6958d9db113",
+  "schema_version": "agents-os.m0a-plan-r2-closure-witness.v0.1",
+  "subject_hashes": {
+    "amendment": "777066d039319bdc74cb487b07d23ccd983d18c0a13a29172674e04d37ffd78e",
+    "contract_obligation_inventory": "b822a483f1983aa92ef1b69c15e21dff3565beb99e00132e13ceeed11cb67698",
+    "exact_persistence_profile": "c0385ea331925bd93507bee9606d1ed58eb2fa5aa3816c997438acd70ed0f555",
+    "external_materialization_profile": "531125fa0603c61e82681df8aceb6d08d2802c6bd42138e00734396d8642a080"
+  }
+}

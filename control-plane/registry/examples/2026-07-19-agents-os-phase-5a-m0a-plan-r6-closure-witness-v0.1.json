@@ -1,0 +1,102 @@
+{
+  "abi": {
+    "exports": [
+      "initialize",
+      "processToolCall",
+      "shutdown"
+    ],
+    "native_method": "execute_command",
+    "source_case_count": 15,
+    "source_sha256": "06517ae19cf58687eaf089ecc482e25bdc4333d7f0db784f699dd07bb5503774"
+  },
+  "boundary": {
+    "JavaScript_implementation_created": false,
+    "VCPToolBox_modified": false,
+    "database_file_created": false,
+    "implementation_authorized": false,
+    "plugin_enabled": false,
+    "private_Memory_read": false,
+    "provider_called": false,
+    "real_effect_occurrence_count": 0,
+    "runtime_usable": false,
+    "sensing_started": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "effective_schema": {
+    "immutable_triggers": [
+      "canonical_fact_no_update",
+      "canonical_fact_no_delete"
+    ],
+    "replacement_tables": [
+      "canonical_fact",
+      "dispatch_arm"
+    ],
+    "table_count": 18
+  },
+  "expected_case_counts": {
+    "JavaScript_AST": 15,
+    "SQLite": 13,
+    "structured_input": 7,
+    "total": 35
+  },
+  "f3_witness_commit": {
+    "canonical_bytes_utf8": "{\"authority_epoch\":1,\"epoch_fingerprint\":\"00000000000000000000000000000000000000000000000000000000000000c9\",\"incarnation_id\":\"inc:1\",\"ownership_event_fingerprint\":\"0000000000000000000000000000000000000000000000000000000000000001\",\"ownership_event_id\":\"event:f3-ownership:resident:A:1\",\"ownership_event_sequence\":1,\"resident_id\":\"resident:A\",\"witness_reservation_fingerprint\":\"000000000000000000000000000000000000000000000000000000000000012d\",\"witness_reservation_ref\":\"reservation:1\"}",
+    "decoded": {
+      "authority_epoch": 1,
+      "epoch_fingerprint": "00000000000000000000000000000000000000000000000000000000000000c9",
+      "incarnation_id": "inc:1",
+      "ownership_event_fingerprint": "0000000000000000000000000000000000000000000000000000000000000001",
+      "ownership_event_id": "event:f3-ownership:resident:A:1",
+      "ownership_event_sequence": 1,
+      "resident_id": "resident:A",
+      "witness_reservation_fingerprint": "000000000000000000000000000000000000000000000000000000000000012d",
+      "witness_reservation_ref": "reservation:1"
+    },
+    "fingerprint": "20db531557b9f653fec1395ea5703cb67d9af2ce43d528386060f784513959bd",
+    "result": "READY_ELIGIBLE"
+  },
+  "f5_replay": {
+    "additional_counts": {
+      "Event": 0,
+      "call_authorization": 0
+    },
+    "after_counts": {
+      "Event": 2,
+      "call_authorization": 1
+    },
+    "authorization_subject_ref": "attempt:A",
+    "authorization_subject_revision": 1,
+    "before_counts": {
+      "Event": 2,
+      "call_authorization": 1
+    },
+    "returned_identity_field_count": 10
+  },
+  "precedence": [
+    "R6_explicit_replacements",
+    "R5_all_other_clauses",
+    "R4_all_other_clauses",
+    "R3_all_other_clauses",
+    "R2_all_other_clauses",
+    "R1_all_other_clauses"
+  ],
+  "profile_fingerprints": {
+    "materialization_ABI": "5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e",
+    "persistence": "c7ee70f591c854a4cd5b0b4c1b245f967064f5b1f4b5ccdb082e227c8539df61",
+    "safe_wrapper": "06517ae19cf58687eaf089ecc482e25bdc4333d7f0db784f699dd07bb5503774",
+    "semantic_owner": "b776d913370cbce76c82c497e1b8f307f43123712b43864927797c8b835a8ac9",
+    "structured_input_totality": "14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660"
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R6_ATOMIC_BUNDLE",
+  "schema_version": "agents-os.phase5a-m0a-plan-r6-closure-witness.v0.1",
+  "semantic_owner_replacements": [
+    "F3_incarnation_and_authority_epoch",
+    "F5_stored_first_Event_and_call_accounting",
+    "external_materialization"
+  ],
+  "structured_input": {
+    "JSON_duplicate_result": "BLOCK",
+    "YAML_duplicate_result": "BLOCK",
+    "last_key_wins": "forbidden"
+  }
+}

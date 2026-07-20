@@ -1,0 +1,61 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5a-m0a-plan-r4-independent-review-disposition-v0.1
+date: 2026-07-19
+owner: Jenn
+agent_steward: Nobao
+status: R4_BLOCK_RECONCILED_R5_DECISION_REQUIRED
+review:
+  path: control-plane/registry/reviews/2026-07-19-yellow-agents-os-phase-5a-m0a-plan-r4-full-atomic-independent-review.yaml
+  sha256: 38d7000d568c1f97028bc38689960e7026c0f79d07e77944e4d69856e64ee79f
+  result: BLOCK
+  findings: {blocker: 3, major: 0, minor: 0, unresolved: 0}
+immutable_lineage:
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R2_manifest_sha256: 48b5e53032e5d6bf527ff542febf20b4c9e940a6d5ab48c6960eb5bcd2bd0f26
+  R3_manifest_sha256: d9af2c8b8f8e469edf64d6897f16e1730d32897a7f9ea1333f1a3b2efb194c49
+  R4_manifest_sha256: 0803bd3e90a0652f1e0cc97b9a4168185df37cd9c76506746796e6096d3dbe58
+  R1_subject_count: 4
+  R2_subject_count: 7
+  R3_subject_count: 7
+  R4_subject_count: 7
+  total_subject_count: 25
+  prior_subject_bytes_may_change: false
+findings:
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R5
+    closure_scope: F3_exact_ownership_Event_READY_witness_and_historical_incarnation_binding
+    required_regressions:
+      - unrelated_ownership_Event_rejected
+      - READY_without_exact_witness_COMMIT_rejected
+      - historical_incarnation_reuse_rejected
+      - executable_Event_and_witness_equality_predicates_frozen
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R5
+    closure_scope: F5_exact_stored_first_Event_and_call_authorization_provenance
+    required_regressions:
+      - first_Event_equals_exact_arm_Event_and_sequence
+      - call_authorization_kind_and_logical_identity_exact
+      - first_apply_and_exact_replay_return_same_stored_identities
+      - replay_additional_Event_and_call_counts_equal_zero
+  - finding_id: PHASE5A-M0A-PLAN-R4-IR-B03
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R5
+    closure_scope: executable_future_index_js_AST_and_dataflow_validation_contract
+    required_regressions:
+      - parser_version_and_fail_closed_syntax_boundary_frozen
+      - exact_args_whitelist_and_source_to_sink_rules_frozen
+      - alias_closure_spread_computed_property_and_helper_call_fixtures_bound
+      - exact_future_index_js_bytes_consumed_by_validator_command
+governance:
+  R5_started: false
+  R5_requires_Jenn_explicit_start: true
+  partial_acceptance: forbidden
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  provider_private_memory_sensing_or_real_effect_authorized: false
+  commit_push_merge_authorized: false

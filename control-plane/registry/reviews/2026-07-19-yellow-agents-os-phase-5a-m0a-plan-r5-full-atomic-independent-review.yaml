@@ -1,0 +1,110 @@
+schema_version: agents-os.independent-review.v0.1
+review_unit: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+result: BLOCK
+date: '2026-07-19'
+review_mode: fresh_full_atomic_hash_bound_independent_review
+partial_acceptance: forbidden
+integrity:
+  archive_sha256: fe3b4be74b4d8d9a6adc58bb8bb3d0584051730b22525dca2677fe3b933ff675
+  manifest_sha256: e26d5e1fa35a6bb69ae26747580e066d58eed5ab9a55371ecce35a991c337fa3
+  internal_manifest_identical_to_external: true
+  archive_entries: 194
+  regular_files: 194
+  directories: 0
+  duplicate_paths: 0
+  unsafe_paths: 0
+  symlinks_or_special_files: 0
+  encrypted_entries: 0
+  crc_failures: 0
+  total_uncompressed_bytes: 6583605
+  total_compressed_bytes: 1402187
+  maximum_compression_ratio: 14.34032634032634
+  extracted_dot_git_occurrences: 0
+  checksum_entries: 193
+  checksum_failures: 0
+  manifest_inputs: 190
+  subjects: 33
+  workspace_authority_inputs: 149
+  author_evidence: 1
+  fixed_vcp_git_objects: 7
+  workspace_inputs: 183
+  all_input_bytes_read: 6428379
+  all_inputs_utf8: 190
+  subject_bytes_read: 316810
+  subject_lines_read: 6417
+  structured_subjects_duplicate_key_scan:
+    yaml: 15
+    json: 4
+    duplicate_keys: 0
+  subject_trailing_whitespace_occurrences: 0
+fixed_commands:
+  r4:
+    exit_code: 0
+    effective_tables: 18/18
+    replacement_tables: 7/7
+    semantic_owner_replacements: 6/6
+    sqlite_cases: 10/10
+    mutation_rejections: 11/11
+    database_file_occurrence_count: 0
+  r5:
+    exit_code: 0
+    effective_tables: 18/18
+    fixed_cases: 21/21
+    ast_dataflow_cases: 13/13
+    sqlite_cases_executed: 8/8
+    sqlite_cases_declared: 9
+    self_test_mutation_rejections: 7/7
+    database_file_occurrence_count: 0
+  builder:
+    exit_code: 0
+    cmp_exit_code: 0
+    rebuilt_sha256: a901b9a6c7d284889388b075274f88777e7e4819708af2ec6fc52d9c7df7f5b9
+findings:
+  - id: B1_F5_authorization_subject_and_replay_identity_gap
+    disposition: BLOCKER
+    target_semantic_result: ACCEPTED_INVALID
+    stale_hash_or_reference_result: not_applicable_fresh_in_memory_graph
+    evidence: dispatch_arm omits authorization subject_ref and subject_revision; its canonical_fact foreign key covers only kind, logical_id, fact_revision, fact_ref, and fact_fingerprint. A fresh row with delivery attempt (attempt:expected,1) and authorization subject (attempt:DIFFERENT,7) committed with empty foreign_key_check.
+    related_gap: F5_replay_identity_substitution is declared but not executed; the replay case performs one SELECT and no before/after zero-addition accounting.
+  - id: B2_F3_witness_commit_content_and_tuple_gap
+    disposition: BLOCKER
+    target_semantic_result: ACCEPTED_INVALID
+    stale_hash_or_reference_result: not_applicable_fresh_in_memory_graph
+    evidence: READY accepted a current F3_WITNESS_COMMIT fact whose canonical bytes disagreed on reservation fingerprint, epoch fingerprint, incarnation, and ownership sequence, and whose fact fingerprint was not the digest of those bytes. The predicate reads neither canonical bytes nor reservation fingerprint and does not execute RECOVERING/READY lifecycle writes.
+    favorable_valid_part: ownership Event composite bindings and historical incarnation uniqueness rejected the tested tuple substitutions.
+  - id: B3_R5_wrapper_inherited_ABI_inconsistency
+    disposition: BLOCKER
+    target_semantic_result: CONTRACT_CONTRADICTION
+    stale_hash_or_reference_result: not_applicable_exact_fixed_bytes
+    evidence: the exact R5 source calls residentNative.process(nativeFrame), while inherited R1/R3 permits exactly execute_command, execute_query, claim_outbox, acknowledge_outbox, and reconcile and forbids a sixth method. It exports only processToolCall while inherited exact exports require initialize, processToolCall, shutdown; R5 does not explicitly replace those inherited clauses.
+  - id: B4_boundary_flags_not_semantically_closed
+    disposition: BLOCKER
+    target_semantic_result: ACCEPTED_INVALID
+    stale_hash_or_reference_result: current_bytes_would_fail_integrity_but_fully_resigned_variant_has_no_semantic_rejection
+    evidence: setting R5 ABI runtime_usable, implementation_authorized, VCPToolBox_modified, JavaScript_implementation_created, and governance implementation_authorized to true produced an empty validator error list.
+  - id: B5_same_revision_rewrite_not_relationally_rejected
+    disposition: BLOCKER
+    target_semantic_result: ACCEPTED_INVALID
+    stale_hash_or_reference_result: not_applicable_in_memory_transaction
+    evidence: one coordinated BEGIN IMMEDIATE transaction updated a revision-1 canonical_fact ref, subject, bytes and fingerprint plus its current pointer; COMMIT and foreign_key_check both succeeded despite the inherited immutable and same-revision rewrite-impossible contract.
+  - id: B6_duplicate_key_totality_gap
+    disposition: BLOCKER
+    target_semantic_result: ACCEPTED_INVALID_WHEN_FULLY_RESIGNED
+    stale_hash_or_reference_result: current_exact_subjects_have_zero_duplicates
+    evidence: yaml.safe_load and json.loads use last-key-wins semantics. A duplicate schema_version witness parsed equal to the original object, and duplicate YAML implementation_authorized values resolved to the last value. No duplicate-rejecting loader is used.
+independent_closed_js_cases:
+  exact_accept: 1
+  fixed_negative_block: 12
+  additional_negative_block: 10
+  additional_cases: [comment, double_quote, this_source, array_spread, dynamic_call, eval, Function_constructor, destructure_alias, await_helper, extra_export]
+boundary:
+  workspace_modified: false
+  git_modified: false
+  governance_modified: false
+  vcptoolbox_modified_or_started: false
+  database_file_created: false
+  runtime_provider_network_or_effect_started: false
+  implementation_started: false
+  commit_push_merge: false
+  temporary_evidence_only: true
+  terminal_outcome: NOT_EXECUTED

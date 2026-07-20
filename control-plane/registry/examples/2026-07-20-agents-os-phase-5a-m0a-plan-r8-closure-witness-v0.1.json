@@ -1,0 +1,1257 @@
+{
+  "boundary": {
+    "JavaScript_implementation_created": false,
+    "VCPToolBox_modified": false,
+    "database_file_created": false,
+    "dependency_installation_authorized": false,
+    "implementation_authorized": false,
+    "plan_frozen": false,
+    "plugin_enabled": false,
+    "private_Memory_read": false,
+    "production_authentication_authorized": false,
+    "provider_called": false,
+    "real_effect_occurrence_count": 0,
+    "runtime_usable": false,
+    "sensing_started": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "complete_key_path_inventory": {
+    "inventory_sha256": "b0e6e94a83b9ad13917abf2e9dacb8397735e89ca29c642a990a9f26a03d84fb",
+    "row_count": 232,
+    "rows": [
+      {
+        "key": "base",
+        "pointer": "/base",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "date",
+        "pointer": "/date",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "effective_inventory_rules",
+        "pointer": "/effective_inventory_rules",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "add_obligation_ids",
+        "pointer": "/effective_inventory_rules/add_obligation_ids",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "base",
+        "pointer": "/effective_inventory_rules/base",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "effective_obligation_count",
+        "pointer": "/effective_inventory_rules/effective_obligation_count",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "remove_obligation_ids",
+        "pointer": "/effective_inventory_rules/remove_obligation_ids",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "replace_exactly_these_obligation_ids",
+        "pointer": "/effective_inventory_rules/replace_exactly_these_obligation_ids",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "governance",
+        "pointer": "/governance",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "creates_new_semantic_authority",
+        "pointer": "/governance/creates_new_semantic_authority",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "recomputes_F3_or_F5_authority",
+        "pointer": "/governance/recomputes_F3_or_F5_authority",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "profile_id",
+        "pointer": "/profile_id",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "replacement_rows",
+        "pointer": "/replacement_rows",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "crash_test",
+        "pointer": "/replacement_rows/0/crash_test",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "invariant",
+        "pointer": "/replacement_rows/0/invariant",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "module_owner",
+        "pointer": "/replacement_rows/0/module_owner",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "negative_test",
+        "pointer": "/replacement_rows/0/negative_test",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "obligation_id",
+        "pointer": "/replacement_rows/0/obligation_id",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "persistence_owner",
+        "pointer": "/replacement_rows/0/persistence_owner",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "positive_test",
+        "pointer": "/replacement_rows/0/positive_test",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "reducer_or_boundary_owner",
+        "pointer": "/replacement_rows/0/reducer_or_boundary_owner",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "replay_test",
+        "pointer": "/replacement_rows/0/replay_test",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "transaction_owner",
+        "pointer": "/replacement_rows/0/transaction_owner",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "schema_version",
+        "pointer": "/schema_version",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "status",
+        "pointer": "/status",
+        "source": "semantic_owner_R7"
+      },
+      {
+        "key": "base",
+        "pointer": "/base",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "date",
+        "pointer": "/date",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "effective_schema",
+        "pointer": "/effective_schema",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "added_tables",
+        "pointer": "/effective_schema/added_tables",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "database_file_created",
+        "pointer": "/effective_schema/database_file_created",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "inherited_R7_table_count",
+        "pointer": "/effective_schema/inherited_R7_table_count",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "removed_tables",
+        "pointer": "/effective_schema/removed_tables",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "fixed_cases",
+        "pointer": "/fixed_cases",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "crash",
+        "pointer": "/fixed_cases/crash",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "negative",
+        "pointer": "/fixed_cases/negative",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "positive",
+        "pointer": "/fixed_cases/positive",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "governance",
+        "pointer": "/governance",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "creates_new_semantic_authority",
+        "pointer": "/governance/creates_new_semantic_authority",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "database_file_created",
+        "pointer": "/governance/database_file_created",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "dependency_installation_authorized",
+        "pointer": "/governance/dependency_installation_authorized",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "plan_frozen",
+        "pointer": "/governance/plan_frozen",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "private_Memory_read",
+        "pointer": "/governance/private_Memory_read",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "production_authentication_authorized",
+        "pointer": "/governance/production_authentication_authorized",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "provider_called",
+        "pointer": "/governance/provider_called",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "real_effect_occurrence_count",
+        "pointer": "/governance/real_effect_occurrence_count",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "recomputes_F3_or_F5_authority",
+        "pointer": "/governance/recomputes_F3_or_F5_authority",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "sensing_started",
+        "pointer": "/governance/sensing_started",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "terminal_outcome",
+        "pointer": "/governance/terminal_outcome",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "profile_id",
+        "pointer": "/profile_id",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "replacement",
+        "pointer": "/replacement",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "F3_RECOVERING_revision_1_prestate",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "RECOVERING_fact",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/RECOVERING_fact",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "created_event_sequence_relation",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/RECOVERING_fact/created_event_sequence_relation",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "revision",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/RECOVERING_fact/revision",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "state",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/RECOVERING_fact/state",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "current_pointer",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/current_pointer",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "revision",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/current_pointer/revision",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "updated_event_sequence_relation",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/current_pointer/updated_event_sequence_relation",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "ownership_Event_kind",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/ownership_Event_kind",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "ownership_Event_tuple_fields",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/ownership_Event_tuple_fields",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "positive_ownership_event_sequence",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/positive_ownership_event_sequence",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "substituted_sequence_2_result",
+        "pointer": "/replacement/F3_RECOVERING_revision_1_prestate/substituted_sequence_2_result",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "F3_RECOVERING_to_READY_revision_2",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "atomicity",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/atomicity",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "commit_writes",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/commit_writes",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "Event",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/commit_writes/Event",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "lifecycle_fact",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/commit_writes/lifecycle_fact",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "lifecycle_pointer",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/commit_writes/lifecycle_pointer",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "in_transaction_recheck",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/in_transaction_recheck",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "pretransaction_recheck",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/pretransaction_recheck",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "transaction_mode",
+        "pointer": "/replacement/F3_RECOVERING_to_READY_revision_2/transaction_mode",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "schema_version",
+        "pointer": "/schema_version",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "status",
+        "pointer": "/status",
+        "source": "persistence_ownership_R8"
+      },
+      {
+        "key": "base",
+        "pointer": "/base",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "date",
+        "pointer": "/date",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "effective_ABI_replacement",
+        "pointer": "/effective_ABI_replacement",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "caller_selected_native_method",
+        "pointer": "/effective_ABI_replacement/caller_selected_native_method",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "exact_exports_in_order",
+        "pointer": "/effective_ABI_replacement/exact_exports_in_order",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "inherited_allowed_native_methods",
+        "pointer": "/effective_ABI_replacement/inherited_allowed_native_methods",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "initialize",
+        "pointer": "/effective_ABI_replacement/initialize",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "async",
+        "pointer": "/effective_ABI_replacement/initialize/async",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "fixed_result",
+        "pointer": "/effective_ABI_replacement/initialize/fixed_result",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "initialized",
+        "pointer": "/effective_ABI_replacement/initialize/fixed_result/initialized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "inputs_forwarded",
+        "pointer": "/effective_ABI_replacement/initialize/inputs_forwarded",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "may_start_runtime",
+        "pointer": "/effective_ABI_replacement/initialize/may_start_runtime",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "parameters",
+        "pointer": "/effective_ABI_replacement/initialize/parameters",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "processToolCall",
+        "pointer": "/effective_ABI_replacement/processToolCall",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "async",
+        "pointer": "/effective_ABI_replacement/processToolCall/async",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "native_argument_count",
+        "pointer": "/effective_ABI_replacement/processToolCall/native_argument_count",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "native_method",
+        "pointer": "/effective_ABI_replacement/processToolCall/native_method",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "parameters",
+        "pointer": "/effective_ABI_replacement/processToolCall/parameters",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "projected_fields",
+        "pointer": "/effective_ABI_replacement/processToolCall/projected_fields",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "shutdown",
+        "pointer": "/effective_ABI_replacement/shutdown",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "async",
+        "pointer": "/effective_ABI_replacement/shutdown/async",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "fixed_result",
+        "pointer": "/effective_ABI_replacement/shutdown/fixed_result",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "shutdown",
+        "pointer": "/effective_ABI_replacement/shutdown/fixed_result/shutdown",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "parameters",
+        "pointer": "/effective_ABI_replacement/shutdown/parameters",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "sixth_native_method",
+        "pointer": "/effective_ABI_replacement/sixth_native_method",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "fixed_future_wrapper",
+        "pointer": "/fixed_future_wrapper",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "classification",
+        "pointer": "/fixed_future_wrapper/classification",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "path",
+        "pointer": "/fixed_future_wrapper/path",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/fixed_future_wrapper/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "sha256",
+        "pointer": "/fixed_future_wrapper/sha256",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "fixed_source_cases",
+        "pointer": "/fixed_source_cases",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "negative",
+        "pointer": "/fixed_source_cases/negative",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "positive",
+        "pointer": "/fixed_source_cases/positive",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "governance",
+        "pointer": "/governance",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "JavaScript_implementation_created",
+        "pointer": "/governance/JavaScript_implementation_created",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "VCPToolBox_modified",
+        "pointer": "/governance/VCPToolBox_modified",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "actual_Plugin_js_owner_remains_R4_hash_bound",
+        "pointer": "/governance/actual_Plugin_js_owner_remains_R4_hash_bound",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "plugin_enabled",
+        "pointer": "/governance/plugin_enabled",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "profile_id",
+        "pointer": "/profile_id",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "schema_version",
+        "pointer": "/schema_version",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "status",
+        "pointer": "/status",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "validator_contract",
+        "pointer": "/validator_contract",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "exact_execute_command_flow_required",
+        "pointer": "/validator_contract/exact_execute_command_flow_required",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "exact_exports_required",
+        "pointer": "/validator_contract/exact_exports_required",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "exact_source_sha256_required",
+        "pointer": "/validator_contract/exact_source_sha256_required",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "forbidden_constructs",
+        "pointer": "/validator_contract/forbidden_constructs",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "forbidden_native_methods",
+        "pointer": "/validator_contract/forbidden_native_methods",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "parser_version",
+        "pointer": "/validator_contract/parser_version",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "unknown_flow_result",
+        "pointer": "/validator_contract/unknown_flow_result",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "unknown_token_result",
+        "pointer": "/validator_contract/unknown_token_result",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "unsupported_syntax_result",
+        "pointer": "/validator_contract/unsupported_syntax_result",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "validator_id",
+        "pointer": "/validator_contract/validator_id",
+        "source": "materialization_ABI_R6"
+      },
+      {
+        "key": "date",
+        "pointer": "/date",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "fixed_cases",
+        "pointer": "/fixed_cases",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "negative",
+        "pointer": "/fixed_cases/negative",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "positive",
+        "pointer": "/fixed_cases/positive",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "governance",
+        "pointer": "/governance",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "VCPToolBox_modified",
+        "pointer": "/governance/VCPToolBox_modified",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "database_file_created",
+        "pointer": "/governance/database_file_created",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "plugin_enabled",
+        "pointer": "/governance/plugin_enabled",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "private_Memory_read",
+        "pointer": "/governance/private_Memory_read",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "provider_called",
+        "pointer": "/governance/provider_called",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "real_effect_occurrence_count",
+        "pointer": "/governance/real_effect_occurrence_count",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "sensing_started",
+        "pointer": "/governance/sensing_started",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "loader_contract",
+        "pointer": "/loader_contract",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "JSON",
+        "pointer": "/loader_contract/JSON",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "NaN_or_Infinity_result",
+        "pointer": "/loader_contract/JSON/NaN_or_Infinity_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "duplicate_object_key_result",
+        "pointer": "/loader_contract/JSON/duplicate_object_key_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "last_key_wins",
+        "pointer": "/loader_contract/JSON/last_key_wins",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "malformed_input_result",
+        "pointer": "/loader_contract/JSON/malformed_input_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "YAML",
+        "pointer": "/loader_contract/YAML",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "duplicate_mapping_key_result",
+        "pointer": "/loader_contract/YAML/duplicate_mapping_key_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "last_key_wins",
+        "pointer": "/loader_contract/YAML/last_key_wins",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "malformed_input_result",
+        "pointer": "/loader_contract/YAML/malformed_input_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "unknown_tag_result",
+        "pointer": "/loader_contract/YAML/unknown_tag_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "uncaught_exception_result",
+        "pointer": "/loader_contract/uncaught_exception_result",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "validation_order",
+        "pointer": "/loader_contract/validation_order",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "profile_id",
+        "pointer": "/profile_id",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "schema_version",
+        "pointer": "/schema_version",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "status",
+        "pointer": "/status",
+        "source": "structured_input_totality_R6"
+      },
+      {
+        "key": "base",
+        "pointer": "/base",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "complete_key_path_contract",
+        "pointer": "/complete_key_path_contract",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "caller_rebuilt_profile_result",
+        "pointer": "/complete_key_path_contract/caller_rebuilt_profile_result",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "changed_sealed_source_byte_result",
+        "pointer": "/complete_key_path_contract/changed_sealed_source_byte_result",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "expected_inventory_sha256",
+        "pointer": "/complete_key_path_contract/expected_inventory_sha256",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "expected_row_count",
+        "pointer": "/complete_key_path_contract/expected_row_count",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "missing_additional_or_renamed_key_path_result",
+        "pointer": "/complete_key_path_contract/missing_additional_or_renamed_key_path_result",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "missing_additional_renamed_or_reordered_source_result",
+        "pointer": "/complete_key_path_contract/missing_additional_renamed_or_reordered_source_result",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "ordering",
+        "pointer": "/complete_key_path_contract/ordering",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "row_shape",
+        "pointer": "/complete_key_path_contract/row_shape",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "sequence_handling",
+        "pointer": "/complete_key_path_contract/sequence_handling",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "traversal",
+        "pointer": "/complete_key_path_contract/traversal",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "coverage_modes",
+        "pointer": "/coverage_modes",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "boundary_contract_R8",
+        "pointer": "/coverage_modes/boundary_contract_R8",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "materialization_ABI_R6",
+        "pointer": "/coverage_modes/materialization_ABI_R6",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "persistence_ownership_R8",
+        "pointer": "/coverage_modes/persistence_ownership_R8",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "semantic_owner_R7",
+        "pointer": "/coverage_modes/semantic_owner_R7",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "structured_input_totality_R6",
+        "pointer": "/coverage_modes/structured_input_totality_R6",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "witness_boundary_R8",
+        "pointer": "/coverage_modes/witness_boundary_R8",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "date",
+        "pointer": "/date",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "explicit_regressions",
+        "pointer": "/explicit_regressions",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "governance",
+        "pointer": "/governance",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "JavaScript_implementation_created",
+        "pointer": "/governance/JavaScript_implementation_created",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "VCPToolBox_modified",
+        "pointer": "/governance/VCPToolBox_modified",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "creates_new_semantic_authority",
+        "pointer": "/governance/creates_new_semantic_authority",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "database_file_created",
+        "pointer": "/governance/database_file_created",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "dependency_installation_authorized",
+        "pointer": "/governance/dependency_installation_authorized",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/governance/implementation_authorized",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "plan_frozen",
+        "pointer": "/governance/plan_frozen",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "plugin_enabled",
+        "pointer": "/governance/plugin_enabled",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "private_Memory_read",
+        "pointer": "/governance/private_Memory_read",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "production_authentication_authorized",
+        "pointer": "/governance/production_authentication_authorized",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "provider_called",
+        "pointer": "/governance/provider_called",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "real_effect_occurrence_count",
+        "pointer": "/governance/real_effect_occurrence_count",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "recomputes_F3_or_F5_authority",
+        "pointer": "/governance/recomputes_F3_or_F5_authority",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/governance/runtime_usable",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "sensing_started",
+        "pointer": "/governance/sensing_started",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "terminal_outcome",
+        "pointer": "/governance/terminal_outcome",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "profile_id",
+        "pointer": "/profile_id",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "schema_version",
+        "pointer": "/schema_version",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "sealed_source_commitments",
+        "pointer": "/sealed_source_commitments",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "materialization_ABI_R6",
+        "pointer": "/sealed_source_commitments/materialization_ABI_R6",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "persistence_ownership_R8",
+        "pointer": "/sealed_source_commitments/persistence_ownership_R8",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "semantic_owner_R7",
+        "pointer": "/sealed_source_commitments/semantic_owner_R7",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "structured_input_totality_R6",
+        "pointer": "/sealed_source_commitments/structured_input_totality_R6",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "source_aliases_in_order",
+        "pointer": "/source_aliases_in_order",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "status",
+        "pointer": "/status",
+        "source": "boundary_contract_R8"
+      },
+      {
+        "key": "JavaScript_implementation_created",
+        "pointer": "/JavaScript_implementation_created",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "VCPToolBox_modified",
+        "pointer": "/VCPToolBox_modified",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "database_file_created",
+        "pointer": "/database_file_created",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "dependency_installation_authorized",
+        "pointer": "/dependency_installation_authorized",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "implementation_authorized",
+        "pointer": "/implementation_authorized",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "plan_frozen",
+        "pointer": "/plan_frozen",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "plugin_enabled",
+        "pointer": "/plugin_enabled",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "private_Memory_read",
+        "pointer": "/private_Memory_read",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "production_authentication_authorized",
+        "pointer": "/production_authentication_authorized",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "provider_called",
+        "pointer": "/provider_called",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "real_effect_occurrence_count",
+        "pointer": "/real_effect_occurrence_count",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "runtime_usable",
+        "pointer": "/runtime_usable",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "sensing_started",
+        "pointer": "/sensing_started",
+        "source": "witness_boundary_R8"
+      },
+      {
+        "key": "terminal_outcome",
+        "pointer": "/terminal_outcome",
+        "source": "witness_boundary_R8"
+      }
+    ]
+  },
+  "expected_case_counts": {
+    "SQLite": 13,
+    "closed_key": 6,
+    "total": 19
+  },
+  "f3_transition": {
+    "atomic_writes": [
+      "RESIDENT_READY_Event",
+      "READY_revision_2_fact",
+      "lifecycle_pointer_1_to_2"
+    ],
+    "authority_epoch": 1,
+    "direct_READY_revision_1_from_empty_history": "BLOCK",
+    "ownership_event": {
+      "aggregate_ref": "resident:A",
+      "aggregate_revision": 1,
+      "event_fingerprint": "0000000000000000000000000000000000000000000000000000000000000001",
+      "event_id": "event:f3-ownership:resident:A:1",
+      "event_kind": "RESIDENT_OWNERSHIP_STARTED",
+      "event_sequence": 1
+    },
+    "poststate": {
+      "canonical_bytes_utf8": "{\"authority_epoch\":1,\"lifecycle\":\"READY\",\"resident_id\":\"resident:A\"}",
+      "created_event_sequence": 3,
+      "fact_ref": "resident-lifecycle:resident:A:2",
+      "fingerprint": "9588578d897631fdc18df1d6d61ad26a4609cc6d0221939c9e1a525c04370500",
+      "pointer_revision": 2,
+      "pointer_updated_event_sequence": 3,
+      "predecessor_fingerprint": "63bbf0f53bca3a12af5d072a57ac9102c63327c4d52fb5e04abaee6efc7f5ee6",
+      "predecessor_ref": "resident-lifecycle:resident:A:1",
+      "predecessor_revision": 1,
+      "revision": 2,
+      "state": "READY"
+    },
+    "prestate": {
+      "canonical_bytes_utf8": "{\"authority_epoch\":1,\"lifecycle\":\"RECOVERING\",\"resident_id\":\"resident:A\"}",
+      "fact_created_event_sequence": 1,
+      "fact_ref": "resident-lifecycle:resident:A:1",
+      "fingerprint": "63bbf0f53bca3a12af5d072a57ac9102c63327c4d52fb5e04abaee6efc7f5ee6",
+      "pointer_revision": 1,
+      "pointer_updated_event_sequence": 1,
+      "revision": 1,
+      "state": "RECOVERING"
+    },
+    "resident_id": "resident:A",
+    "rollback_preserves_revision": 1,
+    "sequence_2_RECOVERING_prestate": "BLOCK"
+  },
+  "precedence": [
+    "R8_explicit_replacements",
+    "R7_all_other_clauses",
+    "R6_all_other_clauses",
+    "R5_all_other_clauses",
+    "R4_all_other_clauses",
+    "R3_all_other_clauses",
+    "R2_all_other_clauses",
+    "R1_all_other_clauses"
+  ],
+  "profile_fingerprints": {
+    "boundary_contract_R8": "b2156a4ec134a01c8f6bb0956ff8c70976425f3bb02a7569207f4a3a1c76c1b0",
+    "materialization_ABI_R6": "5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e",
+    "persistence_ownership_R8": "9a2eef546f4e73981dd0229a840f178b9a810640a40ab0fc415084dba3116146",
+    "semantic_owner_R7": "52fd5aad32d2ce7a31a918101191e03a6d2f9e5a93cac1581bb52ff0e11cf7a9",
+    "structured_input_totality_R6": "14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660"
+  },
+  "review_unit": "PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R8_ATOMIC_BUNDLE",
+  "schema_version": "agents-os.phase5a-m0a-plan-r8-closure-witness.v0.1",
+  "sealed_source_commitments": {
+    "materialization_ABI_R6": "5032f8963a386d0312f69e5a210dfc1723d16f61d6c8ecd2ce96200ef7e15b0e",
+    "persistence_ownership_R8": "9a2eef546f4e73981dd0229a840f178b9a810640a40ab0fc415084dba3116146",
+    "semantic_owner_R7": "52fd5aad32d2ce7a31a918101191e03a6d2f9e5a93cac1581bb52ff0e11cf7a9",
+    "structured_input_totality_R6": "14d52344c0adedbc9cc5209bf6d531d2ff2e70c49021b16134eaeb2b8a3f0660"
+  }
+}

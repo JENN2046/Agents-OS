@@ -1,0 +1,52 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: phase-5a-m0a-plan-r2-author-self-review-v0.1
+date: 2026-07-19
+reviewer:
+  identity: Nobao_author_run
+  independence: false
+review_unit:
+  id: PHASE_5A_M0A_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  R1_subject_count: 4
+  R2_subject_count: 7
+  total_subject_count: 11
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+independent_result: NOT_RUN
+R1_integrity:
+  subjects_unchanged: 4/4
+  manifest_unchanged: true
+  R1_manifest_sha256: 01900e4bf161d613b4f0928add8c3d35e6b309bacf4379767bf1642e406c91ef
+  R1_independent_review_sha256: 68d0fd5a5c6abb63c9b59fec980596aa9bb34adc566115f7cffa1ae9fb02ab48
+finding_disposition:
+  PHASE5A-M0A-PLAN-IR-B01: CLOSED_CLAIMED_BY_110_SUBJECT_63_OBLIGATION_INVENTORY
+  PHASE5A-M0A-PLAN-IR-B02: CLOSED_CLAIMED_BY_18_TABLE_EXHAUSTIVE_SCHEMA_AND_ROW_CLASS_MAPPING
+  PHASE5A-M0A-PLAN-IR-B03: CLOSED_CLAIMED_BY_41_FILE_CANONICAL_MATERIALIZATION_PROFILE
+fixed_validation:
+  canonical_subject_hashes: 110/110_MATCH
+  obligation_inventory: 63/63_COMPLETE_OWNER_FIELDS
+  persistence_tables: 18/18_EXACT
+  planned_source_inventory: 41/41_EXACT
+  fixed_mutations: 12/12_REJECTED
+  builder_byte_reproduction: PASS
+  mutation_exceptions: 0
+boundary_review:
+  F1_through_F6_reducer_reimplementation_found: false
+  second_permission_identity_Task_Command_or_host_authority_found: false
+  VCPToolBox_core_change_authorized: false
+  plugin_enablement_authorized: false
+  Rust_JavaScript_or_NAPI_implementation_present: false
+  dependency_installation_or_build_present: false
+  SQLite_database_created: false
+  runtime_or_provider_started: false
+  private_memory_sensing_or_real_effect_found: false
+governance:
+  Phase_5A_plan_frozen: false
+  Phase_5A_implementation_started: false
+  fresh_full_atomic_independent_review_required: true
+  automatic_plan_acceptance: forbidden
+  automatic_implementation_start: forbidden
+limitations:
+  - author_review_is_not_independent
+  - fixture_and_validator_do_not_replace_full_semantic_review
+  - independent_reviewer_must_construct_coordinated_fully_resigned_counterexamples

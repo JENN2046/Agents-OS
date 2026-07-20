@@ -1,0 +1,78 @@
+schema_version: agents-os.m0a-materialization-abi-corrections.v0.1
+profile_id: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R4
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+base: PHASE_5A_M0A_MATERIALIZATION_ABI_CORRECTIONS_R3
+
+fixed_ABI_owner:
+  repository: lioensky/VCPToolBox
+  commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  git_path: Plugin.js
+  sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2
+  required_manifest_input: true
+  manager_method: _executeDirectToolCallWithTimeout
+  exact_call_expression: serviceModule.processToolCall(pluginSpecificArgs, directContext)
+
+actual_invocation_replacement:
+  manager_positional_values: [pluginSpecificArgs, directContext]
+  positional_value_count: 2
+  directContext_observed_fields:
+    always: [requestIp, sourceNode, pluginName, signal]
+    conditional_when_requiresAdmin: [decryptedAuthCode]
+  blocked_plugin_manifest_requiresAdmin: false
+  module_business_signature:
+    formal_name: processToolCall
+    formal_positional_arguments: [args]
+    formal_business_argument_count: 1
+    JavaScript_extra_manager_value_is_physically_passed: true
+    extra_value_policy: tolerated_but_never_read_or_propagated
+
+closed_dataflow_rule:
+  native_request_frame_sources:
+    - closed_whitelist_projection_of_args
+    - frozen_module_constants
+  forbidden_sources:
+    - arguments
+    - rest_parameters
+    - second_or_later_positional_value
+    - directContext
+    - requestIp
+    - sourceNode
+    - pluginName
+    - signal
+    - decryptedAuthCode
+    - this
+    - ambient_request_context
+  forbidden_sinks_for_directContext:
+    - NAPI_arguments
+    - reducer_inputs
+    - fingerprints
+    - logs
+    - receipts
+    - errors
+    - returned_output
+  static_probe:
+    owner: future_index_js_AST_and_dataflow_validator
+    must_prove_native_frame_has_no_dependency_on_forbidden_sources: true
+    text_search_alone_is_sufficient: false
+    unknown_or_unprovable: BLOCK
+
+fixed_cases:
+  positive:
+    - manager_two_value_call_module_one_business_arg_second_value_ignored
+    - native_frame_derived_only_from_closed_args_projection
+  negative:
+    - access_arguments_1
+    - declare_or_read_directContext_parameter
+    - forward_requestIp_sourceNode_signal_or_auth
+    - derive_fingerprint_log_error_or_output_from_context
+    - omit_fixed_Plugin_js_from_manifest
+    - set_requiresAdmin_true
+
+governance:
+  changes_VCPToolBox: false
+  reads_or_uses_decrypted_auth: false
+  plugin_enablement_authorized: false
+  runtime_start_authorized: false

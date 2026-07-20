@@ -1,0 +1,258 @@
+schema_version: agents-os.m0a-persistence-transaction-corrections.v0.1
+profile_id: PHASE_5A_M0A_PERSISTENCE_TRANSACTION_CORRECTIONS_R3
+date: '2026-07-19'
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+implementation_authorized: false
+
+effective_schema:
+  base: R2_exact_18_table_profile
+  table_inventory_remains_exhaustive: true
+  effective_table_count: 18
+  added_tables: []
+  removed_tables: []
+  replacement_table_count: 10
+  replacement_tables:
+    - resident_incarnation
+    - event
+    - canonical_fact
+    - current_fact_pointer
+    - outbox_claim
+    - delivery_attempt
+    - dispatch_arm
+    - first_apply_guard
+    - delivery_receipt
+    - task_completion
+  inherited_tables:
+    - schema_metadata
+    - resident_identity
+    - resident_authority_epoch
+    - command_definition
+    - inbox_command
+    - command_envelope
+    - replay_index
+    - outbox_intent
+
+replacement_schema_sql: |-
+  CREATE TABLE resident_incarnation (
+    incarnation_id TEXT PRIMARY KEY,
+    resident_id TEXT NOT NULL REFERENCES resident_identity(resident_id),
+    incarnation_revision INTEGER NOT NULL CHECK(incarnation_revision > 0),
+    process_nonce_fingerprint TEXT NOT NULL CHECK(length(process_nonce_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(resident_id, incarnation_revision)
+  ) STRICT;
+  CREATE TABLE event (
+    event_sequence INTEGER PRIMARY KEY CHECK(event_sequence > 0),
+    event_id TEXT NOT NULL UNIQUE,
+    event_kind TEXT NOT NULL,
+    aggregate_ref TEXT NOT NULL,
+    aggregate_revision INTEGER NOT NULL CHECK(aggregate_revision > 0),
+    command_id TEXT REFERENCES inbox_command(command_id) DEFERRABLE INITIALLY DEFERRED,
+    canonical_bytes BLOB NOT NULL,
+    event_fingerprint TEXT NOT NULL UNIQUE CHECK(length(event_fingerprint) = 64),
+    predecessor_event_fingerprint TEXT CHECK(predecessor_event_fingerprint IS NULL OR length(predecessor_event_fingerprint) = 64),
+    UNIQUE(event_id, event_fingerprint)
+  ) STRICT;
+  CREATE TABLE canonical_fact (
+    fact_kind TEXT NOT NULL,
+    logical_id TEXT NOT NULL,
+    fact_revision INTEGER NOT NULL CHECK(fact_revision > 0),
+    fact_ref TEXT NOT NULL,
+    subject_ref TEXT NOT NULL,
+    subject_revision INTEGER NOT NULL CHECK(subject_revision > 0),
+    canonical_bytes BLOB NOT NULL,
+    fact_fingerprint TEXT NOT NULL CHECK(length(fact_fingerprint) = 64),
+    predecessor_fact_revision INTEGER,
+    predecessor_fact_ref TEXT,
+    predecessor_fact_fingerprint TEXT,
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(fact_kind, logical_id, fact_revision),
+    UNIQUE(fact_ref, fact_revision),
+    UNIQUE(fact_ref, fact_revision, fact_fingerprint),
+    UNIQUE(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint),
+    CHECK((fact_revision = 1 AND predecessor_fact_revision IS NULL AND predecessor_fact_ref IS NULL AND predecessor_fact_fingerprint IS NULL) OR
+          (fact_revision > 1 AND predecessor_fact_revision = fact_revision - 1 AND predecessor_fact_ref IS NOT NULL AND length(predecessor_fact_fingerprint) = 64)),
+    FOREIGN KEY(fact_kind, logical_id, predecessor_fact_revision, predecessor_fact_ref, predecessor_fact_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE current_fact_pointer (
+    fact_kind TEXT NOT NULL,
+    logical_id TEXT NOT NULL,
+    current_fact_revision INTEGER NOT NULL CHECK(current_fact_revision > 0),
+    current_fact_ref TEXT NOT NULL,
+    current_fact_fingerprint TEXT NOT NULL CHECK(length(current_fact_fingerprint) = 64),
+    pointer_version INTEGER NOT NULL CHECK(pointer_version > 0),
+    updated_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(fact_kind, logical_id),
+    FOREIGN KEY(fact_kind, logical_id, current_fact_revision, current_fact_ref, current_fact_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE outbox_claim (
+    claim_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_epoch INTEGER NOT NULL CHECK(claim_epoch > 0),
+    lease_expires_at_utc TEXT NOT NULL CHECK(lease_expires_at_utc GLOB '????-??-??T??:??:??*Z'),
+    lease_fact_ref TEXT NOT NULL,
+    lease_fact_revision INTEGER NOT NULL CHECK(lease_fact_revision > 0),
+    lease_fact_fingerprint TEXT NOT NULL CHECK(length(lease_fact_fingerprint) = 64),
+    claim_fingerprint TEXT NOT NULL UNIQUE CHECK(length(claim_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(intent_id, claim_epoch),
+    UNIQUE(claim_id, intent_id),
+    FOREIGN KEY(lease_fact_ref, lease_fact_revision, lease_fact_fingerprint)
+      REFERENCES canonical_fact(fact_ref, fact_revision, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE delivery_attempt (
+    attempt_id TEXT PRIMARY KEY,
+    intent_id TEXT NOT NULL REFERENCES outbox_intent(intent_id),
+    claim_id TEXT NOT NULL,
+    attempt_revision INTEGER NOT NULL CHECK(attempt_revision > 0),
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    attempt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(attempt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE(intent_id, attempt_revision),
+    UNIQUE(intent_id, attempt_id),
+    UNIQUE(attempt_id, intent_id, claim_id),
+    FOREIGN KEY(claim_id, intent_id) REFERENCES outbox_claim(claim_id, intent_id)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE dispatch_arm (
+    arm_id TEXT PRIMARY KEY,
+    attempt_id TEXT NOT NULL UNIQUE,
+    intent_id TEXT NOT NULL,
+    claim_id TEXT NOT NULL,
+    request_id TEXT NOT NULL,
+    request_fingerprint TEXT NOT NULL CHECK(length(request_fingerprint) = 64),
+    request_bytes BLOB NOT NULL,
+    first_event_ref TEXT NOT NULL,
+    first_event_fingerprint TEXT NOT NULL CHECK(length(first_event_fingerprint) = 64),
+    first_call_authorization_ref TEXT NOT NULL,
+    first_call_authorization_revision INTEGER NOT NULL CHECK(first_call_authorization_revision > 0),
+    first_call_authorization_fingerprint TEXT NOT NULL CHECK(length(first_call_authorization_fingerprint) = 64),
+    committed_event_count INTEGER NOT NULL CHECK(committed_event_count >= 0),
+    committed_call_authorization_count INTEGER NOT NULL CHECK(committed_call_authorization_count >= 0),
+    arm_fingerprint TEXT NOT NULL UNIQUE CHECK(length(arm_fingerprint) = 64),
+    armed_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(attempt_id, intent_id, claim_id)
+      REFERENCES delivery_attempt(attempt_id, intent_id, claim_id) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_event_ref, first_event_fingerprint)
+      REFERENCES event(event_id, event_fingerprint) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(first_call_authorization_ref, first_call_authorization_revision, first_call_authorization_fingerprint)
+      REFERENCES canonical_fact(fact_ref, fact_revision, fact_fingerprint) DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE first_apply_guard (
+    intent_id TEXT PRIMARY KEY REFERENCES outbox_intent(intent_id),
+    winning_attempt_id TEXT NOT NULL UNIQUE,
+    guard_revision INTEGER NOT NULL CHECK(guard_revision = 1),
+    guard_fingerprint TEXT NOT NULL UNIQUE CHECK(length(guard_fingerprint) = 64),
+    acquired_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    FOREIGN KEY(intent_id, winning_attempt_id)
+      REFERENCES delivery_attempt(intent_id, attempt_id) DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+  CREATE TABLE delivery_receipt (
+    source_id TEXT NOT NULL,
+    receipt_id TEXT NOT NULL,
+    attempt_id TEXT NOT NULL REFERENCES delivery_attempt(attempt_id),
+    receipt_revision INTEGER NOT NULL CHECK(receipt_revision > 0),
+    first_apply_guard_fingerprint TEXT NOT NULL REFERENCES first_apply_guard(guard_fingerprint),
+    receipt_state TEXT NOT NULL CHECK(receipt_state IN ('APPLIED_CURRENT','HISTORY_ONLY','REJECTED','INDETERMINATE','UNKNOWN')),
+    canonical_bytes BLOB NOT NULL,
+    receipt_fingerprint TEXT NOT NULL UNIQUE CHECK(length(receipt_fingerprint) = 64),
+    created_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(source_id, receipt_id),
+    UNIQUE(source_id, receipt_id, receipt_revision)
+  ) STRICT;
+  CREATE TABLE task_completion (
+    task_ref TEXT NOT NULL,
+    task_revision INTEGER NOT NULL CHECK(task_revision > 0),
+    completion_revision INTEGER NOT NULL CHECK(completion_revision > 0),
+    completion_fact_kind TEXT NOT NULL CHECK(completion_fact_kind = 'TASK_COMPLETION'),
+    completion_logical_id TEXT NOT NULL,
+    completion_fact_revision INTEGER NOT NULL CHECK(completion_fact_revision > 0),
+    completion_fact_ref TEXT NOT NULL,
+    completion_fact_fingerprint TEXT NOT NULL CHECK(length(completion_fact_fingerprint) = 64),
+    completion_event_sequence INTEGER NOT NULL REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED,
+    PRIMARY KEY(task_ref, task_revision, completion_revision),
+    CHECK(completion_logical_id = task_ref),
+    FOREIGN KEY(completion_fact_kind, completion_logical_id, completion_fact_revision, completion_fact_ref, completion_fact_fingerprint)
+      REFERENCES canonical_fact(fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint)
+      DEFERRABLE INITIALLY DEFERRED
+  ) STRICT;
+
+resident_lifecycle:
+  persistence: canonical_fact_plus_current_fact_pointer
+  fact_kind: RESIDENT_LIFECYCLE
+  closed_states: [COLD, RECOVERING, READY, DRAINING, STOPPED, INDETERMINATE]
+  forbidden_states_in_lifecycle: [STARTING, COMPROMISED]
+  transition_transaction: resident_lifecycle_advance
+
+effective_transaction_owners:
+  admitted_command_commit:
+    replaces_for_admitted_command:
+      - R2_command_intake
+      - R2_canonical_fact_advance
+      - R2_outbox_enqueue
+    begin: BEGIN_IMMEDIATE
+    ordered_steps:
+      - insert_or_resolve_inbox_command
+      - insert_command_envelope
+      - insert_all_derived_canonical_facts_with_deferred_Event_FK
+      - compare_and_set_all_current_fact_pointers_with_deferred_Event_FK
+      - crash_injection_after_pointer_CAS_before_Event
+      - insert_single_committed_Event
+      - insert_exact_replay_result
+      - insert_optional_ledger_only_outbox_intent
+      - validate_all_deferred_foreign_keys
+      - COMMIT
+    failure_result: rollback_every_row
+  resident_lifecycle_advance:
+    ordered_steps: [BEGIN_IMMEDIATE, insert_lifecycle_fact, pointer_CAS, crash_injection_after_pointer_CAS_before_Event, insert_Event, validate_deferred_FKs, COMMIT]
+  canonical_fact_advance:
+    ordered_steps: [BEGIN_IMMEDIATE, insert_fact, pointer_CAS, crash_injection_after_pointer_CAS_before_Event, insert_Event, validate_deferred_FKs, COMMIT]
+  outbox_claim:
+    ordered_steps: [BEGIN_IMMEDIATE, insert_lease_fact, pointer_CAS, crash_injection_after_pointer_CAS_before_Event, insert_Event, insert_claim, validate_deferred_FKs, COMMIT]
+  dispatch_arm_and_first_apply:
+    call_boundary_position: strictly_after_COMMIT
+    ordered_steps: [BEGIN_IMMEDIATE, exact_identity_prebranch_check, insert_delivery_attempt, insert_first_apply_guard, insert_dispatch_arm_complete_stored_first_tuple, insert_Event, validate_deferred_FKs, COMMIT, optional_mock_call]
+    exact_duplicate: return_stored_first_tuple_zero_additional_Event_zero_additional_call_authorization
+    different_attempt_for_same_intent: REJECTED_before_call
+  receipt_apply:
+    may_create_first_apply_guard: false
+    ordered_steps: [BEGIN_IMMEDIATE, resolve_existing_guard, validate_source_receipt_attempt_currentness, insert_receipt, insert_derived_fact, pointer_CAS, crash_injection_after_pointer_CAS_before_Event, insert_Event, validate_deferred_FKs, COMMIT]
+  task_completion:
+    ordered_steps: [BEGIN_IMMEDIATE, recheck_all_current_inputs, insert_TASK_COMPLETION_fact, pointer_CAS, crash_injection_after_pointer_CAS_before_Event, insert_Event, insert_task_completion, validate_deferred_FKs, COMMIT]
+
+lineage_invariants:
+  same_kind_logical_revision_unique: true
+  revision_one_predecessor: all_null
+  later_revision_predecessor: exact_same_kind_same_logical_revision_minus_one_ref_and_fingerprint
+  branch: rejected
+  gap: rejected
+  same_revision_resign: rejected
+  pointer_exact_tuple_FK: [fact_kind, logical_id, fact_revision, fact_ref, fact_fingerprint]
+  completion_Task_exact_binding: true
+
+fixed_negative_cases:
+  - admitted_command_partial_commit
+  - lifecycle_STARTING_or_COMPROMISED
+  - first_apply_guard_requires_future_receipt
+  - second_attempt_first_apply
+  - dispatch_arm_missing_call_authorization_identity
+  - receipt_same_id_cross_source_collision
+  - pointer_cross_kind_or_logical_identity
+  - pointer_fingerprint_substitution
+  - same_revision_branch
+  - predecessor_gap_or_substitution
+  - cross_Task_completion_fact
+  - Event_pointer_order_disagreement
+
+governance:
+  profile_authorizes_schema_creation: false
+  profile_authorizes_database_creation: false
+  implementation_requires_separate_Jenn_decision: true
