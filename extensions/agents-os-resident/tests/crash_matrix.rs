@@ -3,6 +3,8 @@ use agents_os_resident::canonical::jcs::canonicalize_json;
 use agents_os_resident::canonical::types::parse_strict_json;
 use agents_os_resident::ledger::replay::{
     OutboxEnqueueFault, TerminalOutboxIntake, TerminalOutboxObservation,
+    TerminalValidationCompletionIntake, TerminalValidationCompletionObservation,
+    ValidationCompletionFault,
 };
 use agents_os_resident::napi_frame::{MethodId, request_bytes};
 use agents_os_resident::reducers::command_intake::{submission_value, validate_submission};
@@ -30,6 +32,40 @@ fn intake(command_id: &str) -> TerminalOutboxIntake {
     let request_bytes = request_bytes(MethodId::ExecuteCommand, command_id, payload).unwrap();
     let response_bytes = br#"{"disposition":"INDETERMINATE","runtime_usable":false}"#.to_vec();
     TerminalOutboxIntake {
+        command_id: command.command_id,
+        command_type_id: command.command_type_id,
+        command_type_revision: command.command_type_revision,
+        canonical_command_bytes: command.canonical_command_bytes,
+        canonical_command_fingerprint: command.canonical_command_fingerprint,
+        request_fingerprint: sha256_hex(&request_bytes),
+        request_bytes,
+        response_fingerprint: sha256_hex(&response_bytes),
+        response_bytes,
+    }
+}
+
+fn wp6_intake(command_id: &str, command_type_id: &str) -> TerminalValidationCompletionIntake {
+    let payload = submission_value(command_id, command_type_id).expect("submission");
+    let payload_bytes = canonicalize_json(&serde_json::to_vec(&payload).unwrap()).unwrap();
+    let command = validate_submission(&parse_strict_json(&payload_bytes).unwrap()).unwrap();
+    let request_bytes = request_bytes(MethodId::ExecuteCommand, command_id, payload).unwrap();
+    let response_bytes = canonicalize_json(
+        &serde_json::to_vec(&serde_json::json!({
+            "disposition": "COMMITTED",
+            "request_id": command_id,
+            "result": {
+                "low_disclosure_result_code": if command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
+                    "VALIDATION_CURRENT_DECISION_RECORDED"
+                } else {
+                    "TASK_COMPLETED_SYNTHETIC"
+                },
+                "runtime_usable": false
+            }
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    TerminalValidationCompletionIntake {
         command_id: command.command_id,
         command_type_id: command.command_type_id,
         command_type_revision: command.command_type_revision,
@@ -95,6 +131,58 @@ fn wp5_enqueue_crash_and_response_loss_are_atomic_and_replayable() {
     assert!(matches!(
         kernel.terminal_synthetic_outbox_intake(changed, OutboxEnqueueFault::None),
         Err(ResidentError::LedgerOperation(message)) if message.contains("request identity conflicts")
+    ));
+    assert_eq!(kernel.ledger_counts().unwrap(), committed);
+    kernel.shutdown().expect("shutdown");
+}
+
+#[test]
+fn wp6_completion_pointer_cas_crash_rolls_back_every_row_and_replays_exactly() {
+    let root = tempfile::tempdir().expect("temporary synthetic root");
+    let kernel = kernel(root.path(), "wp6-crash");
+    let validation = wp6_intake(
+        "command:SYNTHETIC_TEST:wp6-crash-validation",
+        "M0_SYNTHETIC_RECORD_VALIDATION",
+    );
+    assert!(matches!(
+        kernel
+            .terminal_synthetic_validation_intake(validation, ValidationCompletionFault::None)
+            .unwrap(),
+        TerminalValidationCompletionObservation::FirstTerminal
+    ));
+    let before = kernel.ledger_counts().unwrap();
+    let completion = wp6_intake(
+        "command:SYNTHETIC_TEST:wp6-crash-completion",
+        "M0_SYNTHETIC_COMPLETE_TASK",
+    );
+    assert!(matches!(
+        kernel.terminal_synthetic_completion_intake(
+            completion.clone(),
+            ValidationCompletionFault::AfterPointerCasBeforeEvent
+        ),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+    ));
+    assert_eq!(kernel.ledger_counts().unwrap(), before);
+
+    assert!(matches!(
+        kernel
+            .terminal_synthetic_completion_intake(
+                completion.clone(),
+                ValidationCompletionFault::None
+            )
+            .unwrap(),
+        TerminalValidationCompletionObservation::FirstTerminal
+    ));
+    let committed = kernel.ledger_counts().unwrap();
+    assert_eq!(committed.task_completions, 1);
+    assert_eq!(committed.events, before.events + 1);
+    assert_eq!(committed.facts, before.facts + 1);
+    assert_eq!(committed.pointers, before.pointers + 1);
+    assert!(matches!(
+        kernel
+            .terminal_synthetic_completion_intake(completion, ValidationCompletionFault::None)
+            .unwrap(),
+        TerminalValidationCompletionObservation::Replayed { .. }
     ));
     assert_eq!(kernel.ledger_counts().unwrap(), committed);
     kernel.shutdown().expect("shutdown");

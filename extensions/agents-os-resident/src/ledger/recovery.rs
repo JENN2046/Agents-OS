@@ -17,6 +17,7 @@ pub struct LedgerCounts {
     pub dispatch_arms: u64,
     pub delivery_receipts: u64,
     pub first_apply_guards: u64,
+    pub task_completions: u64,
 }
 
 pub fn counts(connection: &Connection) -> Result<LedgerCounts, LedgerError> {
@@ -32,6 +33,7 @@ pub fn counts(connection: &Connection) -> Result<LedgerCounts, LedgerError> {
         dispatch_arms: count(connection, "dispatch_arm")?,
         delivery_receipts: count(connection, "delivery_receipt")?,
         first_apply_guards: count(connection, "first_apply_guard")?,
+        task_completions: count(connection, "task_completion")?,
     })
 }
 

@@ -11,6 +11,8 @@ use crate::ledger::recovery::LedgerCounts;
 use crate::ledger::replay::{
     OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
+    TerminalValidationCompletionIntake, TerminalValidationCompletionObservation,
+    ValidationCompletionFault,
 };
 use crate::ledger::schema::SchemaSnapshot;
 use crate::ledger::transaction::{
@@ -379,6 +381,28 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .resolve_synthetic_outbox(intent_ref.into())
+    }
+
+    pub fn terminal_synthetic_validation_intake(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_synthetic_validation(intake, fault)
+    }
+
+    pub fn terminal_synthetic_completion_intake(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_synthetic_completion(intake, fault)
     }
 
     pub fn ledger_counts(&self) -> Result<LedgerCounts, ResidentError> {

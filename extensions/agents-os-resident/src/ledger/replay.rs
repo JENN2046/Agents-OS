@@ -6,6 +6,13 @@ use crate::canonical::fingerprint::sha256_hex;
 use crate::canonical::jcs::canonicalize_json;
 use crate::reducers::command_intake::{COMMAND_TYPE_IDS, command_schema_fingerprint};
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
+use crate::reducers::task_completion::{
+    CompletionInputs, CompletionResult, QuiescenceCounts, reduce_completion,
+};
+use crate::reducers::validation_current_decision::{
+    COMPLETION_GUARD_FACT_REF, SYNTHETIC_TASK_REF, SYNTHETIC_TASK_REVISION, VALIDATION_FACT_REF,
+    synthetic_material,
+};
 
 use super::LedgerError;
 use super::transaction::{validate_hash, validate_ref};
@@ -87,6 +94,31 @@ pub enum TerminalOutboxObservation {
         response_bytes: Vec<u8>,
         intent: Option<SyntheticOutboxIntent>,
     },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ValidationCompletionFault {
+    None,
+    AfterPointerCasBeforeEvent,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TerminalValidationCompletionIntake {
+    pub command_id: String,
+    pub command_type_id: String,
+    pub command_type_revision: u64,
+    pub canonical_command_bytes: Vec<u8>,
+    pub canonical_command_fingerprint: String,
+    pub request_bytes: Vec<u8>,
+    pub request_fingerprint: String,
+    pub response_bytes: Vec<u8>,
+    pub response_fingerprint: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TerminalValidationCompletionObservation {
+    FirstTerminal,
+    Replayed { response_bytes: Vec<u8> },
 }
 
 pub fn ensure_closed_synthetic_registry(connection: &mut Connection) -> Result<(), LedgerError> {
@@ -461,6 +493,578 @@ pub fn terminal_synthetic_outbox(
     }
     transaction.commit()?;
     Ok(TerminalOutboxObservation::FirstTerminal { intent })
+}
+
+/// Atomically records the fixed synthetic F6 current decision and its
+/// completion-guard assessment.  Both facts share one Event/read barrier and
+/// remain unusable outside `SYNTHETIC_TEST`.
+pub fn terminal_synthetic_validation(
+    connection: &mut Connection,
+    intake: &TerminalValidationCompletionIntake,
+    fault: ValidationCompletionFault,
+) -> Result<TerminalValidationCompletionObservation, LedgerError> {
+    validate_validation_completion_intake(intake, "M0_SYNTHETIC_RECORD_VALIDATION")?;
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    super::schema::verify_schema(&transaction)?;
+    verify_registry(&transaction)?;
+    if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
+        transaction.commit()?;
+        return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
+    }
+
+    let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
+    let material = synthetic_material(event_sequence)?;
+    require_pointer_absent(
+        &transaction,
+        "VALIDATION_CURRENT_DECISION",
+        SYNTHETIC_TASK_REF,
+    )?;
+    require_pointer_absent(
+        &transaction,
+        "COMPLETION_GUARD_ASSESSMENT",
+        SYNTHETIC_TASK_REF,
+    )?;
+    insert_committed_intake(&transaction, intake, event_sequence)?;
+    insert_genesis_fact(
+        &transaction,
+        "VALIDATION_CURRENT_DECISION",
+        SYNTHETIC_TASK_REF,
+        VALIDATION_FACT_REF,
+        SYNTHETIC_TASK_REF,
+        SYNTHETIC_TASK_REVISION,
+        &material.validation_bytes,
+        &material.validation_fingerprint,
+        event_sequence,
+    )?;
+    insert_genesis_fact(
+        &transaction,
+        "COMPLETION_GUARD_ASSESSMENT",
+        SYNTHETIC_TASK_REF,
+        COMPLETION_GUARD_FACT_REF,
+        SYNTHETIC_TASK_REF,
+        SYNTHETIC_TASK_REVISION,
+        &material.guard_bytes,
+        &material.guard_fingerprint,
+        event_sequence,
+    )?;
+    insert_genesis_pointer(
+        &transaction,
+        "VALIDATION_CURRENT_DECISION",
+        SYNTHETIC_TASK_REF,
+        VALIDATION_FACT_REF,
+        &material.validation_fingerprint,
+        event_sequence,
+    )?;
+    insert_genesis_pointer(
+        &transaction,
+        "COMPLETION_GUARD_ASSESSMENT",
+        SYNTHETIC_TASK_REF,
+        COMPLETION_GUARD_FACT_REF,
+        &material.guard_fingerprint,
+        event_sequence,
+    )?;
+    if fault == ValidationCompletionFault::AfterPointerCasBeforeEvent {
+        return Err(LedgerError::InjectedCrash);
+    }
+    let event_bytes = event_bytes(
+        event_sequence,
+        "F6_SYNTHETIC_VALIDATION_RECORDED",
+        SYNTHETIC_TASK_REF,
+        &intake.command_id,
+    )?;
+    insert_event(
+        &transaction,
+        event_sequence,
+        "event:f6-validation:SYNTHETIC_TEST:m0a",
+        "F6_SYNTHETIC_VALIDATION_RECORDED",
+        SYNTHETIC_TASK_REF,
+        1,
+        &intake.command_id,
+        &event_bytes,
+        &predecessor_event_fingerprint,
+    )?;
+    insert_committed_replay(&transaction, intake)?;
+    require_no_foreign_key_violations(&transaction, "WP6 validation")?;
+    transaction.commit()?;
+    Ok(TerminalValidationCompletionObservation::FirstTerminal)
+}
+
+/// Re-reads every fixed synthetic F6 input at one SQLite barrier and commits
+/// `TASK_COMPLETION + pointer + Event + task_completion + replay`, or no rows.
+pub fn terminal_synthetic_completion(
+    connection: &mut Connection,
+    intake: &TerminalValidationCompletionIntake,
+    fault: ValidationCompletionFault,
+) -> Result<TerminalValidationCompletionObservation, LedgerError> {
+    validate_validation_completion_intake(intake, "M0_SYNTHETIC_COMPLETE_TASK")?;
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    super::schema::verify_schema(&transaction)?;
+    verify_registry(&transaction)?;
+    if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
+        transaction.commit()?;
+        return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
+    }
+
+    let validation = resolve_current_fact(
+        &transaction,
+        "VALIDATION_CURRENT_DECISION",
+        SYNTHETIC_TASK_REF,
+    )?;
+    let guard = resolve_current_fact(
+        &transaction,
+        "COMPLETION_GUARD_ASSESSMENT",
+        SYNTHETIC_TASK_REF,
+    )?;
+    if validation.revision != 1
+        || validation.fact_ref != VALIDATION_FACT_REF
+        || validation.subject_ref != SYNTHETIC_TASK_REF
+        || validation.subject_revision != SYNTHETIC_TASK_REVISION
+        || guard.revision != 1
+        || guard.fact_ref != COMPLETION_GUARD_FACT_REF
+        || guard.subject_ref != SYNTHETIC_TASK_REF
+        || guard.subject_revision != SYNTHETIC_TASK_REVISION
+        || validation.created_event_sequence != guard.created_event_sequence
+    {
+        return Err(LedgerError::InvalidInput(
+            "F6 current decision and completion guard are not the exact same-Task barrier",
+        ));
+    }
+    let expected = synthetic_material(validation.created_event_sequence)?;
+    if validation.bytes != expected.validation_bytes
+        || validation.fingerprint != expected.validation_fingerprint
+        || guard.bytes != expected.guard_bytes
+        || guard.fingerprint != expected.guard_fingerprint
+    {
+        return Err(LedgerError::InvalidInput(
+            "F6 owner-issued synthetic facts differ from the immutable commitments",
+        ));
+    }
+    require_pointer_absent(&transaction, "TASK_COMPLETION", SYNTHETIC_TASK_REF)?;
+    let quiescence = current_quiescence(&transaction)?;
+    let decision = reduce_completion(CompletionInputs {
+        same_task_identity: true,
+        unchanged_read_barrier: true,
+        all_assessment_bindings_exact: true,
+        task_current: Some(true),
+        task_verifying: true,
+        candidate_current: Some(true),
+        validation_set_satisfied: true,
+        dependency_current: Some(true),
+        f5_blocker_clear: Some(quiescence.completion_blocking_effect_count == 0),
+        completion_guard_current_zero: Some(true),
+        quiescence,
+    });
+    if decision.result != CompletionResult::Eligible || !decision.task_done_may_be_committed {
+        return Err(LedgerError::InvalidInput(
+            "F6 completion barrier is not eligible",
+        ));
+    }
+
+    let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
+    let completion_bytes = canonicalize_json(
+        &serde_json::to_vec(&serde_json::json!({
+            "completion_epoch": 1,
+            "completion_guard_fingerprint": guard.fingerprint,
+            "completion_guard_ref": guard.fact_ref,
+            "completion_revision": 1,
+            "environment": "SYNTHETIC_TEST",
+            "interface_version": "agents-os.m0a.synthetic-task-completion.v0.1",
+            "primary_reason": decision.primary_reason,
+            "quiescence_counts": {
+                "active_control_intent_count": quiescence.active_control_intent_count,
+                "completion_blocking_effect_count": quiescence.completion_blocking_effect_count,
+                "current_nonterminal_execution_run_count": quiescence.current_nonterminal_execution_run_count,
+                "current_nonterminal_validation_count": quiescence.current_nonterminal_validation_count,
+                "unknown_effect_count": quiescence.unknown_effect_count
+            },
+            "result": "ELIGIBLE",
+            "runtime_usable": false,
+            "task_ref": SYNTHETIC_TASK_REF,
+            "task_revision": SYNTHETIC_TASK_REVISION,
+            "validation_current_decision_fingerprint": validation.fingerprint,
+            "validation_current_decision_ref": validation.fact_ref
+        }))
+        .map_err(|_| LedgerError::InvalidInput("completion fact serialization failed"))?,
+    )?;
+    let completion_fingerprint = sha256_hex(&completion_bytes);
+    let completion_fact_ref = "fact:SYNTHETIC_TEST:task-completion:m0a-validation-completion:1";
+    insert_committed_intake(&transaction, intake, event_sequence)?;
+    insert_genesis_fact(
+        &transaction,
+        "TASK_COMPLETION",
+        SYNTHETIC_TASK_REF,
+        completion_fact_ref,
+        SYNTHETIC_TASK_REF,
+        SYNTHETIC_TASK_REVISION,
+        &completion_bytes,
+        &completion_fingerprint,
+        event_sequence,
+    )?;
+    insert_genesis_pointer(
+        &transaction,
+        "TASK_COMPLETION",
+        SYNTHETIC_TASK_REF,
+        completion_fact_ref,
+        &completion_fingerprint,
+        event_sequence,
+    )?;
+    if fault == ValidationCompletionFault::AfterPointerCasBeforeEvent {
+        return Err(LedgerError::InjectedCrash);
+    }
+    let event_bytes = event_bytes(
+        event_sequence,
+        "F6_SYNTHETIC_TASK_COMPLETED",
+        SYNTHETIC_TASK_REF,
+        &intake.command_id,
+    )?;
+    insert_event(
+        &transaction,
+        event_sequence,
+        "event:f6-completion:SYNTHETIC_TEST:m0a",
+        "F6_SYNTHETIC_TASK_COMPLETED",
+        SYNTHETIC_TASK_REF,
+        1,
+        &intake.command_id,
+        &event_bytes,
+        &predecessor_event_fingerprint,
+    )?;
+    transaction.execute(
+        "INSERT INTO task_completion(task_ref,task_revision,completion_revision,completion_fact_kind,completion_logical_id,completion_fact_revision,completion_fact_ref,completion_fact_fingerprint,completion_event_sequence) VALUES(?1,1,1,'TASK_COMPLETION',?1,1,?2,?3,?4)",
+        params![SYNTHETIC_TASK_REF, completion_fact_ref, completion_fingerprint, as_i64(event_sequence)?],
+    )?;
+    insert_committed_replay(&transaction, intake)?;
+    require_no_foreign_key_violations(&transaction, "WP6 completion")?;
+    transaction.commit()?;
+    Ok(TerminalValidationCompletionObservation::FirstTerminal)
+}
+
+#[derive(Debug)]
+struct CurrentFact {
+    revision: u64,
+    fact_ref: String,
+    subject_ref: String,
+    subject_revision: u64,
+    bytes: Vec<u8>,
+    fingerprint: String,
+    created_event_sequence: u64,
+}
+
+type CurrentFactRow = (i64, String, String, i64, Vec<u8>, String, i64);
+
+fn validate_validation_completion_intake(
+    intake: &TerminalValidationCompletionIntake,
+    expected_type: &str,
+) -> Result<(), LedgerError> {
+    validate_ref(&intake.command_id)?;
+    validate_ref(&intake.command_type_id)?;
+    validate_hash(&intake.canonical_command_fingerprint)?;
+    validate_hash(&intake.request_fingerprint)?;
+    validate_hash(&intake.response_fingerprint)?;
+    if intake.command_type_id != expected_type
+        || intake.command_type_revision != 1
+        || canonicalize_json(&intake.canonical_command_bytes)? != intake.canonical_command_bytes
+        || sha256_hex(&intake.canonical_command_bytes) != intake.canonical_command_fingerprint
+        || canonicalize_json(&intake.request_bytes)? != intake.request_bytes
+        || sha256_hex(&intake.request_bytes) != intake.request_fingerprint
+        || canonicalize_json(&intake.response_bytes)? != intake.response_bytes
+        || sha256_hex(&intake.response_bytes) != intake.response_fingerprint
+    {
+        return Err(LedgerError::InvalidInput(
+            "synthetic validation/completion intake is not the exact canonical WP6 shape",
+        ));
+    }
+    let request: serde_json::Value = serde_json::from_slice(&intake.request_bytes)
+        .map_err(|_| LedgerError::InvalidInput("WP6 request is not JSON"))?;
+    let embedded_command = request
+        .get("payload")
+        .and_then(|value| value.get("canonical_command"))
+        .ok_or(LedgerError::InvalidInput(
+            "WP6 request does not contain the canonical Command",
+        ))?;
+    let embedded_command_bytes =
+        canonicalize_json(&serde_json::to_vec(embedded_command).map_err(|_| {
+            LedgerError::InvalidInput("WP6 embedded Command serialization failed")
+        })?)?;
+    if request.get("method_id").and_then(serde_json::Value::as_str) != Some("execute_command")
+        || request
+            .get("request_id")
+            .and_then(serde_json::Value::as_str)
+            != Some(intake.command_id.as_str())
+        || embedded_command_bytes != intake.canonical_command_bytes
+        || embedded_command
+            .get("command_id")
+            .and_then(serde_json::Value::as_str)
+            != Some(intake.command_id.as_str())
+        || embedded_command
+            .get("command_type_id")
+            .and_then(serde_json::Value::as_str)
+            != Some(expected_type)
+    {
+        return Err(LedgerError::InvalidInput(
+            "WP6 request and canonical Command are not exactly bound",
+        ));
+    }
+    let response: serde_json::Value = serde_json::from_slice(&intake.response_bytes)
+        .map_err(|_| LedgerError::InvalidInput("WP6 response is not JSON"))?;
+    let expected_code = if expected_type == "M0_SYNTHETIC_RECORD_VALIDATION" {
+        "VALIDATION_CURRENT_DECISION_RECORDED"
+    } else {
+        "TASK_COMPLETED_SYNTHETIC"
+    };
+    if response
+        .get("disposition")
+        .and_then(serde_json::Value::as_str)
+        != Some("COMMITTED")
+        || response
+            .get("request_id")
+            .and_then(serde_json::Value::as_str)
+            != Some(intake.command_id.as_str())
+        || response
+            .get("result")
+            .and_then(|value| value.get("low_disclosure_result_code"))
+            .and_then(serde_json::Value::as_str)
+            != Some(expected_code)
+        || response
+            .get("result")
+            .and_then(|value| value.get("runtime_usable"))
+            .and_then(serde_json::Value::as_bool)
+            != Some(false)
+    {
+        return Err(LedgerError::InvalidInput(
+            "WP6 response is not the exact committed runtime-unusable result",
+        ));
+    }
+    Ok(())
+}
+
+fn existing_committed_replay(
+    transaction: &rusqlite::Transaction<'_>,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<Option<Vec<u8>>, LedgerError> {
+    let existing: Option<(String, Vec<u8>, String)> = transaction
+        .query_row(
+            "SELECT request_fingerprint,request_bytes,intake_state FROM inbox_command WHERE command_id=?1",
+            [&intake.command_id],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .optional()?;
+    let Some((request_fingerprint, request_bytes, state)) = existing else {
+        return Ok(None);
+    };
+    if request_fingerprint != intake.request_fingerprint || request_bytes != intake.request_bytes {
+        return Err(LedgerError::ReplayIdentityConflict);
+    }
+    let stored: Option<(String, String, Vec<u8>, i64, i64)> = transaction
+        .query_row(
+            "SELECT request_fingerprint,response_fingerprint,response_bytes,first_event_count,first_external_call_count FROM replay_index WHERE command_id=?1",
+            [&intake.command_id],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?, row.get(4)?)),
+        )
+        .optional()?;
+    let Some((stored_request, stored_response, stored_bytes, events, calls)) = stored else {
+        return Err(LedgerError::InvalidInput(
+            "committed WP6 Inbox row has no immutable replay tuple",
+        ));
+    };
+    if state != "COMMITTED"
+        || stored_request != intake.request_fingerprint
+        || stored_response != intake.response_fingerprint
+        || stored_bytes != intake.response_bytes
+        || sha256_hex(&stored_bytes) != stored_response
+        || canonicalize_json(&stored_bytes)? != stored_bytes
+        || events != 1
+        || calls != 0
+    {
+        return Err(LedgerError::InvalidInput(
+            "stored WP6 replay tuple is not the exact committed zero-call result",
+        ));
+    }
+    Ok(Some(stored_bytes))
+}
+
+fn insert_committed_intake(
+    transaction: &rusqlite::Transaction<'_>,
+    intake: &TerminalValidationCompletionIntake,
+    event_sequence: u64,
+) -> Result<(), LedgerError> {
+    transaction.execute(
+        "INSERT INTO inbox_command(command_id,request_fingerprint,request_bytes,intake_state,first_event_sequence) VALUES(?1,?2,?3,'COMMITTED',?4)",
+        params![intake.command_id, intake.request_fingerprint, intake.request_bytes, as_i64(event_sequence)?],
+    )?;
+    let envelope_id = format!("envelope:SYNTHETIC_TEST:{}", intake.command_id);
+    transaction.execute(
+        "INSERT INTO command_envelope(envelope_id,command_id,command_type_id,command_type_revision,canonical_bytes,envelope_fingerprint,created_event_sequence) VALUES(?1,?2,?3,1,?4,?5,?6)",
+        params![envelope_id, intake.command_id, intake.command_type_id, intake.canonical_command_bytes, intake.canonical_command_fingerprint, as_i64(event_sequence)?],
+    )?;
+    Ok(())
+}
+
+#[allow(clippy::too_many_arguments)]
+fn insert_genesis_fact(
+    transaction: &rusqlite::Transaction<'_>,
+    kind: &str,
+    logical_id: &str,
+    fact_ref: &str,
+    subject_ref: &str,
+    subject_revision: u64,
+    bytes: &[u8],
+    fingerprint: &str,
+    event_sequence: u64,
+) -> Result<(), LedgerError> {
+    transaction.execute(
+        "INSERT INTO canonical_fact(fact_kind,logical_id,fact_revision,fact_ref,subject_ref,subject_revision,canonical_bytes,fact_fingerprint,predecessor_fact_revision,predecessor_fact_ref,predecessor_fact_fingerprint,created_event_sequence) VALUES(?1,?2,1,?3,?4,?5,?6,?7,NULL,NULL,NULL,?8)",
+        params![kind, logical_id, fact_ref, subject_ref, as_i64(subject_revision)?, bytes, fingerprint, as_i64(event_sequence)?],
+    )?;
+    Ok(())
+}
+
+fn insert_genesis_pointer(
+    transaction: &rusqlite::Transaction<'_>,
+    kind: &str,
+    logical_id: &str,
+    fact_ref: &str,
+    fingerprint: &str,
+    event_sequence: u64,
+) -> Result<(), LedgerError> {
+    transaction.execute(
+        "INSERT INTO current_fact_pointer(fact_kind,logical_id,current_fact_revision,current_fact_ref,current_fact_fingerprint,pointer_version,updated_event_sequence) VALUES(?1,?2,1,?3,?4,1,?5)",
+        params![kind, logical_id, fact_ref, fingerprint, as_i64(event_sequence)?],
+    )?;
+    Ok(())
+}
+
+fn require_pointer_absent(
+    transaction: &rusqlite::Transaction<'_>,
+    kind: &str,
+    logical_id: &str,
+) -> Result<(), LedgerError> {
+    let exists: Option<i64> = transaction
+        .query_row(
+            "SELECT 1 FROM current_fact_pointer WHERE fact_kind=?1 AND logical_id=?2",
+            params![kind, logical_id],
+            |row| row.get(0),
+        )
+        .optional()?;
+    if exists.is_some() {
+        Err(LedgerError::StalePointer)
+    } else {
+        Ok(())
+    }
+}
+
+fn resolve_current_fact(
+    transaction: &rusqlite::Transaction<'_>,
+    kind: &str,
+    logical_id: &str,
+) -> Result<CurrentFact, LedgerError> {
+    let row: Option<CurrentFactRow> = transaction
+        .query_row(
+            "SELECT f.fact_revision,f.fact_ref,f.subject_ref,f.subject_revision,f.canonical_bytes,f.fact_fingerprint,f.created_event_sequence FROM current_fact_pointer p JOIN canonical_fact f ON f.fact_kind=p.fact_kind AND f.logical_id=p.logical_id AND f.fact_revision=p.current_fact_revision AND f.fact_ref=p.current_fact_ref AND f.fact_fingerprint=p.current_fact_fingerprint WHERE p.fact_kind=?1 AND p.logical_id=?2 AND p.pointer_version=1",
+            params![kind, logical_id],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?, row.get(4)?, row.get(5)?, row.get(6)?)),
+        )
+        .optional()?;
+    let Some((revision, fact_ref, subject_ref, subject_revision, bytes, fingerprint, sequence)) =
+        row
+    else {
+        return Err(LedgerError::InvalidInput(
+            "required F6 current fact is unavailable",
+        ));
+    };
+    Ok(CurrentFact {
+        revision: nonnegative(revision)?,
+        fact_ref,
+        subject_ref,
+        subject_revision: nonnegative(subject_revision)?,
+        bytes,
+        fingerprint,
+        created_event_sequence: nonnegative(sequence)?,
+    })
+}
+
+fn current_quiescence(
+    transaction: &rusqlite::Transaction<'_>,
+) -> Result<QuiescenceCounts, LedgerError> {
+    let count = |sql: &str| -> Result<u64, LedgerError> {
+        nonnegative(transaction.query_row(sql, [], |row| row.get(0))?)
+    };
+    let unresolved_effects = count("SELECT COUNT(*) FROM outbox_intent")?;
+    Ok(QuiescenceCounts {
+        current_nonterminal_execution_run_count: 0,
+        current_nonterminal_validation_count: 0,
+        active_control_intent_count: count("SELECT COUNT(*) FROM outbox_claim")?,
+        unknown_effect_count: unresolved_effects,
+        completion_blocking_effect_count: unresolved_effects,
+    })
+}
+
+fn event_bytes(
+    sequence: u64,
+    kind: &str,
+    aggregate_ref: &str,
+    command_id: &str,
+) -> Result<Vec<u8>, LedgerError> {
+    canonicalize_json(
+        &serde_json::to_vec(&serde_json::json!({
+            "aggregate_ref": aggregate_ref,
+            "aggregate_revision": 1,
+            "command_id": command_id,
+            "event_kind": kind,
+            "event_sequence": sequence,
+            "interface_version": "agents-os.m0a-event.v0.1",
+            "runtime_usable": false
+        }))
+        .map_err(|_| LedgerError::InvalidInput("WP6 Event serialization failed"))?,
+    )
+    .map_err(LedgerError::from)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn insert_event(
+    transaction: &rusqlite::Transaction<'_>,
+    sequence: u64,
+    event_id: &str,
+    kind: &str,
+    aggregate_ref: &str,
+    aggregate_revision: u64,
+    command_id: &str,
+    bytes: &[u8],
+    predecessor: &Option<String>,
+) -> Result<(), LedgerError> {
+    let fingerprint = sha256_hex(bytes);
+    transaction.execute(
+        "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_id,canonical_bytes,event_fingerprint,predecessor_event_fingerprint) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",
+        params![as_i64(sequence)?, event_id, kind, aggregate_ref, as_i64(aggregate_revision)?, command_id, bytes, fingerprint, predecessor],
+    )?;
+    Ok(())
+}
+
+fn insert_committed_replay(
+    transaction: &rusqlite::Transaction<'_>,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<(), LedgerError> {
+    transaction.execute(
+        "INSERT INTO replay_index(command_id,request_fingerprint,response_fingerprint,response_bytes,first_event_count,first_external_call_count) VALUES(?1,?2,?3,?4,1,0)",
+        params![intake.command_id, intake.request_fingerprint, intake.response_fingerprint, intake.response_bytes],
+    )?;
+    Ok(())
+}
+
+fn require_no_foreign_key_violations(
+    transaction: &rusqlite::Transaction<'_>,
+    owner: &str,
+) -> Result<(), LedgerError> {
+    let violations: i64 =
+        transaction.query_row("SELECT COUNT(*) FROM pragma_foreign_key_check", [], |row| {
+            row.get(0)
+        })?;
+    if violations == 0 {
+        Ok(())
+    } else {
+        Err(LedgerError::SchemaMismatch(format!(
+            "{owner} deferred foreign-key validation failed"
+        )))
+    }
 }
 
 pub fn resolve_synthetic_outbox(

@@ -7,7 +7,8 @@ use crate::canonical::jcs::{canonicalize_json, to_jcs_bytes};
 use crate::canonical::types::{CanonicalError, CanonicalValue, parse_strict_json};
 use crate::ledger::replay::{
     OutboxEnqueueFault, TerminalIntake, TerminalIntakeObservation, TerminalOutboxIntake,
-    TerminalOutboxObservation,
+    TerminalOutboxObservation, TerminalValidationCompletionIntake,
+    TerminalValidationCompletionObservation, ValidationCompletionFault,
 };
 use crate::reducers::command_intake::{CommandIntakeError, validate_submission};
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
@@ -28,7 +29,7 @@ const QUERY_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"propertie
 const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_fence_generation","effect_scope_fingerprint","environment","expected_previous_claim_epoch","fence_currentness_assessment_fingerprint","fence_currentness_assessment_ref","fence_currentness_result","host_authentication_assessment_fingerprint","host_authentication_assessment_ref","host_authentication_result","host_fence_generation","outbox_intent_ref","permit_currentness_assessment_fingerprint","permit_currentness_assessment_ref","permit_currentness_result","task_fence_generation","trusted_time_utc_ms"]}"#;
 const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"]}"#;
 const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"required":["environment","observed_at_utc_ms","outbox_intent_ref"]}"#;
-const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
+const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"},"task_completions":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE","TASK_COMPLETED_SYNTHETIC","VALIDATION_CURRENT_DECISION_RECORDED"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MethodId {
@@ -261,6 +262,7 @@ impl<'a> CommandBoundary<'a> {
                 "delivery_receipts": counts.delivery_receipts,
                 "pointers": counts.pointers,
                 "replay_rows": counts.replay_rows
+                ,"task_completions": counts.task_completions
             })),
         )
     }
@@ -323,8 +325,47 @@ impl<'a> CommandBoundary<'a> {
             };
         }
 
-        // Domain reducers owned by WP1/WP6 remain inactive. Their valid
-        // synthetic Commands retain the WP4 terminal result and replay tuple.
+        if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION"
+            || command.command_type_id == "M0_SYNTHETIC_COMPLETE_TASK"
+        {
+            let code = if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
+                "VALIDATION_CURRENT_DECISION_RECORDED"
+            } else {
+                "TASK_COMPLETED_SYNTHETIC"
+            };
+            let first_response = response(request, Disposition::Committed, code, None)?;
+            let intake = TerminalValidationCompletionIntake {
+                command_id: command.command_id,
+                command_type_id: command.command_type_id.clone(),
+                command_type_revision: command.command_type_revision,
+                canonical_command_bytes: command.canonical_command_bytes,
+                canonical_command_fingerprint: command.canonical_command_fingerprint,
+                request_bytes: request.canonical_bytes.clone(),
+                request_fingerprint: sha256_hex(&request.canonical_bytes),
+                response_bytes: first_response.canonical_bytes.clone(),
+                response_fingerprint: sha256_hex(&first_response.canonical_bytes),
+            };
+            let observation = if command.command_type_id == "M0_SYNTHETIC_RECORD_VALIDATION" {
+                kernel.terminal_synthetic_validation_intake(intake, ValidationCompletionFault::None)
+            } else {
+                kernel.terminal_synthetic_completion_intake(intake, ValidationCompletionFault::None)
+            };
+            return match observation {
+                Ok(TerminalValidationCompletionObservation::FirstTerminal) => Ok(first_response),
+                Ok(TerminalValidationCompletionObservation::Replayed { response_bytes }) => {
+                    replay_response(response_bytes, Disposition::Committed)
+                }
+                Err(ResidentError::LedgerOperation(message))
+                    if message.contains("request identity conflicts") =>
+                {
+                    response(request, Disposition::Rejected, "PROTOCOL_CONFLICT", None)
+                }
+                Err(error) => Err(error.into()),
+            };
+        }
+
+        // WP1 remains inactive. Its valid synthetic Command retains the WP4
+        // terminal result and replay tuple.
         let first_response = response(
             request,
             Disposition::Indeterminate,

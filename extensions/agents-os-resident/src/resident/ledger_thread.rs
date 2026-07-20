@@ -11,6 +11,8 @@ use crate::ledger::recovery::{self, LedgerCounts};
 use crate::ledger::replay::{
     self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
+    TerminalValidationCompletionIntake, TerminalValidationCompletionObservation,
+    ValidationCompletionFault,
 };
 use crate::ledger::schema::{self, SchemaSnapshot};
 use crate::ledger::transaction::{
@@ -57,6 +59,16 @@ enum LedgerCommand {
     ResolveSyntheticOutbox {
         intent_ref: String,
         response: Sender<Result<Option<SyntheticOutboxIntent>, String>>,
+    },
+    TerminalSyntheticValidation {
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+        response: Sender<Result<TerminalValidationCompletionObservation, String>>,
+    },
+    TerminalSyntheticCompletion {
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+        response: Sender<Result<TerminalValidationCompletionObservation, String>>,
     },
     Counts(Sender<Result<LedgerCounts, String>>),
     Shutdown(Sender<()>),
@@ -175,6 +187,30 @@ impl LedgerThread {
     ) -> Result<Option<SyntheticOutboxIntent>, ResidentError> {
         self.request(|response| LedgerCommand::ResolveSyntheticOutbox {
             intent_ref,
+            response,
+        })
+    }
+
+    pub(super) fn terminal_synthetic_validation(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalSyntheticValidation {
+            intake,
+            fault,
+            response,
+        })
+    }
+
+    pub(super) fn terminal_synthetic_completion(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+        fault: ValidationCompletionFault,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalSyntheticCompletion {
+            intake,
+            fault,
             response,
         })
     }
@@ -316,6 +352,26 @@ fn run(
                 let _ = response.send(
                     schema::verify_schema(&connection)
                         .and_then(|_| replay::resolve_synthetic_outbox(&connection, &intent_ref))
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::TerminalSyntheticValidation {
+                intake,
+                fault,
+                response,
+            } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_validation(&mut connection, &intake, fault)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::TerminalSyntheticCompletion {
+                intake,
+                fault,
+                response,
+            } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_completion(&mut connection, &intake, fault)
                         .map_err(|error| error.to_string()),
                 );
             }

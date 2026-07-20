@@ -39,5 +39,17 @@ claim, and reconciliation observes a pre-arm non-effect state. Claim, lease,
 receipt, UNKNOWN and precedence reducers are implemented and tested without
 creating a claim, arm, call authorization, receipt, Host call or effect.
 
+WP6 activates only the two frozen synthetic validation/completion Commands.
+`M0_SYNTHETIC_RECORD_VALIDATION` consumes an exact owner-result tuple without
+recomputing any upstream reducer and atomically records the immutable
+`VALIDATION_CURRENT_DECISION` plus `COMPLETION_GUARD_ASSESSMENT` at one Event
+barrier. `M0_SYNTHETIC_COMPLETE_TASK` re-reads those exact facts and pointers,
+checks the same synthetic Task identity, the current validation-set result,
+the F5 blocker and all five quiescence counts, then atomically records one
+`TASK_COMPLETION` fact, current pointer, Event, completion row and replay tuple.
+Disagreement, unavailable evidence, cross-Task bindings, unresolved synthetic
+Outbox state, stale CAS, changed replay bytes and injected pre-Event crashes
+all fail closed with zero partial completion rows.
+
 The package still does not enable the plugin, start VCPToolBox, call a provider,
 read private Memory, dispatch to a mock or real Host, or perform an effect.
