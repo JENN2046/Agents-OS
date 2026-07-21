@@ -1,0 +1,153 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-21T21:27:37+08:00'
+effective_at: '2026-07-21T21:27:37+08:00'
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_PLAN
+  decision_source: explicit_current_conversation_confirmation_of_Plan_R5_atomic_freeze_decision_package_section_6_A
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-package-v0.1.md
+    sha256: ec998520e9650cda37e7f35928bfed663cf1812c7cc8a5880839b6595c9d0d41
+    section: 6_A
+  confirmation_text_received: 我确认执行 Phase 5B M0-B Plan R5 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+acceptance_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 18
+  result: ACCEPTED_FROZEN
+  precedence:
+  - R5_explicit_replacements
+  - R4_all_other_clauses
+  - R3_all_other_clauses
+  - R2_all_other_clauses
+  - R1_all_other_clauses
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_subject_count: 18
+  verified_authority_input_count: 58
+  verified_author_evidence_count: 23
+  verified_total_input_count: 99
+  fixed_commit: de1072e43803b4f03d312beadeaa5a952db21914
+  fixed_commit_objects_verified: 99/99_MATCH
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 18
+  subject_hashes_verified: 18/18_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+supporting_evidence:
+- role: fresh_full_atomic_hash_bound_independent_review
+  path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+  sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+  result: PASS_NO_BLOCKER
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  requires_R6: false
+  acceptance_subject: false
+- role: independent_case_results
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r5-independent-case-results.json
+  sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+  acceptance_subject: false
+- role: independent_probe
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r5-independent-probe.py
+  sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+  acceptance_subject: false
+- role: atomic_freeze_decision_surface
+  path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-package-v0.1.md
+  sha256: ec998520e9650cda37e7f35928bfed663cf1812c7cc8a5880839b6595c9d0d41
+  acceptance_subject: false
+frozen_plan_boundary:
+- minimum_nonautomatic_synthetic_Session_to_F7_to_F8_to_F3_path
+- no_raw_Session_content_or_automatic_Goal_Task_Memory_or_Command_creation
+- exact_Jenn_owned_external_package_topology_and_unchanged_VCPToolBox_core_boundary
+- exact_future_source_inventory_and_existing_public_NAPI_seam
+- F7_candidate_revision_current_head_predecessor_and_unique_identity_rules
+- F8_nonauthority_handoff_and_canonical_candidate_history_binding
+- complete_sealed_F3_Command_authentication_submission_and_request_shapes
+- exact_implementable_schema_v2_keys_and_ordered_duplicate_free_three_entry_composite_FK_inventory
+- transaction_replay_recovery_privacy_and_zero_real_occurrence_constraints
+- exact_sealed_synthetic_Actor_Principal_binding_and_credential_tuple
+- strict_JSON_integer_type_and_value_1_for_both_claimed_principal_revision_consumption_sites
+- deterministic_synthetic_witness_validator_and_fixed_negative_regression_boundary
+- nonimplementation_nonruntime_nondatabase_file_noneffect_boundary
+excluded_evidence_classes:
+- builder
+- fixture
+- validator
+- manifest
+- author_self_review
+- independent_review
+- case_results
+- probe
+- decision_package
+- review_disposition
+- receipt
+- active_work_queue
+- registry_projection
+effects:
+  Phase_5B_plan_status: ACCEPTED_FROZEN
+  Phase_5B_plan_atomic_freeze_gate: SATISFIED
+  additional_plan_amendment_required: false
+  requires_R6: false
+  plan_revisions_stopped: true
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  WP0_through_WP7_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_implementation_authorized: false
+  dependency_installation_authorized: false
+  toolchain_mutation_authorized: false
+  database_file_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  Resident_Worker_Host_executor_or_service_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  credential_key_or_cryptography_change_authorized: false
+  real_Session_content_access_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  sensing_or_recording_authorized: false
+  provider_or_real_effect_execution_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+next_gate:
+  name: PHASE_5B_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  implementation_start_precondition:
+  - frozen_plan_objects_verified_on_main
+  - separate_exact_Jenn_implementation_start_decision
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_subject_evidence_and_Git_object_reverification_before_closeout: completed
+  fixed_commands: 20/20_PASS
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  subject_change_method: new_revision_plus_fresh_full_atomic_review_plus_new_Jenn_decision
+  derived_registry_current_state_queue_and_receipt_updates: permitted

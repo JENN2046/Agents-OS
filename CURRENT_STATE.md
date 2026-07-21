@@ -6,6 +6,37 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Plan R5 Accepted and Frozen (2026-07-21)
+
+Jenn executed Section 6 A of the fixed Plan R5 Atomic Freeze Decision Package.
+The complete eighteen-subject R1–R5 plan unit is accepted and frozen under its
+declared precedence. This is a plan freeze only: implementation and Git
+delivery remain separate gates.
+
+```yaml
+Phase_5B_plan_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+Phase_5B_plan_acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_plan_subject_count: 18
+Phase_5B_plan_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_plan_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_plan_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+Phase_5B_plan_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_plan_freeze_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1.yaml
+Phase_5B_plan_freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+Phase_5B_plan_accepted: true
+Phase_5B_plan_frozen: true
+Phase_5B_plan_revisions_stopped: true
+requires_R6: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+Git_durability_complete: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
+active_work_queue_sha256: 8795164a27e1f46bdaea83f703ea491926a416a2675064f3f1788355ad1cc906
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
+current_work_package: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT
+next_gate: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+```
+
 ## Phase 5B M0-B Plan R5 Ready for Jenn Atomic Freeze Decision (2026-07-21)
 
 The complete eighteen-subject R1–R5 plan bundle received an independent
