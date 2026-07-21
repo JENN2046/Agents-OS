@@ -6,6 +6,38 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Plan Durable on Main (2026-07-21)
+
+PR #24 merged the complete frozen Phase 5B M0-B Plan R1-R5 lineage into
+private `main`. Commit-tree verification matched all 99 manifest inputs and all
+18 accepted subjects. Implementation remains a separate Jenn-only decision.
+
+```yaml
+Phase_5B_plan_status: ACCEPTED_FROZEN_DURABLE_ON_MAIN_AWAITING_JENN_IMPLEMENTATION_START_DECISION
+Phase_5B_plan_acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_plan_subject_count: 18
+Phase_5B_plan_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_plan_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_plan_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_plan_freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+Phase_5B_plan_mainline_integration_commit: d494f6399337ab918cccee6183646916d594ef2a
+Phase_5B_plan_Git_objects_on_main: true
+Phase_5B_plan_mainline_integrated: true
+Phase_5B_plan_durability_complete: true
+Phase_5B_plan_accepted: true
+Phase_5B_plan_frozen: true
+Phase_5B_plan_revisions_stopped: true
+requires_R6: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.0.md
+active_work_queue_sha256: 455047f39bb6eb50510ba09bc3bf330a5e2fb894b616fb374e5a635b6f4d1cc0
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.0.md
+durability_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-mainline-durability-closeout-v0.1.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_IMPLEMENTATION_START_DECISION
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_IMPLEMENTATION_START_DECISION
+```
+
 ## Phase 5B M0-B Plan R5 Accepted and Frozen (2026-07-21)
 
 Jenn executed Section 6 A of the fixed Plan R5 Atomic Freeze Decision Package.
