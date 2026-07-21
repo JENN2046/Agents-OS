@@ -12,6 +12,32 @@ pub const SCHEMA_VERSION: u64 = 1;
 pub const SCHEMA_FINGERPRINT: &str =
     "0c5a61574a891c7cee0559f18c4bc45f70c6f24a91b65e0b826c9fd15e779f48";
 
+/// WP0 declares the future synthetic-test-only v2 migration surface without
+/// activating it. `initialize_v1` and `verify_schema` continue to accept only
+/// the frozen Phase 5A schema until WP6 implements and tests the migration.
+pub const M0B_SCHEMA_V2_TARGET_VERSION: u64 = 2;
+pub const M0B_SCHEMA_V2_MIGRATION_STATUS: &str = "WP0_DECLARED_NOT_ACTIVE";
+pub const M0B_SCHEMA_V2_NEW_TABLES: [&str; 3] = [
+    "home_candidate_revision",
+    "home_candidate_head",
+    "home_handoff_link",
+];
+pub const M0B_SCHEMA_V2_NEW_INDEXES: [&str; 3] = [
+    "home_candidate_revision_by_subject",
+    "home_candidate_revision_by_event",
+    "home_handoff_link_by_event",
+];
+pub const M0B_SCHEMA_V2_NEW_TRIGGERS: [&str; 4] = [
+    "home_candidate_revision_no_update",
+    "home_candidate_revision_no_delete",
+    "home_handoff_link_no_update",
+    "home_handoff_link_no_delete",
+];
+
+pub fn m0b_schema_v2_migration_sql() -> Option<&'static str> {
+    None
+}
+
 pub const TABLES: [&str; 18] = [
     "canonical_fact",
     "command_definition",

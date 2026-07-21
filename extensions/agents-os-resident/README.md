@@ -74,3 +74,9 @@ only `initialize`, `processToolCall`, and `shutdown`.
 
 The package still does not enable the plugin, start VCPToolBox, call a provider,
 read private Memory, dispatch to a mock or real Host, or perform an effect.
+
+Phase 5B M0-B WP0 adds only the fixed `src/home/` module layout, the
+`tests/synthetic_m0b.rs` layout check and an inert schema v2 migration
+declaration. Schema v1 remains active, the five-method N-API surface is
+unchanged, and no Session reducer, candidate transition, handoff composition,
+new Command type, database migration or runtime path is active yet.

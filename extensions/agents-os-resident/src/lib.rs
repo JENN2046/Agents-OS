@@ -14,6 +14,7 @@ use napi_derive::napi;
 use serde_json::Value;
 
 pub mod canonical;
+pub mod home;
 pub mod ledger;
 pub mod mock_host;
 pub mod napi_frame;
