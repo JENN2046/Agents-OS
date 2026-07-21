@@ -6,6 +6,41 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B WP0 Complete — WP1 Eligible (2026-07-21)
+
+WP0 fixed the Home module/test layout and inert schema v2 migration surface.
+All inherited Phase 5A tests and the three new WP0 tests pass under the pinned
+Rust 1.96.1 toolchain. WP1 is eligible but not yet implemented.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP0_COMPLETE_WP1_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP0_source_commit: a5a4503d2da59d092c1b1d0be0231ba2c2a739a1
+WP0_package_manifest_commit: 6a3b242f63c0fcab909f0b14c2225a7c9261da34
+WP0_content_tree_sha256: 4a07003c50939d60809fd5418df4142d648a4e3743a4d3039dd235d396184268
+WP0_package_manifest_sha256: 54abc1756b9870eeea8b3f2bca8657914d6ff2563c266dcb9804a11626c8bf9c
+WP0_tests: 47/47_PASS
+WP0_active_schema_version: 1
+WP0_declared_schema_v2_status: WP0_DECLARED_NOT_ACTIVE
+WP0_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP1_SESSION_NONPROMOTION_BOUNDARY
+WP1_start_condition_satisfied: true
+WP1_started: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.2.md
+active_work_queue_sha256: 523a7337ca9c67f81b10bb2ff407c1be101e93942f887168491ec9bfc393f87c
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.2.md
+WP0_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-wp0-extension-skeleton-closeout-v0.1.md
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP1_SESSION_NONPROMOTION_BOUNDARY
+```
+
 ## Phase 5B M0-B Implementation Started — WP0 Active (2026-07-21)
 
 Jenn explicitly started the frozen Phase 5B M0-B implementation. The start
