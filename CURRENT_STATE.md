@@ -6,41 +6,41 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5B M0-B PR #26 Seventh Review Fix Complete — Current-Head Re-review Required (2026-07-22)
+## Phase 5B M0-B PR #26 Eighth Review Fix Complete — Current-Head Re-review Required (2026-07-22)
 
-All prior review findings remain closed. The seventh review found one in-scope
-P2 defect: WP1 Session observation refs still accepted a production-prefixed
-ref containing a later `SYNTHETIC_TEST` substring. All four Session observation
-ref fields now require the exact namespace segment. The branch remains at the
+All prior review findings remain closed. The eighth review found one in-scope
+P2 defect: schema-valid Home Intent on exact schema v1 surfaced a native schema
+mismatch. It now returns the existing low-disclosure invalid-source result with
+zero writes and without migrating the database. The branch remains at the
 current-head re-review gate; it is not merged until that review clears.
 
 ```yaml
-Phase_5B_status: M0B_PR26_SEVENTH_REVIEW_FIX_COMPLETE_REREVIEW_REQUIRED
+Phase_5B_status: M0B_PR26_EIGHTH_REVIEW_FIX_COMPLETE_REREVIEW_REQUIRED
 Phase_5B_implementation_complete: true
 implementation_closeout: PASS_COMPLETE
 PR_number: 26
-PR_reviewed_head: 7032ba783cb614407d3c833d96be55abdbbe8926
-Codex_review_findings: 3_P1_PLUS_7_P2_ALL_ADDRESSED
-review_fix_source_commit: b4fb1c0932daebec8b143bca0039103b95e41791
-review_fix_manifest_commit: cd59a40f42bb98e701d2810f7e6bf1d8b1a01828
-final_content_tree_sha256: 0b2aaf5ead4da9ee240b653433272bf2b21111c225ef252909340a3e7c5d2059
-final_package_manifest_sha256: 7b9fd1947a5c8341832476ac4df26f413db85ae00aa23b9a761321a6baeae7bb
+PR_reviewed_head: 88a624a10d3050c687e2efdf92d3eebe2ad4b110
+Codex_review_findings: 3_P1_PLUS_8_P2_ALL_ADDRESSED
+review_fix_source_commit: 3db6d5d2f5d74268c01b262f677456883a111b27
+review_fix_manifest_commit: 736c606e612d8e564e587f6a4da0855ed835100d
+final_content_tree_sha256: 41db10ccc7a1c51df254dba27d759dc7e39ba13951ca9914cbb85d6b09eb6bb7
+final_package_manifest_sha256: 5e98e4cb446874e8b25aa58f575170cd54a638ba71788cd0d5f1fe56fb948c1f
 integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
-total_Rust_tests: 82/82_PASS
-synthetic_m0b_tests: 32/32_PASS
+total_Rust_tests: 83/83_PASS
+synthetic_m0b_tests: 33/33_PASS
 public_NAPI_methods: 5/5_UNCHANGED
 dependency_changes: 0
 VCPToolBox_core_changes: 0
 real_occurrence_count: 0
-PR26_review_fix_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-pr26-seventh-review-fix-v0.1.md
-PR26_review_fix_receipt_sha256: 56afc65a36b0070795701a8479b66c8d327871909f499d0bbcfe9919c9827de5
-active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.7.md
-active_work_queue_sha256: 45d6fd55d280c9df31047f91b0b494eaf9241451dcee89857f4c379fc0260119
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.7.md
+PR26_review_fix_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-pr26-eighth-review-fix-v0.1.md
+PR26_review_fix_receipt_sha256: 3359c40ae449af6f046d7afd1b57e9af59d646c82f190fd8b65f20d9221765ec
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.8.md
+active_work_queue_sha256: 3a8ed9381ef61bc794242d4527ad0841b48c814270f46edb65a9dd3cb05f36f3
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.8.md
 merge_authorized_only_after_current_head_review_clear: true
 runtime_activation_authorized: false
 Phase_5C_started: false
-next_gate: PR26_CURRENT_HEAD_CODEX_REREVIEW_AFTER_SEVENTH_FIX
+next_gate: PR26_CURRENT_HEAD_CODEX_REREVIEW_AFTER_EIGHTH_FIX
 ```
 
 ## Phase 5B M0-B Implementation Closeout Pass — Scoped Delivery Eligible (2026-07-22)
