@@ -1,0 +1,306 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+
+reviewer:
+  identity: Codex_independent_subagent_phase5b_plan_r1
+  independence_basis:
+    - not_the_author_of_the_R1_subjects
+    - reviewed_fixed_commit_6af82739a678519341490db967f267c550ce67fb
+    - reviewed_fixed_workspace_and_archive_bytes
+    - did_not_modify_workspace_subjects_manifest_queue_or_git
+    - author_self_review_read_only_and_not_used_as_conclusion
+    - no_runtime_provider_database_private_memory_sensing_or_effect_execution
+
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+
+result: BLOCK
+requires_R2: true
+
+findings:
+  blocker: 3
+  major: 1
+  minor: 0
+  unresolved: 0
+
+integrity:
+  fixed_commit:
+    expected: 6af82739a678519341490db967f267c550ce67fb
+    actual: 6af82739a678519341490db967f267c550ce67fb
+    match: true
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+    actual_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+    match: true
+  archive:
+    path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r1-independent-review-package-v0.1.zip
+    expected_sha256: 01dc2a29a7a6d81be94a87f8500b94a333ac7bf75af91401920adddba3280c3d
+    actual_sha256: 01dc2a29a7a6d81be94a87f8500b94a333ac7bf75af91401920adddba3280c3d
+    entry_count: 43
+    crc: PASS
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    checksums_rows: 42
+    checksums_match: 42/42
+    archive_map_declared_inputs: 37
+    archive_map_workspace_payloads: 40
+    external_manifest_equals_MANIFEST_alias: true
+    external_manifest_equals_workspace_path_entry: true
+  declared_inputs:
+    total_hashes: 37/37_MATCH
+    total_full_reads: 37/37
+    total_bytes_fully_read: 810751
+    total_lines_fully_read: 17483
+    git_object_membership_at_fixed_commit: 37/37_MATCH
+    subjects: 4/4_MATCH_AND_FULLY_READ
+    authority_inputs: 29/29_MATCH_AND_FULLY_READ
+    author_evidence: 4/4_MATCH_AND_FULLY_READ
+  subject_hashes:
+    implementation_plan: 88c2bd24c4c1beea470ec734a381c7d73310425844bd9d84ef98741878768634
+    exact_build_profile: e213b302fbc3737b20a414b707626a1438ea464da59d2acb24f424582f7d5a60
+    contract_traceability_matrix: 6302ecf424e13580f1207006928a49e605030cecc78c7778a4410e6ce2367726
+    validation_privacy_fault_injection_profile: 668d0ee361c6aff79f6b0062dd558c587c76a4e98dd70c202356d6ef407571a8
+
+fixed_command_reproduction:
+  workspace: 4/4_PASS
+  no_git_extracted_archive: 4/4_PASS
+  yaml_parsing: PASS
+  author_validator:
+    result: PASS
+    case_count: 28
+    row_fingerprints_verified: 28
+    section_fingerprints_verified: 3
+    author_fully_resigned_mutations_rejected: 30/30
+    terminal_outcome: NOT_ACTIVATED
+  builder_byte_equality: PASS
+  whitespace_validator: PASS
+
+independent_probes:
+  coordinated_probe_count: 30
+  independent_fully_resigned_attack_count: 26
+  fully_resigned_attacks_rejected: 26/26
+  parser_probe_count: 4
+  parser_probes_rejected: 4/4
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  stale_hash_or_unpropagated_ref_rejection_count: 0
+  probe_exceptions: 0
+  note: >-
+    The fixed decision-case validator correctly rejects the represented attacks.
+    Several manifest-required structural attacks cannot be represented by the
+    fixed witness at all; that absence is finding PHASE5B_PLAN_R1_IR_B03 and is
+    not misreported as a successful rejection.
+
+finding_details:
+  - id: PHASE5B_PLAN_R1_IR_B01
+    severity: blocker
+    title: Exact source inventory cannot implement the declared F3 seam or preserve the single-writer topology
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-implementation-plan-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-contract-traceability-matrix-v0.1-r1.yaml
+    exact_locations:
+      - implementation_plan_lines_154_160
+      - implementation_plan_lines_168_185
+      - build_profile_lines_41_58
+      - traceability_matrix_lines_121_164
+      - sealed_command_intake_rs_lines_14_21_and_67_116
+      - sealed_napi_frame_rs_lines_32_and_270_399
+      - sealed_ledger_thread_rs_lines_45_84_and_340_420
+    evidence: >-
+      R1 requires a new M0_SYNTHETIC_SUBMIT_HOME_INTENT Command type, dispatch
+      through existing execute_command, and candidate/handoff writes through the
+      one Rust ledger thread. The exact modify inventory omits
+      src/reducers/command_intake.rs, src/napi_frame.rs,
+      src/resident/ledger_thread.rs, src/ledger/replay.rs and
+      src/ledger/recovery.rs, while declaring NAPI_frame_change_expected false.
+      The sealed baseline has exactly four Command types, a closed payload
+      schema, a closed dispatch/result-code table, and a closed LedgerCommand
+      inventory with no Home candidate or handoff operation. Adding only the
+      listed home modules, schema.rs and transaction.rs cannot route the new
+      Command or mutations through the one authoritative connection.
+    reproduction:
+      command_registry_contains_M0_SYNTHETIC_SUBMIT_HOME_INTENT: false
+      napi_dispatch_contains_M0_SYNTHETIC_SUBMIT_HOME_INTENT: false
+      command_intake_rs_in_exact_modify_inventory: false
+      napi_frame_rs_in_exact_modify_inventory: false
+      resident_ledger_thread_rs_in_exact_modify_inventory: false
+      profile_requires_NAPI_frame_change_expected_false: true
+    impact: >-
+      The frozen scope is implementation-impossible as written. An implementer
+      must either violate the exact inventory, bypass F3/ledger ownership, or
+      leave the committed path unreachable.
+    required_R2_correction:
+      - distinguish unchanged five-method public NAPI surface from permitted internal napi_frame implementation changes
+      - enumerate every existing file that must change for registry validation dispatch replay recovery and one-writer routing
+      - bind every new path to the existing single LedgerThread and one SQLite connection
+      - add sealed-source compatibility checks for the exact modified-file inventory
+
+  - id: PHASE5B_PLAN_R1_IR_B02
+    severity: blocker
+    title: The exact F8 handoff tuple is not bound into a closed F3 Command payload or replay identity
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-implementation-plan-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml
+    exact_locations:
+      - implementation_plan_lines_168_182
+      - implementation_plan_lines_215_220
+      - build_profile_lines_136_151
+      - build_profile_lines_209_218
+      - sealed_command_intake_rs_lines_21_and_110_116
+    evidence: >-
+      R1 says the adapter constructs CommandSubmission from the exact F8
+      handoff tuple and that canonical request bytes/idempotency own replay. It
+      freezes only the new command type name. It does not freeze a type-specific
+      command payload schema, payload schema fingerprint, handoff ref/revision/
+      fingerprint fields, command_id derivation, request/idempotency derivation,
+      result code, Event kind, or F3 terminal accounting. The sealed F3 payload
+      schema accepts only schema_version, so it cannot carry or prove the exact
+      F8 tuple. Two distinct handoff candidates can therefore map to the same
+      allowed payload unless R2 supplies rules not present in the frozen unit.
+    reproduction:
+      sealed_command_payload_fields:
+        - schema_version
+      exact_handoff_tuple_fields_present_in_sealed_payload: false
+      R1_type_specific_payload_schema_defined: false
+      R1_command_id_derivation_defined: false
+      R1_idempotency_derivation_defined: false
+      R1_F3_result_and_Event_mapping_defined: false
+    impact: >-
+      F3 could commit a syntactically valid synthetic Command without a
+      verifiable one-to-one binding to the canonical F8 handoff, defeating the
+      central Home-to-Orchestrator seam and replay identity promise.
+    required_R2_correction:
+      - freeze a closed M0 synthetic Home-intent payload schema containing the exact F8 candidate tuple
+      - freeze its schema fingerprint domain and command fingerprint derivation
+      - freeze command_id and idempotency/replay identity derivation from the exact tuple
+      - freeze F3 disposition result-code Event and first-accounting mapping
+      - add distinct-handoff_same-command and same-handoff_changed-bytes fully resigned negative cases
+
+  - id: PHASE5B_PLAN_R1_IR_B03
+    severity: blocker
+    title: The fixed witness cannot exercise the manifest-required history commitment writer or crash attacks
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-validation-privacy-fault-injection-profile-v0.1-r1.yaml
+      - control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r1-synthetic-witness-v0.1.json
+      - control-plane/registry/validate-phase-5b-m0b-plan-r1-witness.py
+      - control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    exact_locations:
+      - validation_profile_decision_case_inventory_and_crash_matrix
+      - manifest_independent_adversarial_minimum
+      - validator_RAW_FIELDS_and_expected_cases
+    evidence: >-
+      The manifest requires same-revision candidate/handoff rewriting, F8 owner
+      commitment substitution, phantom canonical history, second writer/
+      connection/service, schema transaction ownership and crash/restart
+      attacks. The fixed witness contains only 28 scalar decision rows plus
+      aggregate counts. It contains no candidate or handoff object, revision,
+      predecessor, owner commitment, assessment consumer/resolution, canonical
+      history, request bytes, idempotency key, SQLite schema, connection/writer
+      inventory, transaction trace or crash-state graph. Those attacks cannot
+      be fully propagated and re-signed against this unit. The independent 26
+      represented attacks were all correctly rejected, but that does not
+      satisfy the package's own adversarial minimum.
+    reproduction:
+      represented_case_catalog_count: 28
+      candidate_revision_objects_in_witness: 0
+      handoff_revision_objects_in_witness: 0
+      owner_commitment_objects_in_witness: 0
+      canonical_history_objects_in_witness: 0
+      SQLite_schema_or_transaction_objects_in_witness: 0
+      crash_state_objects_in_witness: 0
+      independent_represented_fully_resigned_attacks_rejected: 26/26
+      manifest_required_structural_attack_families_unrepresentable: 6
+    impact: >-
+      A green validator can coexist with a plan that violates its core
+      immutability, owner-source, one-writer and recovery requirements. The
+      package cannot use the fixed witness to support plan-freeze eligibility.
+    required_R2_correction:
+      - add a constructive plan graph covering candidate history F8 commitments F3 command binding writer topology schema transactions and crash ownership
+      - derive every fingerprint and result rather than store favorable labels
+      - add fully propagated re-signing attacks for every manifest-required structural family
+      - keep the 28 decision cases as a separate nonpromotion reducer catalog
+
+  - id: PHASE5B_PLAN_R1_IR_M01
+    severity: major
+    title: Schema v2 persistence and migration profile is not exact enough to freeze
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-implementation-plan-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-build-profile-v0.1-r1.yaml
+    exact_locations:
+      - implementation_plan_lines_187_220
+      - build_profile_lines_153_189
+    evidence: >-
+      R1 names three tables and transaction components but supplies no exact
+      columns, primary/unique/foreign keys, CHECK constraints, immutable update/
+      delete guards, Event tuple binding, candidate-head CAS predicate, schema
+      fingerprint derivation, v1-to-v2 migration transaction, rollback rule, or
+      v0 versus v1 initialization distinction. Multiple materially different
+      schemas, including unsafe ones, satisfy the current prose-level map.
+    impact: >-
+      The package does not yet freeze one deterministic build profile for the
+      highest-risk persistence seam; implementation choices could change
+      immutability and crash semantics without a plan amendment.
+    required_R2_correction:
+      - freeze exact closed table column constraint index trigger and foreign-key inventories
+      - freeze schema fingerprint and metadata migration rules
+      - freeze candidate and handoff transaction preconditions writes CAS Event and accounting
+      - freeze failpoint expected state for every pre-commit post-commit and restart window
+
+boundary_results:
+  second_permission_authority_count: 0
+  second_identity_authority_count: 0
+  Home_Task_authority_count: 0
+  Home_or_F8_Command_authority_count: 0
+  effect_authority_count: 0
+  upstream_authority_recomputation_count: 0
+  synthetic_to_production_leak_count: 0
+  private_content_or_Ledger_disclosure_count: 0
+  NAPI_public_method_expansion_count: 0
+  second_SQLite_writer_connection_or_service_count: 0
+  VCPToolBox_boundary_escape_count: 0
+  crash_replay_or_automatic_promotion_gap_count: 1
+  crash_replay_or_automatic_promotion_gap_basis: required_structural_proof_surface_absent
+  automatic_implementation_start_count: 0
+  real_runtime_provider_database_private_memory_sensing_or_effect_occurrence_count: 0
+
+disposition:
+  Phase_5B_plan_acceptance_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  automatic_freeze: forbidden
+  implementation_authorized: false
+  source_modification_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
+
+next_action:
+  - preserve_R1_four_subjects_manifest_and_review_bytes_immutable
+  - create_narrow_R2_disposition_for_the_three_blockers_and_one_major
+  - revise_only_exact_source_inventory_F3_handoff_binding_constructive_graph_and_schema_v2_totality
+  - create_new_hash_bound_R1_plus_R2_atomic_review_unit
+  - run_fresh_full_atomic_hash_bound_independent_review
+
+forbidden_next_actions:
+  - partial_acceptance
+  - Phase_5B_plan_freeze
+  - Phase_5B_implementation_start
+  - Rust_JavaScript_NAPI_SQL_or_plugin_implementation
+  - dependency_installation
+  - database_creation_or_migration
+  - VCPToolBox_modification_or_start
+  - runtime_activation
+  - production_authentication
+  - private_Memory_access
+  - provider_sensing_or_real_effect

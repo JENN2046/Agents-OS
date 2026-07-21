@@ -1,0 +1,349 @@
+{
+  "favorable_invalid_path_count": 0,
+  "fixture_sha256": "d10eb93cccaef0709b1f14555f790b8fae786d5e7681b75e3d66f2ac59ae6c71",
+  "fully_resigned_attack_count": 26,
+  "fully_resigned_attack_rejected_count": 26,
+  "parser_probe_count": 4,
+  "parser_probe_rejected_count": 4,
+  "parser_records": [
+    {
+      "case_id": "P01_duplicate_root_key",
+      "detail": [
+        "ValidationError: duplicate JSON key: schema_version"
+      ],
+      "kind": "parser_probe",
+      "rejected": true
+    },
+    {
+      "case_id": "P02_float",
+      "detail": [
+        "ValidationError: float forbidden: 1.0"
+      ],
+      "kind": "parser_probe",
+      "rejected": true
+    },
+    {
+      "case_id": "P03_NaN",
+      "detail": [
+        "ValidationError: non-finite number forbidden: NaN"
+      ],
+      "kind": "parser_probe",
+      "rejected": true
+    },
+    {
+      "case_id": "P04_non_NFC",
+      "detail": [
+        "$.case_catalog[0].case_id: non-NFC string",
+        "case_catalog[0]: case_id inventory",
+        "case_catalog[0]: row_fingerprint mismatch",
+        "section_fingerprints: mismatch"
+      ],
+      "kind": "parser_probe",
+      "rejected": true
+    }
+  ],
+  "records": [
+    {
+      "accepted": false,
+      "case_id": "A01_replace_no_promotion_case_with_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[5]: raw_input inventory"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A02_implicit_life_stream_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[6]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A03_implicit_memory_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[11]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A04_implicit_intent_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[13]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A05_phantom_handoff_without_request",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[12]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A06_F3_commit_without_F8_candidate",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[12]: raw_input inventory"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A07_Home_direct_Task_write_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[18]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A08_Home_direct_Command_commit_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[19]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A09_relationship_authority_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[20]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A10_PBL_no_match_permission_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[21]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A11_raw_content_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[22]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A12_formal_Memory_write_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[23]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A13_production_profile_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[24]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A14_stale_upstream_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[25]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A15_F8_rejected_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[26]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A16_F8_indeterminate_favorable",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[27]: derived_output mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A17_make_runtime_usable",
+      "error_count": 1,
+      "errors": [
+        "profile: exact synthetic profile mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A18_make_production_compatible",
+      "error_count": 1,
+      "errors": [
+        "profile: exact synthetic profile mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A19_add_second_writer_boundary_key",
+      "error_count": 2,
+      "errors": [
+        "boundary_assertions: fields mismatch missing=[] extra=['second_writer']",
+        "boundary_assertions: exact all-false mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A20_authorize_implementation",
+      "error_count": 1,
+      "errors": [
+        "boundary_assertions: exact all-false mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A21_add_unknown_raw_private_field",
+      "error_count": 2,
+      "errors": [
+        "case_catalog[0].raw_input: fields mismatch missing=[] extra=['private_memory_payload']",
+        "case_catalog[0]: raw_input inventory"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A22_replace_case_id",
+      "error_count": 1,
+      "errors": [
+        "case_catalog[0]: case_id inventory"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A23_swap_case_order",
+      "error_count": 6,
+      "errors": [
+        "case_catalog[0]: ordinal",
+        "case_catalog[0]: case_id inventory",
+        "case_catalog[0]: raw_input inventory",
+        "case_catalog[1]: ordinal",
+        "case_catalog[1]: case_id inventory",
+        "case_catalog[1]: raw_input inventory"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A24_nonzero_real_Command",
+      "error_count": 1,
+      "errors": [
+        "integrated_witness: exact mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A25_nonzero_provider_call",
+      "error_count": 1,
+      "errors": [
+        "integrated_witness: exact mismatch"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    },
+    {
+      "accepted": false,
+      "case_id": "A26_unknown_root_service",
+      "error_count": 1,
+      "errors": [
+        "root: fields mismatch missing=[] extra=['sidecar_enabled']"
+      ],
+      "expected": "REJECT",
+      "kind": "fully_resigned_attack",
+      "target_semantic_rejection": true
+    }
+  ],
+  "schema_version": "agents-os.phase-5b-m0b-plan-r1-independent-probes.v0.1",
+  "sealed_source_compatibility": {
+    "command_intake_rs_in_modify_inventory": false,
+    "command_payload_can_bind_handoff_tuple": false,
+    "napi_frame_rs_in_modify_inventory": false,
+    "new_command_type_present_in_NAPI_dispatch": false,
+    "new_command_type_present_in_closed_registry": false,
+    "profile_requires_no_napi_frame_change": true
+  }
+}
