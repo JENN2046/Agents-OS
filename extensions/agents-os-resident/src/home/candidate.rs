@@ -637,6 +637,15 @@ fn validate_history(history: &[HomeCandidateRevision]) -> Result<(), CandidateEr
     Ok(())
 }
 
+/// Revalidates one materialized candidate against the same closed canonical
+/// representation used by the F7 reducer. Persistence code must call this
+/// before trusting caller-supplied struct fields or fingerprints.
+pub(crate) fn validate_materialized_candidate(
+    candidate: &HomeCandidateRevision,
+) -> Result<(), CandidateError> {
+    validate_stored_candidate(candidate)
+}
+
 fn validate_stored_candidate(candidate: &HomeCandidateRevision) -> Result<(), CandidateError> {
     if candidate.candidate_id.is_empty()
         || candidate.candidate_revision == 0

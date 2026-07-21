@@ -135,8 +135,14 @@ pub fn terminal_synthetic_home_intent(
         "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC",
     )?;
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
-    super::schema::verify_schema(&transaction)?;
+    let schema = super::schema::verify_schema(&transaction)?;
+    if schema.version != 2 {
+        return Err(LedgerError::SchemaMismatch(
+            "M0-B Home Intent intake requires exact schema v2".to_owned(),
+        ));
+    }
     verify_registry(&transaction)?;
+    require_exact_home_intent_source(&transaction, intake)?;
     if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
         transaction.commit()?;
         return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
@@ -166,6 +172,82 @@ pub fn terminal_synthetic_home_intent(
     require_no_foreign_key_violations(&transaction, "WP5 Home Intent intake")?;
     transaction.commit()?;
     Ok(TerminalValidationCompletionObservation::FirstTerminal)
+}
+
+fn require_exact_home_intent_source(
+    transaction: &rusqlite::Transaction<'_>,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<(), LedgerError> {
+    let command: serde_json::Value = serde_json::from_slice(&intake.canonical_command_bytes)
+        .map_err(|_| LedgerError::InvalidInput("Home Intent Command is not JSON"))?;
+    let payload = command
+        .get("command_payload")
+        .and_then(serde_json::Value::as_object)
+        .ok_or(LedgerError::InvalidInput(
+            "Home Intent Command payload is missing",
+        ))?;
+    let string = |name: &str| -> Result<&str, LedgerError> {
+        payload
+            .get(name)
+            .and_then(serde_json::Value::as_str)
+            .ok_or(LedgerError::InvalidInput(
+                "Home Intent Command payload string is invalid",
+            ))
+    };
+    let integer = |name: &str| -> Result<u64, LedgerError> {
+        payload
+            .get(name)
+            .and_then(serde_json::Value::as_u64)
+            .ok_or(LedgerError::InvalidInput(
+                "Home Intent Command payload integer is invalid",
+            ))
+    };
+    let handoff_ref = string("handoff_candidate_ref")?;
+    let handoff_revision = integer("handoff_candidate_revision")?;
+    let handoff_fingerprint = string("handoff_candidate_fingerprint")?;
+    let intent_ref = string("intent_candidate_ref")?;
+    let intent_revision = integer("intent_candidate_revision")?;
+    let intent_fingerprint = string("intent_candidate_fingerprint")?;
+    let owner_set = string("owner_commitment_set_fingerprint")?;
+    let history = string("canonical_candidate_history_fingerprint")?;
+    let minimum_sequence = integer("minimum_trusted_event_sequence")?;
+    let linked: Option<(String, i64, i64)> = transaction
+        .query_row(
+            "SELECT intent_candidate_id,intent_candidate_revision,created_event_sequence FROM home_handoff_link WHERE handoff_ref=?1 AND handoff_revision=?2 AND handoff_fingerprint=?3 AND intent_candidate_ref=?4 AND intent_candidate_revision=?5 AND intent_candidate_fingerprint=?6 AND owner_commitment_set_fingerprint=?7 AND canonical_candidate_history_fingerprint=?8 AND minimum_trusted_event_sequence=?9",
+            params![handoff_ref,as_i64(handoff_revision)?,handoff_fingerprint,intent_ref,as_i64(intent_revision)?,intent_fingerprint,owner_set,history,as_i64(minimum_sequence)?],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .optional()?;
+    let Some((intent_id, linked_revision, handoff_event_sequence)) = linked else {
+        return Err(LedgerError::InvalidInput(
+            "Home Intent Command does not resolve the exact immutable handoff link",
+        ));
+    };
+    if linked_revision != as_i64(intent_revision)?
+        || handoff_event_sequence <= as_i64(minimum_sequence)?
+    {
+        return Err(LedgerError::InvalidInput(
+            "Home Intent handoff Event/currentness tuple is invalid",
+        ));
+    }
+    let current: Option<(i64, String, String, i64)> = transaction
+        .query_row(
+            "SELECT current_candidate_revision,current_candidate_ref,current_candidate_fingerprint,updated_event_sequence FROM home_candidate_head WHERE candidate_id=?1 AND semantic_class='INTENT_CANDIDATE'",
+            [&intent_id],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+        )
+        .optional()?;
+    if current
+        != Some((
+            as_i64(intent_revision)?,
+            intent_ref.to_owned(),
+            intent_fingerprint.to_owned(),
+            as_i64(minimum_sequence)?,
+        ))
+    {
+        return Err(LedgerError::StalePointer);
+    }
+    Ok(())
 }
 
 /// Atomically records the fixed F1-shaped synthetic Goal, success criteria,

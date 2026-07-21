@@ -9,14 +9,21 @@ use agents_os_resident::home::session_boundary::{
     SessionBoundaryError, SessionBranchChoice, decode_synthetic_observation, reduce_nonpromotion,
 };
 use agents_os_resident::home::handoff::{
-    HandoffError, HandoffResult, compose_f8_handoff, owner_commitment_set_fingerprint,
-    synthetic_f3_home_intent_submission, trusted_owner_commitments,
+    HandoffError, HandoffResult, HomeIntentHandoffCandidate, compose_f8_handoff,
+    owner_commitment_set_fingerprint, synthetic_f3_home_intent_submission,
+    trusted_owner_commitments,
+};
+use agents_os_resident::ledger::transaction::{
+    HomeCommitFault, HomeCommitObservation, HomeHeadExpectation,
 };
 use agents_os_resident::napi_frame::{CommandBoundary, Disposition, MethodId, parse_request};
 use agents_os_resident::reducers::command_intake::{
     HOME_INTENT_COMMAND_TYPE_ID, validate_submission,
 };
-use agents_os_resident::resident::{ResidentKernel, ResidentKernelConfig, SyntheticOwnership};
+use agents_os_resident::resident::{
+    ResidentError, ResidentKernel, ResidentKernelConfig, SYNTHETIC_DATABASE_FILENAME,
+    SyntheticOwnership,
+};
 use serde_json::{Value, json};
 
 #[test]
@@ -604,6 +611,60 @@ fn formed_handoff() -> agents_os_resident::home::handoff::HomeIntentHandoffCandi
     .unwrap()
 }
 
+fn v2_kernel_with_formed_handoff(
+    root: &std::path::Path,
+    suffix: &str,
+) -> (ResidentKernel, HomeIntentHandoffCandidate) {
+    let ownership = SyntheticOwnership::genesis(
+        &format!("incarnation:SYNTHETIC_TEST:{suffix}"),
+        suffix.as_bytes(),
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root, ownership)).unwrap();
+    let schema = kernel.migrate_synthetic_ledger_v2().unwrap();
+    assert_eq!(schema.version, 2);
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                intent.clone(),
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+    let history = vec![intent.clone()];
+    let handoff = compose_f8_handoff(
+        &handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100),
+        &history,
+        &trusted_owner_commitments(),
+        &[],
+    )
+    .unwrap()
+    .candidate
+    .unwrap();
+    assert_eq!(
+        kernel
+            .commit_home_handoff(
+                handoff.clone(),
+                "intent",
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+    (kernel, handoff)
+}
+
 #[test]
 fn wp4_forms_only_an_exact_nonauthoritative_handoff_candidate() {
     let intent = derive_candidate(
@@ -804,16 +865,9 @@ fn wp5_adapts_the_exact_handoff_into_the_existing_execute_command_frame() {
 #[test]
 fn wp5_f3_alone_commits_and_exactly_replays_the_home_intent_command() {
     let root = tempfile::tempdir().unwrap();
-    let ownership = SyntheticOwnership::genesis(
-        "incarnation:SYNTHETIC_TEST:m0b-wp5",
-        b"m0b-wp5-nonce",
-    )
-    .unwrap();
-    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
-        .unwrap();
-    kernel.initialize_ledger_v1().unwrap();
+    let (kernel, handoff) = v2_kernel_with_formed_handoff(root.path(), "m0b-wp5");
     let boundary = CommandBoundary::synthetic(&kernel);
-    let submission = synthetic_f3_home_intent_submission(&formed_handoff()).unwrap();
+    let submission = synthetic_f3_home_intent_submission(&handoff).unwrap();
 
     let before = kernel.ledger_counts().unwrap();
     let first = boundary
@@ -837,6 +891,145 @@ fn wp5_f3_alone_commits_and_exactly_replays_the_home_intent_command() {
         .unwrap();
     assert_eq!(replay.canonical_bytes, first.canonical_bytes);
     assert_eq!(kernel.ledger_counts().unwrap(), after);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
+fn wp6_schema_v2_candidate_handoff_and_replay_are_atomic_and_low_disclosure() {
+    let root = tempfile::tempdir().unwrap();
+    let (kernel, handoff) = v2_kernel_with_formed_handoff(root.path(), "m0b-wp6");
+    let replay_candidate = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                replay_candidate,
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    assert_eq!(
+        kernel
+            .commit_home_handoff(
+                handoff.clone(),
+                "intent",
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    kernel.shutdown().unwrap();
+
+    let database = root.path().join(SYNTHETIC_DATABASE_FILENAME);
+    let connection = rusqlite::Connection::open_with_flags(
+        &database,
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .unwrap();
+    let counts: (i64, i64, i64, i64) = connection
+        .query_row(
+            "SELECT (SELECT COUNT(*) FROM home_candidate_revision),(SELECT COUNT(*) FROM home_candidate_head),(SELECT COUNT(*) FROM home_handoff_link),(SELECT COUNT(*) FROM event)",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+        )
+        .unwrap();
+    assert_eq!(counts, (1, 1, 1, 3));
+    let quick: String = connection
+        .query_row("PRAGMA quick_check", [], |row| row.get(0))
+        .unwrap();
+    let foreign_keys: i64 = connection
+        .query_row("SELECT COUNT(*) FROM pragma_foreign_key_check", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(quick, "ok");
+    assert_eq!(foreign_keys, 0);
+    let forbidden = [
+        "raw_content",
+        "conversation_text",
+        "thought_text",
+        "private_memory",
+        "provider_response",
+        "credential",
+        "token",
+        "cookie",
+        "secret",
+    ];
+    let mut statement = connection
+        .prepare(
+            "SELECT CAST(canonical_bytes AS TEXT) FROM home_candidate_revision UNION ALL SELECT CAST(canonical_bytes AS TEXT) FROM home_handoff_link UNION ALL SELECT CAST(canonical_bytes AS TEXT) FROM event",
+        )
+        .unwrap();
+    let rows: Vec<String> = statement
+        .query_map([], |row| row.get(0))
+        .unwrap()
+        .collect::<Result<_, _>>()
+        .unwrap();
+    for row in rows {
+        let lower = row.to_ascii_lowercase();
+        for pattern in forbidden {
+            assert!(!lower.contains(pattern), "stored forbidden pattern {pattern}");
+        }
+    }
+    drop(statement);
+    drop(connection);
+    let writable = rusqlite::Connection::open(&database).unwrap();
+    writable.pragma_update(None, "foreign_keys", "ON").unwrap();
+    assert!(writable
+        .execute(
+            "UPDATE home_candidate_revision SET payload_commitment=?1 WHERE candidate_id='intent' AND candidate_revision=1",
+            ["ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"],
+        )
+        .is_err_and(|error| error.to_string().contains("home_candidate_revision_immutable")));
+    assert!(writable
+        .execute(
+            "DELETE FROM home_handoff_link WHERE handoff_id='home-intent' AND handoff_revision=1",
+            [],
+        )
+        .is_err_and(|error| error.to_string().contains("home_handoff_link_immutable")));
+}
+
+#[test]
+fn wp6_candidate_and_handoff_same_revision_rewrites_fail_without_partial_rows() {
+    let root = tempfile::tempdir().unwrap();
+    let (kernel, handoff) = v2_kernel_with_formed_handoff(root.path(), "m0b-wp6-rewrite");
+    let mut rewritten_candidate = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'b',
+        &[],
+    );
+    assert!(matches!(
+        kernel.commit_home_candidate(
+            rewritten_candidate.clone(),
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        ),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("same Home candidate revision")
+    ));
+    rewritten_candidate.candidate_fingerprint = handoff.handoff_candidate_fingerprint.clone();
+    assert!(kernel
+        .commit_home_candidate(
+            rewritten_candidate,
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .is_err());
+    let mut rewritten_handoff = handoff.clone();
+    rewritten_handoff.minimum_trusted_event_sequence = 99;
+    assert!(kernel
+        .commit_home_handoff(rewritten_handoff, "intent", HomeCommitFault::None)
+        .is_err());
     kernel.shutdown().unwrap();
 }
 
@@ -1043,10 +1236,13 @@ fn wp1_strict_json_and_schema_totality_fail_closed_without_echoing_payloads() {
 }
 
 #[test]
-fn wp0_declares_but_does_not_activate_schema_v2() {
+fn wp6_activates_only_the_explicit_synthetic_schema_v2_migration() {
     assert_eq!(schema::SCHEMA_VERSION, 1);
     assert_eq!(schema::M0B_SCHEMA_V2_TARGET_VERSION, 2);
-    assert_eq!(schema::M0B_SCHEMA_V2_MIGRATION_STATUS, "WP0_DECLARED_NOT_ACTIVE");
+    assert_eq!(
+        schema::M0B_SCHEMA_V2_MIGRATION_STATUS,
+        "WP6_SYNTHETIC_MIGRATION_ACTIVE"
+    );
     assert_eq!(
         schema::M0B_SCHEMA_V2_NEW_TABLES,
         [
@@ -1057,7 +1253,7 @@ fn wp0_declares_but_does_not_activate_schema_v2() {
     );
     assert_eq!(schema::M0B_SCHEMA_V2_NEW_INDEXES.len(), 3);
     assert_eq!(schema::M0B_SCHEMA_V2_NEW_TRIGGERS.len(), 4);
-    assert_eq!(schema::m0b_schema_v2_migration_sql(), None);
+    assert!(schema::m0b_schema_v2_migration_sql().is_some());
 }
 
 #[test]

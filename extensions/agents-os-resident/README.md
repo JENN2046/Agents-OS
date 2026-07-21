@@ -124,3 +124,16 @@ rows in one transaction. Invalid input writes nothing, exact replay returns the
 stored first response with zero additions, and the public five-method N-API
 inventory remains unchanged. No production F3 type or runtime authority is
 created.
+
+Phase 5B M0-B WP6 activates the explicit synthetic-test-only schema v1→v2
+migration and the three frozen low-disclosure tables. Candidate formation now
+commits one immutable candidate revision, its Event and the exact candidate
+head CAS in one Rust-ledger-thread transaction. Handoff formation re-resolves
+the immutable owner set and canonical candidate history, rechecks the exact
+current Intent Candidate, then commits one immutable link and Event. Every
+pre-commit failpoint rolls back all rows; post-commit response loss resolves as
+an exact replay without automatic promotion or F3 submission. F3 Home Intent
+intake additionally resolves the persisted handoff and current candidate tuple
+before it may commit. Quick/FK checks, immutable triggers and stored-byte scans
+cover the disposable synthetic SQLite database; existing, production and
+private databases remain outside this implementation boundary.

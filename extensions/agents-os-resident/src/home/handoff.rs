@@ -554,6 +554,15 @@ fn validate_handoff_history(history: &[HomeIntentHandoffCandidate]) -> Result<()
     Ok(())
 }
 
+/// Revalidates one materialized handoff against the closed F8 canonical
+/// representation. This does not grant authority; it only prevents a caller
+/// from presenting mutually inconsistent struct fields and canonical bytes.
+pub(crate) fn validate_materialized_handoff(
+    candidate: &HomeIntentHandoffCandidate,
+) -> Result<(), HandoffError> {
+    validate_handoff_history(std::slice::from_ref(candidate))
+}
+
 #[allow(clippy::too_many_arguments)]
 fn handoff_bytes(
     handoff_id: &str,

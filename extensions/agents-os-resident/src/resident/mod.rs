@@ -7,6 +7,8 @@ use unicode_normalization::UnicodeNormalization;
 
 use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
+use crate::home::candidate::HomeCandidateRevision;
+use crate::home::handoff::HomeIntentHandoffCandidate;
 use crate::ledger::recovery::{IntegratedWitness, LedgerCounts};
 use crate::ledger::replay::{
     OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
@@ -16,7 +18,8 @@ use crate::ledger::replay::{
 };
 use crate::ledger::schema::SchemaSnapshot;
 use crate::ledger::transaction::{
-    CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
+    CanonicalFactInput, EventInput, FactAdvanceResult, HomeCommitFault, HomeCommitObservation,
+    HomeHeadExpectation, PointerExpectation, TransactionFault,
 };
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
 
@@ -430,6 +433,39 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .terminal_synthetic_home_intent(intake)
+    }
+
+    /// Migrates only this kernel's fresh/disposable synthetic test ledger.
+    /// No production or existing database discovery is performed.
+    pub fn migrate_synthetic_ledger_v2(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .migrate_schema_v2()
+    }
+
+    pub fn commit_home_candidate(
+        &self,
+        candidate: HomeCandidateRevision,
+        expected: HomeHeadExpectation,
+        fault: HomeCommitFault,
+    ) -> Result<HomeCommitObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .commit_home_candidate(candidate, expected, fault)
+    }
+
+    pub fn commit_home_handoff(
+        &self,
+        handoff: HomeIntentHandoffCandidate,
+        intent_candidate_id: impl Into<String>,
+        fault: HomeCommitFault,
+    ) -> Result<HomeCommitObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .commit_home_handoff(handoff, intent_candidate_id.into(), fault)
     }
 
     pub fn terminal_synthetic_completion_intake(
