@@ -30,7 +30,7 @@ from path_boundary import preflight_target
 
 MANIFEST_PATH = MACHINE_DIR / "machine-manifest.json"
 SCHEMA_PATH = MACHINE_DIR / "queue-item.schema.json"
-DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-22-agents-os-active-work-queue-v13.4.md"
+DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-22-agents-os-active-work-queue-v13.5.md"
 ROUTE_SELECTION_PACKAGE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 ROUTE_ADOPTION_BUNDLE_PREVIEW = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-07-agents-os-control-chain-route-choice-adoption-bundle-preview-v0.1.md"
 TASK_ENVELOPE_VALIDATOR = WORKSPACE_ROOT / "control-plane" / "task-envelope" / "validate-task-envelope.py"
