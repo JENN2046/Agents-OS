@@ -6,6 +6,41 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B PR #26 Review Fixes Complete — Current-Head Re-review Required (2026-07-22)
+
+Codex Review found two in-scope P1 defects in Home Intent replay/currentness.
+Both are fixed and covered by new regressions. The branch remains at the
+current-head re-review gate; it is not merged until that review clears.
+
+```yaml
+Phase_5B_status: M0B_PR26_REVIEW_FIXES_COMPLETE_REREVIEW_REQUIRED
+Phase_5B_implementation_complete: true
+implementation_closeout: PASS_COMPLETE
+PR_number: 26
+PR_reviewed_head: 3ffecfc9a9090ddbc593aa22364c7ef1e4c255c3
+Codex_review_findings: 2_P1
+review_fix_source_commit: 8e479e58115d5faac0789c77f58e6fadffc7c63a
+review_fix_manifest_commit: c4717fd5a5092008bd6d143b434fee62de25bb37
+final_content_tree_sha256: 88e93001ffaa1d375a76ae264aff2a8bf41f532a9c359baaf6fba99b3c4958a6
+final_package_manifest_sha256: 232dc2a25712ee1dc8004d7f2eb319be254298937c780f5b88bb52456ff87a0a
+integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+total_Rust_tests: 76/76_PASS
+synthetic_m0b_tests: 29/29_PASS
+public_NAPI_methods: 5/5_UNCHANGED
+dependency_changes: 0
+VCPToolBox_core_changes: 0
+real_occurrence_count: 0
+PR26_review_fix_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-pr26-review-fixes-v0.1.md
+PR26_review_fix_receipt_sha256: 5ec54be836180cb9232738e9b7e4cc8305d34ea593225470023c12cc63d52fb9
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.1.md
+active_work_queue_sha256: 377041ec94a7817891f6af56cdb4b2827e1b3b59b849279b29a09e1baff7d7a3
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.1.md
+merge_authorized_only_after_current_head_review_clear: true
+runtime_activation_authorized: false
+Phase_5C_started: false
+next_gate: PR26_CURRENT_HEAD_CODEX_REREVIEW
+```
+
 ## Phase 5B M0-B Implementation Closeout Pass — Scoped Delivery Eligible (2026-07-22)
 
 WP0-WP7 and the final package seal have passed implementation closeout. The
