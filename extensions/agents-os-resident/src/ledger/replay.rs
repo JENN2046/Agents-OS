@@ -137,9 +137,7 @@ pub fn terminal_synthetic_home_intent(
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let schema = super::schema::verify_schema(&transaction)?;
     if schema.version != 2 {
-        return Err(LedgerError::SchemaMismatch(
-            "M0-B Home Intent intake requires exact schema v2".to_owned(),
-        ));
+        return Err(LedgerError::InvalidHomeIntentSource);
     }
     verify_registry(&transaction)?;
     if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {

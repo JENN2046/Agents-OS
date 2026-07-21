@@ -1358,6 +1358,31 @@ fn wp5_invalid_or_inactive_home_intent_never_writes_a_command() {
 }
 
 #[test]
+fn wp5_schema_valid_home_intent_on_v1_is_low_disclosure_and_zero_write() {
+    let submission = synthetic_f3_home_intent_submission(&formed_handoff()).unwrap();
+    let root = tempfile::tempdir().unwrap();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp5-v1-source-unavailable",
+        b"m0b-wp5-v1-source-unavailable-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+        .unwrap();
+    assert_eq!(kernel.initialize_ledger_v1().unwrap().version, 1);
+    let before = kernel.ledger_counts().unwrap();
+    let rejected = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(rejected.disposition, Disposition::Rejected);
+    assert_eq!(
+        rejected.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
+        "INVALID_HOME_INTENT_COMMAND"
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), before);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
 fn wp5_schema_valid_but_unresolved_home_intent_is_low_disclosure_and_zero_write() {
     let root = tempfile::tempdir().unwrap();
     let (kernel, handoff) =
