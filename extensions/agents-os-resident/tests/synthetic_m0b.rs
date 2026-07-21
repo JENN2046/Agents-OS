@@ -897,6 +897,104 @@ fn wp5_f3_alone_commits_and_exactly_replays_the_home_intent_command() {
 }
 
 #[test]
+fn wp5_exact_replay_survives_a_later_intent_head_advance() {
+    let root = tempfile::tempdir().unwrap();
+    let (kernel, handoff) = v2_kernel_with_formed_handoff(root.path(), "m0b-wp5-replay-head");
+    let submission = synthetic_f3_home_intent_submission(&handoff).unwrap();
+    let first = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(first.disposition, Disposition::Committed);
+
+    let intent1 = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let intent2 = derive_candidate(
+        "intent",
+        2,
+        "INTENT_CANDIDATE",
+        Some(&intent1),
+        103,
+        'b',
+        std::slice::from_ref(&intent1),
+    );
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                intent2,
+                HomeHeadExpectation::Exact {
+                    revision: 1,
+                    fingerprint: intent1.candidate_fingerprint,
+                },
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+    let before_replay = kernel.ledger_counts().unwrap();
+    let replay = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(replay.canonical_bytes, first.canonical_bytes);
+    assert_eq!(kernel.ledger_counts().unwrap(), before_replay);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
+fn wp5_f3_treats_the_handoff_event_watermark_as_a_lower_bound() {
+    let root = tempfile::tempdir().unwrap();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp5-lower-bound",
+        b"m0b-wp5-lower-bound-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+        .unwrap();
+    kernel.migrate_synthetic_ledger_v2().unwrap();
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        101,
+        'a',
+        &[],
+    );
+    kernel
+        .commit_home_candidate(
+            intent.clone(),
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .unwrap();
+    let history = vec![intent.clone()];
+    let handoff = compose_f8_handoff(
+        &handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100),
+        &history,
+        &trusted_owner_commitments(),
+        &[],
+    )
+    .unwrap()
+    .candidate
+    .unwrap();
+    kernel
+        .commit_home_handoff(handoff.clone(), "intent", HomeCommitFault::None)
+        .unwrap();
+    let submission = synthetic_f3_home_intent_submission(&handoff).unwrap();
+    let response = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(response.disposition, Disposition::Committed);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
 fn wp6_schema_v2_candidate_handoff_and_replay_are_atomic_and_low_disclosure() {
     let root = tempfile::tempdir().unwrap();
     let (kernel, handoff) = v2_kernel_with_formed_handoff(root.path(), "m0b-wp6");

@@ -142,11 +142,11 @@ pub fn terminal_synthetic_home_intent(
         ));
     }
     verify_registry(&transaction)?;
-    require_exact_home_intent_source(&transaction, intake)?;
     if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
         transaction.commit()?;
         return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
     }
+    require_exact_home_intent_source(&transaction, intake)?;
 
     let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
     insert_committed_intake(&transaction, intake, event_sequence)?;
@@ -237,13 +237,15 @@ fn require_exact_home_intent_source(
             |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
         )
         .optional()?;
-    if current
-        != Some((
-            as_i64(intent_revision)?,
-            intent_ref.to_owned(),
-            intent_fingerprint.to_owned(),
-            as_i64(minimum_sequence)?,
-        ))
+    let Some((current_revision, current_ref, current_fingerprint, current_event_sequence)) =
+        current
+    else {
+        return Err(LedgerError::StalePointer);
+    };
+    if current_revision != as_i64(intent_revision)?
+        || current_ref != intent_ref
+        || current_fingerprint != intent_fingerprint
+        || current_event_sequence < as_i64(minimum_sequence)?
     {
         return Err(LedgerError::StalePointer);
     }
