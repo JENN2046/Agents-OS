@@ -5667,6 +5667,40 @@ current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION_GATE
 next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION
 ```
 
+## Phase 5B M0-B Plan R4 Block Reconciled (2026-07-21)
+
+The fixed R1–R4 atomic unit received a fresh independent `BLOCK`. The original
+review and case-results bytes are preserved, and the single finding is bounded
+to a possible narrow R5. R5 has not started.
+
+```yaml
+Phase_5B_plan_status: R4_BLOCK_RECONCILED_AWAITING_JENN_R5_START_DECISION
+Phase_5B_R4_fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+Phase_5B_R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+Phase_5B_R4_independent_review_result: BLOCK
+Phase_5B_R4_findings: 1_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R4_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-full-atomic-independent-review.yaml
+Phase_5B_R4_review_sha256: 9999aa3671b16fd6c94171d5176d3ea3b9a458f0a8d32efa3f703456e2993630
+Phase_5B_R4_case_results: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r4-independent-case-results.json
+Phase_5B_R4_case_results_sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+Phase_5B_R4_finding_disposition: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-finding-disposition-v0.1.yaml
+Phase_5B_R4_finding_disposition_sha256: 0e14ce6fae4b99a052a3c9beb91387c838fb9f8fdf8643da90729ce7fe68ed9a
+Phase_5B_R4_reconciliation_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-block-governance-reconciliation-v0.1.md
+Phase_5B_R4_reconciliation_receipt_sha256: d324e1476bae447b8fa082a76ac51748e39f5e32b7adb06fb789ec11ebef8e5e
+Phase_5B_R5_started: false
+Phase_5B_R5_requires_Jenn_explicit_start: true
+Phase_5B_R5_potential_scope: STRICT_JSON_INTEGER_TOTALITY_FOR_CLAIMED_PRINCIPAL_REVISION_ONLY
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.5.md
+active_work_queue_sha256: 88c3d701bef85db03ddd040c3b5cd60edd0c648752f23c87ee9068c55b0ed62e
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.5.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_START_DECISION
+```
+
 ## Phase 5B M0-B Plan R4 Narrow Closure Started (2026-07-21)
 
 Jenn explicitly started R4 for the three R3 blockers only. All R1–R3 fixed

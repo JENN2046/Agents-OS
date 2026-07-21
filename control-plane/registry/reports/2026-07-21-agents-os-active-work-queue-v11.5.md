@@ -1,0 +1,81 @@
+# AGENTS OS Active Work Queue v11.5
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.4.md`
+
+## Current Facts
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_R4_fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+Phase_5B_R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+Phase_5B_R4_independent_review_result: BLOCK
+Phase_5B_R4_findings: 1_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R4_review_sha256: 9999aa3671b16fd6c94171d5176d3ea3b9a458f0a8d32efa3f703456e2993630
+Phase_5B_R4_case_results_sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+Phase_5B_R4_disposition_sha256: 0e14ce6fae4b99a052a3c9beb91387c838fb9f8fdf8643da90729ce7fe68ed9a
+Phase_5B_R4_reconciliation_receipt_sha256: d324e1476bae447b8fa082a76ac51748e39f5e32b7adb06fb789ec11ebef8e5e
+requires_R5: true
+Phase_5B_R5_started: false
+Phase_5B_plan_status: R4_BLOCK_RECONCILED_AWAITING_JENN_R5_START_DECISION
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_START_DECISION_GATE
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+```
+
+## NOW
+
+### NOW-001: Await Jenn's explicit narrow Plan R5 start decision
+
+Do not begin R5 automatically. If Jenn starts it, limit R5 to strict JSON
+integer totality for `claimed_principal_revision`, including the four preserved
+fully re-signed boolean and float regressions.
+
+## NEXT
+
+```text
+Jenn_explicit_R5_start
+-> preserve_R1_R2_R3_R4_fixed_lineage
+-> close_only_PHASE5B_PLAN_R4_IR_B01
+-> fresh_full_atomic_hash_bound_independent_review
+```
+
+## BLOCKED
+
+```text
+automatic_R5_start=forbidden
+automatic_plan_acceptance_or_freeze=forbidden
+automatic_Phase_5B_implementation_start=forbidden
+modify_R1_R2_R3_or_R4_fixed_lineage=forbidden
+Rust_JavaScript_NAPI_SQLite_or_plugin_source_change=forbidden
+database_creation_or_migration=forbidden
+VCPToolBox_core_change_start_or_plugin_enablement=forbidden
+runtime_or_service_start=forbidden
+production_authentication_or_credentials=forbidden
+private_raw_memory_or_state_private_access=forbidden
+provider_network_sensing_recording_device_or_real_effect=forbidden
+release_deploy_publish_tag=forbidden
+```
+
+## CLOSED
+
+```text
+R4_independent_review=BLOCK_PRESERVED
+R4_findings_disposed=1/1
+R4_independent_cases=28/28_BOUND
+R4_favorable_invalid_paths=4/4_BOUND_TO_POTENTIAL_R5
+active_work_queue_v11_4=superseded_historical_bytes_preserved
+```

@@ -1,0 +1,129 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5B_M0B_PLAN_R4_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-21'
+materialized_at: '2026-07-21T20:33:24+08:00'
+materialization_note: First materialization after the read-only independent review; no claim of prior existence.
+reviewer:
+  identity: Codex_Nobao_phase5b_plan_r4_independent_review
+  independence_basis:
+  - not_the_R1_R2_R3_R4_author_run
+  - reviewed_fixed_commit_and_archive_bytes_read_only
+  - author_self_review_was_evidence_only
+  - no_workspace_or_Git_modification
+  - no_runtime_database_VCPToolBox_provider_private_memory_sensing_or_effect
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+  atomic: true
+  partial_review: false
+  subject_count: 16
+result: BLOCK
+requires_R5: true
+findings:
+  blocker: 1
+  major: 0
+  minor: 0
+  unresolved: 1
+integrity:
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+    match: true
+  archive:
+    path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r4-review-package-v0.1.zip
+    sha256: ea1cfd1e525147e05a1d6321c46526bc38dce4d70b9731e01e5ac1630028a6ee
+    entry_count: 93
+    unique_entries: 93
+    checksums: 92/92_MATCH
+    archive_map: 90/90_MATCH
+    CRC: PASS
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    forbidden_private_paths: 0
+  declared_inputs:
+    hashes: 87/87_MATCH
+    full_reads: 87/87
+    git_objects_at_fixed_commit: 87/87_MATCH
+    subjects: 16/16
+    authority_inputs: 53/53
+    author_evidence: 18/18
+    bytes_fully_read: 1391317
+    lines_fully_read: 28609
+  fixed_commands:
+    result: 16/16_PASS
+    extracted_without_git: true
+    builders_byte_equal: 4/4_PASS
+  immutable_lineage:
+    R1_subjects: 4/4_MATCH
+    R2_subjects: 8/8_MATCH
+    R3_subjects: 12/12_MATCH
+    R1_manifest: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+    R2_manifest: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+    R3_manifest: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+subject_hashes:
+  R1_implementation_plan: 88c2bd24c4c1beea470ec734a381c7d73310425844bd9d84ef98741878768634
+  R1_exact_build_profile: e213b302fbc3737b20a414b707626a1438ea464da59d2acb24f424582f7d5a60
+  R1_contract_traceability_matrix: 6302ecf424e13580f1207006928a49e605030cecc78c7778a4410e6ce2367726
+  R1_validation_privacy_fault_injection_profile: 668d0ee361c6aff79f6b0062dd558c587c76a4e98dd70c202356d6ef407571a8
+  R2_amendment: 26308cfaca2c1db1b2f4a383eb5b4f1a61248613716d4949cf79ad93bf8e87dc
+  R2_exact_source_F3_seam: 6a8297845ca28f94145fba221009558056cb19cc4c2ab3c8544986b8f663a5b1
+  R2_schema_v2_transaction: 8947796f6729edd62c97a9107bcec08ed8e4cfde5c50e27d77cfa46d4e9bb6d7
+  R2_constructive_graph_profile: 4c51c5f73268888a4c7e98ec3fe6ca7d88fabb213fc9f46ce975167500c350d8
+  R3_amendment: 4d3cc02ace4e48684b9fe08a2e4b8e3e70bfd50485e63bc10e5f185f4304bfb2
+  R3_sealed_ABI_F3_shape_profile: 21bd6697816372935eccf1b64b243976439e0171db8103a3b5d0e94a0e975e1a
+  R3_candidate_schema_profile: 8784cf83d73c64d5dfbf606bd7a2c96cdb0d14d132d48434451b3f446f1d6035
+  R3_semantic_validation_profile: 703f183176e165f12110f2b685db3c25d32f1b41cfea6e24010e0eb91c459d9d
+  R4_amendment: 97156759b8d83340533f553c5279b5a4a5204c82649eb594cf5e4678d1256f0d
+  R4_sealed_F3_identity_binding: 1315f4052d25a7c18849ecab62942662d4458c03c3f0b94e6f93551bdc8a8fa9
+  R4_candidate_uniqueness: d6f7953a1edd00520ee71c15caabe02a76044a63d0dbd524497b7ecff7973f3b
+  R4_composite_FK_inventory: 224775d99463d9c2354d52c4302f04c99ecd29487a8bd19a19287fa27d5d1cd6
+confirmed_closures:
+  six_normal_value_substitutions: 6/6_TARGET_SEMANTIC_REJECTION
+  coordinated_binding_and_consumer_substitutions: 6/6_TARGET_SEMANTIC_REJECTION
+  candidate_uniqueness_and_exact_once_resolution: PASS_FOR_STRING_INTEGER_BASELINE
+  composite_FK_exact_inventory_variations: PASS
+  fixed_R3_regressions: 10/10_TARGET_SEMANTIC_REJECTION
+  fixture_seal_only_for_fixed_R3_regressions: 0
+finding_details:
+- id: PHASE5B_PLAN_R4_IR_B01
+  severity: blocker
+  title: claimed_principal_revision exact binding is not strict JSON-type exact
+  evidence:
+  - Replacing integer 1 with JSON boolean true is accepted after all dependent fingerprints are recomputed.
+  - Replacing integer 1 with JSON number 1.0 is also accepted.
+  - The same two substitutions remain accepted when derived_sealed_binding and the consumed Command are changed together.
+  - Python equality treats true == 1 and 1.0 == 1; R4 compares dictionaries without an exact type check, while sealed F3 requires
+    a positive integer exactly equal to 1.
+  impact: R4 does not prove all six sealed values exactly; a structurally invalid F3 Command can receive a favorable closure
+    result.
+  required_correction:
+  - Require type(claimed_principal_revision) is int and value == 1 before binding comparison.
+  - Reject boolean, float and all non-integer JSON forms in both derived binding and consumed Command.
+  - Parse or independently verify the sealed require_positive_integer_exact rule instead of relying on coercive Python equality.
+  - Add fully re-signed boolean and 1.0 regressions for inner-only and coordinated wrapper-plus-inner substitutions.
+case_results:
+  path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r4-independent-case-results.json
+  sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+  independent_fully_resigned_attack_count: 28
+  ten_R3_regression_target_semantic_rejection_count: 10
+  additional_variation_count: 18
+  target_semantic_rejection_count: 24
+  fixture_seal_only_rejection_count: 4
+  favorable_invalid_path_count: 4
+  stale_hash_rejection_count: 0
+  legal_input_over_rejection_count: 0
+  implementation_impossibility_count: 0
+  exceptions: 0
+boundary_results:
+  second_permission_identity_Task_Command_or_effect_authority_count: 0
+  automatic_implementation_start_count: 0
+  implementation_runtime_database_VCPToolBox_provider_private_memory_sensing_or_real_effect_occurrence_count: 0
+disposition:
+  Phase_5B_plan_freeze_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  safe_next_action: preserve_review_then_create_narrow_R5_for_strict_principal_revision_JSON_type_binding

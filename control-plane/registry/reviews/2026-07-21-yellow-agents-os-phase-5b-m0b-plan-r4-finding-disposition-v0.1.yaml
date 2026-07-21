@@ -1,0 +1,91 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5b-m0b-plan-r4-independent-review-disposition-v0.1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: R4_BLOCK_RECONCILED_R5_DECISION_REQUIRED
+
+review:
+  path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-full-atomic-independent-review.yaml
+  sha256: 9999aa3671b16fd6c94171d5176d3ea3b9a458f0a8d32efa3f703456e2993630
+  bytes: 6487
+  result: BLOCK
+  requires_R5: true
+  findings: {blocker: 1, major: 0, minor: 0, unresolved: 1}
+  materialized_at: '2026-07-21T20:33:24+08:00'
+  backdated_preexistence_claim: false
+
+case_results:
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r4-independent-case-results.json
+  sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+  bytes: 20238
+  independent_fully_resigned_cases: 28
+  target_semantic_rejections: 24
+  favorable_invalid_paths: 4
+  fixture_seal_only_rejections: 4
+  stale_hash_rejections: 0
+  legal_input_over_rejections: 0
+  exceptions: 0
+
+immutable_lineage:
+  R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+  R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+  R3_manifest_sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+  R4_fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+  R4_manifest_path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+  R4_archive_sha256: ea1cfd1e525147e05a1d6321c46526bc38dce4d70b9731e01e5ac1630028a6ee
+  R1_R2_R3_R4_subjects_immutable: 16
+  fixed_subject_manifest_and_fixed_commit_bytes_may_change: false
+
+confirmed_closures:
+  - six_normal_sealed_F3_value_substitutions
+  - coordinated_binding_and_consumer_substitutions_for_string_and_integer_baseline
+  - candidate_PK_ref_history_genesis_uniqueness
+  - selected_candidate_exact_once_resolution
+  - exact_ordered_duplicate_free_three_entry_composite_FK_inventory
+  - ten_R3_fixed_regressions_target_semantic_rejection
+
+findings:
+  - finding_id: PHASE5B_PLAN_R4_IR_B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R5
+    closure_scope: strict_JSON_integer_totality_for_claimed_principal_revision
+    required_corrections:
+      - require_type_claimed_principal_revision_is_exact_int_and_value_equals_1
+      - reject_JSON_boolean_float_null_string_array_object_and_unsafe_integer_forms
+      - enforce_the_same_rule_for_derived_binding_and_consumed_Command
+      - avoid_coercive_Python_dictionary_equality_as_the_type_proof
+      - preserve_all_other_R4_closures_without_expansion
+    required_regressions:
+      - inner_revision_integer_1_to_boolean_true
+      - inner_revision_integer_1_to_float_1_0
+      - derived_and_inner_revision_to_boolean_true
+      - derived_and_inner_revision_to_float_1_0
+
+R5_scope_if_started:
+  exact_findings:
+    - PHASE5B_PLAN_R4_IR_B01
+  exact_closure_surface:
+    - claimed_principal_revision_strict_JSON_integer_totality
+  may_modify_R1_R2_R3_or_R4_fixed_lineage: false
+  may_expand_permission_identity_Task_Command_validation_or_effect_authority: false
+  may_start_implementation_or_modify_Rust_JavaScript_NAPI_or_SQLite: false
+  may_install_dependencies_or_create_database: false
+  may_modify_or_start_VCPToolBox_plugin_runtime_or_service: false
+  may_access_production_authentication_private_Memory_provider_sensing_or_effect: false
+
+governance:
+  R5_started: false
+  R5_requires_Jenn_explicit_start: true
+  R5_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5B_plan_freeze_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
