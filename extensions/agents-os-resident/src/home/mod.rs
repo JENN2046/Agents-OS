@@ -2,8 +2,9 @@
 //!
 //! WP0 fixed the module layout. WP1 adds only strict synthetic observation
 //! decoding and zero-write nonpromotion decisions. WP2 derives immutable,
-//! candidate-only F7 revisions without persistence. Promotion gates, handoff
-//! composition and the F3 command boundary remain inactive.
+//! candidate-only F7 revisions without persistence. WP3 adds explicit observe,
+//! discard, Memory Candidate and Intent Candidate gates. Handoff composition
+//! and the F3 command boundary remain inactive.
 
 pub mod candidate;
 pub mod handoff;

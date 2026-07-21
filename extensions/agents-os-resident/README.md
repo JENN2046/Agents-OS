@@ -97,3 +97,11 @@ refs, revisions, fingerprints, commitments, class and a future Event sequence;
 all action, Task, Command, Memory-write, effect and runtime authority remains
 false. WP2 is deliberately storage-free. Schema v2 and atomic candidate/Event/
 head persistence remain owned by the later frozen WP6 package.
+
+Phase 5B M0-B WP3 implements the explicit promotion gates from a current Life
+Stream candidate. `OBSERVE_WITHOUT_PROMOTION` and `DISCARD` terminate with zero
+writes. `PROPOSE_MEMORY_CANDIDATE` and `PROPOSE_INTENT_CANDIDATE` derive only a
+new commitment-only candidate revision through the WP2 reducer. Missing,
+unknown, implicit, stale, non-Life-Stream, raw-content-shaped and
+production-shaped inputs fail closed. No branch creates formal Memory, Goal,
+Task, Command or effect authority, and persistence remains deferred to WP6.

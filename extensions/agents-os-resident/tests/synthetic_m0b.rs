@@ -1,8 +1,9 @@
 use agents_os_resident::{home, ledger::schema};
 use agents_os_resident::canonical::jcs::canonicalize_json;
 use agents_os_resident::home::candidate::{
-    CandidateError, CandidateRevisionResult, CandidateSemanticClass, HomeCandidateRevision,
-    derive_candidate_revision,
+    CandidateError, CandidateRevisionResult, CandidateSemanticClass, ExplicitPromotionChoice,
+    HomeCandidateRevision, PromotionResult, derive_candidate_revision,
+    reduce_explicit_promotion,
 };
 use agents_os_resident::home::session_boundary::{
     SessionBoundaryError, SessionBranchChoice, decode_synthetic_observation, reduce_nonpromotion,
@@ -27,7 +28,7 @@ fn wp1_preserves_the_home_layout_and_later_boundaries() {
     );
     assert_eq!(
         home::candidate::IMPLEMENTATION_STATUS,
-        "WP2_CANDIDATE_REVISION_ACTIVE"
+        "WP3_EXPLICIT_PROMOTION_ACTIVE"
     );
     assert_eq!(home::handoff::IMPLEMENTATION_STATUS, "WP0_LAYOUT_ONLY");
     assert!(!home::session_boundary::CANONICAL_WRITE_AUTHORIZED);
@@ -86,6 +87,33 @@ fn derive_candidate(
     )
     .unwrap()
     .candidate
+}
+
+fn promotion_request(
+    source: &HomeCandidateRevision,
+    choice: Option<&str>,
+    target_id: Option<&str>,
+    target_event_sequence: Option<u64>,
+    minimum_trusted_event_sequence: u64,
+) -> Vec<u8> {
+    let mut value = json!({
+        "explicit_promotion_choice": choice,
+        "minimum_trusted_event_sequence": minimum_trusted_event_sequence,
+        "promotion_id": "promotion:SYNTHETIC_TEST:1",
+        "promotion_revision": 1,
+        "source_candidate_fingerprint": source.candidate_fingerprint,
+        "source_candidate_ref": source.candidate_ref,
+        "source_candidate_revision": source.candidate_revision,
+        "target_candidate_id": target_id,
+        "target_created_event_sequence": target_event_sequence
+    });
+    if choice.is_none() {
+        value
+            .as_object_mut()
+            .unwrap()
+            .remove("explicit_promotion_choice");
+    }
+    canonicalize_json(&serde_json::to_vec(&value).unwrap()).unwrap()
 }
 
 #[test]
@@ -278,6 +306,241 @@ fn wp2_candidate_schema_and_privacy_inputs_fail_closed() {
     assert!(derive_candidate_revision(&mixed_predecessor, &[]).is_err());
     assert_eq!(
         derive_candidate_revision(&noncanonical, &[]).unwrap_err(),
+        CandidateError::NonCanonicalBytes
+    );
+}
+
+#[test]
+fn wp3_observe_and_discard_are_explicit_zero_write_terminal_choices() {
+    let life = derive_candidate(
+        "life",
+        1,
+        "LIFE_STREAM_CANDIDATE",
+        None,
+        10,
+        'a',
+        &[],
+    );
+    for (choice, expected_choice, expected_result) in [
+        (
+            "OBSERVE_WITHOUT_PROMOTION",
+            ExplicitPromotionChoice::ObserveWithoutPromotion,
+            PromotionResult::ObservedNoFurtherPromotion,
+        ),
+        (
+            "DISCARD",
+            ExplicitPromotionChoice::Discard,
+            PromotionResult::DiscardedNoFurtherPromotion,
+        ),
+    ] {
+        let request = promotion_request(&life, Some(choice), None, None, 10);
+        let first = reduce_explicit_promotion(&request, std::slice::from_ref(&life)).unwrap();
+        let second = reduce_explicit_promotion(&request, std::slice::from_ref(&life)).unwrap();
+        assert_eq!(first, second);
+        assert_eq!(first.result, expected_result);
+        assert_eq!(first.explicit_choice, Some(expected_choice));
+        assert_eq!(first.canonical_write_count, 0);
+        assert_eq!(first.event_write_count, 0);
+        assert!(first.derived_candidate.is_none());
+        assert!(!first.action_authority);
+        assert!(!first.task_write_authority);
+        assert!(!first.command_authority);
+        assert!(!first.memory_write_authority);
+        assert!(!first.effect_authority);
+        assert!(!first.runtime_usable);
+    }
+}
+
+#[test]
+fn wp3_memory_and_intent_choices_derive_candidate_only_results() {
+    let life = derive_candidate(
+        "life",
+        1,
+        "LIFE_STREAM_CANDIDATE",
+        None,
+        10,
+        'a',
+        &[],
+    );
+    for (choice, target_id, expected_class, expected_result) in [
+        (
+            "PROPOSE_MEMORY_CANDIDATE",
+            "memory-from-life",
+            CandidateSemanticClass::Memory,
+            PromotionResult::MemoryCandidateOnly,
+        ),
+        (
+            "PROPOSE_INTENT_CANDIDATE",
+            "intent-from-life",
+            CandidateSemanticClass::Intent,
+            PromotionResult::IntentCandidateOnly,
+        ),
+    ] {
+        let request = promotion_request(&life, Some(choice), Some(target_id), Some(11), 10);
+        let decision = reduce_explicit_promotion(&request, std::slice::from_ref(&life)).unwrap();
+        let candidate = decision.derived_candidate.unwrap();
+        assert_eq!(decision.result, expected_result);
+        assert_eq!(candidate.semantic_class, expected_class);
+        assert_eq!(candidate.candidate_revision, 1);
+        assert_eq!(candidate.source_subject_ref, life.candidate_ref);
+        assert_eq!(candidate.source_subject_fingerprint, life.candidate_fingerprint);
+        assert_eq!(candidate.payload_commitment, life.payload_commitment);
+        assert_eq!(decision.canonical_write_count, 0);
+        assert!(!decision.memory_write_authority);
+        assert!(!decision.command_authority);
+        assert!(!decision.task_write_authority);
+    }
+}
+
+#[test]
+fn wp3_missing_unknown_or_implicit_choices_fail_closed() {
+    let life = derive_candidate(
+        "life",
+        1,
+        "LIFE_STREAM_CANDIDATE",
+        None,
+        10,
+        'a',
+        &[],
+    );
+    for request in [
+        promotion_request(&life, None, None, None, 10),
+        promotion_request(&life, Some("UNKNOWN"), None, None, 10),
+    ] {
+        let decision = reduce_explicit_promotion(&request, std::slice::from_ref(&life)).unwrap();
+        assert_eq!(decision.result, PromotionResult::Indeterminate);
+        assert_eq!(decision.canonical_write_count, 0);
+        assert!(decision.derived_candidate.is_none());
+    }
+
+    let implicit_target = promotion_request(
+        &life,
+        Some("OBSERVE_WITHOUT_PROMOTION"),
+        Some("implicit"),
+        Some(11),
+        10,
+    );
+    assert!(reduce_explicit_promotion(&implicit_target, std::slice::from_ref(&life)).is_err());
+
+    let missing_target = promotion_request(
+        &life,
+        Some("PROPOSE_MEMORY_CANDIDATE"),
+        None,
+        None,
+        10,
+    );
+    assert!(reduce_explicit_promotion(&missing_target, std::slice::from_ref(&life)).is_err());
+}
+
+#[test]
+fn wp3_rejects_non_life_stale_or_untrusted_sources() {
+    let life1 = derive_candidate(
+        "life",
+        1,
+        "LIFE_STREAM_CANDIDATE",
+        None,
+        10,
+        'a',
+        &[],
+    );
+    let life2 = derive_candidate(
+        "life",
+        2,
+        "LIFE_STREAM_CANDIDATE",
+        Some(&life1),
+        11,
+        'b',
+        std::slice::from_ref(&life1),
+    );
+    let memory = derive_candidate(
+        "memory",
+        1,
+        "MEMORY_CANDIDATE",
+        None,
+        12,
+        'c',
+        &[life1.clone(), life2.clone()],
+    );
+    let history = vec![life1.clone(), life2.clone(), memory.clone()];
+
+    for request in [
+        promotion_request(
+            &life1,
+            Some("PROPOSE_INTENT_CANDIDATE"),
+            Some("intent"),
+            Some(13),
+            10,
+        ),
+        promotion_request(
+            &memory,
+            Some("PROPOSE_INTENT_CANDIDATE"),
+            Some("intent"),
+            Some(13),
+            10,
+        ),
+        promotion_request(
+            &life2,
+            Some("PROPOSE_INTENT_CANDIDATE"),
+            Some("intent"),
+            Some(13),
+            12,
+        ),
+    ] {
+        assert_eq!(
+            reduce_explicit_promotion(&request, &history).unwrap_err(),
+            CandidateError::InvalidPromotionSource
+        );
+    }
+}
+
+#[test]
+fn wp3_schema_privacy_and_authority_shaped_fields_fail_closed() {
+    let life = derive_candidate(
+        "life",
+        1,
+        "LIFE_STREAM_CANDIDATE",
+        None,
+        10,
+        'a',
+        &[],
+    );
+    let valid = promotion_request(
+        &life,
+        Some("PROPOSE_INTENT_CANDIDATE"),
+        Some("intent"),
+        Some(11),
+        10,
+    );
+    for forbidden in [
+        "raw_content",
+        "private_memory",
+        "formal_memory_write",
+        "task_write_authority",
+        "command_authority",
+        "relationship_authority",
+        "pbl_no_match_permission",
+    ] {
+        let request = mutate(valid.clone(), |object| {
+            object.insert(forbidden.to_owned(), json!(true));
+        });
+        assert!(reduce_explicit_promotion(&request, std::slice::from_ref(&life)).is_err());
+    }
+
+    let mixed_target = mutate(valid.clone(), |object| {
+        object.insert("target_created_event_sequence".to_owned(), Value::Null);
+    });
+    let production = mutate(valid.clone(), |object| {
+        object.insert(
+            "source_candidate_ref".to_owned(),
+            json!("candidate:PRODUCTION:life:1"),
+        );
+    });
+    let mut noncanonical = valid;
+    noncanonical.push(b'\n');
+    assert!(reduce_explicit_promotion(&mixed_target, std::slice::from_ref(&life)).is_err());
+    assert!(reduce_explicit_promotion(&production, std::slice::from_ref(&life)).is_err());
+    assert_eq!(
+        reduce_explicit_promotion(&noncanonical, std::slice::from_ref(&life)).unwrap_err(),
         CandidateError::NonCanonicalBytes
     );
 }

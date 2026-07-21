@@ -1,7 +1,8 @@
-//! Immutable, low-disclosure F7 candidate revision derivation for M0-B WP2.
+//! Immutable, low-disclosure F7 candidate revision and promotion derivation.
 //!
-//! WP2 derives and validates candidate bytes only. It has no ledger dependency
-//! and performs no Event, pointer, Goal, Task, Command, Memory or effect write.
+//! WP2 derives and validates candidate bytes. WP3 adds explicit promotion
+//! choices for Life Stream candidates. Neither boundary has a ledger dependency
+//! or performs an Event, pointer, Goal, Task, Command, Memory or effect write.
 
 use std::collections::HashSet;
 
@@ -12,7 +13,7 @@ use crate::canonical::jcs::{canonicalize_json, to_jcs_bytes};
 use crate::canonical::types::{CanonicalValue, MAX_SAFE_INTEGER, parse_strict_json};
 
 pub const MODULE_ID: &str = "agents-os.m0b.home.candidate.v0.1";
-pub const IMPLEMENTATION_STATUS: &str = "WP2_CANDIDATE_REVISION_ACTIVE";
+pub const IMPLEMENTATION_STATUS: &str = "WP3_EXPLICIT_PROMOTION_ACTIVE";
 pub const CANONICAL_WRITE_AUTHORIZED: bool = false;
 pub const RUNTIME_USABLE: bool = false;
 
@@ -33,6 +34,18 @@ const PROPOSAL_FIELDS: [&str; 13] = [
 ];
 
 const CANDIDATE_DOMAIN: &str = "agents-os.m0b.home-candidate.v0.1";
+
+const PROMOTION_FIELDS: [&str; 9] = [
+    "promotion_id",
+    "promotion_revision",
+    "source_candidate_ref",
+    "source_candidate_revision",
+    "source_candidate_fingerprint",
+    "explicit_promotion_choice",
+    "target_candidate_id",
+    "target_created_event_sequence",
+    "minimum_trusted_event_sequence",
+];
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CandidateSemanticClass {
@@ -82,6 +95,52 @@ pub enum CandidateRevisionResult {
     ExactReplay,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ExplicitPromotionChoice {
+    ObserveWithoutPromotion,
+    Discard,
+    ProposeMemoryCandidate,
+    ProposeIntentCandidate,
+}
+
+impl ExplicitPromotionChoice {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::ObserveWithoutPromotion => "OBSERVE_WITHOUT_PROMOTION",
+            Self::Discard => "DISCARD",
+            Self::ProposeMemoryCandidate => "PROPOSE_MEMORY_CANDIDATE",
+            Self::ProposeIntentCandidate => "PROPOSE_INTENT_CANDIDATE",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum PromotionResult {
+    ObservedNoFurtherPromotion,
+    DiscardedNoFurtherPromotion,
+    MemoryCandidateOnly,
+    IntentCandidateOnly,
+    Indeterminate,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PromotionDecision {
+    pub result: PromotionResult,
+    pub reason: &'static str,
+    pub explicit_choice: Option<ExplicitPromotionChoice>,
+    pub promotion_fingerprint: String,
+    pub source_candidate_ref: Option<String>,
+    pub derived_candidate: Option<HomeCandidateRevision>,
+    pub canonical_write_count: u64,
+    pub event_write_count: u64,
+    pub action_authority: bool,
+    pub task_write_authority: bool,
+    pub command_authority: bool,
+    pub memory_write_authority: bool,
+    pub effect_authority: bool,
+    pub runtime_usable: bool,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct CandidateRevisionDecision {
     pub result: CandidateRevisionResult,
@@ -110,6 +169,176 @@ pub enum CandidateError {
     StaleOrMissingHead,
     #[error("same candidate revision cannot be rewritten")]
     SameRevisionRewrite,
+    #[error("promotion source is not the exact current Life Stream candidate")]
+    InvalidPromotionSource,
+}
+
+pub fn reduce_explicit_promotion(
+    input: &[u8],
+    history: &[HomeCandidateRevision],
+) -> Result<PromotionDecision, CandidateError> {
+    validate_history(history)?;
+    let value = parse_strict_json(input).map_err(|_| CandidateError::MalformedCanonicalJson)?;
+    if to_jcs_bytes(&value) != input {
+        return Err(CandidateError::NonCanonicalBytes);
+    }
+
+    let choice_is_missing = field_is_absent(&value, "explicit_promotion_choice")?;
+    if choice_is_missing {
+        let fields: Vec<&str> = PROMOTION_FIELDS
+            .iter()
+            .copied()
+            .filter(|field| *field != "explicit_promotion_choice")
+            .collect();
+        value
+            .require_exact_fields(&fields)
+            .map_err(|_| CandidateError::InvalidSchema("closed promotion field inventory mismatch"))?;
+    } else {
+        value
+            .require_exact_fields(&PROMOTION_FIELDS)
+            .map_err(|_| CandidateError::InvalidSchema("closed promotion field inventory mismatch"))?;
+    }
+
+    require_synthetic_ref(&value, "promotion_id")?;
+    require_positive_integer(&value, "promotion_revision")?;
+    let source_ref = require_synthetic_ref(&value, "source_candidate_ref")?;
+    let source_revision = require_positive_integer(&value, "source_candidate_revision")?;
+    let source_fingerprint = require_hash(&value, "source_candidate_fingerprint")?;
+    let minimum_sequence = require_positive_integer(&value, "minimum_trusted_event_sequence")?;
+    let target_id = require_nullable_candidate_id(&value, "target_candidate_id")?;
+    let target_event_sequence = require_nullable_positive_integer(
+        &value,
+        "target_created_event_sequence",
+    )?;
+
+    let source = exact_current_candidate(
+        history,
+        source_ref,
+        source_revision,
+        source_fingerprint,
+    )?;
+    if source.semantic_class != CandidateSemanticClass::LifeStream
+        || source.created_event_sequence < minimum_sequence
+    {
+        return Err(CandidateError::InvalidPromotionSource);
+    }
+
+    if choice_is_missing {
+        require_null_target(target_id, target_event_sequence)?;
+        return Ok(promotion_decision(
+            PromotionResult::Indeterminate,
+            "EXPLICIT_LIFE_STREAM_CHOICE_MISSING",
+            None,
+            input,
+            source,
+            None,
+        ));
+    }
+
+    let choice = match require_string(&value, "explicit_promotion_choice")? {
+        "OBSERVE_WITHOUT_PROMOTION" => ExplicitPromotionChoice::ObserveWithoutPromotion,
+        "DISCARD" => ExplicitPromotionChoice::Discard,
+        "PROPOSE_MEMORY_CANDIDATE" => ExplicitPromotionChoice::ProposeMemoryCandidate,
+        "PROPOSE_INTENT_CANDIDATE" => ExplicitPromotionChoice::ProposeIntentCandidate,
+        _ => {
+            require_null_target(target_id, target_event_sequence)?;
+            return Ok(promotion_decision(
+                PromotionResult::Indeterminate,
+                "UNKNOWN_EXPLICIT_LIFE_STREAM_CHOICE",
+                None,
+                input,
+                source,
+                None,
+            ));
+        }
+    };
+
+    match choice {
+        ExplicitPromotionChoice::ObserveWithoutPromotion => {
+            require_null_target(target_id, target_event_sequence)?;
+            Ok(promotion_decision(
+                PromotionResult::ObservedNoFurtherPromotion,
+                "VALID_OBSERVE",
+                Some(choice),
+                input,
+                source,
+                None,
+            ))
+        }
+        ExplicitPromotionChoice::Discard => {
+            require_null_target(target_id, target_event_sequence)?;
+            Ok(promotion_decision(
+                PromotionResult::DiscardedNoFurtherPromotion,
+                "VALID_DISCARD",
+                Some(choice),
+                input,
+                source,
+                None,
+            ))
+        }
+        ExplicitPromotionChoice::ProposeMemoryCandidate
+        | ExplicitPromotionChoice::ProposeIntentCandidate => {
+            let target_id = target_id.ok_or(CandidateError::InvalidSchema(
+                "candidate proposal requires target candidate id",
+            ))?;
+            let target_event_sequence = target_event_sequence.ok_or(
+                CandidateError::InvalidSchema(
+                    "candidate proposal requires target Event sequence",
+                ),
+            )?;
+            if target_event_sequence < minimum_sequence {
+                return Err(CandidateError::InvalidSchema(
+                    "target Event sequence is below the trusted minimum",
+                ));
+            }
+            let semantic_class = match choice {
+                ExplicitPromotionChoice::ProposeMemoryCandidate => {
+                    CandidateSemanticClass::Memory
+                }
+                ExplicitPromotionChoice::ProposeIntentCandidate => {
+                    CandidateSemanticClass::Intent
+                }
+                _ => unreachable!(),
+            };
+            let proposal = canonicalize_json(
+                &serde_json::to_vec(&json!({
+                    "candidate_id": target_id,
+                    "candidate_revision": 1,
+                    "created_event_sequence": target_event_sequence,
+                    "creator_assessment_fingerprint": source.creator_assessment_fingerprint,
+                    "creator_assessment_ref": source.creator_assessment_ref,
+                    "payload_commitment": source.payload_commitment,
+                    "predecessor_candidate_fingerprint": null,
+                    "predecessor_candidate_ref": null,
+                    "predecessor_candidate_revision": null,
+                    "semantic_class": semantic_class.as_str(),
+                    "source_subject_fingerprint": source.candidate_fingerprint,
+                    "source_subject_ref": source.candidate_ref,
+                    "source_subject_revision": source.candidate_revision
+                }))
+                .map_err(|_| CandidateError::InvalidSchema("promotion serialization failed"))?,
+            )
+            .map_err(|_| CandidateError::InvalidSchema("promotion canonicalization failed"))?;
+            let candidate = derive_candidate_revision(&proposal, history)?.candidate;
+            let (result, reason) = match choice {
+                ExplicitPromotionChoice::ProposeMemoryCandidate => {
+                    (PromotionResult::MemoryCandidateOnly, "VALID_MEMORY_CANDIDATE")
+                }
+                ExplicitPromotionChoice::ProposeIntentCandidate => {
+                    (PromotionResult::IntentCandidateOnly, "VALID_INTENT_CANDIDATE")
+                }
+                _ => unreachable!(),
+            };
+            Ok(promotion_decision(
+                result,
+                reason,
+                Some(choice),
+                input,
+                source,
+                Some(candidate),
+            ))
+        }
+    }
 }
 
 pub fn derive_candidate_revision(
@@ -249,6 +478,71 @@ fn decision(
         effect_authority: false,
         runtime_usable: false,
     }
+}
+
+fn promotion_decision(
+    result: PromotionResult,
+    reason: &'static str,
+    explicit_choice: Option<ExplicitPromotionChoice>,
+    input: &[u8],
+    source: &HomeCandidateRevision,
+    derived_candidate: Option<HomeCandidateRevision>,
+) -> PromotionDecision {
+    PromotionDecision {
+        result,
+        reason,
+        explicit_choice,
+        promotion_fingerprint: sha256_hex(input),
+        source_candidate_ref: Some(source.candidate_ref.clone()),
+        derived_candidate,
+        canonical_write_count: 0,
+        event_write_count: 0,
+        action_authority: false,
+        task_write_authority: false,
+        command_authority: false,
+        memory_write_authority: false,
+        effect_authority: false,
+        runtime_usable: false,
+    }
+}
+
+fn exact_current_candidate<'a>(
+    history: &'a [HomeCandidateRevision],
+    candidate_ref: &str,
+    candidate_revision: u64,
+    candidate_fingerprint: &str,
+) -> Result<&'a HomeCandidateRevision, CandidateError> {
+    let candidate = history
+        .iter()
+        .find(|candidate| {
+            candidate.candidate_ref == candidate_ref
+                && candidate.candidate_revision == candidate_revision
+                && candidate.candidate_fingerprint == candidate_fingerprint
+        })
+        .ok_or(CandidateError::InvalidPromotionSource)?;
+    let current = history
+        .iter()
+        .filter(|other| other.candidate_id == candidate.candidate_id)
+        .max_by_key(|other| other.candidate_revision)
+        .ok_or(CandidateError::InvalidPromotionSource)?;
+    if current.candidate_ref != candidate.candidate_ref
+        || current.candidate_fingerprint != candidate.candidate_fingerprint
+    {
+        return Err(CandidateError::InvalidPromotionSource);
+    }
+    Ok(candidate)
+}
+
+fn require_null_target(
+    target_id: Option<&str>,
+    target_event_sequence: Option<u64>,
+) -> Result<(), CandidateError> {
+    if target_id.is_some() || target_event_sequence.is_some() {
+        return Err(CandidateError::InvalidSchema(
+            "nonpromotion choice requires a null target tuple",
+        ));
+    }
+    Ok(())
 }
 
 fn validate_history(history: &[HomeCandidateRevision]) -> Result<(), CandidateError> {
@@ -397,6 +691,14 @@ fn field<'a>(
         .ok_or(CandidateError::InvalidSchema("required field is missing"))
 }
 
+fn field_is_absent(value: &CanonicalValue, name: &str) -> Result<bool, CandidateError> {
+    Ok(!value
+        .as_object()
+        .map_err(|_| CandidateError::InvalidSchema("expected object"))?
+        .iter()
+        .any(|(key, _)| key == name))
+}
+
 fn require_string<'a>(
     value: &'a CanonicalValue,
     name: &str,
@@ -413,6 +715,36 @@ fn require_candidate_id(value: &CanonicalValue) -> Result<&str, CandidateError> 
         Err(CandidateError::InvalidSchema("candidate id must be nonempty"))
     } else {
         Ok(candidate_id)
+    }
+}
+
+fn require_nullable_candidate_id<'a>(
+    value: &'a CanonicalValue,
+    name: &str,
+) -> Result<Option<&'a str>, CandidateError> {
+    match field(value, name)? {
+        CanonicalValue::Null => Ok(None),
+        CanonicalValue::String(candidate_id) if !candidate_id.is_empty() => {
+            Ok(Some(candidate_id))
+        }
+        _ => Err(CandidateError::InvalidSchema(
+            "target candidate id must be null or a nonempty string",
+        )),
+    }
+}
+
+fn require_nullable_positive_integer(
+    value: &CanonicalValue,
+    name: &str,
+) -> Result<Option<u64>, CandidateError> {
+    match field(value, name)? {
+        CanonicalValue::Null => Ok(None),
+        CanonicalValue::Integer(integer) if (1..=MAX_SAFE_INTEGER).contains(integer) => {
+            Ok(Some(*integer as u64))
+        }
+        _ => Err(CandidateError::InvalidSchema(
+            "target Event sequence must be null or a positive safe integer",
+        )),
     }
 }
 
