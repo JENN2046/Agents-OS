@@ -19,7 +19,7 @@ registries:
       human: Jenn
       agent_steward: Nobao
     validator: control-plane/registry/validate-document-registry.py
-    expected_document_count: 1317
+    expected_document_count: 1319
     authority: example only, not active workspace authority
     scope: control-plane/registry documentation governance pilot and Step 4 federation material
     known_external_scope:
