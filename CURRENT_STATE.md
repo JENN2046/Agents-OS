@@ -6,6 +6,47 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B WP3 Complete — WP4 F8 Handoff Composition Eligible (2026-07-22)
+
+WP3 now enforces a new explicit choice for every Life Stream candidate
+transition. Observe and discard terminate without writes; Memory and Intent
+choices derive candidate-only revisions. No branch creates formal Memory,
+Goal, Task, Command or effect authority.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP3_COMPLETE_WP4_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization: control-plane/registry/decisions/2026-07-22-agents-os-phase-5b-m0b-automatic-implementation-delivery-authorization-v0.1.yaml
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP3_source_commit: e66997784ef4d8fa119e77de4b3ff925fa4aba5f
+WP3_package_manifest_commit: 0db90021ac3ce6f37aaf60fdd835720fb9eca1ba
+WP3_content_tree_sha256: 25567c7c0ee0ab7f03ded429ab6b6e8a5ea0fd2c277eacd18c6a12c22e22ede8
+WP3_package_manifest_sha256: 67dc59e07307941fb732e3e3595088850884b6b7bd54dc06a26dcf6f56f69d4a
+WP3_explicit_choices: 4/4_PASS
+WP3_total_Rust_tests: 61/61_PASS
+WP3_active_schema_version: 1
+WP3_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP4_F8_HANDOFF_COMPOSITION
+WP4_start_condition_satisfied: true
+WP4_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.5.md
+active_work_queue_sha256: a057fdb21589e866475bd904c91ae805d4384102167eae1cb40d6645b694ae50
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.5.md
+WP3_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp3-explicit-promotion-gates-closeout-v0.1.md
+WP3_closeout_receipt_sha256: d058b9452f0460a7a8a159ac78646796627fa28589f22a941627ad96627a87bc
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP4_F8_HANDOFF_COMPOSITION
+```
+
 ## Phase 5B M0-B WP2 Complete — WP3 Explicit Promotion Gates Eligible (2026-07-22)
 
 WP2 now derives the three frozen low-disclosure candidate revision classes from
