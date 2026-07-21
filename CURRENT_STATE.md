@@ -6,6 +6,45 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Plan R5 Ready for Jenn Atomic Freeze Decision (2026-07-21)
+
+The complete eighteen-subject R1–R5 plan bundle received an independent
+`PASS_NO_BLOCKER`. Its original review, case-results and probe bytes are
+preserved. The revision line stops at R5, but no acceptance or freeze exists
+until Jenn executes the exact decision text in the Plan R5 Atomic Freeze
+Decision Package.
+
+```yaml
+Phase_5B_plan_status: R5_READY_FOR_JENN_ATOMIC_FREEZE_DECISION
+Phase_5B_R5_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_R5_subjects: 18
+Phase_5B_R5_manifest_inputs: 99
+Phase_5B_R5_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_R5_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+Phase_5B_R5_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_R5_independent_review_result: PASS_NO_BLOCKER
+Phase_5B_R5_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R5_case_results_sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+Phase_5B_R5_probe_sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+Phase_5B_R5_disposition_sha256: 226ba1c1d9c27ca7943989c6162dcdb760119c9c4c9349b3eca931da430ecdc8
+Phase_5B_R5_freeze_decision_package: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-package-v0.1.md
+Phase_5B_R5_freeze_decision_package_sha256: ec998520e9650cda37e7f35928bfed663cf1812c7cc8a5880839b6595c9d0d41
+Phase_5B_R5_decision_surface_receipt_sha256: 773429db1ec705df8c80459eb4be03069e4057f547acf86c0c9c111c0cbbcabf
+requires_R6: false
+Phase_5B_plan_revision_stop: true
+Phase_5B_plan_freeze_ready: true
+Phase_5B_plan_accepted: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.8.md
+active_work_queue_sha256: 33ba29dc2cf74092d2118140372c7d63259b0eea584895bdf94e820ffed2b1ca
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.8.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+```
+
 ## Newer Architecture Handoff (2026-07-12, amended 2026-07-13)
 
 This file remains the 2026-07-07 operational snapshot. The newer accepted

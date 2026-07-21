@@ -1,0 +1,103 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5b-m0b-plan-r5-independent-review-disposition-v0.1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: R5_PASS_RECONCILED_READY_FOR_JENN_ATOMIC_PLAN_FREEZE_DECISION
+
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 18
+
+review:
+  path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+  sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+  bytes: 4161
+  materialized_at: '2026-07-21T21:06:48+08:00'
+  result: PASS_NO_BLOCKER
+  requires_R6: false
+  findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+
+case_results:
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r5-independent-case-results.json
+  sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+  bytes: 13217
+  rows: 42
+  fully_resigned_negative_cases: 40
+  semantic_rejections: 40
+  target_semantic_rejections: 38
+  R4_preserved_regressions: 4/4_TARGET_SEMANTIC_REJECTION
+  parser_cases: 5/5_STABLE_BLOCK
+  positive_controls: 2/2_ACCEPTED
+  favorable_invalid_paths: 0
+  legal_input_over_rejections: 0
+  uncaught_exceptions: 0
+
+probe:
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r5-independent-probe.py
+  sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+  bytes: 5798
+  workspace_write_authority: false
+  runtime_or_external_service_authority: false
+
+manifest:
+  path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+  fixed_commit: de1072e43803b4f03d312beadeaa5a952db21914
+  declared_input_count: 99
+  subject_count: 18
+  authority_input_count: 58
+  author_evidence_count: 23
+
+independent_validation:
+  zip_sha256: 669904e327a9c15dcd4b55c99c0e0a35fadc5822b21aba4afe80b25e13ec8eb5
+  archive_entries: 105
+  checksums: 104/104_MATCH
+  archive_map: 102/102_MATCH
+  manifest_inputs: 99/99_MATCH
+  fixed_commit_objects: 99/99_MATCH
+  fixed_commands: 20/20_PASS
+  builder_byte_equality: 5/5_PASS
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  uncaught_exception_count: 0
+
+immutable_lineage:
+  R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+  R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+  R3_manifest_sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+  R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+  R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+  R1_subject_count: 4
+  R2_subject_count: 4
+  R3_subject_count: 4
+  R4_subject_count: 4
+  R5_subject_count: 2
+  total_subject_count: 18
+  prior_subject_bytes_may_change: false
+
+disposition:
+  independent_review_gate: SATISFIED
+  R6_required: false
+  R6_preplanned: false
+  revision_stop: true
+  automatic_plan_acceptance: forbidden
+  automatic_plan_freeze: forbidden
+  next_gate: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+
+governance:
+  Phase_5B_plan_accepted: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_raw_memory_access_authorized: false
+  provider_sensing_or_real_effect_authorized: false
+  commit_push_PR_merge_tag_release_deploy_publish_authorized: false

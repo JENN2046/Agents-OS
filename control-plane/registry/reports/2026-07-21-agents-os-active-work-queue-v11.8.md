@@ -1,0 +1,88 @@
+# AGENTS OS Active Work Queue v11.8
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.7.md`
+
+## Current Facts
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_R5_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_R5_subjects: 18
+Phase_5B_R5_authority_inputs: 58
+Phase_5B_R5_author_evidence: 23
+Phase_5B_R5_manifest_inputs: 99
+Phase_5B_R5_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_R5_offline_archive_sha256: 669904e327a9c15dcd4b55c99c0e0a35fadc5822b21aba4afe80b25e13ec8eb5
+Phase_5B_R5_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+Phase_5B_R5_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_R5_independent_review_result: PASS_NO_BLOCKER
+Phase_5B_R5_requires_R6: false
+Phase_5B_R5_revision_stop: true
+Phase_5B_R5_case_results_sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+Phase_5B_R5_probe_sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+Phase_5B_R5_disposition_sha256: 226ba1c1d9c27ca7943989c6162dcdb760119c9c4c9349b3eca931da430ecdc8
+Phase_5B_R5_freeze_decision_package: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-package-v0.1.md
+Phase_5B_R5_freeze_decision_package_sha256: ec998520e9650cda37e7f35928bfed663cf1812c7cc8a5880839b6595c9d0d41
+Phase_5B_R5_decision_surface_receipt_sha256: 773429db1ec705df8c80459eb4be03069e4057f547acf86c0c9c111c0cbbcabf
+Phase_5B_plan_status: R5_READY_FOR_JENN_ATOMIC_FREEZE_DECISION
+Phase_5B_plan_freeze_ready: true
+Phase_5B_plan_accepted: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+```
+
+## NOW
+
+### NOW-001: Await Jenn's explicit atomic Plan R5 freeze decision
+
+Review Section 6 of the fixed Plan R5 Atomic Freeze Decision Package. Only
+Jenn may accept and freeze the complete eighteen-subject R1–R5 plan unit.
+
+## NEXT
+
+```text
+JENN_ACCEPT_AND_FREEZE -> immutable_freeze_decision_and_governance_closeout_only
+JENN_REVISE -> preserve_all_fixed_bytes_and_require_separate_R6_start_decision
+JENN_REJECT -> preserve_review_and_keep_plan_unfrozen
+```
+
+Implementation remains a separate Jenn-owned decision after plan freeze and
+Git durability closeout.
+
+## BLOCKED
+
+```text
+automatic_plan_acceptance_or_freeze=forbidden
+automatic_R6_start=forbidden
+automatic_Phase_5B_implementation_start=forbidden
+modify_R1_R2_R3_R4_or_R5_fixed_lineage=forbidden
+Rust_JavaScript_NAPI_SQLite_or_plugin_source_change=forbidden
+database_creation_or_migration=forbidden
+VCPToolBox_core_change_start_or_plugin_enablement=forbidden
+runtime_or_service_start=forbidden
+private_raw_memory_or_state_private_access=forbidden
+provider_network_sensing_recording_device_or_real_effect=forbidden
+```
+
+## CLOSED
+
+```text
+R5_independent_review=PASS_NO_BLOCKER_PRESERVED
+R5_findings=0_BLOCKER_0_MAJOR_0_MINOR
+R6_required=false
+R5_revision_line=STOPPED_PENDING_JENN_DECISION
+active_work_queue_v11_7=superseded_historical_bytes_preserved
+```

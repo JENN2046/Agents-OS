@@ -1,0 +1,104 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5B_M0B_PLAN_R5_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-21'
+materialized_at: '2026-07-21T21:06:48+08:00'
+reviewer:
+  identity: Codex_independent_phase5b_plan_r5_review
+  independence_basis:
+    - not_the_R1_R2_R3_R4_R5_author_run
+    - reviewed_fixed_commit_and_archive_bytes_read_only
+    - author_self_review_was_evidence_only
+    - independently_constructed_fully_resigned_type_and_parser_cases
+    - no_workspace_or_Git_modification
+    - no_implementation_runtime_database_external_service_private_memory_sensing_or_effect
+
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  fixed_commit: de1072e43803b4f03d312beadeaa5a952db21914
+  atomic: true
+  partial_review: false
+  subject_count: 18
+
+result: PASS_NO_BLOCKER
+requires_R6: false
+findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+
+integrity:
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+    match: true
+  archive:
+    path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r5-review-package-v0.1.zip
+    sha256: 669904e327a9c15dcd4b55c99c0e0a35fadc5822b21aba4afe80b25e13ec8eb5
+    entry_count: 105
+    unique_entries: 105
+    checksums: 104/104_MATCH
+    archive_map: 102/102_MATCH
+    CRC: PASS
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+  declared_inputs:
+    hashes: 99/99_MATCH
+    full_reads: 99/99
+    git_objects_at_fixed_commit: 99/99_MATCH
+    subjects: 18/18
+    authority_inputs: 58/58
+    author_evidence: 23/23
+    bytes_fully_read: 1505912
+    lines_fully_read: 30650
+  fixed_commands:
+    result: 20/20_PASS
+    extracted_without_git: true
+    builders_byte_equal: 5/5_PASS
+  immutable_lineage:
+    R1_manifest: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+    R2_manifest: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+    R3_manifest: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+    R4_manifest: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+    R1_R2_R3_R4_subjects: 16/16_MATCH
+
+independent_case_results:
+  path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r5-independent-case-results.json
+  sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+  probe_path: /tmp/phase5b_r5_independent_probe.py
+  probe_sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+  fully_resigned_negative_cases: 40
+  strict_type_target_semantic_rejections: 38
+  all_semantic_rejections: 40/40
+  R4_preserved_favorable_invalid_regressions: 4/4_TARGET_SEMANTIC_REJECTION
+  parser_cases: 5/5_STABLE_BLOCK
+  positive_controls: 2/2_ACCEPTED
+  favorable_invalid_path_count: 0
+  fixture_seal_only_rejection_count: 0
+  legal_input_over_rejection_count: 0
+  uncaught_exception_count: 0
+
+semantic_results:
+  derived_binding_site_exact_JSON_integer_1: PASS
+  consumed_Command_site_exact_JSON_integer_1: PASS
+  sites_checked_independently: true
+  boolean_true_and_false_rejected: true
+  float_and_exponent_forms_rejected: true
+  null_string_array_object_rejected: true
+  zero_negative_other_and_unsafe_integer_rejected: true
+  forged_observation_cannot_hide_invalid_consumed_type: true
+  wrapper_or_profile_rewrite_cannot_change_consumed_rule: true
+  legal_integer_1_remains_accepted: true
+  result_depends_on_declared_schema_rule_not_fixture_equality: true
+
+boundary_results:
+  implementation_impossibility_count: 0
+  second_permission_identity_Task_Command_or_effect_authority_count: 0
+  automatic_implementation_start_count: 0
+  implementation_runtime_database_VCPToolBox_provider_private_memory_sensing_or_real_effect_occurrence_count: 0
+
+disposition:
+  Phase_5B_plan_independent_review_result: PASS_NO_BLOCKER
+  Phase_5B_plan_acceptance_or_freeze_automatic: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  safe_next_action: preserve_this_review_then_prepare_Jenn_atomic_plan_freeze_decision_surface
