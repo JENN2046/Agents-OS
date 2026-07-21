@@ -5667,6 +5667,42 @@ current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION_GATE
 next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION
 ```
 
+## Phase 5B M0-B Plan R5 Fixed for Independent Review (2026-07-21)
+
+Jenn explicitly started R5 for the single R4 strict JSON integer blocker. The
+author package is now fixed as an eighteen-subject R1–R5 atomic unit. R1–R4
+fixed lineage remains immutable; implementation remains forbidden.
+
+```yaml
+Phase_5B_plan_status: R5_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R5_started: true
+Phase_5B_R5_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-narrow-closure-start-decision-v0.1.yaml
+Phase_5B_R5_start_decision_sha256: 1cfec23f4fa52b57f1defe8b138dc247e3a18791b23071b838d986f64e7d97c7
+Phase_5B_R5_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_R5_subjects: 18
+Phase_5B_R5_authority_inputs: 58
+Phase_5B_R5_author_evidence: 23
+Phase_5B_R5_manifest_inputs: 99
+Phase_5B_R5_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_R5_offline_archive_sha256: 669904e327a9c15dcd4b55c99c0e0a35fadc5822b21aba4afe80b25e13ec8eb5
+Phase_5B_R5_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R5_independent_review_created: false
+Phase_5B_R5_independent_review_result: NOT_RUN
+R4_favorable_invalid_paths_target_semantic_rejected: 4/4
+strict_JSON_totality_matrix_target_semantic_rejected: 11/11
+fixture_seal_only_rejections: 0
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.7.md
+active_work_queue_sha256: 4594a5204a5871d42a328308de9afd6dcc43bdfa62f1bf2e9c2317d6ed56bc21
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.7.md
+current_work_package: PHASE_5B_M0B_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
 ## Phase 5B M0-B Plan R4 Block Reconciled (2026-07-21)
 
 The fixed R1–R4 atomic unit received a fresh independent `BLOCK`. The original

@@ -1,0 +1,51 @@
+schema_version: agents-os.m0b-r5-strict-json-integer-profile.v0.1
+profile_id: PHASE_5B_M0B_R5_STRICT_JSON_INTEGER_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+field:
+  name: claimed_principal_revision
+  owner_source: extensions/agents-os-resident/src/reducers/command_intake.rs
+  required_value: 1
+  required_JSON_category: integer
+  required_host_language_predicate: type(value)_is_int_and_value_equals_1
+  boolean_is_integer: false
+  float_is_integer: false
+  numeric_coercion: forbidden
+
+consumption_sites:
+  - R4_fixture.derived_sealed_binding.claimed_principal_revision
+  - R4_fixture.R3_fixture.F3.command.claimed_principal_revision
+
+invalid_forms:
+  - true
+  - false
+  - 1.0
+  - 1e0
+  - null
+  - string
+  - array
+  - object
+  - zero
+  - negative_integer
+  - integer_other_than_1
+
+fixed_regressions:
+  - inner_revision_integer_1_to_boolean_true
+  - inner_revision_integer_1_to_float_1_0
+  - derived_and_inner_revision_to_boolean_true
+  - derived_and_inner_revision_to_float_1_0
+
+acceptance:
+  exact_type_checked_before_binding_equality: required
+  derived_and_consumed_sites_checked_independently: required
+  all_four_regressions_target_semantic_rejected: required
+  fixture_seal_only_rejection_count: 0
+  legal_integer_1_positive_control: required
+
+boundary:
+  second_identity_or_authentication_authority: false
+  upstream_F3_reducer_recomputed: false
+  implementation_authorized: false
+  runtime_usable: false
