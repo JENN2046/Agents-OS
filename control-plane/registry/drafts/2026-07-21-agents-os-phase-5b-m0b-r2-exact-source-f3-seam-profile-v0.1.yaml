@@ -1,0 +1,183 @@
+schema_version: agents-os.m0b-r2-exact-source-f3-seam-profile.v0.1
+profile_id: PHASE_5B_M0B_R2_EXACT_SOURCE_AND_F3_SEAM_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+baseline:
+  package_root: extensions/agents-os-resident
+  package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+  public_NAPI_method_count: 5
+  public_NAPI_methods:
+    - start_resident
+    - get_resident_status
+    - execute_command
+    - claim_outbox
+    - reconcile
+  ledger_thread_count: 1
+  authoritative_SQLite_connection_count: 1
+
+exact_future_source_inventory:
+  create:
+    - src/home/mod.rs
+    - src/home/session_boundary.rs
+    - src/home/candidate.rs
+    - src/home/handoff.rs
+    - tests/synthetic_m0b.rs
+  modify:
+    - README.md
+    - package-manifest.json
+    - src/lib.rs
+    - src/ledger/mod.rs
+    - src/ledger/recovery.rs
+    - src/ledger/replay.rs
+    - src/ledger/schema.rs
+    - src/ledger/transaction.rs
+    - src/napi_frame.rs
+    - src/reducers/command_intake.rs
+    - src/reducers/mod.rs
+    - src/resident/ledger_thread.rs
+    - src/resident/mod.rs
+    - tests/crash_matrix.rs
+    - tests/napi_protocol.rs
+    - tests/replay_and_idempotency.rs
+  forbidden_even_after_implementation_start:
+    - Cargo.toml
+    - Cargo.lock
+    - package.json
+    - package-lock.json
+    - index.js
+    - plugin-manifest.json.block
+    - VCPToolBox_tracked_files
+  exact_create_count: 5
+  exact_modify_count: 16
+  unknown_source_change: forbidden
+  new_dependency_or_lock_change: forbidden
+
+internal_change_classification:
+  src/napi_frame.rs: internal_dispatch_change_public_method_set_unchanged
+  src/reducers/command_intake.rs: closed_synthetic_registry_and_type_specific_payload_validation
+  src/resident/ledger_thread.rs: new_closed_LedgerCommand_variants_on_existing_thread
+  src/ledger/replay.rs: F3_owned_terminal_home_intent_commit_and_exact_replay
+  src/ledger/recovery.rs: read_only_M0B_witness_projection
+  src/ledger/schema.rs: exact_v2_schema_and_migration
+  src/ledger/transaction.rs: candidate_and_handoff_atomic_transactions
+
+single_writer_routes:
+  routes:
+    - operation: FORM_LIFE_STREAM_OR_INTENT_CANDIDATE
+      reducer_owner: home_candidate
+      ledger_command: CommitHomeCandidate
+      receiver: existing_LedgerThread
+      connection_owner: existing_LedgerThread_only
+      transaction_owner: ledger_transaction_commit_home_candidate
+    - operation: FORM_F8_HANDOFF_LINK
+      reducer_owner: home_handoff
+      ledger_command: CommitHomeHandoff
+      receiver: existing_LedgerThread
+      connection_owner: existing_LedgerThread_only
+      transaction_owner: ledger_transaction_commit_home_handoff
+    - operation: COMMIT_F3_HOME_INTENT_COMMAND
+      reducer_owner: F3_command_intake
+      ledger_command: TerminalSyntheticHomeIntent
+      receiver: existing_LedgerThread
+      connection_owner: existing_LedgerThread_only
+      transaction_owner: ledger_replay_terminal_synthetic_home_intent
+  direct_connection_or_SQL_in_home_module: forbidden
+  caller_supplied_database_path: forbidden
+
+home_intent_payload:
+  command_type_id: M0_SYNTHETIC_SUBMIT_HOME_INTENT
+  command_type_revision: 1
+  environment: SYNTHETIC_TEST
+  production_compatible: false
+  interface_version: agents-os.m0a-synthetic-command.v0.1
+  schema_version: agents-os.m0b.synthetic-home-intent-payload.v0.1
+  exact_ordered_fields:
+    - schema_version
+    - handoff_candidate_ref
+    - handoff_candidate_revision
+    - handoff_candidate_fingerprint
+    - intent_candidate_ref
+    - intent_candidate_revision
+    - intent_candidate_fingerprint
+    - owner_commitment_set_fingerprint
+    - canonical_candidate_history_fingerprint
+    - minimum_trusted_event_sequence
+  field_profiles:
+    schema_version: {type: string, const: agents-os.m0b.synthetic-home-intent-payload.v0.1}
+    handoff_candidate_ref: {type: stable_ref}
+    handoff_candidate_revision: {type: positive_safe_integer}
+    handoff_candidate_fingerprint: {type: lowercase_sha256}
+    intent_candidate_ref: {type: stable_ref}
+    intent_candidate_revision: {type: positive_safe_integer}
+    intent_candidate_fingerprint: {type: lowercase_sha256}
+    owner_commitment_set_fingerprint: {type: lowercase_sha256}
+    canonical_candidate_history_fingerprint: {type: lowercase_sha256}
+    minimum_trusted_event_sequence: {type: positive_safe_integer}
+  additional_properties: false
+  raw_or_private_content_fields: forbidden
+
+canonical_derivations:
+  payload_bytes: JCS(home_intent_payload_exact_object)
+  payload_fingerprint: SHA256(payload_bytes)
+  payload_schema_fingerprint: SHA256(JCS([agents-os.m0b.home-intent-payload-schema.v0.1,exact_ordered_fields,field_profiles,additional_properties_false]))
+  command_id_digest: SHA256(JCS([agents-os.m0b.home-intent-command-id.v0.1,handoff_candidate_ref,handoff_candidate_revision,handoff_candidate_fingerprint,intent_candidate_ref,intent_candidate_revision,intent_candidate_fingerprint,owner_commitment_set_fingerprint,canonical_candidate_history_fingerprint,minimum_trusted_event_sequence]))
+  command_id: command:SYNTHETIC_TEST:home-intent:{command_id_digest}
+  canonical_command_bytes: JCS(existing_closed_command_envelope_with_exact_payload)
+  canonical_command_fingerprint: SHA256(canonical_command_bytes)
+  NAPI_request_bytes: JCS(existing_execute_command_request_with_request_id_equal_command_id)
+  request_fingerprint: SHA256(NAPI_request_bytes)
+  replay_identity: [command_id, request_fingerprint, NAPI_request_bytes]
+  idempotency_key: SHA256(JCS([agents-os.m0b.home-intent-idempotency.v0.1,command_id,request_fingerprint]))
+
+F3_terminal_mapping:
+  COMMITTED:
+    disposition: COMMITTED
+    response_code: HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC
+    event_kind: F3_SYNTHETIC_HOME_INTENT_COMMITTED
+    event_aggregate_ref: command_id
+    event_aggregate_revision: 1
+    first_event_count: 1
+    first_external_call_count: 0
+    rows_written_in_one_transaction:
+      - inbox_command
+      - command_envelope
+      - event
+      - replay_index
+  VALIDATION_REJECTED:
+    disposition: REJECTED
+    response_code: INVALID_HOME_INTENT_COMMAND
+    event_kind: null
+    first_event_count: 0
+    first_external_call_count: 0
+    rows_written: 0
+  CONTRACT_NOT_ACTIVE:
+    disposition: INDETERMINATE
+    response_code: CONTRACT_NOT_ACTIVE
+    event_kind: null
+    first_event_count: 0
+    first_external_call_count: 0
+    rows_written: 0
+  PROTOCOL_CONFLICT:
+    disposition: REJECTED
+    response_code: PROTOCOL_CONFLICT
+    event_kind: null
+    additional_event_count: 0
+    additional_external_call_count: 0
+    returns_prior_response: false
+  EXACT_REPLAY:
+    disposition: COMMITTED
+    response_code: HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC
+    additional_event_count: 0
+    additional_external_call_count: 0
+    returned_response_bytes: exact_first_response_bytes
+    returned_accounting: exact_first_accounting
+
+boundary:
+  public_NAPI_method_change: false
+  second_writer_thread_connection_plugin_or_service: false
+  production_command_registry_usable: false
+  Home_authenticates_or_commits_Command: false
+  F3_owner_recomputed_by_Home: false
+  implementation_authorized: false

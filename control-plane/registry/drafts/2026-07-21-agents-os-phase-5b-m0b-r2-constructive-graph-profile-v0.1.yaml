@@ -1,0 +1,145 @@
+schema_version: agents-os.m0b-r2-constructive-graph-profile.v0.1
+profile_id: PHASE_5B_M0B_R2_CONSTRUCTIVE_GRAPH_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+graph_sections_in_exact_order:
+  - source_routes
+  - owner_commitments
+  - candidate_history
+  - handoff
+  - F3_command
+  - schema_inventory
+  - transaction_traces
+  - crash_states
+  - boundary
+
+required_node_ids_in_exact_order:
+  - route:candidate
+  - route:handoff
+  - route:f3-home-intent
+  - owner:F7-candidate-currentness
+  - owner:F8-handoff-decision
+  - owner:F3-command-intake
+  - candidate:life-stream:1
+  - candidate:intent:1
+  - history:home-candidates:1
+  - handoff:home-intent:1
+  - payload:home-intent:1
+  - command:home-intent:1
+  - replay:home-intent:1
+  - schema:home-candidate-revision
+  - schema:home-candidate-head
+  - schema:home-handoff-link
+  - transaction:candidate
+  - transaction:handoff
+  - transaction:f3-home-intent
+  - crash:C0
+  - crash:C1
+  - crash:C2
+  - crash:C3
+  - crash:C4
+  - crash:H0
+  - crash:H1
+  - crash:H2
+  - crash:H3
+  - crash:H4
+  - crash:F0
+  - boundary:nonauthority
+
+required_edges:
+  - [owner:F7-candidate-currentness, candidate:life-stream:1]
+  - [candidate:life-stream:1, candidate:intent:1]
+  - [candidate:life-stream:1, history:home-candidates:1]
+  - [candidate:intent:1, history:home-candidates:1]
+  - [history:home-candidates:1, handoff:home-intent:1]
+  - [owner:F8-handoff-decision, handoff:home-intent:1]
+  - [handoff:home-intent:1, payload:home-intent:1]
+  - [candidate:intent:1, payload:home-intent:1]
+  - [payload:home-intent:1, command:home-intent:1]
+  - [owner:F3-command-intake, command:home-intent:1]
+  - [command:home-intent:1, replay:home-intent:1]
+  - [route:candidate, transaction:candidate]
+  - [route:handoff, transaction:handoff]
+  - [route:f3-home-intent, transaction:f3-home-intent]
+  - [schema:home-candidate-revision, transaction:candidate]
+  - [schema:home-candidate-head, transaction:candidate]
+  - [schema:home-handoff-link, transaction:handoff]
+  - [transaction:candidate, crash:C0]
+  - [transaction:candidate, crash:C1]
+  - [transaction:candidate, crash:C2]
+  - [transaction:candidate, crash:C3]
+  - [transaction:candidate, crash:C4]
+  - [transaction:handoff, crash:H0]
+  - [transaction:handoff, crash:H1]
+  - [transaction:handoff, crash:H2]
+  - [transaction:handoff, crash:H3]
+  - [transaction:handoff, crash:H4]
+  - [transaction:f3-home-intent, crash:F0]
+  - [replay:home-intent:1, boundary:nonauthority]
+
+node_contracts:
+  route:
+    required_fields: [operation, ledger_command, receiver, connection_owner, transaction_owner]
+    connection_owner_const: existing_LedgerThread_only
+  owner_commitment:
+    required_fields: [owner, commitment_ref, commitment_revision, commitment_fingerprint, issued_event_sequence, result, current_head]
+    current_head_type: strict_boolean
+  candidate_revision:
+    required_fields: [candidate_id, candidate_revision, candidate_ref, semantic_class, source_ref, source_revision, source_fingerprint, payload_commitment, predecessor_ref, predecessor_fingerprint, created_event_sequence]
+  history:
+    required_fields: [ordered_candidate_refs, ordered_candidate_fingerprints, latest_candidate_ref, latest_candidate_fingerprint]
+  handoff:
+    required_fields: [handoff_ref, handoff_revision, intent_candidate_ref, intent_candidate_revision, intent_candidate_fingerprint, owner_commitment_set_fingerprint, canonical_candidate_history_fingerprint, minimum_trusted_event_sequence]
+  command:
+    required_fields: [command_type_id, command_type_revision, payload_fingerprint, command_id, command_fingerprint, request_fingerprint, idempotency_key]
+  crash:
+    required_fields: [transaction, failpoint, committed, visible_rows_after_restart, automatic_retry]
+
+attack_inventory:
+  required_fully_resigned_attacks: 32
+  families:
+    - source_inventory_missing_required_file
+    - source_inventory_extra_file
+    - public_NAPI_method_added
+    - second_writer_thread
+    - second_SQLite_connection
+    - direct_home_SQL
+    - owner_commitment_same_revision_rewrite
+    - owner_commitment_cross_role_substitution
+    - candidate_same_revision_rewrite
+    - candidate_predecessor_gap
+    - candidate_head_stale_CAS
+    - candidate_history_phantom
+    - candidate_history_reorder
+    - handoff_candidate_substitution
+    - handoff_owner_commitment_substitution
+    - handoff_watermark_stale
+    - payload_unknown_field
+    - payload_missing_field
+    - payload_handoff_tuple_mismatch
+    - command_id_not_derived
+    - request_identity_not_derived
+    - distinct_handoff_same_command_id
+    - same_command_id_changed_request_bytes
+    - F3_first_accounting_changed_on_replay
+    - schema_unknown_column
+    - schema_missing_constraint
+    - schema_fingerprint_not_derived
+    - migration_metadata_updated_first
+    - candidate_partial_commit_visible
+    - handoff_partial_commit_visible
+    - post_handoff_automatic_F3_retry
+    - synthetic_command_marked_production_usable
+
+acceptance:
+  exact_node_inventory: required
+  exact_edge_inventory: required
+  every_node_payload_closed: required
+  every_node_fingerprint_recomputed: required
+  section_and_root_fingerprints_recomputed: required
+  all_32_attacks_rejected: required
+  R1_28_case_validator_still_passes: required
+  real_occurrence_count: 0
+  terminal_outcome: NOT_ACTIVATED
