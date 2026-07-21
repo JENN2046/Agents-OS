@@ -6,6 +6,45 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B WP5 Complete — WP6 Ledger Privacy and Recovery Eligible (2026-07-22)
+
+WP5 adds the exact implementation-only synthetic Home Intent command and
+adapts the fixed WP4 handoff through the existing `execute_command` frame. F3
+alone authenticates, commits and replays it; Home has no Command writer.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP5_COMPLETE_WP6_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP5_source_commit: 42442c556cb8c1df26cb74b1c647ed8251a22dcb
+WP5_package_manifest_commit: 5e784c649f293f575911671fb6187e8479f1ae6a
+WP5_content_tree_sha256: d3c7bc8292e80a151cb1f0203e5c702b78ff52222c46fcfed1cdfd74ac6e1820
+WP5_package_manifest_sha256: 8316ee36a91471a5d2d4150535288e38ac1057e9a4a529c511abef7be50021ea
+WP5_total_Rust_tests: 68/68_PASS
+WP5_synthetic_m0b_tests: 24/24_PASS
+WP5_home_direct_Command_write: false
+WP5_active_schema_version: 1
+WP5_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP6_LEDGER_PRIVACY_AND_RECOVERY
+WP6_start_condition_satisfied: true
+WP6_started: false
+WP6_disposable_synthetic_database_authorized: true
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.7.md
+active_work_queue_sha256: 852e4161d05b2b88a85d2b47ae3f3573207ac1c0a930e9654c2bbd0e2dd99538
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.7.md
+WP5_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp5-f3-synthetic-intake-closeout-v0.1.md
+WP5_closeout_receipt_sha256: 972002f9322db2eff8ee1901ada5cb0605a74fc42110403523a5f35853f0e8d5
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP6_LEDGER_PRIVACY_AND_RECOVERY
+```
+
 ## Phase 5B M0-B WP4 Complete — WP5 F3 Synthetic Intake Seam Eligible (2026-07-22)
 
 WP4 now composes a synthetic, nonauthoritative F8 handoff candidate from the
