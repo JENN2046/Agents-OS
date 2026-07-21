@@ -1,10 +1,50 @@
 # AGENTS OS Current State
 
-Date: 2026-07-07
+Date: 2026-07-22
 Status: active reality snapshot
 Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
+
+## Phase 5B M0-B WP1 Complete — WP2 Eligible (2026-07-22)
+
+WP1 now decodes only the frozen commitment-only synthetic observation envelope.
+Its three explicit nonpromotion branches deterministically return
+`NO_PROMOTION` with zero canonical writes and no authority. Missing or unknown
+branches are zero-write `INDETERMINATE`; the explicit candidate branch is
+decoded but remains unimplemented until WP2.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP1_COMPLETE_WP2_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP1_source_commit: f34534f8b1ff1f1bba2caacb5dd54dee9aeeec80
+WP1_package_manifest_commit: 7398618584ea9dbc0c89d693ac1385d538d21721
+WP1_content_tree_sha256: 198839c14e67ac5beb4ffff6f034730e8f1c405209b7928904d3ebbee2a2c202
+WP1_package_manifest_sha256: 86ae0d3b13ee74e08977d2a1da8b0e3310b27263fc2c32cb143885fe4c70631f
+WP1_nonpromotion_paths: 3/3_NO_PROMOTION_ZERO_WRITE
+WP1_missing_unknown_branch: 2/2_INDETERMINATE_ZERO_WRITE
+WP1_total_Rust_tests: 51/51_PASS
+WP1_active_schema_version: 1
+WP1_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP2_F7_CANDIDATE_REVISIONS
+WP2_start_condition_satisfied: true
+WP2_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.3.md
+active_work_queue_sha256: ce313a269f53cc203dd0057360a8e3564c710e6541ab27dd6de04529699d9d02
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.3.md
+WP1_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp1-session-nonpromotion-closeout-v0.1.md
+WP1_closeout_receipt_sha256: 122604f38fe247bee4ffbc1d8c905656a94b1a073007c2e6cf877061ea936773
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP2_F7_CANDIDATE_REVISIONS
+```
 
 ## Phase 5B M0-B WP0 Complete — WP1 Eligible (2026-07-21)
 
