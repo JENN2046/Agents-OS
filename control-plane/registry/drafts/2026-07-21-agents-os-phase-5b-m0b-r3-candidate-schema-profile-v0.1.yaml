@@ -1,0 +1,65 @@
+schema_version: agents-os.m0b-r3-candidate-schema-profile.v0.1
+profile_id: PHASE_5B_M0B_R3_CANDIDATE_SCHEMA_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+candidate_revision:
+  primary_key: [candidate_id, candidate_revision]
+  exact_composite_unique_key:
+    - candidate_id
+    - candidate_revision
+    - candidate_ref
+    - candidate_fingerprint
+  column_profiles:
+    candidate_id: {storage_class: TEXT, collation: BINARY, nullable: false}
+    candidate_revision: {storage_class: INTEGER, nullable: false, check: positive_safe_integer}
+    candidate_ref: {storage_class: TEXT, collation: BINARY, nullable: false}
+    candidate_fingerprint: {storage_class: TEXT, collation: BINARY, nullable: false, check: lowercase_sha256}
+  genesis:
+    predicate: candidate_revision_equals_1
+    predecessor_candidate_revision: null
+    predecessor_candidate_ref: null
+    predecessor_candidate_fingerprint: null
+  advance:
+    predicate: candidate_revision_greater_than_1
+    predecessor_same_candidate_id: required
+    predecessor_revision: candidate_revision_minus_1
+    predecessor_ref_and_fingerprint: exact_parent_tuple
+
+canonical_history:
+  purpose: order_distinct_candidate_identities_without_forging_predecessor_lineage
+  exact_membership: required
+  exact_order: required
+  selected_head_must_resolve: required
+
+composite_foreign_keys:
+  - child_table: home_candidate_revision
+    child_columns: [candidate_id, predecessor_candidate_revision, predecessor_candidate_ref, predecessor_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+  - child_table: home_candidate_head
+    child_columns: [candidate_id, current_candidate_revision, current_candidate_ref, current_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+  - child_table: home_handoff_link
+    child_columns: [intent_candidate_id, intent_candidate_revision, intent_candidate_ref, intent_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+
+foreign_key_acceptance:
+  exact_parent_primary_or_unique_key: required
+  exact_column_arity_and_order: required
+  compatible_storage_class_and_collation: required
+  label_only_proof: forbidden
+
+constructive_witness:
+  life_stream_revision_1: separate_genesis
+  intent_revision_1: separate_genesis
+  intent_revision_2: same_identity_exact_predecessor_revision_1
+  selected_handoff_candidate: intent_revision_2
+
+boundary:
+  schema_plan_only: true
+  database_created_or_migrated: false
+  implementation_authorized: false

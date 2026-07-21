@@ -34,7 +34,7 @@ from path_boundary import is_protected_path, is_under_workspace, safe_resolve
 
 SCHEMAS_PATH = CONTROL_DIR / "control-chain.schemas.json"
 MANIFEST_PATH = CONTROL_DIR / "control-chain-manifest.json"
-DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-21-agents-os-active-work-queue-v10.9.md"
+DEFAULT_QUEUE = WORKSPACE_ROOT / "control-plane" / "registry" / "reports" / "2026-07-21-agents-os-active-work-queue-v11.1.md"
 ROUTE_SELECTION_PACKAGE = REGISTRY_DIR / "reports" / "2026-07-07-agents-os-next-route-selection-package-v0.1.md"
 COLAMETA_PREFLIGHT = REGISTRY_DIR / "colameta-executor-preflight.py"
 DOCCTL = REGISTRY_DIR / "docctl.py"
