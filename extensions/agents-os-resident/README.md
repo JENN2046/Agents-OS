@@ -105,3 +105,11 @@ new commitment-only candidate revision through the WP2 reducer. Missing,
 unknown, implicit, stale, non-Life-Stream, raw-content-shaped and
 production-shaped inputs fail closed. No branch creates formal Memory, Goal,
 Task, Command or effect authority, and persistence remains deferred to WP6.
+
+Phase 5B M0-B WP4 composes a synthetic, nonauthoritative F8 handoff candidate
+only after resolving the exact frozen R5 owner-source anchor and the canonical
+current Intent Candidate history. Owner-source rewriting, phantom or reordered
+history, stale Intent tuples, behind-watermark evidence, same-revision handoff
+rewriting and direct-write-shaped inputs fail closed. The favorable result is
+still candidate evidence only: F3 must recheck it, and no Command, Task or
+effect authority or ledger write is produced before the later packages.

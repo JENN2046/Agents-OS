@@ -8,6 +8,10 @@ use agents_os_resident::home::candidate::{
 use agents_os_resident::home::session_boundary::{
     SessionBoundaryError, SessionBranchChoice, decode_synthetic_observation, reduce_nonpromotion,
 };
+use agents_os_resident::home::handoff::{
+    HandoffError, HandoffResult, compose_f8_handoff, owner_commitment_set_fingerprint,
+    trusted_owner_commitments,
+};
 use serde_json::{Value, json};
 
 #[test]
@@ -30,7 +34,10 @@ fn wp1_preserves_the_home_layout_and_later_boundaries() {
         home::candidate::IMPLEMENTATION_STATUS,
         "WP3_EXPLICIT_PROMOTION_ACTIVE"
     );
-    assert_eq!(home::handoff::IMPLEMENTATION_STATUS, "WP0_LAYOUT_ONLY");
+    assert_eq!(
+        home::handoff::IMPLEMENTATION_STATUS,
+        "WP4_F8_HANDOFF_COMPOSITION_ACTIVE"
+    );
     assert!(!home::session_boundary::CANONICAL_WRITE_AUTHORIZED);
     assert!(!home::candidate::CANONICAL_WRITE_AUTHORIZED);
     assert!(!home::handoff::COMMAND_COMMIT_AUTHORIZED);
@@ -542,6 +549,210 @@ fn wp3_schema_privacy_and_authority_shaped_fields_fail_closed() {
     assert_eq!(
         reduce_explicit_promotion(&noncanonical, std::slice::from_ref(&life)).unwrap_err(),
         CandidateError::NonCanonicalBytes
+    );
+}
+
+fn handoff_request(
+    intent: &HomeCandidateRevision,
+    history: &[HomeCandidateRevision],
+    choice: Option<&str>,
+    minimum_sequence: u64,
+) -> Vec<u8> {
+    let owner_source = trusted_owner_commitments();
+    let mut value = json!({
+        "canonical_candidate_history_fingerprint": agents_os_resident::home::candidate::canonical_candidate_history_fingerprint(history).unwrap(),
+        "explicit_handoff_choice": choice,
+        "handoff_candidate_id": "home-intent",
+        "handoff_candidate_revision": 1,
+        "intent_candidate_fingerprint": intent.candidate_fingerprint,
+        "intent_candidate_ref": intent.candidate_ref,
+        "intent_candidate_revision": intent.candidate_revision,
+        "minimum_trusted_event_sequence": minimum_sequence,
+        "owner_commitment_set_fingerprint": owner_commitment_set_fingerprint(&owner_source).unwrap()
+    });
+    if choice.is_none() {
+        value.as_object_mut().unwrap().remove("explicit_handoff_choice");
+    }
+    canonicalize_json(&serde_json::to_vec(&value).unwrap()).unwrap()
+}
+
+#[test]
+fn wp4_forms_only_an_exact_nonauthoritative_handoff_candidate() {
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let history = vec![intent.clone()];
+    let owner_source = trusted_owner_commitments();
+    let request = handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100);
+    let first = compose_f8_handoff(&request, &history, &owner_source, &[]).unwrap();
+    let second = compose_f8_handoff(&request, &history, &owner_source, &[]).unwrap();
+    assert_eq!(first, second);
+    assert_eq!(first.result, HandoffResult::CandidateFormed);
+    assert_eq!(first.reason, "VALID_NONAUTHORITATIVE_HANDOFF_CANDIDATE");
+    assert_eq!(first.canonical_write_count, 0);
+    assert_eq!(first.event_write_count, 0);
+    assert!(first.f3_recheck_required);
+    assert!(!first.command_authority);
+    assert!(!first.task_write_authority);
+    assert!(!first.effect_authority);
+    assert!(!first.runtime_usable);
+    let candidate = first.candidate.unwrap();
+    assert_eq!(candidate.intent_candidate_ref, intent.candidate_ref);
+    assert!(!candidate.command_authority);
+    assert!(!candidate.runtime_usable);
+}
+
+#[test]
+fn wp4_exact_replay_succeeds_and_same_revision_rewrite_rejects() {
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let history = vec![intent.clone()];
+    let owner_source = trusted_owner_commitments();
+    let request = handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100);
+    let candidate = compose_f8_handoff(&request, &history, &owner_source, &[])
+        .unwrap()
+        .candidate
+        .unwrap();
+    let replay = compose_f8_handoff(
+        &request,
+        &history,
+        &owner_source,
+        std::slice::from_ref(&candidate),
+    )
+    .unwrap();
+    assert_eq!(replay.result, HandoffResult::ExactReplay);
+
+    let mut mutated_history = candidate.clone();
+    mutated_history.minimum_trusted_event_sequence = 99;
+    assert_eq!(
+        compose_f8_handoff(
+            &request,
+            &history,
+            &owner_source,
+            std::slice::from_ref(&mutated_history),
+        )
+        .unwrap_err(),
+        HandoffError::InvalidHandoffHistory
+    );
+
+    let rewrite = handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 99);
+    assert_eq!(
+        compose_f8_handoff(
+            &rewrite,
+            &history,
+            &owner_source,
+            std::slice::from_ref(&candidate),
+        )
+        .unwrap_err(),
+        HandoffError::SameRevisionRewrite
+    );
+}
+
+#[test]
+fn wp4_missing_unknown_and_direct_write_shapes_fail_closed() {
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let history = vec![intent.clone()];
+    let owner_source = trusted_owner_commitments();
+    for request in [
+        handoff_request(&intent, &history, None, 100),
+        handoff_request(&intent, &history, Some("UNKNOWN"), 100),
+    ] {
+        let decision = compose_f8_handoff(&request, &history, &owner_source, &[]).unwrap();
+        assert_eq!(decision.result, HandoffResult::Indeterminate);
+        assert!(decision.candidate.is_none());
+    }
+
+    let valid = handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100);
+    for forbidden in [
+        "raw_content",
+        "task_write",
+        "command_commit",
+        "effect_authority",
+        "pbl_no_match_permission",
+        "relationship_authority",
+    ] {
+        let request = mutate(valid.clone(), |object| {
+            object.insert(forbidden.to_owned(), json!(true));
+        });
+        assert!(compose_f8_handoff(&request, &history, &owner_source, &[]).is_err());
+    }
+}
+
+#[test]
+fn wp4_rejects_owner_rewrite_phantom_history_stale_intent_and_watermark() {
+    let intent1 = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let intent2 = derive_candidate(
+        "intent",
+        2,
+        "INTENT_CANDIDATE",
+        Some(&intent1),
+        101,
+        'b',
+        std::slice::from_ref(&intent1),
+    );
+    let history = vec![intent1.clone(), intent2.clone()];
+    let owner_source = trusted_owner_commitments();
+
+    let stale = handoff_request(&intent1, &history, Some("PROPOSE_F8_HANDOFF"), 100);
+    assert_eq!(
+        compose_f8_handoff(&stale, &history, &owner_source, &[]).unwrap_err(),
+        HandoffError::IntentCandidateMismatch
+    );
+
+    let valid = handoff_request(&intent2, &history, Some("PROPOSE_F8_HANDOFF"), 100);
+    let mut rewritten_owner = owner_source.clone();
+    rewritten_owner[0].commitment_revision = 2;
+    assert_eq!(
+        compose_f8_handoff(&valid, &history, &rewritten_owner, &[]).unwrap_err(),
+        HandoffError::OwnerCommitmentMismatch
+    );
+
+    let phantom = mutate(valid.clone(), |object| {
+        object.insert(
+            "intent_candidate_ref".to_owned(),
+            json!("candidate:SYNTHETIC_TEST:phantom:1"),
+        );
+    });
+    assert!(compose_f8_handoff(&phantom, &history, &owner_source, &[]).is_err());
+
+    let above_owner_watermark = handoff_request(
+        &intent2,
+        &history,
+        Some("PROPOSE_F8_HANDOFF"),
+        101,
+    );
+    assert_eq!(
+        compose_f8_handoff(&above_owner_watermark, &history, &owner_source, &[]).unwrap_err(),
+        HandoffError::OwnerCommitmentMismatch
     );
 }
 

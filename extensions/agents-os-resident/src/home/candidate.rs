@@ -34,6 +34,7 @@ const PROPOSAL_FIELDS: [&str; 13] = [
 ];
 
 const CANDIDATE_DOMAIN: &str = "agents-os.m0b.home-candidate.v0.1";
+const CANDIDATE_HISTORY_DOMAIN: &str = "agents-os.m0b.candidate-history.v0.1";
 
 const PROMOTION_FIELDS: [&str; 9] = [
     "promotion_id",
@@ -460,6 +461,45 @@ pub fn derive_candidate_revision(
     }
 
     Ok(decision(CandidateRevisionResult::Derived, candidate))
+}
+
+pub fn canonical_candidate_history_fingerprint(
+    history: &[HomeCandidateRevision],
+) -> Result<String, CandidateError> {
+    validate_history(history)?;
+    let mut ordered: Vec<&HomeCandidateRevision> = history.iter().collect();
+    ordered.sort_by(|left, right| {
+        left.candidate_id
+            .as_bytes()
+            .cmp(right.candidate_id.as_bytes())
+            .then(left.candidate_revision.cmp(&right.candidate_revision))
+    });
+    if !ordered
+        .iter()
+        .zip(history.iter())
+        .all(|(expected, actual)| std::ptr::eq(*expected, actual))
+    {
+        return Err(CandidateError::InvalidHistory(
+            "candidate history is not in canonical identity and revision order",
+        ));
+    }
+    let rows: Vec<_> = ordered
+        .iter()
+        .map(|candidate| {
+            json!([
+                candidate.candidate_id,
+                candidate.candidate_revision,
+                candidate.candidate_ref,
+                candidate.candidate_fingerprint
+            ])
+        })
+        .collect();
+    let bytes = canonicalize_json(
+        &serde_json::to_vec(&json!([CANDIDATE_HISTORY_DOMAIN, rows]))
+            .map_err(|_| CandidateError::InvalidHistory("history serialization failed"))?,
+    )
+    .map_err(|_| CandidateError::InvalidHistory("history canonicalization failed"))?;
+    Ok(sha256_hex(&bytes))
 }
 
 fn decision(
