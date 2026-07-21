@@ -6,6 +6,40 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Implementation Started — WP0 Active (2026-07-21)
+
+Jenn explicitly started the frozen Phase 5B M0-B implementation. The start
+decision binds the complete accepted R1-R5 plan and opens only WP0 on the
+dedicated local implementation branch. WP1-WP7 remain behind their direct
+predecessor gates.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_STARTED_WP0_ACTIVE
+Phase_5B_plan_acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_plan_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_plan_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_plan_freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+Phase_5B_plan_mainline_integration_commit: d494f6399337ab918cccee6183646916d594ef2a
+Phase_5B_plan_durability_projection_commit: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+Phase_5B_implementation_start_preflight_sha256: c9b4add687eca111e0f82985ecd14efb71763b8d4c85e5c1569cb37ebbf2e8c4
+Phase_5B_implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+current_work_package: WP0_M0B_EXTENSION_SKELETON
+WP0_start_authorized: true
+WP1_through_WP7_started: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.1.md
+active_work_queue_sha256: 099a7ec7fdbff752569e5d089eb438e2f0cc9566585b1129c68361204626926c
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.1.md
+implementation_start_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-implementation-start-closeout-v0.1.md
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP0_EXTENSION_SKELETON
+```
+
 ## Phase 5B M0-B Plan Durable on Main (2026-07-21)
 
 PR #24 merged the complete frozen Phase 5B M0-B Plan R1-R5 lineage into
