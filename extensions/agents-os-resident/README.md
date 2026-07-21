@@ -78,5 +78,13 @@ read private Memory, dispatch to a mock or real Host, or perform an effect.
 Phase 5B M0-B WP0 adds only the fixed `src/home/` module layout, the
 `tests/synthetic_m0b.rs` layout check and an inert schema v2 migration
 declaration. Schema v1 remains active, the five-method N-API surface is
-unchanged, and no Session reducer, candidate transition, handoff composition,
-new Command type, database migration or runtime path is active yet.
+unchanged, and no candidate transition, handoff composition, new Command type,
+database migration or runtime path is active yet.
+
+Phase 5B M0-B WP1 adds the strict commitment-only synthetic Session observation
+decoder and the `EPHEMERAL_ONLY`, `DISCARD` and `REMAIN_IN_SESSION` reducers.
+Each returns a deterministic `NO_PROMOTION` decision with zero candidate,
+Event, pointer, Inbox, Outbox, Goal or Task writes and no authority. Unknown,
+implicit, raw-content-shaped, noncanonical or production-shaped input fails
+closed before reduction. The module has no ledger dependency, so these paths
+cannot perform a canonical write.

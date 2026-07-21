@@ -1,8 +1,8 @@
 //! Phase 5B M0-B Home boundary.
 //!
-//! WP0 fixes the module layout only. The modules are synthetic-only and do
-//! not yet decode Session observations, create candidates, form handoffs or
-//! call the F3 command boundary.
+//! WP0 fixed the module layout. WP1 adds only strict synthetic observation
+//! decoding and zero-write nonpromotion decisions. Candidate creation,
+//! handoff composition and the F3 command boundary remain inactive.
 
 pub mod candidate;
 pub mod handoff;
