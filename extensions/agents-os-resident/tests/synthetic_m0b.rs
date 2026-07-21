@@ -1544,6 +1544,20 @@ fn wp1_strict_json_and_schema_totality_fail_closed_without_echoing_payloads() {
     let production_ref = mutate(observation("DISCARD"), |object| {
         object.insert("session_ref".to_owned(), json!("session:PRODUCTION:1"));
     });
+    let smuggled_production_refs = [
+        "observation_id",
+        "session_ref",
+        "source_subject_ref",
+        "creator_assessment_ref",
+    ]
+    .map(|field| {
+        mutate(observation("DISCARD"), |object| {
+            object.insert(
+                field.to_owned(),
+                json!("session:PRODUCTION:case:SYNTHETIC_TEST:leak"),
+            );
+        })
+    });
     let uppercase_hash = mutate(observation("DISCARD"), |object| {
         object.insert(
             "payload_commitment".to_owned(),
@@ -1557,6 +1571,9 @@ fn wp1_strict_json_and_schema_totality_fail_closed_without_echoing_payloads() {
     assert!(reduce_nonpromotion(&boolean).is_err());
     assert!(reduce_nonpromotion(&unsafe_integer).is_err());
     assert!(reduce_nonpromotion(&production_ref).is_err());
+    for smuggled in smuggled_production_refs {
+        assert!(reduce_nonpromotion(&smuggled).is_err());
+    }
     assert!(reduce_nonpromotion(&uppercase_hash).is_err());
     assert!(reduce_nonpromotion(&zero_revision).is_err());
 }

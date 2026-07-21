@@ -263,13 +263,27 @@ fn require_synthetic_ref<'a>(
     name: &str,
 ) -> Result<&'a str, SessionBoundaryError> {
     let reference = require_string(value, name)?;
-    if reference.is_empty() || !reference.contains(":SYNTHETIC_TEST:") {
+    if !is_synthetic_ref(reference) {
         Err(SessionBoundaryError::InvalidSchema(
             "stable ref must be nonempty and synthetic-only",
         ))
     } else {
         Ok(reference)
     }
+}
+
+fn is_synthetic_ref(reference: &str) -> bool {
+    let mut segments = reference.split(':');
+    let Some(kind) = segments.next() else {
+        return false;
+    };
+    if kind.is_empty() || segments.next() != Some("SYNTHETIC_TEST") {
+        return false;
+    }
+    let Some(first_identity_segment) = segments.next() else {
+        return false;
+    };
+    !first_identity_segment.is_empty() && segments.all(|segment| !segment.is_empty())
 }
 
 fn require_hash<'a>(
