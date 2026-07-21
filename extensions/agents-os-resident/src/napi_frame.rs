@@ -368,6 +368,12 @@ impl<'a> CommandBoundary<'a> {
                 {
                     response(request, Disposition::Rejected, "PROTOCOL_CONFLICT", None)
                 }
+                Err(ResidentError::InvalidHomeIntentSource) => response(
+                    request,
+                    Disposition::Rejected,
+                    "INVALID_HOME_INTENT_COMMAND",
+                    None,
+                ),
                 Err(error) => Err(error.into()),
             };
         }

@@ -82,7 +82,7 @@ enum LedgerCommand {
     },
     TerminalSyntheticHomeIntent {
         intake: TerminalValidationCompletionIntake,
-        response: Sender<Result<TerminalValidationCompletionObservation, String>>,
+        response: Sender<Result<TerminalValidationCompletionObservation, LedgerError>>,
     },
     ResolveSyntheticOutbox {
         intent_ref: String,
@@ -254,7 +254,21 @@ impl LedgerThread {
         &self,
         intake: TerminalValidationCompletionIntake,
     ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
-        self.request(|response| LedgerCommand::TerminalSyntheticHomeIntent { intake, response })
+        let (response_tx, response_rx) = mpsc::channel();
+        self.sender
+            .send(LedgerCommand::TerminalSyntheticHomeIntent {
+                intake,
+                response: response_tx,
+            })
+            .map_err(|_| ResidentError::LedgerUnavailable)?;
+        match response_rx.recv() {
+            Ok(Ok(result)) => Ok(result),
+            Ok(Err(LedgerError::InvalidHomeIntentSource)) => {
+                Err(ResidentError::InvalidHomeIntentSource)
+            }
+            Ok(Err(error)) => Err(ResidentError::LedgerOperation(error.to_string())),
+            Err(_) => Err(ResidentError::LedgerUnavailable),
+        }
     }
 
     pub(super) fn resolve_synthetic_outbox(
@@ -498,8 +512,7 @@ fn run(
             }
             LedgerCommand::TerminalSyntheticHomeIntent { intake, response } => {
                 let _ = response.send(
-                    replay::terminal_synthetic_home_intent(&mut connection, &intake)
-                        .map_err(|error| error.to_string()),
+                    replay::terminal_synthetic_home_intent(&mut connection, &intake),
                 );
             }
             LedgerCommand::TerminalSyntheticValidation {

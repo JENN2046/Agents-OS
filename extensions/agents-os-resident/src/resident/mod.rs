@@ -50,6 +50,8 @@ pub enum ResidentError {
     LedgerStartup(String),
     #[error("ledger operation failed: {0}")]
     LedgerOperation(String),
+    #[error("Home Intent source does not resolve to exact current synthetic evidence")]
+    InvalidHomeIntentSource,
     #[error("ledger thread is not available")]
     LedgerUnavailable,
     #[error("SQLite operation failed: {0}")]

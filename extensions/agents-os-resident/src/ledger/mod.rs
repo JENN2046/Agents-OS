@@ -21,6 +21,8 @@ pub enum LedgerError {
     StalePointer,
     #[error("request identity conflicts with the immutable Inbox row")]
     ReplayIdentityConflict,
+    #[error("Home Intent source does not resolve to exact current synthetic evidence")]
+    InvalidHomeIntentSource,
     #[error("synthetic crash injection after pointer CAS")]
     InjectedCrash,
 }

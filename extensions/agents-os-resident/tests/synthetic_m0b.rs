@@ -18,9 +18,12 @@ use agents_os_resident::home::handoff::{
 use agents_os_resident::ledger::transaction::{
     HomeCommitFault, HomeCommitObservation, HomeHeadExpectation,
 };
-use agents_os_resident::napi_frame::{CommandBoundary, Disposition, MethodId, parse_request};
+use agents_os_resident::napi_frame::{
+    CommandBoundary, Disposition, MethodId, parse_request, request_bytes,
+};
 use agents_os_resident::reducers::command_intake::{
-    HOME_INTENT_COMMAND_TYPE_ID, validate_submission,
+    HOME_INTENT_COMMAND_TYPE_ID, SyntheticHomeIntentPayload, home_intent_submission_value,
+    validate_submission,
 };
 use agents_os_resident::resident::{
     ResidentError, ResidentKernel, ResidentKernelConfig, SYNTHETIC_DATABASE_FILENAME,
@@ -1317,6 +1320,42 @@ fn wp5_invalid_or_inactive_home_intent_never_writes_a_command() {
         rejected.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
         "INVALID_HOME_INTENT_COMMAND"
     );
+    assert_eq!(kernel.ledger_counts().unwrap(), before);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
+fn wp5_schema_valid_but_unresolved_home_intent_is_low_disclosure_and_zero_write() {
+    let root = tempfile::tempdir().unwrap();
+    let (kernel, handoff) =
+        v2_kernel_with_formed_handoff(root.path(), "m0b-wp5-unresolved-source");
+    let payload = SyntheticHomeIntentPayload {
+        handoff_candidate_ref: "handoff:SYNTHETIC_TEST:phantom:1".to_owned(),
+        handoff_candidate_revision: handoff.handoff_candidate_revision,
+        handoff_candidate_fingerprint: handoff.handoff_candidate_fingerprint,
+        intent_candidate_ref: handoff.intent_candidate_ref,
+        intent_candidate_revision: handoff.intent_candidate_revision,
+        intent_candidate_fingerprint: handoff.intent_candidate_fingerprint,
+        owner_commitment_set_fingerprint: handoff.owner_commitment_set_fingerprint,
+        canonical_candidate_history_fingerprint: handoff
+            .canonical_candidate_history_fingerprint,
+        minimum_trusted_event_sequence: handoff.minimum_trusted_event_sequence,
+    };
+    let command_id = payload.command_id().unwrap();
+    let submission = home_intent_submission_value(&payload).unwrap();
+    let request = request_bytes(MethodId::ExecuteCommand, &command_id, submission).unwrap();
+    let before = kernel.ledger_counts().unwrap();
+    let rejected = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &request)
+        .unwrap();
+    assert_eq!(rejected.disposition, Disposition::Rejected);
+    assert_eq!(
+        rejected.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
+        "INVALID_HOME_INTENT_COMMAND"
+    );
+    assert!(!String::from_utf8(rejected.canonical_bytes)
+        .unwrap()
+        .contains("phantom"));
     assert_eq!(kernel.ledger_counts().unwrap(), before);
     kernel.shutdown().unwrap();
 }

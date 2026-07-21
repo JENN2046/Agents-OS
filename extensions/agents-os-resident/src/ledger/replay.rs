@@ -219,16 +219,12 @@ fn require_exact_home_intent_source(
         )
         .optional()?;
     let Some((intent_id, linked_revision, handoff_event_sequence)) = linked else {
-        return Err(LedgerError::InvalidInput(
-            "Home Intent Command does not resolve the exact immutable handoff link",
-        ));
+        return Err(LedgerError::InvalidHomeIntentSource);
     };
     if linked_revision != as_i64(intent_revision)?
         || handoff_event_sequence <= as_i64(minimum_sequence)?
     {
-        return Err(LedgerError::InvalidInput(
-            "Home Intent handoff Event/currentness tuple is invalid",
-        ));
+        return Err(LedgerError::InvalidHomeIntentSource);
     }
     let current: Option<(i64, String, String, i64)> = transaction
         .query_row(
@@ -240,14 +236,14 @@ fn require_exact_home_intent_source(
     let Some((current_revision, current_ref, current_fingerprint, current_event_sequence)) =
         current
     else {
-        return Err(LedgerError::StalePointer);
+        return Err(LedgerError::InvalidHomeIntentSource);
     };
     if current_revision != as_i64(intent_revision)?
         || current_ref != intent_ref
         || current_fingerprint != intent_fingerprint
         || current_event_sequence < as_i64(minimum_sequence)?
     {
-        return Err(LedgerError::StalePointer);
+        return Err(LedgerError::InvalidHomeIntentSource);
     }
     Ok(())
 }

@@ -671,6 +671,23 @@ fn validate_stored_candidate(candidate: &HomeCandidateRevision) -> Result<(), Ca
             "candidate source and creator refs must remain synthetic-only",
         ));
     }
+    if candidate.source_subject_revision == 0
+        || candidate.source_subject_revision > MAX_SAFE_INTEGER as u64
+        || candidate.created_event_sequence == 0
+        || candidate.created_event_sequence > MAX_SAFE_INTEGER as u64
+    {
+        return Err(CandidateError::InvalidHistory(
+            "candidate source revision or Event sequence is not a positive safe integer",
+        ));
+    }
+    if !is_lowercase_sha256(&candidate.source_subject_fingerprint)
+        || !is_lowercase_sha256(&candidate.payload_commitment)
+        || !is_lowercase_sha256(&candidate.creator_assessment_fingerprint)
+    {
+        return Err(CandidateError::InvalidHistory(
+            "candidate evidence commitments are not lowercase SHA-256 values",
+        ));
+    }
     let expected_bytes = candidate_bytes(
         &candidate.candidate_id,
         candidate.candidate_revision,
@@ -822,16 +839,19 @@ fn is_synthetic_ref(reference: &str) -> bool {
     !reference.is_empty() && reference.contains(":SYNTHETIC_TEST:")
 }
 
+fn is_lowercase_sha256(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+}
+
 fn require_hash<'a>(
     value: &'a CanonicalValue,
     name: &str,
 ) -> Result<&'a str, CandidateError> {
     let hash = require_string(value, name)?;
-    if hash.len() == 64
-        && hash
-            .bytes()
-            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
-    {
+    if is_lowercase_sha256(hash) {
         Ok(hash)
     } else {
         Err(CandidateError::InvalidSchema(
@@ -966,6 +986,41 @@ mod tests {
                     "candidate source and creator refs must remain synthetic-only",
                 ))
             );
+        }
+    }
+
+    #[test]
+    fn materialized_candidate_rejects_fully_resigned_invalid_evidence_fields() {
+        let mutations: [fn(&mut HomeCandidateRevision); 5] = [
+            |candidate| candidate.source_subject_revision = 0,
+            |candidate| candidate.created_event_sequence = 0,
+            |candidate| candidate.source_subject_fingerprint = "A".repeat(64),
+            |candidate| candidate.payload_commitment = "not-a-hash".to_owned(),
+            |candidate| candidate.creator_assessment_fingerprint = "g".repeat(64),
+        ];
+        for mutate in mutations {
+            let mut candidate = valid_candidate();
+            mutate(&mut candidate);
+            resign(&mut candidate);
+            assert!(matches!(
+                validate_materialized_candidate(&candidate),
+                Err(CandidateError::InvalidHistory(_))
+            ));
+        }
+        for mutate in [
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.source_subject_revision = MAX_SAFE_INTEGER as u64 + 1;
+            },
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.created_event_sequence = MAX_SAFE_INTEGER as u64 + 1;
+            },
+        ] {
+            let mut candidate = valid_candidate();
+            mutate(&mut candidate);
+            assert!(matches!(
+                validate_materialized_candidate(&candidate),
+                Err(CandidateError::InvalidHistory(_))
+            ));
         }
     }
 }
