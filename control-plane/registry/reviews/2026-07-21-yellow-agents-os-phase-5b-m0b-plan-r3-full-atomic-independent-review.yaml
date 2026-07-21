@@ -1,0 +1,149 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5B_M0B_PLAN_R3_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-21'
+materialized_at: '2026-07-21T20:03:42+08:00'
+materialization_note: First materialization after the read-only independent review; no claim of prior existence.
+reviewer:
+  identity: Codex_Nobao_phase5b_plan_r3_independent_review
+  independence_basis:
+  - not_the_R1_R2_R3_author_run
+  - reviewed_fixed_commit_and_archive_bytes_read_only
+  - author_self_review_was_evidence_only
+  - did_not_modify_workspace
+  - did_not_commit_or_push
+  - did_not_execute_runtime_database_provider_private_memory_sensing_or_effect
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: false
+  fixed_commit: 464c216f8cd037325f78fc3e3ec82e3bd92dff81
+  subject_count: 12
+result: BLOCK
+requires_R4: true
+findings:
+  blocker: 3
+  major: 0
+  minor: 0
+  unresolved: 3
+integrity:
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+    match: true
+  archive:
+    path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r3-review-package-v0.1.zip
+    sha256: 2d22674d24ae5ae31a25e030d002c1acbbc3fd6014191e6d422b4e546b93db87
+    entry_count: 79
+    unique_entries: 79
+    checksums: 78/78_MATCH
+    archive_map: 76/76_MATCH
+    CRC: PASS
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    forbidden_private_path_matches: 0
+    external_manifest_equals_archive_manifest: true
+    external_report_equals_archive_report: true
+  declared_inputs:
+    hashes: 73/73_MATCH
+    full_reads: 73/73
+    git_objects_at_fixed_commit: 73/73_MATCH
+    subjects: 12/12
+    authority_inputs: 48/48
+    author_evidence: 13/13
+    bytes_fully_read: 1266396
+    lines_fully_read: 26472
+  fixed_commands:
+    result: 12/12_PASS
+    execution_root: extracted_archive_without_git
+    R1_validator: PASS
+    R2_validator: PASS
+    R3_validator: PASS
+    builders_byte_equal: 3/3_PASS
+  R1_R2_immutable_lineage:
+    subjects: 8/8_MATCH
+    R1_manifest: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+    R2_manifest: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+subject_hashes:
+  R1_implementation_plan: 88c2bd24c4c1beea470ec734a381c7d73310425844bd9d84ef98741878768634
+  R1_exact_build_profile: e213b302fbc3737b20a414b707626a1438ea464da59d2acb24f424582f7d5a60
+  R1_traceability_matrix: 6302ecf424e13580f1207006928a49e605030cecc78c7778a4410e6ce2367726
+  R1_validation_profile: 668d0ee361c6aff79f6b0062dd558c587c76a4e98dd70c202356d6ef407571a8
+  R2_amendment: 26308cfaca2c1db1b2f4a383eb5b4f1a61248613716d4949cf79ad93bf8e87dc
+  R2_exact_source_F3_seam: 6a8297845ca28f94145fba221009558056cb19cc4c2ab3c8544986b8f663a5b1
+  R2_schema_v2_transaction: 8947796f6729edd62c97a9107bcec08ed8e4cfde5c50e27d77cfa46d4e9bb6d7
+  R2_constructive_graph: 4c51c5f73268888a4c7e98ec3fe6ca7d88fabb213fc9f46ce975167500c350d8
+  R3_amendment: 4d3cc02ace4e48684b9fe08a2e4b8e3e70bfd50485e63bc10e5f185f4304bfb2
+  R3_sealed_ABI_F3_shape: 21bd6697816372935eccf1b64b243976439e0171db8103a3b5d0e94a0e975e1a
+  R3_candidate_schema: 8784cf83d73c64d5dfbf606bd7a2c96cdb0d14d132d48434451b3f446f1d6035
+  R3_semantic_validation: 703f183176e165f12110f2b685db3c25d32f1b41cfea6e24010e0eb91c459d9d
+confirmed_closures:
+  sealed_public_NAPI_inventory:
+  - execute_command
+  - execute_query
+  - claim_outbox
+  - acknowledge_outbox
+  - reconcile
+  candidate_genesis_and_cross_identity_predecessor_checks: PASS
+  Command_assertion_submission_and_request_field_inventories: PASS
+  prospective_type_not_current_runtime_authority: PASS
+  R2_fourteen_target_semantic_rejections: 14/14
+  R2_fixture_seal_only_rejections: 0
+finding_details:
+- id: PHASE5B_PLAN_R3_IR_B01
+  severity: blocker
+  title: F3 identity and authentication values are not bound to sealed command_intake.rs
+  evidence:
+  - Six fully resigned rewrites of claimed_actor_id, claimed_principal_id, claimed_principal_revision, claimed_principal_binding_ref,
+    principal_binding_fingerprint and synthetic_credential_id returned no semantic errors.
+  - Sealed source requires exact synthetic Actor, Principal, binding, revision, binding fingerprint and credential values;
+    R3 checks only field inventory and a subset of values.
+  impact: A structurally complete but identity-spoofed synthetic F3 submission can satisfy the R3 proof.
+- id: PHASE5B_PLAN_R3_IR_B02
+  severity: blocker
+  title: Candidate primary-key, ref and history identity uniqueness are not validated
+  evidence:
+  - A fully resigned graph containing two revision-1 rows with candidate_id intent and candidate_ref candidate:SYNTHETIC_TEST:intent:1
+    but different fingerprints returned no semantic errors.
+  - The validator stores candidates by ref with overwrite semantics and never checks primary-key or ref uniqueness.
+  impact: The accepted graph is not insertable under its declared primary key and canonical history is ambiguous.
+- id: PHASE5B_PLAN_R3_IR_B03
+  severity: blocker
+  title: Composite foreign-key inventory completeness and uniqueness are not bound
+  evidence:
+  - Removing all three FKs, removing the home_candidate_head FK, or replacing it with a duplicate of the first FK each returned
+    no semantic errors after root re-signing.
+  - The validator loops only over supplied FKs and never compares the list to the normative three-entry profile.
+  impact: The proof can omit required referential-integrity edges while retaining a favorable result.
+independent_case_results:
+  path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r3-independent-case-results.json
+  sha256: 7b8b88e30427098cc78b85b361eb41e57a899673c5b37328ab690892b67ce600
+  fully_resigned_attack_count: 35
+  R2_replay_count: 14
+  additional_R3_count: 21
+  R2_target_semantic_rejection_count: 14
+  R2_fixture_seal_only_rejection_count: 0
+  additional_target_semantic_rejection_count: 11
+  favorable_invalid_path_count: 10
+  additional_fixture_seal_only_rejection_count: 10
+  legal_input_over_rejection_count: 0
+  implementation_impossibility_count: 1
+  exceptions: 0
+boundary_results:
+  second_permission_identity_Task_Command_or_effect_authority_count: 0
+  F3_identity_or_authentication_binding_bypass_count: 1
+  NAPI_SQLite_writer_or_VCPToolBox_boundary_escape_count: 0
+  automatic_implementation_start_count: 0
+  real_runtime_database_provider_private_memory_sensing_or_effect_count: 0
+disposition:
+  Phase_5B_plan_freeze_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  safe_next_action: preserve_review_and_create_narrow_R4_for_the_three_findings
+R4_scope_limit:
+- bind the complete sealed synthetic F3 identity and authentication tuple
+- enforce candidate primary-key, ref and canonical-history identity uniqueness
+- bind the exact complete duplicate-free three-entry composite FK inventory before key/type/collation checks

@@ -1,0 +1,672 @@
+{
+  "schema_version": "agents-os.independent-review-case-results.v0.1",
+  "case_results_id": "PHASE_5B_M0B_PLAN_R3_INDEPENDENT_CASE_RESULTS_V0_1",
+  "date": "2026-07-21",
+  "materialized_at": "2026-07-21T20:03:42+08:00",
+  "materialization_note": "First materialization after the read-only independent review; no claim of prior existence.",
+  "reviewer": {
+    "identity": "Codex_Nobao_phase5b_plan_r3_independent_review",
+    "independent": true,
+    "workspace_modified": false
+  },
+  "review_unit": {
+    "id": "PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE",
+    "fixed_commit": "464c216f8cd037325f78fc3e3ec82e3bd92dff81",
+    "manifest_sha256": "623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089",
+    "archive_sha256": "2d22674d24ae5ae31a25e030d002c1acbbc3fd6014191e6d422b4e546b93db87"
+  },
+  "method": {
+    "execution": "in_memory_read_only",
+    "fixture_seal_disabled_for_semantic_classification": true,
+    "all_dependent_commitments_resigned": true,
+    "author_self_review_relied_on_as_conclusion": false
+  },
+  "summary": {
+    "total_fully_resigned_cases": 35,
+    "R2_replay_cases": 14,
+    "additional_R3_cases": 21,
+    "R2_target_semantic_rejections": 14,
+    "R2_seal_only_rejections": 0,
+    "additional_target_semantic_rejections": 11,
+    "additional_favorable_invalid_paths": 10,
+    "additional_seal_only_rejections": 10,
+    "legal_input_over_rejection_count": 0,
+    "exceptions": 0,
+    "result": "BLOCK"
+  },
+  "R2_replay_cases": [
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_001",
+      "source_case_name": "F8_owner_result_REJECTED",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F8-handoff-decision.result from CANDIDATE_FORMED to REJECTED.",
+      "propagation": "Recomputed the F8 commitment, owner commitment set, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "OWNER_RESULT_NOT_ACCEPTABLE",
+      "actual": {
+        "semantic_errors": [
+          "OWNER_RESULT_NOT_ACCEPTABLE"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_002",
+      "source_case_name": "F7_owner_result_INDETERMINATE",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F7-candidate-currentness.result from CURRENT_ACCEPTED to INDETERMINATE.",
+      "propagation": "Recomputed the F7 commitment, owner commitment set, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "OWNER_RESULT_NOT_ACCEPTABLE",
+      "actual": {
+        "semantic_errors": [
+          "OWNER_RESULT_NOT_ACCEPTABLE"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_003",
+      "source_case_name": "F3_owner_result_REJECTED",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F3-command-intake.result from READY to REJECTED.",
+      "propagation": "Recomputed the F3 commitment and all graph-level node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "OWNER_RESULT_NOT_ACCEPTABLE",
+      "actual": {
+        "semantic_errors": [
+          "OWNER_RESULT_NOT_ACCEPTABLE"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_004",
+      "source_case_name": "life_semantic_class_MEMORY",
+      "family": "candidate_semantics",
+      "mutation": "Change the Life Stream candidate semantic_class to MEMORY_CANDIDATE.",
+      "propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CANDIDATE_SEMANTIC_CLASS_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CANDIDATE_SEMANTIC_CLASS_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_005",
+      "source_case_name": "intent_semantic_class_MEMORY",
+      "family": "candidate_semantics",
+      "mutation": "Change the handoff source candidate semantic_class from INTENT_CANDIDATE to MEMORY_CANDIDATE.",
+      "propagation": "Recomputed the intent candidate, history, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CANDIDATE_SEMANTIC_CLASS_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CANDIDATE_SEMANTIC_CLASS_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_006",
+      "source_case_name": "life_source_revision_zero",
+      "family": "candidate_schema",
+      "mutation": "Set the Life Stream candidate source_revision to zero.",
+      "propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "POSITIVE_SAFE_INTEGER_REQUIRED",
+      "actual": {
+        "semantic_errors": [
+          "POSITIVE_SAFE_INTEGER_REQUIRED"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_007",
+      "source_case_name": "life_event_sequence_zero",
+      "family": "candidate_schema",
+      "mutation": "Set the Life Stream candidate created_event_sequence to zero.",
+      "propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "POSITIVE_SAFE_INTEGER_REQUIRED",
+      "actual": {
+        "semantic_errors": [
+          "POSITIVE_SAFE_INTEGER_REQUIRED"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_008",
+      "source_case_name": "intent_revision_two_cross_id_predecessor",
+      "family": "candidate_history",
+      "mutation": "Set the Intent candidate revision to 2 while retaining a predecessor from the distinct life-stream candidate_id.",
+      "propagation": "Recomputed the intent candidate, history, handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CANDIDATE_PREDECESSOR_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CANDIDATE_PREDECESSOR_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_009",
+      "source_case_name": "handoff_watermark_20_below_intent_21",
+      "family": "handoff_currentness",
+      "mutation": "Set minimum_trusted_event_sequence to 20 while the selected Intent candidate was created at sequence 21.",
+      "propagation": "Recomputed the handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "HANDOFF_WATERMARK_STALE",
+      "actual": {
+        "semantic_errors": [
+          "HANDOFF_WATERMARK_STALE"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_010",
+      "source_case_name": "handoff_revision_two",
+      "family": "handoff_schema",
+      "mutation": "Change the fixed handoff revision from 1 to 2.",
+      "propagation": "Recomputed the handoff, payload, Command, request, replay, node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "HANDOFF_REVISION_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "HANDOFF_REVISION_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_011",
+      "source_case_name": "replay_response_fingerprint_malformed",
+      "family": "replay_identity",
+      "mutation": "Replace first_response_fingerprint with a non-SHA-256 string.",
+      "propagation": "Recomputed replay node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "LOWERCASE_SHA256_REQUIRED",
+      "actual": {
+        "semantic_errors": [
+          "LOWERCASE_SHA256_REQUIRED"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_012",
+      "source_case_name": "F3_precommit_partial_visible_unmodeled",
+      "family": "crash_state",
+      "mutation": "Change the F3 crash node restart projection to partial_inbox_only.",
+      "propagation": "Recomputed crash node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CRASH_PROJECTION_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CRASH_PROJECTION_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_013",
+      "source_case_name": "candidate_postcommit_marked_uncommitted",
+      "family": "crash_state",
+      "mutation": "Mark C4_after_COMMIT_before_response as committed=false.",
+      "propagation": "Recomputed crash node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CRASH_PROJECTION_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CRASH_PROJECTION_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_014",
+      "source_case_name": "handoff_precommit_marked_committed",
+      "family": "crash_state",
+      "mutation": "Mark H2_after_handoff_insert as committed=true.",
+      "propagation": "Recomputed crash node, section and root fingerprints. R3 semantic witness root and all R3 downstream commitments were recomputed.",
+      "expected": "CRASH_PROJECTION_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CRASH_PROJECTION_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    }
+  ],
+  "additional_R3_cases": [
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_001",
+      "family": "sealed_abi",
+      "mutation": "Replace source_facts.public_NAPI_methods[0] execute_command with start_resident.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "ABI_METHOD_INVENTORY_MISMATCH",
+      "actual": {
+        "semantic_errors": [
+          "ABI_METHOD_INVENTORY_MISMATCH"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_002",
+      "family": "candidate_lineage",
+      "mutation": "Give the Life Stream revision-1 genesis row a non-null predecessor tuple.",
+      "propagation": "Recomputed all candidate fingerprints, history, handoff, F3 payload, Command, assertion, submission, request, replay and root.",
+      "expected": "CANDIDATE_PREDECESSOR_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CANDIDATE_PREDECESSOR_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_003",
+      "family": "candidate_lineage",
+      "mutation": "Replace Intent revision 2 predecessor with the Life Stream revision 1 cross-identity tuple.",
+      "propagation": "Recomputed all candidate fingerprints, history, handoff, F3 payload, Command, assertion, submission, request, replay and root.",
+      "expected": "CANDIDATE_PREDECESSOR_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "CANDIDATE_PREDECESSOR_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_004",
+      "family": "candidate_uniqueness",
+      "mutation": "Rewrite the Life Stream genesis row to candidate_id intent and candidate_ref candidate:SYNTHETIC_TEST:intent:1, duplicating the Intent revision-1 primary key and ref while retaining a different fingerprint.",
+      "propagation": "Recomputed all candidate fingerprints, duplicate-ref history, handoff, F3 payload, Command, assertion, submission, request, replay and root.",
+      "expected": "CANDIDATE_UNIQUENESS_REQUIRED",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_005",
+      "family": "F3_identity_binding",
+      "mutation": "Rewrite claimed_actor_id to actor:SYNTHETIC_TEST:attacker.",
+      "propagation": "Recomputed Command fingerprint, assertion command binding, submission, NAPI request, replay identity and root.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_006",
+      "family": "F3_identity_binding",
+      "mutation": "Rewrite claimed_principal_id to principal:SYNTHETIC_TEST:attacker.",
+      "propagation": "Recomputed Command fingerprint, assertion command binding, submission, NAPI request, replay identity and root.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_007",
+      "family": "F3_identity_binding",
+      "mutation": "Rewrite claimed_principal_revision from 1 to 2.",
+      "propagation": "Recomputed Command fingerprint, assertion command binding, submission, NAPI request, replay identity and root.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_008",
+      "family": "F3_identity_binding",
+      "mutation": "Rewrite claimed_principal_binding_ref to binding:SYNTHETIC_TEST:attacker.",
+      "propagation": "Recomputed Command fingerprint, assertion command binding, submission, NAPI request, replay identity and root.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_009",
+      "family": "F3_authentication_binding",
+      "mutation": "Rewrite assertion principal_binding_fingerprint to 64 zeroes.",
+      "propagation": "Recomputed submission, NAPI request, replay identity and root while preserving the rewritten assertion.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_010",
+      "family": "F3_authentication_binding",
+      "mutation": "Rewrite synthetic_credential_id to credential:SYNTHETIC_TEST:attacker.",
+      "propagation": "Recomputed submission, NAPI request, replay identity and root while preserving the rewritten assertion.",
+      "expected": "F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_011",
+      "family": "F3_shape",
+      "mutation": "Add unknown field to the ten-field Command.",
+      "propagation": "Recomputed Command fingerprint, assertion command binding, submission, NAPI request, replay identity and root.",
+      "expected": "F3_COMMAND_SHAPE_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "F3_COMMAND_SHAPE_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_012",
+      "family": "F3_shape",
+      "mutation": "Remove synthetic_credential_id from the authentication assertion.",
+      "propagation": "Recomputed submission, NAPI request, replay identity and root.",
+      "expected": "F3_ASSERTION_SHAPE_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "F3_ASSERTION_SHAPE_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_013",
+      "family": "NAPI_shape",
+      "mutation": "Add unknown field to the six-field NAPI request.",
+      "propagation": "Recomputed request fingerprint, replay identity and root.",
+      "expected": "NAPI_REQUEST_SHAPE_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "NAPI_REQUEST_SHAPE_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_014",
+      "family": "prospective_type_boundary",
+      "mutation": "Set prospective_command_type_currently_accepted to true without changing the sealed registry.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "PROSPECTIVE_TYPE_STATUS_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "PROSPECTIVE_TYPE_STATUS_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_015",
+      "family": "composite_FK_inventory",
+      "mutation": "Remove all three composite foreign keys from the witness schema inventory.",
+      "propagation": "Recomputed root fingerprint with exact profile fingerprint and parent unique key retained.",
+      "expected": "COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_016",
+      "family": "composite_FK_inventory",
+      "mutation": "Remove the home_candidate_head composite foreign key.",
+      "propagation": "Recomputed root fingerprint with remaining FKs and parent unique key retained.",
+      "expected": "COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_017",
+      "family": "composite_FK_inventory",
+      "mutation": "Replace the second composite FK with a duplicate of the first.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_018",
+      "family": "composite_FK_parent_order",
+      "mutation": "Reorder the first FK parent columns to candidate_revision,candidate_id,candidate_ref,candidate_fingerprint.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "COMPOSITE_FOREIGN_KEY_UNCOVERED",
+      "actual": {
+        "semantic_errors": [
+          "COMPOSITE_FOREIGN_KEY_UNCOVERED"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_019",
+      "family": "composite_FK_type",
+      "mutation": "Change home_candidate_head.current_candidate_revision storage class from INTEGER to TEXT.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "COMPOSITE_FOREIGN_KEY_TYPE_MISMATCH",
+      "actual": {
+        "semantic_errors": [
+          "COMPOSITE_FOREIGN_KEY_TYPE_MISMATCH"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_020",
+      "family": "composite_FK_collation",
+      "mutation": "Change home_handoff_link.intent_candidate_id collation from BINARY to NOCASE.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "COMPOSITE_FOREIGN_KEY_TYPE_MISMATCH",
+      "actual": {
+        "semantic_errors": [
+          "COMPOSITE_FOREIGN_KEY_TYPE_MISMATCH"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_021",
+      "family": "authorization_boundary",
+      "mutation": "Set boundary.implementation_authorized to true.",
+      "propagation": "Recomputed root fingerprint.",
+      "expected": "BOUNDARY_EXPANSION",
+      "actual": {
+        "semantic_errors": [
+          "BOUNDARY_EXPANSION"
+        ],
+        "fixed_fixture_errors": [
+          "FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false
+    }
+  ],
+  "boundary": {
+    "implementation_started": false,
+    "runtime_or_database_executed": false,
+    "provider_private_memory_sensing_or_effect_executed": false,
+    "workspace_modified": false,
+    "commit_or_push": false
+  }
+}
