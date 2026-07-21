@@ -1,0 +1,80 @@
+# AGENTS OS Active Work Queue v10.9
+
+Date: 2026-07-21
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: `control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.8.md`
+
+## Current Facts
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_R2_fixed_commit: 19da0a73d3d8f37bb522e3d559ecd7c37e05b90e
+Phase_5B_R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+Phase_5B_R2_independent_review_result: BLOCK
+Phase_5B_R2_findings: 5_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R2_unresolved: 5
+Phase_5B_R2_review_sha256: 7132d331110ded8cae36d80ec06d5da0a819134a04d77031277b0938bbc8c7d7
+Phase_5B_R2_case_results_sha256: 997f380435f28933370888df3822baac01edbf710ca7f8627e1c7594011dcc77
+Phase_5B_R2_disposition_sha256: 00c9bab404e8d1cc567c556410452f10784232fa8bcb434f1f6dd96805202898
+requires_R3: true
+Phase_5B_R3_started: false
+Phase_5B_plan_status: R2_BLOCK_RECONCILED_AWAITING_JENN_R3_START_DECISION
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R3_START_DECISION_GATE
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+```
+
+## NOW
+
+### NOW-001: Jenn decides whether to start narrow Plan R3
+
+The only permissible R3 scope is the five blockers preserved in the R2 finding
+disposition. No shorthand, automatic continuation or author action starts R3.
+
+## NEXT
+
+```text
+if_Jenn_explicitly_starts_R3
+-> preserve_R1_R2_fixed_bytes
+-> create_narrow_five_finding_R3_author_package
+-> fresh_full_atomic_hash_bound_independent_review
+```
+
+## BLOCKED
+
+```text
+automatic_R3_start=forbidden
+automatic_plan_acceptance_or_freeze=forbidden
+automatic_Phase_5B_implementation_start=forbidden
+modify_R1_or_R2_fixed_subjects_manifests_reviews_or_case_results=forbidden
+Rust_JavaScript_NAPI_SQLite_or_plugin_source_change=forbidden
+dependency_installation_or_database_creation_migration=forbidden
+VCPToolBox_core_change_start_or_plugin_enablement=forbidden
+runtime_or_service_start=forbidden
+production_authentication_or_credentials=forbidden
+private_raw_memory_or_state_private_access=forbidden
+provider_network_sensing_recording_device_or_real_effect=forbidden
+release_deploy_publish_tag=forbidden
+```
+
+## CLOSED
+
+```text
+R2_fixed_review_unit=IMMUTABLE
+R2_independent_review=BLOCK_PRESERVED
+R2_independent_cases=14/14_PRESERVED
+R2_findings_disposed=5/5_FOR_POTENTIAL_NARROW_R3
+active_work_queue_v10_8=superseded_historical_bytes_preserved
+```
