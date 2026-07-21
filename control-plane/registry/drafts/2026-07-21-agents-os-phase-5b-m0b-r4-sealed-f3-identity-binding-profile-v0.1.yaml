@@ -1,0 +1,43 @@
+schema_version: agents-os.m0b-r4-sealed-f3-identity-binding-profile.v0.1
+profile_id: PHASE_5B_M0B_R4_SEALED_F3_IDENTITY_BINDING_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+sealed_source:
+  path: extensions/agents-os-resident/src/reducers/command_intake.rs
+  derivation:
+    string_constants:
+      - SYNTHETIC_ACTOR_ID
+      - SYNTHETIC_PRINCIPAL_ID
+      - SYNTHETIC_PRINCIPAL_BINDING_REF
+      - SYNTHETIC_CREDENTIAL_ID
+    principal_revision: 1
+    principal_binding_fingerprint_domain: agents-os.m0a.synthetic-principal-binding.v0.1
+
+exact_binding:
+  Command.claimed_actor_id: sealed.SYNTHETIC_ACTOR_ID
+  Command.claimed_principal_id: sealed.SYNTHETIC_PRINCIPAL_ID
+  Command.claimed_principal_revision: sealed.principal_revision
+  Command.claimed_principal_binding_ref: sealed.SYNTHETIC_PRINCIPAL_BINDING_REF
+  AuthenticationAssertion.principal_binding_fingerprint: SHA256(JCS([domain,{actor_id,principal_binding_ref,principal_id,principal_revision}]))
+  AuthenticationAssertion.synthetic_credential_id: sealed.SYNTHETIC_CREDENTIAL_ID
+
+acceptance:
+  all_six_values_exact: required
+  derive_before_favorable_result: required
+  shape_only_acceptance: forbidden
+  caller_supplied_identity_authority: forbidden
+
+fixed_regressions:
+  - PHASE5B_PLAN_R3_IR_CASE_005
+  - PHASE5B_PLAN_R3_IR_CASE_006
+  - PHASE5B_PLAN_R3_IR_CASE_007
+  - PHASE5B_PLAN_R3_IR_CASE_008
+  - PHASE5B_PLAN_R3_IR_CASE_009
+  - PHASE5B_PLAN_R3_IR_CASE_010
+
+boundary:
+  F3_owner: unchanged
+  second_identity_or_authentication_authority: false
+  implementation_authorized: false

@@ -1,0 +1,240 @@
+{
+  "schema_version": "agents-os.independent-review-case-results.v0.1",
+  "case_results_id": "PHASE_5B_M0B_PLAN_R2_INDEPENDENT_CASE_RESULTS_V0_1",
+  "date": "2026-07-21",
+  "materialized_at": "2026-07-21T12:50:52+08:00",
+  "materialization_note": "This file was first materialized after the interactive independent review. It does not claim to have existed before this timestamp.",
+  "reviewer": {
+    "identity": "Codex_Nobao_independent_review_run",
+    "independence_basis": [
+      "not_the_author_of_the_R1_or_R2_subjects",
+      "reviewed_fixed_commit_and_archive_bytes_read_only",
+      "author_self_review_was_evidence_only",
+      "did_not_modify_workspace_subjects_manifest_queue_registry_or_git"
+    ]
+  },
+  "review_unit": {
+    "id": "PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE",
+    "fixed_commit": "19da0a73d3d8f37bb522e3d559ecd7c37e05b90e",
+    "manifest_sha256": "32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380",
+    "archive_sha256": "d7c9ca8033f1bd9481dfedef7720181512e9405b65b7b891c033d4172a9f22c6"
+  },
+  "method": {
+    "fixture_source": "control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r2-constructive-graph-v0.1.json",
+    "validator_source": "control-plane/registry/validate-phase-5b-m0b-plan-r2-constructive-graph.py",
+    "execution_mode": "in_memory_read_only",
+    "resign_scope": [
+      "affected_inner_owner_commitment_fingerprints",
+      "affected_candidate_fingerprints",
+      "candidate_history_fingerprint",
+      "handoff_fingerprint",
+      "payload_fingerprint",
+      "command_id_and_command_fingerprint",
+      "request_fingerprint_and_idempotency_key",
+      "replay_identity",
+      "all_node_fingerprints",
+      "all_edge_fingerprints",
+      "all_section_fingerprints",
+      "root_fingerprint"
+    ],
+    "profile_or_manifest_bytes_mutated": false,
+    "classification_rule": "A rejection is semantic only when validate_fixture reports an error other than the final exact expected-fixture equality check."
+  },
+  "summary": {
+    "independent_fully_propagated_resigned_attack_count": 14,
+    "semantic_rejections_outside_exact_fixture_seal": 0,
+    "exact_fixture_seal_only_rejections": 14,
+    "attack_exceptions": 0,
+    "canonical_favorable_invalid_path_count": 3,
+    "legal_input_over_rejection_count_observed": 0,
+    "terminal_result": "BLOCK"
+  },
+  "canonical_favorable_invalid_paths": [
+    {
+      "path_id": "PHASE5B_PLAN_R2_CANONICAL_INVALID_01",
+      "finding_id": "PHASE5B_PLAN_R2_IR_B01",
+      "description": "The fixed R2 public N-API baseline names start_resident and get_resident_status, while the sealed Rust source exports execute_command, execute_query, claim_outbox, acknowledge_outbox and reconcile.",
+      "validator_result_on_canonical_fixture": "PASS",
+      "classification": "SOURCE_BOUNDARY_FACT_MISMATCH"
+    },
+    {
+      "path_id": "PHASE5B_PLAN_R2_CANONICAL_INVALID_02",
+      "finding_id": "PHASE5B_PLAN_R2_IR_B02",
+      "description": "candidate:intent:1 is revision 1 with a non-null predecessor belonging to another candidate_id, contrary to the fixed schema-v2 genesis predicate and predecessor foreign key.",
+      "validator_result_on_canonical_fixture": "PASS",
+      "classification": "CANONICAL_GRAPH_NOT_INSERTABLE_UNDER_OWN_SCHEMA"
+    },
+    {
+      "path_id": "PHASE5B_PLAN_R2_CANONICAL_INVALID_03",
+      "finding_id": "PHASE5B_PLAN_R2_IR_B03",
+      "description": "The graph derives Command and request fingerprints from simplified invented objects rather than the sealed ten-field Command plus authentication assertion and six-field NAPI request frame.",
+      "validator_result_on_canonical_fixture": "PASS",
+      "classification": "SEALED_F3_SHAPE_NOT_MATERIALIZED"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_001",
+      "name": "F8_owner_result_REJECTED",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F8-handoff-decision.result from CANDIDATE_FORMED to REJECTED.",
+      "dependent_propagation": "Recomputed the F8 commitment, owner commitment set, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because a rejected F8 decision cannot produce a favorable handoff or F3 Command.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_002",
+      "name": "F7_owner_result_INDETERMINATE",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F7-candidate-currentness.result from CURRENT_ACCEPTED to INDETERMINATE.",
+      "dependent_propagation": "Recomputed the F7 commitment, owner commitment set, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because indeterminate candidate currentness cannot support handoff formation.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_003",
+      "name": "F3_owner_result_REJECTED",
+      "family": "owner_commitment",
+      "mutation": "Change owner:F3-command-intake.result from READY to REJECTED.",
+      "dependent_propagation": "Recomputed the F3 commitment and all graph-level node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because a rejected F3 intake commitment cannot support a committed Command node.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_004",
+      "name": "life_semantic_class_MEMORY",
+      "family": "candidate_semantics",
+      "mutation": "Change the Life Stream candidate semantic_class to MEMORY_CANDIDATE.",
+      "dependent_propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because the fixed promotion graph requires a LIFE_STREAM_CANDIDATE at this node.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_005",
+      "name": "intent_semantic_class_MEMORY",
+      "family": "candidate_semantics",
+      "mutation": "Change the handoff source candidate semantic_class from INTENT_CANDIDATE to MEMORY_CANDIDATE.",
+      "dependent_propagation": "Recomputed the intent candidate, history, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because only an INTENT_CANDIDATE may form the F8 handoff.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_006",
+      "name": "life_source_revision_zero",
+      "family": "candidate_schema",
+      "mutation": "Set the Life Stream candidate source_revision to zero.",
+      "dependent_propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because source revisions are positive safe integers.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_007",
+      "name": "life_event_sequence_zero",
+      "family": "candidate_schema",
+      "mutation": "Set the Life Stream candidate created_event_sequence to zero.",
+      "dependent_propagation": "Recomputed both candidate fingerprints, history, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because Event sequences are positive safe integers.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_008",
+      "name": "intent_revision_two_cross_id_predecessor",
+      "family": "candidate_history",
+      "mutation": "Set the Intent candidate revision to 2 while retaining a predecessor from the distinct life-stream candidate_id.",
+      "dependent_propagation": "Recomputed the intent candidate, history, handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because the schema predecessor foreign key requires the same candidate_id and a contiguous predecessor revision.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_009",
+      "name": "handoff_watermark_20_below_intent_21",
+      "family": "handoff_currentness",
+      "mutation": "Set minimum_trusted_event_sequence to 20 while the selected Intent candidate was created at sequence 21.",
+      "dependent_propagation": "Recomputed the handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because the minimum trusted watermark does not cover the selected current Intent candidate.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_010",
+      "name": "handoff_revision_two",
+      "family": "handoff_schema",
+      "mutation": "Change the fixed handoff revision from 1 to 2.",
+      "dependent_propagation": "Recomputed the handoff, payload, Command, request, replay, node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because home_handoff_link.handoff_revision is constrained to equal 1.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_011",
+      "name": "replay_response_fingerprint_malformed",
+      "family": "replay_identity",
+      "mutation": "Replace first_response_fingerprint with a non-SHA-256 string.",
+      "dependent_propagation": "Recomputed replay node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because replay response fingerprints must be lowercase SHA-256.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_012",
+      "name": "F3_precommit_partial_visible_unmodeled",
+      "family": "crash_state",
+      "mutation": "Change the F3 crash node restart projection to partial_inbox_only.",
+      "dependent_propagation": "Recomputed crash node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because an F3 terminal transaction may expose either all committed rows or none, never a partial Inbox-only state.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_013",
+      "name": "candidate_postcommit_marked_uncommitted",
+      "family": "crash_state",
+      "mutation": "Mark C4_after_COMMIT_before_response as committed=false.",
+      "dependent_propagation": "Recomputed crash node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because a crash after COMMIT must retain a committed candidate/Event/head tuple.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R2_IR_CASE_014",
+      "name": "handoff_precommit_marked_committed",
+      "family": "crash_state",
+      "mutation": "Mark H2_after_handoff_insert as committed=true.",
+      "dependent_propagation": "Recomputed crash node, section and root fingerprints.",
+      "expected_target_semantics": "REJECT because a pre-COMMIT handoff crash must roll back all handoff and Event rows.",
+      "validator_errors": ["fixture differs from the independently reconstructed fixed graph"],
+      "nonseal_error_count": 0,
+      "classification": "SEAL_ONLY_REJECTION_NOT_SEMANTIC"
+    }
+  ],
+  "non_authorization": {
+    "plan_freeze": false,
+    "R3_start": false,
+    "implementation_start": false,
+    "database_creation_or_migration": false,
+    "runtime_or_provider_execution": false,
+    "private_memory_access": false,
+    "git_delivery": false
+  }
+}

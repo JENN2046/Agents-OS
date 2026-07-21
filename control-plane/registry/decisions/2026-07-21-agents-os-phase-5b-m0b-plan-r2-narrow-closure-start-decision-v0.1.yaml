@@ -1,0 +1,68 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5B_M0B_PLAN_R2_NARROW_CLOSURE_START_DECISION_V0_1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5B_M0B_PLAN_R2_STRICT_SCOPE
+
+authorization_basis:
+  Jenn_exact_text: >-
+    我确认启动 Phase 5B M0-B Plan R2，范围严格限制为关闭 R1 独立审查的
+    3 个 blocker 和 1 个 major；保持 R1 四个 subjects、manifest、
+    independent review 和 fixed commit 字节不变。不得启动 implementation、
+    Rust、N-API、SQLite、VCPToolBox、runtime、provider、private Memory、
+    sensing 或真实 effect。
+  received_in_current_session: true
+
+bound_inputs:
+  R1_manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+  R1_fixed_commit: 6af82739a678519341490db967f267c550ce67fb
+  R1_independent_review:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-full-atomic-independent-review.yaml
+    sha256: 877b067e4a3e5447d38b1eb6bb304453860ac7d7490032e51e21c3f49c0002b6
+  R1_case_results:
+    path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r1-independent-case-results.json
+    sha256: 271d7ad9538711881aadd08288d2d34675eb32940c41477a0cfdd2d0b9326492
+  R1_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-finding-disposition-v0.1.yaml
+    sha256: a7e32b98ea1f2de4f1808404756c53a37d05b80214141cc7f5aa21e868922f74
+
+strict_scope:
+  - exact_implementable_source_inventory_and_single_writer_route
+  - exact_F8_handoff_to_F3_Command_payload_and_replay_identity
+  - constructive_candidate_handoff_owner_writer_transaction_and_crash_graph
+  - exact_schema_v2_and_migration_totality
+
+required_regressions:
+  - public_five_method_NAPI_surface_remains_unchanged_while_required_internal_files_are_exactly_inventoried
+  - all_new_mutations_route_through_existing_single_LedgerThread_and_one_SQLite_connection
+  - exact_F8_handoff_tuple_is_bound_to_closed_F3_payload_schema_command_id_and_replay_identity
+  - candidate_history_owner_commitments_writer_topology_transactions_and_crash_states_are_constructively_materialized
+  - exact_schema_v2_columns_constraints_indexes_triggers_migration_CAS_Event_and_failpoint_states_are_frozen
+  - every_manifest_required_structural_attack_is_fully_propagated_and_resigned
+
+immutable_lineage:
+  R1_subjects_may_change: false
+  R1_manifest_may_change: false
+  R1_independent_review_may_change: false
+  R1_fixed_commit_may_change: false
+
+stop_condition:
+  - create_R2_four_subjects_constructive_graph_fixture_validator_author_self_review_and_hash_bound_package
+  - stop_at_fresh_full_atomic_hash_bound_independent_review
+
+forbidden:
+  - plan_acceptance_or_freeze
+  - implementation_start
+  - Rust_JavaScript_NAPI_or_SQLite_implementation
+  - source_or_dependency_change
+  - database_file_creation_or_migration
+  - VCPToolBox_change_start_or_plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - private_Memory_access
+  - provider_sensing_or_real_effect
+  - F1_through_F8_or_Phase_5A_semantic_revision
+  - commit_push_or_merge_outside_the_scoped_plan_package

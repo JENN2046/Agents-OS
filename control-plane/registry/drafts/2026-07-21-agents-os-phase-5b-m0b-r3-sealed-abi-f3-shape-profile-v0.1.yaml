@@ -1,0 +1,95 @@
+schema_version: agents-os.m0b-r3-sealed-abi-f3-shape-profile.v0.1
+profile_id: PHASE_5B_M0B_R3_SEALED_ABI_F3_SHAPE_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+sealed_sources:
+  lib_rs: extensions/agents-os-resident/src/lib.rs
+  command_intake_rs: extensions/agents-os-resident/src/reducers/command_intake.rs
+  napi_frame_rs: extensions/agents-os-resident/src/napi_frame.rs
+
+public_NAPI:
+  derivation: parse_napi_js_name_attributes_in_sealed_lib_rs_source_order
+  exact_count: 5
+  exact_methods:
+    - execute_command
+    - execute_query
+    - claim_outbox
+    - acknowledge_outbox
+    - reconcile
+  added_or_removed_method: forbidden
+
+sealed_F3_shapes:
+  submission_exact_fields:
+    - authentication_assertion
+    - canonical_command
+  command_exact_fields:
+    - claimed_actor_id
+    - claimed_principal_binding_ref
+    - claimed_principal_id
+    - claimed_principal_revision
+    - command_id
+    - command_payload
+    - command_type_id
+    - command_type_revision
+    - environment
+    - interface_version
+  authentication_assertion_exact_fields:
+    - assertion_ref
+    - command_fingerprint
+    - interface_version
+    - principal_binding_fingerprint
+    - synthetic_credential_id
+  NAPI_request_frame_exact_fields:
+    - interface_version
+    - method_id
+    - payload
+    - payload_schema_ref
+    - payload_schema_sha256
+    - request_id
+  request_interface_version: agents-os.napi-request-frame.v0.1
+  request_method_id: execute_command
+  request_schema_ref: agents-os.m0a.execute-command-request.v0.1
+  command_interface_version: agents-os.m0a-synthetic-command.v0.1
+  assertion_interface_version: agents-os.m0a-synthetic-authentication-assertion.v0.1
+
+prospective_command_delta:
+  owner: F3
+  status: PROSPECTIVE_IMPLEMENTATION_ONLY
+  runtime_usable: false
+  command_type_id: M0_SYNTHETIC_SUBMIT_HOME_INTENT
+  command_type_revision: 1
+  environment: SYNTHETIC_TEST
+  command_registry_change_required: true
+  type_specific_payload_decoder_required: true
+  current_sealed_runtime_accepts_type: false
+  payload_schema_version: agents-os.m0b.synthetic-home-intent-payload.v0.1
+  payload_exact_fields:
+    - schema_version
+    - handoff_candidate_ref
+    - handoff_candidate_revision
+    - handoff_candidate_fingerprint
+    - intent_candidate_ref
+    - intent_candidate_revision
+    - intent_candidate_fingerprint
+    - owner_commitment_set_fingerprint
+    - canonical_candidate_history_fingerprint
+    - minimum_trusted_event_sequence
+
+canonical_derivations:
+  command_bytes: JCS(exact_ten_field_command)
+  command_fingerprint: SHA256(command_bytes)
+  assertion_command_binding: exact_command_fingerprint
+  submission_bytes: JCS(exact_submission)
+  request_bytes: JCS(exact_six_field_NAPI_request_frame)
+  request_schema_sha256: SHA256(exact_COMMAND_REQUEST_SCHEMA_bytes_from_sealed_napi_frame_rs)
+  request_id: exact_command_id
+  request_fingerprint: SHA256(request_bytes)
+  replay_identity: [command_id, request_fingerprint, request_bytes]
+
+boundary:
+  Home_creates_F3_authority: false
+  current_runtime_acceptance_claimed: false
+  public_NAPI_change: false
+  implementation_authorized: false

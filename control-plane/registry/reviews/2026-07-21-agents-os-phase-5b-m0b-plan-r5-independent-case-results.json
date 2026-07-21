@@ -1,0 +1,505 @@
+{
+  "additional_coordinated_cases": 4,
+  "baseline_positive_controls": 2,
+  "favorable_invalid_path_count": 0,
+  "fully_resigned_invalid_cases": 36,
+  "legal_input_over_rejection_count": 0,
+  "parser_cases": [
+    {
+      "case_id": "duplicate_key",
+      "returncode": 1,
+      "stable_block": true
+    },
+    {
+      "case_id": "malformed",
+      "returncode": 1,
+      "stable_block": true
+    },
+    {
+      "case_id": "nan",
+      "returncode": 1,
+      "stable_block": true
+    },
+    {
+      "case_id": "infinity",
+      "returncode": 1,
+      "stable_block": true
+    },
+    {
+      "case_id": "root_array",
+      "returncode": 1,
+      "stable_block": true
+    }
+  ],
+  "result": "PASS",
+  "review_unit": "PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE",
+  "rows": [
+    {
+      "accepted": true,
+      "case_id": "positive_integer_1_baseline"
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_bool_true",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_bool_false",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_float_one",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_float_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_null",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_string",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_array",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_object",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_negative",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_other_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "derived_unsafe_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_bool_true",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_bool_false",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_float_one",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_float_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_null",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_string",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_array",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_object",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_negative",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_other_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "command_unsafe_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_bool_true",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_bool_false",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_float_one",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_float_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_null",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_string",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_array",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_object",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_zero",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_negative",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_other_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": false,
+      "case_id": "both_unsafe_integer",
+      "seal_errors": [
+        "R5_FIXED_FIXTURE_SEAL_MISMATCH"
+      ],
+      "semantic_errors": [
+        "R4::R4_F3_AUTHORITY_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "accepted": true,
+      "case_id": "positive_integer_1_fully_resigned"
+    },
+    {
+      "case_id": "forged_observation_cannot_hide_bool",
+      "semantic_errors": [
+        "R5_OBSERVATION_BINDING_INVALID",
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    },
+    {
+      "case_id": "profile_wrapper_rewrite_rejected",
+      "semantic_errors": [
+        "R5_PROFILE_FINGERPRINT_INVALID"
+      ],
+      "semantic_rejected": true
+    },
+    {
+      "case_id": "implementation_boundary_expansion_rejected",
+      "semantic_errors": [
+        "R5_BOUNDARY_EXPANSION"
+      ],
+      "semantic_rejected": true
+    },
+    {
+      "case_id": "command_exponent_1e0",
+      "semantic_errors": [
+        "R5_PRINCIPAL_REVISION_JSON_INTEGER_INVALID"
+      ],
+      "target_semantic_rejected": true
+    }
+  ],
+  "schema_version": "agents-os.independent-case-results.v0.1",
+  "semantic_rejections_total": 40,
+  "target_semantic_rejections": 38,
+  "uncaught_exception_count": 0
+}

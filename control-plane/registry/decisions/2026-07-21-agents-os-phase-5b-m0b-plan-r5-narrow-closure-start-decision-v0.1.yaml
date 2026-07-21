@@ -1,0 +1,60 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5B_M0B_PLAN_R5_NARROW_CLOSURE_START_V0_1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: ACCEPTED
+
+decision:
+  Phase_5B_R5_started: true
+  exact_scope:
+    - PHASE5B_PLAN_R4_IR_B01
+    - claimed_principal_revision_strict_JSON_integer_totality
+  required_corrections:
+    - require_type_claimed_principal_revision_is_int_and_value_equals_1
+    - enforce_the_rule_for_derived_binding_and_consumed_Command
+    - reject_boolean_float_and_every_non_integer_JSON_form
+    - preserve_the_four_independent_fully_resigned_regressions
+  R1_R2_R3_R4_fixed_lineage_may_change: false
+  automatic_plan_acceptance_or_freeze: false
+  automatic_implementation_start: false
+
+authority_basis:
+  Jenn_current_instruction: start_Plan_R5
+  R4_fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+  R4_governance_commit: 622db74410a36c0734948ad1855c587aa89550d8
+  R4_manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+  R4_independent_review:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-full-atomic-independent-review.yaml
+    sha256: 9999aa3671b16fd6c94171d5176d3ea3b9a458f0a8d32efa3f703456e2993630
+  R4_case_results:
+    path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r4-independent-case-results.json
+    sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+  R4_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-finding-disposition-v0.1.yaml
+    sha256: 0e14ce6fae4b99a052a3c9beb91387c838fb9f8fdf8643da90729ce7fe68ed9a
+
+fixed_regressions:
+  - inner_revision_integer_1_to_boolean_true
+  - inner_revision_integer_1_to_float_1_0
+  - derived_and_inner_revision_to_boolean_true
+  - derived_and_inner_revision_to_float_1_0
+
+non_authorization:
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  Rust_JavaScript_NAPI_or_SQLite_change_authorized: false
+  dependency_installation_authorized: false
+  database_creation_or_migration_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_real_effect_authorized: false
+  Git_delivery_authorized: false
+
+next_gate: PHASE_5B_M0B_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

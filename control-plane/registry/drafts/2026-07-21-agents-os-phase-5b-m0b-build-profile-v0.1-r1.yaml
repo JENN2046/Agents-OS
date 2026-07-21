@@ -1,0 +1,247 @@
+schema_version: agents-os.m0b-build-profile.v0.1-r1
+profile_id: PHASE_5B_M0B_HOME_TO_ACTION_BOUNDARY_BUILD_PROFILE_V0_1_R1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+baseline:
+  repository: JENN2046/Agents-OS
+  main_commit: 6cd2fc79dffd171d6dd871f6bc7419bf6871c20f
+  source_root: extensions/agents-os-resident
+  package_manifest_path: extensions/agents-os-resident/package-manifest.json
+  package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+  content_tree_sha256: 4c8b3cba4ce23e018c1b79a2fd8a221b48af18b6961c07f629c74e3a662a909d
+  VCPToolBox_base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_core_diff_expected: zero
+  blocked_plugin_manifest_required: true
+
+topology:
+  source_ownership: JENN_OWNED_EXTERNAL_SOURCE_PACKAGE
+  package_count: 1
+  plugin_count: 1
+  new_plugin: forbidden
+  new_service_or_sidecar: forbidden
+  new_network_listener: forbidden
+  Rust_ledger_threads: 1
+  authoritative_SQLite_connections: 1
+  JavaScript_or_Home_database_writer: forbidden
+  existing_five_method_NAPI_surface_unchanged: true
+  active_runtime_or_VCPToolBox_worktree_use: forbidden
+
+toolchain:
+  inherit_Phase_5A_exact_locks: true
+  new_direct_dependencies: forbidden
+  Cargo_lock_change_expected: false
+  package_lock_change_expected: false
+  Node_or_Rust_toolchain_change_expected: false
+  dependency_installation_before_implementation_start: forbidden
+
+future_source_change_inventory:
+  create_after_separate_implementation_start:
+    - extensions/agents-os-resident/src/home/mod.rs
+    - extensions/agents-os-resident/src/home/session_boundary.rs
+    - extensions/agents-os-resident/src/home/candidate.rs
+    - extensions/agents-os-resident/src/home/handoff.rs
+    - extensions/agents-os-resident/tests/synthetic_m0b.rs
+  modify_after_separate_implementation_start:
+    - extensions/agents-os-resident/src/lib.rs
+    - extensions/agents-os-resident/src/ledger/schema.rs
+    - extensions/agents-os-resident/src/ledger/transaction.rs
+    - extensions/agents-os-resident/src/reducers/mod.rs
+    - extensions/agents-os-resident/tests/crash_matrix.rs
+    - extensions/agents-os-resident/README.md
+    - extensions/agents-os-resident/package-manifest.json
+  JavaScript_source_change_expected: false
+  NAPI_frame_change_expected: false
+  VCPToolBox_tracked_file_change_expected: false
+
+synthetic_session_observation:
+  owner: synthetic_test_harness
+  production_compatible: false
+  fields:
+    - observation_id
+    - observation_revision
+    - session_ref
+    - session_revision
+    - source_subject_ref
+    - source_subject_revision
+    - source_subject_fingerprint
+    - payload_commitment
+    - creator_assessment_ref
+    - creator_assessment_fingerprint
+    - explicit_branch_choice
+    - trusted_event_sequence
+  raw_content_field: forbidden
+  filesystem_path_field: forbidden
+  provider_payload_field: forbidden
+  credential_field: forbidden
+
+session_branch_choices:
+  closed_order:
+    - EPHEMERAL_ONLY
+    - DISCARD
+    - REMAIN_IN_SESSION
+    - PROPOSE_LIFE_STREAM_CANDIDATE
+  implicit_or_unknown_choice_result: INDETERMINATE
+  no_promotion_choices:
+    - EPHEMERAL_ONLY
+    - DISCARD
+    - REMAIN_IN_SESSION
+  no_promotion_canonical_write_count: 0
+
+candidate_profile:
+  schema_owner: F7
+  implemented_schema: HomeCandidateRevisionV0_1
+  allowed_semantic_classes:
+    - LIFE_STREAM_CANDIDATE
+    - MEMORY_CANDIDATE
+    - INTENT_CANDIDATE
+  exact_predecessor_required_after_revision_1: true
+  same_revision_rewrite: rejected
+  payload: commitment_only
+  action_authority: false
+  Task_write_authority: false
+  Command_authority: false
+  Memory_write_authority: false
+  effect_authority: false
+  runtime_usable: false
+  promotion_edges:
+    LIFE_STREAM_CANDIDATE:
+      - OBSERVE_WITHOUT_PROMOTION
+      - DISCARD
+      - PROPOSE_MEMORY_CANDIDATE
+      - PROPOSE_INTENT_CANDIDATE
+    MEMORY_CANDIDATE: []
+    INTENT_CANDIDATE:
+      - PROPOSE_F8_HANDOFF
+  every_promotion_requires_new_explicit_choice: true
+
+handoff_profile:
+  schema_owner: F8
+  composite_contract: F8_HOME_TO_ORCHESTRATOR_MINIMUM_INTERFACE_V0_1_R5_ATOMIC_BUNDLE
+  consumes_owner_issued_immutable_commitments: true
+  consumes_canonical_candidate_history: true
+  recomputes_F2_F3_F7_POLICY_or_Jenn_authority: false
+  direct_Task_write: forbidden
+  direct_Command_commit: forbidden
+  effect_execution: forbidden
+  relationship_or_trust_as_authority: forbidden
+  PBL_no_match_as_permission: forbidden
+  favorable_result: CANDIDATE_FORMED
+  favorable_result_is_authority: false
+  acknowledgement_is_projection_only: true
+
+F3_seam:
+  Command_owner: F3
+  method: execute_command
+  new_NAPI_method: forbidden
+  implementation_only_command_type: M0_SYNTHETIC_SUBMIT_HOME_INTENT
+  environment: SYNTHETIC_TEST
+  production_registry_compatible: false
+  satisfies_F8_prospective_production_requirement: false
+  adapter_may_write_F3_rows: false
+  adapter_may_authenticate: false
+  adapter_may_claim_commit: false
+  F3_closed_outcomes:
+    - COMMITTED
+    - REJECTED
+    - INDETERMINATE
+  replay_owner: F3
+
+sqlite:
+  location: per_test_temporary_directory_only
+  input_schema_versions: [0, 1]
+  output_schema_version: 2
+  production_or_existing_database_migration: forbidden
+  begin_mode: IMMEDIATE
+  journal_mode: DELETE
+  synchronous: EXTRA
+  foreign_keys: true
+  busy_retry: forbidden
+  new_tables:
+    home_candidate_revision:
+      mutable: false
+      raw_content_columns: 0
+      private_memory_columns: 0
+    home_candidate_head:
+      mutable: compare_and_set_only
+      Event_bound: true
+    home_handoff_link:
+      mutable: false
+      binds_exact_F7_and_F8_tuples: true
+  forbidden_tables:
+    - session_content
+    - memory_content
+    - formal_relationship
+    - task_writer
+    - permission
+    - provider_payload
+    - sensing_payload
+  candidate_commit_transaction:
+    - immutable_candidate_revision
+    - Event
+    - head_compare_and_set
+  handoff_link_transaction:
+    - recheck_candidate_currentness
+    - immutable_handoff_link
+    - Event
+
+privacy:
+  canonical_ledger_allows:
+    - stable_refs
+    - safe_integer_revisions
+    - lowercase_SHA256_fingerprints
+    - payload_commitments
+    - closed_choice_and_result_enums
+    - Event_sequence
+  canonical_ledger_forbids:
+    - raw_conversation
+    - raw_thought
+    - private_memory_payload_or_excerpt
+    - provider_raw_response
+    - credentials_tokens_cookies_or_keys
+    - audio_image_sensor_or_device_payload
+    - caller_filesystem_path
+  diagnostic_output_may_echo_raw_content: false
+
+replay_and_recovery:
+  canonical_request_bytes_bound: true
+  idempotency_key_bound: true
+  exact_replay_returns_first_accounting: true
+  same_id_different_bytes: PROTOCOL_CONFLICT
+  same_revision_different_content: REJECTED
+  automatic_candidate_promotion_after_restart: forbidden
+  automatic_handoff_retry_after_restart: forbidden
+  automatic_Command_retry_after_indeterminate: forbidden
+  F3_outcome_owner: F3
+
+integrated_witness:
+  synthetic_session_observation_count: 4
+  synthetic_life_stream_candidate_count: 1
+  synthetic_memory_candidate_count: 1
+  synthetic_intent_candidate_count: 1
+  synthetic_F8_handoff_candidate_count: 1
+  synthetic_F3_committed_command_count: 1
+  real_session_count: 0
+  real_Goal_or_Task_count: 0
+  formal_memory_write_count: 0
+  real_Command_count: 0
+  provider_call_count: 0
+  sensing_or_recording_count: 0
+  external_effect_count: 0
+  runtime_activation_count: 0
+  terminal_outcome: NOT_ACTIVATED
+
+authorization:
+  this_profile_authorizes_implementation: false
+  this_profile_authorizes_source_modification: false
+  this_profile_authorizes_dependency_installation: false
+  this_profile_authorizes_database_creation: false
+  this_profile_authorizes_VCPToolBox_change_or_start: false
+  this_profile_authorizes_plugin_enablement: false
+  this_profile_authorizes_runtime_activation: false
+  this_profile_authorizes_private_Memory_access: false
+  this_profile_authorizes_provider_sensing_or_effect: false
+  implementation_requires_separate_Jenn_decision_after_atomic_freeze: true

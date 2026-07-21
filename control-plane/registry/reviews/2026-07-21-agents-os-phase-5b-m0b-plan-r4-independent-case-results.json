@@ -1,0 +1,569 @@
+{
+  "schema_version": "agents-os.independent-review-case-results.v0.1",
+  "case_results_id": "PHASE_5B_M0B_PLAN_R4_INDEPENDENT_CASE_RESULTS_V0_1",
+  "date": "2026-07-21",
+  "materialized_at": "2026-07-21T20:33:24+08:00",
+  "materialization_note": "First materialization after the read-only independent review; no claim of prior existence.",
+  "reviewer": {
+    "identity": "Codex_Nobao_phase5b_plan_r4_independent_review",
+    "independent": true,
+    "workspace_modified": false
+  },
+  "review_unit": {
+    "id": "PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE",
+    "fixed_commit": "57e5f1a37792ffb96e75904e6e44235c9286e1e2",
+    "manifest_sha256": "bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8",
+    "archive_sha256": "ea1cfd1e525147e05a1d6321c46526bc38dce4d70b9731e01e5ac1630028a6ee"
+  },
+  "method": {
+    "execution": "in_memory_read_only",
+    "fully_refingerprinted": true,
+    "fixture_seal_separate": true,
+    "stale_hash_rejections_counted_as_target": false
+  },
+  "summary": {
+    "fully_resigned_case_count": 28,
+    "fixed_R3_regressions": 10,
+    "additional_R4_variations": 18,
+    "target_semantic_rejections": 24,
+    "favorable_invalid_paths": 4,
+    "fixture_seal_only_rejections": 4,
+    "stale_hash_rejections": 0,
+    "legal_input_over_rejections": 0,
+    "exceptions": 0,
+    "result": "BLOCK"
+  },
+  "cases": [
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_004",
+      "family": "candidate_uniqueness",
+      "mutation": "Duplicate candidate primary key and ref across the two revision-1 rows.",
+      "propagation": "All candidate, history, handoff, F3 and R4 closure/root fingerprints recomputed.",
+      "expected": "R4_CANDIDATE_UNIQUENESS_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_CANDIDATE_UNIQUENESS_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_005",
+      "family": "F3_identity",
+      "mutation": "Rewrite claimed_actor_id.",
+      "propagation": "Command, assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_006",
+      "family": "F3_identity",
+      "mutation": "Rewrite claimed_principal_id.",
+      "propagation": "Command, assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_007",
+      "family": "F3_identity",
+      "mutation": "Rewrite claimed_principal_revision from 1 to 2.",
+      "propagation": "Command, assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_008",
+      "family": "F3_identity",
+      "mutation": "Rewrite claimed_principal_binding_ref.",
+      "propagation": "Command, assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_009",
+      "family": "F3_authentication",
+      "mutation": "Rewrite principal_binding_fingerprint.",
+      "propagation": "Assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_010",
+      "family": "F3_authentication",
+      "mutation": "Rewrite synthetic_credential_id.",
+      "propagation": "Assertion, submission, request, replay, R3 root, R4 inventory and root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_015",
+      "family": "FK_inventory",
+      "mutation": "Remove all three composite FK entries.",
+      "propagation": "Closure inventory and R4 root recomputed with the parent unique key retained.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_016",
+      "family": "FK_inventory",
+      "mutation": "Remove the home_candidate_head FK entry.",
+      "propagation": "Closure inventory and R4 root recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R3_IR_CASE_017",
+      "family": "FK_inventory",
+      "mutation": "Replace the second FK with a duplicate of the first.",
+      "propagation": "Closure inventory and R4 root recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_001",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.claimed_actor_id and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_002",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.claimed_principal_id and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_003",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.claimed_principal_revision and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_004",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.claimed_principal_binding_ref and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_005",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.principal_binding_fingerprint and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_006",
+      "family": "coordinated_F3_binding",
+      "mutation": "Rewrite both derived_sealed_binding.synthetic_credential_id and the consuming F3 field.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed while sealed source bytes remain unchanged.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_F3_AUTHORITY_BINDING_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_007",
+      "family": "strict_JSON_type",
+      "mutation": "Replace claimed_principal_revision integer 1 with JSON boolean true.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_008",
+      "family": "strict_JSON_type",
+      "mutation": "Replace claimed_principal_revision integer 1 with JSON number 1.0.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_009",
+      "family": "strict_JSON_type",
+      "mutation": "Replace both derived and consumed claimed_principal_revision with JSON boolean true.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_010",
+      "family": "strict_JSON_type",
+      "mutation": "Replace both derived and consumed claimed_principal_revision with JSON number 1.0.",
+      "propagation": "All F3 downstream commitments, R3 root, R4 inventory and R4 root recomputed.",
+      "expected": "R4_F3_AUTHORITY_BINDING_INVALID",
+      "actual": {
+        "semantic_errors": [],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "FAVORABLE_INVALID_PATH",
+      "target_semantic_rejected": false,
+      "seal_only": true,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_011",
+      "family": "candidate_uniqueness",
+      "mutation": "Independently duplicate the candidate primary key and ref.",
+      "propagation": "All candidate, history, handoff, F3, R3 and R4 commitments recomputed.",
+      "expected": "R4_CANDIDATE_UNIQUENESS_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_CANDIDATE_UNIQUENESS_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_012",
+      "family": "FK_inventory",
+      "mutation": "Remove every composite FK.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_013",
+      "family": "FK_inventory",
+      "mutation": "Remove the first composite FK.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_014",
+      "family": "FK_inventory",
+      "mutation": "Duplicate the first FK into the third position.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_015",
+      "family": "FK_inventory",
+      "mutation": "Append an extra duplicate FK.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_016",
+      "family": "FK_inventory",
+      "mutation": "Swap the first two FK entries.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_017",
+      "family": "FK_inventory",
+      "mutation": "Substitute the second FK child_table.",
+      "propagation": "Closure inventory and all R4 fingerprints recomputed.",
+      "expected": "R4_COMPOSITE_FK_INVENTORY_INVALID",
+      "actual": {
+        "semantic_errors": [
+          "R3::COMPOSITE_FOREIGN_KEY_TYPE_MISMATCH",
+          "R4_COMPOSITE_FK_INVENTORY_INVALID"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    },
+    {
+      "case_id": "PHASE5B_PLAN_R4_IR_CASE_018",
+      "family": "authorization_boundary",
+      "mutation": "Set implementation_authorized to true.",
+      "propagation": "R4 root recomputed.",
+      "expected": "R4_BOUNDARY_EXPANSION",
+      "actual": {
+        "semantic_errors": [
+          "R4_BOUNDARY_EXPANSION"
+        ],
+        "fixed_fixture_errors": [
+          "R4_FIXED_FIXTURE_SEAL_MISMATCH"
+        ]
+      },
+      "classification": "TARGET_SEMANTIC_REJECTION",
+      "target_semantic_rejected": true,
+      "seal_only": false,
+      "exception": false
+    }
+  ],
+  "boundary": {
+    "implementation_started": false,
+    "runtime_database_VCPToolBox_provider_private_memory_sensing_or_effect_executed": false,
+    "workspace_modified": false,
+    "commit_or_push": false
+  }
+}

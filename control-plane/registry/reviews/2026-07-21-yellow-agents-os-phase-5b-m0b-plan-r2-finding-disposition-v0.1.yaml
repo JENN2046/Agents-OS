@@ -1,0 +1,117 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5b-m0b-plan-r2-independent-review-disposition-v0.1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+status: R2_BLOCK_RECONCILED_R3_DECISION_REQUIRED
+
+review:
+  path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r2-full-atomic-independent-review.yaml
+  sha256: 7132d331110ded8cae36d80ec06d5da0a819134a04d77031277b0938bbc8c7d7
+  result: BLOCK
+  requires_R3: true
+  findings: {blocker: 5, major: 0, minor: 0, unresolved: 5}
+  materialized_at: '2026-07-21T12:50:52+08:00'
+  backdated_preexistence_claim: false
+
+case_results:
+  path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r2-independent-case-results.json
+  sha256: 997f380435f28933370888df3822baac01edbf710ca7f8627e1c7594011dcc77
+  cases: 14/14
+  unique_case_ids: 14/14
+  semantic_rejections_outside_exact_fixture_seal: 0
+  exact_fixture_seal_only_rejections: 14
+  favorable_invalid_paths: 3
+  implementation_impossibilities: 2
+
+immutable_lineage:
+  R1_fixed_commit: 6af82739a678519341490db967f267c550ce67fb
+  R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+  R2_fixed_commit: 19da0a73d3d8f37bb522e3d559ecd7c37e05b90e
+  R2_manifest_path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+  R1_subjects_immutable: 4
+  R2_subjects_immutable: 4
+  prior_subject_manifest_review_and_case_result_bytes_may_change: false
+
+findings:
+  - finding_id: PHASE5B_PLAN_R2_IR_B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: sealed_source_bound_public_NAPI_inventory
+    required_regressions:
+      - derive_the_exact_five_public_exports_from_sealed_lib_rs
+      - freeze_execute_command_execute_query_claim_outbox_acknowledge_outbox_and_reconcile
+      - reject_missing_extra_renamed_or_reordered_export_inventory
+      - preserve_no_sixth_public_method_and_no_public_ABI_expansion
+
+  - finding_id: PHASE5B_PLAN_R2_IR_B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: candidate_genesis_predecessor_history_and_schema_consistency
+    required_regressions:
+      - choose_one_exact_candidate_identity_and_revision_model
+      - revision_1_requires_all_predecessor_fields_null
+      - revision_greater_than_1_requires_same_candidate_id_and_exact_predecessor
+      - canonical_graph_is_insertable_under_the_exact_schema
+      - cross_candidate_predecessor_is_rejected_by_target_semantics
+
+  - finding_id: PHASE5B_PLAN_R2_IR_B03
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: exact_sealed_F3_Command_authentication_request_and_replay_shape
+    required_regressions:
+      - materialize_the_ten_field_canonical_Command
+      - materialize_the_five_field_authentication_assertion
+      - materialize_the_six_field_NAPI_request_frame
+      - derive_Command_request_and_replay_fingerprints_from_exact_canonical_bytes
+      - reject_field_omission_substitution_or_same_identity_changed_bytes_semantically
+
+  - finding_id: PHASE5B_PLAN_R2_IR_B04
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: exact_SQLite_composite_parent_key_and_FK_coverage
+    required_regressions:
+      - every_composite_FK_matches_one_exact_parent_PRIMARY_KEY_or_UNIQUE_tuple
+      - declare_the_required_four_column_parent_key_or_redesign_the_child_FKs
+      - statically_validate_parent_key_order_arity_affinity_and_collation_coverage
+      - preserve_closed_schema_inventory_and_direct_implementability
+
+  - finding_id: PHASE5B_PLAN_R2_IR_B05
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: target_semantic_validation_independent_of_exact_fixture_equality
+    required_regressions:
+      - exact_fixture_seal_may_prove_fixed_bytes_but_not_semantic_rejection
+      - coordinated_fully_propagated_resigned_cases_reach_target_semantic_checks
+      - report_target_semantic_rejections_separately_from_seal_or_stale_hash_rejections
+      - remove_caller_labels_or_author_fixture_equality_as_acceptance_substitutes
+      - replay_all_14_R2_independent_cases_as_fixed_R3_regressions
+
+R3_scope_if_started:
+  exact_findings:
+    - PHASE5B_PLAN_R2_IR_B01
+    - PHASE5B_PLAN_R2_IR_B02
+    - PHASE5B_PLAN_R2_IR_B03
+    - PHASE5B_PLAN_R2_IR_B04
+    - PHASE5B_PLAN_R2_IR_B05
+  may_add_new_permission_identity_Task_Command_Validation_or_effect_authority: false
+  may_expand_public_NAPI_surface: false
+  may_start_implementation_or_modify_Rust_JavaScript_NAPI_or_SQLite: false
+  may_install_dependencies_or_create_database: false
+  may_modify_or_start_VCPToolBox_plugin_runtime_or_service: false
+  may_access_production_authentication_private_Memory_provider_sensing_or_effect: false
+
+governance:
+  R3_started: false
+  R3_requires_Jenn_explicit_start: true
+  R3_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5B_plan_freeze_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
+  commit_push_merge_authorized: false

@@ -1,0 +1,67 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: PHASE_5B_M0B_PLAN_R5_AUTHOR_SELF_REVIEW_V0_1
+date: 2026-07-21
+owner: Jenn
+reviewer: Nobao_author_run
+independent: false
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+
+scope:
+  finding_closed_claimed:
+    - PHASE5B_PLAN_R4_IR_B01
+  R1_R2_R3_R4_subjects_modified: false
+  implementation_started: false
+
+subjects:
+  amendment:
+    path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-plan-r5-amendment-v0.1.md
+    sha256: d0a5d3960c71162f84dd526ec483e445cae59a70377e817ce3364f2a8ba76b48
+  strict_JSON_integer_profile:
+    path: control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r5-strict-json-integer-profile-v0.1.yaml
+    sha256: abc05eb22da51a8b762066388770caeaa86ffb313446baf614e34c6373683834
+
+author_evidence:
+  builder:
+    path: control-plane/registry/build-phase-5b-m0b-plan-r5-strict-integer-witness.py
+    sha256: dcbe8eb635fec45e60a4cc96fbd94887b224df3030f8221c854726a377e4e2c9
+  fixture:
+    path: control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r5-strict-integer-witness-v0.1.json
+    sha256: ed0cfad31f48f29d24eebb37f67740e80e887220b6e1ff15d8ed989580345766
+  validator:
+    path: control-plane/registry/validate-phase-5b-m0b-plan-r5-strict-integer-witness.py
+    sha256: ca31daf1abd8bb7cf9ad8e52c74e736be3103726b256e12fb5f8989bcee35511
+
+validation:
+  baseline_fixture: PASS
+  deterministic_builder_byte_equality: PASS
+  fixed_fully_resigned_regressions:
+    executed: 4
+    target_semantic_rejected: 4
+    fixture_seal_only_rejections: 0
+    failures: 0
+  strict_totality_matrix:
+    executed: 11
+    target_semantic_rejected: 11
+    failures: 0
+  positive_control:
+    strict_integer_1: ACCEPTED
+  malformed_or_duplicate_JSON: stable_BLOCK
+
+closure_claims:
+  derived_binding_site_requires_exact_int_1: true
+  consumed_Command_site_requires_exact_int_1: true
+  JSON_boolean_rejected: true
+  JSON_float_rejected: true
+  numeric_coercion_used: false
+  R4_dictionary_equality_used_as_type_proof: false
+
+boundary:
+  second_permission_identity_Task_Command_or_effect_authority: false
+  upstream_F3_reducer_recomputed: false
+  real_runtime_database_VCPToolBox_provider_private_Memory_sensing_or_effect: false
+  automatic_plan_freeze: false
+  automatic_implementation_start: false
+
+independence_notice:
+  may_substitute_for_fresh_independent_review: false
+  author_claim_may_be_relied_on_as_final_result: false

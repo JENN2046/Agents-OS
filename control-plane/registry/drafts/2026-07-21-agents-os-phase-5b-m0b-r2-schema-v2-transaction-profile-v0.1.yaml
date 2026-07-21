@@ -1,0 +1,189 @@
+schema_version: agents-os.m0b-r2-schema-v2-transaction-profile.v0.1
+profile_id: PHASE_5B_M0B_R2_SCHEMA_V2_TRANSACTION_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+schema_transition:
+  accepted_inputs:
+    - version: 0
+      condition: fresh_empty_per_test_temporary_database_only
+      action: create_complete_v2
+    - version: 1
+      condition: exact_Phase_5A_schema_fingerprint_match_and_per_test_temporary_database_only
+      action: migrate_v1_to_v2
+  output_version: 2
+  existing_or_non_test_database: reject_without_write
+  unrecognized_version_or_fingerprint: reject_without_write
+  begin_mode: IMMEDIATE
+  schema_metadata_updated_last: true
+  any_failure: rollback_all
+
+new_tables:
+  home_candidate_revision:
+    primary_key: [candidate_id, candidate_revision]
+    columns:
+      - {name: candidate_id, type: TEXT, nullable: false}
+      - {name: candidate_revision, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: candidate_ref, type: TEXT, nullable: false, unique_with: [candidate_revision]}
+      - {name: semantic_class, type: TEXT, nullable: false, enum: [LIFE_STREAM_CANDIDATE, MEMORY_CANDIDATE, INTENT_CANDIDATE]}
+      - {name: source_subject_ref, type: TEXT, nullable: false}
+      - {name: source_subject_revision, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: source_subject_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: payload_commitment, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: creator_assessment_ref, type: TEXT, nullable: false}
+      - {name: creator_assessment_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: canonical_bytes, type: BLOB, nullable: false}
+      - {name: candidate_fingerprint, type: TEXT, nullable: false, unique: true, check: lowercase_sha256}
+      - {name: predecessor_candidate_revision, type: INTEGER, nullable: true}
+      - {name: predecessor_candidate_ref, type: TEXT, nullable: true}
+      - {name: predecessor_candidate_fingerprint, type: TEXT, nullable: true, check_when_nonnull: lowercase_sha256}
+      - {name: created_event_sequence, type: INTEGER, nullable: false, check: positive_safe_integer}
+    checks:
+      - revision_1_has_all_predecessor_fields_null
+      - revision_gt_1_has_revision_minus_1_and_nonnull_predecessor_ref_fingerprint
+      - candidate_ref_equals_candidate_prefix_plus_candidate_id_plus_revision
+      - SHA256_canonical_bytes_equals_candidate_fingerprint
+    foreign_keys:
+      - columns: [candidate_id, predecessor_candidate_revision, predecessor_candidate_ref, predecessor_candidate_fingerprint]
+        references: home_candidate_revision[candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+        deferrable: initially_deferred
+      - columns: [created_event_sequence]
+        references: event[event_sequence]
+        deferrable: initially_deferred
+
+  home_candidate_head:
+    primary_key: [candidate_id]
+    columns:
+      - {name: candidate_id, type: TEXT, nullable: false}
+      - {name: semantic_class, type: TEXT, nullable: false, enum: [LIFE_STREAM_CANDIDATE, MEMORY_CANDIDATE, INTENT_CANDIDATE]}
+      - {name: current_candidate_revision, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: current_candidate_ref, type: TEXT, nullable: false}
+      - {name: current_candidate_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: pointer_version, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: updated_event_sequence, type: INTEGER, nullable: false, check: positive_safe_integer}
+    checks:
+      - pointer_version_equals_current_candidate_revision
+    foreign_keys:
+      - columns: [candidate_id, current_candidate_revision, current_candidate_ref, current_candidate_fingerprint]
+        references: home_candidate_revision[candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+        deferrable: initially_deferred
+      - columns: [updated_event_sequence]
+        references: event[event_sequence]
+        deferrable: initially_deferred
+
+  home_handoff_link:
+    primary_key: [handoff_id, handoff_revision]
+    columns:
+      - {name: handoff_id, type: TEXT, nullable: false}
+      - {name: handoff_revision, type: INTEGER, nullable: false, check: equals_1}
+      - {name: handoff_ref, type: TEXT, nullable: false, unique_with: [handoff_revision]}
+      - {name: intent_candidate_id, type: TEXT, nullable: false}
+      - {name: intent_candidate_revision, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: intent_candidate_ref, type: TEXT, nullable: false}
+      - {name: intent_candidate_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: owner_commitment_set_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: canonical_candidate_history_fingerprint, type: TEXT, nullable: false, check: lowercase_sha256}
+      - {name: minimum_trusted_event_sequence, type: INTEGER, nullable: false, check: positive_safe_integer}
+      - {name: canonical_bytes, type: BLOB, nullable: false}
+      - {name: handoff_fingerprint, type: TEXT, nullable: false, unique: true, check: lowercase_sha256}
+      - {name: created_event_sequence, type: INTEGER, nullable: false, check: positive_safe_integer}
+    unique_constraints:
+      - [intent_candidate_id, intent_candidate_revision]
+    checks:
+      - handoff_ref_equals_handoff_prefix_plus_handoff_id_plus_revision
+      - SHA256_canonical_bytes_equals_handoff_fingerprint
+    foreign_keys:
+      - columns: [intent_candidate_id, intent_candidate_revision, intent_candidate_ref, intent_candidate_fingerprint]
+        references: home_candidate_revision[candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+        deferrable: initially_deferred
+      - columns: [created_event_sequence]
+        references: event[event_sequence]
+        deferrable: initially_deferred
+
+indexes:
+  - {name: home_candidate_revision_by_subject, table: home_candidate_revision, columns: [source_subject_ref, source_subject_revision]}
+  - {name: home_candidate_revision_by_event, table: home_candidate_revision, columns: [created_event_sequence]}
+  - {name: home_handoff_link_by_event, table: home_handoff_link, columns: [created_event_sequence]}
+
+immutability_triggers:
+  - {name: home_candidate_revision_no_update, timing: BEFORE_UPDATE, table: home_candidate_revision, action: ABORT_home_candidate_revision_immutable}
+  - {name: home_candidate_revision_no_delete, timing: BEFORE_DELETE, table: home_candidate_revision, action: ABORT_home_candidate_revision_immutable}
+  - {name: home_handoff_link_no_update, timing: BEFORE_UPDATE, table: home_handoff_link, action: ABORT_home_handoff_link_immutable}
+  - {name: home_handoff_link_no_delete, timing: BEFORE_DELETE, table: home_handoff_link, action: ABORT_home_handoff_link_immutable}
+
+schema_fingerprint:
+  algorithm: SHA256
+  canonical_input: JCS([agents-os.m0b.sqlite-schema.v2,existing_v1_schema_fingerprint,ordered_new_table_inventory,ordered_index_inventory,ordered_trigger_inventory])
+  metadata_row: [singleton_id_1, schema_version_2, derived_schema_fingerprint]
+
+transactions:
+  commit_home_candidate:
+    preconditions:
+      - verify_schema_v2
+      - validate_closed_candidate_input_before_BEGIN
+      - resolve_exact_current_predecessor_or_absence
+      - expected_head_revision_and_fingerprint_match
+    ordered_writes:
+      - BEGIN_IMMEDIATE
+      - insert_home_candidate_revision
+      - insert_exact_Event
+      - insert_or_CAS_home_candidate_head
+      - foreign_key_check_empty
+      - COMMIT
+    accounting: {event_count: 1, external_call_count: 0}
+  commit_home_handoff:
+    preconditions:
+      - verify_schema_v2
+      - validate_closed_handoff_input_before_BEGIN
+      - resolve_exact_current_intent_candidate
+      - resolve_exact_owner_commitment_set_and_history
+      - minimum_trusted_event_sequence_satisfied
+    ordered_writes:
+      - BEGIN_IMMEDIATE
+      - recheck_candidate_head_exact_tuple
+      - insert_home_handoff_link
+      - insert_exact_Event
+      - foreign_key_check_empty
+      - COMMIT
+    accounting: {event_count: 1, external_call_count: 0}
+  terminal_F3_home_intent:
+    preconditions:
+      - verify_schema_v2
+      - validate_exact_command_payload_and_authentication_before_BEGIN
+      - resolve_exact_handoff_and_candidate_tuple
+      - register_or_resolve_replay_identity
+    ordered_writes:
+      - BEGIN_IMMEDIATE
+      - insert_inbox_command
+      - insert_command_envelope
+      - insert_exact_Event
+      - insert_replay_index_with_first_response_and_accounting
+      - foreign_key_check_empty
+      - COMMIT
+    accounting: {event_count: 1, external_call_count: 0}
+
+candidate_head_CAS:
+  genesis_predicate: no_existing_head_and_candidate_revision_equals_1
+  advance_predicate: current_revision_equals_expected_and_current_fingerprint_equals_expected_and_new_revision_equals_current_plus_1
+  affected_row_count_required: 1
+  zero_or_multiple_rows: rollback_conflict
+
+failpoints:
+  - {id: C0_before_BEGIN, transaction: candidate, expected_after_restart: no_candidate_no_Event_no_head}
+  - {id: C1_after_candidate_insert, transaction: candidate, expected_after_restart: no_candidate_no_Event_no_head}
+  - {id: C2_after_candidate_Event, transaction: candidate, expected_after_restart: no_candidate_no_Event_no_head}
+  - {id: C3_after_head_CAS_before_COMMIT, transaction: candidate, expected_after_restart: no_candidate_no_Event_no_head}
+  - {id: C4_after_COMMIT_before_response, transaction: candidate, expected_after_restart: exact_candidate_Event_head_once_replay_first_accounting}
+  - {id: H0_before_BEGIN, transaction: handoff, expected_after_restart: no_handoff_no_Event}
+  - {id: H1_after_currentness_recheck, transaction: handoff, expected_after_restart: no_handoff_no_Event}
+  - {id: H2_after_handoff_insert, transaction: handoff, expected_after_restart: no_handoff_no_Event}
+  - {id: H3_after_handoff_Event_before_COMMIT, transaction: handoff, expected_after_restart: no_handoff_no_Event}
+  - {id: H4_after_COMMIT_before_F3_submission, transaction: handoff, expected_after_restart: exact_handoff_Event_once_no_automatic_F3_submission}
+  - {id: F0_after_F3_COMMIT_before_projection, transaction: F3, expected_after_restart: exact_inbox_envelope_Event_replay_once_F3_exact_replay}
+
+boundary:
+  plan_only: true
+  database_created_or_migrated_now: false
+  implementation_authorized: false
+  runtime_activation_authorized: false

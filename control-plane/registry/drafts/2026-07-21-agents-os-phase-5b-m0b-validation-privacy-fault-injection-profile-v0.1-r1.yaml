@@ -1,0 +1,274 @@
+schema_version: agents-os.m0b-validation-privacy-fault-injection-profile.v0.1-r1
+profile_id: PHASE_5B_M0B_VALIDATION_PRIVACY_FAULT_INJECTION_PROFILE_V0_1_R1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+test_environment:
+  profile: SYNTHETIC_TEST
+  domain_tag: PHASE_5B_M0B_PLAN_R1_SYNTHETIC_NONAUTHORITY
+  network: forbidden
+  provider: forbidden
+  active_runtime_config: forbidden
+  production_credentials: forbidden
+  private_raw_memory: forbidden
+  state_private: forbidden
+  database: per_test_temporary_directory_only_after_implementation_start
+  VCPToolBox_server_start: forbidden
+  plugin_manifest_state: blocked
+  deterministic_clock_principals_and_owner_assessments: required
+
+validation_layers:
+  - id: L1
+    name: closed_schema_and_canonical_primitives
+    required: true
+    cases:
+      - duplicate_JSON_keys_rejected
+      - float_NaN_Infinity_and_unsafe_integer_rejected
+      - non_NFC_string_rejected
+      - unknown_field_enum_type_and_nullability_rejected
+      - bool_is_not_integer
+      - canonical_bytes_and_SHA256_recomputed
+  - id: L2
+    name: session_nonpromotion
+    required: true
+    cases:
+      - ephemeral_discard_and_remain_make_zero_canonical_writes
+      - missing_or_unknown_branch_fails_closed
+      - ordinary_conversation_has_zero_Goal_Task_or_candidate_writes
+      - ordinary_thought_cannot_promote
+  - id: L3
+    name: F7_candidate_revision
+    required: true
+    cases:
+      - explicit_Life_Stream_candidate_only
+      - observe_and_discard_do_not_promote
+      - explicit_Memory_Candidate_is_not_Memory
+      - explicit_Intent_Candidate_is_not_Command
+      - exact_predecessor_and_current_head
+      - same_revision_changed_content_rejected
+  - id: L4
+    name: F8_handoff_composition
+    required: true
+    cases:
+      - exact_owner_commitment_tuple_required
+      - exact_canonical_candidate_history_required
+      - phantom_candidate_rejected
+      - minimum_Event_watermark_enforced
+      - direct_Task_Command_or_effect_request_rejected
+      - relationship_trust_or_PBL_no_match_never_creates_authority
+  - id: L5
+    name: F3_synthetic_Command_seam
+    required: true
+    cases:
+      - existing_execute_command_is_only_NAPI_entry
+      - adapter_cannot_write_F3_rows
+      - F3_committed_rejected_and_indeterminate_outcomes_projected
+      - exact_replay_owned_by_F3
+      - synthetic_command_definition_rejected_outside_SYNTHETIC_TEST
+  - id: L6
+    name: SQLite_atomicity_recovery_and_privacy
+    required: true
+    cases:
+      - v1_to_v2_migration_only_in_temporary_test_database
+      - candidate_Event_head_commit_together
+      - handoff_link_Event_commit_together
+      - rollback_has_no_partial_row_or_pointer
+      - quick_check_PASS_and_foreign_key_check_empty
+      - raw_content_private_Memory_provider_or_credential_scan_empty
+  - id: L7
+    name: inherited_M0A_and_packaging
+    required: true
+    cases:
+      - every_Phase_5A_test_remains_PASS
+      - five_NAPI_methods_unchanged
+      - one_writer_one_connection
+      - no_new_dependency_or_lock_change
+      - VCPToolBox_core_diff_zero
+      - blocked_manifest_not_discoverable
+      - deterministic_package_manifest_and_content_tree
+
+decision_case_inventory:
+  case_count: 28
+  ordered_case_ids:
+    - C01_EPHEMERAL_ONLY
+    - C02_DISCARD
+    - C03_REMAIN_IN_SESSION
+    - C04_MISSING_BRANCH
+    - C05_ORDINARY_THOUGHT_NO_PROMOTION
+    - C06_ORDINARY_THOUGHT_PROMOTION_REJECTED
+    - C07_IMPLICIT_LIFE_STREAM_REJECTED
+    - C08_LIFE_STREAM_CANDIDATE_ONLY
+    - C09_OBSERVE_NO_FURTHER_PROMOTION
+    - C10_DISCARD_NO_FURTHER_PROMOTION
+    - C11_MEMORY_CANDIDATE_ONLY
+    - C12_IMPLICIT_MEMORY_PROMOTION_REJECTED
+    - C13_INTENT_CANDIDATE_ONLY
+    - C14_IMPLICIT_INTENT_PROMOTION_REJECTED
+    - C15_F8_HANDOFF_CANDIDATE_ONLY
+    - C16_F3_COMMITTED_ACKNOWLEDGED
+    - C17_F3_REJECTED_ACKNOWLEDGED
+    - C18_F3_INDETERMINATE_ACKNOWLEDGED
+    - C19_DIRECT_TASK_WRITE_REJECTED
+    - C20_DIRECT_COMMAND_COMMIT_REJECTED
+    - C21_RELATIONSHIP_AUTHORITY_REJECTED
+    - C22_PBL_NO_MATCH_PERMISSION_REJECTED
+    - C23_RAW_CONTENT_PERSIST_REJECTED
+    - C24_FORMAL_MEMORY_WRITE_REJECTED
+    - C25_PRODUCTION_PROFILE_REJECTED
+    - C26_STALE_UPSTREAM_INDETERMINATE
+    - C27_F8_REJECTED
+    - C28_F8_INDETERMINATE
+  exact_order_and_complete_raw_input_are_normative: true
+  caller_claimed_result_is_trusted: false
+  output_is_derived_from_raw_input: true
+
+closed_results:
+  - NO_PROMOTION
+  - INDETERMINATE
+  - REJECTED
+  - LIFE_STREAM_CANDIDATE_ONLY
+  - OBSERVED_NO_FURTHER_PROMOTION
+  - DISCARDED_NO_FURTHER_PROMOTION
+  - MEMORY_CANDIDATE_ONLY
+  - INTENT_CANDIDATE_ONLY
+  - HANDOFF_CANDIDATE_ONLY
+  - F3_COMMAND_ACKNOWLEDGED
+  - F3_REJECTION_ACKNOWLEDGED
+  - F3_INDETERMINATE_ACKNOWLEDGED
+
+closed_reason_precedence:
+  - UNKNOWN_OR_MALFORMED_INPUT
+  - PRODUCTION_PROFILE_FORBIDDEN
+  - RAW_CONTENT_PERSISTENCE_FORBIDDEN
+  - FORMAL_MEMORY_WRITE_FORBIDDEN
+  - DIRECT_TASK_WRITE_FORBIDDEN
+  - DIRECT_COMMAND_COMMIT_FORBIDDEN
+  - RELATIONSHIP_CANNOT_EXPAND_AUTHORITY
+  - PBL_NO_MATCH_IS_NOT_PERMISSION
+  - UPSTREAM_CURRENTNESS_UNAVAILABLE
+  - ORDINARY_THOUGHT_CANNOT_PROMOTE
+  - EXPLICIT_SESSION_BRANCH_MISSING
+  - EXPLICIT_LIFE_STREAM_CHOICE_MISSING
+  - EXPLICIT_MEMORY_CHOICE_MISSING
+  - EXPLICIT_INTENT_CHOICE_MISSING
+  - F8_HANDOFF_REJECTED
+  - F8_HANDOFF_INDETERMINATE
+  - F3_NOT_SUBMITTED
+  - F3_REJECTED
+  - F3_INDETERMINATE
+  - VALID_NO_PROMOTION
+  - VALID_LIFE_STREAM_CANDIDATE
+  - VALID_OBSERVE
+  - VALID_DISCARD
+  - VALID_MEMORY_CANDIDATE
+  - VALID_INTENT_CANDIDATE
+  - VALID_HANDOFF_CANDIDATE
+  - VALID_F3_COMMIT_ACKNOWLEDGEMENT
+
+crash_matrix:
+  mechanism: future_subprocess_failpoint_and_forced_exit
+  failpoints:
+    - before_candidate_BEGIN_IMMEDIATE
+    - after_candidate_insert
+    - after_candidate_Event
+    - after_candidate_head_CAS_before_COMMIT
+    - after_candidate_COMMIT_before_response
+    - before_handoff_BEGIN_IMMEDIATE
+    - after_candidate_currentness_recheck
+    - after_handoff_link_insert
+    - after_handoff_Event_before_COMMIT
+    - after_handoff_COMMIT_before_F3_submission
+    - after_F3_commit_before_acknowledgement_projection
+  required_post_restart_invariants:
+    - no_partial_candidate_Event_or_head_visible
+    - no_partial_handoff_link_or_Event_visible
+    - exact_committed_candidate_replays_first_accounting
+    - uncommitted_request_may_be_submitted_once
+    - F3_committed_Command_replays_through_F3
+    - F3_indeterminate_outcome_not_retried_automatically
+    - no_automatic_candidate_or_handoff_promotion
+
+privacy_probes:
+  forbidden_key_patterns:
+    - raw_content
+    - conversation_text
+    - thought_text
+    - private_memory
+    - provider_response
+    - credential
+    - token
+    - cookie
+    - secret
+    - audio_payload
+    - image_payload
+    - sensor_payload
+  scope:
+    - NAPI_frames
+    - canonical_requests
+    - SQLite_schema_and_rows
+    - Event_payloads
+    - receipts_and_diagnostics
+  match_result: BLOCK
+  payload_echo_in_failure_output: forbidden
+
+integrated_witness:
+  synthetic_session_observation_count: 4
+  branch_coverage:
+    EPHEMERAL_ONLY: 1
+    DISCARD: 1
+    REMAIN_IN_SESSION: 1
+    PROPOSE_LIFE_STREAM_CANDIDATE: 1
+  synthetic_life_stream_candidate_count: 1
+  synthetic_memory_candidate_count: 1
+  synthetic_intent_candidate_count: 1
+  synthetic_F8_handoff_candidate_count: 1
+  synthetic_F3_committed_command_count: 1
+  real_session_count: 0
+  real_Goal_count: 0
+  real_Task_count: 0
+  formal_memory_write_count: 0
+  real_Command_count: 0
+  provider_call_count: 0
+  network_call_count: 0
+  private_memory_read_count: 0
+  sensing_or_recording_count: 0
+  external_effect_count: 0
+  runtime_activation_count: 0
+  expected_terminal_state: NOT_ACTIVATED
+  repeatability:
+    clean_run_count: 2
+    canonical_rows_Events_and_root_hashes_byte_identical: required
+    restart_run_has_no_duplicate_candidate_handoff_or_Command: required
+
+author_validator_requirements:
+  exact_case_catalog_bound: true
+  derived_result_not_trusted_claim: true
+  closed_root_section_row_and_nested_fields: true
+  fully_resigned_mutations_required: 30
+  mutation_exceptions: 0
+  builder_byte_reproduction: required
+  validator_PASS_is_constructive_evidence_only: true
+
+acceptance:
+  all_layers_pass: required
+  all_28_decision_cases_pass: required
+  all_crash_failpoints_owned: required
+  all_13_traceability_rows_covered: required
+  all_30_author_mutations_rejected: required
+  all_real_private_provider_sensing_runtime_effect_counts_zero: required
+  exceptions: 0
+  author_self_review_substitutes_for_independent_review: false
+  independent_PASS_automatically_freezes_plan: false
+  plan_freeze_automatically_starts_implementation: false
+
+non_authorization:
+  implementation_started: false
+  source_modification_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false

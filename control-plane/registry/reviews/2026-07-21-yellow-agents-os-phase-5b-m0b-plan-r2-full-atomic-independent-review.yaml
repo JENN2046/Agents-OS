@@ -1,0 +1,305 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5B_M0B_PLAN_R2_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-21'
+materialized_at: '2026-07-21T12:50:52+08:00'
+materialization_note: >-
+  This file was first materialized after the interactive independent review.
+  It does not claim to have existed before this timestamp and does not treat
+  chat text as pre-existing original bytes.
+
+reviewer:
+  identity: Codex_Nobao_independent_review_run
+  independence_basis:
+    - not_the_author_of_the_R1_or_R2_subjects
+    - reviewed_fixed_commit_and_archive_bytes_read_only
+    - author_self_review_was_evidence_only_and_not_used_as_conclusion
+    - did_not_modify_workspace_subjects_manifest_queue_registry_or_git
+    - no_runtime_provider_database_private_memory_sensing_or_effect_execution
+
+review_unit:
+  id: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 8
+  authority_input_count: 43
+  author_evidence_count: 8
+  declared_input_count: 59
+
+result: BLOCK
+requires_R3: true
+
+findings:
+  blocker: 5
+  major: 0
+  minor: 0
+  unresolved: 5
+
+integrity:
+  fixed_commit:
+    expected: 19da0a73d3d8f37bb522e3d559ecd7c37e05b90e
+    actual: 19da0a73d3d8f37bb522e3d559ecd7c37e05b90e
+    match: true
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+    actual_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+    match: true
+  archive:
+    path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r2-independent-review-package-v0.1.zip
+    expected_sha256: d7c9ca8033f1bd9481dfedef7720181512e9405b65b7b891c033d4172a9f22c6
+    actual_sha256: d7c9ca8033f1bd9481dfedef7720181512e9405b65b7b891c033d4172a9f22c6
+    entry_count: 65
+    unique_paths: 65
+    crc_full_read: PASS
+    checksums_rows: 64
+    checksums_match: 64/64
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    forbidden_name_matches: 0
+    manifest_alias_byte_identity: true
+  declared_inputs:
+    total_hashes: 59/59_MATCH
+    total_full_reads: 59/59
+    total_bytes_fully_read: 1120664
+    total_lines_fully_read: 24132
+    git_object_membership_at_fixed_commit: 59/59_MATCH
+    subjects: 8/8_MATCH_AND_FULLY_READ
+    authority_inputs: 43/43_MATCH_AND_FULLY_READ
+    author_evidence: 8/8_MATCH_AND_FULLY_READ
+  R1_immutable_lineage:
+    four_subjects: 4/4_MATCH
+    manifest: MATCH
+    independent_review: MATCH
+    case_results: MATCH
+    finding_disposition: MATCH
+
+subject_hashes:
+  R1_implementation_plan: 88c2bd24c4c1beea470ec734a381c7d73310425844bd9d84ef98741878768634
+  R1_exact_build_profile: e213b302fbc3737b20a414b707626a1438ea464da59d2acb24f424582f7d5a60
+  R1_contract_traceability_matrix: 6302ecf424e13580f1207006928a49e605030cecc78c7778a4410e6ce2367726
+  R1_validation_privacy_fault_injection_profile: 668d0ee361c6aff79f6b0062dd558c587c76a4e98dd70c202356d6ef407571a8
+  R2_amendment: 26308cfaca2c1db1b2f4a383eb5b4f1a61248613716d4949cf79ad93bf8e87dc
+  R2_exact_source_F3_seam: 6a8297845ca28f94145fba221009558056cb19cc4c2ab3c8544986b8f663a5b1
+  R2_schema_v2_transaction: 8947796f6729edd62c97a9107bcec08ed8e4cfde5c50e27d77cfa46d4e9bb6d7
+  R2_constructive_graph: 4c51c5f73268888a4c7e98ec3fe6ca7d88fabb213fc9f46ce975167500c350d8
+
+fixed_command_reproduction:
+  execution_root: isolated_temporary_extraction_without_git
+  command_1_R1_yaml_parse: PASS
+  command_2_R1_validator: PASS
+  command_3_R1_fixture_byte_reproduction: PASS
+  command_4_R1_whitespace: PASS
+  command_5_R2_yaml_parse: PASS
+  command_6_R2_validator: PASS
+  command_7_R2_fixture_byte_reproduction: PASS
+  command_8_R2_whitespace: PASS
+  total: 8/8_PASS
+  R1_case_count: 28
+  R1_fully_resigned_mutations_reported_by_fixed_validator: 30/30_REJECTED
+  R2_node_count: 31
+  R2_edge_count: 29
+  R2_section_count: 9
+  R2_fully_resigned_mutations_reported_by_fixed_validator: 32/32_REJECTED
+  R2_parser_probes: 5/5_REJECTED
+  terminal_outcome: NOT_ACTIVATED
+  temporary_extraction_cleaned: true
+
+independent_case_results:
+  path: /tmp/2026-07-21-agents-os-phase-5b-m0b-plan-r2-independent-case-results.json
+  sha256: 997f380435f28933370888df3822baac01edbf710ca7f8627e1c7594011dcc77
+  case_count: 14
+  unique_case_ids: 14/14
+  independent_fully_propagated_resigned_attack_count: 14
+  semantic_rejections_outside_exact_fixture_seal: 0
+  exact_fixture_seal_only_rejections: 14
+  attack_exceptions: 0
+  canonical_favorable_invalid_path_count: 3
+  legal_input_over_rejection_count_observed: 0
+  implementation_impossibility_count: 2
+  unrepresentable_required_attack_count: 3
+
+finding_details:
+  - id: PHASE5B_PLAN_R2_IR_B01
+    severity: blocker
+    title: Fixed public N-API baseline contradicts the sealed Rust export set
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-exact-source-f3-seam-profile-v0.1.yaml
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-plan-r2-amendment-v0.1.md
+    authority_inputs:
+      - extensions/agents-os-resident/src/lib.rs
+      - extensions/agents-os-resident/src/napi_frame.rs
+    exact_locations:
+      - exact_source_F3_seam_lines_10_16
+      - R2_amendment_lines_30_50
+      - sealed_lib_rs_lines_172_237
+      - validator_lines_144_147
+    evidence: >-
+      R2 freezes start_resident, get_resident_status, execute_command,
+      claim_outbox and reconcile as the existing public five-method surface.
+      The hash-bound sealed lib.rs instead exports execute_command,
+      execute_query, claim_outbox, acknowledge_outbox and reconcile. The
+      validator hard-codes the incorrect profile list and never derives the
+      actual export inventory from sealed source.
+    impact: >-
+      The exact ABI preservation target is factually wrong. Implementing the
+      profile literally changes two exported methods; preserving sealed source
+      violates the fixed profile.
+    closure_required:
+      - derive_and_freeze_the_exact_public_export_set_from_sealed_lib_rs
+      - add_a_source_bound_export_inventory_check
+
+  - id: PHASE5B_PLAN_R2_IR_B02
+    severity: blocker
+    title: Canonical candidate history is not insertable under its own schema-v2 profile
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-schema-v2-transaction-profile-v0.1.yaml
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-constructive-graph-profile-v0.1.yaml
+    author_evidence:
+      - control-plane/registry/build-phase-5b-m0b-plan-r2-constructive-graph.py
+      - control-plane/registry/examples/2026-07-21-agents-os-phase-5b-m0b-plan-r2-constructive-graph-v0.1.json
+      - control-plane/registry/validate-phase-5b-m0b-plan-r2-constructive-graph.py
+    exact_locations:
+      - schema_v2_profile_lines_23_53
+      - builder_lines_53_79_and_118_132
+      - validator_lines_272_289
+    evidence: >-
+      The builder hard-codes revision 1 for every candidate, then creates
+      candidate:intent:1 with a non-null predecessor pointing to the distinct
+      life-stream candidate_id. Schema v2 requires every revision-1 predecessor
+      field to be null and constrains predecessor history through a composite
+      foreign key containing the same candidate_id. The fixed fixture therefore
+      cannot be inserted under the fixed schema, yet the validator returns PASS.
+    impact: >-
+      This is a favorable invalid path in the canonical evidence and an
+      implementation impossibility for the fixed constructive witness.
+    closure_required:
+      - choose_and_freeze_one_consistent_candidate_identity_and_revision_model
+      - bind_the_graph_validator_to_all_schema_genesis_predecessor_and_FK_rules
+
+  - id: PHASE5B_PLAN_R2_IR_B03
+    severity: blocker
+    title: Constructive F3 Command and request fingerprints use an invented shape
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-exact-source-f3-seam-profile-v0.1.yaml
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-constructive-graph-profile-v0.1.yaml
+    authority_inputs:
+      - extensions/agents-os-resident/src/reducers/command_intake.rs
+      - extensions/agents-os-resident/src/napi_frame.rs
+      - extensions/agents-os-resident/src/lib.rs
+    author_evidence:
+      - control-plane/registry/build-phase-5b-m0b-plan-r2-constructive-graph.py
+      - control-plane/registry/validate-phase-5b-m0b-plan-r2-constructive-graph.py
+    exact_locations:
+      - exact_source_F3_seam_lines_121_132
+      - command_intake_rs_lines_21_148
+      - validator_lines_319_354
+    evidence: >-
+      The graph derives command_fingerprint from a simplified five-field object
+      and request_fingerprint from method/request_id/payload. Sealed F3 requires
+      the ten-field canonical Command, a five-field authentication assertion,
+      and the six-field canonical NAPI request frame. The graph therefore does
+      not materialize the sealed CommandSubmission or request bytes promised by
+      the R2 profile.
+    impact: >-
+      The fixed graph's Command, request and replay fingerprints cannot be used
+      as the constructive proof of the sealed F8-to-F3 seam.
+    closure_required:
+      - materialize_the_exact_sealed_outer_Command_authentication_and_NAPI_frame
+      - derive_all_fingerprints_from_those_exact_bytes
+
+  - id: PHASE5B_PLAN_R2_IR_B04
+    severity: blocker
+    title: Composite foreign-key parent tuples lack an exact parent key
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-schema-v2-transaction-profile-v0.1.yaml
+    exact_locations:
+      - schema_v2_profile_lines_23_102
+    evidence: >-
+      Three foreign keys reference the four-column parent tuple candidate_id,
+      candidate_revision, candidate_ref and candidate_fingerprint. The declared
+      parent keys are only PK(candidate_id,candidate_revision),
+      UNIQUE(candidate_ref,candidate_revision), and
+      UNIQUE(candidate_fingerprint). No exact four-column PRIMARY KEY or UNIQUE
+      parent key is present. The exact closed constraint inventory leaves no
+      authorized place to add it during implementation.
+    impact: >-
+      The specified SQLite foreign keys have no valid exact parent key and the
+      frozen schema is not directly implementable.
+    closure_required:
+      - declare_the_exact_composite_parent_key_or_redesign_each_FK
+      - add_static_parent_key_coverage_validation_for_every_FK
+
+  - id: PHASE5B_PLAN_R2_IR_B05
+    severity: blocker
+    title: Fixed mutation evidence proves fixture sealing rather than target semantics
+    subjects:
+      - control-plane/registry/drafts/2026-07-21-agents-os-phase-5b-m0b-r2-constructive-graph-profile-v0.1.yaml
+    author_evidence:
+      - control-plane/registry/validate-phase-5b-m0b-plan-r2-constructive-graph.py
+    exact_locations:
+      - constructive_graph_profile_lines_100_144
+      - validator_lines_411_426
+      - independent_case_results_cases_001_014
+    evidence: >-
+      Fourteen independent coordinated mutations recomputed every affected
+      inner commitment and all dependent candidate, history, handoff, payload,
+      Command, request, replay, node, section and root fingerprints. All 14 were
+      rejected only by fixture != builder.build_fixture(). None produced a
+      target-semantic error outside that exact-output seal. The fixed author's
+      mutation helper also re-signs only outer graph fingerprints for many
+      cases, leaving inner dependent commitments stale.
+    impact: >-
+      The claimed 32/32 mutation result does not satisfy the manifest requirement
+      that fully propagated attacks be rejected by target semantics rather than
+      stale hashes, unpropagated references or an exact fixture seal.
+    closure_required:
+      - separate_semantic_validation_from_exact_fixture_reproduction
+      - implement_fully_propagated_independent_attack_cases
+      - require_each_attack_to_name_the_specific_semantic_rule_that_rejected_it
+
+boundary_results:
+  second_permission_identity_Task_Command_or_effect_authority_count: 0
+  synthetic_to_production_or_private_content_leak_count: 0
+  NAPI_SQLite_writer_or_VCPToolBox_boundary_escape_occurrence_count: 0
+  NAPI_surface_inventory_mismatch_count: 1
+  crash_replay_or_automatic_promotion_gap_count: 0
+  automatic_implementation_start_count: 0
+  real_runtime_provider_database_private_memory_sensing_or_effect_occurrence_count: 0
+
+disposition:
+  Phase_5B_plan_acceptance_ready: false
+  Phase_5B_plan_freeze_ready: false
+  Phase_5B_plan_frozen: false
+  Phase_5B_implementation_started: false
+  implementation_authorized: false
+  source_modification_authorized: false
+  dependency_installation_authorized: false
+  database_creation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_execution_authorized: false
+  Git_delivery_authorized: false
+
+next_action:
+  - preserve_R1_and_R2_subjects_manifests_reviews_and_case_results_as_immutable_lineage
+  - create_R2_finding_disposition_bound_to_this_review_and_case_results
+  - reconcile_queue_CURRENT_STATE_and_Registry
+  - stop_at_Jenn_R3_start_decision_gate
+
+forbidden_next_actions:
+  - automatic_R3_start
+  - Phase_5B_plan_freeze
+  - Phase_5B_implementation_start
+  - Rust_JavaScript_NAPI_SQLite_or_plugin_implementation
+  - dependency_installation
+  - database_creation_or_migration
+  - VCPToolBox_modification_or_start
+  - runtime_activation
+  - production_authentication
+  - private_Memory_access
+  - provider_sensing_or_real_effect

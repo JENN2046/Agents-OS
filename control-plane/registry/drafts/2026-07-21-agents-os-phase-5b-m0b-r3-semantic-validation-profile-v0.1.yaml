@@ -1,0 +1,72 @@
+schema_version: agents-os.m0b-r3-semantic-validation-profile.v0.1
+profile_id: PHASE_5B_M0B_R3_SEMANTIC_VALIDATION_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+validation_surfaces:
+  semantic:
+    callable: validate_semantics
+    exact_fixture_equality_used: false
+    required: true
+  byte_seal:
+    callable: validate_fixed_fixture
+    purpose: canonical_witness_reproduction_only
+    may_substitute_for_semantic_validation: false
+
+R2_regression_catalog:
+  source: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r2-independent-case-results.json
+  required_case_ids:
+    - PHASE5B_PLAN_R2_IR_CASE_001
+    - PHASE5B_PLAN_R2_IR_CASE_002
+    - PHASE5B_PLAN_R2_IR_CASE_003
+    - PHASE5B_PLAN_R2_IR_CASE_004
+    - PHASE5B_PLAN_R2_IR_CASE_005
+    - PHASE5B_PLAN_R2_IR_CASE_006
+    - PHASE5B_PLAN_R2_IR_CASE_007
+    - PHASE5B_PLAN_R2_IR_CASE_008
+    - PHASE5B_PLAN_R2_IR_CASE_009
+    - PHASE5B_PLAN_R2_IR_CASE_010
+    - PHASE5B_PLAN_R2_IR_CASE_011
+    - PHASE5B_PLAN_R2_IR_CASE_012
+    - PHASE5B_PLAN_R2_IR_CASE_013
+    - PHASE5B_PLAN_R2_IR_CASE_014
+  required_result: TARGET_SEMANTIC_REJECTION
+  seal_only_rejection_allowed: false
+  exceptions_allowed: 0
+
+required_positive_controls:
+  - exact_sealed_public_NAPI_inventory
+  - two_separate_genesis_candidates
+  - same_identity_revision_2_predecessor
+  - exact_composite_foreign_key_coverage
+  - exact_ten_field_Command
+  - exact_five_field_authentication_assertion
+  - exact_six_field_NAPI_request_frame
+  - exact_replay_identity
+
+required_error_codes:
+  - ABI_METHOD_INVENTORY_MISMATCH
+  - OWNER_RESULT_NOT_ACCEPTABLE
+  - CANDIDATE_SEMANTIC_CLASS_INVALID
+  - POSITIVE_SAFE_INTEGER_REQUIRED
+  - CANDIDATE_PREDECESSOR_INVALID
+  - HANDOFF_WATERMARK_STALE
+  - HANDOFF_REVISION_INVALID
+  - LOWERCASE_SHA256_REQUIRED
+  - CRASH_PROJECTION_INVALID
+  - COMPOSITE_FOREIGN_KEY_UNCOVERED
+  - F3_COMMAND_SHAPE_INVALID
+  - NAPI_REQUEST_SHAPE_INVALID
+
+acceptance:
+  R2_cases_target_semantic_rejected: 14/14
+  fixture_seal_only_rejections: 0
+  positive_controls_pass: required
+  real_occurrence_count: 0
+  terminal_outcome: NOT_ACTIVATED
+
+boundary:
+  implementation_authorized: false
+  runtime_activation_authorized: false
+  database_provider_private_Memory_sensing_or_real_effect: false

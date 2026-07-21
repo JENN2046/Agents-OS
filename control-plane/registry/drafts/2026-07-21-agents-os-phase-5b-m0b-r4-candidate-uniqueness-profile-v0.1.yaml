@@ -1,0 +1,28 @@
+schema_version: agents-os.m0b-r4-candidate-uniqueness-profile.v0.1
+profile_id: PHASE_5B_M0B_R4_CANDIDATE_UNIQUENESS_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+candidate_set_constraints:
+  primary_key: [candidate_id, candidate_revision]
+  primary_key_unique: required
+  candidate_ref_unique: required
+  canonical_history_ref_unique: required
+  two_genesis_candidate_identities_distinct: required
+  selected_candidate_resolves_exactly_once: required
+  uniqueness_checked_before_ref_map_construction: required
+  silent_map_overwrite: forbidden
+
+positive_witness:
+  life_stream_revision_1: distinct_genesis_identity
+  intent_revision_1: distinct_genesis_identity
+  intent_revision_2: exact_same_identity_predecessor_advance
+
+fixed_regressions:
+  - PHASE5B_PLAN_R3_IR_CASE_004
+
+boundary:
+  creates_Task_Command_or_identity_authority: false
+  database_created: false
+  implementation_authorized: false

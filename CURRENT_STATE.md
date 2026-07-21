@@ -6,6 +6,76 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Plan R5 Accepted and Frozen (2026-07-21)
+
+Jenn executed Section 6 A of the fixed Plan R5 Atomic Freeze Decision Package.
+The complete eighteen-subject R1–R5 plan unit is accepted and frozen under its
+declared precedence. This is a plan freeze only: implementation and Git
+delivery remain separate gates.
+
+```yaml
+Phase_5B_plan_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+Phase_5B_plan_acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_plan_subject_count: 18
+Phase_5B_plan_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_plan_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_plan_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+Phase_5B_plan_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_plan_freeze_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1.yaml
+Phase_5B_plan_freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+Phase_5B_plan_accepted: true
+Phase_5B_plan_frozen: true
+Phase_5B_plan_revisions_stopped: true
+requires_R6: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+Git_durability_complete: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
+active_work_queue_sha256: 1d27e392236721d5ab97968bfe32e3fe2b53ced0b49fd4a4463fd1cb0f8d62b9
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
+current_work_package: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT
+next_gate: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+```
+
+## Phase 5B M0-B Plan R5 Ready for Jenn Atomic Freeze Decision (2026-07-21)
+
+The complete eighteen-subject R1–R5 plan bundle received an independent
+`PASS_NO_BLOCKER`. Its original review, case-results and probe bytes are
+preserved. The revision line stops at R5, but no acceptance or freeze exists
+until Jenn executes the exact decision text in the Plan R5 Atomic Freeze
+Decision Package.
+
+```yaml
+Phase_5B_plan_status: R5_READY_FOR_JENN_ATOMIC_FREEZE_DECISION
+Phase_5B_R5_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_R5_subjects: 18
+Phase_5B_R5_manifest_inputs: 99
+Phase_5B_R5_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_R5_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+Phase_5B_R5_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_R5_independent_review_result: PASS_NO_BLOCKER
+Phase_5B_R5_findings: 0_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R5_case_results_sha256: 3f8dd7852387c459248fe4516652a37b51bcf068e575cdbcb7bb009fcdc0c4d5
+Phase_5B_R5_probe_sha256: 91688b7bdc0532929ad96b3519c50dd8ae66c91f59fbee584ac6cd1243a2180b
+Phase_5B_R5_disposition_sha256: 226ba1c1d9c27ca7943989c6162dcdb760119c9c4c9349b3eca931da430ecdc8
+Phase_5B_R5_freeze_decision_package: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-package-v0.1.md
+Phase_5B_R5_freeze_decision_package_sha256: ec998520e9650cda37e7f35928bfed663cf1812c7cc8a5880839b6595c9d0d41
+Phase_5B_R5_decision_surface_receipt_sha256: 773429db1ec705df8c80459eb4be03069e4057f547acf86c0c9c111c0cbbcabf
+requires_R6: false
+Phase_5B_plan_revision_stop: true
+Phase_5B_plan_freeze_ready: true
+Phase_5B_plan_accepted: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.8.md
+active_work_queue_sha256: 33ba29dc2cf74092d2118140372c7d63259b0eea584895bdf94e820ffed2b1ca
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.8.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_ATOMIC_FREEZE_DECISION
+```
+
 ## Newer Architecture Handoff (2026-07-12, amended 2026-07-13)
 
 This file remains the 2026-07-07 operational snapshot. The newer accepted
@@ -5390,4 +5460,442 @@ private_raw_memory_access_authorized: false
 provider_sensing_or_real_effect_authorized: false
 current_work_package: PHASE_5B_M0B_PLAN_R1_AUTHOR_PACKAGE
 next_gate: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Current Phase 5B Decision Gate (2026-07-21)
+
+This final projection supersedes the preceding author-package review posture.
+
+```yaml
+Phase_5B_plan_status: R1_BLOCK_RECONCILED_AWAITING_JENN_R2_START_DECISION
+Phase_5B_R1_independent_review_result: BLOCK
+Phase_5B_R1_findings: 3_BLOCKER_1_MAJOR_0_MINOR
+Phase_5B_R2_started: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.6.md
+active_work_queue_sha256: 489ffa8b94f29a1d1b978530edc77127bd7a47ee43a6ce13143e49652a72cc77
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION
+```
+
+## Phase 5B M0-B Plan R2 Narrow Closure Started (2026-07-21)
+
+Jenn explicitly started R2 for the three R1 blockers and one major only. R1
+subjects, manifest, independent review and fixed commit remain immutable.
+
+```yaml
+Phase_5B_plan_status: R2_AUTHOR_PACKAGE_CONSTRUCTION_ACTIVE
+Phase_5B_R2_started: true
+Phase_5B_R2_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r2-narrow-closure-start-decision-v0.1.yaml
+Phase_5B_R2_start_decision_sha256: 88f6b071c74824f6ee03f5ff1a0eca0b736618594c559b09c7bc1dc946b888d2
+Phase_5B_R2_scope: 3_BLOCKERS_1_MAJOR_ONLY
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.7.md
+active_work_queue_sha256: 34e7cb1b0f6b53c27c186138e1df822ab8a8f952767eda16744cf995e5fd4da5
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.7.md
+current_work_package: PHASE_5B_M0B_PLAN_R2_NARROW_CLOSURE_AUTHOR_PACKAGE
+next_gate: PHASE_5B_M0B_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R1 Independent Review Block Reconciled (2026-07-21)
+
+The independent subagent reviewed the exact fixed commit, all 37 manifest
+inputs and the deterministic offline archive. Integrity and fixed commands
+passed, but the complete plan unit was blocked by three implementation and
+proof-surface contradictions plus one schema-v2 totality gap. R1 remains
+immutable and unaccepted. A narrow R2 requires Jenn's explicit start decision.
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_plan_status: R1_BLOCK_RECONCILED_AWAITING_JENN_R2_START_DECISION
+Phase_5B_R1_fixed_commit: 6af82739a678519341490db967f267c550ce67fb
+Phase_5B_R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+Phase_5B_R1_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-full-atomic-independent-review.yaml
+Phase_5B_R1_independent_review_sha256: 877b067e4a3e5447d38b1eb6bb304453860ac7d7490032e51e21c3f49c0002b6
+Phase_5B_R1_independent_review_result: BLOCK
+Phase_5B_R1_findings: 3_BLOCKER_1_MAJOR_0_MINOR
+Phase_5B_R1_independent_fully_resigned_attacks: 26/26_REJECTED
+Phase_5B_R1_parser_probes: 4/4_REJECTED
+Phase_5B_R1_favorable_invalid_paths: 0
+Phase_5B_R1_disposition: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r1-finding-disposition-v0.1.yaml
+Phase_5B_R1_disposition_sha256: a7e32b98ea1f2de4f1808404756c53a37d05b80214141cc7f5aa21e868922f74
+Phase_5B_R2_started: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.6.md
+active_work_queue_sha256: 489ffa8b94f29a1d1b978530edc77127bd7a47ee43a6ce13143e49652a72cc77
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.6.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION
+```
+
+## Phase 5B M0-B Plan R1 Fixed for Independent Review (2026-07-21)
+
+The four-subject implementation-plan bundle, deterministic synthetic witness,
+offline validator and author self-review are fixed as one hash-bound review
+unit. No implementation source, database, runtime, VCPToolBox activation,
+private Memory, provider, sensing or real-effect surface was opened.
+
+```yaml
+Phase_5B_started: true
+Phase_5B_mode: M0B_IMPLEMENTATION_PLAN_AND_BUILD_PROFILE_CLOSURE
+Phase_5B_plan_status: R1_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R1_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+Phase_5B_R1_subjects: 4
+Phase_5B_R1_authority_inputs: 29
+Phase_5B_R1_author_evidence: 4
+Phase_5B_R1_manifest_inputs: 37
+Phase_5B_R1_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R1_manifest_sha256: d0fc1cb73406d5999339d20154e244a7d1bc5226b7f3b295fe53de63c1e3d3ea
+Phase_5B_R1_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R1_independent_review_created: false
+Phase_5B_R1_independent_review_result: NOT_RUN
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.5.md
+active_work_queue_sha256: fc990b79008dcfd1396fa4b7e5b73d22c1e093f0172a951e0e729304393a8948
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.5.md
+current_work_package: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Current Phase 5B Decision Gate After R1 Review (2026-07-21)
+
+This projection is the current authority-facing state and supersedes the
+preceding R1 author-package posture.
+
+```yaml
+Phase_5B_plan_status: R1_BLOCK_RECONCILED_AWAITING_JENN_R2_START_DECISION
+Phase_5B_R1_independent_review_result: BLOCK
+Phase_5B_R1_findings: 3_BLOCKER_1_MAJOR_0_MINOR
+Phase_5B_R2_started: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.6.md
+active_work_queue_sha256: 489ffa8b94f29a1d1b978530edc77127bd7a47ee43a6ce13143e49652a72cc77
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.6.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R2_START_DECISION
+```
+
+## Phase 5B M0-B Plan R2 Fixed for Independent Review (2026-07-21)
+
+The narrow R2 author package is fixed as an eight-subject atomic unit. The
+author evidence closes all four R1 findings by claim; only a fresh independent
+review may determine whether those closures are sufficient.
+
+```yaml
+Phase_5B_plan_status: R2_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R2_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+Phase_5B_R2_subjects: 8
+Phase_5B_R2_authority_inputs: 43
+Phase_5B_R2_author_evidence: 8
+Phase_5B_R2_manifest_inputs: 59
+Phase_5B_R2_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+Phase_5B_R2_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R2_independent_review_created: false
+Phase_5B_R2_independent_review_result: NOT_RUN
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.8.md
+active_work_queue_sha256: 8172bb945c9bffc52fa32e65549724363161b33c2c40d50204b7cb69620958aa
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.8.md
+current_work_package: PHASE_5B_M0B_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R2 Independent Block Reconciled (2026-07-21)
+
+The independent R2 review was first materialized at
+`2026-07-21T12:50:52+08:00` and preserved at its exact original bytes. All
+integrity and fixed-command gates passed, but five blockers remain. The R2
+bundle is immutable, unaccepted and not freeze-ready. R3 has not started.
+
+```yaml
+Phase_5B_plan_status: R2_BLOCK_RECONCILED_AWAITING_JENN_R3_START_DECISION
+Phase_5B_R2_fixed_commit: 19da0a73d3d8f37bb522e3d559ecd7c37e05b90e
+Phase_5B_R2_manifest_sha256: 32020e90e2d7b52cd3c46893af57674c8f90c0bee516b829299e95e7cc524380
+Phase_5B_R2_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r2-full-atomic-independent-review.yaml
+Phase_5B_R2_independent_review_sha256: 7132d331110ded8cae36d80ec06d5da0a819134a04d77031277b0938bbc8c7d7
+Phase_5B_R2_independent_review_result: BLOCK
+Phase_5B_R2_findings: 5_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R2_unresolved: 5
+Phase_5B_R2_case_results: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r2-independent-case-results.json
+Phase_5B_R2_case_results_sha256: 997f380435f28933370888df3822baac01edbf710ca7f8627e1c7594011dcc77
+Phase_5B_R2_disposition: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r2-finding-disposition-v0.1.yaml
+Phase_5B_R2_disposition_sha256: 00c9bab404e8d1cc567c556410452f10784232fa8bcb434f1f6dd96805202898
+requires_R3: true
+Phase_5B_R3_started: false
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.9.md
+active_work_queue_sha256: b8668886a205d20c7e565a33398bc1ca4aa816bce48ec076cba3f3dc76bd2de3
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v10.9.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R3_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R3_START_DECISION
+```
+
+## Phase 5B M0-B Plan R3 Narrow Closure Started (2026-07-21)
+
+Jenn explicitly started R3 for the five R2 blockers only. All R1–R2 fixed
+lineage remains immutable. The current surface is plan correction and offline
+proof construction; implementation remains forbidden.
+
+```yaml
+Phase_5B_plan_status: R3_AUTHOR_PACKAGE_CONSTRUCTION_ACTIVE
+Phase_5B_R3_started: true
+Phase_5B_R3_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r3-narrow-closure-start-decision-v0.1.yaml
+Phase_5B_R3_start_decision_sha256: 761744c2ae0670e7a1e8d5e422c5d18bb094f69b6113784ada589ea161cbfcb4
+Phase_5B_R3_scope: 5_BLOCKERS_ONLY
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.0.md
+active_work_queue_sha256: 7bc987a1b3cf8fde1b5e9b1142a2d96fcec59ef13d079704f5c712003939839e
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.0.md
+current_work_package: PHASE_5B_M0B_PLAN_R3_NARROW_CLOSURE_AUTHOR_PACKAGE
+next_gate: PHASE_5B_M0B_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R3 Independent Block Reconciled (2026-07-21)
+
+The independent R3 review and 35-case evidence were first materialized at
+`2026-07-21T20:03:42+08:00` and preserved at exact original bytes. Package
+integrity and all fixed commands passed, while three blockers remain. R4 has
+not started.
+
+```yaml
+Phase_5B_plan_status: R3_BLOCK_RECONCILED_AWAITING_JENN_R4_START_DECISION
+Phase_5B_R3_fixed_commit: 464c216f8cd037325f78fc3e3ec82e3bd92dff81
+Phase_5B_R3_manifest_sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+Phase_5B_R3_independent_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r3-full-atomic-independent-review.yaml
+Phase_5B_R3_independent_review_sha256: 66ebace1a81d255677f655d2b256bc7e1813344becb83f9f81548d160555320f
+Phase_5B_R3_independent_review_result: BLOCK
+Phase_5B_R3_findings: 3_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R3_unresolved: 3
+Phase_5B_R3_case_results: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r3-independent-case-results.json
+Phase_5B_R3_case_results_sha256: 7b8b88e30427098cc78b85b361eb41e57a899673c5b37328ab690892b67ce600
+Phase_5B_R3_disposition: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r3-finding-disposition-v0.1.yaml
+Phase_5B_R3_disposition_sha256: 39a9d159fcb33a70124eb57067aac97d7e5bd54da88b424ed2160cc8bcd7e3d0
+requires_R4: true
+Phase_5B_R4_started: false
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.2.md
+active_work_queue_sha256: a366e3b01301aaaa93394f1084c0e2bf164ad751617f2efe68472d9d8881befa
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.2.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R4_START_DECISION
+```
+
+## Phase 5B M0-B Plan R5 Fixed for Independent Review (2026-07-21)
+
+Jenn explicitly started R5 for the single R4 strict JSON integer blocker. The
+author package is now fixed as an eighteen-subject R1–R5 atomic unit. R1–R4
+fixed lineage remains immutable; implementation remains forbidden.
+
+```yaml
+Phase_5B_plan_status: R5_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R5_started: true
+Phase_5B_R5_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-narrow-closure-start-decision-v0.1.yaml
+Phase_5B_R5_start_decision_sha256: 1cfec23f4fa52b57f1defe8b138dc247e3a18791b23071b838d986f64e7d97c7
+Phase_5B_R5_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_R5_subjects: 18
+Phase_5B_R5_authority_inputs: 58
+Phase_5B_R5_author_evidence: 23
+Phase_5B_R5_manifest_inputs: 99
+Phase_5B_R5_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R5_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_R5_offline_archive_sha256: 669904e327a9c15dcd4b55c99c0e0a35fadc5822b21aba4afe80b25e13ec8eb5
+Phase_5B_R5_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R5_independent_review_created: false
+Phase_5B_R5_independent_review_result: NOT_RUN
+R4_favorable_invalid_paths_target_semantic_rejected: 4/4
+strict_JSON_totality_matrix_target_semantic_rejected: 11/11
+fixture_seal_only_rejections: 0
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.7.md
+active_work_queue_sha256: 4594a5204a5871d42a328308de9afd6dcc43bdfa62f1bf2e9c2317d6ed56bc21
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.7.md
+current_work_package: PHASE_5B_M0B_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R5_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R4 Block Reconciled (2026-07-21)
+
+The fixed R1–R4 atomic unit received a fresh independent `BLOCK`. The original
+review and case-results bytes are preserved, and the single finding is bounded
+to a possible narrow R5. R5 has not started.
+
+```yaml
+Phase_5B_plan_status: R4_BLOCK_RECONCILED_AWAITING_JENN_R5_START_DECISION
+Phase_5B_R4_fixed_commit: 57e5f1a37792ffb96e75904e6e44235c9286e1e2
+Phase_5B_R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+Phase_5B_R4_independent_review_result: BLOCK
+Phase_5B_R4_findings: 1_BLOCKER_0_MAJOR_0_MINOR
+Phase_5B_R4_review: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-full-atomic-independent-review.yaml
+Phase_5B_R4_review_sha256: 9999aa3671b16fd6c94171d5176d3ea3b9a458f0a8d32efa3f703456e2993630
+Phase_5B_R4_case_results: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r4-independent-case-results.json
+Phase_5B_R4_case_results_sha256: ad821be773928326e1bcb87cf92500c062bb665581e50ecf53bf06feec2d56a6
+Phase_5B_R4_finding_disposition: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-finding-disposition-v0.1.yaml
+Phase_5B_R4_finding_disposition_sha256: 0e14ce6fae4b99a052a3c9beb91387c838fb9f8fdf8643da90729ce7fe68ed9a
+Phase_5B_R4_reconciliation_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r4-block-governance-reconciliation-v0.1.md
+Phase_5B_R4_reconciliation_receipt_sha256: d324e1476bae447b8fa082a76ac51748e39f5e32b7adb06fb789ec11ebef8e5e
+Phase_5B_R5_started: false
+Phase_5B_R5_requires_Jenn_explicit_start: true
+Phase_5B_R5_potential_scope: STRICT_JSON_INTEGER_TOTALITY_FOR_CLAIMED_PRINCIPAL_REVISION_ONLY
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.5.md
+active_work_queue_sha256: 88c3d701bef85db03ddd040c3b5cd60edd0c648752f23c87ee9068c55b0ed62e
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.5.md
+current_work_package: JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_START_DECISION_GATE
+next_gate: AWAITING_JENN_EXPLICIT_PHASE_5B_M0B_PLAN_R5_START_DECISION
+```
+
+## Phase 5B M0-B Plan R4 Narrow Closure Started (2026-07-21)
+
+Jenn explicitly started R4 for the three R3 blockers only. All R1–R3 fixed
+lineage remains immutable. The active surface is plan correction and offline
+proof construction; implementation remains forbidden.
+
+```yaml
+Phase_5B_plan_status: R4_AUTHOR_PACKAGE_CONSTRUCTION_ACTIVE
+Phase_5B_R4_started: true
+Phase_5B_R4_start_decision: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r4-narrow-closure-start-decision-v0.1.yaml
+Phase_5B_R4_start_decision_sha256: 53a224a95fa52d4a31fd8265d3f5dfb87d0f478efa789717c0613feb94e4f13c
+Phase_5B_R4_scope: 3_BLOCKERS_ONLY
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.3.md
+active_work_queue_sha256: 733a7e9a2363d203016e4d26cac3411196b66e0fa0c7be2ad92c42b24b668bef
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.3.md
+current_work_package: PHASE_5B_M0B_PLAN_R4_NARROW_CLOSURE_AUTHOR_PACKAGE
+next_gate: PHASE_5B_M0B_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R4 Fixed for Independent Review (2026-07-21)
+
+The narrow R4 author package is fixed as a sixteen-subject R1–R4 atomic unit.
+Only a fresh independent review may accept or reject the three closure claims.
+
+```yaml
+Phase_5B_plan_status: R4_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R4_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+Phase_5B_R4_subjects: 16
+Phase_5B_R4_authority_inputs: 53
+Phase_5B_R4_author_evidence: 18
+Phase_5B_R4_manifest_inputs: 87
+Phase_5B_R4_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R4_manifest_sha256: bf7fe5aae9ae7f97f1f6a766f3fbeeac78598f84b23f4627e3dfaedf4545aaf8
+Phase_5B_R4_offline_archive_sha256: ea1cfd1e525147e05a1d6321c46526bc38dce4d70b9731e01e5ac1630028a6ee
+Phase_5B_R4_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R4_independent_review_created: false
+Phase_5B_R4_independent_review_result: NOT_RUN
+R3_favorable_invalid_paths_target_semantic_rejected: 10/10
+fixture_seal_only_rejections: 0
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.4.md
+active_work_queue_sha256: 4eed618fc433d2d84e086c984a0eccbc925e5c7457ab1324273bd9926e92239e
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.4.md
+current_work_package: PHASE_5B_M0B_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5B M0-B Plan R3 Fixed for Independent Review (2026-07-21)
+
+The narrow R3 author package is fixed as a twelve-subject R1+R2+R3 atomic
+unit. Author evidence claims closure of all five R2 blockers. Only a fresh
+independent review may accept or reject those claims.
+
+```yaml
+Phase_5B_plan_status: R3_FIXED_FOR_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R3_review_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE
+Phase_5B_R3_subjects: 12
+Phase_5B_R3_authority_inputs: 48
+Phase_5B_R3_author_evidence: 13
+Phase_5B_R3_manifest_inputs: 73
+Phase_5B_R3_manifest: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5B_R3_manifest_sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+Phase_5B_R3_offline_archive_sha256: 2d22674d24ae5ae31a25e030d002c1acbbc3fd6014191e6d422b4e546b93db87
+Phase_5B_R3_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5B_R3_independent_review_created: false
+Phase_5B_R3_independent_review_result: NOT_RUN
+R2_regression_cases_target_semantic_rejected: 14/14
+fixture_seal_only_rejections: 0
+Phase_5B_plan_freeze_ready: false
+Phase_5B_plan_frozen: false
+Phase_5B_implementation_started: false
+implementation_authorized: false
+VCPToolBox_core_change_or_start_authorized: false
+plugin_enablement_authorized: false
+database_change_authorized: false
+runtime_activation_authorized: false
+production_authentication_authorized: false
+private_raw_memory_access_authorized: false
+provider_sensing_or_real_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.1.md
+active_work_queue_sha256: 30d5d8d021b0adf2885c2352552346a99d95608c71ba9bc270ae01772e9b5188
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.1.md
+current_work_package: PHASE_5B_M0B_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+next_gate: PHASE_5B_M0B_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
 ```

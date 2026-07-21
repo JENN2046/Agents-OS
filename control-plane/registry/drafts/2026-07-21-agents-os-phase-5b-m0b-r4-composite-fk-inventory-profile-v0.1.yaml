@@ -1,0 +1,37 @@
+schema_version: agents-os.m0b-r4-composite-fk-inventory-profile.v0.1
+profile_id: PHASE_5B_M0B_R4_COMPOSITE_FK_INVENTORY_PROFILE_V0_1
+date: 2026-07-21
+status: fixed_for_hash_bound_independent_review
+runtime_usable: false
+
+exact_ordered_inventory:
+  - child_table: home_candidate_revision
+    child_columns: [candidate_id, predecessor_candidate_revision, predecessor_candidate_ref, predecessor_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+  - child_table: home_candidate_head
+    child_columns: [candidate_id, current_candidate_revision, current_candidate_ref, current_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+  - child_table: home_handoff_link
+    child_columns: [intent_candidate_id, intent_candidate_revision, intent_candidate_ref, intent_candidate_fingerprint]
+    parent_table: home_candidate_revision
+    parent_columns: [candidate_id, candidate_revision, candidate_ref, candidate_fingerprint]
+
+acceptance:
+  exact_entry_count: 3
+  exact_order_and_content: required
+  duplicate_entries: forbidden
+  missing_extra_substituted_or_reordered_entries: forbidden
+  compare_to_profile_before_iterative_key_checks: required
+  parent_key_arity_order_storage_class_and_collation_checks: inherited_required
+
+fixed_regressions:
+  - PHASE5B_PLAN_R3_IR_CASE_015
+  - PHASE5B_PLAN_R3_IR_CASE_016
+  - PHASE5B_PLAN_R3_IR_CASE_017
+
+boundary:
+  schema_plan_only: true
+  database_created_or_migrated: false
+  implementation_authorized: false
