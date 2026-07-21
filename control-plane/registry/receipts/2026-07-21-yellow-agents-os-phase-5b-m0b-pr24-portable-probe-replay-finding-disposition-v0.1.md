@@ -130,25 +130,42 @@ implementation_authorized: false
 Phase_5B_implementation_started: false
 ```
 
-### Machine-actionable Git delivery gate
+### Machine-safe scope review and separate Git delivery gate
 
 Finding: `P2 Make the Git delivery gate non-actionable`
 
 Review comment ID: `3622926927`
 
-The v11.9 `NOW` item previously used prose that did not match the machine
-parser's closed Git delivery signal vocabulary. The current queue now names
-`git push` and GitHub write explicitly, while retaining the same human meaning:
-the frozen plan does not itself authorize delivery, and commit, PR and merge
-require Jenn's separate current authorization.
+Follow-up finding: `P2 Keep the negated git push phrase together`
+
+Review comment ID: `3623050681`
+
+The original v11.9 `NOW` item mixed the locally actionable scope review with the
+Jenn-gated Git delivery boundary. A first correction made the entire NOW item
+non-actionable, but exposed a physical-line dependency in the parser's negation
+filter and also blocked the intended local scope-review path.
+
+The final projection separates the two operations:
+
+1. `NOW-001` is only the local exact-scope and hash review. It contains no Git
+   delivery signal and remains safely actionable.
+2. `NEXT-001` is the Git delivery gate. It contains
+   `requires_jenn_decision=true` and the explicit `git push` signal, so it is
+   non-actionable unless separately promoted and authorized.
 
 ```yaml
 explicit_queue_inspection:
-  denied_signals:
-    - git_release_boundary
-  requires_jenn: true
-  blocked: true
-  actionable: false
+  NOW-001:
+    denied_signals: []
+    blocked: false
+    actionable: true
+    scope: local_exact_scope_and_hash_review_only
+  NEXT-001:
+    denied_signals:
+      - git_release_boundary
+      - jenn_decision_required
+    blocked: true
+    execution_authorized: false
 default_machine_output_equals_explicit_v11_9: true
 default_dashboard_output_equals_explicit_v11_9: true
 default_control_chain_output_equals_explicit_v11_9: true

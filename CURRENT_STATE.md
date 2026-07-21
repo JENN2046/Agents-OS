@@ -31,7 +31,7 @@ Phase_5B_implementation_started: false
 implementation_authorized: false
 Git_durability_complete: false
 active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
-active_work_queue_sha256: 5c9054c83d8ba7b4932f22c44f3acad22c84cdaa8aa8d14cbe56fe9287c5ee84
+active_work_queue_sha256: 1d27e392236721d5ab97968bfe32e3fe2b53ced0b49fd4a4463fd1cb0f8d62b9
 consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
 current_work_package: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT
 next_gate: PHASE_5B_M0B_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION

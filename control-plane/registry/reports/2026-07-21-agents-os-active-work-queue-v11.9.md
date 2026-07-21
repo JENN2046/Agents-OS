@@ -39,15 +39,20 @@ Git_delivery_authorized_by_plan_freeze: false
 
 ## NOW
 
-### NOW-001: Phase 5B plan Git durability closeout scope and delivery gate
+### NOW-001: Phase 5B plan Git durability scope review
 
 Prepare and independently review an exact Git scope for the complete frozen
 Plan R1–R5 lineage, manifests, reviews, dispositions, freeze decision, receipts
-and necessary governance projections. The plan freeze decision does not itself
-authorize `git push` or any GitHub write. Commit, PR and merge remain outside
-plan-freeze authority and require Jenn's separate current authorization.
+and necessary governance projections. This NOW item ends at local scope and
+hash review; it performs no external write and grants no delivery authority.
 
 ## NEXT
+
+### NEXT-001: Jenn-authorized Phase 5B plan Git durability delivery
+
+`requires_jenn_decision=true`. After the exact scope passes and Jenn provides
+separate current authorization, perform the scoped commit, `git push`, PR
+review, merge and `main` blob/hash verification.
 
 After the frozen plan objects are durably verified on `main`, Jenn independently
 decides whether to start the exact Phase 5B M0-B implementation scope.
