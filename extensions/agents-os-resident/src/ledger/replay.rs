@@ -122,6 +122,52 @@ pub enum TerminalValidationCompletionObservation {
     Replayed { response_bytes: Vec<u8> },
 }
 
+/// Commits the implementation-only M0-B Home Intent Command through the F3
+/// ledger owner. Home supplies canonical candidate evidence but never writes
+/// Inbox, CommandEnvelope, Event or replay rows itself.
+pub fn terminal_synthetic_home_intent(
+    connection: &mut Connection,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<TerminalValidationCompletionObservation, LedgerError> {
+    validate_committed_synthetic_intake(
+        intake,
+        "M0_SYNTHETIC_SUBMIT_HOME_INTENT",
+        "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC",
+    )?;
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    super::schema::verify_schema(&transaction)?;
+    verify_registry(&transaction)?;
+    if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
+        transaction.commit()?;
+        return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
+    }
+
+    let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
+    insert_committed_intake(&transaction, intake, event_sequence)?;
+    let event_kind = "F3_SYNTHETIC_HOME_INTENT_COMMITTED";
+    let event_bytes = event_bytes(
+        event_sequence,
+        event_kind,
+        &intake.command_id,
+        &intake.command_id,
+    )?;
+    insert_event(
+        &transaction,
+        event_sequence,
+        &format!("event:f3-home-intent:SYNTHETIC_TEST:{event_sequence}"),
+        event_kind,
+        &intake.command_id,
+        1,
+        &intake.command_id,
+        &event_bytes,
+        &predecessor_event_fingerprint,
+    )?;
+    insert_committed_replay(&transaction, intake)?;
+    require_no_foreign_key_violations(&transaction, "WP5 Home Intent intake")?;
+    transaction.commit()?;
+    Ok(TerminalValidationCompletionObservation::FirstTerminal)
+}
+
 /// Atomically records the fixed F1-shaped synthetic Goal, success criteria,
 /// Plan revision, and exact three-Task membership.  The four facts share one
 /// Event and are never runtime-usable.

@@ -64,6 +64,10 @@ enum LedgerCommand {
         intake: TerminalValidationCompletionIntake,
         response: Sender<Result<TerminalValidationCompletionObservation, String>>,
     },
+    TerminalSyntheticHomeIntent {
+        intake: TerminalValidationCompletionIntake,
+        response: Sender<Result<TerminalValidationCompletionObservation, String>>,
+    },
     ResolveSyntheticOutbox {
         intent_ref: String,
         response: Sender<Result<Option<SyntheticOutboxIntent>, String>>,
@@ -195,6 +199,13 @@ impl LedgerThread {
         intake: TerminalValidationCompletionIntake,
     ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
         self.request(|response| LedgerCommand::TerminalSyntheticGoalPlan { intake, response })
+    }
+
+    pub(super) fn terminal_synthetic_home_intent(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.request(|response| LedgerCommand::TerminalSyntheticHomeIntent { intake, response })
     }
 
     pub(super) fn resolve_synthetic_outbox(
@@ -387,6 +398,12 @@ fn run(
             LedgerCommand::TerminalSyntheticGoalPlan { intake, response } => {
                 let _ = response.send(
                     replay::terminal_synthetic_goal_plan(&mut connection, &intake)
+                        .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::TerminalSyntheticHomeIntent { intake, response } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_home_intent(&mut connection, &intake)
                         .map_err(|error| error.to_string()),
                 );
             }

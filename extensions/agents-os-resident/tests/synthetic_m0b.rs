@@ -10,8 +10,13 @@ use agents_os_resident::home::session_boundary::{
 };
 use agents_os_resident::home::handoff::{
     HandoffError, HandoffResult, compose_f8_handoff, owner_commitment_set_fingerprint,
-    trusted_owner_commitments,
+    synthetic_f3_home_intent_submission, trusted_owner_commitments,
 };
+use agents_os_resident::napi_frame::{CommandBoundary, Disposition, MethodId, parse_request};
+use agents_os_resident::reducers::command_intake::{
+    HOME_INTENT_COMMAND_TYPE_ID, validate_submission,
+};
+use agents_os_resident::resident::{ResidentKernel, ResidentKernelConfig, SyntheticOwnership};
 use serde_json::{Value, json};
 
 #[test]
@@ -576,6 +581,29 @@ fn handoff_request(
     canonicalize_json(&serde_json::to_vec(&value).unwrap()).unwrap()
 }
 
+fn formed_handoff() -> agents_os_resident::home::handoff::HomeIntentHandoffCandidate {
+    let intent = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let history = vec![intent.clone()];
+    let owner_source = trusted_owner_commitments();
+    compose_f8_handoff(
+        &handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100),
+        &history,
+        &owner_source,
+        &[],
+    )
+    .unwrap()
+    .candidate
+    .unwrap()
+}
+
 #[test]
 fn wp4_forms_only_an_exact_nonauthoritative_handoff_candidate() {
     let intent = derive_candidate(
@@ -754,6 +782,96 @@ fn wp4_rejects_owner_rewrite_phantom_history_stale_intent_and_watermark() {
         compose_f8_handoff(&above_owner_watermark, &history, &owner_source, &[]).unwrap_err(),
         HandoffError::OwnerCommitmentMismatch
     );
+}
+
+#[test]
+fn wp5_adapts_the_exact_handoff_into_the_existing_execute_command_frame() {
+    let candidate = formed_handoff();
+    let submission = synthetic_f3_home_intent_submission(&candidate).unwrap();
+    assert!(submission.command_id.starts_with("command:SYNTHETIC_TEST:home-intent:"));
+    assert_eq!(submission.command_id.len(), "command:SYNTHETIC_TEST:home-intent:".len() + 64);
+    assert_eq!(submission.request_fingerprint, agents_os_resident::canonical::fingerprint::sha256_hex(&submission.request_bytes));
+    assert!(!submission.runtime_usable);
+
+    let frame = parse_request(&submission.request_bytes, MethodId::ExecuteCommand).unwrap();
+    assert_eq!(frame.request_id, submission.command_id);
+    let validated = validate_submission(&frame.payload).unwrap();
+    assert_eq!(validated.command_type_id, HOME_INTENT_COMMAND_TYPE_ID);
+    assert_eq!(validated.command_id, submission.command_id);
+    assert_eq!(validated.canonical_command_fingerprint, submission.command_fingerprint);
+}
+
+#[test]
+fn wp5_f3_alone_commits_and_exactly_replays_the_home_intent_command() {
+    let root = tempfile::tempdir().unwrap();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp5",
+        b"m0b-wp5-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+        .unwrap();
+    kernel.initialize_ledger_v1().unwrap();
+    let boundary = CommandBoundary::synthetic(&kernel);
+    let submission = synthetic_f3_home_intent_submission(&formed_handoff()).unwrap();
+
+    let before = kernel.ledger_counts().unwrap();
+    let first = boundary
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(first.disposition, Disposition::Committed);
+    assert_eq!(
+        first.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
+        "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC"
+    );
+    let after = kernel.ledger_counts().unwrap();
+    assert_eq!(after.inbox_commands, before.inbox_commands + 1);
+    assert_eq!(after.replay_rows, before.replay_rows + 1);
+    assert_eq!(after.events, before.events + 1);
+    assert_eq!(after.facts, before.facts);
+    assert_eq!(after.pointers, before.pointers);
+    assert_eq!(after.outbox_intents, before.outbox_intents);
+
+    let replay = boundary
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(replay.canonical_bytes, first.canonical_bytes);
+    assert_eq!(kernel.ledger_counts().unwrap(), after);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
+fn wp5_invalid_or_inactive_home_intent_never_writes_a_command() {
+    let submission = synthetic_f3_home_intent_submission(&formed_handoff()).unwrap();
+    let inactive = CommandBoundary::inactive()
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(inactive.disposition, Disposition::ContractNotActive);
+
+    let mut value: Value = serde_json::from_slice(&submission.request_bytes).unwrap();
+    value["payload"]["canonical_command"]["command_payload"]["raw_content"] =
+        json!("forbidden");
+    let invalid = canonicalize_json(&serde_json::to_vec(&value).unwrap()).unwrap();
+    let root = tempfile::tempdir().unwrap();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp5-reject",
+        b"m0b-wp5-reject-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+        .unwrap();
+    kernel.initialize_ledger_v1().unwrap();
+    let before = kernel.ledger_counts().unwrap();
+    let rejected = CommandBoundary::synthetic(&kernel)
+        .invoke(MethodId::ExecuteCommand, &invalid)
+        .unwrap();
+    assert_eq!(rejected.disposition, Disposition::Rejected);
+    assert_eq!(
+        rejected.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
+        "INVALID_HOME_INTENT_COMMAND"
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), before);
+    kernel.shutdown().unwrap();
 }
 
 fn observation(choice: &str) -> Vec<u8> {

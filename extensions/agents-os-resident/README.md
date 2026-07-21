@@ -113,3 +113,14 @@ history, stale Intent tuples, behind-watermark evidence, same-revision handoff
 rewriting and direct-write-shaped inputs fail closed. The favorable result is
 still candidate evidence only: F3 must recheck it, and no Command, Task or
 effect authority or ledger write is produced before the later packages.
+
+Phase 5B M0-B WP5 adds exactly one production-incompatible command definition,
+`M0_SYNTHETIC_SUBMIT_HOME_INTENT`, with the frozen closed payload. The Home
+adapter derives its Command ID, authentication-bound submission, existing
+six-field `execute_command` request and replay identity from the exact WP4
+candidate; it does not write the ledger. F3 validates the synthetic principal
+and payload, then alone commits the Inbox, CommandEnvelope, Event and replay
+rows in one transaction. Invalid input writes nothing, exact replay returns the
+stored first response with zero additions, and the public five-method N-API
+inventory remains unchanged. No production F3 type or runtime authority is
+created.

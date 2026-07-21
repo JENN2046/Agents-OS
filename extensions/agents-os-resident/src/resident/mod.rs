@@ -422,6 +422,16 @@ impl ResidentKernel {
             .terminal_synthetic_goal_plan(intake)
     }
 
+    pub fn terminal_synthetic_home_intent_intake(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .terminal_synthetic_home_intent(intake)
+    }
+
     pub fn terminal_synthetic_completion_intake(
         &self,
         intake: TerminalValidationCompletionIntake,

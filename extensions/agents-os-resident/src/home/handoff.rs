@@ -12,6 +12,10 @@ use crate::canonical::types::{CanonicalValue, MAX_SAFE_INTEGER, parse_strict_jso
 use crate::home::candidate::{
     CandidateSemanticClass, HomeCandidateRevision, canonical_candidate_history_fingerprint,
 };
+use crate::napi_frame::{MethodId, request_bytes};
+use crate::reducers::command_intake::{
+    CommandIntakeError, SyntheticHomeIntentPayload, home_intent_submission_value,
+};
 
 pub const MODULE_ID: &str = "agents-os.m0b.home.handoff.v0.1";
 pub const IMPLEMENTATION_STATUS: &str = "WP4_F8_HANDOFF_COMPOSITION_ACTIVE";
@@ -70,6 +74,17 @@ pub struct HomeIntentHandoffCandidate {
     pub effect_authority: bool,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SyntheticHomeIntentSubmission {
+    pub command_id: String,
+    pub command_fingerprint: String,
+    pub submission_bytes: Vec<u8>,
+    pub request_bytes: Vec<u8>,
+    pub request_fingerprint: String,
+    pub idempotency_key: String,
+    pub runtime_usable: bool,
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum HandoffResult {
     CandidateFormed,
@@ -107,6 +122,96 @@ pub enum HandoffError {
     SameRevisionRewrite,
     #[error("handoff history is invalid")]
     InvalidHandoffHistory,
+    #[error("synthetic F3 Home Intent submission could not be derived")]
+    InvalidSyntheticSubmission,
+}
+
+/// Adapts one exact WP4 candidate into the existing F3 `execute_command`
+/// request frame. This creates bytes only; F3 remains the sole authenticator,
+/// replay owner and Command/Event writer.
+pub fn synthetic_f3_home_intent_submission(
+    candidate: &HomeIntentHandoffCandidate,
+) -> Result<SyntheticHomeIntentSubmission, HandoffError> {
+    let expected_handoff_ref = format!(
+        "handoff:SYNTHETIC_TEST:{}:{}",
+        candidate.handoff_candidate_id, candidate.handoff_candidate_revision
+    );
+    let expected_bytes = handoff_bytes(
+        &candidate.handoff_candidate_id,
+        candidate.handoff_candidate_revision,
+        &expected_handoff_ref,
+        &candidate.intent_candidate_ref,
+        candidate.intent_candidate_revision,
+        &candidate.intent_candidate_fingerprint,
+        &candidate.owner_commitment_set_fingerprint,
+        &candidate.canonical_candidate_history_fingerprint,
+        candidate.minimum_trusted_event_sequence,
+    )?;
+    if candidate.runtime_usable
+        || candidate.command_authority
+        || candidate.task_write_authority
+        || candidate.effect_authority
+        || candidate.handoff_candidate_revision == 0
+        || candidate.intent_candidate_revision == 0
+        || candidate.minimum_trusted_event_sequence == 0
+        || candidate.handoff_candidate_ref != expected_handoff_ref
+        || candidate.canonical_bytes != expected_bytes
+        || sha256_hex(&candidate.canonical_bytes) != candidate.handoff_candidate_fingerprint
+    {
+        return Err(HandoffError::InvalidSyntheticSubmission);
+    }
+    let payload = SyntheticHomeIntentPayload {
+        handoff_candidate_ref: candidate.handoff_candidate_ref.clone(),
+        handoff_candidate_revision: candidate.handoff_candidate_revision,
+        handoff_candidate_fingerprint: candidate.handoff_candidate_fingerprint.clone(),
+        intent_candidate_ref: candidate.intent_candidate_ref.clone(),
+        intent_candidate_revision: candidate.intent_candidate_revision,
+        intent_candidate_fingerprint: candidate.intent_candidate_fingerprint.clone(),
+        owner_commitment_set_fingerprint: candidate.owner_commitment_set_fingerprint.clone(),
+        canonical_candidate_history_fingerprint: candidate
+            .canonical_candidate_history_fingerprint
+            .clone(),
+        minimum_trusted_event_sequence: candidate.minimum_trusted_event_sequence,
+    };
+    let command_id = payload
+        .command_id()
+        .map_err(map_submission_error)?;
+    let submission = home_intent_submission_value(&payload).map_err(map_submission_error)?;
+    let submission_bytes = canonicalize_json(
+        &serde_json::to_vec(&submission).map_err(|_| HandoffError::InvalidSyntheticSubmission)?,
+    )
+    .map_err(|_| HandoffError::InvalidSyntheticSubmission)?;
+    let command_bytes = canonicalize_json(
+        &serde_json::to_vec(&submission["canonical_command"])
+            .map_err(|_| HandoffError::InvalidSyntheticSubmission)?,
+    )
+    .map_err(|_| HandoffError::InvalidSyntheticSubmission)?;
+    let command_fingerprint = sha256_hex(&command_bytes);
+    let request_bytes = request_bytes(MethodId::ExecuteCommand, &command_id, submission)
+        .map_err(|_| HandoffError::InvalidSyntheticSubmission)?;
+    let request_fingerprint = sha256_hex(&request_bytes);
+    let idempotency_bytes = canonicalize_json(
+        &serde_json::to_vec(&json!([
+            "agents-os.m0b.home-intent-idempotency.v0.1",
+            command_id,
+            request_fingerprint
+        ]))
+        .map_err(|_| HandoffError::InvalidSyntheticSubmission)?,
+    )
+    .map_err(|_| HandoffError::InvalidSyntheticSubmission)?;
+    Ok(SyntheticHomeIntentSubmission {
+        command_id,
+        command_fingerprint,
+        submission_bytes,
+        request_bytes,
+        request_fingerprint,
+        idempotency_key: sha256_hex(&idempotency_bytes),
+        runtime_usable: false,
+    })
+}
+
+fn map_submission_error(_: CommandIntakeError) -> HandoffError {
+    HandoffError::InvalidSyntheticSubmission
 }
 
 pub fn compose_f8_handoff(

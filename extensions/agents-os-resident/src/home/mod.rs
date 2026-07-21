@@ -5,7 +5,8 @@
 //! candidate-only F7 revisions without persistence. WP3 adds explicit observe,
 //! discard, Memory Candidate and Intent Candidate gates. WP4 composes the
 //! nonauthoritative F8 handoff from sealed owner commitments and canonical
-//! history. The F3 command boundary remains inactive.
+//! history. WP5 adapts only the exact resulting candidate into the existing F3
+//! `execute_command` frame; F3 alone authenticates, commits and replays it.
 
 pub mod candidate;
 pub mod handoff;
