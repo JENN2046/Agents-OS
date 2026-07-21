@@ -664,6 +664,13 @@ fn validate_stored_candidate(candidate: &HomeCandidateRevision) -> Result<(), Ca
             "candidate ref formula mismatch",
         ));
     }
+    if !is_synthetic_ref(&candidate.source_subject_ref)
+        || !is_synthetic_ref(&candidate.creator_assessment_ref)
+    {
+        return Err(CandidateError::InvalidHistory(
+            "candidate source and creator refs must remain synthetic-only",
+        ));
+    }
     let expected_bytes = candidate_bytes(
         &candidate.candidate_id,
         candidate.candidate_revision,
@@ -802,13 +809,17 @@ fn require_synthetic_ref<'a>(
     name: &str,
 ) -> Result<&'a str, CandidateError> {
     let reference = require_string(value, name)?;
-    if reference.is_empty() || !reference.contains(":SYNTHETIC_TEST:") {
+    if !is_synthetic_ref(reference) {
         Err(CandidateError::InvalidSchema(
             "stable ref must be nonempty and synthetic-only",
         ))
     } else {
         Ok(reference)
     }
+}
+
+fn is_synthetic_ref(reference: &str) -> bool {
+    !reference.is_empty() && reference.contains(":SYNTHETIC_TEST:")
 }
 
 fn require_hash<'a>(
@@ -885,5 +896,76 @@ fn require_predecessor(
         _ => Err(CandidateError::InvalidSchema(
             "predecessor tuple must be all null or exact all-nonnull",
         )),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn valid_candidate() -> HomeCandidateRevision {
+        let proposal = canonicalize_json(
+            &serde_json::to_vec(&json!({
+                "candidate_id": "intent",
+                "candidate_revision": 1,
+                "created_event_sequence": 1,
+                "creator_assessment_fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "creator_assessment_ref": "assessment:SYNTHETIC_TEST:creator:1",
+                "payload_commitment": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "predecessor_candidate_fingerprint": null,
+                "predecessor_candidate_ref": null,
+                "predecessor_candidate_revision": null,
+                "semantic_class": "INTENT_CANDIDATE",
+                "source_subject_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "source_subject_ref": "subject:SYNTHETIC_TEST:session:1",
+                "source_subject_revision": 1
+            }))
+            .unwrap(),
+        )
+        .unwrap();
+        derive_candidate_revision(&proposal, &[]).unwrap().candidate
+    }
+
+    fn resign(candidate: &mut HomeCandidateRevision) {
+        candidate.canonical_bytes = candidate_bytes(
+            &candidate.candidate_id,
+            candidate.candidate_revision,
+            &candidate.candidate_ref,
+            candidate.semantic_class,
+            &candidate.source_subject_ref,
+            candidate.source_subject_revision,
+            &candidate.source_subject_fingerprint,
+            &candidate.payload_commitment,
+            &candidate.creator_assessment_ref,
+            &candidate.creator_assessment_fingerprint,
+            candidate.predecessor.as_ref(),
+            candidate.created_event_sequence,
+        )
+        .unwrap();
+        candidate.candidate_fingerprint = sha256_hex(&candidate.canonical_bytes);
+    }
+
+    #[test]
+    fn materialized_candidate_rejects_fully_resigned_nonsynthetic_refs() {
+        let mutations: [fn(&mut HomeCandidateRevision); 2] = [
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.source_subject_ref = "subject:PRODUCTION:session:1".to_owned();
+            },
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.creator_assessment_ref =
+                    "assessment:PRODUCTION:creator:1".to_owned();
+            },
+        ];
+        for mutate in mutations {
+            let mut candidate = valid_candidate();
+            mutate(&mut candidate);
+            resign(&mut candidate);
+            assert_eq!(
+                validate_materialized_candidate(&candidate),
+                Err(CandidateError::InvalidHistory(
+                    "candidate source and creator refs must remain synthetic-only",
+                ))
+            );
+        }
     }
 }

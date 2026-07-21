@@ -110,6 +110,35 @@ fn derive_candidate(
     .candidate
 }
 
+fn resign_materialized_candidate(candidate: &mut HomeCandidateRevision) {
+    let predecessor = candidate.predecessor.as_ref();
+    candidate.canonical_bytes = canonicalize_json(
+        &serde_json::to_vec(&json!([
+            "agents-os.m0b.home-candidate.v0.1",
+            {
+                "candidate_id": candidate.candidate_id.as_str(),
+                "candidate_ref": candidate.candidate_ref.as_str(),
+                "candidate_revision": candidate.candidate_revision,
+                "created_event_sequence": candidate.created_event_sequence,
+                "creator_assessment_fingerprint": candidate.creator_assessment_fingerprint.as_str(),
+                "creator_assessment_ref": candidate.creator_assessment_ref.as_str(),
+                "payload_commitment": candidate.payload_commitment.as_str(),
+                "predecessor_candidate_fingerprint": predecessor.map(|value| value.candidate_fingerprint.as_str()),
+                "predecessor_candidate_ref": predecessor.map(|value| value.candidate_ref.as_str()),
+                "predecessor_candidate_revision": predecessor.map(|value| value.candidate_revision),
+                "semantic_class": candidate.semantic_class.as_str(),
+                "source_subject_fingerprint": candidate.source_subject_fingerprint.as_str(),
+                "source_subject_ref": candidate.source_subject_ref.as_str(),
+                "source_subject_revision": candidate.source_subject_revision
+            }
+        ]))
+        .unwrap(),
+    )
+    .unwrap();
+    candidate.candidate_fingerprint =
+        agents_os_resident::canonical::fingerprint::sha256_hex(&candidate.canonical_bytes);
+}
+
 fn promotion_request(
     source: &HomeCandidateRevision,
     choice: Option<&str>,
@@ -992,6 +1021,73 @@ fn wp5_f3_treats_the_handoff_event_watermark_as_a_lower_bound() {
         .unwrap();
     assert_eq!(response.disposition, Disposition::Committed);
     kernel.shutdown().unwrap();
+}
+
+#[test]
+fn wp6_rejects_fully_resigned_nonsynthetic_candidate_refs_before_persistence() {
+    let root = tempfile::tempdir().unwrap();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp6-ref-boundary",
+        b"m0b-wp6-ref-boundary-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root.path(), ownership))
+        .unwrap();
+    kernel.migrate_synthetic_ledger_v2().unwrap();
+    let baseline = kernel.ledger_counts().unwrap();
+    let valid = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+
+    let mut forged_source = valid.clone();
+    forged_source.source_subject_ref = "subject:PRODUCTION:session:1".to_owned();
+    resign_materialized_candidate(&mut forged_source);
+    let source_error = kernel
+        .commit_home_candidate(
+            forged_source,
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .unwrap_err();
+    assert!(
+        source_error
+            .to_string()
+            .contains("Home candidate is not exact canonical F7 evidence"),
+        "unexpected source rejection: {source_error}"
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), baseline);
+
+    let mut forged_creator = valid;
+    forged_creator.creator_assessment_ref = "assessment:PRODUCTION:creator:1".to_owned();
+    resign_materialized_candidate(&mut forged_creator);
+    let creator_error = kernel
+        .commit_home_candidate(
+            forged_creator,
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .unwrap_err();
+    assert!(
+        creator_error
+            .to_string()
+            .contains("Home candidate is not exact canonical F7 evidence"),
+        "unexpected creator rejection: {creator_error}"
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), baseline);
+    kernel.shutdown().unwrap();
+
+    let connection = rusqlite::Connection::open(root.path().join(SYNTHETIC_DATABASE_FILENAME))
+        .unwrap();
+    let persisted_candidates: i64 = connection
+        .query_row("SELECT COUNT(*) FROM home_candidate_revision", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(persisted_candidates, 0);
 }
 
 #[test]
