@@ -836,7 +836,17 @@ fn require_synthetic_ref<'a>(
 }
 
 fn is_synthetic_ref(reference: &str) -> bool {
-    !reference.is_empty() && reference.contains(":SYNTHETIC_TEST:")
+    let mut segments = reference.split(':');
+    let Some(kind) = segments.next() else {
+        return false;
+    };
+    if kind.is_empty() || segments.next() != Some("SYNTHETIC_TEST") {
+        return false;
+    }
+    let Some(first_identity_segment) = segments.next() else {
+        return false;
+    };
+    !first_identity_segment.is_empty() && segments.all(|segment| !segment.is_empty())
 }
 
 fn is_lowercase_sha256(value: &str) -> bool {
@@ -967,13 +977,21 @@ mod tests {
 
     #[test]
     fn materialized_candidate_rejects_fully_resigned_nonsynthetic_refs() {
-        let mutations: [fn(&mut HomeCandidateRevision); 2] = [
+        let mutations: [fn(&mut HomeCandidateRevision); 4] = [
             |candidate: &mut HomeCandidateRevision| {
                 candidate.source_subject_ref = "subject:PRODUCTION:session:1".to_owned();
             },
             |candidate: &mut HomeCandidateRevision| {
                 candidate.creator_assessment_ref =
                     "assessment:PRODUCTION:creator:1".to_owned();
+            },
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.source_subject_ref =
+                    "subject:PRODUCTION:case:SYNTHETIC_TEST:leak".to_owned();
+            },
+            |candidate: &mut HomeCandidateRevision| {
+                candidate.creator_assessment_ref =
+                    "assessment:PRODUCTION:case:SYNTHETIC_TEST:leak".to_owned();
             },
         ];
         for mutate in mutations {

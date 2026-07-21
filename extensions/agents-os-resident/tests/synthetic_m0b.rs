@@ -343,6 +343,12 @@ fn wp2_candidate_schema_and_privacy_inputs_fail_closed() {
     let production_ref = mutate(valid.clone(), |object| {
         object.insert("source_subject_ref".to_owned(), json!("subject:PRODUCTION:1"));
     });
+    let namespace_smuggle = mutate(valid.clone(), |object| {
+        object.insert(
+            "source_subject_ref".to_owned(),
+            json!("subject:PRODUCTION:case:SYNTHETIC_TEST:leak"),
+        );
+    });
     let boolean_revision = mutate(valid.clone(), |object| {
         object.insert("candidate_revision".to_owned(), json!(true));
     });
@@ -355,6 +361,7 @@ fn wp2_candidate_schema_and_privacy_inputs_fail_closed() {
     assert!(derive_candidate_revision(&raw, &[]).is_err());
     assert!(derive_candidate_revision(&unknown_class, &[]).is_err());
     assert!(derive_candidate_revision(&production_ref, &[]).is_err());
+    assert!(derive_candidate_revision(&namespace_smuggle, &[]).is_err());
     assert!(derive_candidate_revision(&boolean_revision, &[]).is_err());
     assert!(derive_candidate_revision(&mixed_predecessor, &[]).is_err());
     assert_eq!(
@@ -1124,7 +1131,7 @@ fn wp6_rejects_fully_resigned_nonsynthetic_candidate_refs_before_persistence() {
     );
     assert_eq!(kernel.ledger_counts().unwrap(), baseline);
 
-    let mut forged_creator = valid;
+    let mut forged_creator = valid.clone();
     forged_creator.creator_assessment_ref = "assessment:PRODUCTION:creator:1".to_owned();
     resign_materialized_candidate(&mut forged_creator);
     let creator_error = kernel
@@ -1140,6 +1147,32 @@ fn wp6_rejects_fully_resigned_nonsynthetic_candidate_refs_before_persistence() {
             .contains("Home candidate is not exact canonical F7 evidence"),
         "unexpected creator rejection: {creator_error}"
     );
+    assert_eq!(kernel.ledger_counts().unwrap(), baseline);
+
+    let mut smuggled_source = valid.clone();
+    smuggled_source.source_subject_ref =
+        "subject:PRODUCTION:case:SYNTHETIC_TEST:leak".to_owned();
+    resign_materialized_candidate(&mut smuggled_source);
+    assert!(kernel
+        .commit_home_candidate(
+            smuggled_source,
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .is_err());
+    assert_eq!(kernel.ledger_counts().unwrap(), baseline);
+
+    let mut smuggled_creator = valid;
+    smuggled_creator.creator_assessment_ref =
+        "assessment:PRODUCTION:case:SYNTHETIC_TEST:leak".to_owned();
+    resign_materialized_candidate(&mut smuggled_creator);
+    assert!(kernel
+        .commit_home_candidate(
+            smuggled_creator,
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .is_err());
     assert_eq!(kernel.ledger_counts().unwrap(), baseline);
     kernel.shutdown().unwrap();
 
