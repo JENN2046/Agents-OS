@@ -6,6 +6,49 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B WP2 Complete — WP3 Explicit Promotion Gates Eligible (2026-07-22)
+
+WP2 now derives the three frozen low-disclosure candidate revision classes from
+strict canonical synthetic commitment envelopes. It validates immutable
+history, exact predecessor/current-head continuity and same-revision replay
+without performing a ledger write or creating authority.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP2_COMPLETE_WP3_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP2_source_commit: 4e61e814c12dcc8538c3961bbab5a68dae5d0bd0
+WP2_package_manifest_commit: 07b0c8a2b1004026981587f76bc17a589aa885e6
+WP2_content_tree_sha256: 7d36e940608ed7d117911cf5148c9cda67062b763e37895dbe2131ebd1375d51
+WP2_package_manifest_sha256: 64cb1390db6e9111c4fc6d6bcdaba40a125aa650f2fc7b99e222c1541439e557
+WP2_candidate_classes: 3/3_PASS
+WP2_same_revision_exact_replay: PASS_ZERO_WRITE
+WP2_same_revision_rewrite: REJECTED
+WP2_total_Rust_tests: 56/56_PASS
+WP2_active_schema_version: 1
+WP2_public_NAPI_methods: 5/5_UNCHANGED
+v12_3_incorrect_schema_migration_projection: SUPERSEDED
+schema_v2_migration_owner: WP6_LEDGER_PRIVACY_AND_RECOVERY
+current_work_package: WP3_EXPLICIT_PROMOTION_GATES
+WP3_start_condition_satisfied: true
+WP3_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.4.md
+active_work_queue_sha256: 0c17340e207ba24530611479f1ec39eb74b19e3d08a26bb2d1f2cccd18d0e81b
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.4.md
+WP2_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp2-f7-candidate-revisions-closeout-v0.1.md
+WP2_closeout_receipt_sha256: 6c3d8151696f725d80db58adb018bdddffc9e7575afb986cc0376246db0efd97
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP3_EXPLICIT_PROMOTION_GATES
+```
+
 ## Phase 5B M0-B WP1 Complete — WP2 Eligible (2026-07-22)
 
 WP1 now decodes only the frozen commitment-only synthetic observation envelope.
