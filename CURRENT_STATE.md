@@ -6,6 +6,49 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Implementation Closeout Pass — Scoped Delivery Eligible (2026-07-22)
+
+WP0-WP7 and the final package seal have passed implementation closeout. The
+branch may now enter the user-authorized scoped push, PR, CI/review and
+conditional merge loop. No runtime or later phase starts from this status.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_CLOSEOUT_PASS_DELIVERY_ELIGIBLE
+Phase_5B_implementation_started: true
+Phase_5B_implementation_complete: true
+implementation_closeout: PASS_COMPLETE
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_base_main: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP7_status: PASS_COMPLETE
+final_source_payload_commit: e59d638eba11d760807351b5a11eefff711c8626
+final_package_manifest_commit: 9b8da782ea3ea33b0099bd2da73fc8123ade745b
+final_content_tree_sha256: 0d849f6b87c10c2d719ee60611104b798f984fb8d72c979b26642d19de5f169e
+final_package_manifest_sha256: 24b5125957ecc6d4856565c109dc687ea1fb732e9bcaac931f3d9cff63fc9b3e
+integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+implementation_diff_files: 46
+implementation_commits_before_closeout: 27
+total_Rust_tests: 74/74_PASS
+traceability_rows: 13/13_COVERED
+public_NAPI_methods: 5/5_UNCHANGED
+dependency_changes: 0
+VCPToolBox_core_changes: 0
+repository_database_files: 0
+real_occurrence_count: 0
+implementation_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-implementation-closeout-v0.1.md
+implementation_closeout_receipt_sha256: a577337992720438c7dd9499bc9a3105562628765bfc8f9a4f4387a45568b7eb
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.0.md
+active_work_queue_sha256: bc74ae190d5039292dbb16e6e45cf8024799a2ba6da0dcd923722a145d53d065
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.0.md
+scoped_push_PR_and_conditional_merge_authorized: true
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_authentication_or_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+Phase_5C_started: false
+next_gate: PHASE_5B_M0B_SCOPED_GIT_DELIVERY
+```
+
 ## Phase 5B M0-B WP7 Complete — Implementation Closeout Eligible (2026-07-22)
 
 WP7 closes the deterministic synthetic Home-to-F3 witness. Two clean
