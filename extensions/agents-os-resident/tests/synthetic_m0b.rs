@@ -1,5 +1,7 @@
 use agents_os_resident::{home, ledger::schema};
 use agents_os_resident::canonical::jcs::canonicalize_json;
+use agents_os_resident::ledger::recovery::M0BIntegratedWitness;
+use agents_os_resident::ledger::replay::TerminalIntake;
 use agents_os_resident::home::candidate::{
     CandidateError, CandidateRevisionResult, CandidateSemanticClass, ExplicitPromotionChoice,
     HomeCandidateRevision, PromotionResult, derive_candidate_revision,
@@ -1254,6 +1256,215 @@ fn wp6_activates_only_the_explicit_synthetic_schema_v2_migration() {
     assert_eq!(schema::M0B_SCHEMA_V2_NEW_INDEXES.len(), 3);
     assert_eq!(schema::M0B_SCHEMA_V2_NEW_TRIGGERS.len(), 4);
     assert!(schema::m0b_schema_v2_migration_sql().is_some());
+}
+
+fn wp7_life_stream_candidate() -> HomeCandidateRevision {
+    let observed = decode_synthetic_observation(
+        &observation("PROPOSE_LIFE_STREAM_CANDIDATE"),
+    )
+    .unwrap();
+    let proposal = canonicalize_json(
+        &serde_json::to_vec(&json!({
+            "candidate_id": "life-stream",
+            "candidate_revision": 1,
+            "created_event_sequence": 20,
+            "creator_assessment_fingerprint": observed.creator_assessment_fingerprint,
+            "creator_assessment_ref": observed.creator_assessment_ref,
+            "payload_commitment": observed.payload_commitment,
+            "predecessor_candidate_fingerprint": null,
+            "predecessor_candidate_ref": null,
+            "predecessor_candidate_revision": null,
+            "semantic_class": "LIFE_STREAM_CANDIDATE",
+            "source_subject_fingerprint": observed.source_subject_fingerprint,
+            "source_subject_ref": observed.source_subject_ref,
+            "source_subject_revision": observed.source_subject_revision
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    derive_candidate_revision(&proposal, &[]).unwrap().candidate
+}
+
+fn wp7_integrated_run(root: &std::path::Path) -> M0BIntegratedWitness {
+    for choice in ["EPHEMERAL_ONLY", "DISCARD", "REMAIN_IN_SESSION"] {
+        let decision = reduce_nonpromotion(&observation(choice)).unwrap();
+        assert_eq!(decision.result, "NO_PROMOTION");
+        assert_eq!(decision.canonical_writes.total(), 0);
+    }
+    assert_eq!(
+        decode_synthetic_observation(&observation("PROPOSE_LIFE_STREAM_CANDIDATE"))
+            .unwrap()
+            .explicit_branch_choice,
+        SessionBranchChoice::ProposeLifeStreamCandidate
+    );
+
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp7",
+        b"m0b-wp7-deterministic-nonce",
+    )
+    .unwrap();
+    let kernel = ResidentKernel::start(ResidentKernelConfig::synthetic(root, ownership)).unwrap();
+    assert_eq!(kernel.migrate_synthetic_ledger_v2().unwrap().version, 2);
+
+    let life = wp7_life_stream_candidate();
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                life.clone(),
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+
+    let intent = reduce_explicit_promotion(
+        &promotion_request(
+            &life,
+            Some("PROPOSE_INTENT_CANDIDATE"),
+            Some("intent"),
+            Some(100),
+            20,
+        ),
+        std::slice::from_ref(&life),
+    )
+    .unwrap()
+    .derived_candidate
+    .unwrap();
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                intent.clone(),
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+
+    let mut history = vec![intent.clone(), life.clone()];
+    let memory = reduce_explicit_promotion(
+        &promotion_request(
+            &life,
+            Some("PROPOSE_MEMORY_CANDIDATE"),
+            Some("memory"),
+            Some(101),
+            20,
+        ),
+        &history,
+    )
+    .unwrap()
+    .derived_candidate
+    .unwrap();
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                memory.clone(),
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+    history.push(memory);
+
+    let handoff = compose_f8_handoff(
+        &handoff_request(&intent, &history, Some("PROPOSE_F8_HANDOFF"), 100),
+        &history,
+        &trusted_owner_commitments(),
+        &[],
+    )
+    .unwrap()
+    .candidate
+    .unwrap();
+    assert_eq!(
+        kernel
+            .commit_home_handoff(handoff.clone(), "intent", HomeCommitFault::None)
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+
+    let submission = synthetic_f3_home_intent_submission(&handoff).unwrap();
+    let boundary = CommandBoundary::synthetic(&kernel);
+    let committed = boundary
+        .invoke(MethodId::ExecuteCommand, &submission.request_bytes)
+        .unwrap();
+    assert_eq!(committed.disposition, Disposition::Committed);
+
+    let before_rejection = kernel.ledger_counts().unwrap();
+    let mut invalid: Value = serde_json::from_slice(&submission.request_bytes).unwrap();
+    invalid["payload"]["canonical_command"]["command_payload"]["raw_content"] =
+        json!("fixed-rejection-control");
+    let invalid = canonicalize_json(&serde_json::to_vec(&invalid).unwrap()).unwrap();
+    let rejected = boundary.invoke(MethodId::ExecuteCommand, &invalid).unwrap();
+    assert_eq!(rejected.disposition, Disposition::Rejected);
+    assert_eq!(kernel.ledger_counts().unwrap(), before_rejection);
+
+    let ambiguous_request = canonicalize_json(
+        br#"{"environment":"SYNTHETIC_TEST","interface_version":"agents-os.m0b.f3-ambiguous-control.v0.1","request_id":"command:SYNTHETIC_TEST:ambiguous-home-intent"}"#,
+    )
+    .unwrap();
+    let ambiguous_response = canonicalize_json(
+        br#"{"disposition":"INDETERMINATE","external_call_count":0,"runtime_usable":false}"#,
+    )
+    .unwrap();
+    let ambiguous = TerminalIntake {
+        command_id: "command:SYNTHETIC_TEST:ambiguous-home-intent".to_owned(),
+        command_type_id: HOME_INTENT_COMMAND_TYPE_ID.to_owned(),
+        command_type_revision: 1,
+        request_fingerprint: agents_os_resident::canonical::fingerprint::sha256_hex(
+            &ambiguous_request,
+        ),
+        request_bytes: ambiguous_request,
+        response_fingerprint: agents_os_resident::canonical::fingerprint::sha256_hex(
+            &ambiguous_response,
+        ),
+        response_bytes: ambiguous_response,
+    };
+    kernel.terminal_indeterminate_intake(ambiguous).unwrap();
+
+    let witness = kernel.m0b_integrated_witness().unwrap();
+    assert_eq!(witness.synthetic_session_observation_count, 4);
+    assert_eq!(witness.synthetic_life_stream_candidate_count, 1);
+    assert_eq!(witness.synthetic_memory_candidate_count, 1);
+    assert_eq!(witness.synthetic_intent_candidate_count, 1);
+    assert_eq!(witness.synthetic_handoff_count, 1);
+    assert_eq!(witness.synthetic_f3_committed_count, 1);
+    assert_eq!(witness.synthetic_f3_rejected_control_count, 1);
+    assert_eq!(witness.synthetic_f3_indeterminate_count, 1);
+    assert_eq!(witness.real_occurrence_count, 0);
+    assert!(!witness.runtime_usable);
+    kernel.shutdown().unwrap();
+    witness
+}
+
+#[test]
+fn wp7_two_clean_runs_and_restart_are_byte_deterministic_without_promotion() {
+    const FIXED_ROOT: &str =
+        "81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80";
+    let first_root = tempfile::tempdir().unwrap();
+    let second_root = tempfile::tempdir().unwrap();
+    let first = wp7_integrated_run(first_root.path());
+    let second = wp7_integrated_run(second_root.path());
+    assert_eq!(first.root_fingerprint, FIXED_ROOT);
+    assert_eq!(first, second);
+
+    let database_root = first_root.path();
+    let ownership = SyntheticOwnership::genesis(
+        "incarnation:SYNTHETIC_TEST:m0b-wp7",
+        b"m0b-wp7-deterministic-nonce",
+    )
+    .unwrap();
+    let restarted = ResidentKernel::start(ResidentKernelConfig::synthetic(
+        database_root,
+        ownership,
+    ))
+    .unwrap();
+    let counts_before = restarted.ledger_counts().unwrap();
+    let restart_witness = restarted.m0b_integrated_witness().unwrap();
+    assert_eq!(restart_witness, first);
+    assert_eq!(restarted.ledger_counts().unwrap(), counts_before);
+    restarted.shutdown().unwrap();
 }
 
 #[test]

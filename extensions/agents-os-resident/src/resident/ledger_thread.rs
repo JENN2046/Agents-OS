@@ -13,7 +13,7 @@ use crate::canonical::jcs::canonicalize_json;
 use crate::home::candidate::HomeCandidateRevision;
 use crate::home::handoff::HomeIntentHandoffCandidate;
 use crate::ledger::LedgerError;
-use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts};
+use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts, M0BIntegratedWitness};
 use crate::ledger::replay::{
     self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
@@ -100,6 +100,7 @@ enum LedgerCommand {
     },
     Counts(Sender<Result<LedgerCounts, String>>),
     IntegratedWitness(Sender<Result<IntegratedWitness, String>>),
+    M0BIntegratedWitness(Sender<Result<M0BIntegratedWitness, String>>),
     Shutdown(Sender<()>),
 }
 
@@ -296,6 +297,10 @@ impl LedgerThread {
 
     pub(super) fn integrated_witness(&self) -> Result<IntegratedWitness, ResidentError> {
         self.request(LedgerCommand::IntegratedWitness)
+    }
+
+    pub(super) fn m0b_integrated_witness(&self) -> Result<M0BIntegratedWitness, ResidentError> {
+        self.request(LedgerCommand::M0BIntegratedWitness)
     }
 
     fn request<T>(
@@ -530,6 +535,14 @@ fn run(
                     .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
                     .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
                     .and_then(|_| recovery::integrated_witness(&connection))
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
+            }
+            LedgerCommand::M0BIntegratedWitness(response) => {
+                let result = schema::verify_schema(&connection)
+                    .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
+                    .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
+                    .and_then(|_| recovery::m0b_integrated_witness(&connection))
                     .map_err(|error| error.to_string());
                 let _ = response.send(result);
             }

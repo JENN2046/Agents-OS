@@ -137,3 +137,16 @@ intake additionally resolves the persisted handoff and current candidate tuple
 before it may commit. Quick/FK checks, immutable triggers and stored-byte scans
 cover the disposable synthetic SQLite database; existing, production and
 private databases remain outside this implementation boundary.
+
+Phase 5B M0-B WP7 closes the integrated synthetic witness. Four fixed Session
+observations cover `EPHEMERAL_ONLY`, `DISCARD`, `REMAIN_IN_SESSION` and the
+explicit Life Stream proposal branch. Exactly one Life Stream, Memory and
+Intent candidate, one F8 handoff, one F3-committed Home Intent and one
+zero-Event indeterminate F3 control are recovered from the immutable v2
+ledger; the rejected F3 control proves zero writes. The read-only projection
+binds all canonical row digests and the sparse Event chain into fixed root
+`81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80`.
+Two clean disposable databases and one restart produce identical bytes with no
+automatic candidate, handoff or Command addition. Real Session, Goal, Task,
+Command, Memory, provider, sensing, external effect and runtime activation
+counts remain zero.

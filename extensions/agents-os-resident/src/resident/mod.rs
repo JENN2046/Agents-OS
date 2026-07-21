@@ -9,7 +9,7 @@ use crate::canonical::fingerprint::{canonical_fingerprint, sha256_hex};
 use crate::canonical::types::{CanonicalError, MAX_SAFE_INTEGER};
 use crate::home::candidate::HomeCandidateRevision;
 use crate::home::handoff::HomeIntentHandoffCandidate;
-use crate::ledger::recovery::{IntegratedWitness, LedgerCounts};
+use crate::ledger::recovery::{IntegratedWitness, LedgerCounts, M0BIntegratedWitness};
 use crate::ledger::replay::{
     OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
@@ -491,6 +491,13 @@ impl ResidentKernel {
             .as_ref()
             .ok_or(ResidentError::LedgerUnavailable)?
             .integrated_witness()
+    }
+
+    pub fn m0b_integrated_witness(&self) -> Result<M0BIntegratedWitness, ResidentError> {
+        self.ledger
+            .as_ref()
+            .ok_or(ResidentError::LedgerUnavailable)?
+            .m0b_integrated_witness()
     }
 
     pub fn assert_current_thread_is_ledger_owner(&self) -> Result<(), ResidentError> {
