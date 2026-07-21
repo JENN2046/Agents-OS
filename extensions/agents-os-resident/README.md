@@ -88,3 +88,12 @@ Event, pointer, Inbox, Outbox, Goal or Task writes and no authority. Unknown,
 implicit, raw-content-shaped, noncanonical or production-shaped input fails
 closed before reduction. The module has no ledger dependency, so these paths
 cannot perform a canonical write.
+
+Phase 5B M0-B WP2 derives immutable, low-disclosure F7 candidate revisions for
+the three closed classes. It validates exact canonical proposal bytes, complete
+immutable history, distinct candidate identities, exact current predecessors
+and same-revision replay versus rewrite. Candidate canonical bytes contain only
+refs, revisions, fingerprints, commitments, class and a future Event sequence;
+all action, Task, Command, Memory-write, effect and runtime authority remains
+false. WP2 is deliberately storage-free. Schema v2 and atomic candidate/Event/
+head persistence remain owned by the later frozen WP6 package.
