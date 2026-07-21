@@ -161,15 +161,8 @@ pub fn commit_home_candidate(
         .optional()?;
     if let Some((bytes, fingerprint)) = existing {
         if bytes == candidate.canonical_bytes && fingerprint == candidate.candidate_fingerprint {
-            let head: Option<(i64, String)> = transaction.query_row(
-                "SELECT current_candidate_revision,current_candidate_fingerprint FROM home_candidate_head WHERE candidate_id=?1",
-                [&candidate.candidate_id],
-                |row| Ok((row.get(0)?, row.get(1)?)),
-            ).optional()?;
-            if head == Some((as_i64(candidate.candidate_revision)?, candidate.candidate_fingerprint.clone())) {
-                transaction.commit()?;
-                return Ok(HomeCommitObservation::ExactReplay);
-            }
+            transaction.commit()?;
+            return Ok(HomeCommitObservation::ExactReplay);
         }
         return Err(LedgerError::InvalidInput("same Home candidate revision cannot be rewritten"));
     }
@@ -231,6 +224,18 @@ pub fn commit_home_handoff(
         return Err(LedgerError::InjectedCrash);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    let existing: Option<(Vec<u8>, String)> = transaction.query_row(
+        "SELECT canonical_bytes,handoff_fingerprint FROM home_handoff_link WHERE handoff_id=?1 AND handoff_revision=?2",
+        params![handoff.handoff_candidate_id,as_i64(handoff.handoff_candidate_revision)?],
+        |row| Ok((row.get(0)?,row.get(1)?)),
+    ).optional()?;
+    if let Some((bytes,fingerprint))=existing {
+        if bytes==handoff.canonical_bytes && fingerprint==handoff.handoff_candidate_fingerprint {
+            transaction.commit()?;
+            return Ok(HomeCommitObservation::ExactReplay);
+        }
+        return Err(LedgerError::InvalidInput("same Home handoff revision cannot be rewritten"));
+    }
     let head: Option<(i64, String, String)> = transaction.query_row(
         "SELECT current_candidate_revision,current_candidate_ref,current_candidate_fingerprint FROM home_candidate_head WHERE candidate_id=?1 AND semantic_class='INTENT_CANDIDATE'",
         [intent_candidate_id],
@@ -248,18 +253,6 @@ pub fn commit_home_handoff(
     }
     if fault == HomeCommitFault::AfterCurrentnessRecheck {
         return Err(LedgerError::InjectedCrash);
-    }
-    let existing: Option<(Vec<u8>, String)> = transaction.query_row(
-        "SELECT canonical_bytes,handoff_fingerprint FROM home_handoff_link WHERE handoff_id=?1 AND handoff_revision=?2",
-        params![handoff.handoff_candidate_id,as_i64(handoff.handoff_candidate_revision)?],
-        |row| Ok((row.get(0)?,row.get(1)?)),
-    ).optional()?;
-    if let Some((bytes,fingerprint))=existing {
-        if bytes==handoff.canonical_bytes && fingerprint==handoff.handoff_candidate_fingerprint {
-            transaction.commit()?;
-            return Ok(HomeCommitObservation::ExactReplay);
-        }
-        return Err(LedgerError::InvalidInput("same Home handoff revision cannot be rewritten"));
     }
     let event_sequence = next_home_event_sequence(
         &transaction,

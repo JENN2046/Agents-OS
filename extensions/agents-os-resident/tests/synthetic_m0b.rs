@@ -976,6 +976,64 @@ fn wp5_exact_replay_survives_a_later_intent_head_advance() {
 }
 
 #[test]
+fn wp6_candidate_and_handoff_replay_survive_a_later_intent_head_advance() {
+    let root = tempfile::tempdir().unwrap();
+    let (kernel, handoff) =
+        v2_kernel_with_formed_handoff(root.path(), "m0b-wp6-delayed-replay");
+    let intent1 = derive_candidate(
+        "intent",
+        1,
+        "INTENT_CANDIDATE",
+        None,
+        100,
+        'a',
+        &[],
+    );
+    let intent2 = derive_candidate(
+        "intent",
+        2,
+        "INTENT_CANDIDATE",
+        Some(&intent1),
+        103,
+        'b',
+        std::slice::from_ref(&intent1),
+    );
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                intent2,
+                HomeHeadExpectation::Exact {
+                    revision: 1,
+                    fingerprint: intent1.candidate_fingerprint.clone(),
+                },
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::FirstCommitted
+    );
+
+    let before_replays = kernel.ledger_counts().unwrap();
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                intent1,
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    assert_eq!(
+        kernel
+            .commit_home_handoff(handoff, "intent", HomeCommitFault::None)
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), before_replays);
+    kernel.shutdown().unwrap();
+}
+
+#[test]
 fn wp5_f3_treats_the_handoff_event_watermark_as_a_lower_bound() {
     let root = tempfile::tempdir().unwrap();
     let ownership = SyntheticOwnership::genesis(
