@@ -1,10 +1,444 @@
 # AGENTS OS Current State
 
-Date: 2026-07-07
+Date: 2026-07-22
 Status: active reality snapshot
 Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
+
+## Phase 5B M0-B PR #26 Ninth Review Fix Complete — Current-Head Re-review Required (2026-07-22)
+
+All prior review findings remain closed. The ninth review found one in-scope P2
+defect: handoff exact replay did not bind the supplied intent candidate ID. The
+replay lookup now binds that identity and rejects a byte-identical wrong-ID
+retry without adding rows. The branch remains at the current-head re-review
+gate; it is not merged until that review clears.
+
+```yaml
+Phase_5B_status: M0B_PR26_NINTH_REVIEW_FIX_COMPLETE_REREVIEW_REQUIRED
+Phase_5B_implementation_complete: true
+implementation_closeout: PASS_COMPLETE
+PR_number: 26
+PR_reviewed_head: a5289423765ea68630452a206668505e742ad874
+Codex_review_findings: 3_P1_PLUS_9_P2_ALL_ADDRESSED
+review_fix_source_commit: e7268b156d73b57323ef612032e4fd18b36bead9
+review_fix_manifest_commit: fd8d08cdd9e01c83bceffc025613558e27f96970
+final_content_tree_sha256: d98d73848bc986fd26d4b48419a938c3eb5aa81b5c4945fb9a93a066419aafed
+final_package_manifest_sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23
+integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+total_Rust_tests: 83/83_PASS
+synthetic_m0b_tests: 33/33_PASS
+public_NAPI_methods: 5/5_UNCHANGED
+dependency_changes: 0
+VCPToolBox_core_changes: 0
+real_occurrence_count: 0
+PR26_review_fix_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-pr26-ninth-review-fix-v0.1.md
+PR26_review_fix_receipt_sha256: 6f754c44f4a9b511023f8c1f184042ba17110a5edac623c5be2c658e38b0a04e
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.9.md
+active_work_queue_sha256: ddb09a7380664d4d9ad929c80b4f9120ec64a06d2ed646a48f0a82fba0518dde
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.9.md
+merge_authorized_only_after_current_head_review_clear: true
+runtime_activation_authorized: false
+Phase_5C_started: false
+next_gate: PR26_CURRENT_HEAD_CODEX_REREVIEW_AFTER_NINTH_FIX
+```
+
+## Phase 5B M0-B Implementation Closeout Pass — Scoped Delivery Eligible (2026-07-22)
+
+WP0-WP7 and the final package seal have passed implementation closeout. The
+branch may now enter the user-authorized scoped push, PR, CI/review and
+conditional merge loop. No runtime or later phase starts from this status.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_CLOSEOUT_PASS_DELIVERY_ELIGIBLE
+Phase_5B_implementation_started: true
+Phase_5B_implementation_complete: true
+implementation_closeout: PASS_COMPLETE
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_base_main: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP7_status: PASS_COMPLETE
+final_source_payload_commit: e59d638eba11d760807351b5a11eefff711c8626
+final_package_manifest_commit: 9b8da782ea3ea33b0099bd2da73fc8123ade745b
+final_content_tree_sha256: 0d849f6b87c10c2d719ee60611104b798f984fb8d72c979b26642d19de5f169e
+final_package_manifest_sha256: 24b5125957ecc6d4856565c109dc687ea1fb732e9bcaac931f3d9cff63fc9b3e
+integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+implementation_diff_files: 46
+implementation_commits_before_closeout: 27
+total_Rust_tests: 74/74_PASS
+traceability_rows: 13/13_COVERED
+public_NAPI_methods: 5/5_UNCHANGED
+dependency_changes: 0
+VCPToolBox_core_changes: 0
+repository_database_files: 0
+real_occurrence_count: 0
+implementation_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-implementation-closeout-v0.1.md
+implementation_closeout_receipt_sha256: a577337992720438c7dd9499bc9a3105562628765bfc8f9a4f4387a45568b7eb
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.0.md
+active_work_queue_sha256: bc74ae190d5039292dbb16e6e45cf8024799a2ba6da0dcd923722a145d53d065
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v13.0.md
+scoped_push_PR_and_conditional_merge_authorized: true
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_authentication_or_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+Phase_5C_started: false
+next_gate: PHASE_5B_M0B_SCOPED_GIT_DELIVERY
+```
+
+## Phase 5B M0-B WP7 Complete — Implementation Closeout Eligible (2026-07-22)
+
+WP7 closes the deterministic synthetic Home-to-F3 witness. Two clean
+disposable databases and one restart produce the same canonical root with no
+automatic promotion or additional rows. All frozen work packages are now
+eligible for the bounded implementation closeout.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP7_COMPLETE_CLOSEOUT_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+WP7_source_commit: e59d638eba11d760807351b5a11eefff711c8626
+WP7_package_manifest_commit: 9b8da782ea3ea33b0099bd2da73fc8123ade745b
+WP7_content_tree_sha256: 0d849f6b87c10c2d719ee60611104b798f984fb8d72c979b26642d19de5f169e
+WP7_package_manifest_sha256: 24b5125957ecc6d4856565c109dc687ea1fb732e9bcaac931f3d9cff63fc9b3e
+WP7_integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+WP7_total_Rust_tests: 74/74_PASS
+WP7_synthetic_m0b_tests: 27/27_PASS
+WP7_clean_runs: 2/2_BYTE_IDENTICAL
+WP7_restart_runs: 1/1_ZERO_ADDITION
+WP7_real_occurrence_count: 0
+WP7_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: PHASE_5B_M0B_IMPLEMENTATION_CLOSEOUT
+implementation_closeout_start_condition_satisfied: true
+implementation_closeout_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.9.md
+active_work_queue_sha256: 26328e3d47b33aad8a37c5a01fbed65f72c1ad0d56ff99a3b1a2a06a4996b789
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.9.md
+WP7_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp7-integrated-witness-closeout-v0.1.md
+WP7_closeout_receipt_sha256: e9ce22653b656d8d301a90786102278d66a4b82d312053afc68bf1c14578b43f
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_IMPLEMENTATION_CLOSEOUT
+```
+
+## Phase 5B M0-B WP6 Complete — WP7 Integrated Witness Eligible (2026-07-22)
+
+WP6 activates the explicit synthetic-test-only v1→v2 migration. Candidate,
+Event and head CAS rows commit atomically; the exact F8 handoff and Event commit
+atomically after currentness recheck. F3 resolves those persisted tuples before
+Home Intent commit. All databases used were new disposable test artifacts.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP6_COMPLETE_WP7_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP5_status: PASS_COMPLETE
+WP6_status: PASS_COMPLETE
+WP6_source_commit: 11924a0f8d2721153511833c9cbcd7a0eea95501
+WP6_package_manifest_commit: 6d5ee2c6dad40996ce6046e6801c5493a0ec52b4
+WP6_content_tree_sha256: a132a6f6370b5875d94608f140157f902de6b338a46f28f559afb93329f016a9
+WP6_package_manifest_sha256: f69aab0df51c68391abcd01c4b2ba1e4a53ee8f95cb5cae45e31af6a36d3b5c0
+WP6_total_Rust_tests: 73/73_PASS
+WP6_synthetic_m0b_tests: 26/26_PASS
+WP6_crash_matrix_tests: 6/6_PASS
+WP6_schema_transition: v1_TO_v2_SYNTHETIC_TEST_ONLY
+WP6_quick_check: PASS
+WP6_foreign_key_check: EMPTY
+WP6_stored_forbidden_content_scan: EMPTY
+WP6_disposable_synthetic_databases_cleaned: true
+WP6_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP7_INTEGRATED_M0B_WITNESS
+WP7_start_condition_satisfied: true
+WP7_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.8.md
+active_work_queue_sha256: 5992244a5da8e7383e8994106c41644f1e48bc8fe608fc919881f08e82e79542
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.8.md
+WP6_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp6-ledger-privacy-recovery-closeout-v0.1.md
+WP6_closeout_receipt_sha256: 2d0260b3b8f57277d60f1f15d8e5522cdff70a4650685f20ff221f1e3a0aec25
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP7_INTEGRATED_M0B_WITNESS
+```
+
+## Phase 5B M0-B WP5 Complete — WP6 Ledger Privacy and Recovery Eligible (2026-07-22)
+
+WP5 adds the exact implementation-only synthetic Home Intent command and
+adapts the fixed WP4 handoff through the existing `execute_command` frame. F3
+alone authenticates, commits and replays it; Home has no Command writer.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP5_COMPLETE_WP6_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP4_status: PASS_COMPLETE
+WP5_status: PASS_COMPLETE
+WP5_source_commit: 42442c556cb8c1df26cb74b1c647ed8251a22dcb
+WP5_package_manifest_commit: 5e784c649f293f575911671fb6187e8479f1ae6a
+WP5_content_tree_sha256: d3c7bc8292e80a151cb1f0203e5c702b78ff52222c46fcfed1cdfd74ac6e1820
+WP5_package_manifest_sha256: 8316ee36a91471a5d2d4150535288e38ac1057e9a4a529c511abef7be50021ea
+WP5_total_Rust_tests: 68/68_PASS
+WP5_synthetic_m0b_tests: 24/24_PASS
+WP5_home_direct_Command_write: false
+WP5_active_schema_version: 1
+WP5_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP6_LEDGER_PRIVACY_AND_RECOVERY
+WP6_start_condition_satisfied: true
+WP6_started: false
+WP6_disposable_synthetic_database_authorized: true
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.7.md
+active_work_queue_sha256: 852e4161d05b2b88a85d2b47ae3f3573207ac1c0a930e9654c2bbd0e2dd99538
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.7.md
+WP5_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp5-f3-synthetic-intake-closeout-v0.1.md
+WP5_closeout_receipt_sha256: 972002f9322db2eff8ee1901ada5cb0605a74fc42110403523a5f35853f0e8d5
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP6_LEDGER_PRIVACY_AND_RECOVERY
+```
+
+## Phase 5B M0-B WP4 Complete — WP5 F3 Synthetic Intake Seam Eligible (2026-07-22)
+
+WP4 now composes a synthetic, nonauthoritative F8 handoff candidate from the
+fixed trusted owner-source anchor, canonical ordered candidate history and the
+exact current Intent Candidate. It performs no canonical write and creates no
+Command, Task or effect authority.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP4_COMPLETE_WP5_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP3_status: PASS_COMPLETE
+WP4_status: PASS_COMPLETE
+WP4_source_commit: e3a82b0c2a4b1ec0575c889511c9ffd0c03bfa5c
+WP4_package_manifest_commit: 22b11bf7170012620f8215e5569525c7a51cc0d4
+WP4_content_tree_sha256: 74f43af672547bb6c71412dd4f1fcc395619e15f86bb0b149b2be1e4809855e7
+WP4_package_manifest_sha256: 045dded658cd15413941b106e0bf1f0bce1e79f56704d28ce5bcce9acf2e89ff
+WP4_trusted_owner_source_anchor: 79fbc671c0852b990f2c605dc7c77733ff9e150087e2e30cc910eada638cdbaa
+WP4_total_Rust_tests: 65/65_PASS
+WP4_active_schema_version: 1
+WP4_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP5_F3_SYNTHETIC_INTAKE_SEAM
+WP5_start_condition_satisfied: true
+WP5_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.6.md
+active_work_queue_sha256: ea62e2aa3470c7696cfcf391af190b1e88dc5fc1a3d25fb03d9db2c15146b162
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.6.md
+WP4_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp4-f8-handoff-composition-closeout-v0.1.md
+WP4_closeout_receipt_sha256: 6cb3f17211fceadef85bb4363e1094b0bc264f60962682b46cfaa458c6a6fd31
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP5_F3_SYNTHETIC_INTAKE_SEAM
+```
+
+## Phase 5B M0-B WP3 Complete — WP4 F8 Handoff Composition Eligible (2026-07-22)
+
+WP3 now enforces a new explicit choice for every Life Stream candidate
+transition. Observe and discard terminate without writes; Memory and Intent
+choices derive candidate-only revisions. No branch creates formal Memory,
+Goal, Task, Command or effect authority.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP3_COMPLETE_WP4_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization: control-plane/registry/decisions/2026-07-22-agents-os-phase-5b-m0b-automatic-implementation-delivery-authorization-v0.1.yaml
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP3_status: PASS_COMPLETE
+WP3_source_commit: e66997784ef4d8fa119e77de4b3ff925fa4aba5f
+WP3_package_manifest_commit: 0db90021ac3ce6f37aaf60fdd835720fb9eca1ba
+WP3_content_tree_sha256: 25567c7c0ee0ab7f03ded429ab6b6e8a5ea0fd2c277eacd18c6a12c22e22ede8
+WP3_package_manifest_sha256: 67dc59e07307941fb732e3e3595088850884b6b7bd54dc06a26dcf6f56f69d4a
+WP3_explicit_choices: 4/4_PASS
+WP3_total_Rust_tests: 61/61_PASS
+WP3_active_schema_version: 1
+WP3_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP4_F8_HANDOFF_COMPOSITION
+WP4_start_condition_satisfied: true
+WP4_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.5.md
+active_work_queue_sha256: a057fdb21589e866475bd904c91ae805d4384102167eae1cb40d6645b694ae50
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.5.md
+WP3_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp3-explicit-promotion-gates-closeout-v0.1.md
+WP3_closeout_receipt_sha256: d058b9452f0460a7a8a159ac78646796627fa28589f22a941627ad96627a87bc
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP4_F8_HANDOFF_COMPOSITION
+```
+
+## Phase 5B M0-B WP2 Complete — WP3 Explicit Promotion Gates Eligible (2026-07-22)
+
+WP2 now derives the three frozen low-disclosure candidate revision classes from
+strict canonical synthetic commitment envelopes. It validates immutable
+history, exact predecessor/current-head continuity and same-revision replay
+without performing a ledger write or creating authority.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP2_COMPLETE_WP3_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP2_status: PASS_COMPLETE
+WP2_source_commit: 4e61e814c12dcc8538c3961bbab5a68dae5d0bd0
+WP2_package_manifest_commit: 07b0c8a2b1004026981587f76bc17a589aa885e6
+WP2_content_tree_sha256: 7d36e940608ed7d117911cf5148c9cda67062b763e37895dbe2131ebd1375d51
+WP2_package_manifest_sha256: 64cb1390db6e9111c4fc6d6bcdaba40a125aa650f2fc7b99e222c1541439e557
+WP2_candidate_classes: 3/3_PASS
+WP2_same_revision_exact_replay: PASS_ZERO_WRITE
+WP2_same_revision_rewrite: REJECTED
+WP2_total_Rust_tests: 56/56_PASS
+WP2_active_schema_version: 1
+WP2_public_NAPI_methods: 5/5_UNCHANGED
+v12_3_incorrect_schema_migration_projection: SUPERSEDED
+schema_v2_migration_owner: WP6_LEDGER_PRIVACY_AND_RECOVERY
+current_work_package: WP3_EXPLICIT_PROMOTION_GATES
+WP3_start_condition_satisfied: true
+WP3_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.4.md
+active_work_queue_sha256: 0c17340e207ba24530611479f1ec39eb74b19e3d08a26bb2d1f2cccd18d0e81b
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.4.md
+WP2_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp2-f7-candidate-revisions-closeout-v0.1.md
+WP2_closeout_receipt_sha256: 6c3d8151696f725d80db58adb018bdddffc9e7575afb986cc0376246db0efd97
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP3_EXPLICIT_PROMOTION_GATES
+```
+
+## Phase 5B M0-B WP1 Complete — WP2 Eligible (2026-07-22)
+
+WP1 now decodes only the frozen commitment-only synthetic observation envelope.
+Its three explicit nonpromotion branches deterministically return
+`NO_PROMOTION` with zero canonical writes and no authority. Missing or unknown
+branches are zero-write `INDETERMINATE`; the explicit candidate branch is
+decoded but remains unimplemented until WP2.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP1_COMPLETE_WP2_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP1_status: PASS_COMPLETE
+WP1_source_commit: f34534f8b1ff1f1bba2caacb5dd54dee9aeeec80
+WP1_package_manifest_commit: 7398618584ea9dbc0c89d693ac1385d538d21721
+WP1_content_tree_sha256: 198839c14e67ac5beb4ffff6f034730e8f1c405209b7928904d3ebbee2a2c202
+WP1_package_manifest_sha256: 86ae0d3b13ee74e08977d2a1da8b0e3310b27263fc2c32cb143885fe4c70631f
+WP1_nonpromotion_paths: 3/3_NO_PROMOTION_ZERO_WRITE
+WP1_missing_unknown_branch: 2/2_INDETERMINATE_ZERO_WRITE
+WP1_total_Rust_tests: 51/51_PASS
+WP1_active_schema_version: 1
+WP1_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP2_F7_CANDIDATE_REVISIONS
+WP2_start_condition_satisfied: true
+WP2_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.3.md
+active_work_queue_sha256: ce313a269f53cc203dd0057360a8e3564c710e6541ab27dd6de04529699d9d02
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.3.md
+WP1_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp1-session-nonpromotion-closeout-v0.1.md
+WP1_closeout_receipt_sha256: 122604f38fe247bee4ffbc1d8c905656a94b1a073007c2e6cf877061ea936773
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP2_F7_CANDIDATE_REVISIONS
+```
+
+## Phase 5B M0-B WP0 Complete — WP1 Eligible (2026-07-21)
+
+WP0 fixed the Home module/test layout and inert schema v2 migration surface.
+All inherited Phase 5A tests and the three new WP0 tests pass under the pinned
+Rust 1.96.1 toolchain. WP1 is eligible but not yet implemented.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP0_COMPLETE_WP1_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+WP0_status: PASS_COMPLETE
+WP0_source_commit: a5a4503d2da59d092c1b1d0be0231ba2c2a739a1
+WP0_package_manifest_commit: 6a3b242f63c0fcab909f0b14c2225a7c9261da34
+WP0_content_tree_sha256: 4a07003c50939d60809fd5418df4142d648a4e3743a4d3039dd235d396184268
+WP0_package_manifest_sha256: 54abc1756b9870eeea8b3f2bca8657914d6ff2563c266dcb9804a11626c8bf9c
+WP0_tests: 47/47_PASS
+WP0_active_schema_version: 1
+WP0_declared_schema_v2_status: WP0_DECLARED_NOT_ACTIVE
+WP0_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: WP1_SESSION_NONPROMOTION_BOUNDARY
+WP1_start_condition_satisfied: true
+WP1_started: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.2.md
+active_work_queue_sha256: 523a7337ca9c67f81b10bb2ff407c1be101e93942f887168491ec9bfc393f87c
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.2.md
+WP0_closeout_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-wp0-extension-skeleton-closeout-v0.1.md
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP1_SESSION_NONPROMOTION_BOUNDARY
+```
+
+## Phase 5B M0-B Implementation Started — WP0 Active (2026-07-21)
+
+Jenn explicitly started the frozen Phase 5B M0-B implementation. The start
+decision binds the complete accepted R1-R5 plan and opens only WP0 on the
+dedicated local implementation branch. WP1-WP7 remain behind their direct
+predecessor gates.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_STARTED_WP0_ACTIVE
+Phase_5B_plan_acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+Phase_5B_plan_manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+Phase_5B_plan_independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+Phase_5B_plan_freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+Phase_5B_plan_mainline_integration_commit: d494f6399337ab918cccee6183646916d594ef2a
+Phase_5B_plan_durability_projection_commit: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+Phase_5B_implementation_start_preflight_sha256: c9b4add687eca111e0f82985ecd14efb71763b8d4c85e5c1569cb37ebbf2e8c4
+Phase_5B_implementation_start_decision_sha256: 75dfbea4f6543e55038533a8e63ec9889ae42284c23bd8e747cf8da7be866ea8
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+current_work_package: WP0_M0B_EXTENSION_SKELETON
+WP0_start_authorized: true
+WP1_through_WP7_started: false
+active_work_queue: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.1.md
+active_work_queue_sha256: 099a7ec7fdbff752569e5d089eb438e2f0cc9566585b1129c68361204626926c
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v12.1.md
+implementation_start_receipt: control-plane/registry/receipts/2026-07-21-yellow-agents-os-phase-5b-m0b-implementation-start-closeout-v0.1.md
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_WP0_EXTENSION_SKELETON
+```
 
 ## Phase 5B M0-B Plan Durable on Main (2026-07-21)
 

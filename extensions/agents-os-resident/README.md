@@ -74,3 +74,79 @@ only `initialize`, `processToolCall`, and `shutdown`.
 
 The package still does not enable the plugin, start VCPToolBox, call a provider,
 read private Memory, dispatch to a mock or real Host, or perform an effect.
+
+Phase 5B M0-B WP0 adds only the fixed `src/home/` module layout, the
+`tests/synthetic_m0b.rs` layout check and an inert schema v2 migration
+declaration. Schema v1 remains active, the five-method N-API surface is
+unchanged, and no candidate transition, handoff composition, new Command type,
+database migration or runtime path is active yet.
+
+Phase 5B M0-B WP1 adds the strict commitment-only synthetic Session observation
+decoder and the `EPHEMERAL_ONLY`, `DISCARD` and `REMAIN_IN_SESSION` reducers.
+Each returns a deterministic `NO_PROMOTION` decision with zero candidate,
+Event, pointer, Inbox, Outbox, Goal or Task writes and no authority. Unknown,
+implicit, raw-content-shaped, noncanonical or production-shaped input fails
+closed before reduction. The module has no ledger dependency, so these paths
+cannot perform a canonical write.
+
+Phase 5B M0-B WP2 derives immutable, low-disclosure F7 candidate revisions for
+the three closed classes. It validates exact canonical proposal bytes, complete
+immutable history, distinct candidate identities, exact current predecessors
+and same-revision replay versus rewrite. Candidate canonical bytes contain only
+refs, revisions, fingerprints, commitments, class and a future Event sequence;
+all action, Task, Command, Memory-write, effect and runtime authority remains
+false. WP2 is deliberately storage-free. Schema v2 and atomic candidate/Event/
+head persistence remain owned by the later frozen WP6 package.
+
+Phase 5B M0-B WP3 implements the explicit promotion gates from a current Life
+Stream candidate. `OBSERVE_WITHOUT_PROMOTION` and `DISCARD` terminate with zero
+writes. `PROPOSE_MEMORY_CANDIDATE` and `PROPOSE_INTENT_CANDIDATE` derive only a
+new commitment-only candidate revision through the WP2 reducer. Missing,
+unknown, implicit, stale, non-Life-Stream, raw-content-shaped and
+production-shaped inputs fail closed. No branch creates formal Memory, Goal,
+Task, Command or effect authority, and persistence remains deferred to WP6.
+
+Phase 5B M0-B WP4 composes a synthetic, nonauthoritative F8 handoff candidate
+only after resolving the exact frozen R5 owner-source anchor and the canonical
+current Intent Candidate history. Owner-source rewriting, phantom or reordered
+history, stale Intent tuples, behind-watermark evidence, same-revision handoff
+rewriting and direct-write-shaped inputs fail closed. The favorable result is
+still candidate evidence only: F3 must recheck it, and no Command, Task or
+effect authority or ledger write is produced before the later packages.
+
+Phase 5B M0-B WP5 adds exactly one production-incompatible command definition,
+`M0_SYNTHETIC_SUBMIT_HOME_INTENT`, with the frozen closed payload. The Home
+adapter derives its Command ID, authentication-bound submission, existing
+six-field `execute_command` request and replay identity from the exact WP4
+candidate; it does not write the ledger. F3 validates the synthetic principal
+and payload, then alone commits the Inbox, CommandEnvelope, Event and replay
+rows in one transaction. Invalid input writes nothing, exact replay returns the
+stored first response with zero additions, and the public five-method N-API
+inventory remains unchanged. No production F3 type or runtime authority is
+created.
+
+Phase 5B M0-B WP6 activates the explicit synthetic-test-only schema v1→v2
+migration and the three frozen low-disclosure tables. Candidate formation now
+commits one immutable candidate revision, its Event and the exact candidate
+head CAS in one Rust-ledger-thread transaction. Handoff formation re-resolves
+the immutable owner set and canonical candidate history, rechecks the exact
+current Intent Candidate, then commits one immutable link and Event. Every
+pre-commit failpoint rolls back all rows; post-commit response loss resolves as
+an exact replay without automatic promotion or F3 submission. F3 Home Intent
+intake additionally resolves the persisted handoff and current candidate tuple
+before it may commit. Quick/FK checks, immutable triggers and stored-byte scans
+cover the disposable synthetic SQLite database; existing, production and
+private databases remain outside this implementation boundary.
+
+Phase 5B M0-B WP7 closes the integrated synthetic witness. Four fixed Session
+observations cover `EPHEMERAL_ONLY`, `DISCARD`, `REMAIN_IN_SESSION` and the
+explicit Life Stream proposal branch. Exactly one Life Stream, Memory and
+Intent candidate, one F8 handoff, one F3-committed Home Intent and one
+zero-Event indeterminate F3 control are recovered from the immutable v2
+ledger; the rejected F3 control proves zero writes. The read-only projection
+binds all canonical row digests and the sparse Event chain into fixed root
+`81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80`.
+Two clean disposable databases and one restart produce identical bytes with no
+automatic candidate, handoff or Command addition. Real Session, Goal, Task,
+Command, Memory, provider, sensing, external effect and runtime activation
+counts remain zero.

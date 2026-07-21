@@ -1,4 +1,4 @@
-//! Closed SQLite v1 schema boundary.
+//! Closed SQLite v1 plus explicit synthetic-test-only v2 migration boundary.
 
 use std::collections::BTreeSet;
 
@@ -11,6 +11,116 @@ use super::LedgerError;
 pub const SCHEMA_VERSION: u64 = 1;
 pub const SCHEMA_FINGERPRINT: &str =
     "0c5a61574a891c7cee0559f18c4bc45f70c6f24a91b65e0b826c9fd15e779f48";
+
+/// Startup remains on frozen v1. WP6 exposes a separate, explicit migration
+/// command for a caller-created disposable synthetic test ledger; schema
+/// verification accepts only the exact sealed v1 or v2 inventories.
+pub const M0B_SCHEMA_V2_TARGET_VERSION: u64 = 2;
+pub const M0B_SCHEMA_V2_MIGRATION_STATUS: &str = "WP6_SYNTHETIC_MIGRATION_ACTIVE";
+pub const M0B_SCHEMA_V2_FINGERPRINT: &str =
+    "10ef0de6abb6788284d3ec1a2ad4341c853fdb1f05260550f8a1b8559572cea2";
+pub const M0B_SCHEMA_V2_NEW_TABLES: [&str; 3] = [
+    "home_candidate_revision",
+    "home_candidate_head",
+    "home_handoff_link",
+];
+pub const M0B_SCHEMA_V2_NEW_INDEXES: [&str; 3] = [
+    "home_candidate_revision_by_subject",
+    "home_candidate_revision_by_event",
+    "home_handoff_link_by_event",
+];
+pub const M0B_SCHEMA_V2_NEW_TRIGGERS: [&str; 4] = [
+    "home_candidate_revision_no_update",
+    "home_candidate_revision_no_delete",
+    "home_handoff_link_no_update",
+    "home_handoff_link_no_delete",
+];
+
+pub fn m0b_schema_v2_migration_sql() -> Option<&'static str> {
+    Some(M0B_SCHEMA_V2_SQL)
+}
+
+pub const M0B_SCHEMA_V2_SQL: &str = r#"
+ALTER TABLE schema_metadata RENAME TO schema_metadata_v1;
+CREATE TABLE schema_metadata (
+  singleton_id INTEGER PRIMARY KEY CHECK(singleton_id = 1),
+  schema_version INTEGER NOT NULL CHECK(schema_version IN (0,1,2)),
+  schema_fingerprint TEXT NOT NULL CHECK(length(schema_fingerprint) = 64)
+) STRICT;
+CREATE TABLE home_candidate_revision (
+  candidate_id TEXT NOT NULL COLLATE BINARY,
+  candidate_revision INTEGER NOT NULL CHECK(candidate_revision > 0 AND candidate_revision <= 9007199254740991),
+  candidate_ref TEXT NOT NULL COLLATE BINARY,
+  semantic_class TEXT NOT NULL CHECK(semantic_class IN ('LIFE_STREAM_CANDIDATE','MEMORY_CANDIDATE','INTENT_CANDIDATE')),
+  source_subject_ref TEXT NOT NULL,
+  source_subject_revision INTEGER NOT NULL CHECK(source_subject_revision > 0 AND source_subject_revision <= 9007199254740991),
+  source_subject_fingerprint TEXT NOT NULL CHECK(length(source_subject_fingerprint) = 64 AND source_subject_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  payload_commitment TEXT NOT NULL CHECK(length(payload_commitment) = 64 AND payload_commitment NOT GLOB '*[^0-9a-f]*'),
+  creator_assessment_ref TEXT NOT NULL,
+  creator_assessment_fingerprint TEXT NOT NULL CHECK(length(creator_assessment_fingerprint) = 64 AND creator_assessment_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  canonical_bytes BLOB NOT NULL,
+  candidate_fingerprint TEXT NOT NULL UNIQUE CHECK(length(candidate_fingerprint) = 64 AND candidate_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  predecessor_candidate_revision INTEGER,
+  predecessor_candidate_ref TEXT COLLATE BINARY,
+  predecessor_candidate_fingerprint TEXT CHECK(predecessor_candidate_fingerprint IS NULL OR (length(predecessor_candidate_fingerprint) = 64 AND predecessor_candidate_fingerprint NOT GLOB '*[^0-9a-f]*')),
+  created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0 AND created_event_sequence <= 9007199254740991),
+  PRIMARY KEY(candidate_id, candidate_revision),
+  UNIQUE(candidate_ref, candidate_revision),
+  UNIQUE(candidate_id, candidate_revision, candidate_ref, candidate_fingerprint),
+  CHECK(candidate_ref = 'candidate:SYNTHETIC_TEST:' || candidate_id || ':' || candidate_revision),
+  CHECK((candidate_revision = 1 AND predecessor_candidate_revision IS NULL AND predecessor_candidate_ref IS NULL AND predecessor_candidate_fingerprint IS NULL) OR
+        (candidate_revision > 1 AND predecessor_candidate_revision = candidate_revision - 1 AND predecessor_candidate_ref IS NOT NULL AND predecessor_candidate_fingerprint IS NOT NULL)),
+  FOREIGN KEY(candidate_id, predecessor_candidate_revision, predecessor_candidate_ref, predecessor_candidate_fingerprint)
+    REFERENCES home_candidate_revision(candidate_id, candidate_revision, candidate_ref, candidate_fingerprint)
+    DEFERRABLE INITIALLY DEFERRED,
+  FOREIGN KEY(created_event_sequence) REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED
+) STRICT;
+CREATE TABLE home_candidate_head (
+  candidate_id TEXT PRIMARY KEY COLLATE BINARY,
+  semantic_class TEXT NOT NULL CHECK(semantic_class IN ('LIFE_STREAM_CANDIDATE','MEMORY_CANDIDATE','INTENT_CANDIDATE')),
+  current_candidate_revision INTEGER NOT NULL CHECK(current_candidate_revision > 0 AND current_candidate_revision <= 9007199254740991),
+  current_candidate_ref TEXT NOT NULL COLLATE BINARY,
+  current_candidate_fingerprint TEXT NOT NULL CHECK(length(current_candidate_fingerprint) = 64 AND current_candidate_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  pointer_version INTEGER NOT NULL CHECK(pointer_version > 0 AND pointer_version <= 9007199254740991),
+  updated_event_sequence INTEGER NOT NULL CHECK(updated_event_sequence > 0 AND updated_event_sequence <= 9007199254740991),
+  CHECK(pointer_version = current_candidate_revision),
+  FOREIGN KEY(candidate_id, current_candidate_revision, current_candidate_ref, current_candidate_fingerprint)
+    REFERENCES home_candidate_revision(candidate_id, candidate_revision, candidate_ref, candidate_fingerprint)
+    DEFERRABLE INITIALLY DEFERRED,
+  FOREIGN KEY(updated_event_sequence) REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED
+) STRICT;
+CREATE TABLE home_handoff_link (
+  handoff_id TEXT NOT NULL,
+  handoff_revision INTEGER NOT NULL CHECK(handoff_revision = 1),
+  handoff_ref TEXT NOT NULL,
+  intent_candidate_id TEXT NOT NULL COLLATE BINARY,
+  intent_candidate_revision INTEGER NOT NULL CHECK(intent_candidate_revision > 0 AND intent_candidate_revision <= 9007199254740991),
+  intent_candidate_ref TEXT NOT NULL COLLATE BINARY,
+  intent_candidate_fingerprint TEXT NOT NULL CHECK(length(intent_candidate_fingerprint) = 64 AND intent_candidate_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  owner_commitment_set_fingerprint TEXT NOT NULL CHECK(length(owner_commitment_set_fingerprint) = 64 AND owner_commitment_set_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  canonical_candidate_history_fingerprint TEXT NOT NULL CHECK(length(canonical_candidate_history_fingerprint) = 64 AND canonical_candidate_history_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  minimum_trusted_event_sequence INTEGER NOT NULL CHECK(minimum_trusted_event_sequence > 0 AND minimum_trusted_event_sequence <= 9007199254740991),
+  canonical_bytes BLOB NOT NULL,
+  handoff_fingerprint TEXT NOT NULL UNIQUE CHECK(length(handoff_fingerprint) = 64 AND handoff_fingerprint NOT GLOB '*[^0-9a-f]*'),
+  created_event_sequence INTEGER NOT NULL CHECK(created_event_sequence > 0 AND created_event_sequence <= 9007199254740991),
+  PRIMARY KEY(handoff_id, handoff_revision),
+  UNIQUE(handoff_ref, handoff_revision),
+  UNIQUE(intent_candidate_id, intent_candidate_revision),
+  CHECK(handoff_ref = 'handoff:SYNTHETIC_TEST:' || handoff_id || ':' || handoff_revision),
+  FOREIGN KEY(intent_candidate_id, intent_candidate_revision, intent_candidate_ref, intent_candidate_fingerprint)
+    REFERENCES home_candidate_revision(candidate_id, candidate_revision, candidate_ref, candidate_fingerprint)
+    DEFERRABLE INITIALLY DEFERRED,
+  FOREIGN KEY(created_event_sequence) REFERENCES event(event_sequence) DEFERRABLE INITIALLY DEFERRED
+) STRICT;
+CREATE INDEX home_candidate_revision_by_subject ON home_candidate_revision(source_subject_ref, source_subject_revision);
+CREATE INDEX home_candidate_revision_by_event ON home_candidate_revision(created_event_sequence);
+CREATE INDEX home_handoff_link_by_event ON home_handoff_link(created_event_sequence);
+CREATE TRIGGER home_candidate_revision_no_update BEFORE UPDATE ON home_candidate_revision BEGIN SELECT RAISE(ABORT, 'home_candidate_revision_immutable'); END;
+CREATE TRIGGER home_candidate_revision_no_delete BEFORE DELETE ON home_candidate_revision BEGIN SELECT RAISE(ABORT, 'home_candidate_revision_immutable'); END;
+CREATE TRIGGER home_handoff_link_no_update BEFORE UPDATE ON home_handoff_link BEGIN SELECT RAISE(ABORT, 'home_handoff_link_immutable'); END;
+CREATE TRIGGER home_handoff_link_no_delete BEFORE DELETE ON home_handoff_link BEGIN SELECT RAISE(ABORT, 'home_handoff_link_immutable'); END;
+DROP TABLE schema_metadata_v1;
+"#;
 
 pub const TABLES: [&str; 18] = [
     "canonical_fact",
@@ -34,6 +144,18 @@ pub const TABLES: [&str; 18] = [
 ];
 
 pub const TRIGGERS: [&str; 2] = ["canonical_fact_no_delete", "canonical_fact_no_update"];
+
+pub const M0B_SCHEMA_V2_TABLES: [&str; 21] = [
+    "canonical_fact", "command_definition", "command_envelope", "current_fact_pointer",
+    "delivery_attempt", "delivery_receipt", "dispatch_arm", "event", "first_apply_guard",
+    "home_candidate_head", "home_candidate_revision", "home_handoff_link", "inbox_command",
+    "outbox_claim", "outbox_intent", "replay_index", "resident_authority_epoch",
+    "resident_identity", "resident_incarnation", "schema_metadata", "task_completion",
+];
+pub const M0B_SCHEMA_V2_TRIGGERS: [&str; 6] = [
+    "canonical_fact_no_delete", "canonical_fact_no_update", "home_candidate_revision_no_delete",
+    "home_candidate_revision_no_update", "home_handoff_link_no_delete", "home_handoff_link_no_update",
+];
 
 /// R2 schema with the exact R3-R6 replacements applied. R6 is the only
 /// amendment that authorizes triggers; therefore the inventory is exactly two.
@@ -330,6 +452,32 @@ pub struct SchemaSnapshot {
     pub fingerprint: String,
     pub tables: Vec<String>,
     pub triggers: Vec<String>,
+    pub indexes: Vec<String>,
+}
+
+pub fn migrate_synthetic_test_v1_to_v2(
+    connection: &mut Connection,
+) -> Result<SchemaSnapshot, LedgerError> {
+    let v1 = verify_schema_v1(connection)?;
+    if v1.version != 1 {
+        return Err(LedgerError::SchemaMismatch(
+            "only the exact synthetic v1 schema may migrate to v2".to_owned(),
+        ));
+    }
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    transaction.execute_batch(M0B_SCHEMA_V2_SQL)?;
+    let actual = inventory_fingerprint(&transaction)?;
+    if M0B_SCHEMA_V2_FINGERPRINT.len() != 64 || actual != M0B_SCHEMA_V2_FINGERPRINT {
+        return Err(LedgerError::SchemaMismatch(format!(
+            "created SQLite objects do not match the compiled v2 schema seal: {actual}"
+        )));
+    }
+    transaction.execute(
+        "INSERT INTO schema_metadata(singleton_id,schema_version,schema_fingerprint) VALUES(1,2,?1)",
+        [M0B_SCHEMA_V2_FINGERPRINT],
+    )?;
+    transaction.commit()?;
+    verify_schema(connection)
 }
 
 pub fn initialize_v1(connection: &mut Connection) -> Result<SchemaSnapshot, LedgerError> {
@@ -385,12 +533,16 @@ pub fn verify_schema(connection: &Connection) -> Result<SchemaSnapshot, LedgerEr
         [],
         |row| Ok((row.get(0)?, row.get(1)?)),
     )?;
-    if version != SCHEMA_VERSION as i64
-        || fingerprint != SCHEMA_FINGERPRINT
-        || inventory_fingerprint(connection)? != SCHEMA_FINGERPRINT
+    let (expected_fingerprint, expected_tables, expected_triggers, expected_indexes) = match version {
+        1 => (SCHEMA_FINGERPRINT, expected_set(&TABLES), expected_set(&TRIGGERS), BTreeSet::new()),
+        2 => (M0B_SCHEMA_V2_FINGERPRINT, expected_set(&M0B_SCHEMA_V2_TABLES), expected_set(&M0B_SCHEMA_V2_TRIGGERS), expected_set(&M0B_SCHEMA_V2_NEW_INDEXES)),
+        _ => return Err(LedgerError::SchemaMismatch("unknown schema version".to_owned())),
+    };
+    if fingerprint != expected_fingerprint
+        || inventory_fingerprint(connection)? != expected_fingerprint
     {
         return Err(LedgerError::SchemaMismatch(
-            "schema metadata does not match frozen v1".to_owned(),
+            "schema metadata does not match the compiled schema seal".to_owned(),
         ));
     }
     let extra_metadata: i64 = connection.query_row(
@@ -405,29 +557,46 @@ pub fn verify_schema(connection: &Connection) -> Result<SchemaSnapshot, LedgerEr
     }
     let tables = object_names(connection, "table")?;
     let triggers = object_names(connection, "trigger")?;
-    if tables != expected_set(&TABLES) || triggers != expected_set(&TRIGGERS) {
+    let indexes = object_names(connection, "index")?;
+    if tables != expected_tables || triggers != expected_triggers || indexes != expected_indexes {
         return Err(LedgerError::SchemaMismatch(
-            "SQLite object inventory differs from frozen v1".to_owned(),
+            "SQLite object inventory differs from the compiled schema seal".to_owned(),
         ));
     }
     Ok(SchemaSnapshot {
-        version: SCHEMA_VERSION,
+        version: version as u64,
         fingerprint,
         tables: tables.into_iter().collect(),
         triggers: triggers.into_iter().collect(),
+        indexes: indexes.into_iter().collect(),
     })
 }
 
+fn verify_schema_v1(connection: &Connection) -> Result<SchemaSnapshot, LedgerError> {
+    let snapshot = verify_schema(connection)?;
+    if snapshot.version == SCHEMA_VERSION {
+        Ok(snapshot)
+    } else {
+        Err(LedgerError::SchemaMismatch("schema is not frozen v1".to_owned()))
+    }
+}
+
 fn require_connection_boundary(connection: &Connection) -> Result<(), LedgerError> {
-    let attached: i64 =
-        connection.query_row("SELECT COUNT(*) FROM pragma_database_list", [], |row| {
-            row.get(0)
-        })?;
+    let main: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM pragma_database_list WHERE name='main'",
+        [],
+        |row| row.get(0),
+    )?;
+    let attached: i64 = connection.query_row(
+        "SELECT COUNT(*) FROM pragma_database_list WHERE name NOT IN ('main','temp')",
+        [],
+        |row| row.get(0),
+    )?;
     let foreign_keys: i64 = connection.query_row("PRAGMA foreign_keys", [], |row| row.get(0))?;
-    if attached != 1 || foreign_keys != 1 {
-        return Err(LedgerError::SchemaMismatch(
-            "schema requires one attached database and foreign_keys=ON".to_owned(),
-        ));
+    if main != 1 || attached != 0 || foreign_keys != 1 {
+        return Err(LedgerError::SchemaMismatch(format!(
+            "schema requires only main (plus SQLite internal temp) and foreign_keys=ON (main={main}, attached={attached}, foreign_keys={foreign_keys})"
+        )));
     }
     Ok(())
 }
@@ -554,5 +723,27 @@ mod tests {
                 )
                 .is_err()
         );
+    }
+
+    #[test]
+    fn migrates_exact_disposable_synthetic_v1_to_v2() {
+        let (_root, mut connection) = connection();
+        initialize_v1(&mut connection).expect("initialize v1");
+        let snapshot = migrate_synthetic_test_v1_to_v2(&mut connection).expect("migrate v2");
+        assert_eq!(snapshot.version, 2);
+        assert_eq!(snapshot.tables.len(), 21);
+        assert_eq!(snapshot.triggers.len(), 6);
+        assert_eq!(snapshot.indexes, [
+            "home_candidate_revision_by_event".to_owned(),
+            "home_candidate_revision_by_subject".to_owned(),
+            "home_handoff_link_by_event".to_owned(),
+        ]);
+        assert!(connection
+            .query_row("PRAGMA quick_check", [], |row| row.get::<_, String>(0))
+            .is_ok_and(|result| result == "ok"));
+        let violations: i64 = connection
+            .query_row("SELECT COUNT(*) FROM pragma_foreign_key_check", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(violations, 0);
     }
 }

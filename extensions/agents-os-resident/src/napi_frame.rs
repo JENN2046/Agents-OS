@@ -10,7 +10,9 @@ use crate::ledger::replay::{
     TerminalOutboxObservation, TerminalValidationCompletionIntake,
     TerminalValidationCompletionObservation, ValidationCompletionFault,
 };
-use crate::reducers::command_intake::{CommandIntakeError, validate_submission};
+use crate::reducers::command_intake::{
+    CommandIntakeError, HOME_INTENT_COMMAND_TYPE_ID, validate_submission,
+};
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
 use crate::reducers::{authority_assessment, outbox_claim};
 use crate::resident::{ResidentError, ResidentKernel};
@@ -23,6 +25,8 @@ pub const CLAIM_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.claim-outbox-request.v
 pub const ACK_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.acknowledge-outbox-request.v0.1";
 pub const RECONCILE_REQUEST_SCHEMA_REF: &str = "agents-os.m0a.reconcile-request.v0.1";
 pub const RESULT_SCHEMA_REF: &str = "agents-os.m0a.boundary-result.v0.1";
+pub const HOME_INTENT_RESULT_SCHEMA_REF: &str =
+    "agents-os.m0b.home-intent-boundary-result.v0.1";
 
 const COMMAND_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"authentication_assertion":{"type":"object"},"canonical_command":{"type":"object"}},"required":["authentication_assertion","canonical_command"],"type":"object"}"#;
 const QUERY_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"environment":{"const":"SYNTHETIC_TEST"},"query_id":{"const":"LEDGER_COUNTS"}},"required":["environment","query_id"],"type":"object"}"#;
@@ -30,6 +34,7 @@ const CLAIM_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"propertie
 const ACK_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"effect_status":{"enum":["ACKED_ONLY","SUCCEEDED","FAILED","UNKNOWN","NOT_EXECUTED"]},"environment":{"const":"SYNTHETIC_TEST"},"outbox_intent_ref":{"minLength":1,"type":"string"},"receipt_id":{"minLength":1,"type":"string"},"receipt_kind":{"enum":["TRANSPORT_ACK","EFFECT_SUCCEEDED","EFFECT_FAILED","EFFECT_STATUS_UNKNOWN","EFFECT_QUERY_RESULT"]},"source_id":{"minLength":1,"type":"string"}},"required":["effect_status","environment","outbox_intent_ref","receipt_id","receipt_kind","source_id"],"type":"object"}"#;
 const RECONCILE_REQUEST_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"environment":{"const":"SYNTHETIC_TEST"},"observed_at_utc_ms":{"minimum":0,"type":"integer"},"outbox_intent_ref":{"minLength":1,"type":"string"}},"required":["environment","observed_at_utc_ms","outbox_intent_ref"],"type":"object"}"#;
 const RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"detail":{"additionalProperties":false,"properties":{"delivery_attempts":{"type":"integer"},"delivery_receipts":{"type":"integer"},"dispatch_arms":{"type":"integer"},"events":{"type":"integer"},"facts":{"type":"integer"},"first_apply_guards":{"type":"integer"},"inbox_commands":{"type":"integer"},"outbox_claims":{"type":"integer"},"outbox_intent_ref":{"type":"string"},"outbox_intents":{"type":"integer"},"pointers":{"type":"integer"},"replay_rows":{"type":"integer"},"task_completions":{"type":"integer"}},"type":"object"},"low_disclosure_result_code":{"enum":["CLAIM_NOT_EXECUTABLE","COMMAND_INDETERMINATE","CONTRACT_NOT_ACTIVE","GOAL_AND_TASKS_CREATED_SYNTHETIC","INTENT_NOT_FOUND","NO_APPLICABLE_RECEIPT","NO_RECONCILIATION_REQUIRED","PROTOCOL_CONFLICT","QUERY_OK","SYNTHETIC_INPUT_NOT_EXECUTABLE","SYNTHETIC_OUTBOX_NOT_EXECUTABLE","TASK_COMPLETED_SYNTHETIC","VALIDATION_CURRENT_DECISION_RECORDED"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
+const HOME_INTENT_RESULT_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"low_disclosure_result_code":{"enum":["HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC","INVALID_HOME_INTENT_COMMAND"]},"runtime_usable":{"const":false}},"required":["low_disclosure_result_code","runtime_usable"],"type":"object"}"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MethodId {
@@ -267,7 +272,18 @@ impl<'a> CommandBoundary<'a> {
     }
 
     fn execute_command(&self, request: &NapiRequestFrame) -> Result<NapiResponseFrame, FrameError> {
-        let command = validate_submission(&request.payload)?;
+        let command = match validate_submission(&request.payload) {
+            Ok(command) => command,
+            Err(_error) if claims_home_intent_command(&request.payload) => {
+                return response(
+                    request,
+                    Disposition::Rejected,
+                    "INVALID_HOME_INTENT_COMMAND",
+                    None,
+                );
+            }
+            Err(error) => return Err(error.into()),
+        };
         if command.command_id != request.request_id {
             return Err(FrameError::Invalid(
                 "request_id does not match canonical command_id",
@@ -320,6 +336,44 @@ impl<'a> CommandBoundary<'a> {
                 {
                     response(request, Disposition::Rejected, "PROTOCOL_CONFLICT", None)
                 }
+                Err(error) => Err(error.into()),
+            };
+        }
+
+        if command.command_type_id == HOME_INTENT_COMMAND_TYPE_ID {
+            let first_response = response(
+                request,
+                Disposition::Committed,
+                "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC",
+                None,
+            )?;
+            let intake = TerminalValidationCompletionIntake {
+                command_id: command.command_id,
+                command_type_id: command.command_type_id,
+                command_type_revision: command.command_type_revision,
+                canonical_command_bytes: command.canonical_command_bytes,
+                canonical_command_fingerprint: command.canonical_command_fingerprint,
+                request_bytes: request.canonical_bytes.clone(),
+                request_fingerprint: sha256_hex(&request.canonical_bytes),
+                response_bytes: first_response.canonical_bytes.clone(),
+                response_fingerprint: sha256_hex(&first_response.canonical_bytes),
+            };
+            return match kernel.terminal_synthetic_home_intent_intake(intake) {
+                Ok(TerminalValidationCompletionObservation::FirstTerminal) => Ok(first_response),
+                Ok(TerminalValidationCompletionObservation::Replayed { response_bytes }) => {
+                    replay_response(response_bytes, Disposition::Committed)
+                }
+                Err(ResidentError::LedgerOperation(message))
+                    if message.contains("request identity conflicts") =>
+                {
+                    response(request, Disposition::Rejected, "PROTOCOL_CONFLICT", None)
+                }
+                Err(ResidentError::InvalidHomeIntentSource) => response(
+                    request,
+                    Disposition::Rejected,
+                    "INVALID_HOME_INTENT_COMMAND",
+                    None,
+                ),
                 Err(error) => Err(error.into()),
             };
         }
@@ -597,6 +651,14 @@ fn response(
     code: &str,
     detail: Option<Value>,
 ) -> Result<NapiResponseFrame, FrameError> {
+    let (result_schema_ref, result_schema) = if matches!(
+        code,
+        "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC" | "INVALID_HOME_INTENT_COMMAND"
+    ) {
+        (HOME_INTENT_RESULT_SCHEMA_REF, HOME_INTENT_RESULT_SCHEMA)
+    } else {
+        (RESULT_SCHEMA_REF, RESULT_SCHEMA)
+    };
     let mut result = serde_json::Map::new();
     if let Some(detail) = detail {
         result.insert("detail".to_owned(), detail);
@@ -612,8 +674,8 @@ fn response(
         "method_id": request.method_id.as_str(),
         "request_id": request.request_id,
         "result": Value::Object(result),
-        "result_schema_ref": RESULT_SCHEMA_REF,
-        "result_schema_sha256": sha256_hex(RESULT_SCHEMA)
+        "result_schema_ref": result_schema_ref,
+        "result_schema_sha256": sha256_hex(result_schema)
     });
     let canonical_bytes = canonicalize_json(
         &serde_json::to_vec(&value)
@@ -623,6 +685,18 @@ fn response(
         canonical_bytes,
         disposition,
     })
+}
+
+fn claims_home_intent_command(payload: &CanonicalValue) -> bool {
+    let value: Value = match serde_json::from_slice(&to_jcs_bytes(payload)) {
+        Ok(value) => value,
+        Err(_) => return false,
+    };
+    value
+        .get("canonical_command")
+        .and_then(|command| command.get("command_type_id"))
+        .and_then(Value::as_str)
+        == Some(HOME_INTENT_COMMAND_TYPE_ID)
 }
 
 fn field<'a>(value: &'a CanonicalValue, name: &str) -> Result<&'a CanonicalValue, CanonicalError> {

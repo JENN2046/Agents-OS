@@ -14,6 +14,7 @@ use napi_derive::napi;
 use serde_json::Value;
 
 pub mod canonical;
+pub mod home;
 pub mod ledger;
 pub mod mock_host;
 pub mod napi_frame;
@@ -169,9 +170,7 @@ fn invoke_direct_frame(env: Env, method: MethodId, input: Value) -> napi::Result
         .map_err(native_error)
 }
 
-#[napi(js_name = "execute_command")]
-pub fn execute_command(env: Env, input: Value) -> napi::Result<Value> {
-    let state = native_boundary(env)?;
+fn execute_command_frame(input: Value) -> napi::Result<Vec<u8>> {
     let object = input
         .as_object()
         .ok_or_else(|| native_error("execute_command input must be a plain object"))?;
@@ -187,6 +186,12 @@ pub fn execute_command(env: Env, input: Value) -> napi::Result<Value> {
         .ok_or_else(|| native_error("commandRef must be a nonempty string"))?;
     let claimed_fingerprint = object["commandFingerprint"]
         .as_str()
+        .filter(|value| {
+            value.len() == 64
+                && value
+                    .bytes()
+                    .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+        })
         .ok_or_else(|| native_error("commandFingerprint must be a lowercase SHA-256"))?;
     let payload_json = object["payload"]
         .as_str()
@@ -196,17 +201,22 @@ pub fn execute_command(env: Env, input: Value) -> napi::Result<Value> {
     if canonical::jcs::to_jcs_bytes(&payload) != payload_bytes {
         return Err(native_error("payload bytes are not canonical JCS"));
     }
-    let validated = validate_submission(&payload).map_err(native_error)?;
-    if validated.command_id != command_ref
-        || validated.canonical_command_fingerprint != claimed_fingerprint
+    if let Ok(validated) = validate_submission(&payload)
+        && (validated.command_id != command_ref
+            || validated.canonical_command_fingerprint != claimed_fingerprint)
     {
         return Err(native_error(
             "commandRef or commandFingerprint does not match the canonical submission",
         ));
     }
     let payload_value: Value = serde_json::from_slice(&payload_bytes).map_err(native_error)?;
-    let frame = request_bytes(MethodId::ExecuteCommand, command_ref, payload_value)
-        .map_err(native_error)?;
+    request_bytes(MethodId::ExecuteCommand, command_ref, payload_value).map_err(native_error)
+}
+
+#[napi(js_name = "execute_command")]
+pub fn execute_command(env: Env, input: Value) -> napi::Result<Value> {
+    let state = native_boundary(env)?;
+    let frame = execute_command_frame(input)?;
     let boundary = state
         .kernel
         .as_ref()
@@ -235,4 +245,45 @@ pub fn acknowledge_outbox(env: Env, input: Value) -> napi::Result<Value> {
 #[napi(js_name = "reconcile")]
 pub fn reconcile(env: Env, input: Value) -> napi::Result<Value> {
     invoke_direct_frame(env, MethodId::Reconcile, input)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::canonical::jcs::canonicalize_json;
+    use crate::napi_frame::Disposition;
+    use crate::reducers::command_intake::HOME_INTENT_COMMAND_TYPE_ID;
+    use serde_json::json;
+
+    #[test]
+    fn public_execute_command_projection_preserves_low_disclosure_home_rejection() {
+        let payload = canonicalize_json(
+            &serde_json::to_vec(&json!({
+                "authentication_assertion": {},
+                "canonical_command": {
+                    "command_type_id": HOME_INTENT_COMMAND_TYPE_ID,
+                    "forbidden_field": "must not be echoed"
+                }
+            }))
+            .unwrap(),
+        )
+        .unwrap();
+        let frame = execute_command_frame(json!({
+            "commandFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "commandRef": "command:SYNTHETIC_TEST:invalid-home-intent",
+            "payload": String::from_utf8(payload).unwrap()
+        }))
+        .unwrap();
+        let response = CommandBoundary::inactive()
+            .invoke(MethodId::ExecuteCommand, &frame)
+            .unwrap();
+        assert_eq!(response.disposition, Disposition::Rejected);
+        assert_eq!(
+            response.as_json_value().unwrap()["result"]["low_disclosure_result_code"],
+            "INVALID_HOME_INTENT_COMMAND"
+        );
+        assert!(!String::from_utf8(response.canonical_bytes)
+            .unwrap()
+            .contains("must not be echoed"));
+    }
 }

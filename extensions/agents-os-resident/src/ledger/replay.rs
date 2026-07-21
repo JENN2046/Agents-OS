@@ -122,6 +122,130 @@ pub enum TerminalValidationCompletionObservation {
     Replayed { response_bytes: Vec<u8> },
 }
 
+/// Commits the implementation-only M0-B Home Intent Command through the F3
+/// ledger owner. Home supplies canonical candidate evidence but never writes
+/// Inbox, CommandEnvelope, Event or replay rows itself.
+pub fn terminal_synthetic_home_intent(
+    connection: &mut Connection,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<TerminalValidationCompletionObservation, LedgerError> {
+    validate_committed_synthetic_intake(
+        intake,
+        "M0_SYNTHETIC_SUBMIT_HOME_INTENT",
+        "HOME_INTENT_COMMAND_COMMITTED_SYNTHETIC",
+    )?;
+    let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+    let schema = super::schema::verify_schema(&transaction)?;
+    if schema.version != 2 {
+        return Err(LedgerError::InvalidHomeIntentSource);
+    }
+    verify_registry(&transaction)?;
+    if let Some(response_bytes) = existing_committed_replay(&transaction, intake)? {
+        transaction.commit()?;
+        return Ok(TerminalValidationCompletionObservation::Replayed { response_bytes });
+    }
+    require_exact_home_intent_source(&transaction, intake)?;
+
+    let (event_sequence, predecessor_event_fingerprint) = next_event(&transaction)?;
+    insert_committed_intake(&transaction, intake, event_sequence)?;
+    let event_kind = "F3_SYNTHETIC_HOME_INTENT_COMMITTED";
+    let event_bytes = event_bytes(
+        event_sequence,
+        event_kind,
+        &intake.command_id,
+        &intake.command_id,
+    )?;
+    insert_event(
+        &transaction,
+        event_sequence,
+        &format!("event:f3-home-intent:SYNTHETIC_TEST:{event_sequence}"),
+        event_kind,
+        &intake.command_id,
+        1,
+        &intake.command_id,
+        &event_bytes,
+        &predecessor_event_fingerprint,
+    )?;
+    insert_committed_replay(&transaction, intake)?;
+    require_no_foreign_key_violations(&transaction, "WP5 Home Intent intake")?;
+    transaction.commit()?;
+    Ok(TerminalValidationCompletionObservation::FirstTerminal)
+}
+
+fn require_exact_home_intent_source(
+    transaction: &rusqlite::Transaction<'_>,
+    intake: &TerminalValidationCompletionIntake,
+) -> Result<(), LedgerError> {
+    let command: serde_json::Value = serde_json::from_slice(&intake.canonical_command_bytes)
+        .map_err(|_| LedgerError::InvalidInput("Home Intent Command is not JSON"))?;
+    let payload = command
+        .get("command_payload")
+        .and_then(serde_json::Value::as_object)
+        .ok_or(LedgerError::InvalidInput(
+            "Home Intent Command payload is missing",
+        ))?;
+    let string = |name: &str| -> Result<&str, LedgerError> {
+        payload
+            .get(name)
+            .and_then(serde_json::Value::as_str)
+            .ok_or(LedgerError::InvalidInput(
+                "Home Intent Command payload string is invalid",
+            ))
+    };
+    let integer = |name: &str| -> Result<u64, LedgerError> {
+        payload
+            .get(name)
+            .and_then(serde_json::Value::as_u64)
+            .ok_or(LedgerError::InvalidInput(
+                "Home Intent Command payload integer is invalid",
+            ))
+    };
+    let handoff_ref = string("handoff_candidate_ref")?;
+    let handoff_revision = integer("handoff_candidate_revision")?;
+    let handoff_fingerprint = string("handoff_candidate_fingerprint")?;
+    let intent_ref = string("intent_candidate_ref")?;
+    let intent_revision = integer("intent_candidate_revision")?;
+    let intent_fingerprint = string("intent_candidate_fingerprint")?;
+    let owner_set = string("owner_commitment_set_fingerprint")?;
+    let history = string("canonical_candidate_history_fingerprint")?;
+    let minimum_sequence = integer("minimum_trusted_event_sequence")?;
+    let linked: Option<(String, i64, i64)> = transaction
+        .query_row(
+            "SELECT intent_candidate_id,intent_candidate_revision,created_event_sequence FROM home_handoff_link WHERE handoff_ref=?1 AND handoff_revision=?2 AND handoff_fingerprint=?3 AND intent_candidate_ref=?4 AND intent_candidate_revision=?5 AND intent_candidate_fingerprint=?6 AND owner_commitment_set_fingerprint=?7 AND canonical_candidate_history_fingerprint=?8 AND minimum_trusted_event_sequence=?9",
+            params![handoff_ref,as_i64(handoff_revision)?,handoff_fingerprint,intent_ref,as_i64(intent_revision)?,intent_fingerprint,owner_set,history,as_i64(minimum_sequence)?],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .optional()?;
+    let Some((intent_id, linked_revision, handoff_event_sequence)) = linked else {
+        return Err(LedgerError::InvalidHomeIntentSource);
+    };
+    if linked_revision != as_i64(intent_revision)?
+        || handoff_event_sequence <= as_i64(minimum_sequence)?
+    {
+        return Err(LedgerError::InvalidHomeIntentSource);
+    }
+    let current: Option<(i64, String, String, i64)> = transaction
+        .query_row(
+            "SELECT current_candidate_revision,current_candidate_ref,current_candidate_fingerprint,updated_event_sequence FROM home_candidate_head WHERE candidate_id=?1 AND semantic_class='INTENT_CANDIDATE'",
+            [&intent_id],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+        )
+        .optional()?;
+    let Some((current_revision, current_ref, current_fingerprint, current_event_sequence)) =
+        current
+    else {
+        return Err(LedgerError::InvalidHomeIntentSource);
+    };
+    if current_revision != as_i64(intent_revision)?
+        || current_ref != intent_ref
+        || current_fingerprint != intent_fingerprint
+        || current_event_sequence < as_i64(minimum_sequence)?
+    {
+        return Err(LedgerError::InvalidHomeIntentSource);
+    }
+    Ok(())
+}
+
 /// Atomically records the fixed F1-shaped synthetic Goal, success criteria,
 /// Plan revision, and exact three-Task membership.  The four facts share one
 /// Event and are never runtime-usable.

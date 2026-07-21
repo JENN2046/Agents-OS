@@ -12,6 +12,16 @@ use agents_os_resident::resident::{
     ResidentError, ResidentKernel, ResidentKernelConfig, SYNTHETIC_DATABASE_FILENAME,
     SyntheticOwnership,
 };
+use agents_os_resident::home::candidate::{
+    HomeCandidateRevision, derive_candidate_revision,
+};
+use agents_os_resident::home::handoff::{
+    HomeIntentHandoffCandidate, compose_f8_handoff, owner_commitment_set_fingerprint,
+    trusted_owner_commitments,
+};
+use agents_os_resident::ledger::transaction::{
+    HomeCommitFault, HomeCommitObservation, HomeHeadExpectation,
+};
 
 fn kernel(root: &std::path::Path, suffix: &str) -> ResidentKernel {
     let ownership = SyntheticOwnership::genesis(
@@ -77,6 +87,183 @@ fn wp6_intake(command_id: &str, command_type_id: &str) -> TerminalValidationComp
         response_fingerprint: sha256_hex(&response_bytes),
         response_bytes,
     }
+}
+
+fn home_candidate() -> HomeCandidateRevision {
+    let bytes = canonicalize_json(
+        &serde_json::to_vec(&serde_json::json!({
+            "candidate_id": "intent",
+            "candidate_revision": 1,
+            "created_event_sequence": 100,
+            "creator_assessment_fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "creator_assessment_ref": "assessment:SYNTHETIC_TEST:creator:1",
+            "payload_commitment": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "predecessor_candidate_fingerprint": null,
+            "predecessor_candidate_ref": null,
+            "predecessor_candidate_revision": null,
+            "semantic_class": "INTENT_CANDIDATE",
+            "source_subject_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "source_subject_ref": "subject:SYNTHETIC_TEST:session:1",
+            "source_subject_revision": 1
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    derive_candidate_revision(&bytes, &[]).unwrap().candidate
+}
+
+fn home_handoff(intent: &HomeCandidateRevision) -> HomeIntentHandoffCandidate {
+    let history = vec![intent.clone()];
+    let owners = trusted_owner_commitments();
+    let bytes = canonicalize_json(
+        &serde_json::to_vec(&serde_json::json!({
+            "canonical_candidate_history_fingerprint": agents_os_resident::home::candidate::canonical_candidate_history_fingerprint(&history).unwrap(),
+            "explicit_handoff_choice": "PROPOSE_F8_HANDOFF",
+            "handoff_candidate_id": "home-intent",
+            "handoff_candidate_revision": 1,
+            "intent_candidate_fingerprint": intent.candidate_fingerprint,
+            "intent_candidate_ref": intent.candidate_ref,
+            "intent_candidate_revision": intent.candidate_revision,
+            "minimum_trusted_event_sequence": 100,
+            "owner_commitment_set_fingerprint": owner_commitment_set_fingerprint(&owners).unwrap()
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    compose_f8_handoff(&bytes, &history, &owners, &[])
+        .unwrap()
+        .candidate
+        .unwrap()
+}
+
+fn home_row_counts(root: &std::path::Path) -> (i64, i64, i64, i64) {
+    let connection = rusqlite::Connection::open_with_flags(
+        root.join(SYNTHETIC_DATABASE_FILENAME),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .unwrap();
+    connection
+        .query_row(
+            "SELECT (SELECT COUNT(*) FROM home_candidate_revision),(SELECT COUNT(*) FROM home_candidate_head),(SELECT COUNT(*) FROM home_handoff_link),(SELECT COUNT(*) FROM event)",
+            [],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+        )
+        .unwrap()
+}
+
+#[test]
+fn m0b_candidate_crash_matrix_is_atomic_and_postcommit_replays() {
+    for (index, fault) in [
+        HomeCommitFault::BeforeBegin,
+        HomeCommitFault::AfterRecordInsert,
+        HomeCommitFault::AfterEventInsert,
+        HomeCommitFault::AfterHeadCas,
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let root = tempfile::tempdir().unwrap();
+        let kernel = kernel(root.path(), &format!("m0b-c{index}"));
+        kernel.migrate_synthetic_ledger_v2().unwrap();
+        assert!(matches!(
+            kernel.commit_home_candidate(
+                home_candidate(),
+                HomeHeadExpectation::Absent,
+                fault,
+            ),
+            Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+        ));
+        kernel.shutdown().unwrap();
+        assert_eq!(home_row_counts(root.path()), (0, 0, 0, 1));
+    }
+
+    let root = tempfile::tempdir().unwrap();
+    let kernel = kernel(root.path(), "m0b-c4");
+    kernel.migrate_synthetic_ledger_v2().unwrap();
+    let candidate = home_candidate();
+    assert!(matches!(
+        kernel.commit_home_candidate(
+            candidate.clone(),
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::AfterCommitBeforeResponse,
+        ),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+    ));
+    assert_eq!(
+        kernel
+            .commit_home_candidate(
+                candidate,
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    kernel.shutdown().unwrap();
+    assert_eq!(home_row_counts(root.path()), (1, 1, 0, 2));
+}
+
+#[test]
+fn m0b_handoff_crash_matrix_is_atomic_and_never_auto_submits_f3() {
+    for (index, fault) in [
+        HomeCommitFault::BeforeBegin,
+        HomeCommitFault::AfterCurrentnessRecheck,
+        HomeCommitFault::AfterRecordInsert,
+        HomeCommitFault::AfterEventInsert,
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let root = tempfile::tempdir().unwrap();
+        let kernel = kernel(root.path(), &format!("m0b-h{index}"));
+        kernel.migrate_synthetic_ledger_v2().unwrap();
+        let candidate = home_candidate();
+        kernel
+            .commit_home_candidate(
+                candidate.clone(),
+                HomeHeadExpectation::Absent,
+                HomeCommitFault::None,
+            )
+            .unwrap();
+        assert!(matches!(
+            kernel.commit_home_handoff(home_handoff(&candidate), "intent", fault),
+            Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+        ));
+        kernel.shutdown().unwrap();
+        assert_eq!(home_row_counts(root.path()), (1, 1, 0, 2));
+    }
+
+    let root = tempfile::tempdir().unwrap();
+    let kernel = kernel(root.path(), "m0b-h4");
+    kernel.migrate_synthetic_ledger_v2().unwrap();
+    let candidate = home_candidate();
+    kernel
+        .commit_home_candidate(
+            candidate.clone(),
+            HomeHeadExpectation::Absent,
+            HomeCommitFault::None,
+        )
+        .unwrap();
+    let handoff = home_handoff(&candidate);
+    assert!(matches!(
+        kernel.commit_home_handoff(
+            handoff.clone(),
+            "intent",
+            HomeCommitFault::AfterCommitBeforeResponse,
+        ),
+        Err(ResidentError::LedgerOperation(message)) if message.contains("synthetic crash injection")
+    ));
+    assert_eq!(
+        kernel
+            .commit_home_handoff(handoff, "intent", HomeCommitFault::None)
+            .unwrap(),
+        HomeCommitObservation::ExactReplay
+    );
+    let counts = kernel.ledger_counts().unwrap();
+    assert_eq!(counts.inbox_commands, 0);
+    assert_eq!(counts.replay_rows, 0);
+    kernel.shutdown().unwrap();
+    assert_eq!(home_row_counts(root.path()), (1, 1, 1, 3));
 }
 
 #[test]

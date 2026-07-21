@@ -1,0 +1,61 @@
+schema_version: agents-os.implementation-delivery-authorization-record.v0.1
+record_id: agents-os-phase-5b-m0b-automatic-implementation-delivery-authorization-v0.1
+date: 2026-07-22
+status: ACCEPTED
+owner: Jenn
+agent_steward: Nobao
+
+decision:
+  accepted_by: Jenn
+  accepted_at_local_date: 2026-07-22
+  confirmation_text_received: |-
+    我授权 Nuobao 按冻结的 Phase 5B M0-B R1–R5 Plan，在 agent/phase-5b-m0b-implementation 上依次自动完成 WP3–WP7 和 Implementation Closeout。
+    每个 WP 通过直接前序门后无需再次确认，可在冻结范围内修复、测试、自审、精确提交、密封 manifest 并更新治理投影。
+
+    我同时授权为 WP6 创建、写入和清理全新的一次性 synthetic test SQLite 数据库；不得读取或修改生产、现有或私人数据库。
+
+    Closeout 通过后，授权执行 scoped branch push、创建和维护 PR、跟踪 CI/Codex review、解决范围内反馈并继续推送修复。若 required checks 全部
+    通过、无未解决 blocker、diff 范围精确且不会触发 deploy、release 或 publish，授权合并该 PR 到 main，验证本地与远端 main、commit 和 blob/
+    hash 一致，并创建 post-merge durability receipt。
+
+    该授权不包括 VCPToolBox core 修改或启动、plugin enablement、runtime activation、生产认证、private Memory、真实 Session、provider、
+    sensing、真实 effect、release、deploy、publish、force push、tag、history rewrite、secrets/state-private 访问、公共 API/MCP 扩张或 Phase
+    5C/其他后续阶段启动。任何冻结范围扩张或无法在原范围修复的 blocker 必须停止并报告。
+
+authority:
+  branch: agent/phase-5b-m0b-implementation
+  frozen_plan: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  sequential_work_packages:
+    - WP3_EXPLICIT_PROMOTION_GATES
+    - WP4_F8_HANDOFF_COMPOSITION
+    - WP5_F3_SYNTHETIC_INTAKE_SEAM
+    - WP6_LEDGER_PRIVACY_AND_RECOVERY
+    - WP7_INTEGRATED_M0B_WITNESS
+    - PHASE_5B_M0B_IMPLEMENTATION_CLOSEOUT
+  advancement_rule: direct_predecessor_frozen_condition_must_pass
+  repair_inside_frozen_scope: authorized
+  scoped_commits_and_manifest_seals: authorized
+  governance_projection_updates: authorized
+  fresh_disposable_synthetic_SQLite_for_WP6: authorized
+  scoped_branch_push_PR_tracking_and_review_fixes_after_closeout: authorized
+  merge_to_main_when_all_declared_gates_pass: authorized
+  post_merge_hash_verification_and_durability_receipt: authorized
+
+hard_boundaries:
+  VCPToolBox_core_change_or_start: forbidden
+  plugin_enablement: forbidden
+  runtime_activation: forbidden
+  production_authentication: forbidden
+  private_Memory_or_real_Session_access: forbidden
+  provider_sensing_or_real_effect: forbidden
+  production_existing_or_private_database: forbidden
+  release_deploy_publish_force_push_tag_or_history_rewrite: forbidden
+  secrets_or_state_private_access: forbidden
+  public_API_or_MCP_expansion: forbidden
+  Phase_5C_or_later_phase_start: forbidden
+  frozen_scope_expansion: stop_and_report
+  unrepairable_blocker_inside_frozen_scope: stop_and_report
+
+immutability_policy:
+  edit_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record

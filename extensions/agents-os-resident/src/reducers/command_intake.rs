@@ -11,14 +11,31 @@ pub const SYNTHETIC_PRINCIPAL_ID: &str = "principal:SYNTHETIC_TEST:jenn";
 pub const SYNTHETIC_PRINCIPAL_BINDING_REF: &str = "binding:SYNTHETIC_TEST:jenn";
 pub const SYNTHETIC_CREDENTIAL_ID: &str = "credential:SYNTHETIC_TEST:deterministic";
 
-pub const COMMAND_TYPE_IDS: [&str; 4] = [
+pub const HOME_INTENT_COMMAND_TYPE_ID: &str = "M0_SYNTHETIC_SUBMIT_HOME_INTENT";
+
+pub const COMMAND_TYPE_IDS: [&str; 5] = [
     "M0_SYNTHETIC_CREATE_GOAL_AND_TASKS",
     "M0_SYNTHETIC_RECORD_VALIDATION",
     "M0_SYNTHETIC_ENQUEUE_MOCK_EFFECT",
     "M0_SYNTHETIC_COMPLETE_TASK",
+    HOME_INTENT_COMMAND_TYPE_ID,
 ];
 
 const SYNTHETIC_COMMAND_PAYLOAD_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"schema_version":{"const":"agents-os.m0a-synthetic-command-payload.v0.1"}},"required":["schema_version"],"type":"object"}"#;
+const HOME_INTENT_PAYLOAD_SCHEMA: &[u8] = br#"{"additionalProperties":false,"properties":{"canonical_candidate_history_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"handoff_candidate_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"handoff_candidate_ref":{"minLength":1,"type":"string"},"handoff_candidate_revision":{"minimum":1,"type":"integer"},"intent_candidate_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"intent_candidate_ref":{"minLength":1,"type":"string"},"intent_candidate_revision":{"minimum":1,"type":"integer"},"minimum_trusted_event_sequence":{"minimum":1,"type":"integer"},"owner_commitment_set_fingerprint":{"pattern":"^[0-9a-f]{64}$","type":"string"},"schema_version":{"const":"agents-os.m0b.synthetic-home-intent-payload.v0.1"}},"required":["canonical_candidate_history_fingerprint","handoff_candidate_fingerprint","handoff_candidate_ref","handoff_candidate_revision","intent_candidate_fingerprint","intent_candidate_ref","intent_candidate_revision","minimum_trusted_event_sequence","owner_commitment_set_fingerprint","schema_version"],"type":"object"}"#;
+
+const HOME_INTENT_PAYLOAD_FIELDS: [&str; 10] = [
+    "canonical_candidate_history_fingerprint",
+    "handoff_candidate_fingerprint",
+    "handoff_candidate_ref",
+    "handoff_candidate_revision",
+    "intent_candidate_fingerprint",
+    "intent_candidate_ref",
+    "intent_candidate_revision",
+    "minimum_trusted_event_sequence",
+    "owner_commitment_set_fingerprint",
+    "schema_version",
+];
 
 const COMMAND_FIELDS: [&str; 10] = [
     "claimed_actor_id",
@@ -50,6 +67,59 @@ pub struct ValidatedSyntheticCommand {
     pub canonical_command_fingerprint: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SyntheticHomeIntentPayload {
+    pub handoff_candidate_ref: String,
+    pub handoff_candidate_revision: u64,
+    pub handoff_candidate_fingerprint: String,
+    pub intent_candidate_ref: String,
+    pub intent_candidate_revision: u64,
+    pub intent_candidate_fingerprint: String,
+    pub owner_commitment_set_fingerprint: String,
+    pub canonical_candidate_history_fingerprint: String,
+    pub minimum_trusted_event_sequence: u64,
+}
+
+impl SyntheticHomeIntentPayload {
+    pub fn command_id(&self) -> Result<String, CommandIntakeError> {
+        validate_home_intent_material(self)?;
+        let bytes = canonicalize_json(
+            &serde_json::to_vec(&serde_json::json!([
+                "agents-os.m0b.home-intent-command-id.v0.1",
+                self.handoff_candidate_ref,
+                self.handoff_candidate_revision,
+                self.handoff_candidate_fingerprint,
+                self.intent_candidate_ref,
+                self.intent_candidate_revision,
+                self.intent_candidate_fingerprint,
+                self.owner_commitment_set_fingerprint,
+                self.canonical_candidate_history_fingerprint,
+                self.minimum_trusted_event_sequence
+            ]))
+            .map_err(|_| CommandIntakeError::Invalid("home intent command-id serialization failed"))?,
+        )?;
+        Ok(format!(
+            "command:SYNTHETIC_TEST:home-intent:{}",
+            sha256_hex(&bytes)
+        ))
+    }
+
+    fn as_value(&self) -> Value {
+        serde_json::json!({
+            "canonical_candidate_history_fingerprint": self.canonical_candidate_history_fingerprint,
+            "handoff_candidate_fingerprint": self.handoff_candidate_fingerprint,
+            "handoff_candidate_ref": self.handoff_candidate_ref,
+            "handoff_candidate_revision": self.handoff_candidate_revision,
+            "intent_candidate_fingerprint": self.intent_candidate_fingerprint,
+            "intent_candidate_ref": self.intent_candidate_ref,
+            "intent_candidate_revision": self.intent_candidate_revision,
+            "minimum_trusted_event_sequence": self.minimum_trusted_event_sequence,
+            "owner_commitment_set_fingerprint": self.owner_commitment_set_fingerprint,
+            "schema_version": "agents-os.m0b.synthetic-home-intent-payload.v0.1"
+        })
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum CommandIntakeError {
     #[error("canonical command input is invalid: {0}")]
@@ -65,9 +135,13 @@ pub fn synthetic_principal_binding_fingerprint() -> String {
 }
 
 pub fn command_schema_fingerprint(command_type_id: &str) -> Option<String> {
-    COMMAND_TYPE_IDS
-        .contains(&command_type_id)
-        .then(|| sha256_hex(SYNTHETIC_COMMAND_PAYLOAD_SCHEMA))
+    match command_type_id {
+        HOME_INTENT_COMMAND_TYPE_ID => Some(sha256_hex(HOME_INTENT_PAYLOAD_SCHEMA)),
+        value if COMMAND_TYPE_IDS.contains(&value) => {
+            Some(sha256_hex(SYNTHETIC_COMMAND_PAYLOAD_SCHEMA))
+        }
+        _ => None,
+    }
 }
 
 pub fn validate_submission(
@@ -108,12 +182,16 @@ pub fn validate_submission(
         SYNTHETIC_PRINCIPAL_BINDING_REF,
     )?;
     let command_payload = field(command, "command_payload")?;
-    command_payload.require_exact_fields(&["schema_version"])?;
-    require_string(
-        command_payload,
-        "schema_version",
-        "agents-os.m0a-synthetic-command-payload.v0.1",
-    )?;
+    if command_type_id == HOME_INTENT_COMMAND_TYPE_ID {
+        validate_home_intent_payload(command_payload, &command_id)?;
+    } else {
+        command_payload.require_exact_fields(&["schema_version"])?;
+        require_string(
+            command_payload,
+            "schema_version",
+            "agents-os.m0a-synthetic-command-payload.v0.1",
+        )?;
+    }
 
     let command_bytes = crate::canonical::jcs::to_jcs_bytes(command);
     let command_fingerprint = canonical_fingerprint(&command_bytes)?;
@@ -157,6 +235,11 @@ pub fn submission_value(
             "unknown synthetic command type",
         ));
     }
+    if command_type_id == HOME_INTENT_COMMAND_TYPE_ID {
+        return Err(CommandIntakeError::Invalid(
+            "Home Intent commands require the exact type-specific payload adapter",
+        ));
+    }
     let command = serde_json::json!({
         "claimed_actor_id": SYNTHETIC_ACTOR_ID,
         "claimed_principal_binding_ref": SYNTHETIC_PRINCIPAL_BINDING_REF,
@@ -186,6 +269,118 @@ pub fn submission_value(
         },
         "canonical_command": command
     }))
+}
+
+pub fn home_intent_submission_value(
+    payload: &SyntheticHomeIntentPayload,
+) -> Result<Value, CommandIntakeError> {
+    let command_id = payload.command_id()?;
+    let command = serde_json::json!({
+        "claimed_actor_id": SYNTHETIC_ACTOR_ID,
+        "claimed_principal_binding_ref": SYNTHETIC_PRINCIPAL_BINDING_REF,
+        "claimed_principal_id": SYNTHETIC_PRINCIPAL_ID,
+        "claimed_principal_revision": 1,
+        "command_id": command_id,
+        "command_payload": payload.as_value(),
+        "command_type_id": HOME_INTENT_COMMAND_TYPE_ID,
+        "command_type_revision": 1,
+        "environment": "SYNTHETIC_TEST",
+        "interface_version": "agents-os.m0a-synthetic-command.v0.1"
+    });
+    let command_bytes = canonicalize_json(
+        &serde_json::to_vec(&command)
+            .map_err(|_| CommandIntakeError::Invalid("synthetic command serialization failed"))?,
+    )?;
+    let command_fingerprint = canonical_fingerprint(&command_bytes)?;
+    Ok(serde_json::json!({
+        "authentication_assertion": {
+            "assertion_ref": format!("assertion:SYNTHETIC_TEST:{command_id}"),
+            "command_fingerprint": command_fingerprint,
+            "interface_version": "agents-os.m0a-synthetic-authentication-assertion.v0.1",
+            "principal_binding_fingerprint": synthetic_principal_binding_fingerprint(),
+            "synthetic_credential_id": SYNTHETIC_CREDENTIAL_ID
+        },
+        "canonical_command": command
+    }))
+}
+
+fn validate_home_intent_payload(
+    payload: &CanonicalValue,
+    command_id: &str,
+) -> Result<(), CommandIntakeError> {
+    payload.require_exact_fields(&HOME_INTENT_PAYLOAD_FIELDS)?;
+    require_string(
+        payload,
+        "schema_version",
+        "agents-os.m0b.synthetic-home-intent-payload.v0.1",
+    )?;
+    let material = SyntheticHomeIntentPayload {
+        handoff_candidate_ref: require_ref(payload, "handoff_candidate_ref")?.to_owned(),
+        handoff_candidate_revision: require_positive_integer(payload, "handoff_candidate_revision")?,
+        handoff_candidate_fingerprint: require_hash(payload, "handoff_candidate_fingerprint")?.to_owned(),
+        intent_candidate_ref: require_ref(payload, "intent_candidate_ref")?.to_owned(),
+        intent_candidate_revision: require_positive_integer(payload, "intent_candidate_revision")?,
+        intent_candidate_fingerprint: require_hash(payload, "intent_candidate_fingerprint")?.to_owned(),
+        owner_commitment_set_fingerprint: require_hash(payload, "owner_commitment_set_fingerprint")?.to_owned(),
+        canonical_candidate_history_fingerprint: require_hash(payload, "canonical_candidate_history_fingerprint")?.to_owned(),
+        minimum_trusted_event_sequence: require_positive_integer(payload, "minimum_trusted_event_sequence")?,
+    };
+    if material.command_id()? != command_id {
+        return Err(CommandIntakeError::Invalid(
+            "home intent command_id does not match the exact payload",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_home_intent_material(
+    payload: &SyntheticHomeIntentPayload,
+) -> Result<(), CommandIntakeError> {
+    if payload.handoff_candidate_ref.is_empty() || payload.intent_candidate_ref.is_empty() {
+        return Err(CommandIntakeError::Invalid("stable ref must be nonempty"));
+    }
+    if payload.handoff_candidate_revision == 0
+        || payload.intent_candidate_revision == 0
+        || payload.minimum_trusted_event_sequence == 0
+        || payload.handoff_candidate_revision > MAX_SAFE_INTEGER as u64
+        || payload.intent_candidate_revision > MAX_SAFE_INTEGER as u64
+        || payload.minimum_trusted_event_sequence > MAX_SAFE_INTEGER as u64
+    {
+        return Err(CommandIntakeError::Invalid("expected positive safe integer"));
+    }
+    for value in [
+        &payload.handoff_candidate_fingerprint,
+        &payload.intent_candidate_fingerprint,
+        &payload.owner_commitment_set_fingerprint,
+        &payload.canonical_candidate_history_fingerprint,
+    ] {
+        if value.len() != 64
+            || !value
+                .as_bytes()
+                .iter()
+                .all(|byte| byte.is_ascii_digit() || (*byte >= b'a' && *byte <= b'f'))
+        {
+            return Err(CommandIntakeError::Invalid("expected lowercase SHA-256"));
+        }
+    }
+    Ok(())
+}
+
+fn require_hash<'a>(
+    value: &'a CanonicalValue,
+    name: &str,
+) -> Result<&'a str, CommandIntakeError> {
+    let hash = require_string_value(field(value, name)?)?;
+    if hash.len() == 64
+        && hash
+            .as_bytes()
+            .iter()
+            .all(|byte| byte.is_ascii_digit() || (*byte >= b'a' && *byte <= b'f'))
+    {
+        Ok(hash)
+    } else {
+        Err(CommandIntakeError::Invalid("expected lowercase SHA-256"))
+    }
 }
 
 fn field<'a>(value: &'a CanonicalValue, name: &str) -> Result<&'a CanonicalValue, CanonicalError> {

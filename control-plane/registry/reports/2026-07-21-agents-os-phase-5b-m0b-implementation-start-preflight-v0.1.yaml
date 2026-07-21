@@ -1,0 +1,75 @@
+schema_version: agents-os.implementation-start-preflight.v0.1
+preflight_id: PHASE_5B_M0B_IMPLEMENTATION_START_PREFLIGHT_V0_1
+date: '2026-07-21'
+observed_at: '2026-07-21T23:33:42+08:00'
+owner: Jenn
+agent_steward: Nobao
+result: PASS
+decision_readiness: READY_FOR_JENN_IMPLEMENTATION_START_DECISION
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+  independent_review_path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+  independent_review_sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+  freeze_decision_path: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1.yaml
+  freeze_decision_sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+  manifest_inputs_verified_on_main: 99/99_MATCH
+  frozen_subjects_verified_on_main: 18/18_MATCH
+  plan_mainline_integration_commit: d494f6399337ab918cccee6183646916d594ef2a
+  durability_projection_merge_commit: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+  plan_merge_is_ancestor_of_current_main: true
+  durability_projection_is_current_main: true
+
+implementation_baseline:
+  repository: JENN2046/Agents-OS
+  branch_base_commit: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+  branch_base_tree: dce49ee4508a670bdabc01ef155ba42d29083ec6
+  source_authority_root: extensions/agents-os-resident
+  package_manifest_path: extensions/agents-os-resident/package-manifest.json
+  package_manifest_sha256: 5b9d1bf3dcb51278addf9d944a77307453feafc35713e3ec9d6dac0fc815a495
+  VCPToolBox_base_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_core_diff_expected: zero
+  existing_five_method_NAPI_surface_unchanged: true
+  new_direct_dependencies: forbidden
+
+workspace_boundary:
+  implementation_branch: agent/phase-5b-m0b-implementation
+  unrelated_untracked_work_present: true
+  unrelated_untracked_work_adopted: false
+  unrelated_untracked_work_modified: false
+  memory_state_private_ops_reports_and_workbench_records_excluded: true
+  runtime_VCPToolBox_read_or_write_performed: false
+
+decision_scope_if_started:
+  first_work_package: WP0_M0B_EXTENSION_SKELETON
+  ordered_work_packages:
+    - WP0_M0B_EXTENSION_SKELETON
+    - WP1_SESSION_NONPROMOTION_BOUNDARY
+    - WP2_F7_CANDIDATE_REVISIONS
+    - WP3_EXPLICIT_PROMOTION_GATES
+    - WP4_F8_HANDOFF_COMPOSITION
+    - WP5_F3_SYNTHETIC_INTAKE_SEAM
+    - WP6_LEDGER_PRIVACY_AND_RECOVERY
+    - WP7_INTEGRATED_M0B_WITNESS
+  advancement_rule: direct_predecessor_advancement_condition_must_pass
+  skip_or_parallel_advancement: forbidden
+
+retained_boundaries:
+  VCPToolBox_tracked_file_change_authorized: false
+  VCPToolBox_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_database_or_existing_database_authorized: false
+  production_authentication_authorized: false
+  real_Session_content_access_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  provider_sensing_recording_or_real_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  push_PR_merge_tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5B_M0B_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden

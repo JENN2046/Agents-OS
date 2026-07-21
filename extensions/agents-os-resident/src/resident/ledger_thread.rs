@@ -10,8 +10,10 @@ use serde_json::{Value, json};
 
 use crate::canonical::fingerprint::canonical_fingerprint;
 use crate::canonical::jcs::canonicalize_json;
+use crate::home::candidate::HomeCandidateRevision;
+use crate::home::handoff::HomeIntentHandoffCandidate;
 use crate::ledger::LedgerError;
-use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts};
+use crate::ledger::recovery::{self, IntegratedWitness, LedgerCounts, M0BIntegratedWitness};
 use crate::ledger::replay::{
     self, OutboxEnqueueFault, ReplayObservation, RequestIdentity, TerminalIntake,
     TerminalIntakeObservation, TerminalOutboxIntake, TerminalOutboxObservation,
@@ -20,7 +22,8 @@ use crate::ledger::replay::{
 };
 use crate::ledger::schema::{self, SchemaSnapshot};
 use crate::ledger::transaction::{
-    self, CanonicalFactInput, EventInput, FactAdvanceResult, PointerExpectation, TransactionFault,
+    self, CanonicalFactInput, EventInput, FactAdvanceResult, HomeCommitFault,
+    HomeCommitObservation, HomeHeadExpectation, PointerExpectation, TransactionFault,
 };
 use crate::reducers::effect_admission::SyntheticOutboxIntent;
 
@@ -45,8 +48,21 @@ pub struct LedgerSnapshot {
 enum LedgerCommand {
     Health(Sender<Result<LedgerSnapshot, String>>),
     InitializeSchema(Sender<Result<SchemaSnapshot, String>>),
+    MigrateSchemaV2(Sender<Result<SchemaSnapshot, String>>),
     VerifySchema(Sender<Result<SchemaSnapshot, String>>),
     AdvanceFact(Box<AdvanceFactCommand>),
+    CommitHomeCandidate {
+        candidate: HomeCandidateRevision,
+        expected: HomeHeadExpectation,
+        fault: HomeCommitFault,
+        response: Sender<Result<HomeCommitObservation, String>>,
+    },
+    CommitHomeHandoff {
+        handoff: HomeIntentHandoffCandidate,
+        intent_candidate_id: String,
+        fault: HomeCommitFault,
+        response: Sender<Result<HomeCommitObservation, String>>,
+    },
     RegisterOrResolve {
         request: RequestIdentity,
         response: Sender<Result<ReplayObservation, String>>,
@@ -64,6 +80,10 @@ enum LedgerCommand {
         intake: TerminalValidationCompletionIntake,
         response: Sender<Result<TerminalValidationCompletionObservation, String>>,
     },
+    TerminalSyntheticHomeIntent {
+        intake: TerminalValidationCompletionIntake,
+        response: Sender<Result<TerminalValidationCompletionObservation, LedgerError>>,
+    },
     ResolveSyntheticOutbox {
         intent_ref: String,
         response: Sender<Result<Option<SyntheticOutboxIntent>, String>>,
@@ -80,6 +100,7 @@ enum LedgerCommand {
     },
     Counts(Sender<Result<LedgerCounts, String>>),
     IntegratedWitness(Sender<Result<IntegratedWitness, String>>),
+    M0BIntegratedWitness(Sender<Result<M0BIntegratedWitness, String>>),
     Shutdown(Sender<()>),
 }
 
@@ -146,6 +167,10 @@ impl LedgerThread {
         self.request(LedgerCommand::VerifySchema)
     }
 
+    pub(super) fn migrate_schema_v2(&self) -> Result<SchemaSnapshot, ResidentError> {
+        self.request(LedgerCommand::MigrateSchemaV2)
+    }
+
     pub(super) fn advance_fact(
         &self,
         fact: CanonicalFactInput,
@@ -161,6 +186,34 @@ impl LedgerThread {
                 fault,
                 response,
             }))
+        })
+    }
+
+    pub(super) fn commit_home_candidate(
+        &self,
+        candidate: HomeCandidateRevision,
+        expected: HomeHeadExpectation,
+        fault: HomeCommitFault,
+    ) -> Result<HomeCommitObservation, ResidentError> {
+        self.request(|response| LedgerCommand::CommitHomeCandidate {
+            candidate,
+            expected,
+            fault,
+            response,
+        })
+    }
+
+    pub(super) fn commit_home_handoff(
+        &self,
+        handoff: HomeIntentHandoffCandidate,
+        intent_candidate_id: String,
+        fault: HomeCommitFault,
+    ) -> Result<HomeCommitObservation, ResidentError> {
+        self.request(|response| LedgerCommand::CommitHomeHandoff {
+            handoff,
+            intent_candidate_id,
+            fault,
+            response,
         })
     }
 
@@ -195,6 +248,27 @@ impl LedgerThread {
         intake: TerminalValidationCompletionIntake,
     ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
         self.request(|response| LedgerCommand::TerminalSyntheticGoalPlan { intake, response })
+    }
+
+    pub(super) fn terminal_synthetic_home_intent(
+        &self,
+        intake: TerminalValidationCompletionIntake,
+    ) -> Result<TerminalValidationCompletionObservation, ResidentError> {
+        let (response_tx, response_rx) = mpsc::channel();
+        self.sender
+            .send(LedgerCommand::TerminalSyntheticHomeIntent {
+                intake,
+                response: response_tx,
+            })
+            .map_err(|_| ResidentError::LedgerUnavailable)?;
+        match response_rx.recv() {
+            Ok(Ok(result)) => Ok(result),
+            Ok(Err(LedgerError::InvalidHomeIntentSource)) => {
+                Err(ResidentError::InvalidHomeIntentSource)
+            }
+            Ok(Err(error)) => Err(ResidentError::LedgerOperation(error.to_string())),
+            Err(_) => Err(ResidentError::LedgerUnavailable),
+        }
     }
 
     pub(super) fn resolve_synthetic_outbox(
@@ -237,6 +311,10 @@ impl LedgerThread {
 
     pub(super) fn integrated_witness(&self) -> Result<IntegratedWitness, ResidentError> {
         self.request(LedgerCommand::IntegratedWitness)
+    }
+
+    pub(super) fn m0b_integrated_witness(&self) -> Result<M0BIntegratedWitness, ResidentError> {
+        self.request(LedgerCommand::M0BIntegratedWitness)
     }
 
     fn request<T>(
@@ -329,6 +407,16 @@ fn run(
                     .map_err(|error| error.to_string());
                 let _ = response.send(result);
             }
+            LedgerCommand::MigrateSchemaV2(response) => {
+                let result = schema::migrate_synthetic_test_v1_to_v2(&mut connection)
+                    .and_then(|snapshot| {
+                        bind_or_verify_ownership(&mut connection, &ownership)?;
+                        replay::verify_closed_synthetic_registry(&connection)?;
+                        Ok(snapshot)
+                    })
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
+            }
             LedgerCommand::VerifySchema(response) => {
                 let result = schema::verify_schema(&connection)
                     .and_then(|snapshot| {
@@ -350,6 +438,38 @@ fn run(
                 let _ = response.send(
                     transaction::advance_fact(&mut connection, &fact, &expected, &event, fault)
                         .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::CommitHomeCandidate {
+                candidate,
+                expected,
+                fault,
+                response,
+            } => {
+                let _ = response.send(
+                    transaction::commit_home_candidate(
+                        &mut connection,
+                        &candidate,
+                        &expected,
+                        fault,
+                    )
+                    .map_err(|error| error.to_string()),
+                );
+            }
+            LedgerCommand::CommitHomeHandoff {
+                handoff,
+                intent_candidate_id,
+                fault,
+                response,
+            } => {
+                let _ = response.send(
+                    transaction::commit_home_handoff(
+                        &mut connection,
+                        &handoff,
+                        &intent_candidate_id,
+                        fault,
+                    )
+                    .map_err(|error| error.to_string()),
                 );
             }
             LedgerCommand::RegisterOrResolve { request, response } => {
@@ -390,6 +510,11 @@ fn run(
                         .map_err(|error| error.to_string()),
                 );
             }
+            LedgerCommand::TerminalSyntheticHomeIntent { intake, response } => {
+                let _ = response.send(
+                    replay::terminal_synthetic_home_intent(&mut connection, &intake),
+                );
+            }
             LedgerCommand::TerminalSyntheticValidation {
                 intake,
                 fault,
@@ -423,6 +548,14 @@ fn run(
                     .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
                     .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
                     .and_then(|_| recovery::integrated_witness(&connection))
+                    .map_err(|error| error.to_string());
+                let _ = response.send(result);
+            }
+            LedgerCommand::M0BIntegratedWitness(response) => {
+                let result = schema::verify_schema(&connection)
+                    .and_then(|_| bind_or_verify_ownership(&mut connection, &ownership))
+                    .and_then(|_| replay::verify_closed_synthetic_registry(&connection))
+                    .and_then(|_| recovery::m0b_integrated_witness(&connection))
                     .map_err(|error| error.to_string());
                 let _ = response.send(result);
             }

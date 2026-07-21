@@ -1,0 +1,118 @@
+schema_version: agents-os.implementation-start-decision-record.v0.1
+record_id: agents-os-phase-5b-m0b-implementation-start-decision-v0.1
+record_type: ImplementationStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-21T23:33:42+08:00'
+effective_at: '2026-07-21T23:33:42+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_FROZEN_PHASE_5B_M0B_IMPLEMENTATION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 启动 Phase 5B M0-B implementation。
+  interpreted_scope: start_the_frozen_R1_R5_implementation_at_WP0
+  scope_expansion: forbidden
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5B_M0B_PLAN_BUILD_PROFILE_V0_1_R5_ATOMIC_BUNDLE
+  atomic: true
+  partial_interpretation: forbidden
+  subject_count: 18
+  precedence:
+    - R5_explicit_replacements
+    - R4_all_other_clauses
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+  manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721
+    verified_inputs: 99/99_MATCH
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r5-full-atomic-independent-review.yaml
+    sha256: 3ba6a750a14fe0a457414c52babdd8cf51d549d723d4420e8febf69c1cbfca7f
+    result: PASS_NO_BLOCKER
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1.yaml
+    sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d
+  plan_mainline_integration_commit: d494f6399337ab918cccee6183646916d594ef2a
+  durability_projection_merge_commit: f5633b442b571d4b1bc61839b91c65e3b8319fa8
+
+implementation_start_preflight:
+  path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-implementation-start-preflight-v0.1.yaml
+  sha256: c9b4add687eca111e0f82985ecd14efb71763b8d4c85e5c1569cb37ebbf2e8c4
+  result: PASS
+
+implementation_authority:
+  source_authority_root: extensions/agents-os-resident
+  implementation_task_branch: agent/phase-5b-m0b-implementation
+  first_work_package: WP0_M0B_EXTENSION_SKELETON
+  work_packages:
+    - WP0_M0B_EXTENSION_SKELETON
+    - WP1_SESSION_NONPROMOTION_BOUNDARY
+    - WP2_F7_CANDIDATE_REVISIONS
+    - WP3_EXPLICIT_PROMOTION_GATES
+    - WP4_F8_HANDOFF_COMPOSITION
+    - WP5_F3_SYNTHETIC_INTAKE_SEAM
+    - WP6_LEDGER_PRIVACY_AND_RECOVERY
+    - WP7_INTEGRATED_M0B_WITNESS
+  advancement_rule: direct_predecessor_frozen_condition_must_pass
+  skip_or_parallel_advancement: forbidden
+  repair_inside_frozen_scope: authorized
+
+authorized_after_start_closeout:
+  Phase_5B_implementation_started: true
+  implementation_authorized: true
+  WP0_start_authorized: true
+  WP1_through_WP7_started: false
+  scoped_Rust_source_and_tests_under_source_authority: true
+  inherited_locked_toolchain_use: true
+  deterministic_offline_build_and_test: true
+  synthetic_test_fixture_execution: true
+  governance_receipts_and_validation_evidence: true
+
+required_implementation_boundaries:
+  VCPToolBox_core_diff: zero
+  VCPToolBox_tracked_file_change: forbidden
+  new_plugin_service_sidecar_or_network_listener: forbidden
+  existing_five_method_NAPI_surface_unchanged: true
+  new_direct_dependencies: forbidden
+  source_of_truth_remains_extensions_package: true
+  production_domain_compatible: false
+  runtime_usable: false
+
+not_authorized:
+  WP1_through_WP7_start_before_direct_predecessor_gate: true
+  VCPToolBox_change_or_start: true
+  plugin_enablement: true
+  active_runtime_configuration_read_or_change: true
+  production_or_existing_database_use: true
+  production_authentication_credentials_keys_cookies_or_cryptography: true
+  real_Session_content_access: true
+  private_raw_Memory_or_state_private_access: true
+  provider_raw_response_access: true
+  real_Task_Command_Host_Resident_sensing_recording_provider_or_effect: true
+  public_API_or_MCP_expansion: true
+  push_PR_merge_tag_release_deploy_or_publish: true
+  external_Codex_or_executor_runner: true
+
+next_gate:
+  name: PHASE_5B_M0B_WP0_EXTENSION_SKELETON
+  WP0_exit_condition:
+    - fixed_module_and_test_layout
+    - inherited_locks_unchanged
+    - schema_v2_migration_stub_present
+    - existing_NAPI_exports_unchanged
+    - Phase_5A_tests_pass
+    - no_runtime_database_provider_private_memory_or_real_effect_occurrence
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_frozen_plan_subjects: forbidden
+  edit_bound_preflight_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
