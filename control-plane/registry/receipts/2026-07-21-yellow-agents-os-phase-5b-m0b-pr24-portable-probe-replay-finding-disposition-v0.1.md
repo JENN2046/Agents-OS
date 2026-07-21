@@ -52,3 +52,80 @@ The helper is a deterministic offline evidence-replay adapter. It is not an
 accepted plan subject, does not replace the original review evidence, and does
 not authorize implementation, runtime, VCPToolBox, database, provider, private
 Memory, sensing or any real effect.
+
+## Follow-up review dispositions
+
+The current-head review at commit
+`312e7b8b6aaf6609dc32c86c7e64524312727dde` raised two additional P2
+findings. Both were resolved without modifying any accepted subject or fixed
+historical review input.
+
+### Historical R2 replay identity check
+
+Finding: `P2 Bind replay bytes in semantic check`
+
+Review comment ID: `3622821444`
+
+The finding accurately describes the immutable R2 validator in isolation. Its
+SHA-256 remains the value bound by the R5 manifest:
+
+```text
+control-plane/registry/validate-phase-5b-m0b-plan-r2-constructive-graph.py
+SHA-256 cbb5467c08c9b3ff34f4f305bc62515d419dc0c367434398b81446054036902e
+```
+
+That limitation was already recorded as `PHASE5B_PLAN_R2_IR_B05` and was
+explicitly replaced by R3 under
+`R3_explicit_replacements_then_R2_then_R1`. The effective R3 semantic validator
+binds all three replay identity components:
+
+```text
+command_id
+request_fingerprint
+request_bytes_fingerprint = SHA-256(JCS(request))
+```
+
+A targeted independent replay changed only `request_bytes_fingerprint`,
+recomputed the graph root, and produced:
+
+```yaml
+semantic_errors:
+  - REPLAY_IDENTITY_INVALID
+fixed_seal_errors:
+  - FIXED_FIXTURE_SEAL_MISMATCH
+target_semantic_rejection: true
+```
+
+The target semantic error exists independently of the fixed-fixture seal.
+Editing the historical R2 validator would invalidate the accepted immutable
+lineage, so no in-place edit was made.
+
+### Registry validation count
+
+Finding: `P2 Correct registry validation count`
+
+Review comment ID: `3622821450`
+
+The closeout receipt was corrected from the pre-PR-review count to the current
+registered count:
+
+```yaml
+Document_Registry: 1302/1302_PASS
+Federated_Registry: 3/3_PASS
+```
+
+No Registry entry was added for this follow-up because this already-registered
+receipt is the disposition surface; the expected count therefore remains
+`1302`.
+
+## Follow-up boundary
+
+```yaml
+historical_R2_validator_modified: false
+R1_through_R5_subjects_modified: false
+R1_through_R5_manifests_modified: false
+effective_R3_replay_identity_semantic_check: PASS
+closeout_registry_count_reconciled: true
+implementation_authorized: false
+Phase_5B_implementation_started: false
+```

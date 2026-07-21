@@ -65,7 +65,7 @@ case_results_sha256: MATCH
 probe_sha256: MATCH
 decision_package_sha256: MATCH
 decision_record_parse_and_invariants: PASS
-Document_Registry: 1300/1300_PASS
+Document_Registry: 1302/1302_PASS
 Federated_Registry: 3/3_PASS
 Machine_Control_Chain_Dashboard_Workbench: 4/4_PASS
 default_queue_equals_explicit_v11_9: 4/4_PASS
