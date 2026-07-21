@@ -43,7 +43,7 @@ not acceptance subjects.
 ```yaml
 active_work_queue:
   path: control-plane/registry/reports/2026-07-21-agents-os-active-work-queue-v11.9.md
-  sha256: 8795164a27e1f46bdaea83f703ea491926a416a2675064f3f1788355ad1cc906
+  sha256: 5c9054c83d8ba7b4932f22c44f3acad22c84cdaa8aa8d14cbe56fe9287c5ee84
 Phase_5B_plan_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
 Phase_5B_plan_accepted: true
 Phase_5B_plan_frozen: true

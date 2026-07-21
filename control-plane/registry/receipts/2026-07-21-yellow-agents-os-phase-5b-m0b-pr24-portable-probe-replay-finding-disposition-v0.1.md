@@ -129,3 +129,32 @@ closeout_registry_count_reconciled: true
 implementation_authorized: false
 Phase_5B_implementation_started: false
 ```
+
+### Machine-actionable Git delivery gate
+
+Finding: `P2 Make the Git delivery gate non-actionable`
+
+Review comment ID: `3622926927`
+
+The v11.9 `NOW` item previously used prose that did not match the machine
+parser's closed Git delivery signal vocabulary. The current queue now names
+`git push` and GitHub write explicitly, while retaining the same human meaning:
+the frozen plan does not itself authorize delivery, and commit, PR and merge
+require Jenn's separate current authorization.
+
+```yaml
+explicit_queue_inspection:
+  denied_signals:
+    - git_release_boundary
+  requires_jenn: true
+  blocked: true
+  actionable: false
+default_machine_output_equals_explicit_v11_9: true
+default_dashboard_output_equals_explicit_v11_9: true
+default_control_chain_output_equals_explicit_v11_9: true
+default_workbench_output_equals_explicit_v11_9: true
+```
+
+Jenn's separate current authorization for PR 24 durability delivery remains the
+authority for this active delivery run. The queue correction does not create a
+standing or automatic Git delivery authorization.

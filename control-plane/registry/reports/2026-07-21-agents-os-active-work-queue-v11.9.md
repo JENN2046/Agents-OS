@@ -44,7 +44,8 @@ Git_delivery_authorized_by_plan_freeze: false
 Prepare and independently review an exact Git scope for the complete frozen
 Plan R1–R5 lineage, manifests, reviews, dispositions, freeze decision, receipts
 and necessary governance projections. The plan freeze decision does not itself
-authorize commit, push, PR or merge.
+authorize `git push` or any GitHub write. Commit, PR and merge remain outside
+plan-freeze authority and require Jenn's separate current authorization.
 
 ## NEXT
 
