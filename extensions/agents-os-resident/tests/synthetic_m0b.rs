@@ -1035,9 +1035,15 @@ fn wp6_candidate_and_handoff_replay_survive_a_later_intent_head_advance() {
     );
     assert_eq!(
         kernel
-            .commit_home_handoff(handoff, "intent", HomeCommitFault::None)
+            .commit_home_handoff(handoff.clone(), "intent", HomeCommitFault::None)
             .unwrap(),
         HomeCommitObservation::ExactReplay
+    );
+    assert_eq!(kernel.ledger_counts().unwrap(), before_replays);
+    assert!(
+        kernel
+            .commit_home_handoff(handoff, "other-intent", HomeCommitFault::None)
+            .is_err()
     );
     assert_eq!(kernel.ledger_counts().unwrap(), before_replays);
     kernel.shutdown().unwrap();

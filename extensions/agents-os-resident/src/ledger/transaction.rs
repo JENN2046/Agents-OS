@@ -225,8 +225,8 @@ pub fn commit_home_handoff(
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let existing: Option<(Vec<u8>, String)> = transaction.query_row(
-        "SELECT canonical_bytes,handoff_fingerprint FROM home_handoff_link WHERE handoff_id=?1 AND handoff_revision=?2",
-        params![handoff.handoff_candidate_id,as_i64(handoff.handoff_candidate_revision)?],
+        "SELECT canonical_bytes,handoff_fingerprint FROM home_handoff_link WHERE handoff_id=?1 AND handoff_revision=?2 AND intent_candidate_id=?3",
+        params![handoff.handoff_candidate_id,as_i64(handoff.handoff_candidate_revision)?,intent_candidate_id],
         |row| Ok((row.get(0)?,row.get(1)?)),
     ).optional()?;
     if let Some((bytes,fingerprint))=existing {
