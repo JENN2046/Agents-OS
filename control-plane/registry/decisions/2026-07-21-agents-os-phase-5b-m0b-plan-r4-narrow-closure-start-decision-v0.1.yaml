@@ -1,0 +1,68 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5B_M0B_PLAN_R4_NARROW_CLOSURE_START_DECISION_V0_1
+date: 2026-07-21
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5B_M0B_PLAN_R4_STRICT_SCOPE
+
+authorization_basis:
+  Jenn_exact_text: >-
+    我确认启动 Phase 5B M0-B Plan R4，范围严格限制为关闭 R3 独立审查的
+    3 个 blocker：完整 sealed F3 identity/authentication binding、candidate
+    identity uniqueness、exact duplicate-free three-entry composite FK inventory。
+    保持 R1–R3 固定 lineage 不变，不启动 implementation、runtime、database、
+    VCPToolBox、provider、private Memory、sensing 或真实 effect。
+  received_in_current_session: true
+
+bound_inputs:
+  R3_fixed_commit: 464c216f8cd037325f78fc3e3ec82e3bd92dff81
+  R3_manifest:
+    path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 623966e21de3cae20b527719239d6b6e7f0e7ec55ad4614411d3bf369bdae089
+  R3_independent_review:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r3-full-atomic-independent-review.yaml
+    sha256: 66ebace1a81d255677f655d2b256bc7e1813344becb83f9f81548d160555320f
+  R3_case_results:
+    path: control-plane/registry/reviews/2026-07-21-agents-os-phase-5b-m0b-plan-r3-independent-case-results.json
+    sha256: 7b8b88e30427098cc78b85b361eb41e57a899673c5b37328ab690892b67ce600
+  R3_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-21-yellow-agents-os-phase-5b-m0b-plan-r3-finding-disposition-v0.1.yaml
+    sha256: 39a9d159fcb33a70124eb57067aac97d7e5bd54da88b424ed2160cc8bcd7e3d0
+  R3_governance_commit: 249b272bf5da705b0ecf4d128bd27fa13165ddf7
+
+strict_scope:
+  - complete_sealed_synthetic_F3_identity_and_authentication_binding
+  - candidate_primary_key_ref_and_history_identity_uniqueness
+  - exact_complete_duplicate_free_three_entry_composite_FK_inventory
+
+required_regressions:
+  - PHASE5B_PLAN_R3_IR_CASE_004
+  - PHASE5B_PLAN_R3_IR_CASE_005
+  - PHASE5B_PLAN_R3_IR_CASE_006
+  - PHASE5B_PLAN_R3_IR_CASE_007
+  - PHASE5B_PLAN_R3_IR_CASE_008
+  - PHASE5B_PLAN_R3_IR_CASE_009
+  - PHASE5B_PLAN_R3_IR_CASE_010
+  - PHASE5B_PLAN_R3_IR_CASE_015
+  - PHASE5B_PLAN_R3_IR_CASE_016
+  - PHASE5B_PLAN_R3_IR_CASE_017
+
+immutable_lineage:
+  R1_R2_R3_subjects_manifests_reviews_cases_and_commits_may_change: false
+
+stop_condition:
+  - create_R4_correction_subjects_fixture_validator_author_self_review_and_hash_bound_package
+  - stop_at_fresh_full_atomic_hash_bound_independent_review
+
+forbidden:
+  - plan_acceptance_or_freeze
+  - implementation_start
+  - Rust_JavaScript_NAPI_or_SQLite_implementation
+  - source_or_dependency_change
+  - database_file_creation_or_migration
+  - VCPToolBox_change_start_or_plugin_enablement
+  - runtime_activation
+  - production_authentication
+  - private_Memory_access
+  - provider_sensing_or_real_effect
+  - F1_through_F8_or_Phase_5A_semantic_revision
