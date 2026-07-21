@@ -6,6 +6,47 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B WP7 Complete — Implementation Closeout Eligible (2026-07-22)
+
+WP7 closes the deterministic synthetic Home-to-F3 witness. Two clean
+disposable databases and one restart produce the same canonical root with no
+automatic promotion or additional rows. All frozen work packages are now
+eligible for the bounded implementation closeout.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_WP7_COMPLETE_CLOSEOUT_ELIGIBLE
+Phase_5B_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5b-m0b-implementation
+automatic_implementation_delivery_authorization_sha256: 4345a546bbbe78814ccc3f5bd18672ec6507d07322abbffe898ae9bd600b43db
+WP0_through_WP6_status: PASS_COMPLETE
+WP7_status: PASS_COMPLETE
+WP7_source_commit: e59d638eba11d760807351b5a11eefff711c8626
+WP7_package_manifest_commit: 9b8da782ea3ea33b0099bd2da73fc8123ade745b
+WP7_content_tree_sha256: 0d849f6b87c10c2d719ee60611104b798f984fb8d72c979b26642d19de5f169e
+WP7_package_manifest_sha256: 24b5125957ecc6d4856565c109dc687ea1fb732e9bcaac931f3d9cff63fc9b3e
+WP7_integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+WP7_total_Rust_tests: 74/74_PASS
+WP7_synthetic_m0b_tests: 27/27_PASS
+WP7_clean_runs: 2/2_BYTE_IDENTICAL
+WP7_restart_runs: 1/1_ZERO_ADDITION
+WP7_real_occurrence_count: 0
+WP7_public_NAPI_methods: 5/5_UNCHANGED
+current_work_package: PHASE_5B_M0B_IMPLEMENTATION_CLOSEOUT
+implementation_closeout_start_condition_satisfied: true
+implementation_closeout_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.9.md
+active_work_queue_sha256: 26328e3d47b33aad8a37c5a01fbed65f72c1ad0d56ff99a3b1a2a06a4996b789
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v12.9.md
+WP7_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-wp7-integrated-witness-closeout-v0.1.md
+WP7_closeout_receipt_sha256: e9ce22653b656d8d301a90786102278d66a4b82d312053afc68bf1c14578b43f
+VCPToolBox_change_or_start_authorized: false
+runtime_activation_authorized: false
+production_or_existing_database_authorized: false
+real_Session_private_Memory_provider_sensing_or_effect_authorized: false
+next_gate: PHASE_5B_M0B_IMPLEMENTATION_CLOSEOUT
+```
+
 ## Phase 5B M0-B WP6 Complete — WP7 Integrated Witness Eligible (2026-07-22)
 
 WP6 activates the explicit synthetic-test-only v1→v2 migration. Candidate,
