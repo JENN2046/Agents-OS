@@ -6,6 +6,45 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5B M0-B Mainline Durability Complete — Awaiting Jenn Next-Phase Decision (2026-07-22)
+
+The fully reviewed Phase 5B M0-B implementation merged through PR #26. Local
+and remote `main` resolve to the same merge commit, the merge tree equals the
+reviewed PR head, and the package manifest, content tree and governance blobs
+were reverified from mainline objects. No later phase starts automatically.
+
+```yaml
+Phase_5B_status: M0B_IMPLEMENTATION_MAINLINE_DURABILITY_COMPLETE
+Phase_5B_implementation_complete: true
+Phase_5B_mainline_integrated: true
+Phase_5B_durability_complete: true
+PR_number: 26
+PR_head_commit: 1e08fff9f46bfeac933c4c64d3d8535c0ceacd57
+mainline_merge_commit: 354da75149fbddd3d41a4551dbaebd74566dfea8
+local_main_equals_origin_main: true
+merge_tree_equals_reviewed_head: true
+review_threads: 13/13_RESOLVED
+final_source_commit: e7268b156d73b57323ef612032e4fd18b36bead9
+final_package_reseal_commit: fd8d08cdd9e01c83bceffc025613558e27f96970
+final_content_tree_sha256: d98d73848bc986fd26d4b48419a938c3eb5aa81b5c4945fb9a93a066419aafed
+final_package_manifest_sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23
+integrated_witness_root: 81bb0e8a7bc3e389b8220efef5def05a2d891e44b3fe2a1515ffbc0e56324a80
+total_Rust_tests: 83/83_PASS
+synthetic_m0b_tests: 33/33_PASS
+public_NAPI_methods: 5/5_UNCHANGED
+dependency_changes: 0
+VCPToolBox_core_changes: 0
+real_occurrence_count: 0
+postmerge_durability_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-postmerge-durability-closeout-v0.1.md
+postmerge_durability_receipt_sha256: cd06f100eaf37b9b0bf109149f8e3833e0a72f827a536acd00932e3464308918
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.0.md
+active_work_queue_sha256: 1cbfad0c1d7301a5b031bae7a9596186be7c22c66d2b732d041b6d5f3feae0ae
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.0.md
+runtime_activation_authorized: false
+Phase_5C_started: false
+next_gate: AWAITING_JENN_EXPLICIT_NEXT_PHASE_DECISION
+```
+
 ## Phase 5B M0-B PR #26 Ninth Review Fix Complete — Current-Head Re-review Required (2026-07-22)
 
 All prior review findings remain closed. The ninth review found one in-scope P2
