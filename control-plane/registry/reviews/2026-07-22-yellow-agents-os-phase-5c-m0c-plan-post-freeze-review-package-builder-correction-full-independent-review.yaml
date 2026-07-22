@@ -1,0 +1,179 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5C_M0C_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_FULL_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-22'
+materialized_at: '2026-07-22T22:34:23+08:00'
+materialization_note: >-
+  This is the original materialized output of a fresh independent review. It
+  records no claim of prior existence and does not treat author self-review as
+  an independent conclusion.
+
+reviewer:
+  identity: Codex_phase5c_postfreeze_builder_independent_review
+  independent: true
+  independence_basis:
+    - not_the_author_of_the_five_correction_subjects_or_author_evidence
+    - reviewed_fixed_workspace_and_complete_ZIP_bytes_from_scratch
+    - recomputed_and_fully_read_all_manifest_declared_inputs
+    - author_self_review_was_read_as_evidence_only
+    - independently_constructed_collision_and_source_anchor_probes_in_temporary_roots
+    - did_not_modify_correction_subjects_R1_R4_frozen_artifacts_or_Git_state
+    - did_not_access_VCPToolBox_runtime_database_provider_private_data_or_state_private
+
+review_unit:
+  id: PHASE_5C_M0C_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_V0_1
+  atomic: true
+  partial_review: forbidden
+  semantic_plan_amendment: false
+  non_semantic_post_freeze_correction: true
+  subject_count: 5
+  authority_input_count: 7
+  author_evidence_count: 2
+  declared_input_count: 14
+
+result: PASS_NO_BLOCKER
+requires_successor_correction: false
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 40fd04412f211a1b2c786493e3a26e07be55729ef5c8c56805aa2a95c913ab40
+    actual_sha256: 40fd04412f211a1b2c786493e3a26e07be55729ef5c8c56805aa2a95c913ab40
+    match: true
+  archive:
+    path: /tmp/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-review-package-v0.1.zip
+    expected_sha256: 0acda3b19c5b75178f09c77b12823b45284ced9837c986deff47427c9bc031ea
+    actual_sha256: 0acda3b19c5b75178f09c77b12823b45284ced9837c986deff47427c9bc031ea
+    sha256_match: true
+    entry_count: 19
+    unique_paths: 19
+    crc_full_read: PASS
+    unsafe_or_absolute_or_traversal_or_backslash_paths: 0
+    duplicate_paths: 0
+    symlinks: 0
+    non_regular_members: 0
+    checksums: 18/18_MATCH
+    checksums_cover_every_entry_except_CHECKSUMS_sha256: true
+    archive_map_rows: 14
+    archive_map_matches_manifest: 14/14
+    archive_payload_hashes_match: 14/14
+    embedded_manifest_byte_match: true
+    extracted_archive_bytes_match_workspace: 14/14
+  declared_inputs:
+    total_hashes: 14/14_MATCH
+    total_full_reads: 14/14
+    total_bytes_fully_read: 108185
+    total_lines_fully_read: 2322
+    subjects: 5/5_MATCH_AND_FULLY_READ
+    authority_inputs: 7/7_MATCH_AND_FULLY_READ
+    author_evidence: 2/2_MATCH_AND_READ_EVIDENCE_ONLY
+    structured_input_parse:
+      YAML: 5/5_PASS
+      JSON: 1/1_PASS
+
+fixed_command_reproduction:
+  workspace:
+    command_1_fixture_JSON_and_start_decision_YAML_parse: PASS
+    command_2_successor_and_validator_Python_compile: PASS
+    command_3_offline_correction_validator: PASS
+    command_4_trailing_whitespace_check: PASS
+    total: 4/4_PASS
+  isolated_complete_ZIP_without_git:
+    git_directory_present: false
+    command_1_fixture_JSON_and_start_decision_YAML_parse: PASS
+    command_2_successor_and_validator_Python_compile: PASS
+    command_3_offline_correction_validator: PASS
+    command_4_trailing_whitespace_check: PASS
+    total: 4/4_PASS
+
+immutable_lineage:
+  frozen_R4_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  frozen_R4_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  frozen_R4_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+  historical_R3_builder:
+    path: control-plane/registry/build-phase-5c-m0c-plan-r3-review-package.py
+    expected_sha256: 8ddffa24d935189f733929b1aa0df16b997f0b65db946411fdfd0c5b889bcfd4
+    actual_sha256: 8ddffa24d935189f733929b1aa0df16b997f0b65db946411fdfd0c5b889bcfd4
+    current_worktree_equals_HEAD_blob: true
+  frozen_R4_subjects:
+    current_hashes_match_R4_manifest: 9/9
+    current_bytes_equal_HEAD_blobs: 9/9
+  semantic_plan_reopen_or_accepted_subject_rewrite_found: false
+
+independent_adversarial_results:
+  exact_reserved_member_collision_cases: 5
+  exact_reserved_member_collision_cases_rejected_before_output_write: 5/5
+  collision_members:
+    MANIFEST.yaml: REJECTED_BEFORE_OUTPUT_WRITE
+    REPORT.md: REJECTED_BEFORE_OUTPUT_WRITE
+    SOURCE_SNAPSHOT_ID.txt: REJECTED_BEFORE_OUTPUT_WRITE
+    ARCHIVE_MAP.json: REJECTED_BEFORE_OUTPUT_WRITE
+    CHECKSUMS.sha256: REJECTED_BEFORE_OUTPUT_WRITE
+  combined_collision_inventory:
+    all_five_members_reported_in_stable_sorted_error: true
+    output_exists_after_rejection: false
+  payload_read_precedence_probe:
+    setup: noncolliding_missing_payload_precedes_reserved_REPORT_md_row
+    result: reserved_member_guard_rejected_before_missing_payload_read
+    output_exists_after_rejection: false
+  duplicate_declared_input_probe:
+    result: REJECTED_BY_HISTORICAL_DUPLICATE_INPUT_PATH_RULE
+    output_exists_after_rejection: false
+  malformed_reserved_row_probe:
+    result: REJECTED_BY_HISTORICAL_ROW_SHAPE_RULE
+    output_exists_after_rejection: false
+  unknown_top_level_manifest_field_probe:
+    result: ACCEPTED_WITHOUT_CREATING_A_DECLARED_ARCHIVE_MEMBER
+    assessment: >-
+      This is inherited parser compatibility, not a generated-member overwrite
+      bypass: only rows from the three declared input collections become
+      archive entries. Closed-manifest-schema expansion is outside this narrow
+      correction scope.
+  immutable_historical_source_tamper_probe:
+    setup: complete_no_Git_package_extraction_with_only_the_historical_builder_mutated_in_tmp
+    result: REJECTED_BY_IMMUTABLE_HISTORICAL_BUILDER_SHA256_MISMATCH
+    output_exists_after_rejection: false
+  normal_successor_equivalence:
+    synthetic_noncolliding_control_equals_historical_builder: true
+    R4_manifest_report_and_snapshot_reproduction:
+      successor_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+      historical_builder_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+      anchored_R4_archive_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+      successor_equals_historical_builder: true
+      successor_equals_anchored_R4_archive: true
+  correction_package_rebuild:
+    successor_rebuilt_sha256: 0acda3b19c5b75178f09c77b12823b45284ced9837c986deff47427c9bc031ea
+    byte_identical_to_supplied_archive: true
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  uncaught_exception_count: 0
+
+P2_reserved_generated_member_overwrite_closure:
+  closed: true
+  rationale:
+    - guarded_successor_verifies_the_exact_historical_source_before_manifest_parsing_or_output_creation
+    - historical_parser_derives_all_declared_rows_before_any_declared_payload_read
+    - every_exact_generated_member_collision_is_rejected_before_delegation
+    - valid_noncolliding_calls_delegate_to_the_immutable_builder_without_changing_R4_bytes
+
+boundary_review:
+  semantic_plan_reacceptance_or_refreeze: false
+  Phase_5C_implementation_started: false
+  implementation_authorized: false
+  VCPToolBox_or_extension_source_modified_or_started: false
+  plugin_enablement_or_native_host_loading: false
+  runtime_database_provider_private_Memory_sensing_or_real_effect: false
+  Git_delivery_or_merge_authorized_by_this_review: false
+  review_subjects_or_frozen_artifacts_modified_by_reviewer: false
+
+decision:
+  review_gate: PASSED
+  correction_freeze_or_Git_delivery: forbidden_without_separate_current_authorization
+  Phase_5C_semantic_plan_refreeze: not_applicable_and_forbidden
+  automatic_implementation_start: forbidden
+  next_gate: JENN_DECISION_ON_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_DELIVERY
