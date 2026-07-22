@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build:debug": "napi build --platform",
-    "build:release": "napi build --platform --release"
+    "build:release": "napi build --platform --release",
+    "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.7.3"
