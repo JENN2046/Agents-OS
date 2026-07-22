@@ -6,6 +6,154 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5C M0-C Plan R4 Accepted and Frozen (2026-07-22)
+
+Jenn explicitly accepted and froze the complete nine-subject R1–R4 Phase 5C
+M0-C plan unit after its fresh full atomic independent review passed. This is a
+semantic plan freeze only. It requires Git durability closeout before any later
+separate implementation-start decision, and it does not authorize source,
+runtime, VCPToolBox, database, provider, private Memory or effect work.
+
+```yaml
+Phase_5C_status: M0C_PLAN_ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+Phase_5C_plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+Phase_5C_plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+Phase_5C_plan_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+Phase_5C_plan_freeze_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml
+Phase_5C_plan_freeze_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+Phase_5C_plan_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-closeout-v0.1.md
+Phase_5C_plan_freeze_closeout_receipt_sha256: b1ddd64d34d7a98d9b6e5eb466df041e62930b0e3bf6e3d0609c35c5e6e6e9df
+Phase_5C_plan_accepted: true
+Phase_5C_plan_frozen: true
+Phase_5C_plan_revisions_stopped: true
+Phase_5C_requires_R5: false
+Phase_5C_implementation_started: false
+implementation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_or_runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+Git_delivery_authorized_by_plan_freeze: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.9.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.9.md
+next_gate: PHASE_5C_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_IMPLEMENTATION_START_DECISION
+```
+
+## Phase 5C M0-C Plan R4 Independent Review Passed (2026-07-22)
+
+The fresh full atomic hash-bound independent review passed the complete R1–R4
+nine-subject plan bundle. It independently verified all declared input bytes,
+the no-Git archive and deterministic archive rebuild, the complete ustar byte
+contract, and the actual post-cleanup residue fault. This passes only the
+independent-review gate. Jenn alone may decide whether to accept and freeze the
+plan; implementation remains unstarted.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R4_INDEPENDENT_REVIEW_PASS_AWAITING_JENN_ATOMIC_FREEZE_DECISION
+R4_manifest: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+R4_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+R4_review_archive_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+R4_independent_review: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-full-atomic-independent-review.yaml
+R4_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+R4_independent_review_result: PASS_NO_BLOCKER
+R4_requires_R5: false
+R4_finding_disposition: control-plane/registry/reviews/2026-07-22-agents-os-phase-5c-m0c-plan-r4-finding-disposition-v0.1.yaml
+R4_atomic_freeze_decision_package: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-package-v0.1.md
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+implementation_authorized: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_or_runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.8.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.8.md
+next_gate: JENN_PHASE_5C_M0C_PLAN_R4_ATOMIC_FREEZE_DECISION
+```
+
+## Phase 5C M0-C Plan R4 Fixed for Independent Review (2026-07-22)
+
+Jenn explicitly started the narrow R4 correction after the immutable R3
+external review found two blockers. R4 preserves R1–R3 bytes and closes only
+the complete normative POSIX ustar byte contract and actual post-cleanup
+residue fault evidence. Its temporary-root exercise is synthetic and
+self-cleaning; it does not package, enable, load, or run the extension.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R4_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+R3_result: BLOCK
+R4_start_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-narrow-correction-start-decision-v0.1.yaml
+R4_manifest: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+R4_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+R4_review_archive_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+R4_author_validation: PASS
+R4_independent_review_created: false
+R4_independent_review_result: NOT_RUN
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_or_runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.7.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.7.md
+next_gate: PHASE_5C_M0C_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
+## Phase 5C M0-C Plan R3 Independent Review Block Reconciled (2026-07-22)
+
+The external fresh full atomic review verified all 85 declared inputs, all 89
+ZIP checksums, both 8/8 fixed-command environments, byte-identical archive
+reproduction, and 40 target-semantic fully re-signed rejections. It nevertheless
+found two blockers: the normative profile did not freeze every byte-affecting
+POSIX ustar header/padding rule, and the fixed cleanup probe did not observe
+actual post-cleanup residue. R3 remains immutable and cannot be frozen or used
+to start implementation.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R3_INDEPENDENT_REVIEW_BLOCK_NEEDS_R4
+R3_independent_review: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r3-full-atomic-independent-review.yaml
+R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+R3_independent_review_result: BLOCK
+R3_findings: 2_BLOCKER_0_MAJOR_0_MINOR
+R3_finding_disposition: control-plane/registry/reviews/2026-07-22-agents-os-phase-5c-m0c-plan-r3-finding-disposition-v0.1.yaml
+R4_started: false
+R4_requires_Jenn_explicit_start: true
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.6.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.6.md
+next_gate: JENN_EXPLICIT_PHASE_5C_M0C_PLAN_R4_START_DECISION
+```
+
+## Phase 5C M0-C Plan R3 Fixed for Independent Review (2026-07-22)
+
+Jenn explicitly started the narrow R3 correction after the immutable R2
+external review recorded three blockers. R3 leaves R1/R2 bytes unchanged and
+closes only the member-manifest preimage inconsistency, claim-only synthetic
+lifecycle evidence, and missing no-Git archive dependencies. Its temporary-root
+exercise is synthetic and self-cleaning; it does not package, enable, load, or
+run the extension.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R3_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+R2_independent_review_sha256: bb166ee4c61fa389ae834f3a66fdd67faba4a92452192ee91964574bfc11b6f1
+R2_result: BLOCK
+R3_start_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r3-narrow-correction-start-decision-v0.1.yaml
+R3_manifest: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+R3_manifest_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+R3_review_archive_sha256: e0b54e0be26d84e70a35a5ab84428141f357c8d0b9c8bb85ea6ef067e23c0b16
+R3_author_validation: PASS
+R3_independent_review_created: false
+R3_independent_review_result: NOT_RUN
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_or_runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.5.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.5.md
+next_gate: PHASE_5C_M0C_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
 ## Phase 5C M0-C Plan R2 Independent Review Block Reconciled (2026-07-22)
 
 The external fresh full atomic review verified the fixed R2 commit, all 69

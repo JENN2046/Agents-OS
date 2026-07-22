@@ -1,0 +1,79 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5c-m0c-plan-r4-independent-review-disposition-v0.1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: PASS_NO_BLOCKER_RECONCILED_AWAITING_JENN_ATOMIC_FREEZE_DECISION
+
+review:
+  path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-full-atomic-independent-review.yaml
+  sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+  result: PASS_NO_BLOCKER
+  requires_R5: false
+  findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+  materialized_at: '2026-07-22T21:26:31+08:00'
+  backdated_preexistence_claim: false
+
+atomic_bundle:
+  id: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  review_archive_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+  subject_count: 9
+  partial_acceptance: forbidden
+  precedence:
+    - R4_explicit_replacements
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+
+immutable_lineage:
+  R1_manifest_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+  R2_manifest_sha256: 610b42a8d0eefadefe9e7625ea4b60cd370ac02f24b64b37ab7c9d56360a1a27
+  R3_manifest_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+  R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+  R1_R3_subjects_manifests_reviews_and_dispositions_unchanged: true
+
+R3_blocker_closure:
+  PHASE5C_M0C_PLAN_R3_IR_B01:
+    disposition: CLOSED_BY_R4_INDEPENDENT_REVIEW
+    evidence:
+      - complete_normative_512_byte_ustar_header_and_padding_contract
+      - selected_ASCII_0_regular_typeflag_and_alternate_NUL_rejection
+      - 49_fully_resigned_or_profile_rebound_attacks_rejected_by_target_semantics
+  PHASE5C_M0C_PLAN_R3_IR_B02:
+    disposition: CLOSED_BY_R4_INDEPENDENT_REVIEW
+    evidence:
+      - actual_owned_root_cleanup_attempt_while_archive_tar_remains
+      - post_attempt_root_and_residue_observation
+      - fail_closed_result_and_finalizer_after_observation
+      - fully_resigned_suppression_attacks_rejected_by_target_semantics
+
+review_evidence:
+  declared_input_hashes: 98/98_MATCH
+  declared_input_full_reads: 98/98
+  archive_checksums: 102/102_MATCH
+  fixed_commands_workspace: 9/9_PASS
+  fixed_commands_no_Git_archive: 9/9_PASS
+  archive_byte_rebuild: PASS
+  independent_semantic_rejections: 50/50
+  legal_candidates_accepted: 2/2
+  favorable_invalid_paths: 0
+  legal_input_over_rejections: 0
+
+governance:
+  revision_stop: true
+  requires_R5: false
+  partial_acceptance: forbidden
+  Jenn_atomic_freeze_decision_required: true
+  automatic_plan_acceptance: forbidden
+  automatic_plan_freeze: forbidden
+  Phase_5C_plan_frozen: false
+  Phase_5C_implementation_started: false
+  implementation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_runtime_activation_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  commit_push_merge_authorized: false
+
+next_gate: JENN_PHASE_5C_M0C_PLAN_R4_ATOMIC_FREEZE_DECISION

@@ -1,0 +1,114 @@
+schema_version: agents-os.m0c.exact-archive-output-lifecycle-profile.v0.1-r3
+profile_id: PHASE_5C_M0C_EXACT_ARCHIVE_OUTPUT_LIFECYCLE_PROFILE_V0_1_R3
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+runtime_usable: false
+
+inherits:
+  R2_archive_output_lifecycle_profile: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r2.yaml
+  R2_archive_output_lifecycle_profile_sha256: 5cf1306c454b7f266fef0fff9bf2146b6e2fff23cf058d69a3fb13d565a5ca57
+  source_inventory_profile: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml
+  source_inventory_records_sha256: 521ffa427a9b5b0a2391970f6ecb8b8c79bf2d1cc5e6e342806bea945bb81830
+
+archive_encoding:
+  format: POSIX_USTAR
+  compression: NONE
+  byte_stream: complete_raw_tar_bytes
+  checksum_algorithm: SHA-256
+  checksum_preimage: complete_raw_tar_bytes_including_two_512_byte_zero_blocks
+  root_prefix: agents-os-resident/
+  explicit_directory_entries: forbidden
+  regular_files_only: true
+  member_order: UTF8_BYTEWISE_ASCENDING_SOURCE_PATH
+  path_separator: FORWARD_SLASH_ONLY
+  reject_absolute_traversal_backslash_duplicate_or_non_NFC_paths: true
+  member_manifest:
+    algorithm: SHA-256
+    preimage: canonical_JSON_array_of_exact_member_projection_rows
+    encoding: UTF-8
+    object_key_order: LEXICOGRAPHIC_SORTED
+    separators: NO_INSIGNIFICANT_WHITESPACE
+    row_field_inventory: [source_path, archive_path, kind, mode, uid, gid, uname, gname, mtime, byte_length, sha256]
+  header:
+    mode_octal: '0644'
+    uid: 0
+    gid: 0
+    uname: ''
+    gname: ''
+    mtime_unix_seconds: 0
+    pax_headers: forbidden
+    hardlinks_symlinks_devices_named_pipes: forbidden
+  end_of_archive_zero_blocks: 2
+
+output_lifecycle:
+  caller_supplied_output_path: forbidden
+  staging_root: newly_created_owned_synthetic_temporary_directory
+  archive_location_before_delivery: owned_temp_root/archive.tar
+  delivery_mode: RETURN_IN_MEMORY_BYTES_ONLY
+  serialized_success_return_fields: [archive_sha256, archive_byte_length, archive_bytes_in_memory_b64]
+  serialized_failure_return_fields: [stable_error_code]
+  success_events:
+    - {ordinal: 1, event: STAGING_ROOT_CREATED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 2, event: ARCHIVE_WRITTEN, location: OWNED_TEMP_ROOT}
+    - {ordinal: 3, event: ARCHIVE_HASH_VERIFIED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 4, event: ARCHIVE_COPIED_TO_MEMORY, location: MEMORY_ONLY}
+    - {ordinal: 5, event: STAGING_ROOT_REMOVED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 6, event: SUCCESS_RETURNED, location: MEMORY_ONLY}
+  failure_events:
+    - {ordinal: 1, event: STAGING_ROOT_CREATED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 2, event: FAILURE_DETECTED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 3, event: STAGING_ROOT_REMOVED, location: OWNED_TEMP_ROOT}
+    - {ordinal: 4, event: FAILURE_RETURNED, location: NO_ARCHIVE_BYTES}
+  actual_observation_contract:
+    initial_owned_root_inventory: []
+    success_before_cleanup_inventory: [archive.tar]
+    failure_before_cleanup_inventory: []
+    post_cleanup_owned_root_exists: false
+    post_cleanup_residue_relative_paths: []
+  required_negative_actual_probes:
+    - CLEANUP_RESIDUE_DETECTED
+    - RETURN_BYTES_MISMATCH_DETECTED
+
+sealed_host_contract:
+  VCPToolBox_sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  inputs:
+    - {path: AGENTS.md, blob_oid: 28f22b4de495a63f14ede8fe72698278c877cb8d, sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b}
+    - {path: Plugin/AGENTS.md, blob_oid: c2d23c041033b1f7d46b9dc3bdb2ba738566c872, sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4}
+    - {path: docs/PLUGIN_ECOSYSTEM.md, blob_oid: 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506, sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65}
+    - {path: rust-vexus-lite/AGENTS.md, blob_oid: 0fad4dba9bcbaa2452a362910b01e6275e5c352e, sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494}
+    - {path: rust-vexus-lite/Cargo.toml, blob_oid: 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde, sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9}
+    - {path: rust-vexus-lite/package.json, blob_oid: 232a95ef206e6ffab0cdff959826faaa10f6fedb, sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c}
+    - {path: Plugin.js, blob_oid: 5fd77cea37c30ef432f23d9627d05aba862b9744, sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2}
+
+entrypoint_contract:
+  source_path: index.js
+  commonjs_exports: [initialize, processToolCall, shutdown]
+  native_require_module: ./agents-os-resident.linux-x64-gnu.node
+  native_load_allowed_only_inside_function: processToolCall
+  native_NAPI_methods: [execute_command, execute_query, claim_outbox, acknowledge_outbox, reconcile]
+
+manifest_contract:
+  blocked_manifest_path: plugin-manifest.json.block
+  enabled_manifest_path: plugin-manifest.json
+  enabled_manifest_member_allowed: false
+  blocked_manifest_sha256_must_match_source_inventory: true
+
+synthetic_archive_exercise:
+  environment: SYNTHETIC_TEST
+  members:
+    - {source_path: README.md, content_utf8: 'synthetic-only README'}
+    - {source_path: index.js, content_utf8: 'module.exports = {};'}
+    - {source_path: package.json, content_utf8: '{"name":"synthetic-only"}'}
+    - {source_path: plugin-manifest.json.block, content_utf8: '{"disabled":true}'}
+
+boundary:
+  synthetic_witness_runtime_usable: false
+  owned_temp_root_synthetic_test_only: true
+  implementation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_native_host_loading_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  release_deploy_publish_authorized: false

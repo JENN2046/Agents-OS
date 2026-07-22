@@ -1,0 +1,46 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: PHASE_5C_M0C_PLAN_R4_NARROW_CORRECTION_START_DECISION_V0_1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: EXECUTED_STRICT_SCOPE
+
+authorization:
+  source: Jenn_current_explicit_instruction
+  instruction: 启动R4
+  applies_to: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  exact_authorized_scope:
+    - PHASE5C_M0C_PLAN_R3_IR_B01_complete_normative_POSIX_ustar_header_and_padding_byte_contract
+    - PHASE5C_M0C_PLAN_R3_IR_B02_actual_post_cleanup_residue_fault_injection_and_bound_negative_witness
+
+preconditions:
+  R3_independent_review_path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r3-full-atomic-independent-review.yaml
+  R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+  R3_finding_disposition_path: control-plane/registry/reviews/2026-07-22-agents-os-phase-5c-m0c-plan-r3-finding-disposition-v0.1.yaml
+  R3_manifest_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+  R1_R3_fixed_bytes_preserved: true
+
+required_R4_outputs:
+  - narrow_amendment
+  - complete_exact_ustar_profile
+  - synthetic_structural_witness
+  - offline_validator
+  - author_self_review
+  - hash_bound_independent_review_package
+
+prohibitions:
+  R1_R3_subject_manifest_review_and_disposition_rewrite: forbidden
+  implementation_or_extension_source_change: forbidden
+  VCPToolBox_change_or_start: forbidden
+  plugin_enablement_or_native_host_loading: forbidden
+  runtime_activation: forbidden
+  database_creation_or_connection: forbidden
+  private_Memory_provider_sensing_or_real_effect: forbidden
+  dependency_lock_public_API_or_MCP_change: forbidden
+  plan_freeze_or_implementation_start: forbidden
+  commit_push_or_merge: forbidden
+
+completion_gate:
+  next_gate: PHASE_5C_M0C_PLAN_R4_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_freeze: forbidden
+  automatic_implementation_start: forbidden

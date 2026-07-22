@@ -1,0 +1,344 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5C_M0C_PLAN_R3_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-22'
+materialized_at: '2026-07-22T20:21:40+08:00'
+materialization_note: >-
+  This file was first materialized after the interactive independent review.
+  It does not claim to have existed before this timestamp and does not treat
+  chat text as pre-existing original bytes.
+
+reviewer:
+  identity: Codex_Nobao_independent_review_run
+  independent: true
+  independence_basis:
+    - not_the_author_of_the_Phase_5C_M0C_R3_subjects
+    - reviewed_the_manifest_bound_source_snapshot_and_complete_ZIP_from_scratch
+    - author_self_review_was_evidence_only_and_not_used_as_the_conclusion
+    - performed_independent_fully_resigned_structural_attacks
+    - performed_independent_actual_cleanup_fault_injection
+    - rebuilt_and_compared_the_complete_review_ZIP
+    - did_not_modify_the_review_subjects_manifest_or_author_evidence
+    - did_not_freeze_the_plan_or_start_implementation
+    - no_runtime_provider_database_private_memory_sensing_or_effect_execution
+
+review_unit:
+  id: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 7
+  authority_input_count: 72
+  author_evidence_count: 6
+  declared_input_count: 85
+
+result: BLOCK
+requires_R4: true
+
+findings:
+  blocker: 2
+  major: 0
+  minor: 0
+  unresolved: 2
+
+integrity:
+  source_snapshot:
+    type: manifest_bound_uncommitted_source_snapshot
+    source_snapshot_id: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+    equals_manifest_sha256: true
+    Git_commit_claimed: false
+  manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+    actual_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+    match: true
+  archive:
+    path: /tmp/2026-07-22-agents-os-phase-5c-m0c-plan-r3-review-package-v0.1.zip
+    expected_sha256: e0b54e0be26d84e70a35a5ab84428141f357c8d0b9c8bb85ea6ef067e23c0b16
+    actual_sha256: e0b54e0be26d84e70a35a5ab84428141f357c8d0b9c8bb85ea6ef067e23c0b16
+    sha256_match: true
+    entry_count: 90
+    unique_paths: 90
+    crc_full_read: PASS
+    checksums_rows: 89
+    checksums_match: 89/89
+    archive_map_rows: 85
+    archive_map_bytes_match: 85/85
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+  declared_inputs:
+    total_hashes: 85/85_MATCH
+    total_full_reads: 85/85
+    total_bytes_fully_read: 1079717
+    total_lines_fully_read: 23686
+    workspace_snapshot_bytes: 85/85_MATCH
+    extracted_archive_bytes: 85/85_MATCH
+    subjects: 7/7_MATCH_AND_FULLY_READ
+    authority_inputs: 72/72_MATCH_AND_FULLY_READ
+    author_evidence: 6/6_MATCH_AND_FULLY_READ
+
+subject_hashes:
+  R1_immutable_implementation_plan: d8c670f6edb51aba893472d72ffce6c8713d416f6ee14aafc835ab005d8e02e4
+  R1_immutable_build_profile: c996b069d099f25feb93d7828a5b6188ff1b16413b3ac670f2a3d91450582fdb
+  R2_narrow_correction_amendment: 0c3c4363d32a1df64a70762941cd0792342a8a4257d39a2edb2878a5daed9c35
+  R2_sealed_source_inventory_profile: 2554783a30af00e31232be7ac8ca4be72ea40ed13025304cf4288b09c8e42958
+  R2_exact_archive_output_lifecycle_profile: 5cf1306c454b7f266fef0fff9bf2146b6e2fff23cf058d69a3fb13d565a5ca57
+  R3_narrow_correction_amendment: 8bf4ded1a7f748a26b0b30f6f190fabe57a255170340f4ff380721b8438eff04
+  R3_exact_archive_output_lifecycle_profile: 71d534e8b98b8241216049433280261fcbba18590819ea8b6a692e47e46c0062
+
+sealed_source_verification:
+  record_count: 46
+  records_canonical_sha256: 521ffa427a9b5b0a2391970f6ecb8b8c79bf2d1cc5e6e342806bea945bb81830
+  workspace_byte_length_and_sha256_match: 46/46
+  package_manifest_inventory_members_and_order_match: 46/46
+  blocked_manifest_sha256_match: true
+  direct_entrypoint_sha256_match: true
+  CommonJS_exports: [initialize, processToolCall, shutdown]
+  native_require_is_inside_processToolCall: true
+  native_NAPI_methods:
+    - execute_command
+    - execute_query
+    - claim_outbox
+    - acknowledge_outbox
+    - reconcile
+
+fixed_command_reproduction:
+  workspace_snapshot:
+    command_1_profiles_yaml_parse: PASS
+    command_2_sealed_source_rehash: PASS
+    command_3_R1_validator_and_self_test: PASS
+    command_4_R2_validator_and_self_test: PASS
+    command_5_R2_builder_byte_reproduction: PASS
+    command_6_R3_validator_and_self_test: PASS
+    command_7_R3_builder_byte_reproduction: PASS
+    command_8_trailing_whitespace: PASS
+    total: 8/8_PASS
+  isolated_complete_ZIP_without_git:
+    git_directory_present: false
+    command_1_profiles_yaml_parse: PASS
+    command_2_sealed_source_rehash: PASS
+    command_3_R1_validator_and_self_test: PASS
+    command_4_R2_validator_and_self_test: PASS
+    command_5_R2_builder_byte_reproduction: PASS
+    command_6_R3_validator_and_self_test: PASS
+    command_7_R3_builder_byte_reproduction: PASS
+    command_8_trailing_whitespace: PASS
+    total: 8/8_PASS
+  R3_fixed_validator_structural_negative_mutations: 15/15_REJECTED
+  R3_fixed_validator_parser_probes: 1/1_REJECTED
+  R3_fixed_validator_claimed_actual_lifecycle_probes: 2
+  terminal_outcome: NOT_ACTIVATED
+  temporary_extractions_cleaned: true
+
+review_archive_reproduction:
+  rebuilt_from_no_Git_extraction: true
+  rebuilt_entry_count: 90
+  rebuilt_declared_input_count: 85
+  rebuilt_sha256: e0b54e0be26d84e70a35a5ab84428141f357c8d0b9c8bb85ea6ef067e23c0b16
+  byte_identical_to_supplied_archive: true
+  R1_validator_removal_rejected_by_fixed_command_and_rebuild: true
+  R1_fixture_removal_rejected_by_fixed_command_and_rebuild: true
+  missing_dependency_probes: 2/2_REJECTED
+
+independent_adversarial_results:
+  independent_fully_resigned_attack_count: 40
+  semantic_rejection_count: 40
+  fully_resigned_attacks_rejected: 40/40
+  fully_resigned_attacks_accepted: 0
+  root_fingerprint_only_rejection_count: 0
+  independent_parser_probe_count: 5
+  independent_parser_probes_rejected: 5/5
+  independent_actual_cleanup_fault_injections: 2
+  independent_actual_cleanup_fault_injections_fail_closed: 2/2
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 1
+  represented_attack_classes:
+    - sealed_source_commit_and_manifest_hash_substitution
+    - sealed_host_commit_path_blob_and_SHA_substitution
+    - source_inventory_add_remove_duplicate_reorder_and_replace
+    - archive_inventory_add_remove_duplicate_reorder_and_replace
+    - traversal_absolute_backslash_non_NFC_and_symlink_members
+    - propagated_eager_native_load
+    - sixth_NAPI_method
+    - enabled_manifest
+    - old_five_field_member_manifest_preimage
+    - synthetic_member_reorder_and_metadata_drift
+    - raw_archive_byte_drift
+    - caller_output_path
+    - wrong_success_return_bytes_and_failure_extra_bytes
+    - success_and_failure_post_cleanup_residue_claims
+    - suppressed_residue_and_wrong_return_probes
+    - forged_post_cleanup_root_existence
+    - unknown_fields_wrong_types_unsafe_integers_and_activation
+  legal_input_over_rejection:
+    alternate_POSIX_regular_file_typeflag:
+      normative_profile_typeflag_byte: unspecified
+      preferred_regular_typeflag: '0'
+      alternate_regular_typeflag: NUL
+      alternate_archive_standard_parser_regular_members: 4/4
+      all_dependent_archive_and_lifecycle_hashes_fully_resigned: true
+      validator_result: REJECTED
+      validator_errors:
+        - archive_bytes_are_not_deterministic_encoding
+        - synthetic_archive_parse_or_encoding_failed
+
+actual_lifecycle_results:
+  normal_success:
+    initial_inventory: []
+    before_cleanup_inventory: [archive.tar]
+    post_cleanup_owned_root_exists: false
+    post_cleanup_residue: []
+    returned_bytes_equal_archive_bytes: true
+  normal_failure:
+    initial_inventory: []
+    before_cleanup_inventory: []
+    post_cleanup_owned_root_exists: false
+    post_cleanup_residue: []
+    return_fields: [stable_error_code]
+  independent_cleanup_fault_injection:
+    success_path_actual_residue: FAIL_CLOSED
+    failure_path_actual_residue: FAIL_CLOSED
+  wrong_return_probe:
+    actual_returned_bytes_differ: true
+    mismatch_detected: true
+    fail_closed: true
+  fixed_residue_probe:
+    observed_boundary: before_cleanup
+    observed_before_cleanup_inventory: [archive.tar]
+    post_cleanup_owned_root_exists: false
+    post_cleanup_residue: []
+    claimed_result: CLEANUP_RESIDUE_DETECTED
+
+finding_details:
+  - id: PHASE5C_M0C_PLAN_R3_IR_B01
+    severity: blocker
+    title: The_normative_subjects_do_not_freeze_the_complete_POSIX_ustar_header_byte_encoding
+    subjects:
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-r3-narrow-correction-amendment-v0.1.md
+    author_evidence:
+      - control-plane/registry/phase5c_m0c_r3_structural_core.py
+      - control-plane/registry/build-phase-5c-m0c-plan-r3-structural-witness.py
+      - control-plane/registry/validate-phase-5c-m0c-plan-r3-structural-witness.py
+    exact_locations:
+      - R3_archive_profile_lines_15_43
+      - R3_structural_core_lines_113_141
+      - R3_manifest_author_evidence_lines_104_109
+    evidence: >-
+      The normative R3 profile freezes the logical metadata values but does not
+      freeze the regular-file typeflag byte, numeric field padding and
+      termination, checksum field encoding, magic and version bytes, unused
+      header-field zeroing, or file-body padding bytes. Those byte choices are
+      made only inside the structural helper, which the manifest explicitly
+      marks as author evidence that may not substitute for independent
+      judgment. POSIX tar recognizes both typeflag '0' and NUL as regular-file
+      codes. An independently constructed archive changed only the first member
+      typeflag from '0' to NUL, recomputed the header checksum, complete archive
+      SHA and all lifecycle byte bindings, and remained readable as four
+      regular files by the standard tar parser. The R3 validator rejected the
+      fully re-signed archive because its non-normative helper hard-codes '0'.
+    impact: >-
+      The subjects still admit more than one POSIX ustar byte stream while the
+      evidence accepts only one unpublished helper encoding. This violates the
+      exact-header and no-legal-input-over-rejection review questions and
+      prevents an atomic deterministic plan freeze.
+    closure_required:
+      - move_every_byte_affecting_ustar_header_and_padding_rule_into_the_normative_profile
+      - freeze_the_regular_file_typeflag_byte
+      - freeze_numeric_field_padding_termination_and_overflow_rules
+      - freeze_checksum_field_preimage_and_output_encoding
+      - freeze_magic_version_linkname_device_prefix_unused_bytes_and_body_padding
+      - add_fully_resigned_regressions_for_each_alternate_legal_encoding
+
+  - id: PHASE5C_M0C_PLAN_R3_IR_B02
+    severity: blocker
+    title: The_fixed_cleanup_residue_probe_observes_normal_pre_cleanup_state_not_post_cleanup_residue
+    subjects:
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r3.yaml
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-r3-narrow-correction-amendment-v0.1.md
+    author_evidence:
+      - control-plane/registry/phase5c_m0c_r3_structural_core.py
+      - control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r3-structural-witness-v0.1.json
+      - control-plane/registry/validate-phase-5c-m0c-plan-r3-structural-witness.py
+    exact_locations:
+      - R3_archive_profile_lines_64_72
+      - R3_amendment_lines_21_24
+      - R3_structural_core_lines_313_332
+    evidence: >-
+      The profile defines archive.tar as the expected success inventory before
+      cleanup and an empty nonexistent root after cleanup. The fixed residue
+      probe writes archive.tar, observes it before cleanup, successfully removes
+      the root, observes no post-cleanup residue, and then labels that normal
+      pre-cleanup state CLEANUP_RESIDUE_DETECTED. It never injects a failed or
+      incomplete cleanup and never observes residue after the attempted cleanup
+      boundary. Independent fault injection showed that the normal success and
+      failure helpers do fail closed when cleanup is forced to leave actual
+      residue, but that negative condition is absent from the fixed two-probe
+      witness claimed by R3.
+    impact: >-
+      The fixed evidence overstates its actual cleanup-residue probe count and
+      does not execute the exact negative condition required to close R2 B02.
+      Reproducing the same helper output cannot prove a post-cleanup residue
+      detector because the probe never reaches that state.
+    closure_required:
+      - inject_an_actual_incomplete_cleanup_in_a_disposable_owned_temp_root
+      - observe_root_existence_and_residue_after_the_simulated_cleanup_attempt
+      - emit_the_fail_closed_result_from_that_post_cleanup_observation
+      - remove_the_test_root_only_in_a_separate_harness_finalizer
+      - bind_the_actual_fault_record_and_a_fully_resigned_suppression_attack
+
+confirmed_closed_R2_findings:
+  R2_B01_one_eleven_field_member_manifest_preimage: CLOSED
+  R2_B03_complete_self_contained_review_archive: CLOSED
+
+confirmed_safe_boundaries:
+  sealed_host_commit_path_blob_and_SHA_records_present: true
+  sealed_source_inventory_rows: 46
+  enabled_manifest_forbidden: true
+  CommonJS_exports_exactly_three: true
+  public_NAPI_methods_exactly_five: true
+  second_plugin_loader_service_writer_permission_identity_Task_Command_or_effect_authority_found: false
+  implementation_or_source_modification_authorized: false
+  dependency_or_lock_change_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_native_host_loading_authorized: false
+  database_creation_or_connection_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_provider_sensing_or_real_effect_authorized: false
+  release_deploy_or_publish_authorized: false
+
+disposition:
+  Phase_5C_M0C_R3_plan_acceptance_ready: false
+  Phase_5C_M0C_R3_plan_freeze_ready: false
+  Phase_5C_M0C_R3_plan_frozen: false
+  Phase_5C_M0C_implementation_started: false
+  implementation_authorized: false
+  automatic_freeze_performed: false
+  next_gate: PHASE_5C_M0C_PLAN_R4_NARROW_CORRECTION_AND_FRESH_INDEPENDENT_REVIEW
+
+R4_scope_limit:
+  - complete_normative_POSIX_ustar_header_and_padding_byte_contract
+  - actual_post_cleanup_residue_fault_injection_and_bound_negative_witness
+
+forbidden_R4_expansion:
+  - Rust_NAPI_or_SQLite_implementation
+  - dependency_or_lockfile_change
+  - VCPToolBox_materialization_change_or_start
+  - plugin_enablement_or_native_host_loading
+  - database_creation_or_connection
+  - runtime_activation
+  - production_authentication
+  - private_Memory_provider_sensing_or_real_effect
+  - release_deploy_or_publish
+
+terminal_disposition: >-
+  All 85 declared inputs and 89 ZIP checksums match, the review archive rebuilds
+  byte-identically, all eight fixed commands pass in both the workspace snapshot
+  and a no-Git extraction, and forty independent fully re-signed attacks receive
+  target-semantic rejections. R3 remains blocked because the normative subjects
+  do not freeze every byte-affecting ustar header and padding rule and therefore
+  reject an alternate legal POSIX regular-file encoding, while the fixed
+  cleanup-residue probe observes normal pre-cleanup archive presence rather than
+  actual post-cleanup residue. Phase 5C M0-C R3 is not ready for Jenn's atomic
+  freeze decision, and implementation remains unauthorized and not started.
