@@ -1,0 +1,82 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5c-m0c-plan-r2-independent-review-disposition-v0.1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: R2_BLOCK_RECONCILED_R3_DECISION_REQUIRED
+
+review:
+  path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r2-full-atomic-independent-review.yaml
+  sha256: bb166ee4c61fa389ae834f3a66fdd67faba4a92452192ee91964574bfc11b6f1
+  result: BLOCK
+  requires_R3: true
+  findings: {blocker: 3, major: 0, minor: 0, unresolved: 3}
+  materialized_at: '2026-07-22T19:24:31+08:00'
+  backdated_preexistence_claim: false
+
+immutable_lineage:
+  R1_fixed_commit: 8e703895291a6b8b0f1ccfa11382dee47de2dff1
+  R1_manifest_path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  R1_manifest_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+  R2_fixed_commit: f250a8e46dbd63f3dd2bf45fc0e3c61cc16136a3
+  R2_manifest_path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  R2_manifest_sha256: 610b42a8d0eefadefe9e7625ea4b60cd370ac02f24b64b37ab7c9d56360a1a27
+  R2_archive_sha256: 744d70534598d2d4df5768051dee4d7da4e2c3725f8c2eba3969abaa47ffb24b
+  R1_R2_subjects_manifests_author_evidence_and_reviews_immutable: true
+
+findings:
+  - finding_id: PHASE5C_M0C_PLAN_R2_IR_B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: one_exact_member_manifest_preimage_algorithm
+    required_regressions:
+      - freeze_one_complete_field_inventory_and_canonical_JSON_algorithm
+      - make_profile_builder_fixture_and_validator_consume_the_same_preimage
+      - reject_fully_resigned_member_manifest_drift
+      - accept_the_single_profile_conforming_member_manifest_preimage
+
+  - finding_id: PHASE5C_M0C_PLAN_R2_IR_B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: actual_synthetic_output_delivery_and_owned_temp_root_cleanup_evidence
+    required_regressions:
+      - execute_success_and_failure_only_in_a_new_owned_synthetic_temp_root
+      - bind_pre_and_post_filesystem_inventory_to_the_witness
+      - bind_actual_returned_archive_bytes_to_the_exact_archive_bytes
+      - align_success_and_failure_return_fields_with_the_normative_profile
+      - reject_fully_resigned_actual_residue_and_wrong_or_absent_delivery_cases
+
+  - finding_id: PHASE5C_M0C_PLAN_R2_IR_B03
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R3
+    closure_scope: complete_self_contained_offline_review_archive
+    required_regressions:
+      - hash_bind_and_archive_the_R1_validator_and_R1_fixture_used_by_fixed_command_5
+      - run_all_declared_fixed_commands_in_an_isolated_no_git_extraction
+      - reject_archive_map_omission_of_any_fixed_command_dependency
+
+R3_scope_if_started:
+  exact_findings:
+    - PHASE5C_M0C_PLAN_R2_IR_B01
+    - PHASE5C_M0C_PLAN_R2_IR_B02
+    - PHASE5C_M0C_PLAN_R2_IR_B03
+  R1_R2_subjects_manifests_author_evidence_and_independent_reviews_immutable: true
+  owned_temp_root_may_be_synthetic_test_only: true
+  may_change_Phase_5C_objective: false
+  may_start_implementation_or_modify_extension_source: false
+  may_change_or_start_VCPToolBox: false
+  may_enable_plugin_or_load_native_host: false
+  may_create_or_connect_database: false
+  may_access_private_Memory_provider_sensing_or_effect: false
+  may_change_dependencies_locks_public_API_or_MCP: false
+
+governance:
+  R3_started: false
+  R3_requires_Jenn_explicit_start: true
+  R3_preplanned: false
+  partial_acceptance: forbidden
+  Phase_5C_plan_freeze_ready: false
+  Phase_5C_plan_frozen: false
+  Phase_5C_implementation_started: false
+  implementation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_runtime_activation_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  commit_push_merge_authorized: false
