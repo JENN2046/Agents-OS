@@ -11,10 +11,11 @@
   "scripts": {
     "build:debug": "napi build --platform",
     "build:release": "napi build --platform --release",
-    "build:offline": "node tools/build-offline-package.mjs --stage wp1",
+    "build:offline": "node tools/build-offline-package.mjs --stage wp4",
     "check:inert-entrypoint": "node tools/validate-sealed-host-contract.mjs --verify-inert-entrypoint",
     "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0",
-    "preview:compatibility": "node tools/validate-sealed-host-contract.mjs --compatibility-preview"
+    "preview:compatibility": "node tools/validate-sealed-host-contract.mjs --compatibility-preview",
+    "test:offline-packaging": "node tests/offline-packaging.mjs"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.7.3"

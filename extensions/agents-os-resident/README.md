@@ -178,3 +178,12 @@ VCPToolBox commit, tree and seven path/blob/SHA commitments. Its only positive
 result is `PACKAGE_COMPATIBLE_PREVIEW`: a static compatibility statement for
 that exact tuple. It neither reads a VCPToolBox worktree nor grants plugin
 enablement, Host loading, runtime or effect authority.
+
+Phase 5C M0-C WP4 constructs only raw, uncompressed POSIX USTAR bytes from the
+closed source inventory in a newly created owned temporary root. Every member
+uses the frozen `agents-os-resident/` prefix, bytewise source order, normalized
+metadata, exact header bytes, zero padding and two terminal zero blocks. The
+temporary `archive.tar` is re-read only into memory and the owned root is
+removed before return; no archive is delivered, installed, enabled or written
+to the workspace. The offline tamper suite checks headers, content, padding,
+terminal blocks, paths, duplicate members, ordering and NFC path handling.
