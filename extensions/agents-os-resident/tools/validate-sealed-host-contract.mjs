@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Script } from 'node:vm';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
@@ -380,6 +381,84 @@ export function validateSealedHostContract(stage = 'wp0') {
   };
 }
 
+/**
+ * Verify the disabled package boundary without loading the extension through a
+ * Host or calling any exported function. The VM receives a throwing require;
+ * a non-zero require count proves an eager native-load attempt.
+ */
+export function verifyDisabledManifestAndInertEntrypoint() {
+  const errors = [];
+  const baseline = validateSealedHostContract('wp1');
+  if (baseline.result !== 'WP0_BASELINE_VERIFIED') {
+    return { result: 'BLOCKED', errors: [error('SEALED_BASELINE_UNAVAILABLE'), ...(baseline.errors ?? [])] };
+  }
+
+  const fixture = readJsonExact(FIXTURE_PATH, FIXTURE_SHA256, errors, 'CONTRACT_FIXTURE');
+  if (fixture === null) {
+    return { result: 'BLOCKED', errors };
+  }
+  const manifestPath = resolve(EXTENSION_ROOT, fixture.blocked_manifest.path);
+  let manifest;
+  try {
+    manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  } catch {
+    errors.push(error('BLOCKED_MANIFEST_INVALID_JSON'));
+  }
+  if (
+    !hasExactKeys(manifest, ['author', 'capabilities', 'communication', 'description', 'displayName', 'entryPoint', 'manifestVersion', 'name', 'pluginType', 'version']) ||
+    manifest.name !== 'AGENTSOSResident' ||
+    manifest.pluginType !== 'hybridservice' ||
+    !hasExactKeys(manifest.entryPoint, ['script']) ||
+    manifest.entryPoint.script !== fixture.entrypoint.path
+  ) {
+    errors.push(error('BLOCKED_MANIFEST_CONTRACT_INVALID'));
+  }
+  if (existsSync(resolve(EXTENSION_ROOT, fixture.blocked_manifest.enabled_manifest_path))) {
+    errors.push(error('ENABLED_MANIFEST_FORBIDDEN'));
+  }
+
+  let exportsValue = null;
+  let requireCount = 0;
+  try {
+    const source = readFileSync(resolve(EXTENSION_ROOT, fixture.entrypoint.path), 'utf8');
+    const sandbox = {
+      module: { exports: {} },
+      exports: {},
+      require: () => {
+        requireCount += 1;
+        throw new Error('EAGER_REQUIRE_FORBIDDEN');
+      }
+    };
+    new Script(source, { filename: fixture.entrypoint.path }).runInNewContext(sandbox);
+    exportsValue = sandbox.module.exports;
+  } catch {
+    errors.push(error('ENTRYPOINT_STATIC_EVALUATION_FAILED'));
+  }
+  const expectedExports = fixture.entrypoint.commonjs_exports;
+  if (
+    !isObject(exportsValue) ||
+    JSON.stringify(Object.keys(exportsValue).sort()) !== JSON.stringify([...expectedExports].sort()) ||
+    expectedExports.some((name) => typeof exportsValue[name] !== 'function')
+  ) {
+    errors.push(error('ENTRYPOINT_EXPORT_SURFACE_INVALID'));
+  }
+  if (requireCount !== 0) {
+    errors.push(error('ENTRYPOINT_EAGER_REQUIRE_FORBIDDEN'));
+  }
+
+  return errors.length > 0
+    ? { result: 'BLOCKED', errors }
+    : {
+        result: 'DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIED',
+        runtime_usable: false,
+        enabled_plugin_manifest_present: false,
+        commonjs_exports: '3/3_MATCH',
+        eager_native_require_count: 0,
+        native_NAPI_methods: '5/5_SEALED_BY_IMMUTABLE_SOURCE',
+        terminal_outcome: 'NOT_ACTIVATED'
+      };
+}
+
 function runSelfTest() {
   const result = validateSealedHostContract('wp0');
   const errors = [];
@@ -395,6 +474,10 @@ function runSelfTest() {
   if (!invalidRecordErrors.some((item) => item.code === 'IMMUTABLE_RECORD_LENGTH_INVALID')) {
     errors.push('NEGATIVE_LENGTH_NOT_REJECTED');
   }
+  const inert = verifyDisabledManifestAndInertEntrypoint();
+  if (inert.result !== 'DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIED') {
+    errors.push('INERT_ENTRYPOINT_BASELINE_REJECTED');
+  }
   return errors.length === 0
     ? { result: 'PASS', self_test: 'sealed_host_contract', runtime_usable: false }
     : { result: 'BLOCKED', errors };
@@ -403,6 +486,7 @@ function runSelfTest() {
 function parseArgs(argv) {
   let stage = 'wp0';
   let selfTest = false;
+  let verifyInertEntrypoint = false;
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--stage') {
@@ -410,16 +494,27 @@ function parseArgs(argv) {
       index += 1;
     } else if (argument === '--self-test') {
       selfTest = true;
+    } else if (argument === '--verify-inert-entrypoint') {
+      verifyInertEntrypoint = true;
     } else {
       return { error: 'CLI_ARGUMENT_INVALID' };
     }
   }
-  return { stage, selfTest };
+  if (selfTest && verifyInertEntrypoint) {
+    return { error: 'CLI_ARGUMENT_INVALID' };
+  }
+  return { stage, selfTest, verifyInertEntrypoint };
 }
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  const result = args.error ? { result: 'BLOCKED', errors: [error(args.error)] } : args.selfTest ? runSelfTest() : validateSealedHostContract(args.stage);
+  const result = args.error
+    ? { result: 'BLOCKED', errors: [error(args.error)] }
+    : args.selfTest
+      ? runSelfTest()
+      : args.verifyInertEntrypoint
+        ? verifyDisabledManifestAndInertEntrypoint()
+        : validateSealedHostContract(args.stage);
   process.stdout.write(`${JSON.stringify(result)}\n`);
   process.exitCode = result.result === 'BLOCKED' ? 1 : 0;
 }

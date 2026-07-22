@@ -166,3 +166,9 @@ from the sealed contract, rehashes every source before and after copying, and
 cleans that root before it returns. It reports staging metadata only; it does
 not emit a persistent archive, install anything, enable a manifest or invoke a
 native Host.
+
+Phase 5C M0-C WP2 verifies the disabled manifest and inert CommonJS entrypoint
+without importing it through a Host. It parses only the blocked manifest and
+evaluates the fixed entrypoint in an isolated VM with a throwing `require`;
+the successful result proves no eager require occurs. It does not call
+`processToolCall`, load the addon or enable the plugin.
