@@ -6,16 +6,16 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5C M0-C Implementation — WP0 Complete, WP1 Active (2026-07-22)
+## Phase 5C M0-C Implementation — WP1 Complete, WP2 Active (2026-07-22)
 
 Jenn explicitly started the frozen Phase 5C M0-C offline plugin-packaging and
 sealed-host-compatibility implementation. The start closeout binds the Plan R4
 freeze, independent review, mainline durability evidence and sealed seven-path
-VCPToolBox preflight. WP0 has passed its sealed-baseline gate; WP1 is now the
-only active work package.
+VCPToolBox preflight. WP0 and WP1 have passed their direct gates; WP2 is now
+the only active work package.
 
 ```yaml
-Phase_5C_status: M0C_IMPLEMENTATION_WP0_COMPLETE_WP1_ACTIVE
+Phase_5C_status: M0C_IMPLEMENTATION_WP1_COMPLETE_WP2_ACTIVE
 Phase_5C_plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
 Phase_5C_plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
 Phase_5C_plan_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
@@ -37,7 +37,11 @@ WP0_status: PASS_COMPLETE
 WP0_source_payload_commit: f4535e7db8f4574a4d9b92b874f683678c6fb992
 WP0_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-wp0-sealed-baseline-closeout-v0.1.md
 WP0_closeout_receipt_sha256: d9c690598da0cf1c02856ad9a7a2af59a75528996ec72c03e0f6e05af0534ac4
-current_work_package: WP1_DETERMINISTIC_TEMPORARY_STAGING_BUILDER
+WP1_status: PASS_COMPLETE
+WP1_source_payload_commit: 51f4bc13267251554277c4d2db5dfdb676610936
+WP1_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-wp1-deterministic-staging-closeout-v0.1.md
+WP1_closeout_receipt_sha256: bdb2f54322ae857d6d1d683b257f10768ff471c075598eded4c75388a4000af6
+current_work_package: WP2_DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIER
 WP0_start_authorized: true
 WP1_through_WP6_conditionally_authorized: true
 VCPToolBox_change_or_start_authorized: false
@@ -45,9 +49,9 @@ plugin_enablement_or_native_host_load_authorized: false
 runtime_activation_authorized: false
 database_private_Memory_provider_sensing_or_effect_authorized: false
 Git_delivery_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.2.md
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.2.md
-next_gate: PHASE_5C_M0C_WP1_DETERMINISTIC_TEMPORARY_STAGING_BUILDER
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.3.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.3.md
+next_gate: PHASE_5C_M0C_WP2_DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIER
 ```
 
 ## Phase 5C M0-C Plan R4 Independent Review Passed (2026-07-22)
