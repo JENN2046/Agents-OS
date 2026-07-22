@@ -172,3 +172,9 @@ without importing it through a Host. It parses only the blocked manifest and
 evaluates the fixed entrypoint in an isolated VM with a throwing `require`;
 the successful result proves no eager require occurs. It does not call
 `processToolCall`, load the addon or enable the plugin.
+
+Phase 5C M0-C WP3 combines the sealed extension facts with the frozen
+VCPToolBox commit, tree and seven path/blob/SHA commitments. Its only positive
+result is `PACKAGE_COMPATIBLE_PREVIEW`: a static compatibility statement for
+that exact tuple. It neither reads a VCPToolBox worktree nor grants plugin
+enablement, Host loading, runtime or effect authority.

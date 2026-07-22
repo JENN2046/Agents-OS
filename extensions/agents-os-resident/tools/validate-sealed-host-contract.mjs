@@ -459,6 +459,52 @@ export function verifyDisabledManifestAndInertEntrypoint() {
       };
 }
 
+/**
+ * A compatibility preview consumes only the exact immutable tuple already
+ * sealed in this workspace. It deliberately accepts no host path, revision or
+ * caller-supplied source; VCPToolBox is never read, loaded or modified.
+ */
+export function previewSealedHostCompatibility() {
+  const errors = [];
+  const baseline = validateSealedHostContract('wp1');
+  if (baseline.result !== 'WP0_BASELINE_VERIFIED') {
+    return { result: 'BLOCKED', errors: [error('SEALED_BASELINE_UNAVAILABLE'), ...(baseline.errors ?? [])] };
+  }
+  const inert = verifyDisabledManifestAndInertEntrypoint();
+  if (inert.result !== 'DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIED') {
+    return { result: 'BLOCKED', errors: [error('INERT_ENTRYPOINT_UNAVAILABLE'), ...(inert.errors ?? [])] };
+  }
+  const fixture = readJsonExact(FIXTURE_PATH, FIXTURE_SHA256, errors, 'CONTRACT_FIXTURE');
+  if (fixture === null) {
+    return { result: 'BLOCKED', errors };
+  }
+  const host = fixture.sealed_vcptoolbox_host;
+  if (
+    !isObject(host) ||
+    host.repository !== 'lioensky/VCPToolBox' ||
+    host.commit !== '555b3b538f6eb736e530c2912de678c5941f9985' ||
+    host.tree !== 'fd82d403e79f36f749eb7f555b4736eae3eacdff' ||
+    !Array.isArray(host.files) ||
+    host.files.length !== 7 ||
+    new Set(host.files.map((file) => file.path)).size !== 7
+  ) {
+    return { result: 'BLOCKED', errors: [error('SEALED_HOST_COMMITMENT_CONFLICT')] };
+  }
+  return {
+    result: 'PACKAGE_COMPATIBLE_PREVIEW',
+    runtime_usable: false,
+    plugin_enablement_authorized: false,
+    VCPToolBox_worktree_read_or_write_performed: false,
+    sealed_host_repository: host.repository,
+    sealed_host_commit: host.commit,
+    sealed_host_tree: host.tree,
+    sealed_host_commitments: '7/7_MATCH',
+    extension_source_inventory: baseline.source_inventory_state,
+    disabled_manifest_and_inert_entrypoint: true,
+    terminal_outcome: 'NOT_ACTIVATED'
+  };
+}
+
 function runSelfTest() {
   const result = validateSealedHostContract('wp0');
   const errors = [];
@@ -478,6 +524,10 @@ function runSelfTest() {
   if (inert.result !== 'DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIED') {
     errors.push('INERT_ENTRYPOINT_BASELINE_REJECTED');
   }
+  const compatibility = previewSealedHostCompatibility();
+  if (compatibility.result !== 'PACKAGE_COMPATIBLE_PREVIEW') {
+    errors.push('SEALED_HOST_COMPATIBILITY_BASELINE_REJECTED');
+  }
   return errors.length === 0
     ? { result: 'PASS', self_test: 'sealed_host_contract', runtime_usable: false }
     : { result: 'BLOCKED', errors };
@@ -485,25 +535,31 @@ function runSelfTest() {
 
 function parseArgs(argv) {
   let stage = 'wp0';
+  let stageSpecified = false;
   let selfTest = false;
   let verifyInertEntrypoint = false;
+  let compatibilityPreview = false;
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--stage') {
       stage = argv[index + 1];
+      stageSpecified = true;
       index += 1;
     } else if (argument === '--self-test') {
       selfTest = true;
     } else if (argument === '--verify-inert-entrypoint') {
       verifyInertEntrypoint = true;
+    } else if (argument === '--compatibility-preview') {
+      compatibilityPreview = true;
     } else {
       return { error: 'CLI_ARGUMENT_INVALID' };
     }
   }
-  if (selfTest && verifyInertEntrypoint) {
+  const specialModeCount = [selfTest, verifyInertEntrypoint, compatibilityPreview].filter(Boolean).length;
+  if (specialModeCount > 1 || (specialModeCount === 1 && stageSpecified)) {
     return { error: 'CLI_ARGUMENT_INVALID' };
   }
-  return { stage, selfTest, verifyInertEntrypoint };
+  return { stage, selfTest, verifyInertEntrypoint, compatibilityPreview };
 }
 
 function main() {
@@ -514,6 +570,8 @@ function main() {
       ? runSelfTest()
       : args.verifyInertEntrypoint
         ? verifyDisabledManifestAndInertEntrypoint()
+        : args.compatibilityPreview
+          ? previewSealedHostCompatibility()
         : validateSealedHostContract(args.stage);
   process.stdout.write(`${JSON.stringify(result)}\n`);
   process.exitCode = result.result === 'BLOCKED' ? 1 : 0;

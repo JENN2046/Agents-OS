@@ -13,7 +13,8 @@
     "build:release": "napi build --platform --release",
     "build:offline": "node tools/build-offline-package.mjs --stage wp1",
     "check:inert-entrypoint": "node tools/validate-sealed-host-contract.mjs --verify-inert-entrypoint",
-    "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0"
+    "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0",
+    "preview:compatibility": "node tools/validate-sealed-host-contract.mjs --compatibility-preview"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.7.3"
