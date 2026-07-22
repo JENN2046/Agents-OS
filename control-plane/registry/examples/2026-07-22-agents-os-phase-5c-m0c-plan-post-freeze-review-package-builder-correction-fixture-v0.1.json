@@ -1,0 +1,26 @@
+{
+  "schema_version": "agents-os.phase5c.post-freeze-review-package-builder-correction-fixture.v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "historical_builder": {
+    "path": "control-plane/registry/build-phase-5c-m0c-plan-r3-review-package.py",
+    "sha256": "8ddffa24d935189f733929b1aa0df16b997f0b65db946411fdfd0c5b889bcfd4"
+  },
+  "valid_control": {
+    "payload_path": "control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt",
+    "payload_sha256": "7615dac977ceafab9d386dcdcdf9d5af4a9842139e60f5f192c4efdd982eef33",
+    "report_path": "control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md",
+    "snapshot_id": "phase5c-post-freeze-review-package-builder-correction-v0.1"
+  },
+  "reserved_generated_archive_members": [
+    "ARCHIVE_MAP.json",
+    "CHECKSUMS.sha256",
+    "MANIFEST.yaml",
+    "REPORT.md",
+    "SOURCE_SNAPSHOT_ID.txt"
+  ],
+  "collision_expectation": {
+    "result": "REJECTED_BEFORE_PAYLOAD_READ_OR_OUTPUT_WRITE",
+    "output_file_exists_after_rejection": false
+  },
+  "terminal_outcome": "NOT_EXECUTED"
+}

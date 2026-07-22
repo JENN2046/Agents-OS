@@ -1,0 +1,284 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5C_M0C_PLAN_R4_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-22'
+materialized_at: '2026-07-22T21:26:31+08:00'
+materialization_note: >-
+  This file is the original materialized output of this independent review run.
+  It does not claim to have existed before the materialized_at timestamp and
+  does not treat chat text as pre-existing original bytes.
+
+reviewer:
+  identity: Codex_Nobao_independent_review_run
+  independent: true
+  independence_basis:
+    - not_the_author_of_the_Phase_5C_M0C_R4_subjects_or_author_evidence
+    - reviewed_the_manifest_bound_source_snapshot_and_complete_ZIP_from_scratch
+    - treated_the_author_self_review_as_evidence_only_not_as_the_conclusion
+    - independently_recomputed_all_declared_hashes_and_fully_read_all_declared_bytes
+    - independently_rebuilt_and_compared_the_complete_review_ZIP
+    - independently_constructed_rebound_and_fully_resigned_semantic_attacks
+    - independently_instrumented_the_actual_cleanup_fault_and_finalizer_order
+    - did_not_modify_the_review_subjects_manifest_or_author_evidence
+    - did_not_freeze_the_plan_or_start_implementation
+    - no_runtime_provider_database_private_memory_sensing_or_effect_execution
+
+review_unit:
+  id: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 9
+  authority_input_count: 84
+  author_evidence_count: 5
+  declared_input_count: 98
+
+result: PASS_NO_BLOCKER
+requires_R5: false
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved: 0
+
+integrity:
+  source_snapshot:
+    type: manifest_bound_uncommitted_source_snapshot
+    source_snapshot_id: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+    equals_manifest_sha256: true
+    Git_commit_claimed: false
+  manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+    actual_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+    match: true
+  archive:
+    path: /tmp/2026-07-22-agents-os-phase-5c-m0c-plan-r4-review-package-v0.1.zip
+    expected_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+    actual_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+    sha256_match: true
+    byte_length: 1306934
+    entry_count: 103
+    unique_paths: 103
+    crc_full_read: PASS
+    checksums_rows: 102
+    checksums_match: 102/102
+    checksums_cover_every_entry_except_CHECKSUMS_sha256: true
+    archive_map_rows: 98
+    archive_map_matches_manifest: 98/98
+    archive_payload_hashes_match: 98/98
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    undeclared_payload_entries: 0
+    missing_declared_payload_entries: 0
+    embedded_manifest_byte_match: true
+  declared_inputs:
+    total_hashes: 98/98_MATCH
+    total_full_reads: 98/98
+    total_bytes_fully_read: 1207817
+    total_lines_fully_read: 25707
+    workspace_snapshot_bytes: 98/98_MATCH
+    extracted_archive_bytes: 98/98_MATCH
+    subjects: 9/9_MATCH_AND_FULLY_READ
+    authority_inputs: 84/84_MATCH_AND_FULLY_READ
+    author_evidence: 5/5_MATCH_AND_FULLY_READ
+
+subject_hashes:
+  R1_immutable_implementation_plan: d8c670f6edb51aba893472d72ffce6c8713d416f6ee14aafc835ab005d8e02e4
+  R1_immutable_build_profile: c996b069d099f25feb93d7828a5b6188ff1b16413b3ac670f2a3d91450582fdb
+  R2_narrow_correction_amendment: 0c3c4363d32a1df64a70762941cd0792342a8a4257d39a2edb2878a5daed9c35
+  R2_sealed_source_inventory_profile: 2554783a30af00e31232be7ac8ca4be72ea40ed13025304cf4288b09c8e42958
+  R2_exact_archive_output_lifecycle_profile: 5cf1306c454b7f266fef0fff9bf2146b6e2fff23cf058d69a3fb13d565a5ca57
+  R3_narrow_correction_amendment: 8bf4ded1a7f748a26b0b30f6f190fabe57a255170340f4ff380721b8438eff04
+  R3_exact_archive_output_lifecycle_profile: 71d534e8b98b8241216049433280261fcbba18590819ea8b6a692e47e46c0062
+  R4_narrow_correction_amendment: baa3368ab20187a1acac92ec0632f1ac9563897f56b7832832a4c95fd9e62d3c
+  R4_exact_archive_output_lifecycle_profile: 6e92a9c698e2a6038c28ebfef9523c3869e4b9836f1ba37aaca4a4ef981c342f
+
+author_evidence_hashes:
+  R4_exact_structural_core: 17b1674cbefcfdba44f3f290e79644676f26e32cdd369e973463f1bec87a2852
+  R4_deterministic_structural_builder: 7b13c2b9b9248b3ff778bb802ed41cd5263b73d83b23050a99208b4c6446ea28
+  R4_synthetic_structural_witness: 0be6261dbf815aacc458d3f1c05f0ba685dc576352415ea8be7b5444f2a08c85
+  R4_offline_structural_validator: ff2d5d32ebb9817d767fed5e287aa5691cd3d36b2996842dfc440b43fc0e1df0
+  R4_author_self_review: 2eefe66c452e9b6fbe400b3d2e41c5a3287d8e50030e50c70cb4c8e8a3668197
+
+immutable_lineage:
+  R1_manifest_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+  R2_manifest_sha256: 610b42a8d0eefadefe9e7625ea4b60cd370ac02f24b64b37ab7c9d56360a1a27
+  R3_manifest_sha256: e71ea4b04b676c98de6b660fb5985b25c84e9d35aa7956e38f42c24e475ed205
+  R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+  R1_manifest_declared_inputs_currently_match: 21/21
+  R2_manifest_declared_inputs_currently_match: 69/69
+  R3_manifest_declared_inputs_currently_match: 85/85
+  R3_complete_declared_set_preserved_in_R4: 85/85
+  R1_R3_subjects_preserved_in_order_and_hash: 7/7
+
+sealed_source_verification:
+  record_count: 46
+  workspace_byte_length_and_sha256_match: 46/46
+  package_manifest_inventory_members_and_order_match: 46/46
+  source_commit_match: true
+  content_tree_sha256_match: true
+  blocked_manifest_sha256_match: true
+  direct_entrypoint_sha256_match: true
+  maximum_archive_path_UTF8_byte_length: 62
+  filename_field_limit_satisfied: true
+
+fixed_command_reproduction:
+  workspace_snapshot:
+    command_1_R2_R3_R4_profiles_YAML_parse: PASS
+    command_2_R1_validator_and_self_test: PASS
+    command_3_R2_validator_and_self_test: PASS
+    command_4_R2_builder_byte_reproduction: PASS
+    command_5_R3_validator_and_self_test: PASS
+    command_6_R3_builder_byte_reproduction: PASS
+    command_7_R4_validator_and_self_test: PASS
+    command_8_R4_builder_byte_reproduction: PASS
+    command_9_R4_trailing_whitespace: PASS
+    total: 9/9_PASS
+  isolated_complete_ZIP_without_git:
+    git_directory_present: false
+    command_1_R2_R3_R4_profiles_YAML_parse: PASS
+    command_2_R1_validator_and_self_test: PASS
+    command_3_R2_validator_and_self_test: PASS
+    command_4_R2_builder_byte_reproduction: PASS
+    command_5_R3_validator_and_self_test: PASS
+    command_6_R3_builder_byte_reproduction: PASS
+    command_7_R4_validator_and_self_test: PASS
+    command_8_R4_builder_byte_reproduction: PASS
+    command_9_R4_trailing_whitespace: PASS
+    total: 9/9_PASS
+  R4_fixed_validator_structural_negative_mutations: 12/12_REJECTED
+  R4_fixed_validator_parser_probes: 1/1_REJECTED
+  R4_fixed_actual_post_cleanup_fault_injections: 1
+  terminal_outcome: NOT_ACTIVATED
+  temporary_extractions_cleaned: true
+
+review_archive_reproduction:
+  inherited_builder_path: control-plane/registry/build-phase-5c-m0c-plan-r3-review-package.py
+  inherited_builder_sha256: 8ddffa24d935189f733929b1aa0df16b997f0b65db946411fdfd0c5b889bcfd4
+  rebuilt_from_workspace_snapshot: true
+  rebuilt_from_no_Git_extraction: true
+  rebuilt_declared_input_count: 98
+  rebuilt_entry_count: 103
+  rebuilt_sha256: 48d69cb35e315036981e585a5c4b686da7e81b376599539999b3321f036bb857
+  byte_identical_to_supplied_archive: true
+
+independent_adversarial_results:
+  independent_total_attack_count: 50
+  independent_fully_resigned_or_profile_rebound_attack_count: 49
+  independent_parser_probe_count: 1
+  semantic_rejection_count: 50
+  fully_resigned_or_profile_rebound_attacks_rejected: 49/49
+  parser_probes_rejected: 1/1
+  attacks_accepted: 0
+  root_fingerprint_only_rejection_count: 0
+  favorable_invalid_path_count: 0
+  legal_candidate_count: 2
+  legal_candidates_accepted: 2/2
+  legal_input_over_rejection_count: 0
+  independent_actual_cleanup_fault_injections: 1
+  independent_actual_cleanup_fault_injections_fail_closed: 1/1
+  represented_attack_classes:
+    - selected_ASCII_0_to_NUL_or_nonregular_typeflag_substitution
+    - mode_uid_gid_size_and_mtime_numeric_padding_or_termination_drift
+    - checksum_output_and_checksum_value_drift
+    - magic_and_version_drift
+    - linkname_device_prefix_and_unused_header_byte_drift
+    - filename_uname_and_gname_zero_fill_drift
+    - body_padding_drift
+    - terminal_block_mutation_removal_and_addition
+    - header_contract_field_removal_rename_unknown_key_and_offset_swap
+    - profile_value_encoding_overflow_alignment_and_terminal_count_drift
+    - cleanup_post_attempt_root_and_residue_suppression
+    - cleanup_fail_closed_result_and_error_return_suppression
+    - cleanup_fault_label_attempt_result_and_finalizer_order_drift
+    - unknown_fields_wrong_types_unsafe_integers_and_invalid_base64
+    - non_NFC_and_traversal_paths
+    - duplicate_JSON_keys
+  legal_candidates:
+    - exact_R4_baseline
+    - semantically_equivalent_JSON_object_key_reordering
+  selected_alternate_typeflag_assessment:
+    POSIX_readers_may_accept_NUL_as_regular_file: true
+    R4_normatively_selected_regular_typeflag: ASCII_0_HEX_30
+    NUL_is_legal_under_selected_exact_R4_profile: false
+    fully_resigned_NUL_candidate_rejected_by_target_byte_contract: true
+    legal_input_over_rejection: false
+
+exact_ustar_assessment:
+  complete_header_coverage:
+    first_offset: 0
+    final_exclusive_offset: 512
+    gaps: 0
+    overlaps: 0
+  selected_regular_file_typeflag: ASCII_0_HEX_30
+  numeric_fields: ZERO_PADDED_OCTAL_THEN_NUL
+  numeric_overflow: REJECT
+  checksum_preimage: EIGHT_ASCII_SPACES
+  checksum_output: SIX_OCTAL_DIGITS_NUL_ASCII_SPACE
+  magic_hex: '757374617200'
+  version_hex: '3030'
+  linkname_devmajor_devminor_prefix_and_unused_bytes: ALL_ZERO
+  body_padding: ZERO_TO_512_BYTE_ALIGNMENT
+  terminal_blocks: TWO_512_BYTE_ZERO_BLOCKS
+  standard_tar_parser_members: 4/4_REGULAR_FILES
+  standard_tar_parser_selected_typeflags: 4/4_ASCII_0
+  synthetic_archive_byte_length: 5120
+  synthetic_archive_block_aligned: true
+  exact_contract_complete_and_normative: true
+
+actual_cleanup_fault_assessment:
+  root: NEWLY_CREATED_DISPOSABLE_OWNED_TEMP_ROOT
+  initial_observation: {root_exists: true, inventory: []}
+  before_attempt_observation: {root_exists: true, inventory: [archive.tar]}
+  cleanup_attempt: ATTEMPT_ROOT_RMDIR_WHILE_ARCHIVE_TAR_REMAINS
+  cleanup_attempt_result: DIRECTORY_NOT_EMPTY
+  post_attempt_observation: {root_exists: true, inventory: [archive.tar]}
+  fail_closed_probe_result: CLEANUP_RESIDUE_DETECTED
+  fail_closed_return: {stable_error_code: SYNTHETIC_CLEANUP_RESIDUE}
+  finalizer_entered_after_post_attempt_observation: true
+  finalizer_entry_observation: {root_exists: true, inventory: [archive.tar]}
+  finalizer_exit_observation: {root_exists: false, inventory: []}
+  new_temporary_root_leftovers: 0
+  observed_order_exact: true
+
+R3_blocker_closure:
+  PHASE5C_M0C_PLAN_R3_IR_B01:
+    status: CLOSED_BY_R4
+    basis:
+      - all_512_header_bytes_are_covered_by_normative_offset_width_and_encoding_rules
+      - ASCII_0_regular_typeflag_is_explicitly_selected
+      - numeric_checksum_magic_version_zero_fields_padding_and_terminal_rules_are_exact
+      - fully_resigned_alternate_encodings_are_rejected_by_target_profile_semantics
+  PHASE5C_M0C_PLAN_R3_IR_B02:
+    status: CLOSED_BY_R4
+    basis:
+      - cleanup_is_actually_attempted_while_archive_tar_remains
+      - root_and_residue_are_observed_after_the_failed_attempt
+      - result_is_fail_closed_from_the_post_attempt_observation
+      - finalizer_runs_only_after_the_observation_and_leaves_no_root
+      - fully_resigned_suppression_attacks_are_semantically_rejected
+
+finding_details: []
+
+boundary_review:
+  planning_only_synthetic_proof: true
+  plan_freeze_ready_for_Jenn_decision: true
+  plan_frozen: false
+  automatic_plan_freeze: forbidden
+  implementation_started: false
+  implementation_authorized: false
+  extension_or_VCPToolBox_modified_or_started: false
+  plugin_enabled_or_native_host_loaded: false
+  database_or_private_Memory_accessed: false
+  provider_sensing_or_effect_executed: false
+  release_deploy_publish_executed: false
+  commit_push_or_merge_executed: false
+
+decision:
+  review_gate: PASSED
+  automatic_freeze: forbidden
+  automatic_implementation_start: forbidden
+  next_gate: JENN_PHASE_5C_M0C_PLAN_R4_ATOMIC_FREEZE_DECISION

@@ -1,0 +1,228 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5C_M0C_PLAN_R1_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-22'
+materialized_at: '2026-07-22T12:28:24+08:00'
+materialization_note: >-
+  This file was first materialized after the interactive independent review.
+  It does not claim to have existed before this timestamp and does not treat
+  chat text as pre-existing original bytes.
+
+reviewer:
+  identity: Codex_Nobao_independent_review_run
+  independent: true
+  independence_basis:
+    - not_the_author_of_the_Phase_5C_M0C_R1_subjects
+    - reviewed_the_fixed_commit_and_complete_ZIP_bytes_from_scratch
+    - author_self_review_was_evidence_only_and_not_used_as_the_conclusion
+    - did_not_modify_the_review_subjects_manifest_or_author_evidence
+    - did_not_freeze_the_plan_or_start_implementation
+    - no_runtime_provider_database_private_memory_sensing_or_effect_execution
+
+review_unit:
+  id: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 2
+  authority_input_count: 15
+  author_evidence_count: 4
+  declared_input_count: 21
+
+result: BLOCK
+requires_R2: true
+
+findings:
+  blocker: 2
+  major: 0
+  minor: 0
+  unresolved: 2
+
+integrity:
+  fixed_commit:
+    expected: 8e703895291a6b8b0f1ccfa11382dee47de2dff1
+    actual: 8e703895291a6b8b0f1ccfa11382dee47de2dff1
+    match: true
+  manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    expected_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+    actual_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+    match: true
+  archive:
+    path: /tmp/2026-07-22-agents-os-phase-5c-m0c-plan-r1-review-package-v0.1.zip
+    expected_sha256: b9aa296b1f35095c4d0d6d85a99380e9eeb5ce548cef8833fa6e345c34455044
+    actual_sha256: b9aa296b1f35095c4d0d6d85a99380e9eeb5ce548cef8833fa6e345c34455044
+    sha256_match: true
+    entry_count: 24
+    unique_paths: 24
+    crc_full_read: PASS
+    checksums_rows: 23
+    checksums_match: 23/23
+    duplicate_paths: 0
+    symlinks: 0
+    absolute_paths: 0
+    traversal_paths: 0
+    backslash_paths: 0
+    forbidden_name_matches: 0
+  declared_inputs:
+    total_hashes: 21/21_MATCH
+    total_full_reads: 21/21
+    total_bytes_fully_read: 164608
+    total_lines_fully_read: 3027
+    git_object_membership_at_fixed_commit: 21/21_MATCH
+    subjects: 2/2_MATCH_AND_FULLY_READ
+    authority_inputs: 15/15_MATCH_AND_FULLY_READ
+    author_evidence: 4/4_MATCH_AND_FULLY_READ
+
+subject_hashes:
+  implementation_plan: d8c670f6edb51aba893472d72ffce6c8713d416f6ee14aafc835ab005d8e02e4
+  exact_build_profile: c996b069d099f25feb93d7828a5b6188ff1b16413b3ac670f2a3d91450582fdb
+
+fixed_command_reproduction:
+  execution_root: isolated_temporary_extraction_without_git
+  command_1_profile_yaml_parse: PASS
+  command_2_witness_validator_and_self_test: PASS
+  command_3_builder_byte_reproduction: PASS
+  command_4_trailing_whitespace: PASS
+  total: 4/4_PASS
+  witness_case_count: 11
+  fixed_validator_negative_mutations: 8/8_REJECTED
+  terminal_outcome: NOT_ACTIVATED
+  temporary_extraction_cleaned: true
+
+independent_adversarial_results:
+  independent_fully_resigned_attack_count: 14
+  fully_resigned_attacks_rejected: 14/14
+  fully_resigned_attacks_accepted: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  unrepresentable_required_attack_class_count: 6
+  attack_classes_not_representable_by_the_fixed_witness:
+    - sealed_commit_path_blob_or_sha_substitution_with_exact_identity_evidence
+    - package_inventory_member_add_remove_duplicate_reorder_or_replacement
+    - symlink_traversal_absolute_backslash_or_caller_selected_path_evidence
+    - eager_native_load_evidence_independent_of_public_method_count
+    - cleanup_success_forgery_with_actual_bytes_outside_the_owned_temp_root
+    - archive_format_layout_metadata_and_checksum_preimage_drift
+  note: >-
+    Zero accepted serializable attacks does not close the review gate because
+    the fixed witness schema cannot encode or derive six required structural
+    attack classes. Those invalid states collapse to the same claimed booleans
+    and counts as the favorable fixture.
+
+finding_details:
+  - id: PHASE5C_M0C_PLAN_R1_IR_B01
+    severity: blocker
+    title: The_archive_and_output_contract_is_not_exact_enough_for_atomic_freeze
+    subjects:
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-implementation-plan-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-build-profile-v0.1-r1.yaml
+    exact_locations:
+      - implementation_plan_lines_72_95
+      - implementation_plan_lines_99_107
+      - build_profile_lines_55_67
+      - build_profile_lines_77_86
+      - review_manifest_lines_58_70
+    evidence: >-
+      The subjects require deterministic order, deterministic metadata, an
+      archive checksum and two byte-identical clean builds, but do not freeze
+      the archive format, compression method and parameters, normalized mtime,
+      uid, gid or file modes, archive root and member mapping, checksum
+      algorithm and canonical preimage, or the success and failure output
+      delivery and cleanup state machine. The caller output path is forbidden,
+      the builder is confined to a newly owned temporary root, and cleanup is
+      required, but the subjects do not state which final bytes survive or how
+      they are returned without violating those rules.
+    impact: >-
+      Two materially different builders can satisfy the written profile while
+      producing different archive bytes and cleanup outcomes. The atomic unit
+      therefore does not yet define one deterministic buildable result.
+    closure_required:
+      - freeze_one_archive_format_and_all_deterministic_encoding_parameters
+      - freeze_the_exact_archive_root_member_inventory_and_generated_member_locations
+      - freeze_the_checksum_algorithm_scope_and_canonical_preimage
+      - freeze_success_failure_output_delivery_cleanup_and_residue_rules
+
+  - id: PHASE5C_M0C_PLAN_R1_IR_B02
+    severity: blocker
+    title: The_validator_signs_claimed_labels_instead_of_deriving_required_structural_facts
+    subjects:
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-implementation-plan-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-build-profile-v0.1-r1.yaml
+    author_evidence:
+      - control-plane/registry/build-phase-5c-m0c-plan-r1-witness.py
+      - control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r1-synthetic-witness-v0.1.json
+      - control-plane/registry/validate-phase-5c-m0c-plan-r1-witness.py
+    exact_locations:
+      - implementation_plan_lines_113_123
+      - validator_lines_15_17
+      - validator_lines_43_56
+      - validator_lines_59_94
+      - review_manifest_lines_69_80
+    evidence: >-
+      The witness case schema contains only claimed booleans and counts for
+      source sealing, inventory exactness, host-contract exactness, temporary
+      staging and public method count. The validator derives the result from
+      those claims and signs them, but it has no structural fields from which
+      to derive the sealed commit, path, blob and SHA identities, actual package
+      members and path kinds, eager native loading, archive bytes or filesystem
+      residue outside the owned temporary root. Fourteen independent
+      fully-resigned attacks against representable fields were rejected, but
+      six attack classes required by the manifest cannot be represented or
+      evaluated by the fixed evidence contract.
+    impact: >-
+      A favorable witness can assert the required booleans while the underlying
+      package, host commitments, entrypoint behavior, archive or cleanup state
+      is invalid. The required rule that results be derived rather than trusted
+      from claimed labels is not met.
+    closure_required:
+      - replace_claim_only_booleans_with_exact_structural_evidence
+      - bind_sealed_host_identities_inventory_paths_entrypoint_events_archive_and_cleanup_state
+      - derive_each_favorable_condition_from_those_bytes_and_records
+      - add_fully_propagated_attacks_for_every_manifest_required_attack_class
+
+confirmed_safe_boundaries:
+  exact_disabled_manifest_required: true
+  enabled_manifest_forbidden: true
+  exact_commonjs_export_count: 3
+  exact_public_NAPI_method_count: 5
+  second_plugin_loader_service_writer_permission_identity_Task_Command_or_effect_authority_found: false
+  implementation_or_source_modification_authorized: false
+  dependency_or_lock_change_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_native_host_loading_authorized: false
+  database_creation_or_connection_authorized: false
+  runtime_activation_authorized: false
+  private_Memory_provider_sensing_or_real_effect_authorized: false
+  release_deploy_or_publish_authorized: false
+
+disposition:
+  Phase_5C_M0C_R1_plan_acceptance_ready: false
+  Phase_5C_M0C_R1_plan_freeze_ready: false
+  Phase_5C_M0C_R1_plan_frozen: false
+  Phase_5C_M0C_implementation_started: false
+  implementation_authorized: false
+  automatic_freeze_performed: false
+  next_gate: PHASE_5C_M0C_PLAN_R2_NARROW_CORRECTION_AND_FRESH_INDEPENDENT_REVIEW
+
+R2_scope_limit:
+  - exact_archive_encoding_member_mapping_checksum_and_output_lifecycle_contract
+  - structural_witness_fields_and_semantic_derivation_for_all_required_attack_classes
+
+forbidden_R2_expansion:
+  - Rust_NAPI_or_SQLite_implementation
+  - dependency_or_lockfile_change
+  - VCPToolBox_materialization_change_or_start
+  - plugin_enablement_or_native_host_loading
+  - database_creation_or_connection
+  - runtime_activation
+  - production_authentication
+  - private_Memory_provider_sensing_or_real_effect
+  - release_deploy_or_publish
+
+terminal_disposition: >-
+  Package integrity, all 21 declared input hashes and full reads, Git object
+  membership, and all four fixed commands pass. The plan remains blocked because
+  its archive and output lifecycle is not exact enough to select one
+  deterministic implementation, and its fixed witness validates claimed labels
+  rather than deriving six required classes of structural facts. Phase 5C M0-C
+  R1 is not ready for Jenn's atomic freeze decision, and implementation remains
+  unauthorized and not started.

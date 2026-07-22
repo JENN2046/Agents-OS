@@ -1,0 +1,49 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: PHASE_5C_M0C_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_START_DECISION_V0_1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: EXECUTED_STRICT_SCOPE
+
+authorization:
+  source: Jenn_current_explicit_instruction
+  instruction: 启动一个很窄的 Phase 5C Plan post-freeze review-package builder correction：
+  applies_to: PHASE_5C_M0C_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_V0_1
+  exact_authorized_scope:
+    - reject_manifest_declared_input_paths_that_collide_with_generated_review_archive_member_names
+    - preserve_the_historical_R3_builder_and_all_R1_R4_frozen_bytes
+    - prove_the_guard_with_a_synthetic_offline_fixture_and_validator
+    - prepare_a_hash_bound_independent_review_package
+
+preconditions:
+  frozen_plan_decision:
+    path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  frozen_R4_manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  immutable_historical_builder:
+    path: control-plane/registry/build-phase-5c-m0c-plan-r3-review-package.py
+    sha256: 8ddffa24d935189f733929b1aa0df16b997f0b65db946411fdfd0c5b889bcfd4
+  PR_28_review_finding:
+    severity: P2
+    subject: reserved_generated_archive_member_collision
+    required_outcome: reject_before_generated_metadata_can_overwrite_a_manifest_declared_input
+
+prohibitions:
+  R1_R4_accepted_subject_manifest_review_or_historical_builder_rewrite: forbidden
+  Phase_5C_plan_semantics_or_frozen_boundary_change: forbidden
+  plan_reopen_or_new_semantic_plan_revision: forbidden
+  Phase_5C_implementation_or_extension_source_change: forbidden
+  VCPToolBox_change_or_start: forbidden
+  plugin_enablement_or_native_host_loading: forbidden
+  runtime_activation: forbidden
+  database_creation_or_connection: forbidden
+  private_Memory_provider_sensing_or_real_effect: forbidden
+  dependency_lock_public_API_or_MCP_change: forbidden
+  plan_freeze_commit_push_PR_merge_or_implementation_start: forbidden
+
+completion_gate:
+  next_gate: PHASE_5C_M0C_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_FRESH_FULL_INDEPENDENT_REVIEW
+  automatic_semantic_plan_reopen: forbidden
+  automatic_freeze_or_implementation_start: forbidden

@@ -1,0 +1,104 @@
+schema_version: agents-os.m0c.exact-archive-output-lifecycle-profile.v0.1-r4
+profile_id: PHASE_5C_M0C_EXACT_ARCHIVE_OUTPUT_LIFECYCLE_PROFILE_V0_1_R4
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+runtime_usable: false
+
+inherits:
+  R3_archive_output_lifecycle_profile: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r3.yaml
+  R3_archive_output_lifecycle_profile_sha256: 71d534e8b98b8241216049433280261fcbba18590819ea8b6a692e47e46c0062
+  R3_independent_review_sha256: 14e07fb392419a45e71b205493907bc9306e3dc6a3ab82a034d51de13b2df4e0
+
+archive_encoding:
+  format: POSIX_USTAR
+  compression: NONE
+  byte_stream: complete_raw_tar_bytes
+  checksum_algorithm: SHA-256
+  checksum_preimage: complete_raw_tar_bytes_including_two_512_byte_zero_blocks
+  root_prefix: agents-os-resident/
+  explicit_directory_entries: forbidden
+  regular_files_only: true
+  member_order: UTF8_BYTEWISE_ASCENDING_SOURCE_PATH
+  path_separator: FORWARD_SLASH_ONLY
+  reject_absolute_traversal_backslash_duplicate_or_non_NFC_paths: true
+  member_manifest:
+    algorithm: SHA-256
+    preimage: canonical_JSON_array_of_exact_member_projection_rows
+    encoding: UTF-8
+    object_key_order: LEXICOGRAPHIC_SORTED
+    separators: NO_INSIGNIFICANT_WHITESPACE
+    row_field_inventory: [source_path, archive_path, kind, mode, uid, gid, uname, gname, mtime, byte_length, sha256]
+  block_size_bytes: 512
+  header_byte_contract:
+    filename: {offset: 0, width: 100, encoding: UTF8_NUL_THEN_ZERO_FILL, value_source: archive_path}
+    mode: {offset: 100, width: 8, encoding: ZERO_PADDED_OCTAL_THEN_NUL, value_source: mode}
+    uid: {offset: 108, width: 8, encoding: ZERO_PADDED_OCTAL_THEN_NUL, value_source: uid}
+    gid: {offset: 116, width: 8, encoding: ZERO_PADDED_OCTAL_THEN_NUL, value_source: gid}
+    size: {offset: 124, width: 12, encoding: ZERO_PADDED_OCTAL_THEN_NUL, value_source: byte_length}
+    mtime: {offset: 136, width: 12, encoding: ZERO_PADDED_OCTAL_THEN_NUL, value_source: mtime}
+    checksum: {offset: 148, width: 8, preimage_fill_hex: '20', encoding: SIX_OCTAL_DIGITS_NUL_ASCII_SPACE, unsigned_byte_sum: true}
+    typeflag: {offset: 156, width: 1, encoding: EXACT_HEX, hex: '30'}
+    linkname: {offset: 157, width: 100, encoding: ALL_ZERO_BYTES}
+    magic: {offset: 257, width: 6, encoding: EXACT_HEX, hex: '757374617200'}
+    version: {offset: 263, width: 2, encoding: EXACT_HEX, hex: '3030'}
+    uname: {offset: 265, width: 32, encoding: UTF8_NUL_THEN_ZERO_FILL, value_source: uname}
+    gname: {offset: 297, width: 32, encoding: UTF8_NUL_THEN_ZERO_FILL, value_source: gname}
+    devmajor: {offset: 329, width: 8, encoding: ALL_ZERO_BYTES}
+    devminor: {offset: 337, width: 8, encoding: ALL_ZERO_BYTES}
+    prefix: {offset: 345, width: 155, encoding: ALL_ZERO_BYTES}
+    trailing_unused: {offset: 500, width: 12, encoding: ALL_ZERO_BYTES}
+  header_value_normalization:
+    mode_octal: '0644'
+    uid: 0
+    gid: 0
+    uname: ''
+    gname: ''
+    mtime_unix_seconds: 0
+    numeric_overflow: REJECT
+  body_padding: {alignment_bytes: 512, fill_hex: '00'}
+  end_of_archive: {zero_block_count: 2, block_size_bytes: 512}
+
+output_lifecycle:
+  caller_supplied_output_path: forbidden
+  staging_root: newly_created_owned_synthetic_temporary_directory
+  archive_location_before_delivery: owned_temp_root/archive.tar
+  delivery_mode: RETURN_IN_MEMORY_BYTES_ONLY
+  serialized_success_return_fields: [archive_sha256, archive_byte_length, archive_bytes_in_memory_b64]
+  serialized_failure_return_fields: [stable_error_code]
+  actual_observation_contract:
+    initial_owned_root_inventory: []
+    success_before_cleanup_inventory: [archive.tar]
+    failure_before_cleanup_inventory: []
+    post_cleanup_owned_root_exists: false
+    post_cleanup_residue_relative_paths: []
+  cleanup_fault_contract:
+    environment: SYNTHETIC_TEST
+    root_ownership: NEWLY_CREATED_DISPOSABLE_OWNED_TEMP_ROOT
+    fault_injection: ATTEMPT_ROOT_RMDIR_WHILE_ARCHIVE_TAR_REMAINS
+    expected_post_attempt_owned_root_exists: true
+    expected_post_attempt_residue_relative_paths: [archive.tar]
+    required_result: CLEANUP_RESIDUE_DETECTED
+    required_fail_closed_return: {stable_error_code: SYNTHETIC_CLEANUP_RESIDUE}
+    finalizer_may_remove_root_only_after_post_attempt_observation: true
+  required_negative_actual_probes:
+    - CLEANUP_RESIDUE_DETECTED
+    - RETURN_BYTES_MISMATCH_DETECTED
+
+synthetic_archive_exercise:
+  environment: SYNTHETIC_TEST
+  members:
+    - {source_path: README.md, content_utf8: 'synthetic-only README'}
+    - {source_path: index.js, content_utf8: 'module.exports = {};'}
+    - {source_path: package.json, content_utf8: '{"name":"synthetic-only"}'}
+    - {source_path: plugin-manifest.json.block, content_utf8: '{"disabled":true}'}
+
+boundary:
+  synthetic_witness_runtime_usable: false
+  owned_temp_root_synthetic_test_only: true
+  implementation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_native_host_loading_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  release_deploy_publish_authorized: false

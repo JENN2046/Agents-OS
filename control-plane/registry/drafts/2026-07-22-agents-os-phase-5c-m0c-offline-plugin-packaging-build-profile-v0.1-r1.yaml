@@ -1,0 +1,100 @@
+schema_version: agents-os.m0c-build-profile.v0.1-r1
+profile_id: PHASE_5C_M0C_OFFLINE_PLUGIN_PACKAGING_BUILD_PROFILE_V0_1_R1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+runtime_usable: false
+
+baseline:
+  repository: JENN2046/Agents-OS
+  main_commit: f15d400be52a9e8a91fc6a41105f8fe0f2bc50cb
+  source_root: extensions/agents-os-resident
+  package_manifest_sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23
+  content_tree_sha256: d98d73848bc986fd26d4b48419a938c3eb5aa81b5c4945fb9a93a066419aafed
+  blocked_plugin_manifest_sha256: 25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0
+  commonjs_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+  VCPToolBox_sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+
+topology:
+  source_owner: JENN_OWNED_EXTERNAL_EXTENSION
+  package_count: 1
+  plugin_count: 1
+  plugin_manifest_state: BLOCKED
+  enabled_plugin_manifest_allowed: false
+  new_plugin_service_sidecar_listener_or_writer: false
+  VCPToolBox_core_diff_expected: zero
+  VCPToolBox_worktree_read_or_write: forbidden
+  host_runtime_load: forbidden
+
+sealed_host_inputs:
+  - {path: AGENTS.md, blob_oid: 28f22b4de495a63f14ede8fe72698278c877cb8d, sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b}
+  - {path: Plugin/AGENTS.md, blob_oid: c2d23c041033b1f7d46b9dc3bdb2ba738566c872, sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4}
+  - {path: docs/PLUGIN_ECOSYSTEM.md, blob_oid: 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506, sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65}
+  - {path: rust-vexus-lite/AGENTS.md, blob_oid: 0fad4dba9bcbaa2452a362910b01e6275e5c352e, sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494}
+  - {path: rust-vexus-lite/Cargo.toml, blob_oid: 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde, sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9}
+  - {path: rust-vexus-lite/package.json, blob_oid: 232a95ef206e6ffab0cdff959826faaa10f6fedb, sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c}
+  - {path: Plugin.js, blob_oid: 5fd77cea37c30ef432f23d9627d05aba862b9744, sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2}
+
+future_source_inventory:
+  create:
+    - extensions/agents-os-resident/tools/build-offline-package.mjs
+    - extensions/agents-os-resident/tools/validate-sealed-host-contract.mjs
+    - extensions/agents-os-resident/fixtures/sealed-vcptoolbox-host-contract.v0.1.json
+    - extensions/agents-os-resident/tests/offline-packaging.mjs
+  modify:
+    - extensions/agents-os-resident/package.json
+    - extensions/agents-os-resident/README.md
+    - extensions/agents-os-resident/package-manifest.json
+  dependencies_or_locks_changed: false
+  Rust_NAPI_or_SQLite_changed: false
+  public_API_or_MCP_changed: false
+  VCPToolBox_tracked_files_changed: false
+
+package_contract:
+  staging_root: newly_created_owned_temporary_directory
+  caller_supplied_output_path: forbidden
+  regular_files_only: true
+  symlinks_hardlinks_devices_named_pipes: forbidden
+  duplicate_absolute_traversal_or_backslash_paths: forbidden
+  unknown_inventory_members: forbidden
+  deterministic_order: UTF8_bytewise_ascending
+  deterministic_metadata: true
+  manifest_required: plugin-manifest.json.block
+  enabled_manifest_forbidden: plugin-manifest.json
+  commonjs_exports: [initialize, processToolCall, shutdown]
+  native_NAPI_methods: [execute_command, execute_query, claim_outbox, acknowledge_outbox, reconcile]
+
+compatibility_decision:
+  allowed_result: PACKAGE_COMPATIBLE_PREVIEW
+  result_is_activation_authority: false
+  requires_exact_sealed_host_commitment: true
+  minimum_or_latest_version_substitution: forbidden
+  missing_unknown_stale_conflicting_or_extra_input: BLOCKED
+  upstream_reducer_recomputation: forbidden
+
+validation:
+  clean_build_repetitions: 2
+  archive_byte_equality_required: true
+  path_and_inventory_negative_cases_required: true
+  manifest_state_negative_cases_required: true
+  host_commitment_negative_cases_required: true
+  NAPI_and_entrypoint_negative_cases_required: true
+  owned_temp_cleanup_required: true
+  real_occurrence_count: 0
+  terminal_outcome: NOT_ACTIVATED
+
+authorization:
+  implementation_authorized: false
+  source_modification_authorized: false
+  dependency_installation_authorized: false
+  database_creation_or_connection_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  production_authentication_authorized: false
+  private_Memory_access_authorized: false
+  provider_sensing_or_effect_authorized: false
+  release_deploy_publish_authorized: false
+  separate_Jenn_implementation_start_required_after_plan_freeze: true

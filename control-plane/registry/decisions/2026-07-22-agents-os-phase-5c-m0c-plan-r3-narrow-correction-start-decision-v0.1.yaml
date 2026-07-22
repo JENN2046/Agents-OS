@@ -1,0 +1,47 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: JENN_EXPLICIT_PHASE_5C_M0C_PLAN_R3_START_DECISION
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+decision: START_NARROW_PHASE_5C_M0C_PLAN_R3
+
+bindings:
+  R2_manifest_path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  R2_manifest_sha256: 610b42a8d0eefadefe9e7625ea4b60cd370ac02f24b64b37ab7c9d56360a1a27
+  R2_independent_review_path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r2-full-atomic-independent-review.yaml
+  R2_independent_review_sha256: bb166ee4c61fa389ae834f3a66fdd67faba4a92452192ee91964574bfc11b6f1
+  R2_finding_disposition_path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r2-finding-disposition-v0.1.yaml
+  R2_finding_disposition_sha256: 278e7fc4affc501dd84440ebc6d223c92a3cf45ab6685ff5687b2f17a100abf5
+
+authorized_scope:
+  close_exact_findings:
+    - PHASE5C_M0C_PLAN_R2_IR_B01
+    - PHASE5C_M0C_PLAN_R2_IR_B02
+    - PHASE5C_M0C_PLAN_R2_IR_B03
+  permitted_changes:
+    - one_exact_member_manifest_preimage_profile_builder_fixture_and_validator
+    - owned_synthetic_temp_root_actual_return_and_cleanup_observation_proof
+    - complete_self_contained_no_git_review_archive_and_fixed_command_dependencies
+    - new_R3_amendment_fixture_validator_author_self_review_manifest_and_review_package
+  R1_R2_subjects_manifests_author_evidence_independent_reviews_and_fixed_commits_immutable: true
+  synthetic_temp_root_is_test_only: true
+
+forbidden:
+  - Phase_5C_objective_expansion
+  - implementation_start
+  - extension_source_modification
+  - VCPToolBox_change_or_start
+  - plugin_enablement_or_native_host_loading
+  - runtime_activation
+  - database_access
+  - provider_or_production_authentication
+  - private_Memory_sensing_or_real_effect
+  - dependency_lock_public_API_or_MCP_change
+  - freeze_acceptance_commit_push_or_merge
+
+required_stop_state:
+  next_gate: PHASE_5C_M0C_PLAN_R3_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_plan_freeze: forbidden
+  automatic_implementation_start: forbidden
+  independent_review_required: true
+  allowed_independent_results: [PASS_NO_BLOCKER, BLOCK]

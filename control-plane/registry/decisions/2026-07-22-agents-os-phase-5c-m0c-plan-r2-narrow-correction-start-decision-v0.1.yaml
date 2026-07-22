@@ -1,0 +1,41 @@
+schema_version: agents-os.phase-revision-start-decision.v0.1
+decision_id: PHASE_5C_M0C_PLAN_R2_NARROW_CORRECTION_START_DECISION_V0_1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5C_M0C_PLAN_R2_NARROW_CORRECTION
+basis:
+  R1_independent_review_path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r1-full-atomic-independent-review.yaml
+  R1_independent_review_sha256: c95974a58dcda60742a8ef3cfb8ab1abaea12f5d1bd2ff8d53b27c65e1200cd7
+  accepted_findings:
+    - PHASE5C_M0C_PLAN_R1_IR_B01
+    - PHASE5C_M0C_PLAN_R1_IR_B02
+scope:
+  authorized_corrections:
+    - exact_archive_encoding_member_mapping_checksum_and_output_lifecycle_contract
+    - structural_witness_and_semantic_derivation_for_all_previously_required_attack_classes
+  immutable_R1_lineage:
+    fixed_commit: 8e703895291a6b8b0f1ccfa11382dee47de2dff1
+    implementation_plan_manifest_author_evidence_and_independent_review: unchanged
+  authorized_outputs:
+    - narrow_R2_amendment
+    - sealed_source_inventory_profile
+    - exact_archive_output_lifecycle_profile
+    - synthetic_structural_witness_builder
+    - synthetic_structural_witness
+    - offline_structural_validator
+    - author_self_review
+    - hash_bound_independent_review_package
+not_authorized:
+  implementation_or_extension_source_modification: false
+  VCPToolBox_change_or_start: false
+  plugin_enablement_or_native_host_loading: false
+  runtime_activation: false
+  database_creation_or_connection: false
+  dependency_or_lockfile_change: false
+  public_API_or_MCP_change: false
+  production_authentication_private_Memory_provider_sensing_or_effect: false
+  release_deploy_publish: false
+stop_gate: PHASE_5C_M0C_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+automatic_freeze: forbidden
+automatic_implementation_start: forbidden
