@@ -48,12 +48,12 @@ def main() -> int:
     check(summary["route_selection"]["execution_authorized"] is False, "route selection must not authorize execution", failures)
     check(summary["route_selection"]["option_count"] == 5, "dashboard should surface five route options", failures)
     check(
-        summary["next_user_action"]["status"] == "none",
-        "Phase 5C independent review should not claim a Jenn decision gate",
+        summary["next_user_action"]["status"] == "governance_decision_required",
+        "Phase 5C R1 block should surface the Jenn R2 start decision gate",
         failures,
     )
-    check(summary["next_user_action"]["decision_owner"] is None, "Phase 5C independent review should not claim a decision owner", failures)
-    check(summary["next_user_action"]["requires_jenn_decision"] is False, "Phase 5C independent review should remain at the review gate", failures)
+    check(summary["next_user_action"]["decision_owner"] == "Jenn", "Phase 5C R1 block decision owner should be Jenn", failures)
+    check(summary["next_user_action"]["requires_jenn_decision"] is True, "Phase 5C R1 block should require Jenn's R2 start decision", failures)
     check(summary["next_user_action"]["accepted_route_ids"] == [], "F7 independent review should not surface route ids", failures)
     check(summary["next_user_action"]["exact_confirmation_templates_available"] is False, "F7 independent review should not claim route confirmation templates", failures)
     check(

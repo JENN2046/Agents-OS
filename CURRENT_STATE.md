@@ -6,6 +6,29 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5C M0-C Plan R1 Independent Review Block Reconciled (2026-07-22)
+
+The fresh full atomic independent review verified all R1 package integrity and
+fixed commands, but found two plan-freeze blockers: an incomplete archive/output
+lifecycle contract and a claim-based rather than structural-evidence validator.
+R1 remains immutable and is not eligible for acceptance or freeze.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R1_INDEPENDENT_REVIEW_BLOCK_NEEDS_R2
+R1_independent_review: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r1-full-atomic-independent-review.yaml
+R1_independent_review_sha256: c95974a58dcda60742a8ef3cfb8ab1abaea12f5d1bd2ff8d53b27c65e1200cd7
+R1_independent_review_result: BLOCK
+R1_findings: 2_BLOCKER_0_MAJOR_0_MINOR
+R2_required: true
+R2_started: false
+R2_scope: exact_archive_output_lifecycle_and_structural_evidence_derivation_only
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.2.md
+active_work_queue_sha256: 432297bcd9e2f4ad82b647a5ce0e10d7fccf3f124911d6697ecbdd280172eb3c
+next_gate: JENN_EXPLICIT_PHASE_5C_M0C_PLAN_R2_START_DECISION
+```
+
 ## Phase 5C M0-C Plan R1 Fixed for Independent Review (2026-07-22)
 
 Jenn started Phase 5C planning. R1 defines the narrow next engineering seam as
