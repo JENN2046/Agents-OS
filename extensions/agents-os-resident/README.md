@@ -187,3 +187,13 @@ temporary `archive.tar` is re-read only into memory and the owned root is
 removed before return; no archive is delivered, installed, enabled or written
 to the workspace. The offline tamper suite checks headers, content, padding,
 terminal blocks, paths, duplicate members, ordering and NFC path handling.
+
+Phase 5C M0-C WP5 exercises the cleanup contract only against newly created,
+disposable owned temporary roots. Its fault probe writes the synthetic archive,
+attempts a direct non-recursive root removal while `archive.tar` remains,
+observes the real `ENOTEMPTY` residue before finalization, returns the required
+fail-closed synthetic code, and then removes the root. A separate deliberately
+truncated in-memory return is detected before use, and the no-archive failure
+path is also finalized. None of these probes retains an archive or touches a
+Host, VCPToolBox, runtime, database, provider, private Memory, sensing or
+effect boundary.

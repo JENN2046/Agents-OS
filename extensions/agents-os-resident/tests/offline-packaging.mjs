@@ -7,6 +7,9 @@ import { fileURLToPath } from 'node:url';
 import {
   buildExactUstarArchive,
   buildOfflinePackage,
+  runSyntheticCleanupFaultProbe,
+  runSyntheticFailureCleanupProof,
+  runSyntheticReturnBytesMismatchProbe,
   validateExactMemberRows,
   verifyExactUstarArchive
 } from '../tools/build-offline-package.mjs';
@@ -106,6 +109,26 @@ assert.deepEqual(first.owned_temp_lifecycle, {
   post_cleanup_owned_root_exists: false,
   post_cleanup_residue_relative_paths: []
 });
+
+const cleanupFault = runSyntheticCleanupFaultProbe();
+assert.equal(cleanupFault.result, 'CLEANUP_RESIDUE_DETECTED');
+assert.equal(cleanupFault.stable_error_code, 'SYNTHETIC_CLEANUP_RESIDUE');
+assert.equal(cleanupFault.post_cleanup_attempt_owned_root_exists, true);
+assert.deepEqual(cleanupFault.post_cleanup_attempt_residue_relative_paths, ['archive.tar']);
+assert.equal(cleanupFault.finalizer_runs_only_after_post_cleanup_observation, true);
+assert.equal(cleanupFault.finalizer_post_cleanup_owned_root_exists, false);
+assert.deepEqual(cleanupFault.finalizer_post_cleanup_residue_relative_paths, []);
+
+const returnMismatch = runSyntheticReturnBytesMismatchProbe();
+assert.equal(returnMismatch.result, 'RETURN_BYTES_MISMATCH_DETECTED');
+assert.equal(returnMismatch.stable_error_code, 'SYNTHETIC_RETURN_BYTES_MISMATCH');
+assert.equal(returnMismatch.finalizer_post_cleanup_owned_root_exists, false);
+assert.deepEqual(returnMismatch.finalizer_post_cleanup_residue_relative_paths, []);
+
+const failureCleanup = runSyntheticFailureCleanupProof();
+assert.equal(failureCleanup.result, 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED');
+assert.deepEqual(failureCleanup.failure_before_cleanup_inventory, []);
+assert.equal(failureCleanup.finalizer_post_cleanup_owned_root_exists, false);
 
 const rows = currentMembers();
 assert.equal(rows.length, 50);

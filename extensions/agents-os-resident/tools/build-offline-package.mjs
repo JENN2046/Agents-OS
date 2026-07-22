@@ -7,6 +7,7 @@ import {
   mkdtempSync,
   readFileSync,
   readdirSync,
+  rmdirSync,
   rmSync,
   writeFileSync
 } from 'node:fs';
@@ -700,11 +701,169 @@ export function buildOfflinePackage() {
     : stableFailure(errors, 'ARCHIVE_BUILD_FAILED');
 }
 
+function createCurrentArchiveForSyntheticProbe() {
+  const errors = [];
+  if (!verifyArchiveProfile(errors)) {
+    return { result: 'BLOCKED', errors };
+  }
+  const staged = stageClosedSources('wp4');
+  if (staged.result !== 'STAGED') {
+    return { result: 'BLOCKED', errors: staged.errors };
+  }
+  let archive = null;
+  try {
+    const members = stageRowsToMembers(staged.stagingRoot, staged.rows, errors);
+    const memberCheck = validateExactMemberRows(members);
+    if (memberCheck.result !== 'PASS') {
+      errors.push(...memberCheck.errors);
+    }
+    archive = errors.length === 0 ? buildExactUstarArchive(members) : null;
+    if (archive === null || archive.result !== 'PASS') {
+      errors.push(...(archive?.errors ?? [code('USTAR_CONSTRUCTION_FAILED')]));
+    }
+  } catch {
+    errors.push(code('SYNTHETIC_ARCHIVE_PREPARE_FAILED'));
+  }
+  if (!cleanupOwnedStagingRoot(staged.stagingRoot)) {
+    errors.push(code('OWNED_STAGING_CLEANUP_FAILED'));
+  }
+  return errors.length === 0 && archive !== null
+    ? { result: 'PASS', archive }
+    : { result: 'BLOCKED', errors };
+}
+
+/**
+ * Exercise the R4 cleanup-fault contract against a newly created disposable
+ * root. The `rmdir` attempt is real, the residue is observed before the
+ * finalizer runs, and neither the root nor archive path leaves this function.
+ */
+export function runSyntheticCleanupFaultProbe() {
+  const prepared = createCurrentArchiveForSyntheticProbe();
+  if (prepared.result !== 'PASS') {
+    return stableFailure(prepared.errors, 'SYNTHETIC_ARCHIVE_PREPARE_FAILED');
+  }
+  const errors = [];
+  const root = newOwnedStagingRoot(errors);
+  if (root === null) {
+    return stableFailure(errors, 'OWNED_STAGING_ROOT_CREATION_FAILED');
+  }
+  let observed = null;
+  try {
+    const archivePath = resolve(root, ARCHIVE_NAME);
+    if (relative(root, archivePath).split(sep).join('/') !== ARCHIVE_NAME) {
+      errors.push(code('ARCHIVE_STAGING_PATH_ESCAPE'));
+    } else {
+      writeFileSync(archivePath, prepared.archive.archive_bytes, { mode: 0o600, flag: 'wx' });
+      let cleanupAttemptFailed = false;
+      try {
+        rmdirSync(root);
+      } catch (failure) {
+        cleanupAttemptFailed = failure?.code === 'ENOTEMPTY';
+      }
+      const postAttemptRootExists = existsSync(root);
+      const postAttemptResidue = postAttemptRootExists ? readdirSync(root).sort(utf8BytewiseCompare) : [];
+      if (!cleanupAttemptFailed || postAttemptRootExists !== true || JSON.stringify(postAttemptResidue) !== JSON.stringify([ARCHIVE_NAME])) {
+        errors.push(code('CLEANUP_RESIDUE_OBSERVATION_INVALID'));
+      } else {
+        observed = {
+          result: 'CLEANUP_RESIDUE_DETECTED',
+          stable_error_code: 'SYNTHETIC_CLEANUP_RESIDUE',
+          cleanup_attempt: 'DIRECT_RMDIR_NONEMPTY_ROOT',
+          post_cleanup_attempt_owned_root_exists: true,
+          post_cleanup_attempt_residue_relative_paths: [ARCHIVE_NAME],
+          finalizer_runs_only_after_post_cleanup_observation: true,
+          runtime_usable: false,
+          archive_delivery_performed: false,
+          terminal_outcome: 'NOT_ACTIVATED'
+        };
+      }
+    }
+  } catch {
+    errors.push(code('SYNTHETIC_CLEANUP_FAULT_PROBE_FAILED'));
+  }
+  const finalized = cleanupOwnedStagingRoot(root);
+  if (!finalized) {
+    errors.push(code('OWNED_STAGING_CLEANUP_FAILED'));
+  }
+  return errors.length === 0 && observed !== null
+    ? { ...observed, finalizer_post_cleanup_owned_root_exists: false, finalizer_post_cleanup_residue_relative_paths: [] }
+    : stableFailure(errors, 'SYNTHETIC_CLEANUP_FAULT_PROBE_FAILED');
+}
+
+/** Verify that a divergent in-memory return is detected before it can be used. */
+export function runSyntheticReturnBytesMismatchProbe() {
+  const prepared = createCurrentArchiveForSyntheticProbe();
+  if (prepared.result !== 'PASS') {
+    return stableFailure(prepared.errors, 'SYNTHETIC_ARCHIVE_PREPARE_FAILED');
+  }
+  const errors = [];
+  const root = newOwnedStagingRoot(errors);
+  if (root === null) {
+    return stableFailure(errors, 'OWNED_STAGING_ROOT_CREATION_FAILED');
+  }
+  let observed = null;
+  try {
+    const archivePath = resolve(root, ARCHIVE_NAME);
+    writeFileSync(archivePath, prepared.archive.archive_bytes, { mode: 0o600, flag: 'wx' });
+    const wrongReturnedBytes = readFileSync(archivePath).subarray(0, -1);
+    if (wrongReturnedBytes.equals(prepared.archive.archive_bytes)) {
+      errors.push(code('RETURN_BYTES_MISMATCH_NOT_EXERCISED'));
+    } else {
+      observed = {
+        result: 'RETURN_BYTES_MISMATCH_DETECTED',
+        stable_error_code: 'SYNTHETIC_RETURN_BYTES_MISMATCH',
+        expected_archive_sha256: prepared.archive.archive_sha256,
+        observed_archive_sha256: sha256(wrongReturnedBytes),
+        observed_archive_byte_length: wrongReturnedBytes.length,
+        runtime_usable: false,
+        archive_delivery_performed: false,
+        terminal_outcome: 'NOT_ACTIVATED'
+      };
+    }
+  } catch {
+    errors.push(code('SYNTHETIC_RETURN_BYTES_PROBE_FAILED'));
+  }
+  const finalized = cleanupOwnedStagingRoot(root);
+  if (!finalized) {
+    errors.push(code('OWNED_STAGING_CLEANUP_FAILED'));
+  }
+  return errors.length === 0 && observed !== null
+    ? { ...observed, finalizer_post_cleanup_owned_root_exists: false, finalizer_post_cleanup_residue_relative_paths: [] }
+    : stableFailure(errors, 'SYNTHETIC_RETURN_BYTES_PROBE_FAILED');
+}
+
+/** Prove the no-archive failure branch also finalizes a newly created root. */
+export function runSyntheticFailureCleanupProof() {
+  const errors = [];
+  const root = newOwnedStagingRoot(errors);
+  if (root === null) {
+    return stableFailure(errors, 'OWNED_STAGING_ROOT_CREATION_FAILED');
+  }
+  const beforeCleanupInventory = readdirSync(root).sort(utf8BytewiseCompare);
+  const finalized = cleanupOwnedStagingRoot(root);
+  if (!finalized || JSON.stringify(beforeCleanupInventory) !== JSON.stringify([])) {
+    return stableFailure([code('SYNTHETIC_FAILURE_CLEANUP_INVALID')], 'SYNTHETIC_FAILURE_CLEANUP_INVALID');
+  }
+  return {
+    result: 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED',
+    stable_error_code: 'SYNTHETIC_FAILURE',
+    failure_before_cleanup_inventory: [],
+    finalizer_post_cleanup_owned_root_exists: false,
+    finalizer_post_cleanup_residue_relative_paths: [],
+    runtime_usable: false,
+    archive_delivery_performed: false,
+    terminal_outcome: 'NOT_ACTIVATED'
+  };
+}
+
 function runSelfTest() {
   const stagingFirst = prepareDeterministicStaging();
   const stagingSecond = prepareDeterministicStaging();
   const first = buildOfflinePackage();
   const second = buildOfflinePackage();
+  const cleanupFault = runSyntheticCleanupFaultProbe();
+  const returnMismatch = runSyntheticReturnBytesMismatchProbe();
+  const failureCleanup = runSyntheticFailureCleanupProof();
   if (
     stagingFirst.result !== 'STAGING_PREPARED' ||
     stagingSecond.result !== 'STAGING_PREPARED' ||
@@ -712,7 +871,14 @@ function runSelfTest() {
     first.result !== 'ARCHIVE_BUILT' ||
     second.result !== 'ARCHIVE_BUILT' ||
     first.archive_sha256 !== second.archive_sha256 ||
-    first.archive_bytes_in_memory_b64 !== second.archive_bytes_in_memory_b64
+    first.archive_bytes_in_memory_b64 !== second.archive_bytes_in_memory_b64 ||
+    cleanupFault.result !== 'CLEANUP_RESIDUE_DETECTED' ||
+    cleanupFault.stable_error_code !== 'SYNTHETIC_CLEANUP_RESIDUE' ||
+    cleanupFault.finalizer_post_cleanup_owned_root_exists !== false ||
+    returnMismatch.result !== 'RETURN_BYTES_MISMATCH_DETECTED' ||
+    returnMismatch.stable_error_code !== 'SYNTHETIC_RETURN_BYTES_MISMATCH' ||
+    returnMismatch.finalizer_post_cleanup_owned_root_exists !== false ||
+    failureCleanup.result !== 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED'
   ) {
     return stableFailure([code('ARCHIVE_SELF_TEST_FAILED')], 'ARCHIVE_SELF_TEST_FAILED');
   }
@@ -728,24 +894,36 @@ function runSelfTest() {
 function parseArgs(argv) {
   let stage = 'wp1';
   let selfTest = false;
+  let cleanupFaultProbe = false;
+  let returnBytesMismatchProbe = false;
+  let failureCleanupProof = false;
+  let stageSpecified = false;
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--stage') {
       stage = argv[index + 1];
+      stageSpecified = true;
       index += 1;
     } else if (argument === '--self-test') {
       selfTest = true;
+    } else if (argument === '--cleanup-fault-probe') {
+      cleanupFaultProbe = true;
+    } else if (argument === '--return-bytes-mismatch-probe') {
+      returnBytesMismatchProbe = true;
+    } else if (argument === '--failure-cleanup-proof') {
+      failureCleanupProof = true;
     } else {
       return { error: 'CLI_ARGUMENT_INVALID' };
     }
   }
-  if (selfTest && argv.length !== 1) {
+  const specialModeCount = [selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof].filter(Boolean).length;
+  if (specialModeCount > 1 || (specialModeCount === 1 && stageSpecified)) {
     return { error: 'CLI_ARGUMENT_INVALID' };
   }
   if (stage !== 'wp1' && stage !== 'wp4') {
     return { error: 'STAGE_INVALID' };
   }
-  return { stage, selfTest };
+  return { stage, selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof };
 }
 
 function main() {
@@ -754,6 +932,12 @@ function main() {
     ? { result: 'BLOCKED', stable_error_code: args.error }
     : args.selfTest
       ? runSelfTest()
+      : args.cleanupFaultProbe
+        ? runSyntheticCleanupFaultProbe()
+        : args.returnBytesMismatchProbe
+          ? runSyntheticReturnBytesMismatchProbe()
+          : args.failureCleanupProof
+            ? runSyntheticFailureCleanupProof()
       : args.stage === 'wp4'
         ? buildOfflinePackage()
         : prepareDeterministicStaging();
