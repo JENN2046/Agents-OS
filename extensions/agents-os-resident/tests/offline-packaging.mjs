@@ -10,6 +10,7 @@ import {
   runSyntheticCleanupFaultProbe,
   runSyntheticFailureCleanupProof,
   runSyntheticReturnBytesMismatchProbe,
+  runIntegratedOfflineCompatibilityWitness,
   validateExactMemberRows,
   verifyExactUstarArchive
 } from '../tools/build-offline-package.mjs';
@@ -130,6 +131,18 @@ assert.equal(failureCleanup.result, 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED');
 assert.deepEqual(failureCleanup.failure_before_cleanup_inventory, []);
 assert.equal(failureCleanup.finalizer_post_cleanup_owned_root_exists, false);
 
+const integratedWitness = runIntegratedOfflineCompatibilityWitness();
+assert.equal(integratedWitness.result, 'OFFLINE_COMPATIBILITY_WITNESS_PASSED');
+assert.equal(integratedWitness.sealed_source_inventory, '50/50_PRESENT_CLOSED');
+assert.equal(integratedWitness.sealed_host_commitments, '7/7_MATCH');
+assert.equal(integratedWitness.compatibility_preview, 'PACKAGE_COMPATIBLE_PREVIEW');
+assert.equal(integratedWitness.clean_archive_builds, 2);
+assert.equal(integratedWitness.archive_byte_equal, true);
+assert.equal(integratedWitness.archive_semantic_rejection_count, 9);
+assert.equal(integratedWitness.cleanup_fault_result, 'CLEANUP_RESIDUE_DETECTED');
+assert.equal(integratedWitness.return_bytes_mismatch_result, 'RETURN_BYTES_MISMATCH_DETECTED');
+assert.equal(integratedWitness.failure_cleanup_result, 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED');
+
 const rows = currentMembers();
 assert.equal(rows.length, 50);
 assert.equal(validateExactMemberRows(rows).result, 'PASS');
@@ -189,7 +202,8 @@ process.stdout.write(`${JSON.stringify({
   result: 'PASS',
   test: 'offline_packaging_determinism_and_tamper',
   clean_builds: 2,
-  semantic_tamper_rejections: 11,
+  semantic_tamper_rejections: 20,
+  integrated_witness: 'OFFLINE_COMPATIBILITY_WITNESS_PASSED',
   runtime_usable: false,
   archive_delivery_performed: false,
   terminal_outcome: 'NOT_ACTIVATED'

@@ -15,7 +15,11 @@ import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { validateSealedHostContract } from './validate-sealed-host-contract.mjs';
+import {
+  previewSealedHostCompatibility,
+  validateSealedHostContract,
+  verifyDisabledManifestAndInertEntrypoint
+} from './validate-sealed-host-contract.mjs';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
@@ -560,6 +564,83 @@ export function verifyExactUstarArchive(archiveBytes, rows) {
   };
 }
 
+function isExpectedRejection(result, expectedCode) {
+  return result.result === 'BLOCKED' && result.errors?.some((item) => item.code === expectedCode) === true;
+}
+
+function syntheticMemberRows() {
+  const entries = [
+    ['README.md', Buffer.from('synthetic-only README', 'utf8')],
+    ['index.js', Buffer.from('module.exports = {};', 'utf8')],
+    ['package.json', Buffer.from('{"name":"synthetic-only"}', 'utf8')],
+    ['plugin-manifest.json.block', Buffer.from('{"disabled":true}', 'utf8')]
+  ];
+  return entries.map(([sourcePath, content]) => ({
+    source_path: sourcePath,
+    archive_path: `${ARCHIVE_ROOT_PREFIX}${sourcePath}`,
+    kind: 'regular_file',
+    mode: 0o644,
+    uid: 0,
+    gid: 0,
+    uname: '',
+    gname: '',
+    mtime: 0,
+    byte_length: content.length,
+    sha256: sha256(content),
+    content
+  }));
+}
+
+function cloneMemberRows(rows) {
+  return rows.map((row) => ({ ...row, content: Buffer.from(row.content) }));
+}
+
+/**
+ * Execute a closed, in-memory adversarial matrix. Every rejection below is
+ * derived from the target member/header/lifecycle contract rather than a stale
+ * archive hash or a fixture-equality fallback.
+ */
+export function runArchiveSemanticNegativeMatrix() {
+  const rows = syntheticMemberRows();
+  const archive = buildExactUstarArchive(rows);
+  if (archive.result !== 'PASS') {
+    return { result: 'BLOCKED', errors: [code('SYNTHETIC_ARCHIVE_BASELINE_REJECTED')] };
+  }
+  const raw = Buffer.from(archive.archive_bytes);
+  const header = Buffer.from(raw);
+  header[156] ^= 0x01;
+  const content = Buffer.from(raw);
+  content[BLOCK_SIZE] ^= 0x01;
+  const padding = Buffer.from(raw);
+  const firstPaddingOffset = BLOCK_SIZE + rows[0].byte_length;
+  padding[firstPaddingOffset] = 0x01;
+  const terminal = Buffer.from(raw);
+  terminal[terminal.length - 1] = 0x01;
+  const traversal = cloneMemberRows(rows);
+  traversal[0].source_path = '../escape';
+  traversal[0].archive_path = `${ARCHIVE_ROOT_PREFIX}../escape`;
+  const duplicate = cloneMemberRows(rows);
+  duplicate[1].source_path = duplicate[0].source_path;
+  duplicate[1].archive_path = duplicate[0].archive_path;
+  const reordered = cloneMemberRows(rows).reverse();
+  const unknown = cloneMemberRows(rows);
+  unknown[0].unknown_boundary_key = true;
+  const cases = [
+    isExpectedRejection(verifyExactUstarArchive(header, rows), 'USTAR_HEADER_BYTES_MISMATCH'),
+    isExpectedRejection(verifyExactUstarArchive(content, rows), 'USTAR_MEMBER_CONTENT_MISMATCH'),
+    isExpectedRejection(verifyExactUstarArchive(padding, rows), 'USTAR_BODY_PADDING_INVALID'),
+    isExpectedRejection(verifyExactUstarArchive(terminal, rows), 'USTAR_TERMINAL_BLOCKS_INVALID'),
+    isExpectedRejection(verifyExactUstarArchive(raw.subarray(0, raw.length - 1), rows), 'USTAR_ARCHIVE_BLOCK_ALIGNMENT_INVALID'),
+    isExpectedRejection(validateExactMemberRows(traversal), 'MEMBER_ROW_SEMANTIC_INVALID'),
+    isExpectedRejection(validateExactMemberRows(duplicate), 'MEMBER_PATH_DUPLICATE'),
+    isExpectedRejection(validateExactMemberRows(reordered), 'MEMBER_ORDER_INVALID'),
+    isExpectedRejection(validateExactMemberRows(unknown), 'MEMBER_ROW_SCHEMA_INVALID')
+  ];
+  return cases.every(Boolean)
+    ? { result: 'PASS', semantic_rejection_count: cases.length }
+    : { result: 'BLOCKED', errors: [code('ARCHIVE_SEMANTIC_NEGATIVE_MATRIX_FAILED')] };
+}
+
 function stageRowsToMembers(stagingRoot, sourceRows, errors) {
   const rows = [];
   for (const sourceRow of sourceRows) {
@@ -856,6 +937,64 @@ export function runSyntheticFailureCleanupProof() {
   };
 }
 
+/**
+ * Combine the frozen offline gates into one deterministic witness. This is
+ * evidence only: it does not install, enable, return or retain an archive.
+ */
+export function runIntegratedOfflineCompatibilityWitness() {
+  const baseline = validateSealedHostContract('wp4');
+  const inert = verifyDisabledManifestAndInertEntrypoint();
+  const compatibility = previewSealedHostCompatibility();
+  const first = buildOfflinePackage();
+  const second = buildOfflinePackage();
+  const negativeMatrix = runArchiveSemanticNegativeMatrix();
+  const cleanupFault = runSyntheticCleanupFaultProbe();
+  const returnMismatch = runSyntheticReturnBytesMismatchProbe();
+  const failureCleanup = runSyntheticFailureCleanupProof();
+  if (
+    baseline.result !== 'WP0_BASELINE_VERIFIED' ||
+    inert.result !== 'DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIED' ||
+    compatibility.result !== 'PACKAGE_COMPATIBLE_PREVIEW' ||
+    first.result !== 'ARCHIVE_BUILT' ||
+    second.result !== 'ARCHIVE_BUILT' ||
+    first.archive_sha256 !== second.archive_sha256 ||
+    first.archive_bytes_in_memory_b64 !== second.archive_bytes_in_memory_b64 ||
+    negativeMatrix.result !== 'PASS' ||
+    cleanupFault.result !== 'CLEANUP_RESIDUE_DETECTED' ||
+    cleanupFault.stable_error_code !== 'SYNTHETIC_CLEANUP_RESIDUE' ||
+    cleanupFault.finalizer_post_cleanup_owned_root_exists !== false ||
+    returnMismatch.result !== 'RETURN_BYTES_MISMATCH_DETECTED' ||
+    returnMismatch.stable_error_code !== 'SYNTHETIC_RETURN_BYTES_MISMATCH' ||
+    returnMismatch.finalizer_post_cleanup_owned_root_exists !== false ||
+    failureCleanup.result !== 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED' ||
+    failureCleanup.finalizer_post_cleanup_owned_root_exists !== false
+  ) {
+    return stableFailure([code('INTEGRATED_OFFLINE_WITNESS_FAILED')], 'INTEGRATED_OFFLINE_WITNESS_FAILED');
+  }
+  return {
+    result: 'OFFLINE_COMPATIBILITY_WITNESS_PASSED',
+    sealed_source_inventory: baseline.source_inventory_state,
+    sealed_host_commitments: compatibility.sealed_host_commitments,
+    disabled_manifest_and_inert_entrypoint: true,
+    compatibility_preview: compatibility.result,
+    clean_archive_builds: 2,
+    archive_byte_equal: true,
+    archive_sha256: first.archive_sha256,
+    archive_byte_length: first.archive_byte_length,
+    member_manifest_sha256: first.member_manifest_sha256,
+    member_count: first.member_count,
+    archive_semantic_rejection_count: negativeMatrix.semantic_rejection_count,
+    cleanup_fault_result: cleanupFault.result,
+    return_bytes_mismatch_result: returnMismatch.result,
+    failure_cleanup_result: failureCleanup.result,
+    archive_delivery_performed: false,
+    VCPToolBox_worktree_read_or_write_performed: false,
+    runtime_usable: false,
+    plugin_enablement_authorized: false,
+    terminal_outcome: 'NOT_ACTIVATED'
+  };
+}
+
 function runSelfTest() {
   const stagingFirst = prepareDeterministicStaging();
   const stagingSecond = prepareDeterministicStaging();
@@ -864,6 +1003,7 @@ function runSelfTest() {
   const cleanupFault = runSyntheticCleanupFaultProbe();
   const returnMismatch = runSyntheticReturnBytesMismatchProbe();
   const failureCleanup = runSyntheticFailureCleanupProof();
+  const witness = runIntegratedOfflineCompatibilityWitness();
   if (
     stagingFirst.result !== 'STAGING_PREPARED' ||
     stagingSecond.result !== 'STAGING_PREPARED' ||
@@ -878,7 +1018,8 @@ function runSelfTest() {
     returnMismatch.result !== 'RETURN_BYTES_MISMATCH_DETECTED' ||
     returnMismatch.stable_error_code !== 'SYNTHETIC_RETURN_BYTES_MISMATCH' ||
     returnMismatch.finalizer_post_cleanup_owned_root_exists !== false ||
-    failureCleanup.result !== 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED'
+    failureCleanup.result !== 'SYNTHETIC_FAILURE_CLEANUP_VERIFIED' ||
+    witness.result !== 'OFFLINE_COMPATIBILITY_WITNESS_PASSED'
   ) {
     return stableFailure([code('ARCHIVE_SELF_TEST_FAILED')], 'ARCHIVE_SELF_TEST_FAILED');
   }
@@ -897,6 +1038,7 @@ function parseArgs(argv) {
   let cleanupFaultProbe = false;
   let returnBytesMismatchProbe = false;
   let failureCleanupProof = false;
+  let integratedWitness = false;
   let stageSpecified = false;
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
@@ -912,18 +1054,20 @@ function parseArgs(argv) {
       returnBytesMismatchProbe = true;
     } else if (argument === '--failure-cleanup-proof') {
       failureCleanupProof = true;
+    } else if (argument === '--integrated-witness') {
+      integratedWitness = true;
     } else {
       return { error: 'CLI_ARGUMENT_INVALID' };
     }
   }
-  const specialModeCount = [selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof].filter(Boolean).length;
+  const specialModeCount = [selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof, integratedWitness].filter(Boolean).length;
   if (specialModeCount > 1 || (specialModeCount === 1 && stageSpecified)) {
     return { error: 'CLI_ARGUMENT_INVALID' };
   }
   if (stage !== 'wp1' && stage !== 'wp4') {
     return { error: 'STAGE_INVALID' };
   }
-  return { stage, selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof };
+  return { stage, selfTest, cleanupFaultProbe, returnBytesMismatchProbe, failureCleanupProof, integratedWitness };
 }
 
 function main() {
@@ -938,6 +1082,8 @@ function main() {
           ? runSyntheticReturnBytesMismatchProbe()
           : args.failureCleanupProof
             ? runSyntheticFailureCleanupProof()
+            : args.integratedWitness
+              ? runIntegratedOfflineCompatibilityWitness()
       : args.stage === 'wp4'
         ? buildOfflinePackage()
         : prepareDeterministicStaging();

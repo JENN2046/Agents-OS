@@ -197,3 +197,11 @@ truncated in-memory return is detected before use, and the no-archive failure
 path is also finalized. None of these probes retains an archive or touches a
 Host, VCPToolBox, runtime, database, provider, private Memory, sensing or
 effect boundary.
+
+Phase 5C M0-C WP6 combines the sealed-source baseline, blocked-manifest and
+inert-entrypoint checks, exact seven-object Host compatibility preview,
+byte-identical raw USTAR builds, semantic archive tamper matrix and cleanup
+observations into `OFFLINE_COMPATIBILITY_WITNESS_PASSED`. The witness is local
+evidence only. Its positive result does not authorize archive delivery, plugin
+enablement, Host loading, runtime activation, database work, private Memory,
+provider use, sensing or any effect.
