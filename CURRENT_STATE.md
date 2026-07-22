@@ -6,6 +6,35 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5C M0-C Plan R1 Fixed for Independent Review (2026-07-22)
+
+Jenn started Phase 5C planning. R1 defines the narrow next engineering seam as
+deterministic offline packaging and sealed VCPToolBox host-contract
+compatibility for the existing disabled `agents-os-resident` extension. It does
+not install, enable or run the plugin.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R1_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Phase_5C_objective: OFFLINE_PLUGIN_PACKAGING_AND_SEALED_HOST_COMPATIBILITY
+review_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+subjects: 2
+authority_inputs: 15
+author_evidence: 4
+declared_inputs: 21
+manifest: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+manifest_sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6
+author_validation: PASS
+independent_review_created: false
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+VCPToolBox_change_or_start_authorized: false
+plugin_enablement_or_runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.1.md
+active_work_queue_sha256: 280f3741f0511a77fe9c542104cf2bacfa423d6e8e7b93d1d6d757c1d9b73315
+next_gate: PHASE_5C_M0C_PLAN_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+```
+
 ## Phase 5B M0-B Mainline Durability Complete — Awaiting Jenn Next-Phase Decision (2026-07-22)
 
 The fully reviewed Phase 5B M0-B implementation merged through PR #26. Local

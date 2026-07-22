@@ -1,0 +1,26 @@
+schema_version: agents-os.phase-start-decision.v0.1
+decision_id: PHASE_5C_M0C_PLAN_CLOSURE_START_DECISION_V0_1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+decision: START_PHASE_5C_PLANNING
+scope:
+  phase: Phase_5C
+  milestone: M0_C_OFFLINE_PLUGIN_PACKAGING_AND_HOST_COMPATIBILITY
+  authorized_outputs:
+    - exact_implementation_plan
+    - exact_build_profile
+    - synthetic_offline_witness
+    - offline_validator
+    - author_self_review
+    - hash_bound_independent_review_package
+  implementation_authorized: false
+  VCPToolBox_start_authorized: false
+  plugin_enablement_authorized: false
+  runtime_activation_authorized: false
+  real_database_connection_authorized: false
+  private_Memory_access_authorized: false
+  provider_or_real_effect_authorized: false
+stop_gate: PHASE_5C_M0C_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+automatic_freeze: forbidden
+automatic_implementation_start: forbidden
