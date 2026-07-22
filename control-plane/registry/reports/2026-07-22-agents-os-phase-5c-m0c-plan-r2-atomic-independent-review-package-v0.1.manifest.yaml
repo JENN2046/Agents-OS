@@ -1,0 +1,164 @@
+schema_version: agents-os.hash-bound-review-manifest.v0.1
+package_id: agents-os-phase-5c-m0c-plan-r2-atomic-independent-review-package-v0.1
+date: 2026-07-22
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+
+integrity:
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+
+review_unit:
+  id: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 5
+  subjects:
+    - {ordinal: 1, role: R1_immutable_implementation_plan, path: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-implementation-plan-v0.1-r1.md, sha256: d8c670f6edb51aba893472d72ffce6c8713d416f6ee14aafc835ab005d8e02e4}
+    - {ordinal: 2, role: R1_immutable_build_profile, path: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-offline-plugin-packaging-build-profile-v0.1-r1.yaml, sha256: c996b069d099f25feb93d7828a5b6188ff1b16413b3ac670f2a3d91450582fdb}
+    - {ordinal: 3, role: R2_narrow_correction_amendment, path: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-r2-narrow-correction-amendment-v0.1.md, sha256: 0c3c4363d32a1df64a70762941cd0792342a8a4257d39a2edb2878a5daed9c35}
+    - {ordinal: 4, role: R2_sealed_source_inventory_profile, path: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml, sha256: 2554783a30af00e31232be7ac8ca4be72ea40ed13025304cf4288b09c8e42958}
+    - {ordinal: 5, role: R2_exact_archive_output_lifecycle_profile, path: control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r2.yaml, sha256: 5cf1306c454b7f266fef0fff9bf2146b6e2fff23cf058d69a3fb13d565a5ca57}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5}
+  - {role: Phase_5C_R1_start_decision, path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-closure-start-decision-v0.1.yaml, sha256: dac905324281daf8544cbc06c11cff9fdd100724722e4ea941143271b9f63426}
+  - {role: Phase_5C_R2_start_decision, path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r2-narrow-correction-start-decision-v0.1.yaml, sha256: f0160479a7f7aa38e04ab85a230f2897f33986e60dad7cdbc943895e488405fe}
+  - {role: R1_manifest, path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml, sha256: de35400b2ee0c2e3d2e03bd63da6544c6a3f4f87289c2dd5a6276fe026b6bfa6}
+  - {role: R1_independent_review, path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r1-full-atomic-independent-review.yaml, sha256: c95974a58dcda60742a8ef3cfb8ab1abaea12f5d1bd2ff8d53b27c65e1200cd7}
+  - {role: R1_finding_disposition, path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r1-finding-disposition-v0.1.yaml, sha256: c44c682892df927edf68a8a3dc72759e38f796e3d0e4e5183316fc2e83569160}
+  - {role: frozen_F8_decision, path: control-plane/registry/decisions/2026-07-19-agents-os-f8-home-to-orchestrator-minimum-interface-r5-atomic-freeze-decision-v0.1.yaml, sha256: ce35fb0ece80758c9690434ef997efe5fbc01b3482af8228503b2060b70eea6d}
+  - {role: frozen_F8_manifest, path: control-plane/registry/reports/2026-07-19-agents-os-f8-r5-atomic-independent-review-package-v0.1.manifest.yaml, sha256: c4161d9f4ffaaa094e2aebd9e5697cf40003e35691ca4e2a4de169ba4e83b672}
+  - {role: sealed_VCPToolBox_git_object_preflight, path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-preflight-v0.1.yaml, sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344}
+  - {role: frozen_Phase_5B_plan_decision, path: control-plane/registry/decisions/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-freeze-decision-v0.1.yaml, sha256: a8fb172347d2291e8141a2da4369f2e861ad3566d68214f678367b9cd863951d}
+  - {role: frozen_Phase_5B_plan_manifest, path: control-plane/registry/reports/2026-07-21-agents-os-phase-5b-m0b-plan-r5-atomic-independent-review-package-v0.1.manifest.yaml, sha256: bfacffcb1446bc122a7f933ffbbf9ea71628f4cd044977c29fa0f98adc85b721}
+  - {role: Phase_5B_implementation_closeout, path: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-implementation-closeout-v0.1.md, sha256: a577337992720438c7dd9499bc9a3105562628765bfc8f9a4f4387a45568b7eb}
+  - {role: Phase_5B_mainline_durability, path: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5b-m0b-postmerge-durability-closeout-v0.1.md, sha256: cd06f100eaf37b9b0bf109149f8e3833e0a72f827a536acd00932e3464308918}
+  - {role: current_queue_before_R2_package_fix, path: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.2.md, sha256: 432297bcd9e2f4ad82b647a5ce0e10d7fccf3f124911d6697ecbdd280172eb3c}
+  - {role: sealed_extension_source_01, path: extensions/agents-os-resident/Cargo.lock, sha256: 0f5d6ebfa9c5dfcf6b094e5687004c3e202b00a19ad3bbbf29e5c94efab78ce8}
+  - {role: sealed_extension_source_02, path: extensions/agents-os-resident/Cargo.toml, sha256: 169290f190394ebfc557495581029925fb2d5b1f0397b7138ec09812d5d376a0}
+  - {role: sealed_extension_source_03, path: extensions/agents-os-resident/README.md, sha256: ea35d03d48b81412f75406fc9755c85f63b3ade55a4e3343d50f456b892f4f84}
+  - {role: sealed_extension_source_04, path: extensions/agents-os-resident/build.rs, sha256: fcbd1ff3f627a7553fa1704dc6f558998daff8bc256015c37aace62cc49ce584}
+  - {role: sealed_extension_source_05, path: extensions/agents-os-resident/index.js, sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec}
+  - {role: sealed_extension_source_06, path: extensions/agents-os-resident/package-lock.json, sha256: 7f677892a70f9157b7e8b3ca35709cb79abdf3d2fbc91c538b35de0f1dfbfe55}
+  - {role: sealed_extension_source_07, path: extensions/agents-os-resident/package-manifest.json, sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23}
+  - {role: sealed_extension_source_08, path: extensions/agents-os-resident/package.json, sha256: 7def959ba580042c5d293bb937a7c18e6e77e431b95673389f7b767d9246d532}
+  - {role: sealed_extension_source_09, path: extensions/agents-os-resident/plugin-manifest.json.block, sha256: 25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0}
+  - {role: sealed_extension_source_10, path: extensions/agents-os-resident/rust-toolchain.toml, sha256: 7a9b3502eb21ff9f3e6ce60b48f138c581efab2f8fa0fe992005a8e6d602aa94}
+  - {role: sealed_extension_source_11, path: extensions/agents-os-resident/src/canonical/fingerprint.rs, sha256: 6cae076dca33fe0b69778809c56f4023983dcb1132ae671939e4d1b97c39f393}
+  - {role: sealed_extension_source_12, path: extensions/agents-os-resident/src/canonical/jcs.rs, sha256: 5b63409c23523bdf5f64eaf9a5525caf9938ab41accea57276a717e1be5162eb}
+  - {role: sealed_extension_source_13, path: extensions/agents-os-resident/src/canonical/mod.rs, sha256: 55b4149b10f75ccdb5c78af0c2afb9725f6652c01f5ec29129c208712d035f53}
+  - {role: sealed_extension_source_14, path: extensions/agents-os-resident/src/canonical/types.rs, sha256: 4803a8171964a11f023a55f496f57256daa50b5fa585546851049b516203d011}
+  - {role: sealed_extension_source_15, path: extensions/agents-os-resident/src/home/candidate.rs, sha256: 707392d5de41fb19958081c254e3cd3ec3b1a89b630775a04167fef902b18829}
+  - {role: sealed_extension_source_16, path: extensions/agents-os-resident/src/home/handoff.rs, sha256: 82ade4d0e980f1f0a6e0abe1bc6e0d6cd2d4e4e571c154ceb21470b59093d1f3}
+  - {role: sealed_extension_source_17, path: extensions/agents-os-resident/src/home/mod.rs, sha256: c9712b6a49634e0cb2eb84b8a68deef470bf8623c80a2a3ccb20efb520ec46d1}
+  - {role: sealed_extension_source_18, path: extensions/agents-os-resident/src/home/session_boundary.rs, sha256: ed182f55760da590b70d3bbd43fa517f345576532f9f3ab772a174f67dbbadda}
+  - {role: sealed_extension_source_19, path: extensions/agents-os-resident/src/ledger/mod.rs, sha256: c0c2b6e4b1679b36cbef22f1a659c166e1d3051016fb8dc41577fc66597009ef}
+  - {role: sealed_extension_source_20, path: extensions/agents-os-resident/src/ledger/recovery.rs, sha256: 866fe43d2efd55c03c2bdc67542285124385c219bcb0e2f903453490bd95380c}
+  - {role: sealed_extension_source_21, path: extensions/agents-os-resident/src/ledger/replay.rs, sha256: 1e81a420242addcc5049ee5d153483ba6d2d1b0d34eab945b5e5c5f30554a778}
+  - {role: sealed_extension_source_22, path: extensions/agents-os-resident/src/ledger/schema.rs, sha256: 0204b0aa95fc12408d033a044a083b340a6a60bd0fea8ae7b3336afab45cf58e}
+  - {role: sealed_extension_source_23, path: extensions/agents-os-resident/src/ledger/transaction.rs, sha256: 3c9d0f7fe0c14c6708d5d361b4656314a3a2b0d59e5087d0628b5dd4ceaeed0a}
+  - {role: sealed_extension_source_24, path: extensions/agents-os-resident/src/lib.rs, sha256: c3d7d73e3e742298756c5d62c170517680dc41ffb95eb5e62b62e7d09108893d}
+  - {role: sealed_extension_source_25, path: extensions/agents-os-resident/src/mock_host/admission.rs, sha256: 766aaa453171fc82da3d054a843b78c507730aa67fcf77debfef29c00c48b6a2}
+  - {role: sealed_extension_source_26, path: extensions/agents-os-resident/src/mock_host/dispatch.rs, sha256: 50d083ac82ee86e96161558adbe5eaaaa24ade20bd3b44a79748e2d0b8b8a5a6}
+  - {role: sealed_extension_source_27, path: extensions/agents-os-resident/src/mock_host/mod.rs, sha256: cd8715126e10ad1ec01a4a57fcb41deda6d8e2ced8052eb3040c4aeb57c8614c}
+  - {role: sealed_extension_source_28, path: extensions/agents-os-resident/src/napi_frame.rs, sha256: 3dbdb6e8f2d55a2c5d140f6464fb2ff3d9dffc7d0739a5edf80e331676ab2b60}
+  - {role: sealed_extension_source_29, path: extensions/agents-os-resident/src/reducers/authority_assessment.rs, sha256: 9638372fc6d460f35c0e6a53140e51a803a2592306cbf1131311e7ebbf995a23}
+  - {role: sealed_extension_source_30, path: extensions/agents-os-resident/src/reducers/command_intake.rs, sha256: e4e422c9ab8a8182a14a38e55c2325b87270af45b27d7e4fb7945dec0eb5beb5}
+  - {role: sealed_extension_source_31, path: extensions/agents-os-resident/src/reducers/delivery_receipt.rs, sha256: 89e711c08f411fb9ada46a51b5427b29cf450c3cf835b004a70f020e8186baa5}
+  - {role: sealed_extension_source_32, path: extensions/agents-os-resident/src/reducers/effect_admission.rs, sha256: 352fb72bdfd71134cd835614cd924b6b4ec3a2dd87216b2a555395ea28340a96}
+  - {role: sealed_extension_source_33, path: extensions/agents-os-resident/src/reducers/goal_plan.rs, sha256: 13b7005cfd0531a4a9b85e72988d3fcc39fcd2df4d7841c0150057769d9a0786}
+  - {role: sealed_extension_source_34, path: extensions/agents-os-resident/src/reducers/mod.rs, sha256: d087348636c92e8f200a307ef399ec0b80a67b44929caf62302ddea7954791eb}
+  - {role: sealed_extension_source_35, path: extensions/agents-os-resident/src/reducers/outbox_claim.rs, sha256: 68f8b3d1f9266ad2850eb3cd52bf51245b255aef9f1ccafbd42af5d0f0c0082d}
+  - {role: sealed_extension_source_36, path: extensions/agents-os-resident/src/reducers/reconcile.rs, sha256: b5af400eab16cb68c6146b866044b46695eb31031bb11566272a5731c052e5eb}
+  - {role: sealed_extension_source_37, path: extensions/agents-os-resident/src/reducers/task_completion.rs, sha256: a68c892282288f57e0cbecff89fca182940820cbb838483a126ac2ee3b0c3a56}
+  - {role: sealed_extension_source_38, path: extensions/agents-os-resident/src/reducers/validation_current_decision.rs, sha256: ff7322989c8b15ea351d463155bdf3f22fccec3ec2c55563394ada200b7bb925}
+  - {role: sealed_extension_source_39, path: extensions/agents-os-resident/src/resident/ledger_thread.rs, sha256: 58fcf5377e2edaf226d213dbb6770bb1fe6bcd4706fb7a575fb55c37293a5724}
+  - {role: sealed_extension_source_40, path: extensions/agents-os-resident/src/resident/lock.rs, sha256: c61528e2cdc490428cebdba4d4825c3258dcd05ac24c1c93ce3851e9ee7c5f04}
+  - {role: sealed_extension_source_41, path: extensions/agents-os-resident/src/resident/mod.rs, sha256: 59affe7f6588611eec784a9d480825f7c2a31ed2878a3cad6ccab933fca42e60}
+  - {role: sealed_extension_source_42, path: extensions/agents-os-resident/tests/crash_matrix.rs, sha256: d37a3d087d9ba34a86d5ab5cb0766472014d307e13716c1b5b67440821e6bc50}
+  - {role: sealed_extension_source_43, path: extensions/agents-os-resident/tests/napi_protocol.rs, sha256: f35b23f1e1da46b8cd66a8a2bd8fe7df5f41e0ba4d5b8c02099f54c3e3b31985}
+  - {role: sealed_extension_source_44, path: extensions/agents-os-resident/tests/replay_and_idempotency.rs, sha256: 066ea372f763480d86bad7a519cd5e74400c2ae49d0d1971c36b25919fb3ad93}
+  - {role: sealed_extension_source_45, path: extensions/agents-os-resident/tests/synthetic_m0a.rs, sha256: 207b09bc2625f257cd38bd91699dd4e13f1b0e38777ffd89a3df6f6ea09c9440}
+  - {role: sealed_extension_source_46, path: extensions/agents-os-resident/tests/synthetic_m0b.rs, sha256: d5756919803eba44d1815d635c374ab79d0396a8476c8b1e82706fb98655f53f}
+
+author_evidence:
+  - {role: deterministic_structural_builder, path: control-plane/registry/build-phase-5c-m0c-plan-r2-structural-witness.py, sha256: 3a899ba6c2616d0748b3c5095c8a396599762f07272483de0c2a245c5b64ee5f, may_substitute_for_independent_judgment: false}
+  - {role: synthetic_structural_witness, path: control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r2-structural-witness-v0.1.json, sha256: 5c62dee5cab3947b2989ee231a5578c99973dc16c1894ce3a649984439a906c9, runtime_usable: false}
+  - {role: offline_structural_validator, path: control-plane/registry/validate-phase-5c-m0c-plan-r2-structural-witness.py, sha256: 711c39158e9a43370c95f4bbdc1d8e99789ed0930ff17441ad245082013c88ac, may_substitute_for_independent_judgment: false}
+  - {role: author_self_review, path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r2-author-self-review-v0.1.yaml, sha256: 00f4c816704704e557f0498ef239a0d1573cc94ae4bb98c4e358cb7d97e034aa, may_substitute_for_independent_judgment: false}
+
+declared_subject_count: 5
+declared_authority_input_count: 60
+declared_author_evidence_count: 4
+declared_total_input_count: 69
+
+validator_commands:
+  - python3 -c "import yaml; [yaml.safe_load(open(p)) for p in ['control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml','control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r2.yaml']]"
+  - python3 -c "import hashlib,json,yaml; from pathlib import Path; p=yaml.safe_load(open('control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml')); root=Path(p['source_root']); assert len(p['records']) == p['record_count']; assert hashlib.sha256(json.dumps(p['records'],ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest() == p['records_canonical_sha256']; assert all((root/r['source_path']).is_file() and (root/r['source_path']).stat().st_size == r['byte_length'] and hashlib.sha256((root/r['source_path']).read_bytes()).hexdigest() == r['sha256'] for r in p['records'])"
+  - python3 control-plane/registry/validate-phase-5c-m0c-plan-r2-structural-witness.py control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r2-structural-witness-v0.1.json --self-test
+  - sh -c 't=$(mktemp); python3 control-plane/registry/build-phase-5c-m0c-plan-r2-structural-witness.py "$t" && cmp "$t" control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r2-structural-witness-v0.1.json; r=$?; rm -f "$t"; exit $r'
+  - python3 control-plane/registry/validate-phase-5c-m0c-plan-r1-witness.py control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-r1-synthetic-witness-v0.1.json --self-test
+  - python3 -c "from pathlib import Path; ps=[Path(p) for p in ['control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-r2-narrow-correction-amendment-v0.1.md','control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml','control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-exact-archive-output-lifecycle-profile-v0.1-r2.yaml','control-plane/registry/build-phase-5c-m0c-plan-r2-structural-witness.py','control-plane/registry/validate-phase-5c-m0c-plan-r2-structural-witness.py']]; assert not [(p,i) for p in ps for i,l in enumerate(p.read_text().splitlines(),1) if l.rstrip()!=l]"
+
+required_review_questions:
+  - all_69_declared_inputs_match_and_are_fully_read
+  - five_subjects_form_one_atomic_R1_preserving_R2_narrow_correction
+  - all_46_sealed_extension_source_rows_are_rehashed_against_the_R2_source_inventory_profile
+  - POSIX_ustar_no_compression_header_member_order_and_checksum_preimage_are_exact
+  - source_to_archive_member_mapping_is_closed_regular_file_only_and_deterministically_derived
+  - synthetic_archive_bytes_are_constructed_and_parsed_from_structural_member_records_not_claimed_determinism
+  - success_and_failure_lifecycle_delivery_and_cleanup_are_exact_and_fail_closed
+  - sealed_VCPToolBox_commit_path_blob_and_SHA_records_are_exactly_consumed_without_worktree_access
+  - entrypoint_bytes_derive_CommonJS_exports_and_lazy_native_load_placement
+  - native_NAPI_surface_remains_exactly_five_methods
+  - every_R1_unrepresentable_attack_class_is_now_representable_and_semantically_rejected_after_full_resigning
+  - no_second_plugin_loader_service_writer_permission_identity_Task_Command_or_effect_authority_exists
+  - no_implementation_activation_database_private_Memory_provider_sensing_or_effect_is_authorized_or_performed
+  - no_internal_contradiction_implementation_impossibility_or_legal_input_over_rejection_remains
+
+independent_adversarial_minimum:
+  - fully_resign_sealed_commit_path_blob_or_sha_substitution
+  - add_remove_duplicate_reorder_or_replace_sealed_source_or_archive_inventory_members
+  - use_symlink_traversal_absolute_backslash_or_caller_selected_output_paths
+  - alter_entrypoint_to_eager_native_load_and_propagate_source_mapping_hashes
+  - add_a_sixth_NAPI_method_or_enabled_plugin_manifest_evidence
+  - alter_ustar_metadata_checksum_preimage_member_order_or_raw_archive_bytes_and_fully_resign
+  - forge_success_or_failure_cleanup_with_actual_residue_or_archive_delivery
+  - add_unknown_fields_wrong_types_unsafe_integers_non_NFC_or_duplicate_JSON_keys
+  - distinguish_target_semantic_rejections_from_stale_hash_or_fixture_seal_rejections
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - manifest_path_and_sha256
+    - 69_hashes_and_full_reads
+    - six_fixed_commands
+    - independent_fully_resigned_attack_count
+    - semantic_rejection_count
+    - favorable_invalid_path_count
+    - legal_input_over_rejection_count
+    - blocker_major_minor_counts
+    - requires_R3
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  plan_freeze_ready: false
+  automatic_freeze: forbidden
+  automatic_implementation_start: forbidden
+
+non_authorization:
+  Phase_5C_plan_frozen: false
+  Phase_5C_implementation_started: false
+  implementation_or_source_modification_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_runtime_activation_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  Git_delivery_authorized: false

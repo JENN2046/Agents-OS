@@ -6,6 +6,30 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5C M0-C Plan R2 Fixed for Independent Review (2026-07-22)
+
+Jenn explicitly started the narrow R2 correction after the immutable R1 review
+recorded two blockers. R2 adds one exact uncompressed ustar encoding/output
+lifecycle contract and structural evidence that derives source sealing, host
+commitments, member mapping, archive bytes, lazy loading, and cleanup without
+turning any synthetic evidence into runtime authority.
+
+```yaml
+Phase_5C_status: M0C_PLAN_R2_FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+R1_independent_review_sha256: c95974a58dcda60742a8ef3cfb8ab1abaea12f5d1bd2ff8d53b27c65e1200cd7
+R1_result: BLOCK
+R2_start_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r2-narrow-correction-start-decision-v0.1.yaml
+R2_manifest: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+R2_manifest_sha256: 610b42a8d0eefadefe9e7625ea4b60cd370ac02f24b64b37ab7c9d56360a1a27
+R2_author_validation: PASS
+R2_independent_review_created: false
+R2_independent_review_result: NOT_RUN
+Phase_5C_plan_frozen: false
+Phase_5C_implementation_started: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v14.3.md
+next_gate: PHASE_5C_M0C_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+```
+
 ## Phase 5C M0-C Plan R1 Independent Review Block Reconciled (2026-07-22)
 
 The fresh full atomic independent review verified all R1 package integrity and
