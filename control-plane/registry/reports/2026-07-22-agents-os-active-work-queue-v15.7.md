@@ -91,4 +91,3 @@ active_work_queue_v15.6=superseded_historical_bytes_preserved
 This queue authorizes only the frozen, local, offline Phase 5C implementation
 sequence. It does not confer runtime, Host, VCPToolBox, database, provider,
 private-memory or real-effect authority.
-
