@@ -6,14 +6,15 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5C M0-C Plan Mainline Durability Verified; Post-Merge Projection Staged (2026-07-22)
+## Phase 5C M0-C Plan Mainline Durability Verified; Post-Merge Projection Complete (2026-07-22)
 
 PR #28 is merged. The complete nine-subject frozen Plan R1–R4 unit and the
 narrow, post-freeze review-package builder correction have been re-verified
 from `origin/main`; local `main` now equals that same commit. The correction
 does not alter the frozen plan semantics. This branch stages only the resulting
-governance projection. Its separate delivery remains pending, and no Phase 5C
-implementation work is authorized or started.
+governance projection. Once this scoped projection is on `main`, no further
+delivery gate remains before Jenn's separate implementation decision; no Phase
+5C implementation work is authorized or started.
 
 ```yaml
 Phase_5C_status: M0C_PLAN_FROZEN_MAINLINE_DURABILITY_VERIFIED
@@ -40,8 +41,8 @@ Phase_5C_post_freeze_builder_correction_final_review_sha256: a3e3e6fe435b40cb623
 Phase_5C_post_freeze_builder_correction_inputs_on_origin_main: 14/14_MATCH
 Phase_5C_plan_mainline_durability: VERIFIED
 Phase_5C_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-postmerge-durability-closeout-v0.1.md
-Phase_5C_postmerge_durability_receipt_sha256: 13403805e75305709c9b25b273ec60601584e8f62bb6f33f5e1e94e675afbaa0
-Phase_5C_postmerge_projection_delivery: PENDING_SCOPED_GIT_DELIVERY
+Phase_5C_postmerge_durability_receipt_sha256: 22368f4865562f4ca7b8c565fc85a6174ecabfdf7ef449d38b3c20ef8e6e27de
+Phase_5C_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
 Phase_5C_implementation_started: false
 implementation_authorized: false
 VCPToolBox_change_or_start_authorized: false
@@ -50,7 +51,7 @@ database_private_Memory_provider_sensing_or_effect_authorized: false
 Git_delivery_authorized_by_plan_freeze: false
 active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.0.md
 consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.0.md
-next_gate: PHASE_5C_POSTMERGE_PROJECTION_GIT_DELIVERY_THEN_JENN_EXPLICIT_IMPLEMENTATION_START_DECISION
+next_gate: JENN_EXPLICIT_PHASE_5C_M0C_IMPLEMENTATION_START_DECISION
 ```
 
 ## Phase 5C M0-C Plan R4 Independent Review Passed (2026-07-22)

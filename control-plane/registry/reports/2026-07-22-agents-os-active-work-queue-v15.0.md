@@ -30,7 +30,7 @@ Phase_5C_plan_accepted: true
 Phase_5C_plan_frozen: true
 plan_revisions_stopped: true
 Phase_5C_plan_mainline_durability: VERIFIED
-postmerge_projection_delivery: PENDING_SCOPED_GIT_DELIVERY
+postmerge_projection_delivery: COMPLETE_ON_MAINLINE
 Phase_5C_implementation_started: false
 implementation_authorized: false
 runtime_activation_authorized: false
@@ -38,26 +38,25 @@ runtime_activation_authorized: false
 
 ## NOW
 
-### NOW-001: Review the narrow Phase 5C post-merge governance projection for scoped delivery
+### NOW-001: Await Jenn explicit Phase 5C M0-C implementation-start decision
 
 ```text
-requires_jenn_decision=false
+requires_jenn_decision=true
 execution_authorized=false
 ```
 
-The Phase 5C frozen plan and post-freeze builder correction are verified on
-`main`. Review only the scope that would deliver this receipt, queue/state/
-registry reconciliation and the four preview-consumer default queue pointers.
-Do not commit, push, merge or start implementation from this queue item.
+The Phase 5C frozen plan, post-freeze builder correction and this governance
+projection are durable on `main`. Do not start implementation unless Jenn makes
+the separate, exact current decision.
 
 ## NEXT
 
-### NEXT-001: Jenn explicit Phase 5C M0-C implementation-start decision
+### NEXT-001: No automatic action without Jenn's explicit implementation decision
 
-`requires_jenn_decision=true`. This decision is available only after the narrow
-post-merge governance projection is durable. It must bind the frozen plan,
-independent review, freeze decision, PR #28 merge commit and this durability
-receipt. It does not follow automatically from the completed Plan R4 freeze.
+`requires_jenn_decision=true`. A future implementation-start decision must bind
+the frozen plan, independent review, freeze decision, PR #28 merge commit and
+this durability receipt. It does not follow automatically from the completed
+Plan R4 freeze.
 
 ## BLOCKED
 
@@ -77,6 +76,7 @@ Phase_5C_R4_atomic_freeze=COMPLETE
 Phase_5C_frozen_plan_objects_mainline_verification=PASS
 PR28_post_freeze_builder_correction_mainline_integration=PASS
 local_main_origin_main_hash_alignment=PASS
+Phase_5C_postmerge_governance_projection_delivery=COMPLETE_ON_MAINLINE
 active_work_queue_v14_9=superseded_historical_bytes_preserved
 ```
 

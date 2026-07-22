@@ -51,7 +51,7 @@ post_freeze_builder_sha256: f2bbae6bee4d423c3f9f6750ca59a62e6d3799cfa0586ee4bbb6
 post_freeze_builder_correction_semantic_scope: NONE
 
 Phase_5C_plan_mainline_durability: VERIFIED
-Phase_5C_postmerge_projection_delivery: PENDING_SCOPED_GIT_DELIVERY
+Phase_5C_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
 Phase_5C_implementation_started: false
 implementation_authorized: false
 VCPToolBox_change_or_start_authorized: false
@@ -69,6 +69,6 @@ only the merged mainline objects and their bound hashes.
 
 ## Next Gate
 
-The narrow status projection introduced with this receipt still needs its own
-scoped Git delivery. Only after that projection is durable may Jenn make a
-separate, explicit Phase 5C M0-C implementation-start decision.
+Once this scoped governance projection is integrated on `main`, the next gate
+is a separate, explicit Jenn Phase 5C M0-C implementation-start decision.
+Nothing starts automatically at that gate.
