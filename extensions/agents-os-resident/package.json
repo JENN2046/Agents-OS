@@ -11,6 +11,7 @@
   "scripts": {
     "build:debug": "napi build --platform",
     "build:release": "napi build --platform --release",
+    "build:offline": "node tools/build-offline-package.mjs --stage wp1",
     "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0"
   },
   "devDependencies": {

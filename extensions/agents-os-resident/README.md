@@ -159,3 +159,10 @@ verifies the immutable existing source bytes, blocked manifest state and inert
 entrypoint boundary. At WP0 it reports `WP0_BASELINE_VERIFIED`, not package
 compatibility, installation, activation or execution authority. The package is
 still not built, delivered, enabled or loaded through a Host.
+
+Phase 5C M0-C WP1 adds an offline staging builder. It accepts no caller path,
+creates a new owned temporary root, derives the closed current source subset
+from the sealed contract, rehashes every source before and after copying, and
+cleans that root before it returns. It reports staging metadata only; it does
+not emit a persistent archive, install anything, enable a manifest or invoke a
+native Host.
