@@ -6,52 +6,43 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5C M0-C Plan Mainline Durability Verified; Post-Merge Projection Complete (2026-07-22)
+## Phase 5C M0-C Implementation Started — WP0 Active (2026-07-22)
 
-PR #28 is merged. The complete nine-subject frozen Plan R1–R4 unit and the
-narrow, post-freeze review-package builder correction have been re-verified
-from `origin/main`; local `main` now equals that same commit. The correction
-does not alter the frozen plan semantics. This branch stages only the resulting
-governance projection. Once this scoped projection is on `main`, no further
-delivery gate remains before Jenn's separate implementation decision; no Phase
-5C implementation work is authorized or started.
+Jenn explicitly started the frozen Phase 5C M0-C offline plugin-packaging and
+sealed-host-compatibility implementation. The start closeout binds the Plan R4
+freeze, independent review, mainline durability evidence and sealed seven-path
+VCPToolBox preflight. WP0 is now the only active work package.
 
 ```yaml
-Phase_5C_status: M0C_PLAN_FROZEN_MAINLINE_DURABILITY_VERIFIED
+Phase_5C_status: M0C_IMPLEMENTATION_STARTED_WP0_ACTIVE
 Phase_5C_plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
 Phase_5C_plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
 Phase_5C_plan_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
 Phase_5C_plan_freeze_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml
 Phase_5C_plan_freeze_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
-Phase_5C_plan_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-closeout-v0.1.md
-Phase_5C_plan_freeze_closeout_receipt_sha256: b1ddd64d34d7a98d9b6e5eb466df041e62930b0e3bf6e3d0609c35c5e6e6e9df
-Phase_5C_plan_accepted: true
-Phase_5C_plan_frozen: true
-Phase_5C_plan_revisions_stopped: true
-Phase_5C_requires_R5: false
-Phase_5C_PR_number: 28
-Phase_5C_PR_state: MERGED
-Phase_5C_reviewed_PR_head_commit: 290b31617ec7f3b05c261e59b2b01be55a6eb5c9
 Phase_5C_mainline_merge_commit: 89a95bd98426450e4b0edcf6b2881e3f8e931e8b
-Phase_5C_local_main_equals_origin_main: true
-Phase_5C_merge_tree_equals_reviewed_PR_head: true
-Phase_5C_frozen_subjects_on_origin_main: 9/9_MATCH
-Phase_5C_post_freeze_builder_correction_manifest_sha256: 1710f9e5b67c6b704b04d417483b1b5ed10edc717911257f1eff18322ab7c67e
-Phase_5C_post_freeze_builder_correction_final_review_sha256: a3e3e6fe435b40cb623d6197c315d155d0b7cf256524d1c714cbf3fe304b2738
-Phase_5C_post_freeze_builder_correction_inputs_on_origin_main: 14/14_MATCH
-Phase_5C_plan_mainline_durability: VERIFIED
-Phase_5C_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-postmerge-durability-closeout-v0.1.md
-Phase_5C_postmerge_durability_receipt_sha256: 22368f4865562f4ca7b8c565fc85a6174ecabfdf7ef449d38b3c20ef8e6e27de
-Phase_5C_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
-Phase_5C_implementation_started: false
-implementation_authorized: false
+Phase_5C_postmerge_durability_commit: 19ea75f000430803bcc38aa7218e8204d0827b80
+Phase_5C_implementation_start_preflight: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-implementation-start-preflight-v0.1.yaml
+Phase_5C_implementation_start_preflight_sha256: df3815723f335292c681e543cf28bc62f576a46b1f513cf6603f2469c9379253
+Phase_5C_implementation_start_decision: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-implementation-start-decision-v0.1.yaml
+Phase_5C_implementation_start_decision_sha256: be67f58d4223dde54daa58cb0dc702a0fe765b8de62865d8b9477bf880b65955
+Phase_5C_implementation_start_closeout_receipt: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-implementation-start-closeout-v0.1.md
+Phase_5C_implementation_start_closeout_receipt_sha256: 4f5122331b7be6cf6a1fec6a8095eb56bf1091ea78963b6f19844dbe23980ef3
+Phase_5C_implementation_started: true
+implementation_authorized: true
+implementation_branch: agent/phase-5c-m0c-implementation
+source_authority_root: extensions/agents-os-resident
+current_work_package: WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+WP0_start_authorized: true
+WP1_through_WP6_conditionally_authorized: true
 VCPToolBox_change_or_start_authorized: false
-plugin_enablement_or_runtime_activation_authorized: false
+plugin_enablement_or_native_host_load_authorized: false
+runtime_activation_authorized: false
 database_private_Memory_provider_sensing_or_effect_authorized: false
-Git_delivery_authorized_by_plan_freeze: false
-active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.0.md
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.0.md
-next_gate: JENN_EXPLICIT_PHASE_5C_M0C_IMPLEMENTATION_START_DECISION
+Git_delivery_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-22-agents-os-active-work-queue-v15.1.md
+next_gate: PHASE_5C_M0C_WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
 ```
 
 ## Phase 5C M0-C Plan R4 Independent Review Passed (2026-07-22)
