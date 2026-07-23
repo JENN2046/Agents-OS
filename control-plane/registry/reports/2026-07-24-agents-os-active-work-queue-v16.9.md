@@ -9,7 +9,7 @@ Supersedes: `control-plane/registry/reports/2026-07-23-agents-os-active-work-que
 ## Current Facts
 
 ```yaml
-Phase_5D_status: M0D_PLAN_MAINLINE_INTEGRATED_POSTMERGE_DURABILITY_PROJECTION_PENDING
+Phase_5D_status: M0D_PLAN_MAINLINE_DURABILITY_COMPLETE_AWAITING_JENN_IMPLEMENTATION_START_DECISION
 Phase_5D_objective: QUARANTINED_HOST_SMOKE_INTEGRATION_PREFLIGHT_ONLY
 Phase_5D_plan_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
 Phase_5D_R2_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
@@ -23,19 +23,19 @@ Phase_5D_Git_objects_on_main: true
 Phase_5D_mainline_integrated: true
 Phase_5D_frozen_subjects_on_main: 6/6_MATCH
 Phase_5D_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md
-Phase_5D_postmerge_projection_delivery: PENDING
+Phase_5D_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
+Phase_5D_durability_complete: true
 Phase_5D_implementation_started: false
 Phase_5D_implementation_authorized: false
 ```
 
 ## NOW
 
-### NOW-001: Deliver only the Phase 5D M0-D post-merge durability governance projection
+### NOW-001: Await Jenn's explicit Phase 5D M0-D implementation-start decision
 
-Deliver the receipt, this queue, `CURRENT_STATE.md`, Document/Federated
-Registry projections, and the four default queue pointers in one narrow
-governance-only change. Do not modify frozen Plan subjects or infer
-implementation authority.
+The post-merge durability projection is delivered by this change. Do not infer
+implementation authority from the frozen Plan, PR #32, or this queue; only
+Jenn's explicit, current implementation-start decision may open that boundary.
 
 ```text
 Phase_5D_implementation_started=false
@@ -46,11 +46,11 @@ requires_jenn_implementation_start_decision=true
 
 ## NEXT
 
-### NEXT-001: Jenn's explicit Phase 5D M0-D implementation-start decision
+### NEXT-001: Execute only the separately authorized implementation-start decision
 
-Only after the narrow post-merge durability projection is integrated on `main`
-may Jenn explicitly decide whether to start the frozen Phase 5D implementation
-scope. This queue does not grant that authority.
+If Jenn makes that explicit decision, the resulting scope must remain within
+the frozen Plan and must be separately recorded. This queue does not grant
+implementation, Host, plugin, runtime, database, provider, or effect authority.
 
 ## BLOCKED
 
@@ -72,8 +72,9 @@ Phase_5D_M0D_PLAN_R2_INDEPENDENT_REVIEW=PASS_NO_BLOCKER
 Phase_5D_M0D_PLAN_R2_ATOMIC_FREEZE_DECISION=ACCEPTED_FROZEN
 PR_32_MAINLINE_INTEGRATION=COMPLETE
 Phase_5D_frozen_subjects_on_main=6/6_MATCH
+Phase_5D_POSTMERGE_DURABILITY_PROJECTION=COMPLETE_ON_MAINLINE
 active_work_queue_v16.8=superseded_historical_bytes_preserved
 ```
 
-This queue records that the frozen Plan objects are on `main`; it does not
-start implementation, enable a plugin, or authorize a Host/runtime action.
+This queue records that Phase 5D Plan mainline durability is complete. It does
+not start implementation, enable a plugin, or authorize a Host/runtime action.

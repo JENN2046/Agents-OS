@@ -822,7 +822,7 @@ documents:
     title: AGENTS OS Active Work Queue v16.9
     doc_type: review
     status: active
-    scope: current narrow Phase 5D M0-D post-merge durability governance projection
+    scope: current Phase 5D M0-D plan durability complete state awaiting Jenn implementation-start decision
     canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
     owner: {human: Jenn, agent_steward: Nobao}
     source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
@@ -831,7 +831,7 @@ documents:
     related: [CURRENT_STATE.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml]
     last_reviewed: '2026-07-24'
     review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md
-    freshness: {level: critical, review_trigger: [post-merge projection delivery or explicit Jenn implementation-start decision]}
+    freshness: {level: critical, review_trigger: [superseding durability fact or explicit Jenn implementation-start decision]}
     security_boundary: [narrow governance projection only; no automatic implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
     validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md inspect-queue --json"]}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-review-package-builder","title":"Phase 5C M0-C Post-Freeze Review Package Builder","doc_type":"reference","status":"accepted","scope":"collision-safe successor for the immutable Phase 5C R3 review-package builder","canonical_path":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5c-m0c-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["post-freeze correction evidence or archive-member guard change"]},"security_boundary":["offline review-package construction only; no plan-semantic change VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -m py_compile control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py"]}}

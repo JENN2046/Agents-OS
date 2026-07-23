@@ -70,8 +70,8 @@ archive_delivery_release_deploy_publish_or_tag: false
 
 ## Next Gate
 
-This evidence is ready for one narrow governance-projection delivery: the
-receipt, queue v16.9, state, registry/federated-registry projection, and four
-default queue pointers only. Once that projection is on `main`, the next gate
-is a separate explicit Jenn Phase 5D M0-D implementation-start decision.
+This receipt, queue v16.9, state, registry/federated-registry projection, and
+four default queue pointers are delivered together by this narrow governance
+change. Once it is on `main`, Phase 5D Plan durability is complete and the next
+gate is a separate explicit Jenn Phase 5D M0-D implementation-start decision.
 Nothing starts automatically.
