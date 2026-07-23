@@ -1,0 +1,90 @@
+schema_version: agents-os.implementation-start-preflight.v0.1
+preflight_id: PHASE_5D_M0D_IMPLEMENTATION_START_PREFLIGHT_V0_1
+date: '2026-07-24'
+observed_at: '2026-07-24T04:11:25+08:00'
+owner: Jenn
+agent_steward: Nobao
+result: PASS
+decision_readiness: READY_FOR_JENN_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  independent_review_path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+  independent_review_sha256: 902a9fd3686cfbe95693e272df329282f3b33d44ebb1285edfc37bc3ebf8b068
+  independent_review_result: PASS_NO_BLOCKER
+  freeze_decision_path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+  freeze_decision_sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+  frozen_plan_mainline_merge_commit: be0206cfa925c7c1afa2f0987d19ebcbcbdad3d4
+  postmerge_durability_receipt_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md
+  postmerge_durability_receipt_sha256: 7fddc8cc0a33535fb8e8110eca4097f2cfc70ff566ae1a53d7f65dbb4234435a
+  frozen_plan_objects_on_origin_main: 6/6_MATCH
+
+decision_baseline:
+  repository: JENN2046/Agents-OS
+  origin_main_commit: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+  origin_main_tree: dfba67d067d809593497ae17d08ad271f4a7cbf4
+  postmerge_projection_commit: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+  active_queue_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
+  active_queue_sha256: bb0fbc1237545d539619c2c3965abf85f8cec38acfb06813e2f156d5adb57d61
+  queue_requires_jenn_decision: true
+  queue_promotion_preserves_jenn_decision_gate: true
+
+sealed_host_anchor_consumed_without_host_access:
+  source_authority_root: extensions/agents-os-resident
+  VCPToolBox_sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  sealed_host_commitments: 7/7_MATCH_FROM_FROZEN_PROFILE
+  VCPToolBox_worktree_created_or_inspected: false
+  archive_delivered_or_installed: false
+  plugin_enabled_or_Host_loaded: false
+  lifecycle_or_native_call_invoked: false
+
+implementation_scope_if_Jenn_starts:
+  implementation_branch: agent/phase-5d-m0d-implementation-start
+  first_work_package: WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+  ordered_work_packages:
+    - WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+    - WP1_OWNED_QUARANTINE_TOPOLOGY_AND_PATH_POLICY
+    - WP2_BLOCKED_MANIFEST_PRESERVATION_AND_TRANSIENT_MANIFEST_RULE
+    - WP3_INERT_LIFECYCLE_ONLY_SMOKE_CONTRACT
+    - WP4_CLEANUP_ROLLBACK_AND_RESIDUE_OBSERVATION
+    - WP5_INTEGRATED_SYNTHETIC_PREFLIGHT_WITNESS
+  advancement_rule: direct_predecessor_validation_must_pass
+  skip_or_parallel_advancement: forbidden
+  allowed_create:
+    - extensions/agents-os-resident/tools/prepare-quarantined-host-smoke.mjs
+    - extensions/agents-os-resident/tools/validate-quarantined-host-smoke.mjs
+    - extensions/agents-os-resident/fixtures/quarantined-host-smoke-contract.v0.1.json
+    - extensions/agents-os-resident/tests/quarantined-host-smoke.mjs
+  allowed_modify:
+    - extensions/agents-os-resident/README.md
+    - extensions/agents-os-resident/package-manifest.json
+  mandatory_preservation:
+    - extensions/agents-os-resident/plugin-manifest.json.block
+  deterministic_local_offline_validation_only: true
+  newly_created_owned_temporary_quarantine_roots_only: true
+
+retained_boundaries:
+  VCPToolBox_worktree_read_write_clone_or_checkout_authorized: false
+  archive_delivery_or_installation_authorized: false
+  enabled_plugin_manifest_authorized: false
+  Host_discovery_loading_or_lifecycle_authorized: false
+  processToolCall_native_addon_or_NAPI_authorized: false
+  runtime_service_database_provider_or_production_authentication_authorized: false
+  dependency_or_lockfile_change_authorized: false
+  private_raw_Memory_state_private_sensing_recording_or_real_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  release_deploy_publish_tag_or_force_push_authorized: false
+
+workspace_boundary:
+  unrelated_untracked_work_present: true
+  unrelated_untracked_work_adopted_or_modified: false
+  state_private_or_secret_content_read: false
+  real_runtime_or_external_effect_performed: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
