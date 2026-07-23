@@ -5,7 +5,7 @@ import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 
-import { runBlockedManifestSelfTest, runInertLifecycleSelfTest, runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
+import { runBlockedManifestSelfTest, runCleanupRollbackSelfTest, runInertLifecycleSelfTest, runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
@@ -491,6 +491,14 @@ export function validateQuarantinedHostSmoke(options = {}) {
       errors.push(error('INERT_LIFECYCLE_CONTRACT_UNVERIFIED'));
     }
   }
+  let cleanupRollback = 'NOT_RUN';
+  if (ALLOWED_STAGES.has(stage) && STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf('wp4')) {
+    const cleanupResult = runCleanupRollbackSelfTest();
+    cleanupRollback = cleanupResult.result;
+    if (cleanupResult.result !== 'CLEANUP_ROLLBACK_AND_RESIDUE_VERIFIED') {
+      errors.push(error('CLEANUP_ROLLBACK_CONTRACT_UNVERIFIED'));
+    }
+  }
   const sortedErrors = errors.sort((left, right) => `${left.code}:${left.detail ?? ''}`.localeCompare(`${right.code}:${right.detail ?? ''}`));
   return {
     result: sortedErrors.length === 0 ? STAGE_SUCCESS[stage] : 'BLOCKED',
@@ -503,6 +511,7 @@ export function validateQuarantinedHostSmoke(options = {}) {
     owned_quarantine_topology: topology,
     blocked_manifest_rule: blockedManifest,
     inert_lifecycle_contract: inertLifecycle,
+    cleanup_rollback_contract: cleanupRollback,
     vcptoolbox_worktree_accessed: false,
     archive_delivery_performed: false,
     plugin_enabled: false,

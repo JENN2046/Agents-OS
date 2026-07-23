@@ -211,6 +211,42 @@ export function attemptTransientEnabledManifestCreation(handle) {
   });
 }
 
+export function observeOwnedQuarantineResidue(handle) {
+  const errors = validateHandle(handle);
+  if (errors.length > 0) {
+    return result('BLOCKED', { errors });
+  }
+  const residue = [];
+  const walk = (directory) => {
+    try {
+      for (const entry of readdirSync(directory, { withFileTypes: true })) {
+        const absolute = resolve(directory, entry.name);
+        const path = relative(handle.root, absolute).split(sep).join('/');
+        if (entry.isSymbolicLink()) {
+          errors.push(error('OWNED_QUARANTINE_RESIDUE_SYMLINK_FORBIDDEN', path));
+        } else if (entry.isDirectory()) {
+          walk(absolute);
+        } else if (entry.isFile()) {
+          residue.push(path);
+        } else {
+          errors.push(error('OWNED_QUARANTINE_RESIDUE_KIND_FORBIDDEN', path));
+        }
+      }
+    } catch {
+      errors.push(error('OWNED_QUARANTINE_RESIDUE_UNAVAILABLE'));
+    }
+  };
+  walk(handle.root);
+  return result(errors.length === 0 ? 'OWNED_QUARANTINE_RESIDUE_OBSERVED' : 'BLOCKED', {
+    errors,
+    residual_paths: residue.sort(),
+    root_owned_by_harness: true,
+    archive_delivery_performed: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false
+  });
+}
+
 export function runQuarantineTopologySelfTest() {
   const forbidden = prepareQuarantinedHostSmoke({ root: '/tmp/forbidden' });
   if (forbidden.result !== 'BLOCKED') {
@@ -354,6 +390,42 @@ export function runInertLifecycleSelfTest() {
     native_addon_load_trapped_before_use: true,
     host_lifecycle_invoked: false,
     native_addon_loaded: false
+  });
+}
+
+export function runCleanupRollbackSelfTest() {
+  const prepared = prepareQuarantinedHostSmoke();
+  if (prepared.result !== 'QUARANTINE_CREATED') {
+    return prepared;
+  }
+  const syntheticArtifact = resolve(prepared.handle.root, 'staging', 'synthetic-preflight-artifact.json');
+  try {
+    writeFileSync(syntheticArtifact, '{"synthetic":true,"runtime_usable":false}\n', { flag: 'wx', mode: 0o600 });
+  } catch {
+    cleanupOwnedQuarantine(prepared.handle);
+    return result('BLOCKED', { errors: [error('CLEANUP_ROLLBACK_FAULT_INJECTION_FAILED')] });
+  }
+  const residue = observeOwnedQuarantineResidue(prepared.handle);
+  const expectedResidue = ['quarantine-contract.json', 'staging/synthetic-preflight-artifact.json'];
+  const cleanup = cleanupOwnedQuarantine(prepared.handle);
+  const postCleanupInspection = inspectOwnedQuarantine(prepared.handle);
+  if (
+    residue.result !== 'OWNED_QUARANTINE_RESIDUE_OBSERVED' ||
+    JSON.stringify(residue.residual_paths) !== JSON.stringify(expectedResidue) ||
+    cleanup.result !== 'QUARANTINE_REMOVED' ||
+    postCleanupInspection.result !== 'BLOCKED' ||
+    existsSync(syntheticArtifact)
+  ) {
+    return result('BLOCKED', { errors: [error('CLEANUP_ROLLBACK_SELF_TEST_FAILED')] });
+  }
+  return result('CLEANUP_ROLLBACK_AND_RESIDUE_VERIFIED', {
+    errors: [],
+    residue_observed_before_cleanup: expectedResidue,
+    owned_root_removed: true,
+    post_cleanup_residual_paths: [],
+    archive_delivery_performed: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false
   });
 }
 
