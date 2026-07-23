@@ -292,10 +292,38 @@ def self_test(correction_fixture: Path = DEFAULT_CORRECTION_FIXTURE) -> dict[str
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "fixture_path",
+        nargs="?",
+        type=Path,
+        default=DEFAULT_FIXTURE,
+        help="R2 synthetic witness to validate (default: frozen R2 fixture)",
+    )
+    parser.add_argument(
+        "--plan",
+        type=Path,
+        default=DEFAULT_PLAN,
+        help="Plan header to preflight before historical validation",
+    )
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        default=DEFAULT_PROFILE,
+        help="Immutable R2 profile supplied to the historical validator",
+    )
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--fixture", type=Path, default=DEFAULT_CORRECTION_FIXTURE)
+    parser.add_argument(
+        "--correction-fixture",
+        type=Path,
+        default=DEFAULT_CORRECTION_FIXTURE,
+        help="Synthetic fixture used only by --self-test",
+    )
     args = parser.parse_args(argv)
-    result = self_test(args.fixture) if args.self_test else run()
+    result = (
+        self_test(args.correction_fixture)
+        if args.self_test
+        else run(args.fixture_path, args.plan, args.profile)
+    )
     print(json.dumps(result, ensure_ascii=True, separators=(",", ":"), sort_keys=True))
     return 0 if result.get("result") == "PASS" else 1
 

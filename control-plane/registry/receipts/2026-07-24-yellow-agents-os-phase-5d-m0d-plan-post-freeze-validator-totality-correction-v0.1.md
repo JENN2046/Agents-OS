@@ -22,9 +22,9 @@ frozen_R2_fixture_sha256: 37160f3b298aea5438f57c7f332d7cea1653ffbe245e183d1b292a
 
 ```yaml
 start_decision_sha256: 83cb9dcd05e0cc22b965fb8fd851b5ad2d50c358ad7a2c3ca6339a414219d1b1
-correction_contract_sha256: 2baef02806b6165a2b46eacc46e2e93d0f5fbbd736369d2f26c6719dbe9d155a
+correction_contract_sha256: 7953267b633792ad8858894d2b4fedb1088182bfbfca5f268799a1ed542248b8
 synthetic_fixture_sha256: 26d548350ae5576840fae2b1a76c14a70e8fbf0d2423306f4cdd21c9ab92525a
-guarded_successor_sha256: 5ccf02557636959e553161dccfda140ab21f557e60f6fe790801670cf42121bb
+guarded_successor_sha256: 9af0066159a4e0a6f8559e3764b612cc9fd53638659d6d7d1082f1b261f102d3
 correction_git_delivery_decision_sha256: a6c1cc1a40b4d2e23c94cb729347e6e31459a0ac6cda9b3cb5f0865fb68ebdb2
 ```
 
@@ -40,6 +40,15 @@ duplicate_boundary_key: BLOCK_BEFORE_DELEGATION
 uncaught_exception_count: 0
 runtime_or_external_effect: NOT_EXECUTED
 ```
+
+## Current invocation routing
+
+The frozen R2 validator and its immutable manifest command remain historical
+reproduction evidence only. `CURRENT_STATE.md` and the Document Registry now
+point current callers to the guarded successor, which accepts the normal R2
+fixture positional argument and optional `--plan` / `--profile` paths. An
+unknown, missing, non-mapping, or duplicate `current_boundary` therefore emits
+a JSON `BLOCK` result before historical delegation instead of raising.
 
 ## Delivery boundary
 

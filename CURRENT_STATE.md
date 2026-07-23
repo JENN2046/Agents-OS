@@ -1,6 +1,6 @@
 # AGENTS OS Current State
 
-Date: 2026-07-23
+Date: 2026-07-24
 Status: active reality snapshot
 Owner: Jenn
 Agent steward: Nobao
@@ -44,7 +44,16 @@ Phase_5D_R2_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUND
 Phase_5D_R2_amendment: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
 Phase_5D_R2_immutable_binding_profile: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
 Phase_5D_R2_synthetic_fixture: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
-Phase_5D_R2_validator: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+Phase_5D_R2_frozen_validator_historical_only: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+Phase_5D_R2_frozen_validator_sha256: d2767d569eabc795433530f2490672ce71089d85a49da10454294ff47834ac3f
+Phase_5D_R2_current_validator: control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py
+Phase_5D_R2_current_validator_contract: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md
+Phase_5D_R2_current_validator_usage: required_for_all_current_or_malformed_input_validation
+Phase_5D_R2_frozen_manifest_validator_command: historical_package_reproduction_only
+Phase_5D_R2_frozen_review_package_builder_historical_only: control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+Phase_5D_R2_current_review_package_builder: control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package-explicit-input.py
+Phase_5D_R2_current_review_package_builder_usage: required_for_all_current_or_explicit_input_review_package_builds
+Phase_5D_R2_frozen_manifest_builder_command: historical_package_reproduction_only
 Phase_5D_R2_manifest: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
 Phase_5D_R2_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
 Phase_5D_R2_review_package: /tmp/agents-os-phase-5d-m0d-r2/2026-07-23-agents-os-phase-5d-m0d-plan-r2-review-package-v0.1.zip

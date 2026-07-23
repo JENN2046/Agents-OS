@@ -38,6 +38,24 @@ and preserve its favorable offline result. The successor is an input-totality
 guard only; it does not recalculate Plan semantics or create Host, plugin,
 runtime, database, provider, Memory, sensing, or effect authority.
 
+## Current operational entrypoint
+
+The immutable R2 manifest remains an historical package-reproduction record.
+For every current validation invocation, including an altered or future Plan
+header, callers must use the successor rather than invoke the frozen validator
+directly:
+
+```text
+python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py \
+  [FIXTURE_PATH] [--plan PLAN_PATH] [--profile PROFILE_PATH]
+```
+
+The no-argument form validates the frozen R2 inputs. The successor preserves
+the frozen validator's favorable result for those inputs and returns one JSON
+`BLOCK` object for malformed input without delegating. `--self-test` runs the
+fixed totality regression suite; `--correction-fixture PATH` is available only
+to select that suite's synthetic fixture.
+
 ## Frozen boundary
 
 The R1/R2 subjects, manifests, reviews, decisions, receipts, and original
