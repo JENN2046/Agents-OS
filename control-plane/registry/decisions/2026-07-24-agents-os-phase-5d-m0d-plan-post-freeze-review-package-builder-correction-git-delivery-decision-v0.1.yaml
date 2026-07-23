@@ -1,0 +1,90 @@
+schema_version: agents-os.git-delivery-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1
+record_type: GitDeliveryDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-24T00:15:01+08:00'
+effective_at: '2026-07-24T00:15:01+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: AUTHORIZE_PHASE_5D_M0D_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_PR_32_DELIVERY
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 在 PR #32 中执行这个窄范围 post-freeze builder correction
+  interpreted_scope: preserve_the_immutable_R1_R2_builder_bytes_add_the_guarded_successor_and_deliver_only_the_related_governance_correction_on_PR_32
+  scope_expansion: forbidden
+
+prior_delivery_binding:
+  original_delivery_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+    sha256: 8803bf1182dcd7127d8100575fd782c425038c063fc42d483f36c2fc8b6fc7a5
+    immutable: true
+  relation: additive_narrow_correction_scope
+  original_scope_remains_unchanged: true
+  frozen_plan_mutation: forbidden
+
+frozen_plan_binding:
+  plan_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  plan_manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  plan_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+  correction_start_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml
+    sha256: cdd4a0c1a28d3096485ff1d4909447c6edd2cb264e232470b50e2a4dbc983c27
+
+delivery_binding:
+  remote: git@github.com:JENN2046/Agents-OS.git
+  target_branch: agent/phase-5d-m0d-plan-r1
+  base_branch: main
+  base_commit_before_original_delivery: bc5df3903bd1f591d085538f3480be37c11c0ddc
+  PR_number: 32
+  correction_head_at_record_creation: a957ae0f255f481731b6ab5af9bdbe34edc72a6b
+  permitted_changed_paths:
+    - control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package.py
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml
+    - control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml
+    - control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md
+    - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    - control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json
+    - control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt
+    - control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md
+    - control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py
+
+authorized_actions:
+  create_the_additive_immutable_delivery_record: true
+  register_the_exact_correction_artifacts_and_update_the_federated_count: true
+  run_local_scope_hash_and_registry_validators: true
+  commit_and_push_the_exact_PR_32_branch_without_force: true
+  request_and_track_current_head_review: true
+
+not_authorized:
+  mutate_original_delivery_decision_or_frozen_R1_R2_artifacts: false
+  Phase_5D_plan_semantic_reopen_or_implementation_start: false
+  VCPToolBox_Host_archive_plugin_runtime_database_provider_or_authentication: false
+  private_Memory_state_private_sensing_or_real_effect: false
+  main_merge_force_push_tag_release_deploy_or_publish: false
+
+required_precommit_rechecks:
+  - frozen_R1_R2_builder_bytes_match_their_frozen_manifest_hashes
+  - guarded_successor_rejects_protected_paths_before_payload_read_or_archive_write
+  - correction_artifacts_are_registered_in_the_Document_Registry
+  - Federated_Registry_expected_document_count_matches_the_Document_Registry
+  - combined_original_and_correction_delivery_scopes_cover_the_PR_diff
+  - no_memory_ops_reports_state_private_or_secret_paths_are_staged
+
+next_gate:
+  name: PHASE_5D_PLAN_PR_32_CURRENT_HEAD_REVIEW_CI_AND_JENN_MAIN_MERGE_DECISION
+  automatic_main_merge: forbidden
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_additive_decision_record
+  frozen_plan_subject_mutation: forbidden

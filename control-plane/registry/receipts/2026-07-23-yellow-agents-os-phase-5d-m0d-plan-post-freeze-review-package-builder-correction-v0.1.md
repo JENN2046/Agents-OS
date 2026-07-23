@@ -1,6 +1,6 @@
 # Phase 5D M0-D Plan Post-Freeze Review-Package Builder Correction Receipt v0.1
 
-Date: 2026-07-23
+Date: 2026-07-24
 Result: PASS_FOR_PR_INDEPENDENT_REVIEW
 Scope: post-freeze delivery-integrity correction only
 
@@ -28,6 +28,7 @@ guarded_successor_sha256: 7ce6091dca0002483180317d9b607f73aad018d8558b1b9f1c3028
 synthetic_fixture_sha256: 3197288145f433e5b9b7b96ee539e3672883556f6f1e4842902e3042979d8e36
 synthetic_payload_sha256: f9dd4d436638d5f297b920537a9bf2dc83787424f30b3a13dd5e3925a49c32f6
 offline_validator_sha256: f583fd1de410947c5856111f59e9d92d626a79fdd8c7d5a2a78658856aeda39a
+correction_git_delivery_decision_sha256: 91ace83d45f7768d4b2eb26429455c6a61ae7e2502a9040b011779a6cb25f139
 ```
 
 ## Validation
@@ -41,6 +42,9 @@ guarded_R2_valid_output_equals_historical: PASS
 protected_path_rejections: 12/12_PASS
 protected_path_output_written: 0
 allowed_dotenv_template_over_rejection: 0
+Document_Registry: PASS_1488_DOCUMENTS
+Federated_Registry: PASS_1488_EXPECTED_DOCUMENTS
+additive_PR_32_correction_delivery_scope: PASS
 runtime_or_external_effect: NOT_EXECUTED
 ```
 
@@ -51,3 +55,11 @@ builder can read their payloads or create an archive. It remains local,
 synthetic, runtime-unusable, and does not authorize a Plan reopen, Phase 5D
 implementation, VCPToolBox work, plugin enablement, Host loading, database,
 provider, authentication, private Memory, sensing, or a real effect.
+
+## Additive delivery scope
+
+The immutable original Phase 5D Git-delivery decision remains unchanged. The
+separate correction delivery decision records the only added PR #32 files,
+including this receipt and the two registry projections. Together, the original
+delivery scope and this additive correction scope cover the current PR diff;
+they do not authorize a Plan semantic change, implementation, or main merge.
