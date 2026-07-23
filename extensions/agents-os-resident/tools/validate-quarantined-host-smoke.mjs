@@ -5,7 +5,15 @@ import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 
-import { runBlockedManifestSelfTest, runCleanupRollbackSelfTest, runInertLifecycleSelfTest, runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
+import {
+  activeOwnedQuarantineRootCount,
+  prepareQuarantinedHostSmoke,
+  cleanupOwnedQuarantine,
+  runBlockedManifestSelfTest,
+  runCleanupRollbackSelfTest,
+  runInertLifecycleSelfTest,
+  runQuarantineTopologySelfTest
+} from './prepare-quarantined-host-smoke.mjs';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
@@ -87,6 +95,17 @@ const EXCLUDED_ROOT_NAMES = new Set(['node_modules', 'target']);
 const HEX_40 = /^[0-9a-f]{40}$/;
 const HEX_64 = /^[0-9a-f]{64}$/;
 const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
+const PHASE5D_METADATA = Object.freeze({
+  schema_version: 'agents-os.phase5d.m0d.quarantined-host-smoke-metadata.v0.1',
+  fixture: 'fixtures/quarantined-host-smoke-contract.v0.1.json',
+  prepare: 'tools/prepare-quarantined-host-smoke.mjs',
+  validate: 'tools/validate-quarantined-host-smoke.mjs',
+  test: 'tests/quarantined-host-smoke.mjs',
+  implementation_start_decision_sha256: 'be265db9a8352d404e00e57f9ae9333567639d5d213bdf566280c8f35282385a',
+  runtime_usable: false,
+  host_smoke_execution_authorized: false,
+  terminal_outcome: 'QUARANTINED_HOST_SMOKE_PREFLIGHT_READY'
+});
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -436,6 +455,40 @@ function validateSourceAndBaseline(stage, errors) {
   return { baseline_source_record_count: basePaths.length, current_source_path_count: currentPaths.length };
 }
 
+function validatePhase5DPackageMetadata(errors) {
+  let current;
+  let baseline;
+  try {
+    current = parseJsonWithoutDuplicateKeys(readFileSync(resolve(EXTENSION_ROOT, 'package-manifest.json')));
+  } catch {
+    errors.push(error('CURRENT_PACKAGE_MANIFEST_INVALID_OR_DUPLICATE_KEY'));
+    return;
+  }
+  const baselineBytes = readBaselineFile('package-manifest.json', errors);
+  if (baselineBytes === null) {
+    return;
+  }
+  try {
+    baseline = parseJsonWithoutDuplicateKeys(baselineBytes);
+  } catch {
+    errors.push(error('BASELINE_PACKAGE_MANIFEST_INVALID'));
+    return;
+  }
+  if (!hasExactKeys(current, [...Object.keys(baseline), 'phase5d_m0d_quarantined_host_smoke'])) {
+    errors.push(error('CURRENT_PACKAGE_MANIFEST_SCHEMA_INVALID'));
+    return;
+  }
+  for (const [key, value] of Object.entries(baseline)) {
+    if (!isDeepStrictEqual(current[key], value)) {
+      errors.push(error('BASELINE_PACKAGE_MANIFEST_FIELD_REWRITTEN', key));
+    }
+  }
+  if (!hasExactKeys(current.phase5d_m0d_quarantined_host_smoke, Object.keys(PHASE5D_METADATA)) ||
+      !isDeepStrictEqual(current.phase5d_m0d_quarantined_host_smoke, PHASE5D_METADATA)) {
+    errors.push(error('PHASE5D_PACKAGE_METADATA_INVALID'));
+  }
+}
+
 function validateNoCallerSelectedPaths(options, errors) {
   const permitted = new Set(['stage', 'fixtureBytes']);
   for (const key of Object.keys(options)) {
@@ -499,6 +552,20 @@ export function validateQuarantinedHostSmoke(options = {}) {
       errors.push(error('CLEANUP_ROLLBACK_CONTRACT_UNVERIFIED'));
     }
   }
+  let packageMetadata = 'NOT_RUN';
+  if (ALLOWED_STAGES.has(stage) && STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf('wp5')) {
+    const previousErrorCount = errors.length;
+    validatePhase5DPackageMetadata(errors);
+    packageMetadata = errors.length === previousErrorCount ? 'PHASE5D_METADATA_VERIFIED' : 'BLOCKED';
+  }
+  let integratedWitness = 'NOT_RUN';
+  if (ALLOWED_STAGES.has(stage) && stage === 'wp5') {
+    const witness = runIntegratedQuarantinedHostSmokeWitness();
+    integratedWitness = witness.result;
+    if (witness.result !== 'QUARANTINED_HOST_SMOKE_PREFLIGHT_WITNESS_PASSED') {
+      errors.push(error('INTEGRATED_PREFLIGHT_WITNESS_UNVERIFIED'));
+    }
+  }
   const sortedErrors = errors.sort((left, right) => `${left.code}:${left.detail ?? ''}`.localeCompare(`${right.code}:${right.detail ?? ''}`));
   return {
     result: sortedErrors.length === 0 ? STAGE_SUCCESS[stage] : 'BLOCKED',
@@ -512,12 +579,61 @@ export function validateQuarantinedHostSmoke(options = {}) {
     blocked_manifest_rule: blockedManifest,
     inert_lifecycle_contract: inertLifecycle,
     cleanup_rollback_contract: cleanupRollback,
+    package_metadata: packageMetadata,
+    integrated_witness: integratedWitness,
     vcptoolbox_worktree_accessed: false,
     archive_delivery_performed: false,
     plugin_enabled: false,
     host_lifecycle_invoked: false,
     native_napi_invoked: false,
     runtime_usable: false,
+    terminal_outcome: 'NOT_EXECUTED'
+  };
+}
+
+export function runIntegratedQuarantinedHostSmokeWitness() {
+  const base = validateQuarantinedHostSmoke({ stage: 'wp4' });
+  if (base.result !== 'WP4_CLEANUP_AND_RESIDUE_CONTRACT_VERIFIED') {
+    return { result: 'BLOCKED', errors: [error('WP4_DIRECT_PREDECESSOR_UNVERIFIED')], terminal_outcome: 'NOT_EXECUTED' };
+  }
+  let fixtureBytes;
+  try {
+    fixtureBytes = readFileSync(FIXTURE_PATH);
+  } catch {
+    return { result: 'BLOCKED', errors: [error('FIXTURE_UNAVAILABLE')], terminal_outcome: 'NOT_EXECUTED' };
+  }
+  const duplicate = validateQuarantinedHostSmoke({
+    fixtureBytes: Buffer.concat([fixtureBytes.subarray(0, -2), Buffer.from(',"schema_version":"forged"}\n')])
+  });
+  const sourceSubstitution = validateQuarantinedHostSmoke({
+    fixtureBytes: Buffer.from(fixtureBytes.toString('utf8').replace(BASELINE.source_payload_commit, '0000000000000000000000000000000000000000'))
+  });
+  const callerPath = prepareQuarantinedHostSmoke({ sourceRoot: '/tmp/forbidden' });
+  const validRoot = prepareQuarantinedHostSmoke();
+  const validRootCleanup = validRoot.result === 'QUARANTINE_CREATED'
+    ? cleanupOwnedQuarantine(validRoot.handle)
+    : { result: 'BLOCKED' };
+  if (
+    duplicate.result !== 'BLOCKED' ||
+    sourceSubstitution.result !== 'BLOCKED' ||
+    callerPath.result !== 'BLOCKED' ||
+    validRoot.result !== 'QUARANTINE_CREATED' ||
+    validRootCleanup.result !== 'QUARANTINE_REMOVED' ||
+    activeOwnedQuarantineRootCount() !== 0
+  ) {
+    return { result: 'BLOCKED', errors: [error('INTEGRATED_ADVERSARIAL_OR_CLEANUP_CONTROL_FAILED')], terminal_outcome: 'NOT_EXECUTED' };
+  }
+  return {
+    result: 'QUARANTINED_HOST_SMOKE_PREFLIGHT_WITNESS_PASSED',
+    errors: [],
+    positive_controls: 5,
+    adversarial_controls: 3,
+    active_owned_quarantine_roots: 0,
+    runtime_usable: false,
+    archive_delivery_performed: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false,
+    native_napi_invoked: false,
     terminal_outcome: 'NOT_EXECUTED'
   };
 }

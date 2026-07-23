@@ -429,6 +429,10 @@ export function runCleanupRollbackSelfTest() {
   });
 }
 
+export function activeOwnedQuarantineRootCount() {
+  return ACTIVE_ROOTS.size;
+}
+
 if (process.argv[1] === new URL(import.meta.url).pathname) {
   const args = process.argv.slice(2);
   const output = args.length === 1 && args[0] === '--self-test'
