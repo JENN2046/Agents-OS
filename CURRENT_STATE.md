@@ -6,22 +6,19 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5D M0-D Plan R2 — Accepted and Frozen (2026-07-23)
+## Phase 5D M0-D Offline Implementation — WP0 Active (2026-07-24)
 
-Phase 5D M0-D remains planning-only. R1's immutable independent `BLOCK`
+Phase 5D M0-D Plan R1–R2 remains frozen. R1's immutable independent `BLOCK`
 remains preserved: it found that R1's favorable offline result could survive
 coordinated re-signing of sealed source/Host commitments and current-boundary
 claims. The bounded R2 closure binds the exact immutable source/Host/extension
 commitments, the Plan's current-boundary projection, and duplicate-YAML/identity
-totality. The fresh independent review passed with no blockers, and Jenn has
-now explicitly accepted and frozen the complete R1–R2 six-subject unit. PR #32
-has since merged the frozen objects and bounded post-freeze guards into `main`.
-The post-merge governance projection delivered by this PR marks plan durability
-complete; the next reachable gate is Jenn's explicit implementation-start
-decision, not any automatic Host-facing action.
+totality. After plan durability completed on `main`, Jenn explicitly authorized
+the frozen local offline implementation. The implementation has therefore
+started at WP0 only. Host-facing work remains outside this authorization.
 
 ```yaml
-Phase_5D_status: M0D_PLAN_MAINLINE_DURABILITY_COMPLETE_AWAITING_JENN_IMPLEMENTATION_START_DECISION
+Phase_5D_status: M0D_OFFLINE_IMPLEMENTATION_STARTED_WP0_ACTIVE
 Phase_5D_objective: QUARANTINED_HOST_SMOKE_INTEGRATION_PREFLIGHT_ONLY
 Phase_5D_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
 Phase_5D_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
@@ -89,9 +86,22 @@ Phase_5D_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-2
 Phase_5D_postmerge_durability_receipt_sha256: 7fddc8cc0a33535fb8e8110eca4097f2cfc70ff566ae1a53d7f65dbb4234435a
 Phase_5D_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
 Phase_5D_durability_complete: true
-Phase_5D_implementation_started: false
+Phase_5D_implementation_start_preflight: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml
+Phase_5D_implementation_start_preflight_sha256: 887af67b242af25a8ea7569443d3ff5407253ca71a4106a33097859b88b36fcf
+Phase_5D_implementation_start_decision_package: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-package-v0.1.md
+Phase_5D_implementation_start_decision_package_sha256: 378f74257c22349fc5f41d63f22c341304839bbfa6704fcea26f46f14cdc0672
+Phase_5D_implementation_start_decision: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml
+Phase_5D_implementation_start_decision_sha256: be265db9a8352d404e00e57f9ae9333567639d5d213bdf566280c8f35282385a
+Phase_5D_implementation_start_closeout_receipt: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+Phase_5D_implementation_start_closeout_receipt_sha256: add536ddec100f048879298babf7fa79a431ae1a9080c6df4e4dd4a69640f66a
+Phase_5D_implementation_started: true
+Phase_5D_implementation_authorized: true
+Phase_5D_implementation_branch: agent/phase-5d-m0d-implementation-start
+Phase_5D_current_work_package: WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+Phase_5D_WP0_status: IN_PROGRESS
+Phase_5D_WP1_through_WP5_conditionally_authorized: true
 Phase_5C_implementation_durability_complete: true
-current_work_package: AWAITING_JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
+current_work_package: PHASE_5D_M0D_WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
 VCPToolBox_change_or_start_authorized: false
 clean_Host_worktree_creation_or_inspection_authorized: false
 archive_delivery_or_installation_authorized: false
@@ -99,13 +109,13 @@ plugin_enablement_or_Host_loading_authorized: false
 processToolCall_or_native_addon_loading_authorized: false
 runtime_activation_authorized: false
 database_private_Memory_provider_sensing_or_effect_authorized: false
-implementation_source_change_authorized: false
+implementation_source_change_authorized: true
 Git_delivery_authorized: false
 main_merge_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
-active_work_queue_sha256: bb0fbc1237545d539619c2c3965abf85f8cec38acfb06813e2f156d5adb57d61
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
-next_gate: JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
+active_work_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md
+active_work_queue_sha256: a4db8e91d4f3b04969b8746cf0e6ad5be98217ffea444400b978c9b5a143af32
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md
+next_gate: PHASE_5D_M0D_WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
 ```
 
 ## Phase 5C M0-C Implementation — Mainline Durability Complete (2026-07-23)
