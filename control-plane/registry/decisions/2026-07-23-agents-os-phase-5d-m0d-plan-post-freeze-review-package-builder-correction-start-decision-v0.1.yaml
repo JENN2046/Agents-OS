@@ -1,0 +1,47 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: PHASE_5D_M0D_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_START_DECISION_V0_1
+date: '2026-07-23'
+owner: Jenn
+agent_steward: Nobao
+status: EXECUTED_STRICT_SCOPE
+
+authorization:
+  source: Jenn_current_explicit_instruction
+  instruction: 在 PR #32 中执行这个窄范围 post-freeze builder correction
+  applies_to: PHASE_5D_M0D_PLAN_POST_FREEZE_REVIEW_PACKAGE_BUILDER_CORRECTION_V0_1
+  exact_authorized_scope:
+    - restore_the_historical_R1_and_R2_review_package_builders_to_their_frozen_manifest_hashes
+    - add_a_guarded_successor_for_future_or_re_signed_review_package_builds
+    - reject_protected_or_secret_manifest_source_paths_before_payload_read_or_archive_write
+    - prove_the_guard_and_historical_byte_equivalence_with_an_offline_synthetic_validator
+    - deliver_the_narrow_correction_only_through_PR_32_review
+
+immutable_preconditions:
+  frozen_R2_manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  frozen_R2_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+  historical_R1_builder:
+    path: control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py
+    sha256: de811d192f348af5aff68c631738b51e09cc33aa743d4fafa7dcf74ae6475074
+  historical_R2_builder:
+    path: control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+    sha256: 105a4ee485750c7c4f64f7b872f97e4b5e3d9f03bcc9d191a2d0e2c3c56a361b
+
+prohibitions:
+  frozen_R1_R2_subject_manifest_review_freeze_decision_or_receipt_mutation: forbidden
+  Phase_5D_plan_semantic_reopen_or_new_plan_revision: forbidden
+  Phase_5D_implementation_or_Host_runtime_start: forbidden
+  VCPToolBox_plugin_extension_runtime_database_provider_authentication_private_Memory_sensing_or_real_effect: forbidden
+  production_or_private_data_read: forbidden
+  main_merge_force_push_tag_release_deploy_or_publish: forbidden
+
+completion_gate:
+  required:
+    - historical_R1_R2_builder_hashes_match_their_frozen_manifests
+    - successor_rejects_protected_paths_before_payload_read_or_output_write
+    - valid_successor_outputs_equal_the_historical_builders_byte_for_byte
+    - PR_32_current_head_review_has_no_actionable_blocker
+  automatic_Phase_5D_plan_reopen_or_implementation_start: forbidden
