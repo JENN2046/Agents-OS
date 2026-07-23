@@ -41,6 +41,7 @@ Jenn's explicit, current implementation-start decision may open that boundary.
 Phase_5D_implementation_started=false
 implementation_authorized=false
 runtime_execution_authorized=false
+requires_jenn_decision=true
 requires_jenn_implementation_start_decision=true
 ```
 

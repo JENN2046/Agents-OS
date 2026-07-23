@@ -103,7 +103,7 @@ implementation_source_change_authorized: false
 Git_delivery_authorized: false
 main_merge_authorized: false
 active_work_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
-active_work_queue_sha256: d9665b960062805eefeb3b9cd5baadd306481aa15fbc4dc69c0ad6257ee8e8e4
+active_work_queue_sha256: 10bba099580f1db41bcb856044d701d2a2920dfaaaaf053893afba659f842ad3
 consumer_default_queue_pointer: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
 next_gate: JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
 ```
