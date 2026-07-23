@@ -1,0 +1,83 @@
+schema_version: agents-os.hash-bound-independent-review-package.v0.1
+review_unit:
+  id: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+  precedence:
+    - R1_all_clauses
+
+current_boundary:
+  contract_closure_only: true
+  actual_Host_smoke_execution_authorized: false
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_or_installation: false
+  enabled_manifest_plugin_discovery_or_loading: false
+  Host_lifecycle_initialize_shutdown_processToolCall_native_addon_or_NAPI: false
+  runtime_service_database_dependency_provider_or_production_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+
+subjects:
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md
+    sha256: fb31de51e4a65d9d582416eee5bce36715c11f0710c3222614c148498e951f29
+    role: normative_contract
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml
+    sha256: dd2fc55c16795e4344adcdf1f0267959604b62591475615fcac694b3cf8661bc
+    role: closed_evidence_profile
+  - path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+    sha256: f42ef24739872c080f0c8cfe17e641bfc50b1b46c02944b5dbcfa7635673dce5
+    role: synthetic_fixture
+  - path: control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py
+    sha256: 775577f147f4cba35d8b393d4c22fa8d36e950ea9e600878242ef8df684f1f26
+    role: offline_validator
+
+authority_inputs:
+  - path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    sha256: e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b
+    role: frozen_plan_boundary
+  - path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+    sha256: 3dfadf64e8e717d195ed64361bcf4f9af6d770eb835455e92d017510468b9349
+    role: frozen_immutable_binding_profile
+  - path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md
+    sha256: 98a40879d5c66292c107045c83bba335241b1481df2ffc42eb26b2841ff48ca4
+    role: decision_surface
+  - path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml
+    sha256: ced69081df00ac2b0f1cf86e1b5458c66f2e5ce0447103903b64d03a1539410c
+    role: current_Jenn_start_decision
+  - path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+    sha256: ba83d70c5b9230c725a2077c10ae547415a7729187a7f08ae3028e24f4b5f2d0
+    role: offline_preflight_closeout
+
+author_evidence:
+  - path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml
+    sha256: 6f3f6bde166b1b328c06ba29d8ff5423aba6c05ec89a95c206123607f1743eb2
+    role: author_self_review_not_independent
+
+fixed_commands:
+  - python3 -c "import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml').read_text())"
+  - python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+  - python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py --self-test
+  - python3 -c "import json,pathlib; json.loads(pathlib.Path('control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json').read_text())"
+
+independent_review_requirements:
+  hashes: 10/10_MATCH
+  subjects_fully_read: 4/4
+  authority_inputs_fully_read: 5/5
+  author_evidence_read: 1/1
+  fixed_commands: 4/4_PASS
+  partial_review: forbidden
+  must_attack:
+    - unknown_or_missing_fixture_and_case_fields
+    - duplicate_JSON_keys
+    - non_synthetic_reference_or_same_revision_rewrite_claim
+    - runtime_or_actual_Host_authorization_true
+    - missing_or_substituted_owner_contract_section
+    - synthetic_evidence_claimed_as_owner_issued_or_runtime_usable
+    - attempt_to_treat_missing_owner_contract_as_execution_eligible
+  allowed_results:
+    - PASS_NO_BLOCKER
+    - BLOCK
+
+stop_rule:
+  after_author_package: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  actual_Host_smoke_execution: forbidden

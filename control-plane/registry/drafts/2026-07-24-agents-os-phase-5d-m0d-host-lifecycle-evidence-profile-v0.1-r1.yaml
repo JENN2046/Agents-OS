@@ -1,0 +1,69 @@
+schema_version: agents-os.phase5d.m0d.host-lifecycle-evidence-profile.v0.1-r1
+profile_id: PHASE_5D_M0D_HOST_LIFECYCLE_EVIDENCE_PROFILE_V0_1_R1
+status: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+contract_id: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_V0_1_R1
+current_execution_eligibility: false
+runtime_usable: false
+actual_host_smoke_execution_authorized: false
+
+closed_fixture_root_fields:
+  - schema_version
+  - contract_path
+  - contract_sha256
+  - profile_path
+  - profile_sha256
+  - cases
+
+closed_case_fields:
+  - case_id
+  - evidence_class
+  - owner_contract
+  - expected_result
+  - runtime_usable
+  - actual_host_smoke_execution_authorized
+  - expected_host_operation_count
+
+owner_contract_tuple:
+  required_fields:
+    - owner_contract_ref
+    - owner_contract_revision
+    - owner_contract_sha256
+    - sections
+  closed_section_names:
+    - host_discovery
+    - initialize
+    - shutdown
+    - quarantine_cleanup
+  section_required_fields:
+    - section_ref
+    - section_revision
+    - section_sha256
+    - expected_outcome
+  ref_rule: strict_JSON_string_nonempty_NFC
+  revision_rule: positive_safe_integer
+  sha256_rule: lowercase_64_hex
+
+current_allowed_evidence_classes:
+  - NONE
+  - SYNTHETIC_TEST_ONLY
+
+current_allowed_results:
+  - BLOCKED_MISSING_HASH_BOUND_HOST_LIFECYCLE_CONTRACT
+  - SYNTHETIC_CONTRACT_SHAPE_VALIDATED
+
+cross_field_rules:
+  - NONE_requires_null_owner_contract
+  - NONE_requires_BLOCKED_MISSING_HASH_BOUND_HOST_LIFECYCLE_CONTRACT
+  - SYNTHETIC_TEST_ONLY_requires_synthetic_namespace_for_all_refs
+  - SYNTHETIC_TEST_ONLY_requires_SYNTHETIC_CONTRACT_SHAPE_VALIDATED
+  - all_cases_require_runtime_usable_false
+  - all_cases_require_actual_host_smoke_execution_authorized_false
+  - all_cases_require_expected_host_operation_count_zero
+  - unknown_or_missing_field_result_BLOCKED
+
+forbidden_claims:
+  - owner_issued_Host_contract_present
+  - Host_discovery_or_lifecycle_authorized
+  - archive_delivery_or_enabled_manifest_authorized
+  - processToolCall_native_addon_or_NAPI_authorized
+  - runtime_database_provider_private_Memory_sensing_recording_or_effect_authorized

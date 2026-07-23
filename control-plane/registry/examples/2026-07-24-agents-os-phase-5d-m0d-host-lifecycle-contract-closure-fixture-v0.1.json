@@ -1,0 +1,57 @@
+{
+  "schema_version": "agents-os.phase5d.m0d.host-lifecycle-contract-closure-fixture.v0.1-r1",
+  "contract_path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md",
+  "contract_sha256": "fb31de51e4a65d9d582416eee5bce36715c11f0710c3222614c148498e951f29",
+  "profile_path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml",
+  "profile_sha256": "dd2fc55c16795e4344adcdf1f0267959604b62591475615fcac694b3cf8661bc",
+  "cases": [
+    {
+      "case_id": "MISSING_OWNER_CONTRACT",
+      "evidence_class": "NONE",
+      "owner_contract": null,
+      "expected_result": "BLOCKED_MISSING_HASH_BOUND_HOST_LIFECYCLE_CONTRACT",
+      "runtime_usable": false,
+      "actual_host_smoke_execution_authorized": false,
+      "expected_host_operation_count": 0
+    },
+    {
+      "case_id": "SYNTHETIC_SCHEMA_SHAPE_ONLY",
+      "evidence_class": "SYNTHETIC_TEST_ONLY",
+      "owner_contract": {
+        "owner_contract_ref": "synthetic:phase5d:owner-contract:1",
+        "owner_contract_revision": 1,
+        "owner_contract_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "sections": {
+          "host_discovery": {
+            "section_ref": "synthetic:phase5d:host-discovery:1",
+            "section_revision": 1,
+            "section_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+            "expected_outcome": "SYNTHETIC_HOST_DISCOVERY_ONLY"
+          },
+          "initialize": {
+            "section_ref": "synthetic:phase5d:initialize:1",
+            "section_revision": 1,
+            "section_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+            "expected_outcome": "INITIALIZED_FALSE"
+          },
+          "shutdown": {
+            "section_ref": "synthetic:phase5d:shutdown:1",
+            "section_revision": 1,
+            "section_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+            "expected_outcome": "SHUTDOWN_TRUE"
+          },
+          "quarantine_cleanup": {
+            "section_ref": "synthetic:phase5d:quarantine-cleanup:1",
+            "section_revision": 1,
+            "section_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+            "expected_outcome": "OWNED_ROOT_REMOVED"
+          }
+        }
+      },
+      "expected_result": "SYNTHETIC_CONTRACT_SHAPE_VALIDATED",
+      "runtime_usable": false,
+      "actual_host_smoke_execution_authorized": false,
+      "expected_host_operation_count": 0
+    }
+  ]
+}

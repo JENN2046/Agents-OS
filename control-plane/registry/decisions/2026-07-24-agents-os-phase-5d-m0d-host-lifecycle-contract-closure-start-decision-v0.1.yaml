@@ -1,0 +1,60 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-24T06:01:38+08:00'
+effective_at: '2026-07-24T06:01:38+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_NARROW_PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: >-
+    启动窄范围的 Host lifecycle contract closure，只补齐可审查的 Host discovery /
+    initialize / shutdown / quarantine cleanup 精确合同。
+  decision_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md
+    sha256: 98a40879d5c66292c107045c83bba335241b1481df2ffc42eb26b2841ff48ca4
+    section: 6_A
+  scope_expansion: forbidden
+
+bound_preconditions:
+  frozen_plan_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  implementation_closeout_receipt_sha256: ba83d70c5b9230c725a2077c10ae547415a7729187a7f08ae3028e24f4b5f2d0
+  current_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md
+  current_queue_sha256: 744e513f9a36bfa87669d2c21b843e0eb1e18499aef13687752946bc3663ee51
+  offline_terminal_outcome: NOT_EXECUTED
+
+authorized_scope:
+  create_or_modify_only:
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml
+    - control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+    - control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py
+    - control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md
+    - narrow_start_and_review_governance_projections
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_actual_Host_smoke_execution: forbidden
+
+not_authorized:
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_or_installation: false
+  enabled_manifest_plugin_discovery_or_loading: false
+  Host_lifecycle_initialize_shutdown_processToolCall_native_addon_or_NAPI: false
+  runtime_service_database_dependency_provider_or_production_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_phase_or_actual_Host_smoke_start: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision_record
+  actual_Host_smoke_requires: a_new_current_Jenn_execution_decision_after_independent_review
