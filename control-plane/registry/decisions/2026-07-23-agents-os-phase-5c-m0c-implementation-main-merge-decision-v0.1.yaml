@@ -1,0 +1,84 @@
+schema_version: agents-os.mainline-merge-decision-record.v0.1
+record_id: agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1
+record_type: MainlineMergeDecisionRecord
+status: accepted_conditional
+immutable: true
+created_at: '2026-07-23T08:56:11+08:00'
+effective_at: '2026-07-23T08:56:11+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: AUTHORIZE_PR_30_MAINLINE_MERGE_WHEN_CURRENT_HEAD_PRECONDITIONS_ARE_SATISFIED
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received:
+    - 持续跟踪PR
+    - 直到合并为止
+  interpreted_scope: track_PR_30_fix_in_scope_review_or_CI_feedback_and_merge_to_main_only_after_all_declared_preconditions_hold
+  scope_expansion: forbidden
+
+delivery_binding:
+  git_delivery_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-git-delivery-decision-v0.1.yaml
+    sha256: d712a7c80240f214fde265ae85695715079850facc9eb66eeeb036ad6e2fe3bd
+  remote: git@github.com:JENN2046/Agents-OS.git
+  PR_number: 30
+  PR_url: https://github.com/JENN2046/Agents-OS/pull/30
+  implementation_branch: agent/phase-5c-m0c-implementation
+  target_branch: main
+  base_commit_before_review_fixes: 19ea75f000430803bcc38aa7218e8204d0827b80
+  reviewed_head_before_current_review_fixes: 1a3453d8cd35b270fb96956f7474996180ec3eb5
+  final_head_binding: final_PR_head_must_be_rechecked_immediately_before_merge
+
+frozen_implementation_binding:
+  plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  implementation_start_decision_sha256: be67f58d4223dde54daa58cb0dc702a0fe765b8de62865d8b9477bf880b65955
+  implementation_closeout_receipt_sha256: edf82f3d87ed1c7480c82ff60e355af88b8fb6ddd31953f20bca959aee28c0b9
+  source_payload_commit: 0305e918f938d6b2092b38d6af57a258ae814096
+
+authorized_actions:
+  track_PR_30_and_recheck_current_head: true
+  fix_actionable_in_scope_review_or_CI_feedback: true
+  commit_and_push_exact_in_scope_fixes: true
+  resolve_addressed_PR_review_threads: true
+  merge_PR_30_to_main_when_preconditions_hold: true
+  fetch_and_verify_origin_main_after_merge: true
+
+merge_preconditions:
+  PR_state: OPEN
+  draft: false
+  final_head_self_review: PASS
+  final_head_has_no_actionable_unresolved_review_thread: true
+  review_decision_not_changes_requested: true
+  all_configured_status_checks: TERMINAL_SUCCESS_OR_NONE_CONFIGURED
+  mergeability: CLEAN_AND_MERGEABLE
+  final_head_matches_reviewed_and_validated_local_commit: true
+  main_does_not_trigger_release_deploy_or_publish: true
+  merge_method: repository_normal_merge_commit
+
+not_authorized:
+  implementation_source_scope_expansion: false
+  VCPToolBox_core_change_or_start: false
+  plugin_enablement_or_native_host_load: false
+  runtime_activation_or_service_start: false
+  database_creation_or_access: false
+  provider_or_production_authentication: false
+  private_Memory_or_state_private_access: false
+  sensing_or_real_effect: false
+  archive_delivery_release_deploy_or_publish: false
+  force_push_tag_or_history_rewrite: false
+
+post_merge_requirement:
+  verify_merged_PR_state_and_merge_commit: true
+  fetch_origin_and_verify_local_main_equals_origin_main: true
+  verify_bound_governance_and_source_blobs_on_main: true
+  create_followup_post_merge_durability_receipt_only_on_a_separately_scoped_safe_delivery_path: true
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  frozen_plan_or_implementation_subject_mutation: forbidden

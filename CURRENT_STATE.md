@@ -6,19 +6,19 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5C M0-C Implementation — Delivery Scope Reconciliation and PR Tracking (2026-07-23)
+## Phase 5C M0-C Implementation — P2 Review Fix and Conditional Mainline Merge Tracking (2026-07-23)
 
 Jenn explicitly started the frozen Phase 5C M0-C offline plugin-packaging and
 sealed-host-compatibility implementation. The start closeout binds the Plan R4
 freeze, independent review, mainline durability evidence and sealed seven-path
 VCPToolBox preflight. WP0 through WP6 and the local closeout have passed their
-direct gates. Jenn has now authorized only the existing PR #30 Git-delivery
-governance reconciliation and current-head review tracking. The implementation
-bytes remain frozen for this correction; runtime activation, archive delivery,
-Host loading and main merge remain unauthorized.
+direct gates. Jenn has authorized PR #30 tracking through a normal mainline
+merge only after its final current-head review, CI and mergeability conditions
+hold. The implementation bytes remain frozen; runtime activation, archive
+delivery and Host loading remain unauthorized.
 
 ```yaml
-Phase_5C_status: M0C_IMPLEMENTATION_GIT_DELIVERY_SCOPE_RECONCILIATION_AND_PR30_TRACKING
+Phase_5C_status: M0C_PR30_REVIEW_FIX_AND_CONDITIONAL_MAIN_MERGE_TRACKING
 Phase_5C_plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
 Phase_5C_plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
 Phase_5C_plan_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
@@ -71,10 +71,13 @@ Phase_5C_implementation_closeout_receipt_sha256: edf82f3d87ed1c7480c82ff60e355af
 Phase_5C_implementation_closeout: PASS_COMPLETE
 Phase_5C_Git_delivery_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-git-delivery-decision-v0.1.yaml
 Phase_5C_Git_delivery_decision_sha256: d712a7c80240f214fde265ae85695715079850facc9eb66eeeb036ad6e2fe3bd
+Phase_5C_main_merge_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml
+Phase_5C_main_merge_decision_sha256: 779873ec2ab033861543fc645dd28ea8b75c25cbbc4ac102d2a9ab11992bec61
 Phase_5C_PR_number: 30
 Phase_5C_PR_url: https://github.com/JENN2046/Agents-OS/pull/30
 Phase_5C_PR_head_before_reconciliation: ab647aa7fb4a8f5ca9868b54c4543a35b56b623b
-current_work_package: PHASE_5C_M0C_GIT_DELIVERY_SCOPE_RECONCILIATION_AND_PR30_TRACKING
+Phase_5C_PR_P2_WP1_registry_replay_command: FIXED_LOCAL_PENDING_CURRENT_HEAD_REVIEW
+current_work_package: PHASE_5C_M0C_PR30_REVIEW_FIX_AND_CONDITIONAL_MAIN_MERGE
 WP0_start_authorized: true
 WP1_through_WP6_conditionally_authorized: true
 VCPToolBox_change_or_start_authorized: false
@@ -84,10 +87,11 @@ database_private_Memory_provider_sensing_or_effect_authorized: false
 Git_delivery_authorized: true
 Git_delivery_scope: EXISTING_PR_30_GOVERNANCE_PROJECTION_RECONCILIATION_AND_REVIEW_TRACKING_ONLY
 Phase_5C_implementation_source_change_authorized: false
-main_merge_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.0.md
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.0.md
-next_gate: PR_30_CURRENT_HEAD_REVIEW_CI_AND_JENN_MERGE_DECISION
+main_merge_authorized: true
+main_merge_authorization: CONDITIONAL_ON_CURRENT_HEAD_REVIEW_CI_AND_MERGEABILITY
+active_work_queue: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md
+next_gate: PR_30_CURRENT_HEAD_REVIEW_CI_AND_CONDITIONAL_MAIN_MERGE
 ```
 
 ## Phase 5C M0-C Plan R4 Independent Review Passed (2026-07-22)
