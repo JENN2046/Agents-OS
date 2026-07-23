@@ -170,6 +170,43 @@ export function cleanupOwnedQuarantine(handle) {
   }
 }
 
+export function enforceBlockedManifestRule(handle) {
+  const errors = validateHandle(handle);
+  if (errors.length > 0) {
+    return result('BLOCKED', { errors });
+  }
+  try {
+    const transient = resolve(handle.root, 'transient');
+    const transientEntries = readdirSync(transient).sort();
+    if (transientEntries.length !== 0 || existsSync(resolve(handle.root, 'plugin-manifest.json'))) {
+      errors.push(error('TRANSIENT_ENABLED_MANIFEST_OR_RESIDUE_FORBIDDEN'));
+    }
+  } catch {
+    errors.push(error('TRANSIENT_MANIFEST_BOUNDARY_UNAVAILABLE'));
+  }
+  return result(errors.length === 0 ? 'BLOCKED_MANIFEST_RULE_VERIFIED' : 'BLOCKED', {
+    errors,
+    workspace_enabled_manifest: false,
+    transient_enabled_manifest_created: false,
+    archive_delivery_performed: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false
+  });
+}
+
+export function attemptTransientEnabledManifestCreation(handle) {
+  const errors = validateHandle(handle);
+  if (errors.length > 0) {
+    return result('BLOCKED', { errors });
+  }
+  return result('BLOCKED', {
+    errors: [error('FUTURE_JENN_ENABLEMENT_GATE_REQUIRED')],
+    transient_enabled_manifest_created: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false
+  });
+}
+
 export function runQuarantineTopologySelfTest() {
   const forbidden = prepareQuarantinedHostSmoke({ root: '/tmp/forbidden' });
   if (forbidden.result !== 'BLOCKED') {
@@ -192,6 +229,34 @@ export function runQuarantineTopologySelfTest() {
     archive_delivery_performed: false,
     plugin_enabled: false,
     host_lifecycle_invoked: false
+  });
+}
+
+export function runBlockedManifestSelfTest() {
+  const prepared = prepareQuarantinedHostSmoke();
+  if (prepared.result !== 'QUARANTINE_CREATED') {
+    return prepared;
+  }
+  const boundary = enforceBlockedManifestRule(prepared.handle);
+  const denied = attemptTransientEnabledManifestCreation(prepared.handle);
+  const inspected = inspectOwnedQuarantine(prepared.handle);
+  const cleaned = cleanupOwnedQuarantine(prepared.handle);
+  if (
+    boundary.result !== 'BLOCKED_MANIFEST_RULE_VERIFIED' ||
+    denied.result !== 'BLOCKED' ||
+    !denied.errors.some((item) => item.code === 'FUTURE_JENN_ENABLEMENT_GATE_REQUIRED') ||
+    inspected.result !== 'QUARANTINE_CREATED' ||
+    cleaned.result !== 'QUARANTINE_REMOVED'
+  ) {
+    return result('BLOCKED', { errors: [error('BLOCKED_MANIFEST_SELF_TEST_FAILED')] });
+  }
+  return result('BLOCKED_MANIFEST_RULE_VERIFIED', {
+    errors: [],
+    workspace_enabled_manifest: false,
+    transient_enabled_manifest_created: false,
+    plugin_enabled: false,
+    host_lifecycle_invoked: false,
+    owned_root_cleanup_verified: true
   });
 }
 

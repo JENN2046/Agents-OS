@@ -5,7 +5,7 @@ import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 
-import { runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
+import { runBlockedManifestSelfTest, runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
@@ -475,6 +475,14 @@ export function validateQuarantinedHostSmoke(options = {}) {
       errors.push(error('OWNED_QUARANTINE_TOPOLOGY_UNVERIFIED'));
     }
   }
+  let blockedManifest = 'NOT_RUN';
+  if (ALLOWED_STAGES.has(stage) && STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf('wp2')) {
+    const manifestResult = runBlockedManifestSelfTest();
+    blockedManifest = manifestResult.result;
+    if (manifestResult.result !== 'BLOCKED_MANIFEST_RULE_VERIFIED') {
+      errors.push(error('BLOCKED_MANIFEST_RULE_UNVERIFIED'));
+    }
+  }
   const sortedErrors = errors.sort((left, right) => `${left.code}:${left.detail ?? ''}`.localeCompare(`${right.code}:${right.detail ?? ''}`));
   return {
     result: sortedErrors.length === 0 ? STAGE_SUCCESS[stage] : 'BLOCKED',
@@ -485,6 +493,7 @@ export function validateQuarantinedHostSmoke(options = {}) {
     current_source_paths: `${source.current_source_path_count}/${source.current_source_path_count}_CLOSED`,
     sealed_host_commitments: '7/7_STATIC_TUPLE_MATCH',
     owned_quarantine_topology: topology,
+    blocked_manifest_rule: blockedManifest,
     vcptoolbox_worktree_accessed: false,
     archive_delivery_performed: false,
     plugin_enabled: false,
