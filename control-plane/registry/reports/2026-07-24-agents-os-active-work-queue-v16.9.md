@@ -53,6 +53,12 @@ If Jenn makes that explicit decision, the resulting scope must remain within
 the frozen Plan and must be separately recorded. This queue does not grant
 implementation, Host, plugin, runtime, database, provider, or effect authority.
 
+```text
+decision_owner=Jenn
+requires_jenn_decision=true
+requires_jenn_implementation_start_decision=true
+```
+
 ## BLOCKED
 
 ```text
