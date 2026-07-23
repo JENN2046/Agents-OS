@@ -235,7 +235,573 @@ documents:
   - {"id":"agents-os-phase-5c-m0c-implementation-main-merge-decision","title":"Phase 5C M0-C Implementation Main Merge Decision v0.1","doc_type":"decision_record","status":"accepted","scope":"Jenn conditional authorization to merge PR #30 after its final current-head review, checks and mergeability conditions","canonical_path":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["CURRENT_STATE.md","control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-git-delivery-decision-v0.1.yaml","control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md"],"last_reviewed":"2026-07-23","review_by":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision or PR #30 precondition correction"]},"security_boundary":["conditional normal PR #30 merge only; no implementation source expansion runtime VCPToolBox database provider private Memory sensing effect release deploy or publish authority"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml').read_text())\""]}}
   - {"id":"agents-os-active-work-queue-v16.1","title":"AGENTS OS Active Work Queue v16.1","doc_type":"review","status":"superseded","scope":"historical Phase 5C M0-C PR #30 P2 replay-command correction and conditional current-head main-merge tracking","canonical_path":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md","supersedes":["control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.0.md"],"superseded_by":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md","related":["CURRENT_STATE.md","control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml","control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md"],"last_reviewed":"2026-07-23","review_by":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","freshness":{"level":"critical","review_trigger":["historical projection correction only"]},"security_boundary":["historical PR #30 integration tracking only; no implementation source expansion runtime VCPToolBox database provider private Memory sensing effect release deploy or publish authority"],"validation":{"commands":["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md inspect-queue --json"]}}
   - {"id":"agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout","title":"Phase 5C M0-C Implementation Post-Merge Durability Closeout Receipt v0.1","doc_type":"receipt","status":"accepted","scope":"PR #30 normal mainline integration, P2 review closure and bound mainline blob verification for the completed frozen implementation","canonical_path":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","supersedes":[],"superseded_by":null,"related":["CURRENT_STATE.md","control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml","control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md"],"last_reviewed":"2026-07-23","review_by":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","freshness":{"level":"critical","review_trigger":["mainline hash divergence, PR #30 evidence correction or superseding governance decision"]},"security_boundary":["post-merge governance evidence only; no implementation source change VCPToolBox runtime database provider private Memory sensing effect release deploy or publish authority"],"validation":{"commands":["sha256sum control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md"]}}
-  - {"id":"agents-os-active-work-queue-v16.2","title":"AGENTS OS Active Work Queue v16.2","doc_type":"review","status":"active","scope":"Phase 5C M0-C implementation mainline durability complete awaiting Jenn explicit next-stage decision","canonical_path":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md","supersedes":["control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md"],"superseded_by":null,"related":["CURRENT_STATE.md","control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-main-merge-decision-v0.1.yaml"],"last_reviewed":"2026-07-23","review_by":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","freshness":{"level":"critical","review_trigger":["superseding Jenn next-stage decision or post-merge evidence correction"]},"security_boundary":["post-merge governance projection only; no implementation source expansion runtime VCPToolBox database provider private Memory sensing effect release deploy or publish authority"],"validation":{"commands":["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md inspect-queue --json"]}}
+  - {"id":"agents-os-active-work-queue-v16.2","title":"AGENTS OS Active Work Queue v16.2","doc_type":"review","status":"superseded","scope":"historical Phase 5C M0-C implementation mainline durability closeout awaiting Jenn next-stage decision","canonical_path":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md","supersedes":["control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.1.md"],"superseded_by":"control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md","related":["CURRENT_STATE.md","control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md","control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml"],"last_reviewed":"2026-07-23","review_by":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["historical projection correction only"]},"security_boundary":["historical governance projection only; no VCPToolBox runtime database provider private Memory sensing effect release deploy or publish authority"],"validation":{"commands":["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md inspect-queue --json"]}}
+  - id: agents-os-phase-5d-m0d-plan-r1-start-decision
+    title: Phase 5D M0-D Plan R1 Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: Jenn authorization for Phase 5D planning artifacts only
+    canonical_path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [scope correction]}
+    security_boundary: [planning only; no VCPToolBox worktree Host loading runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r1
+    title: Phase 5D M0-D Quarantined Host Smoke Integration Plan R1
+    doc_type: reference
+    status: accepted
+    scope: immutable accepted R1 plan subject under the R2 through R1 freeze precedence
+    canonical_path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent finding]}
+    security_boundary: [no Host worktree delivery enablement native load runtime database provider private Memory sensing or effect]
+    validation: {commands: [git diff --check]}
+  - id: agents-os-phase-5d-m0d-build-profile-r1
+    title: Phase 5D M0-D Quarantined Host Smoke Build Profile R1
+    doc_type: reference
+    status: accepted
+    scope: immutable accepted R1 build-profile subject under the R2 through R1 freeze precedence
+    canonical_path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent finding]}
+    security_boundary: [profile does not authorize Host or implementation]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r1-witness-builder
+    title: Phase 5D M0-D Plan R1 Witness Builder
+    doc_type: reference
+    status: draft
+    scope: deterministic synthetic plan-only witness builder
+    canonical_path: control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [subject change]}
+    security_boundary: [offline synthetic builder only]
+    validation: {commands: ["python3 control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py /tmp/agents-os-phase-5d-m0d-witness.json"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-witness
+    title: Phase 5D M0-D Plan R1 Synthetic Witness
+    doc_type: reference
+    status: draft
+    scope: fixed non-runtime quarantined Host smoke preflight witness
+    canonical_path: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [subject change]}
+    security_boundary: [synthetic runtime-unusable evidence only]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-validator
+    title: Phase 5D M0-D Plan R1 Offline Validator
+    doc_type: reference
+    status: draft
+    scope: closed-schema offline semantic validation for the plan witness
+    canonical_path: control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [subject change]}
+    security_boundary: [offline validation; no Host or external effects]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json --self-test"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-review-package-builder
+    title: Phase 5D M0-D Plan R1 Review Package Builder
+    doc_type: reference
+    status: draft
+    scope: deterministic no-Git independent-review archive builder
+    canonical_path: control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [archive mapping or source hash change]}
+    security_boundary: [offline archive construction only]
+    validation: {commands: ["python3 -m py_compile control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-author-self-review
+    title: Phase 5D M0-D Plan R1 Author Self Review
+    doc_type: review
+    status: accepted
+    scope: non-independent author evidence for the fixed plan package
+    canonical_path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review]}
+    security_boundary: [not independent; not acceptance or execution authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r1-review-manifest
+    title: Phase 5D M0-D Plan R1 Atomic Review Manifest
+    doc_type: reference
+    status: draft
+    scope: 22-input hash-bound independent review unit
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [input byte change]}
+    security_boundary: [review package only; no automatic freeze or Host action]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-review-package
+    title: Phase 5D M0-D Plan R1 Atomic Independent Review Package
+    doc_type: review
+    status: draft
+    scope: fresh full atomic independent review instructions
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review]}
+    security_boundary: [no automatic freeze implementation Host loading or runtime]
+    validation: {commands: [git diff --check]}
+  - id: agents-os-active-work-queue-v16.3
+    title: AGENTS OS Active Work Queue v16.3
+    doc_type: review
+    status: superseded
+    scope: Phase 5D M0-D Plan R1 fresh full atomic independent review gate
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md]
+    superseded_by: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review or Jenn plan-freeze decision]}
+    security_boundary: [planning review only; no VCPToolBox Host archive runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-independent-review
+    title: Phase 5D M0-D Plan R1 Full Atomic Independent Review
+    doc_type: review
+    status: blocked
+    scope: immutable external independent review finding three plan-only closure blockers
+    canonical_path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json, control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [R2 start decision or fixed-review byte correction]}
+    security_boundary: [read-only offline review; no Host worktree plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r1-independent-case-results
+    title: Phase 5D M0-D Plan R1 Independent Adversarial Case Results
+    doc_type: reference
+    status: blocked
+    scope: immutable fully-resigned offline attack evidence for R1 BLOCK
+    canonical_path: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [review byte correction only]}
+    security_boundary: [offline review evidence only; no implementation or Host authority]
+    validation: {commands: ["python3 -m json.tool control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json"]}
+  - id: agents-os-phase-5d-m0d-plan-r1-finding-disposition
+    title: Phase 5D M0-D Plan R1 Independent Review Finding Disposition
+    doc_type: decision_record
+    status: accepted
+    scope: reconciles R1 BLOCK and reserves a Jenn-only narrow R2 decision
+    canonical_path: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [Jenn R2 start decision or immutable review correction]}
+    security_boundary: [governance reconciliation only; no plan freeze implementation Host runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml').read_text())\""]}
+  - id: agents-os-active-work-queue-v16.4
+    title: AGENTS OS Active Work Queue v16.4
+    doc_type: review
+    status: superseded
+    scope: Phase 5D M0-D R1 BLOCK reconciliation and Jenn-only R2 decision gate
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md]
+    superseded_by: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md
+    related: [CURRENT_STATE.md, control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml, control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [Jenn R2 decision or independent review correction]}
+    security_boundary: [R2 decision gate only; no VCPToolBox Host archive runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-start-decision
+    title: Phase 5D M0-D Plan R2 Narrow Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: Jenn authorization limited to the three R1 independent-review blockers
+    canonical_path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml, control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [scope expansion or superseding Jenn decision]}
+    security_boundary: [R2 planning closure only; no VCPToolBox worktree archive delivery plugin enablement Host loading native load processToolCall runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r2-amendment
+    title: Phase 5D M0-D Quarantined Host Smoke Integration Plan R2 Amendment
+    doc_type: contract
+    status: accepted
+    scope: immutable accepted R2 amendment subject binding sealed commitments and current-boundary semantics
+    canonical_path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review or bound-input change]}
+    security_boundary: [plan only; no Host worktree archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: [git diff --check]}
+  - id: agents-os-phase-5d-m0d-plan-r2-immutable-binding-profile
+    title: Phase 5D M0-D Immutable Binding Profile R2
+    doc_type: reference
+    status: accepted
+    scope: immutable accepted R2 source Host extension and plan-boundary commitment inventory
+    canonical_path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md, control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [sealed input or independent review change]}
+    security_boundary: [offline immutable binding evidence only; no Host access or implementation authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r2-witness-builder
+    title: Phase 5D M0-D Plan R2 Witness Builder
+    doc_type: reference
+    status: review_needed
+    scope: deterministic synthetic offline witness construction
+    canonical_path: control-plane/registry/build-phase-5d-m0d-plan-r2-witness.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-phase-5d-m0d-plan-r2-witness.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [subject byte or deterministic output change]}
+    security_boundary: [synthetic offline builder only; no Host or external execution]
+    validation: {commands: ["python3 control-plane/registry/build-phase-5d-m0d-plan-r2-witness.py /tmp/agents-os-phase-5d-m0d-plan-r2-witness.json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-witness
+    title: Phase 5D M0-D Plan R2 Synthetic Witness
+    doc_type: example
+    status: accepted
+    scope: immutable accepted R2 non-runtime witness for exact binding checks
+    canonical_path: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py, control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md
+    freshness: {level: critical, review_trigger: [builder or validator change]}
+    security_boundary: [synthetic runtime-unusable evidence only]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-validator
+    title: Phase 5D M0-D Plan R2 Offline Validator
+    doc_type: reference
+    status: superseded
+    lifecycle_transition: {from: accepted, to: superseded}
+    scope: immutable historical R2 duplicate-safe exact binding and current-boundary validator; current invocations use the totality successor
+    canonical_path: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+    supersedes: []
+    superseded_by: control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py
+    related: [control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json, control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md
+    freshness: {level: critical, review_trigger: [historical source digest or successor totality behavior change]}
+    security_boundary: [historical offline validator only; current input validation must use the totality successor; no Host runtime or external effect]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py --self-test"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-author-self-review
+    title: Phase 5D M0-D Plan R2 Author Self Review v0.1
+    doc_type: review
+    status: review_needed
+    scope: non-independent author evidence for the narrow R2 closure package
+    canonical_path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review result]}
+    security_boundary: [author evidence only; no acceptance freeze Host runtime or implementation authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r2-review-package-builder
+    title: Phase 5D M0-D Plan R2 Review Package Builder
+    doc_type: reference
+    status: review_needed
+    scope: immutable historical archive builder for the R2 independent-review package; current explicit-input builds use the guarded successor
+    canonical_path: control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+    supersedes: []
+    superseded_by: control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package-explicit-input.py
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package-explicit-input.py]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md
+    freshness: {level: critical, review_trigger: [historical builder digest or successor input-resolution change]}
+    security_boundary: [historical offline review-package builder only; current explicit-input builds must use the guarded successor; no archive delivery or installation]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-manifest
+    title: Phase 5D M0-D Plan R2 Atomic Review Manifest
+    doc_type: review
+    status: review_needed
+    scope: 29-input hash-bound fresh full atomic independent review unit
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.md, control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [bound input or independent review change]}
+    security_boundary: [review package only; no automatic freeze Host action or implementation]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-review-package
+    title: Phase 5D M0-D Plan R2 Atomic Independent Review Package
+    doc_type: review
+    status: review_needed
+    scope: reviewer instructions and acceptance boundary for the R1 plus R2 atomic unit
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [manifest or independent review change]}
+    security_boundary: [review instructions only; no automatic plan freeze Host loading runtime or implementation]
+    validation: {commands: [git diff --check]}
+  - id: agents-os-active-work-queue-v16.5
+    title: AGENTS OS Active Work Queue v16.5
+    doc_type: review
+    status: superseded
+    scope: Phase 5D M0-D R2 fixed package awaiting fresh full atomic independent review
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md]
+    superseded_by: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    freshness: {level: critical, review_trigger: [independent review or Jenn plan-freeze decision]}
+    security_boundary: [planning review only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-independent-review
+    title: Phase 5D M0-D Plan R2 Full Atomic Independent Review
+    doc_type: review
+    status: accepted
+    scope: fresh full read-only independent review of the R1 plus R2 atomic plan bundle
+    canonical_path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [bound manifest review archive or reviewer-evidence correction]}
+    security_boundary: [read-only offline review only; no acceptance freeze implementation VCPToolBox Host runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package
+    title: Phase 5D M0-D Plan R2 Atomic Freeze Decision Package v0.1
+    doc_type: decision_record
+    status: active
+    scope: Jenn-only decision surface for the complete six-subject R1 plus R2 plan bundle
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [Jenn decision manifest review or fixed subject byte change]}
+    security_boundary: [decision surface only; no automatic acceptance or freeze VCPToolBox Host runtime database provider private Memory sensing effect or Git authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md"]}
+  - id: agents-os-active-work-queue-v16.6
+    title: AGENTS OS Active Work Queue v16.6
+    doc_type: review
+    status: superseded
+    scope: historical Jenn Phase 5D M0-D R2 atomic plan-freeze decision gate
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md]
+    superseded_by: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md, control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [historical projection correction only]}
+    security_boundary: [historical decision gate only; no automatic freeze implementation VCPToolBox Host archive runtime database provider private Memory sensing effect or Git authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision
+    title: Phase 5D M0-D Plan R2 Atomic Freeze Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn acceptance and freeze of the complete six-subject R1 plus R2 plan unit
+    canonical_path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md, control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md, control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [immutable-decision provenance challenge only]}
+    security_boundary: [plan freeze only; no implementation VCPToolBox Host archive plugin native runtime database provider private Memory sensing effect or Git delivery authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-active-work-queue-v16.7
+    title: AGENTS OS Active Work Queue v16.7
+    doc_type: review
+    status: superseded
+    scope: historical Phase 5D M0-D plan Git durability authorization gate after semantic freeze
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md]
+    superseded_by: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml, control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [historical projection correction only]}
+    security_boundary: [historical frozen planning governance only; no implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-receipt
+    title: Phase 5D M0-D Plan R2 Atomic Freeze Closeout Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: local semantic-freeze closeout evidence and governance projection; no Git delivery
+    canonical_path: control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml, control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md, CURRENT_STATE.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [durability delivery decision or immutable-provenance correction]}
+    security_boundary: [local freeze closeout only; no commit push PR merge implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-plan-git-durability-delivery-decision
+    title: Phase 5D M0-D Plan Git Durability Delivery Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: Jenn-authorized scoped branch commit push and PR delivery of the frozen Phase 5D plan lineage; no main merge
+    canonical_path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md, control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [PR head divergence scope expansion or superseding Jenn delivery decision]}
+    security_boundary: [Git durability delivery only; no main merge frozen subject mutation implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml').read_text())\""]}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-successor","title":"Phase 5D M0-D Post-Freeze Review Package Builder","doc_type":"reference","status":"active","scope":"guarded successor for future or re-signed review-package builds while preserving frozen R1/R2 builder bytes","canonical_path":"control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","freshness":{"level":"critical","review_trigger":["protected-path guard or delegated historical-builder change"]},"security_boundary":["offline review-package construction only; no frozen-plan semantic change Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-start-decision","title":"Phase 5D M0-D Post-Freeze Review Package Builder Correction Start Decision","doc_type":"decision_record","status":"active","scope":"Jenn authorization for the narrow PR #32 review-package builder correction","canonical_path":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["review-package delivery correction only; no plan re-freeze implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-git-delivery-decision","title":"Phase 5D M0-D Post-Freeze Builder Correction Git Delivery Decision","doc_type":"decision_record","status":"accepted","scope":"additive narrow PR #32 delivery scope binding the correction artifacts without modifying the immutable original delivery decision","canonical_path":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml","control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["PR #32 scope divergence or superseding Jenn decision"]},"security_boundary":["Git delivery only; no frozen-plan mutation main merge implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-contract","title":"Phase 5D M0-D Post-Freeze Review Package Builder Correction","doc_type":"contract","status":"active","scope":"narrow protected-path guard contract preserving frozen R1/R2 plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","freshness":{"level":"critical","review_trigger":["guard contract or validator behavior change"]},"security_boundary":["non-semantic offline packaging correction only; no implementation or runtime authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-fixture","title":"Phase 5D M0-D Post-Freeze Builder Correction Fixture","doc_type":"example","status":"active","scope":"synthetic protected-path and valid-control fixture for the narrow review-package builder correction","canonical_path":"control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","freshness":{"level":"critical","review_trigger":["fixture or guard validator change"]},"security_boundary":["synthetic offline fixture only; no Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-payload","title":"Phase 5D M0-D Post-Freeze Builder Correction Synthetic Payload","doc_type":"example","status":"active","scope":"non-sensitive deterministic payload used only by the guarded-successor valid-control fixture","canonical_path":"control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","freshness":{"level":"critical","review_trigger":["fixture payload byte change"]},"security_boundary":["synthetic non-sensitive payload only; no private Memory credential provider or effect data"],"validation":{"commands":["sha256sum control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-receipt","title":"Phase 5D M0-D Post-Freeze Review Package Builder Correction Receipt","doc_type":"receipt","status":"active","scope":"narrow correction validation evidence for PR #32 review and delivery","canonical_path":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","freshness":{"level":"critical","review_trigger":["guard validation or PR #32 delivery-scope correction"]},"security_boundary":["governance receipt only; no plan-semantic re-open implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["sha256sum control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-builder-correction-validator","title":"Phase 5D M0-D Post-Freeze Builder Correction Validator","doc_type":"reference","status":"active","scope":"offline protected-path guard and frozen-builder byte-equivalence validator","canonical_path":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md","freshness":{"level":"critical","review_trigger":["fixture or guard semantic change"]},"security_boundary":["offline validator only; no Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-builder-correction.py"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-successor","title":"Phase 5D M0-D Post-Freeze Validator Totality Successor","doc_type":"reference","status":"active","scope":"current guarded validator entrypoint that returns deterministic BLOCK for malformed R2 Plan boundaries without rewriting frozen validator bytes","canonical_path":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py","supersedes":["control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py"],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-fixture-v0.1.json","control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md","freshness":{"level":"critical","review_trigger":["frozen validator digest or boundary preflight behavior change"]},"security_boundary":["offline totality guard only; no Plan re-open Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py --self-test"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-start-decision","title":"Phase 5D M0-D Post-Freeze Validator Totality Correction Start Decision","doc_type":"decision_record","status":"active","scope":"Jenn authorization for the narrow PR #32 malformed-boundary totality correction","canonical_path":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["post-freeze validator correction only; no frozen byte mutation Plan re-freeze implementation or runtime authority"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-start-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-git-delivery-decision","title":"Phase 5D M0-D Post-Freeze Validator Totality Correction Git Delivery Decision","doc_type":"decision_record","status":"accepted","scope":"additive narrow PR #32 delivery scope for the non-semantic validator-totality correction","canonical_path":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-git-delivery-decision-v0.1.yaml","control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["PR #32 scope divergence or superseding Jenn decision"]},"security_boundary":["Git delivery only; no frozen-plan mutation main merge implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-contract","title":"Phase 5D M0-D Post-Freeze Validator Totality Correction","doc_type":"contract","status":"active","scope":"narrow malformed-boundary preflight contract preserving frozen R1/R2 Plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py","freshness":{"level":"critical","review_trigger":["preflight contract or negative-case behavior change"]},"security_boundary":["non-semantic offline validator correction only; no Plan implementation Host runtime database provider private Memory sensing or effect authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-fixture","title":"Phase 5D M0-D Post-Freeze Validator Totality Correction Fixture","doc_type":"example","status":"active","scope":"synthetic malformed-boundary and valid-control fixture for the guarded successor","canonical_path":"control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-fixture-v0.1.json","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-fixture-v0.1.json","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py","freshness":{"level":"critical","review_trigger":["fixture inventory or guard behavior change"]},"security_boundary":["synthetic offline fixture only; no Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py --self-test"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-validator-totality-receipt","title":"Phase 5D M0-D Post-Freeze Validator Totality Correction Receipt","doc_type":"receipt","status":"active","scope":"narrow PR #32 correction validation evidence for stable malformed-boundary BLOCK behavior","canonical_path":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-validator-totality.py","freshness":{"level":"critical","review_trigger":["totality self-test or PR #32 delivery scope change"]},"security_boundary":["governance receipt only; no frozen-plan mutation implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-successor","title":"Phase 5D M0-D Post-Freeze Review Package Explicit-Input Successor","doc_type":"reference","status":"active","scope":"current R2-only guarded review-package entrypoint that rejects missing explicit inputs while preserving paired extracted-archive aliases","canonical_path":"control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package-explicit-input.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package-explicit-input.py","supersedes":["control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py"],"superseded_by":null,"related":["control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","freshness":{"level":"critical","review_trigger":["explicit input resolver or immutable successor binding change"]},"security_boundary":["offline review-package construction only; no frozen-plan semantic change Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-start-decision","title":"Phase 5D M0-D Post-Freeze Explicit-Input Correction Start Decision","doc_type":"decision_record","status":"active","scope":"Jenn authorization for the narrow PR #32 explicit manifest/report input correction","canonical_path":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["post-freeze explicit-input correction only; no frozen byte mutation Plan re-freeze implementation or runtime authority"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-start-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-git-delivery-decision","title":"Phase 5D M0-D Post-Freeze Explicit-Input Correction Git Delivery Decision","doc_type":"decision_record","status":"accepted","scope":"additive narrow PR #32 delivery scope for the non-semantic explicit-input correction","canonical_path":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-validator-totality-correction-git-delivery-decision-v0.1.yaml","control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml","freshness":{"level":"critical","review_trigger":["PR #32 scope divergence or superseding Jenn decision"]},"security_boundary":["Git delivery only; no frozen-plan mutation main merge implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml').read_text())\""]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-contract","title":"Phase 5D M0-D Post-Freeze Review Package Explicit-Input Correction","doc_type":"contract","status":"active","scope":"narrow paired-alias and missing-explicit-input contract preserving frozen R1/R2 Plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","freshness":{"level":"critical","review_trigger":["explicit input contract or negative-case behavior change"]},"security_boundary":["non-semantic offline packaging correction only; no Plan implementation Host runtime database provider private Memory sensing or effect authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-fixture","title":"Phase 5D M0-D Post-Freeze Explicit-Input Correction Fixture","doc_type":"example","status":"active","scope":"synthetic direct-alias and missing-input fixture for the guarded R2 successor","canonical_path":"control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-fixture-v0.1.json","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-fixture-v0.1.json","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","freshness":{"level":"critical","review_trigger":["fixture inventory or resolver behavior change"]},"security_boundary":["synthetic offline fixture only; no Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-receipt","title":"Phase 5D M0-D Post-Freeze Explicit-Input Correction Receipt","doc_type":"receipt","status":"active","scope":"narrow PR #32 correction validation evidence for explicit manifest/report resolution","canonical_path":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-git-delivery-decision-v0.1.yaml"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","freshness":{"level":"critical","review_trigger":["explicit-input validator or PR #32 delivery scope change"]},"security_boundary":["governance receipt only; no frozen-plan mutation implementation Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md"]}}
+  - {"id":"agents-os-phase-5d-m0d-postfreeze-explicit-input-validator","title":"Phase 5D M0-D Post-Freeze Explicit-Input Correction Validator","doc_type":"reference","status":"active","scope":"offline missing-input rejection and paired-alias byte-equality validator","canonical_path":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-24","review_by":"control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction-v0.1.md","freshness":{"level":"critical","review_trigger":["fixture or resolver behavior change"]},"security_boundary":["offline validator only; no Host runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 control-plane/registry/validate-phase-5d-m0d-plan-post-freeze-review-package-explicit-input-correction.py"]}}
+  - id: agents-os-active-work-queue-v16.8
+    title: AGENTS OS Active Work Queue v16.8
+    doc_type: review
+    status: active
+    scope: current scoped Phase 5D M0-D plan Git durability branch and PR delivery
+    canonical_path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+    supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml]
+    last_reviewed: '2026-07-23'
+    review_by: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [PR review CI or Jenn main-merge decision]}
+    security_boundary: [scoped Git delivery only; no automatic main merge implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md inspect-queue --json"]}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-review-package-builder","title":"Phase 5C M0-C Post-Freeze Review Package Builder","doc_type":"reference","status":"accepted","scope":"collision-safe successor for the immutable Phase 5C R3 review-package builder","canonical_path":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5c-m0c-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["post-freeze correction evidence or archive-member guard change"]},"security_boundary":["offline review-package construction only; no plan-semantic change VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -m py_compile control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py"]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-start-decision","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction Start Decision","doc_type":"decision_record","status":"accepted","scope":"Jenn authorization for a narrow non-semantic review-package builder correction","canonical_path":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["review-package delivery correction only; no plan re-freeze implementation VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml').read_text())\""]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-contract","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction","doc_type":"contract","status":"accepted","scope":"narrow collision rejection contract preserving frozen R1-R4 plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["guard contract or independent review change"]},"security_boundary":["non-semantic offline packaging correction only; no implementation or runtime authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}

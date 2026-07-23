@@ -1,0 +1,125 @@
+schema_version: agents-os.git-delivery-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1
+record_type: GitDeliveryDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-23T23:03:31+08:00'
+effective_at: '2026-07-23T23:03:31+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: AUTHORIZE_PHASE_5D_M0D_PLAN_GIT_DURABILITY_DELIVERY
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 启动 Phase 5D Plan Git Durability Delivery
+  interpreted_scope: commit_push_and_open_a_scoped_PR_for_the_complete_fixed_Phase_5D_R1_R2_plan_lineage_and_required_governance_projections_then_track_review_without_main_merge
+  scope_expansion: forbidden
+
+frozen_plan_binding:
+  plan_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  plan_manifest: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  plan_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  plan_independent_review: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+  plan_independent_review_sha256: 902a9fd3686cfbe95693e272df329282f3b33d44ebb1285edfc37bc3ebf8b068
+  plan_freeze_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+  plan_freeze_decision_sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+  plan_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md
+  plan_freeze_closeout_receipt_sha256: 348be4d8adca1bd6657fd56413604bdac277355483caedccd9d5229e1e27a6cc
+
+delivery_binding:
+  remote: git@github.com:JENN2046/Agents-OS.git
+  target_branch: agent/phase-5d-m0d-plan-r1
+  base_branch: main
+  base_commit_before_delivery: bc5df3903bd1f591d085538f3480be37c11c0ddc
+  remote_branch_preexisting: false
+  PR_number: pending_creation
+  permitted_changed_paths:
+    - CURRENT_STATE.md
+    - control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py
+    - control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py
+    - control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+    - control-plane/registry/build-phase-5d-m0d-plan-r2-witness.py
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+    - control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml
+    - control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+    - control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md
+    - control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    - control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json
+    - control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
+    - control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.3.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.4.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.5.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.6.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.7.md
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+    - control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.md
+    - control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+    - control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.md
+    - control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml
+    - control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json
+    - control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml
+    - control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+    - control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-author-self-review-v0.1.yaml
+    - control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    - control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py
+    - control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+    - execution/agents-os-control-chain/control_chain.py
+    - execution/agents-os-dashboard/dashboard.py
+    - execution/agents-os-machine/machine.py
+    - execution/agents-os-workbench/workbench.py
+
+authorized_actions:
+  create_the_bound_delivery_decision_and_current_governance_projection: true
+  run_local_scope_hash_registry_queue_and_consumer_validators: true
+  create_one_scoped_commit_on_target_branch: true
+  push_the_exact_target_branch_without_force: true
+  create_or_update_one_PR_to_main: true
+  self_review_and_track_in_scope_PR_review_or_CI_feedback: true
+
+not_authorized:
+  frozen_plan_subject_mutation: false
+  Phase_5D_implementation_start: false
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_installation_plugin_enablement_or_Host_loading: false
+  processToolCall_native_NAPI_or_addon_loading: false
+  Rust_JavaScript_SQLite_database_dependency_or_toolchain_work: false
+  runtime_service_provider_production_authentication_or_credentials: false
+  private_Memory_state_private_sensing_or_real_effect: false
+  main_merge: false
+  force_push_tag_release_deploy_or_publish: false
+
+required_precommit_rechecks:
+  - frozen_manifest_independent_review_freeze_decision_and_closeout_receipt_hashes_match
+  - six_accepted_subject_hashes_match_the_frozen_manifest
+  - all_fixed_R2_validator_commands_pass
+  - Document_Registry_and_Federated_Registry_pass
+  - current_queue_has_exactly_one_NOW_item
+  - all_four_default_queue_pointers_match_the_current_queue
+  - diff_scope_matches_permitted_changed_paths
+  - no_memory_ops_reports_state_private_or_secret_paths_are_staged
+
+next_gate:
+  name: PHASE_5D_PLAN_PR_CURRENT_HEAD_REVIEW_CI_AND_JENN_MAIN_MERGE_DECISION
+  automatic_main_merge: forbidden
+  required_before_merge:
+    - current_PR_head_self_review_PASS
+    - no_actionable_unresolved_review_feedback
+    - all_configured_checks_terminal_success_or_no_checks_configured
+    - mergeability_clean
+    - current_exact_Jenn_main_merge_authorization
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  frozen_plan_subject_mutation: forbidden

@@ -1,0 +1,35 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: JENN_EXPLICIT_PHASE_5D_M0D_PLAN_R2_START_DECISION
+date: '2026-07-23'
+owner: Jenn
+agent_steward: Nobao
+decision: START_R2_NARROW_CLOSURE
+
+binding:
+  R1_manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  R1_independent_review_sha256: 4172f1895e4b0bd829ec48775ce92d0785cbc6068e32439bd4aac6226112b265
+  R1_finding_disposition_sha256: 0179e6dffac50e83312c645822645e4c19e9648645a13d1b325dc97714047f5a
+
+authorized_scope:
+  - bind source_payload Host extension commitments to exact immutable constants or Phase_5C evidence
+  - bind current Plan boundary semantics to any favorable offline witness outcome
+  - close duplicate-key rejecting YAML parsing and exact profile identity totality
+  - create synthetic fixture offline validator author self-review manifest and independent review package
+
+immutable:
+  - R1_plan_subject
+  - R1_build_profile_subject
+  - R1_manifest
+  - R1_author_evidence
+  - R1_independent_review
+  - R1_case_results
+  - R1_finding_disposition
+
+forbidden:
+  - VCPToolBox worktree read write clone checkout linked worktree creation or startup
+  - archive delivery package installation plugin enablement Host discovery Host loading or native addon load
+  - processToolCall or native NAPI invocation
+  - implementation source changes runtime service database provider production authentication private Memory sensing or real effect
+  - Git delivery release deploy publish tag force push or history rewrite
+
+terminal_gate: PHASE_5D_M0D_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

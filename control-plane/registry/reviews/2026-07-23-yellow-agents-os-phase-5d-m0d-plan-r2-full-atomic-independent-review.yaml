@@ -1,0 +1,107 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5D_M0D_PLAN_R2_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-23'
+
+reviewer:
+  identity: Codex independent reviewer
+  independent: true
+  independence_basis:
+    - not_the_R2_author
+    - fresh_full_review_of_fixed_ZIP_and_workspace_bytes
+    - author_self_review_used_as_evidence_only
+    - all_attacks_used_isolated_tmp_copies
+    - no_workspace_or_governance_file_modified
+
+review_unit:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 6
+
+result: PASS_NO_BLOCKER
+requires_R3: false
+
+integrity:
+  archive:
+    sha256: 0ac6078ff0f41fa40638155ce17f0d5290f8ee69c83a0f3b982de5d29053785f
+    archive_external_manifest_bytes_equal: true
+    entries: 33
+    duplicate_paths: 0
+    unsafe_paths: 0
+    symlinks: 0
+    nonregular_members: 0
+    crc: PASS
+    checksums: 32/32_MATCH
+    archive_map: 29/29_MATCH
+    archive_workspace_payload_bytes: 29/29_MATCH
+  manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  declared_inputs:
+    hashes: 29/29_MATCH
+    full_reads: 29/29
+    subjects: 6/6
+    authority_inputs: 20/20
+    author_evidence: 3/3
+    bytes_fully_read: 233152
+    lines_fully_read: 5019
+  R1_immutable_subjects: 2/2_MATCH
+  R1_lineage_hash_bindings: PASS
+  source_payload_git_membership: PASS
+  source_payload_is_baseline_ancestor: true
+  sealed_extension_bytes_at_source_payload: 3/3_MATCH
+
+fixed_reproduction:
+  workspace_fixed_commands: 6/6_PASS
+  isolated_no_Git_fixed_commands: 6/6_PASS
+  deterministic_fixture_reproduction: PASS
+  isolated_archive_rebuild_byte_equal: true
+  workspace_status_changed_by_review: false
+
+independent_adversarial_review:
+  fully_resigned_attack_count: 40
+  fully_resigned_archive_integrity: 40/40_PASS
+  target_semantic_rejections: 40/40
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  positive_controls: 3/3_ACCEPTED
+  R1_B01_source_Host_extension_anchor:
+    source_payload_commit: REJECTED_BY_IMMUTABLE_ANCHOR
+    sealed_Host_commit: REJECTED_BY_IMMUTABLE_ANCHOR
+    sealed_Host_tree: REJECTED_BY_IMMUTABLE_ANCHOR
+    seven_Host_rows: 7/7_REJECTED_BY_IMMUTABLE_ANCHOR
+    extension_hashes: 3/3_REJECTED_BY_IMMUTABLE_ANCHOR
+    alternate_or_absolute_source_root: 2/2_REJECTED_BY_IMMUTABLE_ANCHOR
+  R1_B02_exact_current_Plan_boundary:
+    current_Host_claim: REJECTED_BY_EXACT_PLAN_HEADER
+    current_plugin_claim: REJECTED_BY_EXACT_PLAN_HEADER
+    current_processToolCall_claim: REJECTED_BY_EXACT_PLAN_HEADER
+    current_native_NAPI_claim: REJECTED_BY_EXACT_PLAN_HEADER
+    current_runtime_claim: REJECTED_BY_EXACT_PLAN_HEADER
+    coordinated_Plan_profile_fixture_resigning: REJECTED_BY_PLAN_PROFILE_BOUNDARY
+  R1_B03_schema_identity_duplicate_totality:
+    duplicate_profile_YAML_key: REJECTED_BEFORE_SEMANTIC_PROCESSING
+    duplicate_Plan_header_YAML_key: REJECTED_BEFORE_SEMANTIC_PROCESSING
+    duplicate_JSON_key: REJECTED
+    noncanonical_profile_schema_id_status: 3/3_REJECTED
+    unknown_profile_or_witness_fields: 2/2_REJECTED
+    strict_boolean_integer_NaN_and_nested_row_probes: 8/8_REJECTED
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+
+boundary:
+  VCPToolBox_worktree_access: false
+  Host_plugin_native_or_NAPI_invocation: false
+  runtime_database_provider_private_Memory_sensing_or_effect: false
+  commit_push_or_freeze_performed: false
+
+disposition:
+  Phase_5D_plan_freeze_ready_for_Jenn_decision: true
+  Phase_5D_plan_accepted: false
+  Phase_5D_plan_frozen: false
+  Phase_5D_implementation_started: false
+  next_gate: JENN_PHASE_5D_M0D_PLAN_R2_ATOMIC_FREEZE_DECISION
+  automatic_acceptance_or_freeze: forbidden

@@ -1,0 +1,51 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: PHASE_5D_M0D_PLAN_POST_FREEZE_REVIEW_PACKAGE_EXPLICIT_INPUT_CORRECTION_START_DECISION_V0_1
+date: '2026-07-24'
+owner: Jenn
+agent_steward: Nobao
+status: EXECUTED_STRICT_SCOPE
+
+authorization:
+  source: Jenn_current_explicit_instruction
+  instruction: 授权
+  context_binding: >-
+    Authorization of the immediately proposed independent, narrow post-freeze
+    builder explicit-input-resolution correction for PR #32.
+  applies_to: PHASE_5D_M0D_PLAN_POST_FREEZE_REVIEW_PACKAGE_EXPLICIT_INPUT_CORRECTION_V0_1
+  exact_authorized_scope:
+    - preserve_all_frozen_R1_R2_subject_manifest_review_decision_and_receipt_bytes
+    - preserve_the_prior_post_freeze_builder_and_validator_totality_correction_bytes
+    - add_one_additive_guarded_R2_review_package_successor_for_explicit_input_resolution_only
+    - accept_only_the_paired_MANIFEST_yaml_and_REPORT_md_archive_root_aliases_from_an_extracted_payload_directory
+    - reject_every_other_missing_or_partial_explicit_manifest_report_input_before_payload_read_or_output_write
+    - add_synthetic_offline_direct_alias_and_negative-path_validation
+    - deliver_only_the_related_non_semantic_correction_through_PR_32_review
+
+immutable_preconditions:
+  frozen_R2_manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  frozen_R2_builder:
+    path: control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py
+    sha256: 105a4ee485750c7c4f64f7b872f97e4b5e3d9f03bcc9d191a2d0e2c3c56a361b
+  prior_guarded_successor:
+    path: control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package.py
+    sha256: 7ce6091dca0002483180317d9b607f73aad018d8558b1b9f1c30280c493d0392
+
+prohibitions:
+  frozen_R1_R2_subject_manifest_review_freeze_decision_or_receipt_mutation: forbidden
+  prior_post_freeze_correction_mutation: forbidden
+  Phase_5D_plan_semantic_reopen_or_new_plan_revision: forbidden
+  Phase_5D_implementation_or_Host_runtime_start: forbidden
+  VCPToolBox_plugin_extension_runtime_database_provider_authentication_private_Memory_sensing_or_real_effect: forbidden
+  production_or_private_data_read: forbidden
+  main_merge_force_push_tag_release_deploy_or_publish: forbidden
+
+completion_gate:
+  required:
+    - frozen_R2_builder_and_prior_guarded_successor_hashes_match
+    - direct_valid_explicit_inputs_reproduce_the_historical_R2_archive_byte_for_byte
+    - extracted_payload_MANIFEST_yaml_REPORT_md_alias_pair_reproduces_the_historical_R2_archive_byte_for_byte
+    - missing_partial_or_out_of_context_explicit_inputs_reject_before_output_write
+    - PR_32_current_head_review_has_no_actionable_blocker
+  automatic_Phase_5D_plan_reopen_or_implementation_start: forbidden

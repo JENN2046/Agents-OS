@@ -1,0 +1,119 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+reviewer_identity: Codex independent reviewer
+independence_basis:
+  - Reviewed only the supplied fixed ZIP and supplied external manifest.
+  - Did not rely on author self-review for judgment.
+  - Did not access VCPToolBox, state-private, secrets, databases, network, runtime,
+    plugins, providers, Host loading, or real effects.
+  - Used a new isolated no-.git extraction under this review directory.
+review_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+decision: BLOCK
+requires_R2: true
+
+fixed_artifact_integrity:
+  archive_path: /tmp/agents-os-phase-5d-m0d/2026-07-23-agents-os-phase-5d-m0d-plan-r1-review-package-v0.1.zip
+  archive_sha256: 1a99a221fd909743b80f916fe3bbd57dc47a6327480ab7cc82faedf9725dda24
+  manifest_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  archive_manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  archive_and_external_manifest_bytes_equal: true
+  zip_members: 26
+  unsafe_or_duplicate_zip_members: 0
+  declared_inputs: 22
+  full_utf8_reads: 22
+  declared_input_hash_matches: 22
+  archive_map_bindings: 22
+  package_checksum_matches: 25
+  integrity_errors: 0
+
+fixed_commands:
+  isolated_no_git_extraction: true
+  commands_run: 5
+  commands_passed: 5
+  results:
+    - {number: 1, exit_code: 0, result: PASS}
+    - {number: 2, exit_code: 0, result: QUARANTINED_HOST_SMOKE_PREFLIGHT_READY}
+    - {number: 3, exit_code: 0, result: PASS}
+    - {number: 4, exit_code: 0, result: PASS}
+    - {number: 5, exit_code: 0, result: PASS}
+
+independent_adversarial_review:
+  execution_boundary: offline copies under this directory only
+  fully_resigned_attack_method:
+    - Modified only isolated package copies.
+    - Recomputed all 22 manifest input digests, ARCHIVE_MAP hashes, 25 CHECKSUMS entries,
+      REPORT manifest digest, and a fresh ZIP digest for every case.
+    - The supplied external fixed manifest was never changed.
+  case_count: 48
+  invalid_attack_count: 45
+  rejected_invalid_path_count: 36
+  favorable_invalid_path_count: 9
+  legal_control_count: 3
+  legal_input_over_rejection_count: 0
+  favorable_invalid_paths:
+    - resigned_source_payload_commit_substitution
+    - resigned_sealed_Host_commit_and_tree_substitution
+    - resigned_extension_hash_substitution
+    - resigned_sealed_Host_file_commitment_substitution
+    - resigned_noncanonical_profile_identity
+    - resigned_absolute_source_root
+    - resigned_plan_claims_Host_plugin_runtime_execution
+    - resigned_plan_claims_processToolCall_native_execution
+    - duplicate_YAML_profile_key
+  required_negative_categories_rejected:
+    - unknown profile or witness fields and wrong hash type
+    - duplicate JSON key and uppercase noncanonical source commit
+    - caller-selected root, existing root, enabled workspace manifest, and escaped transient manifest
+    - processToolCall/native-load allowance and each of the five N-API methods
+    - forged initialize/shutdown result and reordered state
+    - runtime, database, authentication, private-Memory, provider/effect, and remaining authorization-flag claims
+    - current Host lifecycle contract or Host discovery/loading outcome claims
+  resigned_attack_integrity_spot_checks:
+    - {attack: resigned_sealed_Host_file_commitment_substitution, members: 26, inputs: 22, checksums: 25, all_match: true}
+    - {attack: resigned_plan_claims_Host_plugin_runtime_execution, members: 26, inputs: 22, checksums: 25, all_match: true}
+    - {attack: duplicate_YAML_profile_key, members: 26, inputs: 22, checksums: 25, all_match: true}
+
+findings:
+  blocker_count: 3
+  major_count: 0
+  minor_count: 0
+  blockers:
+    - id: B1
+      title: Fully resigned source/Host/extension commitment substitutions are accepted
+      evidence: >
+        The validator only format-checks baseline commit/hash fields and the seven Host
+        rows; it does not bind them to the sealed constants or an immutable Phase 5C
+        contract digest. Independently rebuilt profile+fixture+package attacks returned
+        QUARANTINED_HOST_SMOKE_PREFLIGHT_READY with zero errors.
+      affected_validator_lines: 90-171, 415-433
+    - id: B2
+      title: The implementation-plan subject is not semantically bound to the favorable validator outcome
+      evidence: >
+        The validator loads only PROFILE_PATH and the witness. Two fully resigned
+        packages whose plan text claimed current Host/plugin/runtime execution or
+        processToolCall/native execution still returned
+        QUARANTINED_HOST_SMOKE_PREFLIGHT_READY with zero errors.
+      affected_validator_lines: 18-21, 436-445
+    - id: B3
+      title: Duplicate YAML and noncanonical profile identity are accepted
+      evidence: >
+        yaml.safe_load accepts a duplicate profile key, and schema_version/profile_id/status
+        lack exact value checks. The independently re-signed duplicate-YAML and
+        noncanonical-identity packages both returned the favorable result.
+      affected_validator_lines: 88-117, 328
+
+scope_limits:
+  - This is a package-only, offline review; no VCPToolBox worktree fact was read or recomputed.
+  - The fixed external manifest pins the current archive bytes, so each adversarial package has
+    a different manifest/archive SHA-256. That integrity pin does not cure the explicit
+    fully-resigned semantic attack requirement, which failed.
+  - No implementation, plan freeze, Git delivery, Host discovery/load, plugin enablement,
+    native addon load, runtime, database, provider, private-Memory, or real effect occurred.
+
+exact_next_gate: >
+  PHASE_5D_M0D_PLAN_R2_REMEDIATION_THEN_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW:
+  bind every source/Host/extension commitment and profile identity to exact sealed constants
+  or an immutable Phase 5C contract digest; parse YAML with duplicate-key rejection; bind
+  the implementation-plan current boundary to the profile/witness favorable outcome; regenerate
+  fixture/package; rerun a fresh full independent review. Plan freeze and implementation/execution
+  remain forbidden.

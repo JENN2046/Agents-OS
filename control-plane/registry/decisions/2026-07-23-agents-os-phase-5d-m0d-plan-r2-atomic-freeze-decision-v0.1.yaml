@@ -1,0 +1,150 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-23T22:44:12+08:00'
+effective_at: '2026-07-23T22:44:12+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_PLAN
+  decision_source: explicit_current_conversation_confirmation_of_Phase_5D_M0D_Plan_R2_atomic_freeze_decision_package_section_6_A
+
+decision_confirmation:
+  exact_decision_text_confirmed: true
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+    sha256: 104a8566f2fbcb967a2477b35fa9ead274c7dc80a1cc7657396549bcf3698120
+    section: 6_A
+  confirmation_text_received: 我确认执行 Phase 5D M0-D Plan R2 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+
+acceptance_unit:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 6
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_subject_count: 6
+  verified_authority_input_count: 20
+  verified_author_evidence_count: 3
+  verified_total_input_count: 29
+  source_snapshot_type: local_hash_bound_R2_plan_authoring_snapshot
+  source_snapshot_main_baseline: bc5df3903bd1f591d085538f3480be37c11c0ddc
+  Git_commit_claimed: false
+
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 6
+  subject_hashes_verified: 6/6_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    sha256: 902a9fd3686cfbe95693e272df329282f3b33d44ebb1285edfc37bc3ebf8b068
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    favorable_invalid_path_count: 0
+    legal_input_over_rejection_count: 0
+    requires_R3: false
+    acceptance_subject: false
+  - role: independent_review_archive
+    path: /tmp/agents-os-phase-5d-m0d-r2/2026-07-23-agents-os-phase-5d-m0d-plan-r2-review-package-v0.1.zip
+    sha256: 0ac6078ff0f41fa40638155ce17f0d5290f8ee69c83a0f3b982de5d29053785f
+    acceptance_subject: false
+  - role: R1_block_finding_disposition
+    path: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml
+    sha256: 0179e6dffac50e83312c645822645e4c19e9648645a13d1b325dc97714047f5a
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+    sha256: 104a8566f2fbcb967a2477b35fa9ead274c7dc80a1cc7657396549bcf3698120
+    acceptance_subject: false
+
+frozen_plan_boundary:
+  - quarantined_Host_smoke_preflight_is_synthetic_and_plan_only
+  - exact_sealed_source_Host_and_extension_commitment_inventory
+  - exact_current_Plan_boundary_is_Host_plugin_native_and_runtime_unusable
+  - duplicate_key_rejection_and_canonical_profile_identity_totality
+  - future_initialize_shutdown_interface_requirement_is_unimplemented_and_separately_authorized
+  - favorable_witness_is_NOT_EXECUTED_runtime_usable_false_and_real_occurrence_count_zero
+
+excluded_evidence_classes:
+  - builder
+  - fixture
+  - validator
+  - manifest
+  - author_self_review
+  - independent_review
+  - review_archive
+  - start_decision
+  - decision_package
+  - finding_disposition
+  - receipt
+  - active_work_queue
+  - registry_projection
+
+effects:
+  Phase_5D_plan_status: ACCEPTED_FROZEN_AWAITING_GIT_DURABILITY_CLOSEOUT
+  Phase_5D_plan_atomic_freeze_gate: SATISFIED
+  Phase_5D_plan_accepted: true
+  Phase_5D_plan_frozen: true
+  additional_plan_amendment_required: false
+  requires_R3: false
+  plan_revisions_stopped: true
+  Phase_5D_implementation_started: false
+  implementation_authorized: false
+  VCPToolBox_worktree_read_write_clone_or_checkout_authorized: false
+  archive_delivery_or_installation_authorized: false
+  plugin_enablement_or_Host_loading_authorized: false
+  Host_lifecycle_processToolCall_native_NAPI_or_addon_loading_authorized: false
+  Rust_JavaScript_NAPI_SQLite_database_dependency_or_toolchain_authorized: false
+  runtime_service_provider_or_production_authentication_authorized: false
+  credential_key_private_raw_Memory_state_private_sensing_recording_or_real_effect_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: PHASE_5D_PLAN_GIT_DURABILITY_CLOSEOUT_THEN_EXPLICIT_JENN_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  implementation_start_precondition:
+    - frozen_plan_objects_verified_on_main
+    - separate_exact_Jenn_implementation_start_decision
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_review_subject_evidence_and_archive_reverification_before_closeout: completed
+  workspace_fixed_commands: 6/6_PASS
+  no_Git_archive_fixed_commands: 6/6_PASS
+  archive_byte_rebuild: PASS
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  edit_bound_independent_review_bytes: forbidden
+  future_plan_semantic_change_requires_new_revision_review_and_Jenn_decision: true

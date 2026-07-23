@@ -1,0 +1,117 @@
+schema_version: agents-os.hash-bound-review-manifest.v0.1
+package_id: agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1
+date: '2026-07-23'
+owner: Jenn
+agent_steward: Nobao
+status: fixed_for_fresh_full_atomic_independent_review
+
+integrity:
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  manifest_self_digest: external
+  presentation_report_digest: excluded_to_avoid_digest_cycle
+  source_snapshot_type: local_hash_bound_plan_authoring_snapshot
+  source_snapshot_main_baseline: bc5df3903bd1f591d085538f3480be37c11c0ddc
+
+review_unit:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 2
+
+subjects:
+  - {ordinal: 1, role: implementation_plan, path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md, sha256: 60cb27e9fafd2881dcbad4ccea5fd45ef2da8ceb8cb3717738d272d02cb77e27}
+  - {ordinal: 2, role: exact_build_profile, path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml, sha256: de9feef1e71d4c7ef27b58d4759c7190fb7b4c9b7bbf9b636cdad08a8ff00e82}
+
+authority_inputs:
+  - {role: workspace_governance, path: AGENTS.md, sha256: a202b938465e923c84e05243ffa4166a3cb1b046c5fa0f7eba52a7e53e9febe5}
+  - {role: workspace_boundary, path: WORKSPACE_MANIFEST.md, sha256: ef173071d6d675a9823e161567eaea5abc5b5fb7879122715071798df20bbc0d}
+  - {role: security_boundary, path: governance/SECURITY_BOUNDARIES.md, sha256: 4c217835e559b37234af009aa9248bef0c1f564e48dda710631c25c9417bfd7d}
+  - {role: Phase_5D_plan_start_decision, path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml, sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855}
+  - {role: frozen_Phase_5C_plan_decision, path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml, sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce}
+  - {role: frozen_Phase_5C_plan_manifest, path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml, sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e}
+  - {role: Phase_5C_implementation_closeout, path: control-plane/registry/receipts/2026-07-22-yellow-agents-os-phase-5c-m0c-implementation-closeout-v0.1.md, sha256: edf82f3d87ed1c7480c82ff60e355af88b8fb6ddd31953f20bca959aee28c0b9}
+  - {role: Phase_5C_postmerge_durability, path: control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5c-m0c-implementation-postmerge-durability-closeout-v0.1.md, sha256: 55dbfd4000a5f709293bbdd0403c7623479253c180e0e8927462a1a17dad72fe}
+  - {role: current_queue_before_start, path: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.2.md, sha256: fb202ce8fe7d521bf974b11a6f1ec690e48aa1d9cac0089cffd5e40bde67b8b1}
+  - {role: durable_extension_manifest, path: extensions/agents-os-resident/package-manifest.json, sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23}
+  - {role: blocked_plugin_manifest, path: extensions/agents-os-resident/plugin-manifest.json.block, sha256: 25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0}
+  - {role: inert_commonjs_entrypoint, path: extensions/agents-os-resident/index.js, sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec}
+  - {role: durable_extension_package_profile, path: extensions/agents-os-resident/package.json, sha256: 6ab0164c43587e60dc53ab68eb663d7203e8e59b58c3433af71e0ab9df3a2264}
+  - {role: durable_extension_documentation, path: extensions/agents-os-resident/README.md, sha256: ac79d00a08a2fed903ebad15d998c649d89a11f9750e11886036eca7ddb073be}
+  - {role: sealed_host_contract_verifier, path: extensions/agents-os-resident/tools/validate-sealed-host-contract.mjs, sha256: 9c5575f164a319edef81be7080cf0fae995b380a99736fbcc11b9982f78b9b19}
+
+author_evidence:
+  - {role: deterministic_builder, path: control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py, sha256: 9445592bfd381a202da27bc0ed6ed2b8042bcfa5bcc9eb13ea21f6cc0a3ca10f, may_substitute_for_independent_judgment: false}
+  - {role: synthetic_fixture, path: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json, sha256: 40f6368d5f7735a81b1eae1f9174f1acd5d1d35f32f713fe428f64c53bd10019, runtime_usable: false}
+  - {role: offline_validator, path: control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py, sha256: 3c1802f486309e86d21c51fe53c2bd9e2a62c23b4022f12e1dae29075a26f49e, may_substitute_for_independent_judgment: false}
+  - {role: author_self_review, path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-author-self-review-v0.1.yaml, sha256: 25aad25e47c61e1e104d60f37826b97edfccba5404f5e3b07adcadc86a2a1354, may_substitute_for_independent_judgment: false}
+  - {role: deterministic_review_package_builder, path: control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py, sha256: de811d192f348af5aff68c631738b51e09cc33aa743d4fafa7dcf74ae6475074, may_substitute_for_independent_judgment: false}
+
+declared_subject_count: 2
+declared_authority_input_count: 15
+declared_author_evidence_count: 5
+declared_total_input_count: 22
+
+validator_commands:
+  - python3 -c "import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml').read_text())"
+  - python3 control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json --self-test
+  - sh -c 't=$(mktemp); python3 control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py "$t" && cmp "$t" control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json; r=$?; rm -f "$t"; exit $r'
+  - python3 -m py_compile control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py
+  - python3 -c "from pathlib import Path; ps=[Path(p) for p in ['control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md','control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml','control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py','control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py','control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py']]; assert not [(p,i) for p in ps for i,l in enumerate(p.read_text().splitlines(),1) if l.rstrip()!=l]"
+
+required_review_questions:
+  - all_22_declared_inputs_match_and_are_fully_read
+  - two_subjects_form_one_atomic_plan_only_unit
+  - plan_uses_the_Phase_5C_sealed_Host_contract_without_reading_or_recomputing_it
+  - future_quarantine_root_and_transient_manifest_cannot_escape_owned_cleanup
+  - processToolCall_native_addon_and_all_five_NAPI_methods_are_excluded
+  - initialize_and_shutdown_expected_results_are_inert_and_not_runtime_authority
+  - Host_lifecycle_arguments_are_not_invented_or_used_without_a_later_hash_bound_Host_contract
+  - every_VCPToolBox_delivery_enablement_load_and_runtime_step_has_a_separate_Jenn_gate
+  - no_second_loader_permission_identity_Task_Command_or_effect_authority_exists
+  - no_runtime_database_provider_private_Memory_sensing_or_real_effect_is_authorized_or_performed
+  - validator_derives_the_result_from_closed_profile_constraints_and_rejects_duplicate_keys
+  - no_internal_contradiction_implementation_impossibility_or_legal_input_over_rejection_remains
+
+independent_adversarial_minimum:
+  - substitute_source_commit_sealed_host_commitment_or_extension_hash_and_fully_resign
+  - add_an_unknown_profile_or_witness_field_or_duplicate_JSON_key
+  - allow_a_caller_selected_root_preexisting_root_or_workspace_enabled_manifest
+  - move_the_transient_enabled_manifest_outside_the_owned_quarantine_root
+  - add_processToolCall_native_load_or_any_NAPI_method_to_the_smoke_surface
+  - forge_initialize_or_shutdown_output_or_out_of_order_smoke_state
+  - claim_runtime_database_provider_authentication_private_Memory_sensing_or_real_effect
+  - claim_a_future_Host_lifecycle_contract_is_current_or_runtime_usable
+  - alter_profile_and_fixture_together_then_recompute_all_local_hashes
+
+required_output_contract:
+  schema_version: agents-os.hash-bound-independent-review.v0.1
+  allowed_results: [PASS_NO_BLOCKER, BLOCK]
+  must_report:
+    - reviewer_identity_and_independence_basis
+    - manifest_path_and_sha256
+    - 22_hashes_and_full_reads
+    - five_fixed_commands
+    - independent_fully_resigned_attack_count
+    - favorable_invalid_path_count
+    - legal_input_over_rejection_count
+    - blocker_major_minor_counts
+    - requires_R2
+
+decision_gate:
+  package_ready: true
+  independent_review_started: false
+  plan_freeze_ready: false
+  automatic_freeze: forbidden
+  automatic_implementation_or_execution_start: forbidden
+
+non_authorization:
+  Phase_5D_plan_frozen: false
+  Phase_5D_implementation_started: false
+  VCPToolBox_change_or_start_authorized: false
+  archive_delivery_or_installation_authorized: false
+  plugin_enablement_or_Host_loading_authorized: false
+  processToolCall_or_native_addon_loading_authorized: false
+  runtime_database_provider_private_Memory_sensing_or_effect_authorized: false
+  Git_delivery_authorized: false

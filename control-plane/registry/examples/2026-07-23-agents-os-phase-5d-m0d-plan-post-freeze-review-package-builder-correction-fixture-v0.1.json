@@ -1,0 +1,36 @@
+{
+  "schema_version": "agents-os.phase5d.post-freeze-review-package-builder-correction-fixture.v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "historical_builders": {
+    "r1": {
+      "path": "control-plane/registry/build-phase-5d-m0d-plan-r1-review-package.py",
+      "sha256": "de811d192f348af5aff68c631738b51e09cc33aa743d4fafa7dcf74ae6475074"
+    },
+    "r2": {
+      "path": "control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py",
+      "sha256": "105a4ee485750c7c4f64f7b872f97e4b5e3d9f03bcc9d191a2d0e2c3c56a361b"
+    }
+  },
+  "valid_control": {
+    "payload_path": "control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-payload-v0.1.txt",
+    "payload_sha256": "f9dd4d436638d5f297b920537a9bf2dc83787424f30b3a13dd5e3925a49c32f6",
+    "report_path": "control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-plan-post-freeze-review-package-builder-correction-v0.1.md"
+  },
+  "protected_paths": [
+    ".env",
+    "config.env",
+    "credentials.json",
+    "key.pem",
+    "secrets/probe.txt",
+    "state-private/probe.txt"
+  ],
+  "allowed_template_paths": [
+    ".env.example",
+    "config.env.example"
+  ],
+  "rejection_expectation": {
+    "result": "REJECTED_BEFORE_PAYLOAD_READ_OR_OUTPUT_WRITE",
+    "output_file_exists_after_rejection": false
+  },
+  "terminal_outcome": "NOT_EXECUTED"
+}

@@ -1,0 +1,45 @@
+schema_version: agents-os.jenn-start-decision.v0.1
+decision_id: PHASE_5D_M0D_PLAN_POST_FREEZE_VALIDATOR_TOTALITY_CORRECTION_START_DECISION_V0_1
+date: '2026-07-24'
+owner: Jenn
+agent_steward: Nobao
+status: EXECUTED_STRICT_SCOPE
+
+authorization:
+  source: Jenn_current_explicit_instruction
+  instruction: 保持冻结 R1/R2 字节不变，仅新增 guarded successor/harness，将 malformed boundary 输入稳定映射为 BLOCK，加负例验证后继续 PR #32 审查。
+  applies_to: PHASE_5D_M0D_PLAN_POST_FREEZE_VALIDATOR_TOTALITY_CORRECTION_V0_1
+  exact_authorized_scope:
+    - preserve_all_frozen_R1_R2_subject_manifest_review_decision_and_receipt_bytes
+    - add_one_guarded_successor_that_preflights_current_boundary_totality_before_delegating_to_the_immutable_R2_validator
+    - map_malformed_current_boundary_inputs_to_a_deterministic_offline_BLOCK_result_without_an_uncaught_exception
+    - add_synthetic_negative_cases_and_an_offline_self_test
+    - deliver_only_the_related_non_semantic_correction_through_PR_32_review
+
+immutable_preconditions:
+  frozen_R2_manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+  frozen_R2_validator:
+    path: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+    sha256: d2767d569eabc795433530f2490672ce71089d85a49da10454294ff47834ac3f
+  frozen_R2_plan:
+    path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    sha256: e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b
+
+prohibitions:
+  frozen_R1_R2_subject_manifest_review_freeze_decision_or_receipt_mutation: forbidden
+  Phase_5D_plan_semantic_reopen_or_new_plan_revision: forbidden
+  Phase_5D_implementation_or_Host_runtime_start: forbidden
+  VCPToolBox_plugin_extension_runtime_database_provider_authentication_private_Memory_sensing_or_real_effect: forbidden
+  production_or_private_data_read: forbidden
+  main_merge_force_push_tag_release_deploy_or_publish: forbidden
+
+completion_gate:
+  required:
+    - immutable_R2_validator_digest_matches_the_frozen_manifest
+    - unknown_missing_non_mapping_and_duplicate_current_boundary_cases_return_JSON_BLOCK
+    - malformed_boundary_cases_do_not_delegate_to_the_historical_validator
+    - valid_frozen_R2_fixture_delegates_and_preserves_the_favorable_offline_result
+    - PR_32_current_head_review_has_no_actionable_blocker
+  automatic_Phase_5D_plan_reopen_or_implementation_start: forbidden

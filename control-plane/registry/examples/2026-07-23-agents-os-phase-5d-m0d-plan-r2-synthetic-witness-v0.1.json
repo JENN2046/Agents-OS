@@ -1,0 +1,54 @@
+{
+  "authorization": {
+    "Git_delivery_authorized": false,
+    "R2_plan_authoring_authorized": true,
+    "VCPToolBox_change_or_start_authorized": false,
+    "archive_delivery_or_installation_authorized": false,
+    "database_provider_private_Memory_sensing_or_effect_authorized": false,
+    "implementation_or_source_modification_authorized": false,
+    "plugin_enablement_or_Host_loading_authorized": false,
+    "processToolCall_or_native_addon_loading_authorized": false,
+    "runtime_activation_authorized": false,
+    "separate_Jenn_plan_freeze_required": true
+  },
+  "claimed_decision": "QUARANTINED_HOST_SMOKE_PREFLIGHT_READY",
+  "current_boundary": {
+    "Host_worktree_read_or_write": "forbidden",
+    "archive_delivery_or_installation": "forbidden",
+    "current_plan_authoring_only": true,
+    "future_Host_discovery_or_lifecycle": "separately_Jenn_authorized_only",
+    "future_Host_lifecycle_argument_contract": "future_hash_bound_Host_contract_required",
+    "future_lifecycle_methods_only": [
+      "initialize",
+      "shutdown"
+    ],
+    "implementation_authorized": false,
+    "native_NAPI_invocation": "forbidden",
+    "plugin_enablement_or_Host_loading": "forbidden",
+    "processToolCall_or_native_addon_load": "forbidden",
+    "runtime_database_provider_private_Memory_sensing_or_effect": "forbidden",
+    "runtime_usable": false,
+    "terminal_outcome": "NOT_EXECUTED"
+  },
+  "environment": "SYNTHETIC_PLAN_ONLY",
+  "plan_binding": {
+    "plan_header_sha256": "83830e38986803ff88cde70f86c82a9736e50d6cfb2d498d68035e31fe9ed4f7",
+    "plan_id": "PHASE_5D_M0D_QUARANTINED_HOST_SMOKE_INTEGRATION_PLAN_V0_1_R2",
+    "plan_sha256": "e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b"
+  },
+  "profile_binding": {
+    "profile_id": "PHASE_5D_M0D_QUARANTINED_HOST_SMOKE_IMMUTABLE_BINDING_PROFILE_V0_1_R2",
+    "profile_schema_version": "agents-os.m0d-quarantined-host-smoke-immutable-binding-profile.v0.1-r2",
+    "profile_sha256": "3dfadf64e8e717d195ed64361bcf4f9af6d770eb835455e92d017510468b9349"
+  },
+  "real_occurrence_count": 0,
+  "runtime_usable": false,
+  "schema_version": "agents-os.m0d.synthetic-plan-r2-witness.v0.1",
+  "source_anchor": {
+    "VCPToolBox_sealed_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "VCPToolBox_sealed_tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "anchor_sha256": "b85ae99e47bc80bfbbcf634d403628a3ad972ec06a459e0e9cb710b679692352",
+    "sealed_host_commitments_sha256": "f8ba65db13ce536570c792b51dbb1273b87911f837fe8932b3bae1a5e08fc0e6",
+    "source_payload_commit": "0305e918f938d6b2092b38d6af57a258ae814096"
+  }
+}
