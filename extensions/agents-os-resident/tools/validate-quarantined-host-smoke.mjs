@@ -5,6 +5,8 @@ import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 
+import { runQuarantineTopologySelfTest } from './prepare-quarantined-host-smoke.mjs';
+
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const EXTENSION_ROOT = resolve(dirname(TOOL_PATH), '..');
 const WORKSPACE_ROOT = resolve(EXTENSION_ROOT, '..', '..');
@@ -72,6 +74,15 @@ const REQUIRED_BY_STAGE = Object.freeze({
   wp5: FUTURE_CREATE
 });
 const ALLOWED_STAGES = new Set(Object.keys(REQUIRED_BY_STAGE));
+const STAGE_ORDER = Object.freeze(['wp0', 'wp1', 'wp2', 'wp3', 'wp4', 'wp5']);
+const STAGE_SUCCESS = Object.freeze({
+  wp0: 'WP0_SEALED_SOURCE_AND_HOST_COMMITMENTS_VERIFIED',
+  wp1: 'WP1_OWNED_QUARANTINE_TOPOLOGY_VERIFIED',
+  wp2: 'WP2_BLOCKED_MANIFEST_RULE_VERIFIED',
+  wp3: 'WP3_INERT_LIFECYCLE_CONTRACT_VERIFIED',
+  wp4: 'WP4_CLEANUP_AND_RESIDUE_CONTRACT_VERIFIED',
+  wp5: 'QUARANTINED_HOST_SMOKE_PREFLIGHT_READY'
+});
 const EXCLUDED_ROOT_NAMES = new Set(['node_modules', 'target']);
 const HEX_40 = /^[0-9a-f]{40}$/;
 const HEX_64 = /^[0-9a-f]{64}$/;
@@ -456,15 +467,24 @@ export function validateQuarantinedHostSmoke(options = {}) {
   const source = errors.some((item) => item.code === 'STAGE_INVALID')
     ? { baseline_source_record_count: 0, current_source_path_count: 0 }
     : validateSourceAndBaseline(stage, errors);
+  let topology = 'NOT_RUN';
+  if (ALLOWED_STAGES.has(stage) && STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf('wp1')) {
+    const topologyResult = runQuarantineTopologySelfTest();
+    topology = topologyResult.result;
+    if (topologyResult.result !== 'OWNED_QUARANTINE_TOPOLOGY_VERIFIED') {
+      errors.push(error('OWNED_QUARANTINE_TOPOLOGY_UNVERIFIED'));
+    }
+  }
   const sortedErrors = errors.sort((left, right) => `${left.code}:${left.detail ?? ''}`.localeCompare(`${right.code}:${right.detail ?? ''}`));
   return {
-    result: sortedErrors.length === 0 ? 'WP0_SEALED_SOURCE_AND_HOST_COMMITMENTS_VERIFIED' : 'BLOCKED',
+    result: sortedErrors.length === 0 ? STAGE_SUCCESS[stage] : 'BLOCKED',
     stage,
     errors: sortedErrors,
     frozen_source_payload_commit: BASELINE.source_payload_commit,
     baseline_source_records: `${source.baseline_source_record_count}/${source.baseline_source_record_count}_MATCH`,
     current_source_paths: `${source.current_source_path_count}/${source.current_source_path_count}_CLOSED`,
     sealed_host_commitments: '7/7_STATIC_TUPLE_MATCH',
+    owned_quarantine_topology: topology,
     vcptoolbox_worktree_accessed: false,
     archive_delivery_performed: false,
     plugin_enabled: false,
