@@ -1,0 +1,118 @@
+{
+  "authorization": {
+    "Git_delivery_authorized": false,
+    "Host_loading_authorized": false,
+    "VCPToolBox_change_or_start_authorized": false,
+    "archive_delivery_or_installation_authorized": false,
+    "clean_Host_worktree_creation_or_inspection_authorized": false,
+    "database_creation_or_connection_authorized": false,
+    "implementation_or_source_modification_authorized": false,
+    "native_addon_loading_authorized": false,
+    "plan_authoring_authorized": true,
+    "plugin_enablement_authorized": false,
+    "private_Memory_access_authorized": false,
+    "production_authentication_authorized": false,
+    "provider_sensing_or_real_effect_authorized": false,
+    "runtime_activation_authorized": false,
+    "separate_Jenn_implementation_start_required_after_plan_durability": true,
+    "separate_Jenn_plan_freeze_required": true
+  },
+  "baseline": {
+    "VCPToolBox_sealed_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "VCPToolBox_sealed_tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "baseline_main_commit": "bc5df3903bd1f591d085538f3480be37c11c0ddc",
+    "blocked_plugin_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+    "inert_commonjs_entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+    "package_manifest_sha256": "b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23",
+    "repository": "JENN2046/Agents-OS",
+    "source_payload_commit": "0305e918f938d6b2092b38d6af57a258ae814096",
+    "source_root": "extensions/agents-os-resident"
+  },
+  "claimed_decision": "QUARANTINED_HOST_SMOKE_PREFLIGHT_READY",
+  "environment": "SYNTHETIC_PLAN_ONLY",
+  "quarantine_contract": {
+    "caller_selected_source_host_output_manifest_or_config_path": "forbidden",
+    "environment": "NEWLY_CREATED_OWNED_DISPOSABLE_NONPRODUCTION_ROOT",
+    "existing_root_or_residue": "BLOCKED",
+    "transient_enabled_manifest": {
+      "location": "newly_created_owned_quarantine_root_only",
+      "must_be_deleted_before_terminal_success": true,
+      "possible_only_after_separate_Jenn_enablement_gate": true,
+      "source_or_Host_worktree_persistence": "forbidden"
+    },
+    "workspace_enabled_manifest": "forbidden"
+  },
+  "real_occurrence_count": 0,
+  "runtime_usable": false,
+  "schema_version": "agents-os.m0d-synthetic-plan-witness.v0.1",
+  "sealed_host_commitments": [
+    {
+      "blob_oid": "28f22b4de495a63f14ede8fe72698278c877cb8d",
+      "path": "AGENTS.md",
+      "sha256": "24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b"
+    },
+    {
+      "blob_oid": "c2d23c041033b1f7d46b9dc3bdb2ba738566c872",
+      "path": "Plugin/AGENTS.md",
+      "sha256": "b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4"
+    },
+    {
+      "blob_oid": "81dc779453ccf2fb56c1f57d1ecde8ff3ffda506",
+      "path": "docs/PLUGIN_ECOSYSTEM.md",
+      "sha256": "f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65"
+    },
+    {
+      "blob_oid": "0fad4dba9bcbaa2452a362910b01e6275e5c352e",
+      "path": "rust-vexus-lite/AGENTS.md",
+      "sha256": "e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494"
+    },
+    {
+      "blob_oid": "3682f96f45c095f85e0f3c93bc2d6c1f21c98dde",
+      "path": "rust-vexus-lite/Cargo.toml",
+      "sha256": "01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9"
+    },
+    {
+      "blob_oid": "232a95ef206e6ffab0cdff959826faaa10f6fedb",
+      "path": "rust-vexus-lite/package.json",
+      "sha256": "c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c"
+    },
+    {
+      "blob_oid": "5fd77cea37c30ef432f23d9627d05aba862b9744",
+      "path": "Plugin.js",
+      "sha256": "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2"
+    }
+  ],
+  "sealed_host_commitments_sha256": "f8ba65db13ce536570c792b51dbb1273b87911f837fe8932b3bae1a5e08fc0e6",
+  "smoke_contract": {
+    "expected_initialize_result": {
+      "initialized": false
+    },
+    "expected_shutdown_result": {
+      "shutdown": true
+    },
+    "host_lifecycle_argument_contract": "future_hash_bound_Host_contract_required",
+    "lifecycle_methods_allowed_only": [
+      "initialize",
+      "shutdown"
+    ],
+    "native_NAPI_methods_allowed": [],
+    "processToolCall_or_native_addon_load": "forbidden"
+  },
+  "state_machine": {
+    "allowed_sequence": [
+      "NOT_STARTED",
+      "QUARANTINE_CREATED",
+      "SEALED_INPUTS_VERIFIED",
+      "BLOCKED_PACKAGE_STAGED",
+      "FUTURE_JENN_ENABLEMENT_GATE",
+      "FUTURE_JENN_HOST_LOAD_GATE",
+      "INITIALIZED_INERT",
+      "SHUTDOWN_INERT",
+      "QUARANTINE_REMOVED"
+    ],
+    "current_terminal_state": "NOT_EXECUTED",
+    "observed_sequence": [
+      "NOT_STARTED"
+    ]
+  }
+}

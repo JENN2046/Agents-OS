@@ -1,0 +1,93 @@
+schema_version: agents-os.finding-disposition.v0.1
+record_id: phase-5d-m0d-plan-r1-independent-review-disposition-v0.1
+date: 2026-07-23
+owner: Jenn
+agent_steward: Nobao
+status: R1_BLOCK_RECONCILED_R2_DECISION_REQUIRED
+
+materialization:
+  review_was_conducted_read_only: true
+  review_and_case_results_preserved_byte_for_byte: true
+  backdated_preexistence_claim: false
+
+review:
+  path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r1-full-atomic-independent-review.yaml
+  sha256: 4172f1895e4b0bd829ec48775ce92d0785cbc6068e32439bd4aac6226112b265
+  case_results_path: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-independent-case-results.json
+  case_results_sha256: c3a20153939955b329f23c143ecf62137d3290081e7ac055c313b877cb0ea183
+  result: BLOCK
+  requires_R2: true
+  findings: {blocker: 3, major: 0, minor: 0, unresolved: 3}
+
+atomic_bundle:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  review_archive_sha256: 1a99a221fd909743b80f916fe3bbd57dc47a6327480ab7cc82faedf9725dda24
+  subject_count: 2
+  partial_acceptance: forbidden
+
+immutable_lineage:
+  R1_subjects_manifest_author_evidence_and_independent_review_immutable: true
+  R1_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
+  R1_plan_sha256: 60cb27e9fafd2881dcbad4ccea5fd45ef2da8ceb8cb3717738d272d02cb77e27
+  R1_profile_sha256: de9feef1e71d4c7ef27b58d4759c7190fb7b4c9b7bbf9b636cdad08a8ff00e82
+
+findings:
+  - finding_id: PHASE5D_M0D_PLAN_R1_IR_B01
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R2
+    closure_scope: exact_immutable_binding_of_source_Host_and_extension_commitments
+    required_regressions:
+      - fully_resigned_source_payload_commit_substitution_rejected_by_target_semantics
+      - fully_resigned_sealed_Host_commit_tree_and_seven_path_substitution_rejected_by_target_semantics
+      - fully_resigned_extension_hash_substitution_rejected_by_target_semantics
+      - exact_binding_to_a_single_immutable_Phase_5C_sealed_source_digest_or_equivalent_exact_constants
+    no_scope_expansion: true
+
+  - finding_id: PHASE5D_M0D_PLAN_R1_IR_B02
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R2
+    closure_scope: exact_plan_boundary_binding_to_favorable_preflight_outcome
+    required_regressions:
+      - plan_claiming_current_Host_plugin_or_runtime_execution_rejected
+      - plan_claiming_processToolCall_or_native_execution_rejected
+      - favorable_result_derived_only_from_the_exact_canonical_plan_and_profile_boundary
+    no_scope_expansion: true
+
+  - finding_id: PHASE5D_M0D_PLAN_R1_IR_B03
+    disposition: ACCEPTED_FOR_POTENTIAL_NARROW_R2
+    closure_scope: duplicate_key_rejecting_YAML_and_exact_profile_identity_totality
+    required_regressions:
+      - duplicate_profile_key_rejected_before_semantic_processing
+      - exact_schema_version_profile_id_and_status_constants_required
+      - noncanonical_profile_identity_rejected
+    no_scope_expansion: true
+
+R2_scope_if_started:
+  exact_findings:
+    - PHASE5D_M0D_PLAN_R1_IR_B01
+    - PHASE5D_M0D_PLAN_R1_IR_B02
+    - PHASE5D_M0D_PLAN_R1_IR_B03
+  R1_subjects_manifest_author_evidence_and_independent_review_immutable: true
+  may_modify_or_inspect_VCPToolBox: false
+  may_create_Host_worktree_or_deliver_archive: false
+  may_enable_or_load_plugin_or_native_addon: false
+  may_invoke_processToolCall_or_NAPI: false
+  may_start_runtime_or_service: false
+  may_create_or_access_database: false
+  may_access_private_Memory_provider_sensing_or_effect: false
+  may_change_dependencies_locks_public_API_or_MCP: false
+
+governance:
+  R2_started: false
+  R2_requires_Jenn_explicit_start: true
+  partial_acceptance: forbidden
+  Phase_5D_plan_freeze_ready: false
+  Phase_5D_plan_frozen: false
+  Phase_5D_implementation_started: false
+  implementation_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_runtime_activation_authorized: false
+  database_private_Memory_provider_sensing_or_effect_authorized: false
+  commit_push_merge_authorized: false
+
+next_gate: JENN_EXPLICIT_PHASE_5D_M0D_PLAN_R2_START_DECISION

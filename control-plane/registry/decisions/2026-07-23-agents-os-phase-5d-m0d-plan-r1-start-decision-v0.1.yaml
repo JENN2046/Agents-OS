@@ -1,0 +1,56 @@
+schema_version: agents-os.phase-start-decision.v0.1
+record_id: agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1
+record_type: PhaseStartDecision
+status: accepted
+immutable: true
+created_at: '2026-07-23T13:00:00+08:00'
+
+authority:
+  decided_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5D_M0D_QUARANTINED_HOST_SMOKE_INTEGRATION_PLANNING
+  decision_source: explicit_current_conversation_instruction
+  confirmation_text_received: >-
+    启动 Phase 5D M0-D：Quarantined Host Smoke Integration（隔离首次 Host 集成）规划。
+
+scope:
+  objective: >-
+    Produce a plan-only, hash-bound review package for a future quarantined
+    Host smoke preflight. The package must define the future boundary without
+    reading, modifying, starting, or loading VCPToolBox.
+  allowed_now:
+    - implementation_plan_and_build_profile
+    - synthetic_fixture_and_offline_validator
+    - author_self_review_and_hash_bound_review_package
+    - current_queue_CURRENT_STATE_and_registry_governance_projection
+    - local_offline_validation_of_only_the_new_plan_artifacts
+  explicitly_not_authorized_now:
+    - VCPToolBox_worktree_read_or_write
+    - VCPToolBox_clean_checkout_or_linked_worktree_creation
+    - package_archive_delivery_or_installation
+    - plugin_manifest_enablement
+    - Host_discovery_or_Host_loading
+    - CommonJS_processToolCall_or_native_addon_loading
+    - runtime_or_service_start
+    - database_creation_or_access
+    - provider_production_authentication_private_Memory_sensing_or_real_effect
+    - dependency_installation_or_toolchain_mutation
+    - public_API_or_MCP_expansion
+    - commit_push_PR_or_main_merge
+
+required_boundary:
+  current_terminal_outcome: NOT_EXECUTED
+  current_runtime_usable: false
+  canonical_plugin_manifest_state: BLOCKED
+  future_smoke_lifecycle_surface:
+    allowed_only: [initialize, shutdown]
+    forbidden: [processToolCall, execute_command, execute_query, claim_outbox, acknowledge_outbox, reconcile]
+  future_native_addon_load: separately_Jenn_authorized_only
+  future_Host_smoke_execution: separately_Jenn_authorized_only
+
+next_gate:
+  name: PHASE_5D_M0D_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW
+  automatic_transition: forbidden
+  plan_freeze_requires: separate_Jenn_atomic_freeze_decision
+  implementation_or_execution_requires: separate_Jenn_decision_after_plan_freeze_and_durability

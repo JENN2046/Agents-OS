@@ -1,0 +1,94 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: PHASE_5D_M0D_PLAN_R2_AUTHOR_SELF_REVIEW_V0_1
+date: '2026-07-23'
+
+reviewer:
+  identity: Nobao
+  independent: false
+  role: author_self_review
+  may_substitute_for_independent_judgment: false
+
+review_unit:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 6
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+immutable_R1_subjects:
+  implementation_plan_sha256: 60cb27e9fafd2881dcbad4ccea5fd45ef2da8ceb8cb3717738d272d02cb77e27
+  build_profile_sha256: de9feef1e71d4c7ef27b58d4759c7190fb7b4c9b7bbf9b636cdad08a8ff00e82
+  manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  independent_review_sha256: 4172f1895e4b0bd829ec48775ce92d0785cbc6068e32439bd4aac6226112b265
+
+R2_subjects:
+  amendment_plan:
+    path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+    sha256: e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b
+  immutable_binding_profile:
+    path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+    sha256: 3dfadf64e8e717d195ed64361bcf4f9af6d770eb835455e92d017510468b9349
+  synthetic_fixture:
+    path: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
+    sha256: 37160f3b298aea5438f57c7f332d7cea1653ffbe245e183d1b292af7b2220ed0
+  offline_validator:
+    path: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+    sha256: d2767d569eabc795433530f2490672ce71089d85a49da10454294ff47834ac3f
+
+author_evidence:
+  deterministic_builder:
+    path: control-plane/registry/build-phase-5d-m0d-plan-r2-witness.py
+    sha256: 78057b8b85e26ebbe922473b17edb5d43b84b97ac9cfd3bea70e172889e2059a
+  R2_start_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml
+    sha256: 1fe1f780fe6b917e27af993cbb9085bb2060bdd46a0a40fc03fbc632a0b34583
+
+R1_blocker_closure_claims:
+  immutable_source_Host_extension_anchor:
+    status: CLOSED_CLAIMED_PENDING_INDEPENDENT_REVIEW
+    evidence:
+      - validator owns exact R2 source Host extension constants
+      - profile raw SHA and anchor preimage must both match
+      - source payload sealed commit tree extension hash and seven Host rows are exact
+  plan_boundary_to_favorable_outcome:
+    status: CLOSED_CLAIMED_PENDING_INDEPENDENT_REVIEW
+    evidence:
+      - plan raw SHA and exact leading YAML header are required
+      - current Host plugin native runtime claims are rejected
+      - favorable outcome remains synthetic runtime-unusable NOT_EXECUTED evidence
+  duplicate_YAML_and_identity_totality:
+    status: CLOSED_CLAIMED_PENDING_INDEPENDENT_REVIEW
+    evidence:
+      - custom duplicate-key rejecting YAML loader is used for Plan and profile
+      - exact R2 schema_version profile_id and status constants are required
+
+checks:
+  plan_profile_yaml_parse: PASS
+  validator_positive_fixture: PASS
+  builder_two_run_byte_reproduction: PASS
+  builder_matches_fixed_fixture: PASS
+  python_compile: PASS
+  structured_negative_mutations: 12/12_REJECTED
+  duplicate_YAML_key_probe: REJECTED
+  coordinated_resigned_source_Host_Plan_and_duplicate_key_probes: 5/5_TARGET_SEMANTIC_REJECTION
+  R1_immutable_hashes: 4/4_MATCH
+  VCPToolBox_worktree_access: NOT_PERFORMED
+
+boundary_review:
+  Host_worktree_read_or_write_performed: false
+  archive_delivered_or_installed: false
+  plugin_enablement_or_Host_loading_performed: false
+  processToolCall_or_native_addon_loading_performed: false
+  runtime_or_service_started: false
+  database_created_or_accessed: false
+  provider_production_authentication_private_Memory_sensing_or_effect: false
+  implementation_or_source_modification_performed: false
+  second_permission_identity_Task_Command_or_effect_authority: false
+
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+independent_review_created: false
+plan_freeze_ready: false
+implementation_authorized: false
+next_gate: PHASE_5D_M0D_PLAN_R2_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

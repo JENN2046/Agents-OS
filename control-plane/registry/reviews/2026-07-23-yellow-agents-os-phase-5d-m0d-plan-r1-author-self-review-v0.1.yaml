@@ -1,0 +1,63 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: PHASE_5D_M0D_PLAN_R1_AUTHOR_SELF_REVIEW_V0_1
+date: '2026-07-23'
+
+reviewer:
+  identity: Nobao
+  independent: false
+  role: author_self_review
+  may_substitute_for_independent_judgment: false
+
+review_unit:
+  id: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 2
+
+subjects:
+  implementation_plan:
+    path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r1.md
+    sha256: 60cb27e9fafd2881dcbad4ccea5fd45ef2da8ceb8cb3717738d272d02cb77e27
+  exact_build_profile:
+    path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-build-profile-v0.1-r1.yaml
+    sha256: de9feef1e71d4c7ef27b58d4759c7190fb7b4c9b7bbf9b636cdad08a8ff00e82
+
+author_evidence:
+  deterministic_builder:
+    path: control-plane/registry/build-phase-5d-m0d-plan-r1-witness.py
+    sha256: 9445592bfd381a202da27bc0ed6ed2b8042bcfa5bcc9eb13ea21f6cc0a3ca10f
+  synthetic_fixture:
+    path: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r1-synthetic-witness-v0.1.json
+    sha256: 40f6368d5f7735a81b1eae1f9174f1acd5d1d35f32f713fe428f64c53bd10019
+  offline_validator:
+    path: control-plane/registry/validate-phase-5d-m0d-plan-r1-witness.py
+    sha256: 3c1802f486309e86d21c51fe53c2bd9e2a62c23b4022f12e1dae29075a26f49e
+
+checks:
+  profile_yaml_parse: PASS
+  validator_positive_fixture: PASS
+  builder_fixture_byte_reproduction: PASS
+  python_compile: PASS
+  trailing_whitespace: PASS
+  structured_negative_mutations: 10/10_REJECTED
+  duplicate_JSON_key_probe: REJECTED
+  profile_static_boundary_closure: PASS
+
+boundary_review:
+  VCPToolBox_worktree_read_or_write_performed: false
+  VCPToolBox_clean_checkout_created: false
+  archive_delivered_or_installed: false
+  workspace_enabled_manifest_created: false
+  Host_discovery_or_loading_performed: false
+  processToolCall_or_native_addon_loading_performed: false
+  runtime_or_service_started: false
+  database_created_or_accessed: false
+  provider_production_authentication_private_Memory_sensing_or_effect: false
+  public_API_or_MCP_expansion: false
+  second_permission_identity_Task_Command_or_effect_authority: false
+
+result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+independent_review_created: false
+plan_freeze_ready: false
+implementation_authorized: false
+next_gate: PHASE_5D_M0D_PLAN_R1_FRESH_FULL_ATOMIC_HASH_BOUND_INDEPENDENT_REVIEW

@@ -6,6 +6,84 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
+## Phase 5D M0-D Plan R2 — Accepted and Frozen (2026-07-23)
+
+Phase 5D M0-D remains planning-only. R1's immutable independent `BLOCK`
+remains preserved: it found that R1's favorable offline result could survive
+coordinated re-signing of sealed source/Host commitments and current-boundary
+claims. The bounded R2 closure binds the exact immutable source/Host/extension
+commitments, the Plan's current-boundary projection, and duplicate-YAML/identity
+totality. The fresh independent review passed with no blockers, and Jenn has
+now explicitly accepted and frozen the complete R1–R2 six-subject unit. The
+only next gate is a separately authorized Git durability closeout; this does
+not start implementation or any Host-facing action.
+
+```yaml
+Phase_5D_status: M0D_PLAN_ACCEPTED_FROZEN_GIT_DURABILITY_DELIVERY_IN_PROGRESS
+Phase_5D_objective: QUARANTINED_HOST_SMOKE_INTEGRATION_PREFLIGHT_ONLY
+Phase_5D_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
+Phase_5D_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
+Phase_5D_plan_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+Phase_5D_plan_manifest: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5D_plan_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+Phase_5D_plan_review_package: /tmp/agents-os-phase-5d-m0d-r2/2026-07-23-agents-os-phase-5d-m0d-plan-r2-review-package-v0.1.zip
+Phase_5D_plan_review_package_sha256: 0ac6078ff0f41fa40638155ce17f0d5290f8ee69c83a0f3b982de5d29053785f
+Phase_5D_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5D_author_self_review_sha256: 76023c07cf1b57f06bbb2bec704647d58f9824b2001270481d0b4bf1e7a1044d
+Phase_5D_independent_review: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+Phase_5D_independent_review_sha256: 902a9fd3686cfbe95693e272df329282f3b33d44ebb1285edfc37bc3ebf8b068
+Phase_5D_independent_review_created: true
+Phase_5D_independent_review_result: PASS_NO_BLOCKER
+Phase_5D_independent_review_findings: {blocker: 0, major: 0, minor: 0}
+Phase_5D_R1_finding_disposition: control-plane/registry/reviews/2026-07-23-agents-os-phase-5d-m0d-plan-r1-finding-disposition-v0.1.yaml
+Phase_5D_R1_finding_disposition_sha256: 0179e6dffac50e83312c645822645e4c19e9648645a13d1b325dc97714047f5a
+Phase_5D_R2_started: true
+Phase_5D_R2_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-narrow-closure-start-decision-v0.1.yaml
+Phase_5D_R2_start_decision_sha256: 1fe1f780fe6b917e27af993cbb9085bb2060bdd46a0a40fc03fbc632a0b34583
+Phase_5D_R2_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+Phase_5D_R2_amendment: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+Phase_5D_R2_immutable_binding_profile: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+Phase_5D_R2_synthetic_fixture: control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json
+Phase_5D_R2_validator: control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py
+Phase_5D_R2_manifest: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+Phase_5D_R2_manifest_sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+Phase_5D_R2_review_package: /tmp/agents-os-phase-5d-m0d-r2/2026-07-23-agents-os-phase-5d-m0d-plan-r2-review-package-v0.1.zip
+Phase_5D_R2_review_package_sha256: 0ac6078ff0f41fa40638155ce17f0d5290f8ee69c83a0f3b982de5d29053785f
+Phase_5D_R2_author_self_review: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+Phase_5D_R2_author_self_review_sha256: 76023c07cf1b57f06bbb2bec704647d58f9824b2001270481d0b4bf1e7a1044d
+Phase_5D_R2_independent_review_created: true
+Phase_5D_R2_independent_review_result: PASS_NO_BLOCKER
+Phase_5D_R2_requires_R3: false
+Phase_5D_R2_freeze_decision_package: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-package-v0.1.md
+Phase_5D_R2_freeze_decision_package_sha256: 104a8566f2fbcb967a2477b35fa9ead274c7dc80a1cc7657396549bcf3698120
+Phase_5D_R2_atomic_freeze_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+Phase_5D_R2_atomic_freeze_decision_sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+Phase_5D_R2_atomic_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-closeout-v0.1.md
+Phase_5D_R2_atomic_freeze_closeout_receipt_sha256: 348be4d8adca1bd6657fd56413604bdac277355483caedccd9d5229e1e27a6cc
+Phase_5D_Git_delivery_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-git-durability-delivery-decision-v0.1.yaml
+Phase_5D_Git_delivery_decision_sha256: 8803bf1182dcd7127d8100575fd782c425038c063fc42d483f36c2fc8b6fc7a5
+Phase_5D_plan_accepted: true
+Phase_5D_plan_frozen: true
+Phase_5D_plan_revisions_stopped: true
+Phase_5D_implementation_started: false
+Phase_5C_implementation_durability_complete: true
+current_work_package: PHASE_5D_M0D_PLAN_GIT_DURABILITY_DELIVERY
+VCPToolBox_change_or_start_authorized: false
+clean_Host_worktree_creation_or_inspection_authorized: false
+archive_delivery_or_installation_authorized: false
+plugin_enablement_or_Host_loading_authorized: false
+processToolCall_or_native_addon_loading_authorized: false
+runtime_activation_authorized: false
+database_private_Memory_provider_sensing_or_effect_authorized: false
+implementation_source_change_authorized: false
+Git_delivery_authorized: true
+main_merge_authorized: false
+active_work_queue: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+active_work_queue_sha256: 014577dee1b7109350573e46079f927f4cdedb80ad7f0e7b145143ddd88fa0ec
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
+next_gate: PHASE_5D_PLAN_PR_CURRENT_HEAD_REVIEW_CI_AND_JENN_MAIN_MERGE_DECISION
+```
+
 ## Phase 5C M0-C Implementation — Mainline Durability Complete (2026-07-23)
 
 Jenn explicitly started the frozen Phase 5C M0-C offline plugin-packaging and

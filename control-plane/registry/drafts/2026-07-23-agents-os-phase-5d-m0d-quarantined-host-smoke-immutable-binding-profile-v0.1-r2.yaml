@@ -1,0 +1,81 @@
+schema_version: agents-os.m0d-quarantined-host-smoke-immutable-binding-profile.v0.1-r2
+profile_id: PHASE_5D_M0D_QUARANTINED_HOST_SMOKE_IMMUTABLE_BINDING_PROFILE_V0_1_R2
+date: '2026-07-23'
+status: fixed_for_fresh_full_atomic_independent_review
+runtime_usable: false
+terminal_outcome: NOT_EXECUTED
+
+plan_binding:
+  plan_path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+  plan_sha256: e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b
+  required_plan_schema_version: agents-os.phase5d.m0d.plan.v0.1-r2
+  required_plan_id: PHASE_5D_M0D_QUARANTINED_HOST_SMOKE_INTEGRATION_PLAN_V0_1_R2
+  required_plan_status: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+
+r1_immutable_lineage:
+  r1_plan_sha256: 60cb27e9fafd2881dcbad4ccea5fd45ef2da8ceb8cb3717738d272d02cb77e27
+  r1_profile_sha256: de9feef1e71d4c7ef27b58d4759c7190fb7b4c9b7bbf9b636cdad08a8ff00e82
+  r1_manifest_sha256: 6ea9be0cc7873dfed3b0038c853e18fcb58be97f08553411226dd7ef65b2f568
+  r1_independent_review_sha256: 4172f1895e4b0bd829ec48775ce92d0785cbc6068e32439bd4aac6226112b265
+  r1_finding_disposition_sha256: 0179e6dffac50e83312c645822645e4c19e9648645a13d1b325dc97714047f5a
+
+phase5c_immutable_evidence:
+  freeze_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  implementation_closeout_sha256: edf82f3d87ed1c7480c82ff60e355af88b8fb6ddd31953f20bca959aee28c0b9
+  postmerge_durability_sha256: 55dbfd4000a5f709293bbdd0403c7623479253c180e0e8927462a1a17dad72fe
+
+exact_source_Host_extension_anchor:
+  repository: JENN2046/Agents-OS
+  baseline_main_commit: bc5df3903bd1f591d085538f3480be37c11c0ddc
+  source_payload_commit: 0305e918f938d6b2092b38d6af57a258ae814096
+  source_root: extensions/agents-os-resident
+  package_manifest_sha256: b30b455cee6313b3c4c6fa0883865ec4ea45e3854d7453cbc651e77a2e83df23
+  blocked_plugin_manifest_sha256: 25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0
+  inert_commonjs_entrypoint_sha256: 51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec
+  VCPToolBox_sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  VCPToolBox_sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  sealed_host_commitments:
+    - {path: AGENTS.md, blob_oid: 28f22b4de495a63f14ede8fe72698278c877cb8d, sha256: 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b}
+    - {path: Plugin/AGENTS.md, blob_oid: c2d23c041033b1f7d46b9dc3bdb2ba738566c872, sha256: b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4}
+    - {path: docs/PLUGIN_ECOSYSTEM.md, blob_oid: 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506, sha256: f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65}
+    - {path: rust-vexus-lite/AGENTS.md, blob_oid: 0fad4dba9bcbaa2452a362910b01e6275e5c352e, sha256: e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494}
+    - {path: rust-vexus-lite/Cargo.toml, blob_oid: 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde, sha256: 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9}
+    - {path: rust-vexus-lite/package.json, blob_oid: 232a95ef206e6ffab0cdff959826faaa10f6fedb, sha256: c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c}
+    - {path: Plugin.js, blob_oid: 5fd77cea37c30ef432f23d9627d05aba862b9744, sha256: be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2}
+  anchor_sha256: b85ae99e47bc80bfbbcf634d403628a3ad972ec06a459e0e9cb710b679692352
+
+current_plan_boundary_projection:
+  current_plan_authoring_only: true
+  Host_worktree_read_or_write: forbidden
+  archive_delivery_or_installation: forbidden
+  plugin_enablement_or_Host_loading: forbidden
+  processToolCall_or_native_addon_load: forbidden
+  native_NAPI_invocation: forbidden
+  runtime_database_provider_private_Memory_sensing_or_effect: forbidden
+  implementation_authorized: false
+  runtime_usable: false
+  terminal_outcome: NOT_EXECUTED
+  future_lifecycle_methods_only: [initialize, shutdown]
+  future_Host_lifecycle_argument_contract: future_hash_bound_Host_contract_required
+  future_Host_discovery_or_lifecycle: separately_Jenn_authorized_only
+
+offline_witness_contract:
+  favorable_result: QUARANTINED_HOST_SMOKE_PREFLIGHT_READY
+  favorable_result_is_not_execution: true
+  environment: SYNTHETIC_PLAN_ONLY
+  real_occurrence_count: 0
+  source_profile_and_plan_mutation: BLOCKED
+  current_Host_plugin_native_or_runtime_claim: BLOCKED
+  duplicate_YAML_key_or_noncanonical_identity: BLOCKED
+
+authorization:
+  R2_plan_authoring_authorized: true
+  implementation_or_source_modification_authorized: false
+  VCPToolBox_change_or_start_authorized: false
+  archive_delivery_or_installation_authorized: false
+  plugin_enablement_or_Host_loading_authorized: false
+  processToolCall_or_native_addon_loading_authorized: false
+  runtime_activation_authorized: false
+  database_provider_private_Memory_sensing_or_effect_authorized: false
+  Git_delivery_authorized: false
+  separate_Jenn_plan_freeze_required: true
