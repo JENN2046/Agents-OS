@@ -1,0 +1,146 @@
+schema_version: agents-os.implementation-start-decision-record.v0.1
+record_id: agents-os-phase-5c-m0c-implementation-start-decision-v0.1
+record_type: ImplementationStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-22T23:42:42+08:00'
+effective_at: '2026-07-22T23:42:42+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_FROZEN_PHASE_5C_M0C_IMPLEMENTATION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 可以启动Phase 5C了
+  interpreted_scope: start_the_frozen_Phase_5C_M0C_implementation_at_WP0
+  scope_expansion: forbidden
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_interpretation: forbidden
+  subject_count: 9
+  precedence:
+    - R4_explicit_replacements
+    - R3_all_other_clauses
+    - R2_all_other_clauses
+    - R1_all_other_clauses
+  manifest:
+    path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+    verified_inputs: 98/98_MATCH
+    verified_subjects: 9/9_MATCH
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-full-atomic-independent-review.yaml
+    sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+    result: PASS_NO_BLOCKER
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml
+    sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  plan_mainline_integration_commit: 89a95bd98426450e4b0edcf6b2881e3f8e931e8b
+  durability_projection_merge_commit: 19ea75f000430803bcc38aa7218e8204d0827b80
+
+implementation_start_preflight:
+  path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-implementation-start-preflight-v0.1.yaml
+  sha256: df3815723f335292c681e543cf28bc62f576a46b1f513cf6603f2469c9379253
+  result: PASS
+  sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  sealed_host_commitments: 7/7_MATCH
+
+implementation_authority:
+  source_authority_root: extensions/agents-os-resident
+  implementation_task_branch: agent/phase-5c-m0c-implementation
+  first_work_package: WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+  work_packages:
+    - WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+    - WP1_DETERMINISTIC_TEMPORARY_STAGING_BUILDER
+    - WP2_DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIER
+    - WP3_SEALED_HOST_CONTRACT_COMPATIBILITY_VERIFIER
+    - WP4_ARCHIVE_DETERMINISM_AND_TAMPER_SUITE
+    - WP5_OWNED_TEMPORARY_STAGING_ROLLBACK_AND_CLEANUP_PROOF
+    - WP6_INTEGRATED_OFFLINE_COMPATIBILITY_WITNESS
+  advancement_rule: direct_predecessor_frozen_condition_must_pass
+  skip_or_parallel_advancement: forbidden
+  repair_inside_frozen_scope: authorized
+
+authorized_after_start_closeout:
+  Phase_5C_implementation_started: true
+  implementation_authorized: true
+  WP0_start_authorized: true
+  WP1_through_WP6_conditionally_authorized: true
+  allowed_create:
+    - extensions/agents-os-resident/tools/build-offline-package.mjs
+    - extensions/agents-os-resident/tools/validate-sealed-host-contract.mjs
+    - extensions/agents-os-resident/fixtures/sealed-vcptoolbox-host-contract.v0.1.json
+    - extensions/agents-os-resident/tests/offline-packaging.mjs
+  allowed_modify:
+    - extensions/agents-os-resident/package.json
+    - extensions/agents-os-resident/README.md
+    - extensions/agents-os-resident/package-manifest.json
+  deterministic_local_JavaScript_and_offline_test_execution: true
+  newly_created_owned_temporary_staging_roots: true
+  in_memory_archive_return_for_synthetic_test_only: true
+  scoped_local_commits: true
+  deterministic_validation_reports_and_receipts: true
+
+required_implementation_boundaries:
+  VCPToolBox_core_diff: zero
+  VCPToolBox_worktree_read_or_write: forbidden
+  enabled_plugin_manifest: forbidden
+  native_host_load: forbidden
+  package_source_of_truth: extensions/agents-os-resident
+  direct_dependency_or_lockfile_change: forbidden
+  Rust_NAPI_or_SQLite_change: forbidden
+  public_API_or_MCP_change: forbidden
+  persistent_archive_delivery: forbidden
+  runtime_usable: false
+  terminal_result_limit: PACKAGE_COMPATIBLE_PREVIEW
+
+not_authorized:
+  VCPToolBox_change_or_start_authorized: false
+  plugin_enablement_or_native_host_loading_authorized: false
+  runtime_activation_authorized: false
+  database_creation_or_existing_database_access_authorized: false
+  production_authentication_credentials_keys_cookies_or_cryptography_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  provider_raw_response_access_authorized: false
+  real_Session_Task_Command_Host_Resident_sensing_recording_provider_or_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  implementation_branch_push_PR_or_merge_authorized: false
+  tag_release_deploy_or_package_publish_authorized: false
+  external_Codex_or_executor_runner_authorized: false
+
+start_closeout:
+  implementation_source_creation_during_closeout: forbidden
+  dependency_installation_during_closeout: forbidden
+  database_creation_during_closeout: forbidden
+  VCPToolBox_modification_or_start_during_closeout: forbidden
+  plugin_enablement_or_runtime_start_during_closeout: forbidden
+  required_projections:
+    - CURRENT_STATE
+    - Active_Work_Queue
+    - Document_Registry
+    - Federated_Document_Registry
+    - Machine_Dashboard_Control_Chain_Workbench_defaults
+    - implementation_start_receipt
+
+next_gate:
+  name: PHASE_5C_M0C_WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+  automatic_progress_inside_frozen_scope: true
+  WP0_exit_condition:
+    - frozen_plan_and_sealed_host_bindings_reverified
+    - future_source_inventory_is_closed_and_exact
+    - blocked_manifest_only
+    - VCPToolBox_core_diff_zero
+    - no_runtime_database_provider_private_memory_or_real_effect_occurrence
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_frozen_plan_subjects: forbidden
+  edit_bound_preflight_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  derived_registry_current_state_queue_and_receipt_updates: permitted

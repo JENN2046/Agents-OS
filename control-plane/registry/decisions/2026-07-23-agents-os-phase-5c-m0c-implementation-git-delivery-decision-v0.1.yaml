@@ -1,0 +1,94 @@
+schema_version: agents-os.git-delivery-decision-record.v0.1
+record_id: agents-os-phase-5c-m0c-implementation-git-delivery-decision-v0.1
+record_type: GitDeliveryDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-23T08:28:55+08:00'
+effective_at: '2026-07-23T08:28:55+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: AUTHORIZE_PHASE_5C_M0C_IMPLEMENTATION_GIT_DELIVERY_AND_PR30_GOVERNANCE_RECONCILIATION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received:
+    - 授权 Phase 5C 的 Git delivery；
+    - 先做一个极窄的同 PR 修复：记录本次授权、创建新的当前 queue、同步 CURRENT_STATE、Registry/Federated Registry 与默认指针；不改实现、不启用任何运行时。随后重新自审并等待/处理 PR review，再进入合并门。
+  interpreted_scope: record_the_existing_delivery_authorization_then_commit_and_push_only_the_PR30_governance_projection_reconciliation_and_track_review
+  scope_expansion: forbidden
+
+frozen_implementation_binding:
+  plan_acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  plan_manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  plan_independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+  plan_freeze_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  implementation_start_decision_sha256: be67f58d4223dde54daa58cb0dc702a0fe765b8de62865d8b9477bf880b65955
+  implementation_closeout_receipt_sha256: edf82f3d87ed1c7480c82ff60e355af88b8fb6ddd31953f20bca959aee28c0b9
+  source_payload_commit: 0305e918f938d6b2092b38d6af57a258ae814096
+
+delivery_binding:
+  remote: git@github.com:JENN2046/Agents-OS.git
+  target_branch: agent/phase-5c-m0c-implementation
+  base_branch: main
+  base_commit_before_reconciliation: 19ea75f000430803bcc38aa7218e8204d0827b80
+  PR_number: 30
+  PR_url: https://github.com/JENN2046/Agents-OS/pull/30
+  PR_head_before_reconciliation: ab647aa7fb4a8f5ca9868b54c4543a35b56b623b
+  permitted_changed_paths:
+    - CURRENT_STATE.md
+    - control-plane/registry/decisions/2026-07-23-agents-os-phase-5c-m0c-implementation-git-delivery-decision-v0.1.yaml
+    - control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.0.md
+    - control-plane/registry/drafts/document-registry.v0.1.example.yaml
+    - control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml
+    - execution/agents-os-machine/machine.py
+    - execution/agents-os-dashboard/dashboard.py
+    - execution/agents-os-control-chain/control_chain.py
+    - execution/agents-os-workbench/workbench.py
+
+authorized_actions:
+  create_the_bound_governance_projection_files: true
+  update_existing_governance_projection_files: true
+  run_local_governance_validators_and_PR_self_review: true
+  commit_and_push_the_exact_governance_reconciliation_to_PR_30: true
+  track_and_fix_in_scope_PR_review_or_CI_feedback: true
+  create_or_update_PR_30: true
+
+not_authorized:
+  Phase_5C_implementation_source_change: false
+  VCPToolBox_core_change_or_start: false
+  plugin_enablement_or_native_host_load: false
+  runtime_activation_or_service_start: false
+  database_creation_or_access: false
+  provider_or_production_authentication: false
+  private_Memory_or_state_private_access: false
+  sensing_or_real_effect: false
+  archive_delivery_release_deploy_or_publish: false
+  main_merge: false
+  force_push_tag_or_history_rewrite: false
+
+required_reconciliation:
+  preserve_existing_implementation_bytes: true
+  preserve_frozen_plan_bytes: true
+  create_a_new_current_queue: true
+  supersede_v15_9_in_the_document_registry: true
+  synchronize_CURRENT_STATE_registry_federated_registry_and_all_four_default_queue_pointers: true
+  exactly_one_NOW_item_in_the_new_queue: true
+  validate_default_queue_equals_explicit_queue: true
+
+next_gate:
+  name: PR_30_CURRENT_HEAD_REVIEW_CI_AND_JENN_MERGE_DECISION
+  automatic_main_merge: forbidden
+  required_before_merge:
+    - current_PR_head_self_review_PASS
+    - no_actionable_unresolved_review_feedback
+    - all_configured_checks_terminal_success_or_no_checks_configured
+    - mergeability_clean
+    - current_exact_Jenn_main_merge_authorization
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  frozen_plan_or_implementation_subject_mutation: forbidden

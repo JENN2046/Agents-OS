@@ -1,0 +1,125 @@
+{
+  "schema_version": "agents-os.sealed-vcptoolbox-host-contract.v0.1",
+  "profile_id": "PHASE_5C_M0C_SEALED_HOST_CONTRACT_V0_1",
+  "environment": "SYNTHETIC_TEST",
+  "runtime_usable": false,
+  "source_root": "extensions/agents-os-resident",
+  "source_inventory_profile": {
+    "path": "control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-sealed-source-inventory-v0.1-r2.yaml",
+    "sha256": "2554783a30af00e31232be7ac8ca4be72ea40ed13025304cf4288b09c8e42958",
+    "record_count": 46,
+    "records_canonical_sha256": "521ffa427a9b5b0a2391970f6ecb8b8c79bf2d1cc5e6e342806bea945bb81830"
+  },
+  "immutable_source_records": [
+    {"source_path":"Cargo.lock","kind":"regular_file","byte_length":19867,"sha256":"0f5d6ebfa9c5dfcf6b094e5687004c3e202b00a19ad3bbbf29e5c94efab78ce8"},
+    {"source_path":"Cargo.toml","kind":"regular_file","byte_length":701,"sha256":"169290f190394ebfc557495581029925fb2d5b1f0397b7138ec09812d5d376a0"},
+    {"source_path":"build.rs","kind":"regular_file","byte_length":39,"sha256":"fcbd1ff3f627a7553fa1704dc6f558998daff8bc256015c37aace62cc49ce584"},
+    {"source_path":"index.js","kind":"regular_file","byte_length":586,"sha256":"51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec"},
+    {"source_path":"package-lock.json","kind":"regular_file","byte_length":60642,"sha256":"7f677892a70f9157b7e8b3ca35709cb79abdf3d2fbc91c538b35de0f1dfbfe55"},
+    {"source_path":"plugin-manifest.json.block","kind":"regular_file","byte_length":413,"sha256":"25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0"},
+    {"source_path":"rust-toolchain.toml","kind":"regular_file","byte_length":90,"sha256":"7a9b3502eb21ff9f3e6ce60b48f138c581efab2f8fa0fe992005a8e6d602aa94"},
+    {"source_path":"src/canonical/fingerprint.rs","kind":"regular_file","byte_length":2882,"sha256":"6cae076dca33fe0b69778809c56f4023983dcb1132ae671939e4d1b97c39f393"},
+    {"source_path":"src/canonical/jcs.rs","kind":"regular_file","byte_length":3869,"sha256":"5b63409c23523bdf5f64eaf9a5525caf9938ab41accea57276a717e1be5162eb"},
+    {"source_path":"src/canonical/mod.rs","kind":"regular_file","byte_length":267,"sha256":"55b4149b10f75ccdb5c78af0c2afb9725f6652c01f5ec29129c208712d035f53"},
+    {"source_path":"src/canonical/types.rs","kind":"regular_file","byte_length":9685,"sha256":"4803a8171964a11f023a55f496f57256daa50b5fa585546851049b516203d011"},
+    {"source_path":"src/home/candidate.rs","kind":"regular_file","byte_length":38638,"sha256":"707392d5de41fb19958081c254e3cd3ec3b1a89b630775a04167fef902b18829"},
+    {"source_path":"src/home/handoff.rs","kind":"regular_file","byte_length":28778,"sha256":"82ade4d0e980f1f0a6e0abe1bc6e0d6cd2d4e4e571c154ceb21470b59093d1f3"},
+    {"source_path":"src/home/mod.rs","kind":"regular_file","byte_length":965,"sha256":"c9712b6a49634e0cb2eb84b8a68deef470bf8623c80a2a3ccb20efb520ec46d1"},
+    {"source_path":"src/home/session_boundary.rs","kind":"regular_file","byte_length":11591,"sha256":"ed182f55760da590b70d3bbd43fa517f345576532f9f3ab772a174f67dbbadda"},
+    {"source_path":"src/ledger/mod.rs","kind":"regular_file","byte_length":911,"sha256":"c0c2b6e4b1679b36cbef22f1a659c166e1d3051016fb8dc41577fc66597009ef"},
+    {"source_path":"src/ledger/recovery.rs","kind":"regular_file","byte_length":39151,"sha256":"866fe43d2efd55c03c2bdc67542285124385c219bcb0e2f903453490bd95380c"},
+    {"source_path":"src/ledger/replay.rs","kind":"regular_file","byte_length":58045,"sha256":"1e81a420242addcc5049ee5d153483ba6d2d1b0d34eab945b5e5c5f30554a778"},
+    {"source_path":"src/ledger/schema.rs","kind":"regular_file","byte_length":39490,"sha256":"0204b0aa95fc12408d033a044a083b340a6a60bd0fea8ae7b3336afab45cf58e"},
+    {"source_path":"src/ledger/transaction.rs","kind":"regular_file","byte_length":32106,"sha256":"3c9d0f7fe0c14c6708d5d361b4656314a3a2b0d59e5087d0628b5dd4ceaeed0a"},
+    {"source_path":"src/lib.rs","kind":"regular_file","byte_length":10543,"sha256":"c3d7d73e3e742298756c5d62c170517680dc41ffb95eb5e62b62e7d09108893d"},
+    {"source_path":"src/mock_host/admission.rs","kind":"regular_file","byte_length":309,"sha256":"766aaa453171fc82da3d054a843b78c507730aa67fcf77debfef29c00c48b6a2"},
+    {"source_path":"src/mock_host/dispatch.rs","kind":"regular_file","byte_length":902,"sha256":"50d083ac82ee86e96161558adbe5eaaaa24ade20bd3b44a79748e2d0b8b8a5a6"},
+    {"source_path":"src/mock_host/mod.rs","kind":"regular_file","byte_length":37,"sha256":"cd8715126e10ad1ec01a4a57fcb41deda6d8e2ced8052eb3040c4aeb57c8614c"},
+    {"source_path":"src/napi_frame.rs","kind":"regular_file","byte_length":41441,"sha256":"3dbdb6e8f2d55a2c5d140f6464fb2ff3d9dffc7d0739a5edf80e331676ab2b60"},
+    {"source_path":"src/reducers/authority_assessment.rs","kind":"regular_file","byte_length":1382,"sha256":"9638372fc6d460f35c0e6a53140e51a803a2592306cbf1131311e7ebbf995a23"},
+    {"source_path":"src/reducers/command_intake.rs","kind":"regular_file","byte_length":19601,"sha256":"e4e422c9ab8a8182a14a38e55c2325b87270af45b27d7e4fb7945dec0eb5beb5"},
+    {"source_path":"src/reducers/delivery_receipt.rs","kind":"regular_file","byte_length":1372,"sha256":"89e711c08f411fb9ada46a51b5427b29cf450c3cf835b004a70f020e8186baa5"},
+    {"source_path":"src/reducers/effect_admission.rs","kind":"regular_file","byte_length":16312,"sha256":"352fb72bdfd71134cd835614cd924b6b4ec3a2dd87216b2a555395ea28340a96"},
+    {"source_path":"src/reducers/goal_plan.rs","kind":"regular_file","byte_length":5287,"sha256":"13b7005cfd0531a4a9b85e72988d3fcc39fcd2df4d7841c0150057769d9a0786"},
+    {"source_path":"src/reducers/mod.rs","kind":"regular_file","byte_length":228,"sha256":"d087348636c92e8f200a307ef399ec0b80a67b44929caf62302ddea7954791eb"},
+    {"source_path":"src/reducers/outbox_claim.rs","kind":"regular_file","byte_length":4818,"sha256":"68f8b3d1f9266ad2850eb3cd52bf51245b255aef9f1ccafbd42af5d0f0c0082d"},
+    {"source_path":"src/reducers/reconcile.rs","kind":"regular_file","byte_length":1895,"sha256":"b5af400eab16cb68c6146b866044b46695eb31031bb11566272a5731c052e5eb"},
+    {"source_path":"src/reducers/task_completion.rs","kind":"regular_file","byte_length":5321,"sha256":"a68c892282288f57e0cbecff89fca182940820cbb838483a126ac2ee3b0c3a56"},
+    {"source_path":"src/reducers/validation_current_decision.rs","kind":"regular_file","byte_length":11751,"sha256":"ff7322989c8b15ea351d463155bdf3f22fccec3ec2c55563394ada200b7bb925"},
+    {"source_path":"src/resident/ledger_thread.rs","kind":"regular_file","byte_length":33517,"sha256":"58fcf5377e2edaf226d213dbb6770bb1fe6bcd4706fb7a575fb55c37293a5724"},
+    {"source_path":"src/resident/lock.rs","kind":"regular_file","byte_length":2507,"sha256":"c61528e2cdc490428cebdba4d4825c3258dcd05ac24c1c93ce3851e9ee7c5f04"},
+    {"source_path":"src/resident/mod.rs","kind":"regular_file","byte_length":28747,"sha256":"59affe7f6588611eec784a9d480825f7c2a31ed2878a3cad6ccab933fca42e60"},
+    {"source_path":"tests/crash_matrix.rs","kind":"regular_file","byte_length":20556,"sha256":"d37a3d087d9ba34a86d5ab5cb0766472014d307e13716c1b5b67440821e6bc50"},
+    {"source_path":"tests/napi_protocol.rs","kind":"regular_file","byte_length":5473,"sha256":"f35b23f1e1da46b8cd66a8a2bd8fe7df5f41e0ba4d5b8c02099f54c3e3b31985"},
+    {"source_path":"tests/replay_and_idempotency.rs","kind":"regular_file","byte_length":3154,"sha256":"066ea372f763480d86bad7a519cd5e74400c2ae49d0d1971c36b25919fb3ad93"},
+    {"source_path":"tests/synthetic_m0a.rs","kind":"regular_file","byte_length":14893,"sha256":"207b09bc2625f257cd38bd91699dd4e13f1b0e38777ffd89a3df6f6ea09c9440"},
+    {"source_path":"tests/synthetic_m0b.rs","kind":"regular_file","byte_length":64723,"sha256":"d5756919803eba44d1815d635c374ab79d0396a8476c8b1e82706fb98655f53f"}
+  ],
+  "mutable_metadata_paths": [
+    "README.md",
+    "package-manifest.json",
+    "package.json"
+  ],
+  "phase5c_owned_paths": [
+    "fixtures/sealed-vcptoolbox-host-contract.v0.1.json",
+    "tests/offline-packaging.mjs",
+    "tools/build-offline-package.mjs",
+    "tools/validate-sealed-host-contract.mjs"
+  ],
+  "stage_required_paths": {
+    "wp0": [
+      "fixtures/sealed-vcptoolbox-host-contract.v0.1.json",
+      "tools/validate-sealed-host-contract.mjs"
+    ],
+    "wp1": [
+      "fixtures/sealed-vcptoolbox-host-contract.v0.1.json",
+      "tools/build-offline-package.mjs",
+      "tools/validate-sealed-host-contract.mjs"
+    ],
+    "wp4": [
+      "fixtures/sealed-vcptoolbox-host-contract.v0.1.json",
+      "tests/offline-packaging.mjs",
+      "tools/build-offline-package.mjs",
+      "tools/validate-sealed-host-contract.mjs"
+    ]
+  },
+  "excluded_non_source_directory_names": [
+    "node_modules",
+    "target"
+  ],
+  "blocked_manifest": {
+    "path": "plugin-manifest.json.block",
+    "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+    "enabled_manifest_path": "plugin-manifest.json"
+  },
+  "entrypoint": {
+    "path": "index.js",
+    "sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+    "commonjs_exports": [
+      "initialize",
+      "processToolCall",
+      "shutdown"
+    ],
+    "native_NAPI_methods": [
+      "execute_command",
+      "execute_query",
+      "claim_outbox",
+      "acknowledge_outbox",
+      "reconcile"
+    ]
+  },
+  "sealed_vcptoolbox_host": {
+    "repository": "lioensky/VCPToolBox",
+    "commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "files": [
+      {"path":"AGENTS.md","blob_oid":"28f22b4de495a63f14ede8fe72698278c877cb8d","sha256":"24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b"},
+      {"path":"Plugin/AGENTS.md","blob_oid":"c2d23c041033b1f7d46b9dc3bdb2ba738566c872","sha256":"b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4"},
+      {"path":"Plugin.js","blob_oid":"5fd77cea37c30ef432f23d9627d05aba862b9744","sha256":"be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2"},
+      {"path":"docs/PLUGIN_ECOSYSTEM.md","blob_oid":"81dc779453ccf2fb56c1f57d1ecde8ff3ffda506","sha256":"f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65"},
+      {"path":"rust-vexus-lite/AGENTS.md","blob_oid":"0fad4dba9bcbaa2452a362910b01e6275e5c352e","sha256":"e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494"},
+      {"path":"rust-vexus-lite/Cargo.toml","blob_oid":"3682f96f45c095f85e0f3c93bc2d6c1f21c98dde","sha256":"01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9"},
+      {"path":"rust-vexus-lite/package.json","blob_oid":"232a95ef206e6ffab0cdff959826faaa10f6fedb","sha256":"c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c"}
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+schema_version: agents-os.implementation-start-preflight.v0.1
+preflight_id: PHASE_5C_M0C_IMPLEMENTATION_START_PREFLIGHT_V0_1
+date: '2026-07-22'
+observed_at: '2026-07-22T23:42:42+08:00'
+owner: Jenn
+agent_steward: Nobao
+result: PASS
+decision_readiness: READY_FOR_JENN_IMPLEMENTATION_START_DECISION
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5C_M0C_PLAN_BUILD_PROFILE_V0_1_R4_ATOMIC_BUNDLE
+  manifest_path: control-plane/registry/reports/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-independent-review-package-v0.1.manifest.yaml
+  manifest_sha256: 5fb69183acadaddb5003d63ed80229ed1cbe4ce5363c96bd3c61099ca430575e
+  independent_review_path: control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-r4-full-atomic-independent-review.yaml
+  independent_review_sha256: 035395b05518ac5e19f5e4516e24edf9e399ded43015d7e2a5630776e2edf151
+  independent_review_result: PASS_NO_BLOCKER
+  freeze_decision_path: control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-r4-atomic-freeze-decision-v0.1.yaml
+  freeze_decision_sha256: 160f2e0d6e9a4a4fbb868bfb378b030b33455d78a943daea8aadb554a049e2ce
+  declared_subjects_verified: 9/9_MATCH
+  declared_manifest_inputs_verified: 98/98_MATCH
+  plan_mainline_integration_commit: 89a95bd98426450e4b0edcf6b2881e3f8e931e8b
+  postmerge_durability_projection_commit: 19ea75f000430803bcc38aa7218e8204d0827b80
+  local_main_equals_origin_main: true
+  plan_merge_is_ancestor_of_current_main: true
+
+implementation_baseline:
+  repository: JENN2046/Agents-OS
+  branch_base_commit: 19ea75f000430803bcc38aa7218e8204d0827b80
+  branch_base_tree: 5daf75bcdf033609e417f6245d55e551699f6bd1
+  source_authority_root: extensions/agents-os-resident
+  future_source_inventory_absent_before_WP0: 4/4_MATCH
+  direct_dependency_or_lockfile_change_planned: false
+  Rust_NAPI_or_SQLite_change_planned: false
+  VCPToolBox_tracked_file_change_planned: false
+
+sealed_host_evidence:
+  source_preflight_path: control-plane/registry/reports/2026-07-20-agents-os-phase-5a-m0a-implementation-start-preflight-v0.1.yaml
+  source_preflight_sha256: 34d5e7d4d96aebf90e989f36b4fea76a6b59a4f882ad5ec49bca2be722882344
+  sealed_repository: lioensky/VCPToolBox
+  sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  exact_path_blob_sha_commitments_consumed: 7/7_MATCH
+  VCPToolBox_worktree_read_or_write_performed: false
+  dirty_runtime_VCPToolBox_worktree_used: false
+
+workspace_boundary:
+  implementation_branch: agent/phase-5c-m0c-implementation
+  unrelated_untracked_work_present: true
+  unrelated_untracked_work_adopted: false
+  unrelated_untracked_work_modified: false
+  memory_state_private_ops_reports_and_workbench_records_excluded: true
+
+decision_scope_if_started:
+  first_work_package: WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+  ordered_work_packages:
+    - WP0_SEALED_BASELINE_AND_SOURCE_INVENTORY_CHECKER
+    - WP1_DETERMINISTIC_TEMPORARY_STAGING_BUILDER
+    - WP2_DISABLED_MANIFEST_AND_INERT_ENTRYPOINT_VERIFIER
+    - WP3_SEALED_HOST_CONTRACT_COMPATIBILITY_VERIFIER
+    - WP4_ARCHIVE_DETERMINISM_AND_TAMPER_SUITE
+    - WP5_OWNED_TEMPORARY_STAGING_ROLLBACK_AND_CLEANUP_PROOF
+    - WP6_INTEGRATED_OFFLINE_COMPATIBILITY_WITNESS
+  advancement_rule: direct_predecessor_frozen_condition_must_pass
+  skip_or_parallel_advancement: forbidden
+
+retained_boundaries:
+  VCPToolBox_tracked_file_change_authorized: false
+  VCPToolBox_start_authorized: false
+  plugin_enablement_authorized: false
+  native_host_load_authorized: false
+  runtime_activation_authorized: false
+  database_creation_or_access_authorized: false
+  dependency_installation_authorized: false
+  production_authentication_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  provider_sensing_recording_or_real_effect_authorized: false
+  archive_delivery_or_publish_authorized: false
+  push_PR_merge_tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5C_M0C_IMPLEMENTATION_START_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden

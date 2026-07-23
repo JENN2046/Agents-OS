@@ -150,3 +150,58 @@ Two clean disposable databases and one restart produce identical bytes with no
 automatic candidate, handoff or Command addition. Real Session, Goal, Task,
 Command, Memory, provider, sensing, external effect and runtime activation
 counts remain zero.
+
+Phase 5C M0-C WP0 adds a sealed-host and sealed-source baseline checker. It
+consumes only the frozen seven VCPToolBox path/blob/SHA commitments and the
+frozen 46-file source-inventory profile; it does not read a VCPToolBox
+worktree. The checker permits only the four reviewed Phase 5C source paths and
+verifies the immutable existing source bytes, blocked manifest state and inert
+entrypoint boundary. At WP0 it reports `WP0_BASELINE_VERIFIED`, not package
+compatibility, installation, activation or execution authority. The package is
+still not built, delivered, enabled or loaded through a Host.
+
+Phase 5C M0-C WP1 adds an offline staging builder. It accepts no caller path,
+creates a new owned temporary root, derives the closed current source subset
+from the sealed contract, rehashes every source before and after copying, and
+cleans that root before it returns. It reports staging metadata only; it does
+not emit a persistent archive, install anything, enable a manifest or invoke a
+native Host.
+
+Phase 5C M0-C WP2 verifies the disabled manifest and inert CommonJS entrypoint
+without importing it through a Host. It parses only the blocked manifest and
+evaluates the fixed entrypoint in an isolated VM with a throwing `require`;
+the successful result proves no eager require occurs. It does not call
+`processToolCall`, load the addon or enable the plugin.
+
+Phase 5C M0-C WP3 combines the sealed extension facts with the frozen
+VCPToolBox commit, tree and seven path/blob/SHA commitments. Its only positive
+result is `PACKAGE_COMPATIBLE_PREVIEW`: a static compatibility statement for
+that exact tuple. It neither reads a VCPToolBox worktree nor grants plugin
+enablement, Host loading, runtime or effect authority.
+
+Phase 5C M0-C WP4 constructs only raw, uncompressed POSIX USTAR bytes from the
+closed source inventory in a newly created owned temporary root. Every member
+uses the frozen `agents-os-resident/` prefix, bytewise source order, normalized
+metadata, exact header bytes, zero padding and two terminal zero blocks. The
+temporary `archive.tar` is re-read only into memory and the owned root is
+removed before return; no archive is delivered, installed, enabled or written
+to the workspace. The offline tamper suite checks headers, content, padding,
+terminal blocks, paths, duplicate members, ordering and NFC path handling.
+
+Phase 5C M0-C WP5 exercises the cleanup contract only against newly created,
+disposable owned temporary roots. Its fault probe writes the synthetic archive,
+attempts a direct non-recursive root removal while `archive.tar` remains,
+observes the real `ENOTEMPTY` residue before finalization, returns the required
+fail-closed synthetic code, and then removes the root. A separate deliberately
+truncated in-memory return is detected before use, and the no-archive failure
+path is also finalized. None of these probes retains an archive or touches a
+Host, VCPToolBox, runtime, database, provider, private Memory, sensing or
+effect boundary.
+
+Phase 5C M0-C WP6 combines the sealed-source baseline, blocked-manifest and
+inert-entrypoint checks, exact seven-object Host compatibility preview,
+byte-identical raw USTAR builds, semantic archive tamper matrix and cleanup
+observations into `OFFLINE_COMPATIBILITY_WITNESS_PASSED`. The witness is local
+evidence only. Its positive result does not authorize archive delivery, plugin
+enablement, Host loading, runtime activation, database work, private Memory,
+provider use, sensing or any effect.
