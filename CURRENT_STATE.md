@@ -14,12 +14,14 @@ coordinated re-signing of sealed source/Host commitments and current-boundary
 claims. The bounded R2 closure binds the exact immutable source/Host/extension
 commitments, the Plan's current-boundary projection, and duplicate-YAML/identity
 totality. The fresh independent review passed with no blockers, and Jenn has
-now explicitly accepted and frozen the complete R1–R2 six-subject unit. The
-only next gate is a separately authorized Git durability closeout; this does
-not start implementation or any Host-facing action.
+now explicitly accepted and frozen the complete R1–R2 six-subject unit. PR #32
+has since merged the frozen objects and bounded post-freeze guards into `main`.
+The post-merge governance projection delivered by this PR marks plan durability
+complete; the next reachable gate is Jenn's explicit implementation-start
+decision, not any automatic Host-facing action.
 
 ```yaml
-Phase_5D_status: M0D_PLAN_ACCEPTED_FROZEN_GIT_DURABILITY_DELIVERY_IN_PROGRESS
+Phase_5D_status: M0D_PLAN_MAINLINE_DURABILITY_COMPLETE_AWAITING_JENN_IMPLEMENTATION_START_DECISION
 Phase_5D_objective: QUARANTINED_HOST_SMOKE_INTEGRATION_PREFLIGHT_ONLY
 Phase_5D_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
 Phase_5D_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
@@ -74,9 +76,22 @@ Phase_5D_Git_delivery_decision_sha256: 8803bf1182dcd7127d8100575fd782c425038c063
 Phase_5D_plan_accepted: true
 Phase_5D_plan_frozen: true
 Phase_5D_plan_revisions_stopped: true
+Phase_5D_PR_number: 32
+Phase_5D_PR_url: https://github.com/JENN2046/Agents-OS/pull/32
+Phase_5D_PR_final_head: c08eebc2374bc9bb0ad073095e4ccad23859f984
+Phase_5D_mainline_merge_commit: be0206cfa925c7c1afa2f0987d19ebcbcbdad3d4
+Phase_5D_merge_first_parent: bc5df3903bd1f591d085538f3480be37c11c0ddc
+Phase_5D_merge_second_parent: c08eebc2374bc9bb0ad073095e4ccad23859f984
+Phase_5D_Git_objects_on_main: true
+Phase_5D_mainline_integrated: true
+Phase_5D_frozen_subjects_on_origin_main: 6/6_MATCH
+Phase_5D_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md
+Phase_5D_postmerge_durability_receipt_sha256: 7fddc8cc0a33535fb8e8110eca4097f2cfc70ff566ae1a53d7f65dbb4234435a
+Phase_5D_postmerge_projection_delivery: COMPLETE_ON_MAINLINE
+Phase_5D_durability_complete: true
 Phase_5D_implementation_started: false
 Phase_5C_implementation_durability_complete: true
-current_work_package: PHASE_5D_M0D_PLAN_GIT_DURABILITY_DELIVERY
+current_work_package: AWAITING_JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
 VCPToolBox_change_or_start_authorized: false
 clean_Host_worktree_creation_or_inspection_authorized: false
 archive_delivery_or_installation_authorized: false
@@ -85,12 +100,12 @@ processToolCall_or_native_addon_loading_authorized: false
 runtime_activation_authorized: false
 database_private_Memory_provider_sensing_or_effect_authorized: false
 implementation_source_change_authorized: false
-Git_delivery_authorized: true
+Git_delivery_authorized: false
 main_merge_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
-active_work_queue_sha256: 014577dee1b7109350573e46079f927f4cdedb80ad7f0e7b145143ddd88fa0ec
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md
-next_gate: PHASE_5D_PLAN_PR_CURRENT_HEAD_REVIEW_CI_AND_JENN_MAIN_MERGE_DECISION
+active_work_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
+active_work_queue_sha256: bb0fbc1237545d539619c2c3965abf85f8cec38acfb06813e2f156d5adb57d61
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
+next_gate: JENN_EXPLICIT_PHASE_5D_M0D_IMPLEMENTATION_START_DECISION
 ```
 
 ## Phase 5C M0-C Implementation — Mainline Durability Complete (2026-07-23)
