@@ -8,6 +8,10 @@ const MARKER_NAME = 'quarantine-contract.json';
 const OWNED_HANDLES = new WeakSet();
 const ACTIVE_ROOTS = new Set();
 const EXPECTED_ROOT_ENTRIES = Object.freeze([MARKER_NAME, 'staging', 'transient']);
+const INERT_LIFECYCLE = Object.freeze({
+  initialize: Object.freeze({ initialized: false }),
+  shutdown: Object.freeze({ shutdown: true })
+});
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -257,6 +261,99 @@ export function runBlockedManifestSelfTest() {
     plugin_enabled: false,
     host_lifecycle_invoked: false,
     owned_root_cleanup_verified: true
+  });
+}
+
+export function createInertLifecycleOnlySimulator(options = {}) {
+  if (!hasNoOptions(options)) {
+    return result('BLOCKED', { errors: [error('CALLER_SELECTED_LIFECYCLE_INPUT_FORBIDDEN')] });
+  }
+  let state = 'NOT_STARTED';
+  let hostLifecycleInvoked = false;
+  let nativeLoadInvoked = false;
+  const invoke = (method) => {
+    if (method === 'processToolCall') {
+      return result('BLOCKED', {
+        errors: [error('PROCESS_TOOL_CALL_TRAPPED_BEFORE_USE')],
+        state,
+        host_lifecycle_invoked: hostLifecycleInvoked,
+        native_addon_loaded: nativeLoadInvoked
+      });
+    }
+    if (method === 'native_addon_load') {
+      return result('BLOCKED', {
+        errors: [error('NATIVE_ADDON_LOAD_TRAPPED_BEFORE_USE')],
+        state,
+        host_lifecycle_invoked: hostLifecycleInvoked,
+        native_addon_loaded: nativeLoadInvoked
+      });
+    }
+    if (method === 'initialize' && state === 'NOT_STARTED') {
+      state = 'INITIALIZED_INERT';
+      return result('INITIALIZED_INERT', {
+        errors: [],
+        lifecycle_output: INERT_LIFECYCLE.initialize,
+        state,
+        synthetic_contract_evaluated: true,
+        host_lifecycle_invoked: hostLifecycleInvoked,
+        native_addon_loaded: nativeLoadInvoked
+      });
+    }
+    if (method === 'shutdown' && state === 'INITIALIZED_INERT') {
+      state = 'SHUTDOWN_INERT';
+      return result('SHUTDOWN_INERT', {
+        errors: [],
+        lifecycle_output: INERT_LIFECYCLE.shutdown,
+        state,
+        synthetic_contract_evaluated: true,
+        host_lifecycle_invoked: hostLifecycleInvoked,
+        native_addon_loaded: nativeLoadInvoked
+      });
+    }
+    return result('BLOCKED', {
+      errors: [error('LIFECYCLE_METHOD_OR_STATE_FORBIDDEN')],
+      state,
+      host_lifecycle_invoked: hostLifecycleInvoked,
+      native_addon_loaded: nativeLoadInvoked
+    });
+  };
+  return Object.freeze({ invoke });
+}
+
+export function runInertLifecycleSelfTest() {
+  const badOptions = createInertLifecycleOnlySimulator({ lifecycleArguments: ['forbidden'] });
+  if (badOptions.result !== 'BLOCKED') {
+    return result('BLOCKED', { errors: [error('LIFECYCLE_CALLER_INPUT_NEGATIVE_CONTROL_FAILED')] });
+  }
+  const simulator = createInertLifecycleOnlySimulator();
+  const preShutdown = simulator.invoke('shutdown');
+  const processToolCall = simulator.invoke('processToolCall');
+  const nativeLoad = simulator.invoke('native_addon_load');
+  const initialized = simulator.invoke('initialize');
+  const shutdown = simulator.invoke('shutdown');
+  const duplicateShutdown = simulator.invoke('shutdown');
+  if (
+    preShutdown.result !== 'BLOCKED' ||
+    processToolCall.result !== 'BLOCKED' ||
+    nativeLoad.result !== 'BLOCKED' ||
+    initialized.result !== 'INITIALIZED_INERT' ||
+    shutdown.result !== 'SHUTDOWN_INERT' ||
+    duplicateShutdown.result !== 'BLOCKED' ||
+    initialized.host_lifecycle_invoked !== false ||
+    shutdown.host_lifecycle_invoked !== false ||
+    initialized.native_addon_loaded !== false ||
+    shutdown.native_addon_loaded !== false
+  ) {
+    return result('BLOCKED', { errors: [error('INERT_LIFECYCLE_SELF_TEST_FAILED')] });
+  }
+  return result('INERT_LIFECYCLE_CONTRACT_VERIFIED', {
+    errors: [],
+    initialize_result: INERT_LIFECYCLE.initialize,
+    shutdown_result: INERT_LIFECYCLE.shutdown,
+    processToolCall_trapped_before_use: true,
+    native_addon_load_trapped_before_use: true,
+    host_lifecycle_invoked: false,
+    native_addon_loaded: false
   });
 }
 
