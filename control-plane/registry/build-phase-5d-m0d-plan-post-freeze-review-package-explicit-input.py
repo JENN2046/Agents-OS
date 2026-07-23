@@ -11,7 +11,6 @@ the historical builder can read a payload or create an output ZIP.
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import importlib.util
 import os
@@ -176,13 +175,14 @@ def build(output: Path, manifest: Path | None, report: Path | None) -> None:
 
 
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("output", type=Path)
-    parser.add_argument("--manifest", type=Path)
-    parser.add_argument("--report", type=Path)
-    args = parser.parse_args(argv[1:])
+    if len(argv) not in (2, 4):
+        print(f"usage: {argv[0]} OUTPUT_ZIP [MANIFEST_PATH REPORT_PATH]", file=sys.stderr)
+        return 2
+    output = Path(argv[1])
+    manifest = Path(argv[2]) if len(argv) == 4 else None
+    report = Path(argv[3]) if len(argv) == 4 else None
     try:
-        build(args.output, args.manifest, args.report)
+        build(output, manifest, report)
     except (OSError, ValueError, yaml.YAMLError) as exc:
         print(f"BLOCK explicit-input resolution: {exc}", file=sys.stderr)
         return 1

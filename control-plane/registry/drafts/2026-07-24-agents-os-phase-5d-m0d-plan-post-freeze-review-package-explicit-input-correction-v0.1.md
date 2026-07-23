@@ -19,7 +19,15 @@ to workspace defaults. The frozen source remains evidence and is not altered.
 ## Exact successor behavior
 
 The new R2-only successor verifies the already guarded successor before it
-uses any input path. It has three modes:
+uses any input path. It preserves the historical command grammar, but not the
+historical fallback behavior:
+
+```text
+OUTPUT_ZIP
+OUTPUT_ZIP MANIFEST_PATH REPORT_PATH
+```
+
+It has three modes:
 
 ```text
 no explicit manifest/report pair
@@ -50,11 +58,17 @@ one archive alias paired with a non-alias
 paired aliases outside payload/
 ```
 
+In particular, the successor never treats a missing explicit path as a request
+for the frozen workspace default. Defaults are available only in the
+no-explicit-input form.
+
 ## Offline proof boundary
 
 The synthetic validator uses a temporary directory only. It first confirms the
 historical fallback exists, then proves the successor rejects the same missing
-explicit paths without output. It also builds an R2 archive, extracts it in a
+explicit paths through the same four-argument CLI form without output. It also
+proves the no-explicit-input CLI form is the only mode that reproduces the
+frozen default. It then builds an R2 archive, extracts it in a
 temporary directory, and proves both direct explicit paths and the paired
 archive-root aliases reproduce the historical bytes exactly.
 

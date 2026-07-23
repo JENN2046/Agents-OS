@@ -5,13 +5,14 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import stat
 import sys
 import tempfile
 import zipfile
-from contextlib import contextmanager
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from pathlib import Path, PurePosixPath
 from types import ModuleType
 from typing import Any, Iterator
@@ -94,6 +95,7 @@ def validate_fixture(value: object, errors: list[str]) -> dict[str, Any] | None:
     if value["negative_case_ids"] != expected_negative_cases:
         errors.append("negative case inventory mismatch")
     if value["expectations"] != {
+        "no_explicit_inputs": "BYTE_EQUAL",
         "direct_explicit_inputs": "BYTE_EQUAL",
         "archive_alias_pair": "BYTE_EQUAL",
         "all_negative_cases": "REJECTED_BEFORE_OUTPUT_WRITE",
@@ -113,29 +115,46 @@ def safe_extract(archive: Path, destination: Path) -> None:
         source.extractall(destination)
 
 
-def expect_rejection(
+def invoke_cli(successor: ModuleType, argv: list[str], cwd: Path) -> tuple[int, str, str]:
+    stdout = io.StringIO()
+    stderr = io.StringIO()
+    with working_directory(cwd), redirect_stdout(stdout), redirect_stderr(stderr):
+        result = successor.main(argv)
+    return result, stdout.getvalue(), stderr.getvalue()
+
+
+def expect_cli_rejection(
     successor: ModuleType,
     output: Path,
     manifest: Path | None,
     report: Path | None,
+    cwd: Path,
     errors: list[str],
     results: dict[str, str],
     case_id: str,
 ) -> None:
+    if manifest is None or report is None:
+        errors.append(f"{case_id} missing explicit test arguments")
+        results[case_id] = "INVALID_TEST"
+        return
     try:
-        successor.build(output, manifest, report)
-    except ValueError:
-        if output.exists():
-            errors.append(f"{case_id} wrote output before rejection")
-            results[case_id] = "OUTPUT_WRITTEN"
-        else:
-            results[case_id] = "REJECTED_BEFORE_OUTPUT_WRITE"
+        result, _, _ = invoke_cli(
+            successor,
+            ["explicit-input-successor", str(output), str(manifest), str(report)],
+            cwd,
+        )
     except Exception as exc:
         errors.append(f"{case_id} raised an unstable exception: {exc}")
         results[case_id] = "UNSTABLE_EXCEPTION"
-    else:
+        return
+    if result == 0:
         errors.append(f"{case_id} accepted a malformed explicit input")
         results[case_id] = "ACCEPTED"
+    elif output.exists():
+        errors.append(f"{case_id} wrote output before rejection")
+        results[case_id] = "OUTPUT_WRITTEN"
+    else:
+        results[case_id] = "REJECTED_BEFORE_OUTPUT_WRITE"
 
 
 def run(fixture_path: Path) -> dict[str, object]:
@@ -183,7 +202,13 @@ def run(fixture_path: Path) -> dict[str, object]:
 
         direct_output = temp / "direct.zip"
         try:
-            successor.build(direct_output, manifest_path, report_path)
+            result, _, _ = invoke_cli(
+                successor,
+                ["explicit-input-successor", str(direct_output), str(manifest_path), str(report_path)],
+                ROOT,
+            )
+            if result != 0:
+                raise ValueError(f"direct explicit CLI returned {result}")
             byte_equality["direct_explicit"] = "BYTE_EQUAL" if direct_output.read_bytes() == historical_output.read_bytes() else "DIFFERENT"
             if byte_equality["direct_explicit"] != "BYTE_EQUAL":
                 errors.append("direct explicit output differs from historical R2 output")
@@ -196,12 +221,18 @@ def run(fixture_path: Path) -> dict[str, object]:
         payload = extracted / fixture["archive_aliases"]["payload_directory"]
         alias_output = temp / "alias.zip"
         try:
-            with working_directory(payload):
-                successor.build(
-                    alias_output,
-                    Path(fixture["archive_aliases"]["manifest"]),
-                    Path(fixture["archive_aliases"]["report"]),
-                )
+            result, _, _ = invoke_cli(
+                successor,
+                [
+                    "explicit-input-successor",
+                    str(alias_output),
+                    fixture["archive_aliases"]["manifest"],
+                    fixture["archive_aliases"]["report"],
+                ],
+                payload,
+            )
+            if result != 0:
+                raise ValueError(f"archive alias CLI returned {result}")
             byte_equality["archive_alias_pair"] = "BYTE_EQUAL" if alias_output.read_bytes() == historical_output.read_bytes() else "DIFFERENT"
             if byte_equality["archive_alias_pair"] != "BYTE_EQUAL":
                 errors.append("archive alias output differs from historical R2 output")
@@ -224,53 +255,66 @@ def run(fixture_path: Path) -> dict[str, object]:
         if not historical_fallback_observed:
             errors.append("frozen historical missing-input fallback was not reproducible")
 
-        expect_rejection(
+        default_output = temp / "default.zip"
+        result, _, _ = invoke_cli(successor, ["explicit-input-successor", str(default_output)], ROOT)
+        if result != 0:
+            errors.append("no-explicit-input control failed")
+            byte_equality["no_explicit"] = "ERROR"
+        else:
+            byte_equality["no_explicit"] = "BYTE_EQUAL" if default_output.read_bytes() == historical_output.read_bytes() else "DIFFERENT"
+            if byte_equality["no_explicit"] != "BYTE_EQUAL":
+                errors.append("no-explicit-input output differs from historical R2 output")
+
+        expect_cli_rejection(
             successor,
             temp / "missing-manifest.zip",
             temp / "missing-manifest.yaml",
             report_path,
+            ROOT,
             errors,
             negative_results,
             "MISSING_MANIFEST",
         )
-        expect_rejection(
+        expect_cli_rejection(
             successor,
             temp / "missing-report.zip",
             manifest_path,
             temp / "missing-report.md",
+            ROOT,
             errors,
             negative_results,
             "MISSING_REPORT",
         )
-        expect_rejection(
+        expect_cli_rejection(
             successor,
             temp / "missing-both.zip",
             temp / "missing-both-manifest.yaml",
             temp / "missing-both-report.md",
+            ROOT,
             errors,
             negative_results,
             "MISSING_BOTH",
         )
-        with working_directory(payload):
-            expect_rejection(
-                successor,
-                temp / "partial-alias.zip",
-                Path(fixture["archive_aliases"]["manifest"]),
-                report_path,
-                errors,
-                negative_results,
-                "PARTIAL_ALIAS",
-            )
-        with working_directory(ROOT):
-            expect_rejection(
-                successor,
-                temp / "alias-outside-payload.zip",
-                Path(fixture["archive_aliases"]["manifest"]),
-                Path(fixture["archive_aliases"]["report"]),
-                errors,
-                negative_results,
-                "ALIAS_OUTSIDE_PAYLOAD",
-            )
+        expect_cli_rejection(
+            successor,
+            temp / "partial-alias.zip",
+            Path(fixture["archive_aliases"]["manifest"]),
+            report_path,
+            payload,
+            errors,
+            negative_results,
+            "PARTIAL_ALIAS",
+        )
+        expect_cli_rejection(
+            successor,
+            temp / "alias-outside-payload.zip",
+            Path(fixture["archive_aliases"]["manifest"]),
+            Path(fixture["archive_aliases"]["report"]),
+            ROOT,
+            errors,
+            negative_results,
+            "ALIAS_OUTSIDE_PAYLOAD",
+        )
 
     if errors:
         return {

@@ -21,10 +21,10 @@ prior_guarded_successor_sha256: 7ce6091dca0002483180317d9b607f73aad018d8558b1b9f
 
 ```yaml
 start_decision_sha256: f04b5d6d765096d052c4397a0d034ab4d233c83d3e8a5fbe64c2c9842ef20fc4
-correction_contract_sha256: 72e69738b75e05ecc142d3ad0ad940cd9acac330d37228b094622aefff43d05e
-synthetic_fixture_sha256: 4881b7c45eeb33782ca59057921d871f918a29bae0e1ed645e85e44aabe74c4b
-guarded_successor_sha256: 62a8ef5f65e0fdc54595163625ca7ff7b94cde59377257554044119d8541dfef
-offline_validator_sha256: 57e53a084df5e76ee8ac47dc4c602c8c62298878bc652c0575a1ca260c7c48c0
+correction_contract_sha256: e3e19e5127970dcd59768e3c8d2d2915d153e6dacf13db039b52bfa5ce8ee4fd
+synthetic_fixture_sha256: 29cde3ec16668b6679c7525cff33eb5cfbf61549bcf7583c6a909c3f63d8c0b1
+guarded_successor_sha256: 3033bd3e98bc441b3002bddc56dc2a9961f501a89ce4ede361d875f8cd493591
+offline_validator_sha256: 5c59a756995aa7292a681ab3e2550f1072f1fe4d08f70391919a816ea4fa6ec7
 correction_git_delivery_decision_sha256: cea9489607da72df5af2ce16a498687bd92007dfc3e46cf29bd1df88c93a2212
 ```
 
@@ -32,6 +32,7 @@ correction_git_delivery_decision_sha256: cea9489607da72df5af2ce16a498687bd92007d
 
 ```yaml
 historical_missing_input_fallback_observed: true
+no_explicit_input_R2_rebuild: BYTE_EQUAL
 direct_explicit_R2_rebuild: BYTE_EQUAL
 payload_archive_alias_R2_rebuild: BYTE_EQUAL
 missing_manifest: REJECTED_BEFORE_OUTPUT_WRITE
@@ -46,6 +47,9 @@ runtime_or_external_effect: NOT_EXECUTED
 ## Delivery boundary
 
 This additive record is limited to the new explicit-input successor and its
-synthetic proof. It does not amend previous immutable delivery records,
+synthetic proof. The successor preserves the historical `OUTPUT_ZIP
+[MANIFEST_PATH REPORT_PATH]` invocation grammar, but only the no-explicit-input
+form may select frozen defaults; every missing explicit pair member blocks
+before output. It does not amend previous immutable delivery records,
 re-open the Phase 5D Plan, authorize implementation, or authorize a main
 merge.
