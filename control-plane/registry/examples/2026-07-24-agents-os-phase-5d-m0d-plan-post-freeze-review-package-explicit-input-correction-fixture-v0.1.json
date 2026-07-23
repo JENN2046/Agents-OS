@@ -1,0 +1,36 @@
+{
+  "schema_version": "agents-os.phase5d.post-freeze-review-package-explicit-input-correction-fixture.v0.1",
+  "environment": "SYNTHETIC_TEST",
+  "frozen_bindings": {
+    "r2_builder": {
+      "path": "control-plane/registry/build-phase-5d-m0d-plan-r2-review-package.py",
+      "sha256": "105a4ee485750c7c4f64f7b872f97e4b5e3d9f03bcc9d191a2d0e2c3c56a361b"
+    },
+    "r2_manifest": {
+      "path": "control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml",
+      "sha256": "f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061"
+    },
+    "prior_guarded_successor": {
+      "path": "control-plane/registry/build-phase-5d-m0d-plan-post-freeze-review-package.py",
+      "sha256": "7ce6091dca0002483180317d9b607f73aad018d8558b1b9f1c30280c493d0392"
+    }
+  },
+  "archive_aliases": {
+    "manifest": "MANIFEST.yaml",
+    "report": "REPORT.md",
+    "payload_directory": "payload"
+  },
+  "negative_case_ids": [
+    "ALIAS_OUTSIDE_PAYLOAD",
+    "MISSING_BOTH",
+    "MISSING_MANIFEST",
+    "MISSING_REPORT",
+    "PARTIAL_ALIAS"
+  ],
+  "expectations": {
+    "direct_explicit_inputs": "BYTE_EQUAL",
+    "archive_alias_pair": "BYTE_EQUAL",
+    "all_negative_cases": "REJECTED_BEFORE_OUTPUT_WRITE"
+  },
+  "terminal_outcome": "NOT_EXECUTED"
+}
