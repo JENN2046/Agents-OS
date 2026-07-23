@@ -31,6 +31,7 @@
     "no_explicit_inputs": "BYTE_EQUAL",
     "direct_explicit_inputs": "BYTE_EQUAL",
     "archive_alias_pair": "BYTE_EQUAL",
+    "payload_alias_shadow": "BYTE_EQUAL",
     "all_negative_cases": "REJECTED_BEFORE_OUTPUT_WRITE"
   },
   "terminal_outcome": "NOT_EXECUTED"

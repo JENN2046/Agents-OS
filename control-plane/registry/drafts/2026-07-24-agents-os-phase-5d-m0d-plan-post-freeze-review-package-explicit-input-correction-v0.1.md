@@ -45,7 +45,10 @@ current working directory must be the direct `payload/` directory; the parent
 must contain regular non-symlink `MANIFEST.yaml` and `REPORT.md`; every
 manifest-declared member must be a safe, non-protected, regular file under
 that `payload/` tree; and the output ZIP must be outside the extracted archive
-root.
+root. The successor passes those already verified parent paths, rather than
+the bare aliases, to the immutable builder. Therefore an extra
+`payload/MANIFEST.yaml` or `payload/REPORT.md` cannot shadow the reviewed
+archive-root inputs.
 
 Every other malformed explicit-input form returns a stable `BLOCK` exit before
 the immutable builder reads a manifest payload or writes an output ZIP:
@@ -70,7 +73,8 @@ explicit paths through the same four-argument CLI form without output. It also
 proves the no-explicit-input CLI form is the only mode that reproduces the
 frozen default. It then builds an R2 archive, extracts it in a
 temporary directory, and proves both direct explicit paths and the paired
-archive-root aliases reproduce the historical bytes exactly.
+archive-root aliases reproduce the historical bytes exactly, including when
+untrusted same-named files are placed under `payload/`.
 
 No Plan semantics, Host, plugin, VCPToolBox, runtime, database, provider,
 authentication, private Memory, sensing, or real effect is created or used.

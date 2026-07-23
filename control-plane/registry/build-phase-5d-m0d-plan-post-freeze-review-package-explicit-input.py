@@ -144,8 +144,8 @@ def build_from_archive_aliases(prior: ModuleType, output: Path, manifest: Path, 
         [
             str(prior.historical_builder_path("r2")),
             str(target),
-            ARCHIVE_MANIFEST_ALIAS,
-            ARCHIVE_REPORT_ALIAS,
+            str(manifest_path),
+            str(report_path),
         ]
     )
     if result != 0:

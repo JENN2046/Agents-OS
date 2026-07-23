@@ -98,6 +98,7 @@ def validate_fixture(value: object, errors: list[str]) -> dict[str, Any] | None:
         "no_explicit_inputs": "BYTE_EQUAL",
         "direct_explicit_inputs": "BYTE_EQUAL",
         "archive_alias_pair": "BYTE_EQUAL",
+        "payload_alias_shadow": "BYTE_EQUAL",
         "all_negative_cases": "REJECTED_BEFORE_OUTPUT_WRITE",
     }:
         errors.append("expectation inventory mismatch")
@@ -239,6 +240,36 @@ def run(fixture_path: Path) -> dict[str, object]:
         except Exception as exc:
             errors.append(f"archive alias control failed: {exc}")
             byte_equality["archive_alias_pair"] = "ERROR"
+
+        # These files are deliberately not members declared by the verified
+        # parent manifest.  A bare alias handed to the immutable builder would
+        # consume them from payload/ and produce a different archive.  The
+        # successor must delegate the resolved parent paths instead.
+        (payload / fixture["archive_aliases"]["manifest"]).write_text(
+            "subjects: []\nauthority_inputs: []\nauthor_evidence: []\n",
+            encoding="utf-8",
+        )
+        (payload / fixture["archive_aliases"]["report"]).write_text("payload shadow\n", encoding="utf-8")
+        shadow_output = temp / "payload-alias-shadow.zip"
+        try:
+            result, _, _ = invoke_cli(
+                successor,
+                [
+                    "explicit-input-successor",
+                    str(shadow_output),
+                    fixture["archive_aliases"]["manifest"],
+                    fixture["archive_aliases"]["report"],
+                ],
+                payload,
+            )
+            if result != 0:
+                raise ValueError(f"payload alias shadow CLI returned {result}")
+            byte_equality["payload_alias_shadow"] = "BYTE_EQUAL" if shadow_output.read_bytes() == historical_output.read_bytes() else "DIFFERENT"
+            if byte_equality["payload_alias_shadow"] != "BYTE_EQUAL":
+                errors.append("payload alias shadow changed the verified R2 output")
+        except Exception as exc:
+            errors.append(f"payload alias shadow control failed: {exc}")
+            byte_equality["payload_alias_shadow"] = "ERROR"
 
         historical_missing = temp / "historical-missing.zip"
         historical = prior.load_historical_builder("r2")

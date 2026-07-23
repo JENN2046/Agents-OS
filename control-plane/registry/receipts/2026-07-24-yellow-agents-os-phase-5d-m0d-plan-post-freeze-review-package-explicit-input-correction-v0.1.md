@@ -21,10 +21,10 @@ prior_guarded_successor_sha256: 7ce6091dca0002483180317d9b607f73aad018d8558b1b9f
 
 ```yaml
 start_decision_sha256: f04b5d6d765096d052c4397a0d034ab4d233c83d3e8a5fbe64c2c9842ef20fc4
-correction_contract_sha256: e3e19e5127970dcd59768e3c8d2d2915d153e6dacf13db039b52bfa5ce8ee4fd
-synthetic_fixture_sha256: 29cde3ec16668b6679c7525cff33eb5cfbf61549bcf7583c6a909c3f63d8c0b1
-guarded_successor_sha256: 3033bd3e98bc441b3002bddc56dc2a9961f501a89ce4ede361d875f8cd493591
-offline_validator_sha256: 5c59a756995aa7292a681ab3e2550f1072f1fe4d08f70391919a816ea4fa6ec7
+correction_contract_sha256: d7035f6c0661666282acb040ff29623c06942a84571850d7fb46f5f6b1993897
+synthetic_fixture_sha256: 396637898a51fe3c4b07d0752e60805d56d7f3c0de934c48e776aac42fc60753
+guarded_successor_sha256: 1e4a49963d7eb4d5c605d49ffdaaaee61b4b026d1b1681cb2020497605c62156
+offline_validator_sha256: 2d617dbcd804dfbadce05376bc8f3fe6c0cffcba1bf692c8cda4de1efe6cd5e9
 correction_git_delivery_decision_sha256: cea9489607da72df5af2ce16a498687bd92007dfc3e46cf29bd1df88c93a2212
 ```
 
@@ -35,6 +35,7 @@ historical_missing_input_fallback_observed: true
 no_explicit_input_R2_rebuild: BYTE_EQUAL
 direct_explicit_R2_rebuild: BYTE_EQUAL
 payload_archive_alias_R2_rebuild: BYTE_EQUAL
+payload_alias_shadow_R2_rebuild: BYTE_EQUAL
 missing_manifest: REJECTED_BEFORE_OUTPUT_WRITE
 missing_report: REJECTED_BEFORE_OUTPUT_WRITE
 missing_both: REJECTED_BEFORE_OUTPUT_WRITE
@@ -50,6 +51,8 @@ This additive record is limited to the new explicit-input successor and its
 synthetic proof. The successor preserves the historical `OUTPUT_ZIP
 [MANIFEST_PATH REPORT_PATH]` invocation grammar, but only the no-explicit-input
 form may select frozen defaults; every missing explicit pair member blocks
-before output. It does not amend previous immutable delivery records,
+before output. In alias mode, the immutable builder receives the verified
+archive-root paths, so same-named files under `payload/` cannot shadow them.
+It does not amend previous immutable delivery records,
 re-open the Phase 5D Plan, authorize implementation, or authorize a main
 merge.
