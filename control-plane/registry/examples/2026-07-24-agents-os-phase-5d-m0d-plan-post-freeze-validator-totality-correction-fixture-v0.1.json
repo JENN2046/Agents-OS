@@ -1,0 +1,54 @@
+{
+  "environment": "SYNTHETIC_TEST",
+  "frozen_artifacts": {
+    "fixture": {
+      "path": "control-plane/registry/examples/2026-07-23-agents-os-phase-5d-m0d-plan-r2-synthetic-witness-v0.1.json",
+      "sha256": "37160f3b298aea5438f57c7f332d7cea1653ffbe245e183d1b292af7b2220ed0"
+    },
+    "plan": {
+      "path": "control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md",
+      "sha256": "e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b"
+    },
+    "profile": {
+      "path": "control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml",
+      "sha256": "3dfadf64e8e717d195ed64361bcf4f9af6d770eb835455e92d017510468b9349"
+    },
+    "validator": {
+      "path": "control-plane/registry/validate-phase-5d-m0d-plan-r2-witness.py",
+      "sha256": "d2767d569eabc795433530f2490672ce71089d85a49da10454294ff47834ac3f"
+    }
+  },
+  "negative_cases": [
+    {
+      "expected_error_prefix": "plan.current_boundary: fields mismatch",
+      "id": "UNKNOWN_BOUNDARY_KEY",
+      "mutation": "add_unknown_key"
+    },
+    {
+      "expected_error_prefix": "plan.current_boundary: fields mismatch",
+      "id": "MISSING_BOUNDARY_KEY",
+      "mutation": "remove_required_key"
+    },
+    {
+      "expected_error_prefix": "plan.current_boundary: expected object",
+      "id": "MISSING_BOUNDARY_MAPPING",
+      "mutation": "remove_boundary_mapping"
+    },
+    {
+      "expected_error_prefix": "plan.current_boundary: expected object",
+      "id": "NON_MAPPING_BOUNDARY",
+      "mutation": "replace_boundary_with_empty_list"
+    },
+    {
+      "expected_error_prefix": "plan.header: duplicate YAML key",
+      "id": "DUPLICATE_BOUNDARY_KEY",
+      "mutation": "duplicate_existing_key"
+    }
+  ],
+  "positive_control": {
+    "expected_historical_result": "QUARANTINED_HOST_SMOKE_PREFLIGHT_READY",
+    "expected_result": "PASS"
+  },
+  "schema_version": "agents-os.phase5d.m0d.post-freeze-validator-totality-correction-fixture.v0.1",
+  "terminal_outcome": "NOT_EXECUTED"
+}
