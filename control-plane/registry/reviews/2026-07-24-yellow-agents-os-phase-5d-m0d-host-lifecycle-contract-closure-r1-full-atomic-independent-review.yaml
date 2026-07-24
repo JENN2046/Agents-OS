@@ -1,0 +1,176 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+date: '2026-07-24'
+
+reviewer:
+  identity: Codex_/root/phase5d_host_lifecycle_r1_review
+  independent: true
+  independence_basis:
+    - did_not_author_the_R1_subjects_or_author_self_review
+    - fresh_read_only_review_of_current_hash_bound_workspace_bytes
+    - author_self_review_was_read_as_evidence_only_not_as_review_proof
+    - no_subject_or_governance_file_was_modified_during_review
+    - no_Host_VCPToolBox_runtime_database_provider_or_private_Memory_action_was_run
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+
+result: PASS_NO_BLOCKER
+requires_R2: false
+
+integrity:
+  fixed_head:
+    commit: b6283b8ea35bec02e309848e1357909387144fe8
+    review_inputs_match_HEAD_blobs: 10/10_PASS
+    review_inputs_clean_against_HEAD: 10/10_PASS
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 898425226dd4be50530889611f319cd42af867cba98c1886e0d818df7d913808
+    declared_input_hashes: 10/10_MATCH
+  review_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md
+    sha256: 7c4f5427fd2c975b08e306d6aea6244ac1629e172720e2fad5d121ee6f456fae
+    manifest_sha256_match: true
+  input_file_safety:
+    regular_files: 10/10_PASS
+    symlinks: 0
+  declared_inputs:
+    subjects_fully_read: 4/4
+    authority_inputs_fully_read: 5/5
+    author_evidence_fully_read: 1/1
+    total_fully_read: 10/10
+
+input_hashes:
+  subjects:
+    - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md
+      sha256: fb31de51e4a65d9d582416eee5bce36715c11f0710c3222614c148498e951f29
+    - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml
+      sha256: dd2fc55c16795e4344adcdf1f0267959604b62591475615fcac694b3cf8661bc
+    - path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+      sha256: f42ef24739872c080f0c8cfe17e641bfc50b1b46c02944b5dbcfa7635673dce5
+    - path: control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py
+      sha256: 775577f147f4cba35d8b393d4c22fa8d36e950ea9e600878242ef8df684f1f26
+  authority_inputs:
+    - path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-integration-plan-v0.1-r2-amendment.md
+      sha256: e3b70cc2638bca9624d2593e3105b69aeb1b033226941032f46c9bf61d1d3e0b
+    - path: control-plane/registry/drafts/2026-07-23-agents-os-phase-5d-m0d-quarantined-host-smoke-immutable-binding-profile-v0.1-r2.yaml
+      sha256: 3dfadf64e8e717d195ed64361bcf4f9af6d770eb835455e92d017510468b9349
+    - path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md
+      sha256: 98a40879d5c66292c107045c83bba335241b1481df2ffc42eb26b2841ff48ca4
+    - path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml
+      sha256: ced69081df00ac2b0f1cf86e1b5458c66f2e5ce0447103903b64d03a1539410c
+    - path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+      sha256: ba83d70c5b9230c725a2077c10ae547415a7729187a7f08ae3028e24f4b5f2d0
+  author_evidence:
+    - path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml
+      sha256: 6f3f6bde166b1b328c06ba29d8ff5423aba6c05ec89a95c206123607f1743eb2
+      used_as_independent_review_proof: false
+
+fixed_command_reproduction:
+  commands:
+    - command: >-
+        python3 -c "import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml').read_text())"
+      result: PASS
+    - command: >-
+        python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+      result: PASS
+    - command: >-
+        python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py --self-test
+      result: PASS
+    - command: >-
+        python3 -c "import json,pathlib; json.loads(pathlib.Path('control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json').read_text())"
+      result: PASS
+  total: 4/4_PASS
+  fixed_validator_output:
+    result: PASS
+    runtime_usable: false
+    actual_host_smoke_execution_authorized: false
+    host_operation_count: 0
+    terminal_outcome: NOT_EXECUTED
+
+independent_adversarial_review:
+  method: >-
+    In-memory full-object schema and semantic mutations were evaluated directly
+    against the fixed validator functions; no test fixture was written to disk.
+  target_invalid_mutations:
+    count: 14
+    rejected: 14
+    cases:
+      - unknown_root_field
+      - missing_root_field
+      - unknown_case_field
+      - missing_case_field
+      - duplicate_JSON_key
+      - non_synthetic_section_ref
+      - runtime_usable_true
+      - actual_Host_smoke_execution_authorized_true
+      - missing_owner_section
+      - substituted_owner_section
+      - synthetic_claimed_owner_issued
+      - missing_owner_claimed_shape_valid
+      - missing_owner_nonzero_operations
+      - integer_false_for_runtime
+    rejection_basis:
+      - closed_field_set_or_strict_JSON_type
+      - synthetic_namespace_requirement
+      - closed_owner_section_inventory_and_outcome_mapping
+      - strict_false_runtime_and_actual_Host_authorization
+      - missing_owner_contract_fail_closed_rule
+      - zero_Host_operation_count_rule
+  alternate_fixture_submission:
+    path: /dev/null
+    result: BLOCKED
+    exit_code: 1
+    reason: only_the_fixed_Phase_5D_synthetic_fixture_is_accepted
+  same_revision_synthetic_tuple_rewrite:
+    mutation: >-
+      Changed only synthetic owner_contract_ref and owner_contract_sha256 while
+      retaining its positive revision and all strict false/zero boundary fields.
+    shape_validator_result: ACCEPTED_AS_SYNTHETIC_TEST_ONLY
+    favorable_invalid_path: false
+    rationale:
+      - no_owner_issued_claim_field_exists_in_the_closed_schema
+      - adding_an_owner_issued_claim_is_rejected_as_an_unknown_field
+      - the_result_remains_SYNTHETIC_CONTRACT_SHAPE_VALIDATED
+      - runtime_usable_and_actual_Host_authorization_remain_strict_false
+      - alternate_fixture_submission_is_blocked_and_the_review_manifest_binds_the_fixed_fixture_bytes
+      - future_actual_execution_requires_a_separately_accepted_immutable_owner_issued_contract
+
+semantic_assessment:
+  contract_closes_evidence_shape_only: true
+  current_owner_issued_Host_contract_created_or_accepted: false
+  Host_discovery_selector_or_lifecycle_argument_bytes_created: false
+  second_Host_identity_permission_Task_Command_or_effect_authority_created: false
+  missing_owner_contract_fails_closed: true
+  synthetic_evidence_can_become_owner_authority: false
+  unknown_or_malformed_input_fails_closed: true
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  host_operation_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+boundary_verification:
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_or_installation: false
+  enabled_manifest_plugin_discovery_or_loading: false
+  Host_lifecycle_initialize_shutdown_processToolCall_native_addon_or_NAPI: false
+  runtime_service_database_dependency_provider_or_production_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  workspace_subject_or_governance_modification_during_review: false
+  commit_push_or_PR_action_during_review: false
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved: 0
+
+disposition:
+  contract_closure_review_gate: PASS_NO_BLOCKER
+  closure_accepted: false
+  closure_frozen: false
+  actual_Host_smoke_execution: forbidden
+  next_gate: JENN_PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_ATOMIC_FREEZE_DECISION
