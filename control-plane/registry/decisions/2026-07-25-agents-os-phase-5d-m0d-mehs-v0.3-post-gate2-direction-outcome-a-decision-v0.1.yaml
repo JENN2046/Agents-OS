@@ -1,0 +1,121 @@
+schema_version: agents-os.mehs-post-gate2-direction-decision.v0.1
+record_id: agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1
+record_type: PostGate2DirectionDecisionRecord
+status: accepted
+immutable: true
+created_at: '2026-07-25T21:00:32+08:00'
+owner: Jenn
+agent_steward: Nobao
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision_source: explicit_current_conversation_instruction
+  selected_outcome: A_TERMINAL_CLOSE_AND_RETURN_TO_ROUTE_SELECTION
+
+decision_confirmation:
+  package_path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md
+  package_sha256: c6160ec82b48264acb457156e01ac19ae45e8827f685c6fa2fb2756bec9295fe
+  section: 6
+  outcome: A
+  complete_outcome_body_confirmed: true
+  confirmation_text_normalization: visual_path_and_host_runtime_line_wraps_joined_without_semantic_change
+  normalized_confirmation_text_sha256: c60ad3f7bde869a3e4ad86499d5704674a7477b7d1b5d44e500be74b74eb2e27
+  normalized_confirmation_text: |
+    我确认以下 package exact bytes：
+
+    control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md
+
+    SHA-256：
+    c6160ec82b48264acb457156e01ac19ae45e8827f685c6fa2fb2756bec9295fe
+
+    我选择 Outcome A，并明确确认执行该 package Section 6 Outcome A 的完整 outcome body。
+
+    此选择只授权 local governance closeout candidate 与精确 local commit；不授权 push、PR、merge 或任何实际 Host/runtime 行为。
+
+hash_bindings:
+  frozen_candidate: 4690ce291d45339f5dbe71a793662e051629d558
+  frozen_candidate_parent: 310a7358f96b6749f0c31dd3e39517c9df87c50c
+  observed_origin_main: 96e07d937ee3fad6c7240ec058ecb46784f60e5a
+  observed_origin_main_tree: 38044fe876b47b4ebd681d0e99dc6fb2cba0d939
+  candidate_is_origin_main_ancestor: true
+  Gate_1_claim:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+    sha256: 7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69
+    consumed: true
+    retry_authorized: false
+  terminal_receipt:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+    sha256: e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c
+    result: HOST_SMOKE_CANDIDATE_OBSERVED
+    failure: null
+    cleanup: CLEAN
+    owned_temporary_residue_count: 0
+  fresh_actual_closeout_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    sha256: 2e63d87301b7f23c2d933d9412756576dbb78fbab55bb03f233537b750bd4873
+    result: PASS_NO_BLOCKER
+  Gate_2_merge:
+    PR_number: 34
+    reviewed_head: 799fd235b4ebf43c51d76f7bb55459223ed78cd3
+    merge_commit: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+  postmerge_projection_merge:
+    PR_number: 35
+    reviewed_head: 660e47328284b5926abd6c2ce87de0085973ba4e
+    merge_commit: 96e07d937ee3fad6c7240ec058ecb46784f60e5a
+    merge_tree: 38044fe876b47b4ebd681d0e99dc6fb2cba0d939
+  PR_35_premerge_decision_record:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml
+    sha256: f84cf645542791d8bff4bfe34ddcaa0371f8ffe054c9294a613cad6f31cb5586
+    preserve_exact_bytes: true
+
+decision_effect:
+  MEHS_v0_3_terminally_closed_after_Gate_2: true
+  Gate_1_consumed_permanently: true
+  Gate_1_retry_or_replay: forbidden
+  automatic_Gate_3: false
+  automatic_later_phase_start: false
+  active_automatic_MEHS_item: false
+  next_decision_owner: Jenn
+  next_decision_kind: ROUTE_SELECTION
+
+authorized_actions:
+  use_clean_dedicated_worktree: true
+  materialize_this_immutable_decision_record: true
+  preserve_and_include_exact_PR_35_premerge_decision_record: true
+  create_separate_PR_35_merge_successor_evidence: true
+  update_bounded_CURRENT_STATE_registry_queue_and_default_pointer_projections: true
+  create_one_exact_local_commit: true
+
+not_authorized:
+  push: false
+  pull_request_create_or_update: false
+  merge: false
+  direct_push_to_main: false
+  actual_replay_or_second_claim: false
+  Host_or_VCPToolBox_Git: false
+  processToolCall_native_addon_or_NAPI: false
+  runtime_service_or_provider: false
+  database_or_production_authentication: false
+  private_Memory_or_state_private: false
+  sensing_recording_or_real_effect: false
+  release_deploy_package_publish: false
+  tag_force_push_or_history_rewrite: false
+
+canonical_root_protection:
+  existing_tracked_or_untracked_work_is_outside_subject: true
+  overwrite_stash_reset_clean_or_mix: forbidden
+  exact_existing_dirty_byte_bindings_revalidated_before_materialization: 8/8_MATCH
+
+fail_closed:
+  package_or_evidence_hash_change: true
+  origin_main_or_history_change: true
+  candidate_ancestry_change: true
+  prohibited_content_or_scope_expansion: true
+  canonical_root_interference: true
+
+immutability_policy:
+  edit_after_creation: forbidden
+  correction_method: new_superseding_record
+  frozen_candidate_claim_receipt_or_review_rewrite: forbidden

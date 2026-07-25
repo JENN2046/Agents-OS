@@ -1,0 +1,118 @@
+schema_version: agents-os.mainline-merge-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1
+record_type: MainlineMergeDecisionRecord
+status: accepted_pending_single_normal_merge
+immutable: true
+created_at: '2026-07-25T20:28:39+08:00'
+owner: Jenn
+agent_steward: Nobao
+
+scope:
+  repository: JENN2046/Agents-OS
+  repository_visibility: PRIVATE
+  PR_number: 35
+  PR_url: https://github.com/JENN2046/Agents-OS/pull/35
+  merge_method: normal_merge_commit
+  single_merge_only: true
+  direct_push_to_main: false
+
+authorization:
+  source: Jenn_current_exact_confirmation
+  authorization_text_sha256: 9a24b777c2248cb2fbe4e1722b22be7a2d86ffda95840d9628e2eeccb61dd1da
+  exact_confirmation_text: |
+    我明确授权：仅为 PR #35
+    https://github.com/JENN2046/Agents-OS/pull/35
+
+    建立 hash-bound mainline merge decision record，并仅在：
+
+    - origin/main 精确为 40139fe21f676e70ff22c70b416dd896fdf83e7e；
+    - PR final head 精确为 660e47328284b5926abd6c2ce87de0085973ba4e；
+    - durability receipt SHA-256 精确为 fd19cc90f3080f7ac13c151a3b872d7ac857dc8f2c03f2ff5c7c339990a4f143；
+    - active queue SHA-256 精确为 7523923609fb24a7902f29d58f78a8458e59c7f58fc98e359824d2945680e4a7；
+    - PR 仍为 OPEN、ready、CLEAN、MERGEABLE；
+    - 当前 required checks、reviews、approvals 全部满足；
+    - 无 blocking comments 或 unresolved review threads；
+    - canonical root 现有工作树修改未被覆盖、stash、reset 或改变
+
+    时，执行一次 normal merge commit。
+
+    任何 base、head、证据、history、review 或工作树状态变化都必须 fail closed，并重新请求决定。
+
+    本授权不包含 direct push to main、--actual replay、Host 或 VCPToolBox Git、runtime、provider、database、private Memory、state-private、
+    release、deploy、publish、tag、force push 或后续阶段启动。
+
+hash_bindings:
+  origin_main: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+  PR_final_head: 660e47328284b5926abd6c2ce87de0085973ba4e
+  PR_final_head_parent: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+  PR_final_head_tree: 38044fe876b47b4ebd681d0e99dc6fb2cba0d939
+  frozen_candidate: 4690ce291d45339f5dbe71a793662e051629d558
+  prior_Gate_2_merge_commit: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+  durability_receipt:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    sha256: fd19cc90f3080f7ac13c151a3b872d7ac857dc8f2c03f2ff5c7c339990a4f143
+  active_queue:
+    path: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
+    sha256: 7523923609fb24a7902f29d58f78a8458e59c7f58fc98e359824d2945680e4a7
+  complete_PR_delta:
+    commits: 1
+    paths: 9
+    additions: 477
+    deletions: 41
+
+preconditions_observed_before_record:
+  observed_at: '2026-07-25T20:28:39+08:00'
+  PR_state: OPEN
+  PR_ready: true
+  PR_mergeable: true
+  PR_mergeable_state: clean
+  configured_workflows: 0
+  status_checks: 0
+  branch_protection_rules: 0
+  reviews: 0
+  review_requests: 0
+  review_comments: 0
+  unresolved_review_threads: 0
+  issue_comments: 1
+  blocking_comments: 0
+  sole_issue_comment_role: current_head_self_review_PASS_NO_BLOCKER
+  independent_exact_head_review: PASS_NO_BLOCKER
+  state_sync_record_present: false
+  canonical_root_existing_dirty_hashes_match: 8/8
+  subject_worktree_clean: true
+  remote_branch_matches_final_head: true
+
+canonical_root_existing_dirty_byte_bindings:
+  CURRENT_STATE.md: 7b75ec8fd7bc3716762fadd9b6b6d7852669adb6f8e62c54eb11c016cd6efad8
+  control-plane/registry/drafts/document-registry.v0.1.example.yaml: 2c595161c5451a443b8c1e9216583375df4dcbd3ef4b3b7ffafccbbdbc35a767
+  control-plane/registry/drafts/federated-document-registry.v0.1.example.yaml: af393fb779fa5fd9e07b062894acbde022f0fa326da40026ceef91d248a0dfa7
+  execution/agents-os-control-chain/control_chain.py: ade0cef351904aa06d9f04869b27bc5ef9fbea9ed056fcd47dda05d8976adf10
+  execution/agents-os-dashboard/dashboard.py: ebb7b1092507e721ca0f20f1ccf7296966d206cb8e0d486a8041caa979b6c713
+  execution/agents-os-machine/machine.py: 3be6e495ef634d3cfeadd30c1a64ccafac21da3c5bbc20d3fe1e672607dbf6c8
+  execution/agents-os-workbench/test-workbench.py: 0ea513bc335153675a3cfa3b5e74985d62a54a660532fe0d018d7385fbeb2330
+  execution/agents-os-workbench/workbench.py: fec7f4d126b327b805f50e48cd71b3b0a8de63f69edbc04f6178a01e15c3c791
+
+permitted_action:
+  action: merge_PR_35_once
+  method: normal_merge_commit
+  require_expected_head: 660e47328284b5926abd6c2ce87de0085973ba4e
+  require_exact_base: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+  fail_closed_on_any_drift: true
+
+retained_prohibitions:
+  direct_push_to_main: true
+  actual_replay: true
+  Host_or_VCPToolBox_Git: true
+  runtime_or_provider: true
+  database_or_private_Memory: true
+  state_private: true
+  release_deploy_or_publish: true
+  tag_or_force_push: true
+  automatic_later_phase_start: true
+
+delivery:
+  record_path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml
+  PR_35_head_changed_by_record: false
+  local_canonical_record_materialized: true
+  committed_or_pushed: false
+  future_registry_delivery_requires_separate_scope: true
