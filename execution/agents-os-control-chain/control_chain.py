@@ -2302,6 +2302,49 @@ def validate_reviewed_queue_mutation(result: dict[str, Any]) -> list[str]:
     return errors
 
 
+def active_jenn_governance_gate(route_handoff_reconciliation: dict[str, Any]) -> bool:
+    machine_action = route_handoff_reconciliation.get("machine_next_user_action", {})
+    return (
+        machine_action.get("status") == "governance_decision_required"
+        and machine_action.get("decision_owner") == "Jenn"
+        and machine_action.get("requires_jenn_decision") is True
+    )
+
+
+def validate_route_adoption_bundle_handoff(
+    route_handoff_reconciliation: dict[str, Any],
+    route_adoption_bundle_preview: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    active_governance_gate = active_jenn_governance_gate(route_handoff_reconciliation)
+    if active_governance_gate:
+        if route_adoption_bundle_preview.get("passed") is not False:
+            errors.append("route choice adoption bundle preview bypassed the active Jenn governance gate")
+        if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not False:
+            errors.append("route choice adoption bundle preview made the active Jenn governance gate apply-ready")
+    elif route_adoption_bundle_preview.get("passed") is not True:
+        errors.append("route choice adoption bundle preview did not pass")
+    if route_adoption_bundle_preview.get("selected_route_id") != "B":
+        errors.append("route choice adoption bundle preview fixture did not select route B")
+    if not active_governance_gate and route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not True:
+        errors.append("route choice adoption bundle preview did not reach separate apply gate readiness")
+    for flag in (
+        "real_queue_write_performed",
+        "workspace_route_state_modified",
+        "active_queue_modified",
+        "write_performed",
+        "queue_write_authorized",
+        "queue_promotion_authorized",
+        "route_adoption_authorized",
+        "execution_authorized",
+        "raw_confirmation_text_output",
+        "raw_template_output",
+    ):
+        if route_adoption_bundle_preview.get(flag) is not False:
+            errors.append(f"route choice adoption bundle preview authorized {flag}")
+    return errors
+
+
 def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     errors: list[str] = []
     local_candidate = {
@@ -2363,11 +2406,6 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
         ROUTE_SELECTION_PACKAGE,
         fixture_only=True,
     )
-    active_governance_gate = (
-        route_handoff_reconciliation.get("machine_next_user_action", {}).get("status") == "governance_decision_required"
-        and route_handoff_reconciliation.get("machine_next_user_action", {}).get("decision_owner") == "Jenn"
-        and route_handoff_reconciliation.get("machine_next_user_action", {}).get("requires_jenn_decision") is True
-    )
     if route_handoff_reconciliation.get("passed") is not True:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
@@ -2417,31 +2455,12 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     for flag in ROUTE_CHOICE_E2E_FALSE_FLAGS:
         if route_e2e_readiness.get(flag) is not False:
             errors.append(f"route choice end-to-end readiness authorized {flag}")
-    if active_governance_gate:
-        if route_adoption_bundle_preview.get("passed") is not False:
-            errors.append("route choice adoption bundle preview bypassed the active Jenn governance gate")
-        if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not False:
-            errors.append("route choice adoption bundle preview made the active Jenn governance gate apply-ready")
-    elif route_adoption_bundle_preview.get("passed") is not True:
-        errors.append("route choice adoption bundle preview did not pass")
-    if route_adoption_bundle_preview.get("selected_route_id") != "B":
-        errors.append("route choice adoption bundle preview fixture did not select route B")
-    if not active_governance_gate and route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not True:
-        errors.append("route choice adoption bundle preview did not reach separate apply gate readiness")
-    for flag in (
-        "real_queue_write_performed",
-        "workspace_route_state_modified",
-        "active_queue_modified",
-        "write_performed",
-        "queue_write_authorized",
-        "queue_promotion_authorized",
-        "route_adoption_authorized",
-        "execution_authorized",
-        "raw_confirmation_text_output",
-        "raw_template_output",
-    ):
-        if route_adoption_bundle_preview.get(flag) is not False:
-            errors.append(f"route choice adoption bundle preview authorized {flag}")
+    errors.extend(
+        validate_route_adoption_bundle_handoff(
+            route_handoff_reconciliation,
+            route_adoption_bundle_preview,
+        )
+    )
     try:
         producer = import_module(TASK_PRODUCER, "agents_os_task_producer_for_control_chain")
         route_option_candidate = producer.candidate_from_route_option("A")

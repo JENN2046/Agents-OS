@@ -252,6 +252,93 @@ route A
     check(invalid_route_adoption_bundle["real_queue_write_performed"] is False, "invalid route adoption bundle must not write real queue", failures)
     check(invalid_route_adoption_bundle["execution_authorized"] is False, "invalid route adoption bundle must not authorize execution", failures)
 
+    with tempfile.TemporaryDirectory(prefix="agents-os-governance-gate-test-", dir=chain.WORKSPACE_ROOT) as gate_temp_dir:
+        governance_queue_path = Path(gate_temp_dir) / "governance-gate-queue.md"
+        governance_queue_text = """# governance gate fixture
+
+## NOW
+
+### NOW-001: Awaiting Jenn Explicit Start Decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+        governance_queue_path.write_text(governance_queue_text, encoding="utf-8")
+        governance_handoff = chain.route_choice_handoff_reconciliation(governance_queue_path)
+        governance_bundle = chain.route_choice_adoption_bundle_preview(
+            "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+            "这是 governance gate fixture；不写真实队列、不执行。",
+            governance_queue_path,
+            chain.ROUTE_SELECTION_PACKAGE,
+            fixture_only=True,
+        )
+        check(
+            governance_queue_path.read_text(encoding="utf-8") == governance_queue_text,
+            "active governance gate fixtures must not modify their queue",
+            failures,
+        )
+    check(
+        governance_handoff["passed"] is True and governance_handoff["aligned"] is True,
+        f"active governance gate handoff should pass and align: {governance_handoff['errors']}",
+        failures,
+    )
+    check(
+        governance_handoff["machine_next_user_action"]["status"] == "governance_decision_required"
+        and governance_handoff["dashboard_next_user_action"]["status"] == "governance_decision_required",
+        "active governance gate fixture should make Machine and Dashboard require a governance decision",
+        failures,
+    )
+    check(
+        chain.active_jenn_governance_gate(governance_handoff) is True,
+        "active Jenn governance gate should be detected",
+        failures,
+    )
+    check(
+        governance_bundle["passed"] is True
+        and governance_bundle["can_apply_with_separate_apply_gate"] is True,
+        "adversarial governance bundle fixture should reproduce the apply-ready bypass",
+        failures,
+    )
+    governance_bypass_errors = chain.validate_route_adoption_bundle_handoff(
+        governance_handoff,
+        governance_bundle,
+    )
+    check(
+        governance_bypass_errors
+        == [
+            "route choice adoption bundle preview bypassed the active Jenn governance gate",
+            "route choice adoption bundle preview made the active Jenn governance gate apply-ready",
+        ],
+        f"active Jenn governance gate should reject bypass exactly: {governance_bypass_errors}",
+        failures,
+    )
+    blocked_governance_bundle = dict(
+        governance_bundle,
+        passed=False,
+        can_apply_with_separate_apply_gate=False,
+    )
+    blocked_governance_errors = chain.validate_route_adoption_bundle_handoff(
+        governance_handoff,
+        blocked_governance_bundle,
+    )
+    check(
+        blocked_governance_errors == [],
+        f"fail-closed governance bundle should satisfy the active gate: {blocked_governance_errors}",
+        failures,
+    )
+
     invalid_decision = chain.build_commander_decision(invalid)
     check(invalid_decision["decision"] == "reject_as_out_of_scope", "invalid candidate should be rejected", failures)
 
@@ -590,7 +677,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=30 failures={len(failures)}")
+        print(f"cases=32 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -604,12 +691,14 @@ old_task: closed
     print("PASS route choice template readiness fixture")
     print("PASS route choice end-to-end readiness fixture")
     print("PASS route choice adoption bundle preview fixture")
+    print("PASS active Jenn governance gate bypass fixture")
+    print("PASS active Jenn governance gate fail-closed fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=30 failures=0")
+    print("cases=32 failures=0")
     return 0
 
 
