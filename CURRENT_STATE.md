@@ -1,34 +1,32 @@
 # AGENTS OS Current State
 
-Date: 2026-07-24
+Date: 2026-07-25
 Status: active reality snapshot
 Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5D M0-D Host Lifecycle Contract Closure R1 — Accepted and Frozen (2026-07-24)
+## Phase 5D M0-D MEHS v0.3 Gate 2 — Mainline Merged, Durability Projection (2026-07-25)
 
-Phase 5D M0-D Plan R1–R2 remains frozen. R1's immutable independent `BLOCK`
-remains preserved: it found that R1's favorable offline result could survive
-coordinated re-signing of sealed source/Host commitments and current-boundary
-claims. The bounded R2 closure binds the exact immutable source/Host/extension
-commitments, the Plan's current-boundary projection, and duplicate-YAML/identity
-totality. After plan durability completed on `main`, Jenn explicitly authorized
-the frozen local offline implementation. The implementation has therefore
-started at WP0 under the frozen sequence. WP0 through WP5 passed their direct
-predecessor validations and closed as a deterministic offline preflight. Jenn
-then authorized only a narrow contract closure: it fixes the required evidence
-shape for future Host discovery, `initialize`, `shutdown`, and quarantine
-cleanup without inventing any Host-owned values. The R1 package received a
-fresh full atomic independent `PASS_NO_BLOCKER` review. Jenn then selected the
-package's Section 6 A atomic acceptance-and-freeze outcome. The four-subject
-future-evidence contract is now immutable; its freeze still does not create
-Host-owned inputs or authorize a Host-facing action. The terminal outcome
-remains `NOT_EXECUTED`.
+The frozen MEHS v0.3 candidate
+`4690ce291d45339f5dbe71a793662e051629d558` passed fresh independent review.
+Jenn then authorized one exact Gate 1 actual Host smoke. Its permanent claim was
+created before Host observation, the execution returned
+`HOST_SMOKE_CANDIDATE_OBSERVED`, cleanup was `CLEAN`, and the fresh independent
+actual closeout review returned `PASS_NO_BLOCKER`. Gate 1 is permanently
+consumed and retry is not authorized.
+
+Jenn selected Gate 2 Decision Package Section 6 Outcome A. PR #34 delivered the
+complete reviewed 16-commit, 53-path `origin/main..final_head` surface and
+normally merged at `40139fe21f676e70ff22c70b416dd896fdf83e7e`.
+The merge tree exactly matches reviewed final head
+`799fd235b4ebf43c51d76f7bb55459223ed78cd3`; all twelve bound mainline objects
+match. This projection records those durable facts only. It does not replay
+Gate 1, authorize another Host action, or automatically start a later phase.
 
 ```yaml
-Phase_5D_status: M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_ACCEPTED_FROZEN_AWAITING_SEPARATE_JENN_HOST_SMOKE_DECISION
-Phase_5D_objective: QUARANTINED_HOST_SMOKE_INTEGRATION_PREFLIGHT_ONLY
+Phase_5D_status: M0D_MEHS_V0_3_GATE_2_MAINLINE_MERGED_POSTMERGE_DURABILITY_PROJECTION
+Phase_5D_objective: MEHS_V0_3_GATE_2_DURABILITY_ONLY
 Phase_5D_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
 Phase_5D_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
 Phase_5D_plan_acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
@@ -147,7 +145,7 @@ Phase_5D_contract_closure_atomic_freeze_decision_package_closeout_receipt: contr
 Phase_5D_contract_closure_atomic_freeze_decision_package_closeout_receipt_sha256: 5b430639c4530f23d3d53b9fdc4be86988df4258924c10573f21bf07c7c905de
 Phase_5D_contract_closure_atomic_freeze_closeout_receipt: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md
 Phase_5D_contract_closure_atomic_freeze_closeout_receipt_sha256: 40cae93aeecac2878b0916a9ffcdcad5e2656f36e75993057a6ad99a876b492c
-Phase_5D_current_work_package: JENN_EXPLICIT_PHASE_5D_M0D_HOST_SMOKE_EXECUTION_DECISION
+Phase_5D_current_work_package: JENN_EXPLICIT_POST_GATE2_DIRECTION_DECISION
 Phase_5D_WP0_status: PASS_COMPLETE
 Phase_5D_WP1_status: PASS_COMPLETE
 Phase_5D_WP2_status: PASS_COMPLETE
@@ -155,11 +153,57 @@ Phase_5D_WP3_status: PASS_COMPLETE
 Phase_5D_WP4_status: PASS_COMPLETE
 Phase_5D_WP5_status: PASS_COMPLETE
 Phase_5D_offline_terminal_result: QUARANTINED_HOST_SMOKE_PREFLIGHT_READY
-Phase_5D_terminal_outcome: NOT_EXECUTED
+Phase_5D_terminal_outcome: HOST_SMOKE_CANDIDATE_OBSERVED
 Phase_5D_implementation_closeout_receipt: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
 Phase_5D_implementation_closeout_receipt_sha256: ba83d70c5b9230c725a2077c10ae547415a7729187a7f08ae3028e24f4b5f2d0
+Phase_5D_MEHS_frozen_candidate: 4690ce291d45339f5dbe71a793662e051629d558
+Phase_5D_MEHS_frozen_candidate_baseline: 310a7358f96b6749f0c31dd3e39517c9df87c50c
+Phase_5D_MEHS_frozen_plan: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json
+Phase_5D_MEHS_frozen_plan_sha256: e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59
+Phase_5D_MEHS_frozen_correction_sha256: e6a6958c1f69ee6181c3f94093da18575a6cfa4f52920800187ff5a771d0d8fc
+Phase_5D_MEHS_frozen_runner_sha256: 5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74
+Phase_5D_MEHS_frozen_tests_sha256: 19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f
+Phase_5D_MEHS_frozen_candidate_review: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+Phase_5D_MEHS_frozen_candidate_review_sha256: 85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61
+Phase_5D_MEHS_frozen_candidate_review_result: PASS_NO_BLOCKER
+Phase_5D_MEHS_Gate_1_decision: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+Phase_5D_MEHS_Gate_1_decision_sha256: 3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12
+Phase_5D_MEHS_Gate_1_claim: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+Phase_5D_MEHS_Gate_1_claim_sha256: 7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69
+Phase_5D_MEHS_terminal_receipt: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+Phase_5D_MEHS_terminal_receipt_sha256: e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c
+Phase_5D_MEHS_Gate_1_consumed: true
+Phase_5D_MEHS_Gate_1_retry_authorized: false
+Phase_5D_MEHS_actual_result: HOST_SMOKE_CANDIDATE_OBSERVED
+Phase_5D_MEHS_actual_failure: null
+Phase_5D_MEHS_cleanup_status: CLEAN
+Phase_5D_MEHS_owned_temporary_residue_count: 0
+Phase_5D_MEHS_actual_closeout_review: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+Phase_5D_MEHS_actual_closeout_review_sha256: 2e63d87301b7f23c2d933d9412756576dbb78fbab55bb03f233537b750bd4873
+Phase_5D_MEHS_actual_closeout_review_result: PASS_NO_BLOCKER
+Phase_5D_MEHS_Gate_2_decision_package: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+Phase_5D_MEHS_Gate_2_decision_package_sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+Phase_5D_MEHS_Gate_2_decision_record: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+Phase_5D_MEHS_Gate_2_decision_record_sha256: f90fad11ec2b37582a7f15ae592c75943d0d52cae37bd67a7853cf6163121d3a
+Phase_5D_MEHS_Gate_2_delivery_manifest: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml
+Phase_5D_MEHS_Gate_2_delivery_manifest_sha256: 7c5b8cf29e2f4ab34e04d7c9c608492a70cbfe80c16becc16d40a71263062633
+Phase_5D_MEHS_Gate_2_PR_number: 34
+Phase_5D_MEHS_Gate_2_PR_url: https://github.com/JENN2046/Agents-OS/pull/34
+Phase_5D_MEHS_Gate_2_PR_final_head: 799fd235b4ebf43c51d76f7bb55459223ed78cd3
+Phase_5D_MEHS_Gate_2_mainline_merge_commit: 40139fe21f676e70ff22c70b416dd896fdf83e7e
+Phase_5D_MEHS_Gate_2_merge_first_parent: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+Phase_5D_MEHS_Gate_2_merge_second_parent: 799fd235b4ebf43c51d76f7bb55459223ed78cd3
+Phase_5D_MEHS_Gate_2_merge_tree_oid: 3f85f004ef17b95123d29565e49e094471ffec88
+Phase_5D_MEHS_Gate_2_full_delta_commits: 16
+Phase_5D_MEHS_Gate_2_full_delta_paths: 53
+Phase_5D_MEHS_Gate_2_bound_mainline_objects: 12/12_MATCH
+Phase_5D_MEHS_Gate_2_mainline_integrated: true
+Phase_5D_MEHS_Gate_2_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+Phase_5D_MEHS_Gate_2_postmerge_durability_receipt_sha256: fd19cc90f3080f7ac13c151a3b872d7ac857dc8f2c03f2ff5c7c339990a4f143
+Phase_5D_MEHS_Gate_2_postmerge_projection_delivery: COMPLETE_ON_MAINLINE_WHEN_THIS_PROJECTION_PR_MERGES
+Phase_5D_MEHS_Gate_2_durability_complete: true_when_projection_is_on_mainline
 Phase_5C_implementation_durability_complete: true
-current_work_package: JENN_EXPLICIT_PHASE_5D_M0D_HOST_SMOKE_EXECUTION_DECISION
+current_work_package: JENN_EXPLICIT_POST_GATE2_DIRECTION_DECISION
 VCPToolBox_change_or_start_authorized: false
 clean_Host_worktree_creation_or_inspection_authorized: false
 archive_delivery_or_installation_authorized: false
@@ -171,10 +215,10 @@ implementation_source_change_authorized: false
 actual_Host_smoke_execution_authorized: false
 Git_delivery_authorized: false
 main_merge_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
-active_work_queue_sha256: 79939bcaea9490af25a3aef46f0a6f92146d14a2a9bb3d429139e2976075483d
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
-next_gate: JENN_EXPLICIT_PHASE_5D_M0D_HOST_SMOKE_EXECUTION_DECISION
+active_work_queue: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
+active_work_queue_sha256: 7523923609fb24a7902f29d58f78a8458e59c7f58fc98e359824d2945680e4a7
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
+next_gate: JENN_EXPLICIT_POST_GATE2_DIRECTION_DECISION
 ```
 
 ## Phase 5C M0-C Implementation — Mainline Durability Complete (2026-07-23)

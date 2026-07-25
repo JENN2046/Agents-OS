@@ -1269,19 +1269,211 @@ documents:
   - id: agents-os-active-work-queue-v17.5
     title: AGENTS OS Active Work Queue v17.5
     doc_type: review
-    status: active
-    scope: Jenn-only separate actual Host-smoke preflight decision gate after contract-closure freeze
+    status: superseded
+    scope: historical Jenn-only separate actual Host-smoke preflight decision gate after contract-closure freeze
     canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
     owner: {human: Jenn, agent_steward: Nobao}
     source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
     supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md]
-    superseded_by: null
+    superseded_by: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
     related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md]
     last_reviewed: '2026-07-24'
     review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
     freshness: {level: critical, review_trigger: [separate Jenn Host-smoke decision or evidence correction]}
     security_boundary: [Jenn-only decision gate; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
     validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-gate1-decision
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Gate 1 Decision
+    doc_type: decision_record
+    status: accepted
+    scope: exact one-shot actual Host-smoke authorization bound to the frozen MEHS v0.3 candidate and evidence
+    canonical_path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json, control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    freshness: {level: critical, review_trigger: [candidate evidence or one-shot claim binding challenge]}
+    security_boundary: [historical exact Gate 1 authority only; claim consumed and retry unauthorized]
+    validation: {commands: ["sha256sum control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-gate2-mainline-merge-decision
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Gate 2 Mainline Merge Decision
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Outcome A decision binding the full reviewed final-head delivery and conditional PR merge
+    canonical_path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md, control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [bound object remote base history or final-head manifest change]}
+    security_boundary: [PR 34 conditional merge only; no direct main push actual replay later phase release deploy or publish]
+    validation: {commands: ["sha256sum control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-plan
+    title: AGENTS OS Phase 5D M0-D Minimum Exact Host Smoke Plan v0.3
+    doc_type: contract
+    status: accepted
+    scope: frozen hash-bound minimum exact Host-smoke plan for candidate 4690ce291d45339f5dbe71a793662e051629d558
+    canonical_path: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json, execution/agents-os-phase5d-host-smoke/one-shot-host-smoke.mjs]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    freshness: {level: critical, review_trigger: [frozen candidate plan runner tests or correction bytes change]}
+    security_boundary: [frozen historical one-shot plan; no further execution authority]
+    validation: {commands: ["sha256sum control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-gate1-consumed-claim
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Gate 1 Consumed Claim
+    doc_type: receipt
+    status: accepted
+    scope: permanent one-shot Gate 1 consumption witness created before the authorized Host smoke
+    canonical_path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    freshness: {level: critical, review_trigger: [claim presence state candidate or decision binding challenge]}
+    security_boundary: [permanent consumed claim; deletion rollback replacement and retry prohibited]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-terminal-receipt
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Terminal Receipt
+    doc_type: receipt
+    status: accepted
+    scope: canonical terminal evidence for the unique authorized actual Host-smoke execution
+    canonical_path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json, control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    freshness: {level: critical, review_trigger: [terminal result cleanup or evidence-binding challenge]}
+    security_boundary: [immutable terminal receipt; no actual replay Host action or Gate 1 retry]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-gate2-decision-package
+    title: AGENTS OS Phase 5D M0-D Minimum Exact Host Smoke Gate 2 Decision Package v0.1
+    doc_type: review
+    status: accepted
+    scope: hash-bound Jenn decision surface for Gate 2 Outcome A or B after actual closeout
+    canonical_path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml, control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [package bytes candidate or six-evidence binding change]}
+    security_boundary: [decision package only; no automatic merge actual replay release deploy or publish]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-gate2-delivery-manifest
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Gate 2 Delivery Manifest
+    doc_type: review
+    status: accepted
+    scope: exact current-final-head delivery content and full origin-main delta manifest for PR 34
+    canonical_path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [remote base final head history or manifest object change]}
+    security_boundary: [delivery manifest only; no direct main push later phase release deploy or publish]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml"]}
+  - id: agents-os-phase-5d-m0d-r4-disposition-clean-correction
+    title: AGENTS OS Phase 5D M0-D R4 Disposition Clean Correction v0.1
+    doc_type: review
+    status: accepted
+    scope: superseding clean governance-record correction preserving malformed historical R4 bytes
+    canonical_path: control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-r4-disposition-clean-correction-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-r4-disposition-clean-correction-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    freshness: {level: critical, review_trigger: [historical R4 provenance or correction binding challenge]}
+    security_boundary: [governance correction only; no candidate mutation execution runtime provider or effect]
+    validation: {commands: ["sha256sum control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-r4-disposition-clean-correction-v0.1.yaml"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-r5-actual-closeout-fresh-independent-review
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 R5 Actual Closeout Fresh Independent Review
+    doc_type: review
+    status: accepted
+    scope: fresh hash-bound independent closure of claim receipt candidate and unique actual execution evidence
+    canonical_path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    freshness: {level: critical, review_trigger: [claim receipt candidate or execution-evidence bytes change]}
+    security_boundary: [read-only independent closeout; no actual replay runtime provider database or private Memory]
+    validation: {commands: ["sha256sum control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-r5-fresh-independent-review-closure
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 R5 Fresh Independent Review Closure
+    doc_type: review
+    status: accepted
+    scope: fresh independent exact dry-run test FD-binding transport and Gate 1 attack closure
+    canonical_path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json, execution/agents-os-phase5d-host-smoke/one-shot-host-smoke.mjs]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    freshness: {level: critical, review_trigger: [candidate plan runner tests seccomp artifact or review evidence change]}
+    security_boundary: [read-only independent review; no actual Host VCPToolBox runtime provider database or private Memory]
+    validation: {commands: ["sha256sum control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json"]}
+  - id: agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout
+    title: AGENTS OS Phase 5D M0-D MEHS Gate 2 Post-Merge Durability Closeout v0.1
+    doc_type: receipt
+    status: accepted
+    scope: PR 34 merge-object frozen-candidate bound-evidence and mainline-tree durability closeout
+    canonical_path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md, control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [PR state merge object mainline ancestry or bound-object challenge]}
+    security_boundary: [durability evidence only; no actual replay Host VCPToolBox later phase release deploy or publish]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.6-gate2
+    title: AGENTS OS Active Work Queue v17.6 Gate 2
+    doc_type: review
+    status: active
+    scope: post-Gate-2 Jenn-only direction gate after MEHS v0.3 mainline integration and durability projection
+    canonical_path: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [new Jenn direction decision or durability evidence correction]}
+    security_boundary: [Jenn-only post-Gate-2 direction gate; no actual replay Host runtime provider database private Memory release deploy or publish]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md inspect-queue --json"]}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-review-package-builder","title":"Phase 5C M0-C Post-Freeze Review Package Builder","doc_type":"reference","status":"accepted","scope":"collision-safe successor for the immutable Phase 5C R3 review-package builder","canonical_path":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5c-m0c-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["post-freeze correction evidence or archive-member guard change"]},"security_boundary":["offline review-package construction only; no plan-semantic change VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -m py_compile control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py"]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-start-decision","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction Start Decision","doc_type":"decision_record","status":"accepted","scope":"Jenn authorization for a narrow non-semantic review-package builder correction","canonical_path":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["review-package delivery correction only; no plan re-freeze implementation VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml').read_text())\""]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-contract","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction","doc_type":"contract","status":"accepted","scope":"narrow collision rejection contract preserving frozen R1-R4 plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["guard contract or independent review change"]},"security_boundary":["non-semantic offline packaging correction only; no implementation or runtime authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}
