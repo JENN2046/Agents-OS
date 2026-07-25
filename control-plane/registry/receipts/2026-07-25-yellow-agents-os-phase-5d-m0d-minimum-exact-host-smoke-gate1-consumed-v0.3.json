@@ -1,0 +1,8 @@
+{
+  "schema_version": "agents-os.phase5d.minimum-exact-host-smoke-gate1-claim.v0.3",
+  "decision_sha256": "3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12",
+  "candidate_commit": "4690ce291d45339f5dbe71a793662e051629d558",
+  "state": "CONSUMED_PENDING",
+  "retry_authorized": false,
+  "terminal_receipt_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json"
+}

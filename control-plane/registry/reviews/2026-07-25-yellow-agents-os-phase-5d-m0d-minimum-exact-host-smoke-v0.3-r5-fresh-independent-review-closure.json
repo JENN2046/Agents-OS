@@ -1,0 +1,87 @@
+{
+  "schema_version": "agents-os.hash-bound-independent-review.v0.1",
+  "review_id": "MEHS_V0_3_R5_FRESH_INDEPENDENT_REVIEW_CLOSURE",
+  "date": "2026-07-25",
+  "reviewer": {
+    "identity": "Codex_MEHS_v0_3_R5_fresh_independent_reviewer",
+    "independent": true,
+    "independence_basis": [
+      "did_not_participate_in_candidate_implementation",
+      "reviewed_frozen_candidate_in_an_independent_temporary_clone",
+      "did_not_modify_candidate_or_canonical_workspace",
+      "did_not_execute_actual_or_consume_canonical_gate_1"
+    ]
+  },
+  "review_unit": {
+    "candidate_commit": "4690ce291d45339f5dbe71a793662e051629d558",
+    "baseline_commit": "310a7358f96b6749f0c31dd3e39517c9df87c50c",
+    "unique_parent_matches_baseline": true,
+    "baseline_to_candidate": "4_A_0_NON_A"
+  },
+  "artifact_sha256": {
+    "plan": "e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59",
+    "correction_yaml": "e6a6958c1f69ee6181c3f94093da18575a6cfa4f52920800187ff5a771d0d8fc",
+    "runner": "5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74",
+    "tests": "19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f"
+  },
+  "result": "PASS_NO_BLOCKER",
+  "findings": {
+    "blocker": 0,
+    "unresolved": 0
+  },
+  "validation": {
+    "exact_dry_run": {
+      "exit_status": 0,
+      "stderr_bytes": 0,
+      "stdout_bytes": 2722,
+      "canonical_json": true,
+      "cleanup_status": "CLEAN",
+      "spawn_wrapper_error_code": null
+    },
+    "seccomp_fd_binding": {
+      "delegated_fd_sha256": "7a3c08b062d90d1f205bf458aedf4853f59350a6229a6182d5d0a0d77bd4b286",
+      "worker_filter_increment": 1,
+      "pathname_swap": "PASS",
+      "weakened_fd_with_path_restored": "REJECTED",
+      "post_hash_mutation": "REJECTED",
+      "truncated_or_trailing_fd": "REJECTED"
+    },
+    "canonical_transport": {
+      "positive_cases": 1,
+      "negative_cases": 8,
+      "all_negative_cases_rejected": true
+    },
+    "full_test": {
+      "exit_status": 0,
+      "stderr_bytes": 0,
+      "plan_negative_cases": 22,
+      "seccomp_focused_negative_cases": 14,
+      "runtime_negative_cases": 5,
+      "fd_cases": "2_POSITIVE_4_NEGATIVE",
+      "spawn_cases": "2_POSITIVE_4_NEGATIVE"
+    },
+    "gate_1_adversarial": {
+      "concurrent_os_processes": 32,
+      "winners": 1,
+      "rejected": 31,
+      "sigkill_claim_persistence": "PASS",
+      "receipt_eacces_claim_persistence": "PASS",
+      "missing_receipt_replay": "REJECTED"
+    }
+  },
+  "boundaries": {
+    "actual_cli_preflight_invocations": 0,
+    "actual_host_execution_count": 0,
+    "canonical_gate_1_consumed": false,
+    "canonical_claim_created": false,
+    "canonical_receipt_created": false,
+    "canonical_actual_root_created": false,
+    "persistent_review_artifact_created_by_review": false
+  },
+  "semantic_limits": [
+    "AF_UNIX_EPERM_IS_CORROBORATING_ONLY",
+    "PACKET_COUNT_ZERO_IS_NOT_PACKET_CAPTURE_EVIDENCE",
+    "SHARE_NET_IS_SHARED_NETWORK_NAMESPACE"
+  ],
+  "next_gate": "JENN_GATE_1_DECISION"
+}

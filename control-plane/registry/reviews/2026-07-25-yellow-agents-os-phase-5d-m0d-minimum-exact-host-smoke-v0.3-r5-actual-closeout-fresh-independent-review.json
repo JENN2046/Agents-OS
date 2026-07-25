@@ -1,0 +1,94 @@
+{
+  "schema_version": "agents-os.hash-bound-independent-review.v0.1",
+  "review_id": "MEHS_V0_3_R5_ACTUAL_CLOSEOUT_FRESH_INDEPENDENT_REVIEW",
+  "date": "2026-07-25",
+  "reviewer": {
+    "identity": "Codex_MEHS_v0_3_R5_fresh_actual_closeout_reviewer",
+    "independent": true,
+    "independence_basis": [
+      "did_not_participate_in_candidate_implementation",
+      "did_not_participate_in_frozen_candidate_review",
+      "did_not_prepare_gate_1_or_execute_actual",
+      "performed_closeout_review_read_only",
+      "did_not_call_or_simulate_actual_or_replay"
+    ]
+  },
+  "review_unit": {
+    "candidate_commit": "4690ce291d45339f5dbe71a793662e051629d558",
+    "baseline_commit": "310a7358f96b6749f0c31dd3e39517c9df87c50c",
+    "candidate_shape": "4_A_0_NON_A",
+    "gate_1_decision_sha256": "3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12",
+    "gate_1_claim_sha256": "7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69",
+    "terminal_receipt_sha256": "e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c",
+    "frozen_candidate_review_sha256": "85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61"
+  },
+  "candidate_artifact_sha256": {
+    "plan": "e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59",
+    "correction_yaml": "e6a6958c1f69ee6181c3f94093da18575a6cfa4f52920800187ff5a771d0d8fc",
+    "runner": "5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74",
+    "tests": "19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f"
+  },
+  "result": "PASS_NO_BLOCKER",
+  "execution_closeout": {
+    "receipt_result": "HOST_SMOKE_CANDIDATE_OBSERVED",
+    "failure": null,
+    "cleanup_status": "CLEAN",
+    "owned_temporary_residue_count": 0,
+    "gate_1_consumed": true,
+    "retry_authorized": false,
+    "gate_2_mainline_merge_authorized": false,
+    "actual_quarantine_root_exists": false,
+    "sealed_host_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "sealed_host_tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "sealed_host_blob_oid": "5fd77cea37c30ef432f23d9627d05aba862b9744",
+    "sealed_host_blob_sha256": "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2"
+  },
+  "observed_lifecycle": {
+    "method_sequence": [
+      "PluginManager.loadPlugins",
+      "InertPayload.initialize",
+      "PluginManager.shutdownAllPlugins",
+      "InertPayload.shutdown",
+      "Harness.quarantineCleanup"
+    ],
+    "discovered_plugin_names": [
+      "AGENTSOSResident"
+    ],
+    "initialize_return": {
+      "initialized": false
+    },
+    "shutdown_return": {
+      "shutdown": true
+    },
+    "forbidden_effect_counts_zero": true,
+    "canonical_root_modified": false,
+    "harness_bwrap_invocation_count": 1,
+    "spawn_wrapper_error_code": null
+  },
+  "one_time_gate_review": {
+    "claim_created_before_isolation_source_and_smoke": true,
+    "claim_creation": "O_EXCL_O_NOFOLLOW_MODE_0600_WITH_FILE_AND_DIRECTORY_SYNC",
+    "terminal_receipt_creation": "WX_MODE_0600",
+    "claim_or_receipt_preexistence_blocks_before_smoke": true,
+    "claim_or_receipt_delete_path_present": false,
+    "replay_attempted_by_review": false,
+    "permanent_semantics": "RUNNER_AND_GOVERNANCE_NO_DELETE_NOT_FILESYSTEM_IMMUTABILITY"
+  },
+  "semantic_limits": [
+    "AF_UNIX_EPERM_IS_CORROBORATING_ONLY",
+    "PACKET_COUNT_ZERO_IS_NOT_PACKET_CAPTURE_EVIDENCE",
+    "SHARE_NET_IS_SHARED_NETWORK_NAMESPACE",
+    "CLOSEOUT_DOES_NOT_ESTABLISH_PRODUCTION_OR_RUNTIME_READINESS"
+  ],
+  "findings": {
+    "blocker": 0,
+    "unresolved": 0
+  },
+  "scope_limit": {
+    "candidate_modified": false,
+    "actual_or_replay_invoked_by_review": false,
+    "gate_2_or_merge_authorized_by_review": false,
+    "commit_push_merge_release_or_deploy_performed": false
+  },
+  "next_gate": "JENN_GATE_2_MAINLINE_MERGE_DECISION"
+}

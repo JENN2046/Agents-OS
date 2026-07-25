@@ -1,0 +1,27 @@
+{
+  "schema_version": "agents-os.phase5d.minimum-exact-host-smoke-gate1-decision.v0.3",
+  "decision_id": "JENN_PHASE_5D_M0D_MINIMUM_EXACT_HOST_SMOKE_GATE_1_V0_3",
+  "owner": "Jenn",
+  "candidate_commit": "4690ce291d45339f5dbe71a793662e051629d558",
+  "plan_sha256": "e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59",
+  "runner_sha256": "5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74",
+  "tests_sha256": "19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f",
+  "independent_review_relative_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json",
+  "independent_review_sha256": "85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61",
+  "independent_review_result": "PASS_NO_BLOCKER",
+  "quarantine_root": "/tmp/agents-os-phase5d-minimum-host-smoke-v0.3-555b3b538f6e",
+  "gate_1_claim_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json",
+  "receipt_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json",
+  "sealed_host_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+  "sealed_host_tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+  "sealed_host_blob_oid": "5fd77cea37c30ef432f23d9627d05aba862b9744",
+  "allowed_method_sequence": [
+    "PluginManager.loadPlugins",
+    "InertPayload.initialize",
+    "PluginManager.shutdownAllPlugins",
+    "InertPayload.shutdown",
+    "Harness.quarantineCleanup"
+  ],
+  "actual_host_smoke_authorized": true,
+  "authorized_once": true
+}

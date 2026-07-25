@@ -1,0 +1,226 @@
+schema_version: agents-os.gate2-delivery-manifest.v0.1
+manifest_id: agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1
+created_at: 2026-07-25
+status: FINAL_HEAD_CONTENT_MANIFEST_AWAITING_EXTERNAL_CURRENT_HEAD_CLOSURE
+
+scope:
+  repository: JENN2046/Agents-OS
+  repository_visibility: PRIVATE
+  remote: origin
+  target_branch: main
+  delivery_branch: agent/phase-5d-m0d-minimum-host-smoke-gate2-closeout-v0.1
+  review_range: origin/main..final_head
+  review_scope_is_only_candidate_four_additions: false
+  actual_replay_authorized: false
+
+authority:
+  decision_package:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+    sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+  decision_record:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+    sha256: f90fad11ec2b37582a7f15ae592c75943d0d52cae37bd67a7853cf6163121d3a
+  outcome: A
+  exact_authorization_bound_by_decision_record: true
+
+git_binding:
+  refreshed_origin_main: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+  merge_base: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+  implementation_line: 310a7358f96b6749f0c31dd3e39517c9df87c50c
+  frozen_candidate: 4690ce291d45339f5dbe71a793662e051629d558
+  delivery_parent: 4690ce291d45339f5dbe71a793662e051629d558
+  final_head_commit_sha: CURRENT_PR_HEAD_BINDING_REQUIRED
+  final_head_manifest_sha256: EXTERNAL_CURRENT_HEAD_REVIEW_BINDING_REQUIRED
+  expected_origin_main_to_final_head_commit_count: 16
+  expected_final_file_surface:
+    paths: 53
+    added: 44
+    modified: 9
+    deleted: 0
+    renamed: 0
+  self_reference_note: >-
+    The immutable manifest file cannot contain its own content hash or the
+    commit SHA that contains it. The current-head review must bind the exact
+    committed manifest SHA-256 and PR head SHA and must recheck them immediately
+    before merge.
+
+origin_main_to_candidate_history:
+  commit_count: 15
+  canonical_command: git log --reverse --format=%H%x20%P origin/main..4690ce291d45339f5dbe71a793662e051629d558
+  canonical_output_sha256: a6e56d271708fb672d754513c8d5d631d311c038d2956ea683dfffb6cbb52cd3
+  commits:
+    - 105b891eb922628c09786606a937734a2e8677ba
+    - 3a39a3deb163e21f9fa1d25a24b13cb48fa5122d
+    - b98716ebb40aefd7dc918530c9651da5322bac0e
+    - a40991d1d93f567c312fdde2c1b9469376a16116
+    - e11efc1eae551ba6d02714585ecb819621ec5b93
+    - 4419c947f83b7735cf4b3eb6bc66ab807152877a
+    - b754f5cac7a60196b0def6034ce5e6e9cb9e1578
+    - ca03100de8d750a08a8a6a2da8bef623514f8e56
+    - b6479b849a162fe438d7ee38fee4dd48ed3d46ef
+    - 193ddbc9bac137a2932bb497f083a0b81695a384
+    - b6283b8ea35bec02e309848e1357909387144fe8
+    - 18d1afbdac9bb086d0c571ed89afc6b48162a733
+    - 697292442f57ba7de036008b577676bbe9afcf1b
+    - 310a7358f96b6749f0c31dd3e39517c9df87c50c
+    - 4690ce291d45339f5dbe71a793662e051629d558
+
+origin_main_to_candidate_diff:
+  final_path_count: 45
+  added: 36
+  modified: 9
+  deleted: 0
+  renamed: 0
+  canonical_name_status_command: git diff --name-status --find-renames origin/main..4690ce291d45339f5dbe71a793662e051629d558
+  canonical_name_status_sha256: 3e0f09b880c7d69fe161818ce0b7b479d04884f36566c31af3a03d38dd032d76
+  canonical_raw_command: git diff --raw --no-abbrev --find-renames origin/main..4690ce291d45339f5dbe71a793662e051629d558
+  canonical_raw_sha256: e0074f3ebce0a1e915ce392cae7061f9304da30b9f6ab6b9ca275f961ff172b4
+  reviewed_boundaries:
+    CURRENT_STATE: 1
+    control_plane: 32
+    execution: 6
+    extensions: 6
+
+frozen_candidate_artifacts:
+  - path: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-plan-v0.3.json
+    sha256: e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59
+  - path: control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-r4-disposition-clean-correction-v0.1.yaml
+    sha256: e6a6958c1f69ee6181c3f94093da18575a6cfa4f52920800187ff5a771d0d8fc
+  - path: execution/agents-os-phase5d-host-smoke/one-shot-host-smoke.mjs
+    sha256: 5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74
+  - path: execution/agents-os-phase5d-host-smoke/one-shot-host-smoke.test.mjs
+    sha256: 19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f
+
+gate_evidence:
+  - kind: frozen_candidate_review
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    sha256: 85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61
+  - kind: Gate_1_decision
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+    sha256: 3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12
+  - kind: Gate_1_claim
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+    sha256: 7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69
+    materialized_mode: "0600"
+  - kind: terminal_receipt
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+    sha256: e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c
+    materialized_mode: "0600"
+  - kind: fresh_actual_closeout_review
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    sha256: 2e63d87301b7f23c2d933d9412756576dbb78fbab55bb03f233537b750bd4873
+  - kind: Gate_2_decision_package
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+    sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+
+delivery_additions:
+  exact_added_path_count: 8
+  modified_or_deleted_paths: 0
+  files:
+    - path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+      sha256: 3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12
+    - path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1.yaml
+      sha256: f90fad11ec2b37582a7f15ae592c75943d0d52cae37bd67a7853cf6163121d3a
+    - path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+      sha256: 7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69
+    - path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+      sha256: e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c
+    - path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+      sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+    - path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-delivery-manifest-v0.1.yaml
+      sha256: EXTERNAL_CURRENT_HEAD_REVIEW_BINDING_REQUIRED
+    - path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+      sha256: 2e63d87301b7f23c2d933d9412756576dbb78fbab55bb03f233537b750bd4873
+    - path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+      sha256: 85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61
+
+precommit_preconditions:
+  candidate_ref_exact: true
+  claim_regular_file_mode_0600: true
+  receipt_regular_file_mode_0600: true
+  retry_authorized: false
+  terminal_result: HOST_SMOKE_CANDIDATE_OBSERVED
+  terminal_failure: null
+  cleanup_status: CLEAN
+  owned_temporary_residue_count: 0
+  quarantine_root_absent: true
+  clean_dedicated_worktree: true
+  root_dirty_worktree_modified_or_stashed: false
+  origin_refreshed_and_unchanged: true
+  github_workflow_files_present_in_final_tree: false
+  push_or_PR_known_to_trigger_runtime_or_real_effect: false
+
+precommit_validation:
+  syntax:
+    runner: PASS
+    tests: PASS
+  exact_dry_run:
+    clean_candidate_only_worktree: PASS
+    result: HOST_SMOKE_CANDIDATE_OBSERVED
+    actual_Host_smoke_executed: false
+    VCPToolBox_Git_command_count: 0
+  complete_test:
+    clean_candidate_only_worktree: PASS
+    positive_dry_runs: 1
+    gate_1_concurrent_processes: 32
+    gate_1_atomic_claim_winners: 1
+    gate_1_atomic_claim_losers: 31
+    actual_cli_preflight_invocations: 0
+    actual_Host_execution_count: 0
+    VCPToolBox_Git_command_count: 0
+  post_consumption_delivery_worktree_note: >-
+    Running the pre-claim complete test directly beside the materialized
+    permanent claim and receipt reaches its intentional claim-absence
+    assertion. The exact frozen suite passes in a separate clean candidate-only
+    worktree. No actual path was invoked in either validation.
+
+prohibited_content_review:
+  reviewed_range_objects: 217
+  reviewed_text_blobs: 89
+  known_secret_pattern_hits: 0
+  high_entropy_credential_assignment_hits: 0
+  prohibited_path_hits: 0
+  private_raw_memory_or_provider_raw_response_hits: 0
+  raw_log_paths: 0
+  unrelated_user_work_paths: 0
+  canonical_local_path_bindings:
+    count: 30
+    disposition: REVIEWED_PRIVATE_REMOTE_ONLY
+  note: >-
+    A broad authorization-string heuristic produced false positives. A
+    key-and-literal assignment scan over every introduced text blob found no
+    credential assignment or known secret prefix.
+
+projection_scope:
+  premerge_projection_changes: []
+  reason: >-
+    No CURRENT_STATE or queue projection is necessary before merge. Existing
+    root-worktree projection edits are outside this delivery branch and remain
+    untouched. The bounded durability receipt and only then-necessary
+    projections are post-merge work under the exact Outcome A authorization.
+
+required_current_head_closure:
+  exact_manifest_sha256_bound: PENDING
+  current_PR_head_sha_bound: PENDING
+  full_origin_main_to_final_head_self_review: PENDING
+  configured_checks: PENDING
+  required_reviews_and_approvals: PENDING
+  review_decision_not_changes_requested: PENDING
+  actionable_unresolved_review_threads: PENDING
+  blocking_comments: PENDING
+  mergeability: PENDING
+  remote_base_unchanged: PENDING
+  merge_authorized_now: false
+
+retained_prohibitions:
+  direct_push_to_main: true
+  force_push_tag_or_history_rewrite: true
+  branch_protection_or_review_bypass: true
+  actual_replay_or_second_claim: true
+  real_Host_or_VCPToolBox_Git: true
+  processToolCall_native_addon_or_NAPI: true
+  runtime_service_or_provider: true
+  database_or_production_authentication: true
+  private_Memory_or_state_private: true
+  sensing_recording_or_real_effect: true
+  release_deploy_or_package_publish: true
