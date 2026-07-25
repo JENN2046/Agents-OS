@@ -1,0 +1,45 @@
+schema_version: agents-os.governance-record-correction.v0.1
+correction_id: PHASE_5D_M0D_R4_DISPOSITION_CLEAN_CORRECTION_V0_1
+date: '2026-07-25'
+owner: Jenn
+agent_steward: Nobao
+status: SUPERSEDING_CORRECTION
+
+malformed_historical_record:
+  path: control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-independent-review-disposition-v0.1.yaml
+  sha256: 1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4
+  bytes: 6205
+  parse_result: FAIL_SCANNER_ERROR_AT_LITERAL_PATCH_MARKER
+  preserved_immutable: true
+  usable_as_structured_authority: false
+
+correction_basis:
+  R4_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-full-atomic-independent-review.yaml
+    sha256: cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8
+    result: BLOCK
+  R5_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-full-atomic-independent-review.yaml
+    sha256: c07085d2083f4c9b7a863912a628915127af657e2c40bd9d77d627fb9970028b
+    finding: AOOSR-R5-IR-B01
+
+corrected_disposition:
+  review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R4_ATOMIC_BUNDLE
+  R4_independent_review_result: BLOCK
+  R4_delayed_scanner_module_self_replacement: OPEN_AT_R4_CLOSEOUT
+  R4_independent_review_gate_satisfied: false
+  R4_requires_R5: true
+  R4_accepted: false
+  R4_frozen: false
+  actual_object_only_source_run_authorized: false
+  Host_path_authorized: false
+  later_R5_result: BLOCK
+  automatic_R6: false
+  current_direction: PHASE_5D_M0D_EXECUTION_MODEL_RESET
+
+authority_effect:
+  supersedes_semantic_use_of_malformed_record: true
+  mutates_historical_record: false
+  accepts_or_freezes_R4_or_R5: false
+  authorizes_actual_execution: false
+  creates_new_revision: false
