@@ -6,7 +6,7 @@ Owner: Jenn
 Agent steward: Nobao
 Scope: `/home/jenn/AGENTS_OS_Workspace`
 
-## Phase 5D M0-D MEHS v0.3 — Terminally Closed After Gate 2 (2026-07-25)
+## Phase 5D M0-D MEHS v0.3 — Terminally Closed And PR #36 Mainline-Integrated (2026-07-25)
 
 The frozen MEHS v0.3 candidate
 `4690ce291d45339f5dbe71a793662e051629d558` passed fresh independent review.
@@ -23,13 +23,15 @@ PR #35 then normally merged the bounded post-merge durability projection at
 `96e07d937ee3fad6c7240ec058ecb46784f60e5a`.
 
 Jenn subsequently selected Post-Gate-2 Direction Decision Outcome A. MEHS v0.3
-is terminally closed, there is no active automatic MEHS item, and the next
-construction route belongs to a new Jenn decision. Gate 1 remains permanently
-consumed. No Gate 3, Host action, runtime, Git delivery or later phase starts
+is terminally closed. PR #36 normally merged that exact closeout at
+`23a508c4a3cc4817ec00f34655d5ec05ff47967b`; this snapshot is the bounded
+post-merge durability projection. There is no active automatic MEHS item, and
+the next construction route belongs to a new Jenn decision. Gate 1 remains
+permanently consumed. No Gate 3, Host action, runtime or later phase starts
 automatically.
 
 ```yaml
-Phase_5D_status: M0D_MEHS_V0_3_TERMINALLY_CLOSED_POST_GATE_2
+Phase_5D_status: M0D_MEHS_V0_3_TERMINALLY_CLOSED_PR36_MAINLINE_INTEGRATED
 Phase_5D_objective: MEHS_V0_3_TERMINAL_CLOSEOUT_COMPLETE
 Phase_5D_start_decision: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r1-start-decision-v0.1.yaml
 Phase_5D_start_decision_sha256: 9776b11e1a6c225408b6bf8b4749dea7778ca57b298a762e8e0c379439e82855
@@ -222,6 +224,23 @@ Phase_5D_MEHS_post_Gate_2_direction_package_sha256: c6160ec82b48264acb457156e01a
 Phase_5D_MEHS_post_Gate_2_direction_decision: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml
 Phase_5D_MEHS_post_Gate_2_direction_decision_sha256: 6353a9794d6a599cbe25d2a32b40a692696b256802a3df877cd82fc5cdb0b458
 Phase_5D_MEHS_post_Gate_2_selected_outcome: A_TERMINAL_CLOSE_AND_RETURN_TO_ROUTE_SELECTION
+Phase_5D_MEHS_post_Gate_2_closeout_PR_number: 36
+Phase_5D_MEHS_post_Gate_2_closeout_PR_url: https://github.com/JENN2046/Agents-OS/pull/36
+Phase_5D_MEHS_post_Gate_2_closeout_PR_final_head: bd41c39f0aa33221ecab216e04c508117afb6cc5
+Phase_5D_MEHS_post_Gate_2_closeout_PR_final_tree: f0af0a1d9ac10af8cd1e704561d03d613ae49d2f
+Phase_5D_MEHS_post_Gate_2_closeout_merge_commit: 23a508c4a3cc4817ec00f34655d5ec05ff47967b
+Phase_5D_MEHS_post_Gate_2_closeout_merge_first_parent: 96e07d937ee3fad6c7240ec058ecb46784f60e5a
+Phase_5D_MEHS_post_Gate_2_closeout_merge_second_parent: bd41c39f0aa33221ecab216e04c508117afb6cc5
+Phase_5D_MEHS_post_Gate_2_closeout_merge_tree: f0af0a1d9ac10af8cd1e704561d03d613ae49d2f
+Phase_5D_MEHS_PR36_mainline_merge_decision_package: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-closeout-pr36-mainline-merge-decision-package-v0.1.md
+Phase_5D_MEHS_PR36_mainline_merge_decision_package_sha256: b57990d2256d08982eec684e3bf790a532a2c7646448b4d735f092d877b4df8d
+Phase_5D_MEHS_PR36_mainline_merge_decision: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-closeout-pr36-mainline-merge-decision-v0.1.yaml
+Phase_5D_MEHS_PR36_mainline_merge_decision_sha256: c51c64cd79684690454a31d8c8ad0fa66b615cd75687375c4b6d0c6f24001eb3
+Phase_5D_MEHS_PR36_postmerge_durability_receipt: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr36-postmerge-durability-closeout-v0.1.md
+Phase_5D_MEHS_PR36_postmerge_durability_receipt_sha256: 67b80b5745c9366cdbb5481b5aaabd686faa447e9bf22d84cc5a7784c0507fd7
+Phase_5D_MEHS_PR36_mainline_integrated: true
+Phase_5D_MEHS_PR36_postmerge_projection_delivery: COMPLETE_ON_MAINLINE_WHEN_THIS_PROJECTION_MERGES
+Phase_5D_MEHS_PR36_durability_complete: true_when_projection_is_on_mainline
 Phase_5D_MEHS_terminally_closed: true
 Phase_5D_MEHS_active_automatic_item: false
 Phase_5D_MEHS_automatic_Gate_3_or_later_phase: false
@@ -238,9 +257,9 @@ implementation_source_change_authorized: false
 actual_Host_smoke_execution_authorized: false
 Git_delivery_authorized: false
 main_merge_authorized: false
-active_work_queue: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md
-active_work_queue_sha256: 0ded8fcf3b9048c5e4f49470febf3df0d8b5b5e57eccb746d4625b36d702dcc5
-consumer_default_queue_pointer: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md
+active_work_queue: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.8-pr36-mainline-durability.md
+active_work_queue_sha256: a5a15c3208e8bc8d1e6d0d01252fca6dc30d8e9bfa4d0f1eb304774f9c0e7442
+consumer_default_queue_pointer: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.8-pr36-mainline-durability.md
 next_gate: JENN_EXPLICIT_ROUTE_SELECTION
 ```
 

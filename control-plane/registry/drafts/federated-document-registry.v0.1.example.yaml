@@ -19,7 +19,7 @@ registries:
       human: Jenn
       agent_steward: Nobao
     validator: control-plane/registry/validate-document-registry.py
-    expected_document_count: 1548
+    expected_document_count: 1552
     authority: example only, not active workspace authority
     scope: control-plane/registry documentation governance pilot and Step 4 federation material
     known_external_scope:
@@ -42,7 +42,7 @@ registries:
           - archived file list changes
           - replacement route changes
           - archive governance rule changes
-    last_receipt: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    last_receipt: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr36-postmerge-durability-closeout-v0.1.md
     last_review: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
     security_boundary:
       - no secrets
