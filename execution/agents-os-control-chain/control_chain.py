@@ -2363,6 +2363,11 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
         ROUTE_SELECTION_PACKAGE,
         fixture_only=True,
     )
+    active_governance_gate = (
+        route_handoff_reconciliation.get("machine_next_user_action", {}).get("status") == "governance_decision_required"
+        and route_handoff_reconciliation.get("machine_next_user_action", {}).get("decision_owner") == "Jenn"
+        and route_handoff_reconciliation.get("machine_next_user_action", {}).get("requires_jenn_decision") is True
+    )
     if route_handoff_reconciliation.get("passed") is not True:
         errors.append("route choice handoff reconciliation did not pass")
     if route_handoff_reconciliation.get("aligned") is not True:
@@ -2412,11 +2417,16 @@ def validate_control_chain(run_colameta: bool = True) -> dict[str, Any]:
     for flag in ROUTE_CHOICE_E2E_FALSE_FLAGS:
         if route_e2e_readiness.get(flag) is not False:
             errors.append(f"route choice end-to-end readiness authorized {flag}")
-    if route_adoption_bundle_preview.get("passed") is not True:
+    if active_governance_gate:
+        if route_adoption_bundle_preview.get("passed") is not False:
+            errors.append("route choice adoption bundle preview bypassed the active Jenn governance gate")
+        if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not False:
+            errors.append("route choice adoption bundle preview made the active Jenn governance gate apply-ready")
+    elif route_adoption_bundle_preview.get("passed") is not True:
         errors.append("route choice adoption bundle preview did not pass")
     if route_adoption_bundle_preview.get("selected_route_id") != "B":
         errors.append("route choice adoption bundle preview fixture did not select route B")
-    if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not True:
+    if not active_governance_gate and route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not True:
         errors.append("route choice adoption bundle preview did not reach separate apply gate readiness")
     for flag in (
         "real_queue_write_performed",

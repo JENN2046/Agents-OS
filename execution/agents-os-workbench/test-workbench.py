@@ -514,11 +514,21 @@ def main() -> int:
         stopped_queue_path.write_text(workbench.fixture_route_stop_queue_text(), encoding="utf-8")
         advance_record_root = Path(temp_dir) / "advance-records"
         advance_record_root.mkdir()
-        empty_status = workbench.build_status(advance_record_root)
+        empty_status = workbench.build_status(advance_record_root, queue_path)
         check(empty_status["passed"] is True, f"empty status should pass: {empty_status['errors']}", failures)
         check(
-            empty_status["next_step"]["status"] == "no_advance_records",
-            "empty status should report no_advance_records",
+            empty_status["status_reconciliation"]["next_action_source"] == "live_queue",
+            "empty status should treat the live queue as the current authority",
+            failures,
+        )
+        check(
+            empty_status["next_step"]["status"] == empty_status["live_queue"]["next_step"]["status"],
+            "empty status should project the live queue next step",
+            failures,
+        )
+        check(
+            empty_status["next_step"].get("execution_authorized") is False,
+            "empty status must keep execution authorization false",
             failures,
         )
         check(empty_status["goal_session_count"] == 0, "empty status should report no goal sessions", failures)
@@ -667,7 +677,7 @@ def main() -> int:
             "safe advance without apply_intake must not modify queue",
             failures,
         )
-        safe_status = workbench.build_status(advance_record_root)
+        safe_status = workbench.build_status(advance_record_root, advance_queue_path)
         check(safe_status["passed"] is True, f"safe status should pass: {safe_status['errors']}", failures)
         check(
             safe_status["latest_advance_id"] == safe_advance["advance_id"],
@@ -675,8 +685,13 @@ def main() -> int:
             failures,
         )
         check(
-            safe_status["next_step"]["status"] == "review_queue_proposal",
-            "safe status should surface review_queue_proposal",
+            safe_status["next_step"]["status"] == "queue_ready_for_run",
+            "safe status should preserve the current fixture queue as live authority",
+            failures,
+        )
+        check(
+            safe_status["status_reconciliation"]["record_next_step_status"] == "review_queue_proposal",
+            "safe status should preserve the record review_queue_proposal boundary",
             failures,
         )
         check(safe_status["write_performed"] is False, "safe status must be read-only", failures)
@@ -762,7 +777,7 @@ def main() -> int:
             )
         else:
             failures.append("advance with intake record file should exist")
-        status_after_intake = workbench.build_status(advance_record_root)
+        status_after_intake = workbench.build_status(advance_record_root, advance_apply_queue_path)
         check(
             status_after_intake["latest_advance_id"] == advance_with_intake["advance_id"],
             "status after intake should identify latest advance with intake",
@@ -1229,7 +1244,7 @@ def main() -> int:
             "stopped goal must not output raw route templates",
             failures,
         )
-        stopped_goal_status = workbench.build_status(advance_record_root)
+        stopped_goal_status = workbench.build_status(advance_record_root, stopped_queue_path)
         check(stopped_goal_status["passed"] is True, f"stopped goal status should pass: {stopped_goal_status['errors']}", failures)
         check(
             stopped_goal_status["route_choice_readiness"]["option_count"] == 5,
@@ -1273,7 +1288,7 @@ def main() -> int:
             "safe goal should not surface route choice readiness",
             failures,
         )
-        goal_status = workbench.build_status(advance_record_root)
+        goal_status = workbench.build_status(advance_record_root, goal_queue_path)
         check(goal_status["passed"] is True, f"goal status should pass: {goal_status['errors']}", failures)
         check(goal_status["goal_session_count"] == 2, "goal status should count stopped and safe goal sessions", failures)
         check(

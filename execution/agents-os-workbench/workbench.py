@@ -2383,8 +2383,14 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         "owner": "Nobao",
         "instruction": "run workbench advance to create the first local advance record",
     }
-    route_choice_readiness = build_route_choice_readiness(status_next_step)
     live_next_step = live_queue.get("next_step", {})
+    next_action_source = (
+        "live_queue"
+        if live_next_step.get("status") in {"queue_ready_for_run", "route_choice_required", "jenn_decision_required"}
+        else "latest_record"
+    )
+    effective_next_step = live_next_step if next_action_source == "live_queue" else status_next_step
+    route_choice_readiness = build_route_choice_readiness(effective_next_step)
     status_reconciliation = {
         "schema_version": "agents-os.workbench.status-reconciliation.v0.1",
         "record_next_step_status": status_next_step.get("status"),
@@ -2394,9 +2400,7 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             and live_next_step.get("status")
             and status_next_step.get("status") != live_next_step.get("status")
         ),
-        "next_action_source": "live_queue"
-        if live_next_step.get("status") in {"queue_ready_for_run", "route_choice_required", "jenn_decision_required"}
-        else "latest_record",
+        "next_action_source": next_action_source,
         "write_performed": False,
     }
     result = {
@@ -2460,7 +2464,7 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             "raw_content_output": latest_goal.get("raw_content_output") if latest_goal else None,
         },
         "route_choice_readiness": route_choice_readiness,
-        "next_step": status_next_step,
+        "next_step": effective_next_step,
         "raw_content_output": False,
         "errors": sorted(set(errors)),
     }
@@ -2489,6 +2493,16 @@ def validate_status(result: dict[str, Any]) -> list[str]:
         errors.append("workbench status reconciliation must not write")
     if not reconciliation.get("live_queue_next_step_status"):
         errors.append("workbench status reconciliation must include live queue next step")
+    if reconciliation.get("next_action_source") == "live_queue":
+        live_next_step = result.get("live_queue", {}).get("next_step", {})
+        effective_next_step = result.get("next_step", {})
+        if effective_next_step.get("status") != live_next_step.get("status"):
+            errors.append("workbench status must project live queue next step when live_queue is authoritative")
+        if live_next_step.get("requires_jenn_decision") is True:
+            if effective_next_step.get("requires_jenn_decision") is not True:
+                errors.append("workbench status must preserve live Jenn decision requirement")
+            if effective_next_step.get("owner") != "Jenn":
+                errors.append("workbench status must preserve Jenn as live decision owner")
     if result.get("advance_record_count", 0) < 0:
         errors.append("workbench status advance_record_count cannot be negative")
     if result.get("goal_session_count", 0) < 0:
@@ -4046,7 +4060,7 @@ def validate_workbench() -> dict[str, Any]:
         advance_record_root.mkdir()
         route_continue_record_root = Path(temp_dir) / "route-continue-records"
         route_continue_record_root.mkdir()
-        empty_status = build_status(advance_record_root)
+        empty_status = build_status(advance_record_root, queue_path)
         stopped_cycle = build_cycle(
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
@@ -4210,7 +4224,7 @@ def validate_workbench() -> dict[str, Any]:
             "### NOW-001: Second safe follow-up task"
             in continue_loop_queue_path.read_text(encoding="utf-8")
         )
-        safe_status = build_status(advance_record_root)
+        safe_status = build_status(advance_record_root, goal_queue_path)
         advance_apply_queue_path = Path(temp_dir) / "advance-apply-queue.md"
         advance_apply_queue_path.write_text(fixture_queue_text(), encoding="utf-8")
         advance_with_intake = build_advance(
@@ -4231,7 +4245,7 @@ def validate_workbench() -> dict[str, Any]:
             apply_intake=True,
             allowed_queue_root=Path(temp_dir),
         )
-        status_after_intake = build_status(advance_record_root)
+        status_after_intake = build_status(advance_record_root, run_apply_queue_path)
         safe_advance_record_name = Path(
             safe_advance.get("stages", {}).get("record", {}).get("record_path", "")
         ).name
@@ -4420,8 +4434,8 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("stopped goal must not output raw route templates")
     if empty_status.get("passed") is not True:
         errors.extend(f"empty status: {error}" for error in empty_status.get("errors", []))
-    if empty_status.get("next_step", {}).get("status") != "no_advance_records":
-        errors.append("empty status should report no_advance_records")
+    if empty_status.get("next_step", {}).get("status") != "queue_ready_for_run":
+        errors.append("empty status should project the current fixture queue")
     if empty_status.get("goal_session_count") != 0:
         errors.append("empty status should report no goal sessions")
     if safe_advance.get("passed") is not True:
@@ -4464,8 +4478,10 @@ def validate_workbench() -> dict[str, Any]:
         errors.extend(f"safe status: {error}" for error in safe_status.get("errors", []))
     if safe_status.get("latest_advance_id") != safe_goal.get("run", {}).get("steps", [{}])[-1].get("advance_id"):
         errors.append("safe status should report safe goal advance as latest")
-    if safe_status.get("next_step", {}).get("status") != "review_queue_proposal":
-        errors.append("safe status should surface review_queue_proposal")
+    if safe_status.get("next_step", {}).get("status") != "queue_ready_for_run":
+        errors.append("safe status should preserve the current fixture queue as live authority")
+    if safe_status.get("status_reconciliation", {}).get("record_next_step_status") != "review_queue_proposal":
+        errors.append("safe status should preserve the record review_queue_proposal boundary")
     if safe_status.get("write_performed") is not False:
         errors.append("safe status must not write")
     if safe_status.get("goal_session_count") != 2:
@@ -4693,6 +4709,7 @@ def validate_workbench() -> dict[str, Any]:
             "safe_latest_advance_id_matches": safe_status.get("latest_advance_id")
             == safe_goal.get("run", {}).get("steps", [{}])[-1].get("advance_id"),
             "safe_next_step": safe_status.get("next_step", {}).get("status"),
+            "safe_record_next_step": safe_status.get("status_reconciliation", {}).get("record_next_step_status"),
             "safe_goal_session_count": safe_status.get("goal_session_count"),
             "safe_latest_goal_session_id": safe_status.get("latest_goal_session", {}).get("goal_session_id"),
             "safe_latest_goal_state": safe_status.get("latest_goal_session", {}).get("goal_state"),
@@ -5207,7 +5224,8 @@ def build_completion_audit(
             "Status and goal summaries expose the next boundary without raw objective or record output.",
             bool(status.get("next_step", {}).get("status"))
             and validation.get("status", {}).get("safe_goal_session_count", 0) >= 1
-            and validation.get("status", {}).get("safe_next_step") == "review_queue_proposal"
+            and bool(validation.get("status", {}).get("safe_next_step"))
+            and validation.get("status", {}).get("safe_record_next_step") == "review_queue_proposal"
             and status.get("raw_content_output") is False,
             {
                 "status_next_step": status.get("next_step", {}),
