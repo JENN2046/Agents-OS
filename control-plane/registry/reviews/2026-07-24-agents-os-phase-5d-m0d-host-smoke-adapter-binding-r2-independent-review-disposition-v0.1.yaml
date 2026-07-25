@@ -1,0 +1,53 @@
+schema_version: agents-os.independent-review-finding-disposition.v0.1
+disposition_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R2_INDEPENDENT_REVIEW_DISPOSITION_V0_1
+date: '2026-07-24'
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+
+immutable_history:
+  R1_manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+  R1_later_revision_totality_finding:
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-reproduction-v0.1.yaml
+    sha256: 4ce823b7526ea8b72bc83402075e54759bc36715391cbe736230aa7cd1e61c54
+    result: BLOCK
+  R1_finding_disposition:
+    path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-finding-disposition-v0.1.yaml
+    sha256: 59a280cc964a11e6d77b2d8e87e51cedd4502ebb0aad3c98ab65618c96ed2a6a
+
+R2_fixed_review_unit:
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 422c97bae3c23db8c18860e3779b3c0b016bb382f1732a134f9757619caefa5f
+  subjects: 8
+  R2_independent_review:
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-full-atomic-independent-review.yaml
+    sha256: b406dfa76047d6d580327ae5ccfd36695c3ea53885a1a14da4e742b2ba5f6fc1
+    result: PASS_NO_BLOCKER
+    findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+
+disposition:
+  R1_bytes_preserved: true
+  R2_R1_revision_totality_blocker_closed: true
+  R2_independent_review_gate_satisfied: true
+  R2_requires_R3: false
+  R2_semantic_freeze_candidate: true
+  R2_accepted: false
+  R2_frozen: false
+  R2_atomic_freeze_decision_created: false
+  next_gate: JENN_ONLY_R2_ATOMIC_FREEZE_DECISION_PACKAGE
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  terminal_outcome: NOT_EXECUTED
+
+scope_limit:
+  - records the R2 review result only
+  - does not accept or freeze R2
+  - does not create an atomic freeze decision package
+  - does not authorize a VCPToolBox worktree, Host lifecycle, plugin, runtime, database, provider, private Memory, sensing, or effect action
+  - does not authorize Git delivery

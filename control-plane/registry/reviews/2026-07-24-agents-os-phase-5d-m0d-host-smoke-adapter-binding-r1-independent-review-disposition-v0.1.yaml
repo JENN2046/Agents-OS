@@ -1,0 +1,44 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+disposition_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_INDEPENDENT_REVIEW_DISPOSITION_V0_1
+date: '2026-07-24'
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+
+bindings:
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-full-atomic-independent-review.yaml
+    sha256: 26dc4a38a07d606735bd28d766338232259dba671fc2718ca7d61d65ff33aa01
+
+independent_result:
+  result: PASS_NO_BLOCKER
+  requires_R2: false
+  findings: {blocker: 0, major: 0, minor: 0, unresolved: 0}
+  fixed_commands: 4/4_PASS
+  declared_inputs: 13/13_MATCH_AND_FULLY_READ
+  independent_negative_probes: 38/38_BLOCKED
+  favorable_invalid_path_count: 0
+  uncaught_exception_count: 0
+
+disposition:
+  independent_review_gate: SATISFIED
+  acceptance_by_this_disposition: false
+  freeze_by_this_disposition: false
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  terminal_outcome: NOT_EXECUTED
+  next_gate: JENN_ONLY_ADAPTER_BINDING_CLOSURE_ATOMIC_FREEZE_DECISION
+
+retained_prohibitions:
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: forbidden
+  archive_delivery_or_installation: forbidden
+  enabled_manifest_plugin_discovery_loading_or_Host_lifecycle: forbidden
+  processToolCall_native_addon_NAPI_runtime_database_dependency_install: forbidden
+  provider_production_authentication_private_Memory_state_private_sensing_recording_or_effect: forbidden
+  Git_delivery: forbidden

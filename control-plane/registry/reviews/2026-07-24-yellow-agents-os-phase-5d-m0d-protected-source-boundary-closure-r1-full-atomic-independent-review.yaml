@@ -1,0 +1,133 @@
+schema_version: agents-os.full-atomic-independent-review.v0.1
+review_unit: PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+
+reviewer:
+  identity: independent_Codex_window
+  independent: true
+  author_of_subjects: false
+
+result: PASS_NO_BLOCKER
+blocker_count: 0
+major_count: 0
+minor_count: 0
+requires_R2: false
+
+hash_binding:
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45
+  review_zip:
+    path: /tmp/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-review-package-v0.1.zip
+    sha256: 5a6ac991990780f82dfb7099a17e57c6e1576e9b96ac477ad76249a21ce7b4da
+  required_inputs:
+    declared: 9
+    matched: 9
+    result: 9/9_MATCH
+
+subjects:
+  contract:
+    sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+  synthetic_fixture:
+    sha256: 3f7512223d6c5c594c5f1064eb4aaf136f4214858571fefac6f3eb11e7835a49
+  deterministic_builder:
+    sha256: 40628339fb46931e2245f9e6df3f528e5d105136b704a888b40b432067d02d1f
+  offline_validator:
+    sha256: bc698fc465eb8a99bcb10fb776987de8f277d93451f0df91644a674ee5b153aa
+
+authority_inputs:
+  consumed_preflight_receipt:
+    sha256: e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd
+  consumed_preflight_decision_package:
+    sha256: 72a467b18b1f1a4f4ae859bac86d8dc248507bb0718827d53885e0128046f2b1
+  sealed_source_preflight:
+    sha256: 3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d
+  adapter_binding_freeze_decision:
+    sha256: ba24dd3a7e13d04fd23fc688f9a5a1d941d50daa352ac7cb6cbf6f26f36eb46c
+  author_self_review:
+    sha256: e87952cf1850960209a3bff3c6f72677c041ecdef695374743bc07c9503425ac
+
+zip_integrity:
+  result: PASS
+  entry_count: 13
+  checksum_rows: 11
+  checksum_matches: 11/11
+  crc: PASS
+  unsafe_path_count: 0
+  symlink_count: 0
+  manifest_copies_byte_identical: true
+
+fixed_commands:
+  fixture_validation: PASS_NO_BLOCKER
+  builder_byte_reproduction: PASS
+  negative_self_test: 10/10_PASS
+  python_compile: PASS
+  result: 4/4_PASS
+
+independent_adversarial_review:
+  baseline_result: PASS
+  constructed_semantic_attacks: 36
+  rejected_semantic_attacks: 36
+  unexpected_accepts: 0
+  covered:
+    - sealed_commit_and_tree_substitution
+    - protected_path_add_omit_rename_and_reorder
+    - protected_content_or_object_identifier_injection
+    - allowed_blob_tuple_add_omit_substitute_and_reorder
+    - oid_only_alias_and_unknown_field_injection
+    - git_worktree_checkout_sparse_checkout_and_archive
+    - arbitrary_git_path_read_and_environment_module_resolution
+    - Host_runtime_and_execution_authority_promotion
+    - duplicate_unknown_and_type_drifted_JSON
+    - result_promotion
+
+reviewed_boundaries:
+  sealed_commit_and_tree_fixed: true
+  allowed_non_protected_blob_tuple_count: 7
+  complete_tuple_allowlist_required: true
+  protected_path_names_only: true
+  protected_content_or_blob_identifier_allowed: false
+  generic_tree_blob_enumeration_allowed: false
+  arbitrary_git_show_path_allowed: false
+  checkout_allowed: false
+  worktree_allowed: false
+  sparse_checkout_allowed: false
+  archive_allowed: false
+  Host_or_runtime_path_allowed: false
+  synthetic_witness_runtime_usable: false
+  automatic_execution_transition_allowed: false
+
+governance_validation:
+  docctl_status: PASS_100
+  docctl_doctor: PASS
+  document_registry: PASS
+  federated_registry: PASS
+  machine_default_equals_explicit_v18_5: true
+  dashboard_summary: PASS
+  dashboard_validate: PASS
+  git_diff_check: PASS
+
+execution_observation:
+  protected_content_bytes_read: 0
+  protected_blob_identifier_read_count: 0
+  actual_Git_object_run_count: 0
+  VCPToolBox_worktree_operation_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+  subject_files_modified: 0
+  review_artifact_created: true
+
+authority_effect:
+  R1_review_passed: true
+  R1_accepted: false
+  R1_frozen: false
+  actual_Git_object_run_authorized: false
+  VCPToolBox_worktree_authorized: false
+  actual_Host_smoke_execution_authorized: false
+  execution_authorized: false
+
+findings: []
+
+remaining_gate:
+  name: JENN_EXPLICIT_PHASE_5D_M0D_PROTECTED_TRACKED_SOURCE_BOUNDARY_DISPOSITION
+  decision_owner: Jenn
+  automatic_transition: forbidden

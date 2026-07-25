@@ -1,0 +1,64 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-24T20:08:53+08:00'
+effective_at: '2026-07-24T20:08:53+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_NARROW_PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_R2_REVISION_TOTALITY_ONLY
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 启动“revision-totality-only”的窄范围 R2。
+  scope_expansion: forbidden
+
+bound_preconditions:
+  R1_manifest_sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+  R1_historical_independent_review_sha256: 26dc4a38a07d606735bd28d766338232259dba671fc2718ca7d61d65ff33aa01
+  R1_revision_totality_reproduction_sha256: 4ce823b7526ea8b72bc83402075e54759bc36715391cbe736230aa7cd1e61c54
+  R1_revision_totality_finding_disposition_sha256: 59a280cc964a11e6d77b2d8e87e51cedd4502ebb0aad3c98ab65618c96ed2a6a
+  current_terminal_outcome: NOT_EXECUTED
+
+authorized_scope:
+  create_only:
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-amendment-v0.1.md
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r2.yaml
+    - control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-fixture-v0.1.json
+    - control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py
+    - control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-author-self-review-v0.1.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.md
+    - narrow_R2_start_and_review_governance_projections
+  preserve_byte_for_byte:
+    - R1_contract_profile_fixture_validator
+    - R1_manifest_author_self_review_independent_review_and_dispositions
+  required_semantic_closure:
+    - strict_positive_safe_integer_contract_revision
+    - every_section_revision_equals_contract_revision
+    - revision_2_positive_control
+    - maximum_safe_integer_positive_control
+    - mismatch_and_invalid_revision_negative_controls
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_R2_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_acceptance_or_freeze: forbidden
+  automatic_actual_Host_smoke_execution: forbidden
+
+not_authorized:
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_or_installation: false
+  enabled_manifest_plugin_discovery_or_loading: false
+  Host_lifecycle_initialize_shutdown_quarantine_cleanup_processToolCall_native_addon_or_NAPI: false
+  runtime_service_database_dependency_install_provider_or_production_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_phase_or_actual_Host_smoke_start: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision_record
+  R2_acceptance_or_freeze_requires: a_new_current_Jenn_atomic_decision_after_fresh_independent_review

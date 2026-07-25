@@ -1,0 +1,195 @@
+{
+  "schema_version": "agents-os.phase5d.m0d.host-smoke-adapter-binding-r2-revision-totality-fixture.v0.1",
+  "amendment_path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-amendment-v0.1.md",
+  "profile_path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r2.yaml",
+  "immutable_anchor": {
+    "VCPToolBox_commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "VCPToolBox_tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "source_preflight_sha256": "3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d",
+    "inert_entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+    "blocked_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0"
+  },
+  "cases": [
+    {
+      "case_id": "C01_MISSING_OWNER_BINDING",
+      "environment": "SYNTHETIC_TEST",
+      "owner_contract": null,
+      "hermetic_dependency_inventory": null,
+      "inert_payload": {
+        "entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+        "blocked_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "processToolCall_authorized": false
+      },
+      "transient_enabled_manifest": {
+        "target_relative_path": "Plugin/AGENTSOSResident/plugin-manifest.json",
+        "byte_count": 413,
+        "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "materialized": false
+      },
+      "lifecycle_binding": null,
+      "expected_result": "BLOCKED_MISSING_OWNER_ISSUED_ADAPTER_BINDING",
+      "runtime_usable": false,
+      "actual_Host_smoke_execution_authorized": false,
+      "Host_operation_count": 0
+    },
+    {
+      "case_id": "C02_SYNTHETIC_REVISION_1",
+      "environment": "SYNTHETIC_TEST",
+      "owner_contract": {
+        "kind": "SYNTHETIC_SHAPE_ONLY",
+        "contract_ref": "synthetic:phase5d-m0d-adapter-binding",
+        "contract_revision": 1,
+        "contract_sha256": "aefee596ffc1f9360ae0148048a69762178a9ab38dee3787bad07c54a00d3e83",
+        "sections": {
+          "hermetic_quarantine_root": {"ref": "synthetic:hermetic-root", "revision": 1, "sha256": "9531c57d2101d1240c0badb9b4e29683bba4acf28685bdb8144e11a46b853098"},
+          "Host_module_and_dependency_inventory": {"ref": "synthetic:module-inventory", "revision": 1, "sha256": "d50bb434a3553622bf507a03bd6778fdeb64d2ff00911dc8e7dc7354ec6c91f0"},
+          "inert_payload": {"ref": "synthetic:inert-payload", "revision": 1, "sha256": "f122916a96b68101347b2b87a5cc4103a60e63be5cfe7ec3383234e28c995a1d"},
+          "transient_enabled_manifest": {"ref": "synthetic:transient-manifest", "revision": 1, "sha256": "e09d34136deaf8cc0c4b54283eb996117e6e6d0575d34326588c2e7859382a44"},
+          "host_discovery": {"ref": "synthetic:host-discovery", "revision": 1, "sha256": "39e2ea5dc259d0ae2b9453eafc9e5a6546afe34a97f08da0004aefce7306db9e"},
+          "initialize": {"ref": "synthetic:initialize", "revision": 1, "sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75"},
+          "shutdown": {"ref": "synthetic:shutdown", "revision": 1, "sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea"},
+          "quarantine_cleanup": {"ref": "synthetic:quarantine-cleanup", "revision": 1, "sha256": "1abbbeab7cb1ee2c1c409e6789d95a4af03e4adf17b86f6c0dc4fdd6c9b148dd"}
+        }
+      },
+      "hermetic_dependency_inventory": {
+        "kind": "SYNTHETIC_UNMATERIALIZED",
+        "complete_for_actual_Host": false,
+        "entries": [
+          {"logical_name": "synthetic:HostAdapter", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:HostAdapter:r1", "sha256": "d6275dfdfcb0036e730f511c2aea229e491e5fdafc0e45fdc91523a2537700d7", "resolution_ordinal": 1},
+          {"logical_name": "synthetic:InertPayload", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:InertPayload:r1", "sha256": "4c485000f7ad61f89a43bc3cba364a2ceba26b6b2407ef200c304e33df298071", "resolution_ordinal": 2}
+        ]
+      },
+      "inert_payload": {
+        "entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+        "blocked_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "processToolCall_authorized": false
+      },
+      "transient_enabled_manifest": {
+        "target_relative_path": "Plugin/AGENTSOSResident/plugin-manifest.json",
+        "byte_count": 413,
+        "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "materialized": false
+      },
+      "lifecycle_binding": {
+        "host_discovery_selector": "synthetic:HostAdapter.discover",
+        "initialize_selector": "synthetic:InertPayload.initialize",
+        "initialize_argument_bytes_sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75",
+        "initialize_expected_return": {"initialized": false},
+        "shutdown_selector": "synthetic:InertPayload.shutdown",
+        "shutdown_argument_bytes_sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea",
+        "shutdown_expected_return": {"shutdown": true},
+        "cleanup_selector": "synthetic:HostAdapter.cleanup"
+      },
+      "expected_result": "SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED",
+      "runtime_usable": false,
+      "actual_Host_smoke_execution_authorized": false,
+      "Host_operation_count": 0
+    },
+    {
+      "case_id": "C03_SYNTHETIC_REVISION_2",
+      "environment": "SYNTHETIC_TEST",
+      "owner_contract": {
+        "kind": "SYNTHETIC_SHAPE_ONLY",
+        "contract_ref": "synthetic:phase5d-m0d-adapter-binding",
+        "contract_revision": 2,
+        "contract_sha256": "aefee596ffc1f9360ae0148048a69762178a9ab38dee3787bad07c54a00d3e83",
+        "sections": {
+          "hermetic_quarantine_root": {"ref": "synthetic:hermetic-root", "revision": 2, "sha256": "9531c57d2101d1240c0badb9b4e29683bba4acf28685bdb8144e11a46b853098"},
+          "Host_module_and_dependency_inventory": {"ref": "synthetic:module-inventory", "revision": 2, "sha256": "d50bb434a3553622bf507a03bd6778fdeb64d2ff00911dc8e7dc7354ec6c91f0"},
+          "inert_payload": {"ref": "synthetic:inert-payload", "revision": 2, "sha256": "f122916a96b68101347b2b87a5cc4103a60e63be5cfe7ec3383234e28c995a1d"},
+          "transient_enabled_manifest": {"ref": "synthetic:transient-manifest", "revision": 2, "sha256": "e09d34136deaf8cc0c4b54283eb996117e6e6d0575d34326588c2e7859382a44"},
+          "host_discovery": {"ref": "synthetic:host-discovery", "revision": 2, "sha256": "39e2ea5dc259d0ae2b9453eafc9e5a6546afe34a97f08da0004aefce7306db9e"},
+          "initialize": {"ref": "synthetic:initialize", "revision": 2, "sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75"},
+          "shutdown": {"ref": "synthetic:shutdown", "revision": 2, "sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea"},
+          "quarantine_cleanup": {"ref": "synthetic:quarantine-cleanup", "revision": 2, "sha256": "1abbbeab7cb1ee2c1c409e6789d95a4af03e4adf17b86f6c0dc4fdd6c9b148dd"}
+        }
+      },
+      "hermetic_dependency_inventory": {
+        "kind": "SYNTHETIC_UNMATERIALIZED",
+        "complete_for_actual_Host": false,
+        "entries": [
+          {"logical_name": "synthetic:HostAdapter", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:HostAdapter:r1", "sha256": "d6275dfdfcb0036e730f511c2aea229e491e5fdafc0e45fdc91523a2537700d7", "resolution_ordinal": 1},
+          {"logical_name": "synthetic:InertPayload", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:InertPayload:r1", "sha256": "4c485000f7ad61f89a43bc3cba364a2ceba26b6b2407ef200c304e33df298071", "resolution_ordinal": 2}
+        ]
+      },
+      "inert_payload": {
+        "entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+        "blocked_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "processToolCall_authorized": false
+      },
+      "transient_enabled_manifest": {
+        "target_relative_path": "Plugin/AGENTSOSResident/plugin-manifest.json",
+        "byte_count": 413,
+        "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "materialized": false
+      },
+      "lifecycle_binding": {
+        "host_discovery_selector": "synthetic:HostAdapter.discover",
+        "initialize_selector": "synthetic:InertPayload.initialize",
+        "initialize_argument_bytes_sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75",
+        "initialize_expected_return": {"initialized": false},
+        "shutdown_selector": "synthetic:InertPayload.shutdown",
+        "shutdown_argument_bytes_sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea",
+        "shutdown_expected_return": {"shutdown": true},
+        "cleanup_selector": "synthetic:HostAdapter.cleanup"
+      },
+      "expected_result": "SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED",
+      "runtime_usable": false,
+      "actual_Host_smoke_execution_authorized": false,
+      "Host_operation_count": 0
+    },
+    {
+      "case_id": "C04_SYNTHETIC_MAX_SAFE_REVISION",
+      "environment": "SYNTHETIC_TEST",
+      "owner_contract": {
+        "kind": "SYNTHETIC_SHAPE_ONLY",
+        "contract_ref": "synthetic:phase5d-m0d-adapter-binding",
+        "contract_revision": 9007199254740991,
+        "contract_sha256": "aefee596ffc1f9360ae0148048a69762178a9ab38dee3787bad07c54a00d3e83",
+        "sections": {
+          "hermetic_quarantine_root": {"ref": "synthetic:hermetic-root", "revision": 9007199254740991, "sha256": "9531c57d2101d1240c0badb9b4e29683bba4acf28685bdb8144e11a46b853098"},
+          "Host_module_and_dependency_inventory": {"ref": "synthetic:module-inventory", "revision": 9007199254740991, "sha256": "d50bb434a3553622bf507a03bd6778fdeb64d2ff00911dc8e7dc7354ec6c91f0"},
+          "inert_payload": {"ref": "synthetic:inert-payload", "revision": 9007199254740991, "sha256": "f122916a96b68101347b2b87a5cc4103a60e63be5cfe7ec3383234e28c995a1d"},
+          "transient_enabled_manifest": {"ref": "synthetic:transient-manifest", "revision": 9007199254740991, "sha256": "e09d34136deaf8cc0c4b54283eb996117e6e6d0575d34326588c2e7859382a44"},
+          "host_discovery": {"ref": "synthetic:host-discovery", "revision": 9007199254740991, "sha256": "39e2ea5dc259d0ae2b9453eafc9e5a6546afe34a97f08da0004aefce7306db9e"},
+          "initialize": {"ref": "synthetic:initialize", "revision": 9007199254740991, "sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75"},
+          "shutdown": {"ref": "synthetic:shutdown", "revision": 9007199254740991, "sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea"},
+          "quarantine_cleanup": {"ref": "synthetic:quarantine-cleanup", "revision": 9007199254740991, "sha256": "1abbbeab7cb1ee2c1c409e6789d95a4af03e4adf17b86f6c0dc4fdd6c9b148dd"}
+        }
+      },
+      "hermetic_dependency_inventory": {
+        "kind": "SYNTHETIC_UNMATERIALIZED",
+        "complete_for_actual_Host": false,
+        "entries": [
+          {"logical_name": "synthetic:HostAdapter", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:HostAdapter:r1", "sha256": "d6275dfdfcb0036e730f511c2aea229e491e5fdafc0e45fdc91523a2537700d7", "resolution_ordinal": 1},
+          {"logical_name": "synthetic:InertPayload", "source_kind": "SYNTHETIC", "immutable_identity": "synthetic:InertPayload:r1", "sha256": "4c485000f7ad61f89a43bc3cba364a2ceba26b6b2407ef200c304e33df298071", "resolution_ordinal": 2}
+        ]
+      },
+      "inert_payload": {
+        "entrypoint_sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+        "blocked_manifest_sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "processToolCall_authorized": false
+      },
+      "transient_enabled_manifest": {
+        "target_relative_path": "Plugin/AGENTSOSResident/plugin-manifest.json",
+        "byte_count": 413,
+        "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+        "materialized": false
+      },
+      "lifecycle_binding": {
+        "host_discovery_selector": "synthetic:HostAdapter.discover",
+        "initialize_selector": "synthetic:InertPayload.initialize",
+        "initialize_argument_bytes_sha256": "30fdfcd36111d7b947340df9b17ca2f2e93df086f39604982f76369d56b0fc75",
+        "initialize_expected_return": {"initialized": false},
+        "shutdown_selector": "synthetic:InertPayload.shutdown",
+        "shutdown_argument_bytes_sha256": "5af5078573440737ccc62446e38039bf0f7be495004860467e8868b9a8f8e1ea",
+        "shutdown_expected_return": {"shutdown": true},
+        "cleanup_selector": "synthetic:HostAdapter.cleanup"
+      },
+      "expected_result": "SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED",
+      "runtime_usable": false,
+      "actual_Host_smoke_execution_authorized": false,
+      "Host_operation_count": 0
+    }
+  ]
+}

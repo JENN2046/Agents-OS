@@ -1,0 +1,55 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-actual-object-only-source-run-r3-narrow-correction-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+recorded_on: '2026-07-25'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R3_NARROW_CORRECTION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 启动窄范围 R3
+  scope_expansion: forbidden
+
+bound_preconditions:
+  R2_manifest_sha256: 6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe
+  R2_independent_review_sha256: ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe
+  R2_independent_review_result: BLOCK
+  R2_required_blockers:
+    - scanner_verify_before_execute
+    - signal_safe_terminal_receipt_commit
+    - closed_no_follow_fixture_input
+  current_terminal_outcome: NOT_EXECUTED
+
+authorized_scope:
+  required_semantic_closure:
+    - verify_scanner_bytes_before_any_scanner_execution
+    - signal_safe_terminal_commit_without_post_receipt_catchable_signal_delivery
+    - fixed_regular_no_follow_synthetic_fixture_input
+  preserve_byte_for_byte:
+    - R1_actual_object_only_source_run_decision_package_and_review
+    - R2_atomic_bundle_manifest_subjects_review_and_archive
+    - protected_source_boundary_R1_frozen_lineage
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_acceptance_or_freeze: forbidden
+  automatic_actual_object_only_source_run: forbidden
+
+not_authorized:
+  VCPToolBox_Git_object_command_or_worktree: false
+  checkout_archive_fetch_or_network: false
+  plugin_or_Host_lifecycle: false
+  native_NAPI_runtime_database_provider_or_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_commit_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_actual_Host_smoke_execution: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision_record
+  R3_acceptance_or_freeze_requires: fresh_independent_review_and_new_current_Jenn_atomic_decision

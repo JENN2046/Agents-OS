@@ -1,0 +1,100 @@
+schema_version: agents-os.post-review-finding-reproduction.v0.1
+review_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_REVISION_TOTALITY_REPRODUCTION_V0_1
+date: '2026-07-24'
+
+provenance:
+  trigger: Jenn-supplied external re-review finding
+  original_external_artifact_available_in_workspace: false
+  record_type: local read-only reproduction of the reported finding
+  does_not_replace_or_rewrite_original_external_bytes: true
+  did_not_modify_R1_subjects_or_manifest: true
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+
+bindings:
+  contract:
+    path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-contract-closure-v0.1-r1.md
+    sha256: b6b64375195a0d9f88446a2e010806c3425f007647e785b6f98cd01ee74139ae
+  profile:
+    path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r1.yaml
+    sha256: efcbe2afc78e29f549e692a5ae6f96dca9a0512cfd51c8fb7cfb07b85316fc05
+  fixture:
+    path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-fixture-v0.1.json
+    sha256: e1dd4f0812d587c7ccaa4692e69b9a0eeb1e29c17783c696ad9848165693ee1d
+  validator:
+    path: control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding.py
+    sha256: 17c17564e3b94ab7d90ff3a3b0601361948eabd45aec9cbb7b238c647f86fc98
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+  historical_independent_review:
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-full-atomic-independent-review.yaml
+    sha256: 26dc4a38a07d606735bd28d766338232259dba671fc2718ca7d61d65ff33aa01
+    recorded_result: PASS_NO_BLOCKER
+
+finding:
+  id: PHASE5D_ADAPTER_BINDING_R1_POST_REVIEW_B01
+  severity: blocker
+  title: legal same-revision synthetic owner contracts are structurally over-rejected
+  contract_rule: >-
+    Every section carries a positive revision and belongs to the same contract revision.
+  profile_rule: all_sections_require_strict_ref_positive_revision_lowercase_sha256
+  contradictory_validator_rules:
+    - owner.contract_revision must equal 1
+    - every owner.sections.*.revision must equal 1
+  impact: >-
+    The validator rejects legal positive safe-integer revisions even when the contract
+    revision and every section revision are exactly equal. The R1 PASS_NO_BLOCKER
+    record therefore cannot serve as freeze evidence.
+
+reproduction:
+  isolation: temporary fixture written outside the workspace and removed after each run
+  source_case: C02_SYNTHETIC_COMPLETE_SHAPE
+  retained_invariants:
+    - all refs unchanged and synthetic
+    - all ref-derived SHA-256 values unchanged and valid
+    - all eight section revisions equal contract_revision
+    - runtime_usable=false
+    - actual_Host_smoke_execution_authorized=false
+    - Host_operation_count=0
+  cases:
+    - id: R01_REVISION_2_SAME_ACROSS_CONTRACT_AND_SECTIONS
+      contract_revision: 2
+      section_revisions: all_2
+      observed_result: BLOCKED
+      observed_errors:
+        - OWNER_CONTRACT_REVISION_INVALID
+        - 8_OWNER_SECTION_REVISION_INVALID
+    - id: R02_MAX_SAFE_INTEGER_SAME_ACROSS_CONTRACT_AND_SECTIONS
+      contract_revision: 9007199254740991
+      section_revisions: all_9007199254740991
+      observed_result: BLOCKED
+      observed_errors:
+        - OWNER_CONTRACT_REVISION_INVALID
+        - 8_OWNER_SECTION_REVISION_INVALID
+
+result: BLOCK
+requires_R2: true
+R1_freeze_ready: false
+Favorable_invalid_path_count: 0
+legal_input_over_rejection_count: 2
+
+required_R2_scope:
+  - preserve all R1 subjects, manifest, author evidence, and historical reviews byte-for-byte
+  - accept every strict positive safe-integer revision when all contract and section revisions are equal
+  - reject contract-to-section revision mismatch
+  - reject zero, negative, float, boolean, and out-of-range revisions
+  - add revision_2 and maximum_safe_integer positive controls plus mismatch negatives
+  - run a new fresh full atomic hash-bound independent review
+
+retained_boundaries:
+  actual_Host_smoke_execution_authorized: false
+  Host_operation_count: 0
+  runtime_usable: false
+  VCPToolBox_worktree_or_Host_API_access: false
+  archive_delivery_or_plugin_loading: false
+  database_provider_private_Memory_sensing_or_effect: false
+  Git_delivery_authorized: false

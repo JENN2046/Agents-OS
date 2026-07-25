@@ -1,0 +1,106 @@
+{
+  "schema_version": "agents-os.hash-bound-independent-review-package.v0.1",
+  "review_unit": "PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R2_ATOMIC_BUNDLE",
+  "atomic": true,
+  "partial_review": "forbidden",
+  "subjects": [
+    {
+      "id": "R2_amendment",
+      "path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md",
+      "sha256": "cc93de3f40aea692e945cb6725ebc38a0d7a677146e28ad1a772b8ba88f16901"
+    },
+    {
+      "id": "R2_successor_decision_package",
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.2.md",
+      "sha256": "2fdf621a76ccb57eaaf629bb032da0ab89109b88061a369fc22cbb80b90b930e"
+    },
+    {
+      "id": "R2_scanner",
+      "path": "control-plane/registry/object-only-source-run-r2-scanner.py",
+      "sha256": "82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35"
+    },
+    {
+      "id": "R2_runner",
+      "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py",
+      "sha256": "3ba69bb5537629e3ff3b6250569ddb7a332a3bbe5f32dae61486c0ee4bd1eb63"
+    },
+    {
+      "id": "R2_fixture_builder",
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py",
+      "sha256": "ff2d3b0c90b60ba013a93dfba7c676801f1d09088db0c7858e641e7f954025e6"
+    },
+    {
+      "id": "R2_synthetic_fixture",
+      "path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json",
+      "sha256": "8d8dd387be1ac54c4d3559cce8d3c5d097ed8162801b031ee4f935d6241e4483"
+    },
+    {
+      "id": "R2_validator",
+      "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py",
+      "sha256": "f69da16c2a5205bf3aab2457426c3d050f29919fd0df68d271505172feee2513"
+    },
+    {
+      "id": "R2_review_package_builder",
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+      "sha256": "20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e"
+    }
+  ],
+  "authority_inputs": [
+    {
+      "id": "R1_decision_package",
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md",
+      "sha256": "6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f"
+    },
+    {
+      "id": "R1_independent_review",
+      "path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml",
+      "sha256": "93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265"
+    },
+    {
+      "id": "R2_narrow_start_decision",
+      "path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml",
+      "sha256": "5f71dbcd9467e47be90519513f10205decd3b31d3203dc6758c122e4b10329cd"
+    },
+    {
+      "id": "protected_source_boundary_freeze_decision",
+      "path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml",
+      "sha256": "0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082"
+    },
+    {
+      "id": "protected_source_boundary_contract",
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md",
+      "sha256": "0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3"
+    },
+    {
+      "id": "protected_source_boundary_manifest",
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml",
+      "sha256": "b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45"
+    },
+    {
+      "id": "protected_source_boundary_review",
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml",
+      "sha256": "61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c"
+    },
+    {
+      "id": "current_stop_queue",
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v18.7.md",
+      "sha256": "eab88bbeec414571c740a931493253f75bf6f0bfcb6ab0687f70922d5fabbe4f"
+    }
+  ],
+  "author_evidence": [
+    {
+      "id": "R2_author_self_review",
+      "path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-author-self-review.yaml",
+      "sha256": "7cbbeee868f2fadf83577f23a8e9843236a39dbcf59f9d7f26cdd9f5b943755f"
+    }
+  ],
+  "fixed_commands": [
+    "python3 -m py_compile control-plane/registry/object-only-source-run-r2-scanner.py control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+    "python3 control-plane/registry/object-only-source-run-r2-scanner.py --self-test",
+    "python3 control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py --self-test",
+    "python3 control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py /tmp/agents-os-phase5d-m0d-r2-fixture.json && cmp -s /tmp/agents-os-phase5d-m0d-r2-fixture.json control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json",
+    "python3 control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json",
+    "python3 control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py --self-test",
+    "python3 control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py --fixture control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json"
+  ]
+}
