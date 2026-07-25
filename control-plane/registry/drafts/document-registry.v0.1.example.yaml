@@ -1461,19 +1461,99 @@ documents:
   - id: agents-os-active-work-queue-v17.6-gate2
     title: AGENTS OS Active Work Queue v17.6 Gate 2
     doc_type: review
-    status: active
+    status: superseded
     scope: post-Gate-2 Jenn-only direction gate after MEHS v0.3 mainline integration and durability projection
     canonical_path: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
     owner: {human: Jenn, agent_steward: Nobao}
     source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md
     supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md]
-    superseded_by: null
+    superseded_by: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md
     related: [CURRENT_STATE.md, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md]
     last_reviewed: '2026-07-25'
     review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md
-    freshness: {level: critical, review_trigger: [new Jenn direction decision or durability evidence correction]}
-    security_boundary: [Jenn-only post-Gate-2 direction gate; no actual replay Host runtime provider database private Memory release deploy or publish]
+    freshness: {level: critical, review_trigger: [historical correction only]}
+    security_boundary: [historical post-Gate-2 direction gate; no actual replay Host runtime provider database private Memory release deploy or publish]
     validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-pr35-premerge-decision
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 PR 35 Mainline Merge Decision
+    doc_type: decision_record
+    status: accepted
+    scope: immutable historical pre-merge authorization for the single normal PR 35 projection merge
+    canonical_path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-gate2-postmerge-durability-closeout-v0.1.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [historical authorization or exact-byte challenge]}
+    security_boundary: [consumed PR 35 merge authorization only; no reusable merge push Host runtime or later-phase authority]
+    validation: {commands: ["sha256sum control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-package
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Post-Gate-2 Direction Decision Package v0.1
+    doc_type: review
+    status: accepted
+    scope: hash-bound Jenn decision surface separating terminal closeout evidence assessment new-capability intake and hold
+    canonical_path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml, control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [package bytes evidence binding or Jenn outcome change]}
+    security_boundary: [direction package only; no automatic Gate 3 Git delivery Host runtime provider database Memory release deploy or publish]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-outcome-a-decision
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 Post-Gate-2 Outcome A Decision
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn Outcome A decision terminally closing MEHS v0.3 and returning to route selection
+    canonical_path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-decision-package-v0.1.md, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md, control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [superseding Jenn direction decision only]}
+    security_boundary: [terminal closeout and local commit only; no push PR merge actual Host runtime or later-phase authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout
+    title: AGENTS OS Phase 5D M0-D MEHS v0.3 PR 35 Merge Successor Closeout v0.1
+    doc_type: receipt
+    status: accepted
+    scope: successor evidence recording PR 35 merged state while preserving immutable pre-merge decision bytes
+    canonical_path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-gate2-postmerge-projection-pr35-mainline-merge-decision-v0.1.yaml, control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [PR 35 merge object remote main or pre-merge decision byte challenge]}
+    security_boundary: [historical merge successor evidence only; no reusable merge Host runtime or later-phase authority]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.7-mehs-terminal-closeout
+    title: AGENTS OS Active Work Queue v17.7 MEHS Terminal Closeout
+    doc_type: review
+    status: active
+    scope: terminal MEHS v0.3 stop-state with no active automatic MEHS item and Jenn route selection required
+    canonical_path: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md
+    supersedes: [control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.6-gate2.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-mehs-v0.3-pr35-merge-successor-closeout-v0.1.md]
+    last_reviewed: '2026-07-25'
+    review_by: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-mehs-v0.3-post-gate2-direction-outcome-a-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [new Jenn route decision or closeout evidence correction]}
+    security_boundary: [route-selection stop-state; no automatic Gate 3 Git delivery Host runtime provider database private Memory release deploy or publish]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v17.7-mehs-terminal-closeout.md inspect-queue --json"]}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-review-package-builder","title":"Phase 5C M0-C Post-Freeze Review Package Builder","doc_type":"reference","status":"accepted","scope":"collision-safe successor for the immutable Phase 5C R3 review-package builder","canonical_path":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5c-m0c-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["post-freeze correction evidence or archive-member guard change"]},"security_boundary":["offline review-package construction only; no plan-semantic change VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -m py_compile control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py"]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-start-decision","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction Start Decision","doc_type":"decision_record","status":"accepted","scope":"Jenn authorization for a narrow non-semantic review-package builder correction","canonical_path":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["review-package delivery correction only; no plan re-freeze implementation VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml').read_text())\""]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-contract","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction","doc_type":"contract","status":"accepted","scope":"narrow collision rejection contract preserving frozen R1-R4 plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["guard contract or independent review change"]},"security_boundary":["non-semantic offline packaging correction only; no implementation or runtime authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}
