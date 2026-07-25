@@ -1,0 +1,210 @@
+{
+  "schema_version": "agents-os.phase5d.minimum-exact-host-smoke-plan.v0.3",
+  "candidate_id": "PHASE_5D_M0D_MINIMUM_EXACT_HOST_SMOKE_CANDIDATE_V0_3",
+  "status": "CANDIDATE_FOR_INDEPENDENT_REVIEW",
+  "execution_authorized": false,
+  "trust_root": {
+    "candidate_commit_binding": "JENN_GATE_1_DECISION",
+    "gate_1_decision_relative_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json",
+    "gate_1_schema_version": "agents-os.phase5d.minimum-exact-host-smoke-gate1-decision.v0.3",
+    "gate_1_consumption": "ONE_TIME",
+    "gate_2": "JENN_MAINLINE_MERGE_AFTER_SUCCESS_RECEIPT_AND_INDEPENDENT_CLOSEOUT",
+    "manifest_self_authorization": false
+  },
+  "sealed_host": {
+    "repository_root": "/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox",
+    "commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "plugin_manager_path": "Plugin.js",
+    "plugin_manager_blob_oid": "5fd77cea37c30ef432f23d9627d05aba862b9744",
+    "plugin_manager_sha256": "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2",
+    "source_transport": "GIT_CAT_FILE_BLOB_TO_MEMORY_ONLY",
+    "git_operation_sequence": [
+      "SEALED_COMMIT_EXISTS",
+      "SEALED_TREE_RESOLVE",
+      "PLUGIN_MANAGER_BLOB_RESOLVE",
+      "PLUGIN_MANAGER_BLOB_READ"
+    ]
+  },
+  "isolation": {
+    "security_boundary": "BWRAP_NAMESPACES_PLUS_SECCOMP_NETWORK_DENY_PLUS_NODE_PERMISSION_MODEL",
+    "vm_role": "ADAPTER_ONLY_NOT_SECURITY_BOUNDARY",
+    "bwrap_path": "/usr/bin/bwrap",
+    "bwrap_sha256": "52231e1caf55bcbc667b269f49c63599a6f7db4767ae6a039580d0ff853db712",
+    "node_path": "/home/jenn/.nvm/versions/node/v22.23.1/bin/node",
+    "node_sha256": "93956de2e59480474a7b46571da1651180b1a050cdf32641ebec4ce6e478e068",
+    "sandbox_runner_path": "/candidate/one-shot-host-smoke.mjs",
+    "sandbox_work_path": "/work",
+    "network": "SHARED_NAMESPACE_WITH_ALL_NETWORK_SOCKET_SYSCALLS_DENIED",
+    "process_namespace": "UNSHARED",
+    "harness_bwrap_invocation_count_per_smoke": 1,
+    "worker_stdio_transport": "UNLINKED_REGULAR_FILE_FDS_WITH_CANONICAL_REQUEST_RESPONSE",
+    "network_seccomp": {
+      "architecture": "X86_64",
+      "action": "ERRNO_EPERM",
+      "relative_path": ".agents-os-network-deny.bpf",
+      "byte_count": 176,
+      "sha256": "7a3c08b062d90d1f205bf458aedf4853f59350a6229a6182d5d0a0d77bd4b286",
+      "delegated_fd_binding": "OPEN_UNLINK_FSTAT_POSITIONAL_READ_SHA256_SAME_FD",
+      "filter_count_attestation": "WORKER_SECCOMP_FILTERS_EQUALS_PARENT_PLUS_ONE",
+      "base64": "IAAAAAQAAAAVAAATPgAAwCAAAAAAAAAANQAAAQAAAEAVAAAQ/////xUADgApAAAAFQANACoAAAAVAAwAKwAAABUACwAsAAAAFQAKAC0AAAAVAAkALgAAABUACAAvAAAAFQAHADAAAAAVAAYAMQAAABUABQAyAAAAFQAEADUAAAAVAAMAIAEAABUAAgArAQAAFQABADMBAAAGAAAAAAD/fwYAAAABAAUABgAAAAAAAAA=",
+      "denied_syscalls": [
+        "socket",
+        "socketpair",
+        "connect",
+        "bind",
+        "listen",
+        "accept",
+        "accept4",
+        "sendto",
+        "sendmsg",
+        "sendmmsg",
+        "recvfrom",
+        "recvmsg",
+        "recvmmsg",
+        "shutdown"
+      ],
+      "worker_probe": "AF_UNIX_NONEXISTENT_PATH_MUST_RETURN_EPERM",
+      "worker_probe_role": "CORROBORATING_ONLY_NOT_CAUSAL_PROOF",
+      "packet_count": 0
+    },
+    "filesystem_projection": [
+      "/lib:READ_ONLY",
+      "/lib64:READ_ONLY",
+      "/node:READ_ONLY",
+      "/candidate/one-shot-host-smoke.mjs:READ_ONLY",
+      "/work:READ_WRITE_OWNED_QUARANTINE_ONLY",
+      "/proc:PRIVATE",
+      "/dev:PRIVATE",
+      "/tmp:PRIVATE_TMPFS"
+    ],
+    "node_permission_flags": [
+      "--permission",
+      "--allow-fs-read=/candidate",
+      "--allow-fs-read=/work",
+      "--allow-fs-read=/proc/self/status",
+      "--allow-fs-write=/work"
+    ],
+    "environment": {
+      "HOME": "/nonexistent",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PWD": "/work"
+    },
+    "vm_code_generation": {
+      "strings": false,
+      "wasm": false
+    }
+  },
+  "host_adapter": {
+    "mode": "SEALED_COMMONJS_IN_CONTROLLED_VM",
+    "module_export": "SINGLETON_PLUGIN_MANAGER",
+    "plugin_population": [
+      "AGENTSOSResident"
+    ],
+    "method_sequence": [
+      "PluginManager.loadPlugins",
+      "InertPayload.initialize",
+      "PluginManager.shutdownAllPlugins",
+      "InertPayload.shutdown",
+      "Harness.quarantineCleanup"
+    ],
+    "require_allowlist": [
+      "fs",
+      "events",
+      "path",
+      "child_process",
+      "node-schedule",
+      "dotenv",
+      "./FileFetcherServer.js",
+      "express",
+      "chokidar",
+      "./modules/captchaDecoder",
+      "./modules/toolApprovalManager",
+      "./modules/foldProtocol",
+      "./modules/toolResultPrivacyGuard",
+      "./modules/toolCallRecordStore",
+      "EXACT_INERT_ENTRYPOINT"
+    ],
+    "filesystem_read_allowlist": [
+      "Plugin",
+      "Plugin/AGENTSOSResident/plugin-manifest.json",
+      "Plugin/AGENTSOSResident/config.env",
+      "preprocessor_order.json"
+    ],
+    "initialize_argument_projection": {
+      "DebugMode": false,
+      "PORT": "UNDEFINED",
+      "Key": "UNDEFINED",
+      "PROJECT_BASE_PATH": null,
+      "dependency_keys": [
+        "pluginManager",
+        "vcpLogFunctions"
+      ]
+    },
+    "initialize_expected_return": {
+      "initialized": false
+    },
+    "shutdown_argument_count": 0,
+    "shutdown_expected_return": {
+      "shutdown": true
+    }
+  },
+  "inert_payload": {
+    "plugin_directory": "Plugin/AGENTSOSResident",
+    "entrypoint": {
+      "relative_path": "Plugin/AGENTSOSResident/index.js",
+      "byte_count": 586,
+      "sha256": "51190bacd5ff8e394731e5a83d72ba99c7a249136c51797f50e847fff7fda6ec",
+      "base64": "J3VzZSBzdHJpY3QnOwphc3luYyBmdW5jdGlvbiBpbml0aWFsaXplKGNvbmZpZywgZGVwZW5kZW5jaWVzKSB7CiAgcmV0dXJuIHsgaW5pdGlhbGl6ZWQ6IGZhbHNlIH07Cn0KZnVuY3Rpb24gcHJvamVjdEFyZ3MoYXJncykgewogIHJldHVybiB7CiAgICBjb21tYW5kUmVmOiBhcmdzLmNvbW1hbmRSZWYsCiAgICBjb21tYW5kRmluZ2VycHJpbnQ6IGFyZ3MuY29tbWFuZEZpbmdlcnByaW50LAogICAgcGF5bG9hZDogYXJncy5wYXlsb2FkCiAgfTsKfQphc3luYyBmdW5jdGlvbiBwcm9jZXNzVG9vbENhbGwoYXJncykgewogIGNvbnN0IG5hdGl2ZUZyYW1lID0gcHJvamVjdEFyZ3MoYXJncyk7CiAgY29uc3QgcmVzaWRlbnROYXRpdmUgPSByZXF1aXJlKCcuL2FnZW50cy1vcy1yZXNpZGVudC5saW51eC14NjQtZ251Lm5vZGUnKTsKICByZXR1cm4gcmVzaWRlbnROYXRpdmUuZXhlY3V0ZV9jb21tYW5kKG5hdGl2ZUZyYW1lKTsKfQphc3luYyBmdW5jdGlvbiBzaHV0ZG93bigpIHsKICByZXR1cm4geyBzaHV0ZG93bjogdHJ1ZSB9Owp9Cm1vZHVsZS5leHBvcnRzID0geyBpbml0aWFsaXplLCBwcm9jZXNzVG9vbENhbGwsIHNodXRkb3duIH07Cg=="
+    },
+    "manifest": {
+      "relative_path": "Plugin/AGENTSOSResident/plugin-manifest.json",
+      "byte_count": 413,
+      "sha256": "25a6084a0ecd2500e89075ed2ad502e791d95352b2638540b8c0aa1563ce8cc0",
+      "base64": "eyJhdXRob3IiOiJKZW5uIiwiY2FwYWJpbGl0aWVzIjp7Imludm9jYXRpb25Db21tYW5kcyI6W10sInN5c3RlbVByb21wdFBsYWNlaG9sZGVycyI6W119LCJjb21tdW5pY2F0aW9uIjp7InByb3RvY29sIjoiZGlyZWN0IiwidGltZW91dCI6NjAwMDB9LCJkZXNjcmlwdGlvbiI6IlN5bnRoZXRpYy1vbmx5IGJsb2NrZWQgUGhhc2UgNUEgTTAtQSByZXNpZGVudDsgbm90IHJ1bnRpbWUgdXNhYmxlLiIsImRpc3BsYXlOYW1lIjoiQUdFTlRTIE9TIFJlc2lkZW50IChCbG9ja2VkIE0wLUEpIiwiZW50cnlQb2ludCI6eyJzY3JpcHQiOiJpbmRleC5qcyJ9LCJtYW5pZmVzdFZlcnNpb24iOiIxLjAuMCIsIm5hbWUiOiJBR0VOVFNPU1Jlc2lkZW50IiwicGx1Z2luVHlwZSI6Imh5YnJpZHNlcnZpY2UiLCJ2ZXJzaW9uIjoiMC4wLjAtbTBhIn0="
+    }
+  },
+  "paths": {
+    "actual_quarantine_root": "/tmp/agents-os-phase5d-minimum-host-smoke-v0.3-555b3b538f6e",
+    "sandbox_inner_quarantine": "/work/quarantine",
+    "ownership_marker": ".agents-os-phase5d-owner",
+    "gate_1_claim_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json",
+    "receipt_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json",
+    "caller_selected_paths": false,
+    "preexisting_root": "BLOCKED",
+    "gate_1_claim_lifecycle": "PERMANENT_ONCE_CREATED_NEVER_DELETED"
+  },
+  "expected_observation": {
+    "discovered_plugin_names": [
+      "AGENTSOSResident"
+    ],
+    "initialize_return": {
+      "initialized": false
+    },
+    "shutdown_return": {
+      "shutdown": true
+    },
+    "processToolCall_count": 0,
+    "native_addon_require_count": 0,
+    "child_process_spawn_count": 0,
+    "provider_or_network_count": 0,
+    "database_count": 0,
+    "private_memory_count": 0,
+    "canonical_root_modified": false,
+    "owned_temporary_residue_count": 0
+  },
+  "forbidden": [
+    "processToolCall",
+    "native_or_NAPI_load",
+    "database",
+    "provider_or_network",
+    "production_authentication",
+    "private_Memory_or_state-private",
+    "sensing_or_recording",
+    "real_effect",
+    "VCPToolBox_source_write",
+    "canonical_worktree_write",
+    "ordinary_plugin_population_read"
+  ]
+}

@@ -1,0 +1,148 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-24T12:59:18+08:00'
+effective_at: '2026-07-24T12:59:18+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_HOST_LIFECYCLE_CONTRACT_CLOSURE
+  decision_source: direct_current_conversation_confirmation_to_execute_the_bound_decision_package_section_6_A
+
+decision_confirmation:
+  section_6_A_execution_confirmed: true
+  direct_reference_to_exact_decision_text: true
+  verbatim_exact_decision_text_received: false
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md
+    sha256: e18e1d42fdc3370c4d86dfbee158a23b2718c437e4fe1f516cedc5068ac512fd
+    section: 6_A
+  confirmation_text_received: 按决策包第 6 节 A 作出明确冻结
+  interpretation: Jenn explicitly selected the package's A accept-and-freeze outcome for the complete atomic unit.
+
+acceptance_unit:
+  id: PHASE_5D_M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 4
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R1_all_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 898425226dd4be50530889611f319cd42af867cba98c1886e0d818df7d913808
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_subject_count: 4
+  verified_authority_input_count: 5
+  verified_author_evidence_count: 1
+  verified_total_input_count: 10
+  source_snapshot_type: local_hash_bound_R1_contract_closure_authoring_snapshot
+  Git_commit_claimed: false
+
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 4
+  subject_hashes_verified: 4/4_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    sha256: 443e37b31622bad80d893ea0cf08b62cba698ba69a319ff2e7ffc3fd1f92d7fb
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    favorable_invalid_path_count: 0
+    legal_input_over_rejection_count: 0
+    requires_R2: false
+    acceptance_subject: false
+  - role: independent_review_PASS_disposition
+    path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml
+    sha256: 798b79ae604b8d214f4c387ecdec1bc39c6294f7c961f26974ea9a04e0a6e45a
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md
+    sha256: e18e1d42fdc3370c4d86dfbee158a23b2718c437e4fe1f516cedc5068ac512fd
+    acceptance_subject: false
+
+frozen_contract_boundary:
+  - future_Host_discovery_requires_exact_selector_and_owner_API_binding
+  - future_initialize_requires_exact_argument_bytes_and_expected_inert_result
+  - future_shutdown_requires_exact_argument_bytes_and_expected_inert_result
+  - future_quarantine_cleanup_requires_delivery_location_cleanup_order_and_residue_observation
+  - missing_owner_issued_evidence_fails_closed
+  - synthetic_evidence_is_shape_only_and_never_owner_authority
+  - runtime_usable_false_actual_Host_smoke_execution_authorized_false_Host_operation_count_zero
+
+excluded_evidence_classes:
+  - manifest
+  - review_package
+  - author_self_review
+  - independent_review
+  - independent_review_disposition
+  - start_decision
+  - decision_package
+  - receipt
+  - active_work_queue
+  - registry_projection
+
+effects:
+  Phase_5D_status: M0D_HOST_LIFECYCLE_CONTRACT_CLOSURE_R1_ACCEPTED_FROZEN_AWAITING_SEPARATE_JENN_HOST_SMOKE_DECISION
+  Phase_5D_contract_closure_atomic_freeze_gate: SATISFIED
+  Phase_5D_contract_closure_accepted: true
+  Phase_5D_contract_closure_frozen: true
+  additional_contract_closure_revision_required: false
+  requires_R2: false
+  contract_closure_revisions_stopped: true
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  VCPToolBox_worktree_read_write_clone_checkout_or_start_authorized: false
+  archive_delivery_or_installation_authorized: false
+  enabled_manifest_plugin_discovery_or_loading_authorized: false
+  Host_lifecycle_initialize_shutdown_quarantine_cleanup_processToolCall_native_NAPI_or_addon_authorized: false
+  Rust_JavaScript_SQLite_database_dependency_toolchain_public_API_or_MCP_authorized: false
+  runtime_service_provider_or_production_authentication_authorized: false
+  credential_key_private_raw_Memory_state_private_sensing_recording_or_real_effect_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5D_M0D_HOST_SMOKE_EXECUTION_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  actual_Host_smoke_preconditions:
+    - a_separate_current_Jenn_decision
+    - actual_Host_owner_issued_evidence_matching_the_frozen_contract_shape
+    - a_new_hash_bound_preflight_that_remains_fail_closed_on_any_missing_input
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_input_reverification_before_freeze: completed
+  manifest_input_hashes: 10/10_MATCH
+  accepted_subject_hashes: 4/4_MATCH
+  fixed_commands: 4/4_PASS
+  independent_review_sha256_bytes_and_result: MATCH
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  edit_bound_independent_review_bytes: forbidden
+  future_contract_semantic_change_requires_new_revision_review_and_Jenn_decision: true

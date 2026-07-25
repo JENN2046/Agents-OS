@@ -1,0 +1,101 @@
+{
+  "schema_version": "agents-os.phase5d.minimum-exact-host-smoke-receipt.v0.3",
+  "decision_sha256": "3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12",
+  "candidate_commit": "4690ce291d45339f5dbe71a793662e051629d558",
+  "artifact_hashes": {
+    "plan_sha256": "e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59",
+    "runner_sha256": "5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74",
+    "tests_sha256": "19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f"
+  },
+  "sealed_host": {
+    "commit": "555b3b538f6eb736e530c2912de678c5941f9985",
+    "tree": "fd82d403e79f36f749eb7f555b4736eae3eacdff",
+    "plugin_manager_blob_oid": "5fd77cea37c30ef432f23d9627d05aba862b9744",
+    "plugin_manager_sha256": "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2"
+  },
+  "VCPToolBox_Git_command_ids": [
+    "SEALED_COMMIT_EXISTS",
+    "SEALED_TREE_RESOLVE",
+    "PLUGIN_MANAGER_BLOB_RESOLVE",
+    "PLUGIN_MANAGER_BLOB_READ"
+  ],
+  "result": "HOST_SMOKE_CANDIDATE_OBSERVED",
+  "failure": null,
+  "cleanup_status": "CLEAN",
+  "owned_temporary_residue_count": 0,
+  "observations": {
+    "calls": [
+      "PluginManager.loadPlugins",
+      "InertPayload.initialize",
+      "PluginManager.shutdownAllPlugins",
+      "InertPayload.shutdown",
+      "Harness.quarantineCleanup"
+    ],
+    "host_require_specifiers": [
+      "fs",
+      "events",
+      "path",
+      "child_process",
+      "node-schedule",
+      "dotenv",
+      "./FileFetcherServer.js",
+      "express",
+      "chokidar",
+      "./modules/captchaDecoder",
+      "./modules/toolApprovalManager",
+      "./modules/foldProtocol",
+      "./modules/toolResultPrivacyGuard",
+      "./modules/toolCallRecordStore",
+      "EXACT_INERT_ENTRYPOINT"
+    ],
+    "host_filesystem_read_attempts": [
+      "Plugin",
+      "Plugin/AGENTSOSResident/plugin-manifest.json",
+      "Plugin/AGENTSOSResident/config.env",
+      "preprocessor_order.json"
+    ],
+    "discovered_plugin_names": [
+      "AGENTSOSResident"
+    ],
+    "initialize_argument_projection": {
+      "DebugMode": false,
+      "PORT": "UNDEFINED",
+      "Key": "UNDEFINED",
+      "PROJECT_BASE_PATH": null,
+      "dependency_keys": [
+        "pluginManager",
+        "vcpLogFunctions"
+      ]
+    },
+    "initialize_return": {
+      "initialized": false
+    },
+    "shutdown_argument_count": 0,
+    "shutdown_return": {
+      "shutdown": true
+    },
+    "processToolCall_count": 0,
+    "native_addon_require_count": 0,
+    "child_process_spawn_count": 0,
+    "provider_or_network_count": 0,
+    "database_count": 0,
+    "private_memory_count": 0,
+    "canonical_root_modified": false
+  },
+  "isolation_observation": {
+    "security_boundary": "BWRAP_NAMESPACES_PLUS_SECCOMP_NETWORK_DENY_PLUS_NODE_PERMISSION_MODEL",
+    "vm_security_boundary": false,
+    "sandbox_network": "SECCOMP_ALL_NETWORK_SOCKET_SYSCALLS_DENIED",
+    "harness_bwrap_invocation_count": 1,
+    "network_seccomp_probe": {
+      "attempted_socket_syscalls": 1,
+      "denied_socket_syscalls": 1,
+      "denial_code": "EPERM",
+      "packet_count": 0
+    },
+    "spawn_wrapper_error_code": null
+  },
+  "gate_1_claim_relative_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json",
+  "Gate_1_consumed": true,
+  "Gate_2_mainline_merge_authorized": false
+}

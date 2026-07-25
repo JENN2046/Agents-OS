@@ -821,19 +821,467 @@ documents:
   - id: agents-os-active-work-queue-v16.9
     title: AGENTS OS Active Work Queue v16.9
     doc_type: review
-    status: active
+    status: superseded
     scope: current Phase 5D M0-D plan durability complete state awaiting Jenn implementation-start decision
     canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
     owner: {human: Jenn, agent_steward: Nobao}
     source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md
     supersedes: [control-plane/registry/reports/2026-07-23-agents-os-active-work-queue-v16.8.md]
-    superseded_by: null
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md
     related: [CURRENT_STATE.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md, control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml]
     last_reviewed: '2026-07-24'
     review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-plan-postmerge-durability-closeout-v0.1.md
     freshness: {level: critical, review_trigger: [superseding durability fact or explicit Jenn implementation-start decision]}
     security_boundary: [narrow governance projection only; no automatic implementation VCPToolBox Host archive plugin runtime database provider private Memory sensing or effect]
     validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-implementation-start-preflight
+    title: Phase 5D M0-D Implementation Start Preflight v0.1
+    doc_type: review
+    status: accepted
+    scope: read-only frozen-plan, origin-main, queue-gate, and sealed-Host commitment preflight before offline implementation start
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [frozen-plan hash queue-gate or sealed commitment correction]}
+    security_boundary: [read-only preflight only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-implementation-start-decision-package
+    title: Phase 5D M0-D Implementation Start Decision Package v0.1
+    doc_type: reference
+    status: accepted
+    scope: exact Jenn decision surface for the frozen offline WP0-WP5 implementation sequence
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [superseding Jenn implementation-start decision or frozen-plan binding correction]}
+    security_boundary: [decision surface only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-implementation-start-decision
+    title: Phase 5D M0-D Implementation Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn authorization to start the frozen local offline Phase 5D implementation at WP0 and conditionally advance through WP5
+    canonical_path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [superseding Jenn decision only]}
+    security_boundary: [frozen local offline implementation only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-implementation-start-closeout-receipt
+    title: Phase 5D M0-D Implementation Start Closeout Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: implementation-start decision binding and WP0 governance projection evidence
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md, CURRENT_STATE.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [governance projection or bound decision correction]}
+    security_boundary: [start closeout only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect occurrence]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.0
+    title: AGENTS OS Active Work Queue v17.0
+    doc_type: review
+    status: superseded
+    scope: historical Phase 5D M0-D frozen offline implementation WP0 queue
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v16.9.md]
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-start-closeout-v0.1.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [historical projection correction only]}
+    security_boundary: [frozen local offline implementation queue only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-implementation-closeout-receipt
+    title: Phase 5D M0-D Offline Implementation Closeout Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: WP0-WP5 offline preflight completion, validation, and Jenn-only Host-smoke decision gate
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-implementation-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [offline harness source validation or Jenn Host-smoke decision change]}
+    security_boundary: [offline closeout evidence only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.1
+    title: AGENTS OS Active Work Queue v17.1
+    doc_type: review
+    status: superseded
+    scope: historical Jenn-only Phase 5D M0-D Host-smoke execution decision gate after offline implementation closeout
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.0.md]
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md
+    related: [CURRENT_STATE.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-implementation-closeout-v0.1.md, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [historical correction only]}
+    security_boundary: [decision gate only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-host-smoke-execution-decision-package
+    title: Phase 5D M0-D Host Smoke Execution Decision Package v0.1
+    doc_type: reference
+    status: accepted
+    scope: decision surface distinguishing offline preflight from actual Host smoke and opening only the bounded contract closure
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [accepted owner-issued Host lifecycle contract or superseding Jenn decision]}
+    security_boundary: [decision surface only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision
+    title: Phase 5D M0-D Host Lifecycle Contract Closure Start Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn authorization for the bounded control-plane contract closure only
+    canonical_path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-execution-decision-package-v0.1.md, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [superseding Jenn decision only]}
+    security_boundary: [contract closure only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1
+    doc_type: contract
+    status: active
+    scope: exact future owner-evidence requirements and fail-closed non-execution boundary
+    canonical_path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [owner-evidence schema or independent-review result change]}
+    security_boundary: [control-plane contract only; no Host or runtime authority]
+    validation: {commands: ["sha256sum control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-v0.1-r1.md"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-r1
+    title: Phase 5D M0-D Host Lifecycle Evidence Profile R1
+    doc_type: schema
+    status: active
+    scope: closed synthetic evidence profile for the Host lifecycle contract closure
+    canonical_path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json, control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [schema or independent-review result change]}
+    security_boundary: [synthetic evidence schema only; no Host or runtime authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-evidence-profile-v0.1-r1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure Fixture R1
+    doc_type: example
+    status: active
+    scope: synthetic missing-owner and schema-shape fixture with zero Host operations
+    canonical_path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [fixture or independent-review result change]}
+    security_boundary: [synthetic fixture only; no Host or runtime authority]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-validator-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure Offline Validator R1
+    doc_type: reference
+    status: active
+    scope: strict offline validation of the closed synthetic contract-closure fixture
+    canonical_path: control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-fixture-v0.1.json]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [validator or independent-review result change]}
+    security_boundary: [offline validator only; no Host or runtime authority]
+    validation: {commands: ["python3 control-plane/registry/validate-phase-5d-m0d-host-lifecycle-contract-closure.py --self-test"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Author Self Review
+    doc_type: review
+    status: active
+    scope: non-independent author evidence for the fixed R1 contract-closure bundle
+    canonical_path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [subject hash or independent-review result change]}
+    security_boundary: [author evidence only; no Host or runtime authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-author-self-review-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-manifest-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Atomic Review Manifest
+    doc_type: review
+    status: active
+    scope: hash-bound manifest for the complete R1 contract-closure review unit
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [any declared input or independent-review result change]}
+    security_boundary: [review manifest only; no Host or runtime authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-review-package-r1
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Review Package
+    doc_type: review
+    status: active
+    scope: independent-review instructions for the fixed R1 contract-closure bundle
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [manifest or independent-review result change]}
+    security_boundary: [review instructions only; no Host or runtime authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-receipt
+    title: Phase 5D M0-D Host Lifecycle Contract Closure Start Closeout Receipt v0.1
+    doc_type: receipt
+    status: accepted
+    scope: Jenn decision binding and R1 author-package fixed evidence
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-decision-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [decision or author-package correction]}
+    security_boundary: [control-plane closeout only; no Host or runtime authority]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-start-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.2
+    title: AGENTS OS Active Work Queue v17.2
+    doc_type: review
+    status: superseded
+    scope: current Phase 5D M0-D Host lifecycle contract closure R1 independent-review queue
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.1.md]
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md
+    related: [CURRENT_STATE.md, control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md
+    freshness: {level: critical, review_trigger: [independent-review result or Jenn superseding decision]}
+    security_boundary: [contract-closure review only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Independent Review
+    doc_type: review
+    status: accepted
+    scope: fresh full atomic independent review of the fixed R1 contract-closure bundle; no acceptance or Host execution authority
+    canonical_path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [manifest input change or independent-review evidence challenge]}
+    security_boundary: [independent review only; no acceptance freeze or Host runtime authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Independent Review PASS Disposition
+    doc_type: review
+    status: accepted
+    scope: zero-finding PASS disposition that opens only Jenn's atomic contract-closure decision gate
+    canonical_path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [review result or Jenn decision change]}
+    security_boundary: [governance disposition only; no acceptance freeze or Host runtime authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Independent Review Reconciliation v0.1
+    doc_type: receipt
+    status: accepted
+    scope: governance reconciliation of the fixed independent PASS review to the Jenn-only decision gate
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md
+    freshness: {level: critical, review_trigger: [review disposition or Jenn decision change]}
+    security_boundary: [governance reconciliation only; no acceptance freeze or Host runtime authority]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-reconciliation-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.3
+    title: AGENTS OS Active Work Queue v17.3
+    doc_type: review
+    status: superseded
+    scope: Jenn-only Phase 5D M0-D Host lifecycle contract-closure atomic decision queue
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.2.md]
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [Jenn decision or review-evidence correction]}
+    security_boundary: [Jenn-only decision gate; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Atomic Freeze Decision Package v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: consumed Jenn-only decision surface for the accepted and frozen four-subject future Host-entry evidence contract
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml, control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-independent-review-disposition-v0.1.yaml, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [immutable-decision provenance challenge only]}
+    security_boundary: [consumed decision surface; freeze applies only to the four-subject evidence contract and creates no actual Host execution authority]
+    validation: {commands: ["sha256sum control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Atomic Freeze Decision Package Closeout v0.1
+    doc_type: receipt
+    status: accepted
+    scope: package-preparation receipt binding the Jenn-only decision surface and its unchanged non-execution boundary
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md
+    freshness: {level: critical, review_trigger: [bound decision-package hash or Jenn decision change]}
+    security_boundary: [governance preparation only; no acceptance freeze or actual Host execution authority]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.4
+    title: AGENTS OS Active Work Queue v17.4
+    doc_type: review
+    status: superseded
+    scope: historical Jenn-only Phase 5D M0-D Host lifecycle contract-closure R1 atomic freeze decision queue
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.3.md]
+    superseded_by: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
+    related: [CURRENT_STATE.md, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [historical projection correction only]}
+    security_boundary: [historical decision gate only; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md inspect-queue --json"]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Atomic Freeze Decision v0.1
+    doc_type: decision_record
+    status: accepted
+    scope: immutable Jenn acceptance and freeze of the complete four-subject future Host-entry evidence contract
+    canonical_path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-atomic-independent-review-package-v0.1.manifest.yaml, control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml, control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-package-v0.1.md, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [immutable-decision provenance challenge only]}
+    security_boundary: [future evidence contract freeze only; no actual Host action VCPToolBox access archive plugin runtime database provider private Memory sensing or effect authority]
+    validation: {commands: ["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml').read_text())\""]}
+  - id: agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout
+    title: Phase 5D M0-D Host Lifecycle Contract Closure R1 Atomic Freeze Closeout v0.1
+    doc_type: receipt
+    status: accepted
+    scope: local atomic-freeze closeout evidence and governance projection; no actual Host action
+    canonical_path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md
+    supersedes: []
+    superseded_by: null
+    related: [control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml, control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md, CURRENT_STATE.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-full-atomic-independent-review.yaml
+    freshness: {level: critical, review_trigger: [immutable decision or governance projection provenance challenge]}
+    security_boundary: [local freeze closeout only; no actual Host action VCPToolBox archive plugin runtime database provider private Memory sensing or effect]
+    validation: {commands: ["sha256sum control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md"]}
+  - id: agents-os-active-work-queue-v17.5
+    title: AGENTS OS Active Work Queue v17.5
+    doc_type: review
+    status: active
+    scope: Jenn-only separate actual Host-smoke preflight decision gate after contract-closure freeze
+    canonical_path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
+    owner: {human: Jenn, agent_steward: Nobao}
+    source_of_truth: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md
+    supersedes: [control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.4.md]
+    superseded_by: null
+    related: [CURRENT_STATE.md, control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml, control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-closeout-v0.1.md]
+    last_reviewed: '2026-07-24'
+    review_by: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    freshness: {level: critical, review_trigger: [separate Jenn Host-smoke decision or evidence correction]}
+    security_boundary: [Jenn-only decision gate; no VCPToolBox worktree Host archive plugin runtime database provider private Memory sensing or real effect authority]
+    validation: {commands: ["python3 execution/agents-os-machine/machine.py --queue control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v17.5.md inspect-queue --json"]}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-review-package-builder","title":"Phase 5C M0-C Post-Freeze Review Package Builder","doc_type":"reference","status":"accepted","scope":"collision-safe successor for the immutable Phase 5C R3 review-package builder","canonical_path":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py","supersedes":[],"superseded_by":null,"related":["control-plane/registry/validate-phase-5c-m0c-plan-post-freeze-review-package-builder-correction.py"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["post-freeze correction evidence or archive-member guard change"]},"security_boundary":["offline review-package construction only; no plan-semantic change VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -m py_compile control-plane/registry/build-phase-5c-m0c-plan-post-freeze-review-package.py"]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-start-decision","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction Start Decision","doc_type":"decision_record","status":"accepted","scope":"Jenn authorization for a narrow non-semantic review-package builder correction","canonical_path":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml","supersedes":[],"superseded_by":null,"related":["control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["superseding Jenn decision only"]},"security_boundary":["review-package delivery correction only; no plan re-freeze implementation VCPToolBox runtime database provider private Memory sensing or effect"],"validation":{"commands":["python3 -c \"import pathlib,yaml; yaml.safe_load(pathlib.Path('control-plane/registry/decisions/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-start-decision-v0.1.yaml').read_text())\""]}}
   - {"id":"agents-os-phase-5c-m0c-postfreeze-builder-correction-contract","title":"Phase 5C M0-C Post-Freeze Review Package Builder Correction","doc_type":"contract","status":"accepted","scope":"narrow collision rejection contract preserving frozen R1-R4 plan bytes","canonical_path":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","owner":{"human":"Jenn","agent_steward":"Nobao"},"source_of_truth":"control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md","supersedes":[],"superseded_by":null,"related":["control-plane/registry/examples/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-fixture-v0.1.json"],"last_reviewed":"2026-07-22","review_by":"control-plane/registry/reviews/2026-07-22-yellow-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-final-full-independent-review.yaml","freshness":{"level":"critical","review_trigger":["guard contract or independent review change"]},"security_boundary":["non-semantic offline packaging correction only; no implementation or runtime authority"],"validation":{"commands":["sha256sum control-plane/registry/drafts/2026-07-22-agents-os-phase-5c-m0c-plan-post-freeze-review-package-builder-correction-v0.1.md"]}}

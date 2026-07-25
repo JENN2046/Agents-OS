@@ -205,3 +205,15 @@ observations into `OFFLINE_COMPATIBILITY_WITNESS_PASSED`. The witness is local
 evidence only. Its positive result does not authorize archive delivery, plugin
 enablement, Host loading, runtime activation, database work, private Memory,
 provider use, sensing or any effect.
+
+Phase 5D M0-D adds a separate, offline-only quarantined Host-smoke preflight
+harness. It revalidates the frozen Phase 5C source baseline and seven sealed
+Host commitments without opening a VCPToolBox worktree; creates only fresh,
+harness-owned temporary quarantine roots; preserves the blocked manifest;
+models the inert `initialize` and `shutdown` results in memory; traps
+`processToolCall` and native loading before use; and removes every synthetic
+temporary artifact. Its terminal result is
+`QUARANTINED_HOST_SMOKE_PREFLIGHT_READY`, not archive delivery, plugin
+enablement, Host discovery, lifecycle invocation, runtime activation, database
+access, provider use, private-Memory access, sensing, recording, or a real
+effect.

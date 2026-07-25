@@ -1,0 +1,172 @@
+schema_version: agents-os.mainline-merge-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-mainline-merge-decision-v0.1
+record_type: MainlineMergeDecisionRecord
+status: accepted_conditional
+immutable: true
+created_at: '2026-07-25T19:03:44+08:00'
+effective_at: '2026-07-25T19:03:44+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: AUTHORIZE_MEHS_V0_3_R5_SCOPED_GATE_2_DELIVERY_AND_CONDITIONAL_MAINLINE_MERGE
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  selected_outcome: A
+  package_path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+  package_sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+  package_outcome_a_exact_text_sha256: b76b8f70db06c92eb00e1808804dba512b6bab3726d2ef798ebb8440c18253d6
+  package_outcome_a_exact_text_bytes: 2861
+  confirmation_text_received_sha256: 3006556a0be82b8793a3ba3d787e0ebc27041624fb94c9b631b62ba9d2bd6405
+  confirmation_text_received_bytes: 1281
+  directly_confirms_complete_package_outcome_a_exact_text: true
+  scope_expansion: forbidden
+  confirmation_text_received: |
+    我选择 Outcome A。
+
+    我明确确认执行以下 Gate 2 Decision Package Section 6 Outcome A 的完整 Exact Confirmation Text：
+
+    control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-
+    package-v0.1.md
+
+    SHA-256：
+    c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+
+    本授权仅适用于上述精确 package bytes，以及 candidate：
+    4690ce291d45339f5dbe71a793662e051629d558
+
+    任何 commit 或 push 前，必须先建立 Gate 2 decision record，绑定：
+    - 上述 package path 和 SHA-256；
+    - candidate commit；
+    - 六份 Gate evidence 的当前 path 和 SHA-256；
+    - 本次完整授权文本。
+
+    必须完整审查 origin/main..final_head，而不得把 delivery scope 描述为仅 4 个 additions。
+
+    仅在 package Section 5 的全部 preconditions、current-final-head required reviews/approvals、CI、mergeability
+    和无 blocking comments 均满足时，才允许条件式 merge；任何对象、证据、remote base、history 或 final-head
+    manifest 出现未审变化，必须 fail closed 并重新请求决定。
+
+    不得 direct push to main，不得重放 --actual，不得执行真实 Host、VCPToolBox Git、release、deploy 或 package
+    publish；其余 retained prohibitions 全部保持有效。
+
+candidate_binding:
+  candidate_commit: 4690ce291d45339f5dbe71a793662e051629d558
+  candidate_parent: 310a7358f96b6749f0c31dd3e39517c9df87c50c
+  candidate_delta: 4_A_0_NON_A
+  candidate_ref: agent/phase-5d-m0d-minimum-host-smoke-candidate-v0.3-r5
+  candidate_ref_must_not_move: true
+  candidate_commit_or_blob_rewrite: forbidden
+  plan_sha256: e7bdc6dc34fad8fb431aee440d9ea3e3ad9cd286e4a45e15c30419d57e83bd59
+  correction_yaml_sha256: e6a6958c1f69ee6181c3f94093da18575a6cfa4f52920800187ff5a771d0d8fc
+  runner_sha256: 5301d36548dae2357a2e58615bcc60d0eac256223b838e5a26ec5d0892082c74
+  tests_sha256: 19a0b95bef69980b4388496edad12ed8325a55eec8920a89fba574a59191338f
+
+gate_evidence_binding:
+  evidence_count: 6
+  frozen_candidate_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-fresh-independent-review-closure.json
+    sha256: 85db40073e42625f79bf20076728e97256ecc2ac5eb188e81fb2f12f36556b61
+  Gate_1_decision:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-decision-v0.3.json
+    sha256: 3ed0c05d30af4866f26b5b4e386efa4b9b71988bc8c7549fd0ce806119022d12
+  Gate_1_claim:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate1-consumed-v0.3.json
+    sha256: 7fbab37aa21dd90657cffe9b8d83dd845a0d632638e8082f51a0cf9afaf1af69
+  terminal_receipt:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3.json
+    sha256: e4a5b7cff752d95c4891ba966d1aa6df5d17f609659e5fc0df4637dcfdb8035c
+  fresh_actual_closeout_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-minimum-exact-host-smoke-v0.3-r5-actual-closeout-fresh-independent-review.json
+    sha256: 2e63d87301b7f23c2d933d9412756576dbb78fbab55bb03f233537b750bd4873
+    result: PASS_NO_BLOCKER
+  Gate_2_decision_package:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-minimum-exact-host-smoke-gate2-decision-package-v0.1.md
+    sha256: c6167c4e1d6176960a8f3acfe571213d5bec3085dfb4735a94e0bf3a178399d1
+
+execution_closeout_binding:
+  result: HOST_SMOKE_CANDIDATE_OBSERVED
+  failure: null
+  cleanup_status: CLEAN
+  owned_temporary_residue_count: 0
+  Gate_1_consumed: true
+  retry_authorized: false
+  actual_replay_authorized: false
+  Gate_2_mainline_merge_authorized_before_this_record: false
+
+delivery_binding:
+  repository: JENN2046/Agents-OS
+  repository_visibility: PRIVATE
+  remote: origin
+  target_branch: main
+  delivery_branch: agent/phase-5d-m0d-minimum-host-smoke-gate2-closeout-v0.1
+  delivery_branch_base: 4690ce291d45339f5dbe71a793662e051629d558
+  final_head_binding: exact_final_head_manifest_and_current_head_review_required
+  observed_local_main: be0206cfa925c7c1afa2f0987d19ebcbcbdad3d4
+  observed_origin_main: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+  observed_local_main_to_candidate: 20_commits_fast_forward
+  observed_origin_main_to_candidate: 15_commits_fast_forward
+  observed_implementation_line_to_candidate: 1_commit_fast_forward
+  full_origin_main_to_final_head_review_required: true
+  describe_as_only_four_additions: forbidden
+
+authorized_actions:
+  create_clean_scoped_delivery_worktree_and_branch: true
+  materialize_exact_bound_evidence_and_decision_record: true
+  create_exact_final_head_manifest: true
+  update_only_necessary_reviewed_governance_projections: true
+  commit_exact_scoped_delivery: true
+  push_scoped_task_branch_to_approved_private_origin: true
+  create_or_update_pull_request_targeting_main: true
+  track_CI_reviews_approvals_and_comments: true
+  fix_only_actionable_in_scope_feedback: true
+  conditionally_merge_when_all_preconditions_hold: true
+  verify_remote_mainline_and_create_bounded_durability_receipt: true
+
+merge_preconditions:
+  package_section_5_all_satisfied: true
+  candidate_and_all_evidence_hashes_match: true
+  approved_private_remote_refreshed: true
+  complete_origin_main_to_final_head_history_diff_and_manifest_reviewed: true
+  prohibited_content_and_unrelated_work_absent: true
+  no_production_release_deploy_publish_provider_or_effect_trigger: true
+  task_branch_and_pull_request_targeting_main: true
+  direct_push_to_main: forbidden
+  current_final_head_self_review: PASS
+  current_final_head_required_reviews_and_approvals_satisfied: true
+  configured_status_checks: TERMINAL_SUCCESS
+  review_decision: NOT_CHANGES_REQUESTED
+  actionable_unresolved_review_threads: 0
+  blocking_comments: 0
+  mergeability: CLEAN_AND_MERGEABLE
+  final_head_manifest_and_hashes_match: true
+  merge_method: repository_normal_merge_method
+
+not_authorized:
+  direct_push_to_main: false
+  force_push_tag_or_history_rewrite: false
+  branch_protection_or_review_bypass: false
+  actual_replay_or_second_claim: false
+  real_Host_or_VCPToolBox_Git: false
+  processToolCall_native_addon_or_NAPI: false
+  runtime_service_or_provider: false
+  database_or_production_authentication: false
+  private_Memory_or_state_private: false
+  sensing_recording_or_real_effect: false
+  release_deploy_or_package_publish: false
+
+post_merge_requirement:
+  verify_PR_merged_state_and_merge_commit: true
+  refresh_and_verify_remote_main: true
+  verify_bound_candidate_and_evidence_objects_on_main: true
+  create_bounded_durability_receipt: true
+  update_only_necessary_reviewed_projections: true
+  automatic_next_phase_or_runtime_start: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: create_new_superseding_record
+  delete_or_rewrite_claim_or_receipt: forbidden
+  rewrite_candidate_or_evidence: forbidden

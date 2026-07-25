@@ -1,0 +1,163 @@
+schema_version: agents-os.implementation-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-implementation-start-decision-v0.1
+record_type: ImplementationStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-24T04:21:44+08:00'
+effective_at: '2026-07-24T04:21:44+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_FROZEN_PHASE_5D_M0D_OFFLINE_IMPLEMENTATION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: |
+    我确认启动 AGENTS OS Phase 5D M0-D Quarantined Host Smoke Integration 的冻结
+    offline implementation，严格按 Phase 5D M0-D Implementation Start Decision
+    Package v0.1 第 3 节的 WP0–WP5 顺序执行，并以每个直接前序验证通过为继续条件。
+
+    我确认该启动只授权创建该 package 第 3 节列明的四个 harness 文件，以及修改
+    extensions/agents-os-resident/README.md 与 package-manifest.json；
+    plugin-manifest.json.block 必须保持不变。
+
+    我确认本决定不授权 VCPToolBox worktree、archive delivery、enabled manifest、plugin
+    discovery/loading、Host lifecycle、processToolCall、native/N-API、runtime、database、
+    dependency、provider、production authentication、private Memory、state-private、sensing、
+    recording、真实 effect、release、deploy、publish、tag、force push 或后续阶段启动。
+
+    请创建不可变的 Phase 5D M0-D implementation-start decision record，并只做必要的
+    CURRENT_STATE、Active Work Queue、Registry、default-pointer 与 start receipt 投影；
+    然后从 WP0 开始。
+  interpreted_scope: start_the_frozen_Phase_5D_M0D_offline_implementation_at_WP0_then_conditionally_advance_through_WP5
+  scope_expansion: forbidden
+
+frozen_plan_binding:
+  acceptance_unit: PHASE_5D_M0D_PLAN_BUILD_PROFILE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_interpretation: forbidden
+  subject_count: 6
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+  manifest:
+    path: control-plane/registry/reports/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f8c4dc55df8c7110462d1ec117856df275edaf654ab057f083ce1817f7bbb061
+    verified_inputs: 29/29_MATCH
+    verified_subjects: 6/6_MATCH
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-23-yellow-agents-os-phase-5d-m0d-plan-r2-full-atomic-independent-review.yaml
+    sha256: 902a9fd3686cfbe95693e272df329282f3b33d44ebb1285edfc37bc3ebf8b068
+    result: PASS_NO_BLOCKER
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-23-agents-os-phase-5d-m0d-plan-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: 08da0e6ee8b93e994ef3b259b45d9f81b7e1fa443b947ccadedc8c2436a9ee31
+  plan_mainline_integration_commit: be0206cfa925c7c1afa2f0987d19ebcbcbdad3d4
+  durability_projection_merge_commit: 5d66dbd608a031c1b6db3a7bcac9ca25b5491f31
+
+implementation_start_preflight:
+  path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-implementation-start-preflight-v0.1.yaml
+  sha256: 887af67b242af25a8ea7569443d3ff5407253ca71a4106a33097859b88b36fcf
+  result: PASS
+  sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  sealed_host_commitments: 7/7_MATCH_FROM_FROZEN_PROFILE
+
+implementation_authority:
+  source_authority_root: extensions/agents-os-resident
+  implementation_task_branch: agent/phase-5d-m0d-implementation-start
+  first_work_package: WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+  work_packages:
+    - WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+    - WP1_OWNED_QUARANTINE_TOPOLOGY_AND_PATH_POLICY
+    - WP2_BLOCKED_MANIFEST_PRESERVATION_AND_TRANSIENT_MANIFEST_RULE
+    - WP3_INERT_LIFECYCLE_ONLY_SMOKE_CONTRACT
+    - WP4_CLEANUP_ROLLBACK_AND_RESIDUE_OBSERVATION
+    - WP5_INTEGRATED_SYNTHETIC_PREFLIGHT_WITNESS
+  advancement_rule: direct_predecessor_validation_must_pass
+  skip_or_parallel_advancement: forbidden
+  repair_inside_frozen_scope: authorized
+
+authorized_after_start_closeout:
+  Phase_5D_implementation_started: true
+  implementation_authorized: true
+  WP0_start_authorized: true
+  WP1_through_WP5_conditionally_authorized: true
+  allowed_create:
+    - extensions/agents-os-resident/tools/prepare-quarantined-host-smoke.mjs
+    - extensions/agents-os-resident/tools/validate-quarantined-host-smoke.mjs
+    - extensions/agents-os-resident/fixtures/quarantined-host-smoke-contract.v0.1.json
+    - extensions/agents-os-resident/tests/quarantined-host-smoke.mjs
+  allowed_modify:
+    - extensions/agents-os-resident/README.md
+    - extensions/agents-os-resident/package-manifest.json
+  mandatory_preservation:
+    - extensions/agents-os-resident/plugin-manifest.json.block
+  deterministic_local_offline_JavaScript_and_test_execution: true
+  newly_created_owned_temporary_quarantine_roots_only: true
+  scoped_local_commits: true
+  deterministic_validation_reports_and_receipts: true
+
+required_implementation_boundaries:
+  VCPToolBox_core_diff: zero
+  VCPToolBox_worktree_read_write_clone_or_checkout: forbidden
+  archive_delivery_or_installation: forbidden
+  enabled_plugin_manifest_or_plugin_discovery_loading: forbidden
+  Host_lifecycle_processToolCall_native_addon_or_NAPI: forbidden
+  runtime_service_database_provider_or_production_authentication: forbidden
+  dependency_or_lockfile_change: forbidden
+  private_raw_Memory_state_private_sensing_recording_or_real_effect: forbidden
+  public_API_or_MCP_expansion: forbidden
+  release_deploy_publish_tag_or_force_push: forbidden
+  runtime_usable: false
+  terminal_result_limit: QUARANTINED_HOST_SMOKE_PREFLIGHT_READY
+
+not_authorized:
+  VCPToolBox_change_or_start_authorized: false
+  clean_Host_worktree_creation_or_inspection_authorized: false
+  archive_delivery_or_installation_authorized: false
+  plugin_enablement_or_Host_loading_authorized: false
+  processToolCall_or_native_addon_loading_authorized: false
+  runtime_activation_authorized: false
+  database_creation_or_existing_database_access_authorized: false
+  dependency_or_lockfile_change_authorized: false
+  production_authentication_credentials_keys_cookies_or_cryptography_authorized: false
+  private_raw_Memory_or_state_private_access_authorized: false
+  provider_sensing_recording_or_real_effect_authorized: false
+  public_API_or_MCP_expansion_authorized: false
+  implementation_branch_push_PR_or_merge_authorized: false
+  tag_release_deploy_or_package_publish_authorized: false
+  external_Codex_or_executor_runner_authorized: false
+
+start_closeout:
+  implementation_source_creation_during_closeout: forbidden
+  dependency_installation_during_closeout: forbidden
+  database_creation_during_closeout: forbidden
+  VCPToolBox_modification_or_start_during_closeout: forbidden
+  plugin_enablement_or_runtime_start_during_closeout: forbidden
+  required_projections:
+    - CURRENT_STATE
+    - Active_Work_Queue
+    - Document_Registry
+    - Federated_Document_Registry
+    - Machine_Dashboard_Control_Chain_Workbench_defaults
+    - implementation_start_receipt
+
+next_gate:
+  name: PHASE_5D_M0D_WP0_SEALED_SOURCE_AND_HOST_COMMITMENT_REVALIDATION
+  automatic_progress_inside_frozen_scope: true
+  WP0_exit_condition:
+    - frozen_plan_and_sealed_host_bindings_reverified
+    - source_authority_root_and_blocked_manifest_preserved
+    - exact_future_harness_inventory_is_closed
+    - VCPToolBox_core_diff_zero
+    - no_Host_runtime_database_provider_private_memory_or_real_effect_occurrence
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_frozen_plan_subjects: forbidden
+  edit_bound_preflight_bytes: forbidden
+  correction_method: create_a_new_superseding_decision_record
+  derived_registry_current_state_queue_and_receipt_updates: permitted
