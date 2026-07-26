@@ -21,6 +21,10 @@ from typing import Any
 
 ROOT = Path(__file__).parent
 RUNNER_PATH = ROOT / "run-phase-5d-m0d-actual-object-only-source-run-r3.py"
+REVIEW_BUILDER_PATH = (
+    ROOT
+    / "build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py"
+)
 RUNNER = runpy.run_path(str(RUNNER_PATH))
 
 
@@ -194,6 +198,14 @@ def self_test() -> int:
             or b'"result": "PASS"' not in runner_self_test.stdout
         ):
             failures.append("runner_self_test_failed")
+        builder_self_test = _subprocess(
+            [sys.executable, str(REVIEW_BUILDER_PATH), "--self-test"]
+        )
+        if (
+            builder_self_test.returncode != 0
+            or b'"result": "PASS"' not in builder_self_test.stdout
+        ):
+            failures.append("review_builder_self_test_failed")
 
         checkout_root = Path(directory) / "portable-checkout"
         checkout_registry = checkout_root / "control-plane" / "registry"
@@ -229,7 +241,7 @@ def self_test() -> int:
     )
     if _subprocess([sys.executable, "-c", direct_exit]).returncode != 0:
         failures.append("success_exit_probe")
-    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 9, "failures": failures}, sort_keys=True))
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 10, "failures": failures}, sort_keys=True))
     return 0 if not failures else 1
 
 

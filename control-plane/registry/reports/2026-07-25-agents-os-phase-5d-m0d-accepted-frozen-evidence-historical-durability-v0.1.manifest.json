@@ -299,7 +299,7 @@
     "artifact_verification": "git_blob_bytes_at_anchor_commit",
     "commit": "d200b31471df4c82bab86de9412086259585b893",
     "tree": "f3642942e0e0140cf54f717b3eba79021d41ed06",
-    "working_tree_corrections_excluded_from_frozen_evidence": 2
+    "working_tree_corrections_excluded_from_frozen_evidence": 3
   },
   "components": [
     {
@@ -346,7 +346,7 @@
     "accepted_frozen_components": 3,
     "already_present_on_base_main": 1,
     "artifact_count": 58,
-    "current_worktree_correction_count": 2,
+    "current_worktree_correction_count": 3,
     "declared_hash_conflicts": 0,
     "declared_hash_mismatches": 0,
     "declared_path_sha256_pairs_reverified": 53,
@@ -355,6 +355,19 @@
   },
   "status": "CORRECTION_OVERLAY_REVIEW_NEEDED",
   "working_tree_corrections": [
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e",
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+      "reason": "strict duplicate-key parsing, component-wise no-follow regular single-link snapshots, and reuse of the exact hash-verified bytes for payload plus ARCHIVE_MAP close review-package ambiguity, symlink/hard-link disclosure, and byte-swap races",
+      "review_status": "REVIEW_NEEDED",
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1kyw",
+        "PRRT_kwDOSxA_XM6T1kyx",
+        "PRRT_kwDOSxA_XM6T1kyz"
+      ],
+      "working_tree_sha256": "947a5297f299870078d3d57a55c827e85f295813fe01a86c73c6ca0d37166727"
+    },
     {
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
@@ -374,16 +387,19 @@
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
       "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
-      "reason": "portable-checkout, effect-free actual denial, no-live-self-hash-cycle, scanner-digest, and atomic-receipt fault regressions validate the review-needed runner corrections",
+      "reason": "portable-checkout, effect-free actual denial, no-live-self-hash-cycle, scanner-digest, review-builder attack self-tests, and atomic-receipt fault regressions validate the review-needed corrections",
       "review_status": "REVIEW_NEEDED",
       "review_threads": [
         "PRRT_kwDOSxA_XM6T1Cqd",
         "PRRT_kwDOSxA_XM6T1Pyj",
         "PRRT_kwDOSxA_XM6T1Pyk",
         "PRRT_kwDOSxA_XM6T1a1n",
-        "PRRT_kwDOSxA_XM6T1a1q"
+        "PRRT_kwDOSxA_XM6T1a1q",
+        "PRRT_kwDOSxA_XM6T1kyw",
+        "PRRT_kwDOSxA_XM6T1kyx",
+        "PRRT_kwDOSxA_XM6T1kyz"
       ],
-      "working_tree_sha256": "0c39cb4d4693641baeba54c73862032006d9b9ab1630d334530ba26e247bf9b7"
+      "working_tree_sha256": "64b0d72d24a10c3995b9ab4a483c6b3e93b709e0a8d752941251e17f07d428d3"
     }
   ]
 }
