@@ -10,15 +10,19 @@ from __future__ import annotations
 
 import argparse
 import copy
+import ctypes
 from dataclasses import dataclass, field
+import errno
 from hashlib import sha256
 import json
 import os
 from pathlib import Path, PurePosixPath
+import secrets
 import signal
 import stat
 import subprocess
 import sys
+import tempfile
 from typing import Any, Final
 
 
@@ -45,6 +49,7 @@ REVIEW_MANIFEST_RELATIVE: Final[str] = (
     "control-plane/registry/reports/"
     "2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml"
 )
+EXPECTED_REVIEW_MANIFEST_SHA256: Final[str] = "f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1"
 REVIEW_UNIT: Final[str] = "PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R3_ATOMIC_BUNDLE"
 SCANNER_RECORD_ID: Final[str] = "R2_scanner_verified_source"
 SCANNER_SOURCE_RELATIVE: Final[str] = "control-plane/registry/object-only-source-run-r2-scanner.py"
@@ -105,6 +110,7 @@ PROTECTED_PARTS: Final[frozenset[str]] = frozenset({"state-private", "secrets", 
 CATCHABLE_SIGNALS: Final[frozenset[int]] = frozenset({signal.SIGINT, signal.SIGTERM, signal.SIGHUP})
 MARKER_BYTES: Final[bytes] = b"run_id=PHASE5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_20260725_V0_1\nsealed_commit=555b3b538f6eb736e530c2912de678c5941f9985\n"
 TEMPORARY_RESULT_BYTES: Final[bytes] = b"status: IN_PROGRESS\nsource_bytes_persisted: false\n"
+RENAME_NOREPLACE: Final[int] = 1
 
 
 class Blocked(RuntimeError):
@@ -221,16 +227,26 @@ def _parse_bound_manifest(raw: bytes) -> tuple[tuple[dict[str, str], ...], str]:
     return tuple(records), successor_digest
 
 
-def _verify_bound_manifest() -> tuple[dict[str, bytes], str]:
+def _require_expected_review_manifest(raw: bytes) -> None:
+    if sha256(raw).hexdigest() != EXPECTED_REVIEW_MANIFEST_SHA256:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest_digest")
+
+
+def _verify_bound_manifest() -> tuple[dict[str, bytes], str, str]:
     try:
-        records, successor_digest = _parse_bound_manifest(_read_regular_workspace_file(REVIEW_MANIFEST_RELATIVE, "manifest"))
+        raw_manifest = _read_regular_workspace_file(REVIEW_MANIFEST_RELATIVE, "manifest")
+        _require_expected_review_manifest(raw_manifest)
+        records, successor_digest = _parse_bound_manifest(raw_manifest)
         sources = {entry["id"]: _read_regular_workspace_file(entry["path"], "manifest_source") for entry in records}
     except (Blocked, UnicodeError, ValueError, json.JSONDecodeError) as exc:
         raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest") from exc
     for entry in records:
         if sha256(sources[entry["id"]]).hexdigest() != entry["sha256"]:
             raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest_hash")
-    return sources, successor_digest
+    scanner_digest = next(
+        entry["sha256"] for entry in records if entry["id"] == SCANNER_RECORD_ID
+    )
+    return sources, successor_digest, scanner_digest
 
 
 def _load_verified_scanner(source: bytes, expected_digest: str) -> dict[str, Any]:
@@ -310,6 +326,267 @@ def _write_exclusive(path: Path, content: bytes, phase: str) -> None:
         os.fsync(descriptor)
     finally:
         os.close(descriptor)
+
+
+def write_all_receipt_fd(file_fd: int, content: bytes) -> None:
+    view = memoryview(content)
+    while view:
+        written = os.write(file_fd, view)
+        if written <= 0:
+            raise OSError(errno.EIO, "receipt write made no progress")
+        view = view[written:]
+
+
+def fsync_receipt_file_fd(file_fd: int) -> None:
+    os.fsync(file_fd)
+
+
+def close_receipt_file_fd(file_fd: int) -> None:
+    os.close(file_fd)
+
+
+def fsync_receipt_parent_fd(parent_fd: int) -> None:
+    os.fsync(parent_fd)
+
+
+def rename_receipt_noreplace(parent_fd: int, source_name: str, target_name: str) -> None:
+    libc = ctypes.CDLL(None, use_errno=True)
+    renameat2 = getattr(libc, "renameat2", None)
+    if renameat2 is None:
+        raise OSError(errno.ENOSYS, "renameat2 is unavailable")
+    renameat2.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    renameat2.restype = ctypes.c_int
+    result = renameat2(
+        parent_fd,
+        os.fsencode(source_name),
+        parent_fd,
+        os.fsencode(target_name),
+        RENAME_NOREPLACE,
+    )
+    if result != 0:
+        error_code = ctypes.get_errno()
+        raise OSError(error_code, os.strerror(error_code))
+
+
+def _open_bound_receipt_parent(target: Path, trusted_root: Path) -> tuple[int, str]:
+    root = Path(os.path.abspath(trusted_root))
+    candidate = Path(os.path.abspath(target))
+    try:
+        if root.resolve(strict=True) != root:
+            raise ValueError("trusted root realpath mismatch")
+        relative = candidate.relative_to(root)
+    except (OSError, ValueError) as exc:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "receipt_parent") from exc
+    if len(relative.parts) < 1:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "receipt_parent")
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC | os.O_NOFOLLOW
+    descriptor: int | None = None
+    try:
+        descriptor = os.open(root, flags)
+        for part in relative.parts[:-1]:
+            next_descriptor = os.open(part, flags, dir_fd=descriptor)
+            os.close(descriptor)
+            descriptor = next_descriptor
+        parent_stat = os.fstat(descriptor)
+        if not stat.S_ISDIR(parent_stat.st_mode):
+            raise OSError(errno.ENOTDIR, "receipt parent is not a directory")
+        return descriptor, relative.parts[-1]
+    except OSError as exc:
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "receipt_parent") from exc
+
+
+def _receipt_temp_prefix(target_name: str) -> str:
+    return f".{target_name}.agents-os-receipt-txn-"
+
+
+def _entry_identity(parent_fd: int, name: str) -> tuple[int, int] | None:
+    try:
+        item = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    except FileNotFoundError:
+        return None
+    except OSError:
+        return (-1, -1)
+    if not stat.S_ISREG(item.st_mode):
+        return (-1, -1)
+    return item.st_dev, item.st_ino
+
+
+def _unlink_receipt_entry_if_identity(
+    parent_fd: int,
+    name: str,
+    identity: tuple[int, int],
+) -> bool:
+    if _entry_identity(parent_fd, name) != identity:
+        return False
+    try:
+        os.unlink(name, dir_fd=parent_fd)
+    except OSError:
+        return False
+    return _entry_identity(parent_fd, name) is None
+
+
+def _read_exact_receipt_entry(
+    parent_fd: int,
+    name: str,
+    identity: tuple[int, int],
+    expected: bytes,
+) -> None:
+    descriptor = os.open(
+        name,
+        os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW,
+        dir_fd=parent_fd,
+    )
+    try:
+        before = os.fstat(descriptor)
+        chunks: list[bytes] = []
+        while True:
+            chunk = os.read(descriptor, 65536)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        after = os.fstat(descriptor)
+    finally:
+        os.close(descriptor)
+    if (
+        not stat.S_ISREG(before.st_mode)
+        or (before.st_dev, before.st_ino) != identity
+        or (after.st_dev, after.st_ino) != identity
+        or before.st_nlink != 1
+        or after.st_nlink != 1
+        or stat.S_IMODE(before.st_mode) != 0o600
+        or stat.S_IMODE(after.st_mode) != 0o600
+        or before.st_size != after.st_size
+        or before.st_mtime_ns != after.st_mtime_ns
+        or before.st_ctime_ns != after.st_ctime_ns
+        or b"".join(chunks) != expected
+    ):
+        raise OSError(errno.EIO, "receipt entry failed exact identity/byte verification")
+
+
+def _cleanup_failed_receipt_commit(
+    parent_fd: int,
+    target_name: str,
+    temp_name: str | None,
+    identity: tuple[int, int] | None,
+) -> bool:
+    if identity is None:
+        return temp_name is None and _entry_identity(parent_fd, target_name) is None
+    removed = False
+    for name in (target_name, temp_name):
+        if name is not None and _entry_identity(parent_fd, name) == identity:
+            removed = _unlink_receipt_entry_if_identity(parent_fd, name, identity) or removed
+    fsynced = True
+    if removed:
+        try:
+            fsync_receipt_parent_fd(parent_fd)
+        except OSError:
+            fsynced = False
+    target_identity = _entry_identity(parent_fd, target_name)
+    temp_identity = _entry_identity(parent_fd, temp_name) if temp_name is not None else None
+    return fsynced and target_identity is None and temp_identity is None
+
+
+def _commit_receipt_atomically(
+    target: Path,
+    content: bytes,
+    *,
+    trusted_root: Path,
+) -> None:
+    parent_fd, target_name = _open_bound_receipt_parent(target, trusted_root)
+    temp_name: str | None = None
+    temp_fd: int | None = None
+    identity: tuple[int, int] | None = None
+    try:
+        if _entry_identity(parent_fd, target_name) is not None:
+            raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "receipt_target")
+        prefix = _receipt_temp_prefix(target_name)
+        if any(name.startswith(prefix) and name.endswith(".tmp") for name in os.listdir(parent_fd)):
+            raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "receipt_transaction_residue")
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC | os.O_NOFOLLOW
+        for _ in range(16):
+            candidate = f"{prefix}{secrets.token_hex(16)}.tmp"
+            try:
+                temp_fd = os.open(candidate, flags, 0o600, dir_fd=parent_fd)
+                temp_name = candidate
+                break
+            except FileExistsError:
+                continue
+        if temp_fd is None or temp_name is None:
+            raise OSError(errno.EEXIST, "receipt transaction temp collisions exhausted")
+        os.fchmod(temp_fd, 0o600)
+        created = os.fstat(temp_fd)
+        if not stat.S_ISREG(created.st_mode) or created.st_nlink != 1:
+            raise OSError(errno.EIO, "receipt transaction temp shape mismatch")
+        identity = (created.st_dev, created.st_ino)
+        write_all_receipt_fd(temp_fd, content)
+        os.ftruncate(temp_fd, len(content))
+        fsync_receipt_file_fd(temp_fd)
+        close_receipt_file_fd(temp_fd)
+        temp_fd = None
+        _read_exact_receipt_entry(parent_fd, temp_name, identity, content)
+        rename_receipt_noreplace(parent_fd, temp_name, target_name)
+        fsync_receipt_parent_fd(parent_fd)
+        _read_exact_receipt_entry(parent_fd, target_name, identity, content)
+    except Blocked:
+        if identity is None and temp_name is None:
+            raise
+        if temp_fd is not None:
+            try:
+                os.close(temp_fd)
+            except OSError:
+                pass
+            temp_fd = None
+        if not _cleanup_failed_receipt_commit(
+            parent_fd,
+            target_name,
+            temp_name,
+            identity,
+        ):
+            raise Blocked(
+                "BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN",
+                "receipt_commit",
+            )
+        raise
+    except Exception as exc:
+        if temp_fd is not None:
+            try:
+                os.close(temp_fd)
+            except OSError:
+                pass
+            temp_fd = None
+        cleanup_proven = _cleanup_failed_receipt_commit(
+            parent_fd,
+            target_name,
+            temp_name,
+            identity,
+        )
+        if cleanup_proven:
+            raise Blocked("BLOCKED_RECEIPT_WRITE_UNVERIFIED", "receipt") from exc
+        raise Blocked(
+            "BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN",
+            "receipt_commit",
+        ) from exc
+    finally:
+        if temp_fd is not None:
+            try:
+                os.close(temp_fd)
+            except OSError:
+                pass
+        try:
+            os.close(parent_fd)
+        except OSError:
+            pass
 
 
 def _create_owned_root(state: RunState) -> None:
@@ -450,7 +727,11 @@ def _receipt_bytes(state: RunState, package_sha256: str) -> bytes:
 
 
 def _write_receipt(state: RunState, package_sha256: str) -> None:
-    _write_exclusive(RECEIPT_TARGET, _receipt_bytes(state, package_sha256), "receipt")
+    _commit_receipt_atomically(
+        RECEIPT_TARGET,
+        _receipt_bytes(state, package_sha256),
+        trusted_root=WORKSPACE_ROOT,
+    )
 
 
 def run_actual() -> int:
@@ -459,10 +740,10 @@ def run_actual() -> int:
     guard = SignalGuard()
     try:
         guard.enter()
-        sources, package_sha256 = _verify_bound_manifest()
+        sources, package_sha256, scanner_digest = _verify_bound_manifest()
         _assert_preconditions()
         _create_owned_root(state)
-        scanner = _load_verified_scanner(sources[SCANNER_RECORD_ID], sha256(sources[SCANNER_RECORD_ID]).hexdigest())
+        scanner = _load_verified_scanner(sources[SCANNER_RECORD_ID], scanner_digest)
         _run_exact_inventory(state, scanner)
         if guard.has_pending():
             raise Blocked("BLOCKED_INTERRUPTED_OR_SIGNALLED", "pending_signal_before_terminal_commit")
@@ -480,8 +761,10 @@ def run_actual() -> int:
             state.result, state.failure_phase = "BLOCKED_INTERRUPTED_OR_SIGNALLED", "pending_signal_terminal_commit"
         try:
             _write_receipt(state, package_sha256)
+        except Blocked as exc:
+            state.result, state.failure_phase = exc.result, exc.phase
         except Exception:
-            state.result, state.failure_phase = "BLOCKED_RECEIPT_WRITE_UNVERIFIED", "receipt"
+            state.result, state.failure_phase = "BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN", "receipt_commit"
         if state.result == "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY":
             guard.success_exit()
         guard.restore_failure_mask()
@@ -538,7 +821,151 @@ def self_test() -> int:
         failures.append("protected_path")
     except ValueError:
         pass
-    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 2, "failures": failures}, sort_keys=True))
+    case_count = len(cases) + 2
+
+    exact_manifest = b""
+    try:
+        exact_manifest = _read_regular_checkout_file(REVIEW_MANIFEST_RELATIVE, "self_test_manifest")
+        _require_expected_review_manifest(exact_manifest)
+    except Blocked:
+        failures.append("exact_manifest_anchor")
+    case_count += 1
+    try:
+        _require_expected_review_manifest(exact_manifest + b"\n")
+        failures.append("substituted_manifest_anchor")
+    except Blocked:
+        pass
+    case_count += 1
+
+    with tempfile.TemporaryDirectory(prefix="agents-os-r3-receipt-self-test-") as directory:
+        root = Path(directory)
+        content = b'{"result":"OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY"}\n'
+
+        success_target = root / "success-receipt.json"
+        try:
+            _commit_receipt_atomically(success_target, content, trusted_root=root)
+            if success_target.read_bytes() != content:
+                failures.append("atomic_receipt_success_bytes")
+            if list(root.glob(f"{_receipt_temp_prefix(success_target.name)}*.tmp")):
+                failures.append("atomic_receipt_success_residue")
+        except Blocked:
+            failures.append("atomic_receipt_success")
+        case_count += 1
+
+        def run_receipt_fault(
+            name: str,
+            helper_name: str,
+            replacement: Any,
+        ) -> None:
+            target = root / f"{name}.json"
+            original = globals()[helper_name]
+            globals()[helper_name] = replacement
+            try:
+                try:
+                    _commit_receipt_atomically(target, content, trusted_root=root)
+                    failures.append(f"{name}_accepted")
+                except Blocked:
+                    pass
+            finally:
+                globals()[helper_name] = original
+            if target.exists():
+                failures.append(f"{name}_target_residue")
+            if list(root.glob(f"{_receipt_temp_prefix(target.name)}*.tmp")):
+                failures.append(f"{name}_temp_residue")
+
+        def partial_receipt_write(file_fd: int, data: bytes) -> None:
+            os.write(file_fd, data[: max(1, len(data) // 3)])
+            raise OSError(errno.EIO, "injected partial receipt write")
+
+        run_receipt_fault(
+            "partial_write",
+            "write_all_receipt_fd",
+            partial_receipt_write,
+        )
+        case_count += 1
+
+        run_receipt_fault(
+            "file_fsync",
+            "fsync_receipt_file_fd",
+            lambda _file_fd: (_ for _ in ()).throw(
+                OSError(errno.EIO, "injected receipt file fsync failure")
+            ),
+        )
+        case_count += 1
+
+        def close_then_fail(file_fd: int) -> None:
+            os.close(file_fd)
+            raise OSError(errno.EIO, "injected receipt close failure")
+
+        run_receipt_fault(
+            "file_close",
+            "close_receipt_file_fd",
+            close_then_fail,
+        )
+        case_count += 1
+
+        original_parent_fsync = fsync_receipt_parent_fd
+        parent_fsync_state = {"calls": 0}
+
+        def fail_first_parent_fsync(parent_fd: int) -> None:
+            parent_fsync_state["calls"] += 1
+            if parent_fsync_state["calls"] == 1:
+                raise OSError(errno.EIO, "injected receipt parent fsync failure")
+            original_parent_fsync(parent_fd)
+
+        run_receipt_fault(
+            "parent_fsync",
+            "fsync_receipt_parent_fd",
+            fail_first_parent_fsync,
+        )
+        if parent_fsync_state["calls"] < 2:
+            failures.append("parent_fsync_cleanup_not_attempted")
+        case_count += 1
+
+        persistent_fsync_target = root / "persistent-parent-fsync.json"
+        original_parent_fsync = fsync_receipt_parent_fd
+        globals()["fsync_receipt_parent_fd"] = lambda _parent_fd: (
+            (_ for _ in ()).throw(
+                OSError(errno.EIO, "injected persistent receipt parent fsync failure")
+            )
+        )
+        try:
+            try:
+                _commit_receipt_atomically(
+                    persistent_fsync_target,
+                    content,
+                    trusted_root=root,
+                )
+                failures.append("persistent_parent_fsync_accepted")
+            except Blocked as exc:
+                if exc.result != "BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN":
+                    failures.append("persistent_parent_fsync_not_unknown")
+        finally:
+            globals()["fsync_receipt_parent_fd"] = original_parent_fsync
+        if persistent_fsync_target.exists():
+            failures.append("persistent_parent_fsync_target_residue")
+        if list(
+            root.glob(
+                f"{_receipt_temp_prefix(persistent_fsync_target.name)}*.tmp"
+            )
+        ):
+            failures.append("persistent_parent_fsync_temp_residue")
+        case_count += 1
+
+        occupied_target = root / "occupied-receipt.json"
+        occupied_target.write_bytes(b"existing\n")
+        try:
+            _commit_receipt_atomically(occupied_target, content, trusted_root=root)
+            failures.append("occupied_receipt_replaced")
+        except Blocked:
+            pass
+        if occupied_target.read_bytes() != b"existing\n":
+            failures.append("occupied_receipt_changed")
+        if list(root.glob(f"{_receipt_temp_prefix(occupied_target.name)}*.tmp")):
+            failures.append("occupied_receipt_temp_residue")
+        case_count += 1
+
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": case_count, "failures": failures}, sort_keys=True))
     return 0 if not failures else 1
 
 

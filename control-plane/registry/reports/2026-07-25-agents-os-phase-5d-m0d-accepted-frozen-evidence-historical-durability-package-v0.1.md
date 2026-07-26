@@ -30,7 +30,7 @@ base_tree: d0bd0b967ead4209a828cd1133ceab2b1c9a4a54
 
 ```yaml
 path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-accepted-frozen-evidence-historical-durability-v0.1.manifest.json
-sha256: c662edae96097ae04de60157b68e713b16e6a61115cff909308bc510d75e109b
+sha256: da434607071acd9dc5284d0e71530d8e56d92b84c32e30837b36cb26133bf4c6
 artifact_count: 58
 historical_anchor_exact_artifact_count: 58
 current_worktree_correction_count: 2
@@ -60,14 +60,23 @@ The following current paths intentionally differ from their frozen
 
 | Path | Historical SHA-256 | Current correction SHA-256 | Status |
 |---|---|---|---|
-| `control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py` | `3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0` | `6bbe5cfdff98e3b5f5f11d8f01be1b01e3b41602f6112f8069049484d0838e90` | `REVIEW_NEEDED` |
-| `control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py` | `cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601` | `fc767f1df71c4604295a21a8756f96b2b78b21303384f8e8d9c2777492d4a2a7` | `REVIEW_NEEDED` |
+| `control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py` | `3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0` | `f23b43bd3ce0df0610fd05ce183c2f974722288b489e5494d42c64867cb22407` | `REVIEW_NEEDED` |
+| `control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py` | `cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601` | `52bf8a39b35e05c7872e3a23f1909cf5bde04cbb9a0901e337796df0a49b0684` | `REVIEW_NEEDED` |
 
-The runner now derives only its offline fixture root from `__file__`. Its
-actual-mode canonical root, receipt path, run root, Git object source, and hard
-stops are unchanged. The validator adds a copied-checkout regression. Neither
-correction updates the old R3 freeze manifest or decision, and neither carries
-forward any `--actual` authority.
+The runner derives only its offline fixture root from `__file__`. For actual
+mode it now verifies the exact immutable R3 manifest digest before parsing any
+manifest-supplied source, passes the scanner digest declared by those anchored
+bytes, and publishes a receipt only through an exact sibling-temp write,
+file-`fsync`, no-replace atomic rename, parent-directory `fsync`, and final
+no-follow identity/byte verification. A failed receipt commit is removed and
+durably reconciled when provable; otherwise its outcome is explicitly
+`BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN`.
+
+The validator adds copied-checkout, manifest-substitution, scanner-digest, and
+receipt write/`fsync`/close/parent-`fsync` fault regressions. The actual-mode
+canonical root, receipt path, run root, Git object source, and hard stops remain
+unchanged. Neither correction updates the old R3 freeze manifest or decision,
+and neither carries forward any `--actual` authority.
 
 ## 5. Explicit Exclusions
 

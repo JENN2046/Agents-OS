@@ -972,6 +972,71 @@ def validate_replacement_security_metadata(
     return errors
 
 
+def queue_transaction_residue_errors(
+    binding: dict[str, Any],
+    *,
+    allowed_name: str | None = None,
+    allowed_fd: int | None = None,
+) -> list[str]:
+    parent_fd = int(binding["parent_fd"])
+    queue_name = str(binding["name"])
+    prefix = f".{queue_name}.agents-os-txn-"
+    errors = validate_queue_parent_path_identity(binding)
+    try:
+        names = sorted(
+            name
+            for name in os.listdir(parent_fd)
+            if name.startswith(prefix) and name.endswith(".tmp")
+        )
+    except OSError as exc:
+        return errors + [f"queue transaction residue inventory failed: {exc}"]
+    for name in names:
+        if allowed_name is not None and name == allowed_name:
+            if allowed_fd is None or not named_entry_matches_descriptor(
+                parent_fd,
+                name,
+                allowed_fd,
+            ):
+                errors.append(
+                    f"current queue transaction temp identity mismatch: {name}"
+                )
+            continue
+        descriptor: int | None = None
+        try:
+            descriptor = os.open(
+                name,
+                os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW,
+                dir_fd=parent_fd,
+            )
+            descriptor_stat = os.fstat(descriptor)
+            entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+            if (
+                not stat.S_ISREG(descriptor_stat.st_mode)
+                or not stat.S_ISREG(entry_stat.st_mode)
+                or (descriptor_stat.st_dev, descriptor_stat.st_ino)
+                != (entry_stat.st_dev, entry_stat.st_ino)
+            ):
+                raise OSError(errno.EINVAL, "residue is not one bound regular file")
+            errors.append(
+                "pre-existing queue transaction residue requires reconciliation: "
+                f"name={name} device={descriptor_stat.st_dev} "
+                f"inode={descriptor_stat.st_ino} nlink={descriptor_stat.st_nlink} "
+                f"size={descriptor_stat.st_size}"
+            )
+        except OSError as exc:
+            errors.append(
+                "pre-existing queue transaction residue requires reconciliation: "
+                f"name={name} identity_unverified={exc}"
+            )
+        finally:
+            if descriptor is not None:
+                try:
+                    os.close(descriptor)
+                except OSError:
+                    pass
+    return errors
+
+
 def open_queue_transaction_temp(
     binding: dict[str, Any],
     expected_security_metadata: tuple[int, int, int],
@@ -1204,14 +1269,19 @@ def transactional_replace_queue_binding(
     rollback_performed = False
     temp_cleanup_confirmed = False
     parent_directory_fsynced = False
+    residue_detected = False
 
+    initial_residue_errors = queue_transaction_residue_errors(binding)
+    if initial_residue_errors:
+        residue_detected = True
+        errors.extend(initial_residue_errors)
     expected_security_metadata, metadata_error = original_queue_security_metadata(
         original_snapshot
     )
     if metadata_error or expected_security_metadata is None:
         errors.append(metadata_error or "original queue security metadata could not be bound")
-        temp_cleanup_confirmed = True
-    else:
+        temp_cleanup_confirmed = not residue_detected
+    elif not errors:
         temp_name, temp_fd, temp_error = open_queue_transaction_temp(
             binding,
             expected_security_metadata,
@@ -1220,6 +1290,15 @@ def transactional_replace_queue_binding(
             errors.append(temp_error or "queue transaction temp could not be created")
             if temp_name is None and temp_fd is None:
                 temp_cleanup_confirmed = True
+    if not errors and temp_name is not None and temp_fd is not None:
+        namespace_errors = queue_transaction_residue_errors(
+            binding,
+            allowed_name=temp_name,
+            allowed_fd=temp_fd,
+        )
+        if namespace_errors:
+            residue_detected = True
+            errors.extend(namespace_errors)
     if not errors:
         try:
             write_transaction_temp_fd(temp_fd, data)
@@ -1361,6 +1440,13 @@ def transactional_replace_queue_binding(
                 expected_security_metadata,
             )
         )
+
+    final_residue_errors = queue_transaction_residue_errors(binding)
+    if final_residue_errors:
+        residue_detected = True
+        errors.extend(final_residue_errors)
+    if residue_detected:
+        temp_cleanup_confirmed = False
 
     queue_state, final_queue_sha256 = classify_transaction_queue_state(
         binding,
@@ -3108,6 +3194,13 @@ def reviewed_route_adoption_apply_gate(
                         "final_queue_sha256": str(snapshot["sha256"]),
                     }
                 )
+                residue_errors = queue_transaction_residue_errors(binding)
+                if residue_errors:
+                    transaction["temp_cleanup_confirmed"] = False
+                    errors.extend(
+                        f"queue transaction residue: {error}"
+                        for error in residue_errors
+                    )
                 handoff_reconciliation = route_choice_handoff_reconciliation_from_snapshot(
                     Path(binding["path"]),
                     snapshot,

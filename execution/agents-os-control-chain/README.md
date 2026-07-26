@@ -89,7 +89,12 @@ not preserve xattrs, POSIX ACLs, SELinux labels, or other extended metadata,
 the apply gate rejects any original inode carrying them before exchange.
 Extended metadata appearing on a replacement inode also blocks `COMMITTED`;
 pre-exchange detection returns `NO_WRITE`, while post-exchange detection must
-prove rollback or report `PARTIAL_OR_UNKNOWN`.
+prove rollback or report `PARTIAL_OR_UNKNOWN`. Every invocation inventories
+the bound parent directory for the queue-specific
+`.agents-os-txn-*.tmp` namespace before creating a new transaction and again
+before final classification. A prior regular-file residue is reported with its
+device/inode identity; a link or otherwise uninspectable residue is never
+followed. Either form requires explicit reconciliation and blocks adoption.
 
 Failure handling classifies validation failure, scope violation, protected
 path detection, dirty worktree conflict, unknown action type, P3 signal, and

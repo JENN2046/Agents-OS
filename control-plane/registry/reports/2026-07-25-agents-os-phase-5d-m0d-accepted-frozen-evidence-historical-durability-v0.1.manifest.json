@@ -359,19 +359,27 @@
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
       "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
-      "reason": "offline fixture lookup must bind the current checkout while actual mode retains its canonical-root hard stop",
+      "reason": "offline fixture lookup binds the current checkout; actual mode separately anchors the immutable R3 manifest before parsing or scanner load and commits receipts through a no-replace sibling transaction",
       "review_status": "REVIEW_NEEDED",
-      "review_thread": "PRRT_kwDOSxA_XM6T1Cqd",
-      "working_tree_sha256": "6bbe5cfdff98e3b5f5f11d8f01be1b01e3b41602f6112f8069049484d0838e90"
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1Cqd",
+        "PRRT_kwDOSxA_XM6T1Pyj",
+        "PRRT_kwDOSxA_XM6T1Pyk"
+      ],
+      "working_tree_sha256": "f23b43bd3ce0df0610fd05ce183c2f974722288b489e5494d42c64867cb22407"
     },
     {
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
       "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
-      "reason": "portable-checkout regression validates the corrected offline fixture boundary",
+      "reason": "portable-checkout, immutable-manifest-anchor, scanner-digest, and atomic-receipt fault regressions validate the review-needed runner corrections",
       "review_status": "REVIEW_NEEDED",
-      "review_thread": "PRRT_kwDOSxA_XM6T1Cqd",
-      "working_tree_sha256": "fc767f1df71c4604295a21a8756f96b2b78b21303384f8e8d9c2777492d4a2a7"
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1Cqd",
+        "PRRT_kwDOSxA_XM6T1Pyj",
+        "PRRT_kwDOSxA_XM6T1Pyk"
+      ],
+      "working_tree_sha256": "52bf8a39b35e05c7872e3a23f1909cf5bde04cbb9a0901e337796df0a49b0684"
     }
   ]
 }

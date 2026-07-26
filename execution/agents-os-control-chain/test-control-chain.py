@@ -1760,6 +1760,52 @@ prior_task: closed
                 "SIGKILL after temp fsync must leave exact old active queue bytes",
                 failures,
             )
+            preexchange_residue = list(
+                preexchange_kill_queue_path.parent.glob(
+                    f".{preexchange_kill_queue_path.name}.agents-os-txn-*.tmp"
+                )
+            )
+            check(
+                len(preexchange_residue) == 1,
+                "SIGKILL after temp fsync must leave one discoverable transaction residue",
+                failures,
+            )
+            preexchange_replay = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                preexchange_kill_queue_path,
+                apply=True,
+            )
+            check(
+                preexchange_replay["passed"] is False
+                and preexchange_replay["transaction_outcome"] == "NO_WRITE"
+                and preexchange_replay["queue_state"] == "UNCHANGED"
+                and preexchange_replay["queue_commit_attempted"] is False
+                and preexchange_replay["write_performed"] is False
+                and preexchange_replay["temp_cleanup_confirmed"] is False
+                and preexchange_replay["requires_jenn_decision"] is True
+                and preexchange_replay["queue_adoption_authorized"] is False
+                and preexchange_kill_queue_path.read_text(encoding="utf-8")
+                == route_queue_text,
+                (
+                    "next invocation after pre-exchange SIGKILL must fail closed on "
+                    f"bound residue without writing: {preexchange_replay}"
+                ),
+                failures,
+            )
+            check(
+                any(
+                    "residue requires reconciliation" in error
+                    and "device=" in error
+                    and "inode=" in error
+                    for error in preexchange_replay["errors"]
+                ),
+                (
+                    "pre-exchange SIGKILL residue must carry identity-bound "
+                    f"reconciliation evidence: {preexchange_replay}"
+                ),
+                failures,
+            )
 
             postexchange_kill_queue_path = Path(temp_dir) / "postexchange-kill-queue.md"
             postexchange_kill_queue_path.write_text(route_queue_text, encoding="utf-8")
@@ -1791,6 +1837,101 @@ prior_task: closed
                 "SIGKILL after atomic exchange must leave exact new active queue bytes, never a torn queue",
                 failures,
             )
+            postexchange_residue = list(
+                postexchange_kill_queue_path.parent.glob(
+                    f".{postexchange_kill_queue_path.name}.agents-os-txn-*.tmp"
+                )
+            )
+            check(
+                len(postexchange_residue) == 1,
+                "SIGKILL after atomic exchange must leave one discoverable transaction residue",
+                failures,
+            )
+            postexchange_replay = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                postexchange_kill_queue_path,
+                apply=True,
+            )
+            check(
+                postexchange_replay["passed"] is False
+                and postexchange_replay["transaction_outcome"] == "NO_WRITE"
+                and postexchange_replay["queue_state"] == "UNCHANGED"
+                and postexchange_replay["queue_commit_attempted"] is False
+                and postexchange_replay["write_performed"] is False
+                and postexchange_replay["temp_cleanup_confirmed"] is False
+                and postexchange_replay["requires_jenn_decision"] is True
+                and postexchange_replay["queue_adoption_authorized"] is False
+                and postexchange_kill_queue_path.read_text(encoding="utf-8")
+                == expected_postexchange_text,
+                (
+                    "next invocation after post-exchange SIGKILL must preserve exact "
+                    f"new bytes while requiring residue reconciliation: {postexchange_replay}"
+                ),
+                failures,
+            )
+            check(
+                any(
+                    "residue requires reconciliation" in error
+                    and "device=" in error
+                    and "inode=" in error
+                    for error in postexchange_replay["errors"]
+                ),
+                (
+                    "post-exchange SIGKILL residue must carry identity-bound "
+                    f"reconciliation evidence: {postexchange_replay}"
+                ),
+                failures,
+            )
+
+        symlink_residue_queue_path = Path(temp_dir) / "symlink-residue-queue.md"
+        symlink_residue_queue_path.write_text(route_queue_text, encoding="utf-8")
+        symlink_residue_target = Path(temp_dir) / "symlink-residue-target.md"
+        symlink_residue_target.write_text("do not follow\n", encoding="utf-8")
+        symlink_residue_name = (
+            f".{symlink_residue_queue_path.name}.agents-os-txn-"
+            f"{'0' * 32}.tmp"
+        )
+        symlink_residue_path = symlink_residue_queue_path.parent / symlink_residue_name
+        symlink_residue_path.symlink_to(symlink_residue_target)
+        symlink_residue_result = chain.reviewed_route_adoption_apply_gate(
+            route_choice_proposal,
+            route_review,
+            symlink_residue_queue_path,
+            apply=True,
+        )
+        check(
+            symlink_residue_result["passed"] is False
+            and symlink_residue_result["transaction_outcome"] == "NO_WRITE"
+            and symlink_residue_result["queue_state"] == "UNCHANGED"
+            and symlink_residue_result["queue_commit_attempted"] is False
+            and symlink_residue_result["write_performed"] is False
+            and symlink_residue_result["temp_cleanup_confirmed"] is False
+            and symlink_residue_result["requires_jenn_decision"] is True
+            and symlink_residue_result["queue_adoption_authorized"] is False
+            and symlink_residue_queue_path.read_text(encoding="utf-8")
+            == route_queue_text
+            and symlink_residue_target.read_text(encoding="utf-8")
+            == "do not follow\n",
+            (
+                "symlink transaction residue must fail closed without following or "
+                f"writing either path: {symlink_residue_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "residue requires reconciliation" in error
+                and "identity_unverified=" in error
+                and symlink_residue_name in error
+                for error in symlink_residue_result["errors"]
+            ),
+            (
+                "symlink transaction residue must be reported as no-follow "
+                f"identity-unverified evidence: {symlink_residue_result}"
+            ),
+            failures,
+        )
 
         adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, route_review, route_queue_path)
         check(adoption_preview["passed"], f"reviewed route adoption preview should pass: {adoption_preview['errors']}", failures)
@@ -1969,7 +2110,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=56 failures={len(failures)}")
+        print(f"cases=58 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -2009,12 +2150,14 @@ old_task: closed
     print("PASS commit-cleanup parent-fsync transaction fault fixture")
     print("PASS post-exchange validation transaction fault fixture")
     print("PASS process-kill old-or-new transaction fixture")
+    print("PASS process-kill transaction residue reconciliation fixture")
+    print("PASS transaction residue no-follow fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=56 failures=0")
+    print("cases=58 failures=0")
     return 0
 
 

@@ -40,10 +40,17 @@ def validate(document: Any) -> list[str]:
     for required in (
         "def _load_verified_scanner",
         "def _verify_bound_manifest",
+        "EXPECTED_REVIEW_MANIFEST_SHA256",
+        "_require_expected_review_manifest(raw_manifest)",
+        "scanner_digest = next(",
+        "_load_verified_scanner(sources[SCANNER_RECORD_ID], scanner_digest)",
         "exec(compile(source",
         "signal.SIG_BLOCK, CATCHABLE_SIGNALS",
         "pending_signal_terminal_commit",
         "guard.success_exit()",
+        "def _commit_receipt_atomically",
+        "rename_receipt_noreplace(parent_fd, temp_name, target_name)",
+        "fsync_receipt_parent_fd(parent_fd)",
         "def _load_fixed_fixture",
         "CHECKOUT_ROOT: Final[Path] = Path(__file__).resolve().parents[2]",
         "_read_regular_checkout_file(FIXTURE_RELATIVE, \"fixture\")",
@@ -54,6 +61,14 @@ def validate(document: Any) -> list[str]:
             errors.append(f"runner:SOURCE_BINDING:{required}")
     if "runpy" in source:
         errors.append("runner:TOP_LEVEL_DYNAMIC_SCANNER_LOAD")
+    if source.index("_require_expected_review_manifest(raw_manifest)") > source.index(
+        "_parse_bound_manifest(raw_manifest)"
+    ):
+        errors.append("runner:MANIFEST_ANCHOR_ORDER")
+    if "sha256(sources[SCANNER_RECORD_ID]).hexdigest()" in source:
+        errors.append("runner:TAUTOLOGICAL_SCANNER_DIGEST")
+    if "_write_exclusive(RECEIPT_TARGET" in source:
+        errors.append("runner:NONTRANSACTIONAL_RECEIPT_WRITE")
     if source.index("_write_receipt(state, package_sha256)") > source.index("guard.success_exit()"):
         errors.append("runner:SUCCESS_COMMIT_ORDER")
     return errors
@@ -96,6 +111,12 @@ def self_test() -> int:
         valid = _subprocess([sys.executable, str(RUNNER_PATH), "--fixture"])
         if valid.returncode != 0 or b'"result": "PASS_NO_BLOCKER"' not in valid.stdout:
             failures.append("fixed_fixture_failed")
+        runner_self_test = _subprocess([sys.executable, str(RUNNER_PATH), "--self-test"])
+        if (
+            runner_self_test.returncode != 0
+            or b'"result": "PASS"' not in runner_self_test.stdout
+        ):
+            failures.append("runner_self_test_failed")
 
         checkout_root = Path(directory) / "portable-checkout"
         checkout_registry = checkout_root / "control-plane" / "registry"
@@ -131,7 +152,7 @@ def self_test() -> int:
     )
     if _subprocess([sys.executable, "-c", direct_exit]).returncode != 0:
         failures.append("success_exit_probe")
-    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 6, "failures": failures}, sort_keys=True))
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 7, "failures": failures}, sort_keys=True))
     return 0 if not failures else 1
 
 
