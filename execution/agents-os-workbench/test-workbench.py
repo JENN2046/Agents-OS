@@ -1662,6 +1662,46 @@ def main() -> int:
             "generic P3 Workbench attacks must preserve exact queue bytes",
             failures,
         )
+        generic_p3_run_record_root = Path(temp_dir) / "generic-p3-run-records"
+        generic_p3_run_record_root.mkdir()
+        generic_p3_run = workbench.build_run(
+            "Continue current work.",
+            generic_p3_gate_queue_path,
+            record_root=generic_p3_run_record_root,
+            max_steps=3,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            generic_p3_run["passed"] is True
+            and generic_p3_run["steps_performed"] == 1
+            and generic_p3_run["record_write_count"] == 1
+            and generic_p3_run["local_safe_execution_count"] == 0,
+            "generic P3 run must stop after one boundary record without execution",
+            failures,
+        )
+        check(
+            generic_p3_run["stopped_reason"]
+            == "governance_decision_required"
+            and generic_p3_run["next_step"]["status"]
+            == "governance_decision_required"
+            and workbench.goal_state_for_next_step(
+                generic_p3_run["next_step"]
+            )
+            == "waiting_at_boundary",
+            "generic P3 run must preserve the Jenn governance boundary",
+            failures,
+        )
+        check(
+            generic_p3_run["active_queue_modified"] is False
+            and generic_p3_run["queue_write_authorized"] is False
+            and generic_p3_run["execution_authorized"] is False
+            and generic_p3_run["provider_call_authorized"] is False
+            and generic_p3_run["service_start_authorized"] is False
+            and generic_p3_gate_queue_path.read_text(encoding="utf-8")
+            == generic_p3_gate_queue_text,
+            "generic P3 run must preserve queue bytes and all effect denials",
+            failures,
+        )
         route_promotion_preview = workbench.build_queue_promotion_apply_gate(
             route_apply_queue_path,
             apply=False,

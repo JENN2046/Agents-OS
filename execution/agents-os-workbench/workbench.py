@@ -3087,6 +3087,7 @@ def validate_next_step_selector(result: dict[str, Any]) -> list[str]:
 
 
 RUN_STOP_STATUSES = {
+    "governance_decision_required",
     "route_choice_required",
     "jenn_decision_required",
     "nobao_review_required",
@@ -4297,6 +4298,20 @@ def validate_workbench() -> dict[str, Any]:
             record_root=advance_record_root,
             allowed_queue_root=Path(temp_dir),
         )
+        governance_run_queue_path = Path(temp_dir) / "governance-run-queue.md"
+        governance_run_queue_path.write_text(
+            fixture_queue_text("Call provider and start service"),
+            encoding="utf-8",
+        )
+        governance_run_record_root = Path(temp_dir) / "governance-run-records"
+        governance_run_record_root.mkdir()
+        governance_run = build_run(
+            "Continue current work.",
+            governance_run_queue_path,
+            record_root=governance_run_record_root,
+            max_steps=3,
+            allowed_queue_root=Path(temp_dir),
+        )
         goal_queue_path = Path(temp_dir) / "goal-queue.md"
         goal_queue_path.write_text(fixture_queue_text(), encoding="utf-8")
         safe_goal = build_goal_session(
@@ -4620,6 +4635,31 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("safe run should stop at review_queue_proposal")
     if safe_run.get("active_queue_modified") is not False:
         errors.append("safe run without apply_intake must not modify queue")
+    if governance_run.get("passed") is not True:
+        errors.extend(
+            f"governance run: {error}"
+            for error in governance_run.get("errors", [])
+        )
+    if governance_run.get("steps_performed") != 1:
+        errors.append("governance run must stop after its first boundary step")
+    if governance_run.get("record_write_count") != 1:
+        errors.append("governance run must write exactly one boundary record")
+    if (
+        governance_run.get("stopped_reason")
+        != "governance_decision_required"
+    ):
+        errors.append("governance run must preserve its Jenn boundary reason")
+    if (
+        governance_run.get("next_step", {}).get("status")
+        != "governance_decision_required"
+    ):
+        errors.append("governance run must surface the Jenn decision boundary")
+    if governance_run.get("local_safe_execution_count") != 0:
+        errors.append("governance run must not perform local-safe execution")
+    if goal_state_for_next_step(governance_run.get("next_step", {})) != (
+        "waiting_at_boundary"
+    ):
+        errors.append("governance run must project a waiting goal state")
     if safe_goal.get("passed") is not True:
         errors.extend(f"safe goal: {error}" for error in safe_goal.get("errors", []))
     if safe_goal.get("run_summary", {}).get("local_safe_execution_count") != 1:
@@ -4879,6 +4919,9 @@ def validate_workbench() -> dict[str, Any]:
             "stopped_local_safe_execution_count": stopped_run.get("local_safe_execution_count"),
             "safe_next_step": safe_run.get("next_step", {}).get("status"),
             "safe_local_safe_execution_count": safe_run.get("local_safe_execution_count"),
+            "governance_next_step": governance_run.get("next_step", {}).get("status"),
+            "governance_steps_performed": governance_run.get("steps_performed"),
+            "governance_record_write_count": governance_run.get("record_write_count"),
             "with_intake_active_queue_modified": run_with_intake.get("active_queue_modified"),
             "with_intake_queue_promotion_authorized": run_with_intake.get("queue_promotion_authorized"),
         },
