@@ -519,6 +519,7 @@ def build_route_choice_preview(
         queue_path,
         source,
     )
+    governance_gate_active = bundle.get("active_jenn_governance_gate") is True
     errors = []
     if bundle.get("passed") is not True:
         errors.extend(f"bundle: {error}" for error in bundle.get("errors", []))
@@ -547,8 +548,10 @@ def build_route_choice_preview(
             "reviewed_route_adoption_preview_passed": bundle.get("reviewed_route_adoption_preview_passed"),
             "reviewed_route_adoption_apply_preview_passed": bundle.get("reviewed_route_adoption_apply_preview_passed"),
             "can_apply_with_separate_apply_gate": bundle.get("can_apply_with_separate_apply_gate"),
+            "active_jenn_governance_gate": bundle.get("active_jenn_governance_gate"),
             "next_required_gate": bundle.get("next_required_gate"),
         },
+        "active_jenn_governance_gate": governance_gate_active,
         "confirmation_text_included": False,
         "raw_confirmation_text_output": False,
         "raw_template_output": False,
@@ -568,10 +571,16 @@ def build_route_choice_preview(
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
         "next_step": {
-            "status": "review_route_choice_adoption_bundle",
-            "owner": "Nobao",
+            "status": "governance_decision_required"
+            if governance_gate_active
+            else "review_route_choice_adoption_bundle",
+            "owner": "Jenn" if governance_gate_active else "Nobao",
             "selected_route_id": bundle.get("selected_route_id"),
-            "instruction": bundle.get("next_required_gate"),
+            "instruction": (
+                "resolve the active Jenn governance decision before route adoption"
+                if governance_gate_active
+                else bundle.get("next_required_gate")
+            ),
             "active_queue_mutation_authorized": False,
             "queue_promotion_authorized": False,
             "execution_authorized": False,
@@ -618,6 +627,15 @@ def validate_workbench_route_choice_preview(result: dict[str, Any]) -> list[str]
         if result.get(flag) is not False:
             errors.append(f"workbench route choice preview must keep {flag}=false")
     bundle = result.get("bundle", {})
+    if result.get("active_jenn_governance_gate") is True:
+        if bundle.get("active_jenn_governance_gate") is not True:
+            errors.append("workbench route choice preview lost the active Jenn governance gate")
+        if bundle.get("can_apply_with_separate_apply_gate") is not False:
+            errors.append("active Jenn governance gate must block Workbench apply readiness")
+        if result.get("next_step", {}).get("status") != "governance_decision_required":
+            errors.append("active Jenn governance gate must preserve governance_decision_required")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("active Jenn governance gate must preserve Jenn as next-step owner")
     if not result.get("errors"):
         if bundle.get("passed") is not True:
             errors.append("workbench route choice preview requires passing bundle")
@@ -653,13 +671,27 @@ def build_route_choice_apply_gate(
     resolved_queue, path_error = resolve_queue_apply_path(queue_path, allowed_queue_root)
     if path_error or resolved_queue is None:
         errors.append(path_error or "queue path is not allowed")
+    handoff_reconciliation: dict[str, Any] = {}
+    handoff_gate_errors: list[str] = []
+    governance_gate_active = False
+    if resolved_queue is not None:
+        handoff_reconciliation = chain.route_choice_handoff_reconciliation(resolved_queue)
+        handoff_gate_errors = chain.route_adoption_handoff_gate_errors(handoff_reconciliation)
+        governance_gate_active = chain.active_jenn_governance_gate(handoff_reconciliation)
+        errors.extend(f"route choice handoff: {error}" for error in handoff_gate_errors)
 
     route_preview = producer.route_choice_preview(confirmation_text, source)
     route_preview_errors = chain.validate_route_choice_preview(route_preview)
     errors.extend(f"route choice preview: {error}" for error in route_preview_errors)
     proposal = chain.route_choice_queue_proposal(route_preview)
     errors.extend(f"route choice proposal: {error}" for error in proposal.get("errors", []))
-    review = chain.accepted_nobao_review_for(proposal)
+    review: dict[str, Any] = {
+        "review_status": "blocked",
+        "reviewer": "Nobao",
+        "requires_jenn_decision": governance_gate_active,
+    }
+    if not handoff_gate_errors:
+        review = chain.accepted_nobao_review_for(proposal)
 
     apply_gate: dict[str, Any] = {
         "schema_version": "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1",
@@ -690,6 +722,11 @@ def build_route_choice_apply_gate(
         "schema_version": "agents-os.workbench.route-choice-apply-gate.v0.1",
         "mode": "route_choice_reviewed_apply_gate",
         "preview_only": not apply,
+        "active_jenn_governance_gate": governance_gate_active,
+        "handoff_reconciliation": {
+            "passed": handoff_reconciliation.get("passed"),
+            "aligned": handoff_reconciliation.get("aligned"),
+        },
         "source": {
             "confirmation_text_character_count": len(confirmation_text),
             "confirmation_text_included": False,
@@ -746,12 +783,22 @@ def build_route_choice_apply_gate(
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
         "next_step": {
-            "status": "route_adoption_applied_review_queue_promotion" if apply_gate.get("write_performed") is True else "review_route_choice_apply_gate",
-            "owner": "Nobao",
+            "status": (
+                "governance_decision_required"
+                if governance_gate_active
+                else "route_adoption_applied_review_queue_promotion"
+                if apply_gate.get("write_performed") is True
+                else "review_route_choice_apply_gate"
+            ),
+            "owner": "Jenn" if governance_gate_active else "Nobao",
             "selected_route_id": selected.get("option_id"),
-            "instruction": "review NEXT-to-NOW promotion gate for the updated queue"
-            if apply_gate.get("write_performed") is True
-            else "review route choice apply gate before --apply",
+            "instruction": (
+                "resolve the active Jenn governance decision before route adoption"
+                if governance_gate_active
+                else "review NEXT-to-NOW promotion gate for the updated queue"
+                if apply_gate.get("write_performed") is True
+                else "review route choice apply gate before --apply"
+            ),
             "active_queue_mutation_authorized": apply_gate.get("write_performed") is True,
             "queue_promotion_authorized": False,
             "execution_authorized": False,
@@ -796,10 +843,25 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not False:
                 errors.append(f"preview route choice apply gate must keep {flag}=false")
-    if apply:
+    if apply and result.get("errors"):
+        for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
+            if result.get(flag) is not False:
+                errors.append(f"blocked route choice apply gate must keep {flag}=false")
+    if apply and not result.get("errors"):
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not True:
                 errors.append(f"applied route choice apply gate must set {flag}=true")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("review", {}).get("review_status") != "blocked":
+            errors.append("active Jenn governance gate must block Workbench review")
+        if result.get("review", {}).get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve the Jenn decision requirement")
+        if result.get("apply_gate", {}).get("queue_adoption_authorized") is not False:
+            errors.append("active Jenn governance gate must block Workbench queue adoption")
+        if result.get("next_step", {}).get("status") != "governance_decision_required":
+            errors.append("active Jenn governance gate must preserve governance_decision_required")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("active Jenn governance gate must preserve Jenn as next-step owner")
     route = result.get("route", {})
     if not result.get("errors"):
         if route.get("selected_route_id") not in ["A", "B", "C", "D", "E"]:

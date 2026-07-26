@@ -6,6 +6,8 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 from types import ModuleType
 
@@ -282,7 +284,6 @@ prior_task: closed
             "这是 governance gate fixture；不写真实队列、不执行。",
             governance_queue_path,
             chain.ROUTE_SELECTION_PACKAGE,
-            fixture_only=True,
         )
         check(
             governance_queue_path.read_text(encoding="utf-8") == governance_queue_text,
@@ -306,36 +307,46 @@ prior_task: closed
         failures,
     )
     check(
-        governance_bundle["passed"] is True
-        and governance_bundle["can_apply_with_separate_apply_gate"] is True,
-        "adversarial governance bundle fixture should reproduce the apply-ready bypass",
+        governance_bundle["passed"] is False
+        and governance_bundle["can_apply_with_separate_apply_gate"] is False,
+        "production governance bundle should fail closed before apply readiness",
         failures,
     )
-    governance_bypass_errors = chain.validate_route_adoption_bundle_handoff(
+    check(
+        governance_bundle["fixture_only"] is False,
+        "active governance gate fixture should exercise the public production bundle path",
+        failures,
+    )
+    check(
+        governance_bundle["active_jenn_governance_gate"] is True,
+        "production governance bundle should preserve the active Jenn gate",
+        failures,
+    )
+    check(
+        governance_bundle["review_object_generated"] is False
+        and governance_bundle["reviewed_route_adoption_preview_passed"] is False
+        and governance_bundle["reviewed_route_adoption_apply_preview_passed"] is False,
+        "production governance bundle must not generate or pass route adoption review",
+        failures,
+    )
+    check(
+        governance_bundle["review_requires_jenn_decision"] is True,
+        "production governance bundle should preserve the Jenn decision requirement",
+        failures,
+    )
+    governance_gate_errors = chain.route_adoption_handoff_gate_errors(governance_handoff)
+    check(
+        governance_gate_errors == ["active Jenn governance gate blocks route adoption"],
+        f"active Jenn governance gate should emit the exact production block: {governance_gate_errors}",
+        failures,
+    )
+    governance_handoff_errors = chain.validate_route_adoption_bundle_handoff(
         governance_handoff,
         governance_bundle,
     )
     check(
-        governance_bypass_errors
-        == [
-            "route choice adoption bundle preview bypassed the active Jenn governance gate",
-            "route choice adoption bundle preview made the active Jenn governance gate apply-ready",
-        ],
-        f"active Jenn governance gate should reject bypass exactly: {governance_bypass_errors}",
-        failures,
-    )
-    blocked_governance_bundle = dict(
-        governance_bundle,
-        passed=False,
-        can_apply_with_separate_apply_gate=False,
-    )
-    blocked_governance_errors = chain.validate_route_adoption_bundle_handoff(
-        governance_handoff,
-        blocked_governance_bundle,
-    )
-    check(
-        blocked_governance_errors == [],
-        f"fail-closed governance bundle should satisfy the active gate: {blocked_governance_errors}",
+        governance_handoff_errors == [],
+        f"production fail-closed governance bundle should satisfy handoff validation: {governance_handoff_errors}",
         failures,
     )
 
@@ -549,6 +560,115 @@ old_task: closed
             "reviewer": "Nobao",
             "requires_jenn_decision": False,
         }
+        direct_governance_queue_path = Path(temp_dir) / "direct-governance-gate-queue.md"
+        direct_governance_queue_text = """# governance gate fixture
+
+## NOW
+
+### NOW-001: Awaiting Jenn Explicit Start Decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+        direct_governance_queue_path.write_text(direct_governance_queue_text, encoding="utf-8")
+        direct_governance_preview = chain.reviewed_route_adoption_preview(
+            route_choice_proposal,
+            route_review,
+            direct_governance_queue_path,
+        )
+        direct_governance_apply_preview = chain.reviewed_route_adoption_apply_gate(
+            route_choice_proposal,
+            route_review,
+            direct_governance_queue_path,
+        )
+        direct_governance_apply = chain.reviewed_route_adoption_apply_gate(
+            route_choice_proposal,
+            route_review,
+            direct_governance_queue_path,
+            apply=True,
+        )
+        check(
+            direct_governance_preview["passed"] is False
+            and direct_governance_preview["active_jenn_governance_gate"] is True
+            and direct_governance_preview["requires_jenn_decision"] is True
+            and direct_governance_preview["queue_mutation_preview_authorized"] is False,
+            "direct reviewed route adoption preview must fail closed under the active Jenn gate",
+            failures,
+        )
+        check(
+            direct_governance_apply_preview["passed"] is False
+            and direct_governance_apply_preview["active_jenn_governance_gate"] is True
+            and direct_governance_apply_preview["queue_adoption_authorized"] is False,
+            "direct reviewed route adoption apply preview must fail closed under the active Jenn gate",
+            failures,
+        )
+        check(
+            direct_governance_apply["passed"] is False
+            and direct_governance_apply["active_jenn_governance_gate"] is True
+            and direct_governance_apply["queue_adoption_authorized"] is False
+            and direct_governance_apply["active_queue_modified"] is False
+            and direct_governance_apply["write_performed"] is False
+            and direct_governance_apply["queue_write_authorized"] is False,
+            "direct reviewed route adoption apply must not authorize or perform a write under the active Jenn gate",
+            failures,
+        )
+        check(
+            direct_governance_queue_path.read_text(encoding="utf-8") == direct_governance_queue_text,
+            "direct active Jenn gate attacks must leave queue bytes unchanged",
+            failures,
+        )
+
+        route_proposal_json = Path(temp_dir) / "route-proposal.json"
+        route_review_json = Path(temp_dir) / "route-review.json"
+        route_proposal_json.write_text(json.dumps(route_choice_proposal), encoding="utf-8")
+        route_review_json.write_text(json.dumps(route_review), encoding="utf-8")
+        direct_cli_apply = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "control_chain.py"),
+                "reviewed-route-adoption-apply-gate",
+                "--proposal-json",
+                str(route_proposal_json),
+                "--review-json",
+                str(route_review_json),
+                "--queue",
+                str(direct_governance_queue_path),
+                "--apply",
+                "--json",
+            ],
+            cwd=chain.WORKSPACE_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        direct_cli_apply_result = json.loads(direct_cli_apply.stdout)
+        check(
+            direct_cli_apply.returncode == 1
+            and direct_cli_apply_result["passed"] is False
+            and direct_cli_apply_result["active_jenn_governance_gate"] is True
+            and direct_cli_apply_result["queue_adoption_authorized"] is False
+            and direct_cli_apply_result["write_performed"] is False,
+            f"public reviewed route adoption CLI must fail closed under the active Jenn gate: {direct_cli_apply.stderr}",
+            failures,
+        )
+        check(
+            direct_governance_queue_path.read_text(encoding="utf-8") == direct_governance_queue_text,
+            "public reviewed route adoption CLI attack must leave queue bytes unchanged",
+            failures,
+        )
+
         adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, route_review, route_queue_path)
         check(adoption_preview["passed"], f"reviewed route adoption preview should pass: {adoption_preview['errors']}", failures)
         check(adoption_preview["preview_only"] is True, "reviewed route adoption should be preview-only", failures)
@@ -677,7 +797,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=32 failures={len(failures)}")
+        print(f"cases=34 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -691,14 +811,16 @@ old_task: closed
     print("PASS route choice template readiness fixture")
     print("PASS route choice end-to-end readiness fixture")
     print("PASS route choice adoption bundle preview fixture")
-    print("PASS active Jenn governance gate bypass fixture")
-    print("PASS active Jenn governance gate fail-closed fixture")
+    print("PASS active Jenn governance gate production block fixture")
+    print("PASS active Jenn governance gate handoff validation fixture")
+    print("PASS direct active Jenn governance gate adoption block fixture")
+    print("PASS public active Jenn governance gate adoption CLI block fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=32 failures=0")
+    print("cases=34 failures=0")
     return 0
 
 

@@ -549,24 +549,37 @@ def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dic
     machine_preview: dict[str, Any] = {}
     dashboard_summary: dict[str, Any] = {}
 
-    try:
-        machine = import_module(MACHINE, "agents_os_machine_for_control_chain")
-        normalized = machine.load_queue(source_queue)
-        if normalized.get("passed") is not True:
-            errors.extend(f"machine queue: {error}" for error in normalized.get("parse_errors", []))
-        else:
-            machine_preview = machine.build_preview(machine.now_item(normalized))
-            errors.extend(f"machine preview: {error}" for error in machine.validate_preview(machine_preview))
-    except Exception as exc:  # pragma: no cover - surfaced as validation error
-        errors.append(f"Machine handoff read failed: {exc}")
+    resolved, resolve_error = safe_resolve(source_queue)
+    if is_protected_path(source_queue):
+        errors.append(f"route choice handoff queue path is protected: {source_queue}")
+    elif resolve_error or resolved is None:
+        errors.append(f"route choice handoff queue path could not be resolved: {resolve_error or source_queue}")
+    elif is_protected_path(resolved):
+        errors.append(f"route choice handoff queue resolves to a protected path: {source_queue}")
+    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
+        errors.append(f"route choice handoff queue path is outside workspace: {source_queue}")
+    elif not resolved.exists() or not resolved.is_file():
+        errors.append(f"route choice handoff queue path is not a file: {rel(resolved)}")
+    else:
+        source_queue = resolved
+        try:
+            machine = import_module(MACHINE, "agents_os_machine_for_control_chain")
+            normalized = machine.load_queue(source_queue)
+            if normalized.get("passed") is not True:
+                errors.extend(f"machine queue: {error}" for error in normalized.get("parse_errors", []))
+            else:
+                machine_preview = machine.build_preview(machine.now_item(normalized))
+                errors.extend(f"machine preview: {error}" for error in machine.validate_preview(machine_preview))
+        except Exception as exc:  # pragma: no cover - surfaced as validation error
+            errors.append(f"Machine handoff read failed: {exc}")
 
-    try:
-        dashboard = import_module(DASHBOARD, "agents_os_dashboard_for_control_chain")
-        dashboard_summary = dashboard.build_dashboard_summary(source_queue, run_validations=False)
-        if dashboard_summary.get("passed") is not True:
-            errors.extend(f"dashboard summary: {error}" for error in dashboard_summary.get("errors", []))
-    except Exception as exc:  # pragma: no cover - surfaced as validation error
-        errors.append(f"Dashboard handoff read failed: {exc}")
+        try:
+            dashboard = import_module(DASHBOARD, "agents_os_dashboard_for_control_chain")
+            dashboard_summary = dashboard.build_dashboard_summary(source_queue, run_validations=False)
+            if dashboard_summary.get("passed") is not True:
+                errors.extend(f"dashboard summary: {error}" for error in dashboard_summary.get("errors", []))
+        except Exception as exc:  # pragma: no cover - surfaced as validation error
+            errors.append(f"Dashboard handoff read failed: {exc}")
 
     machine_action = machine_preview.get("next_user_action", {}) if machine_preview else {}
     dashboard_action = dashboard_summary.get("next_user_action", {}) if dashboard_summary else {}
@@ -1017,6 +1030,10 @@ def route_choice_adoption_bundle_preview(
 ) -> dict[str, Any]:
     errors: list[str] = []
     producer = import_module(TASK_PRODUCER, "agents_os_task_producer_adoption_bundle_for_control_chain")
+    handoff_reconciliation = route_choice_handoff_reconciliation(queue_path)
+    handoff_gate_errors = route_adoption_handoff_gate_errors(handoff_reconciliation)
+    errors.extend(f"route choice handoff: {error}" for error in handoff_gate_errors)
+    governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
 
     route_preview = producer.route_choice_preview(confirmation_text, source)
     route_preview_errors = validate_route_choice_preview(route_preview)
@@ -1025,12 +1042,25 @@ def route_choice_adoption_bundle_preview(
     proposal = route_choice_queue_proposal(route_preview)
     errors.extend(f"route choice proposal: {error}" for error in proposal.get("errors", []))
 
-    review = accepted_nobao_review_for(proposal)
-    adoption_preview = reviewed_route_adoption_preview(proposal, review, queue_path)
-    errors.extend(f"reviewed route adoption preview: {error}" for error in adoption_preview.get("errors", []))
+    review: dict[str, Any] = {
+        "review_status": "blocked",
+        "reviewer": "Nobao",
+        "requires_jenn_decision": governance_gate_active,
+    }
+    adoption_preview: dict[str, Any] = {
+        "passed": False,
+    }
+    apply_preview: dict[str, Any] = {
+        "passed": False,
+        "queue_adoption_authorized": False,
+    }
+    if not handoff_gate_errors:
+        review = accepted_nobao_review_for(proposal)
+        adoption_preview = reviewed_route_adoption_preview(proposal, review, queue_path)
+        errors.extend(f"reviewed route adoption preview: {error}" for error in adoption_preview.get("errors", []))
 
-    apply_preview = reviewed_route_adoption_apply_gate(proposal, review, queue_path, apply=False)
-    errors.extend(f"reviewed route adoption apply preview: {error}" for error in apply_preview.get("errors", []))
+        apply_preview = reviewed_route_adoption_apply_gate(proposal, review, queue_path, apply=False)
+        errors.extend(f"reviewed route adoption apply preview: {error}" for error in apply_preview.get("errors", []))
 
     selected = route_preview.get("selected_option", {}) if isinstance(route_preview, dict) else {}
     item = proposal.get("proposed_queue_item", {}) if isinstance(proposal, dict) else {}
@@ -1044,6 +1074,9 @@ def route_choice_adoption_bundle_preview(
         "confirmation_text_included": False,
         "raw_confirmation_text_output": False,
         "raw_template_output": False,
+        "handoff_reconciliation_passed": handoff_reconciliation.get("passed"),
+        "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned"),
+        "active_jenn_governance_gate": governance_gate_active,
         "route_choice_preview_passed": route_preview.get("passed") is True and not route_preview_errors,
         "route_choice_detected": route_preview.get("route_choice_detected") is True,
         "selected_route_id": selected.get("option_id"),
@@ -1053,7 +1086,7 @@ def route_choice_adoption_bundle_preview(
         "queue_proposal_passed": proposal.get("passed") is True,
         "proposal_id": proposal.get("proposal_id"),
         "proposed_next_title": item.get("title"),
-        "review_object_generated": True,
+        "review_object_generated": not handoff_gate_errors,
         "review_status": review.get("review_status"),
         "reviewer": review.get("reviewer"),
         "review_requires_jenn_decision": review.get("requires_jenn_decision"),
@@ -1076,7 +1109,11 @@ def route_choice_adoption_bundle_preview(
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
         "plugin_execution_authorized": False,
-        "next_required_gate": "reviewed-route-adoption-apply-gate with explicit apply authorization after Jenn route choice review",
+        "next_required_gate": (
+            "resolve the active Jenn governance decision before route adoption"
+            if governance_gate_active
+            else "reviewed-route-adoption-apply-gate with explicit apply authorization after Jenn route choice review"
+        ),
         "errors": sorted(set(errors)),
     }
     validation_errors = validate_route_choice_adoption_bundle_preview(result)
@@ -1117,6 +1154,17 @@ def validate_route_choice_adoption_bundle_preview(result: dict[str, Any]) -> lis
     ):
         if result.get(flag) is not False:
             errors.append(f"route choice adoption bundle preview must keep {flag}=false")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("review_object_generated") is not False:
+            errors.append("active Jenn governance gate must block route adoption review generation")
+        if result.get("review_requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve the Jenn decision requirement")
+        if result.get("reviewed_route_adoption_preview_passed") is not False:
+            errors.append("active Jenn governance gate must block route adoption preview")
+        if result.get("reviewed_route_adoption_apply_preview_passed") is not False:
+            errors.append("active Jenn governance gate must block route adoption apply preview")
+        if result.get("can_apply_with_separate_apply_gate") is not False:
+            errors.append("active Jenn governance gate must block separate apply gate readiness")
     if not result.get("errors"):
         if result.get("route_choice_preview_passed") is not True:
             errors.append("route choice adoption bundle preview requires passing route choice preview")
@@ -1796,6 +1844,8 @@ def reviewed_route_adoption_preview(
     queue_path: Path = DEFAULT_QUEUE,
 ) -> dict[str, Any]:
     errors = validate_route_choice_queue_proposal(proposal)
+    handoff_reconciliation: dict[str, Any] = {}
+    governance_gate_active = False
     if proposal.get("passed") is not True:
         errors.append("route choice queue proposal must be passed")
     errors.extend(validate_queue_review(review, proposal))
@@ -1807,11 +1857,19 @@ def reviewed_route_adoption_preview(
     mutation_preview: dict[str, Any] = {}
     if resolve_error or resolved is None:
         errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
+    elif is_protected_path(resolved):
+        errors.append(f"queue path resolves to a protected path: {queue_path}")
     elif not is_under_workspace(resolved, WORKSPACE_ROOT):
         errors.append(f"queue path is outside workspace: {queue_path}")
     elif not resolved.exists() or not resolved.is_file():
         errors.append(f"queue path is not a file: {rel(resolved)}")
     else:
+        handoff_reconciliation = route_choice_handoff_reconciliation(resolved)
+        governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
+        errors.extend(
+            f"route choice handoff: {error}"
+            for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
+        )
         queue_text = resolved.read_text(encoding="utf-8")
         now_blocks = queue_lane_blocks(queue_text, "NOW")
         next_blocks = queue_lane_blocks(queue_text, "NEXT")
@@ -1851,7 +1909,10 @@ def reviewed_route_adoption_preview(
         "queue_promotion_authorized": False,
         "execution_authorized": False,
         "requires_nobao_review": True,
-        "requires_jenn_decision": False,
+        "requires_jenn_decision": governance_gate_active,
+        "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
+        "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
+        "active_jenn_governance_gate": governance_gate_active,
         "mutation_preview": mutation_preview,
         "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
         "errors": errors,
@@ -1875,6 +1936,18 @@ def validate_reviewed_route_adoption_preview(result: dict[str, Any]) -> list[str
         errors.append("reviewed route adoption preview must be preview_only")
     if result.get("requires_nobao_review") is not True:
         errors.append("reviewed route adoption preview must require Nobao review")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve Jenn decision requirement")
+        if result.get("queue_mutation_preview_authorized") is not False:
+            errors.append("active Jenn governance gate must block route adoption mutation preview")
+    if result.get("queue_mutation_preview_authorized") is True:
+        if result.get("handoff_reconciliation_passed") is not True:
+            errors.append("authorized route adoption preview requires passing handoff reconciliation")
+        if result.get("handoff_reconciliation_aligned") is not True:
+            errors.append("authorized route adoption preview requires aligned handoff reconciliation")
+        if result.get("active_jenn_governance_gate") is not False:
+            errors.append("authorized route adoption preview must not bypass an active Jenn governance gate")
     for flag in (
         "route_adoption_authorized",
         "workspace_route_state_modified",
@@ -1960,6 +2033,8 @@ def reviewed_route_adoption_apply_gate(
     apply: bool = False,
 ) -> dict[str, Any]:
     errors = validate_route_choice_queue_proposal(proposal)
+    handoff_reconciliation: dict[str, Any] = {}
+    governance_gate_active = False
     if proposal.get("passed") is not True:
         errors.append("route choice queue proposal must be passed")
     errors.extend(validate_queue_review(review, proposal))
@@ -1973,11 +2048,19 @@ def reviewed_route_adoption_apply_gate(
     mutation: dict[str, Any] = {}
     if resolve_error or resolved is None:
         errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
+    elif is_protected_path(resolved):
+        errors.append(f"queue path resolves to a protected path: {queue_path}")
     elif not is_under_workspace(resolved, WORKSPACE_ROOT):
         errors.append(f"queue path is outside workspace: {queue_path}")
     elif not resolved.exists() or not resolved.is_file():
         errors.append(f"queue path is not a file: {rel(resolved)}")
     else:
+        handoff_reconciliation = route_choice_handoff_reconciliation(resolved)
+        governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
+        errors.extend(
+            f"route choice handoff: {error}"
+            for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
+        )
         queue_text = resolved.read_text(encoding="utf-8")
         now_blocks = queue_lane_blocks(queue_text, "NOW")
         next_blocks = queue_lane_blocks(queue_text, "NEXT")
@@ -2015,7 +2098,10 @@ def reviewed_route_adoption_apply_gate(
         "queue_promotion_authorized": False,
         "execution_authorized": False,
         "requires_nobao_review": True,
-        "requires_jenn_decision": False,
+        "requires_jenn_decision": governance_gate_active,
+        "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
+        "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
+        "active_jenn_governance_gate": governance_gate_active,
         "no_p3_route_adoption_guard": not errors,
         "mutation": mutation,
         "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
@@ -2038,6 +2124,27 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
         errors.append("reviewed route adoption apply gate schema_version is invalid")
     if result.get("requires_nobao_review") is not True:
         errors.append("reviewed route adoption apply gate must require Nobao review")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve Jenn decision requirement")
+        if result.get("queue_adoption_authorized") is not False:
+            errors.append("active Jenn governance gate must block route adoption")
+        for flag in (
+            "route_adoption_authorized",
+            "workspace_route_state_modified",
+            "active_queue_modified",
+            "write_performed",
+            "queue_write_authorized",
+        ):
+            if result.get(flag) is not False:
+                errors.append(f"active Jenn governance gate must keep {flag}=false")
+    if result.get("queue_adoption_authorized") is True:
+        if result.get("handoff_reconciliation_passed") is not True:
+            errors.append("authorized route adoption requires passing handoff reconciliation")
+        if result.get("handoff_reconciliation_aligned") is not True:
+            errors.append("authorized route adoption requires aligned handoff reconciliation")
+        if result.get("active_jenn_governance_gate") is not False:
+            errors.append("authorized route adoption must not bypass an active Jenn governance gate")
     for flag in ("queue_promotion_authorized", "execution_authorized"):
         if result.get(flag) is not False:
             errors.append(f"reviewed route adoption apply gate flag must be false: {flag}")
@@ -2304,11 +2411,24 @@ def validate_reviewed_queue_mutation(result: dict[str, Any]) -> list[str]:
 
 def active_jenn_governance_gate(route_handoff_reconciliation: dict[str, Any]) -> bool:
     machine_action = route_handoff_reconciliation.get("machine_next_user_action", {})
-    return (
-        machine_action.get("status") == "governance_decision_required"
-        and machine_action.get("decision_owner") == "Jenn"
-        and machine_action.get("requires_jenn_decision") is True
+    dashboard_action = route_handoff_reconciliation.get("dashboard_next_user_action", {})
+    return all(
+        action.get("status") == "governance_decision_required"
+        and action.get("decision_owner") == "Jenn"
+        and action.get("requires_jenn_decision") is True
+        for action in (machine_action, dashboard_action)
     )
+
+
+def route_adoption_handoff_gate_errors(route_handoff_reconciliation: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if route_handoff_reconciliation.get("passed") is not True:
+        errors.append("route choice handoff reconciliation did not pass")
+    if route_handoff_reconciliation.get("aligned") is not True:
+        errors.append("route choice handoff reconciliation is not aligned")
+    if active_jenn_governance_gate(route_handoff_reconciliation):
+        errors.append("active Jenn governance gate blocks route adoption")
+    return errors
 
 
 def validate_route_adoption_bundle_handoff(
@@ -2322,6 +2442,14 @@ def validate_route_adoption_bundle_handoff(
             errors.append("route choice adoption bundle preview bypassed the active Jenn governance gate")
         if route_adoption_bundle_preview.get("can_apply_with_separate_apply_gate") is not False:
             errors.append("route choice adoption bundle preview made the active Jenn governance gate apply-ready")
+        if route_adoption_bundle_preview.get("active_jenn_governance_gate") is not True:
+            errors.append("route choice adoption bundle preview lost the active Jenn governance gate")
+        if route_adoption_bundle_preview.get("review_object_generated") is not False:
+            errors.append("route choice adoption bundle preview generated review under the active Jenn governance gate")
+        if route_adoption_bundle_preview.get("reviewed_route_adoption_preview_passed") is not False:
+            errors.append("route choice adoption bundle preview passed adoption review under the active Jenn governance gate")
+        if route_adoption_bundle_preview.get("reviewed_route_adoption_apply_preview_passed") is not False:
+            errors.append("route choice adoption bundle preview passed apply preview under the active Jenn governance gate")
     elif route_adoption_bundle_preview.get("passed") is not True:
         errors.append("route choice adoption bundle preview did not pass")
     if route_adoption_bundle_preview.get("selected_route_id") != "B":

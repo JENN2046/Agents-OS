@@ -37,6 +37,30 @@ def fixture_queue_with_now_lines(workbench: ModuleType, title: str, *lines: str)
     )
 
 
+def fixture_governance_gate_queue_text() -> str:
+    return """# workbench governance gate fixture
+
+## NOW
+
+### NOW-001: Awaiting Jenn Explicit Start Decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fixture tests for AGENTS OS Workbench v0.1.")
     parser.add_argument("--full", action="store_true", help="Run full validation and completion audit checks.")
@@ -1376,6 +1400,66 @@ def main() -> int:
             "route apply should append formal Memory first safe package",
             failures,
         )
+        governance_gate_queue_path = Path(temp_dir) / "governance-gate-queue.md"
+        governance_gate_queue_text = fixture_governance_gate_queue_text()
+        governance_gate_queue_path.write_text(governance_gate_queue_text, encoding="utf-8")
+        governance_route_preview = workbench.build_route_choice_preview(
+            route_choice_text,
+            governance_gate_queue_path,
+        )
+        check(
+            governance_route_preview["passed"] is False,
+            "active Jenn governance gate should block Workbench route preview",
+            failures,
+        )
+        check(
+            governance_route_preview["active_jenn_governance_gate"] is True
+            and governance_route_preview["bundle"]["can_apply_with_separate_apply_gate"] is False,
+            "active Jenn governance gate should block Workbench apply readiness",
+            failures,
+        )
+        check(
+            governance_route_preview["next_step"]["status"] == "governance_decision_required"
+            and governance_route_preview["next_step"]["owner"] == "Jenn",
+            "active Jenn governance gate should preserve Jenn as preview decision owner",
+            failures,
+        )
+        governance_apply_preview = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            governance_gate_queue_path,
+            apply=False,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            governance_apply_preview["passed"] is False
+            and governance_apply_preview["apply_gate"]["queue_adoption_authorized"] is False,
+            "active Jenn governance gate should block Workbench apply preview",
+            failures,
+        )
+        governance_apply = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            governance_gate_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            governance_apply["passed"] is False
+            and governance_apply["apply_gate"]["queue_adoption_authorized"] is False,
+            "active Jenn governance gate should block Workbench apply production path",
+            failures,
+        )
+        check(
+            governance_apply["write_performed"] is False
+            and governance_apply["active_queue_modified"] is False
+            and governance_apply["queue_write_authorized"] is False,
+            "blocked Workbench governance apply must keep all write flags false",
+            failures,
+        )
+        check(
+            governance_gate_queue_path.read_text(encoding="utf-8") == governance_gate_queue_text,
+            "blocked Workbench governance apply must preserve exact queue bytes",
+            failures,
+        )
         route_promotion_preview = workbench.build_queue_promotion_apply_gate(
             route_apply_queue_path,
             apply=False,
@@ -1703,6 +1787,87 @@ def main() -> int:
             )
         else:
             failures.append("CLI route apply should emit JSON")
+        cli_governance_queue_path = Path(temp_dir) / "cli-governance-gate-queue.md"
+        cli_governance_queue_text = fixture_governance_gate_queue_text()
+        cli_governance_queue_path.write_text(cli_governance_queue_text, encoding="utf-8")
+        cli_governance_preview = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-preview",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_governance_queue_path),
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_governance_preview.returncode == 1,
+            f"CLI active governance preview should fail closed: {cli_governance_preview.stderr}",
+            failures,
+        )
+        if cli_governance_preview.stdout:
+            cli_governance_preview_payload = json.loads(cli_governance_preview.stdout)
+            check(
+                cli_governance_preview_payload.get("active_jenn_governance_gate") is True,
+                "CLI active governance preview should preserve the Jenn gate",
+                failures,
+            )
+            check(
+                cli_governance_preview_payload.get("bundle", {}).get("can_apply_with_separate_apply_gate") is False,
+                "CLI active governance preview must not become apply-ready",
+                failures,
+            )
+        else:
+            failures.append("CLI active governance preview should emit JSON")
+        cli_governance_apply = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-apply-gate",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_governance_queue_path),
+                "--allowed-queue-root",
+                str(Path(temp_dir)),
+                "--apply",
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_governance_apply.returncode == 1,
+            f"CLI active governance apply should fail closed: {cli_governance_apply.stderr}",
+            failures,
+        )
+        if cli_governance_apply.stdout:
+            cli_governance_apply_payload = json.loads(cli_governance_apply.stdout)
+            check(
+                cli_governance_apply_payload.get("apply_gate", {}).get("queue_adoption_authorized") is False,
+                "CLI active governance apply must not authorize queue adoption",
+                failures,
+            )
+            check(
+                cli_governance_apply_payload.get("write_performed") is False,
+                "CLI active governance apply must not write",
+                failures,
+            )
+        else:
+            failures.append("CLI active governance apply should emit JSON")
+        check(
+            cli_governance_queue_path.read_text(encoding="utf-8") == cli_governance_queue_text,
+            "CLI active governance apply must preserve exact queue bytes",
+            failures,
+        )
         cli_queue_promotion = subprocess.run(
             [
                 "python3",
@@ -2084,7 +2249,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases={20 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
+        print(f"cases={22 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -2100,6 +2265,8 @@ def main() -> int:
     print("PASS workbench goal fixtures")
     print("PASS workbench route choice preview fixtures")
     print("PASS workbench route choice apply gate fixtures")
+    print("PASS active Jenn governance preview fixtures")
+    print("PASS active Jenn governance apply fixtures")
     print("PASS workbench queue promotion apply gate fixtures")
     print("PASS workbench continue current fixtures")
     print("PASS workbench continue loop fixtures")
@@ -2108,7 +2275,7 @@ def main() -> int:
     if args.full:
         print("PASS workbench validation")
         print("PASS workbench completion audit")
-    print(f"cases={20 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
+    print(f"cases={22 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 
