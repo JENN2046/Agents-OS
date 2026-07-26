@@ -731,13 +731,344 @@ def main() -> int:
             failures,
         )
         check(
-            safe_status["next_step"]["status"] == "queue_ready_for_run",
-            "safe status should preserve the current fixture queue as live authority",
+            safe_status["next_step"]["status"] == "review_queue_proposal",
+            "safe status should preserve the pending review boundary",
             failures,
         )
         check(
-            safe_status["status_reconciliation"]["record_next_step_status"] == "review_queue_proposal",
-            "safe status should preserve the record review_queue_proposal boundary",
+            safe_status["status_reconciliation"]["record_next_step_status"]
+            == "review_queue_proposal"
+            and safe_status["status_reconciliation"]["next_action_source"]
+            == "latest_record"
+            and safe_status["status_reconciliation"]["queue_bytes_match_record"]
+            is True
+            and safe_status["status_reconciliation"]["record_boundary_pending"]
+            is True
+            and safe_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is False,
+            "unchanged queue bytes must keep the record boundary authoritative",
+            failures,
+        )
+        invalid_shadow_payload = json.loads(json.dumps(safe_advance))
+        invalid_shadow_payload["advance_id"] = "ADVANCE-INVALID-SHADOW"
+        invalid_shadow_payload["passed"] = False
+        invalid_shadow_payload["errors"] = [
+            "synthetic incomplete advance record"
+        ]
+        invalid_shadow_path = (
+            advance_record_root / "invalid-shadow-advance.json"
+        )
+        invalid_shadow_path.write_text(
+            json.dumps(
+                invalid_shadow_payload,
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        invalid_shadow_mtime_ns = (
+            max(
+                path.stat().st_mtime_ns
+                for path in advance_record_root.glob("*.json")
+                if path != invalid_shadow_path
+            )
+            + 1_000_000
+        )
+        os.utime(
+            invalid_shadow_path,
+            ns=(invalid_shadow_mtime_ns, invalid_shadow_mtime_ns),
+        )
+        invalid_shadow_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            invalid_shadow_status["passed"] is False
+            and invalid_shadow_status["latest_advance_id"]
+            == safe_advance["advance_id"]
+            and invalid_shadow_status[
+                "invalid_matching_advance_record_count"
+            ]
+            == 1
+            and invalid_shadow_status[
+                "invalid_live_binding_advance_record_count"
+            ]
+            == 1
+            and invalid_shadow_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and any(
+                "record reconciliation is required" in error
+                for error in invalid_shadow_status["errors"]
+            ),
+            "invalid newer records must fail closed without shadowing a valid boundary",
+            failures,
+        )
+        invalid_shadow_path.unlink()
+        unbound_shadow_payload = json.loads(json.dumps(safe_advance))
+        unbound_shadow_payload["advance_id"] = "ADVANCE-UNBOUND-SHADOW"
+        unbound_shadow_payload.pop("source_queue_binding", None)
+        unbound_shadow_path = (
+            advance_record_root / "unbound-shadow-advance.json"
+        )
+        unbound_shadow_path.write_text(
+            json.dumps(
+                unbound_shadow_payload,
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        unbound_shadow_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            unbound_shadow_status["passed"] is False
+            and unbound_shadow_status["latest_advance_id"]
+            == safe_advance["advance_id"]
+            and unbound_shadow_status["unbound_advance_record_count"]
+            == 1
+            and unbound_shadow_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and any(
+                "unbound advance records cannot be reconciled" in error
+                for error in unbound_shadow_status["errors"]
+            ),
+            "unbound records must fail closed without shadowing a valid boundary",
+            failures,
+        )
+        unbound_shadow_path.unlink()
+        advance_record_files_before = sorted(advance_record_root.glob("*.json"))
+        repeated_run = workbench.build_run(
+            "Write local governance report and run docctl validation.",
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_selector = workbench.build_next_step_selector(
+            advance_queue_path,
+            advance_record_root,
+        )
+        pending_continue = workbench.build_continue_current(
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_continue_loop = workbench.build_continue_loop(
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_cycles=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            repeated_run["passed"] is True
+            and repeated_run["steps_performed"] == 0
+            and repeated_run["record_write_count"] == 0
+            and repeated_run["local_safe_execution_count"] == 0
+            and repeated_run["stopped_reason"] == "review_queue_proposal",
+            "repeated run must stop without re-executing an unchanged queue",
+            failures,
+        )
+        check(
+            pending_selector["passed"] is True
+            and pending_selector["candidate_present"] is False
+            and pending_selector["selector_state"]
+            == "blocked_by_pending_record_boundary",
+            "selector must not propose duplicate work across a pending boundary",
+            failures,
+        )
+        check(
+            pending_continue["passed"] is True
+            and pending_continue["run"] is None
+            and pending_continue["run_summary"]["record_write_count"] == 0
+            and pending_continue["run_summary"]["local_safe_execution_count"]
+            == 0
+            and pending_continue["next_step"]["status"]
+            == "review_queue_proposal"
+            and sorted(advance_record_root.glob("*.json"))
+            == advance_record_files_before,
+            "continue must preserve a pending boundary without new records",
+            failures,
+        )
+        check(
+            pending_continue_loop["passed"] is True
+            and pending_continue_loop["cycles_performed"] == 0
+            and pending_continue_loop["record_write_count"] == 0
+            and pending_continue_loop["local_safe_execution_count"] == 0
+            and pending_continue_loop["stopped_reason"]
+            == "review_queue_proposal"
+            and sorted(advance_record_root.glob("*.json"))
+            == advance_record_files_before,
+            "continue loop must preserve a pending boundary without work",
+            failures,
+        )
+        original_advance_queue_text = advance_queue_path.read_text(
+            encoding="utf-8"
+        )
+        advance_queue_path.write_text(
+            original_advance_queue_text + "\n<!-- reviewed queue change -->\n",
+            encoding="utf-8",
+        )
+        changed_queue_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            changed_queue_status["passed"] is True
+            and changed_queue_status["next_step"]["status"]
+            == "queue_ready_for_run"
+            and changed_queue_status["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and changed_queue_status["status_reconciliation"][
+                "queue_bytes_match_record"
+            ]
+            is False
+            and changed_queue_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True,
+            "changed queue bytes must supersede the bound record boundary",
+            failures,
+        )
+        expected_binding_queue_path = (
+            Path(temp_dir) / "expected-binding-queue.md"
+        )
+        expected_binding_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        expected_binding_record_root = (
+            Path(temp_dir) / "expected-binding-records"
+        )
+        expected_binding_record_root.mkdir()
+        expected_binding_status = workbench.build_status(
+            expected_binding_record_root,
+            expected_binding_queue_path,
+        )
+        expected_binding = expected_binding_status["live_queue"][
+            "queue_binding"
+        ]
+        expected_binding_queue_path.write_text(
+            workbench.fixture_queue_text()
+            + "\n<!-- changed after caller snapshot -->\n",
+            encoding="utf-8",
+        )
+        expected_binding_run = workbench.build_run(
+            "Write local governance report and run docctl validation.",
+            expected_binding_queue_path,
+            record_root=expected_binding_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+            expected_queue_binding=expected_binding,
+        )
+        check(
+            expected_binding_run["passed"] is False
+            and expected_binding_run["steps_performed"] == 0
+            and expected_binding_run["record_write_count"] == 0
+            and expected_binding_run["local_safe_execution_count"] == 0
+            and not list(expected_binding_record_root.glob("*.json"))
+            and any(
+                "queue bytes changed after the caller status snapshot"
+                in error
+                for error in expected_binding_run["errors"]
+            ),
+            "run must fail closed when queue bytes change after caller status",
+            failures,
+        )
+        expected_binding_changed_bytes = (
+            expected_binding_queue_path.read_bytes()
+        )
+        expected_binding_advance = workbench.build_advance(
+            "Write local governance report and run docctl validation.",
+            expected_binding_queue_path,
+            record_root=expected_binding_record_root,
+            apply_intake=True,
+            allowed_queue_root=Path(temp_dir),
+            expected_queue_binding=expected_binding,
+        )
+        check(
+            expected_binding_advance["passed"] is False
+            and expected_binding_advance["stages"]["execution"][
+                "local_safe_execution_performed"
+            ]
+            is False
+            and expected_binding_advance["stages"]["intake_apply"][
+                "write_performed"
+            ]
+            is False
+            and expected_binding_advance["active_queue_modified"] is False
+            and expected_binding_advance["queue_write_authorized"] is False
+            and expected_binding_queue_path.read_bytes()
+            == expected_binding_changed_bytes
+            and not list(expected_binding_record_root.glob("*.json")),
+            "advance must not execute, record, or apply intake after binding drift",
+            failures,
+        )
+        selector_skew_queue_path = (
+            Path(temp_dir) / "selector-read-skew-queue.md"
+        )
+        selector_skew_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        selector_skew_record_root = (
+            Path(temp_dir) / "selector-read-skew-records"
+        )
+        selector_skew_record_root.mkdir()
+        original_load_bound_queue_snapshot = (
+            workbench.load_bound_queue_snapshot
+        )
+        selector_skew_calls = {"count": 0}
+
+        def selector_skew_snapshot(
+            chain: object,
+            queue_path: Path,
+        ) -> tuple[dict | None, str | None]:
+            snapshot_result = original_load_bound_queue_snapshot(
+                chain,
+                queue_path,
+            )
+            selector_skew_calls["count"] += 1
+            if selector_skew_calls["count"] == 1:
+                selector_skew_queue_path.write_text(
+                    workbench.fixture_queue_text()
+                    + "\n<!-- selector status/read skew -->\n",
+                    encoding="utf-8",
+                )
+            return snapshot_result
+
+        workbench.load_bound_queue_snapshot = selector_skew_snapshot
+        try:
+            selector_skew = workbench.build_next_step_selector(
+                selector_skew_queue_path,
+                selector_skew_record_root,
+            )
+        finally:
+            workbench.load_bound_queue_snapshot = (
+                original_load_bound_queue_snapshot
+            )
+        check(
+            selector_skew_calls["count"] >= 2
+            and selector_skew["passed"] is False
+            and selector_skew["candidate_present"] is False
+            and any(
+                "selector queue bytes changed after status reconciliation"
+                in error
+                for error in selector_skew["errors"]
+            ),
+            "selector must fail closed on status/read queue-byte skew",
             failures,
         )
         check(safe_status["write_performed"] is False, "safe status must be read-only", failures)
@@ -763,6 +1094,13 @@ def main() -> int:
             check(
                 safe_advance_payload.get("passed") is True,
                 "safe advance record file should include final passed=true",
+                failures,
+            )
+            check(
+                workbench.valid_queue_snapshot_binding(
+                    safe_advance_payload.get("source_queue_binding")
+                ),
+                "safe advance record must bind exact source queue bytes",
                 failures,
             )
             check(
@@ -839,11 +1177,30 @@ def main() -> int:
             "status after intake must keep queue promotion false",
             failures,
         )
+        check(
+            status_after_intake["next_step"]["status"] == "queue_ready_for_run"
+            and status_after_intake["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and status_after_intake["status_reconciliation"][
+                "queue_bytes_match_record"
+            ]
+            is False
+            and status_after_intake["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True,
+            "applied intake bytes must supersede the source record boundary",
+            failures,
+        )
         cli_status = subprocess.run(
             [
                 "python3",
                 str(ROOT / "workbench.py"),
                 "status",
+                "--queue",
+                str(advance_apply_queue_path),
                 "--record-root",
                 str(advance_record_root),
                 "--json",
@@ -1749,8 +2106,16 @@ def main() -> int:
             failures,
         )
         check(
-            route_promotion_status["status_reconciliation"]["record_boundary_may_be_stale"] is True,
-            "route promotion status should detect stale record boundary",
+            route_promotion_status["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and route_promotion_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is False
+            and route_promotion_status["matching_advance_record_count"] == 0,
+            "route promotion status must ignore unrelated queue records",
             failures,
         )
         route_promotion_continue = workbench.build_continue_current(
@@ -2215,8 +2580,21 @@ def main() -> int:
                 failures,
             )
             check(
-                cli_live_status_payload.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is True,
-                "CLI live status should detect stale record boundary",
+                cli_live_status_payload.get(
+                    "status_reconciliation",
+                    {},
+                ).get("next_action_source")
+                == "live_queue"
+                and cli_live_status_payload.get(
+                    "status_reconciliation",
+                    {},
+                ).get("record_boundary_may_be_stale")
+                is False
+                and cli_live_status_payload.get(
+                    "matching_advance_record_count"
+                )
+                == 0,
+                "CLI live status must ignore unrelated queue records",
                 failures,
             )
         else:
