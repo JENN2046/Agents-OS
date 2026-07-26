@@ -38,9 +38,17 @@
       "git_porcelain_v1_code": "??",
       "count": 40
     },
-    "initial_bundle_commit": "d4f1812dcac78000764c7dca91f6887ad091d256",
-    "initial_bundle_tree": "8d3a1bd3f50277dc37d0254de307c799e19ba497",
-    "durable_source_byte_binding": "The selected SHA-256 values and content-addressed objects were first durably bound by initial_bundle_commit and initial_bundle_tree. This provenance successor must preserve those object bytes; source_worktree_head_at_capture does not bind them.",
+    "delivered_archive_binding": {
+      "binding_scope": "objects/",
+      "object_count": 40,
+      "objects_subtree_git_oid_algorithm": "sha1",
+      "objects_subtree_git_oid": "e0b38c332631aafb06632ee4d243703991a634e4",
+      "per_object_binding": "$.objects[*].{blob_path,sha256,size_bytes,source_mode}",
+      "stored_git_mode": "100644",
+      "audit_rule": "Resolve objects_subtree_git_oid from the delivered commit tree, then require every declared blob_path to exist with stored Git mode 100644 and the declared source_mode, size_bytes, and SHA-256. No intermediate branch ref or commit object is an audit input.",
+      "first_durable_binding_claimed": false,
+      "provenance_successor_relationship_claimed": false
+    },
     "selection_closure": {
       "candidate_root": "control-plane/registry",
       "path_form": "repository-relative POSIX path",

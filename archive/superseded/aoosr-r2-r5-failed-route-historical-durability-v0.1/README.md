@@ -81,10 +81,12 @@ That HEAD is context only. It does not bind the historical source bytes:
 - all 40 selected paths were therefore also `UNTRACKED`;
 - `source_bytes_commit_bound` is explicitly `false`.
 
-The content-addressed objects and per-object SHA-256 values were first durably
-bound by bundle commit `d4f1812dcac78000764c7dca91f6887ad091d256`
-and tree `8d3a1bd3f50277dc37d0254de307c799e19ba497`. This
-provenance-only successor preserves those object bytes exactly.
+The delivered archive binds the 40 retained bytes without relying on an
+intermediate branch ref or commit object. Audit the delivered `objects/`
+subtree at Git OID `e0b38c332631aafb06632ee4d243703991a634e4`,
+then require every manifest entry to match its declared path, mode, size, and
+SHA-256. This archive makes no claim about which commit first durably bound the
+bytes and asserts no provenance-successor relationship.
 
 The candidate universe is deterministic:
 
