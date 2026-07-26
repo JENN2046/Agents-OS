@@ -208,6 +208,21 @@ def queue_snapshot_bindings_equal(left: Any, right: Any) -> bool:
     )
 
 
+def queue_snapshot_record_key(value: Any) -> str | None:
+    if not valid_queue_snapshot_binding(value):
+        return None
+    encoded = json.dumps(
+        {
+            field: value[field]
+            for field in ("path", "sha256", "byte_count")
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def load_bound_queue_snapshot(
     chain: Any,
     queue_path: Path,
@@ -2398,8 +2413,32 @@ def build_advance(
     Queue intake remains behind the reviewed apply gate.
     """
     resolved_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
-    cycle_record_path = record_root / f"{stable_id('CYCLERECORD', [intent, rel(resolved_queue), validation_command]).lower()}.json"
-    advance_record_path = record_root / f"{stable_id('ADVANCERECORD', [intent, rel(resolved_queue), validation_command, apply_intake]).lower()}.json"
+    record_queue_binding = expected_queue_binding
+    effective_expected_queue_binding = expected_queue_binding
+    if expected_queue_binding is None:
+        chain = import_module(
+            CONTROL_CHAIN_PATH,
+            "agents_os_control_chain_for_workbench_advance_record_binding",
+        )
+        queue_snapshot, queue_snapshot_error = load_bound_queue_snapshot(
+            chain,
+            resolved_queue,
+        )
+        if queue_snapshot_error or queue_snapshot is None:
+            record_queue_binding = {}
+            effective_expected_queue_binding = {}
+        else:
+            record_queue_binding = queue_snapshot["source_binding"]
+            effective_expected_queue_binding = record_queue_binding
+    record_key = queue_snapshot_record_key(record_queue_binding) or "unbound"
+    cycle_record_path = record_root / (
+        f"{stable_id('CYCLERECORD', [intent, rel(resolved_queue), validation_command]).lower()}"
+        f"-{record_key}.json"
+    )
+    advance_record_path = record_root / (
+        f"{stable_id('ADVANCERECORD', [intent, rel(resolved_queue), validation_command, apply_intake]).lower()}"
+        f"-{record_key}.json"
+    )
     cycle = build_cycle(
         intent,
         queue_path,
@@ -2408,7 +2447,7 @@ def build_advance(
         write_record=True,
         record_path=cycle_record_path,
         allowed_record_root=record_root,
-        expected_queue_binding=expected_queue_binding,
+        expected_queue_binding=effective_expected_queue_binding,
     )
     intake_apply: dict[str, Any] = {
         "present": False,
@@ -2582,6 +2621,21 @@ def validate_advance(
         errors.append("workbench advance must remain preview_first")
     if not valid_queue_snapshot_binding(result.get("source_queue_binding")):
         errors.append("workbench advance must bind its exact source queue bytes")
+    else:
+        record_key = queue_snapshot_record_key(
+            result.get("source_queue_binding")
+        )
+        record = result.get("stages", {}).get("record", {})
+        for field in ("cycle_record_path", "advance_record_path"):
+            value = record.get(field)
+            if (
+                not isinstance(value, str)
+                or record_key is None
+                or not Path(value).name.endswith(f"-{record_key}.json")
+            ):
+                errors.append(
+                    f"workbench advance {field} must bind its exact source queue snapshot"
+                )
     for flag in (
         "write_performed",
         "queue_promotion_authorized",

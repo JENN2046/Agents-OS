@@ -942,6 +942,175 @@ def main() -> int:
             "changed queue bytes must supersede the bound record boundary",
             failures,
         )
+        snapshot_record_queue_path = (
+            Path(temp_dir) / "snapshot-record-queue.md"
+        )
+        snapshot_record_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        snapshot_record_root = (
+            Path(temp_dir) / "snapshot-bound-records"
+        )
+        snapshot_record_root.mkdir()
+        snapshot_record_intent = (
+            "Write snapshot-bound governance evidence and run validation."
+        )
+        snapshot_h1_advance = workbench.build_advance(
+            snapshot_record_intent,
+            snapshot_record_queue_path,
+            record_root=snapshot_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        snapshot_h1_binding = snapshot_h1_advance.get(
+            "source_queue_binding",
+            {},
+        )
+        snapshot_h1_cycle_path = snapshot_record_root / Path(
+            snapshot_h1_advance["stages"]["record"]["cycle_record_path"]
+        ).name
+        snapshot_h1_advance_path = snapshot_record_root / Path(
+            snapshot_h1_advance["stages"]["record"]["advance_record_path"]
+        ).name
+        snapshot_record_queue_path.write_text(
+            workbench.fixture_queue_text()
+            + "\n<!-- distinct queue snapshot H2 -->\n",
+            encoding="utf-8",
+        )
+        snapshot_h2_advance = workbench.build_advance(
+            snapshot_record_intent,
+            snapshot_record_queue_path,
+            record_root=snapshot_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        snapshot_h2_binding = snapshot_h2_advance.get(
+            "source_queue_binding",
+            {},
+        )
+        snapshot_h2_cycle_path = snapshot_record_root / Path(
+            snapshot_h2_advance["stages"]["record"]["cycle_record_path"]
+        ).name
+        snapshot_h2_advance_path = snapshot_record_root / Path(
+            snapshot_h2_advance["stages"]["record"]["advance_record_path"]
+        ).name
+        snapshot_record_files = sorted(
+            snapshot_record_root.glob("*.json")
+        )
+        snapshot_h1_cycle_payload = (
+            workbench.load_json(snapshot_h1_cycle_path)
+            if snapshot_h1_cycle_path.exists()
+            else {}
+        )
+        snapshot_h1_advance_payload = (
+            workbench.load_json(snapshot_h1_advance_path)
+            if snapshot_h1_advance_path.exists()
+            else {}
+        )
+        snapshot_h2_cycle_payload = (
+            workbench.load_json(snapshot_h2_cycle_path)
+            if snapshot_h2_cycle_path.exists()
+            else {}
+        )
+        snapshot_h2_advance_payload = (
+            workbench.load_json(snapshot_h2_advance_path)
+            if snapshot_h2_advance_path.exists()
+            else {}
+        )
+        check(
+            snapshot_h1_advance["passed"] is True
+            and snapshot_h2_advance["passed"] is True
+            and snapshot_h1_advance["advance_id"]
+            != snapshot_h2_advance["advance_id"]
+            and snapshot_h1_binding != snapshot_h2_binding
+            and snapshot_h1_cycle_path != snapshot_h2_cycle_path
+            and snapshot_h1_advance_path != snapshot_h2_advance_path
+            and len(snapshot_record_files) == 4
+            and snapshot_h1_cycle_payload.get("replay_inputs", {}).get(
+                "queue_binding"
+            )
+            == snapshot_h1_binding
+            and snapshot_h1_advance_payload.get("source_queue_binding")
+            == snapshot_h1_binding
+            and snapshot_h2_cycle_payload.get("replay_inputs", {}).get(
+                "queue_binding"
+            )
+            == snapshot_h2_binding
+            and snapshot_h2_advance_payload.get("source_queue_binding")
+            == snapshot_h2_binding,
+            "same-intent advances over distinct queue snapshots must preserve both cycle and advance records",
+            failures,
+        )
+        record_binding_skew_queue_path = (
+            Path(temp_dir) / "record-binding-skew-queue.md"
+        )
+        record_binding_skew_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        record_binding_skew_root = (
+            Path(temp_dir) / "record-binding-skew-records"
+        )
+        record_binding_skew_root.mkdir()
+        original_load_bound_queue_snapshot = (
+            workbench.load_bound_queue_snapshot
+        )
+        record_binding_skew_calls = {"count": 0}
+
+        def record_binding_skew_snapshot(
+            chain: object,
+            queue_path: Path,
+        ) -> tuple[dict | None, str | None]:
+            snapshot_result = original_load_bound_queue_snapshot(
+                chain,
+                queue_path,
+            )
+            record_binding_skew_calls["count"] += 1
+            if record_binding_skew_calls["count"] == 1:
+                record_binding_skew_queue_path.write_text(
+                    workbench.fixture_queue_text()
+                    + "\n<!-- changed after record-path binding -->\n",
+                    encoding="utf-8",
+                )
+            return snapshot_result
+
+        workbench.load_bound_queue_snapshot = (
+            record_binding_skew_snapshot
+        )
+        try:
+            record_binding_skew_advance = workbench.build_advance(
+                "Do not record after queue binding skew.",
+                record_binding_skew_queue_path,
+                record_root=record_binding_skew_root,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.load_bound_queue_snapshot = (
+                original_load_bound_queue_snapshot
+            )
+        check(
+            record_binding_skew_calls["count"] >= 2
+            and record_binding_skew_advance["passed"] is False
+            and record_binding_skew_advance["stages"]["execution"][
+                "local_safe_execution_performed"
+            ]
+            is False
+            and record_binding_skew_advance[
+                "cycle_record_write_performed"
+            ]
+            is False
+            and record_binding_skew_advance[
+                "advance_record_write_performed"
+            ]
+            is False
+            and not list(record_binding_skew_root.glob("*.json"))
+            and any(
+                "queue bytes changed after the caller snapshot"
+                in error
+                for error in record_binding_skew_advance["errors"]
+            ),
+            "advance must fail closed when queue bytes change after record-path binding",
+            failures,
+        )
         expected_binding_queue_path = (
             Path(temp_dir) / "expected-binding-queue.md"
         )
