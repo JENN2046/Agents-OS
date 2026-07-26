@@ -359,27 +359,31 @@
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
       "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
-      "reason": "offline fixture lookup binds the current checkout; actual mode separately anchors the immutable R3 manifest before parsing or scanner load and commits receipts through a no-replace sibling transaction",
+      "reason": "offline fixture lookup binds the current checkout; the legacy --actual spelling now denies before manifest, Git, run-root, or receipt I/O because no authenticated external Jenn execution decision exists; the historical self-referential manifest is evidence only",
       "review_status": "REVIEW_NEEDED",
       "review_threads": [
         "PRRT_kwDOSxA_XM6T1Cqd",
         "PRRT_kwDOSxA_XM6T1Pyj",
-        "PRRT_kwDOSxA_XM6T1Pyk"
+        "PRRT_kwDOSxA_XM6T1Pyk",
+        "PRRT_kwDOSxA_XM6T1a1n",
+        "PRRT_kwDOSxA_XM6T1a1q"
       ],
-      "working_tree_sha256": "f23b43bd3ce0df0610fd05ce183c2f974722288b489e5494d42c64867cb22407"
+      "working_tree_sha256": "049475b14376183b097f8422a129bcc94af29aa3ea9a7e1f90ad1361b99c3235"
     },
     {
       "freeze_authority_carried_forward": false,
       "historical_anchor_sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
       "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
-      "reason": "portable-checkout, immutable-manifest-anchor, scanner-digest, and atomic-receipt fault regressions validate the review-needed runner corrections",
+      "reason": "portable-checkout, effect-free actual denial, no-live-self-hash-cycle, scanner-digest, and atomic-receipt fault regressions validate the review-needed runner corrections",
       "review_status": "REVIEW_NEEDED",
       "review_threads": [
         "PRRT_kwDOSxA_XM6T1Cqd",
         "PRRT_kwDOSxA_XM6T1Pyj",
-        "PRRT_kwDOSxA_XM6T1Pyk"
+        "PRRT_kwDOSxA_XM6T1Pyk",
+        "PRRT_kwDOSxA_XM6T1a1n",
+        "PRRT_kwDOSxA_XM6T1a1q"
       ],
-      "working_tree_sha256": "52bf8a39b35e05c7872e3a23f1909cf5bde04cbb9a0901e337796df0a49b0684"
+      "working_tree_sha256": "0c39cb4d4693641baeba54c73862032006d9b9ab1630d334530ba26e247bf9b7"
     }
   ]
 }

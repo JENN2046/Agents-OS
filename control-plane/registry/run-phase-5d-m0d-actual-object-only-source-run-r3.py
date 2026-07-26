@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Fail-closed R3 runner for the Phase 5D object-only source run.
+"""Fail-closed R3 evidence runner for the Phase 5D object-only source run.
 
-Import, --self-test and --fixture are offline-only.  --actual is intentionally
-present for a later decision, but is not called while R3 is authored or
-reviewed.
+Import, --self-test and --fixture are offline-only.  The historical ``--actual``
+spelling is retained only as a deterministic denial surface: these corrected
+bytes are outside the frozen R3 manifest and no separate, authenticated Jenn
+execution decision exists.  A future execution must use a separately reviewed
+launcher and trust anchor; this module cannot be activated by caller input.
 """
 
 from __future__ import annotations
@@ -49,12 +51,12 @@ REVIEW_MANIFEST_RELATIVE: Final[str] = (
     "control-plane/registry/reports/"
     "2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml"
 )
-EXPECTED_REVIEW_MANIFEST_SHA256: Final[str] = "f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1"
 REVIEW_UNIT: Final[str] = "PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R3_ATOMIC_BUNDLE"
 SCANNER_RECORD_ID: Final[str] = "R2_scanner_verified_source"
 SCANNER_SOURCE_RELATIVE: Final[str] = "control-plane/registry/object-only-source-run-r2-scanner.py"
 EXPECTED_PROTECTED_INVENTORY_SHA256: Final[str] = "52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011"
 TUPLE_SET_PREIMAGE_SHA256: Final[str] = "3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce"
+ACTUAL_DENIAL_RESULT: Final[str] = "BLOCKED_CURRENT_JENN_EXECUTION_DECISION_REQUIRED"
 
 
 @dataclass(frozen=True)
@@ -80,8 +82,9 @@ EXPECTED_COMMAND_IDS: Final[tuple[str, ...]] = (
 )
 assert len(EXPECTED_COMMAND_IDS) == 24
 
-# Paths and identities are closed here; hashes remain in the R3 manifest to
-# avoid a source/manifest self-hash cycle and are verified before actual mode.
+# These identities describe the immutable historical review bundle exposed by
+# fixture mode.  They are not an executable trust anchor for the corrected
+# runner: the historical manifest contains the historical runner hash.
 EXPECTED_REVIEW_RECORDS: Final[dict[str, tuple[tuple[str, str], ...]]] = {
     "subjects": (
         ("R3_amendment", "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-amendment-v0.1.md"),
@@ -225,28 +228,6 @@ def _parse_bound_manifest(raw: bytes) -> tuple[tuple[dict[str, str], ...], str]:
     if len(records) != EXPECTED_REVIEW_RECORD_COUNT or len({entry["path"] for entry in records}) != len(records) or successor_digest is None:
         raise ValueError("manifest inventory")
     return tuple(records), successor_digest
-
-
-def _require_expected_review_manifest(raw: bytes) -> None:
-    if sha256(raw).hexdigest() != EXPECTED_REVIEW_MANIFEST_SHA256:
-        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest_digest")
-
-
-def _verify_bound_manifest() -> tuple[dict[str, bytes], str, str]:
-    try:
-        raw_manifest = _read_regular_workspace_file(REVIEW_MANIFEST_RELATIVE, "manifest")
-        _require_expected_review_manifest(raw_manifest)
-        records, successor_digest = _parse_bound_manifest(raw_manifest)
-        sources = {entry["id"]: _read_regular_workspace_file(entry["path"], "manifest_source") for entry in records}
-    except (Blocked, UnicodeError, ValueError, json.JSONDecodeError) as exc:
-        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest") from exc
-    for entry in records:
-        if sha256(sources[entry["id"]]).hexdigest() != entry["sha256"]:
-            raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "manifest_hash")
-    scanner_digest = next(
-        entry["sha256"] for entry in records if entry["id"] == SCANNER_RECORD_ID
-    )
-    return sources, successor_digest, scanner_digest
 
 
 def _load_verified_scanner(source: bytes, expected_digest: str) -> dict[str, Any]:
@@ -734,40 +715,21 @@ def _write_receipt(state: RunState, package_sha256: str) -> None:
     )
 
 
-def run_actual() -> int:
-    state = RunState()
-    package_sha256 = "UNAVAILABLE"
-    guard = SignalGuard()
-    try:
-        guard.enter()
-        sources, package_sha256, scanner_digest = _verify_bound_manifest()
-        _assert_preconditions()
-        _create_owned_root(state)
-        scanner = _load_verified_scanner(sources[SCANNER_RECORD_ID], scanner_digest)
-        _run_exact_inventory(state, scanner)
-        if guard.has_pending():
-            raise Blocked("BLOCKED_INTERRUPTED_OR_SIGNALLED", "pending_signal_before_terminal_commit")
-        state.result = "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY"
-        state.failure_phase = None
-    except Blocked as exc:
-        state.result, state.failure_phase = exc.result, exc.phase
-    except Exception:
-        state.result, state.failure_phase = "BLOCKED_UNEXPECTED_RUNNER_FAILURE", "runner"
-    finally:
-        state.cleanup_status = _finalize_owned_root(state)
-        if state.cleanup_status not in {"CLEAN", "NOT_CREATED"}:
-            state.result, state.failure_phase = "BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED", "finalizer"
-        if state.result == "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY" and guard.has_pending():
-            state.result, state.failure_phase = "BLOCKED_INTERRUPTED_OR_SIGNALLED", "pending_signal_terminal_commit"
-        try:
-            _write_receipt(state, package_sha256)
-        except Blocked as exc:
-            state.result, state.failure_phase = exc.result, exc.phase
-        except Exception:
-            state.result, state.failure_phase = "BLOCKED_RECEIPT_COMMIT_PARTIAL_OR_UNKNOWN", "receipt_commit"
-        if state.result == "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY":
-            guard.success_exit()
-        guard.restore_failure_mask()
+def _actual_denial_document() -> dict[str, Any]:
+    return {
+        "result": ACTUAL_DENIAL_RESULT,
+        "actual_mode_entered": False,
+        "actual_object_only_source_run_authorized": False,
+        "authenticated_external_decision_present": False,
+        "receipt_write_attempted": False,
+        "run_root_created": False,
+        "VCPToolBox_Git_command_count": 0,
+    }
+
+
+def deny_actual() -> int:
+    """Reject the legacy spelling before any manifest, Git, root or receipt I/O."""
+    print(json.dumps(_actual_denial_document(), sort_keys=True))
     return 1
 
 
@@ -823,18 +785,16 @@ def self_test() -> int:
         pass
     case_count = len(cases) + 2
 
-    exact_manifest = b""
-    try:
-        exact_manifest = _read_regular_checkout_file(REVIEW_MANIFEST_RELATIVE, "self_test_manifest")
-        _require_expected_review_manifest(exact_manifest)
-    except Blocked:
-        failures.append("exact_manifest_anchor")
-    case_count += 1
-    try:
-        _require_expected_review_manifest(exact_manifest + b"\n")
-        failures.append("substituted_manifest_anchor")
-    except Blocked:
-        pass
+    if _actual_denial_document() != {
+        "result": ACTUAL_DENIAL_RESULT,
+        "actual_mode_entered": False,
+        "actual_object_only_source_run_authorized": False,
+        "authenticated_external_decision_present": False,
+        "receipt_write_attempted": False,
+        "run_root_created": False,
+        "VCPToolBox_Git_command_count": 0,
+    }:
+        failures.append("actual_denial_document")
     case_count += 1
 
     with tempfile.TemporaryDirectory(prefix="agents-os-r3-receipt-self-test-") as directory:
@@ -985,7 +945,7 @@ def main() -> int:
             errors = ["fixture:BLOCKED"]
         print(json.dumps({"result": "PASS_NO_BLOCKER" if not errors else "BLOCKED", "errors": errors}, sort_keys=True))
         return 0 if not errors else 1
-    return run_actual()
+    return deny_actual()
 
 
 if __name__ == "__main__":

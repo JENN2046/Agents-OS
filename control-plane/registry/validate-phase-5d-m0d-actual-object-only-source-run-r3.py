@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import ast
+from contextlib import redirect_stdout
 import copy
+import io
 import json
 import os
 from pathlib import Path
@@ -39,15 +42,19 @@ def validate(document: Any) -> list[str]:
     source = RUNNER_PATH.read_text(encoding="utf-8")
     for required in (
         "def _load_verified_scanner",
-        "def _verify_bound_manifest",
-        "EXPECTED_REVIEW_MANIFEST_SHA256",
-        "_require_expected_review_manifest(raw_manifest)",
-        "scanner_digest = next(",
-        "_load_verified_scanner(sources[SCANNER_RECORD_ID], scanner_digest)",
+        "ACTUAL_DENIAL_RESULT",
+        "def _actual_denial_document",
+        "def deny_actual",
+        "return deny_actual()",
+        "\"actual_mode_entered\": False",
+        "\"actual_object_only_source_run_authorized\": False",
+        "\"authenticated_external_decision_present\": False",
+        "\"receipt_write_attempted\": False",
+        "\"run_root_created\": False",
+        "\"VCPToolBox_Git_command_count\": 0",
         "exec(compile(source",
         "signal.SIG_BLOCK, CATCHABLE_SIGNALS",
-        "pending_signal_terminal_commit",
-        "guard.success_exit()",
+        "def success_exit",
         "def _commit_receipt_atomically",
         "rename_receipt_noreplace(parent_fd, temp_name, target_name)",
         "fsync_receipt_parent_fd(parent_fd)",
@@ -59,18 +66,47 @@ def validate(document: Any) -> list[str]:
     ):
         if required not in source:
             errors.append(f"runner:SOURCE_BINDING:{required}")
+    for forbidden in (
+        "EXPECTED_REVIEW_MANIFEST_SHA256",
+        "def _verify_bound_manifest",
+        "def run_actual",
+    ):
+        if forbidden in source:
+            errors.append(f"runner:LIVE_ACTUAL_OR_SELF_HASH_CYCLE:{forbidden}")
     if "runpy" in source:
         errors.append("runner:TOP_LEVEL_DYNAMIC_SCANNER_LOAD")
-    if source.index("_require_expected_review_manifest(raw_manifest)") > source.index(
-        "_parse_bound_manifest(raw_manifest)"
-    ):
-        errors.append("runner:MANIFEST_ANCHOR_ORDER")
     if "sha256(sources[SCANNER_RECORD_ID]).hexdigest()" in source:
         errors.append("runner:TAUTOLOGICAL_SCANNER_DIGEST")
     if "_write_exclusive(RECEIPT_TARGET" in source:
         errors.append("runner:NONTRANSACTIONAL_RECEIPT_WRITE")
-    if source.index("_write_receipt(state, package_sha256)") > source.index("guard.success_exit()"):
-        errors.append("runner:SUCCESS_COMMIT_ORDER")
+    tree = ast.parse(source)
+    denial = next(
+        (
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == "deny_actual"
+        ),
+        None,
+    )
+    if denial is None:
+        errors.append("runner:ACTUAL_DENIAL_FUNCTION_MISSING")
+    else:
+        dangerous = {
+            "_assert_preconditions",
+            "_create_owned_root",
+            "_load_verified_scanner",
+            "_run_exact_inventory",
+            "_write_receipt",
+            "_commit_receipt_atomically",
+            "subprocess",
+        }
+        called = {
+            node.func.id
+            for node in ast.walk(denial)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        if called & dangerous:
+            errors.append("runner:ACTUAL_DENIAL_HAS_EFFECT_CALL")
     return errors
 
 
@@ -91,6 +127,47 @@ def self_test() -> int:
         mutate(mutated)
         cases.append((name, mutated, False))
     failures = [name for name, document, should_pass in cases if (not validate(document)) is not should_pass]
+    expected_denial = {
+        "result": RUNNER["ACTUAL_DENIAL_RESULT"],
+        "actual_mode_entered": False,
+        "actual_object_only_source_run_authorized": False,
+        "authenticated_external_decision_present": False,
+        "receipt_write_attempted": False,
+        "run_root_created": False,
+        "VCPToolBox_Git_command_count": 0,
+    }
+    if RUNNER["_actual_denial_document"]() != expected_denial:
+        failures.append("actual_denial_document_mismatch")
+    guarded_helpers = (
+        "_assert_preconditions",
+        "_create_owned_root",
+        "_load_verified_scanner",
+        "_run_exact_inventory",
+        "_write_receipt",
+        "_commit_receipt_atomically",
+    )
+    originals = {name: RUNNER[name] for name in guarded_helpers}
+
+    def unexpected_effect(*_args: Any, **_kwargs: Any) -> None:
+        raise AssertionError("actual denial attempted an effect")
+
+    for name in guarded_helpers:
+        RUNNER[name] = unexpected_effect
+    denial_output = io.StringIO()
+    try:
+        with redirect_stdout(denial_output):
+            denial_status = RUNNER["deny_actual"]()
+    except AssertionError:
+        failures.append("actual_denial_attempted_effect")
+        denial_status = 0
+    finally:
+        RUNNER.update(originals)
+    try:
+        emitted_denial = json.loads(denial_output.getvalue(), object_pairs_hook=_no_duplicates)
+    except (json.JSONDecodeError, ValueError):
+        emitted_denial = None
+    if denial_status != 1 or emitted_denial != expected_denial:
+        failures.append("actual_denial_output_mismatch")
 
     with tempfile.TemporaryDirectory(prefix="agents-os-r3-validator-") as directory:
         marker = Path(directory) / "scanner-side-effect"
@@ -152,7 +229,7 @@ def self_test() -> int:
     )
     if _subprocess([sys.executable, "-c", direct_exit]).returncode != 0:
         failures.append("success_exit_probe")
-    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 7, "failures": failures}, sort_keys=True))
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 9, "failures": failures}, sort_keys=True))
     return 0 if not failures else 1
 
 
