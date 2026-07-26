@@ -3,10 +3,14 @@
 
 from __future__ import annotations
 
+import errno
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
+import signal
+import stat
 import subprocess
 import sys
 import tempfile
@@ -881,6 +885,346 @@ prior_task: closed
             failures,
         )
 
+        post_cas_byte_queue_path = Path(temp_dir) / "post-cas-byte-swap-queue.md"
+        post_cas_byte_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_rename_exchange = chain.rename_exchange
+        post_cas_byte_state = {"triggered": False}
+
+        def post_cas_byte_swap(parent_fd: int, first_name: str, second_name: str) -> None:
+            if not post_cas_byte_state["triggered"]:
+                post_cas_byte_state["triggered"] = True
+                post_cas_byte_queue_path.write_text(generic_p3_queue_text, encoding="utf-8")
+            original_rename_exchange(parent_fd, first_name, second_name)
+
+        chain.rename_exchange = post_cas_byte_swap
+        try:
+            post_cas_byte_apply = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                post_cas_byte_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.rename_exchange = original_rename_exchange
+        check(post_cas_byte_state["triggered"] is True, "post-CAS byte-swap attack hook should run", failures)
+        check(
+            post_cas_byte_apply["passed"] is False
+            and post_cas_byte_apply["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and post_cas_byte_apply["queue_state"] == "UNKNOWN"
+            and post_cas_byte_apply["queue_commit_attempted"] is True
+            and post_cas_byte_apply["rollback_performed"] is True
+            and post_cas_byte_apply["write_performed"] is True
+            and post_cas_byte_apply["queue_adoption_authorized"] is False
+            and post_cas_byte_apply["queue_write_authorized"] is False
+            and post_cas_byte_apply["requires_jenn_decision"] is True,
+            f"post-CAS same-inode byte swap must roll back and report PARTIAL_OR_UNKNOWN: {post_cas_byte_apply}",
+            failures,
+        )
+        check(
+            post_cas_byte_queue_path.read_text(encoding="utf-8") == generic_p3_queue_text,
+            "post-CAS byte swap must preserve attacker-updated queue bytes instead of overwriting them",
+            failures,
+        )
+
+        post_cas_link_queue_path = Path(temp_dir) / "post-cas-hardlink-queue.md"
+        post_cas_link_alias_path = Path(temp_dir) / "post-cas-hardlink-alias.md"
+        post_cas_link_queue_path.write_text(route_queue_text, encoding="utf-8")
+        post_cas_link_state = {"triggered": False}
+
+        def post_cas_hardlink(parent_fd: int, first_name: str, second_name: str) -> None:
+            if not post_cas_link_state["triggered"]:
+                post_cas_link_state["triggered"] = True
+                os.link(post_cas_link_queue_path, post_cas_link_alias_path)
+            original_rename_exchange(parent_fd, first_name, second_name)
+
+        chain.rename_exchange = post_cas_hardlink
+        try:
+            post_cas_link_apply = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                post_cas_link_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.rename_exchange = original_rename_exchange
+        check(post_cas_link_state["triggered"] is True, "post-CAS hardlink attack hook should run", failures)
+        check(
+            post_cas_link_apply["passed"] is False
+            and post_cas_link_apply["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and post_cas_link_apply["queue_state"] == "UNKNOWN"
+            and post_cas_link_apply["rollback_performed"] is True
+            and post_cas_link_apply["write_performed"] is True
+            and post_cas_link_apply["queue_adoption_authorized"] is False,
+            f"post-CAS hardlink injection must fail closed with truthful write evidence: {post_cas_link_apply}",
+            failures,
+        )
+        check(
+            post_cas_link_queue_path.read_text(encoding="utf-8") == route_queue_text
+            and post_cas_link_alias_path.read_text(encoding="utf-8") == route_queue_text,
+            "post-CAS hardlink injection must not expose candidate writes through the alias",
+            failures,
+        )
+        post_cas_link_alias_path.unlink()
+
+        def run_precommit_fault(
+            name: str,
+            helper_name: str,
+            replacement: object,
+        ) -> tuple[dict, Path]:
+            fault_queue_path = Path(temp_dir) / name
+            fault_queue_path.write_text(route_queue_text, encoding="utf-8")
+            original_helper = getattr(chain, helper_name)
+            setattr(chain, helper_name, replacement)
+            try:
+                result = chain.reviewed_route_adoption_apply_gate(
+                    route_choice_proposal,
+                    route_review,
+                    fault_queue_path,
+                    apply=True,
+                )
+            finally:
+                setattr(chain, helper_name, original_helper)
+            return result, fault_queue_path
+
+        original_os_write = chain.os.write
+        partial_write_state = {"triggered": False}
+
+        def partial_write_then_eio(file_fd: int, data: bytes) -> int:
+            if not partial_write_state["triggered"]:
+                partial_write_state["triggered"] = True
+                prefix_size = max(1, len(data) // 3)
+                original_os_write(file_fd, data[:prefix_size])
+                raise OSError(errno.EIO, "injected partial transaction write")
+            return original_os_write(file_fd, data)
+
+        partial_write_result, partial_write_queue_path = run_precommit_fault(
+            "partial-write-fault-queue.md",
+            "write_all_transaction_fd",
+            lambda file_fd, data: partial_write_then_eio(file_fd, data),
+        )
+        check(partial_write_state["triggered"] is True, "partial-write fault hook should run", failures)
+        check(
+            partial_write_result["passed"] is False
+            and partial_write_result["transaction_outcome"] == "NO_WRITE"
+            and partial_write_result["queue_state"] == "UNCHANGED"
+            and partial_write_result["queue_commit_attempted"] is False
+            and partial_write_result["write_performed"] is False
+            and partial_write_result["temp_cleanup_confirmed"] is True
+            and partial_write_result["queue_adoption_authorized"] is False,
+            f"partial temp write must prove NO_WRITE without a false active-queue mutation claim: {partial_write_result}",
+            failures,
+        )
+        check(
+            partial_write_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            "partial temp write failure must preserve exact old active queue bytes",
+            failures,
+        )
+
+        def injected_truncate_failure(file_fd: int, size: int) -> None:
+            raise OSError(errno.EIO, "injected transaction truncate failure")
+
+        truncate_result, truncate_queue_path = run_precommit_fault(
+            "truncate-fault-queue.md",
+            "truncate_transaction_temp_fd",
+            injected_truncate_failure,
+        )
+        check(
+            truncate_result["passed"] is False
+            and truncate_result["transaction_outcome"] == "NO_WRITE"
+            and truncate_result["queue_state"] == "UNCHANGED"
+            and truncate_result["write_performed"] is False
+            and truncate_result["temp_cleanup_confirmed"] is True
+            and truncate_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            f"temp ftruncate failure must preserve exact old active queue bytes: {truncate_result}",
+            failures,
+        )
+
+        def injected_file_fsync_failure(file_fd: int) -> None:
+            raise OSError(errno.EIO, "injected transaction file fsync failure")
+
+        file_fsync_result, file_fsync_queue_path = run_precommit_fault(
+            "file-fsync-fault-queue.md",
+            "fsync_transaction_file_fd",
+            injected_file_fsync_failure,
+        )
+        check(
+            file_fsync_result["passed"] is False
+            and file_fsync_result["transaction_outcome"] == "NO_WRITE"
+            and file_fsync_result["queue_state"] == "UNCHANGED"
+            and file_fsync_result["write_performed"] is False
+            and file_fsync_result["temp_cleanup_confirmed"] is True
+            and file_fsync_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            f"temp fsync failure must preserve exact old active queue bytes: {file_fsync_result}",
+            failures,
+        )
+
+        parent_fsync_queue_path = Path(temp_dir) / "parent-fsync-fault-queue.md"
+        parent_fsync_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_parent_fsync = chain.fsync_transaction_parent_fd
+        parent_fsync_state = {"calls": 0}
+
+        def injected_first_parent_fsync_failure(parent_fd: int) -> None:
+            parent_fsync_state["calls"] += 1
+            if parent_fsync_state["calls"] == 1:
+                raise OSError(errno.EIO, "injected post-exchange parent fsync failure")
+            original_parent_fsync(parent_fd)
+
+        chain.fsync_transaction_parent_fd = injected_first_parent_fsync_failure
+        try:
+            parent_fsync_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                parent_fsync_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.fsync_transaction_parent_fd = original_parent_fsync
+        check(
+            parent_fsync_result["passed"] is False
+            and parent_fsync_result["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and parent_fsync_result["queue_state"] == "UNCHANGED"
+            and parent_fsync_result["queue_commit_attempted"] is True
+            and parent_fsync_result["rollback_performed"] is True
+            and parent_fsync_result["write_performed"] is True
+            and parent_fsync_result["queue_adoption_authorized"] is False
+            and parent_fsync_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            f"post-exchange parent fsync failure must roll back with truthful PARTIAL evidence: {parent_fsync_result}",
+            failures,
+        )
+
+        commit_cleanup_fsync_queue_path = Path(temp_dir) / "commit-cleanup-fsync-fault-queue.md"
+        commit_cleanup_fsync_queue_path.write_text(route_queue_text, encoding="utf-8")
+        expected_commit_cleanup_text, _ = chain.append_route_adoption_to_queue_text(
+            route_queue_text,
+            route_choice_proposal,
+        )
+        commit_cleanup_fsync_state = {"calls": 0}
+
+        def injected_commit_cleanup_fsync_failure(parent_fd: int) -> None:
+            commit_cleanup_fsync_state["calls"] += 1
+            if commit_cleanup_fsync_state["calls"] == 2:
+                raise OSError(errno.EIO, "injected commit-cleanup parent fsync failure")
+            original_parent_fsync(parent_fd)
+
+        chain.fsync_transaction_parent_fd = injected_commit_cleanup_fsync_failure
+        try:
+            commit_cleanup_fsync_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                commit_cleanup_fsync_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.fsync_transaction_parent_fd = original_parent_fsync
+        check(
+            commit_cleanup_fsync_result["passed"] is False
+            and commit_cleanup_fsync_result["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and commit_cleanup_fsync_result["queue_state"] == "UPDATED"
+            and commit_cleanup_fsync_result["queue_commit_attempted"] is True
+            and commit_cleanup_fsync_result["rollback_performed"] is False
+            and commit_cleanup_fsync_result["write_performed"] is True
+            and commit_cleanup_fsync_result["temp_cleanup_confirmed"] is True
+            and commit_cleanup_fsync_result["parent_directory_fsynced"] is False
+            and commit_cleanup_fsync_result["queue_adoption_authorized"] is False
+            and commit_cleanup_fsync_queue_path.read_text(encoding="utf-8")
+            == expected_commit_cleanup_text,
+            (
+                "commit-cleanup fsync failure must preserve exact new bytes and "
+                f"report truthful PARTIAL evidence: {commit_cleanup_fsync_result}"
+            ),
+            failures,
+        )
+
+        post_validation_queue_path = Path(temp_dir) / "post-validation-fault-queue.md"
+        post_validation_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_exchange_validation = chain.validate_transaction_exchange
+
+        def injected_post_exchange_validation(*args: object, **kwargs: object) -> list[str]:
+            raise OSError(errno.EIO, "injected post-exchange validation failure")
+
+        chain.validate_transaction_exchange = injected_post_exchange_validation
+        try:
+            post_validation_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                post_validation_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.validate_transaction_exchange = original_exchange_validation
+        check(
+            post_validation_result["passed"] is False
+            and post_validation_result["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and post_validation_result["queue_state"] == "UNCHANGED"
+            and post_validation_result["queue_commit_attempted"] is True
+            and post_validation_result["rollback_performed"] is True
+            and post_validation_result["write_performed"] is True
+            and post_validation_result["queue_adoption_authorized"] is False
+            and post_validation_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            f"post-exchange validation failure must roll back with truthful PARTIAL evidence: {post_validation_result}",
+            failures,
+        )
+
+        if hasattr(os, "fork"):
+            preexchange_kill_queue_path = Path(temp_dir) / "preexchange-kill-queue.md"
+            preexchange_kill_queue_path.write_text(route_queue_text, encoding="utf-8")
+            original_temp_write = chain.write_transaction_temp_fd
+
+            def kill_after_temp_fsync(file_fd: int, data: bytes) -> None:
+                original_temp_write(file_fd, data)
+                os.kill(os.getpid(), signal.SIGKILL)
+
+            chain.write_transaction_temp_fd = kill_after_temp_fsync
+            preexchange_child = os.fork()
+            if preexchange_child == 0:
+                chain.reviewed_route_adoption_apply_gate(
+                    route_choice_proposal,
+                    route_review,
+                    preexchange_kill_queue_path,
+                    apply=True,
+                )
+                os._exit(70)
+            _, preexchange_status = os.waitpid(preexchange_child, 0)
+            chain.write_transaction_temp_fd = original_temp_write
+            check(
+                os.WIFSIGNALED(preexchange_status)
+                and os.WTERMSIG(preexchange_status) == signal.SIGKILL
+                and preexchange_kill_queue_path.read_text(encoding="utf-8") == route_queue_text,
+                "SIGKILL after temp fsync must leave exact old active queue bytes",
+                failures,
+            )
+
+            postexchange_kill_queue_path = Path(temp_dir) / "postexchange-kill-queue.md"
+            postexchange_kill_queue_path.write_text(route_queue_text, encoding="utf-8")
+            expected_postexchange_text, _ = chain.append_route_adoption_to_queue_text(
+                route_queue_text,
+                route_choice_proposal,
+            )
+
+            def kill_after_atomic_exchange(parent_fd: int, first_name: str, second_name: str) -> None:
+                original_rename_exchange(parent_fd, first_name, second_name)
+                os.kill(os.getpid(), signal.SIGKILL)
+
+            chain.rename_exchange = kill_after_atomic_exchange
+            postexchange_child = os.fork()
+            if postexchange_child == 0:
+                chain.reviewed_route_adoption_apply_gate(
+                    route_choice_proposal,
+                    route_review,
+                    postexchange_kill_queue_path,
+                    apply=True,
+                )
+                os._exit(71)
+            _, postexchange_status = os.waitpid(postexchange_child, 0)
+            chain.rename_exchange = original_rename_exchange
+            check(
+                os.WIFSIGNALED(postexchange_status)
+                and os.WTERMSIG(postexchange_status) == signal.SIGKILL
+                and postexchange_kill_queue_path.read_text(encoding="utf-8") == expected_postexchange_text,
+                "SIGKILL after atomic exchange must leave exact new active queue bytes, never a torn queue",
+                failures,
+            )
+
         adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, route_review, route_queue_path)
         check(adoption_preview["passed"], f"reviewed route adoption preview should pass: {adoption_preview['errors']}", failures)
         check(adoption_preview["preview_only"] is True, "reviewed route adoption should be preview-only", failures)
@@ -929,9 +1273,17 @@ old_task: closed
         check(adoption_apply_preview["preview_only"] is True, "route adoption apply preview should be preview-only", failures)
         check(adoption_apply_preview["active_queue_modified"] is False, "route adoption apply preview must not mutate queue", failures)
         check(adoption_apply_preview["queue_write_authorized"] is False, "route adoption apply preview must not authorize queue write", failures)
+        check(
+            adoption_apply_preview["transaction_outcome"] == "NO_WRITE"
+            and adoption_apply_preview["queue_state"] == "UNCHANGED",
+            "route adoption apply preview must attest NO_WRITE/UNCHANGED",
+            failures,
+        )
         check(route_apply_queue_path.read_text(encoding="utf-8") == route_apply_queue_text, "route adoption apply preview should not change queue", failures)
+        route_apply_before_stat = route_apply_queue_path.stat()
         adoption_apply = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, route_review, route_apply_queue_path, apply=True)
         route_apply_text = route_apply_queue_path.read_text(encoding="utf-8")
+        route_apply_after_stat = route_apply_queue_path.stat()
         check(adoption_apply["passed"], f"reviewed route adoption apply should pass: {adoption_apply['errors']}", failures)
         check(adoption_apply["active_queue_modified"] is True, "route adoption apply should mutate fixture queue", failures)
         check(adoption_apply["queue_write_authorized"] is True, "route adoption apply should authorize explicit queue write", failures)
@@ -946,6 +1298,30 @@ old_task: closed
         check(
             adoption_apply["final_queue_sha256"] == hashlib.sha256(route_apply_text.encode("utf-8")).hexdigest(),
             "route adoption apply must attest the exact final queue bytes",
+            failures,
+        )
+        check(
+            adoption_apply["transaction_outcome"] == "COMMITTED"
+            and adoption_apply["queue_state"] == "UPDATED"
+            and adoption_apply["queue_commit_attempted"] is True
+            and adoption_apply["write_performed"] is True
+            and adoption_apply["temp_cleanup_confirmed"] is True
+            and adoption_apply["parent_directory_fsynced"] is True,
+            f"route adoption apply must prove a durable committed transaction: {adoption_apply}",
+            failures,
+        )
+        check(
+            route_apply_after_stat.st_ino != route_apply_before_stat.st_ino
+            and stat.S_IMODE(route_apply_after_stat.st_mode) == stat.S_IMODE(route_apply_before_stat.st_mode)
+            and route_apply_after_stat.st_uid == route_apply_before_stat.st_uid
+            and route_apply_after_stat.st_gid == route_apply_before_stat.st_gid
+            and route_apply_after_stat.st_nlink == 1,
+            "committed route transaction must install a distinct inode with preserved security metadata",
+            failures,
+        )
+        check(
+            not list(route_apply_queue_path.parent.glob(f".{route_apply_queue_path.name}.agents-os-txn-*.tmp")),
+            "committed route transaction must leave no reserved sibling temp entry",
             failures,
         )
         check("### NOW-001: No Active Automatic Construction Item" in route_apply_text, "route adoption apply must leave NOW unchanged", failures)
@@ -1026,7 +1402,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=38 failures={len(failures)}")
+        print(f"cases=47 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -1048,12 +1424,21 @@ old_task: closed
     print("PASS queue byte-swap binding attack fixture")
     print("PASS queue symlink-swap binding attack fixture")
     print("PASS Machine/Dashboard read-skew binding attack fixture")
+    print("PASS post-CAS byte-swap transaction attack fixture")
+    print("PASS post-CAS hardlink transaction attack fixture")
+    print("PASS partial-write transaction fault fixture")
+    print("PASS ftruncate transaction fault fixture")
+    print("PASS fsync transaction fault fixture")
+    print("PASS post-exchange parent-fsync transaction fault fixture")
+    print("PASS commit-cleanup parent-fsync transaction fault fixture")
+    print("PASS post-exchange validation transaction fault fixture")
+    print("PASS process-kill old-or-new transaction fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=38 failures=0")
+    print("cases=47 failures=0")
     return 0
 
 

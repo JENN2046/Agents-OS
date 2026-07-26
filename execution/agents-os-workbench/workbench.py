@@ -699,11 +699,21 @@ def build_route_choice_apply_gate(
         "preview_only": not apply,
         "queue_adoption_authorized": False,
         "route_adoption_authorized": False,
+        "workspace_route_state_modified": False,
         "active_queue_modified": False,
         "write_performed": False,
         "queue_write_authorized": False,
         "queue_promotion_authorized": False,
         "execution_authorized": False,
+        "requires_jenn_decision": False,
+        "transaction_outcome": "NO_WRITE",
+        "queue_state": "UNCHANGED",
+        "queue_state_known": True,
+        "queue_commit_attempted": False,
+        "rollback_performed": False,
+        "temp_cleanup_confirmed": True,
+        "parent_directory_fsynced": False,
+        "final_queue_sha256": None,
         "mutation": {},
         "errors": [],
     }
@@ -715,8 +725,10 @@ def build_route_choice_apply_gate(
             apply=apply,
         )
         lower_gate_active = apply_gate.get("active_jenn_governance_gate") is True
+        lower_requires_jenn = apply_gate.get("requires_jenn_decision") is True
         if lower_gate_active:
             governance_gate_active = True
+        if lower_requires_jenn:
             review = {
                 "schema_version": "agents-os.queue-manager.review.v0.1",
                 "source_proposal_id": proposal.get("proposal_id"),
@@ -728,6 +740,12 @@ def build_route_choice_apply_gate(
 
     selected = route_preview.get("selected_option", {}) if isinstance(route_preview, dict) else {}
     mutation = apply_gate.get("mutation", {})
+    transaction_outcome = apply_gate.get("transaction_outcome")
+    queue_state = apply_gate.get("queue_state")
+    queue_reconciliation_required = transaction_outcome == "PARTIAL_OR_UNKNOWN"
+    requires_jenn_decision = (
+        governance_gate_active or apply_gate.get("requires_jenn_decision") is True
+    )
     result = {
         "schema_version": "agents-os.workbench.route-choice-apply-gate.v0.1",
         "mode": "route_choice_reviewed_apply_gate",
@@ -769,6 +787,15 @@ def build_route_choice_apply_gate(
             "queue_adoption_authorized": apply_gate.get("queue_adoption_authorized"),
             "route_adoption_authorized": apply_gate.get("route_adoption_authorized"),
             "no_p3_route_adoption_guard": apply_gate.get("no_p3_route_adoption_guard"),
+            "requires_jenn_decision": apply_gate.get("requires_jenn_decision"),
+            "transaction_outcome": transaction_outcome,
+            "queue_state": queue_state,
+            "queue_state_known": apply_gate.get("queue_state_known"),
+            "queue_commit_attempted": apply_gate.get("queue_commit_attempted"),
+            "rollback_performed": apply_gate.get("rollback_performed"),
+            "temp_cleanup_confirmed": apply_gate.get("temp_cleanup_confirmed"),
+            "parent_directory_fsynced": apply_gate.get("parent_directory_fsynced"),
+            "final_queue_sha256": apply_gate.get("final_queue_sha256"),
             "appended_next_id": mutation.get("appended_next_id"),
             "appended_next_title": mutation.get("appended_next_title"),
             "next_count_before": mutation.get("next_count_before"),
@@ -780,8 +807,8 @@ def build_route_choice_apply_gate(
         "raw_confirmation_text_output": False,
         "raw_template_output": False,
         "route_auto_selection_authorized": False,
-        "workspace_route_state_modified": apply_gate.get("workspace_route_state_modified") is True,
-        "active_queue_modified": apply_gate.get("active_queue_modified") is True,
+        "workspace_route_state_modified": apply_gate.get("workspace_route_state_modified"),
+        "active_queue_modified": apply_gate.get("active_queue_modified"),
         "write_performed": apply_gate.get("write_performed") is True,
         "queue_write_authorized": apply_gate.get("queue_write_authorized") is True,
         "queue_promotion_authorized": False,
@@ -792,24 +819,37 @@ def build_route_choice_apply_gate(
         "external_write_authorized": False,
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
+        "requires_jenn_decision": requires_jenn_decision,
+        "transaction_outcome": transaction_outcome,
+        "queue_state": queue_state,
+        "queue_state_known": apply_gate.get("queue_state_known") is True,
+        "queue_commit_attempted": apply_gate.get("queue_commit_attempted") is True,
+        "rollback_performed": apply_gate.get("rollback_performed") is True,
+        "temp_cleanup_confirmed": apply_gate.get("temp_cleanup_confirmed") is True,
+        "parent_directory_fsynced": apply_gate.get("parent_directory_fsynced") is True,
+        "final_queue_sha256": apply_gate.get("final_queue_sha256"),
         "next_step": {
             "status": (
                 "governance_decision_required"
                 if governance_gate_active
+                else "queue_state_reconciliation_required"
+                if queue_reconciliation_required
                 else "route_adoption_applied_review_queue_promotion"
-                if apply_gate.get("write_performed") is True
+                if transaction_outcome == "COMMITTED"
                 else "review_route_choice_apply_gate"
             ),
-            "owner": "Jenn" if governance_gate_active else "Nobao",
+            "owner": "Jenn" if governance_gate_active or queue_reconciliation_required else "Nobao",
             "selected_route_id": selected.get("option_id"),
             "instruction": (
                 "resolve the active Jenn governance decision before route adoption"
                 if governance_gate_active
+                else "reconcile the active queue exact bytes before any further route mutation"
+                if queue_reconciliation_required
                 else "review NEXT-to-NOW promotion gate for the updated queue"
-                if apply_gate.get("write_performed") is True
+                if transaction_outcome == "COMMITTED"
                 else "review route choice apply gate before --apply"
             ),
-            "active_queue_mutation_authorized": apply_gate.get("write_performed") is True,
+            "active_queue_mutation_authorized": apply_gate.get("queue_write_authorized") is True,
             "queue_promotion_authorized": False,
             "execution_authorized": False,
             "write_performed": apply_gate.get("write_performed") is True,
@@ -836,6 +876,20 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         errors.append("workbench route choice apply gate must not output raw confirmation text")
     if result.get("raw_template_output") is not False:
         errors.append("workbench route choice apply gate must not output raw template")
+    transaction_outcome = result.get("transaction_outcome")
+    queue_state = result.get("queue_state")
+    if transaction_outcome not in ("NO_WRITE", "COMMITTED", "PARTIAL_OR_UNKNOWN"):
+        errors.append("workbench route choice apply gate transaction_outcome is invalid")
+    if queue_state not in ("UNCHANGED", "UPDATED", "UNKNOWN"):
+        errors.append("workbench route choice apply gate queue_state is invalid")
+    if result.get("queue_state_known") is not (queue_state != "UNKNOWN"):
+        errors.append("workbench route choice apply gate queue_state_known is inconsistent")
+    expected_state_flag: bool | None = (
+        True if queue_state == "UPDATED" else False if queue_state == "UNCHANGED" else None
+    )
+    for flag in ("workspace_route_state_modified", "active_queue_modified"):
+        if result.get(flag) is not expected_state_flag:
+            errors.append(f"workbench route choice apply gate {flag} is inconsistent with queue_state")
     for flag in (
         "route_auto_selection_authorized",
         "queue_promotion_authorized",
@@ -853,15 +907,34 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not False:
                 errors.append(f"preview route choice apply gate must keep {flag}=false")
-    if apply and result.get("errors"):
+        if transaction_outcome != "NO_WRITE" or queue_state != "UNCHANGED":
+            errors.append("preview route choice apply gate must prove NO_WRITE/UNCHANGED")
+    if apply and result.get("errors") and transaction_outcome == "NO_WRITE":
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not False:
-                errors.append(f"blocked route choice apply gate must keep {flag}=false")
+                errors.append(f"NO_WRITE blocked route choice apply gate must keep {flag}=false")
+    if transaction_outcome == "PARTIAL_OR_UNKNOWN":
+        if result.get("queue_write_authorized") is not False:
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must not authorize queue write")
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must require Jenn decision")
+        if result.get("write_performed") is not result.get("queue_commit_attempted"):
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must truthfully report commit-attempt writes")
+        if result.get("review", {}).get("review_status") != "blocked":
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must block review")
+        if result.get("next_step", {}).get("status") != "queue_state_reconciliation_required":
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must require queue state reconciliation")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("PARTIAL_OR_UNKNOWN Workbench reconciliation must be owned by Jenn")
     if apply and not result.get("errors"):
+        if transaction_outcome != "COMMITTED" or queue_state != "UPDATED":
+            errors.append("successful applied route choice gate must prove COMMITTED/UPDATED")
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not True:
                 errors.append(f"applied route choice apply gate must set {flag}=true")
     if result.get("active_jenn_governance_gate") is True:
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve the Workbench Jenn decision requirement")
         if result.get("review", {}).get("review_status") != "blocked":
             errors.append("active Jenn governance gate must block Workbench review")
         if result.get("review", {}).get("requires_jenn_decision") is not True:

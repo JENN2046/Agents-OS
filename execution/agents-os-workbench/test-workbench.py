@@ -1421,6 +1421,73 @@ def main() -> int:
             "route apply should append formal Memory first safe package",
             failures,
         )
+        route_transaction_fault_path = Path(temp_dir) / "route-transaction-fault-queue.md"
+        route_transaction_fault_text = workbench.fixture_route_stop_queue_text()
+        route_transaction_fault_path.write_text(route_transaction_fault_text, encoding="utf-8")
+        original_workbench_import = workbench.import_module
+        workbench_fault_state = {"triggered": False}
+
+        def import_with_post_exchange_fault(path: Path, module_name: str) -> ModuleType:
+            module = original_workbench_import(path, module_name)
+            if Path(path) == workbench.CONTROL_CHAIN_PATH:
+                original_exchange = module.rename_exchange
+
+                def injected_post_cas_byte_swap(
+                    parent_fd: int,
+                    first_name: str,
+                    second_name: str,
+                ) -> None:
+                    if not workbench_fault_state["triggered"]:
+                        workbench_fault_state["triggered"] = True
+                        route_transaction_fault_path.write_text(
+                            fixture_generic_p3_governance_gate_queue_text(),
+                            encoding="utf-8",
+                        )
+                    original_exchange(parent_fd, first_name, second_name)
+
+                module.rename_exchange = injected_post_cas_byte_swap
+            return module
+
+        workbench.import_module = import_with_post_exchange_fault
+        try:
+            route_transaction_fault = workbench.build_route_choice_apply_gate(
+                route_choice_text,
+                route_transaction_fault_path,
+                apply=True,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.import_module = original_workbench_import
+        check(
+            workbench_fault_state["triggered"] is True
+            and route_transaction_fault["passed"] is False
+            and route_transaction_fault["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and route_transaction_fault["queue_state"] == "UNKNOWN"
+            and route_transaction_fault["queue_state_known"] is False
+            and route_transaction_fault["queue_commit_attempted"] is True
+            and route_transaction_fault["rollback_performed"] is True
+            and route_transaction_fault["write_performed"] is True
+            and route_transaction_fault["workspace_route_state_modified"] is None
+            and route_transaction_fault["active_queue_modified"] is None
+            and route_transaction_fault["queue_write_authorized"] is False
+            and route_transaction_fault["requires_jenn_decision"] is True,
+            f"Workbench must preserve truthful PARTIAL transaction evidence: {route_transaction_fault}",
+            failures,
+        )
+        check(
+            route_transaction_fault["review"]["review_status"] == "blocked"
+            and route_transaction_fault["next_step"]["status"] == "queue_state_reconciliation_required"
+            and route_transaction_fault["next_step"]["owner"] == "Jenn"
+            and route_transaction_fault["next_step"]["active_queue_mutation_authorized"] is False,
+            "Workbench PARTIAL transaction must stop at Jenn-owned exact-byte reconciliation",
+            failures,
+        )
+        check(
+            route_transaction_fault_path.read_text(encoding="utf-8")
+            == fixture_generic_p3_governance_gate_queue_text(),
+            "Workbench post-CAS rollback must preserve externally changed queue bytes",
+            failures,
+        )
         governance_gate_queue_path = Path(temp_dir) / "governance-gate-queue.md"
         governance_gate_queue_text = fixture_governance_gate_queue_text()
         governance_gate_queue_path.write_text(governance_gate_queue_text, encoding="utf-8")
@@ -1465,7 +1532,8 @@ def main() -> int:
         )
         check(
             governance_apply["passed"] is False
-            and governance_apply["apply_gate"]["queue_adoption_authorized"] is False,
+            and governance_apply["apply_gate"]["queue_adoption_authorized"] is False
+            and governance_apply["requires_jenn_decision"] is True,
             "active Jenn governance gate should block Workbench apply production path",
             failures,
         )
@@ -1511,6 +1579,7 @@ def main() -> int:
             generic_p3_route_apply["passed"] is False
             and generic_p3_route_apply["active_jenn_governance_gate"] is True
             and generic_p3_route_apply["apply_gate"]["queue_adoption_authorized"] is False
+            and generic_p3_route_apply["requires_jenn_decision"] is True
             and generic_p3_route_apply["write_performed"] is False,
             "generic P3 blocked NOW must fail closed in Workbench apply",
             failures,
@@ -2352,7 +2421,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases={23 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
+        print(f"cases={24 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -2368,6 +2437,7 @@ def main() -> int:
     print("PASS workbench goal fixtures")
     print("PASS workbench route choice preview fixtures")
     print("PASS workbench route choice apply gate fixtures")
+    print("PASS workbench route transaction truthfulness fixture")
     print("PASS active Jenn governance preview fixtures")
     print("PASS active Jenn governance apply fixtures")
     print("PASS generic P3 Jenn governance Workbench fixtures")
@@ -2379,7 +2449,7 @@ def main() -> int:
     if args.full:
         print("PASS workbench validation")
         print("PASS workbench completion audit")
-    print(f"cases={23 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
+    print(f"cases={24 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 

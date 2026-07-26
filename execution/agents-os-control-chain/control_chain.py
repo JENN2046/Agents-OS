@@ -3,14 +3,16 @@
 
 This module wires the first commander decision layer, track selector, shared
 track result contract, ColaMeta readiness reconciliation, local-safe executor
-actions, and queue proposal-only manager. It does not call providers, start
-services, activate plugins/runtimes, write formal Memory, or mutate the Active
-Work Queue.
+actions, and reviewed queue gates. It does not call providers, start services,
+activate plugins/runtimes, or write formal Memory. Queue writes are available
+only through explicit reviewed apply gates and caller-selected local paths.
 """
 
 from __future__ import annotations
 
 import argparse
+import ctypes
+import errno
 import fcntl
 import hashlib
 import importlib.util
@@ -18,6 +20,7 @@ import json
 import os
 from pathlib import Path
 import re
+import secrets
 import shlex
 import stat
 import subprocess
@@ -126,6 +129,9 @@ NEXT_USER_ACTION_FALSE_FLAGS = (
     "write_performed",
     "raw_content_output",
 )
+QUEUE_TRANSACTION_OUTCOMES = ("NO_WRITE", "COMMITTED", "PARTIAL_OR_UNKNOWN")
+QUEUE_STATES = ("UNCHANGED", "UPDATED", "UNKNOWN")
+RENAME_EXCHANGE = 2
 ROUTE_CHOICE_TEMPLATE_COVERAGE_FALSE_FLAGS = (
     "workspace_route_state_modified",
     "active_queue_modified",
@@ -643,20 +649,90 @@ def read_queue_binding_bytes(binding: dict[str, Any]) -> bytes:
         chunks.append(chunk)
 
 
-def queue_binding_snapshot(binding: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+def file_descriptor_snapshot(file_fd: int) -> tuple[dict[str, Any] | None, str | None]:
     try:
-        data = read_queue_binding_bytes(binding)
+        before = os.fstat(file_fd)
+        if not stat.S_ISREG(before.st_mode):
+            return None, "file descriptor snapshot target is not a regular file"
+        os.lseek(file_fd, 0, os.SEEK_SET)
+        chunks: list[bytes] = []
+        while True:
+            chunk = os.read(file_fd, 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        data = b"".join(chunks)
+        after = os.fstat(file_fd)
         text = data.decode("utf-8")
     except (OSError, UnicodeDecodeError) as exc:
         return None, f"queue snapshot could not be read as UTF-8: {exc}"
-    identity = dict(binding["identity"])
+    stable_fields = (
+        "st_dev",
+        "st_ino",
+        "st_mode",
+        "st_nlink",
+        "st_uid",
+        "st_gid",
+        "st_size",
+        "st_mtime_ns",
+        "st_ctime_ns",
+    )
+    if any(getattr(before, field) != getattr(after, field) for field in stable_fields):
+        return None, "queue file changed while its snapshot was being read"
     return {
         "bytes": data,
         "text": text,
         "sha256": hashlib.sha256(data).hexdigest(),
         "byte_count": len(data),
-        "identity": identity,
+        "identity": {
+            "device": after.st_dev,
+            "inode": after.st_ino,
+        },
+        "metadata": {
+            "mode": stat.S_IMODE(after.st_mode),
+            "nlink": after.st_nlink,
+            "uid": after.st_uid,
+            "gid": after.st_gid,
+            "size": after.st_size,
+            "mtime_ns": after.st_mtime_ns,
+            "ctime_ns": after.st_ctime_ns,
+        },
     }, None
+
+
+def queue_binding_snapshot(binding: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+    snapshot, snapshot_error = file_descriptor_snapshot(int(binding["file_fd"]))
+    if snapshot_error or snapshot is None:
+        return None, snapshot_error
+    if snapshot.get("identity") != binding.get("identity"):
+        return None, "queue file descriptor identity changed before snapshot binding"
+    return snapshot, None
+
+
+def validate_file_descriptor_snapshot(
+    file_fd: int,
+    snapshot: dict[str, Any],
+    *,
+    ignore_metadata_fields: tuple[str, ...] = (),
+) -> tuple[list[str], bytes | None]:
+    current, snapshot_error = file_descriptor_snapshot(file_fd)
+    if snapshot_error or current is None:
+        return [snapshot_error or "file descriptor snapshot could not be revalidated"], None
+    errors: list[str] = []
+    if current.get("identity") != snapshot.get("identity"):
+        errors.append("file descriptor identity changed")
+    if current.get("sha256") != snapshot.get("sha256"):
+        errors.append("queue bytes changed after handoff attestation")
+    if current.get("byte_count") != snapshot.get("byte_count"):
+        errors.append("queue byte count changed after handoff attestation")
+    expected_metadata = snapshot.get("metadata", {})
+    current_metadata = current.get("metadata", {})
+    for field in ("mode", "nlink", "uid", "gid", "size", "mtime_ns", "ctime_ns"):
+        if field in ignore_metadata_fields:
+            continue
+        if current_metadata.get(field) != expected_metadata.get(field):
+            errors.append(f"queue file metadata changed after handoff attestation: {field}")
+    return errors, current.get("bytes")
 
 
 def validate_queue_file_binding(
@@ -717,18 +793,12 @@ def validate_queue_file_binding(
         errors.append("queue file descriptor identity changed")
     if entry_identity != expected:
         errors.append("queue directory entry identity changed after handoff attestation")
-    try:
-        current_bytes = read_queue_binding_bytes(binding)
-    except OSError as exc:
-        errors.append(f"queue bytes could not be revalidated: {exc}")
-        return errors, None
-    if hashlib.sha256(current_bytes).hexdigest() != snapshot.get("sha256"):
-        errors.append("queue bytes changed after handoff attestation")
+    descriptor_errors, current_bytes = validate_file_descriptor_snapshot(file_fd, snapshot)
+    errors.extend(descriptor_errors)
     return errors, current_bytes
 
 
-def write_queue_binding_bytes(binding: dict[str, Any], data: bytes) -> None:
-    file_fd = int(binding["file_fd"])
+def write_all_transaction_fd(file_fd: int, data: bytes) -> None:
     os.lseek(file_fd, 0, os.SEEK_SET)
     offset = 0
     while offset < len(data):
@@ -736,8 +806,424 @@ def write_queue_binding_bytes(binding: dict[str, Any], data: bytes) -> None:
         if written <= 0:
             raise OSError("queue file descriptor write made no progress")
         offset += written
-    os.ftruncate(file_fd, len(data))
+
+
+def truncate_transaction_temp_fd(file_fd: int, size: int) -> None:
+    os.ftruncate(file_fd, size)
+
+
+def fsync_transaction_file_fd(file_fd: int) -> None:
     os.fsync(file_fd)
+
+
+def fsync_transaction_parent_fd(parent_fd: int) -> None:
+    os.fsync(parent_fd)
+
+
+def write_transaction_temp_fd(file_fd: int, data: bytes) -> None:
+    write_all_transaction_fd(file_fd, data)
+    truncate_transaction_temp_fd(file_fd, len(data))
+    fsync_transaction_file_fd(file_fd)
+
+
+def rename_exchange(parent_fd: int, first_name: str, second_name: str) -> None:
+    libc = ctypes.CDLL(None, use_errno=True)
+    renameat2 = getattr(libc, "renameat2", None)
+    if renameat2 is None:
+        raise OSError(errno.ENOSYS, "renameat2 is unavailable")
+    renameat2.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    renameat2.restype = ctypes.c_int
+    result = renameat2(
+        parent_fd,
+        os.fsencode(first_name),
+        parent_fd,
+        os.fsencode(second_name),
+        RENAME_EXCHANGE,
+    )
+    if result != 0:
+        error_code = ctypes.get_errno()
+        raise OSError(error_code, os.strerror(error_code))
+
+
+def open_queue_transaction_temp(
+    binding: dict[str, Any],
+    original_snapshot: dict[str, Any],
+) -> tuple[str | None, int | None, str | None]:
+    parent_fd = int(binding["parent_fd"])
+    original_metadata = original_snapshot.get("metadata", {})
+    flags = os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC | os.O_NOFOLLOW
+    for _ in range(16):
+        name = f".{binding['name']}.agents-os-txn-{secrets.token_hex(16)}.tmp"
+        try:
+            file_fd = os.open(name, flags, 0o600, dir_fd=parent_fd)
+        except FileExistsError:
+            continue
+        except OSError as exc:
+            return None, None, f"queue transaction temp could not be created: {exc}"
+        try:
+            # Keep both the original inode and its prospective replacement
+            # exclusively locked across exchange/rollback. Cooperative writers
+            # therefore cannot enter through the newly active inode mid-commit.
+            fcntl.flock(file_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            file_stat = os.fstat(file_fd)
+            expected_uid = original_metadata.get("uid")
+            expected_gid = original_metadata.get("gid")
+            if (
+                isinstance(expected_uid, int)
+                and isinstance(expected_gid, int)
+                and (file_stat.st_uid, file_stat.st_gid) != (expected_uid, expected_gid)
+            ):
+                os.fchown(file_fd, expected_uid, expected_gid)
+                file_stat = os.fstat(file_fd)
+            expected_mode = int(original_metadata.get("mode", 0o600))
+            os.fchmod(file_fd, expected_mode)
+            file_stat = os.fstat(file_fd)
+            entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+            if not stat.S_ISREG(file_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
+                raise OSError("queue transaction temp is not a regular file")
+            if (file_stat.st_dev, file_stat.st_ino) != (entry_stat.st_dev, entry_stat.st_ino):
+                raise OSError("queue transaction temp identity changed during creation")
+            if file_stat.st_nlink != 1:
+                raise OSError("queue transaction temp must have exactly one hard link")
+            if stat.S_IMODE(file_stat.st_mode) != expected_mode:
+                raise OSError("queue transaction temp mode does not match the original queue")
+            if isinstance(expected_uid, int) and file_stat.st_uid != expected_uid:
+                raise OSError("queue transaction temp owner does not match the original queue")
+            if isinstance(expected_gid, int) and file_stat.st_gid != expected_gid:
+                raise OSError("queue transaction temp group does not match the original queue")
+            return name, file_fd, None
+        except OSError as exc:
+            # Return the still-open descriptor and reserved name so the caller
+            # can perform identity-bound cleanup and report whether it succeeded.
+            return name, file_fd, f"queue transaction temp could not be bound: {exc}"
+    return None, None, "queue transaction temp name collisions exhausted"
+
+
+def validate_named_file_descriptor(
+    parent_fd: int,
+    name: str,
+    file_fd: int,
+    snapshot: dict[str, Any],
+    *,
+    exchanged: bool = False,
+) -> list[str]:
+    errors: list[str] = []
+    try:
+        descriptor_stat = os.fstat(file_fd)
+        entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    except OSError as exc:
+        return [f"transaction entry could not be revalidated: {name}: {exc}"]
+    if not stat.S_ISREG(descriptor_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
+        errors.append(f"transaction entry is not a regular file: {name}")
+    if (entry_stat.st_dev, entry_stat.st_ino) != (descriptor_stat.st_dev, descriptor_stat.st_ino):
+        errors.append(f"transaction entry identity mismatch: {name}")
+    descriptor_errors, _ = validate_file_descriptor_snapshot(
+        file_fd,
+        snapshot,
+        ignore_metadata_fields=("ctime_ns",) if exchanged else (),
+    )
+    errors.extend(f"{name}: {error}" for error in descriptor_errors)
+    return errors
+
+
+def validate_queue_parent_path_identity(binding: dict[str, Any]) -> list[str]:
+    relative_parts = tuple(str(part) for part in binding.get("relative_parts", ()))
+    expected_parent = binding.get("parent_identity", {})
+    directory_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_DIRECTORY | os.O_NOFOLLOW
+    current_parent_fd: int | None = None
+    try:
+        current_parent_fd = os.open(WORKSPACE_ROOT.resolve(), directory_flags)
+        for part in relative_parts[:-1]:
+            next_fd = os.open(part, directory_flags, dir_fd=current_parent_fd)
+            os.close(current_parent_fd)
+            current_parent_fd = next_fd
+        current_stat = os.fstat(current_parent_fd)
+    except OSError as exc:
+        return [f"queue parent path could not be transactionally revalidated: {exc}"]
+    finally:
+        if current_parent_fd is not None:
+            try:
+                os.close(current_parent_fd)
+            except OSError:
+                pass
+    if (current_stat.st_dev, current_stat.st_ino) != (
+        expected_parent.get("device"),
+        expected_parent.get("inode"),
+    ):
+        return ["queue parent path identity changed during transaction"]
+    return []
+
+
+def named_entry_matches_descriptor(parent_fd: int, name: str, file_fd: int) -> bool:
+    try:
+        descriptor_stat = os.fstat(file_fd)
+        entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    except OSError:
+        return False
+    return (
+        stat.S_ISREG(descriptor_stat.st_mode)
+        and stat.S_ISREG(entry_stat.st_mode)
+        and (entry_stat.st_dev, entry_stat.st_ino) == (descriptor_stat.st_dev, descriptor_stat.st_ino)
+    )
+
+
+def unlink_named_entry_if_descriptor(
+    parent_fd: int,
+    name: str,
+    file_fd: int,
+) -> tuple[bool, str | None]:
+    if not named_entry_matches_descriptor(parent_fd, name, file_fd):
+        return False, f"transaction cleanup entry identity mismatch: {name}"
+    try:
+        os.unlink(name, dir_fd=parent_fd)
+    except OSError as exc:
+        return False, f"transaction cleanup unlink failed: {name}: {exc}"
+    try:
+        remaining_links = os.fstat(file_fd).st_nlink
+    except OSError as exc:
+        return False, f"transaction cleanup descriptor could not be revalidated: {name}: {exc}"
+    if remaining_links != 0:
+        return False, (
+            f"transaction cleanup descriptor retains unexpected hard links: "
+            f"{name}: nlink={remaining_links}"
+        )
+    return True, None
+
+
+def validate_transaction_exchange(
+    binding: dict[str, Any],
+    temp_name: str,
+    temp_fd: int,
+    original_snapshot: dict[str, Any],
+    new_snapshot: dict[str, Any],
+) -> list[str]:
+    parent_fd = int(binding["parent_fd"])
+    errors = validate_queue_parent_path_identity(binding)
+    errors.extend(
+        validate_named_file_descriptor(
+            parent_fd,
+            str(binding["name"]),
+            temp_fd,
+            new_snapshot,
+            exchanged=True,
+        )
+    )
+    errors.extend(
+        validate_named_file_descriptor(
+            parent_fd,
+            temp_name,
+            int(binding["file_fd"]),
+            original_snapshot,
+            exchanged=True,
+        )
+    )
+    return errors
+
+
+def classify_transaction_queue_state(
+    binding: dict[str, Any],
+    original_snapshot: dict[str, Any],
+    temp_fd: int | None,
+    new_snapshot: dict[str, Any] | None,
+) -> tuple[str, str | None]:
+    if validate_queue_parent_path_identity(binding):
+        return "UNKNOWN", None
+    parent_fd = int(binding["parent_fd"])
+    queue_name = str(binding["name"])
+    if named_entry_matches_descriptor(parent_fd, queue_name, int(binding["file_fd"])):
+        errors, _ = validate_file_descriptor_snapshot(
+            int(binding["file_fd"]),
+            original_snapshot,
+            ignore_metadata_fields=("ctime_ns",),
+        )
+        if not errors:
+            return "UNCHANGED", str(original_snapshot.get("sha256"))
+        current, _ = file_descriptor_snapshot(int(binding["file_fd"]))
+        return "UNKNOWN", current.get("sha256") if current else None
+    if (
+        temp_fd is not None
+        and new_snapshot is not None
+        and named_entry_matches_descriptor(parent_fd, queue_name, temp_fd)
+    ):
+        errors, _ = validate_file_descriptor_snapshot(
+            temp_fd,
+            new_snapshot,
+            ignore_metadata_fields=("ctime_ns",),
+        )
+        if not errors:
+            return "UPDATED", str(new_snapshot.get("sha256"))
+        current, _ = file_descriptor_snapshot(temp_fd)
+        return "UNKNOWN", current.get("sha256") if current else None
+    return "UNKNOWN", None
+
+
+def transactional_replace_queue_binding(
+    binding: dict[str, Any],
+    original_snapshot: dict[str, Any],
+    data: bytes,
+) -> dict[str, Any]:
+    parent_fd = int(binding["parent_fd"])
+    queue_name = str(binding["name"])
+    errors: list[str] = []
+    temp_name: str | None = None
+    temp_fd: int | None = None
+    new_snapshot: dict[str, Any] | None = None
+    exchange_performed = False
+    rollback_performed = False
+    temp_cleanup_confirmed = False
+    parent_directory_fsynced = False
+
+    temp_name, temp_fd, temp_error = open_queue_transaction_temp(binding, original_snapshot)
+    if temp_error or temp_name is None or temp_fd is None:
+        errors.append(temp_error or "queue transaction temp could not be created")
+        if temp_name is None and temp_fd is None:
+            temp_cleanup_confirmed = True
+    if not errors:
+        try:
+            write_transaction_temp_fd(temp_fd, data)
+        except OSError as exc:
+            errors.append(f"queue transaction temp write failed: {exc}")
+    if not errors:
+        new_snapshot, new_snapshot_error = file_descriptor_snapshot(temp_fd)
+        if new_snapshot_error or new_snapshot is None:
+            errors.append(new_snapshot_error or "queue transaction temp snapshot failed")
+        elif new_snapshot.get("sha256") != hashlib.sha256(data).hexdigest():
+            errors.append("queue transaction temp SHA-256 does not match proposed queue bytes")
+    if not errors and new_snapshot is not None:
+        errors.extend(validate_named_file_descriptor(parent_fd, temp_name, temp_fd, new_snapshot))
+        binding_errors, _ = validate_queue_file_binding(binding, original_snapshot)
+        errors.extend(f"queue transaction precommit: {error}" for error in binding_errors)
+    if not errors:
+        try:
+            rename_exchange(parent_fd, temp_name, queue_name)
+            exchange_performed = True
+        except OSError as exc:
+            errors.append(f"queue transaction atomic exchange failed: {exc}")
+    if exchange_performed:
+        try:
+            fsync_transaction_parent_fd(parent_fd)
+            parent_directory_fsynced = True
+        except OSError as exc:
+            parent_directory_fsynced = False
+            errors.append(f"queue transaction parent fsync after exchange failed: {exc}")
+        if new_snapshot is not None:
+            try:
+                exchange_errors = validate_transaction_exchange(
+                    binding,
+                    temp_name,
+                    temp_fd,
+                    original_snapshot,
+                    new_snapshot,
+                )
+                errors.extend(f"queue transaction post-exchange: {error}" for error in exchange_errors)
+            except OSError as exc:
+                errors.append(f"queue transaction post-exchange validation failed: {exc}")
+
+        if errors:
+            if (
+                named_entry_matches_descriptor(parent_fd, queue_name, temp_fd)
+                and named_entry_matches_descriptor(parent_fd, temp_name, int(binding["file_fd"]))
+            ):
+                try:
+                    rename_exchange(parent_fd, temp_name, queue_name)
+                    rollback_performed = True
+                    fsync_transaction_parent_fd(parent_fd)
+                    parent_directory_fsynced = True
+                except OSError as exc:
+                    parent_directory_fsynced = False
+                    errors.append(f"queue transaction rollback failed: {exc}")
+            else:
+                errors.append("queue transaction rollback guard could not bind both exchange entries")
+            if rollback_performed and named_entry_matches_descriptor(parent_fd, temp_name, temp_fd):
+                temp_cleanup_confirmed, cleanup_error = unlink_named_entry_if_descriptor(
+                    parent_fd,
+                    temp_name,
+                    temp_fd,
+                )
+                if cleanup_error:
+                    errors.append(cleanup_error)
+                else:
+                    try:
+                        fsync_transaction_parent_fd(parent_fd)
+                        parent_directory_fsynced = True
+                    except OSError as exc:
+                        parent_directory_fsynced = False
+                        errors.append(f"queue transaction parent fsync after rollback cleanup failed: {exc}")
+        else:
+            removed_old, cleanup_error = unlink_named_entry_if_descriptor(
+                parent_fd,
+                temp_name,
+                int(binding["file_fd"]),
+            )
+            temp_cleanup_confirmed = removed_old
+            if cleanup_error:
+                errors.append(cleanup_error)
+            else:
+                try:
+                    fsync_transaction_parent_fd(parent_fd)
+                    parent_directory_fsynced = True
+                except OSError as exc:
+                    parent_directory_fsynced = False
+                    errors.append(f"queue transaction parent fsync after commit cleanup failed: {exc}")
+
+    if not exchange_performed and temp_name is not None and temp_fd is not None:
+        if named_entry_matches_descriptor(parent_fd, temp_name, temp_fd):
+            temp_cleanup_confirmed, cleanup_error = unlink_named_entry_if_descriptor(
+                parent_fd,
+                temp_name,
+                temp_fd,
+            )
+            if cleanup_error:
+                errors.append(cleanup_error)
+            else:
+                try:
+                    fsync_transaction_parent_fd(parent_fd)
+                    parent_directory_fsynced = True
+                except OSError as exc:
+                    parent_directory_fsynced = False
+                    errors.append(f"queue transaction parent fsync after temp cleanup failed: {exc}")
+
+    queue_state, final_queue_sha256 = classify_transaction_queue_state(
+        binding,
+        original_snapshot,
+        temp_fd,
+        new_snapshot,
+    )
+    if exchange_performed and not errors and queue_state == "UPDATED" and temp_cleanup_confirmed:
+        transaction_outcome = "COMMITTED"
+    elif not exchange_performed and queue_state == "UNCHANGED" and temp_cleanup_confirmed:
+        transaction_outcome = "NO_WRITE"
+    else:
+        transaction_outcome = "PARTIAL_OR_UNKNOWN"
+        if not errors:
+            errors.append("queue transaction final state could not be proven")
+
+    if temp_fd is not None:
+        try:
+            os.close(temp_fd)
+        except OSError as exc:
+            errors.append(f"queue transaction temp FD close failed: {exc}")
+            if transaction_outcome == "COMMITTED":
+                transaction_outcome = "PARTIAL_OR_UNKNOWN"
+
+    return {
+        "transaction_outcome": transaction_outcome,
+        "queue_state": queue_state,
+        "queue_state_known": queue_state != "UNKNOWN",
+        "queue_commit_attempted": exchange_performed,
+        "rollback_performed": rollback_performed,
+        "write_performed": exchange_performed,
+        "temp_cleanup_confirmed": temp_cleanup_confirmed,
+        "parent_directory_fsynced": parent_directory_fsynced,
+        "final_queue_sha256": final_queue_sha256,
+        "errors": sorted(set(errors)),
+    }
 
 
 def jenn_gate_evidence(
@@ -2410,8 +2896,19 @@ def reviewed_route_adoption_apply_gate(
     handoff_reconciliation: dict[str, Any] = {}
     governance_gate_active = False
     queue_snapshot: dict[str, Any] = {}
-    final_queue_sha256: str | None = None
-    write_performed = False
+    transaction = {
+        "transaction_outcome": "PARTIAL_OR_UNKNOWN",
+        "queue_state": "UNKNOWN",
+        "queue_state_known": False,
+        "queue_commit_attempted": False,
+        "rollback_performed": False,
+        "write_performed": False,
+        "temp_cleanup_confirmed": True,
+        "parent_directory_fsynced": False,
+        "final_queue_sha256": None,
+        "errors": [],
+    }
+    p3_signals_detected = False
     if proposal.get("passed") is not True:
         errors.append("route choice queue proposal must be passed")
     errors.extend(validate_queue_review(review, proposal))
@@ -2429,7 +2926,14 @@ def reviewed_route_adoption_apply_gate(
                 errors.append(snapshot_error or "queue snapshot could not be created")
             else:
                 queue_snapshot = snapshot
-                final_queue_sha256 = str(snapshot["sha256"])
+                transaction.update(
+                    {
+                        "transaction_outcome": "NO_WRITE",
+                        "queue_state": "UNCHANGED",
+                        "queue_state_known": True,
+                        "final_queue_sha256": str(snapshot["sha256"]),
+                    }
+                )
                 handoff_reconciliation = route_choice_handoff_reconciliation_from_snapshot(
                     Path(binding["path"]),
                     snapshot,
@@ -2444,6 +2948,7 @@ def reviewed_route_adoption_apply_gate(
                 next_blocks = queue_lane_blocks(queue_text, "NEXT")
                 item = proposal.get("proposed_queue_item", {})
                 signals = queue_p3_signals(proposed_queue_item_text(item))
+                p3_signals_detected = bool(signals)
                 if len(now_blocks) != 1:
                     errors.append(f"expected exactly one NOW before route adoption, got {len(now_blocks)}")
                 if signals:
@@ -2456,36 +2961,63 @@ def reviewed_route_adoption_apply_gate(
                         updated_text, mutation = append_route_adoption_to_queue_text(queue_text, proposal)
                         mutation["queue_path"] = str(binding["relative_path"])
                         if apply:
-                            binding_errors, _ = validate_queue_file_binding(binding, snapshot)
-                            errors.extend(f"queue binding: {error}" for error in binding_errors)
-                            if not errors:
-                                updated_bytes = updated_text.encode("utf-8")
-                                try:
-                                    write_queue_binding_bytes(binding, updated_bytes)
-                                    write_performed = True
-                                    final_queue_sha256 = hashlib.sha256(updated_bytes).hexdigest()
-                                except OSError as exc:
-                                    errors.append(f"queue FD write failed: {exc}")
-                                if write_performed:
-                                    final_snapshot = {
-                                        "identity": dict(snapshot["identity"]),
-                                        "sha256": final_queue_sha256,
-                                    }
-                                    post_write_errors, _ = validate_queue_file_binding(binding, final_snapshot)
-                                    errors.extend(
-                                        f"queue post-write binding: {error}"
-                                        for error in post_write_errors
-                                    )
+                            transaction = transactional_replace_queue_binding(
+                                binding,
+                                snapshot,
+                                updated_text.encode("utf-8"),
+                            )
+                            errors.extend(
+                                f"queue transaction: {error}"
+                                for error in transaction.get("errors", [])
+                            )
                         else:
                             binding_errors, _ = validate_queue_file_binding(binding, snapshot)
                             errors.extend(f"queue binding: {error}" for error in binding_errors)
+                            queue_state, current_sha = classify_transaction_queue_state(
+                                binding,
+                                snapshot,
+                                None,
+                                None,
+                            )
+                            transaction.update(
+                                {
+                                    "transaction_outcome": (
+                                        "NO_WRITE" if queue_state == "UNCHANGED" else "PARTIAL_OR_UNKNOWN"
+                                    ),
+                                    "queue_state": queue_state,
+                                    "queue_state_known": queue_state != "UNKNOWN",
+                                    "final_queue_sha256": current_sha,
+                                }
+                            )
                     except ValueError as exc:
                         errors.append(str(exc))
+                elif apply:
+                    queue_state, current_sha = classify_transaction_queue_state(
+                        binding,
+                        snapshot,
+                        None,
+                        None,
+                    )
+                    transaction.update(
+                        {
+                            "transaction_outcome": (
+                                "NO_WRITE" if queue_state == "UNCHANGED" else "PARTIAL_OR_UNKNOWN"
+                            ),
+                            "queue_state": queue_state,
+                            "queue_state_known": queue_state != "UNKNOWN",
+                            "final_queue_sha256": current_sha,
+                        }
+                    )
         finally:
             close_queue_file_binding(binding)
 
-    can_apply = bool(apply and write_performed)
-    queue_adoption_authorized = bool(write_performed or not errors)
+    transaction_outcome = str(transaction.get("transaction_outcome"))
+    queue_state = str(transaction.get("queue_state"))
+    can_apply = bool(apply and not errors and transaction_outcome == "COMMITTED")
+    queue_adoption_authorized = bool((not apply and not errors) or can_apply)
+    state_flag: bool | None = (
+        True if queue_state == "UPDATED" else False if queue_state == "UNCHANGED" else None
+    )
     result = {
         "schema_version": "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1",
         "adoption_id": stable_id("ROUTEADOPTIONAPPLY", [proposal.get("proposal_id"), review.get("review_status"), apply]),
@@ -2494,14 +3026,16 @@ def reviewed_route_adoption_apply_gate(
         "preview_only": not apply,
         "queue_adoption_authorized": queue_adoption_authorized,
         "route_adoption_authorized": can_apply,
-        "workspace_route_state_modified": can_apply,
-        "active_queue_modified": can_apply,
-        "write_performed": write_performed,
+        "workspace_route_state_modified": state_flag,
+        "active_queue_modified": state_flag,
+        "write_performed": transaction.get("write_performed") is True,
         "queue_write_authorized": can_apply,
         "queue_promotion_authorized": False,
         "execution_authorized": False,
         "requires_nobao_review": True,
-        "requires_jenn_decision": governance_gate_active,
+        "requires_jenn_decision": (
+            governance_gate_active or transaction_outcome == "PARTIAL_OR_UNKNOWN"
+        ),
         "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
         "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
         "active_jenn_governance_gate": governance_gate_active,
@@ -2509,8 +3043,15 @@ def reviewed_route_adoption_apply_gate(
         "queue_snapshot_byte_count": queue_snapshot.get("byte_count"),
         "queue_snapshot_identity": queue_snapshot.get("identity", {}),
         "queue_file_identity_bound": bool(queue_snapshot),
-        "final_queue_sha256": final_queue_sha256,
-        "no_p3_route_adoption_guard": not errors,
+        "final_queue_sha256": transaction.get("final_queue_sha256"),
+        "transaction_outcome": transaction_outcome,
+        "queue_state": queue_state,
+        "queue_state_known": transaction.get("queue_state_known") is True,
+        "queue_commit_attempted": transaction.get("queue_commit_attempted") is True,
+        "rollback_performed": transaction.get("rollback_performed") is True,
+        "temp_cleanup_confirmed": transaction.get("temp_cleanup_confirmed") is True,
+        "parent_directory_fsynced": transaction.get("parent_directory_fsynced") is True,
+        "no_p3_route_adoption_guard": not p3_signals_detected,
         "mutation": mutation,
         "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
         "errors": errors,
@@ -2532,6 +3073,64 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
         errors.append("reviewed route adoption apply gate schema_version is invalid")
     if result.get("requires_nobao_review") is not True:
         errors.append("reviewed route adoption apply gate must require Nobao review")
+    transaction_outcome = result.get("transaction_outcome")
+    queue_state = result.get("queue_state")
+    if transaction_outcome not in QUEUE_TRANSACTION_OUTCOMES:
+        errors.append("reviewed route adoption apply gate transaction_outcome is invalid")
+    if queue_state not in QUEUE_STATES:
+        errors.append("reviewed route adoption apply gate queue_state is invalid")
+    if result.get("queue_state_known") is not (queue_state != "UNKNOWN"):
+        errors.append("reviewed route adoption apply gate queue_state_known is inconsistent")
+    final_sha = result.get("final_queue_sha256")
+    if final_sha is not None and (
+        not isinstance(final_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", final_sha)
+    ):
+        errors.append("reviewed route adoption apply gate final_queue_sha256 is invalid")
+    if queue_state != "UNKNOWN" and (
+        not isinstance(final_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", final_sha)
+    ):
+        errors.append("known route adoption queue state requires a final SHA-256")
+    expected_state_flag: bool | None = (
+        True if queue_state == "UPDATED" else False if queue_state == "UNCHANGED" else None
+    )
+    for flag in ("workspace_route_state_modified", "active_queue_modified"):
+        if result.get(flag) is not expected_state_flag:
+            errors.append(f"reviewed route adoption apply gate {flag} is inconsistent with queue_state")
+    if transaction_outcome == "NO_WRITE":
+        if result.get("write_performed") is not False:
+            errors.append("NO_WRITE route adoption transaction must keep write_performed=false")
+        if result.get("queue_commit_attempted") is not False:
+            errors.append("NO_WRITE route adoption transaction must not attempt queue commit")
+        if result.get("rollback_performed") is not False:
+            errors.append("NO_WRITE route adoption transaction must not report rollback")
+        if queue_state != "UNCHANGED":
+            errors.append("NO_WRITE route adoption transaction must prove queue UNCHANGED")
+    elif transaction_outcome == "COMMITTED":
+        if result.get("write_performed") is not True:
+            errors.append("COMMITTED route adoption transaction must report write_performed=true")
+        if result.get("queue_commit_attempted") is not True:
+            errors.append("COMMITTED route adoption transaction must report queue commit attempt")
+        if result.get("rollback_performed") is not False:
+            errors.append("COMMITTED route adoption transaction must not report rollback")
+        if queue_state != "UPDATED":
+            errors.append("COMMITTED route adoption transaction must prove queue UPDATED")
+        if result.get("temp_cleanup_confirmed") is not True:
+            errors.append("COMMITTED route adoption transaction must prove temp cleanup")
+        if result.get("parent_directory_fsynced") is not True:
+            errors.append("COMMITTED route adoption transaction must fsync parent directory")
+    elif transaction_outcome == "PARTIAL_OR_UNKNOWN":
+        if result.get("queue_adoption_authorized") is not False:
+            errors.append("PARTIAL_OR_UNKNOWN transaction must not authorize queue adoption")
+        if result.get("route_adoption_authorized") is not False:
+            errors.append("PARTIAL_OR_UNKNOWN transaction must not authorize route adoption")
+        if result.get("queue_write_authorized") is not False:
+            errors.append("PARTIAL_OR_UNKNOWN transaction must not authorize queue write")
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("PARTIAL_OR_UNKNOWN transaction must require Jenn decision")
+        if result.get("write_performed") is not result.get("queue_commit_attempted"):
+            errors.append("PARTIAL_OR_UNKNOWN commit attempt and write evidence must agree")
+        if result.get("rollback_performed") is True and result.get("queue_commit_attempted") is not True:
+            errors.append("PARTIAL_OR_UNKNOWN rollback requires a prior commit attempt")
     if result.get("active_jenn_governance_gate") is True:
         if result.get("requires_jenn_decision") is not True:
             errors.append("active Jenn governance gate must preserve Jenn decision requirement")
@@ -2563,7 +3162,6 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
         identity = result.get("queue_snapshot_identity", {})
         if not isinstance(identity.get("device"), int) or not isinstance(identity.get("inode"), int):
             errors.append("authorized route adoption must bind queue device and inode")
-        final_sha = result.get("final_queue_sha256")
         if not isinstance(final_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", final_sha):
             errors.append("authorized route adoption must report final queue SHA-256")
     for flag in ("queue_promotion_authorized", "execution_authorized"):
@@ -2579,7 +3177,9 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
         ):
             if result.get(flag) is not False:
                 errors.append(f"preview route adoption apply gate flag must be false: {flag}")
-    if result.get("write_performed") is True:
+        if transaction_outcome != "NO_WRITE" or queue_state != "UNCHANGED":
+            errors.append("preview route adoption apply gate must prove NO_WRITE/UNCHANGED")
+    if transaction_outcome == "COMMITTED":
         for flag in (
             "route_adoption_authorized",
             "workspace_route_state_modified",
@@ -2587,7 +3187,7 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
             "queue_write_authorized",
         ):
             if result.get(flag) is not True:
-                errors.append(f"write_performed requires true flag: {flag}")
+                errors.append(f"COMMITTED route adoption transaction requires true flag: {flag}")
     mutation = result.get("mutation", {})
     if result.get("queue_adoption_authorized") is True:
         if mutation.get("target_lane") != "NEXT":
