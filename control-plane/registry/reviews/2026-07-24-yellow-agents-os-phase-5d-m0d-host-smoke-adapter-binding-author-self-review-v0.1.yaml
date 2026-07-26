@@ -1,0 +1,48 @@
+schema_version: agents-os.author-self-review.v0.1
+review_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_AUTHOR_SELF_REVIEW
+reviewer:
+  identity: Nobao
+  independence: false
+  scope: author-side fixed-byte readiness review only
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 4
+
+subject_hashes:
+  contract: b6b64375195a0d9f88446a2e010806c3425f007647e785b6f98cd01ee74139ae
+  evidence_profile: efcbe2afc78e29f549e692a5ae6f96dca9a0512cfd51c8fb7cfb07b85316fc05
+  synthetic_fixture: e1dd4f0812d587c7ccaa4692e69b9a0eeb1e29c17783c696ad9848165693ee1d
+  offline_validator: 17c17564e3b94ab7d90ff3a3b0601361948eabd45aec9cbb7b238c647f86fc98
+
+checks:
+  contract_does_not_create_Host_authority: PASS
+  missing_owner_or_hermetic_inventory_result: BLOCKED
+  synthetic_complete_shape_result: SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED
+  synthetic_result_runtime_usable: false
+  synthetic_result_actual_Host_smoke_authorized: false
+  synthetic_result_Host_operation_count: 0
+  unknown_fields_rejected: true
+  missing_section_rejected_without_exception: true
+  malformed_owner_contract_returns_BLOCKED_without_exception: true
+  strict_JSON_boolean_and_integer_substitutions_rejected: true
+  malformed_case_and_nonstring_mapping_key_return_BLOCKED_without_exception: true
+  synthetic_ref_fingerprint_recomputed: true
+  inventory_actual_completeness_claim_rejected: true
+  transient_manifest_materialization_rejected: true
+  processToolCall_authority_rejected: true
+  duplicate_JSON_and_YAML_keys_rejected: true
+  fixed_commands:
+    validator: PASS
+    validator_self_test: PASS
+    validator_in_memory_compile: PASS
+
+author_disposition:
+  result: PASS_FOR_HASH_BOUND_INDEPENDENT_REVIEW
+  independent_review_required: true
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  terminal_outcome: NOT_EXECUTED
+  next_gate: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW

@@ -1,0 +1,61 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-host-smoke-adapter-binding-closure-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+created_at: '2026-07-24T18:42:14+08:00'
+effective_at: '2026-07-24T18:42:14+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_NARROW_PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: >-
+    我确认执行 Phase 5D M0-D Actual Host-Smoke Execution Decision Package v0.2
+    第 6 节 A 的完整 Exact decision text。
+  decision_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-actual-host-smoke-execution-decision-package-v0.2.md
+    sha256: 82d2d2d49e25e652c6b35f853fa7a0767f14290f99dbc20f8819eedc93b15627
+    section: 6_A
+  scope_expansion: forbidden
+
+bound_preconditions:
+  frozen_lifecycle_contract_sha256: fb31de51e4a65d9d582416eee5bce36715c11f0710c3222614c148498e951f29
+  frozen_lifecycle_contract_freeze_decision_sha256: 1d1185bfa10e4bdde8e820386da6971d6e7a3bd44feb245de6c4bb6e389a970f
+  source_preflight_sha256: 3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d
+  sealed_VCPToolBox_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_VCPToolBox_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  current_terminal_outcome: NOT_EXECUTED
+
+authorized_scope:
+  create_or_modify_only:
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-contract-closure-v0.1-r1.md
+    - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r1.yaml
+    - control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-fixture-v0.1.json
+    - control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding.py
+    - control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-author-self-review-v0.1.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.md
+    - narrow_start_and_review_governance_projections
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_actual_Host_smoke_execution: forbidden
+
+not_authorized:
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: false
+  archive_delivery_or_installation: false
+  enabled_manifest_plugin_discovery_or_loading: false
+  Host_lifecycle_initialize_shutdown_quarantine_cleanup_processToolCall_native_addon_or_NAPI: false
+  runtime_service_database_dependency_install_provider_or_production_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_phase_or_actual_Host_smoke_start: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision_record
+  actual_Host_smoke_requires: a_new_current_Jenn_execution_decision_after_independent_review
