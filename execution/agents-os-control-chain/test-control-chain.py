@@ -966,6 +966,431 @@ prior_task: closed
         )
         post_cas_link_alias_path.unlink()
 
+        original_temp_write = chain.write_transaction_temp_fd
+
+        replacement_mode_queue_path = Path(temp_dir) / "replacement-mode-drift-queue.md"
+        replacement_mode_queue_path.write_text(route_queue_text, encoding="utf-8")
+        replacement_mode_queue_path.chmod(0o600)
+        replacement_mode_state = {"triggered": False}
+
+        def drift_replacement_mode_after_write(file_fd: int, data: bytes) -> None:
+            original_temp_write(file_fd, data)
+            os.fchmod(file_fd, 0o640)
+            replacement_mode_state["triggered"] = True
+
+        chain.write_transaction_temp_fd = drift_replacement_mode_after_write
+        try:
+            replacement_mode_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                replacement_mode_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.write_transaction_temp_fd = original_temp_write
+        check(
+            replacement_mode_state["triggered"] is True,
+            "replacement mode drift hook should run",
+            failures,
+        )
+        check(
+            replacement_mode_result["passed"] is False
+            and replacement_mode_result["transaction_outcome"] == "NO_WRITE"
+            and replacement_mode_result["queue_state"] == "UNCHANGED"
+            and replacement_mode_result["queue_commit_attempted"] is False
+            and replacement_mode_result["write_performed"] is False
+            and replacement_mode_result["temp_cleanup_confirmed"] is True
+            and replacement_mode_result["queue_adoption_authorized"] is False
+            and replacement_mode_queue_path.read_text(encoding="utf-8") == route_queue_text
+            and stat.S_IMODE(replacement_mode_queue_path.stat().st_mode) == 0o600,
+            (
+                "replacement mode drift before exchange must preserve exact old queue state "
+                f"and report NO_WRITE: {replacement_mode_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "mode does not match the original queue" in error
+                for error in replacement_mode_result["errors"]
+            ),
+            f"replacement mode drift should report original-metadata mismatch: {replacement_mode_result}",
+            failures,
+        )
+
+        replacement_gid_queue_path = Path(temp_dir) / "replacement-gid-drift-queue.md"
+        replacement_gid_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_queue_gid = replacement_gid_queue_path.stat().st_gid
+        alternate_gid = next(
+            (group_id for group_id in os.getgroups() if group_id != original_queue_gid),
+            None,
+        )
+        check(alternate_gid is not None, "replacement gid fixture requires an alternate member group", failures)
+        replacement_gid_state = {"triggered": False}
+
+        def drift_replacement_gid_after_write(file_fd: int, data: bytes) -> None:
+            original_temp_write(file_fd, data)
+            if alternate_gid is None:
+                raise OSError(errno.EPERM, "no alternate fixture group available")
+            os.fchown(file_fd, -1, alternate_gid)
+            replacement_gid_state["triggered"] = True
+
+        chain.write_transaction_temp_fd = drift_replacement_gid_after_write
+        try:
+            replacement_gid_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                replacement_gid_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.write_transaction_temp_fd = original_temp_write
+        check(
+            replacement_gid_state["triggered"] is True,
+            "replacement gid drift hook should run",
+            failures,
+        )
+        check(
+            replacement_gid_result["passed"] is False
+            and replacement_gid_result["transaction_outcome"] == "NO_WRITE"
+            and replacement_gid_result["queue_state"] == "UNCHANGED"
+            and replacement_gid_result["queue_commit_attempted"] is False
+            and replacement_gid_result["write_performed"] is False
+            and replacement_gid_result["temp_cleanup_confirmed"] is True
+            and replacement_gid_result["queue_adoption_authorized"] is False
+            and replacement_gid_queue_path.read_text(encoding="utf-8") == route_queue_text
+            and replacement_gid_queue_path.stat().st_gid == original_queue_gid,
+            (
+                "replacement gid drift before exchange must preserve exact old queue state "
+                f"and report NO_WRITE: {replacement_gid_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "group does not match the original queue" in error
+                for error in replacement_gid_result["errors"]
+            ),
+            f"replacement gid drift should report original-metadata mismatch: {replacement_gid_result}",
+            failures,
+        )
+
+        replacement_link_queue_path = Path(temp_dir) / "replacement-link-drift-queue.md"
+        replacement_link_alias_path = Path(temp_dir) / "replacement-link-drift-alias.md"
+        replacement_link_queue_path.write_text(route_queue_text, encoding="utf-8")
+        replacement_link_state = {"triggered": False}
+
+        def add_replacement_link_after_write(file_fd: int, data: bytes) -> None:
+            original_temp_write(file_fd, data)
+            temp_entries = list(
+                replacement_link_queue_path.parent.glob(
+                    f".{replacement_link_queue_path.name}.agents-os-txn-*.tmp"
+                )
+            )
+            if len(temp_entries) != 1:
+                raise OSError(errno.ENOENT, "replacement temp fixture entry is unavailable")
+            os.link(temp_entries[0], replacement_link_alias_path)
+            replacement_link_state["triggered"] = True
+
+        chain.write_transaction_temp_fd = add_replacement_link_after_write
+        try:
+            replacement_link_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                replacement_link_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.write_transaction_temp_fd = original_temp_write
+        check(
+            replacement_link_state["triggered"] is True,
+            "replacement hard-link drift hook should run",
+            failures,
+        )
+        check(
+            replacement_link_result["passed"] is False
+            and replacement_link_result["transaction_outcome"] == "NO_WRITE"
+            and replacement_link_result["queue_state"] == "UNCHANGED"
+            and replacement_link_result["queue_commit_attempted"] is False
+            and replacement_link_result["write_performed"] is False
+            and replacement_link_result["temp_cleanup_confirmed"] is False
+            and replacement_link_result["queue_adoption_authorized"] is False
+            and replacement_link_result["requires_jenn_decision"] is True
+            and replacement_link_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            (
+                "replacement hard-link drift before exchange must preserve exact old active "
+                f"queue bytes and report NO_WRITE with unresolved cleanup: {replacement_link_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "hard-link count does not match nlink=1" in error
+                for error in replacement_link_result["errors"]
+            ),
+            f"replacement hard-link drift should report original-metadata mismatch: {replacement_link_result}",
+            failures,
+        )
+        if replacement_link_alias_path.exists():
+            replacement_link_alias_path.unlink()
+
+        replacement_uid_queue_path = Path(temp_dir) / "replacement-uid-drift-queue.md"
+        replacement_uid_queue_path.write_text(route_queue_text, encoding="utf-8")
+        replacement_uid_state: dict[str, object] = {"triggered": False, "file_fd": None}
+        original_fstat = chain.os.fstat
+
+        class UidDriftStat:
+            def __init__(self, source: os.stat_result, uid: int) -> None:
+                self._source = source
+                self.st_uid = uid
+
+            def __getattr__(self, name: str) -> object:
+                return getattr(self._source, name)
+
+        def mock_replacement_uid_after_write(file_fd: int, data: bytes) -> None:
+            original_temp_write(file_fd, data)
+            replacement_uid_state["file_fd"] = file_fd
+            replacement_uid_state["triggered"] = True
+
+        def replacement_uid_fstat(file_fd: int) -> os.stat_result:
+            result = original_fstat(file_fd)
+            if (
+                replacement_uid_state["triggered"] is True
+                and replacement_uid_state["file_fd"] == file_fd
+            ):
+                return UidDriftStat(result, result.st_uid + 1)  # type: ignore[return-value]
+            return result
+
+        chain.write_transaction_temp_fd = mock_replacement_uid_after_write
+        chain.os.fstat = replacement_uid_fstat
+        try:
+            replacement_uid_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                replacement_uid_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.os.fstat = original_fstat
+            chain.write_transaction_temp_fd = original_temp_write
+        check(
+            replacement_uid_state["triggered"] is True,
+            "replacement uid mock drift hook should run",
+            failures,
+        )
+        check(
+            replacement_uid_result["passed"] is False
+            and replacement_uid_result["transaction_outcome"] == "NO_WRITE"
+            and replacement_uid_result["queue_state"] == "UNCHANGED"
+            and replacement_uid_result["queue_commit_attempted"] is False
+            and replacement_uid_result["write_performed"] is False
+            and replacement_uid_result["temp_cleanup_confirmed"] is True
+            and replacement_uid_result["queue_adoption_authorized"] is False
+            and replacement_uid_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            (
+                "replacement uid drift before exchange must preserve exact old queue state "
+                f"and report NO_WRITE: {replacement_uid_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "owner does not match the original queue" in error
+                for error in replacement_uid_result["errors"]
+            ),
+            f"replacement uid drift should report original-metadata mismatch: {replacement_uid_result}",
+            failures,
+        )
+
+        preexchange_metadata_queue_path = (
+            Path(temp_dir) / "preexchange-replacement-mode-drift-queue.md"
+        )
+        preexchange_metadata_queue_path.write_text(route_queue_text, encoding="utf-8")
+        preexchange_metadata_queue_path.chmod(0o600)
+        original_named_validation = chain.validate_named_file_descriptor
+        preexchange_metadata_state = {"triggered": False}
+
+        def drift_replacement_mode_after_snapshot(
+            parent_fd: int,
+            name: str,
+            file_fd: int,
+            snapshot: dict,
+            *,
+            exchanged: bool = False,
+        ) -> list[str]:
+            result = original_named_validation(
+                parent_fd,
+                name,
+                file_fd,
+                snapshot,
+                exchanged=exchanged,
+            )
+            if (
+                not exchanged
+                and not preexchange_metadata_state["triggered"]
+                and name.startswith(f".{preexchange_metadata_queue_path.name}.agents-os-txn-")
+            ):
+                os.fchmod(file_fd, 0o640)
+                preexchange_metadata_state["triggered"] = True
+            return result
+
+        chain.validate_named_file_descriptor = drift_replacement_mode_after_snapshot
+        try:
+            preexchange_metadata_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                preexchange_metadata_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.validate_named_file_descriptor = original_named_validation
+        check(
+            preexchange_metadata_state["triggered"] is True,
+            "pre-exchange replacement metadata drift hook should run",
+            failures,
+        )
+        check(
+            preexchange_metadata_result["passed"] is False
+            and preexchange_metadata_result["transaction_outcome"] == "NO_WRITE"
+            and preexchange_metadata_result["queue_state"] == "UNCHANGED"
+            and preexchange_metadata_result["queue_commit_attempted"] is False
+            and preexchange_metadata_result["write_performed"] is False
+            and preexchange_metadata_result["temp_cleanup_confirmed"] is True
+            and preexchange_metadata_result["queue_adoption_authorized"] is False
+            and preexchange_metadata_queue_path.read_text(encoding="utf-8")
+            == route_queue_text
+            and stat.S_IMODE(preexchange_metadata_queue_path.stat().st_mode) == 0o600,
+            (
+                "replacement metadata drift after snapshot but before exchange must preserve "
+                f"exact old queue state and report NO_WRITE: {preexchange_metadata_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "pre-exchange" in error
+                and "mode does not match the original queue" in error
+                for error in preexchange_metadata_result["errors"]
+            ),
+            f"pre-exchange metadata drift should report exact stage mismatch: {preexchange_metadata_result}",
+            failures,
+        )
+
+        postexchange_metadata_queue_path = (
+            Path(temp_dir) / "postexchange-replacement-mode-drift-queue.md"
+        )
+        postexchange_metadata_queue_path.write_text(route_queue_text, encoding="utf-8")
+        postexchange_metadata_queue_path.chmod(0o600)
+        postexchange_metadata_state = {"triggered": False}
+
+        def drift_replacement_mode_after_exchange(
+            parent_fd: int,
+            first_name: str,
+            second_name: str,
+        ) -> None:
+            original_rename_exchange(parent_fd, first_name, second_name)
+            if not postexchange_metadata_state["triggered"]:
+                os.chmod(postexchange_metadata_queue_path, 0o640)
+                postexchange_metadata_state["triggered"] = True
+
+        chain.rename_exchange = drift_replacement_mode_after_exchange
+        try:
+            postexchange_metadata_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                postexchange_metadata_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.rename_exchange = original_rename_exchange
+        check(
+            postexchange_metadata_state["triggered"] is True,
+            "post-exchange replacement metadata drift hook should run",
+            failures,
+        )
+        check(
+            postexchange_metadata_result["passed"] is False
+            and postexchange_metadata_result["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and postexchange_metadata_result["queue_state"] == "UNCHANGED"
+            and postexchange_metadata_result["queue_commit_attempted"] is True
+            and postexchange_metadata_result["rollback_performed"] is True
+            and postexchange_metadata_result["write_performed"] is True
+            and postexchange_metadata_result["queue_adoption_authorized"] is False
+            and postexchange_metadata_result["requires_jenn_decision"] is True
+            and postexchange_metadata_queue_path.read_text(encoding="utf-8") == route_queue_text
+            and stat.S_IMODE(postexchange_metadata_queue_path.stat().st_mode) == 0o600,
+            (
+                "replacement metadata drift after exchange must roll back exact old queue "
+                f"state and report PARTIAL_OR_UNKNOWN: {postexchange_metadata_result}"
+            ),
+            failures,
+        )
+
+        final_metadata_queue_path = Path(temp_dir) / "final-replacement-mode-drift-queue.md"
+        final_metadata_queue_path.write_text(route_queue_text, encoding="utf-8")
+        final_metadata_queue_path.chmod(0o600)
+        expected_final_metadata_text, _ = chain.append_route_adoption_to_queue_text(
+            route_queue_text,
+            route_choice_proposal,
+        )
+        original_unlink_descriptor = chain.unlink_named_entry_if_descriptor
+        final_metadata_state = {"triggered": False}
+
+        def drift_replacement_mode_before_final_classification(
+            parent_fd: int,
+            name: str,
+            file_fd: int,
+        ) -> tuple[bool, str | None]:
+            if not final_metadata_state["triggered"]:
+                os.chmod(final_metadata_queue_path, 0o640)
+                final_metadata_state["triggered"] = True
+            return original_unlink_descriptor(parent_fd, name, file_fd)
+
+        chain.unlink_named_entry_if_descriptor = (
+            drift_replacement_mode_before_final_classification
+        )
+        try:
+            final_metadata_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                final_metadata_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.unlink_named_entry_if_descriptor = original_unlink_descriptor
+        check(
+            final_metadata_state["triggered"] is True,
+            "final replacement metadata drift hook should run",
+            failures,
+        )
+        check(
+            final_metadata_result["passed"] is False
+            and final_metadata_result["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and final_metadata_result["queue_state"] == "UNKNOWN"
+            and final_metadata_result["queue_commit_attempted"] is True
+            and final_metadata_result["rollback_performed"] is False
+            and final_metadata_result["write_performed"] is True
+            and final_metadata_result["queue_adoption_authorized"] is False
+            and final_metadata_result["queue_write_authorized"] is False
+            and final_metadata_result["requires_jenn_decision"] is True
+            and final_metadata_queue_path.read_text(encoding="utf-8")
+            == expected_final_metadata_text,
+            (
+                "replacement metadata drift after displaced-old cleanup must report UNKNOWN "
+                f"without adoption authorization: {final_metadata_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "final replacement" in error
+                and "mode does not match the original queue" in error
+                for error in final_metadata_result["errors"]
+            ),
+            f"final replacement metadata drift should report exact mismatch: {final_metadata_result}",
+            failures,
+        )
+
         def run_precommit_fault(
             name: str,
             helper_name: str,
@@ -1168,8 +1593,6 @@ prior_task: closed
         if hasattr(os, "fork"):
             preexchange_kill_queue_path = Path(temp_dir) / "preexchange-kill-queue.md"
             preexchange_kill_queue_path.write_text(route_queue_text, encoding="utf-8")
-            original_temp_write = chain.write_transaction_temp_fd
-
             def kill_after_temp_fsync(file_fd: int, data: bytes) -> None:
                 original_temp_write(file_fd, data)
                 os.kill(os.getpid(), signal.SIGKILL)
@@ -1402,7 +1825,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=47 failures={len(failures)}")
+        print(f"cases=54 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -1426,6 +1849,13 @@ old_task: closed
     print("PASS Machine/Dashboard read-skew binding attack fixture")
     print("PASS post-CAS byte-swap transaction attack fixture")
     print("PASS post-CAS hardlink transaction attack fixture")
+    print("PASS replacement mode binding transaction fixture")
+    print("PASS replacement gid binding transaction fixture")
+    print("PASS replacement hard-link binding transaction fixture")
+    print("PASS replacement uid mock binding transaction fixture")
+    print("PASS pre-exchange replacement metadata binding fixture")
+    print("PASS post-exchange replacement metadata rollback fixture")
+    print("PASS final replacement metadata classification fixture")
     print("PASS partial-write transaction fault fixture")
     print("PASS ftruncate transaction fault fixture")
     print("PASS fsync transaction fault fixture")
@@ -1438,7 +1868,7 @@ old_task: closed
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=47 failures=0")
+    print("cases=54 failures=0")
     return 0
 
 

@@ -742,7 +742,10 @@ def build_route_choice_apply_gate(
     mutation = apply_gate.get("mutation", {})
     transaction_outcome = apply_gate.get("transaction_outcome")
     queue_state = apply_gate.get("queue_state")
-    queue_reconciliation_required = transaction_outcome == "PARTIAL_OR_UNKNOWN"
+    queue_reconciliation_required = (
+        transaction_outcome == "PARTIAL_OR_UNKNOWN"
+        or apply_gate.get("temp_cleanup_confirmed") is not True
+    )
     requires_jenn_decision = (
         governance_gate_active or apply_gate.get("requires_jenn_decision") is True
     )
@@ -843,7 +846,10 @@ def build_route_choice_apply_gate(
             "instruction": (
                 "resolve the active Jenn governance decision before route adoption"
                 if governance_gate_active
-                else "reconcile the active queue exact bytes before any further route mutation"
+                else (
+                    "reconcile the active queue exact bytes and transaction-file cleanup "
+                    "before any further route mutation"
+                )
                 if queue_reconciliation_required
                 else "review NEXT-to-NOW promotion gate for the updated queue"
                 if transaction_outcome == "COMMITTED"
@@ -913,19 +919,24 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not False:
                 errors.append(f"NO_WRITE blocked route choice apply gate must keep {flag}=false")
-    if transaction_outcome == "PARTIAL_OR_UNKNOWN":
+    transaction_reconciliation_required = (
+        transaction_outcome == "PARTIAL_OR_UNKNOWN"
+        or result.get("temp_cleanup_confirmed") is not True
+    )
+    if transaction_reconciliation_required:
         if result.get("queue_write_authorized") is not False:
-            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must not authorize queue write")
+            errors.append("unresolved Workbench transaction must not authorize queue write")
         if result.get("requires_jenn_decision") is not True:
-            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must require Jenn decision")
+            errors.append("unresolved Workbench transaction must require Jenn decision")
+        if result.get("review", {}).get("review_status") != "blocked":
+            errors.append("unresolved Workbench transaction must block review")
+        if result.get("next_step", {}).get("status") != "queue_state_reconciliation_required":
+            errors.append("unresolved Workbench transaction must require queue reconciliation")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("unresolved Workbench transaction reconciliation must be owned by Jenn")
+    if transaction_outcome == "PARTIAL_OR_UNKNOWN":
         if result.get("write_performed") is not result.get("queue_commit_attempted"):
             errors.append("PARTIAL_OR_UNKNOWN Workbench gate must truthfully report commit-attempt writes")
-        if result.get("review", {}).get("review_status") != "blocked":
-            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must block review")
-        if result.get("next_step", {}).get("status") != "queue_state_reconciliation_required":
-            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must require queue state reconciliation")
-        if result.get("next_step", {}).get("owner") != "Jenn":
-            errors.append("PARTIAL_OR_UNKNOWN Workbench reconciliation must be owned by Jenn")
     if apply and not result.get("errors"):
         if transaction_outcome != "COMMITTED" or queue_state != "UPDATED":
             errors.append("successful applied route choice gate must prove COMMITTED/UPDATED")

@@ -76,10 +76,15 @@ an accepted Nobao review object and never authorizes auto-promote.
 
 Explicit reviewed route adoption uses a same-directory, identity-bound
 transaction file and atomic `renameat2(RENAME_EXCHANGE)`. It fsyncs file and
-directory state, revalidates the displaced old bytes and installed new bytes,
-and reports `NO_WRITE`, `COMMITTED`, or `PARTIAL_OR_UNKNOWN`. An uncertain
-post-exchange result never authorizes further queue mutation and must preserve
-truthful `write_performed` evidence for reconciliation.
+directory state, and keeps the replacement bound to the original queue's
+`mode`, `uid`, `gid`, and single-link invariant after write, before exchange,
+after exchange, and during final-state classification. It revalidates the
+displaced old bytes and installed new bytes and reports `NO_WRITE`, `COMMITTED`,
+or `PARTIAL_OR_UNKNOWN`. An uncertain post-exchange result never authorizes
+further queue mutation and must preserve truthful `write_performed` evidence
+for reconciliation. A pre-exchange metadata drift proves `NO_WRITE` only for
+the active queue; unresolved transaction-file cleanup remains explicit and
+requires Jenn-owned reconciliation.
 
 Failure handling classifies validation failure, scope violation, protected
 path detection, dirty worktree conflict, unknown action type, P3 signal, and

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -1488,6 +1489,78 @@ def main() -> int:
             "Workbench post-CAS rollback must preserve externally changed queue bytes",
             failures,
         )
+
+        unresolved_temp_queue_path = Path(temp_dir) / "unresolved-temp-cleanup-queue.md"
+        unresolved_temp_alias_path = Path(temp_dir) / "unresolved-temp-cleanup-alias.md"
+        unresolved_temp_queue_text = workbench.fixture_route_stop_queue_text()
+        unresolved_temp_queue_path.write_text(unresolved_temp_queue_text, encoding="utf-8")
+        unresolved_temp_state = {"triggered": False}
+
+        def import_with_unresolved_temp_cleanup(path: Path, module_name: str) -> ModuleType:
+            module = original_workbench_import(path, module_name)
+            if Path(path) == workbench.CONTROL_CHAIN_PATH:
+                original_temp_write = module.write_transaction_temp_fd
+
+                def add_replacement_link_after_write(file_fd: int, data: bytes) -> None:
+                    original_temp_write(file_fd, data)
+                    if not unresolved_temp_state["triggered"]:
+                        temp_entries = list(
+                            unresolved_temp_queue_path.parent.glob(
+                                f".{unresolved_temp_queue_path.name}.agents-os-txn-*.tmp"
+                            )
+                        )
+                        if len(temp_entries) != 1:
+                            raise OSError("unresolved temp cleanup fixture entry is unavailable")
+                        os.link(temp_entries[0], unresolved_temp_alias_path)
+                        unresolved_temp_state["triggered"] = True
+
+                module.write_transaction_temp_fd = add_replacement_link_after_write
+            return module
+
+        workbench.import_module = import_with_unresolved_temp_cleanup
+        try:
+            unresolved_temp_result = workbench.build_route_choice_apply_gate(
+                route_choice_text,
+                unresolved_temp_queue_path,
+                apply=True,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.import_module = original_workbench_import
+        check(
+            unresolved_temp_state["triggered"] is True
+            and unresolved_temp_result["passed"] is False
+            and unresolved_temp_result["transaction_outcome"] == "NO_WRITE"
+            and unresolved_temp_result["queue_state"] == "UNCHANGED"
+            and unresolved_temp_result["queue_state_known"] is True
+            and unresolved_temp_result["queue_commit_attempted"] is False
+            and unresolved_temp_result["write_performed"] is False
+            and unresolved_temp_result["temp_cleanup_confirmed"] is False
+            and unresolved_temp_result["workspace_route_state_modified"] is False
+            and unresolved_temp_result["active_queue_modified"] is False
+            and unresolved_temp_result["queue_write_authorized"] is False
+            and unresolved_temp_result["requires_jenn_decision"] is True,
+            (
+                "Workbench must preserve NO_WRITE evidence while surfacing unresolved "
+                f"transaction cleanup: {unresolved_temp_result}"
+            ),
+            failures,
+        )
+        check(
+            unresolved_temp_result["review"]["review_status"] == "blocked"
+            and unresolved_temp_result["next_step"]["status"]
+            == "queue_state_reconciliation_required"
+            and unresolved_temp_result["next_step"]["owner"] == "Jenn"
+            and unresolved_temp_result["next_step"]["active_queue_mutation_authorized"]
+            is False
+            and unresolved_temp_queue_path.read_text(encoding="utf-8")
+            == unresolved_temp_queue_text,
+            "Workbench unresolved temp cleanup must stop at Jenn-owned reconciliation",
+            failures,
+        )
+        if unresolved_temp_alias_path.exists():
+            unresolved_temp_alias_path.unlink()
+
         governance_gate_queue_path = Path(temp_dir) / "governance-gate-queue.md"
         governance_gate_queue_text = fixture_governance_gate_queue_text()
         governance_gate_queue_path.write_text(governance_gate_queue_text, encoding="utf-8")
@@ -2421,7 +2494,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases={24 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
+        print(f"cases={25 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -2438,6 +2511,7 @@ def main() -> int:
     print("PASS workbench route choice preview fixtures")
     print("PASS workbench route choice apply gate fixtures")
     print("PASS workbench route transaction truthfulness fixture")
+    print("PASS workbench unresolved transaction cleanup reconciliation fixture")
     print("PASS active Jenn governance preview fixtures")
     print("PASS active Jenn governance apply fixtures")
     print("PASS generic P3 Jenn governance Workbench fixtures")
@@ -2449,7 +2523,7 @@ def main() -> int:
     if args.full:
         print("PASS workbench validation")
         print("PASS workbench completion audit")
-    print(f"cases={24 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
+    print(f"cases={25 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 

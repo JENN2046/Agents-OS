@@ -851,12 +851,70 @@ def rename_exchange(parent_fd: int, first_name: str, second_name: str) -> None:
         raise OSError(error_code, os.strerror(error_code))
 
 
+def original_queue_security_metadata(
+    original_snapshot: dict[str, Any],
+) -> tuple[tuple[int, int, int] | None, str | None]:
+    metadata = original_snapshot.get("metadata")
+    if not isinstance(metadata, dict):
+        return None, "original queue security metadata is missing"
+    values: list[int] = []
+    for field in ("mode", "uid", "gid"):
+        value = metadata.get(field)
+        if not isinstance(value, int):
+            return None, f"original queue security metadata is invalid: {field}"
+        values.append(value)
+    if metadata.get("nlink") != 1:
+        return None, "original queue security metadata must bind nlink=1"
+    return (values[0], values[1], values[2]), None
+
+
+def validate_replacement_security_metadata(
+    parent_fd: int,
+    name: str,
+    file_fd: int,
+    expected: tuple[int, int, int],
+) -> list[str]:
+    try:
+        descriptor_stat = os.fstat(file_fd)
+        entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    except OSError as exc:
+        return [f"replacement security metadata could not be revalidated: {name}: {exc}"]
+    errors: list[str] = []
+    if not stat.S_ISREG(descriptor_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
+        errors.append(f"replacement security metadata target is not a regular file: {name}")
+    if (descriptor_stat.st_dev, descriptor_stat.st_ino) != (
+        entry_stat.st_dev,
+        entry_stat.st_ino,
+    ):
+        errors.append(f"replacement security metadata identity mismatch: {name}")
+    expected_mode, expected_uid, expected_gid = expected
+    for source, file_stat in (("descriptor", descriptor_stat), ("entry", entry_stat)):
+        if file_stat.st_nlink != 1:
+            errors.append(
+                f"replacement {source} hard-link count does not match nlink=1: "
+                f"{name}: nlink={file_stat.st_nlink}"
+            )
+        if stat.S_IMODE(file_stat.st_mode) != expected_mode:
+            errors.append(
+                f"replacement {source} mode does not match the original queue: {name}"
+            )
+        if file_stat.st_uid != expected_uid:
+            errors.append(
+                f"replacement {source} owner does not match the original queue: {name}"
+            )
+        if file_stat.st_gid != expected_gid:
+            errors.append(
+                f"replacement {source} group does not match the original queue: {name}"
+            )
+    return errors
+
+
 def open_queue_transaction_temp(
     binding: dict[str, Any],
-    original_snapshot: dict[str, Any],
+    expected_security_metadata: tuple[int, int, int],
 ) -> tuple[str | None, int | None, str | None]:
     parent_fd = int(binding["parent_fd"])
-    original_metadata = original_snapshot.get("metadata", {})
+    expected_mode, expected_uid, expected_gid = expected_security_metadata
     flags = os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC | os.O_NOFOLLOW
     for _ in range(16):
         name = f".{binding['name']}.agents-os-txn-{secrets.token_hex(16)}.tmp"
@@ -872,31 +930,17 @@ def open_queue_transaction_temp(
             # therefore cannot enter through the newly active inode mid-commit.
             fcntl.flock(file_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
             file_stat = os.fstat(file_fd)
-            expected_uid = original_metadata.get("uid")
-            expected_gid = original_metadata.get("gid")
-            if (
-                isinstance(expected_uid, int)
-                and isinstance(expected_gid, int)
-                and (file_stat.st_uid, file_stat.st_gid) != (expected_uid, expected_gid)
-            ):
+            if (file_stat.st_uid, file_stat.st_gid) != (expected_uid, expected_gid):
                 os.fchown(file_fd, expected_uid, expected_gid)
-                file_stat = os.fstat(file_fd)
-            expected_mode = int(original_metadata.get("mode", 0o600))
             os.fchmod(file_fd, expected_mode)
-            file_stat = os.fstat(file_fd)
-            entry_stat = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
-            if not stat.S_ISREG(file_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
-                raise OSError("queue transaction temp is not a regular file")
-            if (file_stat.st_dev, file_stat.st_ino) != (entry_stat.st_dev, entry_stat.st_ino):
-                raise OSError("queue transaction temp identity changed during creation")
-            if file_stat.st_nlink != 1:
-                raise OSError("queue transaction temp must have exactly one hard link")
-            if stat.S_IMODE(file_stat.st_mode) != expected_mode:
-                raise OSError("queue transaction temp mode does not match the original queue")
-            if isinstance(expected_uid, int) and file_stat.st_uid != expected_uid:
-                raise OSError("queue transaction temp owner does not match the original queue")
-            if isinstance(expected_gid, int) and file_stat.st_gid != expected_gid:
-                raise OSError("queue transaction temp group does not match the original queue")
+            metadata_errors = validate_replacement_security_metadata(
+                parent_fd,
+                name,
+                file_fd,
+                expected_security_metadata,
+            )
+            if metadata_errors:
+                raise OSError("; ".join(metadata_errors))
             return name, file_fd, None
         except OSError as exc:
             # Return the still-open descriptor and reserved name so the caller
@@ -1002,6 +1046,7 @@ def validate_transaction_exchange(
     temp_fd: int,
     original_snapshot: dict[str, Any],
     new_snapshot: dict[str, Any],
+    expected_security_metadata: tuple[int, int, int],
 ) -> list[str]:
     parent_fd = int(binding["parent_fd"])
     errors = validate_queue_parent_path_identity(binding)
@@ -1012,6 +1057,14 @@ def validate_transaction_exchange(
             temp_fd,
             new_snapshot,
             exchanged=True,
+        )
+    )
+    errors.extend(
+        validate_replacement_security_metadata(
+            parent_fd,
+            str(binding["name"]),
+            temp_fd,
+            expected_security_metadata,
         )
     )
     errors.extend(
@@ -1031,6 +1084,7 @@ def classify_transaction_queue_state(
     original_snapshot: dict[str, Any],
     temp_fd: int | None,
     new_snapshot: dict[str, Any] | None,
+    expected_security_metadata: tuple[int, int, int] | None = None,
 ) -> tuple[str, str | None]:
     if validate_queue_parent_path_identity(binding):
         return "UNKNOWN", None
@@ -1049,12 +1103,21 @@ def classify_transaction_queue_state(
     if (
         temp_fd is not None
         and new_snapshot is not None
+        and expected_security_metadata is not None
         and named_entry_matches_descriptor(parent_fd, queue_name, temp_fd)
     ):
         errors, _ = validate_file_descriptor_snapshot(
             temp_fd,
             new_snapshot,
             ignore_metadata_fields=("ctime_ns",),
+        )
+        errors.extend(
+            validate_replacement_security_metadata(
+                parent_fd,
+                queue_name,
+                temp_fd,
+                expected_security_metadata,
+            )
         )
         if not errors:
             return "UPDATED", str(new_snapshot.get("sha256"))
@@ -1079,16 +1142,36 @@ def transactional_replace_queue_binding(
     temp_cleanup_confirmed = False
     parent_directory_fsynced = False
 
-    temp_name, temp_fd, temp_error = open_queue_transaction_temp(binding, original_snapshot)
-    if temp_error or temp_name is None or temp_fd is None:
-        errors.append(temp_error or "queue transaction temp could not be created")
-        if temp_name is None and temp_fd is None:
-            temp_cleanup_confirmed = True
+    expected_security_metadata, metadata_error = original_queue_security_metadata(
+        original_snapshot
+    )
+    if metadata_error or expected_security_metadata is None:
+        errors.append(metadata_error or "original queue security metadata could not be bound")
+        temp_cleanup_confirmed = True
+    else:
+        temp_name, temp_fd, temp_error = open_queue_transaction_temp(
+            binding,
+            expected_security_metadata,
+        )
+        if temp_error or temp_name is None or temp_fd is None:
+            errors.append(temp_error or "queue transaction temp could not be created")
+            if temp_name is None and temp_fd is None:
+                temp_cleanup_confirmed = True
     if not errors:
         try:
             write_transaction_temp_fd(temp_fd, data)
         except OSError as exc:
             errors.append(f"queue transaction temp write failed: {exc}")
+    if not errors and expected_security_metadata is not None:
+        errors.extend(
+            f"queue transaction post-write: {error}"
+            for error in validate_replacement_security_metadata(
+                parent_fd,
+                temp_name,
+                temp_fd,
+                expected_security_metadata,
+            )
+        )
     if not errors:
         new_snapshot, new_snapshot_error = file_descriptor_snapshot(temp_fd)
         if new_snapshot_error or new_snapshot is None:
@@ -1099,6 +1182,16 @@ def transactional_replace_queue_binding(
         errors.extend(validate_named_file_descriptor(parent_fd, temp_name, temp_fd, new_snapshot))
         binding_errors, _ = validate_queue_file_binding(binding, original_snapshot)
         errors.extend(f"queue transaction precommit: {error}" for error in binding_errors)
+    if not errors and expected_security_metadata is not None:
+        errors.extend(
+            f"queue transaction pre-exchange: {error}"
+            for error in validate_replacement_security_metadata(
+                parent_fd,
+                temp_name,
+                temp_fd,
+                expected_security_metadata,
+            )
+        )
     if not errors:
         try:
             rename_exchange(parent_fd, temp_name, queue_name)
@@ -1120,6 +1213,7 @@ def transactional_replace_queue_binding(
                     temp_fd,
                     original_snapshot,
                     new_snapshot,
+                    expected_security_metadata,
                 )
                 errors.extend(f"queue transaction post-exchange: {error}" for error in exchange_errors)
             except OSError as exc:
@@ -1189,15 +1283,32 @@ def transactional_replace_queue_binding(
                     parent_directory_fsynced = False
                     errors.append(f"queue transaction parent fsync after temp cleanup failed: {exc}")
 
+    if (
+        exchange_performed
+        and temp_fd is not None
+        and expected_security_metadata is not None
+        and named_entry_matches_descriptor(parent_fd, queue_name, temp_fd)
+    ):
+        errors.extend(
+            f"queue transaction final replacement: {error}"
+            for error in validate_replacement_security_metadata(
+                parent_fd,
+                queue_name,
+                temp_fd,
+                expected_security_metadata,
+            )
+        )
+
     queue_state, final_queue_sha256 = classify_transaction_queue_state(
         binding,
         original_snapshot,
         temp_fd,
         new_snapshot,
+        expected_security_metadata,
     )
     if exchange_performed and not errors and queue_state == "UPDATED" and temp_cleanup_confirmed:
         transaction_outcome = "COMMITTED"
-    elif not exchange_performed and queue_state == "UNCHANGED" and temp_cleanup_confirmed:
+    elif not exchange_performed and queue_state == "UNCHANGED":
         transaction_outcome = "NO_WRITE"
     else:
         transaction_outcome = "PARTIAL_OR_UNKNOWN"
@@ -3034,7 +3145,9 @@ def reviewed_route_adoption_apply_gate(
         "execution_authorized": False,
         "requires_nobao_review": True,
         "requires_jenn_decision": (
-            governance_gate_active or transaction_outcome == "PARTIAL_OR_UNKNOWN"
+            governance_gate_active
+            or transaction_outcome == "PARTIAL_OR_UNKNOWN"
+            or transaction.get("temp_cleanup_confirmed") is not True
         ),
         "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
         "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
@@ -3105,6 +3218,20 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
             errors.append("NO_WRITE route adoption transaction must not report rollback")
         if queue_state != "UNCHANGED":
             errors.append("NO_WRITE route adoption transaction must prove queue UNCHANGED")
+        if result.get("temp_cleanup_confirmed") is not True:
+            if result.get("requires_jenn_decision") is not True:
+                errors.append(
+                    "NO_WRITE with unresolved temp cleanup must require Jenn reconciliation"
+                )
+            for flag in (
+                "queue_adoption_authorized",
+                "route_adoption_authorized",
+                "queue_write_authorized",
+            ):
+                if result.get(flag) is not False:
+                    errors.append(
+                        f"NO_WRITE with unresolved temp cleanup must keep {flag}=false"
+                    )
     elif transaction_outcome == "COMMITTED":
         if result.get("write_performed") is not True:
             errors.append("COMMITTED route adoption transaction must report write_performed=true")
