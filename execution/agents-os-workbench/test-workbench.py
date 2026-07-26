@@ -61,6 +61,27 @@ prior_task: closed
 """
 
 
+def fixture_generic_p3_governance_gate_queue_text() -> str:
+    return """# workbench generic P3 governance gate fixture
+
+## NOW
+
+### NOW-001: Call provider
+
+Call provider and start service.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fixture tests for AGENTS OS Workbench v0.1.")
     parser.add_argument("--full", action="store_true", help="Run full validation and completion audit checks.")
@@ -1460,6 +1481,45 @@ def main() -> int:
             "blocked Workbench governance apply must preserve exact queue bytes",
             failures,
         )
+        generic_p3_gate_queue_path = Path(temp_dir) / "generic-p3-governance-gate-queue.md"
+        generic_p3_gate_queue_text = fixture_generic_p3_governance_gate_queue_text()
+        generic_p3_gate_queue_path.write_text(generic_p3_gate_queue_text, encoding="utf-8")
+        generic_p3_route_preview = workbench.build_route_choice_preview(
+            route_choice_text,
+            generic_p3_gate_queue_path,
+        )
+        generic_p3_route_apply = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            generic_p3_gate_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            generic_p3_route_preview["passed"] is False
+            and generic_p3_route_preview["active_jenn_governance_gate"] is True
+            and generic_p3_route_preview["bundle"]["can_apply_with_separate_apply_gate"] is False,
+            "generic P3 blocked NOW must block Workbench route preview and apply readiness",
+            failures,
+        )
+        check(
+            generic_p3_route_preview["next_step"]["status"] == "governance_decision_required"
+            and generic_p3_route_preview["next_step"]["owner"] == "Jenn",
+            "generic P3 Workbench preview must surface Jenn governance decision",
+            failures,
+        )
+        check(
+            generic_p3_route_apply["passed"] is False
+            and generic_p3_route_apply["active_jenn_governance_gate"] is True
+            and generic_p3_route_apply["apply_gate"]["queue_adoption_authorized"] is False
+            and generic_p3_route_apply["write_performed"] is False,
+            "generic P3 blocked NOW must fail closed in Workbench apply",
+            failures,
+        )
+        check(
+            generic_p3_gate_queue_path.read_text(encoding="utf-8") == generic_p3_gate_queue_text,
+            "generic P3 Workbench attacks must preserve exact queue bytes",
+            failures,
+        )
         route_promotion_preview = workbench.build_queue_promotion_apply_gate(
             route_apply_queue_path,
             apply=False,
@@ -1868,6 +1928,49 @@ def main() -> int:
             "CLI active governance apply must preserve exact queue bytes",
             failures,
         )
+        cli_generic_p3_queue_path = Path(temp_dir) / "cli-generic-p3-governance-gate-queue.md"
+        cli_generic_p3_queue_text = fixture_generic_p3_governance_gate_queue_text()
+        cli_generic_p3_queue_path.write_text(cli_generic_p3_queue_text, encoding="utf-8")
+        cli_generic_p3_apply = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-apply-gate",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_generic_p3_queue_path),
+                "--allowed-queue-root",
+                str(Path(temp_dir)),
+                "--apply",
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_generic_p3_apply.returncode == 1,
+            f"CLI generic P3 governance apply should fail closed: {cli_generic_p3_apply.stderr}",
+            failures,
+        )
+        if cli_generic_p3_apply.stdout:
+            cli_generic_p3_payload = json.loads(cli_generic_p3_apply.stdout)
+            check(
+                cli_generic_p3_payload.get("active_jenn_governance_gate") is True
+                and cli_generic_p3_payload.get("apply_gate", {}).get("queue_adoption_authorized") is False
+                and cli_generic_p3_payload.get("write_performed") is False,
+                "CLI generic P3 governance apply must preserve the gate and deny writes",
+                failures,
+            )
+        else:
+            failures.append("CLI generic P3 governance apply should emit JSON")
+        check(
+            cli_generic_p3_queue_path.read_text(encoding="utf-8") == cli_generic_p3_queue_text,
+            "CLI generic P3 governance apply must preserve exact queue bytes",
+            failures,
+        )
         cli_queue_promotion = subprocess.run(
             [
                 "python3",
@@ -2249,7 +2352,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases={22 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
+        print(f"cases={23 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -2267,6 +2370,7 @@ def main() -> int:
     print("PASS workbench route choice apply gate fixtures")
     print("PASS active Jenn governance preview fixtures")
     print("PASS active Jenn governance apply fixtures")
+    print("PASS generic P3 Jenn governance Workbench fixtures")
     print("PASS workbench queue promotion apply gate fixtures")
     print("PASS workbench continue current fixtures")
     print("PASS workbench continue loop fixtures")
@@ -2275,7 +2379,7 @@ def main() -> int:
     if args.full:
         print("PASS workbench validation")
         print("PASS workbench completion audit")
-    print(f"cases={22 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
+    print(f"cases={23 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 

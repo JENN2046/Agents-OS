@@ -714,6 +714,16 @@ def build_route_choice_apply_gate(
             resolved_queue,
             apply=apply,
         )
+        lower_gate_active = apply_gate.get("active_jenn_governance_gate") is True
+        if lower_gate_active:
+            governance_gate_active = True
+            review = {
+                "schema_version": "agents-os.queue-manager.review.v0.1",
+                "source_proposal_id": proposal.get("proposal_id"),
+                "review_status": "blocked",
+                "reviewer": "Nobao",
+                "requires_jenn_decision": True,
+            }
         errors.extend(f"apply gate: {error}" for error in apply_gate.get("errors", []))
 
     selected = route_preview.get("selected_option", {}) if isinstance(route_preview, dict) else {}

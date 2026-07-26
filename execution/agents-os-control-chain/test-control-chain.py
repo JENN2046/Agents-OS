@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -669,6 +670,217 @@ prior_task: closed
             failures,
         )
 
+        generic_p3_queue_path = Path(temp_dir) / "generic-p3-governance-gate-queue.md"
+        generic_p3_queue_text = """# generic P3 governance gate fixture
+
+## NOW
+
+### NOW-001: Call provider
+
+Call provider and start service.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+        generic_p3_queue_path.write_text(generic_p3_queue_text, encoding="utf-8")
+        generic_p3_handoff = chain.route_choice_handoff_reconciliation(generic_p3_queue_path)
+        generic_p3_bundle = chain.route_choice_adoption_bundle_preview(
+            "确认选择 AGENTS OS 下一路线：Formal Memory Loop。\n"
+            "先准备 formal Memory candidate gate v0.1；只做候选和确认模型，不写正式 Memory。",
+            generic_p3_queue_path,
+            chain.ROUTE_SELECTION_PACKAGE,
+        )
+        generic_p3_preview = chain.reviewed_route_adoption_preview(
+            route_choice_proposal,
+            route_review,
+            generic_p3_queue_path,
+        )
+        generic_p3_apply = chain.reviewed_route_adoption_apply_gate(
+            route_choice_proposal,
+            route_review,
+            generic_p3_queue_path,
+            apply=True,
+        )
+        check(
+            generic_p3_handoff["passed"] is True
+            and generic_p3_handoff["active_jenn_governance_gate"] is True
+            and generic_p3_handoff["machine_next_user_action"]["status"] == "governance_decision_required"
+            and generic_p3_handoff["dashboard_next_user_action"]["status"] == "governance_decision_required",
+            f"generic P3 blocked NOW must reconcile as an active Jenn gate: {generic_p3_handoff['errors']}",
+            failures,
+        )
+        check(
+            generic_p3_bundle["passed"] is False
+            and generic_p3_bundle["active_jenn_governance_gate"] is True
+            and generic_p3_bundle["can_apply_with_separate_apply_gate"] is False,
+            "generic P3 blocked NOW must fail closed in the adoption bundle",
+            failures,
+        )
+        check(
+            generic_p3_preview["passed"] is False
+            and generic_p3_preview["active_jenn_governance_gate"] is True
+            and generic_p3_preview["queue_mutation_preview_authorized"] is False,
+            "generic P3 blocked NOW must fail closed in the direct adoption preview",
+            failures,
+        )
+        check(
+            generic_p3_apply["passed"] is False
+            and generic_p3_apply["active_jenn_governance_gate"] is True
+            and generic_p3_apply["queue_adoption_authorized"] is False
+            and generic_p3_apply["write_performed"] is False,
+            "generic P3 blocked NOW must fail closed in the direct apply API",
+            failures,
+        )
+        generic_p3_cli_apply = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "control_chain.py"),
+                "reviewed-route-adoption-apply-gate",
+                "--proposal-json",
+                str(route_proposal_json),
+                "--review-json",
+                str(route_review_json),
+                "--queue",
+                str(generic_p3_queue_path),
+                "--apply",
+                "--json",
+            ],
+            cwd=chain.WORKSPACE_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        generic_p3_cli_result = json.loads(generic_p3_cli_apply.stdout)
+        check(
+            generic_p3_cli_apply.returncode == 1
+            and generic_p3_cli_result["passed"] is False
+            and generic_p3_cli_result["active_jenn_governance_gate"] is True
+            and generic_p3_cli_result["write_performed"] is False,
+            f"generic P3 blocked NOW must fail closed in the public CLI: {generic_p3_cli_apply.stderr}",
+            failures,
+        )
+        check(
+            generic_p3_queue_path.read_text(encoding="utf-8") == generic_p3_queue_text,
+            "generic P3 bundle/API/CLI attacks must preserve exact queue bytes",
+            failures,
+        )
+
+        byte_swap_queue_path = Path(temp_dir) / "byte-swap-queue.md"
+        byte_swap_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_snapshot_handoff = chain.route_choice_handoff_reconciliation_from_snapshot
+
+        def byte_swap_after_handoff(queue_path: Path, snapshot: dict) -> dict:
+            result = original_snapshot_handoff(queue_path, snapshot)
+            byte_swap_queue_path.write_text(generic_p3_queue_text, encoding="utf-8")
+            return result
+
+        chain.route_choice_handoff_reconciliation_from_snapshot = byte_swap_after_handoff
+        try:
+            byte_swap_apply = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                byte_swap_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.route_choice_handoff_reconciliation_from_snapshot = original_snapshot_handoff
+        check(
+            byte_swap_apply["passed"] is False
+            and byte_swap_apply["queue_adoption_authorized"] is False
+            and byte_swap_apply["write_performed"] is False,
+            "same-inode queue byte swap after handoff must fail before route-adoption write",
+            failures,
+        )
+        check(
+            any("queue bytes changed after handoff attestation" in error for error in byte_swap_apply["errors"]),
+            f"same-inode byte swap should report the failed byte binding: {byte_swap_apply['errors']}",
+            failures,
+        )
+        check(
+            byte_swap_queue_path.read_text(encoding="utf-8") == generic_p3_queue_text,
+            "failed byte-swap attack must not overwrite the replacement queue bytes",
+            failures,
+        )
+
+        symlink_swap_queue_path = Path(temp_dir) / "symlink-swap-queue.md"
+        symlink_swap_queue_path.write_text(route_queue_text, encoding="utf-8")
+        with tempfile.TemporaryDirectory(prefix="agents-os-external-queue-target-") as external_temp_dir:
+            external_queue_path = Path(external_temp_dir) / "external-target.md"
+            external_queue_text = "external target must remain unchanged\n"
+            external_queue_path.write_text(external_queue_text, encoding="utf-8")
+
+            def symlink_swap_after_handoff(queue_path: Path, snapshot: dict) -> dict:
+                result = original_snapshot_handoff(queue_path, snapshot)
+                symlink_swap_queue_path.unlink()
+                symlink_swap_queue_path.symlink_to(external_queue_path)
+                return result
+
+            chain.route_choice_handoff_reconciliation_from_snapshot = symlink_swap_after_handoff
+            try:
+                symlink_swap_apply = chain.reviewed_route_adoption_apply_gate(
+                    route_choice_proposal,
+                    route_review,
+                    symlink_swap_queue_path,
+                    apply=True,
+                )
+            finally:
+                chain.route_choice_handoff_reconciliation_from_snapshot = original_snapshot_handoff
+            check(
+                symlink_swap_apply["passed"] is False
+                and symlink_swap_apply["queue_adoption_authorized"] is False
+                and symlink_swap_apply["write_performed"] is False,
+                "queue symlink swap after handoff must fail before route-adoption write",
+                failures,
+            )
+            check(
+                any("queue binding target is no longer a regular file" in error for error in symlink_swap_apply["errors"]),
+                f"symlink swap should report the failed file-identity binding: {symlink_swap_apply['errors']}",
+                failures,
+            )
+            check(
+                external_queue_path.read_text(encoding="utf-8") == external_queue_text,
+                "failed symlink-swap attack must not write the external target",
+                failures,
+            )
+
+        read_skew_queue_path = Path(temp_dir) / "machine-dashboard-read-skew-queue.md"
+        read_skew_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_import_module = chain.import_module
+        read_skew_state = {"triggered": False}
+
+        def read_skew_import(path: Path, name: str) -> ModuleType:
+            module = original_import_module(path, name)
+            if Path(path) == chain.DASHBOARD and not read_skew_state["triggered"]:
+                read_skew_queue_path.write_text(generic_p3_queue_text, encoding="utf-8")
+                read_skew_state["triggered"] = True
+            return module
+
+        chain.import_module = read_skew_import
+        try:
+            read_skew_handoff = chain.route_choice_handoff_reconciliation(read_skew_queue_path)
+        finally:
+            chain.import_module = original_import_module
+        check(read_skew_state["triggered"] is True, "Machine/Dashboard read-skew attack hook should run", failures)
+        check(
+            read_skew_handoff["passed"] is False
+            and read_skew_handoff["aligned"] is False
+            and read_skew_handoff["write_performed"] is False,
+            "Machine/Dashboard pathname read-skew must fail the bound snapshot reconciliation",
+            failures,
+        )
+        check(
+            any("queue bytes changed after handoff attestation" in error for error in read_skew_handoff["errors"]),
+            f"Machine/Dashboard read-skew should report queue byte drift: {read_skew_handoff['errors']}",
+            failures,
+        )
+
         adoption_preview = chain.reviewed_route_adoption_preview(route_choice_proposal, route_review, route_queue_path)
         check(adoption_preview["passed"], f"reviewed route adoption preview should pass: {adoption_preview['errors']}", failures)
         check(adoption_preview["preview_only"] is True, "reviewed route adoption should be preview-only", failures)
@@ -677,6 +889,12 @@ prior_task: closed
         check(adoption_preview["write_performed"] is False, "reviewed route adoption preview must not write", failures)
         check(adoption_preview["queue_write_authorized"] is False, "reviewed route adoption preview must not authorize queue write", failures)
         check(adoption_preview["execution_authorized"] is False, "reviewed route adoption preview must not authorize execution", failures)
+        check(adoption_preview["queue_file_identity_bound"] is True, "reviewed route adoption preview must bind queue identity", failures)
+        check(
+            adoption_preview["queue_snapshot_sha256"] == hashlib.sha256(route_queue_text.encode("utf-8")).hexdigest(),
+            "reviewed route adoption preview must bind the exact queue bytes",
+            failures,
+        )
         check(adoption_preview["mutation_preview"]["target_lane"] == "NEXT", "reviewed route adoption preview should target NEXT", failures)
         check(adoption_preview["mutation_preview"]["would_promote_now"] is False, "reviewed route adoption preview must not promote NOW", failures)
         check(route_queue_path.read_text(encoding="utf-8") == route_queue_text, "reviewed route adoption preview should not change fixture queue", failures)
@@ -719,6 +937,17 @@ old_task: closed
         check(adoption_apply["queue_write_authorized"] is True, "route adoption apply should authorize explicit queue write", failures)
         check(adoption_apply["queue_promotion_authorized"] is False, "route adoption apply must not authorize queue promotion", failures)
         check(adoption_apply["execution_authorized"] is False, "route adoption apply must not authorize execution", failures)
+        check(adoption_apply["queue_file_identity_bound"] is True, "route adoption apply must preserve bound queue identity", failures)
+        check(
+            adoption_apply["queue_snapshot_sha256"] == hashlib.sha256(route_apply_queue_text.encode("utf-8")).hexdigest(),
+            "route adoption apply must bind the exact pre-write queue bytes",
+            failures,
+        )
+        check(
+            adoption_apply["final_queue_sha256"] == hashlib.sha256(route_apply_text.encode("utf-8")).hexdigest(),
+            "route adoption apply must attest the exact final queue bytes",
+            failures,
+        )
         check("### NOW-001: No Active Automatic Construction Item" in route_apply_text, "route adoption apply must leave NOW unchanged", failures)
         check("### NEXT-001: AGENTS OS formal Memory candidate gate v0.1" in route_apply_text, "route adoption apply should append selected route to NEXT", failures)
         duplicate_route_apply = chain.reviewed_route_adoption_apply_gate(route_choice_proposal, route_review, route_apply_queue_path)
@@ -797,7 +1026,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=34 failures={len(failures)}")
+        print(f"cases=38 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -815,12 +1044,16 @@ old_task: closed
     print("PASS active Jenn governance gate handoff validation fixture")
     print("PASS direct active Jenn governance gate adoption block fixture")
     print("PASS public active Jenn governance gate adoption CLI block fixture")
+    print("PASS generic P3 Jenn governance gate block fixture")
+    print("PASS queue byte-swap binding attack fixture")
+    print("PASS queue symlink-swap binding attack fixture")
+    print("PASS Machine/Dashboard read-skew binding attack fixture")
     print("PASS route choice queue proposal fixture")
     print("PASS reviewed queue mutation fixture")
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=34 failures=0")
+    print("cases=38 failures=0")
     return 0
 
 

@@ -183,7 +183,18 @@ Goal: call provider and start service.
     check(p3_preview["actionable"] is False, "P3 signal preview should be actionable=false", failures)
     check(p3_preview["review_gate"]["requires_jenn_decision"] is True, "P3 signal should require Jenn", failures)
     check(p3_preview["execution_authorized"] is False, "P3 signal should not authorize execution", failures)
-    check(p3_preview["next_user_action"]["status"] == "none", "P3-only signal should not become route choice handoff", failures)
+    check(
+        p3_preview["next_user_action"]["status"] == "governance_decision_required",
+        "generic P3 signal should surface governance decision handoff",
+        failures,
+    )
+    check(p3_preview["next_user_action"]["decision_owner"] == "Jenn", "generic P3 handoff owner should be Jenn", failures)
+    check(
+        p3_preview["next_user_action"]["requires_jenn_decision"] is True,
+        "generic P3 handoff should preserve Jenn decision requirement",
+        failures,
+    )
+    check(p3_preview["next_user_action"]["accepted_route_ids"] == [], "generic P3 handoff must not surface route ids", failures)
 
     negated_queue = machine.parse_queue_markdown(
         """# fixture
@@ -318,6 +329,11 @@ Goal: write to Notion and create GitHub issue.
     check(external_preview["blocked"] is True, "external write signal should be blocked", failures)
     check("external_write" in external_preview["denied_signals"], "external write signal should be detected", failures)
     check(external_preview["actionable"] is False, "external write preview should be actionable=false", failures)
+    check(
+        external_preview["next_user_action"]["status"] == "governance_decision_required",
+        "external write signal should surface governance decision handoff",
+        failures,
+    )
 
     database_queue = machine.parse_queue_markdown(
         """# fixture
@@ -332,6 +348,11 @@ Goal: perform a database write.
     )
     database_preview = machine.build_preview(machine.now_item(database_queue))
     check("database_write" in database_preview["denied_signals"], "database write signal should be detected", failures)
+    check(
+        database_preview["next_user_action"]["status"] == "governance_decision_required",
+        "database write signal should surface governance decision handoff",
+        failures,
+    )
 
     protected_queue = machine.load_queue(Path("state-private/queue.md"))
     check(not protected_queue["passed"], "protected queue path should fail before read", failures)

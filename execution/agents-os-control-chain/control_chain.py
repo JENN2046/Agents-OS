@@ -11,6 +11,7 @@ Work Queue.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import importlib.util
 import json
@@ -18,6 +19,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+import stat
 import subprocess
 import sys
 import tempfile
@@ -526,6 +528,246 @@ def next_user_action_summary(action: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def lexical_workspace_path(path: Path) -> tuple[Path | None, list[str], str | None]:
+    root = WORKSPACE_ROOT.resolve()
+    candidate = path if path.is_absolute() else root / path
+    lexical = Path(os.path.abspath(candidate))
+    if is_protected_path(lexical):
+        return None, [], f"queue path is protected: {path}"
+    try:
+        relative_parts = list(lexical.relative_to(root).parts)
+    except ValueError:
+        return None, [], f"queue path is outside workspace: {path}"
+    if not relative_parts:
+        return None, [], f"queue path does not identify a file: {path}"
+    return lexical, relative_parts, None
+
+
+def close_queue_file_binding(binding: dict[str, Any] | None) -> None:
+    if not binding:
+        return
+    file_fd = binding.get("file_fd")
+    parent_fd = binding.get("parent_fd")
+    if isinstance(file_fd, int):
+        try:
+            fcntl.flock(file_fd, fcntl.LOCK_UN)
+        except OSError:
+            pass
+        try:
+            os.close(file_fd)
+        except OSError:
+            pass
+    if isinstance(parent_fd, int):
+        try:
+            os.close(parent_fd)
+        except OSError:
+            pass
+
+
+def open_queue_file_binding(
+    queue_path: Path,
+    *,
+    writable: bool,
+) -> tuple[dict[str, Any] | None, str | None]:
+    lexical, relative_parts, path_error = lexical_workspace_path(queue_path)
+    if path_error or lexical is None:
+        return None, path_error or f"queue path is invalid: {queue_path}"
+    required_flags = ("O_CLOEXEC", "O_DIRECTORY", "O_NOFOLLOW")
+    missing_flags = [name for name in required_flags if not hasattr(os, name)]
+    if missing_flags:
+        return None, f"required queue binding flags unavailable: {','.join(missing_flags)}"
+
+    directory_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_DIRECTORY | os.O_NOFOLLOW
+    parent_fd: int | None = None
+    file_fd: int | None = None
+    try:
+        parent_fd = os.open(WORKSPACE_ROOT.resolve(), directory_flags)
+        for part in relative_parts[:-1]:
+            next_fd = os.open(part, directory_flags, dir_fd=parent_fd)
+            os.close(parent_fd)
+            parent_fd = next_fd
+        file_flags = (os.O_RDWR if writable else os.O_RDONLY) | os.O_CLOEXEC | os.O_NOFOLLOW
+        file_fd = os.open(relative_parts[-1], file_flags, dir_fd=parent_fd)
+        lock_mode = fcntl.LOCK_EX if writable else fcntl.LOCK_SH
+        fcntl.flock(file_fd, lock_mode | fcntl.LOCK_NB)
+        file_stat = os.fstat(file_fd)
+        parent_stat = os.fstat(parent_fd)
+        entry_stat = os.stat(relative_parts[-1], dir_fd=parent_fd, follow_symlinks=False)
+        if not stat.S_ISDIR(parent_stat.st_mode):
+            raise OSError("queue binding parent is not a directory")
+        if not stat.S_ISREG(file_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
+            raise OSError("queue binding target is not a regular file")
+        if (file_stat.st_dev, file_stat.st_ino) != (entry_stat.st_dev, entry_stat.st_ino):
+            raise OSError("queue binding target changed during open")
+        if file_stat.st_nlink != 1:
+            raise OSError("queue binding target must have exactly one hard link")
+        return {
+            "path": lexical,
+            "relative_path": lexical.relative_to(WORKSPACE_ROOT.resolve()).as_posix(),
+            "relative_parts": tuple(relative_parts),
+            "name": relative_parts[-1],
+            "file_fd": file_fd,
+            "parent_fd": parent_fd,
+            "parent_identity": {
+                "device": parent_stat.st_dev,
+                "inode": parent_stat.st_ino,
+            },
+            "writable": writable,
+            "identity": {
+                "device": file_stat.st_dev,
+                "inode": file_stat.st_ino,
+            },
+        }, None
+    except OSError as exc:
+        if file_fd is not None:
+            try:
+                os.close(file_fd)
+            except OSError:
+                pass
+        if parent_fd is not None:
+            try:
+                os.close(parent_fd)
+            except OSError:
+                pass
+        return None, f"queue path could not be bound without following links: {exc}"
+
+
+def read_queue_binding_bytes(binding: dict[str, Any]) -> bytes:
+    file_fd = int(binding["file_fd"])
+    os.lseek(file_fd, 0, os.SEEK_SET)
+    chunks: list[bytes] = []
+    while True:
+        chunk = os.read(file_fd, 1024 * 1024)
+        if not chunk:
+            return b"".join(chunks)
+        chunks.append(chunk)
+
+
+def queue_binding_snapshot(binding: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+    try:
+        data = read_queue_binding_bytes(binding)
+        text = data.decode("utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        return None, f"queue snapshot could not be read as UTF-8: {exc}"
+    identity = dict(binding["identity"])
+    return {
+        "bytes": data,
+        "text": text,
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "byte_count": len(data),
+        "identity": identity,
+    }, None
+
+
+def validate_queue_file_binding(
+    binding: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> tuple[list[str], bytes | None]:
+    errors: list[str] = []
+    file_fd = int(binding["file_fd"])
+    parent_fd = int(binding["parent_fd"])
+    name = str(binding["name"])
+    expected_identity = snapshot.get("identity", {})
+    expected_parent_identity = binding.get("parent_identity", {})
+    relative_parts = tuple(str(part) for part in binding.get("relative_parts", ()))
+    directory_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_DIRECTORY | os.O_NOFOLLOW
+    current_parent_fd: int | None = None
+    try:
+        file_stat = os.fstat(file_fd)
+        bound_parent_stat = os.fstat(parent_fd)
+        current_parent_fd = os.open(WORKSPACE_ROOT.resolve(), directory_flags)
+        for part in relative_parts[:-1]:
+            next_fd = os.open(part, directory_flags, dir_fd=current_parent_fd)
+            os.close(current_parent_fd)
+            current_parent_fd = next_fd
+        current_parent_stat = os.fstat(current_parent_fd)
+        entry_stat = os.stat(name, dir_fd=current_parent_fd, follow_symlinks=False)
+    except OSError as exc:
+        if current_parent_fd is not None:
+            try:
+                os.close(current_parent_fd)
+            except OSError:
+                pass
+            current_parent_fd = None
+        return [f"queue binding identity could not be revalidated: {exc}"], None
+    finally:
+        if current_parent_fd is not None:
+            try:
+                os.close(current_parent_fd)
+            except OSError:
+                pass
+    if not stat.S_ISREG(file_stat.st_mode) or not stat.S_ISREG(entry_stat.st_mode):
+        errors.append("queue binding target is no longer a regular file")
+    if file_stat.st_nlink != 1:
+        errors.append("queue binding target hard-link count changed")
+    current_identity = (file_stat.st_dev, file_stat.st_ino)
+    entry_identity = (entry_stat.st_dev, entry_stat.st_ino)
+    expected = (expected_identity.get("device"), expected_identity.get("inode"))
+    expected_parent = (
+        expected_parent_identity.get("device"),
+        expected_parent_identity.get("inode"),
+    )
+    bound_parent_identity = (bound_parent_stat.st_dev, bound_parent_stat.st_ino)
+    current_parent_identity = (current_parent_stat.st_dev, current_parent_stat.st_ino)
+    if bound_parent_identity != expected_parent:
+        errors.append("bound queue parent directory identity changed")
+    if current_parent_identity != expected_parent:
+        errors.append("queue parent directory identity changed after handoff attestation")
+    if current_identity != expected:
+        errors.append("queue file descriptor identity changed")
+    if entry_identity != expected:
+        errors.append("queue directory entry identity changed after handoff attestation")
+    try:
+        current_bytes = read_queue_binding_bytes(binding)
+    except OSError as exc:
+        errors.append(f"queue bytes could not be revalidated: {exc}")
+        return errors, None
+    if hashlib.sha256(current_bytes).hexdigest() != snapshot.get("sha256"):
+        errors.append("queue bytes changed after handoff attestation")
+    return errors, current_bytes
+
+
+def write_queue_binding_bytes(binding: dict[str, Any], data: bytes) -> None:
+    file_fd = int(binding["file_fd"])
+    os.lseek(file_fd, 0, os.SEEK_SET)
+    offset = 0
+    while offset < len(data):
+        written = os.write(file_fd, data[offset:])
+        if written <= 0:
+            raise OSError("queue file descriptor write made no progress")
+        offset += written
+    os.ftruncate(file_fd, len(data))
+    os.fsync(file_fd)
+
+
+def jenn_gate_evidence(
+    *,
+    blocked: Any,
+    denied_signals: Any,
+    review_requires_jenn_decision: Any,
+    next_user_action: dict[str, Any],
+) -> dict[str, Any]:
+    signals = sorted({str(signal) for signal in denied_signals}) if isinstance(denied_signals, list) else []
+    generic_signals = [signal for signal in signals if signal != "route_selection_required"]
+    route_choice_only = (
+        signals == ["route_selection_required"]
+        and next_user_action.get("status") == "route_choice_required"
+    )
+    active_gate = (
+        bool(generic_signals)
+        or (blocked is True and not route_choice_only)
+        or (review_requires_jenn_decision is True and not route_choice_only)
+        or next_user_action.get("status") == "governance_decision_required"
+    )
+    return {
+        "blocked": blocked is True,
+        "denied_signals": signals,
+        "review_requires_jenn_decision": review_requires_jenn_decision is True,
+        "route_choice_only": route_choice_only,
+        "active_jenn_governance_gate": active_gate,
+    }
+
+
 def validate_next_user_action(prefix: str, action: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     for flag in NEXT_USER_ACTION_FALSE_FLAGS:
@@ -540,49 +782,101 @@ def validate_next_user_action(prefix: str, action: dict[str, Any]) -> list[str]:
             errors.append(f"{prefix} next_user_action must include accepted route ids")
         if action.get("exact_confirmation_templates_available") is not True:
             errors.append(f"{prefix} next_user_action must point to available confirmation templates")
+    elif action.get("status") == "governance_decision_required":
+        if action.get("decision_owner") != "Jenn":
+            errors.append(f"{prefix} governance next_user_action decision_owner must be Jenn")
+        if action.get("requires_jenn_decision") is not True:
+            errors.append(f"{prefix} governance next_user_action must require Jenn decision")
+        if action.get("accepted_route_ids"):
+            errors.append(f"{prefix} governance next_user_action must not include route ids")
+        if action.get("exact_confirmation_templates_available") is not False:
+            errors.append(f"{prefix} governance next_user_action must not claim route templates")
     return errors
 
 
-def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
+def failed_route_choice_handoff_reconciliation(queue_path: Path, error: str) -> dict[str, Any]:
+    result = {
+        "schema_version": "agents-os.control-chain.route-choice-handoff-reconciliation.v0.1",
+        "preview_only": True,
+        "read_only": True,
+        "source_queue_path": str(queue_path),
+        "queue_snapshot_sha256": None,
+        "queue_snapshot_byte_count": None,
+        "queue_snapshot_identity": {},
+        "machine_source_item": {},
+        "machine_next_user_action": next_user_action_summary({}),
+        "dashboard_next_user_action": next_user_action_summary({}),
+        "machine_jenn_gate": {},
+        "dashboard_jenn_gate": {},
+        "active_jenn_governance_gate": False,
+        "aligned": False,
+        "route_choice_required": False,
+        "decision_owner": None,
+        "accepted_route_ids": [],
+        "route_auto_selection_authorized": False,
+        "active_queue_mutation_authorized": False,
+        "queue_promotion_authorized": False,
+        "execution_authorized": False,
+        "write_performed": False,
+        "raw_content_output": False,
+        "errors": [error],
+        "passed": False,
+    }
+    return result
+
+
+def route_choice_handoff_reconciliation_from_snapshot(
+    queue_path: Path,
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
     errors: list[str] = []
-    source_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+    source_queue, source_parts, source_error = lexical_workspace_path(queue_path)
+    if source_error or source_queue is None:
+        errors.append(source_error or f"queue snapshot source path is invalid: {queue_path}")
+        source_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+        source_queue_path = str(queue_path)
+    else:
+        source_queue_path = "/".join(source_parts)
     machine_preview: dict[str, Any] = {}
     dashboard_summary: dict[str, Any] = {}
+    normalized: dict[str, Any] = {}
+    try:
+        machine = import_module(MACHINE, "agents_os_machine_for_control_chain")
+        normalized = machine.parse_queue_markdown(str(snapshot.get("text", "")), source_queue)
+        if normalized.get("passed") is not True:
+            errors.extend(f"machine queue: {error}" for error in normalized.get("parse_errors", []))
+        else:
+            machine_preview = machine.build_preview(machine.now_item(normalized))
+            errors.extend(f"machine preview: {error}" for error in machine.validate_preview(machine_preview))
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"Machine handoff snapshot parse failed: {exc}")
 
-    resolved, resolve_error = safe_resolve(source_queue)
-    if is_protected_path(source_queue):
-        errors.append(f"route choice handoff queue path is protected: {source_queue}")
-    elif resolve_error or resolved is None:
-        errors.append(f"route choice handoff queue path could not be resolved: {resolve_error or source_queue}")
-    elif is_protected_path(resolved):
-        errors.append(f"route choice handoff queue resolves to a protected path: {source_queue}")
-    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
-        errors.append(f"route choice handoff queue path is outside workspace: {source_queue}")
-    elif not resolved.exists() or not resolved.is_file():
-        errors.append(f"route choice handoff queue path is not a file: {rel(resolved)}")
-    else:
-        source_queue = resolved
-        try:
-            machine = import_module(MACHINE, "agents_os_machine_for_control_chain")
-            normalized = machine.load_queue(source_queue)
-            if normalized.get("passed") is not True:
-                errors.extend(f"machine queue: {error}" for error in normalized.get("parse_errors", []))
-            else:
-                machine_preview = machine.build_preview(machine.now_item(normalized))
-                errors.extend(f"machine preview: {error}" for error in machine.validate_preview(machine_preview))
-        except Exception as exc:  # pragma: no cover - surfaced as validation error
-            errors.append(f"Machine handoff read failed: {exc}")
-
-        try:
-            dashboard = import_module(DASHBOARD, "agents_os_dashboard_for_control_chain")
-            dashboard_summary = dashboard.build_dashboard_summary(source_queue, run_validations=False)
-            if dashboard_summary.get("passed") is not True:
-                errors.extend(f"dashboard summary: {error}" for error in dashboard_summary.get("errors", []))
-        except Exception as exc:  # pragma: no cover - surfaced as validation error
-            errors.append(f"Dashboard handoff read failed: {exc}")
+    try:
+        dashboard = import_module(DASHBOARD, "agents_os_dashboard_for_control_chain")
+        dashboard_summary = dashboard.build_dashboard_summary_from_normalized_queue(
+            normalized,
+            run_validations=False,
+        )
+        if dashboard_summary.get("passed") is not True:
+            errors.extend(f"dashboard summary: {error}" for error in dashboard_summary.get("errors", []))
+    except Exception as exc:  # pragma: no cover - surfaced as validation error
+        errors.append(f"Dashboard handoff snapshot projection failed: {exc}")
 
     machine_action = machine_preview.get("next_user_action", {}) if machine_preview else {}
     dashboard_action = dashboard_summary.get("next_user_action", {}) if dashboard_summary else {}
+    dashboard_now = dashboard_summary.get("queue", {}).get("now", {}) if dashboard_summary else {}
+    machine_gate = jenn_gate_evidence(
+        blocked=machine_preview.get("blocked"),
+        denied_signals=machine_preview.get("denied_signals", []),
+        review_requires_jenn_decision=machine_preview.get("review_gate", {}).get("requires_jenn_decision"),
+        next_user_action=machine_action,
+    )
+    dashboard_gate = jenn_gate_evidence(
+        blocked=dashboard_now.get("blocked"),
+        denied_signals=dashboard_now.get("denied_signals", []),
+        review_requires_jenn_decision=dashboard_now.get("review_requires_jenn_decision"),
+        next_user_action=dashboard_action,
+    )
     errors.extend(validate_next_user_action("machine", machine_action))
     errors.extend(validate_next_user_action("dashboard", dashboard_action))
 
@@ -597,22 +891,41 @@ def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dic
     for field in comparable_fields:
         if machine_action.get(field) != dashboard_action.get(field):
             errors.append(f"Machine/Dashboard next_user_action mismatch: {field}")
+    for field in (
+        "blocked",
+        "denied_signals",
+        "review_requires_jenn_decision",
+        "route_choice_only",
+        "active_jenn_governance_gate",
+    ):
+        if machine_gate.get(field) != dashboard_gate.get(field):
+            errors.append(f"Machine/Dashboard Jenn gate evidence mismatch: {field}")
 
     route_choice_required = (
         machine_action.get("status") == "route_choice_required"
         and dashboard_action.get("status") == "route_choice_required"
     )
+    active_governance_gate = (
+        machine_gate.get("active_jenn_governance_gate") is True
+        or dashboard_gate.get("active_jenn_governance_gate") is True
+    )
     result = {
         "schema_version": "agents-os.control-chain.route-choice-handoff-reconciliation.v0.1",
         "preview_only": True,
         "read_only": True,
-        "source_queue_path": rel(source_queue),
+        "source_queue_path": source_queue_path,
+        "queue_snapshot_sha256": snapshot.get("sha256"),
+        "queue_snapshot_byte_count": snapshot.get("byte_count"),
+        "queue_snapshot_identity": snapshot.get("identity", {}),
         "machine_source_item": machine_preview.get("source_item", {}),
         "machine_next_user_action": next_user_action_summary(machine_action),
         "dashboard_next_user_action": next_user_action_summary(dashboard_action),
+        "machine_jenn_gate": machine_gate,
+        "dashboard_jenn_gate": dashboard_gate,
+        "active_jenn_governance_gate": active_governance_gate,
         "aligned": not errors,
         "route_choice_required": route_choice_required,
-        "decision_owner": "Jenn" if route_choice_required and not errors else None,
+        "decision_owner": "Jenn" if (route_choice_required or active_governance_gate) and not errors else None,
         "accepted_route_ids": machine_action.get("accepted_route_ids", []) if route_choice_required else [],
         "route_auto_selection_authorized": False,
         "active_queue_mutation_authorized": False,
@@ -623,10 +936,38 @@ def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dic
         "errors": errors,
     }
     result_errors = validate_route_choice_handoff_reconciliation(result)
-    result["passed"] = not result_errors
     result["errors"] = sorted(set(result["errors"] + result_errors))
     result["aligned"] = not result["errors"]
+    result["passed"] = not result["errors"]
     return result
+
+
+def route_choice_handoff_reconciliation(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
+    binding, binding_error = open_queue_file_binding(queue_path, writable=False)
+    if binding_error or binding is None:
+        return failed_route_choice_handoff_reconciliation(
+            queue_path,
+            binding_error or f"queue path could not be bound: {queue_path}",
+        )
+    try:
+        snapshot, snapshot_error = queue_binding_snapshot(binding)
+        if snapshot_error or snapshot is None:
+            return failed_route_choice_handoff_reconciliation(
+                Path(binding["path"]),
+                snapshot_error or "queue snapshot could not be created",
+            )
+        result = route_choice_handoff_reconciliation_from_snapshot(
+            Path(binding["path"]),
+            snapshot,
+        )
+        binding_errors, _ = validate_queue_file_binding(binding, snapshot)
+        if binding_errors:
+            result["errors"] = sorted(set(result.get("errors", []) + binding_errors))
+            result["aligned"] = False
+            result["passed"] = False
+        return result
+    finally:
+        close_queue_file_binding(binding)
 
 
 def validate_route_choice_handoff_reconciliation(result: dict[str, Any]) -> list[str]:
@@ -637,6 +978,15 @@ def validate_route_choice_handoff_reconciliation(result: dict[str, Any]) -> list
         errors.append("route choice handoff reconciliation must be preview_only")
     if result.get("read_only") is not True:
         errors.append("route choice handoff reconciliation must be read_only")
+    if not result.get("errors"):
+        snapshot_sha = result.get("queue_snapshot_sha256")
+        if not isinstance(snapshot_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", snapshot_sha):
+            errors.append("route choice handoff reconciliation must bind a queue snapshot SHA-256")
+        if not isinstance(result.get("queue_snapshot_byte_count"), int):
+            errors.append("route choice handoff reconciliation must bind queue snapshot byte count")
+        identity = result.get("queue_snapshot_identity", {})
+        if not isinstance(identity.get("device"), int) or not isinstance(identity.get("inode"), int):
+            errors.append("route choice handoff reconciliation must bind queue file identity")
     for flag in (
         "route_auto_selection_authorized",
         "active_queue_mutation_authorized",
@@ -654,6 +1004,11 @@ def validate_route_choice_handoff_reconciliation(result: dict[str, Any]) -> list
             errors.append("route choice handoff reconciliation must be aligned")
         if result.get("accepted_route_ids") != ["A", "B", "C", "D", "E"]:
             errors.append("route choice handoff reconciliation accepted route ids must be A-E")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("decision_owner") != "Jenn":
+            errors.append("active Jenn governance handoff decision owner must be Jenn")
+        if result.get("accepted_route_ids"):
+            errors.append("active Jenn governance handoff must not surface route ids")
     return errors
 
 
@@ -1846,50 +2201,55 @@ def reviewed_route_adoption_preview(
     errors = validate_route_choice_queue_proposal(proposal)
     handoff_reconciliation: dict[str, Any] = {}
     governance_gate_active = False
+    queue_snapshot: dict[str, Any] = {}
     if proposal.get("passed") is not True:
         errors.append("route choice queue proposal must be passed")
     errors.extend(validate_queue_review(review, proposal))
-    if is_protected_path(queue_path):
-        errors.append(f"queue path is protected: {queue_path}")
 
-    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
-    resolved, resolve_error = safe_resolve(candidate)
     mutation_preview: dict[str, Any] = {}
-    if resolve_error or resolved is None:
-        errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
-    elif is_protected_path(resolved):
-        errors.append(f"queue path resolves to a protected path: {queue_path}")
-    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
-        errors.append(f"queue path is outside workspace: {queue_path}")
-    elif not resolved.exists() or not resolved.is_file():
-        errors.append(f"queue path is not a file: {rel(resolved)}")
+    binding, binding_error = open_queue_file_binding(queue_path, writable=False)
+    if binding_error or binding is None:
+        errors.append(binding_error or f"queue path could not be bound: {queue_path}")
     else:
-        handoff_reconciliation = route_choice_handoff_reconciliation(resolved)
-        governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
-        errors.extend(
-            f"route choice handoff: {error}"
-            for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
-        )
-        queue_text = resolved.read_text(encoding="utf-8")
-        now_blocks = queue_lane_blocks(queue_text, "NOW")
-        next_blocks = queue_lane_blocks(queue_text, "NEXT")
-        item = proposal.get("proposed_queue_item", {})
-        signals = queue_p3_signals(proposed_queue_item_text(item))
-        if len(now_blocks) != 1:
-            errors.append(f"expected exactly one NOW before route adoption preview, got {len(now_blocks)}")
-        if signals:
-            errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
-        mutation_preview = {
-            "queue_path": rel(resolved),
-            "target_lane": "NEXT",
-            "would_append_next_title": item.get("title"),
-            "would_append_next_body_lines": item.get("body_lines", []),
-            "next_count_before": len(next_blocks),
-            "next_count_after_preview": len(next_blocks) + 1 if not errors else None,
-            "exactly_one_now_before": len(now_blocks) == 1,
-            "would_leave_now_unchanged": True,
-            "would_promote_now": False,
-        }
+        try:
+            snapshot, snapshot_error = queue_binding_snapshot(binding)
+            if snapshot_error or snapshot is None:
+                errors.append(snapshot_error or "queue snapshot could not be created")
+            else:
+                queue_snapshot = snapshot
+                handoff_reconciliation = route_choice_handoff_reconciliation_from_snapshot(
+                    Path(binding["path"]),
+                    snapshot,
+                )
+                governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
+                errors.extend(
+                    f"route choice handoff: {error}"
+                    for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
+                )
+                queue_text = str(snapshot["text"])
+                now_blocks = queue_lane_blocks(queue_text, "NOW")
+                next_blocks = queue_lane_blocks(queue_text, "NEXT")
+                item = proposal.get("proposed_queue_item", {})
+                signals = queue_p3_signals(proposed_queue_item_text(item))
+                if len(now_blocks) != 1:
+                    errors.append(f"expected exactly one NOW before route adoption preview, got {len(now_blocks)}")
+                if signals:
+                    errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
+                mutation_preview = {
+                    "queue_path": str(binding["relative_path"]),
+                    "target_lane": "NEXT",
+                    "would_append_next_title": item.get("title"),
+                    "would_append_next_body_lines": item.get("body_lines", []),
+                    "next_count_before": len(next_blocks),
+                    "next_count_after_preview": len(next_blocks) + 1 if not errors else None,
+                    "exactly_one_now_before": len(now_blocks) == 1,
+                    "would_leave_now_unchanged": True,
+                    "would_promote_now": False,
+                }
+                binding_errors, _ = validate_queue_file_binding(binding, snapshot)
+                errors.extend(f"queue binding: {error}" for error in binding_errors)
+        finally:
+            close_queue_file_binding(binding)
 
     result = {
         "schema_version": "agents-os.queue-manager.reviewed-route-adoption-preview.v0.1",
@@ -1913,6 +2273,10 @@ def reviewed_route_adoption_preview(
         "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
         "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
         "active_jenn_governance_gate": governance_gate_active,
+        "queue_snapshot_sha256": queue_snapshot.get("sha256"),
+        "queue_snapshot_byte_count": queue_snapshot.get("byte_count"),
+        "queue_snapshot_identity": queue_snapshot.get("identity", {}),
+        "queue_file_identity_bound": bool(queue_snapshot),
         "mutation_preview": mutation_preview,
         "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
         "errors": errors,
@@ -1948,6 +2312,16 @@ def validate_reviewed_route_adoption_preview(result: dict[str, Any]) -> list[str
             errors.append("authorized route adoption preview requires aligned handoff reconciliation")
         if result.get("active_jenn_governance_gate") is not False:
             errors.append("authorized route adoption preview must not bypass an active Jenn governance gate")
+        if result.get("queue_file_identity_bound") is not True:
+            errors.append("authorized route adoption preview must bind the queue file identity")
+        snapshot_sha = result.get("queue_snapshot_sha256")
+        if not isinstance(snapshot_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", snapshot_sha):
+            errors.append("authorized route adoption preview must bind queue bytes by SHA-256")
+        if not isinstance(result.get("queue_snapshot_byte_count"), int):
+            errors.append("authorized route adoption preview must bind queue byte count")
+        identity = result.get("queue_snapshot_identity", {})
+        if not isinstance(identity.get("device"), int) or not isinstance(identity.get("inode"), int):
+            errors.append("authorized route adoption preview must bind queue device and inode")
     for flag in (
         "route_adoption_authorized",
         "workspace_route_state_modified",
@@ -2035,65 +2409,94 @@ def reviewed_route_adoption_apply_gate(
     errors = validate_route_choice_queue_proposal(proposal)
     handoff_reconciliation: dict[str, Any] = {}
     governance_gate_active = False
+    queue_snapshot: dict[str, Any] = {}
+    final_queue_sha256: str | None = None
+    write_performed = False
     if proposal.get("passed") is not True:
         errors.append("route choice queue proposal must be passed")
     errors.extend(validate_queue_review(review, proposal))
     if proposal.get("requires_jenn_decision") is True:
         errors.append("proposal requiring Jenn cannot adopt route")
-    if is_protected_path(queue_path):
-        errors.append(f"queue path is protected: {queue_path}")
 
-    candidate = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
-    resolved, resolve_error = safe_resolve(candidate)
     mutation: dict[str, Any] = {}
-    if resolve_error or resolved is None:
-        errors.append(f"queue path could not be resolved: {resolve_error or queue_path}")
-    elif is_protected_path(resolved):
-        errors.append(f"queue path resolves to a protected path: {queue_path}")
-    elif not is_under_workspace(resolved, WORKSPACE_ROOT):
-        errors.append(f"queue path is outside workspace: {queue_path}")
-    elif not resolved.exists() or not resolved.is_file():
-        errors.append(f"queue path is not a file: {rel(resolved)}")
+    binding, binding_error = open_queue_file_binding(queue_path, writable=apply)
+    if binding_error or binding is None:
+        errors.append(binding_error or f"queue path could not be bound: {queue_path}")
     else:
-        handoff_reconciliation = route_choice_handoff_reconciliation(resolved)
-        governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
-        errors.extend(
-            f"route choice handoff: {error}"
-            for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
-        )
-        queue_text = resolved.read_text(encoding="utf-8")
-        now_blocks = queue_lane_blocks(queue_text, "NOW")
-        next_blocks = queue_lane_blocks(queue_text, "NEXT")
-        item = proposal.get("proposed_queue_item", {})
-        signals = queue_p3_signals(proposed_queue_item_text(item))
-        if len(now_blocks) != 1:
-            errors.append(f"expected exactly one NOW before route adoption, got {len(now_blocks)}")
-        if signals:
-            errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
-        proposed_title = str(item.get("title", "")).strip()
-        if any(block.get("title") == proposed_title for block in next_blocks):
-            errors.append("proposed route queue item already exists in NEXT")
-        if not errors:
-            try:
-                updated_text, mutation = append_route_adoption_to_queue_text(queue_text, proposal)
-                mutation["queue_path"] = rel(resolved)
-                if apply:
-                    resolved.write_text(updated_text, encoding="utf-8")
-            except ValueError as exc:
-                errors.append(str(exc))
+        try:
+            snapshot, snapshot_error = queue_binding_snapshot(binding)
+            if snapshot_error or snapshot is None:
+                errors.append(snapshot_error or "queue snapshot could not be created")
+            else:
+                queue_snapshot = snapshot
+                final_queue_sha256 = str(snapshot["sha256"])
+                handoff_reconciliation = route_choice_handoff_reconciliation_from_snapshot(
+                    Path(binding["path"]),
+                    snapshot,
+                )
+                governance_gate_active = active_jenn_governance_gate(handoff_reconciliation)
+                errors.extend(
+                    f"route choice handoff: {error}"
+                    for error in route_adoption_handoff_gate_errors(handoff_reconciliation)
+                )
+                queue_text = str(snapshot["text"])
+                now_blocks = queue_lane_blocks(queue_text, "NOW")
+                next_blocks = queue_lane_blocks(queue_text, "NEXT")
+                item = proposal.get("proposed_queue_item", {})
+                signals = queue_p3_signals(proposed_queue_item_text(item))
+                if len(now_blocks) != 1:
+                    errors.append(f"expected exactly one NOW before route adoption, got {len(now_blocks)}")
+                if signals:
+                    errors.append(f"proposed route queue item contains P3 signals: {','.join(signals)}")
+                proposed_title = str(item.get("title", "")).strip()
+                if any(block.get("title") == proposed_title for block in next_blocks):
+                    errors.append("proposed route queue item already exists in NEXT")
+                if not errors:
+                    try:
+                        updated_text, mutation = append_route_adoption_to_queue_text(queue_text, proposal)
+                        mutation["queue_path"] = str(binding["relative_path"])
+                        if apply:
+                            binding_errors, _ = validate_queue_file_binding(binding, snapshot)
+                            errors.extend(f"queue binding: {error}" for error in binding_errors)
+                            if not errors:
+                                updated_bytes = updated_text.encode("utf-8")
+                                try:
+                                    write_queue_binding_bytes(binding, updated_bytes)
+                                    write_performed = True
+                                    final_queue_sha256 = hashlib.sha256(updated_bytes).hexdigest()
+                                except OSError as exc:
+                                    errors.append(f"queue FD write failed: {exc}")
+                                if write_performed:
+                                    final_snapshot = {
+                                        "identity": dict(snapshot["identity"]),
+                                        "sha256": final_queue_sha256,
+                                    }
+                                    post_write_errors, _ = validate_queue_file_binding(binding, final_snapshot)
+                                    errors.extend(
+                                        f"queue post-write binding: {error}"
+                                        for error in post_write_errors
+                                    )
+                        else:
+                            binding_errors, _ = validate_queue_file_binding(binding, snapshot)
+                            errors.extend(f"queue binding: {error}" for error in binding_errors)
+                    except ValueError as exc:
+                        errors.append(str(exc))
+        finally:
+            close_queue_file_binding(binding)
 
-    can_apply = bool(apply and not errors)
+    can_apply = bool(apply and write_performed)
+    queue_adoption_authorized = bool(write_performed or not errors)
     result = {
         "schema_version": "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1",
         "adoption_id": stable_id("ROUTEADOPTIONAPPLY", [proposal.get("proposal_id"), review.get("review_status"), apply]),
         "source_proposal_id": proposal.get("proposal_id"),
         "source_review_status": review.get("review_status"),
         "preview_only": not apply,
-        "queue_adoption_authorized": not errors,
+        "queue_adoption_authorized": queue_adoption_authorized,
         "route_adoption_authorized": can_apply,
         "workspace_route_state_modified": can_apply,
         "active_queue_modified": can_apply,
-        "write_performed": can_apply,
+        "write_performed": write_performed,
         "queue_write_authorized": can_apply,
         "queue_promotion_authorized": False,
         "execution_authorized": False,
@@ -2102,6 +2505,11 @@ def reviewed_route_adoption_apply_gate(
         "handoff_reconciliation_passed": handoff_reconciliation.get("passed") is True,
         "handoff_reconciliation_aligned": handoff_reconciliation.get("aligned") is True,
         "active_jenn_governance_gate": governance_gate_active,
+        "queue_snapshot_sha256": queue_snapshot.get("sha256"),
+        "queue_snapshot_byte_count": queue_snapshot.get("byte_count"),
+        "queue_snapshot_identity": queue_snapshot.get("identity", {}),
+        "queue_file_identity_bound": bool(queue_snapshot),
+        "final_queue_sha256": final_queue_sha256,
         "no_p3_route_adoption_guard": not errors,
         "mutation": mutation,
         "blocked_capabilities": ROUTE_CHOICE_PROPOSAL_BLOCKED_CAPABILITIES,
@@ -2145,6 +2553,19 @@ def validate_reviewed_route_adoption_apply_gate(result: dict[str, Any]) -> list[
             errors.append("authorized route adoption requires aligned handoff reconciliation")
         if result.get("active_jenn_governance_gate") is not False:
             errors.append("authorized route adoption must not bypass an active Jenn governance gate")
+        if result.get("queue_file_identity_bound") is not True:
+            errors.append("authorized route adoption must bind the queue file identity")
+        snapshot_sha = result.get("queue_snapshot_sha256")
+        if not isinstance(snapshot_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", snapshot_sha):
+            errors.append("authorized route adoption must bind queue bytes by SHA-256")
+        if not isinstance(result.get("queue_snapshot_byte_count"), int):
+            errors.append("authorized route adoption must bind queue byte count")
+        identity = result.get("queue_snapshot_identity", {})
+        if not isinstance(identity.get("device"), int) or not isinstance(identity.get("inode"), int):
+            errors.append("authorized route adoption must bind queue device and inode")
+        final_sha = result.get("final_queue_sha256")
+        if not isinstance(final_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", final_sha):
+            errors.append("authorized route adoption must report final queue SHA-256")
     for flag in ("queue_promotion_authorized", "execution_authorized"):
         if result.get(flag) is not False:
             errors.append(f"reviewed route adoption apply gate flag must be false: {flag}")
@@ -2410,9 +2831,14 @@ def validate_reviewed_queue_mutation(result: dict[str, Any]) -> list[str]:
 
 
 def active_jenn_governance_gate(route_handoff_reconciliation: dict[str, Any]) -> bool:
+    if route_handoff_reconciliation.get("active_jenn_governance_gate") is True:
+        return True
+    for gate_name in ("machine_jenn_gate", "dashboard_jenn_gate"):
+        if route_handoff_reconciliation.get(gate_name, {}).get("active_jenn_governance_gate") is True:
+            return True
     machine_action = route_handoff_reconciliation.get("machine_next_user_action", {})
     dashboard_action = route_handoff_reconciliation.get("dashboard_next_user_action", {})
-    return all(
+    return any(
         action.get("status") == "governance_decision_required"
         and action.get("decision_owner") == "Jenn"
         and action.get("requires_jenn_decision") is True

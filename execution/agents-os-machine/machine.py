@@ -153,8 +153,14 @@ def parse_route_option_ids(path: Path = ROUTE_SELECTION_PACKAGE) -> list[str]:
 
 
 def next_user_action_for_item(item: dict[str, Any]) -> dict[str, Any]:
-    route_choice_required = "route_selection_required" in item.get("denied_signals", [])
-    governance_decision_required = "jenn_decision_required" in item.get("denied_signals", [])
+    denied_signals = {str(signal) for signal in item.get("denied_signals", [])}
+    route_choice_required = "route_selection_required" in denied_signals
+    generic_denied_signals = denied_signals - {"route_selection_required"}
+    review_requires_jenn = item.get("review_gate", {}).get("requires_jenn_decision") is True
+    governance_decision_required = bool(generic_denied_signals) or (
+        (item.get("blocked") is True or review_requires_jenn)
+        and not route_choice_required
+    )
     route_ids = parse_route_option_ids() if route_choice_required else []
     status = "none"
     instruction = None
@@ -761,17 +767,17 @@ def validate_preview(preview: dict[str, Any]) -> list[str]:
             errors.append("route selection preview should surface accepted route ids")
         if next_user_action.get("exact_confirmation_templates_available") is not True:
             errors.append("route selection preview should point to available confirmation templates")
-    elif "jenn_decision_required" in preview.get("denied_signals", []):
+    elif preview.get("blocked") is True or preview.get("review_gate", {}).get("requires_jenn_decision") is True:
         if next_user_action.get("status") != "governance_decision_required":
-            errors.append("Jenn decision preview must surface governance_decision_required next user action")
+            errors.append("blocked Jenn-required preview must surface governance_decision_required next user action")
         if next_user_action.get("decision_owner") != "Jenn":
-            errors.append("Jenn decision preview next user action owner must be Jenn")
+            errors.append("blocked Jenn-required preview next user action owner must be Jenn")
         if next_user_action.get("requires_jenn_decision") is not True:
-            errors.append("Jenn decision preview next user action must require Jenn decision")
+            errors.append("blocked Jenn-required preview next user action must require Jenn decision")
         if next_user_action.get("accepted_route_ids"):
-            errors.append("generic Jenn decision preview must not surface route ids")
+            errors.append("blocked generic Jenn decision preview must not surface route ids")
         if next_user_action.get("exact_confirmation_templates_available") is not False:
-            errors.append("generic Jenn decision preview must not claim route confirmation templates")
+            errors.append("blocked generic Jenn decision preview must not claim route confirmation templates")
     elif next_user_action.get("status") != "none":
         errors.append("non-decision preview next user action must be none")
     route_choice_readiness = preview.get("route_choice_adoption_bundle_readiness", {})
