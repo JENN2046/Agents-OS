@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import runpy
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -44,6 +45,8 @@ def validate(document: Any) -> list[str]:
         "pending_signal_terminal_commit",
         "guard.success_exit()",
         "def _load_fixed_fixture",
+        "CHECKOUT_ROOT: Final[Path] = Path(__file__).resolve().parents[2]",
+        "_read_regular_checkout_file(FIXTURE_RELATIVE, \"fixture\")",
         "mode.add_argument(\"--fixture\", action=\"store_true\")",
         "os.O_RDONLY | os.O_NOFOLLOW",
     ):
@@ -94,6 +97,24 @@ def self_test() -> int:
         if valid.returncode != 0 or b'"result": "PASS_NO_BLOCKER"' not in valid.stdout:
             failures.append("fixed_fixture_failed")
 
+        checkout_root = Path(directory) / "portable-checkout"
+        checkout_registry = checkout_root / "control-plane" / "registry"
+        checkout_examples = checkout_registry / "examples"
+        checkout_examples.mkdir(parents=True)
+        checkout_runner = checkout_registry / RUNNER_PATH.name
+        checkout_fixture = checkout_examples / RUNNER["FIXTURE_RELATIVE"].split("/")[-1]
+        shutil.copyfile(RUNNER_PATH, checkout_runner)
+        shutil.copyfile(ROOT / RUNNER["FIXTURE_RELATIVE"].removeprefix("control-plane/registry/"), checkout_fixture)
+        portable = subprocess.run(
+            [sys.executable, str(checkout_runner), "--fixture"],
+            cwd=checkout_root,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if portable.returncode != 0 or b'"result": "PASS_NO_BLOCKER"' not in portable.stdout:
+            failures.append("portable_checkout_fixture_failed")
+
     probe = (
         "import os,runpy,signal;"
         f"r=runpy.run_path({str(RUNNER_PATH)!r});g=r['SignalGuard']();g.enter();"
@@ -110,7 +131,7 @@ def self_test() -> int:
     )
     if _subprocess([sys.executable, "-c", direct_exit]).returncode != 0:
         failures.append("success_exit_probe")
-    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 5, "failures": failures}, sort_keys=True))
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 6, "failures": failures}, sort_keys=True))
     return 0 if not failures else 1
 
 

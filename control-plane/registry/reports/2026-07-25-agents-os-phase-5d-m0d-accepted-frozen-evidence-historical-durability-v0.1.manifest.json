@@ -295,6 +295,12 @@
     "commit": "3a5ce7ab0af075f4b12f75ca16b2f1554f399536",
     "tree": "d0bd0b967ead4209a828cd1133ceab2b1c9a4a54"
   },
+  "historical_anchor": {
+    "artifact_verification": "git_blob_bytes_at_anchor_commit",
+    "commit": "d200b31471df4c82bab86de9412086259585b893",
+    "tree": "f3642942e0e0140cf54f717b3eba79021d41ed06",
+    "working_tree_corrections_excluded_from_frozen_evidence": 2
+  },
   "components": [
     {
       "canonical_manifest_path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml",
@@ -324,8 +330,10 @@
   "date": "2026-07-25",
   "retained_boundaries": {
     "actual_replayed": false,
+    "corrected_runner_actual_authorized": false,
     "consumer_default_queue_pointer_modified": false,
     "current_state_modified": false,
+    "frozen_execution_authority_carried_forward": false,
     "gate_1_authority_reused": false,
     "historical_queue_bytes_are_not_active_queue_authority": true,
     "host_or_vcptoolbox_git_executed": false,
@@ -338,10 +346,32 @@
     "accepted_frozen_components": 3,
     "already_present_on_base_main": 1,
     "artifact_count": 58,
+    "current_worktree_correction_count": 2,
     "declared_hash_conflicts": 0,
     "declared_hash_mismatches": 0,
     "declared_path_sha256_pairs_reverified": 53,
+    "historical_anchor_exact_artifact_count": 58,
     "materialized_from_preserved_canonical_root": 57
   },
-  "status": "CANDIDATE_LOCAL_ONLY"
+  "status": "CORRECTION_OVERLAY_REVIEW_NEEDED",
+  "working_tree_corrections": [
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
+      "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "reason": "offline fixture lookup must bind the current checkout while actual mode retains its canonical-root hard stop",
+      "review_status": "REVIEW_NEEDED",
+      "review_thread": "PRRT_kwDOSxA_XM6T1Cqd",
+      "working_tree_sha256": "6bbe5cfdff98e3b5f5f11d8f01be1b01e3b41602f6112f8069049484d0838e90"
+    },
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
+      "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "reason": "portable-checkout regression validates the corrected offline fixture boundary",
+      "review_status": "REVIEW_NEEDED",
+      "review_thread": "PRRT_kwDOSxA_XM6T1Cqd",
+      "working_tree_sha256": "fc767f1df71c4604295a21a8756f96b2b78b21303384f8e8d9c2777492d4a2a7"
+    }
+  ]
 }

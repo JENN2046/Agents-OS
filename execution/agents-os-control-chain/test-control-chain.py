@@ -1021,21 +1021,33 @@ prior_task: closed
         replacement_gid_queue_path = Path(temp_dir) / "replacement-gid-drift-queue.md"
         replacement_gid_queue_path.write_text(route_queue_text, encoding="utf-8")
         original_queue_gid = replacement_gid_queue_path.stat().st_gid
-        alternate_gid = next(
-            (group_id for group_id in os.getgroups() if group_id != original_queue_gid),
-            None,
-        )
-        check(alternate_gid is not None, "replacement gid fixture requires an alternate member group", failures)
-        replacement_gid_state = {"triggered": False}
+        replacement_gid_state: dict[str, object] = {"triggered": False, "file_fd": None}
+        original_fstat = chain.os.fstat
 
-        def drift_replacement_gid_after_write(file_fd: int, data: bytes) -> None:
+        class GidDriftStat:
+            def __init__(self, source: os.stat_result, gid: int) -> None:
+                self._source = source
+                self.st_gid = gid
+
+            def __getattr__(self, name: str) -> object:
+                return getattr(self._source, name)
+
+        def mock_replacement_gid_after_write(file_fd: int, data: bytes) -> None:
             original_temp_write(file_fd, data)
-            if alternate_gid is None:
-                raise OSError(errno.EPERM, "no alternate fixture group available")
-            os.fchown(file_fd, -1, alternate_gid)
+            replacement_gid_state["file_fd"] = file_fd
             replacement_gid_state["triggered"] = True
 
-        chain.write_transaction_temp_fd = drift_replacement_gid_after_write
+        def replacement_gid_fstat(file_fd: int) -> os.stat_result:
+            result = original_fstat(file_fd)
+            if (
+                replacement_gid_state["triggered"] is True
+                and replacement_gid_state["file_fd"] == file_fd
+            ):
+                return GidDriftStat(result, result.st_gid + 1)  # type: ignore[return-value]
+            return result
+
+        chain.write_transaction_temp_fd = mock_replacement_gid_after_write
+        chain.os.fstat = replacement_gid_fstat
         try:
             replacement_gid_result = chain.reviewed_route_adoption_apply_gate(
                 route_choice_proposal,
@@ -1044,6 +1056,7 @@ prior_task: closed
                 apply=True,
             )
         finally:
+            chain.os.fstat = original_fstat
             chain.write_transaction_temp_fd = original_temp_write
         check(
             replacement_gid_state["triggered"] is True,
@@ -1072,6 +1085,137 @@ prior_task: closed
                 for error in replacement_gid_result["errors"]
             ),
             f"replacement gid drift should report original-metadata mismatch: {replacement_gid_result}",
+            failures,
+        )
+
+        original_extended_queue_path = Path(temp_dir) / "original-extended-metadata-queue.md"
+        original_extended_queue_path.write_text(route_queue_text, encoding="utf-8")
+        original_extended_identity = (
+            original_extended_queue_path.stat().st_dev,
+            original_extended_queue_path.stat().st_ino,
+        )
+        original_extended_metadata = chain.file_descriptor_extended_metadata
+        extended_metadata_state = {"inspected": False}
+
+        def mock_original_extended_metadata(file_fd: int) -> tuple[dict | None, str | None]:
+            file_stat = os.fstat(file_fd)
+            if (file_stat.st_dev, file_stat.st_ino) == original_extended_identity:
+                extended_metadata_state["inspected"] = True
+                return {
+                    "count": 3,
+                    "names_sha256": hashlib.sha256(
+                        b"user.evidence\0system.posix_acl_access\0security.selinux"
+                    ).hexdigest(),
+                }, None
+            return original_extended_metadata(file_fd)
+
+        chain.file_descriptor_extended_metadata = mock_original_extended_metadata
+        try:
+            original_extended_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                original_extended_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.file_descriptor_extended_metadata = original_extended_metadata
+        check(
+            extended_metadata_state["inspected"] is True,
+            "original extended metadata fixture should be inspected",
+            failures,
+        )
+        check(
+            original_extended_result["passed"] is False
+            and original_extended_result["transaction_outcome"] == "NO_WRITE"
+            and original_extended_result["queue_state"] == "UNCHANGED"
+            and original_extended_result["queue_commit_attempted"] is False
+            and original_extended_result["write_performed"] is False
+            and original_extended_result["temp_cleanup_confirmed"] is True
+            and original_extended_result["queue_adoption_authorized"] is False
+            and original_extended_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            (
+                "original xattr, ACL, or security-label metadata must reject replacement "
+                f"with exact old queue state: {original_extended_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "extended metadata" in error and "NO_WRITE" in error
+                for error in original_extended_result["errors"]
+            ),
+            f"original extended metadata rejection should be explicit: {original_extended_result}",
+            failures,
+        )
+
+        replacement_extended_queue_path = (
+            Path(temp_dir) / "replacement-extended-metadata-drift-queue.md"
+        )
+        replacement_extended_queue_path.write_text(route_queue_text, encoding="utf-8")
+        replacement_extended_state: dict[str, object] = {
+            "triggered": False,
+            "file_fd": None,
+        }
+
+        def mark_replacement_extended_metadata_after_write(
+            file_fd: int,
+            data: bytes,
+        ) -> None:
+            original_temp_write(file_fd, data)
+            replacement_extended_state["file_fd"] = file_fd
+            replacement_extended_state["triggered"] = True
+
+        def mock_replacement_extended_metadata(
+            file_fd: int,
+        ) -> tuple[dict | None, str | None]:
+            if (
+                replacement_extended_state["triggered"] is True
+                and replacement_extended_state["file_fd"] == file_fd
+            ):
+                return {
+                    "count": 1,
+                    "names_sha256": hashlib.sha256(b"user.evidence").hexdigest(),
+                }, None
+            return original_extended_metadata(file_fd)
+
+        chain.write_transaction_temp_fd = mark_replacement_extended_metadata_after_write
+        chain.file_descriptor_extended_metadata = mock_replacement_extended_metadata
+        try:
+            replacement_extended_result = chain.reviewed_route_adoption_apply_gate(
+                route_choice_proposal,
+                route_review,
+                replacement_extended_queue_path,
+                apply=True,
+            )
+        finally:
+            chain.file_descriptor_extended_metadata = original_extended_metadata
+            chain.write_transaction_temp_fd = original_temp_write
+        check(
+            replacement_extended_state["triggered"] is True,
+            "replacement extended metadata drift fixture should run",
+            failures,
+        )
+        check(
+            replacement_extended_result["passed"] is False
+            and replacement_extended_result["transaction_outcome"] == "NO_WRITE"
+            and replacement_extended_result["queue_state"] == "UNCHANGED"
+            and replacement_extended_result["queue_commit_attempted"] is False
+            and replacement_extended_result["write_performed"] is False
+            and replacement_extended_result["temp_cleanup_confirmed"] is True
+            and replacement_extended_result["queue_adoption_authorized"] is False
+            and replacement_extended_queue_path.read_text(encoding="utf-8") == route_queue_text,
+            (
+                "replacement xattr, ACL, or security-label drift before exchange must "
+                f"preserve exact old queue state: {replacement_extended_result}"
+            ),
+            failures,
+        )
+        check(
+            any(
+                "replacement extended metadata must be empty" in error
+                for error in replacement_extended_result["errors"]
+            ),
+            f"replacement extended metadata drift should be explicit: {replacement_extended_result}",
             failures,
         )
 
@@ -1825,7 +1969,7 @@ old_task: closed
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases=54 failures={len(failures)}")
+        print(f"cases=56 failures={len(failures)}")
         return 1
 
     print("PASS commander routing fixtures")
@@ -1853,6 +1997,8 @@ old_task: closed
     print("PASS replacement gid binding transaction fixture")
     print("PASS replacement hard-link binding transaction fixture")
     print("PASS replacement uid mock binding transaction fixture")
+    print("PASS original extended metadata NO_WRITE fixture")
+    print("PASS replacement extended metadata NO_WRITE fixture")
     print("PASS pre-exchange replacement metadata binding fixture")
     print("PASS post-exchange replacement metadata rollback fixture")
     print("PASS final replacement metadata classification fixture")
@@ -1868,7 +2014,7 @@ old_task: closed
     print("PASS reviewed route adoption preview fixture")
     print("PASS reviewed route adoption apply gate fixture")
     print("PASS route option stop gate fixture")
-    print("cases=54 failures=0")
+    print("cases=56 failures=0")
     return 0
 
 

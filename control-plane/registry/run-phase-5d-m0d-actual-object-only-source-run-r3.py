@@ -22,6 +22,7 @@ import sys
 from typing import Any, Final
 
 
+CHECKOUT_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
 WORKSPACE_ROOT: Final[Path] = Path("/home/jenn/AGENTS_OS_Workspace")
 CANONICAL_ROOT: Final[Path] = WORKSPACE_ROOT / "runtime/VCPToolBox"
 GIT_DIR: Final[Path] = CANONICAL_ROOT / ".git"
@@ -154,13 +155,13 @@ def _safe_relative(value: Any) -> str:
     return path.as_posix()
 
 
-def _read_regular_workspace_file(relative: str, phase: str) -> bytes:
+def _read_regular_root_file(root_path: Path, relative: str, phase: str) -> bytes:
     try:
         safe = _safe_relative(relative)
-        root = WORKSPACE_ROOT.resolve(strict=True)
-        if root != WORKSPACE_ROOT:
+        root = root_path.resolve(strict=True)
+        if root != root_path:
             raise ValueError("workspace realpath")
-        candidate = WORKSPACE_ROOT.joinpath(*PurePosixPath(safe).parts)
+        candidate = root.joinpath(*PurePosixPath(safe).parts)
         direct = os.lstat(candidate)
         resolved = candidate.resolve(strict=True)
         if stat.S_ISLNK(direct.st_mode) or not stat.S_ISREG(direct.st_mode) or resolved != candidate:
@@ -179,6 +180,14 @@ def _read_regular_workspace_file(relative: str, phase: str) -> bytes:
             chunks.append(chunk)
     finally:
         os.close(descriptor)
+
+
+def _read_regular_workspace_file(relative: str, phase: str) -> bytes:
+    return _read_regular_root_file(WORKSPACE_ROOT, relative, phase)
+
+
+def _read_regular_checkout_file(relative: str, phase: str) -> bytes:
+    return _read_regular_root_file(CHECKOUT_ROOT, relative, phase)
 
 
 def _valid_sha256(value: Any) -> bool:
@@ -499,7 +508,7 @@ def validate_synthetic_fixture(document: Any) -> list[str]:
 
 def _load_fixed_fixture() -> Any:
     try:
-        return json.loads(_read_regular_workspace_file(FIXTURE_RELATIVE, "fixture").decode("utf-8"), object_pairs_hook=_reject_duplicate_json_keys)
+        return json.loads(_read_regular_checkout_file(FIXTURE_RELATIVE, "fixture").decode("utf-8"), object_pairs_hook=_reject_duplicate_json_keys)
     except (Blocked, UnicodeError, ValueError, json.JSONDecodeError) as exc:
         raise Blocked("BLOCKED_FIXED_FIXTURE_INPUT", "fixture") from exc
 

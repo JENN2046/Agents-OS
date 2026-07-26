@@ -84,7 +84,12 @@ or `PARTIAL_OR_UNKNOWN`. An uncertain post-exchange result never authorizes
 further queue mutation and must preserve truthful `write_performed` evidence
 for reconciliation. A pre-exchange metadata drift proves `NO_WRITE` only for
 the active queue; unresolved transaction-file cleanup remains explicit and
-requires Jenn-owned reconciliation.
+requires Jenn-owned reconciliation. Because the replacement transaction does
+not preserve xattrs, POSIX ACLs, SELinux labels, or other extended metadata,
+the apply gate rejects any original inode carrying them before exchange.
+Extended metadata appearing on a replacement inode also blocks `COMMITTED`;
+pre-exchange detection returns `NO_WRITE`, while post-exchange detection must
+prove rollback or report `PARTIAL_OR_UNKNOWN`.
 
 Failure handling classifies validation failure, scope violation, protected
 path detection, dirty worktree conflict, unknown action type, P3 signal, and

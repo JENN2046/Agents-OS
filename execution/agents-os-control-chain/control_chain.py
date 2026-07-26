@@ -649,11 +649,33 @@ def read_queue_binding_bytes(binding: dict[str, Any]) -> bytes:
         chunks.append(chunk)
 
 
+def file_descriptor_extended_metadata(
+    file_fd: int,
+) -> tuple[dict[str, Any] | None, str | None]:
+    try:
+        names = sorted(os.listxattr(file_fd))
+    except (AttributeError, OSError, TypeError) as exc:
+        return None, f"queue extended metadata could not be inspected: {exc}"
+    encoded_names: list[bytes] = []
+    for name in names:
+        if not isinstance(name, str):
+            return None, "queue extended metadata name is not text"
+        encoded = name.encode("utf-8", "surrogateescape")
+        encoded_names.append(len(encoded).to_bytes(8, "big") + encoded)
+    return {
+        "count": len(encoded_names),
+        "names_sha256": hashlib.sha256(b"".join(encoded_names)).hexdigest(),
+    }, None
+
+
 def file_descriptor_snapshot(file_fd: int) -> tuple[dict[str, Any] | None, str | None]:
     try:
         before = os.fstat(file_fd)
         if not stat.S_ISREG(before.st_mode):
             return None, "file descriptor snapshot target is not a regular file"
+        extended_before, extended_before_error = file_descriptor_extended_metadata(file_fd)
+        if extended_before_error or extended_before is None:
+            return None, extended_before_error
         os.lseek(file_fd, 0, os.SEEK_SET)
         chunks: list[bytes] = []
         while True:
@@ -662,6 +684,9 @@ def file_descriptor_snapshot(file_fd: int) -> tuple[dict[str, Any] | None, str |
                 break
             chunks.append(chunk)
         data = b"".join(chunks)
+        extended_after, extended_after_error = file_descriptor_extended_metadata(file_fd)
+        if extended_after_error or extended_after is None:
+            return None, extended_after_error
         after = os.fstat(file_fd)
         text = data.decode("utf-8")
     except (OSError, UnicodeDecodeError) as exc:
@@ -679,11 +704,14 @@ def file_descriptor_snapshot(file_fd: int) -> tuple[dict[str, Any] | None, str |
     )
     if any(getattr(before, field) != getattr(after, field) for field in stable_fields):
         return None, "queue file changed while its snapshot was being read"
+    if extended_before != extended_after:
+        return None, "queue extended metadata changed while its snapshot was being read"
     return {
         "bytes": data,
         "text": text,
         "sha256": hashlib.sha256(data).hexdigest(),
         "byte_count": len(data),
+        "extended_metadata": extended_after,
         "identity": {
             "device": after.st_dev,
             "inode": after.st_ino,
@@ -725,6 +753,8 @@ def validate_file_descriptor_snapshot(
         errors.append("queue bytes changed after handoff attestation")
     if current.get("byte_count") != snapshot.get("byte_count"):
         errors.append("queue byte count changed after handoff attestation")
+    if current.get("extended_metadata") != snapshot.get("extended_metadata"):
+        errors.append("queue extended metadata changed after handoff attestation")
     expected_metadata = snapshot.get("metadata", {})
     current_metadata = current.get("metadata", {})
     for field in ("mode", "nlink", "uid", "gid", "size", "mtime_ns", "ctime_ns"):
@@ -854,6 +884,28 @@ def rename_exchange(parent_fd: int, first_name: str, second_name: str) -> None:
 def original_queue_security_metadata(
     original_snapshot: dict[str, Any],
 ) -> tuple[tuple[int, int, int] | None, str | None]:
+    extended_metadata = original_snapshot.get("extended_metadata")
+    if not isinstance(extended_metadata, dict):
+        return None, "original queue extended metadata binding is missing"
+    extended_count = extended_metadata.get("count")
+    extended_digest = extended_metadata.get("names_sha256")
+    if (
+        not isinstance(extended_count, int)
+        or extended_count < 0
+        or not isinstance(extended_digest, str)
+        or len(extended_digest) != 64
+        or any(character not in "0123456789abcdef" for character in extended_digest)
+        or (
+            extended_count == 0
+            and extended_digest != hashlib.sha256(b"").hexdigest()
+        )
+    ):
+        return None, "original queue extended metadata binding is invalid"
+    if extended_count != 0:
+        return None, (
+            "original queue has extended metadata that transactional replacement "
+            "cannot preserve; xattrs, ACLs, and security labels require NO_WRITE"
+        )
     metadata = original_snapshot.get("metadata")
     if not isinstance(metadata, dict):
         return None, "original queue security metadata is missing"
@@ -887,6 +939,17 @@ def validate_replacement_security_metadata(
         entry_stat.st_ino,
     ):
         errors.append(f"replacement security metadata identity mismatch: {name}")
+    extended_metadata, extended_error = file_descriptor_extended_metadata(file_fd)
+    if extended_error or extended_metadata is None:
+        errors.append(
+            f"replacement extended metadata could not be revalidated: {name}: "
+            f"{extended_error or 'unknown error'}"
+        )
+    elif extended_metadata.get("count") != 0:
+        errors.append(
+            f"replacement extended metadata must be empty because xattrs, ACLs, "
+            f"and security labels are not preserved: {name}"
+        )
     expected_mode, expected_uid, expected_gid = expected
     for source, file_stat in (("descriptor", descriptor_stat), ("entry", entry_stat)):
         if file_stat.st_nlink != 1:

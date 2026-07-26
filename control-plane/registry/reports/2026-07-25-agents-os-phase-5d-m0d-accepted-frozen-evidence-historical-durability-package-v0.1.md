@@ -1,7 +1,7 @@
 # Phase 5D M0-D Accepted/Frozen Evidence Historical Durability Package v0.1
 
 Date: 2026-07-25
-Status: LOCAL_CANDIDATE
+Status: CORRECTION_OVERLAY_REVIEW_NEEDED
 Owner: Jenn
 Agent steward: Nobao
 
@@ -10,6 +10,11 @@ Agent steward: Nobao
 This package preserves three already accepted and frozen Phase 5D M0-D
 governance evidence units on a branch rooted at the exact post-PR-37 mainline
 state. It is a historical durability projection only.
+
+The 58 frozen artifacts remain bound to historical anchor
+`d200b31471df4c82bab86de9412086259585b893`. Two current-worktree files now
+carry review-needed portability corrections. Their new bytes are not part of
+the old freeze and inherit no execution authority.
 
 It does not reactivate an old queue, replace `CURRENT_STATE.md`, change a
 consumer default queue pointer, authorize execution, or reopen MEHS.
@@ -25,8 +30,10 @@ base_tree: d0bd0b967ead4209a828cd1133ceab2b1c9a4a54
 
 ```yaml
 path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-accepted-frozen-evidence-historical-durability-v0.1.manifest.json
-sha256: ebe4baa01deb8c1016051505c672a2a535d488a6cd6986bcc5d0192fd0c338b4
+sha256: c662edae96097ae04de60157b68e713b16e6a61115cff909308bc510d75e109b
 artifact_count: 58
+historical_anchor_exact_artifact_count: 58
+current_worktree_correction_count: 2
 materialized_from_preserved_canonical_root: 57
 already_present_on_base_main: 1
 declared_path_sha256_pairs_reverified: 53
@@ -45,6 +52,22 @@ declared_hash_mismatches: 0
 The historical `v18.7` queue bytes are included only because the R3 canonical
 manifest binds them as an authority input from that review moment. They are not
 the active queue and must not become a consumer default.
+
+### 4.1 Current-worktree portability correction
+
+The following current paths intentionally differ from their frozen
+`d200b314...` bytes:
+
+| Path | Historical SHA-256 | Current correction SHA-256 | Status |
+|---|---|---|---|
+| `control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py` | `3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0` | `6bbe5cfdff98e3b5f5f11d8f01be1b01e3b41602f6112f8069049484d0838e90` | `REVIEW_NEEDED` |
+| `control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py` | `cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601` | `fc767f1df71c4604295a21a8756f96b2b78b21303384f8e8d9c2777492d4a2a7` | `REVIEW_NEEDED` |
+
+The runner now derives only its offline fixture root from `__file__`. Its
+actual-mode canonical root, receipt path, run root, Git object source, and hard
+stops are unchanged. The validator adds a copied-checkout regression. Neither
+correction updates the old R3 freeze manifest or decision, and neither carries
+forward any `--actual` authority.
 
 ## 5. Explicit Exclusions
 
@@ -65,15 +88,18 @@ This package excludes:
 
 The candidate must fail closed unless:
 
-1. all 58 manifest artifacts exist as regular files;
-2. every artifact SHA-256 matches the durability manifest;
+1. all 58 manifest artifacts exist as exact Git blobs at historical anchor
+   `d200b31471df4c82bab86de9412086259585b893`;
+2. every historical-anchor artifact SHA-256 matches the durability manifest;
 3. all three canonical manifests match their immutable decision bindings;
-4. the selected freeze decisions still report their exact accepted/frozen
+4. the two declared current-worktree corrections match their separate SHA-256
+   values and remain `REVIEW_NEEDED`;
+5. the selected freeze decisions still report their exact accepted/frozen
    result;
-5. no R4/R5 path is present in the durability manifest;
-6. `CURRENT_STATE.md` and all consumer default queue pointers remain based on
+6. no R4/R5 path is present in the historical artifact set;
+7. `CURRENT_STATE.md` and all consumer default queue pointers remain based on
    the post-PR-37 mainline state;
-7. Document Registry and targeted offline validators pass.
+8. Document Registry and targeted offline validators pass.
 
 ## 7. Delivery Boundary
 
