@@ -1016,6 +1016,94 @@ def main() -> int:
             "advance must not execute, record, or apply intake after binding drift",
             failures,
         )
+        reversion_queue_path = Path(temp_dir) / "hash-reversion-queue.md"
+        reversion_h1_bytes = workbench.fixture_queue_text().encode("utf-8")
+        reversion_queue_path.write_bytes(reversion_h1_bytes)
+        reversion_record_root = Path(temp_dir) / "hash-reversion-records"
+        reversion_record_root.mkdir()
+        reversion_h1_advance = workbench.build_advance(
+            "Write H1 local governance report and run docctl validation.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        reversion_queue_path.write_bytes(
+            reversion_h1_bytes
+            + b"\n<!-- distinct H2 queue bytes -->\n"
+        )
+        reversion_h2_advance = workbench.build_advance(
+            "Write H2 local governance report and run docctl validation.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        reversion_h2_record_path = (
+            reversion_record_root
+            / Path(
+                reversion_h2_advance["stages"]["record"][
+                    "record_path"
+                ]
+            ).name
+        )
+        reversion_h1_record_path = (
+            reversion_record_root
+            / Path(
+                reversion_h1_advance["stages"]["record"][
+                    "record_path"
+                ]
+            ).name
+        )
+        reversion_h2_mtime_ns = (
+            reversion_h1_record_path.stat().st_mtime_ns + 1_000_000
+        )
+        os.utime(
+            reversion_h2_record_path,
+            ns=(reversion_h2_mtime_ns, reversion_h2_mtime_ns),
+        )
+        reversion_queue_path.write_bytes(reversion_h1_bytes)
+        reversion_status = workbench.build_status(
+            reversion_record_root,
+            reversion_queue_path,
+        )
+        reversion_record_files_before = sorted(
+            reversion_record_root.glob("*.json")
+        )
+        reversion_run = workbench.build_run(
+            "Do not repeat reverted H1 queue work.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            reversion_h1_advance["passed"] is True
+            and reversion_h2_advance["passed"] is True
+            and reversion_status["passed"] is True
+            and reversion_status["latest_advance_id"]
+            == reversion_h2_advance["advance_id"]
+            and reversion_status["authoritative_record"]["advance_id"]
+            == reversion_h1_advance["advance_id"]
+            and reversion_status["exact_matching_advance_record_count"]
+            == 1
+            and reversion_status["next_step"]["status"]
+            == "review_queue_proposal"
+            and reversion_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and reversion_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True
+            and reversion_run["passed"] is True
+            and reversion_run["steps_performed"] == 0
+            and reversion_run["record_write_count"] == 0
+            and reversion_run["local_safe_execution_count"] == 0
+            and sorted(reversion_record_root.glob("*.json"))
+            == reversion_record_files_before,
+            "H1-H2-H1 reversion must preserve the exact H1 pending boundary",
+            failures,
+        )
         selector_skew_queue_path = (
             Path(temp_dir) / "selector-read-skew-queue.md"
         )

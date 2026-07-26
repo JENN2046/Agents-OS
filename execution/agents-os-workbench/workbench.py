@@ -2747,6 +2747,14 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             "record reconciliation is required"
         )
 
+    exact_matching_records = [
+        record
+        for record in valid_matching_records
+        if queue_snapshot_bindings_equal(
+            record[2].get("source_queue_binding", {}),
+            live_binding,
+        )
+    ]
     latest_path: Path | None = None
     latest: dict[str, Any] = {}
     if valid_matching_records:
@@ -2756,6 +2764,21 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         )
     latest_stages = latest.get("stages", {}) if latest else {}
     latest_next_step = latest_stages.get("next_step", {}) if latest else {}
+    authoritative_path: Path | None = None
+    authoritative: dict[str, Any] = {}
+    if exact_matching_records:
+        _authoritative_mtime_ns, authoritative_path, authoritative = max(
+            exact_matching_records,
+            key=lambda item: (item[0], item[1].name),
+        )
+    authoritative_stages = (
+        authoritative.get("stages", {}) if authoritative else {}
+    )
+    authoritative_next_step = (
+        authoritative_stages.get("next_step", {})
+        if authoritative
+        else {}
+    )
     latest_goal_path: Path | None = None
     latest_goal: dict[str, Any] = {}
     if goal_records:
@@ -2767,22 +2790,26 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         if latest_goal
         else {}
     )
-    status_next_step = latest_next_step if latest else {
+    status_record = authoritative or latest
+    status_next_step = (
+        authoritative_next_step
+        if authoritative
+        else latest_next_step
+    ) if status_record else {
         "status": "no_advance_records",
         "owner": "Nobao",
         "instruction": "run workbench advance to create the first local advance record",
     }
     live_next_step = live_queue.get("next_step", {})
-    record_binding = latest.get("source_queue_binding", {}) if latest else {}
-    queue_bytes_match_record = bool(
-        latest
-        and latest.get("passed") is True
-        and valid_queue_snapshot_binding(record_binding)
-        and valid_queue_snapshot_binding(live_binding)
-        and record_binding.get("path") == live_binding.get("path")
-        and record_binding.get("sha256") == live_binding.get("sha256")
-        and record_binding.get("byte_count") == live_binding.get("byte_count")
+    latest_record_binding = (
+        latest.get("source_queue_binding", {}) if latest else {}
     )
+    record_binding = (
+        authoritative.get("source_queue_binding", {})
+        if authoritative
+        else latest_record_binding
+    )
+    queue_bytes_match_record = bool(authoritative)
     record_boundary_pending = bool(
         queue_bytes_match_record
         and status_next_step.get("status") in RUN_STOP_STATUSES
@@ -2801,15 +2828,28 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         ),
         "record_queue_path": record_binding.get("path"),
         "record_queue_sha256": record_binding.get("sha256"),
+        "authoritative_record_present": bool(authoritative),
+        "authoritative_advance_id": (
+            authoritative.get("advance_id") if authoritative else None
+        ),
+        "latest_path_record_advance_id": (
+            latest.get("advance_id") if latest else None
+        ),
+        "latest_path_record_queue_sha256": (
+            latest_record_binding.get("sha256")
+        ),
         "live_queue_path": live_binding.get("path"),
         "live_queue_sha256": live_binding.get("sha256"),
         "queue_bytes_match_record": queue_bytes_match_record,
         "record_boundary_pending": record_boundary_pending,
         "record_boundary_may_be_stale": bool(
             latest
-            and valid_queue_snapshot_binding(record_binding)
+            and valid_queue_snapshot_binding(latest_record_binding)
             and valid_queue_snapshot_binding(live_binding)
-            and not queue_bytes_match_record
+            and not queue_snapshot_bindings_equal(
+                latest_record_binding,
+                live_binding,
+            )
         ),
         "next_action_source": next_action_source,
         "write_performed": False,
@@ -2825,6 +2865,9 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         "matching_advance_record_count": len(matching_records),
         "valid_matching_advance_record_count": len(
             valid_matching_records
+        ),
+        "exact_matching_advance_record_count": len(
+            exact_matching_records
         ),
         "invalid_matching_advance_record_count": (
             len(invalid_matching_records)
@@ -2859,6 +2902,25 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             "advance_record_path": latest_stages.get("record", {}).get("advance_record_path") if latest else None,
             "cycle_record_path": latest_stages.get("record", {}).get("cycle_record_path") if latest else None,
             "source_queue_binding": latest.get("source_queue_binding", {}) if latest else {},
+        },
+        "authoritative_record": {
+            "present": bool(authoritative),
+            "record_path": (
+                rel(authoritative_path)
+                if authoritative_path is not None
+                else None
+            ),
+            "advance_id": (
+                authoritative.get("advance_id")
+                if authoritative
+                else None
+            ),
+            "next_step": authoritative_next_step,
+            "source_queue_binding": (
+                authoritative.get("source_queue_binding", {})
+                if authoritative
+                else {}
+            ),
         },
         "latest_effects": {
             "active_queue_modified": latest.get("active_queue_modified") if latest else None,
@@ -2919,6 +2981,7 @@ def validate_status(result: dict[str, Any]) -> list[str]:
         errors.append("workbench status reconciliation must include live queue next step")
     for field in (
         "record_queue_binding_present",
+        "authoritative_record_present",
         "queue_bytes_match_record",
         "record_boundary_pending",
         "record_boundary_may_be_stale",
@@ -2935,6 +2998,10 @@ def validate_status(result: dict[str, Any]) -> list[str]:
         if reconciliation.get("next_action_source") != "latest_record":
             errors.append(
                 "pending record boundary must remain the next action source"
+            )
+        if reconciliation.get("authoritative_record_present") is not True:
+            errors.append(
+                "pending record boundary requires an exact-byte authoritative record"
             )
     if reconciliation.get("next_action_source") == "live_queue":
         live_next_step = result.get("live_queue", {}).get("next_step", {})
@@ -2965,6 +3032,7 @@ def validate_status(result: dict[str, Any]) -> list[str]:
     for field in (
         "matching_advance_record_count",
         "valid_matching_advance_record_count",
+        "exact_matching_advance_record_count",
         "invalid_matching_advance_record_count",
         "invalid_live_binding_advance_record_count",
         "unbound_advance_record_count",
@@ -2994,6 +3062,42 @@ def validate_status(result: dict[str, Any]) -> list[str]:
         errors.append(
             "workbench status invalid live-binding record accounting is inconsistent"
         )
+    if result.get("exact_matching_advance_record_count", 0) > result.get(
+        "valid_matching_advance_record_count",
+        0,
+    ):
+        errors.append(
+            "workbench status exact matching record accounting is inconsistent"
+        )
+    authoritative_record = result.get("authoritative_record", {})
+    if (
+        authoritative_record.get("present") is True
+    ) is not (
+        reconciliation.get("authoritative_record_present") is True
+    ):
+        errors.append(
+            "workbench status authoritative record presence is inconsistent"
+        )
+    if authoritative_record.get("present") is True:
+        if not authoritative_record.get("record_path"):
+            errors.append(
+                "workbench status authoritative record must include path"
+            )
+        if not authoritative_record.get("advance_id"):
+            errors.append(
+                "workbench status authoritative record must include advance_id"
+            )
+        if not authoritative_record.get("next_step", {}).get("status"):
+            errors.append(
+                "workbench status authoritative record must include next_step.status"
+            )
+        if not queue_snapshot_bindings_equal(
+            authoritative_record.get("source_queue_binding", {}),
+            result.get("live_queue", {}).get("queue_binding", {}),
+        ):
+            errors.append(
+                "workbench status authoritative record must match exact live queue bytes"
+            )
     if result.get("goal_session_count", 0) < 0:
         errors.append("workbench status goal_session_count cannot be negative")
     if result.get("latest_present") is True:
