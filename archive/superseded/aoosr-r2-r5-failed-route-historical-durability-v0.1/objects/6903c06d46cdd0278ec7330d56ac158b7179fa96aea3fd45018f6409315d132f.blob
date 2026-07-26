@@ -1,0 +1,360 @@
+# AGENTS OS Phase 5D M0-D Actual Object-Only Source Run Decision Package v0.1
+
+Date: 2026-07-25
+Owner: Jenn
+Agent steward: Nobao
+Status: DRAFT_FOR_FRESH_INDEPENDENT_REVIEW
+Terminal outcome: NOT_EXECUTED
+
+## 1. Purpose and non-transition rule
+
+This is a new, standalone decision package for one possible later
+object-database-only source run. It is intentionally not the earlier
+materialization preflight: it creates no worktree, performs no checkout, and
+creates no quarantine payload.
+
+Creating, reading, validating, or independently reviewing this package does not
+run a Git command against VCPToolBox. It does not grant any execution authority.
+Only a later current Jenn decision using Section 6 A, after the review gate in
+Section 5 has passed, may authorize the bounded run described here.
+
+The run, if separately authorized, may prove only that the sealed commit exists,
+its tree matches, the exact seven non-protected tuples still resolve, and the
+expected protected-name inventory remains excluded from any blob read. Its
+success is evidence only. It cannot authorize a worktree, a plugin, a Host
+lifecycle call, a runtime, or an actual Host smoke.
+
+## 2. Frozen inputs and exact constants
+
+All paths below are workspace evidence paths. Their hashes are recomputed before
+any future execution decision. No VCPToolBox object is read while preparing this
+package.
+
+    protected_source_boundary_freeze_decision:
+      path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml
+      sha256: 0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082
+    frozen_contract:
+      path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md
+      sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+    frozen_manifest:
+      path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml
+      sha256: b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45
+    independent_review:
+      path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml
+      sha256: 61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c
+      result: PASS_NO_BLOCKER
+    review_disposition:
+      path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-independent-review-disposition-v0.1.yaml
+      sha256: 334d0ecb9c9c29fd838ae0a96d3bb6e2b28fb4bf0ae8eafcec929fcbf254d87b
+    current_stop_queue:
+      path: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v18.7.md
+      sha256: eab88bbeec414571c740a931493253f75bf6f0bfcb6ab0687f70922d5fabbe4f
+
+The future run accepts no caller-selected root, ref, path, object ID, output
+path, or cleanup target. These literals are the entire input surface:
+
+    run_id: PHASE5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_20260725_V0_1
+    canonical_root: /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox
+    execution_working_directory: /home/jenn/AGENTS_OS_Workspace
+    sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+    sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+    run_root: /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e
+    ownership_marker: /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e/.agents-os-owner
+    temporary_result: /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e/result.yaml
+    final_receipt_target: /home/jenn/AGENTS_OS_Workspace/control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+    tuple_set_preimage_sha256: 3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce
+    protected_name_inventory_preimage_sha256: 52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+
+The tuple-set preimage is the seven rows below, in this exact order, each
+encoded as ASCII path, TAB, blob OID, TAB, SHA-256, LF. The protected-name
+inventory preimage is the seven names in Section 3.2, in that exact order, each
+encoded as ASCII name, LF.
+
+| ID | Path | Blob OID | SHA-256 |
+| --- | --- | --- | --- |
+| T01 | AGENTS.md | 28f22b4de495a63f14ede8fe72698278c877cb8d | 24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b |
+| T02 | Plugin/AGENTS.md | c2d23c041033b1f7d46b9dc3bdb2ba738566c872 | b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4 |
+| T03 | docs/PLUGIN_ECOSYSTEM.md | 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506 | f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65 |
+| T04 | rust-vexus-lite/AGENTS.md | 0fad4dba9bcbaa2452a362910b01e6275e5c352e | e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494 |
+| T05 | rust-vexus-lite/Cargo.toml | 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde | 01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9 |
+| T06 | rust-vexus-lite/package.json | 232a95ef206e6ffab0cdff959826faaa10f6fedb | c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c |
+| T07 | Plugin.js | 5fd77cea37c30ef432f23d9627d05aba862b9744 | be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2 |
+
+## 3. Exact bounded operation contract
+
+### 3.1 Process envelope and preconditions
+
+The approved run must begin in the literal execution working directory from
+Section 2 and may not change directory. It must use a non-interactive shell
+with an empty inherited environment except for the following literal variables.
+It must use GIT_DIR=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git,
+GIT_OBJECT_DIRECTORY=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects,
+GIT_ALTERNATE_OBJECT_DIRECTORIES empty, GIT_CONFIG_NOSYSTEM=1,
+GIT_CONFIG_GLOBAL=/dev/null, HOME=/nonexistent, GIT_TERMINAL_PROMPT=0,
+GIT_OPTIONAL_LOCKS=0, GIT_PAGER=cat, LC_ALL=C, and PATH=/usr/bin:/bin.
+The harness does not invoke git config or parse a configuration value as data;
+Git's own internal repository metadata parsing for object lookup is constrained
+to this literal Git directory, emits no value, and is not a permitted output
+source. It may not invoke git config, git status, git worktree, git checkout,
+git sparse-checkout, git archive, git show, git log, git grep, git fsck, git
+fetch, git pull, git push, or any network command.
+
+Before the first Git command, all of these conditions are required:
+
+    test "$(pwd -P)" = /home/jenn/AGENTS_OS_Workspace
+    test -d /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox
+    test -d /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git
+    test ! -L /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git
+    test -d /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects
+    test ! -L /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects
+    test ! -L /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects/info
+    test ! -e /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects/info/alternates
+    test ! -L /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects/info/alternates
+    test ! -e /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e
+    test ! -L /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e
+    test ! -e /home/jenn/AGENTS_OS_Workspace/control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+    test ! -L /home/jenn/AGENTS_OS_Workspace/control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+
+The runner must then create only the literal run root with mode 0700 and write
+the ownership marker with exactly these two LF-terminated lines:
+
+    run_id=PHASE5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_20260725_V0_1
+    sealed_commit=555b3b538f6eb736e530c2912de678c5941f9985
+
+No source bytes, tree output, Git stderr, environment values, configuration
+contents, protected path names, or source-path list may be written below the run
+root.
+
+### 3.2 Protected-name-only scan
+
+This scan is permitted because it consumes tree entry names only. It never asks
+Git for a protected object ID, mode, blob type, or blob content. It must read
+the complete name-only stream in memory, compare the protected-name subset to
+the following exact ordered inventory, and emit no name:
+
+    Plugin/CodeSearcher/config.env
+    Plugin/DailyNote/config.env
+    Plugin/FileOperator/config.env
+    Plugin/LinuxShellExecutor/config.env
+    Plugin/MagiAgent/config.env
+    Plugin/NCBIDatasets/config.env
+    Plugin/PowerShellExecutor/config.env
+
+The scanner must treat a path as protected if its basename is .env, begins
+.env., equals config.env, ends in .pem or .key, or any path component equals
+credentials, tokens, cookies, secret, secrets, or state-private. The complete
+protected subset must equal the seven rows above in that order. An absent,
+renamed, extra, reordered, or duplicate protected name is a failure. The
+scanner may return only a zero/nonzero exit status to its caller; it must not
+print its input, an error message, or an inventory.
+
+The one permitted Git producer for that scanner is exactly:
+
+    git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git ls-tree -r --name-only -z 555b3b538f6eb736e530c2912de678c5941f9985 -- 2>/dev/null
+
+Its stdout is connected only to the in-memory scanner stdin. Its stderr is
+discarded. This is a whole-tree name-only scan, not generic tree/blob
+enumeration: no object IDs or blob bytes are requested for any path in the
+stream.
+
+### 3.3 Exact Git command inventory
+
+Every Git command below has stdout captured only into an internal scalar or
+piped directly to a SHA-256 program. Every command has stderr redirected to
+/dev/null. No captured scalar may be written to a terminal, log, temporary
+file, or final receipt.
+
+G01 proves only that the frozen commit object exists:
+
+    git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -e 555b3b538f6eb736e530c2912de678c5941f9985^{commit} >/dev/null 2>/dev/null
+
+G02 obtains the frozen commit tree into an internal scalar, which must equal the
+sealed tree literal:
+
+    git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985^{tree} 2>/dev/null
+
+G03 is the exact name-only producer in Section 3.2.
+
+Each tuple has exactly three calls: resolve its path against the sealed commit,
+assert that the resulting object is a blob, and pipe only that already-matched
+allowlisted blob to SHA-256. The resolve call must equal the row OID before its
+type or byte-digest call is made.
+
+| Tuple | Resolve command | Type command | Digest producer |
+| --- | --- | --- | --- |
+| T01 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:AGENTS.md | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 28f22b4de495a63f14ede8fe72698278c877cb8d | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 28f22b4de495a63f14ede8fe72698278c877cb8d |
+| T02 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:Plugin/AGENTS.md | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t c2d23c041033b1f7d46b9dc3bdb2ba738566c872 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob c2d23c041033b1f7d46b9dc3bdb2ba738566c872 |
+| T03 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:docs/PLUGIN_ECOSYSTEM.md | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 81dc779453ccf2fb56c1f57d1ecde8ff3ffda506 |
+| T04 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:rust-vexus-lite/AGENTS.md | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 0fad4dba9bcbaa2452a362910b01e6275e5c352e | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 0fad4dba9bcbaa2452a362910b01e6275e5c352e |
+| T05 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:rust-vexus-lite/Cargo.toml | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 3682f96f45c095f85e0f3c93bc2d6c1f21c98dde |
+| T06 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:rust-vexus-lite/package.json | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 232a95ef206e6ffab0cdff959826faaa10f6fedb | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 232a95ef206e6ffab0cdff959826faaa10f6fedb |
+| T07 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git rev-parse 555b3b538f6eb736e530c2912de678c5941f9985:Plugin.js | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file -t 5fd77cea37c30ef432f23d9627d05aba862b9744 | git --git-dir=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git cat-file blob 5fd77cea37c30ef432f23d9627d05aba862b9744 |
+
+No environment, branch, HEAD, ref name, caller input, discovered path, or
+alternate object directory may replace any argument in this table.
+Each digest producer is connected only to sha256sum; its computed digest must
+equal the row SHA-256. It may not be redirected to a file or terminal.
+
+The permitted command sequence is exactly:
+
+    G01
+    G02
+    G03
+    T01 resolve, type, digest
+    T02 resolve, type, digest
+    T03 resolve, type, digest
+    T04 resolve, type, digest
+    T05 resolve, type, digest
+    T06 resolve, type, digest
+    T07 resolve, type, digest
+
+Any extra Git invocation, any path-based blob reader other than the seven
+resolve calls, any protected-object identifier lookup, any command output
+escaping its allowed sink, or any dynamically resolved module is
+BLOCKED_UNAUTHORIZED_OR_NONHERMETIC_GIT_OPERATION.
+
+## 4. Sanitized output and owned cleanup finalizer
+
+### 4.1 Output suppression
+
+The only allowed persistent output is the exact final receipt target in Section
+2. It is written only after the finalizer has run. It must use UTF-8, LF-only
+line endings and contain only:
+
+    schema_version
+    run_id
+    package_sha256
+    sealed_commit
+    sealed_tree
+    tuple_set_preimage_sha256
+    tuple_count
+    protected_name_inventory_preimage_sha256
+    protected_name_count
+    protected_blob_content_reads
+    allowlisted_blob_content_reads
+    Git_command_count
+    Host_operation_count
+    worktree_created
+    payload_files_created
+    stdout_bytes_emitted
+    stderr_bytes_emitted
+    cleanup_status
+    result
+    failure_phase
+
+The receipt may not contain source bytes, source excerpts, any individual path,
+object ID, content digest, raw Git output, raw stderr, environment value,
+repository configuration value, protected-path name, or stack trace. The caller
+receives only the process exit code and the receipt path; normal stdout and
+stderr remain empty.
+
+Success requires these exact output assertions:
+
+    tuple_count: 7
+    protected_name_count: 7
+    protected_blob_content_reads: 0
+    allowlisted_blob_content_reads: 7
+    Git_command_count: 24
+    Host_operation_count: 0
+    worktree_created: false
+    payload_files_created: 0
+    stdout_bytes_emitted: 0
+    stderr_bytes_emitted: 0
+    cleanup_status: CLEAN
+    result: OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY
+    failure_phase: null
+
+### 4.2 Finalizer
+
+The finalizer runs after both success and every failure that occurs after the
+literal run root is created. It may touch only the literal run root and its two
+known regular files: the ownership marker and temporary result. It must:
+
+1. read the marker only to compare it byte-for-byte with the two literal lines
+   in Section 3.1;
+2. remove the marker and temporary result by their exact literal paths;
+3. use rmdir on the literal run root; and
+4. verify that the run root no longer exists and is not a symlink.
+
+It must not use rm -rf, recursive deletion, globbing, parent traversal,
+caller-supplied paths, a worktree cleanup command, or a Host cleanup method.
+
+If the marker is missing or differs, a known temporary file is missing, rmdir
+fails, or the run root still exists, the result is
+BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED. The runner must stop. It may write only
+the sanitized failure receipt; it may not try a broader deletion.
+
+## 5. Fail-closed results and review gate
+
+| Condition | Required terminal result |
+| --- | --- |
+| Any required path exists, is a symlink, or cannot be owned exclusively | BLOCKED_PREEXISTING_OR_UNOWNED_PATH |
+| Git executable or required local utility unavailable | BLOCKED_LOCAL_TOOLING_UNAVAILABLE |
+| G01 fails, G02 tree differs, or a tuple does not resolve/type/digest exactly | BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH |
+| Name-only scanner detects any protected inventory deviation | BLOCKED_PROTECTED_PATH_INVENTORY_MISMATCH |
+| Any output leaves the allowed sink or a forbidden Git command is attempted | BLOCKED_UNAUTHORIZED_OR_NONHERMETIC_GIT_OPERATION |
+| Any worktree, checkout, archive, sparse checkout, payload, plugin, Host, runtime, database, provider, auth, private Memory, sensing, recording, or effect attempt occurs | BLOCKED_OUT_OF_SCOPE_OPERATION |
+| Finalizer cannot prove clean owned-root removal | BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED |
+| All preconditions and exact operations pass | OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY |
+
+This package is not execution-ready merely because it exists. Before Section 6
+can be consumed, a fresh independent review must verify:
+
+1. all frozen input hashes in Section 2;
+2. all seven tuple rows and both inventory fingerprints;
+3. that the command inventory has no worktree, checkout, archive, sparse,
+   protected-object, dynamic-path, output-leak, or Host operation;
+4. that the name-only scanner cannot expose protected names or inspect protected
+   object identifiers or contents;
+5. that the finalizer cannot expand beyond the literal newly owned run root;
+6. that a preexisting path, tuple substitution, protected-name substitution,
+   extra Git call, output leak, and cleanup failure each fail closed; and
+7. that no VCPToolBox command was executed while creating or reviewing this
+   package.
+
+Only PASS_NO_BLOCKER from that review can make this package eligible for a
+current Jenn Section 6 A decision. It still cannot make a Host-smoke decision
+eligible.
+
+## 6. Jenn decision surface
+
+### A. Authorize exactly one actual object-only source run
+
+Exact decision text:
+
+    我确认执行 AGENTS OS Phase 5D M0-D Actual Object-Only Source Run Decision
+    Package v0.1 第 6 节 A 的完整 Exact decision text。
+
+    我只授权一次、只使用本包第 2 节的 canonical VCPToolBox root、sealed commit、
+    sealed tree、literal run root、receipt target 与完整 7 个 tuple，以及第 3 节 G01–G03
+    和 T01–T07 的精确 Git command inventory。允许的 source bytes 仅可从七个已匹配 tuple
+    经由 Git cat-file blob 流入 SHA-256；不得输出、保存或解释这些 bytes。保护路径只可进行
+    name-only 内存比对，不得读取其 object ID、内容、哈希或配置语义。
+
+    我确认本次不授权 git worktree、checkout、sparse checkout、archive、fetch、network、
+    plugin、PluginManager、discovery、load、initialize、shutdown、processToolCall、native/N-API、
+    runtime、database、provider、authentication、private Memory、state-private、sensing、recording
+    或任何真实 effect。不得修改 VCPToolBox、不得创建 payload 或 enabled manifest。
+
+    任何 precondition、sealed tuple、protected inventory、output suppression、ownership 或 cleanup
+    失败必须 fail closed，只生成本包定义的 sanitized receipt 并停止。本决定不授权 commit、
+    push、PR、merge、release、deploy、publish、tag、后续 Host-smoke 或下一阶段启动。
+
+### B. Do not run
+
+Retain the frozen R1 boundary and the v18.7 Jenn-only stop state. No Git object
+command, temporary root, receipt, worktree, or Host operation may occur.
+
+## 7. Retained prohibitions
+
+    actual_object_only_source_run_authorized_by_package_creation: false
+    VCPToolBox_worktree_authorized: false
+    git_checkout_sparse_checkout_archive_or_network_authorized: false
+    payload_or_enabled_manifest_authorized: false
+    Host_operation_count: 0
+    runtime_database_provider_authentication_private_Memory_sensing_recording_or_effect_authorized: false
+    commit_push_PR_merge_release_deploy_publish_tag_or_force_push_authorized: false
+
+No command in this package has been executed. The current queue remains the
+Jenn-only object-only source-run decision gate until a future independent review
+passes and Jenn expressly selects Section 6 A.

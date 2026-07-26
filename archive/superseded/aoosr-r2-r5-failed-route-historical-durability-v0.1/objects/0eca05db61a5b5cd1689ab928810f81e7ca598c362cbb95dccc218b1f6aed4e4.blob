@@ -1,0 +1,97 @@
+schema_version: agents-os.phase5d.actual-object-only-source-run.execution-admission-preflight.v0.1
+preflight_id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_EXECUTION_ADMISSION_PREFLIGHT_V0_1
+date: '2026-07-25'
+status: DRAFT_FOR_JENN_EXECUTION_DECISION
+terminal_outcome: NOT_EXECUTED
+
+purpose:
+  - binds a one-time future object-only source-run decision to the frozen R3 bytes
+  - defines the runner's fail-closed admission sequence before any Git object command
+  - does not perform the preflight, create a worktree, materialize a payload, or read VCPToolBox
+
+frozen_authority:
+  R3_manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+  R3_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-full-atomic-independent-review.yaml
+    sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+    result: PASS_NO_BLOCKER
+  R3_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml
+    sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+    result: ACCEPTED_FROZEN
+  R3_runner:
+    path: control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py
+    sha256: 3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0
+
+exact_static_execution_binding:
+  canonical_root: /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox
+  sealed_commit: 555b3b538f6eb736e530c2912de678c5941f9985
+  sealed_tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+  tuple_count: 7
+  tuple_set_preimage_sha256: 3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce
+  protected_name_inventory_sha256: 52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+  exact_Git_command_count: 24
+  allowed_blob_content_read_count: 7
+  protected_blob_content_read_count: 0
+  temporary_run_root: /tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e
+  sole_workspace_receipt_target: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+
+exact_future_invocation:
+  executable: /usr/bin/python3
+  argv:
+    - /home/jenn/AGENTS_OS_Workspace/control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py
+    - --actual
+  working_directory: /home/jenn/AGENTS_OS_Workspace
+  outer_environment:
+    mode: env_i
+    PATH: /usr/bin:/bin
+    HOME: /nonexistent
+    LC_ALL: C
+  no_extra_argv: true
+  runner_internal_Git_environment_must_include:
+    GIT_NO_REPLACE_OBJECTS: '1'
+    GIT_CONFIG_NOSYSTEM: '1'
+    GIT_CONFIG_GLOBAL: /dev/null
+    GIT_TERMINAL_PROMPT: '0'
+    GIT_OPTIONAL_LOCKS: '0'
+    GIT_PAGER: cat
+
+admission_order:
+  - verify every frozen_authority path is a regular no-follow file with its exact SHA-256
+  - verify the runner's closed review-record inventory and exact static execution binding
+  - verify the canonical root, .git directory and object directory have the exact required safe shape
+  - verify the sealed commit and sealed tree are available before any allowed blob read
+  - verify the temporary run root and sole receipt target are absent before creating anything
+  - create only the owned temporary run root, ownership marker and temporary result
+  - execute exactly the 24 runner-owned Git object commands under the internal fixed environment
+  - read content only for the seven sealed allowlisted tuple paths; never read a protected path or protected blob content
+  - clean the owned temporary root, observe zero residue, then write exactly one receipt or fail closed
+
+success_observation:
+  result: OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY
+  cleanup_status: CLEAN
+  worktree_created: false
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+  payload_materialized: false
+  plugin_enabled_or_loaded: false
+
+failure_contract:
+  missing_or_mismatched_input: BLOCKED
+  unexpected_root_or_receipt_preexistence: BLOCKED
+  canonical_root_or_git_shape_mismatch: BLOCKED
+  tuple_or_digest_mismatch: BLOCKED
+  protected_path_or_content_read_attempt: BLOCKED
+  pending_SIGINT_SIGTERM_or_SIGHUP: BLOCKED_INTERRUPTED_OR_SIGNALLED
+  cleanup_or_residue_uncertain: BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED
+  success_receipt_without_clean_terminal_state: forbidden
+
+never_authorized_by_this_preflight_draft:
+  - executing the future invocation
+  - VCPToolBox worktree checkout sparse_checkout archive or source modification
+  - plugin discovery loading initialize shutdown processToolCall native_or_N_API
+  - runtime service database provider authentication private_Memory state_private sensing recording or real effect
+  - commit push PR merge tag release deploy publish or history rewrite
+

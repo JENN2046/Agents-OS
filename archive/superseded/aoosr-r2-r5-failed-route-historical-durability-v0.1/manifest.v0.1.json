@@ -1,0 +1,413 @@
+{
+  "schema_version": "agents-os.opaque-historical-durability-bundle.v0.1",
+  "bundle_id": "AOOSR_R2_R5_FAILED_ROUTE_HISTORICAL_DURABILITY_V0_1",
+  "status": "BLOCKED",
+  "labels": [
+    "HISTORICAL_ONLY",
+    "NO_AUTHORITY"
+  ],
+  "runtime_usable": false,
+  "authority": {
+    "grants_execution": false,
+    "grants_actual_replay": false,
+    "grants_gate_reuse": false,
+    "grants_adoption": false,
+    "grants_merge_release_deploy_or_publish": false
+  },
+  "provenance": {
+    "main_base_commit": "2ab3b0ff0d2d92e1fff21802e5c76f4d65c1a84f",
+    "main_base_tree": "bbad8469a397bfd56f4e5c03bb6f04622c7059da",
+    "canonical_source_head": "310a7358f96b6749f0c31dd3e39517c9df87c50c",
+    "selection": "post-PR-38 reconciliation of AOOSR R2-R5 local historical bytes that were missing from or different from main",
+    "source_set_sha256": "3487cc4cba6e8e2516a0b91f42ab7a1424903f53919926bd3856c7b689456468",
+    "source_set_serialization": "UTF-8 lines sorted by original_path, each formatted as '<sha256><two spaces><original_path><LF>'"
+  },
+  "inventory": {
+    "object_count": 40,
+    "missing_from_main_count": 37,
+    "superseded_bytes_count": 3,
+    "total_bytes": 318770,
+    "total_lf_count": 6734,
+    "historical_home_path_label_occurrences": 67,
+    "file_uri_occurrences": 0
+  },
+  "isolation": {
+    "object_encoding": "exact bytes, no transformation",
+    "object_naming": "objects/<sha256>.blob",
+    "archive_mode": "0644",
+    "original_paths_are_metadata_only": true,
+    "objects_may_be_executed": false,
+    "objects_may_be_restored_to_active_paths": false,
+    "active_runner_validator_queue_and_current_state_changed": false
+  },
+  "known_malformed_objects": [
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-independent-review-disposition-v0.1.yaml",
+      "sha256": "1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4",
+      "handling": "OPAQUE_BYTES_ONLY",
+      "parsing_normalization_or_authority_use": "FORBIDDEN"
+    }
+  ],
+  "objects": [
+    {
+      "original_path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py",
+      "blob_path": "objects/ff2d3b0c90b60ba013a93dfba7c676801f1d09088db0c7858e641e7f954025e6.blob",
+      "sha256": "ff2d3b0c90b60ba013a93dfba7c676801f1d09088db0c7858e641e7f954025e6",
+      "size_bytes": 777,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+      "blob_path": "objects/20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e.blob",
+      "sha256": "20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e",
+      "size_bytes": 4795,
+      "source_mode": "0644",
+      "relation_to_main": "SUPERSEDED_BYTES",
+      "main_sha256": "947a5297f299870078d3d57a55c827e85f295813fe01a86c73c6ca0d37166727"
+    },
+    {
+      "original_path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r4-fixture.py",
+      "blob_path": "objects/1742d308727f46e3d4380356917528bacf5c01f25198c7fb105c0ec2323dc9c4.blob",
+      "sha256": "1742d308727f46e3d4380356917528bacf5c01f25198c7fb105c0ec2323dc9c4",
+      "size_bytes": 730,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r5-fixture.py",
+      "blob_path": "objects/bb2e5ddbf7566f3dc23af9cf5e781d9f004410f3ddfcda238a1cd73d1360858b.blob",
+      "sha256": "bb2e5ddbf7566f3dc23af9cf5e781d9f004410f3ddfcda238a1cd73d1360858b",
+      "size_bytes": 1330,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-execution-decision-v0.1.yaml",
+      "blob_path": "objects/6383bdb3434a779dd2109755205e55134d7c1a253254cd4144c2e5f62f45f243.blob",
+      "sha256": "6383bdb3434a779dd2109755205e55134d7c1a253254cd4144c2e5f62f45f243",
+      "size_bytes": 3523,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml",
+      "blob_path": "objects/5f71dbcd9467e47be90519513f10205decd3b31d3203dc6758c122e4b10329cd.blob",
+      "sha256": "5f71dbcd9467e47be90519513f10205decd3b31d3203dc6758c122e4b10329cd",
+      "size_bytes": 3859,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-narrow-correction-start-decision-v0.1.yaml",
+      "blob_path": "objects/c3578a74057a002767e8dad73c8c15f9ecc1df9e08e4d009069e8acffaf7865d.blob",
+      "sha256": "c3578a74057a002767e8dad73c8c15f9ecc1df9e08e4d009069e8acffaf7865d",
+      "size_bytes": 2906,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-start-decision-v0.1.yaml",
+      "blob_path": "objects/543706ef2f52ec887d372d4067e5766e130bf48c698a4099cdab655f5e6a4ac1.blob",
+      "sha256": "543706ef2f52ec887d372d4067e5766e130bf48c698a4099cdab655f5e6a4ac1",
+      "size_bytes": 3129,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-execution-admission-preflight-v0.1.yaml",
+      "blob_path": "objects/0eca05db61a5b5cd1689ab928810f81e7ca598c362cbb95dccc218b1f6aed4e4.blob",
+      "sha256": "0eca05db61a5b5cd1689ab928810f81e7ca598c362cbb95dccc218b1f6aed4e4",
+      "size_bytes": 4918,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md",
+      "blob_path": "objects/cc93de3f40aea692e945cb6725ebc38a0d7a677146e28ad1a772b8ba88f16901.blob",
+      "sha256": "cc93de3f40aea692e945cb6725ebc38a0d7a677146e28ad1a772b8ba88f16901",
+      "size_bytes": 6273,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-amendment-v0.1.md",
+      "blob_path": "objects/d3eeef98e1a4a4d153d0516ac5b46fafb81a3b4d19aca158dcc51b2393a3076a.blob",
+      "sha256": "d3eeef98e1a4a4d153d0516ac5b46fafb81a3b4d19aca158dcc51b2393a3076a",
+      "size_bytes": 3128,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-v0.1.md",
+      "blob_path": "objects/0d5aab1ce4582dc499b42bb16e9feb8dde081fbe5920c6ad30ac3745454274b9.blob",
+      "sha256": "0d5aab1ce4582dc499b42bb16e9feb8dde081fbe5920c6ad30ac3745454274b9",
+      "size_bytes": 4224,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json",
+      "blob_path": "objects/8d8dd387be1ac54c4d3559cce8d3c5d097ed8162801b031ee4f935d6241e4483.blob",
+      "sha256": "8d8dd387be1ac54c4d3559cce8d3c5d097ed8162801b031ee4f935d6241e4483",
+      "size_bytes": 2656,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-synthetic-fixture-v0.1.json",
+      "blob_path": "objects/1f59912a3ade6d0e0b690480efe4a327ee027acd69c6a0e34d4913faa31b0543.blob",
+      "sha256": "1f59912a3ade6d0e0b690480efe4a327ee027acd69c6a0e34d4913faa31b0543",
+      "size_bytes": 2105,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-synthetic-fixture-v0.1.json",
+      "blob_path": "objects/bd0024e7314246f0f8040c97c8cb18c4a17a7d76cfa437f46c0e2d2b08930a63.blob",
+      "sha256": "bd0024e7314246f0f8040c97c8cb18c4a17a7d76cfa437f46c0e2d2b08930a63",
+      "size_bytes": 4483,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml",
+      "blob_path": "objects/d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996.blob",
+      "sha256": "d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996",
+      "size_bytes": 910,
+      "source_mode": "0600",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.8.md",
+      "blob_path": "objects/0be3c1a8c4d3f2790bfbb6875a8cb6ebf48e3012244acf3b9591218c69e83525.blob",
+      "sha256": "0be3c1a8c4d3f2790bfbb6875a8cb6ebf48e3012244acf3b9591218c69e83525",
+      "size_bytes": 3175,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.9.md",
+      "blob_path": "objects/e1fa089c8cbee66a1c574fb44cb8379a70c2e961404f0f87c4fa3bfbbcb8f762.blob",
+      "sha256": "e1fa089c8cbee66a1c574fb44cb8379a70c2e961404f0f87c4fa3bfbbcb8f762",
+      "size_bytes": 3327,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md",
+      "blob_path": "objects/6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f.blob",
+      "sha256": "6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f",
+      "size_bytes": 21283,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.2.md",
+      "blob_path": "objects/2fdf621a76ccb57eaaf629bb032da0ab89109b88061a369fc22cbb80b90b930e.blob",
+      "sha256": "2fdf621a76ccb57eaaf629bb032da0ab89109b88061a369fc22cbb80b90b930e",
+      "size_bytes": 7766,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.4.md",
+      "blob_path": "objects/da0d0c3e8f0a6df8efd3c2ff7487adff5cdd45dd45658af7f9a2f92595cf72ca.blob",
+      "sha256": "da0d0c3e8f0a6df8efd3c2ff7487adff5cdd45dd45658af7f9a2f92595cf72ca",
+      "size_bytes": 2977,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.5.md",
+      "blob_path": "objects/a5ab59611f79c8b7c255cf1ddc8bf14f7258b98001cfa3a9d00e0ba6980d84e4.blob",
+      "sha256": "a5ab59611f79c8b7c255cf1ddc8bf14f7258b98001cfa3a9d00e0ba6980d84e4",
+      "size_bytes": 2482,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-execution-decision-package-v0.1.md",
+      "blob_path": "objects/276371c495357d414c608b88ca71db03b8a6ad0e3d9f237c60f898a089a56773.blob",
+      "sha256": "276371c495357d414c608b88ca71db03b8a6ad0e3d9f237c60f898a089a56773",
+      "size_bytes": 5277,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-atomic-independent-review-package-v0.1.manifest.yaml",
+      "blob_path": "objects/c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be.blob",
+      "sha256": "c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be",
+      "size_bytes": 6486,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-atomic-independent-review-package-v0.1.manifest.yaml",
+      "blob_path": "objects/1d9dd2c5cbee74b51df98d481a40563fde4873467edf09c3364e1b67578ca5dc.blob",
+      "sha256": "1d9dd2c5cbee74b51df98d481a40563fde4873467edf09c3364e1b67578ca5dc",
+      "size_bytes": 6394,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-independent-review-disposition-v0.1.yaml",
+      "blob_path": "objects/1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4.blob",
+      "sha256": "1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4",
+      "size_bytes": 6205,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml",
+      "blob_path": "objects/93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265.blob",
+      "sha256": "93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265",
+      "size_bytes": 6973,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-author-self-review.yaml",
+      "blob_path": "objects/7cbbeee868f2fadf83577f23a8e9843236a39dbcf59f9d7f26cdd9f5b943755f.blob",
+      "sha256": "7cbbeee868f2fadf83577f23a8e9843236a39dbcf59f9d7f26cdd9f5b943755f",
+      "size_bytes": 3633,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-author-self-review.yaml",
+      "blob_path": "objects/113a3e5c2e3014b357a361471dd0a6d9833d674ce7940a0ea843f5dbfbc92102.blob",
+      "sha256": "113a3e5c2e3014b357a361471dd0a6d9833d674ce7940a0ea843f5dbfbc92102",
+      "size_bytes": 3477,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-full-atomic-independent-review.yaml",
+      "blob_path": "objects/cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8.blob",
+      "sha256": "cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8",
+      "size_bytes": 6280,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-author-self-review.yaml",
+      "blob_path": "objects/20b8f460a51d04435e5f548a4827d44e008dcce2dba6890c26bbea08cd954186.blob",
+      "sha256": "20b8f460a51d04435e5f548a4827d44e008dcce2dba6890c26bbea08cd954186",
+      "size_bytes": 3640,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-full-atomic-independent-review.yaml",
+      "blob_path": "objects/c07085d2083f4c9b7a863912a628915127af657e2c40bd9d77d627fb9970028b.blob",
+      "sha256": "c07085d2083f4c9b7a863912a628915127af657e2c40bd9d77d627fb9970028b",
+      "size_bytes": 10892,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py",
+      "blob_path": "objects/3ba69bb5537629e3ff3b6250569ddb7a332a3bbe5f32dae61486c0ee4bd1eb63.blob",
+      "sha256": "3ba69bb5537629e3ff3b6250569ddb7a332a3bbe5f32dae61486c0ee4bd1eb63",
+      "size_bytes": 37129,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "blob_path": "objects/3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0.blob",
+      "sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
+      "size_bytes": 28380,
+      "source_mode": "0644",
+      "relation_to_main": "SUPERSEDED_BYTES",
+      "main_sha256": "049475b14376183b097f8422a129bcc94af29aa3ea9a7e1f90ad1361b99c3235"
+    },
+    {
+      "original_path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r4.py",
+      "blob_path": "objects/7370983bcfd30b3dd13d1df50066bf95b3d28b2f078b699af50697c3a79ee4db.blob",
+      "sha256": "7370983bcfd30b3dd13d1df50066bf95b3d28b2f078b699af50697c3a79ee4db",
+      "size_bytes": 31955,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r5.py",
+      "blob_path": "objects/92b876f8a7c58412ce97790ccd894b96cb3e57ecf79ecb5b5baa9cc2fcefb582.blob",
+      "sha256": "92b876f8a7c58412ce97790ccd894b96cb3e57ecf79ecb5b5baa9cc2fcefb582",
+      "size_bytes": 40459,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py",
+      "blob_path": "objects/f69da16c2a5205bf3aab2457426c3d050f29919fd0df68d271505172feee2513.blob",
+      "sha256": "f69da16c2a5205bf3aab2457426c3d050f29919fd0df68d271505172feee2513",
+      "size_bytes": 8475,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "blob_path": "objects/cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601.blob",
+      "sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
+      "size_bytes": 5473,
+      "source_mode": "0644",
+      "relation_to_main": "SUPERSEDED_BYTES",
+      "main_sha256": "64b0d72d24a10c3995b9ab4a483c6b3e93b709e0a8d752941251e17f07d428d3"
+    },
+    {
+      "original_path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r4.py",
+      "blob_path": "objects/49db39fd5cced8f110c4d8abcff5251c1df2da0b85d6149ef41017c74f0e5b80.blob",
+      "sha256": "49db39fd5cced8f110c4d8abcff5251c1df2da0b85d6149ef41017c74f0e5b80",
+      "size_bytes": 8023,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    },
+    {
+      "original_path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r5.py",
+      "blob_path": "objects/ae02154fac6f3d93abdc8e667286a8b69fb1922b1612de43375a9b001a9a2b7c.blob",
+      "sha256": "ae02154fac6f3d93abdc8e667286a8b69fb1922b1612de43375a9b001a9a2b7c",
+      "size_bytes": 8863,
+      "source_mode": "0644",
+      "relation_to_main": "MISSING_FROM_MAIN",
+      "main_sha256": null
+    }
+  ]
+}

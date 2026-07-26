@@ -1,0 +1,159 @@
+# AGENTS OS Phase 5D M0-D Actual Object-Only Source Run Decision Package v0.2
+
+Date: 2026-07-25
+Owner: Jenn
+Agent steward: Nobao
+Status: DRAFT_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Terminal outcome: NOT_EXECUTED
+
+## 1. Successor purpose
+
+This R2 successor replaces no frozen Phase 5D contract. It responds only to the
+three blockers in the R1 independent review of the object-only decision
+package:
+
+1. replacement Git objects are disabled;
+2. the exact runner and scanner are review subjects; and
+3. root ownership, receipt creation, temporary-result creation, and finalizer
+   paths are implemented as fail-closed executable rules.
+
+The original R1 package and its BLOCK review remain historical immutable
+evidence. Creation or review of this v0.2 package does not invoke its runner,
+Git, VCPToolBox, a worktree, a Host method, or a runtime.
+
+## 2. R2 atomic execution inputs
+
+    R2_narrow_start_decision:
+      path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml
+      sha256: 5f71dbcd9467e47be90519513f10205decd3b31d3203dc6758c122e4b10329cd
+
+    R2_amendment:
+      path: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md
+      sha256: cc93de3f40aea692e945cb6725ebc38a0d7a677146e28ad1a772b8ba88f16901
+    runner:
+      path: control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py
+      sha256: 3ba69bb5537629e3ff3b6250569ddb7a332a3bbe5f32dae61486c0ee4bd1eb63
+    scanner:
+      path: control-plane/registry/object-only-source-run-r2-scanner.py
+      sha256: 82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35
+    fixture_builder:
+      path: control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py
+      sha256: ff2d3b0c90b60ba013a93dfba7c676801f1d09088db0c7858e641e7f954025e6
+    synthetic_fixture:
+      path: control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json
+      sha256: 8d8dd387be1ac54c4d3559cce8d3c5d097ed8162801b031ee4f935d6241e4483
+    validator:
+      path: control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py
+      sha256: f69da16c2a5205bf3aab2457426c3d050f29919fd0df68d271505172feee2513
+    review_package_builder:
+      path: control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py
+      sha256: 20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e
+
+The R2 executable subjects admit no caller-selected paths, refs, object IDs,
+tuples, output locations, or cleanup locations. The only actual-mode command
+surface is the runner's fixed 24-command Git inventory:
+
+    sealed commit identity: 555b3b538f6eb736e530c2912de678c5941f9985
+    sealed tree identity: fd82d403e79f36f749eb7f555b4736eae3eacdff
+    non-protected blob tuples: 7
+    Git command count: 24
+    GIT_NO_REPLACE_OBJECTS: "1"
+    GIT_ALTERNATE_OBJECT_DIRECTORIES: ""
+    protected blob content reads: 0
+    Host operation count: 0
+
+Before G01, the runner parses the fixed R2 manifest with duplicate-key
+rejection; requires the exact 16 frozen record IDs and workspace-relative
+paths; rejects protected or symlinked workspace inputs; and recomputes every
+declared source digest through a regular no-follow file descriptor. A manifest
+or source mismatch prevents every Git invocation. The later Jenn execution
+decision must additionally bind the reviewed manifest SHA-256 and runner
+SHA-256; this internal check does not replace that human decision surface.
+
+## 3. Exact execution effect if later authorized
+
+The runner's actual mode has one possible successful terminal result:
+
+    OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY
+
+It can create only its literal mode-0700 temporary root, marker, temporary
+sanitized result, and one exclusive no-follow sanitized receipt. Its only Git
+blob reads are seven already path-matched, replacement-disabled streams passed
+directly into the in-process SHA-256 accumulator. The tree scan is name-only,
+NUL-safe, in-memory, and never requests a protected object ID or protected
+content.
+
+Every other outcome is fail closed. In particular, a canonical-root symlink,
+alternate object store, replacement-object setting, unknown Git command,
+preexisting/symlink receipt, temporary-result mismatch, signal interruption,
+missing finalizer evidence, or residue blocks the run. Catchable signals are
+blocked before their temporary handlers are installed and again during cleanup,
+so there is no owned-root setup or finalizer interval with an unguarded handler.
+SIGKILL or process crash can never be recorded as success.
+
+## 4. What R2 does not authorize
+
+    creation_of_this_package_authorizes_actual_mode: false
+    VCPToolBox_worktree_or_checkout: false
+    git_sparse_checkout_archive_fetch_or_network: false
+    payload_or_enabled_manifest: false
+    plugin_discovery_loading_or_Host_lifecycle: false
+    processToolCall_native_NAPI_runtime_database_provider_or_authentication: false
+    private_Memory_state_private_sensing_recording_or_real_effect: false
+    commit_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+
+## 5. Preconditions for the Jenn decision surface
+
+Before Section 6 A may be consumed:
+
+1. the R2 manifest must bind the seven R2 subjects, R1 historical bytes, and
+   all frozen boundary inputs;
+2. the runner, scanner, fixture, builder, and validator must reproduce their
+   deterministic synthetic evidence;
+3. the fresh full atomic independent review must report PASS_NO_BLOCKER; and
+4. the active governance projection must still show no actual object-only run
+   has occurred.
+
+Without all four conditions, Section 6 A is ineligible and no command may be
+run.
+
+## 6. Jenn decision surface
+
+### A. Authorize exactly one R2 actual object-only source run
+
+Exact decision text:
+
+    我确认执行 AGENTS OS Phase 5D M0-D Actual Object-Only Source Run Decision
+    Package v0.2 第 6 节 A 的完整 Exact decision text。
+
+    我只授权一次运行本包第 2 节 hash-bound R2 runner 的 actual mode；它只能在固定
+    canonical VCPToolBox Git object store 中，对固定 commit、tree 与完整七个 tuple 执行
+    固定的 24 条 Git object-only commands。运行环境必须包含
+    GIT_NO_REPLACE_OBJECTS=1 和空 GIT_ALTERNATE_OBJECT_DIRECTORIES。不得使用任何
+    caller-selected root、ref、path、OID、receipt 或 cleanup path。
+
+    我确认本次不授权 worktree、checkout、sparse checkout、archive、fetch、network、payload、
+    plugin、PluginManager、discovery、load、initialize、shutdown、processToolCall、native/N-API、
+    runtime、database、provider、authentication、private Memory、state-private、sensing、recording
+    或任何真实 effect。保护路径只可进行 name-only 内存比对，不得读取其 object ID、内容、
+    哈希或配置语义。
+
+    任何 replace-object、tuple、path、receipt、output、signal、ownership、temporary-result 或
+    cleanup 条件失败必须 fail closed。只可产生 R2 定义的 sanitized receipt 并停止。本决定不
+    授权 commit、push、PR、merge、release、deploy、publish、tag、后续 Host-smoke 或下一阶段启动。
+
+### B. Do not run
+
+Keep the frozen protected-source boundary R1 and the current Jenn-only stop
+state. No VCPToolBox Git command, temporary root, receipt, worktree, or Host
+operation may occur.
+
+## 7. Current non-authority state
+
+    R2_accepted: false
+    R2_frozen: false
+    R2_independent_review_created: false
+    actual_object_only_source_run_authorized: false
+    VCPToolBox_Git_command_count: 0
+    Host_operation_count: 0
+    terminal_outcome: NOT_EXECUTED

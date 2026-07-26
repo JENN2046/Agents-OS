@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+"""Offline validator for the Phase 5D object-only source-run R2 author bundle."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import json
+from pathlib import Path
+import runpy
+from typing import Any
+
+
+ROOT = Path(__file__).parent
+RUNNER = runpy.run_path(str(ROOT / "run-phase-5d-m0d-actual-object-only-source-run-r2.py"))
+SCANNER = runpy.run_path(str(ROOT / "object-only-source-run-r2-scanner.py"))
+
+
+def no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def load_fixture(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=no_duplicates)
+
+
+def _scanner_baseline() -> bytes:
+    protected = SCANNER["EXPECTED_PROTECTED_PATHS"]
+    return b"AGENTS.md\x00Plugin/AGENTS.md\x00" + b"\x00".join(protected) + b"\x00Plugin.js\x00"
+
+
+def validate(doc: Any) -> list[str]:
+    errors = list(RUNNER["validate_synthetic_fixture"](doc))
+    environment = RUNNER["git_environment"]()
+    if environment.get("GIT_NO_REPLACE_OBJECTS") != "1":
+        errors.append("runner:REPLACE_OBJECTS_NOT_DISABLED")
+    if environment.get("GIT_ALTERNATE_OBJECT_DIRECTORIES") != "":
+        errors.append("runner:ALTERNATE_OBJECTS_NOT_DISABLED")
+    if len(RUNNER["EXPECTED_COMMAND_IDS"]) != 24:
+        errors.append("runner:GIT_COMMAND_COUNT")
+    if RUNNER["EXPECTED_REVIEW_RECORD_COUNT"] != 17:
+        errors.append("runner:REVIEW_RECORD_COUNT")
+    source = (ROOT / "run-phase-5d-m0d-actual-object-only-source-run-r2.py").read_text(encoding="utf-8")
+    scanner_source = (ROOT / "object-only-source-run-r2-scanner.py").read_text(encoding="utf-8")
+    for required in (
+        "os.O_EXCL | os.O_NOFOLLOW",
+        "canonical_root_realpath",
+        "signal.pthread_sigmask",
+        "BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED",
+        "GIT_NO_REPLACE_OBJECTS",
+        "def _verify_bound_manifest",
+        "def _validate_review_manifest_document",
+        "_read_regular_workspace_file",
+        "EXPECTED_REVIEW_RECORDS",
+        "signal.pthread_sigmask(signal.SIG_BLOCK, set(CATCHABLE_SIGNALS))",
+    ):
+        if required not in source:
+            errors.append(f"runner:SOURCE_BINDING:{required}")
+    if "sha256sum" in source:
+        errors.append("runner:UNBOUND_EXTERNAL_DIGEST_PROCESS")
+    for required in ("scan_name_only_stream", "EXPECTED_PROTECTED_PATHS", "stream.endswith(b\"\\x00\")"):
+        if required not in scanner_source:
+            errors.append(f"scanner:SOURCE_BINDING:{required}")
+    try:
+        result = SCANNER["scan_name_only_stream"](_scanner_baseline())
+        if result.protected_name_count != 7:
+            errors.append("scanner:BASELINE_COUNT")
+    except Exception:
+        errors.append("scanner:BASELINE")
+    return errors
+
+
+def self_test() -> int:
+    baseline = RUNNER["synthetic_fixture"]()
+    cases: list[tuple[str, Any, bool]] = [( "baseline", baseline, True)]
+
+    def mutate(name: str, callback: Any) -> None:
+        item = copy.deepcopy(baseline)
+        callback(item)
+        cases.append((name, item, False))
+
+    mutate("replace_objects", lambda item: item["environment"].__setitem__("GIT_NO_REPLACE_OBJECTS", "0"))
+    mutate("alternate_object_store", lambda item: item["environment"].__setitem__("GIT_ALTERNATE_OBJECT_DIRECTORIES", "/tmp/alternate"))
+    mutate("manifest_before_git", lambda item: item["review_binding"].__setitem__("manifest_verified_before_git", False))
+    mutate("manifest_record_count", lambda item: item["review_binding"].__setitem__("record_count", 15))
+    mutate("extra_git_command", lambda item: item["command_ids"].append("UNBOUND_GIT_CALL"))
+    mutate("missing_git_command", lambda item: item["command_ids"].pop())
+    mutate("canonical_symlink", lambda item: item["path_safety"].__setitem__("canonical_root_rejects_symlink", False))
+    mutate("canonical_realpath", lambda item: item["path_safety"].__setitem__("canonical_root_realpath_exact", False))
+    mutate("receipt_without_exclusive", lambda item: item["path_safety"].__setitem__("receipt_open_flags", ["O_WRONLY", "O_CREAT", "O_NOFOLLOW"]))
+    mutate("receipt_without_nofollow", lambda item: item["path_safety"].__setitem__("receipt_open_flags", ["O_WRONLY", "O_CREAT", "O_EXCL"]))
+    mutate("temporary_result_order", lambda item: item["path_safety"].__setitem__("temporary_result_created_after_marker", False))
+    mutate("temporary_result_flags", lambda item: item["path_safety"].__setitem__("temporary_result_open_flags", ["O_WRONLY", "O_CREAT", "O_EXCL"]))
+    mutate("signal_gap", lambda item: item["finalizer"].__setitem__("catchable_signals", ["SIGINT", "SIGTERM"]))
+    mutate("signal_setup_gap", lambda item: item["finalizer"].__setitem__("signals_blocked_before_handler_installation", False))
+    mutate("unrecoverable_signal_pass", lambda item: item["finalizer"].__setitem__("unrecoverable_SIGKILL_result", "PASS"))
+    mutate("output_leak", lambda item: item["expected_success"].__setitem__("stderr_bytes_emitted", 1))
+    mutate("host_operation", lambda item: item["expected_success"].__setitem__("Host_operation_count", 1))
+
+    failures: list[str] = []
+    for name, doc, should_pass in cases:
+        passed = not validate(doc)
+        if passed is not should_pass:
+            failures.append(name)
+    try:
+        json.loads('{"x":1,"x":2}', object_pairs_hook=RUNNER["_reject_duplicate_json_keys"])
+        failures.append("runner_duplicate_json_key")
+    except ValueError:
+        pass
+    scanner_stream = _scanner_baseline() + b".env\x00"
+    try:
+        SCANNER["scan_name_only_stream"](scanner_stream)
+        failures.append("protected_name_extra")
+    except SCANNER["ScannerBlocked"]:
+        pass
+    manifest = {
+        "schema_version": "agents-os.hash-bound-independent-review-package.v0.1",
+        "review_unit": RUNNER["REVIEW_UNIT"],
+        "atomic": True,
+        "partial_review": "forbidden",
+        "subjects": [],
+        "authority_inputs": [],
+        "author_evidence": [],
+        "fixed_commands": ["x"] * 7,
+    }
+    for group, expected in RUNNER["EXPECTED_REVIEW_RECORDS"].items():
+        manifest[group] = [
+            {"id": identifier, "path": path, "sha256": "0" * 64}
+            for identifier, path in expected
+        ]
+    try:
+        RUNNER["_validate_review_manifest_document"](manifest)
+    except ValueError:
+        failures.append("manifest_baseline")
+    protected_manifest = copy.deepcopy(manifest)
+    protected_manifest["subjects"][0]["path"] = "state-private/forbidden.json"
+    try:
+        RUNNER["_validate_review_manifest_document"](protected_manifest)
+        failures.append("manifest_protected_path")
+    except ValueError:
+        pass
+    duplicate_manifest = copy.deepcopy(manifest)
+    duplicate_manifest["subjects"][1]["path"] = duplicate_manifest["subjects"][0]["path"]
+    try:
+        RUNNER["_validate_review_manifest_document"](duplicate_manifest)
+        failures.append("manifest_duplicate_path")
+    except ValueError:
+        pass
+    for name, value in (
+        ("private_component", "state-private/forbidden.json"),
+        ("environment_name", "control-plane/.env"),
+        ("backslash", "control-plane\\registry\\review.yaml"),
+    ):
+        try:
+            RUNNER["_safe_workspace_relative_path"](value)
+            failures.append(f"manifest_path_{name}")
+        except ValueError:
+            pass
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases) + 8, "failures": failures}, sort_keys=True))
+    return 0 if not failures else 1
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("fixture", nargs="?", type=Path)
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+    if args.self_test:
+        return self_test()
+    if args.fixture is None:
+        parser.error("fixture is required unless --self-test is used")
+    try:
+        errors = validate(load_fixture(args.fixture))
+    except (OSError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
+        errors = [f"input:BLOCKED:{type(exc).__name__}"]
+    print(json.dumps({"result": "PASS_NO_BLOCKER" if not errors else "BLOCKED", "errors": errors}, sort_keys=True))
+    return 0 if not errors else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

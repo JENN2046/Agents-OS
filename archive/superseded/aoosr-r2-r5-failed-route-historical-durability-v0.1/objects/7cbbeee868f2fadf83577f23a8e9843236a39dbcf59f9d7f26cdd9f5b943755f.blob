@@ -1,0 +1,71 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R2_ATOMIC_BUNDLE
+author: Nobao
+independent: false
+status: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+terminal_outcome: NOT_EXECUTED
+
+immutable_R1_lineage:
+  decision_package:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md
+    sha256: 6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml
+    sha256: 93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265
+    result: BLOCK
+
+R2_start_authority:
+  path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml
+  sha256: 5f71dbcd9467e47be90519513f10205decd3b31d3203dc6758c122e4b10329cd
+  scope_expansion: forbidden
+
+R2_subjects:
+  amendment:
+    path: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md
+    sha256: cc93de3f40aea692e945cb6725ebc38a0d7a677146e28ad1a772b8ba88f16901
+  successor_decision_package:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.2.md
+    sha256: 2fdf621a76ccb57eaaf629bb032da0ab89109b88061a369fc22cbb80b90b930e
+  scanner:
+    path: control-plane/registry/object-only-source-run-r2-scanner.py
+    sha256: 82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35
+  runner:
+    path: control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py
+    sha256: 3ba69bb5537629e3ff3b6250569ddb7a332a3bbe5f32dae61486c0ee4bd1eb63
+  fixture_builder:
+    path: control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py
+    sha256: ff2d3b0c90b60ba013a93dfba7c676801f1d09088db0c7858e641e7f954025e6
+  synthetic_fixture:
+    path: control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json
+    sha256: 8d8dd387be1ac54c4d3559cce8d3c5d097ed8162801b031ee4f935d6241e4483
+  validator:
+    path: control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py
+    sha256: f69da16c2a5205bf3aab2457426c3d050f29919fd0df68d271505172feee2513
+  review_package_builder:
+    path: control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py
+    sha256: 20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e
+
+author_checks:
+  GIT_NO_REPLACE_OBJECTS_exactly_1: PASS
+  GIT_ALTERNATE_OBJECT_DIRECTORIES_empty: PASS
+  command_inventory: 24/24_FIXED
+  scanner_is_NUL_safe_and_no_blob_reader: PASS
+  canonical_root_symlink_rejected: PASS
+  receipt_and_temporary_result_O_EXCL_O_NOFOLLOW: PASS
+  catchable_signal_finalizer_contract: PASS
+  synthetic_fixture_validator: PASS
+  validator_positive_controls: 2/2_PASS
+  fixed_negative_cases: 24/24_REJECTED
+  actual_VCPToolBox_Git_command_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+
+author_scope_assertions:
+  protected_source_boundary_R1_modified: false
+  R1_package_or_review_modified: false
+  worktree_checkout_archive_or_payload_created: false
+  plugin_or_Host_operation_performed: false
+  actual_object_only_source_run_authorized: false
+  independent_review_created: false
+
+next_gate: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R2_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW

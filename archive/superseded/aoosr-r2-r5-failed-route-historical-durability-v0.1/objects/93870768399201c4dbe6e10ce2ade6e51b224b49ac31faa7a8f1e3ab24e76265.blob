@@ -1,0 +1,150 @@
+schema_version: agents-os.fresh-independent-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1
+
+reviewer:
+  identity: independent_Codex_window
+  independent: true
+  author_of_subject: false
+
+subject:
+  path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md
+  sha256: 6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f
+  declared_status: DRAFT_FOR_FRESH_INDEPENDENT_REVIEW
+
+result: BLOCK
+blocker_count: 3
+major_count: 0
+minor_count: 0
+requires_R2: true
+section_6_A_eligible: false
+
+frozen_input_validation:
+  declared: 6
+  matched: 6
+  result: 6/6_MATCH
+  inputs:
+    protected_source_boundary_freeze_decision:
+      sha256: 0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082
+    frozen_contract:
+      sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+    frozen_manifest:
+      sha256: b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45
+    independent_review:
+      sha256: 61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c
+      result: PASS_NO_BLOCKER
+    review_disposition:
+      sha256: 334d0ecb9c9c29fd838ae0a96d3bb6e2b28fb4bf0ae8eafcec929fcbf254d87b
+    current_stop_queue:
+      sha256: eab88bbeec414571c740a931493253f75bf6f0bfcb6ab0687f70922d5fabbe4f
+
+independent_validation:
+  tuple_rows: 7
+  tuple_set_preimage_sha256:
+    expected: 3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce
+    actual: 3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce
+    result: MATCH
+  protected_name_count: 7
+  protected_name_inventory_preimage_sha256:
+    expected: 52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+    actual: 52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+    result: MATCH
+  declared_Git_command_count: 24
+  reconstructed_Git_command_count: 24
+  command_count_result: MATCH
+  git_diff_check: PASS
+
+findings:
+  - id: AOOSR-R1-BLOCKER-001
+    severity: blocker
+    title: Git replacement objects are not disabled
+    evidence:
+      - GIT_NO_REPLACE_OBJECTS is absent from the literal environment
+      - --no-replace-objects is absent from all Git invocations
+      - an independent temporary bare-repository reproduction showed that git_cat_file_blob_of_a_fixed_OID_returned_refs_replace_bytes_by_default
+      - the same reproduction returned the original OID bytes only with GIT_NO_REPLACE_OBJECTS=1
+      - no VCPToolBox command was used for the reproduction
+    impact: >
+      A literal object ID does not guarantee that Git reads the original object
+      bytes or original tree semantics while replacement refs remain active.
+      The sealed-object claim is therefore not established by the current
+      command envelope.
+    required_disposition:
+      - bind GIT_NO_REPLACE_OBJECTS=1 in the empty execution environment
+      - or bind the equivalent global no-replace option to every Git invocation
+      - add a deterministic negative test proving replacement refs cannot alter any observed object
+
+  - id: AOOSR-R1-BLOCKER-002
+    severity: blocker
+    title: No hash-bound executable runner or scanner is included in the review unit
+    evidence:
+      - no runner path or runner SHA-256 is declared
+      - no scanner path or scanner SHA-256 is declared
+      - the NUL-safe protected-name filter is described only in prose
+      - environment clearing, scalar capture, digest comparison, output-byte accounting, receipt serialization and finalizer dispatch are not represented by reviewed executable bytes
+      - Section 6 A would authorize a later implementation that has not itself received independent review
+    impact: >
+      The document fixes desired Git command text but cannot prove that the
+      actual execution process performs only those commands, suppresses every
+      output, handles every failure and signal, or invokes the finalizer
+      correctly. The most security-sensitive part of the run remains outside
+      the hash-bound review surface.
+    required_disposition:
+      - add a deterministic runner and scanner as hash-bound review subjects
+      - make the runner reject any command inventory or constant drift
+      - add offline synthetic fixtures for success, protected-name substitution, extra Git call, output leak and cleanup failure
+      - perform a fresh independent review of the complete package plus executable subjects
+
+  - id: AOOSR-R1-BLOCKER-003
+    severity: blocker
+    title: Path ownership, receipt creation and finalizer semantics are not atomic or complete
+    evidence:
+      - the canonical VCPToolBox root is tested as a directory but is not rejected when it is itself a symlink
+      - the final receipt preexistence check is separated from the later write and no O_EXCL plus O_NOFOLLOW mechanism is bound
+      - creation of temporary_result is not specified
+      - the finalizer treats a missing temporary_result as cleanup failure
+      - signal and interruption paths that must trigger the finalizer are not bound
+    impact: >
+      A path can change after the precheck, the final receipt writer can race
+      with a newly created file or symlink, and failures after run-root creation
+      do not have a fully specified cleanup path. The package cannot yet prove
+      exclusive ownership or complete fail-closed cleanup.
+    required_disposition:
+      - reject a symlink canonical root and bind canonical realpath expectations
+      - create the final receipt with an exclusive no-follow primitive
+      - specify exactly when and how temporary_result is created
+      - bind finalizer behavior for success, ordinary failure, interruption and signal paths
+      - add adversarial race and residue tests to the reviewed runner
+
+confirmed_safe_properties:
+  exact_seven_tuple_preimage: true
+  exact_protected_name_inventory_preimage: true
+  logical_Git_command_count_is_24: true
+  checkout_worktree_sparse_checkout_archive_commands_declared: false
+  Host_runtime_provider_or_effect_commands_declared: false
+  package_creation_authorizes_execution: false
+
+execution_observation:
+  VCPToolBox_Git_command_count: 0
+  VCPToolBox_worktree_operation_count: 0
+  protected_content_bytes_read: 0
+  protected_blob_identifier_read_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+  subject_files_modified: 0
+  independent_review_artifact_created: true
+
+authority_effect:
+  actual_object_only_source_run_authorized: false
+  Section_6_A_may_be_selected: false
+  protected_source_boundary_R1_remains_frozen: true
+  current_stop_queue_remains_authoritative: true
+  automatic_transition: forbidden
+
+next_gate:
+  name: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R2_NARROW_CORRECTION
+  decision_owner: Jenn
+  permitted_scope:
+    - disable_Git_replace_objects
+    - hash_bind_the_exact_runner_and_scanner
+    - close_path_receipt_and_finalizer_atomicity
+  actual_execution_before_R2_review: forbidden

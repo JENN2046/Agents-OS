@@ -1,0 +1,73 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R5_ATOMIC_BUNDLE
+author: Nobao
+independent: false
+status: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+terminal_outcome: NOT_EXECUTED
+
+R5_start_authority:
+  path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-start-decision-v0.1.yaml
+  sha256: 543706ef2f52ec887d372d4067e5766e130bf48c698a4099cdab655f5e6a4ac1
+  authorized_architecture: FROZEN_UPSTREAM_EVIDENCE_CONSUMPTION
+  scope_expansion: forbidden
+
+immutable_R4_lineage:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-full-atomic-independent-review.yaml
+    sha256: cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8
+    result: BLOCK
+  finding_disposition:
+    path: control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-independent-review-disposition-v0.1.yaml
+    sha256: 1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4
+    disposition: ARCHITECTURE_REBASELINE_REQUIRED
+
+protected_source_authority:
+  contract_sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+  freeze_decision_sha256: 0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082
+  source_receipt_sha256: e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd
+  protected_name_count: 7
+  protected_inventory_sha256: 52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+  R5_recomputes_protected_policy: false
+
+R5_subjects:
+  amendment_sha256: 0d5aab1ce4582dc499b42bb16e9feb8dde081fbe5920c6ad30ac3745454274b9
+  successor_decision_package_sha256: a5ab59611f79c8b7c255cf1ddc8bf14f7258b98001cfa3a9d00e0ba6980d84e4
+  runner_sha256: 92b876f8a7c58412ce97790ccd894b96cb3e57ecf79ecb5b5baa9cc2fcefb582
+  fixture_builder_sha256: bb2e5ddbf7566f3dc23af9cf5e781d9f004410f3ddfcda238a1cd73d1360858b
+  fixture_sha256: bd0024e7314246f0f8040c97c8cb18c4a17a7d76cfa437f46c0e2d2b08930a63
+  validator_sha256: ae02154fac6f3d93abdc8e667286a8b69fb1922b1612de43375a9b001a9a2b7c
+
+author_checks:
+  runner_self_test: 16/16_PASS
+  fixture_validation: PASS_NO_BLOCKER
+  validator_self_test: 22/22_PASS
+  validator_fixture_result: PASS_NO_BLOCKER
+  fixture_byte_reproduction: PASS
+  exact_Git_command_inventory: 23/23
+  exact_tuple_inventory: 7/7
+  dynamic_scanner_import_compile_or_execution: ABSENT
+  generic_tree_name_enumeration: ABSENT
+  protected_policy_recomputation: ABSENT
+  frozen_upstream_fact_observed_this_run: false
+  frozen_upstream_fact_consumed: true
+  future_actual_requires_fixed_Jenn_decision: true
+  actual_mode_invocations_during_R5_authoring: 0
+  VCPToolBox_Git_command_count_during_R5_authoring: 0
+  Host_operation_count_during_R5_authoring: 0
+  runtime_or_effect_operation_count_during_R5_authoring: 0
+
+boundary_assertions:
+  second_permission_or_identity_authority_created: false
+  second_protected_path_policy_created: false
+  R1_through_R4_fixed_bytes_modified: false
+  sealed_commit_or_tree_changed: false
+  exact_tuple_set_changed: false
+  Host_path_started: false
+  runtime_or_real_effect_started: false
+  R5_accepted: false
+  R5_frozen: false
+
+next_gate: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW

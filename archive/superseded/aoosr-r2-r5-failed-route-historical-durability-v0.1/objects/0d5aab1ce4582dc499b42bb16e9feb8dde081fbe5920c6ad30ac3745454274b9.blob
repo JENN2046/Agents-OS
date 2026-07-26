@@ -1,0 +1,132 @@
+# Phase 5D M0-D Actual Object-Only Source Run R5 Evidence-Consumption Rebaseline v0.1
+
+Date: 2026-07-25  
+Status: DRAFT_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW  
+Owner: Jenn  
+Agent steward: Nobao  
+Terminal outcome: NOT_EXECUTED
+
+## 1. Purpose
+
+R5 replaces the R4 dynamic scanner architecture. It does not create a new
+protected-path classifier. The frozen Protected Source Boundary remains the
+owner of the exact sealed tree, seven protected-name facts, protected inventory
+fingerprint and seven allowlisted blob tuples.
+
+The R5 runner consumes those immutable upstream facts. It verifies only their
+hash binding, the exact sealed tree and the seven allowlisted
+`(path, blob_oid, sha256)` tuples. It does not import, compile, execute or
+reinterpret `object-only-source-run-r2-scanner.py`.
+
+## 2. Architecture rule
+
+```text
+Protected Source Boundary
+  -> owns sealed-tree and protected-name facts
+
+R5 object-only runner
+  -> verifies upstream refs, hashes and sealed-tree currentness
+  -> reads only seven exact allowlisted blobs
+  -> emits candidate-only evidence
+
+Future Host smoke
+  -> may consume a separately accepted receipt
+  -> may not cause R5 to recompute upstream policy
+```
+
+The R5 runner must not contain or call `exec`, `compile`, `runpy`, `importlib`,
+`types.ModuleType`, `sys.modules`, a caller-supplied callable or a
+caller-supplied scanner source.
+
+## 3. Exact operation inventory
+
+The prior `G03_NAME_ONLY_SCAN` operation is removed. R5 never performs generic
+tree-name enumeration.
+
+```text
+G01_COMMIT_EXISTS
+G02_TREE_RESOLVE
+
+T01 through T07:
+  RESOLVE
+  TYPE
+  DIGEST
+```
+
+The exact count is:
+
+```text
+2 + (7 * 3) = 23
+```
+
+The sealed commit and tree remain:
+
+```yaml
+commit: 555b3b538f6eb736e530c2912de678c5941f9985
+tree: fd82d403e79f36f749eb7f555b4736eae3eacdff
+```
+
+Any extra Git command, generic enumeration, protected-object lookup, arbitrary
+path lookup, checkout, worktree, sparse checkout or archive operation is
+`BLOCKED_UNAUTHORIZED_OR_NONHERMETIC_GIT_OPERATION`.
+
+## 4. Receipt v0.2
+
+R5 defines a successor receipt schema that does not claim the protected-name
+inventory was observed during the current run:
+
+```yaml
+schema_version: agents-os.phase5d.actual-object-only-source-run-receipt.v0.2
+protected_inventory_binding:
+  source_ref:
+  source_sha256:
+  sealed_tree:
+  protected_name_count: 7
+  protected_name_inventory_sha256:
+  observed_this_run: false
+  consumed_as_frozen_upstream_fact: true
+Git_command_count: 23
+allowlisted_blob_content_reads: 7
+protected_blob_content_reads: 0
+tree_name_enumeration_performed: false
+protected_policy_recomputed: false
+worktree_created: false
+payload_materialized: false
+Host_operation_count: 0
+runtime_or_effect_operation_count: 0
+cleanup_status:
+result:
+failure_phase:
+```
+
+The only favorable result remains
+`OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY`. It grants no Host, plugin,
+runtime, database, provider, authentication, private Memory or effect authority.
+
+## 5. Required proof
+
+The R5 fixture, validator and independent reviewer must prove without invoking
+`--actual` or Git:
+
+1. R1 through R4 immutable hashes remain unchanged;
+2. every protected-source authority input matches its fixed SHA-256;
+3. no dynamic scanner interface or generic tree enumeration remains;
+4. the command inventory is exactly the ordered 23-entry inventory;
+5. all seven tuple identities remain exact, ordered and duplicate-free;
+6. protected facts are marked as bound upstream evidence, not current
+   observation or recomputation;
+7. unknown fields, duplicate JSON keys, wrong types, pseudo-booleans and
+   authority/runtime elevation are rejected; and
+8. source-level and fully re-signed mutations receive target-semantic
+   rejection rather than an exact-fixture-only rejection.
+
+## 6. Stop rule
+
+R5 stops after creation of the fixed author package at
+`PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW`.
+
+No R5 `--actual`, VCPToolBox Git command, worktree, Host path or Git delivery is
+authorized. `PASS_NO_BLOCKER` would open only a separate Jenn-only R5 freeze
+decision. A finding outside this evidence-consumption architecture stops the
+revision line for Phase 5D re-evaluation rather than automatically creating
+R6.

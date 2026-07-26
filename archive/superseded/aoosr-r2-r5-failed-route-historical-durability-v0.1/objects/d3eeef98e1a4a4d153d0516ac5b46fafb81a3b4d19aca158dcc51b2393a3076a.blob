@@ -1,0 +1,69 @@
+# Phase 5D M0-D Actual Object-Only Source Run R4 Amendment v0.1
+
+Date: 2026-07-25  
+Status: DRAFT_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW  
+Owner: Jenn  
+Agent steward: Nobao  
+Terminal outcome: NOT_EXECUTED
+
+## 1. Exact purpose
+
+R4 closes exactly one defect observed during the one authorized R3 `--actual`
+attempt. The R3 runner verified its bound inputs and stopped before every Git
+object command, but its dynamically executed, hash-verified scanner defines a
+`@dataclass`. The R3 loader assigned an invented `__name__` without placing the
+module in `sys.modules`; Python therefore rejected the otherwise valid scanner
+during dataclass initialization.
+
+R4 changes only the verified scanner module lifecycle:
+
+1. verify the exact scanner bytes before compile or execution;
+2. reject a pre-existing scanner module-name collision;
+3. register one fresh module object under the fixed scanner module name before
+   `exec`;
+4. execute only the already hash-verified bytes in that module dictionary;
+5. verify the required scanner callable and protected-inventory digest; and
+6. remove the exact module object after both success and failure, rejecting an
+   identity substitution or residual mapping.
+
+R4 does not alter the protected-source inventory, seven tuple identities,
+24-command Git inventory, output semantics, signal behavior, fixture path
+rules, authority model, or Host boundary.
+
+## 2. Immutable prior evidence
+
+```yaml
+R3_manifest_sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+R3_independent_review_sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+R3_freeze_decision_sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+R3_actual_attempt_receipt_sha256: d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996
+R3_actual_attempt_result: BLOCKED_REVIEW_BINDING_MISMATCH
+R3_actual_attempt_failure_phase: scanner_load
+R3_actual_attempt_Git_command_count: 0
+```
+
+All R1–R3 bytes remain historical and immutable. The R3 freeze remains an
+offline closure; it is not rewritten as a successful actual execution.
+
+## 3. Required R4 proofs
+
+The fixture, validator and independent reviewer must demonstrate all of the
+following without invoking `--actual`, Git, VCPToolBox, Host, plugin, runtime,
+database, provider, private Memory, sensing or effect code:
+
+1. the real inherited scanner source, after matching its declared SHA-256,
+   loads successfully despite its `@dataclass`;
+2. scanner bytes with a mismatched digest do not execute top-level code;
+3. the fixed scanner module name is absent before loading and absent after a
+   successful or failed load;
+4. a pre-existing module-name collision fails closed without replacing or
+   deleting the pre-existing caller module; and
+5. a scanner that replaces its own `sys.modules[__name__]` entry is rejected
+   and leaves no R4 scanner module mapping behind.
+
+## 4. Stop rule
+
+R4 stops at
+`PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R4_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW`.
+It cannot accept, freeze, re-run `--actual`, create a worktree, invoke Host,
+or perform Git delivery.

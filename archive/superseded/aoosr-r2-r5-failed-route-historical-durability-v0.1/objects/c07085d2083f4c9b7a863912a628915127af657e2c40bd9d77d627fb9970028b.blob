@@ -1,0 +1,231 @@
+schema_version: agents-os.full-atomic-independent-review.v0.1
+review_id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_FULL_ATOMIC_INDEPENDENT_REVIEW_V0_1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R5_ATOMIC_BUNDLE
+reviewed_on: '2026-07-25'
+
+reviewer:
+  identity: Codex_Nobao_independent_review_run
+  independent: true
+  author_of_R5_subjects: false
+  basis:
+    - fresh_full_review_of_fixed_current_workspace_and_ZIP_bytes
+    - all_18_manifest_inputs_fully_read_and_hash_recomputed
+    - author_self_review_read_as_evidence_only
+    - R1_through_R4_hash_lineage_reverified_without_modification
+    - no_actual_mode_VCPToolBox_Git_or_Host_execution
+
+result: BLOCK
+blocker_count: 2
+major_count: 1
+minor_count: 0
+informational_count: 0
+automatic_R6: forbidden
+requires_Phase_5D_reevaluation: true
+R5_acceptance_eligible: false
+R5_freeze_decision_eligible: false
+actual_object_only_source_run_authorized: false
+
+hash_binding:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 1d9dd2c5cbee74b51df98d481a40563fde4873467edf09c3364e1b67578ca5dc
+  review_zip:
+    path: /tmp/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-review-package-v0.1.zip
+    sha256: f4732d1ce94d70318a4bd41ee9dcaf1eef3658daadd8643d6d025c770fb82557
+  required_inputs:
+    subjects: 6
+    authority_inputs: 11
+    author_evidence: 1
+    declared: 18
+    workspace_hash_matches: 18
+    archive_map_matches: 18
+    fully_read: 18
+    full_read_bytes: 118813
+    full_read_lines: 2846
+    result: 18/18_MATCH
+  immutable_lineage:
+    protected_source_boundary_R1_manifest:
+      sha256: b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45
+      result: 9/9_MATCH
+    actual_object_only_source_run_R2_manifest:
+      sha256: 6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe
+      result: 17/17_MATCH
+    actual_object_only_source_run_R3_manifest:
+      sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+      result: 15/15_MATCH
+    actual_object_only_source_run_R4_manifest:
+      sha256: c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be
+      result: 19/19_MATCH
+
+zip_integrity:
+  result: PASS
+  entry_count: 20
+  crc: PASS
+  unsafe_path_count: 0
+  symlink_entry_count: 0
+  archive_map: 18/18_MATCH
+  top_level_manifest_byte_equal: true
+  byte_reproduction:
+    result: PASS
+    rebuilt_sha256: f4732d1ce94d70318a4bd41ee9dcaf1eef3658daadd8643d6d025c770fb82557
+
+fixed_commands:
+  execution_root: /home/jenn/AGENTS_OS_Workspace
+  python_compile: PASS
+  runner_self_test: 16/16_PASS
+  runner_fixture_mode: PASS_NO_BLOCKER
+  validator_self_test: 22/22_PASS
+  validator_fixture: PASS_NO_BLOCKER
+  fixture_byte_reproduction: PASS
+  review_package_builder: PASS
+  result: 7/7_PASS
+  actual_mode_invoked: false
+
+exact_R5_source_observations:
+  R4_delayed_scanner_self_replacement_surface:
+    disposition_in_current_exact_runner: ARCHITECTURALLY_REMOVED
+    dynamic_scanner_import_compile_or_execution: absent
+    runpy_importlib_types_sys_modules_surface: absent
+  exact_Git_command_inventory:
+    expected: 23
+    observed: 23
+    unique: 23
+    G03_NAME_ONLY_SCAN_present: false
+    generic_tree_name_enumeration_present: false
+  exact_tuple_inventory:
+    expected: 7
+    observed: 7
+    unique: 7
+    ordered_exact_match: true
+  receipt_v0_2_projection:
+    observed_this_run: false
+    consumed_as_frozen_upstream_fact: true
+    protected_policy_recomputed: false
+    tree_name_enumeration_performed: false
+    Host_operation_count: 0
+    runtime_or_effect_operation_count: 0
+
+independent_adversarial_probes:
+  R4_disposition_authority_input:
+    sha256_matches_manifest: true
+    workspace_and_ZIP_bytes_equal: true
+    YAML_parse: FAIL
+    parse_error_class: ScannerError
+    literal_patch_marker_count: 1
+    appended_queue_header_count: 1
+    appended_suffix_byte_equal_to_active_work_queue_v18_9: true
+  fully_resigned_uncounted_generic_tree_read:
+    mutation: add_untracked_git_cat_file_p_of_SEALED_TREE_inside_run_inventory
+    mutation_executed: false
+    Git_command_count_during_probe: 0
+    updated_runner_sha256_accepted_by_manifest_parser: true
+    source_totality_errors: []
+    validator_semantic_errors: []
+    observed_result: FAIL_OPEN_ACCEPTED
+  fully_resigned_obfuscated_dynamic_exec:
+    mutation: add_builtins_getattr_of_concatenated_exec_name_inside_run_actual
+    mutation_executed: false
+    updated_runner_sha256_accepted_by_manifest_parser: true
+    source_totality_errors: []
+    validator_semantic_errors: []
+    observed_result: FAIL_OPEN_ACCEPTED
+
+findings:
+  - id: AOOSR-R5-IR-B01
+    severity: blocker
+    title: The fixed R4 disposition authority input is a malformed patch-contaminated file
+    contract_surface:
+      - control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-independent-review-disposition-v0.1.yaml
+      - control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-start-decision-v0.1.yaml
+      - control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-atomic-independent-review-package-v0.1.manifest.yaml
+    evidence: >-
+      The fixed disposition has a valid-looking 2754-byte YAML prefix, followed
+      by a literal "*** Add File:" patch marker and the complete 3327-byte
+      active-work-queue-v18.9 document. The appended suffix is byte-equal to
+      the separately stored queue. PyYAML rejects the fixed authority input
+      with ScannerError. The bad bytes are identically present in the R5 ZIP
+      and match the declared SHA-256, so this is a fixed semantic defect rather
+      than transport corruption.
+    impact: >-
+      R5 cannot atomically consume the R4 finding disposition as a valid
+      governance record. Hash equality proves only that the malformed bytes
+      were reproduced; it does not establish the disposition semantics claimed
+      by the R5 start decision and author self-review.
+    required_disposition:
+      - preserve_the_malformed_fixed_bytes_as_historical_evidence
+      - create_a_clean_superseding_R4_disposition_correction_record
+      - obtain_any_new_Jenn_scope_or_start_decision_needed_to_bind_the_superseding_record
+      - rebuild_and_freshly_review_a_successor_atomic_bundle
+
+  - id: AOOSR-R5-IR-B02
+    severity: blocker
+    title: The R5 validator accepts fully re-signed forbidden source mutations
+    contract_surface:
+      - control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-v0.1.md
+      - control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r5.py
+      - control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r5.py
+    evidence: >-
+      An independent temporary runner mutation inserted an uncounted
+      "git cat-file -p SEALED_TREE" operation inside _run_exact_inventory.
+      A second mutation invoked dynamic exec through getattr(builtins,
+      "ex" + "ec") inside run_actual. Neither branch was executed during the
+      probes. After updating the runner SHA-256 in an otherwise exact manifest,
+      the R5 manifest parser accepted both records and the R5 validator returned
+      no source-totality or semantic errors for either mutation.
+    impact: >-
+      The validator does not establish required proof items 3, 4 and 8 for a
+      fully re-signed bundle. It can certify a successor source that performs
+      an uncounted generic tree read or restores dynamic execution while the
+      synthetic command inventory still claims exactly 23 operations.
+    required_disposition:
+      - make_source_totality_enforcement_structural_and_fail_closed_for_all_process_and_dynamic_execution_surfaces
+      - prove_every_Git_subprocess_is_derived_from_one_exact_declarative_23_operation_plan
+      - add_integrated_fully_resigned_runner_and_manifest_mutation_tests
+      - require_target_semantic_rejections_for_obfuscated_dynamic_execution_and_uncounted_Git_operations
+
+  - id: AOOSR-R5-IR-M01
+    severity: major
+    title: The receipt attributes an inventory fingerprint to an upstream source that does not define it
+    contract_surface:
+      - control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-execution-admission-materialization-preflight-v0.1.md
+      - control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md
+      - control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-v0.1.md
+      - control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r5.py
+    evidence: >-
+      The fixed upstream receipt contains the seven ordered protected path
+      names but no protected_name_inventory_sha256 or canonical digest-preimage
+      rule. The frozen Protected Source Boundary contract and freeze decision
+      likewise do not state the digest. R5 nevertheless projects
+      52349f79221f041a48134331666315686ed6185b0838c56c13b1e9ed3b247011
+      as a consumed frozen upstream fact. That value can be reproduced only
+      after independently choosing the newline-delimited ordered-name preimage,
+      a rule not defined by the cited R5 upstream source_ref.
+    impact: >-
+      The digest value is reproducible but its claimed provenance is not
+      self-describing or fully bound. A receipt consumer cannot distinguish an
+      upstream-frozen fingerprint from a new R5 canonicalization convention.
+    required_disposition:
+      - either_remove_the_unowned_digest_claim_and_bind_only_the_exact_frozen_source
+      - or_bind_a_superseding_frozen_upstream_record_that_defines_the_exact_order_encoding_and_SHA256_preimage
+      - keep_observed_this_run_false_and_do_not_reintroduce_tree_enumeration_or_policy_recomputation
+
+boundary_observations:
+  R5_actual_mode_invocations_during_review: 0
+  R5_run_root_present_after_review: false
+  R5_actual_receipt_present_after_review: false
+  VCPToolBox_Git_command_count_during_review: 0
+  VCPToolBox_worktree_operation_count_during_review: 0
+  Host_operation_count_during_review: 0
+  runtime_database_provider_private_memory_or_effect_occurrence: false
+  subject_or_preexisting_governance_files_modified_by_reviewer: 0
+  independent_review_artifact_created: true
+
+disposition:
+  R4_dynamic_scanner_architecture_removed_in_exact_R5_source: true
+  R5_independent_review_gate_satisfied: false
+  R5_accepted: false
+  R5_frozen: false
+  actual_object_only_source_run_remains_forbidden: true
+  Host_path_remains_forbidden: true
+  automatic_successor_revision: forbidden
+  safe_next_action: Jenn_only_Phase_5D_reevaluation_and_corrected_successor_scope_decision

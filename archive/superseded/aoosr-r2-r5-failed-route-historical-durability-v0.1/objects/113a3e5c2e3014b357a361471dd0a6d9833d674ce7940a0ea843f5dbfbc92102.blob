@@ -1,0 +1,67 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R4_ATOMIC_BUNDLE
+author: Nobao
+independent: false
+status: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+terminal_outcome: NOT_EXECUTED
+
+immutable_R3_lineage:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-full-atomic-independent-review.yaml
+    sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+    result: PASS_NO_BLOCKER
+  freeze_decision:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml
+    sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+    result: ACCEPTED_FROZEN
+  actual_attempt_receipt:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+    sha256: d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996
+    result: BLOCKED_REVIEW_BINDING_MISMATCH
+    failure_phase: scanner_load
+    Git_command_count: 0
+    Host_operation_count: 0
+    cleanup_status: CLEAN
+
+R4_start_authority:
+  path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-narrow-correction-start-decision-v0.1.yaml
+  sha256: c3578a74057a002767e8dad73c8c15f9ecc1df9e08e4d009069e8acffaf7865d
+  scope_expansion: forbidden
+
+R4_subjects:
+  amendment_sha256: d3eeef98e1a4a4d153d0516ac5b46fafb81a3b4d19aca158dcc51b2393a3076a
+  successor_decision_package_sha256: da0d0c3e8f0a6df8efd3c2ff7487adff5cdd45dd45658af7f9a2f92595cf72ca
+  runner_sha256: 7370983bcfd30b3dd13d1df50066bf95b3d28b2f078b699af50697c3a79ee4db
+  fixture_builder_sha256: 1742d308727f46e3d4380356917528bacf5c01f25198c7fb105c0ec2323dc9c4
+  fixture_sha256: 1f59912a3ade6d0e0b690480efe4a327ee027acd69c6a0e34d4913faa31b0543
+  validator_sha256: 49db39fd5cced8f110c4d8abcff5251c1df2da0b85d6149ef41017c74f0e5b80
+  inherited_review_package_builder_sha256: 20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e
+
+author_checks:
+  R1_R3_bytes_preserved: PASS
+  real_inherited_dataclass_scanner_after_verified_digest: PASS
+  scanner_digest_mismatch_rejected_before_top_level_execution: PASS
+  scanner_module_collision_rejected_and_caller_module_preserved: PASS
+  scanner_module_identity_substitution_rejected_and_residue_removed: PASS
+  real_scanner_module_residue_after_success: ABSENT
+  runner_self_test: 14/14_PASS
+  fixture_byte_reproduction: PASS
+  fixture_validation: PASS_NO_BLOCKER
+  validator_self_test: 16/16_PASS
+  actual_mode_invocations_during_R4_authoring: 0
+  VCPToolBox_Git_command_count_during_R4_authoring: 0
+  Host_operation_count_during_R4_authoring: 0
+  runtime_or_effect_operation_count_during_R4_authoring: 0
+
+boundary_assertions:
+  R4_is_not_a_second_permission_or_identity_authority: true
+  protected_source_inventory_changed: false
+  tuple_set_changed: false
+  Git_command_inventory_changed: false
+  Host_path_started: false
+  runtime_or_real_effect_started: false
+
+next_gate: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R4_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
