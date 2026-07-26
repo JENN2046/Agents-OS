@@ -184,6 +184,121 @@ def import_module(path: Path, module_name: str) -> Any:
     return module
 
 
+def valid_queue_snapshot_binding(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and isinstance(value.get("path"), str)
+        and bool(value["path"])
+        and isinstance(value.get("sha256"), str)
+        and len(value["sha256"]) == 64
+        and all(character in "0123456789abcdef" for character in value["sha256"])
+        and type(value.get("byte_count")) is int
+        and value["byte_count"] >= 0
+    )
+
+
+def queue_snapshot_bindings_equal(left: Any, right: Any) -> bool:
+    return (
+        valid_queue_snapshot_binding(left)
+        and valid_queue_snapshot_binding(right)
+        and all(
+            left.get(field) == right.get(field)
+            for field in ("path", "sha256", "byte_count")
+        )
+    )
+
+
+def queue_snapshot_record_key(value: Any) -> str | None:
+    if not valid_queue_snapshot_binding(value):
+        return None
+    encoded = json.dumps(
+        {
+            field: value[field]
+            for field in ("path", "sha256", "byte_count")
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def load_bound_queue_snapshot(
+    chain: Any,
+    queue_path: Path,
+) -> tuple[dict[str, Any] | None, str | None]:
+    binding, binding_error = chain.open_queue_file_binding(
+        queue_path,
+        writable=False,
+    )
+    if binding_error or binding is None:
+        return None, binding_error or "queue snapshot could not be bound"
+    try:
+        snapshot, snapshot_error = chain.queue_binding_snapshot(binding)
+        if snapshot_error or snapshot is None:
+            return None, snapshot_error or "queue snapshot could not be read"
+        return {
+            "path": Path(binding["path"]),
+            "text": str(snapshot["text"]),
+            "source_binding": {
+                "path": str(binding["relative_path"]),
+                "sha256": str(snapshot["sha256"]),
+                "byte_count": int(snapshot["byte_count"]),
+            },
+        }, None
+    finally:
+        chain.close_queue_file_binding(binding)
+
+
+def blocked_normalized_queue(
+    queue_path: Path,
+    error: str,
+) -> dict[str, Any]:
+    return {
+        "schema_version": "agents-os.machine.normalized-queue.v0.1",
+        "source_path": rel(
+            queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
+        ),
+        "source_binding": {},
+        "parse_errors": [error],
+        "path_findings": [],
+        "passed": False,
+        "lanes": {
+            lane: []
+            for lane in ("NOW", "NEXT", "LATER", "BLOCKED", "CLOSED")
+        },
+        "blocked_entries": [],
+        "closed_entries": [],
+        "summary": {
+            "now_count": 0,
+            "next_count": 0,
+            "later_count": 0,
+            "blocked_count": 0,
+            "closed_count": 0,
+            "item_count": 0,
+        },
+    }
+
+
+def load_bound_normalized_queue(
+    machine: Any,
+    chain: Any,
+    queue_path: Path,
+) -> dict[str, Any]:
+    snapshot, snapshot_error = load_bound_queue_snapshot(chain, queue_path)
+    if snapshot_error or snapshot is None:
+        return blocked_normalized_queue(
+            queue_path,
+            snapshot_error or "queue snapshot could not be read",
+        )
+    normalized_queue = machine.parse_queue_markdown(
+        str(snapshot["text"]),
+        Path(snapshot["path"]),
+    )
+    normalized_queue["source_binding"] = snapshot["source_binding"]
+    return normalized_queue
+
+
 def load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         data = json.load(handle)
@@ -519,6 +634,7 @@ def build_route_choice_preview(
         queue_path,
         source,
     )
+    governance_gate_active = bundle.get("active_jenn_governance_gate") is True
     errors = []
     if bundle.get("passed") is not True:
         errors.extend(f"bundle: {error}" for error in bundle.get("errors", []))
@@ -547,8 +663,10 @@ def build_route_choice_preview(
             "reviewed_route_adoption_preview_passed": bundle.get("reviewed_route_adoption_preview_passed"),
             "reviewed_route_adoption_apply_preview_passed": bundle.get("reviewed_route_adoption_apply_preview_passed"),
             "can_apply_with_separate_apply_gate": bundle.get("can_apply_with_separate_apply_gate"),
+            "active_jenn_governance_gate": bundle.get("active_jenn_governance_gate"),
             "next_required_gate": bundle.get("next_required_gate"),
         },
+        "active_jenn_governance_gate": governance_gate_active,
         "confirmation_text_included": False,
         "raw_confirmation_text_output": False,
         "raw_template_output": False,
@@ -568,10 +686,16 @@ def build_route_choice_preview(
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
         "next_step": {
-            "status": "review_route_choice_adoption_bundle",
-            "owner": "Nobao",
+            "status": "governance_decision_required"
+            if governance_gate_active
+            else "review_route_choice_adoption_bundle",
+            "owner": "Jenn" if governance_gate_active else "Nobao",
             "selected_route_id": bundle.get("selected_route_id"),
-            "instruction": bundle.get("next_required_gate"),
+            "instruction": (
+                "resolve the active Jenn governance decision before route adoption"
+                if governance_gate_active
+                else bundle.get("next_required_gate")
+            ),
             "active_queue_mutation_authorized": False,
             "queue_promotion_authorized": False,
             "execution_authorized": False,
@@ -618,6 +742,15 @@ def validate_workbench_route_choice_preview(result: dict[str, Any]) -> list[str]
         if result.get(flag) is not False:
             errors.append(f"workbench route choice preview must keep {flag}=false")
     bundle = result.get("bundle", {})
+    if result.get("active_jenn_governance_gate") is True:
+        if bundle.get("active_jenn_governance_gate") is not True:
+            errors.append("workbench route choice preview lost the active Jenn governance gate")
+        if bundle.get("can_apply_with_separate_apply_gate") is not False:
+            errors.append("active Jenn governance gate must block Workbench apply readiness")
+        if result.get("next_step", {}).get("status") != "governance_decision_required":
+            errors.append("active Jenn governance gate must preserve governance_decision_required")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("active Jenn governance gate must preserve Jenn as next-step owner")
     if not result.get("errors"):
         if bundle.get("passed") is not True:
             errors.append("workbench route choice preview requires passing bundle")
@@ -653,13 +786,27 @@ def build_route_choice_apply_gate(
     resolved_queue, path_error = resolve_queue_apply_path(queue_path, allowed_queue_root)
     if path_error or resolved_queue is None:
         errors.append(path_error or "queue path is not allowed")
+    handoff_reconciliation: dict[str, Any] = {}
+    handoff_gate_errors: list[str] = []
+    governance_gate_active = False
+    if resolved_queue is not None:
+        handoff_reconciliation = chain.route_choice_handoff_reconciliation(resolved_queue)
+        handoff_gate_errors = chain.route_adoption_handoff_gate_errors(handoff_reconciliation)
+        governance_gate_active = chain.active_jenn_governance_gate(handoff_reconciliation)
+        errors.extend(f"route choice handoff: {error}" for error in handoff_gate_errors)
 
     route_preview = producer.route_choice_preview(confirmation_text, source)
     route_preview_errors = chain.validate_route_choice_preview(route_preview)
     errors.extend(f"route choice preview: {error}" for error in route_preview_errors)
     proposal = chain.route_choice_queue_proposal(route_preview)
     errors.extend(f"route choice proposal: {error}" for error in proposal.get("errors", []))
-    review = chain.accepted_nobao_review_for(proposal)
+    review: dict[str, Any] = {
+        "review_status": "blocked",
+        "reviewer": "Nobao",
+        "requires_jenn_decision": governance_gate_active,
+    }
+    if not handoff_gate_errors:
+        review = chain.accepted_nobao_review_for(proposal)
 
     apply_gate: dict[str, Any] = {
         "schema_version": "agents-os.queue-manager.reviewed-route-adoption-apply-gate.v0.1",
@@ -667,11 +814,21 @@ def build_route_choice_apply_gate(
         "preview_only": not apply,
         "queue_adoption_authorized": False,
         "route_adoption_authorized": False,
+        "workspace_route_state_modified": False,
         "active_queue_modified": False,
         "write_performed": False,
         "queue_write_authorized": False,
         "queue_promotion_authorized": False,
         "execution_authorized": False,
+        "requires_jenn_decision": False,
+        "transaction_outcome": "NO_WRITE",
+        "queue_state": "UNCHANGED",
+        "queue_state_known": True,
+        "queue_commit_attempted": False,
+        "rollback_performed": False,
+        "temp_cleanup_confirmed": True,
+        "parent_directory_fsynced": False,
+        "final_queue_sha256": None,
         "mutation": {},
         "errors": [],
     }
@@ -682,14 +839,40 @@ def build_route_choice_apply_gate(
             resolved_queue,
             apply=apply,
         )
+        lower_gate_active = apply_gate.get("active_jenn_governance_gate") is True
+        lower_requires_jenn = apply_gate.get("requires_jenn_decision") is True
+        if lower_gate_active:
+            governance_gate_active = True
+        if lower_requires_jenn:
+            review = {
+                "schema_version": "agents-os.queue-manager.review.v0.1",
+                "source_proposal_id": proposal.get("proposal_id"),
+                "review_status": "blocked",
+                "reviewer": "Nobao",
+                "requires_jenn_decision": True,
+            }
         errors.extend(f"apply gate: {error}" for error in apply_gate.get("errors", []))
 
     selected = route_preview.get("selected_option", {}) if isinstance(route_preview, dict) else {}
     mutation = apply_gate.get("mutation", {})
+    transaction_outcome = apply_gate.get("transaction_outcome")
+    queue_state = apply_gate.get("queue_state")
+    queue_reconciliation_required = (
+        transaction_outcome == "PARTIAL_OR_UNKNOWN"
+        or apply_gate.get("temp_cleanup_confirmed") is not True
+    )
+    requires_jenn_decision = (
+        governance_gate_active or apply_gate.get("requires_jenn_decision") is True
+    )
     result = {
         "schema_version": "agents-os.workbench.route-choice-apply-gate.v0.1",
         "mode": "route_choice_reviewed_apply_gate",
         "preview_only": not apply,
+        "active_jenn_governance_gate": governance_gate_active,
+        "handoff_reconciliation": {
+            "passed": handoff_reconciliation.get("passed"),
+            "aligned": handoff_reconciliation.get("aligned"),
+        },
         "source": {
             "confirmation_text_character_count": len(confirmation_text),
             "confirmation_text_included": False,
@@ -722,6 +905,15 @@ def build_route_choice_apply_gate(
             "queue_adoption_authorized": apply_gate.get("queue_adoption_authorized"),
             "route_adoption_authorized": apply_gate.get("route_adoption_authorized"),
             "no_p3_route_adoption_guard": apply_gate.get("no_p3_route_adoption_guard"),
+            "requires_jenn_decision": apply_gate.get("requires_jenn_decision"),
+            "transaction_outcome": transaction_outcome,
+            "queue_state": queue_state,
+            "queue_state_known": apply_gate.get("queue_state_known"),
+            "queue_commit_attempted": apply_gate.get("queue_commit_attempted"),
+            "rollback_performed": apply_gate.get("rollback_performed"),
+            "temp_cleanup_confirmed": apply_gate.get("temp_cleanup_confirmed"),
+            "parent_directory_fsynced": apply_gate.get("parent_directory_fsynced"),
+            "final_queue_sha256": apply_gate.get("final_queue_sha256"),
             "appended_next_id": mutation.get("appended_next_id"),
             "appended_next_title": mutation.get("appended_next_title"),
             "next_count_before": mutation.get("next_count_before"),
@@ -733,8 +925,8 @@ def build_route_choice_apply_gate(
         "raw_confirmation_text_output": False,
         "raw_template_output": False,
         "route_auto_selection_authorized": False,
-        "workspace_route_state_modified": apply_gate.get("workspace_route_state_modified") is True,
-        "active_queue_modified": apply_gate.get("active_queue_modified") is True,
+        "workspace_route_state_modified": apply_gate.get("workspace_route_state_modified"),
+        "active_queue_modified": apply_gate.get("active_queue_modified"),
         "write_performed": apply_gate.get("write_performed") is True,
         "queue_write_authorized": apply_gate.get("queue_write_authorized") is True,
         "queue_promotion_authorized": False,
@@ -745,14 +937,40 @@ def build_route_choice_apply_gate(
         "external_write_authorized": False,
         "memory_write_authorized": False,
         "runtime_plugin_activation_authorized": False,
+        "requires_jenn_decision": requires_jenn_decision,
+        "transaction_outcome": transaction_outcome,
+        "queue_state": queue_state,
+        "queue_state_known": apply_gate.get("queue_state_known") is True,
+        "queue_commit_attempted": apply_gate.get("queue_commit_attempted") is True,
+        "rollback_performed": apply_gate.get("rollback_performed") is True,
+        "temp_cleanup_confirmed": apply_gate.get("temp_cleanup_confirmed") is True,
+        "parent_directory_fsynced": apply_gate.get("parent_directory_fsynced") is True,
+        "final_queue_sha256": apply_gate.get("final_queue_sha256"),
         "next_step": {
-            "status": "route_adoption_applied_review_queue_promotion" if apply_gate.get("write_performed") is True else "review_route_choice_apply_gate",
-            "owner": "Nobao",
+            "status": (
+                "governance_decision_required"
+                if governance_gate_active
+                else "queue_state_reconciliation_required"
+                if queue_reconciliation_required
+                else "route_adoption_applied_review_queue_promotion"
+                if transaction_outcome == "COMMITTED"
+                else "review_route_choice_apply_gate"
+            ),
+            "owner": "Jenn" if governance_gate_active or queue_reconciliation_required else "Nobao",
             "selected_route_id": selected.get("option_id"),
-            "instruction": "review NEXT-to-NOW promotion gate for the updated queue"
-            if apply_gate.get("write_performed") is True
-            else "review route choice apply gate before --apply",
-            "active_queue_mutation_authorized": apply_gate.get("write_performed") is True,
+            "instruction": (
+                "resolve the active Jenn governance decision before route adoption"
+                if governance_gate_active
+                else (
+                    "reconcile the active queue exact bytes and transaction-file cleanup "
+                    "before any further route mutation"
+                )
+                if queue_reconciliation_required
+                else "review NEXT-to-NOW promotion gate for the updated queue"
+                if transaction_outcome == "COMMITTED"
+                else "review route choice apply gate before --apply"
+            ),
+            "active_queue_mutation_authorized": apply_gate.get("queue_write_authorized") is True,
             "queue_promotion_authorized": False,
             "execution_authorized": False,
             "write_performed": apply_gate.get("write_performed") is True,
@@ -779,6 +997,20 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         errors.append("workbench route choice apply gate must not output raw confirmation text")
     if result.get("raw_template_output") is not False:
         errors.append("workbench route choice apply gate must not output raw template")
+    transaction_outcome = result.get("transaction_outcome")
+    queue_state = result.get("queue_state")
+    if transaction_outcome not in ("NO_WRITE", "COMMITTED", "PARTIAL_OR_UNKNOWN"):
+        errors.append("workbench route choice apply gate transaction_outcome is invalid")
+    if queue_state not in ("UNCHANGED", "UPDATED", "UNKNOWN"):
+        errors.append("workbench route choice apply gate queue_state is invalid")
+    if result.get("queue_state_known") is not (queue_state != "UNKNOWN"):
+        errors.append("workbench route choice apply gate queue_state_known is inconsistent")
+    expected_state_flag: bool | None = (
+        True if queue_state == "UPDATED" else False if queue_state == "UNCHANGED" else None
+    )
+    for flag in ("workspace_route_state_modified", "active_queue_modified"):
+        if result.get(flag) is not expected_state_flag:
+            errors.append(f"workbench route choice apply gate {flag} is inconsistent with queue_state")
     for flag in (
         "route_auto_selection_authorized",
         "queue_promotion_authorized",
@@ -796,10 +1028,49 @@ def validate_workbench_route_choice_apply_gate(result: dict[str, Any], *, apply:
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not False:
                 errors.append(f"preview route choice apply gate must keep {flag}=false")
-    if apply:
+        if transaction_outcome != "NO_WRITE" or queue_state != "UNCHANGED":
+            errors.append("preview route choice apply gate must prove NO_WRITE/UNCHANGED")
+    if apply and result.get("errors") and transaction_outcome == "NO_WRITE":
+        for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
+            if result.get(flag) is not False:
+                errors.append(f"NO_WRITE blocked route choice apply gate must keep {flag}=false")
+    transaction_reconciliation_required = (
+        transaction_outcome == "PARTIAL_OR_UNKNOWN"
+        or result.get("temp_cleanup_confirmed") is not True
+    )
+    if transaction_reconciliation_required:
+        if result.get("queue_write_authorized") is not False:
+            errors.append("unresolved Workbench transaction must not authorize queue write")
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("unresolved Workbench transaction must require Jenn decision")
+        if result.get("review", {}).get("review_status") != "blocked":
+            errors.append("unresolved Workbench transaction must block review")
+        if result.get("next_step", {}).get("status") != "queue_state_reconciliation_required":
+            errors.append("unresolved Workbench transaction must require queue reconciliation")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("unresolved Workbench transaction reconciliation must be owned by Jenn")
+    if transaction_outcome == "PARTIAL_OR_UNKNOWN":
+        if result.get("write_performed") is not result.get("queue_commit_attempted"):
+            errors.append("PARTIAL_OR_UNKNOWN Workbench gate must truthfully report commit-attempt writes")
+    if apply and not result.get("errors"):
+        if transaction_outcome != "COMMITTED" or queue_state != "UPDATED":
+            errors.append("successful applied route choice gate must prove COMMITTED/UPDATED")
         for flag in ("workspace_route_state_modified", "active_queue_modified", "write_performed", "queue_write_authorized"):
             if result.get(flag) is not True:
                 errors.append(f"applied route choice apply gate must set {flag}=true")
+    if result.get("active_jenn_governance_gate") is True:
+        if result.get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve the Workbench Jenn decision requirement")
+        if result.get("review", {}).get("review_status") != "blocked":
+            errors.append("active Jenn governance gate must block Workbench review")
+        if result.get("review", {}).get("requires_jenn_decision") is not True:
+            errors.append("active Jenn governance gate must preserve the Jenn decision requirement")
+        if result.get("apply_gate", {}).get("queue_adoption_authorized") is not False:
+            errors.append("active Jenn governance gate must block Workbench queue adoption")
+        if result.get("next_step", {}).get("status") != "governance_decision_required":
+            errors.append("active Jenn governance gate must preserve governance_decision_required")
+        if result.get("next_step", {}).get("owner") != "Jenn":
+            errors.append("active Jenn governance gate must preserve Jenn as next-step owner")
     route = result.get("route", {})
     if not result.get("errors"):
         if route.get("selected_route_id") not in ["A", "B", "C", "D", "E"]:
@@ -1522,6 +1793,7 @@ def build_record_preview(
         "replay_inputs": {
             "candidate_id": candidate.get("candidate_id"),
             "queue_path": normalized_queue.get("source_path"),
+            "queue_binding": normalized_queue.get("source_binding", {}),
             "source_now_id": machine_preview.get("source_item", {}).get("id"),
             "validation_command_recorded": track_result is not None,
             "raw_intent_included": False,
@@ -1612,6 +1884,10 @@ def validate_record_preview(record: dict[str, Any]) -> list[str]:
     replay = record.get("replay_inputs", {})
     if replay.get("raw_intent_included") is not False:
         errors.append("workbench record must not include raw intent")
+    if record.get("stage_receipts", {}).get("queue_passed") is True and not (
+        valid_queue_snapshot_binding(replay.get("queue_binding"))
+    ):
+        errors.append("workbench record must bind its exact source queue bytes")
     if not record.get("next_step", {}).get("status"):
         errors.append("workbench record must include next_step.status")
     errors.extend(validate_next_user_action_summary("workbench record next_step", record.get("next_step", {})))
@@ -1788,6 +2064,7 @@ def build_cycle(
     write_record: bool = False,
     record_path: Path | None = None,
     allowed_record_root: Path = DEFAULT_RECORD_ROOT,
+    expected_queue_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     producer = import_module(PRODUCER_PATH, "agents_os_task_producer_for_workbench")
     machine = import_module(MACHINE_PATH, "agents_os_machine_for_workbench")
@@ -1799,7 +2076,25 @@ def build_cycle(
     candidate["passed"] = not candidate_errors
     candidate["errors"] = candidate_errors
 
-    normalized_queue = machine.load_queue(queue_path)
+    normalized_queue = load_bound_normalized_queue(
+        machine,
+        chain,
+        queue_path,
+    )
+    actual_queue_binding = normalized_queue.get("source_binding", {})
+    queue_binding_errors: list[str] = []
+    if expected_queue_binding is not None:
+        if not valid_queue_snapshot_binding(expected_queue_binding):
+            queue_binding_errors.append(
+                "expected queue binding is invalid"
+            )
+        elif not queue_snapshot_bindings_equal(
+            expected_queue_binding,
+            actual_queue_binding,
+        ):
+            queue_binding_errors.append(
+                "queue bytes changed after the caller snapshot"
+            )
     machine_preview: dict[str, Any] = {}
     if normalized_queue.get("passed") is True:
         machine_preview = machine.build_preview(machine.now_item(normalized_queue))
@@ -1814,6 +2109,7 @@ def build_cycle(
             [
                 candidate.get("candidate_id"),
                 normalized_queue.get("source_path"),
+                normalized_queue.get("source_binding"),
                 machine_preview.get("source_item", {}),
                 machine_preview.get("blocked"),
             ],
@@ -1835,6 +2131,7 @@ def build_cycle(
     current_queue_blocked = machine_preview.get("blocked") is True
     can_run_local_validation = (
         run_local_validation
+        and not queue_binding_errors
         and not current_queue_blocked
         and track_preview.get("track_authorized") is True
         and track_preview.get("selected_track") == "local_executor"
@@ -1851,7 +2148,10 @@ def build_cycle(
             failure_report = chain.build_failure_report(track_result)
             stop_loop = chain.build_stop_loop_result(failure_report)
 
-    dashboard_summary = dashboard.build_dashboard_summary(queue_path, run_validations=False)
+    dashboard_summary = dashboard.build_dashboard_summary_from_normalized_queue(
+        normalized_queue,
+        run_validations=False,
+    )
     next_step = next_step_for(
         machine_preview=machine_preview,
         commander_decision=commander_decision,
@@ -1867,6 +2167,7 @@ def build_cycle(
             run_local_validation,
             candidate.get("candidate_id"),
             machine_preview.get("source_item", {}),
+            normalized_queue.get("source_binding"),
             commander_decision.get("decision"),
             track_preview.get("selected_track"),
             next_step,
@@ -1888,7 +2189,7 @@ def build_cycle(
         next_step=next_step,
     )
     record_write: dict[str, Any] | None = None
-    if write_record:
+    if write_record and not queue_binding_errors:
         if record_path is None:
             record_path = DEFAULT_RECORD_ROOT / f"{record_preview['record_id'].lower()}.json"
         record_write = build_record_write_result(
@@ -1899,6 +2200,7 @@ def build_cycle(
         )
 
     errors = compact_errors(candidate, normalized_queue, machine_preview, commander_decision, track_preview, dashboard_summary)
+    errors.extend(queue_binding_errors)
     errors.extend(f"intake proposal: {error}" for error in intake_proposal.get("errors", []))
     if queue_proposal is not None:
         errors.extend(queue_proposal.get("errors", []))
@@ -1929,6 +2231,8 @@ def build_cycle(
             "intent_character_count": len(intent),
             "intent_raw_output": False,
             "queue_path": normalized_queue.get("source_path"),
+            "queue_binding": normalized_queue.get("source_binding", {}),
+            "expected_queue_binding": expected_queue_binding or {},
         },
         "stages": {
             "idea": {"received": bool(intent.strip())},
@@ -1936,6 +2240,7 @@ def build_cycle(
             "queue": {
                 "passed": normalized_queue.get("passed"),
                 "summary": normalized_queue.get("summary"),
+                "source_binding": normalized_queue.get("source_binding", {}),
             },
             "intake_proposal": intake_proposal,
             "machine": summarize_machine_preview(machine_preview),
@@ -2033,6 +2338,26 @@ def validate_cycle(result: dict[str, Any]) -> list[str]:
     for stage in required_stages:
         if stage not in stages:
             errors.append(f"workbench missing stage: {stage}")
+    if stages.get("queue", {}).get("passed") is True and not (
+        valid_queue_snapshot_binding(
+            result.get("source", {}).get("queue_binding")
+        )
+    ):
+        errors.append("workbench cycle must bind its exact source queue bytes")
+    expected_queue_binding = result.get("source", {}).get(
+        "expected_queue_binding",
+        {},
+    )
+    if expected_queue_binding:
+        if not valid_queue_snapshot_binding(expected_queue_binding):
+            errors.append("workbench cycle expected queue binding is invalid")
+        elif not queue_snapshot_bindings_equal(
+            expected_queue_binding,
+            result.get("source", {}).get("queue_binding", {}),
+        ):
+            errors.append(
+                "workbench cycle source queue changed after its caller snapshot"
+            )
     if stages.get("task", {}).get("execution_authorized") is not False:
         errors.append("task stage must not authorize execution")
     if stages.get("machine", {}).get("execution_authorized") is not False:
@@ -2079,6 +2404,7 @@ def build_advance(
     record_root: Path = DEFAULT_RECORD_ROOT,
     apply_intake: bool = False,
     allowed_queue_root: Path = WORKSPACE_ROOT,
+    expected_queue_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Run one bounded local-safe workbench advancement.
 
@@ -2087,8 +2413,32 @@ def build_advance(
     Queue intake remains behind the reviewed apply gate.
     """
     resolved_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
-    cycle_record_path = record_root / f"{stable_id('CYCLERECORD', [intent, rel(resolved_queue), validation_command]).lower()}.json"
-    advance_record_path = record_root / f"{stable_id('ADVANCERECORD', [intent, rel(resolved_queue), validation_command, apply_intake]).lower()}.json"
+    record_queue_binding = expected_queue_binding
+    effective_expected_queue_binding = expected_queue_binding
+    if expected_queue_binding is None:
+        chain = import_module(
+            CONTROL_CHAIN_PATH,
+            "agents_os_control_chain_for_workbench_advance_record_binding",
+        )
+        queue_snapshot, queue_snapshot_error = load_bound_queue_snapshot(
+            chain,
+            resolved_queue,
+        )
+        if queue_snapshot_error or queue_snapshot is None:
+            record_queue_binding = {}
+            effective_expected_queue_binding = {}
+        else:
+            record_queue_binding = queue_snapshot["source_binding"]
+            effective_expected_queue_binding = record_queue_binding
+    record_key = queue_snapshot_record_key(record_queue_binding) or "unbound"
+    cycle_record_path = record_root / (
+        f"{stable_id('CYCLERECORD', [intent, rel(resolved_queue), validation_command]).lower()}"
+        f"-{record_key}.json"
+    )
+    advance_record_path = record_root / (
+        f"{stable_id('ADVANCERECORD', [intent, rel(resolved_queue), validation_command, apply_intake]).lower()}"
+        f"-{record_key}.json"
+    )
     cycle = build_cycle(
         intent,
         queue_path,
@@ -2097,6 +2447,7 @@ def build_advance(
         write_record=True,
         record_path=cycle_record_path,
         allowed_record_root=record_root,
+        expected_queue_binding=effective_expected_queue_binding,
     )
     intake_apply: dict[str, Any] = {
         "present": False,
@@ -2106,7 +2457,7 @@ def build_advance(
         "queue_promotion_authorized": False,
         "execution_authorized": False,
     }
-    if apply_intake:
+    if apply_intake and cycle.get("passed") is True:
         proposal = cycle.get("stages", {}).get("intake_proposal", {})
         review = accepted_nobao_review_for_intake(proposal)
         intake_apply = reviewed_intake_apply_gate(
@@ -2118,6 +2469,17 @@ def build_advance(
         )
         intake_apply["present"] = True
         intake_apply["requested"] = True
+    elif apply_intake:
+        intake_apply.update(
+            {
+                "present": True,
+                "requested": True,
+                "passed": False,
+                "errors": [
+                    "intake apply was not attempted because the bound cycle failed"
+                ],
+            }
+        )
 
     stages = cycle.get("stages", {})
     local_validation = stages.get("local_validation", {})
@@ -2134,6 +2496,7 @@ def build_advance(
             "ADVANCE",
             [
                 cycle.get("workbench_id"),
+                cycle.get("source", {}).get("queue_binding"),
                 record_write.get("record_path"),
                 apply_intake,
                 intake_apply.get("intake_apply_id"),
@@ -2142,6 +2505,10 @@ def build_advance(
         "mode": "local_safe_one_step",
         "preview_first": True,
         "source_cycle_id": cycle.get("workbench_id"),
+        "source_queue_binding": cycle.get("source", {}).get(
+            "queue_binding",
+            {},
+        ),
         "write_performed": False,
         "cycle_record_write_performed": record_write.get("write_performed") is True,
         "advance_record_write_performed": False,
@@ -2252,6 +2619,23 @@ def validate_advance(
         errors.append("workbench advance mode must be local_safe_one_step")
     if result.get("preview_first") is not True:
         errors.append("workbench advance must remain preview_first")
+    if not valid_queue_snapshot_binding(result.get("source_queue_binding")):
+        errors.append("workbench advance must bind its exact source queue bytes")
+    else:
+        record_key = queue_snapshot_record_key(
+            result.get("source_queue_binding")
+        )
+        record = result.get("stages", {}).get("record", {})
+        for field in ("cycle_record_path", "advance_record_path"):
+            value = record.get(field)
+            if (
+                not isinstance(value, str)
+                or record_key is None
+                or not Path(value).name.endswith(f"-{record_key}.json")
+            ):
+                errors.append(
+                    f"workbench advance {field} must bind its exact source queue snapshot"
+                )
     for flag in (
         "write_performed",
         "queue_promotion_authorized",
@@ -2361,12 +2745,94 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             else:
                 ignored_json_count += 1
 
+    live_binding = live_queue.get("queue_binding", {})
+    matching_records: list[tuple[int, Path, dict[str, Any]]] = []
+    unbound_record_count = 0
+    other_queue_record_count = 0
+    for record in records:
+        record_binding = record[2].get("source_queue_binding", {})
+        if not valid_queue_snapshot_binding(record_binding):
+            unbound_record_count += 1
+        elif (
+            valid_queue_snapshot_binding(live_binding)
+            and record_binding.get("path") == live_binding.get("path")
+        ):
+            matching_records.append(record)
+        else:
+            other_queue_record_count += 1
+
+    if unbound_record_count:
+        errors.append(
+            "unbound advance records cannot be reconciled to exact queue "
+            "bytes; record reconciliation is required"
+        )
+
+    valid_matching_records: list[tuple[int, Path, dict[str, Any]]] = []
+    invalid_matching_records: list[tuple[int, Path, dict[str, Any]]] = []
+    for record in matching_records:
+        payload = record[2]
+        apply_intake = (
+            payload.get("stages", {})
+            .get("intake_apply", {})
+            .get("requested")
+            is True
+        )
+        record_errors = validate_advance(
+            payload,
+            apply_intake=apply_intake,
+            require_advance_record=True,
+        )
+        if payload.get("passed") is True and not record_errors:
+            valid_matching_records.append(record)
+        else:
+            invalid_matching_records.append(record)
+
+    invalid_live_binding_record_count = sum(
+        1
+        for _mtime_ns, _path, payload in invalid_matching_records
+        if queue_snapshot_bindings_equal(
+            payload.get("source_queue_binding", {}),
+            live_binding,
+        )
+    )
+    if invalid_live_binding_record_count:
+        errors.append(
+            "invalid advance record matches the live queue bytes; "
+            "record reconciliation is required"
+        )
+
+    exact_matching_records = [
+        record
+        for record in valid_matching_records
+        if queue_snapshot_bindings_equal(
+            record[2].get("source_queue_binding", {}),
+            live_binding,
+        )
+    ]
     latest_path: Path | None = None
     latest: dict[str, Any] = {}
-    if records:
-        _mtime_ns, latest_path, latest = max(records, key=lambda item: (item[0], item[1].name))
+    if valid_matching_records:
+        _mtime_ns, latest_path, latest = max(
+            valid_matching_records,
+            key=lambda item: (item[0], item[1].name),
+        )
     latest_stages = latest.get("stages", {}) if latest else {}
     latest_next_step = latest_stages.get("next_step", {}) if latest else {}
+    authoritative_path: Path | None = None
+    authoritative: dict[str, Any] = {}
+    if exact_matching_records:
+        _authoritative_mtime_ns, authoritative_path, authoritative = max(
+            exact_matching_records,
+            key=lambda item: (item[0], item[1].name),
+        )
+    authoritative_stages = (
+        authoritative.get("stages", {}) if authoritative else {}
+    )
+    authoritative_next_step = (
+        authoritative_stages.get("next_step", {})
+        if authoritative
+        else {}
+    )
     latest_goal_path: Path | None = None
     latest_goal: dict[str, Any] = {}
     if goal_records:
@@ -2378,25 +2844,68 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         if latest_goal
         else {}
     )
-    status_next_step = latest_next_step if latest else {
+    status_record = authoritative or latest
+    status_next_step = (
+        authoritative_next_step
+        if authoritative
+        else latest_next_step
+    ) if status_record else {
         "status": "no_advance_records",
         "owner": "Nobao",
         "instruction": "run workbench advance to create the first local advance record",
     }
-    route_choice_readiness = build_route_choice_readiness(status_next_step)
     live_next_step = live_queue.get("next_step", {})
+    latest_record_binding = (
+        latest.get("source_queue_binding", {}) if latest else {}
+    )
+    record_binding = (
+        authoritative.get("source_queue_binding", {})
+        if authoritative
+        else latest_record_binding
+    )
+    queue_bytes_match_record = bool(authoritative)
+    record_boundary_pending = bool(
+        queue_bytes_match_record
+        and status_next_step.get("status") in RUN_STOP_STATUSES
+    )
+    next_action_source = (
+        "latest_record" if record_boundary_pending else "live_queue"
+    )
+    effective_next_step = live_next_step if next_action_source == "live_queue" else status_next_step
+    route_choice_readiness = build_route_choice_readiness(effective_next_step)
     status_reconciliation = {
         "schema_version": "agents-os.workbench.status-reconciliation.v0.1",
         "record_next_step_status": status_next_step.get("status"),
         "live_queue_next_step_status": live_next_step.get("status"),
+        "record_queue_binding_present": valid_queue_snapshot_binding(
+            record_binding
+        ),
+        "record_queue_path": record_binding.get("path"),
+        "record_queue_sha256": record_binding.get("sha256"),
+        "authoritative_record_present": bool(authoritative),
+        "authoritative_advance_id": (
+            authoritative.get("advance_id") if authoritative else None
+        ),
+        "latest_path_record_advance_id": (
+            latest.get("advance_id") if latest else None
+        ),
+        "latest_path_record_queue_sha256": (
+            latest_record_binding.get("sha256")
+        ),
+        "live_queue_path": live_binding.get("path"),
+        "live_queue_sha256": live_binding.get("sha256"),
+        "queue_bytes_match_record": queue_bytes_match_record,
+        "record_boundary_pending": record_boundary_pending,
         "record_boundary_may_be_stale": bool(
             latest
-            and live_next_step.get("status")
-            and status_next_step.get("status") != live_next_step.get("status")
+            and valid_queue_snapshot_binding(latest_record_binding)
+            and valid_queue_snapshot_binding(live_binding)
+            and not queue_snapshot_bindings_equal(
+                latest_record_binding,
+                live_binding,
+            )
         ),
-        "next_action_source": "live_queue"
-        if live_next_step.get("status") in {"queue_ready_for_run", "route_choice_required", "jenn_decision_required"}
-        else "latest_record",
+        "next_action_source": next_action_source,
         "write_performed": False,
     }
     result = {
@@ -2407,6 +2916,21 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
         "status_reconciliation": status_reconciliation,
         "record_root": rel(resolved_root) if resolved_root is not None else str(record_root),
         "advance_record_count": len(records),
+        "matching_advance_record_count": len(matching_records),
+        "valid_matching_advance_record_count": len(
+            valid_matching_records
+        ),
+        "exact_matching_advance_record_count": len(
+            exact_matching_records
+        ),
+        "invalid_matching_advance_record_count": (
+            len(invalid_matching_records)
+        ),
+        "invalid_live_binding_advance_record_count": (
+            invalid_live_binding_record_count
+        ),
+        "unbound_advance_record_count": unbound_record_count,
+        "other_queue_advance_record_count": other_queue_record_count,
         "goal_session_count": len(goal_records),
         "ignored_json_count": ignored_json_count,
         "latest_present": bool(latest),
@@ -2431,6 +2955,26 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             "cycle_record_write_performed": latest.get("cycle_record_write_performed") if latest else None,
             "advance_record_path": latest_stages.get("record", {}).get("advance_record_path") if latest else None,
             "cycle_record_path": latest_stages.get("record", {}).get("cycle_record_path") if latest else None,
+            "source_queue_binding": latest.get("source_queue_binding", {}) if latest else {},
+        },
+        "authoritative_record": {
+            "present": bool(authoritative),
+            "record_path": (
+                rel(authoritative_path)
+                if authoritative_path is not None
+                else None
+            ),
+            "advance_id": (
+                authoritative.get("advance_id")
+                if authoritative
+                else None
+            ),
+            "next_step": authoritative_next_step,
+            "source_queue_binding": (
+                authoritative.get("source_queue_binding", {})
+                if authoritative
+                else {}
+            ),
         },
         "latest_effects": {
             "active_queue_modified": latest.get("active_queue_modified") if latest else None,
@@ -2460,7 +3004,7 @@ def build_status(record_root: Path = DEFAULT_RECORD_ROOT, queue_path: Path = DEF
             "raw_content_output": latest_goal.get("raw_content_output") if latest_goal else None,
         },
         "route_choice_readiness": route_choice_readiness,
-        "next_step": status_next_step,
+        "next_step": effective_next_step,
         "raw_content_output": False,
         "errors": sorted(set(errors)),
     }
@@ -2489,8 +3033,125 @@ def validate_status(result: dict[str, Any]) -> list[str]:
         errors.append("workbench status reconciliation must not write")
     if not reconciliation.get("live_queue_next_step_status"):
         errors.append("workbench status reconciliation must include live queue next step")
+    for field in (
+        "record_queue_binding_present",
+        "authoritative_record_present",
+        "queue_bytes_match_record",
+        "record_boundary_pending",
+        "record_boundary_may_be_stale",
+    ):
+        if type(reconciliation.get(field)) is not bool:
+            errors.append(
+                f"workbench status reconciliation must include boolean {field}"
+            )
+    if reconciliation.get("record_boundary_pending") is True:
+        if reconciliation.get("queue_bytes_match_record") is not True:
+            errors.append(
+                "pending record boundary requires exact queue-byte match"
+            )
+        if reconciliation.get("next_action_source") != "latest_record":
+            errors.append(
+                "pending record boundary must remain the next action source"
+            )
+        if reconciliation.get("authoritative_record_present") is not True:
+            errors.append(
+                "pending record boundary requires an exact-byte authoritative record"
+            )
+    if reconciliation.get("next_action_source") == "live_queue":
+        live_next_step = result.get("live_queue", {}).get("next_step", {})
+        effective_next_step = result.get("next_step", {})
+        if effective_next_step.get("status") != live_next_step.get("status"):
+            errors.append("workbench status must project live queue next step when live_queue is authoritative")
+        if live_next_step.get("requires_jenn_decision") is True:
+            if effective_next_step.get("requires_jenn_decision") is not True:
+                errors.append("workbench status must preserve live Jenn decision requirement")
+            if effective_next_step.get("owner") != "Jenn":
+                errors.append("workbench status must preserve Jenn as live decision owner")
+    elif reconciliation.get("next_action_source") == "latest_record":
+        if reconciliation.get("record_boundary_pending") is not True:
+            errors.append(
+                "latest record can be authoritative only for a pending boundary"
+            )
+        if (
+            result.get("next_step", {}).get("status")
+            != reconciliation.get("record_next_step_status")
+        ):
+            errors.append(
+                "workbench status must preserve the pending record next step"
+            )
+    else:
+        errors.append("workbench status reconciliation next_action_source is invalid")
     if result.get("advance_record_count", 0) < 0:
         errors.append("workbench status advance_record_count cannot be negative")
+    for field in (
+        "matching_advance_record_count",
+        "valid_matching_advance_record_count",
+        "exact_matching_advance_record_count",
+        "invalid_matching_advance_record_count",
+        "invalid_live_binding_advance_record_count",
+        "unbound_advance_record_count",
+        "other_queue_advance_record_count",
+    ):
+        if type(result.get(field)) is not int or result[field] < 0:
+            errors.append(f"workbench status {field} cannot be negative")
+    if (
+        result.get("matching_advance_record_count", 0)
+        + result.get("unbound_advance_record_count", 0)
+        + result.get("other_queue_advance_record_count", 0)
+        != result.get("advance_record_count", 0)
+    ):
+        errors.append("workbench status advance record accounting is inconsistent")
+    if (
+        result.get("valid_matching_advance_record_count", 0)
+        + result.get("invalid_matching_advance_record_count", 0)
+        != result.get("matching_advance_record_count", 0)
+    ):
+        errors.append(
+            "workbench status matching advance record accounting is inconsistent"
+        )
+    if result.get("invalid_live_binding_advance_record_count", 0) > result.get(
+        "invalid_matching_advance_record_count",
+        0,
+    ):
+        errors.append(
+            "workbench status invalid live-binding record accounting is inconsistent"
+        )
+    if result.get("exact_matching_advance_record_count", 0) > result.get(
+        "valid_matching_advance_record_count",
+        0,
+    ):
+        errors.append(
+            "workbench status exact matching record accounting is inconsistent"
+        )
+    authoritative_record = result.get("authoritative_record", {})
+    if (
+        authoritative_record.get("present") is True
+    ) is not (
+        reconciliation.get("authoritative_record_present") is True
+    ):
+        errors.append(
+            "workbench status authoritative record presence is inconsistent"
+        )
+    if authoritative_record.get("present") is True:
+        if not authoritative_record.get("record_path"):
+            errors.append(
+                "workbench status authoritative record must include path"
+            )
+        if not authoritative_record.get("advance_id"):
+            errors.append(
+                "workbench status authoritative record must include advance_id"
+            )
+        if not authoritative_record.get("next_step", {}).get("status"):
+            errors.append(
+                "workbench status authoritative record must include next_step.status"
+            )
+        if not queue_snapshot_bindings_equal(
+            authoritative_record.get("source_queue_binding", {}),
+            result.get("live_queue", {}).get("queue_binding", {}),
+        ):
+            errors.append(
+                "workbench status authoritative record must match exact live queue bytes"
+            )
     if result.get("goal_session_count", 0) < 0:
         errors.append("workbench status goal_session_count cannot be negative")
     if result.get("latest_present") is True:
@@ -2747,9 +3408,14 @@ def build_next_step_selector(
 ) -> dict[str, Any]:
     """Select a non-repeating NEXT candidate without mutating the queue."""
     errors: list[str] = []
-    live_queue = build_live_queue_state(queue_path)
-    if live_queue.get("passed") is not True:
-        errors.extend(f"live queue: {error}" for error in live_queue.get("errors", []))
+    latest_status = build_status(record_root, queue_path)
+    if latest_status.get("passed") is not True:
+        errors.extend(
+            f"status: {error}"
+            for error in latest_status.get("errors", [])
+        )
+    live_queue = latest_status.get("live_queue", {})
+    effective_next_step = latest_status.get("next_step", {})
 
     resolved_queue = queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path
     queue_text = ""
@@ -2757,14 +3423,34 @@ def build_next_step_selector(
     next_blocks: list[dict[str, str]] = []
     later_blocks: list[dict[str, str]] = []
     closed_titles: list[str] = []
-    try:
-        queue_text = resolved_queue.read_text(encoding="utf-8")
+    selector_queue_binding: dict[str, Any] = {}
+    chain = import_module(
+        CONTROL_CHAIN_PATH,
+        "agents_os_control_chain_selector_for_workbench",
+    )
+    selector_snapshot, selector_snapshot_error = load_bound_queue_snapshot(
+        chain,
+        queue_path,
+    )
+    if selector_snapshot_error or selector_snapshot is None:
+        errors.append(
+            f"selector queue snapshot: "
+            f"{selector_snapshot_error or 'queue snapshot is unavailable'}"
+        )
+    else:
+        queue_text = str(selector_snapshot["text"])
+        selector_queue_binding = selector_snapshot["source_binding"]
+        if not queue_snapshot_bindings_equal(
+            live_queue.get("queue_binding", {}),
+            selector_queue_binding,
+        ):
+            errors.append(
+                "selector queue bytes changed after status reconciliation"
+            )
         now_blocks = queue_lane_blocks(queue_text, "NOW")
         next_blocks = queue_lane_blocks(queue_text, "NEXT")
         later_blocks = queue_lane_blocks(queue_text, "LATER")
         closed_titles = queue_closed_titles(queue_text)
-    except OSError as exc:
-        errors.append(f"queue read failed: {exc}")
 
     now_block = now_blocks[0] if now_blocks else live_queue.get("now", {})
     now_title = str(now_block.get("title", "")).strip()
@@ -2773,14 +3459,17 @@ def build_next_step_selector(
     )
     existing_titles = [str(block.get("title", "")) for block in [*now_blocks, *next_blocks, *later_blocks]]
     existing_titles.extend(closed_titles)
-    latest_status = build_status(record_root, queue_path)
-    if latest_status.get("passed") is not True:
-        errors.extend(f"status: {error}" for error in latest_status.get("errors", []))
 
     candidate: dict[str, Any] | None = None
     selector_state = "candidate_ready"
-    if live_queue.get("next_step", {}).get("status") in {"route_choice_required", "jenn_decision_required"}:
+    if effective_next_step.get("status") in {
+        "route_choice_required",
+        "jenn_decision_required",
+        "governance_decision_required",
+    }:
         selector_state = "blocked_by_jenn_boundary"
+    elif effective_next_step.get("status") in RUN_STOP_STATUSES:
+        selector_state = "blocked_by_pending_record_boundary"
     elif not now_title:
         selector_state = "blocked_missing_now"
         errors.append("selector requires a current NOW title")
@@ -2836,10 +3525,16 @@ def build_next_step_selector(
         "raw_queue_body_output": False,
         "source": {
             "queue_path": rel(resolved_queue),
+            "queue_binding": selector_queue_binding,
             "record_root": rel(record_root if record_root.is_absolute() else WORKSPACE_ROOT / record_root),
             "current_now_title": now_title,
             "current_now_evidence_scoped": True,
             "live_queue_next_step": live_queue.get("next_step", {}).get("status"),
+            "effective_next_step": effective_next_step.get("status"),
+            "status_next_action_source": latest_status.get(
+                "status_reconciliation",
+                {},
+            ).get("next_action_source"),
             "existing_title_count": len([title for title in existing_titles if title]),
             "closed_title_count": len([title for title in closed_titles if title]),
             "latest_record_next_step": latest_status.get("next_step", {}).get("status"),
@@ -2878,6 +3573,10 @@ def validate_next_step_selector(result: dict[str, Any]) -> list[str]:
     ):
         if result.get(flag) is not False:
             errors.append(f"next-step selector must keep {flag}=false")
+    if not valid_queue_snapshot_binding(
+        result.get("source", {}).get("queue_binding")
+    ):
+        errors.append("next-step selector must bind its exact queue bytes")
     if result.get("candidate_present") is True:
         candidate = result.get("candidate", {})
         if not candidate.get("title"):
@@ -2917,6 +3616,7 @@ def validate_next_step_selector(result: dict[str, Any]) -> list[str]:
 
 
 RUN_STOP_STATUSES = {
+    "governance_decision_required",
     "route_choice_required",
     "jenn_decision_required",
     "nobao_review_required",
@@ -2938,8 +3638,16 @@ def goal_state_for_next_step(next_step: dict[str, Any]) -> str:
 def build_live_queue_state(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
     """Read the current queue so status can detect stale record boundaries."""
     machine = import_module(MACHINE_PATH, "agents_os_machine_live_queue_for_workbench")
+    chain = import_module(
+        CONTROL_CHAIN_PATH,
+        "agents_os_control_chain_live_queue_for_workbench",
+    )
     errors: list[str] = []
-    normalized_queue = machine.load_queue(queue_path)
+    normalized_queue = load_bound_normalized_queue(
+        machine,
+        chain,
+        queue_path,
+    )
     errors.extend(str(error) for error in normalized_queue.get("parse_errors", []) if error)
     machine_preview: dict[str, Any] = {}
     next_step = {
@@ -3009,6 +3717,7 @@ def build_live_queue_state(queue_path: Path = DEFAULT_QUEUE) -> dict[str, Any]:
         "read_only": True,
         "write_performed": False,
         "queue_path": normalized_queue.get("source_path") or rel(queue_path if queue_path.is_absolute() else WORKSPACE_ROOT / queue_path),
+        "queue_binding": normalized_queue.get("source_binding", {}),
         "queue_passed": normalized_queue.get("passed"),
         "summary": normalized_queue.get("summary", {}),
         "now": machine_preview.get("source_item", {}) if machine_preview else {},
@@ -3035,6 +3744,10 @@ def validate_live_queue_state(result: dict[str, Any]) -> list[str]:
         errors.append("live queue state must not write")
     if result.get("raw_content_output") is not False:
         errors.append("live queue state must not output raw content")
+    if result.get("queue_passed") is True and not valid_queue_snapshot_binding(
+        result.get("queue_binding")
+    ):
+        errors.append("live queue state must bind its exact source queue bytes")
     if not result.get("next_step", {}).get("status"):
         errors.append("live queue state must emit next_step.status")
     for flag in ("active_queue_mutation_authorized", "queue_promotion_authorized", "execution_authorized", "write_performed"):
@@ -3044,16 +3757,26 @@ def validate_live_queue_state(result: dict[str, Any]) -> list[str]:
     return errors
 
 
-def current_now_internal_intent(queue_path: Path = DEFAULT_QUEUE) -> tuple[str | None, dict[str, Any], list[str]]:
-    machine = import_module(MACHINE_PATH, "agents_os_machine_current_now_for_workbench")
-    normalized_queue = machine.load_queue(queue_path)
-    errors = [str(error) for error in normalized_queue.get("parse_errors", []) if error]
-    if normalized_queue.get("passed") is not True:
-        return None, {}, errors or ["queue did not pass normalization"]
-    try:
-        item = machine.now_item(normalized_queue)
-    except (KeyError, ValueError) as exc:
-        return None, {}, [f"current NOW read failed: {exc}"]
+def current_now_internal_intent(
+    queue_path: Path = DEFAULT_QUEUE,
+    *,
+    live_queue_state: dict[str, Any] | None = None,
+) -> tuple[str | None, dict[str, Any], list[str]]:
+    if live_queue_state is None:
+        live_queue_state = build_live_queue_state(queue_path)
+    if live_queue_state.get("passed") is not True:
+        return (
+            None,
+            {},
+            [
+                f"current NOW status: {error}"
+                for error in live_queue_state.get("errors", [])
+            ]
+            or ["queue did not pass normalization"],
+        )
+    item = live_queue_state.get("now", {})
+    if not isinstance(item, dict) or not item:
+        return None, {}, ["current NOW item is missing"]
     title = str(item.get("title", "")).strip()
     continue_context = (
         "Workbench continue context: process the current NOW item as a local "
@@ -3076,11 +3799,15 @@ def build_continue_current(
     allowed_queue_root: Path = WORKSPACE_ROOT,
 ) -> dict[str, Any]:
     """Continue from the current live NOW item until the next boundary."""
-    live_queue = build_live_queue_state(queue_path)
+    current_status = build_status(record_root, queue_path)
+    live_queue = current_status.get("live_queue", {})
     errors: list[str] = []
-    if live_queue.get("passed") is not True:
-        errors.extend(f"live queue: {error}" for error in live_queue.get("errors", []))
-    live_next_step = live_queue.get("next_step", {})
+    if current_status.get("passed") is not True:
+        errors.extend(
+            f"status: {error}"
+            for error in current_status.get("errors", [])
+        )
+    entry_next_step = current_status.get("next_step", {})
     intent: str | None = None
     now_item_payload: dict[str, Any] = {}
     run: dict[str, Any] | None = None
@@ -3091,8 +3818,11 @@ def build_continue_current(
         "queue_promotion_authorized": False,
         "execution_authorized": False,
     }
-    if not errors and live_next_step.get("status") == "queue_ready_for_run":
-        intent, now_item_payload, intent_errors = current_now_internal_intent(queue_path)
+    if not errors and entry_next_step.get("status") == "queue_ready_for_run":
+        intent, now_item_payload, intent_errors = current_now_internal_intent(
+            queue_path,
+            live_queue_state=live_queue,
+        )
         errors.extend(intent_errors)
         if intent and not errors:
             run = build_run(
@@ -3103,6 +3833,10 @@ def build_continue_current(
                 max_steps=max_steps,
                 apply_intake=apply_intake,
                 allowed_queue_root=allowed_queue_root,
+                expected_queue_binding=live_queue.get(
+                    "queue_binding",
+                    {},
+                ),
             )
             if run.get("passed") is not True:
                 errors.extend(f"run: {error}" for error in run.get("errors", []))
@@ -3137,14 +3871,14 @@ def build_continue_current(
         "steps_performed": run.get("steps_performed") if run else 0,
         "local_safe_execution_count": run.get("local_safe_execution_count") if run else 0,
         "record_write_count": run.get("record_write_count") if run else 0,
-        "stopped_reason": run.get("stopped_reason") if run else live_next_step.get("status"),
+        "stopped_reason": run.get("stopped_reason") if run else entry_next_step.get("status"),
     }
     post_promotion_status: dict[str, Any] | None = None
     if completion_promotion.get("write_performed") is True:
         post_promotion_status = build_status(record_root, queue_path)
         if post_promotion_status.get("passed") is not True:
             errors.extend(f"post promotion status: {error}" for error in post_promotion_status.get("errors", []))
-    next_step = run.get("next_step") if run else live_next_step
+    next_step = run.get("next_step") if run else entry_next_step
     if completion_promotion.get("write_performed") is True:
         next_step = {
             "status": "completion_promotion_applied_continue_ready",
@@ -3168,6 +3902,11 @@ def build_continue_current(
             "raw_queue_body_output": False,
         },
         "live_queue": live_queue,
+        "entry_next_step": entry_next_step,
+        "status_reconciliation": current_status.get(
+            "status_reconciliation",
+            {},
+        ),
         "run": run,
         "run_summary": run_summary,
         "completion_promotion": completion_promotion,
@@ -3266,9 +4005,9 @@ def validate_continue_current(
                 errors.append("continue current completion promotion should leave live queue ready for another run")
     if completion_promotion.get("execution_authorized") is not False:
         errors.append("continue current completion promotion must not authorize execution")
-    live_status = result.get("live_queue", {}).get("next_step", {}).get("status")
+    entry_status = result.get("entry_next_step", {}).get("status")
     run = result.get("run")
-    if live_status == "queue_ready_for_run":
+    if entry_status == "queue_ready_for_run":
         if source.get("derived_intent_character_count", 0) <= 0:
             errors.append("continue current ready queue must derive a NOW intent")
         if not isinstance(run, dict) or run.get("schema_version") != "agents-os.workbench.run.v0.1":
@@ -3276,7 +4015,7 @@ def validate_continue_current(
         elif run.get("passed") is not True:
             errors.append("continue current run payload must pass")
     elif run is not None:
-        errors.append("continue current must not run when live queue is at a boundary")
+        errors.append("continue current must not run when status is at a boundary")
     if not result.get("next_step", {}).get("status"):
         errors.append("continue current must emit next_step.status")
     return errors
@@ -3314,22 +4053,32 @@ def build_continue_loop(
 
     if not errors:
         for index in range(max_cycles):
-            live_queue = build_live_queue_state(queue_path)
-            if live_queue.get("passed") is not True:
-                errors.extend(f"cycle {index + 1} live queue: {error}" for error in live_queue.get("errors", []))
-                stopped_reason = "live_queue_failed"
-                final_next_step = live_queue.get("next_step", {})
+            current_status = build_status(record_root, queue_path)
+            live_queue = current_status.get("live_queue", {})
+            if current_status.get("passed") is not True:
+                errors.extend(
+                    f"cycle {index + 1} status: {error}"
+                    for error in current_status.get("errors", [])
+                )
+                stopped_reason = "status_failed"
+                final_next_step = current_status.get("next_step", {})
                 break
-            live_next_step = live_queue.get("next_step", {})
-            if live_next_step.get("status") != "queue_ready_for_run":
-                stopped_reason = live_next_step.get("status") or "live_queue_boundary"
-                final_next_step = live_next_step
+            entry_next_step = current_status.get("next_step", {})
+            if entry_next_step.get("status") != "queue_ready_for_run":
+                stopped_reason = (
+                    entry_next_step.get("status") or "status_boundary"
+                )
+                final_next_step = entry_next_step
                 cycles.append(
                     {
                         "cycle_index": index + 1,
                         "performed": False,
                         "reason": stopped_reason,
-                        "live_queue_next_step": live_next_step,
+                        "live_queue_next_step": live_queue.get(
+                            "next_step",
+                            {},
+                        ),
+                        "effective_next_step": entry_next_step,
                     }
                 )
                 break
@@ -3350,7 +4099,11 @@ def build_continue_loop(
                 "continue_id": current.get("run_summary", {}).get("run_id"),
                 "passed": current.get("passed"),
                 "source_now_title": current.get("source", {}).get("current_now_title"),
-                "live_queue_next_step_before": live_next_step.get("status"),
+                "live_queue_next_step_before": live_queue.get(
+                    "next_step",
+                    {},
+                ).get("status"),
+                "effective_next_step_before": entry_next_step.get("status"),
                 "next_count_before": next_count,
                 "completion_promotion_requested": request_completion,
                 "completion_promotion_write_performed": current.get("completion_promotion", {}).get("write_performed"),
@@ -3475,6 +4228,7 @@ def build_run(
     max_steps: int = 1,
     apply_intake: bool = False,
     allowed_queue_root: Path = WORKSPACE_ROOT,
+    expected_queue_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     initial_status = build_status(record_root, queue_path)
     errors: list[str] = []
@@ -3484,6 +4238,20 @@ def build_run(
         errors.append("run max_steps must be at least 1")
     if max_steps > 5:
         errors.append("run max_steps must not exceed 5")
+    initial_queue_binding = initial_status.get("live_queue", {}).get(
+        "queue_binding",
+        {},
+    )
+    if expected_queue_binding is not None:
+        if not valid_queue_snapshot_binding(expected_queue_binding):
+            errors.append("run expected queue binding is invalid")
+        elif not queue_snapshot_bindings_equal(
+            expected_queue_binding,
+            initial_queue_binding,
+        ):
+            errors.append(
+                "queue bytes changed after the caller status snapshot"
+            )
 
     steps: list[dict[str, Any]] = []
     active_queue_modified = False
@@ -3492,8 +4260,19 @@ def build_run(
     record_write_count = 0
     stopped_reason = "not_started"
     final_next_step: dict[str, Any] = initial_status.get("next_step", {})
+    preexisting_record_boundary = (
+        initial_status.get("status_reconciliation", {}).get(
+            "record_boundary_pending"
+        )
+        is True
+    )
 
-    if not errors:
+    if not errors and preexisting_record_boundary:
+        stopped_reason = (
+            final_next_step.get("status")
+            or "pending_record_boundary"
+        )
+    elif not errors:
         for index in range(max_steps):
             advance = build_advance(
                 intent,
@@ -3502,6 +4281,7 @@ def build_run(
                 record_root=record_root,
                 apply_intake=apply_intake,
                 allowed_queue_root=allowed_queue_root,
+                expected_queue_binding=initial_queue_binding,
             )
             advance_next_step = advance.get("stages", {}).get("next_step", {})
             step = {
@@ -3563,6 +4343,8 @@ def build_run(
         "mode": "automatic_until_boundary",
         "preview_first": True,
         "requested_max_steps": max_steps,
+        "expected_queue_binding": expected_queue_binding or {},
+        "initial_queue_binding": initial_queue_binding,
         "steps_performed": len(steps),
         "local_safe_execution_count": local_safe_execution_count,
         "record_write_count": record_write_count,
@@ -3571,12 +4353,20 @@ def build_run(
             "passed": initial_status.get("passed"),
             "advance_record_count": initial_status.get("advance_record_count"),
             "next_step": initial_status.get("next_step", {}),
+            "status_reconciliation": initial_status.get(
+                "status_reconciliation",
+                {},
+            ),
         },
         "final_status": {
             "passed": final_status.get("passed"),
             "advance_record_count": final_status.get("advance_record_count"),
             "latest_advance_id": final_status.get("latest_advance_id"),
             "next_step": final_status.get("next_step", {}),
+            "status_reconciliation": final_status.get(
+                "status_reconciliation",
+                {},
+            ),
         },
         "steps": steps,
         "next_step": final_next_step,
@@ -3608,10 +4398,22 @@ def validate_run(result: dict[str, Any], *, apply_intake: bool) -> list[str]:
         errors.append("workbench run mode must be automatic_until_boundary")
     if result.get("preview_first") is not True:
         errors.append("workbench run must remain preview_first")
-    if result.get("steps_performed", 0) < 1:
-        errors.append("workbench run must perform at least one step")
+    steps_performed = result.get("steps_performed", 0)
+    if type(steps_performed) is not int or steps_performed < 0:
+        errors.append("workbench run steps_performed must be nonnegative")
     if result.get("steps_performed", 0) > result.get("requested_max_steps", 0):
         errors.append("workbench run cannot exceed requested_max_steps")
+    expected_queue_binding = result.get("expected_queue_binding", {})
+    if expected_queue_binding:
+        if not valid_queue_snapshot_binding(expected_queue_binding):
+            errors.append("workbench run expected queue binding is invalid")
+        elif not queue_snapshot_bindings_equal(
+            expected_queue_binding,
+            result.get("initial_queue_binding", {}),
+        ):
+            errors.append(
+                "workbench run initial queue changed after its caller snapshot"
+            )
     for flag in (
         "write_performed",
         "queue_promotion_authorized",
@@ -3631,7 +4433,27 @@ def validate_run(result: dict[str, Any], *, apply_intake: bool) -> list[str]:
             errors.append("workbench run without apply_intake must not modify queue")
         if result.get("queue_write_authorized") is not False:
             errors.append("workbench run without apply_intake must not authorize queue write")
-    if result.get("record_write_count", 0) < 1:
+    if steps_performed == 0:
+        initial_reconciliation = result.get("initial_status", {}).get(
+            "status_reconciliation",
+            {},
+        )
+        if initial_reconciliation.get("record_boundary_pending") is not True:
+            errors.append(
+                "zero-step workbench run requires a preexisting pending record boundary"
+            )
+        if result.get("record_write_count") != 0:
+            errors.append("zero-step workbench run must not write another record")
+        if result.get("local_safe_execution_count") != 0:
+            errors.append("zero-step workbench run must not execute local validation")
+        if (
+            result.get("stopped_reason")
+            != result.get("next_step", {}).get("status")
+        ):
+            errors.append(
+                "zero-step workbench run must preserve its pending boundary reason"
+            )
+    elif result.get("record_write_count", 0) < 1:
         errors.append("workbench run must write at least one local record")
     for step in result.get("steps", []):
         if step.get("queue_promotion_authorized") is not False:
@@ -4017,6 +4839,11 @@ def validate_workbench() -> dict[str, Any]:
     empty_status: dict[str, Any] = {}
     safe_status: dict[str, Any] = {}
     status_after_intake: dict[str, Any] = {}
+    pending_record_run: dict[str, Any] = {}
+    pending_record_selector: dict[str, Any] = {}
+    pending_record_continue: dict[str, Any] = {}
+    pending_record_continue_loop: dict[str, Any] = {}
+    pending_record_files_unchanged = False
     stopped_run: dict[str, Any] = {}
     safe_run: dict[str, Any] = {}
     run_with_intake: dict[str, Any] = {}
@@ -4046,7 +4873,7 @@ def validate_workbench() -> dict[str, Any]:
         advance_record_root.mkdir()
         route_continue_record_root = Path(temp_dir) / "route-continue-records"
         route_continue_record_root.mkdir()
-        empty_status = build_status(advance_record_root)
+        empty_status = build_status(advance_record_root, queue_path)
         stopped_cycle = build_cycle(
             "Build AGENTS OS into a local automatic workbench.",
             stopped_queue_path,
@@ -4125,6 +4952,20 @@ def validate_workbench() -> dict[str, Any]:
             run_queue_path,
             validation_command="python3 --version",
             record_root=advance_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        governance_run_queue_path = Path(temp_dir) / "governance-run-queue.md"
+        governance_run_queue_path.write_text(
+            fixture_queue_text("Call provider and start service"),
+            encoding="utf-8",
+        )
+        governance_run_record_root = Path(temp_dir) / "governance-run-records"
+        governance_run_record_root.mkdir()
+        governance_run = build_run(
+            "Continue current work.",
+            governance_run_queue_path,
+            record_root=governance_run_record_root,
+            max_steps=3,
             allowed_queue_root=Path(temp_dir),
         )
         goal_queue_path = Path(temp_dir) / "goal-queue.md"
@@ -4210,7 +5051,39 @@ def validate_workbench() -> dict[str, Any]:
             "### NOW-001: Second safe follow-up task"
             in continue_loop_queue_path.read_text(encoding="utf-8")
         )
-        safe_status = build_status(advance_record_root)
+        safe_status = build_status(advance_record_root, goal_queue_path)
+        pending_record_files_before = sorted(
+            path.name for path in advance_record_root.glob("*.json")
+        )
+        pending_record_run = build_run(
+            "Write local governance report and run docctl validation.",
+            goal_queue_path,
+            validation_command=fixture_validation_command,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_record_selector = build_next_step_selector(
+            goal_queue_path,
+            advance_record_root,
+        )
+        pending_record_continue = build_continue_current(
+            goal_queue_path,
+            validation_command=fixture_validation_command,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_record_continue_loop = build_continue_loop(
+            goal_queue_path,
+            validation_command=fixture_validation_command,
+            record_root=advance_record_root,
+            max_cycles=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_record_files_unchanged = pending_record_files_before == sorted(
+            path.name for path in advance_record_root.glob("*.json")
+        )
         advance_apply_queue_path = Path(temp_dir) / "advance-apply-queue.md"
         advance_apply_queue_path.write_text(fixture_queue_text(), encoding="utf-8")
         advance_with_intake = build_advance(
@@ -4231,7 +5104,7 @@ def validate_workbench() -> dict[str, Any]:
             apply_intake=True,
             allowed_queue_root=Path(temp_dir),
         )
-        status_after_intake = build_status(advance_record_root)
+        status_after_intake = build_status(advance_record_root, run_apply_queue_path)
         safe_advance_record_name = Path(
             safe_advance.get("stages", {}).get("record", {}).get("record_path", "")
         ).name
@@ -4402,8 +5275,8 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("stopped run should stop at route_choice_required")
     if stopped_run.get("local_safe_execution_count") != 0:
         errors.append("stopped run must not perform local-safe execution")
-    if stopped_run.get("record_write_count") != 1:
-        errors.append("stopped run should write exactly one record")
+    if stopped_run.get("record_write_count") != 0:
+        errors.append("stopped run must not duplicate the existing stopped advance record")
     if stopped_goal.get("passed") is not True:
         errors.extend(f"stopped goal: {error}" for error in stopped_goal.get("errors", []))
     if stopped_goal.get("next_step", {}).get("status") != "route_choice_required":
@@ -4420,8 +5293,8 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("stopped goal must not output raw route templates")
     if empty_status.get("passed") is not True:
         errors.extend(f"empty status: {error}" for error in empty_status.get("errors", []))
-    if empty_status.get("next_step", {}).get("status") != "no_advance_records":
-        errors.append("empty status should report no_advance_records")
+    if empty_status.get("next_step", {}).get("status") != "queue_ready_for_run":
+        errors.append("empty status should project the current fixture queue")
     if empty_status.get("goal_session_count") != 0:
         errors.append("empty status should report no goal sessions")
     if safe_advance.get("passed") is not True:
@@ -4450,6 +5323,31 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("safe run should stop at review_queue_proposal")
     if safe_run.get("active_queue_modified") is not False:
         errors.append("safe run without apply_intake must not modify queue")
+    if governance_run.get("passed") is not True:
+        errors.extend(
+            f"governance run: {error}"
+            for error in governance_run.get("errors", [])
+        )
+    if governance_run.get("steps_performed") != 1:
+        errors.append("governance run must stop after its first boundary step")
+    if governance_run.get("record_write_count") != 1:
+        errors.append("governance run must write exactly one boundary record")
+    if (
+        governance_run.get("stopped_reason")
+        != "governance_decision_required"
+    ):
+        errors.append("governance run must preserve its Jenn boundary reason")
+    if (
+        governance_run.get("next_step", {}).get("status")
+        != "governance_decision_required"
+    ):
+        errors.append("governance run must surface the Jenn decision boundary")
+    if governance_run.get("local_safe_execution_count") != 0:
+        errors.append("governance run must not perform local-safe execution")
+    if goal_state_for_next_step(governance_run.get("next_step", {})) != (
+        "waiting_at_boundary"
+    ):
+        errors.append("governance run must project a waiting goal state")
     if safe_goal.get("passed") is not True:
         errors.extend(f"safe goal: {error}" for error in safe_goal.get("errors", []))
     if safe_goal.get("run_summary", {}).get("local_safe_execution_count") != 1:
@@ -4465,7 +5363,17 @@ def validate_workbench() -> dict[str, Any]:
     if safe_status.get("latest_advance_id") != safe_goal.get("run", {}).get("steps", [{}])[-1].get("advance_id"):
         errors.append("safe status should report safe goal advance as latest")
     if safe_status.get("next_step", {}).get("status") != "review_queue_proposal":
-        errors.append("safe status should surface review_queue_proposal")
+        errors.append("safe status should preserve the pending review boundary")
+    if safe_status.get("status_reconciliation", {}).get("record_next_step_status") != "review_queue_proposal":
+        errors.append("safe status should preserve the record review_queue_proposal boundary")
+    if safe_status.get("status_reconciliation", {}).get("next_action_source") != "latest_record":
+        errors.append("safe status should keep the exact-bound record authoritative")
+    if safe_status.get("status_reconciliation", {}).get("queue_bytes_match_record") is not True:
+        errors.append("safe status should prove the queue bytes still match the record")
+    if safe_status.get("status_reconciliation", {}).get("record_boundary_pending") is not True:
+        errors.append("safe status should mark the exact-bound record boundary pending")
+    if safe_status.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is not False:
+        errors.append("safe status should not call an exact-bound record stale")
     if safe_status.get("write_performed") is not False:
         errors.append("safe status must not write")
     if safe_status.get("goal_session_count") != 2:
@@ -4480,6 +5388,56 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("safe status must not expose raw goal objective")
     if safe_status.get("route_choice_readiness", {}).get("present") is not False:
         errors.append("safe status should not surface route choice readiness for safe latest advance")
+    if pending_record_run.get("passed") is not True:
+        errors.extend(
+            f"pending record run: {error}"
+            for error in pending_record_run.get("errors", [])
+        )
+    if pending_record_run.get("steps_performed") != 0:
+        errors.append("pending record run must not repeat the queue item")
+    if pending_record_run.get("record_write_count") != 0:
+        errors.append("pending record run must not write another record")
+    if pending_record_run.get("local_safe_execution_count") != 0:
+        errors.append("pending record run must not repeat local validation")
+    if pending_record_run.get("stopped_reason") != "review_queue_proposal":
+        errors.append("pending record run must preserve review_queue_proposal")
+    if pending_record_selector.get("passed") is not True:
+        errors.extend(
+            f"pending record selector: {error}"
+            for error in pending_record_selector.get("errors", [])
+        )
+    if pending_record_selector.get("candidate_present") is not False:
+        errors.append("pending record selector must not propose duplicate work")
+    if pending_record_selector.get("selector_state") != "blocked_by_pending_record_boundary":
+        errors.append("pending record selector must stop at the record boundary")
+    if pending_record_continue.get("passed") is not True:
+        errors.extend(
+            f"pending record continue: {error}"
+            for error in pending_record_continue.get("errors", [])
+        )
+    if pending_record_continue.get("run") is not None:
+        errors.append("pending record continue must not start another run")
+    if pending_record_continue.get("run_summary", {}).get("record_write_count") != 0:
+        errors.append("pending record continue must not write another record")
+    if pending_record_continue.get("run_summary", {}).get("local_safe_execution_count") != 0:
+        errors.append("pending record continue must not repeat local validation")
+    if pending_record_continue.get("next_step", {}).get("status") != "review_queue_proposal":
+        errors.append("pending record continue must preserve review_queue_proposal")
+    if pending_record_continue_loop.get("passed") is not True:
+        errors.extend(
+            f"pending record continue loop: {error}"
+            for error in pending_record_continue_loop.get("errors", [])
+        )
+    if pending_record_continue_loop.get("cycles_performed") != 0:
+        errors.append("pending record continue loop must not perform a cycle")
+    if pending_record_continue_loop.get("record_write_count") != 0:
+        errors.append("pending record continue loop must not write another record")
+    if pending_record_continue_loop.get("local_safe_execution_count") != 0:
+        errors.append("pending record continue loop must not repeat local validation")
+    if pending_record_continue_loop.get("stopped_reason") != "review_queue_proposal":
+        errors.append("pending record continue loop must preserve review_queue_proposal")
+    if not pending_record_files_unchanged:
+        errors.append("pending record paths must not create any new record files")
     if route_choice_preview.get("passed") is not True:
         errors.extend(f"route choice preview: {error}" for error in route_choice_preview.get("errors", []))
     if route_choice_preview.get("bundle", {}).get("selected_route_id") != "B":
@@ -4530,8 +5488,12 @@ def validate_workbench() -> dict[str, Any]:
         errors.extend(f"route promotion status: {error}" for error in route_promotion_status.get("errors", []))
     if route_promotion_status.get("live_queue", {}).get("next_step", {}).get("status") != "queue_ready_for_run":
         errors.append("route promotion status should report live queue ready for run")
-    if route_promotion_status.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is not True:
-        errors.append("route promotion status should detect stale record boundary after queue promotion")
+    if route_promotion_status.get("status_reconciliation", {}).get("next_action_source") != "live_queue":
+        errors.append("route promotion status should keep its live queue authoritative")
+    if route_promotion_status.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is not False:
+        errors.append("route promotion status must not compare unrelated queue records")
+    if route_promotion_status.get("matching_advance_record_count") != 0:
+        errors.append("route promotion status must ignore records for other queues")
     if route_promotion_continue.get("passed") is not True:
         errors.extend(f"route promotion continue: {error}" for error in route_promotion_continue.get("errors", []))
     if route_promotion_continue.get("run_summary", {}).get("local_safe_execution_count") != 1:
@@ -4596,6 +5558,14 @@ def validate_workbench() -> dict[str, Any]:
         errors.append("status after intake should surface active queue modification in fixture")
     if status_after_intake.get("latest_effects", {}).get("queue_promotion_authorized") is not False:
         errors.append("status after intake must keep queue promotion false")
+    if status_after_intake.get("next_step", {}).get("status") != "queue_ready_for_run":
+        errors.append("status after intake should project the changed live queue")
+    if status_after_intake.get("status_reconciliation", {}).get("next_action_source") != "live_queue":
+        errors.append("status after intake should make changed live bytes authoritative")
+    if status_after_intake.get("status_reconciliation", {}).get("queue_bytes_match_record") is not False:
+        errors.append("status after intake should detect a source-record byte mismatch")
+    if status_after_intake.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is not True:
+        errors.append("status after intake should mark the prior record boundary stale")
     if status_after_intake.get("goal_session_count") != 2:
         errors.append("status after intake should preserve goal session count")
     if status_after_intake.get("latest_goal_session", {}).get("goal_session_id") != safe_goal.get("goal_session_id"):
@@ -4693,12 +5663,24 @@ def validate_workbench() -> dict[str, Any]:
             "safe_latest_advance_id_matches": safe_status.get("latest_advance_id")
             == safe_goal.get("run", {}).get("steps", [{}])[-1].get("advance_id"),
             "safe_next_step": safe_status.get("next_step", {}).get("status"),
+            "safe_record_next_step": safe_status.get("status_reconciliation", {}).get("record_next_step_status"),
+            "safe_next_action_source": safe_status.get("status_reconciliation", {}).get("next_action_source"),
+            "safe_queue_bytes_match_record": safe_status.get("status_reconciliation", {}).get("queue_bytes_match_record"),
+            "safe_record_boundary_pending": safe_status.get("status_reconciliation", {}).get("record_boundary_pending"),
             "safe_goal_session_count": safe_status.get("goal_session_count"),
             "safe_latest_goal_session_id": safe_status.get("latest_goal_session", {}).get("goal_session_id"),
             "safe_latest_goal_state": safe_status.get("latest_goal_session", {}).get("goal_state"),
             "after_intake_latest_advance_id_matches": status_after_intake.get("latest_advance_id") == run_with_intake.get("steps", [{}])[-1].get("advance_id"),
             "after_intake_active_queue_modified": status_after_intake.get("latest_effects", {}).get("active_queue_modified"),
             "after_intake_goal_session_count": status_after_intake.get("goal_session_count"),
+            "after_intake_next_action_source": status_after_intake.get("status_reconciliation", {}).get("next_action_source"),
+            "after_intake_queue_bytes_match_record": status_after_intake.get("status_reconciliation", {}).get("queue_bytes_match_record"),
+            "pending_run_steps_performed": pending_record_run.get("steps_performed"),
+            "pending_run_record_write_count": pending_record_run.get("record_write_count"),
+            "pending_selector_state": pending_record_selector.get("selector_state"),
+            "pending_continue_run_present": pending_record_continue.get("run") is not None,
+            "pending_continue_loop_cycles_performed": pending_record_continue_loop.get("cycles_performed"),
+            "pending_record_files_unchanged": pending_record_files_unchanged,
             "write_performed": status_after_intake.get("write_performed"),
         },
         "run": {
@@ -4706,6 +5688,9 @@ def validate_workbench() -> dict[str, Any]:
             "stopped_local_safe_execution_count": stopped_run.get("local_safe_execution_count"),
             "safe_next_step": safe_run.get("next_step", {}).get("status"),
             "safe_local_safe_execution_count": safe_run.get("local_safe_execution_count"),
+            "governance_next_step": governance_run.get("next_step", {}).get("status"),
+            "governance_steps_performed": governance_run.get("steps_performed"),
+            "governance_record_write_count": governance_run.get("record_write_count"),
             "with_intake_active_queue_modified": run_with_intake.get("active_queue_modified"),
             "with_intake_queue_promotion_authorized": run_with_intake.get("queue_promotion_authorized"),
         },
@@ -4743,7 +5728,9 @@ def validate_workbench() -> dict[str, Any]:
             "execution_authorized": queue_promotion_apply.get("execution_authorized"),
             "promoted_now_present": route_promotion_queue_contains_promoted_now,
             "live_status_next_step": route_promotion_status.get("live_queue", {}).get("next_step", {}).get("status"),
+            "next_action_source": route_promotion_status.get("status_reconciliation", {}).get("next_action_source"),
             "record_boundary_may_be_stale": route_promotion_status.get("status_reconciliation", {}).get("record_boundary_may_be_stale"),
+            "matching_advance_record_count": route_promotion_status.get("matching_advance_record_count"),
         },
         "continue_current": {
             "passed": route_promotion_continue.get("passed"),
@@ -5207,7 +6194,8 @@ def build_completion_audit(
             "Status and goal summaries expose the next boundary without raw objective or record output.",
             bool(status.get("next_step", {}).get("status"))
             and validation.get("status", {}).get("safe_goal_session_count", 0) >= 1
-            and validation.get("status", {}).get("safe_next_step") == "review_queue_proposal"
+            and bool(validation.get("status", {}).get("safe_next_step"))
+            and validation.get("status", {}).get("safe_record_next_step") == "review_queue_proposal"
             and status.get("raw_content_output") is False,
             {
                 "status_next_step": status.get("next_step", {}),

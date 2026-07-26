@@ -1,0 +1,91 @@
+schema_version: agents-os.hash-bound-independent-review-package.v0.1
+package_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R2_ATOMIC_BUNDLE
+atomic: true
+partial_review: forbidden
+subject_count: 8
+
+subject_precedence:
+  - R2_revision_totality_amendment_and_successor_profile_fixture_validator
+  - R1_all_other_clauses_and_boundaries
+
+subjects:
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-contract-closure-v0.1-r1.md
+    sha256: b6b64375195a0d9f88446a2e010806c3425f007647e785b6f98cd01ee74139ae
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r1.yaml
+    sha256: efcbe2afc78e29f549e692a5ae6f96dca9a0512cfd51c8fb7cfb07b85316fc05
+  - path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-fixture-v0.1.json
+    sha256: e1dd4f0812d587c7ccaa4692e69b9a0eeb1e29c17783c696ad9848165693ee1d
+  - path: control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding.py
+    sha256: 17c17564e3b94ab7d90ff3a3b0601361948eabd45aec9cbb7b238c647f86fc98
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-amendment-v0.1.md
+    sha256: f5439cf4cd3f17917155f6379baf5eec58f00ef9873b36c77341027be539248b
+  - path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r2.yaml
+    sha256: f91fd879231bdaf289de06012b06c138bc2e2e60024d9b6e64e7e4c1d9904625
+  - path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-fixture-v0.1.json
+    sha256: bf98481b5dd4ee569e750ef3556db850dcdd322831981f4a135e0635af7c24db
+  - path: control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py
+    sha256: df14f05d420536441505e058e9a8522fcf618541af63d6a8d293e650382edbd2
+
+authority_inputs:
+  - path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-start-decision-v0.1.yaml
+    sha256: bf956a5e256538efe25912bd1c23835f49f4a57e0ce7887998ea3d793691f4fa
+  - path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+  - path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-full-atomic-independent-review.yaml
+    sha256: 26dc4a38a07d606735bd28d766338232259dba671fc2718ca7d61d65ff33aa01
+  - path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-reproduction-v0.1.yaml
+    sha256: 4ce823b7526ea8b72bc83402075e54759bc36715391cbe736230aa7cd1e61c54
+  - path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-finding-disposition-v0.1.yaml
+    sha256: 59a280cc964a11e6d77b2d8e87e51cedd4502ebb0aad3c98ab65618c96ed2a6a
+  - path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-independent-review-disposition-v0.1.yaml
+    sha256: 9917f661f1fa3ae756d0c4633f017eb68043f0085c0910bc96f1be8520300e86
+  - path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-actual-host-smoke-execution-decision-package-v0.2.md
+    sha256: 82d2d2d49e25e652c6b35f853fa7a0767f14290f99dbc20f8819eedc93b15627
+  - path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml
+    sha256: 1d1185bfa10e4bdde8e820386da6971d6e7a3bd44feb245de6c4bb6e389a970f
+  - path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-source-preflight-v0.1.md
+    sha256: 3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d
+
+author_evidence:
+  - path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-author-self-review-v0.1.yaml
+    sha256: dd136d8c8b982da1378fb46eee287f5885f4123f021905728e71596c084be8e7
+
+fixed_commands:
+  - python3 control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding.py
+  - python3 control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py
+  - python3 control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py --self-test
+  - python3 -c "compile(open('control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py', encoding='utf-8').read(), 'validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py', 'exec')"
+  - python3 -c "import json,pathlib,yaml; json.load(open('control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-fixture-v0.1.json')); yaml.safe_load(pathlib.Path('control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r2.yaml').read_text())"
+
+independent_review_requirements:
+  all_declared_input_hashes_must_match: true
+  all_subjects_must_be_fully_read: true
+  all_authority_inputs_must_be_fully_read: true
+  author_self_review_is_evidence_only: true
+  fixed_commands_must_pass: true
+  required_adversarial_tests:
+    - R1_subject_bytes_unchanged
+    - same_revision_2_for_contract_and_all_sections_is_accepted
+    - maximum_safe_integer_for_contract_and_all_sections_is_accepted
+    - one_section_revision_mismatch_is_rejected_by_target_semantic_rule
+    - contract_and_all_section_zero_negative_float_boolean_null_string_or_out_of_range_are_rejected
+    - profile_revision_totality_boolean_or_float_type_confusion_is_rejected
+    - unknown_or_missing_field_returns_BLOCKED_not_exception
+    - synthetic_owner_contract_cannot_be_promoted_to_actual_Host_authority
+    - nonzero_Host_operation_count_or_manifest_materialization_or_processToolCall_authorization_is_rejected
+  forbidden_during_review:
+    - VCPToolBox_worktree_read_write_clone_checkout_or_start
+    - archive_delivery_or_installation
+    - enabled_manifest_plugin_discovery_loading_or_Host_lifecycle
+    - processToolCall_native_addon_NAPI_runtime_database_dependency_install
+    - provider_production_authentication_private_Memory_state_private_sensing_recording_or_effect
+
+allowed_results:
+  - PASS_NO_BLOCKER
+  - BLOCK
+
+current_boundary:
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  terminal_outcome: NOT_EXECUTED

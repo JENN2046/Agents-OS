@@ -1,0 +1,405 @@
+{
+  "artifacts": [
+    {
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e"
+    },
+    {
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r3-fixture.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "f30b8f1f03354c51f8b5dea6f8a4daca0c5a493721a5bd757671f7fd28dde746"
+    },
+    {
+      "path": "control-plane/registry/build-phase-5d-m0d-protected-source-boundary-closure-r1-witness.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "40628339fb46931e2245f9e6df3f528e5d105136b704a888b40b432067d02d1f"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-lifecycle-contract-closure-r1-atomic-freeze-decision-v0.1.yaml",
+      "provenance": "already_present_on_base_main",
+      "sha256": "1d1185bfa10e4bdde8e820386da6971d6e7a3bd44feb245de6c4bb6e389a970f"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "ba24dd3a7e13d04fd23fc688f9a5a1d941d50daa352ac7cb6cbf6f26f36eb46c"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-start-decision-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "bf956a5e256538efe25912bd1c23835f49f4a57e0ce7887998ea3d793691f4fa"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922"
+    },
+    {
+      "path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-narrow-correction-start-decision-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "0ddac25b83277637c56ab1be750e9751ee8b2e45b100302864dec793b5f7ff0d"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-contract-closure-v0.1-r1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "b6b64375195a0d9f88446a2e010806c3425f007647e785b6f98cd01ee74139ae"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "efcbe2afc78e29f549e692a5ae6f96dca9a0512cfd51c8fb7cfb07b85316fc05"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-evidence-profile-v0.1-r2.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "f91fd879231bdaf289de06012b06c138bc2e2e60024d9b6e64e7e4c1d9904625"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-amendment-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "f5439cf4cd3f17917155f6379baf5eec58f00ef9873b36c77341027be539248b"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3"
+    },
+    {
+      "path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-amendment-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "22d03bee4337141de6e8973cf6d0b03a6060c30536d33c413aecf1ae25005575"
+    },
+    {
+      "path": "control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-fixture-v0.1.json",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "e1dd4f0812d587c7ccaa4692e69b9a0eeb1e29c17783c696ad9848165693ee1d"
+    },
+    {
+      "path": "control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality-fixture-v0.1.json",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "bf98481b5dd4ee569e750ef3556db850dcdd322831981f4a135e0635af7c24db"
+    },
+    {
+      "path": "control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-synthetic-witness-v0.1.json",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "3f7512223d6c5c594c5f1064eb4aaf136f4214858571fefac6f3eb11e7835a49"
+    },
+    {
+      "path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-synthetic-fixture-v0.1.json",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "1c78df56c9a4627ea6844616a2529879cc1eb058d984c0a54f69423356181256"
+    },
+    {
+      "path": "control-plane/registry/object-only-source-run-r2-scanner.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-execution-admission-materialization-preflight-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-closeout-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "c21419d45f25a6ec4484d9da5297e411e73e464700cd5c9ccd0b6f87fc06176a"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-package-closeout-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "43579852c0e517f7bf78abfb585c1f753b8e614a924627f2f751c608720cac20"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-governance-freeze-gate-correction-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "0dc4e258785dc29d2521b36829d0d562781e8cdacb26a3258cca7f3925152653"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-closeout-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "aac383cded99218ba853fe78f2c02b7faad6137c55e4431bdd5c3aac3e4c5c96"
+    },
+    {
+      "path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-closeout-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "24976d8d6a1d76d60b721b49d0e5478e9b9c91871c65405bf699f861b797c501"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v18.7.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "eab88bbeec414571c740a931493253f75bf6f0bfcb6ab0687f70922d5fabbe4f"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-actual-host-smoke-execution-decision-package-v0.2.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "82d2d2d49e25e652c6b35f853fa7a0767f14290f99dbc20f8819eedc93b15627"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-execution-admission-materialization-preflight-decision-package-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "72a467b18b1f1a4f4ae859bac86d8dc248507bb0718827d53885e0128046f2b1"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-package-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "d94558e82e3329f304feb4996e12b4196b751c44e47ddb10715ff0e317771209"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "422c97bae3c23db8c18860e3779b3c0b016bb382f1732a134f9757619caefa5f"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-source-preflight-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-package-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "1dd13617384803575a5d06d7e36bc4159123560c42215b4d47ea7f915d719e33"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.3.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "6e042306381bd51efc8a6df4b22856c895d5cd038615320553e05e35d7e4f974"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-package-v0.1.md",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "ec69a575a0619e3feef2a3ab97e16956794bb02348acc14e75511ff1af78df05"
+    },
+    {
+      "path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-independent-review-disposition-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "9917f661f1fa3ae756d0c4633f017eb68043f0085c0910bc96f1be8520300e86"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-finding-disposition-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "59a280cc964a11e6d77b2d8e87e51cedd4502ebb0aad3c98ab65618c96ed2a6a"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-independent-review-disposition-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "5cd83ddfceb60a75b052cc7fc9545ccc6105191cef6986fae2b0096cf1f6eb87"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-author-self-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "e87952cf1850960209a3bff3c6f72677c041ecdef695374743bc07c9503425ac"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-independent-review-disposition-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "334d0ecb9c9c29fd838ae0a96d3bb6e2b28fb4bf0ae8eafcec929fcbf254d87b"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-full-atomic-independent-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "26dc4a38a07d606735bd28d766338232259dba671fc2718ca7d61d65ff33aa01"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r1-revision-totality-reproduction-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "4ce823b7526ea8b72bc83402075e54759bc36715391cbe736230aa7cd1e61c54"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-author-self-review-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "dd136d8c8b982da1378fb46eee287f5885f4123f021905728e71596c084be8e7"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-full-atomic-independent-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "b406dfa76047d6d580327ae5ccfd36695c3ea53885a1a14da4e742b2ba5f6fc1"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-independent-review-disposition-v0.1.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "335d1b0b278cbfb2694169381c3a2c7e4d76af6ea34e27d888caec4481d7cf4d"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-full-atomic-independent-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-author-self-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "f4e17b19c38b723e266883dca30d6fecfcaee939007e4ba59da6d2500f19c40e"
+    },
+    {
+      "path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-full-atomic-independent-review.yaml",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916"
+    },
+    {
+      "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0"
+    },
+    {
+      "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601"
+    },
+    {
+      "path": "control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding-r2-revision-totality.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "df14f05d420536441505e058e9a8522fcf618541af63d6a8d293e650382edbd2"
+    },
+    {
+      "path": "control-plane/registry/validate-phase-5d-m0d-host-smoke-adapter-binding.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "17c17564e3b94ab7d90ff3a3b0601361948eabd45aec9cbb7b238c647f86fc98"
+    },
+    {
+      "path": "control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py",
+      "provenance": "materialized_from_preserved_canonical_root",
+      "sha256": "bc698fc465eb8a99bcb10fb776987de8f277d93451f0df91644a674ee5b153aa"
+    }
+  ],
+  "base": {
+    "commit": "3a5ce7ab0af075f4b12f75ca16b2f1554f399536",
+    "tree": "d0bd0b967ead4209a828cd1133ceab2b1c9a4a54"
+  },
+  "historical_anchor": {
+    "artifact_verification": "git_blob_bytes_at_anchor_commit",
+    "commit": "d200b31471df4c82bab86de9412086259585b893",
+    "tree": "f3642942e0e0140cf54f717b3eba79021d41ed06",
+    "working_tree_corrections_excluded_from_frozen_evidence": 3
+  },
+  "components": [
+    {
+      "canonical_manifest_path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml",
+      "canonical_manifest_sha256": "422c97bae3c23db8c18860e3779b3c0b016bb382f1732a134f9757619caefa5f",
+      "decision_path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-v0.1.yaml",
+      "decision_sha256": "ba24dd3a7e13d04fd23fc688f9a5a1d941d50daa352ac7cb6cbf6f26f36eb46c",
+      "id": "HOST_SMOKE_ADAPTER_BINDING_R2",
+      "status": "ACCEPTED_FROZEN"
+    },
+    {
+      "canonical_manifest_path": "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml",
+      "canonical_manifest_sha256": "b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45",
+      "decision_path": "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml",
+      "decision_sha256": "0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082",
+      "id": "PROTECTED_SOURCE_BOUNDARY_R1",
+      "status": "ACCEPTED_FROZEN"
+    },
+    {
+      "canonical_manifest_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml",
+      "canonical_manifest_sha256": "f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1",
+      "decision_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml",
+      "decision_sha256": "a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922",
+      "id": "ACTUAL_OBJECT_ONLY_SOURCE_RUN_R3_OFFLINE_CLOSURE",
+      "status": "ACCEPTED_FROZEN_OFFLINE_CLOSURE_ONLY"
+    }
+  ],
+  "date": "2026-07-25",
+  "retained_boundaries": {
+    "actual_replayed": false,
+    "corrected_runner_actual_authorized": false,
+    "consumer_default_queue_pointer_modified": false,
+    "current_state_modified": false,
+    "frozen_execution_authority_carried_forward": false,
+    "gate_1_authority_reused": false,
+    "historical_queue_bytes_are_not_active_queue_authority": true,
+    "host_or_vcptoolbox_git_executed": false,
+    "push_pr_merge_release_deploy_or_publish_authorized": false,
+    "r4_or_r5_artifacts_included": false,
+    "runtime_provider_database_or_private_memory_used": false
+  },
+  "schema_version": "agents-os.accepted-frozen-evidence-historical-durability-manifest.v0.1",
+  "scope": {
+    "accepted_frozen_components": 3,
+    "already_present_on_base_main": 1,
+    "artifact_count": 58,
+    "current_worktree_correction_count": 3,
+    "declared_hash_conflicts": 0,
+    "declared_hash_mismatches": 0,
+    "declared_path_sha256_pairs_reverified": 53,
+    "historical_anchor_exact_artifact_count": 58,
+    "materialized_from_preserved_canonical_root": 57
+  },
+  "status": "CORRECTION_OVERLAY_REVIEW_NEEDED",
+  "working_tree_corrections": [
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "20379aef089b1384ac4b9661657d96a1de2e07436dca6dc4ebf2055ab256016e",
+      "path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py",
+      "reason": "strict duplicate-key parsing, component-wise no-follow regular single-link snapshots, and reuse of the exact hash-verified bytes for payload plus ARCHIVE_MAP close review-package ambiguity, symlink/hard-link disclosure, and byte-swap races",
+      "review_status": "REVIEW_NEEDED",
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1kyw",
+        "PRRT_kwDOSxA_XM6T1kyx",
+        "PRRT_kwDOSxA_XM6T1kyz"
+      ],
+      "working_tree_sha256": "947a5297f299870078d3d57a55c827e85f295813fe01a86c73c6ca0d37166727"
+    },
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0",
+      "path": "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "reason": "offline fixture lookup binds the current checkout; the legacy --actual spelling now denies before manifest, Git, run-root, or receipt I/O because no authenticated external Jenn execution decision exists; the historical self-referential manifest is evidence only",
+      "review_status": "REVIEW_NEEDED",
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1Cqd",
+        "PRRT_kwDOSxA_XM6T1Pyj",
+        "PRRT_kwDOSxA_XM6T1Pyk",
+        "PRRT_kwDOSxA_XM6T1a1n",
+        "PRRT_kwDOSxA_XM6T1a1q"
+      ],
+      "working_tree_sha256": "049475b14376183b097f8422a129bcc94af29aa3ea9a7e1f90ad1361b99c3235"
+    },
+    {
+      "freeze_authority_carried_forward": false,
+      "historical_anchor_sha256": "cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601",
+      "path": "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r3.py",
+      "reason": "portable-checkout, effect-free actual denial, no-live-self-hash-cycle, scanner-digest, review-builder attack self-tests, and atomic-receipt fault regressions validate the review-needed corrections",
+      "review_status": "REVIEW_NEEDED",
+      "review_threads": [
+        "PRRT_kwDOSxA_XM6T1Cqd",
+        "PRRT_kwDOSxA_XM6T1Pyj",
+        "PRRT_kwDOSxA_XM6T1Pyk",
+        "PRRT_kwDOSxA_XM6T1a1n",
+        "PRRT_kwDOSxA_XM6T1a1q",
+        "PRRT_kwDOSxA_XM6T1kyw",
+        "PRRT_kwDOSxA_XM6T1kyx",
+        "PRRT_kwDOSxA_XM6T1kyz"
+      ],
+      "working_tree_sha256": "64b0d72d24a10c3995b9ab4a483c6b3e93b709e0a8d752941251e17f07d428d3"
+    }
+  ]
+}

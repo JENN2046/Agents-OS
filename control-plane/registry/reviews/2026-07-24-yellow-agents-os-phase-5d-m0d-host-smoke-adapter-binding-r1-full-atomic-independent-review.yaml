@@ -1,0 +1,123 @@
+schema_version: agents-os.hash-bound-independent-review.v0.1
+review_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R1_FULL_ATOMIC_INDEPENDENT_REVIEW
+date: '2026-07-24'
+
+reviewer:
+  identity: Nuobao_independent_review_run
+  independent: true
+  independence_basis:
+    - did_not_author_the_fixed_subjects_or_author_self_review
+    - reviewed_the_final_fixed_manifest_bytes_after_prior_totality_corrections
+    - author_self_review_was_evidence_only
+    - did_not_modify_subjects_manifest_queue_or_CURRENT_STATE
+    - did_not_read_or_create_any_VCPToolBox_worktree
+    - did_not_execute_Host_plugin_runtime_database_provider_or_effect_paths
+
+review_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  subject_count: 4
+
+result: PASS_NO_BLOCKER
+requires_R2: false
+
+integrity:
+  manifest:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 2d18462988425344e1e642b9a47006be1ab6aea9bf103f79d3c5573f28f61499
+    atomic: true
+    partial_review_forbidden: true
+  declared_inputs:
+    total: 13
+    hashes: 13/13_MATCH
+    full_reads: 13/13
+    bytes_fully_read: 77497
+    subjects: 4/4_MATCH_AND_FULLY_READ
+    authority_inputs: 8/8_MATCH_AND_FULLY_READ
+    author_evidence: 1/1_MATCH_AND_FULLY_READ
+    all_regular_files: true
+    symlinks: 0
+  subject_hashes:
+    contract: b6b64375195a0d9f88446a2e010806c3425f007647e785b6f98cd01ee74139ae
+    evidence_profile: efcbe2afc78e29f549e692a5ae6f96dca9a0512cfd51c8fb7cfb07b85316fc05
+    synthetic_fixture: e1dd4f0812d587c7ccaa4692e69b9a0eeb1e29c17783c696ad9848165693ee1d
+    offline_validator: 17c17564e3b94ab7d90ff3a3b0601361948eabd45aec9cbb7b238c647f86fc98
+  authority_input_hashes: 8/8_MATCH
+  author_self_review_sha256: a94f74606a9a949b14c9cd82a352a5e9f6fc4223adbddfb67f8b65a3243ac11f
+
+fixed_command_reproduction:
+  command_1_validator: PASS
+  command_2_validator_self_test: PASS
+  command_3_in_memory_compile: PASS
+  command_4_JSON_and_YAML_parse: PASS
+  total: 4/4_PASS
+  baseline_fixture:
+    result: PASS
+    C01: BLOCKED_MISSING_OWNER_ISSUED_ADAPTER_BINDING
+    C02: SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED
+    runtime_usable: false
+    actual_Host_smoke_execution_authorized: false
+    Host_operation_count: 0
+    terminal_outcome: NOT_EXECUTED
+  fixed_self_test: 25/25_REJECTED
+
+independent_adversarial_review:
+  independent_probe_records: 40
+  negative_probes: 38/38_BLOCKED
+  positive_controls: 2/2_PASS
+  uncaught_exception_count: 0
+  favorable_invalid_path_count: 0
+  legal_input_over_rejection_count: 0
+  stale_hash_or_unpropagated_reference_rejection_count: 0
+  target_semantic_rejections:
+    - coherent_owner_contract_promotion_to_actual_is_rejected_by_kind_ref_and_selector_constraints
+    - runtime_usable_true_actual_Host_authorization_true_and_nonzero_Host_operation_count_are_rejected
+    - unknown_root_case_and_owner_fields_are_rejected_by_closed_schema_inventory
+    - missing_or_reordered_owner_sections_are_rejected_by_exact_section_inventory
+    - actual_or_unsealed_inventory_claims_are_rejected
+    - transient_manifest_materialization_and_processToolCall_authorization_are_rejected
+    - type_confusion_for_boolean_byte_count_ordinal_and_Host_operation_fields_is_rejected
+    - malformed_owner_contract_and_non_object_case_values_stably_return_BLOCKED
+    - duplicate_JSON_duplicate_YAML_non_string_YAML_key_and_malformed_JSON_fail_closed
+  coherent_reference_tests:
+    stale_or_independent_synthetic_fingerprint: BLOCKED_OWNER_SECTION_FINGERPRINT_INVALID
+    actual_prefix_with_recomputed_fingerprint: BLOCKED_OWNER_CONTRACT_KIND_INVALID
+    coherent_synthetic_ref_and_derived_fingerprint_substitution: SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED
+    coherent_synthetic_substitution_interpretation: >-
+      Allowed as a structural synthetic-shape positive control: all refs remain
+      NFC synthetic refs, all fingerprints are re-derived, and the reducer still
+      emits no Host authority, runtime usability, actual execution authorization,
+      or Host operation. The contract does not claim those synthetic labels are
+      immutable owner-issued evidence.
+  malformed_CLI_probe:
+    input: C02_case_null
+    process_exit_code: 1
+    stdout: valid_JSON_BLOCKED
+    stderr: empty
+    exception: false
+
+boundary_review:
+  second_permission_or_identity_authority_found: false
+  synthetic_to_actual_owner_authority_promotion_found: false
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  VCPToolBox_worktree_read_write_clone_checkout_or_start: not_performed
+  archive_delivery_or_installation: not_performed
+  enabled_manifest_plugin_discovery_loading_or_Host_lifecycle: not_performed
+  processToolCall_native_addon_NAPI_runtime_database_dependency_install: not_performed
+  provider_production_authentication_private_Memory_state_private_sensing_recording_or_effect: not_performed
+  terminal_outcome: NOT_EXECUTED
+
+findings:
+  blocker: 0
+  major: 0
+  minor: 0
+  unresolved: 0
+
+disposition:
+  adapter_binding_closure_independent_review_gate: SATISFIED
+  acceptance_or_freeze_by_this_review: false
+  actual_Host_smoke_execution_authorized: false
+  next_gate: JENN_ONLY_ATOMIC_FREEZE_DECISION_FOR_HOST_SMOKE_ADAPTER_BINDING_CLOSURE

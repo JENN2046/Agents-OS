@@ -1,0 +1,57 @@
+schema_version: agents-os.hash-bound-independent-review-package.v0.1
+review_unit:
+  id: PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_review: forbidden
+  result_if_required_input_unavailable: BLOCK
+subjects:
+  - role: contract
+    path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md
+    sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+  - role: synthetic_fixture
+    path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-synthetic-witness-v0.1.json
+    sha256: 3f7512223d6c5c594c5f1064eb4aaf136f4214858571fefac6f3eb11e7835a49
+  - role: deterministic_builder
+    path: control-plane/registry/build-phase-5d-m0d-protected-source-boundary-closure-r1-witness.py
+    sha256: 40628339fb46931e2245f9e6df3f528e5d105136b704a888b40b432067d02d1f
+  - role: offline_validator
+    path: control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py
+    sha256: bc698fc465eb8a99bcb10fb776987de8f277d93451f0df91644a674ee5b153aa
+authority_inputs:
+  - role: consumed_preflight_receipt
+    path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-execution-admission-materialization-preflight-v0.1.md
+    sha256: e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd
+  - role: consumed_preflight_decision_package
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-execution-admission-materialization-preflight-decision-package-v0.1.md
+    sha256: 72a467b18b1f1a4f4ae859bac86d8dc248507bb0718827d53885e0128046f2b1
+  - role: sealed_source_preflight
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-source-preflight-v0.1.md
+    sha256: 3a420c5ff995fc28839ba2340d69a23501bf9bd517d77ef552a9217cdfa14a3d
+  - role: adapter_binding_freeze_decision
+    path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-v0.1.yaml
+    sha256: ba24dd3a7e13d04fd23fc688f9a5a1d941d50daa352ac7cb6cbf6f26f36eb46c
+author_evidence:
+  - path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-author-self-review.yaml
+    sha256: e87952cf1850960209a3bff3c6f72677c041ecdef695374743bc07c9503425ac
+fixed_commands:
+  - id: fixture_validation
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-synthetic-witness-v0.1.json
+  - id: builder_byte_reproduction
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/build-phase-5d-m0d-protected-source-boundary-closure-r1-witness.py | cmp -s - control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-synthetic-witness-v0.1.json
+  - id: negative_self_test
+    command: PYTHONDONTWRITEBYTECODE=1 python3 control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py --self-test
+  - id: python_compile
+    command: PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile control-plane/registry/build-phase-5d-m0d-protected-source-boundary-closure-r1-witness.py control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py
+review_requirements:
+  - recompute all 9 input SHA-256 values
+  - fully read all 4 subjects, 4 authority inputs and author evidence
+  - run all 4 fixed commands
+  - construct fully resigned semantic attacks rather than relying on stale hashes
+  - confirm no protected content or protected object identifier enters the schema
+  - confirm no checkout, worktree, sparse checkout, archive, Host or runtime path is authorized
+allowed_results: [PASS_NO_BLOCKER, BLOCK]
+non_authority_assertions:
+  actual_Git_object_run_authorized: false
+  VCPToolBox_worktree_authorized: false
+  actual_Host_smoke_execution_authorized: false
+  Host_operation_count: 0

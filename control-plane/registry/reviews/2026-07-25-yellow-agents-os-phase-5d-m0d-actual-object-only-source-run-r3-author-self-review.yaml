@@ -1,0 +1,46 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R3_ATOMIC_BUNDLE
+author: Nobao
+independent: false
+status: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+terminal_outcome: NOT_EXECUTED
+
+immutable_R2_lineage:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe
+  independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-full-atomic-independent-review.yaml
+    sha256: ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe
+    result: BLOCK
+
+R3_start_authority:
+  path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-narrow-correction-start-decision-v0.1.yaml
+  sha256: 0ddac25b83277637c56ab1be750e9751ee8b2e45b100302864dec793b5f7ff0d
+  scope_expansion: forbidden
+
+R3_subjects:
+  amendment_sha256: 22d03bee4337141de6e8973cf6d0b03a6060c30536d33c413aecf1ae25005575
+  decision_package_sha256: 6e042306381bd51efc8a6df4b22856c895d5cd038615320553e05e35d7e4f974
+  runner_sha256: 3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0
+  fixture_builder_sha256: f30b8f1f03354c51f8b5dea6f8a4daca0c5a493721a5bd757671f7fd28dde746
+  fixture_sha256: 1c78df56c9a4627ea6844616a2529879cc1eb058d984c0a54f69423356181256
+  validator_sha256: cf28f801abc3db9e133904da4d729ce40c50c4ba9f03d335b5d151841d186601
+  inherited_scanner_sha256: 82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35
+
+author_checks:
+  runner_import_scanner_execution: false
+  scanner_bytes_verified_before_exec: PASS
+  malicious_scanner_top_level_side_effect: REJECTED_WITHOUT_EXECUTION
+  fixture_has_no_caller_path_argument: PASS
+  fixture_symlink_argument: REJECTED
+  pending_SIGTERM_before_terminal_commit: BLOCKED
+  success_exit_keeps_catchable_signals_masked: PASS
+  runner_self_test: 8/8_PASS
+  validator_self_test: 10/10_PASS
+  actual_mode_invocations: 0
+  VCPToolBox_Git_command_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+
+next_gate: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW

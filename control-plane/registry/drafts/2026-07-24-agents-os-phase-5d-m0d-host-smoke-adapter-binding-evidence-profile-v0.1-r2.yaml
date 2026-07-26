@@ -1,0 +1,134 @@
+schema_version: agents-os.phase5d.m0d.host-smoke-adapter-binding-evidence-profile.v0.1-r2
+profile_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_EVIDENCE_PROFILE_V0_1_R2
+status: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+contract_id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R2
+runtime_usable: false
+actual_Host_smoke_execution_authorized: false
+Host_operation_count: 0
+terminal_outcome: NOT_EXECUTED
+
+closed_fixture_root_fields:
+  - schema_version
+  - amendment_path
+  - profile_path
+  - immutable_anchor
+  - cases
+
+closed_case_fields:
+  - case_id
+  - environment
+  - owner_contract
+  - hermetic_dependency_inventory
+  - inert_payload
+  - transient_enabled_manifest
+  - lifecycle_binding
+  - expected_result
+  - runtime_usable
+  - actual_Host_smoke_execution_authorized
+  - Host_operation_count
+
+case_ids_in_order:
+  - C01_MISSING_OWNER_BINDING
+  - C02_SYNTHETIC_REVISION_1
+  - C03_SYNTHETIC_REVISION_2
+  - C04_SYNTHETIC_MAX_SAFE_REVISION
+
+immutable_anchor_fields:
+  - VCPToolBox_commit
+  - VCPToolBox_tree
+  - source_preflight_sha256
+  - inert_entrypoint_sha256
+  - blocked_manifest_sha256
+
+owner_contract_fields:
+  - kind
+  - contract_ref
+  - contract_revision
+  - contract_sha256
+  - sections
+
+required_sections_in_order:
+  - hermetic_quarantine_root
+  - Host_module_and_dependency_inventory
+  - inert_payload
+  - transient_enabled_manifest
+  - host_discovery
+  - initialize
+  - shutdown
+  - quarantine_cleanup
+
+section_fields:
+  - ref
+  - revision
+  - sha256
+
+inventory_fields:
+  - kind
+  - complete_for_actual_Host
+  - entries
+
+inventory_entry_fields:
+  - logical_name
+  - source_kind
+  - immutable_identity
+  - sha256
+  - resolution_ordinal
+
+inert_payload_fields:
+  - entrypoint_sha256
+  - blocked_manifest_sha256
+  - processToolCall_authorized
+
+transient_enabled_manifest_fields:
+  - target_relative_path
+  - byte_count
+  - sha256
+  - materialized
+
+lifecycle_binding_fields:
+  - host_discovery_selector
+  - initialize_selector
+  - initialize_argument_bytes_sha256
+  - initialize_expected_return
+  - shutdown_selector
+  - shutdown_argument_bytes_sha256
+  - shutdown_expected_return
+  - cleanup_selector
+
+revision_totality:
+  strict_JSON_integer: true
+  minimum: 1
+  maximum: 9007199254740991
+  contract_revision_must_equal_each_section_revision: true
+  fixed_revision_value: null
+
+current_allowed_results:
+  - BLOCKED_MISSING_OWNER_ISSUED_ADAPTER_BINDING
+  - BLOCKED_HERMETIC_DEPENDENCY_INVENTORY_UNAVAILABLE
+  - SYNTHETIC_ADAPTER_BINDING_SHAPE_VALIDATED
+
+cross_field_rules:
+  - all_cases_require_SYNTHETIC_TEST_environment
+  - all_cases_require_runtime_usable_false
+  - all_cases_require_actual_Host_smoke_execution_authorized_false
+  - all_cases_require_Host_operation_count_zero
+  - all_boolean_and_integer_fields_require_strict_JSON_types
+  - all_mapping_keys_require_strict_JSON_strings
+  - C01_requires_null_owner_contract_and_inventory
+  - C02_C03_C04_require_complete_synthetic_owner_contract_shape
+  - C02_C03_C04_require_synthetic_unmaterialized_inventory
+  - C02_C03_C04_require_unmaterialized_transient_manifest
+  - all_sections_require_strict_ref_positive_revision_lowercase_sha256
+  - contract_revision_must_equal_all_section_revisions
+  - synthetic_fingerprints_must_derive_from_their_synthetic_reference_bytes
+  - processToolCall_authorized_must_be_false
+  - unknown_or_missing_field_result_BLOCKED
+
+forbidden_claims:
+  - owner_issued_actual_Host_contract_present
+  - actual_Host_smoke_execution_authorized
+  - Host_operation_count_greater_than_zero
+  - real_quarantine_root_created
+  - enabled_manifest_materialized
+  - processToolCall_or_native_addon_authorized
+  - runtime_database_dependency_install_provider_private_Memory_sensing_or_effect

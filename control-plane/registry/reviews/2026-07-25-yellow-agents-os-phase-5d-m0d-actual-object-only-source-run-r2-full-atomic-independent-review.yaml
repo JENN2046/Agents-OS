@@ -1,0 +1,184 @@
+schema_version: agents-os.full-atomic-independent-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R2_ATOMIC_BUNDLE
+
+reviewer:
+  identity: independent_Codex_window
+  independent: true
+  author_of_subjects: false
+
+result: BLOCK
+blocker_count: 3
+major_count: 0
+minor_count: 0
+requires_R3: true
+R2_acceptance_eligible: false
+Section_6_A_eligible: false
+
+hash_binding:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: 6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe
+  review_zip:
+    path: /tmp/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-review-package-v0.1.zip
+    sha256: 7a9a12af6fb9c4bc325217a307e54701ea674f7cfc61a7bc63418956a3fc98c8
+  required_inputs:
+    declared: 17
+    workspace_hash_matches: 17
+    archive_map_matches: 17
+    result: 17/17_MATCH
+
+zip_integrity:
+  result: PASS
+  entry_count: 19
+  crc: PASS
+  unsafe_path_count: 0
+  symlink_entry_count: 0
+  archive_map: 17/17_MATCH
+  top_level_manifest_byte_equal: true
+  byte_reproduction: PASS
+
+fixed_commands:
+  python_compile: PASS
+  scanner_self_test: 5/5_PASS
+  runner_self_test: 10/10_PASS
+  fixture_byte_reproduction: PASS
+  fixture_validation: PASS_NO_BLOCKER
+  validator_self_test: 26/26_PASS
+  runner_fixture_mode: PASS_NO_BLOCKER
+  result: 7/7_PASS
+  actual_mode_invoked: false
+
+independent_positive_probes:
+  replacement_ref_control_without_flag_returns_replacement_bytes: true
+  replacement_ref_with_R2_environment_returns_original_OID_bytes: true
+  missing_GIT_NO_REPLACE_OBJECTS_rejected: true
+  changed_GIT_NO_REPLACE_OBJECTS_rejected: true
+  receipt_symlink_rejected_without_target_change: true
+  receipt_post_precheck_race_rejected_by_exclusive_create: true
+  ordinary_finalizer_result: CLEAN
+  missing_temporary_result_result: RESIDUE_UNVERIFIED
+  marker_mismatch_result: RESIDUE_UNVERIFIED
+  unexpected_residue_result: RESIDUE_UNVERIFIED
+  SIGINT_execution_interval:
+    handler_reached: true
+    cleanup: CLEAN
+  SIGTERM_execution_interval:
+    handler_reached: true
+    cleanup: CLEAN
+  SIGHUP_execution_interval:
+    handler_reached: true
+    cleanup: CLEAN
+
+findings:
+  - id: AOOSR-R2-BLOCKER-001
+    severity: blocker
+    title: Scanner code executes before its manifest hash is verified
+    evidence:
+      - runner_line_26_executes_scanner_with_runpy_run_path_at_module_import
+      - bound_manifest_verification_begins_only_inside_run_actual_at_runner_line_607
+      - scanner_hash_drift_is_therefore_detected_only_after_the_changed_scanner_has_already_executed
+    impact: >
+      The scanner is nominally hash-bound but is not verify-before-execute.
+      A substituted scanner can perform arbitrary top-level Python behavior
+      before the runner rejects its digest, defeating the stated executable
+      subject boundary.
+    required_disposition:
+      - remove top-level scanner execution from runner import
+      - verify manifest and scanner bytes before executing scanner code
+      - execute only the already verified byte buffer or embed the reviewed scanner
+      - add a negative test whose substituted scanner has a top-level side effect and prove the side effect cannot occur
+
+  - id: AOOSR-R2-BLOCKER-002
+    severity: blocker
+    title: A signal pending during finalization can coexist with a success receipt and then terminate the process
+    evidence:
+      - block_for_finalizer_blocks_SIGINT_SIGTERM_SIGHUP_before_cleanup_and_receipt_write
+      - the receipt is written while those signals remain blocked
+      - SignalGuard_exit_restores_previous_handlers_before_restoring_the_previous_mask
+      - independent_child_probe_queued_SIGTERM_in_the_masked_window
+      - independent_child_probe_created_the_success_marker_then_exited_with_returncode_minus_15
+    impact: >
+      A catchable interruption that arrives before terminal receipt commit can
+      be delivered only after a success receipt already exists. The process
+      then terminates by signal while durable evidence claims success, so exit
+      status and receipt semantics are contradictory.
+    required_disposition:
+      - define an explicit signal-safe terminal commit point
+      - ensure a signal received before that point downgrades result and receipt to an interruption outcome
+      - prevent a pending catchable signal from terminating the process after a success receipt is committed
+      - add real subprocess tests for signals arriving during cleanup and receipt finalization
+
+  - id: AOOSR-R2-BLOCKER-003
+    severity: blocker
+    title: Runner fixture mode still accepts and follows a caller-selected symlink path
+    evidence:
+      - argparse_exposes_fixture_as_an_unrestricted_Path_argument
+      - load_json_no_duplicates_uses_Path_read_text_without_lstat_realpath_or_no_follow_checks
+      - independent_probe_passed_a_random_tmp_symlink_to_the_valid_fixture
+      - the_caller_selected_symlink_fixture_was_accepted_with_PASS_NO_BLOCKER
+      - the_successor_package_claims_R2_executable_subjects_admit_no_caller_selected_paths
+    impact: >
+      The actual-capable runner can be directed to read arbitrary caller-chosen
+      UTF-8 files through fixture mode, including symlink targets. Although the
+      mode does not invoke Git, it violates the declared closed input surface
+      and can cross protected-file read boundaries.
+    required_disposition:
+      - make fixture mode use only the exact hash-bound synthetic fixture path
+      - or apply the same workspace-relative protected-path, regular-file, realpath and O_NOFOLLOW checks before reading
+      - add protected-path and symlink fixture negative tests
+
+confirmed_R1_blocker_progress:
+  GIT_NO_REPLACE_OBJECTS_exactly_1: PASS
+  alternate_object_directory_disabled: PASS
+  runner_and_scanner_present_in_hash_bound_manifest: PASS
+  canonical_root_symlink_checks_implemented: PASS
+  exclusive_no_follow_file_creation_implemented: PASS
+  temporary_result_creation_implemented: PASS
+  normal_and_execution_interval_signal_finalizer_paths: PASS
+
+reviewer_diagnostic_incident:
+  occurred: true
+  description: >
+    An initial helper-level finalizer probe attempted to redirect runner
+    globals to a random temporary root, but runpy returned a mapping distinct
+    from the function globals. The helper therefore created the literal run
+    root twice without invoking actual mode or Git. The first instance was
+    finalized immediately; the second was left by the probe exception and was
+    then removed with the runner's exact non-recursive finalizer.
+  literal_run_root_helper_creation_count: 2
+  actual_mode_invocation_count: 0
+  VCPToolBox_Git_command_count: 0
+  protected_content_bytes_read: 0
+  protected_blob_identifier_read_count: 0
+  final_receipt_created: false
+  exact_finalizer_cleanup_result: CLEAN
+  literal_run_root_absent_after_cleanup: true
+
+execution_observation:
+  actual_object_only_source_run_performed: false
+  actual_mode_invocation_count: 0
+  VCPToolBox_Git_command_count: 0
+  VCPToolBox_worktree_operation_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+  final_receipt_target_absent: true
+  subject_files_modified: 0
+  independent_review_artifact_created: true
+
+authority_effect:
+  R2_review_passed: false
+  R2_accepted: false
+  R2_frozen: false
+  actual_object_only_source_run_authorized: false
+  Section_6_A_may_be_selected: false
+  protected_source_boundary_R1_remains_frozen: true
+  automatic_transition: forbidden
+
+next_gate:
+  name: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3_NARROW_CORRECTION
+  decision_owner: Jenn
+  permitted_scope:
+    - scanner_verify_before_execute
+    - signal_safe_terminal_receipt_commit
+    - closed_no_follow_fixture_input
+  actual_execution_before_R3_review: forbidden

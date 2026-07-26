@@ -1,0 +1,47 @@
+schema_version: agents-os.independent-review-finding-disposition.v0.1
+disposition_id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R3_INDEPENDENT_REVIEW_DISPOSITION_V0_1
+date: '2026-07-25'
+owner: Jenn
+agent_steward: Nobao
+
+review_unit:
+  id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R3_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+
+immutable_history:
+  R2_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-full-atomic-independent-review.yaml
+    sha256: ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe
+    result: BLOCK
+  R3_manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+    subjects: 7
+    bound_inputs: 15
+  R3_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-full-atomic-independent-review.yaml
+    sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+    result: PASS_NO_BLOCKER
+    findings: {blocker: 0, major: 0, minor: 0, informational: 1}
+
+disposition:
+  R2_scanner_verify_before_execute_blocker: CLOSED_BY_R3
+  R2_signal_safe_terminal_commit_blocker: CLOSED_BY_R3
+  R2_closed_no_follow_fixture_input_blocker: CLOSED_BY_R3
+  R3_independent_review_gate_satisfied: true
+  R3_requires_R4: false
+  R3_semantic_freeze_candidate: true
+  R3_accepted: false
+  R3_frozen: false
+  R3_atomic_freeze_decision_created: false
+  actual_object_only_source_run_authorized: false
+  next_gate: JENN_ONLY_R3_ATOMIC_FREEZE_DECISION
+  terminal_outcome: NOT_EXECUTED
+
+scope_limit:
+  - records the R3 independent-review result only
+  - does not accept or freeze the R3 atomic bundle
+  - does not authorize the actual object-only source run or any VCPToolBox Git command
+  - does not authorize a worktree, Host lifecycle, plugin, runtime, database, provider, private Memory, sensing, or effect action
+  - does not authorize Git delivery

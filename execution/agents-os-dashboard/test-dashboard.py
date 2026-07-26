@@ -236,6 +236,43 @@ latest_closed: new
         check(fixture_summary["last_completed"]["text"] == "latest_closed: new", "latest CLOSED should surface", failures)
         check(len(fixture_summary["open_blockers"]) == 2, "fixture blockers should surface", failures)
 
+        p3_fixture = Path(temp_dir) / "p3-queue.md"
+        p3_fixture.write_text(
+            """# P3 fixture queue
+
+## NOW
+
+### NOW-001: Call provider
+
+Call provider and start service.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+old_task: closed
+```
+""",
+            encoding="utf-8",
+        )
+        p3_summary = dashboard.build_dashboard_summary(p3_fixture, run_validations=False)
+        check(p3_summary["passed"], f"P3 dashboard summary should pass as blocked state: {p3_summary['errors']}", failures)
+        check(p3_summary["queue"]["now"]["blocked"] is True, "P3 dashboard NOW should preserve blocked=true", failures)
+        check(
+            p3_summary["queue"]["now"]["review_requires_jenn_decision"] is True,
+            "P3 dashboard NOW should preserve Jenn review requirement",
+            failures,
+        )
+        check(
+            p3_summary["next_user_action"]["status"] == "governance_decision_required",
+            "P3 dashboard next action should require governance decision",
+            failures,
+        )
+        check(p3_summary["next_user_action"]["decision_owner"] == "Jenn", "P3 dashboard next action owner should be Jenn", failures)
+
     protected_summary = dashboard.build_dashboard_summary(Path("state-private/queue.md"), run_validations=False)
     check(not protected_summary["passed"], "protected queue path should fail before read", failures)
 

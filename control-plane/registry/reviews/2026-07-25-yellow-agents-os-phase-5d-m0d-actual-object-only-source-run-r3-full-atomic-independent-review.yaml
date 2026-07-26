@@ -1,0 +1,161 @@
+schema_version: agents-os.full-atomic-independent-review.v0.1
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R3_ATOMIC_BUNDLE
+reviewed_on: '2026-07-25'
+
+reviewer:
+  identity: independent_Codex_window
+  independent: true
+  author_of_subjects: false
+
+result: PASS_NO_BLOCKER
+blocker_count: 0
+major_count: 0
+minor_count: 0
+informational_count: 1
+requires_R4: false
+R3_acceptance_eligible: true
+R3_freeze_decision_eligible: true
+actual_object_only_source_run_eligible: false
+
+hash_binding:
+  manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+  review_zip:
+    path: /tmp/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-review-package-v0.1.zip
+    sha256: f87ff4f180cfd9890f84f2a572d81341702f83634ea86ba323f96645ebb3c002
+  immutable_R2_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-full-atomic-independent-review.yaml
+    sha256: ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe
+    result: BLOCK
+  required_inputs:
+    declared: 15
+    workspace_hash_matches: 15
+    archive_map_matches: 15
+    result: 15/15_MATCH
+
+zip_integrity:
+  result: PASS
+  entry_count: 17
+  crc: PASS
+  unsafe_path_count: 0
+  symlink_entry_count: 0
+  archive_map: 15/15_MATCH
+  top_level_manifest_byte_equal: true
+  byte_reproduction:
+    result: PASS
+    rebuilt_sha256: f87ff4f180cfd9890f84f2a572d81341702f83634ea86ba323f96645ebb3c002
+
+fixed_commands:
+  execution_root: /home/jenn/AGENTS_OS_Workspace
+  python_compile: PASS
+  runner_self_test: 8/8_PASS
+  runner_fixture_mode: PASS_NO_BLOCKER
+  fixture_byte_reproduction: PASS
+  fixture_validation: PASS_NO_BLOCKER
+  validator_self_test: 10/10_PASS
+  review_package_builder: PASS
+  result: 7/7_PASS
+  actual_mode_invoked: false
+
+R2_blocker_disposition:
+  - R2_finding: AOOSR-R2-BLOCKER-001
+    title: Scanner code executes before its manifest hash is verified
+    disposition: CLOSED
+    evidence:
+      - runner_has_no_top_level_scanner_load_or_runpy
+      - bound_manifest_and_all_15_source_hashes_are_verified_before_scanner_compile_or_exec
+      - scanner_executes_from_the_already_verified_in_memory_byte_buffer
+      - mismatched_digest_scanner_with_top_level_file_side_effect_was_rejected_without_creating_the_marker
+      - matching_digest_shape_valid_scanner_buffer_loaded_successfully
+
+  - R2_finding: AOOSR-R2-BLOCKER-002
+    title: A signal pending during finalization can coexist with a success receipt and then terminate the process
+    disposition: CLOSED
+    evidence:
+      - SIGINT_SIGTERM_SIGHUP_are_blocked_for_the_full_actual_mode_lifetime
+      - pending_signal_is_checked_before_success_state_and_again_at_terminal_linearization
+      - success_receipt_is_followed_by_os__exit_0_without_restoring_the_catchable_signal_mask
+      - independent_subprocess_detected_a_queued_SIGTERM_while_masked
+      - independent_subprocess_confirmed_success_exit_retains_SIGTERM_in_the_mask
+      - independent_subprocess_confirmed_a_signal_after_the_terminal_check_cannot_contradict_direct_success_exit
+
+  - R2_finding: AOOSR-R2-BLOCKER-003
+    title: Runner fixture mode accepts and follows a caller-selected symlink path
+    disposition: CLOSED
+    evidence:
+      - fixture_is_a_boolean_mode_with_no_path_argument
+      - caller_supplied_fixture_path_is_rejected_by_argparse
+      - literal_fixture_reader_requires_safe_workspace_relative_regular_realpath_exact_O_NOFOLLOW_input
+      - independent_fixture_substitutions_rejected_symlink_nonregular_and_path_escape
+      - independent_regular_fixed_fixture_control_was_accepted
+
+independent_adversarial_probes:
+  scanner:
+    mismatched_digest_rejected_before_side_effect: PASS
+    matching_digest_shape_valid_buffer_loaded: PASS
+    verify_before_scanner_and_Git_call_order: PASS
+  fixture:
+    regular_fixed_input_control: PASS
+    symlink_substitution: REJECTED
+    nonregular_substitution: REJECTED
+    path_escape_substitution: REJECTED
+    caller_path_argument: REJECTED
+  signal_terminal_commit:
+    queued_signal_detected_while_masked: PASS
+    success_exit_retains_mask: PASS
+    post_linearization_signal_cannot_contradict_direct_exit: PASS
+  boundary:
+    actual_mode_invoked: false
+    literal_run_root_created: false
+    actual_receipt_created: false
+    VCPToolBox_Git_command_count: 0
+    VCPToolBox_worktree_operation_count: 0
+    Host_operation_count: 0
+    runtime_or_effect_operation_count: 0
+
+findings: []
+
+non_blocking_observations:
+  - id: AOOSR-R3-INFO-001
+    severity: informational
+    title: Review-package builder fixed command is canonical-workspace-relative
+    evidence:
+      - all_7_fixed_commands_pass_from_the_declared_canonical_workspace
+      - the_ZIP_places_the_manifest_at_top_level_MANIFEST_yaml_and_the_15_inputs_under_payload
+      - command_7_as_written_references_the_original_workspace_manifest_path_and_does_not_replay_from_the_extracted_payload_alone
+    impact: >
+      This does not weaken the 15-input hash binding, archive integrity,
+      deterministic byte reproduction, or any of the three R3 safety
+      closures. It means the seventh fixed command is a canonical-workspace
+      builder check rather than a standalone ZIP-only replay command.
+    required_action: none_for_R3_acceptance_or_freeze
+
+execution_observation:
+  actual_object_only_source_run_performed: false
+  actual_mode_invocation_count: 0
+  VCPToolBox_Git_command_count: 0
+  VCPToolBox_worktree_operation_count: 0
+  Host_operation_count: 0
+  runtime_or_effect_operation_count: 0
+  literal_run_root_absent_after_review: true
+  final_receipt_target_absent: true
+  subject_files_modified: 0
+  independent_review_artifact_created: true
+
+authority_effect:
+  R3_review_passed: true
+  R3_accepted: false
+  R3_frozen: false
+  actual_object_only_source_run_authorized: false
+  future_execution_decision_exists: false
+  protected_source_boundary_R1_remains_frozen: true
+  automatic_transition: forbidden
+
+next_gate:
+  name: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3_ATOMIC_FREEZE_DECISION
+  decision_owner: Jenn
+  review_result_required: PASS_NO_BLOCKER
+  review_result_observed: PASS_NO_BLOCKER
+  acceptance_or_freeze_requires_new_current_Jenn_decision: true
+  actual_execution_requires_later_separate_Jenn_decision: true

@@ -1,0 +1,37 @@
+schema_version: agents-os.author-self-review.v0.1
+review_unit: PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+reviewer:
+  identity: Nobao
+  independent: false
+  basis:
+    - authored_the_R1_draft_subjects
+    - no_VCPToolBox_or_Host_operation_during_author_review
+    - protected_config_env_contents_not_read
+result: PASS_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+subjects:
+  contract:
+    path: control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md
+    sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+  fixture:
+    path: control-plane/registry/examples/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-synthetic-witness-v0.1.json
+    sha256: 3f7512223d6c5c594c5f1064eb4aaf136f4214858571fefac6f3eb11e7835a49
+  builder:
+    path: control-plane/registry/build-phase-5d-m0d-protected-source-boundary-closure-r1-witness.py
+    sha256: 40628339fb46931e2245f9e6df3f528e5d105136b704a888b40b432067d02d1f
+  validator:
+    path: control-plane/registry/validate-phase-5d-m0d-protected-source-boundary-closure-r1.py
+    sha256: bc698fc465eb8a99bcb10fb776987de8f277d93451f0df91644a674ee5b153aa
+validation:
+  builder_byte_reproduction: PASS
+  canonical_fixture_validator: PASS_NO_BLOCKER
+  self_test_cases: 10/10_PASS
+  python_compile: PASS
+  protected_content_read_count: 0
+  Host_operation_count: 0
+reviewed_boundaries:
+  protected_path_content_or_identifier_allowed: false
+  generic_Git_path_or_blob_reader_allowed: false
+  worktree_checkout_sparse_checkout_or_archive_allowed: false
+  Host_lifecycle_or_runtime_allowed: false
+  synthetic_witness_runtime_usable: false
+remaining_gate: FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW

@@ -1,0 +1,152 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-24T22:11:49+08:00'
+effective_at: '2026-07-24T22:11:49+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R2
+  decision_source: direct_current_conversation_confirmation_to_execute_the_bound_decision_package_section_6_A
+
+decision_confirmation:
+  section_6_A_execution_confirmed: true
+  direct_reference_to_exact_decision_text: true
+  verbatim_exact_decision_text_received: false
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-package-v0.1.md
+    sha256: d94558e82e3329f304feb4996e12b4196b751c44e47ddb10715ff0e317771209
+    section: 6_A
+  confirmation_text_received: 我确认执行 Phase 5D M0-D Host-Smoke Adapter Binding R2 Atomic Freeze Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+  interpretation: Jenn explicitly selected the package's complete atomic accept-and-freeze outcome for the R1-R2 adapter-binding closure bundle.
+
+acceptance_unit:
+  id: PHASE_5D_M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_V0_1_R2_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 8
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R2_explicit_replacements
+    - R1_all_other_clauses
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: 422c97bae3c23db8c18860e3779b3c0b016bb382f1732a134f9757619caefa5f
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_subject_count: 8
+  verified_authority_input_count: 9
+  verified_author_evidence_count: 1
+  verified_total_input_count: 18
+  source_snapshot_type: local_hash_bound_R1_R2_adapter_binding_authoring_snapshot
+  Git_commit_claimed: false
+
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 8
+  subject_hashes_verified: 8/8_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-full-atomic-independent-review.yaml
+    sha256: b406dfa76047d6d580327ae5ccfd36695c3ea53885a1a14da4e742b2ba5f6fc1
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    favorable_invalid_path_count: 0
+    legal_input_over_rejection_count: 0
+    requires_R3: false
+    acceptance_subject: false
+  - role: independent_review_PASS_disposition
+    path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-independent-review-disposition-v0.1.yaml
+    sha256: 5cd83ddfceb60a75b052cc7fc9545ccc6105191cef6986fae2b0096cf1f6eb87
+    acceptance_subject: false
+  - role: governance_freeze_gate_correction
+    path: control-plane/registry/receipts/2026-07-24-yellow-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-governance-freeze-gate-correction-v0.1.md
+    sha256: 0dc4e258785dc29d2521b36829d0d562781e8cdacb26a3258cca7f3925152653
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-host-smoke-adapter-binding-r2-atomic-freeze-decision-package-v0.1.md
+    sha256: d94558e82e3329f304feb4996e12b4196b751c44e47ddb10715ff0e317771209
+    acceptance_subject: false
+
+frozen_contract_boundary:
+  - owner_section_contract_revision_is_any_strict_JSON_positive_safe_integer
+  - every_owner_section_revision_must_exactly_equal_the_contract_revision
+  - revision_1_revision_2_and_in_range_positive_safe_integer_examples_are_valid
+  - contract_section_revision_mismatch_fails_closed
+  - malformed_or_type_drifted_revision_input_fails_closed
+  - synthetic_adapter_binding_evidence_is_shape_only_and_never_owner_authority
+  - runtime_usable_false_actual_Host_smoke_execution_authorized_false_Host_operation_count_zero
+
+excluded_evidence_classes:
+  - manifest
+  - review_package
+  - author_self_review
+  - independent_review
+  - independent_review_disposition
+  - start_decision
+  - decision_package
+  - receipt
+  - active_work_queue
+  - registry_projection
+
+effects:
+  Phase_5D_status: M0D_HOST_SMOKE_ADAPTER_BINDING_CLOSURE_R2_ACCEPTED_FROZEN_AWAITING_SEPARATE_JENN_ACTUAL_HOST_SMOKE_EXECUTION_DECISION
+  Phase_5D_adapter_binding_R2_atomic_freeze_gate: SATISFIED
+  Phase_5D_adapter_binding_R2_accepted: true
+  Phase_5D_adapter_binding_R2_frozen: true
+  Phase_5D_adapter_binding_R2_revisions_stopped: true
+  additional_R3_required: false
+  actual_Host_smoke_execution_authorized: false
+  runtime_usable: false
+  Host_operation_count: 0
+  VCPToolBox_worktree_read_write_clone_checkout_or_start_authorized: false
+  archive_delivery_or_installation_authorized: false
+  enabled_manifest_plugin_discovery_or_loading_authorized: false
+  Host_lifecycle_discovery_initialize_shutdown_quarantine_cleanup_processToolCall_native_NAPI_or_addon_authorized: false
+  Rust_JavaScript_SQLite_database_dependency_toolchain_public_API_or_MCP_authorized: false
+  runtime_service_provider_or_production_authentication_authorized: false
+  credential_key_private_raw_Memory_state_private_sensing_recording_or_real_effect_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5D_M0D_ACTUAL_HOST_SMOKE_EXECUTION_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  actual_Host_smoke_preconditions:
+    - a_separate_current_Jenn_execution_decision
+    - exact_actual_Host_owner_issued_evidence_matching_the_frozen_lifecycle_and_adapter_binding_contracts
+    - a_new_hash_bound_preflight_that_remains_fail_closed_on_any_missing_input
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_input_reverification_before_freeze: completed
+  manifest_input_hashes: 18/18_MATCH
+  accepted_subject_hashes: 8/8_MATCH
+  fixed_commands: 5/5_PASS
+  independent_review_sha256_bytes_and_result: MATCH
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  edit_bound_independent_review_bytes: forbidden
+  future_contract_semantic_change_requires_new_R3_review_and_Jenn_decision: true

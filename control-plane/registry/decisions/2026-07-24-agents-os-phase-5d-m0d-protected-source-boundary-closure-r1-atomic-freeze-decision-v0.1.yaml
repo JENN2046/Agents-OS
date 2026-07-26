@@ -1,0 +1,142 @@
+schema_version: agents-os.freeze-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1
+record_type: FreezeDecisionRecord
+status: accepted_frozen
+immutable: true
+created_at: '2026-07-24T23:36:37+08:00'
+effective_at: '2026-07-24T23:36:37+08:00'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: ACCEPT_AND_FREEZE_PROTECTED_SOURCE_BOUNDARY_CLOSURE_R1
+  decision_source: direct_current_conversation_confirmation_to_execute_the_bound_decision_package_section_6_A
+
+decision_confirmation:
+  section_6_A_execution_confirmed: true
+  direct_reference_to_exact_decision_text: true
+  verbatim_exact_decision_text_received: false
+  confirmed_package:
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-package-v0.1.md
+    sha256: 1dd13617384803575a5d06d7e36bc4159123560c42215b4d47ea7f915d719e33
+    section: 6_A
+  confirmation_text_received: 执行决策包第 6 节 A 的完整 Exact decision text。
+  interpretation: Jenn explicitly selected the package's complete atomic accept-and-freeze outcome for the protected-source boundary R1 bundle.
+
+acceptance_unit:
+  id: PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+  subject_count: 4
+  result: ACCEPTED_FROZEN
+  precedence:
+    - R1_complete_contract_fixture_builder_validator_bundle
+
+manifest_binding:
+  path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml
+  sha256: b26584bcbc93219a382d23e4ccd1a9b09650c0fca6920604bc4b06a493ca4b45
+  algorithm: SHA-256
+  byte_scope: entire_regular_file
+  canonicalization: none
+  verified_subject_count: 4
+  verified_authority_input_count: 4
+  verified_author_evidence_count: 1
+  verified_total_input_count: 9
+  source_snapshot_type: local_hash_bound_protected_source_boundary_authoring_snapshot
+  Git_commit_claimed: false
+
+accepted_subject_inventory:
+  source: manifest_binding.review_unit.subjects
+  subject_count: 4
+  subject_hashes_verified: 4/4_MATCH
+  inline_duplicate_inventory: false
+  reason: manifest_is_the_canonical_hash_bound_subject_inventory
+
+supporting_evidence:
+  - role: fresh_full_atomic_hash_bound_independent_review
+    path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml
+    sha256: 61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c
+    result: PASS_NO_BLOCKER
+    blocker_count: 0
+    major_count: 0
+    minor_count: 0
+    requires_R2: false
+    acceptance_subject: false
+  - role: independent_review_PASS_disposition
+    path: control-plane/registry/reviews/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-independent-review-disposition-v0.1.yaml
+    sha256: 334d0ecb9c9c29fd838ae0a96d3bb6e2b28fb4bf0ae8eafcec929fcbf254d87b
+    acceptance_subject: false
+  - role: atomic_freeze_decision_surface
+    path: control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-package-v0.1.md
+    sha256: 1dd13617384803575a5d06d7e36bc4159123560c42215b4d47ea7f915d719e33
+    acceptance_subject: false
+
+frozen_contract_boundary:
+  - protected_tracked_paths_are_names_only_never_content_blob_OID_content_hash_or_configuration_semantics
+  - only_the_complete_seven_tuple_sealed_nonprotected_blob_allowlist_is_an_object_only_input
+  - checkout_worktree_sparse_checkout_and_archive_mechanisms_are_forbidden
+  - synthetic_witness_cannot_become_Git_Host_runtime_or_effect_authority
+  - missing_unknown_or_protected_input_fails_closed
+
+excluded_evidence_classes:
+  - manifest
+  - review_package
+  - author_self_review
+  - independent_review
+  - independent_review_disposition
+  - decision_package
+  - decision_record
+  - receipt
+  - active_work_queue
+  - registry_projection
+
+effects:
+  Phase_5D_status: M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_R1_ACCEPTED_FROZEN_AWAITING_SEPARATE_JENN_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION
+  Phase_5D_protected_source_boundary_R1_atomic_freeze_gate: SATISFIED
+  Phase_5D_protected_source_boundary_R1_accepted: true
+  Phase_5D_protected_source_boundary_R1_frozen: true
+  Phase_5D_protected_source_boundary_R1_revisions_stopped: true
+  additional_R2_required: false
+  actual_Git_object_run_authorized: false
+  VCPToolBox_worktree_authorized: false
+  git_checkout_sparse_checkout_or_archive_authorized: false
+  quarantine_root_or_payload_materialization_authorized: false
+  actual_Host_smoke_execution_authorized: false
+  Host_operation_count: 0
+  runtime_database_provider_private_Memory_or_effect_authorized: false
+  commit_authorized_by_this_decision: false
+  push_PR_or_merge_authorized_by_this_decision: false
+  tag_release_deploy_or_publish_authorized: false
+
+next_gate:
+  name: JENN_EXPLICIT_PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION
+  decision_owner: Jenn
+  automatic_transition: forbidden
+  actual_object_only_source_run_preconditions:
+    - a_separate_current_Jenn_execution_decision
+    - exact_commands_roots_outputs_and_cleanup_bound_in_a_new_hash_bound_package
+    - reverified_sealed_commit_and_nonprotected_blob_allowlist
+    - no_protected_content_or_protected_object_identifier_observation
+    - fail_closed_on_any_missing_or_unexpected_input
+
+integrity_contract:
+  algorithm: SHA-256
+  digest_encoding: lowercase_hex
+  byte_scope: entire_regular_file
+  canonicalization: none
+  required_encoding: UTF-8
+  required_line_endings: LF_only
+  byte_order_mark: forbidden
+  manifest_input_reverification_before_freeze: completed
+  manifest_input_hashes: 9/9_MATCH
+  accepted_subject_hashes: 4/4_MATCH
+  fixed_commands: 4/4_PASS
+  independent_review_sha256_bytes_and_result: MATCH
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  edit_accepted_subject_bytes: forbidden
+  edit_bound_manifest_bytes: forbidden
+  edit_bound_independent_review_bytes: forbidden
+  future_contract_semantic_change_requires_new_R2_review_and_Jenn_decision: true

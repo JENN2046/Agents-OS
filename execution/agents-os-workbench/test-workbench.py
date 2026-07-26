@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -35,6 +36,51 @@ def fixture_queue_with_now_lines(workbench: ModuleType, title: str, *lines: str)
         "Run local validation and prepare proposal-only queue output.",
         "\n".join(["Run local validation and prepare proposal-only queue output.", *lines]),
     )
+
+
+def fixture_governance_gate_queue_text() -> str:
+    return """# workbench governance gate fixture
+
+## NOW
+
+### NOW-001: Awaiting Jenn Explicit Start Decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+```
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
+
+
+def fixture_generic_p3_governance_gate_queue_text() -> str:
+    return """# workbench generic P3 governance gate fixture
+
+## NOW
+
+### NOW-001: Call provider
+
+Call provider and start service.
+
+## NEXT
+
+_No active NEXT items._
+
+## CLOSED
+
+```text
+prior_task: closed
+```
+"""
 
 
 def main() -> int:
@@ -514,11 +560,21 @@ def main() -> int:
         stopped_queue_path.write_text(workbench.fixture_route_stop_queue_text(), encoding="utf-8")
         advance_record_root = Path(temp_dir) / "advance-records"
         advance_record_root.mkdir()
-        empty_status = workbench.build_status(advance_record_root)
+        empty_status = workbench.build_status(advance_record_root, queue_path)
         check(empty_status["passed"] is True, f"empty status should pass: {empty_status['errors']}", failures)
         check(
-            empty_status["next_step"]["status"] == "no_advance_records",
-            "empty status should report no_advance_records",
+            empty_status["status_reconciliation"]["next_action_source"] == "live_queue",
+            "empty status should treat the live queue as the current authority",
+            failures,
+        )
+        check(
+            empty_status["next_step"]["status"] == empty_status["live_queue"]["next_step"]["status"],
+            "empty status should project the live queue next step",
+            failures,
+        )
+        check(
+            empty_status["next_step"].get("execution_authorized") is False,
+            "empty status must keep execution authorization false",
             failures,
         )
         check(empty_status["goal_session_count"] == 0, "empty status should report no goal sessions", failures)
@@ -667,7 +723,7 @@ def main() -> int:
             "safe advance without apply_intake must not modify queue",
             failures,
         )
-        safe_status = workbench.build_status(advance_record_root)
+        safe_status = workbench.build_status(advance_record_root, advance_queue_path)
         check(safe_status["passed"] is True, f"safe status should pass: {safe_status['errors']}", failures)
         check(
             safe_status["latest_advance_id"] == safe_advance["advance_id"],
@@ -676,7 +732,600 @@ def main() -> int:
         )
         check(
             safe_status["next_step"]["status"] == "review_queue_proposal",
-            "safe status should surface review_queue_proposal",
+            "safe status should preserve the pending review boundary",
+            failures,
+        )
+        check(
+            safe_status["status_reconciliation"]["record_next_step_status"]
+            == "review_queue_proposal"
+            and safe_status["status_reconciliation"]["next_action_source"]
+            == "latest_record"
+            and safe_status["status_reconciliation"]["queue_bytes_match_record"]
+            is True
+            and safe_status["status_reconciliation"]["record_boundary_pending"]
+            is True
+            and safe_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is False,
+            "unchanged queue bytes must keep the record boundary authoritative",
+            failures,
+        )
+        invalid_shadow_payload = json.loads(json.dumps(safe_advance))
+        invalid_shadow_payload["advance_id"] = "ADVANCE-INVALID-SHADOW"
+        invalid_shadow_payload["passed"] = False
+        invalid_shadow_payload["errors"] = [
+            "synthetic incomplete advance record"
+        ]
+        invalid_shadow_path = (
+            advance_record_root / "invalid-shadow-advance.json"
+        )
+        invalid_shadow_path.write_text(
+            json.dumps(
+                invalid_shadow_payload,
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        invalid_shadow_mtime_ns = (
+            max(
+                path.stat().st_mtime_ns
+                for path in advance_record_root.glob("*.json")
+                if path != invalid_shadow_path
+            )
+            + 1_000_000
+        )
+        os.utime(
+            invalid_shadow_path,
+            ns=(invalid_shadow_mtime_ns, invalid_shadow_mtime_ns),
+        )
+        invalid_shadow_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            invalid_shadow_status["passed"] is False
+            and invalid_shadow_status["latest_advance_id"]
+            == safe_advance["advance_id"]
+            and invalid_shadow_status[
+                "invalid_matching_advance_record_count"
+            ]
+            == 1
+            and invalid_shadow_status[
+                "invalid_live_binding_advance_record_count"
+            ]
+            == 1
+            and invalid_shadow_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and any(
+                "record reconciliation is required" in error
+                for error in invalid_shadow_status["errors"]
+            ),
+            "invalid newer records must fail closed without shadowing a valid boundary",
+            failures,
+        )
+        invalid_shadow_path.unlink()
+        unbound_shadow_payload = json.loads(json.dumps(safe_advance))
+        unbound_shadow_payload["advance_id"] = "ADVANCE-UNBOUND-SHADOW"
+        unbound_shadow_payload.pop("source_queue_binding", None)
+        unbound_shadow_path = (
+            advance_record_root / "unbound-shadow-advance.json"
+        )
+        unbound_shadow_path.write_text(
+            json.dumps(
+                unbound_shadow_payload,
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        unbound_shadow_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            unbound_shadow_status["passed"] is False
+            and unbound_shadow_status["latest_advance_id"]
+            == safe_advance["advance_id"]
+            and unbound_shadow_status["unbound_advance_record_count"]
+            == 1
+            and unbound_shadow_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and any(
+                "unbound advance records cannot be reconciled" in error
+                for error in unbound_shadow_status["errors"]
+            ),
+            "unbound records must fail closed without shadowing a valid boundary",
+            failures,
+        )
+        unbound_shadow_path.unlink()
+        advance_record_files_before = sorted(advance_record_root.glob("*.json"))
+        repeated_run = workbench.build_run(
+            "Write local governance report and run docctl validation.",
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_selector = workbench.build_next_step_selector(
+            advance_queue_path,
+            advance_record_root,
+        )
+        pending_continue = workbench.build_continue_current(
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        pending_continue_loop = workbench.build_continue_loop(
+            advance_queue_path,
+            record_root=advance_record_root,
+            max_cycles=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            repeated_run["passed"] is True
+            and repeated_run["steps_performed"] == 0
+            and repeated_run["record_write_count"] == 0
+            and repeated_run["local_safe_execution_count"] == 0
+            and repeated_run["stopped_reason"] == "review_queue_proposal",
+            "repeated run must stop without re-executing an unchanged queue",
+            failures,
+        )
+        check(
+            pending_selector["passed"] is True
+            and pending_selector["candidate_present"] is False
+            and pending_selector["selector_state"]
+            == "blocked_by_pending_record_boundary",
+            "selector must not propose duplicate work across a pending boundary",
+            failures,
+        )
+        check(
+            pending_continue["passed"] is True
+            and pending_continue["run"] is None
+            and pending_continue["run_summary"]["record_write_count"] == 0
+            and pending_continue["run_summary"]["local_safe_execution_count"]
+            == 0
+            and pending_continue["next_step"]["status"]
+            == "review_queue_proposal"
+            and sorted(advance_record_root.glob("*.json"))
+            == advance_record_files_before,
+            "continue must preserve a pending boundary without new records",
+            failures,
+        )
+        check(
+            pending_continue_loop["passed"] is True
+            and pending_continue_loop["cycles_performed"] == 0
+            and pending_continue_loop["record_write_count"] == 0
+            and pending_continue_loop["local_safe_execution_count"] == 0
+            and pending_continue_loop["stopped_reason"]
+            == "review_queue_proposal"
+            and sorted(advance_record_root.glob("*.json"))
+            == advance_record_files_before,
+            "continue loop must preserve a pending boundary without work",
+            failures,
+        )
+        original_advance_queue_text = advance_queue_path.read_text(
+            encoding="utf-8"
+        )
+        advance_queue_path.write_text(
+            original_advance_queue_text + "\n<!-- reviewed queue change -->\n",
+            encoding="utf-8",
+        )
+        changed_queue_status = workbench.build_status(
+            advance_record_root,
+            advance_queue_path,
+        )
+        check(
+            changed_queue_status["passed"] is True
+            and changed_queue_status["next_step"]["status"]
+            == "queue_ready_for_run"
+            and changed_queue_status["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and changed_queue_status["status_reconciliation"][
+                "queue_bytes_match_record"
+            ]
+            is False
+            and changed_queue_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True,
+            "changed queue bytes must supersede the bound record boundary",
+            failures,
+        )
+        snapshot_record_queue_path = (
+            Path(temp_dir) / "snapshot-record-queue.md"
+        )
+        snapshot_record_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        snapshot_record_root = (
+            Path(temp_dir) / "snapshot-bound-records"
+        )
+        snapshot_record_root.mkdir()
+        snapshot_record_intent = (
+            "Write snapshot-bound governance evidence and run validation."
+        )
+        snapshot_h1_advance = workbench.build_advance(
+            snapshot_record_intent,
+            snapshot_record_queue_path,
+            record_root=snapshot_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        snapshot_h1_binding = snapshot_h1_advance.get(
+            "source_queue_binding",
+            {},
+        )
+        snapshot_h1_cycle_path = snapshot_record_root / Path(
+            snapshot_h1_advance["stages"]["record"]["cycle_record_path"]
+        ).name
+        snapshot_h1_advance_path = snapshot_record_root / Path(
+            snapshot_h1_advance["stages"]["record"]["advance_record_path"]
+        ).name
+        snapshot_record_queue_path.write_text(
+            workbench.fixture_queue_text()
+            + "\n<!-- distinct queue snapshot H2 -->\n",
+            encoding="utf-8",
+        )
+        snapshot_h2_advance = workbench.build_advance(
+            snapshot_record_intent,
+            snapshot_record_queue_path,
+            record_root=snapshot_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        snapshot_h2_binding = snapshot_h2_advance.get(
+            "source_queue_binding",
+            {},
+        )
+        snapshot_h2_cycle_path = snapshot_record_root / Path(
+            snapshot_h2_advance["stages"]["record"]["cycle_record_path"]
+        ).name
+        snapshot_h2_advance_path = snapshot_record_root / Path(
+            snapshot_h2_advance["stages"]["record"]["advance_record_path"]
+        ).name
+        snapshot_record_files = sorted(
+            snapshot_record_root.glob("*.json")
+        )
+        snapshot_h1_cycle_payload = (
+            workbench.load_json(snapshot_h1_cycle_path)
+            if snapshot_h1_cycle_path.exists()
+            else {}
+        )
+        snapshot_h1_advance_payload = (
+            workbench.load_json(snapshot_h1_advance_path)
+            if snapshot_h1_advance_path.exists()
+            else {}
+        )
+        snapshot_h2_cycle_payload = (
+            workbench.load_json(snapshot_h2_cycle_path)
+            if snapshot_h2_cycle_path.exists()
+            else {}
+        )
+        snapshot_h2_advance_payload = (
+            workbench.load_json(snapshot_h2_advance_path)
+            if snapshot_h2_advance_path.exists()
+            else {}
+        )
+        check(
+            snapshot_h1_advance["passed"] is True
+            and snapshot_h2_advance["passed"] is True
+            and snapshot_h1_advance["advance_id"]
+            != snapshot_h2_advance["advance_id"]
+            and snapshot_h1_binding != snapshot_h2_binding
+            and snapshot_h1_cycle_path != snapshot_h2_cycle_path
+            and snapshot_h1_advance_path != snapshot_h2_advance_path
+            and len(snapshot_record_files) == 4
+            and snapshot_h1_cycle_payload.get("replay_inputs", {}).get(
+                "queue_binding"
+            )
+            == snapshot_h1_binding
+            and snapshot_h1_advance_payload.get("source_queue_binding")
+            == snapshot_h1_binding
+            and snapshot_h2_cycle_payload.get("replay_inputs", {}).get(
+                "queue_binding"
+            )
+            == snapshot_h2_binding
+            and snapshot_h2_advance_payload.get("source_queue_binding")
+            == snapshot_h2_binding,
+            "same-intent advances over distinct queue snapshots must preserve both cycle and advance records",
+            failures,
+        )
+        record_binding_skew_queue_path = (
+            Path(temp_dir) / "record-binding-skew-queue.md"
+        )
+        record_binding_skew_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        record_binding_skew_root = (
+            Path(temp_dir) / "record-binding-skew-records"
+        )
+        record_binding_skew_root.mkdir()
+        original_load_bound_queue_snapshot = (
+            workbench.load_bound_queue_snapshot
+        )
+        record_binding_skew_calls = {"count": 0}
+
+        def record_binding_skew_snapshot(
+            chain: object,
+            queue_path: Path,
+        ) -> tuple[dict | None, str | None]:
+            snapshot_result = original_load_bound_queue_snapshot(
+                chain,
+                queue_path,
+            )
+            record_binding_skew_calls["count"] += 1
+            if record_binding_skew_calls["count"] == 1:
+                record_binding_skew_queue_path.write_text(
+                    workbench.fixture_queue_text()
+                    + "\n<!-- changed after record-path binding -->\n",
+                    encoding="utf-8",
+                )
+            return snapshot_result
+
+        workbench.load_bound_queue_snapshot = (
+            record_binding_skew_snapshot
+        )
+        try:
+            record_binding_skew_advance = workbench.build_advance(
+                "Do not record after queue binding skew.",
+                record_binding_skew_queue_path,
+                record_root=record_binding_skew_root,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.load_bound_queue_snapshot = (
+                original_load_bound_queue_snapshot
+            )
+        check(
+            record_binding_skew_calls["count"] >= 2
+            and record_binding_skew_advance["passed"] is False
+            and record_binding_skew_advance["stages"]["execution"][
+                "local_safe_execution_performed"
+            ]
+            is False
+            and record_binding_skew_advance[
+                "cycle_record_write_performed"
+            ]
+            is False
+            and record_binding_skew_advance[
+                "advance_record_write_performed"
+            ]
+            is False
+            and not list(record_binding_skew_root.glob("*.json"))
+            and any(
+                "queue bytes changed after the caller snapshot"
+                in error
+                for error in record_binding_skew_advance["errors"]
+            ),
+            "advance must fail closed when queue bytes change after record-path binding",
+            failures,
+        )
+        expected_binding_queue_path = (
+            Path(temp_dir) / "expected-binding-queue.md"
+        )
+        expected_binding_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        expected_binding_record_root = (
+            Path(temp_dir) / "expected-binding-records"
+        )
+        expected_binding_record_root.mkdir()
+        expected_binding_status = workbench.build_status(
+            expected_binding_record_root,
+            expected_binding_queue_path,
+        )
+        expected_binding = expected_binding_status["live_queue"][
+            "queue_binding"
+        ]
+        expected_binding_queue_path.write_text(
+            workbench.fixture_queue_text()
+            + "\n<!-- changed after caller snapshot -->\n",
+            encoding="utf-8",
+        )
+        expected_binding_run = workbench.build_run(
+            "Write local governance report and run docctl validation.",
+            expected_binding_queue_path,
+            record_root=expected_binding_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+            expected_queue_binding=expected_binding,
+        )
+        check(
+            expected_binding_run["passed"] is False
+            and expected_binding_run["steps_performed"] == 0
+            and expected_binding_run["record_write_count"] == 0
+            and expected_binding_run["local_safe_execution_count"] == 0
+            and not list(expected_binding_record_root.glob("*.json"))
+            and any(
+                "queue bytes changed after the caller status snapshot"
+                in error
+                for error in expected_binding_run["errors"]
+            ),
+            "run must fail closed when queue bytes change after caller status",
+            failures,
+        )
+        expected_binding_changed_bytes = (
+            expected_binding_queue_path.read_bytes()
+        )
+        expected_binding_advance = workbench.build_advance(
+            "Write local governance report and run docctl validation.",
+            expected_binding_queue_path,
+            record_root=expected_binding_record_root,
+            apply_intake=True,
+            allowed_queue_root=Path(temp_dir),
+            expected_queue_binding=expected_binding,
+        )
+        check(
+            expected_binding_advance["passed"] is False
+            and expected_binding_advance["stages"]["execution"][
+                "local_safe_execution_performed"
+            ]
+            is False
+            and expected_binding_advance["stages"]["intake_apply"][
+                "write_performed"
+            ]
+            is False
+            and expected_binding_advance["active_queue_modified"] is False
+            and expected_binding_advance["queue_write_authorized"] is False
+            and expected_binding_queue_path.read_bytes()
+            == expected_binding_changed_bytes
+            and not list(expected_binding_record_root.glob("*.json")),
+            "advance must not execute, record, or apply intake after binding drift",
+            failures,
+        )
+        reversion_queue_path = Path(temp_dir) / "hash-reversion-queue.md"
+        reversion_h1_bytes = workbench.fixture_queue_text().encode("utf-8")
+        reversion_queue_path.write_bytes(reversion_h1_bytes)
+        reversion_record_root = Path(temp_dir) / "hash-reversion-records"
+        reversion_record_root.mkdir()
+        reversion_h1_advance = workbench.build_advance(
+            "Write H1 local governance report and run docctl validation.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        reversion_queue_path.write_bytes(
+            reversion_h1_bytes
+            + b"\n<!-- distinct H2 queue bytes -->\n"
+        )
+        reversion_h2_advance = workbench.build_advance(
+            "Write H2 local governance report and run docctl validation.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            allowed_queue_root=Path(temp_dir),
+        )
+        reversion_h2_record_path = (
+            reversion_record_root
+            / Path(
+                reversion_h2_advance["stages"]["record"][
+                    "record_path"
+                ]
+            ).name
+        )
+        reversion_h1_record_path = (
+            reversion_record_root
+            / Path(
+                reversion_h1_advance["stages"]["record"][
+                    "record_path"
+                ]
+            ).name
+        )
+        reversion_h2_mtime_ns = (
+            reversion_h1_record_path.stat().st_mtime_ns + 1_000_000
+        )
+        os.utime(
+            reversion_h2_record_path,
+            ns=(reversion_h2_mtime_ns, reversion_h2_mtime_ns),
+        )
+        reversion_queue_path.write_bytes(reversion_h1_bytes)
+        reversion_status = workbench.build_status(
+            reversion_record_root,
+            reversion_queue_path,
+        )
+        reversion_record_files_before = sorted(
+            reversion_record_root.glob("*.json")
+        )
+        reversion_run = workbench.build_run(
+            "Do not repeat reverted H1 queue work.",
+            reversion_queue_path,
+            record_root=reversion_record_root,
+            max_steps=2,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            reversion_h1_advance["passed"] is True
+            and reversion_h2_advance["passed"] is True
+            and reversion_status["passed"] is True
+            and reversion_status["latest_advance_id"]
+            == reversion_h2_advance["advance_id"]
+            and reversion_status["authoritative_record"]["advance_id"]
+            == reversion_h1_advance["advance_id"]
+            and reversion_status["exact_matching_advance_record_count"]
+            == 1
+            and reversion_status["next_step"]["status"]
+            == "review_queue_proposal"
+            and reversion_status["status_reconciliation"][
+                "record_boundary_pending"
+            ]
+            is True
+            and reversion_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True
+            and reversion_run["passed"] is True
+            and reversion_run["steps_performed"] == 0
+            and reversion_run["record_write_count"] == 0
+            and reversion_run["local_safe_execution_count"] == 0
+            and sorted(reversion_record_root.glob("*.json"))
+            == reversion_record_files_before,
+            "H1-H2-H1 reversion must preserve the exact H1 pending boundary",
+            failures,
+        )
+        selector_skew_queue_path = (
+            Path(temp_dir) / "selector-read-skew-queue.md"
+        )
+        selector_skew_queue_path.write_text(
+            workbench.fixture_queue_text(),
+            encoding="utf-8",
+        )
+        selector_skew_record_root = (
+            Path(temp_dir) / "selector-read-skew-records"
+        )
+        selector_skew_record_root.mkdir()
+        original_load_bound_queue_snapshot = (
+            workbench.load_bound_queue_snapshot
+        )
+        selector_skew_calls = {"count": 0}
+
+        def selector_skew_snapshot(
+            chain: object,
+            queue_path: Path,
+        ) -> tuple[dict | None, str | None]:
+            snapshot_result = original_load_bound_queue_snapshot(
+                chain,
+                queue_path,
+            )
+            selector_skew_calls["count"] += 1
+            if selector_skew_calls["count"] == 1:
+                selector_skew_queue_path.write_text(
+                    workbench.fixture_queue_text()
+                    + "\n<!-- selector status/read skew -->\n",
+                    encoding="utf-8",
+                )
+            return snapshot_result
+
+        workbench.load_bound_queue_snapshot = selector_skew_snapshot
+        try:
+            selector_skew = workbench.build_next_step_selector(
+                selector_skew_queue_path,
+                selector_skew_record_root,
+            )
+        finally:
+            workbench.load_bound_queue_snapshot = (
+                original_load_bound_queue_snapshot
+            )
+        check(
+            selector_skew_calls["count"] >= 2
+            and selector_skew["passed"] is False
+            and selector_skew["candidate_present"] is False
+            and any(
+                "selector queue bytes changed after status reconciliation"
+                in error
+                for error in selector_skew["errors"]
+            ),
+            "selector must fail closed on status/read queue-byte skew",
             failures,
         )
         check(safe_status["write_performed"] is False, "safe status must be read-only", failures)
@@ -702,6 +1351,13 @@ def main() -> int:
             check(
                 safe_advance_payload.get("passed") is True,
                 "safe advance record file should include final passed=true",
+                failures,
+            )
+            check(
+                workbench.valid_queue_snapshot_binding(
+                    safe_advance_payload.get("source_queue_binding")
+                ),
+                "safe advance record must bind exact source queue bytes",
                 failures,
             )
             check(
@@ -762,7 +1418,7 @@ def main() -> int:
             )
         else:
             failures.append("advance with intake record file should exist")
-        status_after_intake = workbench.build_status(advance_record_root)
+        status_after_intake = workbench.build_status(advance_record_root, advance_apply_queue_path)
         check(
             status_after_intake["latest_advance_id"] == advance_with_intake["advance_id"],
             "status after intake should identify latest advance with intake",
@@ -778,11 +1434,30 @@ def main() -> int:
             "status after intake must keep queue promotion false",
             failures,
         )
+        check(
+            status_after_intake["next_step"]["status"] == "queue_ready_for_run"
+            and status_after_intake["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and status_after_intake["status_reconciliation"][
+                "queue_bytes_match_record"
+            ]
+            is False
+            and status_after_intake["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is True,
+            "applied intake bytes must supersede the source record boundary",
+            failures,
+        )
         cli_status = subprocess.run(
             [
                 "python3",
                 str(ROOT / "workbench.py"),
                 "status",
+                "--queue",
+                str(advance_apply_queue_path),
                 "--record-root",
                 str(advance_record_root),
                 "--json",
@@ -1229,7 +1904,7 @@ def main() -> int:
             "stopped goal must not output raw route templates",
             failures,
         )
-        stopped_goal_status = workbench.build_status(advance_record_root)
+        stopped_goal_status = workbench.build_status(advance_record_root, stopped_queue_path)
         check(stopped_goal_status["passed"] is True, f"stopped goal status should pass: {stopped_goal_status['errors']}", failures)
         check(
             stopped_goal_status["route_choice_readiness"]["option_count"] == 5,
@@ -1273,7 +1948,7 @@ def main() -> int:
             "safe goal should not surface route choice readiness",
             failures,
         )
-        goal_status = workbench.build_status(advance_record_root)
+        goal_status = workbench.build_status(advance_record_root, goal_queue_path)
         check(goal_status["passed"] is True, f"goal status should pass: {goal_status['errors']}", failures)
         check(goal_status["goal_session_count"] == 2, "goal status should count stopped and safe goal sessions", failures)
         check(
@@ -1361,6 +2036,286 @@ def main() -> int:
             "route apply should append formal Memory first safe package",
             failures,
         )
+        route_transaction_fault_path = Path(temp_dir) / "route-transaction-fault-queue.md"
+        route_transaction_fault_text = workbench.fixture_route_stop_queue_text()
+        route_transaction_fault_path.write_text(route_transaction_fault_text, encoding="utf-8")
+        original_workbench_import = workbench.import_module
+        workbench_fault_state = {"triggered": False}
+
+        def import_with_post_exchange_fault(path: Path, module_name: str) -> ModuleType:
+            module = original_workbench_import(path, module_name)
+            if Path(path) == workbench.CONTROL_CHAIN_PATH:
+                original_exchange = module.rename_exchange
+
+                def injected_post_cas_byte_swap(
+                    parent_fd: int,
+                    first_name: str,
+                    second_name: str,
+                ) -> None:
+                    if not workbench_fault_state["triggered"]:
+                        workbench_fault_state["triggered"] = True
+                        route_transaction_fault_path.write_text(
+                            fixture_generic_p3_governance_gate_queue_text(),
+                            encoding="utf-8",
+                        )
+                    original_exchange(parent_fd, first_name, second_name)
+
+                module.rename_exchange = injected_post_cas_byte_swap
+            return module
+
+        workbench.import_module = import_with_post_exchange_fault
+        try:
+            route_transaction_fault = workbench.build_route_choice_apply_gate(
+                route_choice_text,
+                route_transaction_fault_path,
+                apply=True,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.import_module = original_workbench_import
+        check(
+            workbench_fault_state["triggered"] is True
+            and route_transaction_fault["passed"] is False
+            and route_transaction_fault["transaction_outcome"] == "PARTIAL_OR_UNKNOWN"
+            and route_transaction_fault["queue_state"] == "UNKNOWN"
+            and route_transaction_fault["queue_state_known"] is False
+            and route_transaction_fault["queue_commit_attempted"] is True
+            and route_transaction_fault["rollback_performed"] is True
+            and route_transaction_fault["write_performed"] is True
+            and route_transaction_fault["workspace_route_state_modified"] is None
+            and route_transaction_fault["active_queue_modified"] is None
+            and route_transaction_fault["queue_write_authorized"] is False
+            and route_transaction_fault["requires_jenn_decision"] is True,
+            f"Workbench must preserve truthful PARTIAL transaction evidence: {route_transaction_fault}",
+            failures,
+        )
+        check(
+            route_transaction_fault["review"]["review_status"] == "blocked"
+            and route_transaction_fault["next_step"]["status"] == "queue_state_reconciliation_required"
+            and route_transaction_fault["next_step"]["owner"] == "Jenn"
+            and route_transaction_fault["next_step"]["active_queue_mutation_authorized"] is False,
+            "Workbench PARTIAL transaction must stop at Jenn-owned exact-byte reconciliation",
+            failures,
+        )
+        check(
+            route_transaction_fault_path.read_text(encoding="utf-8")
+            == fixture_generic_p3_governance_gate_queue_text(),
+            "Workbench post-CAS rollback must preserve externally changed queue bytes",
+            failures,
+        )
+
+        unresolved_temp_queue_path = Path(temp_dir) / "unresolved-temp-cleanup-queue.md"
+        unresolved_temp_alias_path = Path(temp_dir) / "unresolved-temp-cleanup-alias.md"
+        unresolved_temp_queue_text = workbench.fixture_route_stop_queue_text()
+        unresolved_temp_queue_path.write_text(unresolved_temp_queue_text, encoding="utf-8")
+        unresolved_temp_state = {"triggered": False}
+
+        def import_with_unresolved_temp_cleanup(path: Path, module_name: str) -> ModuleType:
+            module = original_workbench_import(path, module_name)
+            if Path(path) == workbench.CONTROL_CHAIN_PATH:
+                original_temp_write = module.write_transaction_temp_fd
+
+                def add_replacement_link_after_write(file_fd: int, data: bytes) -> None:
+                    original_temp_write(file_fd, data)
+                    if not unresolved_temp_state["triggered"]:
+                        temp_entries = list(
+                            unresolved_temp_queue_path.parent.glob(
+                                f".{unresolved_temp_queue_path.name}.agents-os-txn-*.tmp"
+                            )
+                        )
+                        if len(temp_entries) != 1:
+                            raise OSError("unresolved temp cleanup fixture entry is unavailable")
+                        os.link(temp_entries[0], unresolved_temp_alias_path)
+                        unresolved_temp_state["triggered"] = True
+
+                module.write_transaction_temp_fd = add_replacement_link_after_write
+            return module
+
+        workbench.import_module = import_with_unresolved_temp_cleanup
+        try:
+            unresolved_temp_result = workbench.build_route_choice_apply_gate(
+                route_choice_text,
+                unresolved_temp_queue_path,
+                apply=True,
+                allowed_queue_root=Path(temp_dir),
+            )
+        finally:
+            workbench.import_module = original_workbench_import
+        check(
+            unresolved_temp_state["triggered"] is True
+            and unresolved_temp_result["passed"] is False
+            and unresolved_temp_result["transaction_outcome"] == "NO_WRITE"
+            and unresolved_temp_result["queue_state"] == "UNCHANGED"
+            and unresolved_temp_result["queue_state_known"] is True
+            and unresolved_temp_result["queue_commit_attempted"] is False
+            and unresolved_temp_result["write_performed"] is False
+            and unresolved_temp_result["temp_cleanup_confirmed"] is False
+            and unresolved_temp_result["workspace_route_state_modified"] is False
+            and unresolved_temp_result["active_queue_modified"] is False
+            and unresolved_temp_result["queue_write_authorized"] is False
+            and unresolved_temp_result["requires_jenn_decision"] is True,
+            (
+                "Workbench must preserve NO_WRITE evidence while surfacing unresolved "
+                f"transaction cleanup: {unresolved_temp_result}"
+            ),
+            failures,
+        )
+        check(
+            unresolved_temp_result["review"]["review_status"] == "blocked"
+            and unresolved_temp_result["next_step"]["status"]
+            == "queue_state_reconciliation_required"
+            and unresolved_temp_result["next_step"]["owner"] == "Jenn"
+            and unresolved_temp_result["next_step"]["active_queue_mutation_authorized"]
+            is False
+            and unresolved_temp_queue_path.read_text(encoding="utf-8")
+            == unresolved_temp_queue_text,
+            "Workbench unresolved temp cleanup must stop at Jenn-owned reconciliation",
+            failures,
+        )
+        if unresolved_temp_alias_path.exists():
+            unresolved_temp_alias_path.unlink()
+
+        governance_gate_queue_path = Path(temp_dir) / "governance-gate-queue.md"
+        governance_gate_queue_text = fixture_governance_gate_queue_text()
+        governance_gate_queue_path.write_text(governance_gate_queue_text, encoding="utf-8")
+        governance_route_preview = workbench.build_route_choice_preview(
+            route_choice_text,
+            governance_gate_queue_path,
+        )
+        check(
+            governance_route_preview["passed"] is False,
+            "active Jenn governance gate should block Workbench route preview",
+            failures,
+        )
+        check(
+            governance_route_preview["active_jenn_governance_gate"] is True
+            and governance_route_preview["bundle"]["can_apply_with_separate_apply_gate"] is False,
+            "active Jenn governance gate should block Workbench apply readiness",
+            failures,
+        )
+        check(
+            governance_route_preview["next_step"]["status"] == "governance_decision_required"
+            and governance_route_preview["next_step"]["owner"] == "Jenn",
+            "active Jenn governance gate should preserve Jenn as preview decision owner",
+            failures,
+        )
+        governance_apply_preview = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            governance_gate_queue_path,
+            apply=False,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            governance_apply_preview["passed"] is False
+            and governance_apply_preview["apply_gate"]["queue_adoption_authorized"] is False,
+            "active Jenn governance gate should block Workbench apply preview",
+            failures,
+        )
+        governance_apply = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            governance_gate_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            governance_apply["passed"] is False
+            and governance_apply["apply_gate"]["queue_adoption_authorized"] is False
+            and governance_apply["requires_jenn_decision"] is True,
+            "active Jenn governance gate should block Workbench apply production path",
+            failures,
+        )
+        check(
+            governance_apply["write_performed"] is False
+            and governance_apply["active_queue_modified"] is False
+            and governance_apply["queue_write_authorized"] is False,
+            "blocked Workbench governance apply must keep all write flags false",
+            failures,
+        )
+        check(
+            governance_gate_queue_path.read_text(encoding="utf-8") == governance_gate_queue_text,
+            "blocked Workbench governance apply must preserve exact queue bytes",
+            failures,
+        )
+        generic_p3_gate_queue_path = Path(temp_dir) / "generic-p3-governance-gate-queue.md"
+        generic_p3_gate_queue_text = fixture_generic_p3_governance_gate_queue_text()
+        generic_p3_gate_queue_path.write_text(generic_p3_gate_queue_text, encoding="utf-8")
+        generic_p3_route_preview = workbench.build_route_choice_preview(
+            route_choice_text,
+            generic_p3_gate_queue_path,
+        )
+        generic_p3_route_apply = workbench.build_route_choice_apply_gate(
+            route_choice_text,
+            generic_p3_gate_queue_path,
+            apply=True,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            generic_p3_route_preview["passed"] is False
+            and generic_p3_route_preview["active_jenn_governance_gate"] is True
+            and generic_p3_route_preview["bundle"]["can_apply_with_separate_apply_gate"] is False,
+            "generic P3 blocked NOW must block Workbench route preview and apply readiness",
+            failures,
+        )
+        check(
+            generic_p3_route_preview["next_step"]["status"] == "governance_decision_required"
+            and generic_p3_route_preview["next_step"]["owner"] == "Jenn",
+            "generic P3 Workbench preview must surface Jenn governance decision",
+            failures,
+        )
+        check(
+            generic_p3_route_apply["passed"] is False
+            and generic_p3_route_apply["active_jenn_governance_gate"] is True
+            and generic_p3_route_apply["apply_gate"]["queue_adoption_authorized"] is False
+            and generic_p3_route_apply["requires_jenn_decision"] is True
+            and generic_p3_route_apply["write_performed"] is False,
+            "generic P3 blocked NOW must fail closed in Workbench apply",
+            failures,
+        )
+        check(
+            generic_p3_gate_queue_path.read_text(encoding="utf-8") == generic_p3_gate_queue_text,
+            "generic P3 Workbench attacks must preserve exact queue bytes",
+            failures,
+        )
+        generic_p3_run_record_root = Path(temp_dir) / "generic-p3-run-records"
+        generic_p3_run_record_root.mkdir()
+        generic_p3_run = workbench.build_run(
+            "Continue current work.",
+            generic_p3_gate_queue_path,
+            record_root=generic_p3_run_record_root,
+            max_steps=3,
+            allowed_queue_root=Path(temp_dir),
+        )
+        check(
+            generic_p3_run["passed"] is True
+            and generic_p3_run["steps_performed"] == 1
+            and generic_p3_run["record_write_count"] == 1
+            and generic_p3_run["local_safe_execution_count"] == 0,
+            "generic P3 run must stop after one boundary record without execution",
+            failures,
+        )
+        check(
+            generic_p3_run["stopped_reason"]
+            == "governance_decision_required"
+            and generic_p3_run["next_step"]["status"]
+            == "governance_decision_required"
+            and workbench.goal_state_for_next_step(
+                generic_p3_run["next_step"]
+            )
+            == "waiting_at_boundary",
+            "generic P3 run must preserve the Jenn governance boundary",
+            failures,
+        )
+        check(
+            generic_p3_run["active_queue_modified"] is False
+            and generic_p3_run["queue_write_authorized"] is False
+            and generic_p3_run["execution_authorized"] is False
+            and generic_p3_run["provider_call_authorized"] is False
+            and generic_p3_run["service_start_authorized"] is False
+            and generic_p3_gate_queue_path.read_text(encoding="utf-8")
+            == generic_p3_gate_queue_text,
+            "generic P3 run must preserve queue bytes and all effect denials",
+            failures,
+        )
         route_promotion_preview = workbench.build_queue_promotion_apply_gate(
             route_apply_queue_path,
             apply=False,
@@ -1408,8 +2363,16 @@ def main() -> int:
             failures,
         )
         check(
-            route_promotion_status["status_reconciliation"]["record_boundary_may_be_stale"] is True,
-            "route promotion status should detect stale record boundary",
+            route_promotion_status["status_reconciliation"][
+                "next_action_source"
+            ]
+            == "live_queue"
+            and route_promotion_status["status_reconciliation"][
+                "record_boundary_may_be_stale"
+            ]
+            is False
+            and route_promotion_status["matching_advance_record_count"] == 0,
+            "route promotion status must ignore unrelated queue records",
             failures,
         )
         route_promotion_continue = workbench.build_continue_current(
@@ -1688,6 +2651,130 @@ def main() -> int:
             )
         else:
             failures.append("CLI route apply should emit JSON")
+        cli_governance_queue_path = Path(temp_dir) / "cli-governance-gate-queue.md"
+        cli_governance_queue_text = fixture_governance_gate_queue_text()
+        cli_governance_queue_path.write_text(cli_governance_queue_text, encoding="utf-8")
+        cli_governance_preview = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-preview",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_governance_queue_path),
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_governance_preview.returncode == 1,
+            f"CLI active governance preview should fail closed: {cli_governance_preview.stderr}",
+            failures,
+        )
+        if cli_governance_preview.stdout:
+            cli_governance_preview_payload = json.loads(cli_governance_preview.stdout)
+            check(
+                cli_governance_preview_payload.get("active_jenn_governance_gate") is True,
+                "CLI active governance preview should preserve the Jenn gate",
+                failures,
+            )
+            check(
+                cli_governance_preview_payload.get("bundle", {}).get("can_apply_with_separate_apply_gate") is False,
+                "CLI active governance preview must not become apply-ready",
+                failures,
+            )
+        else:
+            failures.append("CLI active governance preview should emit JSON")
+        cli_governance_apply = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-apply-gate",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_governance_queue_path),
+                "--allowed-queue-root",
+                str(Path(temp_dir)),
+                "--apply",
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_governance_apply.returncode == 1,
+            f"CLI active governance apply should fail closed: {cli_governance_apply.stderr}",
+            failures,
+        )
+        if cli_governance_apply.stdout:
+            cli_governance_apply_payload = json.loads(cli_governance_apply.stdout)
+            check(
+                cli_governance_apply_payload.get("apply_gate", {}).get("queue_adoption_authorized") is False,
+                "CLI active governance apply must not authorize queue adoption",
+                failures,
+            )
+            check(
+                cli_governance_apply_payload.get("write_performed") is False,
+                "CLI active governance apply must not write",
+                failures,
+            )
+        else:
+            failures.append("CLI active governance apply should emit JSON")
+        check(
+            cli_governance_queue_path.read_text(encoding="utf-8") == cli_governance_queue_text,
+            "CLI active governance apply must preserve exact queue bytes",
+            failures,
+        )
+        cli_generic_p3_queue_path = Path(temp_dir) / "cli-generic-p3-governance-gate-queue.md"
+        cli_generic_p3_queue_text = fixture_generic_p3_governance_gate_queue_text()
+        cli_generic_p3_queue_path.write_text(cli_generic_p3_queue_text, encoding="utf-8")
+        cli_generic_p3_apply = subprocess.run(
+            [
+                "python3",
+                str(ROOT / "workbench.py"),
+                "route-choice-apply-gate",
+                "--confirmation-text",
+                route_choice_text,
+                "--queue",
+                str(cli_generic_p3_queue_path),
+                "--allowed-queue-root",
+                str(Path(temp_dir)),
+                "--apply",
+                "--json",
+            ],
+            cwd=workbench.WORKSPACE_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        check(
+            cli_generic_p3_apply.returncode == 1,
+            f"CLI generic P3 governance apply should fail closed: {cli_generic_p3_apply.stderr}",
+            failures,
+        )
+        if cli_generic_p3_apply.stdout:
+            cli_generic_p3_payload = json.loads(cli_generic_p3_apply.stdout)
+            check(
+                cli_generic_p3_payload.get("active_jenn_governance_gate") is True
+                and cli_generic_p3_payload.get("apply_gate", {}).get("queue_adoption_authorized") is False
+                and cli_generic_p3_payload.get("write_performed") is False,
+                "CLI generic P3 governance apply must preserve the gate and deny writes",
+                failures,
+            )
+        else:
+            failures.append("CLI generic P3 governance apply should emit JSON")
+        check(
+            cli_generic_p3_queue_path.read_text(encoding="utf-8") == cli_generic_p3_queue_text,
+            "CLI generic P3 governance apply must preserve exact queue bytes",
+            failures,
+        )
         cli_queue_promotion = subprocess.run(
             [
                 "python3",
@@ -1750,8 +2837,21 @@ def main() -> int:
                 failures,
             )
             check(
-                cli_live_status_payload.get("status_reconciliation", {}).get("record_boundary_may_be_stale") is True,
-                "CLI live status should detect stale record boundary",
+                cli_live_status_payload.get(
+                    "status_reconciliation",
+                    {},
+                ).get("next_action_source")
+                == "live_queue"
+                and cli_live_status_payload.get(
+                    "status_reconciliation",
+                    {},
+                ).get("record_boundary_may_be_stale")
+                is False
+                and cli_live_status_payload.get(
+                    "matching_advance_record_count"
+                )
+                == 0,
+                "CLI live status must ignore unrelated queue records",
                 failures,
             )
         else:
@@ -2069,7 +3169,7 @@ def main() -> int:
     if failures:
         for failure in failures:
             print(f"FAIL {failure}")
-        print(f"cases={20 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
+        print(f"cases={25 if args.full else 18} failures={len(failures)} mode={'full' if args.full else 'fast'}")
         return 1
 
     print("PASS current stopped queue cycle")
@@ -2085,6 +3185,11 @@ def main() -> int:
     print("PASS workbench goal fixtures")
     print("PASS workbench route choice preview fixtures")
     print("PASS workbench route choice apply gate fixtures")
+    print("PASS workbench route transaction truthfulness fixture")
+    print("PASS workbench unresolved transaction cleanup reconciliation fixture")
+    print("PASS active Jenn governance preview fixtures")
+    print("PASS active Jenn governance apply fixtures")
+    print("PASS generic P3 Jenn governance Workbench fixtures")
     print("PASS workbench queue promotion apply gate fixtures")
     print("PASS workbench continue current fixtures")
     print("PASS workbench continue loop fixtures")
@@ -2093,7 +3198,7 @@ def main() -> int:
     if args.full:
         print("PASS workbench validation")
         print("PASS workbench completion audit")
-    print(f"cases={20 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
+    print(f"cases={25 if args.full else 18} failures=0 mode={'full' if args.full else 'fast'}")
     return 0
 
 

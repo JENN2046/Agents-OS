@@ -1,0 +1,25 @@
+schema_version: agents-os.independent-review-disposition.v0.1
+review_unit: PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_V0_1_R1_ATOMIC_BUNDLE
+source_review:
+  path: control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml
+  sha256: 61e4443e540d413d9e49bfeec114827f3b1feb9eddbb95962543200286e2443c
+  result: PASS_NO_BLOCKER
+  requires_R2: false
+disposition:
+  result: PASS_REVIEW_RECORDED
+  blocker: 0
+  major: 0
+  minor: 0
+  R1_accepted: false
+  R1_frozen: false
+  automatic_freeze: forbidden
+  actual_Git_object_run_authorized: false
+  VCPToolBox_worktree_authorized: false
+  actual_Host_smoke_execution_authorized: false
+  Host_operation_count: 0
+next_gate: JENN_PHASE_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_R1_ATOMIC_FREEZE_DECISION
+immutable_review_boundary:
+  subjects_modified: false
+  protected_content_bytes_read: 0
+  protected_blob_identifier_read_count: 0
+  runtime_or_effect_operation_count: 0

@@ -281,8 +281,14 @@ def next_user_action_status(route_selection: dict[str, Any], normalized_queue: d
     ]
     awaiting_selection = route_selection.get("status") == "awaiting_jenn_selection"
     now_items = normalized_queue.get("lanes", {}).get("NOW", [])
-    now_denied_signals = now_items[0].get("denied_signals", []) if now_items else []
-    governance_decision_required = "jenn_decision_required" in now_denied_signals
+    now_item = now_items[0] if now_items else {}
+    now_denied_signals = {str(signal) for signal in now_item.get("denied_signals", [])}
+    generic_denied_signals = now_denied_signals - {"route_selection_required"}
+    review_requires_jenn = now_item.get("review_gate", {}).get("requires_jenn_decision") is True
+    governance_decision_required = bool(generic_denied_signals) or (
+        (now_item.get("blocked") is True or review_requires_jenn)
+        and not awaiting_selection
+    )
     status = "none"
     instruction = None
     if awaiting_selection:
@@ -478,9 +484,12 @@ def build_memory_candidates(normalized_queue: dict[str, Any], validation: dict[s
     return candidates
 
 
-def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations: bool = True) -> dict[str, Any]:
-    machine = load_machine()
-    normalized_queue = machine.load_queue(queue_path)
+def build_dashboard_summary_from_normalized_queue(
+    normalized_queue: dict[str, Any],
+    *,
+    run_validations: bool = True,
+) -> dict[str, Any]:
+    """Build a Dashboard summary from one caller-supplied queue snapshot."""
     validation = validation_status(run_validations=run_validations)
     authorization = authorization_defaults()
     blockers = open_blockers(normalized_queue)
@@ -499,6 +508,17 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
         "now": {
             "title": now_title,
             "id": normalized_queue.get("lanes", {}).get("NOW", [{}])[0].get("id")
+            if normalized_queue.get("lanes", {}).get("NOW")
+            else None,
+            "blocked": normalized_queue.get("lanes", {}).get("NOW", [{}])[0].get("blocked")
+            if normalized_queue.get("lanes", {}).get("NOW")
+            else None,
+            "denied_signals": normalized_queue.get("lanes", {}).get("NOW", [{}])[0].get("denied_signals", [])
+            if normalized_queue.get("lanes", {}).get("NOW")
+            else [],
+            "review_requires_jenn_decision": normalized_queue.get("lanes", {}).get("NOW", [{}])[0]
+            .get("review_gate", {})
+            .get("requires_jenn_decision")
             if normalized_queue.get("lanes", {}).get("NOW")
             else None,
         },
@@ -542,6 +562,15 @@ def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations
     summary["passed"] = not errors
     summary["errors"] = sorted(set(summary["errors"] + errors))
     return summary
+
+
+def build_dashboard_summary(queue_path: Path = DEFAULT_QUEUE, *, run_validations: bool = True) -> dict[str, Any]:
+    machine = load_machine()
+    normalized_queue = machine.load_queue(queue_path)
+    return build_dashboard_summary_from_normalized_queue(
+        normalized_queue,
+        run_validations=run_validations,
+    )
 
 
 def validate_memory_candidate(candidate: dict[str, Any]) -> list[str]:
