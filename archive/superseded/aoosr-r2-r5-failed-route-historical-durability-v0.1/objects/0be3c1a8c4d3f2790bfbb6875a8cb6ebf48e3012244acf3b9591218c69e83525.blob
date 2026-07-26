@@ -1,0 +1,68 @@
+# AGENTS OS Active Work Queue v18.8
+
+Date: 2026-07-25
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v18.7.md
+
+## Current Facts
+
+```yaml
+Phase_5D_status: M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R3_ACCEPTED_FROZEN_AWAITING_SEPARATE_JENN_EXECUTION_DECISION
+Phase_5D_protected_source_boundary_R1_frozen: true
+Phase_5D_actual_object_only_source_run_R3_manifest_sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+Phase_5D_actual_object_only_source_run_R3_independent_review_sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+Phase_5D_actual_object_only_source_run_R3_independent_review_result: PASS_NO_BLOCKER
+Phase_5D_actual_object_only_source_run_R3_requires_R4: false
+Phase_5D_actual_object_only_source_run_R3_atomic_freeze_decision: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml
+Phase_5D_actual_object_only_source_run_R3_atomic_freeze_decision_sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+Phase_5D_actual_object_only_source_run_R3_accepted: true
+Phase_5D_actual_object_only_source_run_R3_frozen: true
+Phase_5D_actual_object_only_source_run_R3_revisions_stopped: true
+actual_Git_object_run_authorized: false
+VCPToolBox_worktree_authorized: false
+quarantine_root_or_payload_materialization_authorized: false
+actual_Host_smoke_execution_authorized: false
+Host_operation_count: 0
+runtime_usable: false
+terminal_outcome: NOT_EXECUTED
+Git_delivery_authorized: false
+```
+
+## NOW
+
+### NOW-001: Jenn-only actual object-only source-run execution decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+execution_authorized=false
+```
+
+R3 is frozen only as an offline, hash-bound decision-package closure. It does
+not permit `--actual`. Any future actual object-only source run needs a new,
+separate and current Jenn execution decision that binds exact commands, roots,
+outputs, cleanup and fail-closed observations.
+
+## BLOCKED
+
+```text
+any actual Git object run, VCPToolBox worktree, checkout, sparse checkout, git archive, quarantine root, or payload materialization
+any reading, copying, exposure, exception, import, blob identifier, content hash, or semantic interpretation of protected config.env paths
+PluginManager, plugin discovery/loading, initialize, shutdownAllPlugins, shutdown, processToolCall, native addon or N-API
+runtime/service/database/provider/production authentication; dependency installation; public API/MCP expansion
+private raw Memory/state-private/credentials/keys/active configuration/sensing/recording/real effect
+commit, push, PR, merge, tag, release, deploy, publish, force push, history rewrite, or automatic actual Host-smoke start
+```
+
+## CLOSED
+
+```text
+Phase_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_R1=ACCEPTED_FROZEN
+PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3=ACCEPTED_FROZEN
+active_work_queue_v18.7=superseded_historical_bytes_preserved
+```
+
+No actual Git object run, protected-content read, worktree, quarantine root,
+payload, Host, plugin, runtime or external effect has occurred.

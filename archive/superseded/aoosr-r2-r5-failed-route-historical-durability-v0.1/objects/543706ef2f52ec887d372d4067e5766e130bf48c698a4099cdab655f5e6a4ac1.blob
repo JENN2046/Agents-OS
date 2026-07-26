@@ -1,0 +1,61 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-actual-object-only-source-run-r5-evidence-consumption-rebaseline-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+recorded_on: '2026-07-25'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_EVIDENCE_CONSUMPTION_REBASELINE
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 执行R5
+  interpreted_against:
+    - the immediately preceding Phase 5D M0-D R5 Evidence-Consumption Rebaseline Plan
+    - the architecture-unification review that rejected a second protected-path classifier
+  scope_expansion: forbidden
+
+bound_preconditions:
+  R4_manifest_sha256: c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be
+  R4_independent_review_sha256: cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8
+  R4_independent_review_result: BLOCK
+  R4_finding_disposition_sha256: 1ec8cfea9f35f6bd9dda3a964bad9bfcc0b9782212014fd393be924683a49bb4
+  protected_source_boundary_contract_sha256: 0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3
+  protected_source_boundary_freeze_decision_sha256: 0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082
+  protected_inventory_source_receipt_sha256: e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd
+
+authorized_scope:
+  required_architecture:
+    - consume_frozen_protected_source_evidence_without_recomputing_protected_path_policy
+    - remove_dynamic_scanner_module_loading_and_execution
+    - remove_generic_tree_name_enumeration
+    - verify_the_exact_sealed_tree_and_seven_allowlisted_blob_tuples
+    - reduce_the_closed_Git_command_inventory_from_24_to_23
+    - create_a_receipt_v0_2_that_distinguishes_bound_upstream_facts_from_current_run_observations
+  preserve_byte_for_byte:
+    - R1_through_R4_actual_object_only_source_run_subjects_manifests_reviews_and_dispositions
+    - R3_freeze_decision_and_consumed_execution_receipt
+    - protected_source_boundary_R1_frozen_lineage
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW_GATE
+  automatic_acceptance_or_freeze: forbidden
+  automatic_actual_object_only_source_run: forbidden
+
+not_authorized:
+  R5_actual_mode_invocation: false
+  VCPToolBox_Git_object_command_or_worktree: false
+  checkout_archive_fetch_or_network: false
+  plugin_or_Host_lifecycle: false
+  native_NAPI_runtime_database_provider_or_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_commit_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_actual_Host_smoke_execution: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_successor_subjects_and_fresh_independent_review
+  R5_acceptance_or_freeze_requires: fresh_independent_review_and_new_current_Jenn_atomic_decision

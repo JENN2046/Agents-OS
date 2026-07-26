@@ -1,0 +1,271 @@
+#!/usr/bin/env python3
+"""Offline semantic and source-totality validator for the R5 bundle."""
+
+from __future__ import annotations
+
+import argparse
+import ast
+import copy
+import json
+from pathlib import Path
+import runpy
+from typing import Any, Final
+
+
+WORKSPACE_ROOT: Final[Path] = Path("/home/jenn/AGENTS_OS_Workspace")
+RUNNER: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r5.py"
+)
+FIXTURE: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/examples/"
+    "2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-synthetic-fixture-v0.1.json"
+)
+FORBIDDEN_IMPORTS: Final[frozenset[str]] = frozenset(
+    {"runpy", "importlib", "types"}
+)
+FORBIDDEN_CALLS: Final[frozenset[str]] = frozenset(
+    {"exec", "compile", "__import__"}
+)
+
+
+def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate key: {key}")
+        result[key] = value
+    return result
+
+
+def runner_namespace() -> dict[str, Any]:
+    return runpy.run_path(str(RUNNER))
+
+
+def source_totality_errors(source: str) -> list[str]:
+    errors: list[str] = []
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return ["runner:SYNTAX"]
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name.split(".", 1)[0] in FORBIDDEN_IMPORTS:
+                    errors.append(f"runner:FORBIDDEN_IMPORT:{alias.name}")
+        elif isinstance(node, ast.ImportFrom):
+            module = (node.module or "").split(".", 1)[0]
+            if module in FORBIDDEN_IMPORTS:
+                errors.append(f"runner:FORBIDDEN_IMPORT:{module}")
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+            if node.func.id in FORBIDDEN_CALLS:
+                errors.append(f"runner:FORBIDDEN_CALL:{node.func.id}")
+        elif isinstance(node, ast.Attribute):
+            if (
+                node.attr == "modules"
+                and isinstance(node.value, ast.Name)
+                and node.value.id == "sys"
+            ):
+                errors.append("runner:FORBIDDEN_SYS_MODULES")
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            if node.value == "ls-tree":
+                errors.append("runner:FORBIDDEN_TREE_ENUMERATION")
+    return sorted(set(errors))
+
+
+def semantic_errors(document: Any, namespace: dict[str, Any]) -> list[str]:
+    errors = list(namespace["validate_synthetic_fixture"](document))
+    if tuple(namespace["EXPECTED_COMMAND_IDS"]) != tuple(
+        [
+            "G01_COMMIT_EXISTS",
+            "G02_TREE_RESOLVE",
+            *(
+                f"T{index:02d}_{phase}"
+                for index in range(1, 8)
+                for phase in ("RESOLVE", "TYPE", "DIGEST")
+            ),
+        ]
+    ):
+        errors.append("runner:COMMAND_INVENTORY")
+    if len(namespace["TUPLES"]) != 7:
+        errors.append("runner:TUPLE_COUNT")
+    tuple_rows = [
+        (item.identifier, item.path, item.blob_oid, item.sha256)
+        for item in namespace["TUPLES"]
+    ]
+    if len(set(tuple_rows)) != 7:
+        errors.append("runner:TUPLE_DUPLICATE")
+    if (
+        namespace["AUTHORITY_SHA256"].get(
+            "protected_source_boundary_contract"
+        )
+        != "0b7c58e2df9d939ab7f86acb573f3dfc92d4fa57e70b17e28c6303989e26f6f3"
+        or namespace["AUTHORITY_SHA256"].get(
+            "protected_source_boundary_freeze_decision"
+        )
+        != "0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082"
+        or namespace["AUTHORITY_SHA256"].get(
+            "protected_inventory_source_receipt"
+        )
+        != "e13937d9f334d1ff114c2d77fbd73609aff09c2297c14764b3379489919ec3bd"
+    ):
+        errors.append("runner:UPSTREAM_AUTHORITY_ANCHORS")
+    errors.extend(source_totality_errors(RUNNER.read_text(encoding="utf-8")))
+    return sorted(set(errors))
+
+
+def self_test(namespace: dict[str, Any]) -> tuple[int, list[str]]:
+    baseline = namespace["synthetic_fixture"]()
+    cases: list[tuple[str, Any, bool]] = [("baseline", baseline, True)]
+    mutations = (
+        (
+            "upstream_contract",
+            lambda item: item["upstream_authority"].__setitem__(
+                "contract_sha256", "a" * 64
+            ),
+        ),
+        (
+            "upstream_receipt",
+            lambda item: item["upstream_authority"][
+                "receipt_binding"
+            ].__setitem__("source_sha256", "a" * 64),
+        ),
+        (
+            "observed_now",
+            lambda item: item["upstream_authority"][
+                "receipt_binding"
+            ].__setitem__("observed_this_run", True),
+        ),
+        (
+            "not_consumed",
+            lambda item: item["upstream_authority"][
+                "receipt_binding"
+            ].__setitem__("consumed_as_frozen_upstream_fact", False),
+        ),
+        (
+            "tuple_omission",
+            lambda item: item["sealed_source"]["tuples"].pop(),
+        ),
+        (
+            "tuple_insertion",
+            lambda item: item["sealed_source"]["tuples"].append(
+                copy.deepcopy(item["sealed_source"]["tuples"][-1])
+            ),
+        ),
+        (
+            "tuple_reorder",
+            lambda item: item["sealed_source"]["tuples"].__setitem__(
+                slice(0, 2),
+                list(reversed(item["sealed_source"]["tuples"][:2])),
+            ),
+        ),
+        (
+            "command_omission",
+            lambda item: item["command_ids"].pop(),
+        ),
+        (
+            "name_scan",
+            lambda item: item["command_ids"].insert(
+                2, "G03_NAME_ONLY_SCAN"
+            ),
+        ),
+        (
+            "policy_recomputed",
+            lambda item: item["expected_receipt"].__setitem__(
+                "protected_policy_recomputed", True
+            ),
+        ),
+        (
+            "tree_enumerated",
+            lambda item: item["expected_receipt"].__setitem__(
+                "tree_name_enumeration_performed", True
+            ),
+        ),
+        (
+            "runtime_elevation",
+            lambda item: item["expected_receipt"].__setitem__(
+                "runtime_or_effect_operation_count", 1
+            ),
+        ),
+        (
+            "unknown_receipt_key",
+            lambda item: item["expected_receipt"].__setitem__(
+                "runtime_usable", True
+            ),
+        ),
+        (
+            "pseudo_boolean",
+            lambda item: item["execution_model"].__setitem__(
+                "dynamic_scanner_present", 0
+            ),
+        ),
+    )
+    for name, mutate in mutations:
+        candidate = copy.deepcopy(baseline)
+        mutate(candidate)
+        cases.append((name, candidate, False))
+    failures = [
+        name
+        for name, document, expected_accept in cases
+        if (not semantic_errors(document, namespace)) is not expected_accept
+    ]
+
+    forbidden_samples = {
+        "runpy": "import runpy\n",
+        "importlib": "from importlib import util\n",
+        "types": "import types\n",
+        "exec": "exec('x = 1')\n",
+        "compile": "compile('x = 1', '<x>', 'exec')\n",
+        "sys_modules": "import sys\nx = sys.modules\n",
+        "ls_tree": "x = 'ls-tree'\n",
+    }
+    for name, source in forbidden_samples.items():
+        if not source_totality_errors(source):
+            failures.append(f"source_{name}")
+    return len(cases) + len(forbidden_samples), failures
+
+
+def load_fixture() -> Any:
+    return json.loads(
+        FIXTURE.read_text(encoding="utf-8"),
+        object_pairs_hook=reject_duplicate_keys,
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+    namespace = runner_namespace()
+    if args.self_test:
+        count, failures = self_test(namespace)
+        print(
+            json.dumps(
+                {
+                    "result": "PASS" if not failures else "BLOCKED",
+                    "cases": count,
+                    "failures": failures,
+                },
+                sort_keys=True,
+            )
+        )
+        return 0 if not failures else 1
+    try:
+        errors = semantic_errors(load_fixture(), namespace)
+    except (OSError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
+        errors = [f"fixture:MALFORMED:{type(exc).__name__}"]
+    print(
+        json.dumps(
+            {
+                "result": "PASS_NO_BLOCKER" if not errors else "BLOCKED",
+                "errors": errors,
+            },
+            sort_keys=True,
+        )
+    )
+    return 0 if not errors else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

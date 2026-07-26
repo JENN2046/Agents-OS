@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""Build the deterministic R5 synthetic fixture.
+
+This builder is offline-only.  It imports the fixed runner source to call its
+pure synthetic_fixture() function and never invokes --actual or Git.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import runpy
+from typing import Any, Final
+
+
+WORKSPACE_ROOT: Final[Path] = Path("/home/jenn/AGENTS_OS_Workspace")
+RUNNER: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r5.py"
+)
+DEFAULT_OUTPUT: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/examples/"
+    "2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r5-synthetic-fixture-v0.1.json"
+)
+
+
+def fixture_bytes() -> bytes:
+    namespace: dict[str, Any] = runpy.run_path(str(RUNNER))
+    document = namespace["synthetic_fixture"]()
+    return (
+        json.dumps(document, sort_keys=True, separators=(",", ":")).encode(
+            "utf-8"
+        )
+        + b"\n"
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.write_bytes(fixture_bytes())
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

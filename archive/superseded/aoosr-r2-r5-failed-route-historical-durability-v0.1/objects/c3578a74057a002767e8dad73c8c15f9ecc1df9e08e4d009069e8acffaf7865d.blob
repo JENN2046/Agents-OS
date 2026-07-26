@@ -1,0 +1,58 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-actual-object-only-source-run-r4-narrow-correction-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+recorded_on: '2026-07-25'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R4_NARROW_CORRECTION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: 启动一个极窄的 R4，只修复 verified scanner 的模块加载/清理闭环并重新独立审查；不得修改已冻结 R1–R3 字节或启动 Host 路径。
+  scope_expansion: forbidden
+
+bound_preconditions:
+  R3_manifest_sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+  R3_independent_review_sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+  R3_freeze_decision_sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+  actual_attempt_receipt_sha256: d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996
+  actual_attempt_result: BLOCKED_REVIEW_BINDING_MISMATCH
+  actual_attempt_failure_phase: scanner_load
+  actual_attempt_Git_command_count: 0
+  actual_attempt_Host_operation_count: 0
+  actual_attempt_cleanup_status: CLEAN
+
+authorized_scope:
+  required_semantic_closure:
+    - register_the_hash_verified_scanner_module_before_exec
+    - remove_the_exact_registered_scanner_module_after_success_or_failure
+    - reject_module_name_collision_or_identity_substitution_fail_closed
+    - prove_the_real_inherited_dataclass_scanner_loads_after_digest_verification
+  preserve_byte_for_byte:
+    - R1_actual_object_only_source_run_subjects_and_reviews
+    - R2_actual_object_only_source_run_subjects_and_reviews
+    - R3_actual_object_only_source_run_subjects_manifest_review_and_freeze_decision
+    - protected_source_boundary_R1_frozen_lineage
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R4_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_acceptance_or_freeze: forbidden
+  automatic_actual_object_only_source_run: forbidden
+
+not_authorized:
+  VCPToolBox_Git_object_command_or_worktree: false
+  checkout_archive_fetch_or_network: false
+  plugin_or_Host_lifecycle: false
+  native_NAPI_runtime_database_provider_or_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_commit_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_actual_Host_smoke_execution: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_R4_successor_subjects_and_fresh_independent_review
+  R4_acceptance_or_freeze_requires: fresh_independent_review_and_new_current_Jenn_atomic_decision

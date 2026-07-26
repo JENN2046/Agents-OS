@@ -1,0 +1,821 @@
+#!/usr/bin/env python3
+"""Hash-bound, fail-closed runner for the Phase 5D object-only source run.
+
+The default and fixture modes never invoke Git.  The --actual mode is present
+only so a separately reviewed and current Jenn decision can name immutable
+runner bytes; this turn never invokes that mode.
+"""
+
+from __future__ import annotations
+
+import argparse
+import copy
+from dataclasses import dataclass, field
+from hashlib import sha256
+import json
+import os
+from pathlib import Path, PurePosixPath
+import runpy
+import signal
+import stat
+import subprocess
+import sys
+from typing import Any, Final
+
+
+SCANNER = runpy.run_path(str(Path(__file__).with_name("object-only-source-run-r2-scanner.py")))
+ScannerBlocked = SCANNER["ScannerBlocked"]
+scan_name_only_stream = SCANNER["scan_name_only_stream"]
+EXPECTED_PROTECTED_INVENTORY_SHA256 = SCANNER["EXPECTED_PROTECTED_INVENTORY_SHA256"]
+
+WORKSPACE_ROOT: Final[Path] = Path("/home/jenn/AGENTS_OS_Workspace")
+CANONICAL_ROOT: Final[Path] = WORKSPACE_ROOT / "runtime/VCPToolBox"
+GIT_DIR: Final[Path] = CANONICAL_ROOT / ".git"
+OBJECT_DIRECTORY: Final[Path] = GIT_DIR / "objects"
+SEALED_COMMIT: Final[str] = "555b3b538f6eb736e530c2912de678c5941f9985"
+SEALED_TREE: Final[str] = "fd82d403e79f36f749eb7f555b4736eae3eacdff"
+RUN_ID: Final[str] = "PHASE5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_20260725_V0_1"
+RUN_ROOT: Final[Path] = Path("/tmp/agents-os-phase5d-m0d-object-only-source-run-555b3b538f6e")
+OWNERSHIP_MARKER: Final[Path] = RUN_ROOT / ".agents-os-owner"
+TEMPORARY_RESULT: Final[Path] = RUN_ROOT / "result.yaml"
+RECEIPT_TARGET: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml"
+)
+REVIEW_MANIFEST_PATH: Final[Path] = (
+    WORKSPACE_ROOT
+    / "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml"
+)
+REVIEW_UNIT: Final[str] = "PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R2_ATOMIC_BUNDLE"
+TUPLE_SET_PREIMAGE_SHA256: Final[str] = "3c7ce3d7ecb615874288b2a735afae5428d79144c45352bd4dc38084ca1605ce"
+
+# The review manifest is an input to actual mode, not a caller-provided input.
+# Its record IDs and workspace-relative locations are frozen here.  The records'
+# digests deliberately remain in the manifest so that a later freeze decision can
+# bind their reviewed bytes without creating a source/manifest self-hash cycle.
+EXPECTED_REVIEW_RECORDS: Final[dict[str, tuple[tuple[str, str], ...]]] = {
+    "subjects": (
+        ("R2_amendment", "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md"),
+        ("R2_successor_decision_package", "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.2.md"),
+        ("R2_scanner", "control-plane/registry/object-only-source-run-r2-scanner.py"),
+        ("R2_runner", "control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py"),
+        ("R2_fixture_builder", "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py"),
+        ("R2_synthetic_fixture", "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json"),
+        ("R2_validator", "control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py"),
+        ("R2_review_package_builder", "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py"),
+    ),
+    "authority_inputs": (
+        ("R1_decision_package", "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md"),
+        ("R1_independent_review", "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml"),
+        ("R2_narrow_start_decision", "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml"),
+        ("protected_source_boundary_freeze_decision", "control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml"),
+        ("protected_source_boundary_contract", "control-plane/registry/drafts/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-v0.1-r1.md"),
+        ("protected_source_boundary_manifest", "control-plane/registry/reports/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-independent-review-package-v0.1.manifest.yaml"),
+        ("protected_source_boundary_review", "control-plane/registry/reviews/2026-07-24-yellow-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-full-atomic-independent-review.yaml"),
+        ("current_stop_queue", "control-plane/registry/reports/2026-07-24-agents-os-active-work-queue-v18.7.md"),
+    ),
+    "author_evidence": (
+        ("R2_author_self_review", "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-author-self-review.yaml"),
+    ),
+}
+EXPECTED_REVIEW_RECORD_COUNT: Final[int] = sum(len(rows) for rows in EXPECTED_REVIEW_RECORDS.values())
+PROTECTED_WORKSPACE_COMPONENTS: Final[frozenset[str]] = frozenset(
+    {"state-private", "secrets", "secret", "credentials", "tokens", "cookies"}
+)
+
+
+@dataclass(frozen=True)
+class TupleSpec:
+    identifier: str
+    path: str
+    blob_oid: str
+    sha256: str
+
+
+TUPLES: Final[tuple[TupleSpec, ...]] = (
+    TupleSpec("T01", "AGENTS.md", "28f22b4de495a63f14ede8fe72698278c877cb8d", "24b2a4c3e45a98107a726c8dfd80b577846052d49068bb1c13479f872bf0374b"),
+    TupleSpec("T02", "Plugin/AGENTS.md", "c2d23c041033b1f7d46b9dc3bdb2ba738566c872", "b060ad148827faa37877deb8b170399a0f00f46bc194797949005c9bb62572d4"),
+    TupleSpec("T03", "docs/PLUGIN_ECOSYSTEM.md", "81dc779453ccf2fb56c1f57d1ecde8ff3ffda506", "f806b90c4f7d46bd2113f8b5af9f773adce49b454d615e7b6aa8445663490a65"),
+    TupleSpec("T04", "rust-vexus-lite/AGENTS.md", "0fad4dba9bcbaa2452a362910b01e6275e5c352e", "e5e68ad817c4fc7da657ce0d9c131db666eff97888b772ac31b9661210c93494"),
+    TupleSpec("T05", "rust-vexus-lite/Cargo.toml", "3682f96f45c095f85e0f3c93bc2d6c1f21c98dde", "01f6f29f824418c58dc1c0a5243df514bd6b2bd5cd6a68de850c13e465e6eea9"),
+    TupleSpec("T06", "rust-vexus-lite/package.json", "232a95ef206e6ffab0cdff959826faaa10f6fedb", "c996185f59cc84208077f854077f2f5451368ea9cd05c775ba0b06028fed7f7c"),
+    TupleSpec("T07", "Plugin.js", "5fd77cea37c30ef432f23d9627d05aba862b9744", "be15f76324b73400fe70052e6f07a0254b2a9c26393009ad1f026793fb36f5a2"),
+)
+
+EXPECTED_COMMAND_IDS: Final[tuple[str, ...]] = (
+    "G01_COMMIT_EXISTS",
+    "G02_TREE_RESOLVE",
+    "G03_NAME_ONLY_SCAN",
+    *(f"{item.identifier}_{phase}" for item in TUPLES for phase in ("RESOLVE", "TYPE", "DIGEST")),
+)
+assert len(EXPECTED_COMMAND_IDS) == 24
+
+MARKER_BYTES: Final[bytes] = (
+    b"run_id=PHASE5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_20260725_V0_1\n"
+    b"sealed_commit=555b3b538f6eb736e530c2912de678c5941f9985\n"
+)
+TEMPORARY_RESULT_BYTES: Final[bytes] = b"status: IN_PROGRESS\nsource_bytes_persisted: false\n"
+RECEIPT_FIELDS: Final[tuple[str, ...]] = (
+    "schema_version",
+    "run_id",
+    "package_sha256",
+    "sealed_commit",
+    "sealed_tree",
+    "tuple_set_preimage_sha256",
+    "tuple_count",
+    "protected_name_inventory_preimage_sha256",
+    "protected_name_count",
+    "protected_blob_content_reads",
+    "allowlisted_blob_content_reads",
+    "Git_command_count",
+    "Host_operation_count",
+    "worktree_created",
+    "payload_files_created",
+    "stdout_bytes_emitted",
+    "stderr_bytes_emitted",
+    "cleanup_status",
+    "result",
+    "failure_phase",
+)
+CATCHABLE_SIGNALS: Final[tuple[int, ...]] = (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)
+
+
+class Blocked(RuntimeError):
+    def __init__(self, result: str, phase: str) -> None:
+        super().__init__(result)
+        self.result = result
+        self.phase = phase
+
+
+class InterruptedRun(Blocked):
+    pass
+
+
+@dataclass
+class RunState:
+    command_ids: list[str] = field(default_factory=list)
+    root_created: bool = False
+    marker_created: bool = False
+    temporary_result_created: bool = False
+    protected_name_count: int = 0
+    allowlisted_blob_content_reads: int = 0
+    result: str = "BLOCKED_INTERNAL_UNINITIALIZED"
+    failure_phase: str | None = "preflight"
+    cleanup_status: str = "NOT_STARTED"
+
+
+def git_environment() -> dict[str, str]:
+    """The exact empty-environment envelope used only by --actual."""
+
+    return {
+        "PATH": "/usr/bin:/bin",
+        "HOME": "/nonexistent",
+        "LC_ALL": "C",
+        "GIT_DIR": str(GIT_DIR),
+        "GIT_OBJECT_DIRECTORY": str(OBJECT_DIRECTORY),
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES": "",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_NO_REPLACE_OBJECTS": "1",
+        "GIT_TERMINAL_PROMPT": "0",
+        "GIT_OPTIONAL_LOCKS": "0",
+        "GIT_PAGER": "cat",
+    }
+
+
+def _lstat(path: Path) -> os.stat_result:
+    try:
+        return os.lstat(path)
+    except OSError as exc:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "path_lstat") from exc
+
+
+def _require_directory_not_symlink(path: Path, phase: str) -> None:
+    item = _lstat(path)
+    if stat.S_ISLNK(item.st_mode) or not stat.S_ISDIR(item.st_mode):
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", phase)
+
+
+def _require_absent_not_symlink(path: Path, phase: str) -> None:
+    try:
+        item = os.lstat(path)
+    except FileNotFoundError:
+        return
+    except OSError as exc:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", phase) from exc
+    # Any pre-existing node, including a non-symlink regular file or directory,
+    # means exclusive ownership cannot be proven.
+    del item
+    raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", phase)
+
+
+def _require_receipt_parent_chain() -> None:
+    current = WORKSPACE_ROOT
+    _require_directory_not_symlink(current, "workspace_root")
+    if current.resolve(strict=True) != current:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "workspace_root_realpath")
+    for part in RECEIPT_TARGET.relative_to(WORKSPACE_ROOT).parent.parts:
+        current = current / part
+        _require_directory_not_symlink(current, "receipt_parent")
+
+
+def _reject_duplicate_json_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def _valid_lower_sha256(value: Any) -> bool:
+    return type(value) is str and len(value) == 64 and all(character in "0123456789abcdef" for character in value)
+
+
+def _safe_workspace_relative_path(value: Any) -> str:
+    if type(value) is not str or not value or "\\" in value:
+        raise ValueError("unsafe workspace path")
+    item = PurePosixPath(value)
+    if item.is_absolute() or any(part in {"", ".", ".."} for part in item.parts):
+        raise ValueError("unsafe workspace path")
+    if any(part in PROTECTED_WORKSPACE_COMPONENTS for part in item.parts):
+        raise ValueError("unsafe workspace path")
+    basename = item.parts[-1]
+    if basename == ".env" or basename.startswith(".env.") or basename == "config.env":
+        raise ValueError("unsafe workspace path")
+    return item.as_posix()
+
+
+def _require_regular_workspace_file(relative: str, phase: str) -> Path:
+    try:
+        candidate = WORKSPACE_ROOT.joinpath(*PurePosixPath(_safe_workspace_relative_path(relative)).parts)
+    except ValueError as exc:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase) from exc
+    try:
+        direct = os.lstat(candidate)
+        resolved = candidate.resolve(strict=True)
+    except OSError as exc:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase) from exc
+    if stat.S_ISLNK(direct.st_mode) or not stat.S_ISREG(direct.st_mode):
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase)
+    if WORKSPACE_ROOT.resolve(strict=True) != WORKSPACE_ROOT or resolved != candidate:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase)
+    return candidate
+
+
+def _read_regular_workspace_file(relative: str, phase: str) -> bytes:
+    candidate = _require_regular_workspace_file(relative, phase)
+    try:
+        descriptor = os.open(candidate, os.O_RDONLY | os.O_NOFOLLOW)
+    except OSError as exc:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase) from exc
+    try:
+        item = os.fstat(descriptor)
+        if not stat.S_ISREG(item.st_mode):
+            raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase)
+        pieces: list[bytes] = []
+        while True:
+            piece = os.read(descriptor, 65536)
+            if not piece:
+                break
+            pieces.append(piece)
+        return b"".join(pieces)
+    except OSError as exc:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", phase) from exc
+    finally:
+        os.close(descriptor)
+
+
+def _validate_review_manifest_document(document: Any) -> tuple[tuple[dict[str, str], ...], str]:
+    if type(document) is not dict or set(document) != {
+        "schema_version", "review_unit", "atomic", "partial_review",
+        "subjects", "authority_inputs", "author_evidence", "fixed_commands",
+    }:
+        raise ValueError("review manifest keys")
+    if (
+        document["schema_version"] != "agents-os.hash-bound-independent-review-package.v0.1"
+        or document["review_unit"] != REVIEW_UNIT
+        or document["atomic"] is not True
+        or document["partial_review"] != "forbidden"
+    ):
+        raise ValueError("review manifest shape")
+    fixed_commands = document["fixed_commands"]
+    if type(fixed_commands) is not list or len(fixed_commands) != 7 or any(type(item) is not str or not item for item in fixed_commands):
+        raise ValueError("review manifest commands")
+    records: list[dict[str, str]] = []
+    decision_digest: str | None = None
+    for group, expected in EXPECTED_REVIEW_RECORDS.items():
+        entries = document[group]
+        if type(entries) is not list or len(entries) != len(expected):
+            raise ValueError("review manifest record count")
+        for entry, (expected_id, expected_path) in zip(entries, expected, strict=True):
+            if type(entry) is not dict or set(entry) != {"id", "path", "sha256"}:
+                raise ValueError("review manifest record keys")
+            if (
+                entry["id"] != expected_id
+                or entry["path"] != expected_path
+                or not _valid_lower_sha256(entry["sha256"])
+            ):
+                raise ValueError("review manifest record value")
+            records.append(entry)
+            if entry["id"] == "R2_successor_decision_package":
+                decision_digest = entry["sha256"]
+    if len(records) != EXPECTED_REVIEW_RECORD_COUNT or len({entry["path"] for entry in records}) != len(records):
+        raise ValueError("review manifest record uniqueness")
+    if decision_digest is None:
+        raise ValueError("review manifest decision package")
+    return tuple(records), decision_digest
+
+
+def _verify_bound_manifest() -> str:
+    """Verify the current reviewed R2 bytes before any Git command is possible."""
+
+    manifest_relative = str(REVIEW_MANIFEST_PATH.relative_to(WORKSPACE_ROOT))
+    try:
+        manifest_bytes = _read_regular_workspace_file(manifest_relative, "review_manifest")
+        document = json.loads(manifest_bytes.decode("utf-8"), object_pairs_hook=_reject_duplicate_json_keys)
+        records, decision_digest = _validate_review_manifest_document(document)
+    except (Blocked, OSError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
+        raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "review_manifest_parse") from exc
+    for entry in records:
+        if sha256(_read_regular_workspace_file(entry["path"], "review_manifest_subject")).hexdigest() != entry["sha256"]:
+            raise Blocked("BLOCKED_REVIEW_BINDING_MISMATCH", "review_manifest_hash")
+    return decision_digest
+
+
+def _assert_preconditions() -> None:
+    if Path.cwd().resolve() != WORKSPACE_ROOT:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "working_directory")
+    _require_directory_not_symlink(CANONICAL_ROOT, "canonical_root")
+    if CANONICAL_ROOT.resolve() != CANONICAL_ROOT:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "canonical_root_realpath")
+    _require_directory_not_symlink(GIT_DIR, "git_directory")
+    _require_directory_not_symlink(OBJECT_DIRECTORY, "object_directory")
+    info = OBJECT_DIRECTORY / "info"
+    if info.exists():
+        _require_directory_not_symlink(info, "object_info_directory")
+    _require_absent_not_symlink(OBJECT_DIRECTORY / "info" / "alternates", "alternates")
+    _require_directory_not_symlink(RUN_ROOT.parent, "temporary_parent")
+    _require_absent_not_symlink(RUN_ROOT, "run_root")
+    _require_receipt_parent_chain()
+    _require_absent_not_symlink(RECEIPT_TARGET, "receipt_target")
+    if not hasattr(os, "O_NOFOLLOW"):
+        raise Blocked("BLOCKED_LOCAL_TOOLING_UNAVAILABLE", "o_nofollow")
+    if not hasattr(signal, "pthread_sigmask"):
+        raise Blocked("BLOCKED_SIGNAL_FINALIZER_UNAVAILABLE", "signal_mask")
+
+
+def _open_exclusive_nofollow(path: Path, content: bytes, phase: str) -> None:
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW
+    try:
+        descriptor = os.open(path, flags, 0o600)
+    except OSError as exc:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", phase) from exc
+    try:
+        position = 0
+        while position < len(content):
+            written = os.write(descriptor, content[position:])
+            if written <= 0:
+                raise Blocked("BLOCKED_RECEIPT_WRITE_UNVERIFIED", phase)
+            position += written
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _create_owned_run_root(state: RunState) -> None:
+    try:
+        os.mkdir(RUN_ROOT, 0o700)
+    except OSError as exc:
+        raise Blocked("BLOCKED_PREEXISTING_OR_UNOWNED_PATH", "run_root_create") from exc
+    state.root_created = True
+    _open_exclusive_nofollow(OWNERSHIP_MARKER, MARKER_BYTES, "ownership_marker_create")
+    state.marker_created = True
+    _open_exclusive_nofollow(TEMPORARY_RESULT, TEMPORARY_RESULT_BYTES, "temporary_result_create")
+    state.temporary_result_created = True
+
+
+def _require_exact_marker() -> None:
+    flags = os.O_RDONLY | os.O_NOFOLLOW
+    try:
+        descriptor = os.open(OWNERSHIP_MARKER, flags)
+    except OSError as exc:
+        raise Blocked("BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED", "ownership_marker_read") from exc
+    try:
+        value = os.read(descriptor, len(MARKER_BYTES) + 1)
+    finally:
+        os.close(descriptor)
+    if value != MARKER_BYTES:
+        raise Blocked("BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED", "ownership_marker_mismatch")
+
+
+def _finalize_owned_root(state: RunState) -> str:
+    if not state.root_created:
+        return "NOT_CREATED"
+    try:
+        _require_exact_marker()
+        temporary = _lstat(TEMPORARY_RESULT)
+        if stat.S_ISLNK(temporary.st_mode) or not stat.S_ISREG(temporary.st_mode):
+            raise Blocked("BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED", "temporary_result_shape")
+        os.unlink(TEMPORARY_RESULT)
+        os.unlink(OWNERSHIP_MARKER)
+        os.rmdir(RUN_ROOT)
+        try:
+            os.lstat(RUN_ROOT)
+        except FileNotFoundError:
+            return "CLEAN"
+        raise Blocked("BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED", "residue_present")
+    except (Blocked, OSError):
+        return "RESIDUE_UNVERIFIED"
+
+
+def _git_scalar(state: RunState, command_id: str, arguments: list[str], phase: str) -> str:
+    try:
+        completed = subprocess.run(
+            ["git", f"--git-dir={GIT_DIR}", *arguments],
+            cwd=WORKSPACE_ROOT,
+            env=git_environment(),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError as exc:
+        raise Blocked("BLOCKED_LOCAL_TOOLING_UNAVAILABLE", phase) from exc
+    state.command_ids.append(command_id)
+    if completed.returncode != 0:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", phase)
+    try:
+        value = completed.stdout.decode("ascii", "strict").strip()
+    except UnicodeDecodeError as exc:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", phase) from exc
+    return value
+
+
+def _git_name_stream(state: RunState) -> bytes:
+    try:
+        completed = subprocess.run(
+            ["git", f"--git-dir={GIT_DIR}", "ls-tree", "-r", "--name-only", "-z", SEALED_COMMIT, "--"],
+            cwd=WORKSPACE_ROOT,
+            env=git_environment(),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError as exc:
+        raise Blocked("BLOCKED_LOCAL_TOOLING_UNAVAILABLE", "name_only_scan") from exc
+    state.command_ids.append("G03_NAME_ONLY_SCAN")
+    if completed.returncode != 0:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", "name_only_scan")
+    return completed.stdout
+
+
+def _git_digest(state: RunState, item: TupleSpec) -> str:
+    try:
+        source = subprocess.Popen(
+            ["git", f"--git-dir={GIT_DIR}", "cat-file", "blob", item.blob_oid],
+            cwd=WORKSPACE_ROOT,
+            env=git_environment(),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+    except OSError as exc:
+        raise Blocked("BLOCKED_LOCAL_TOOLING_UNAVAILABLE", f"{item.identifier}_digest") from exc
+    assert source.stdout is not None
+    try:
+        digest = sha256()
+        while True:
+            chunk = source.stdout.read(65536)
+            if not chunk:
+                break
+            digest.update(chunk)
+    finally:
+        source.stdout.close()
+    source_returncode = source.wait()
+    state.command_ids.append(f"{item.identifier}_DIGEST")
+    if source_returncode != 0:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", f"{item.identifier}_digest")
+    return digest.hexdigest()
+
+
+def _run_exact_git_inventory(state: RunState) -> None:
+    value = _git_scalar(state, "G01_COMMIT_EXISTS", ["cat-file", "-e", f"{SEALED_COMMIT}^{{commit}}"], "commit_exists")
+    if value:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", "commit_exists_output")
+    tree = _git_scalar(state, "G02_TREE_RESOLVE", ["rev-parse", f"{SEALED_COMMIT}^{{tree}}"], "tree_resolve")
+    if tree != SEALED_TREE:
+        raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", "tree_resolve")
+    try:
+        scan_result = scan_name_only_stream(_git_name_stream(state))
+    except ScannerBlocked as exc:
+        raise Blocked("BLOCKED_PROTECTED_PATH_INVENTORY_MISMATCH", "name_only_scan") from exc
+    state.protected_name_count = scan_result.protected_name_count
+    for item in TUPLES:
+        resolved = _git_scalar(
+            state,
+            f"{item.identifier}_RESOLVE",
+            ["rev-parse", f"{SEALED_COMMIT}:{item.path}"],
+            f"{item.identifier}_resolve",
+        )
+        if resolved != item.blob_oid:
+            raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", f"{item.identifier}_resolve")
+        object_type = _git_scalar(
+            state,
+            f"{item.identifier}_TYPE",
+            ["cat-file", "-t", item.blob_oid],
+            f"{item.identifier}_type",
+        )
+        if object_type != "blob":
+            raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", f"{item.identifier}_type")
+        if _git_digest(state, item) != item.sha256:
+            raise Blocked("BLOCKED_SEALED_SOURCE_OR_TUPLE_MISMATCH", f"{item.identifier}_digest")
+        state.allowlisted_blob_content_reads += 1
+    if tuple(state.command_ids) != EXPECTED_COMMAND_IDS:
+        raise Blocked("BLOCKED_UNAUTHORIZED_OR_NONHERMETIC_GIT_OPERATION", "command_inventory")
+
+
+def _receipt_bytes(state: RunState, package_sha256: str) -> bytes:
+    values: dict[str, Any] = {
+        "schema_version": "agents-os.phase5d.actual-object-only-source-run-receipt.v0.1",
+        "run_id": RUN_ID,
+        "package_sha256": package_sha256,
+        "sealed_commit": SEALED_COMMIT,
+        "sealed_tree": SEALED_TREE,
+        "tuple_set_preimage_sha256": TUPLE_SET_PREIMAGE_SHA256,
+        "tuple_count": len(TUPLES),
+        "protected_name_inventory_preimage_sha256": EXPECTED_PROTECTED_INVENTORY_SHA256,
+        "protected_name_count": state.protected_name_count,
+        "protected_blob_content_reads": 0,
+        "allowlisted_blob_content_reads": state.allowlisted_blob_content_reads,
+        "Git_command_count": len(state.command_ids),
+        "Host_operation_count": 0,
+        "worktree_created": False,
+        "payload_files_created": 0,
+        "stdout_bytes_emitted": 0,
+        "stderr_bytes_emitted": 0,
+        "cleanup_status": state.cleanup_status,
+        "result": state.result,
+        "failure_phase": state.failure_phase,
+    }
+    if tuple(values) != RECEIPT_FIELDS:
+        raise Blocked("BLOCKED_RECEIPT_WRITE_UNVERIFIED", "receipt_schema")
+    return json.dumps(values, sort_keys=True, separators=(",", ":")).encode("utf-8") + b"\n"
+
+
+class SignalGuard:
+    def __init__(self) -> None:
+        self.previous: dict[int, Any] = {}
+        self.previous_mask: set[int] | None = None
+
+    def __enter__(self) -> "SignalGuard":
+        # Block first, then install handlers, then restore the pre-existing mask.
+        # This leaves no setup interval in which an owned root can exist while a
+        # catchable signal has its prior handler but is not masked.
+        self.previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, set(CATCHABLE_SIGNALS))
+        try:
+            for number in CATCHABLE_SIGNALS:
+                self.previous[number] = signal.getsignal(number)
+                signal.signal(number, self._handler)
+        except Exception:
+            signal.pthread_sigmask(signal.SIG_SETMASK, self.previous_mask)
+            raise
+        signal.pthread_sigmask(signal.SIG_SETMASK, self.previous_mask)
+        return self
+
+    def _handler(self, number: int, _frame: Any) -> None:
+        raise InterruptedRun("BLOCKED_INTERRUPTED_OR_SIGNALLED", f"signal_{number}")
+
+    def block_for_finalizer(self) -> None:
+        signal.pthread_sigmask(signal.SIG_BLOCK, set(CATCHABLE_SIGNALS))
+
+    def __exit__(self, _type: Any, _value: Any, _traceback: Any) -> None:
+        for number, previous in self.previous.items():
+            signal.signal(number, previous)
+        if self.previous_mask is not None:
+            signal.pthread_sigmask(signal.SIG_SETMASK, self.previous_mask)
+
+
+def run_actual() -> int:
+    """Run the exact inventory only when a later human decision authorizes it."""
+
+    state = RunState()
+    package_sha256 = "UNAVAILABLE"
+    with SignalGuard() as guard:
+        try:
+            package_sha256 = _verify_bound_manifest()
+            _assert_preconditions()
+            _create_owned_run_root(state)
+            _run_exact_git_inventory(state)
+            state.result = "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY"
+            state.failure_phase = None
+        except Blocked as exc:
+            state.result = exc.result
+            state.failure_phase = exc.phase
+        except Exception:
+            state.result = "BLOCKED_UNEXPECTED_RUNNER_FAILURE"
+            state.failure_phase = "runner"
+        finally:
+            try:
+                guard.block_for_finalizer()
+            except OSError:
+                state.result = "BLOCKED_SIGNAL_FINALIZER_UNAVAILABLE"
+                state.failure_phase = "signal_mask"
+            state.cleanup_status = _finalize_owned_root(state)
+            if state.cleanup_status not in {"CLEAN", "NOT_CREATED"}:
+                state.result = "BLOCKED_CLEANUP_OR_RESIDUE_UNVERIFIED"
+                state.failure_phase = "finalizer"
+            try:
+                _write_actual_receipt(state, package_sha256)
+            except Exception:
+                state.result = "BLOCKED_RECEIPT_WRITE_UNVERIFIED"
+                state.failure_phase = "receipt_write"
+    return 0 if state.result == "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY" else 1
+
+
+def _write_actual_receipt(state: RunState, package_sha256: str) -> None:
+    _require_receipt_parent_chain()
+    _require_absent_not_symlink(RECEIPT_TARGET, "receipt_target_write")
+    _open_exclusive_nofollow(RECEIPT_TARGET, _receipt_bytes(state, package_sha256), "receipt_target_write")
+
+
+def synthetic_fixture() -> dict[str, Any]:
+    return {
+        "schema_version": "agents-os.phase5d.actual-object-only-source-run-r2.synthetic-fixture.v0.1",
+        "run_id": RUN_ID,
+        "environment": git_environment(),
+        "review_binding": {
+            "manifest_path": str(REVIEW_MANIFEST_PATH),
+            "review_unit": REVIEW_UNIT,
+            "record_count": EXPECTED_REVIEW_RECORD_COUNT,
+            "fixed_command_count": 7,
+            "manifest_verified_before_git": True,
+            "duplicate_json_keys_rejected": True,
+            "protected_workspace_inputs_rejected": True,
+        },
+        "sealed_host": {"canonical_root": str(CANONICAL_ROOT), "commit": SEALED_COMMIT, "tree": SEALED_TREE},
+        "tuple_set_preimage_sha256": TUPLE_SET_PREIMAGE_SHA256,
+        "protected_name_inventory_preimage_sha256": EXPECTED_PROTECTED_INVENTORY_SHA256,
+        "command_ids": list(EXPECTED_COMMAND_IDS),
+        "path_safety": {
+            "canonical_root_rejects_symlink": True,
+            "canonical_root_realpath_exact": True,
+            "receipt_open_flags": ["O_WRONLY", "O_CREAT", "O_EXCL", "O_NOFOLLOW"],
+            "temporary_result_created_after_marker": True,
+            "temporary_result_open_flags": ["O_WRONLY", "O_CREAT", "O_EXCL", "O_NOFOLLOW"],
+        },
+        "finalizer": {
+            "catchable_signals": ["SIGINT", "SIGTERM", "SIGHUP"],
+            "signals_blocked_before_handler_installation": True,
+            "signal_finalizer_masked": True,
+            "unrecoverable_SIGKILL_result": "BLOCKED_UNRECOVERED_INTERRUPTION",
+            "uses_recursive_delete": False,
+            "uses_rmdir_only": True,
+        },
+        "expected_success": {
+            "result": "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY",
+            "Git_command_count": 24,
+            "protected_blob_content_reads": 0,
+            "allowlisted_blob_content_reads": 7,
+            "stdout_bytes_emitted": 0,
+            "stderr_bytes_emitted": 0,
+            "cleanup_status": "CLEAN",
+            "Host_operation_count": 0,
+            "worktree_created": False,
+            "payload_files_created": 0,
+        },
+    }
+
+
+def validate_synthetic_fixture(doc: Any) -> list[str]:
+    errors: list[str] = []
+    if type(doc) is not dict:
+        return ["fixture:TYPE"]
+    expected_keys = {
+        "schema_version", "run_id", "environment", "sealed_host",
+        "review_binding",
+        "tuple_set_preimage_sha256", "protected_name_inventory_preimage_sha256",
+        "command_ids", "path_safety", "finalizer", "expected_success",
+    }
+    if set(doc) != expected_keys:
+        return ["fixture:KEYS"]
+    if doc["schema_version"] != "agents-os.phase5d.actual-object-only-source-run-r2.synthetic-fixture.v0.1":
+        errors.append("fixture:SCHEMA")
+    if doc["run_id"] != RUN_ID:
+        errors.append("fixture:RUN_ID")
+    if doc["environment"] != git_environment():
+        errors.append("fixture:ENVIRONMENT")
+    expected_review_binding = {
+        "manifest_path": str(REVIEW_MANIFEST_PATH),
+        "review_unit": REVIEW_UNIT,
+        "record_count": EXPECTED_REVIEW_RECORD_COUNT,
+        "fixed_command_count": 7,
+        "manifest_verified_before_git": True,
+        "duplicate_json_keys_rejected": True,
+        "protected_workspace_inputs_rejected": True,
+    }
+    if doc["review_binding"] != expected_review_binding:
+        errors.append("fixture:REVIEW_BINDING")
+    if doc["sealed_host"] != {"canonical_root": str(CANONICAL_ROOT), "commit": SEALED_COMMIT, "tree": SEALED_TREE}:
+        errors.append("fixture:SEALED_HOST")
+    if doc["tuple_set_preimage_sha256"] != TUPLE_SET_PREIMAGE_SHA256:
+        errors.append("fixture:TUPLE_PREIMAGE")
+    if doc["protected_name_inventory_preimage_sha256"] != EXPECTED_PROTECTED_INVENTORY_SHA256:
+        errors.append("fixture:PROTECTED_PREIMAGE")
+    if doc["command_ids"] != list(EXPECTED_COMMAND_IDS):
+        errors.append("fixture:COMMAND_IDS")
+    expected_path_safety = {
+        "canonical_root_rejects_symlink": True,
+        "canonical_root_realpath_exact": True,
+        "receipt_open_flags": ["O_WRONLY", "O_CREAT", "O_EXCL", "O_NOFOLLOW"],
+        "temporary_result_created_after_marker": True,
+        "temporary_result_open_flags": ["O_WRONLY", "O_CREAT", "O_EXCL", "O_NOFOLLOW"],
+    }
+    if doc["path_safety"] != expected_path_safety:
+        errors.append("fixture:PATH_SAFETY")
+    expected_finalizer = {
+        "catchable_signals": ["SIGINT", "SIGTERM", "SIGHUP"],
+        "signals_blocked_before_handler_installation": True,
+        "signal_finalizer_masked": True,
+        "unrecoverable_SIGKILL_result": "BLOCKED_UNRECOVERED_INTERRUPTION",
+        "uses_recursive_delete": False,
+        "uses_rmdir_only": True,
+    }
+    if doc["finalizer"] != expected_finalizer:
+        errors.append("fixture:FINALIZER")
+    expected_success = {
+        "result": "OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY",
+        "Git_command_count": 24,
+        "protected_blob_content_reads": 0,
+        "allowlisted_blob_content_reads": 7,
+        "stdout_bytes_emitted": 0,
+        "stderr_bytes_emitted": 0,
+        "cleanup_status": "CLEAN",
+        "Host_operation_count": 0,
+        "worktree_created": False,
+        "payload_files_created": 0,
+    }
+    if doc["expected_success"] != expected_success:
+        errors.append("fixture:SUCCESS")
+    return errors
+
+
+def self_test() -> int:
+    baseline = synthetic_fixture()
+    cases: dict[str, tuple[dict[str, Any], bool]] = {"baseline": (baseline, True)}
+    for name, mutate in (
+        ("replace_objects", lambda item: item["environment"].__setitem__("GIT_NO_REPLACE_OBJECTS", "0")),
+        ("review_binding", lambda item: item["review_binding"].__setitem__("manifest_verified_before_git", False)),
+        ("extra_git_command", lambda item: item["command_ids"].append("EXTRA")),
+        ("root_symlink", lambda item: item["path_safety"].__setitem__("canonical_root_rejects_symlink", False)),
+        ("receipt_not_exclusive", lambda item: item["path_safety"].__setitem__("receipt_open_flags", ["O_WRONLY", "O_CREAT"])),
+        ("temporary_order", lambda item: item["path_safety"].__setitem__("temporary_result_created_after_marker", False)),
+        ("signal_gap", lambda item: item["finalizer"].__setitem__("catchable_signals", ["SIGINT"])),
+        ("signal_setup_gap", lambda item: item["finalizer"].__setitem__("signals_blocked_before_handler_installation", False)),
+        ("output_leak", lambda item: item["expected_success"].__setitem__("stdout_bytes_emitted", 1)),
+    ):
+        mutated = copy.deepcopy(baseline)
+        mutate(mutated)
+        cases[name] = (mutated, False)
+    failures: list[str] = []
+    for name, (doc, should_pass) in cases.items():
+        passed = not validate_synthetic_fixture(doc)
+        if passed is not should_pass:
+            failures.append(name)
+    print(json.dumps({"result": "PASS" if not failures else "BLOCKED", "cases": len(cases), "failures": failures}, sort_keys=True))
+    return 0 if not failures else 1
+
+
+def _load_json_no_duplicates(path: Path) -> Any:
+    def reject_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate JSON key")
+            result[key] = value
+        return result
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicates)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--self-test", action="store_true")
+    group.add_argument("--fixture", type=Path)
+    group.add_argument("--actual", action="store_true")
+    args = parser.parse_args()
+    if args.self_test:
+        return self_test()
+    if args.fixture is not None:
+        try:
+            errors = validate_synthetic_fixture(_load_json_no_duplicates(args.fixture))
+        except (OSError, UnicodeError, ValueError, json.JSONDecodeError):
+            errors = ["fixture:BLOCKED"]
+        print(json.dumps({"result": "PASS_NO_BLOCKER" if not errors else "BLOCKED", "errors": errors}, sort_keys=True))
+        return 0 if not errors else 1
+    return run_actual()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

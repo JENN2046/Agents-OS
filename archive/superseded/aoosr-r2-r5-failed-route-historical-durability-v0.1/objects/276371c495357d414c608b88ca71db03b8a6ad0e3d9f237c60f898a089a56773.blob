@@ -1,0 +1,120 @@
+# Phase 5D M0-D Actual Object-Only Source Run Execution Decision Package v0.1
+
+Date: 2026-07-25  
+Owner: Jenn  
+Agent steward: Nobao  
+Status: DRAFT_FOR_JENN_ONLY_EXECUTION_DECISION  
+Terminal outcome: NOT_EXECUTED
+
+## 1. Purpose
+
+This package is the separate decision surface required after the frozen R3
+offline closure. It can authorize at most one execution of the already frozen
+R3 runner in `--actual` mode. It does not authorize any Host lifecycle,
+plugin, runtime, worktree, checkout, payload delivery, implementation change,
+Git delivery, or real-world effect.
+
+## 2. Bound evidence
+
+```yaml
+R3_manifest:
+  sha256: f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1
+R3_independent_review:
+  sha256: 42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916
+  result: PASS_NO_BLOCKER
+R3_freeze_decision:
+  sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+  result: ACCEPTED_FROZEN
+R3_runner:
+  sha256: 3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0
+execution_admission_preflight:
+  path: control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-execution-admission-preflight-v0.1.yaml
+  sha256: 0eca05db61a5b5cd1689ab928810f81e7ca598c362cbb95dccc218b1f6aed4e4
+```
+
+The admission preflight binds the canonical root, sealed commit and tree,
+seven allowlisted tuple identities, the closed 24-command inventory, the
+temporary root, the sole receipt target, and every fail-closed outcome.
+
+## 3. Exact future operation
+
+Only this process is eligible, after the decision in Section 6A and no other
+command or argument:
+
+```text
+env -i PATH=/usr/bin:/bin HOME=/nonexistent LC_ALL=C \
+  /usr/bin/python3 \
+  /home/jenn/AGENTS_OS_Workspace/control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r3.py \
+  --actual
+```
+
+Working directory: `/home/jenn/AGENTS_OS_Workspace`.
+
+The runner itself verifies all bound workspace bytes before compiling or
+executing the scanner, uses `GIT_NO_REPLACE_OBJECTS=1`, and refuses a missing,
+substituted, unsafe, or stale input. It must stop before any Git object command
+when its admission sequence fails.
+
+## 4. Success is deliberately narrow
+
+Success can produce only a candidate-only receipt stating all of the following:
+
+```yaml
+result: OBJECT_ONLY_SOURCE_RUN_EVIDENCE_CANDIDATE_ONLY
+Git_command_count: 24
+allowlisted_blob_content_reads: 7
+protected_blob_content_reads: 0
+worktree_created: false
+payload_materialized: false
+Host_operation_count: 0
+runtime_or_effect_operation_count: 0
+cleanup_status: CLEAN
+```
+
+Neither success nor failure authorizes a Host call, plugin discovery/loading,
+N-API, runtime, database, provider, authentication, private Memory,
+state-private access, sensing, recording, or an effect.
+
+## 5. Preconditions immediately before execution
+
+Nobao must rehash every entry in Section 2, validate the preflight profile,
+verify the exact future invocation has no extra argument, and verify both the
+temporary run root and receipt target are absent. Any mismatch, preexisting
+path, missing prerequisite, or unavailable observation is `BLOCKED` and no
+Git command may run.
+
+The operation must not proceed until the current Jenn decision in Section 6A
+has been received verbatim or explicitly confirmed as the complete exact text.
+
+## 6. Jenn decision surface
+
+### A. Authorize exactly one object-only source run
+
+~~~text
+我确认执行 Phase 5D M0-D Actual Object-Only Source Run Execution Decision Package v0.1 第 6 节 A 的完整 Exact decision text。
+
+我只授权在 /home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox 上，使用已绑定 SHA-256 为 3bf99381e9c4b3e4413abfa799dbad676ae864e173dbe0eeef15ce829d02e5f0 的 R3 runner，按本包第 3 节的唯一命令执行一次 --actual。
+
+我确认该次执行只可在 runner 的 hash-bound admission preflight 全部通过后读取已封存 commit 555b3b538f6eb736e530c2912de678c5941f9985 的七个 allowlisted object tuple；不得读取任何 protected path、protected blob content、state-private、secret、credential、token、cookie、private Memory 或 active configuration。
+
+我确认只允许该 runner 创建并清理本包绑定的 /tmp run root，并在成功或 fail-closed 结束时写入本包绑定的唯一 receipt target。任何 hash、root shape、Git object、tuple、signal、cleanup 或 receipt 条件不满足时必须 fail closed、清理已拥有的临时路径并停止。
+
+我不授权 worktree、checkout、sparse checkout、archive、payload delivery、plugin discovery/loading、initialize、shutdown、processToolCall、native/N-API、runtime、database、provider、production authentication、private Memory、sensing、recording、真实 effect、commit、push、PR、merge、tag、release、deploy、publish 或后续 Host-smoke。
+~~~
+
+### B. Do not execute
+
+Keep this package at the Jenn-only execution-decision gate. No VCPToolBox Git
+command, temporary root, receipt, scanner execution in actual mode, Host
+operation, runtime path, or Git delivery may occur.
+
+## 7. Current state
+
+```yaml
+execution_decision_received: false
+actual_object_only_source_run_authorized: false
+actual_mode_invocation_count: 0
+VCPToolBox_Git_command_count: 0
+Host_operation_count: 0
+runtime_or_effect_operation_count: 0
+```

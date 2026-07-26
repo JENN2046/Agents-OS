@@ -1,0 +1,72 @@
+# Phase 5D M0-D Actual Object-Only Source Run Decision Package v0.5
+
+Date: 2026-07-25  
+Owner: Jenn  
+Agent steward: Nobao  
+Status: DRAFT_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW  
+Terminal outcome: NOT_EXECUTED
+
+## 1. Decision-package purpose
+
+This package is an offline R5 review subject. It records the architecture
+rebaseline from a dynamically executed scanner to consumption of frozen
+Protected Source Boundary evidence.
+
+It is not an execution decision and contains no current `--actual` invocation.
+
+## 2. Current candidate
+
+```yaml
+review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R5_ATOMIC_BUNDLE
+R5_architecture: FROZEN_UPSTREAM_EVIDENCE_CONSUMPTION
+dynamic_scanner_execution: false
+generic_tree_name_enumeration: false
+exact_Git_command_count: 23
+actual_object_only_source_run_authorized: false
+Host_path_authorized: false
+runtime_usable: false
+terminal_outcome: NOT_EXECUTED
+```
+
+## 3. Independent-review requirement
+
+The complete R5 bundle must receive a fresh full atomic independent review.
+The reviewer must read and hash every declared input, execute every fixed
+offline command and independently attack:
+
+- substitution of the frozen protected-source contract, decision or receipt;
+- a changed sealed tree;
+- tuple omission, insertion, replacement, reordering or duplication;
+- restoration of `G03_NAME_ONLY_SCAN`, generic enumeration or scanner code;
+- false claims that protected facts were observed or recomputed in R5;
+- any Host, runtime, worktree, payload or effect authority.
+
+## 4. Future decision boundary
+
+`PASS_NO_BLOCKER` would not execute or freeze R5. Jenn would still need a
+separate atomic freeze decision.
+
+Even a later R5 freeze would not authorize `--actual`; a future source run
+would require another exact, current Jenn execution decision bound to the
+accepted R5 bytes and receipt v0.2.
+
+## 5. Retained prohibitions
+
+```yaml
+actual_mode: forbidden
+VCPToolBox_Git_or_worktree: forbidden
+checkout_sparse_checkout_archive_or_fetch: forbidden
+plugin_discovery_loading_or_Host_lifecycle: forbidden
+native_NAPI_runtime_database_provider_or_authentication: forbidden
+private_Memory_state_private_sensing_recording_or_real_effect: forbidden
+commit_push_PR_merge_release_deploy_publish_tag_or_force_push: forbidden
+```
+
+## 6. Stop state
+
+```yaml
+R5_accepted: false
+R5_frozen: false
+requires_fresh_independent_review: true
+next_gate: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R5_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+```

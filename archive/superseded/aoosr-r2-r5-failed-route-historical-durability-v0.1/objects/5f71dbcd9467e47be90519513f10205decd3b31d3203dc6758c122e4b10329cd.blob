@@ -1,0 +1,67 @@
+schema_version: agents-os.phase-start-decision-record.v0.1
+record_id: agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1
+record_type: PhaseStartDecisionRecord
+status: accepted_started
+immutable: true
+recorded_on: '2026-07-25'
+
+authority:
+  accepted_by: Jenn
+  actor_type: human
+  authority_class: P0_JENN_ROOT_AUTHORITY
+  decision: START_PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R2_NARROW_CORRECTION
+  decision_source: explicit_current_conversation_instruction
+
+decision_confirmation:
+  confirmation_text_received: |-
+    明确启动极窄的 R2，仅允许：
+      - GIT_NO_REPLACE_OBJECTS=1 与对应负例；
+      - 新增并审查固定 runner/scanner、fixture 与 validator；
+      - 关闭 canonical-root、exclusive no-follow receipt、temporary result、信号/中断 finalizer 的原子性。
+  scope_expansion: forbidden
+
+bound_preconditions:
+  R1_decision_package_sha256: 6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f
+  R1_independent_review_sha256: 93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265
+  R1_independent_review_result: BLOCK
+  required_R2_blockers:
+    - replacement_objects_disabled
+    - hash_bound_runner_and_scanner
+    - path_receipt_and_finalizer_atomicity
+  current_terminal_outcome: NOT_EXECUTED
+
+authorized_scope:
+  create_or_update_only:
+    - control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-amendment-v0.1.md
+    - control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.2.md
+    - control-plane/registry/object-only-source-run-r2-scanner.py
+    - control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py
+    - control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-fixture.py
+    - control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-synthetic-fixture-v0.1.json
+    - control-plane/registry/validate-phase-5d-m0d-actual-object-only-source-run-r2.py
+    - control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r2-review-package.py
+    - control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-author-self-review.yaml
+    - control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml
+    - control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-narrow-correction-start-decision-v0.1.yaml
+  preserve_byte_for_byte:
+    - control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md
+    - control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml
+    - protected_source_boundary_R1_frozen_lineage
+  required_result: FIXED_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  stop_after: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R2_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+  automatic_acceptance_or_freeze: forbidden
+  automatic_actual_object_only_source_run: forbidden
+
+not_authorized:
+  VCPToolBox_Git_object_command_or_worktree: false
+  checkout_archive_fetch_or_network: false
+  plugin_or_Host_lifecycle: false
+  native_NAPI_runtime_database_provider_or_authentication: false
+  private_Memory_state_private_sensing_recording_or_real_effect: false
+  Git_commit_push_PR_merge_release_deploy_publish_tag_or_force_push: false
+  later_actual_Host_smoke_execution: false
+
+immutability_policy:
+  edit_this_record_after_creation: forbidden
+  correction_method: new_superseding_decision_record
+  R2_acceptance_or_freeze_requires: fresh_independent_review_and_new_current_Jenn_atomic_decision

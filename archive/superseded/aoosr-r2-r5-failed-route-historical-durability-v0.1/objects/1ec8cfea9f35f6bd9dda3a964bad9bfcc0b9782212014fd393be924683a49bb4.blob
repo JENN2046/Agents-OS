@@ -1,0 +1,130 @@
+schema_version: agents-os.independent-review-finding-disposition.v0.1
+disposition_id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R4_INDEPENDENT_REVIEW_DISPOSITION_V0_1
+date: '2026-07-25'
+owner: Jenn
+agent_steward: Nobao
+
+review_unit:
+  id: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R4_ATOMIC_BUNDLE
+  atomic: true
+  partial_acceptance: forbidden
+
+immutable_history:
+  R3_atomic_freeze_decision:
+    path: control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml
+    sha256: a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922
+    result: ACCEPTED_FROZEN_OFFLINE_CLOSURE_ONLY
+  R3_actual_execution_failure_receipt:
+    path: control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-v0.1.yaml
+    sha256: d84ea0e80c672674c48f0dffd48d589cf1ba67387b8f736c169bb328a43f5996
+    result: BLOCKED_REVIEW_BINDING_MISMATCH
+    Git_command_count: 0
+    Host_operation_count: 0
+    cleanup_status: CLEAN
+  R4_manifest:
+    path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-atomic-independent-review-package-v0.1.manifest.yaml
+    sha256: c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be
+    subjects: 7
+    bound_inputs: 19
+  R4_independent_review:
+    path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r4-full-atomic-independent-review.yaml
+    sha256: cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8
+    result: BLOCK
+    findings: {blocker: 1, major: 0, minor: 0, informational: 0}
+
+disposition:
+  R4_delayed_scanner_module_self_replacement: OPEN_REQUIRES_R5
+  R4_independent_review_gate_satisfied: false
+  R4_requires_R5: true
+  R4_accepted: false
+  R4_frozen: false
+  actual_object_only_source_run_authorized: false
+  Host_path_authorized: false
+  next_gate: JENN_ONLY_R5_NARROW_SCANNER_MODULE_LIFECYCLE_CORRECTION_START_DECISION
+
+R5_scope_limit:
+  - close post-return or asynchronous scanner self-replacement and residual module mapping
+  - retain digest-before-execution, collision preservation, and the fixed scanner boundary
+  - make deterministic delayed-Event self-replacement a fixed negative probe
+  - preserve R1 through R4 bytes unchanged
+  - do not run actual mode, VCPToolBox Git, worktree, Host, plugin, runtime, database, provider, private Memory, sensing, or effect paths
+
+scope_limit:
+  - records the R4 independent-review BLOCK only
+  - does not modify any R1 through R4 subject or manifest
+  - does not authorize R5 authoring, acceptance, freezing, or Git delivery
+  - does not authorize a retry of the consumed R3 actual execution decision
+*** Add File: /home/jenn/AGENTS_OS_Workspace/control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.9.md
+# AGENTS OS Active Work Queue v18.9
+
+Date: 2026-07-25
+Status: ACTIVE
+Owner: Jenn
+Agent steward: Nobao
+Supersedes: control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.8.md
+
+## Current Facts
+
+```yaml
+Phase_5D_status: M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_R4_BLOCKED_REQUIRES_JENN_R5_NARROW_CORRECTION_START_DECISION
+Phase_5D_protected_source_boundary_R1_frozen: true
+Phase_5D_actual_object_only_source_run_R3_frozen: true
+Phase_5D_actual_object_only_source_run_R3_execution_decision: CONSUMED_ONCE
+Phase_5D_actual_object_only_source_run_R3_execution_result: BLOCKED_REVIEW_BINDING_MISMATCH
+Phase_5D_actual_object_only_source_run_R3_execution_Git_command_count: 0
+Phase_5D_actual_object_only_source_run_R3_execution_Host_operation_count: 0
+Phase_5D_actual_object_only_source_run_R3_execution_cleanup_status: CLEAN
+Phase_5D_actual_object_only_source_run_R4_manifest_sha256: c23814ed69e5c7e04c11f08ac6e009c5d8ccf54ab6b76028321af69e5c60e9be
+Phase_5D_actual_object_only_source_run_R4_independent_review_sha256: cb95498185a1a666cba9bee0528dbeca781b2db0d2ed5572666b8700e4aca5e8
+Phase_5D_actual_object_only_source_run_R4_independent_review_result: BLOCK
+Phase_5D_actual_object_only_source_run_R4_requires_R5: true
+actual_Git_object_run_authorized: false
+VCPToolBox_worktree_authorized: false
+quarantine_root_or_payload_materialization_authorized: false
+actual_Host_smoke_execution_authorized: false
+Host_operation_count: 0
+runtime_usable: false
+Git_delivery_authorized: false
+```
+
+## NOW
+
+### NOW-001: Jenn-only R5 scanner module-lifecycle correction start decision
+
+```text
+requires_jenn_decision=true
+decision_owner=Jenn
+execution_authorized=false
+```
+
+R4's independent review found that a hash-matching scanner can retain a delayed
+thread and reinstall the fixed `sys.modules` mapping after the loader returns.
+R5 may close only that post-return lifecycle escape. It must preserve R1–R4
+bytes and remain entirely offline.
+
+The earlier R3 actual execution decision was consumed exactly once and ended
+`BLOCKED_REVIEW_BINDING_MISMATCH` at scanner load. It cannot be retried or
+treated as an open execution gate.
+
+## BLOCKED
+
+```text
+any actual Git object run, VCPToolBox worktree, checkout, sparse checkout, git archive, quarantine root, or payload materialization
+any reading, copying, exposure, exception, import, blob identifier, content hash, or semantic interpretation of protected config.env paths
+PluginManager, plugin discovery/loading, initialize, shutdownAllPlugins, shutdown, processToolCall, native addon or N-API
+runtime/service/database/provider/production authentication; dependency installation; public API/MCP expansion
+private raw Memory/state-private/credentials/keys/active configuration/sensing/recording/real effect
+commit, push, PR, merge, tag, release, deploy, publish, force push, history rewrite, or automatic actual Host-smoke start
+```
+
+## CLOSED
+
+```text
+Phase_5D_M0D_PROTECTED_SOURCE_BOUNDARY_CLOSURE_R1=ACCEPTED_FROZEN
+PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_R3=ACCEPTED_FROZEN_OFFLINE_CLOSURE_ONLY
+R3_actual_execution_decision=CONSUMED_ONCE_BLOCKED_CLEAN
+active_work_queue_v18.8=superseded_historical_bytes_preserved
+```
+
+No actual Git object run, protected-content read, worktree, quarantine root,
+payload, Host, plugin, runtime, or external effect has occurred.

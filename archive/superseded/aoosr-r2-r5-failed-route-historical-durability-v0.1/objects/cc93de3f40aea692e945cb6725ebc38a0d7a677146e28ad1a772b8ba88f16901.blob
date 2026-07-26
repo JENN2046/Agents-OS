@@ -1,0 +1,144 @@
+# Phase 5D M0-D Actual Object-Only Source Run R2 Amendment v0.1
+
+Date: 2026-07-25
+Status: DRAFT_FOR_FRESH_FULL_ATOMIC_INDEPENDENT_REVIEW
+Owner: Jenn
+Agent steward: Nobao
+Terminal outcome: NOT_EXECUTED
+
+## 1. Narrow purpose
+
+R2 closes only the three blockers in the R1 fresh independent review:
+
+1. fixed Git object IDs must not be altered by replacement refs;
+2. the sensitive runner and protected-name scanner must be deterministic,
+   hash-bound executable subjects rather than prose only; and
+3. canonical-root ownership, receipt creation, temporary-result creation, and
+   success/failure/interruption cleanup must be deterministic and fail closed.
+
+It does not authorize the source run. It does not modify the frozen protected
+source boundary R1. It does not create a worktree, checkout, archive, payload,
+plugin, Host lifecycle, runtime, database, provider, authentication, private
+Memory, sensing, recording, or real effect.
+
+## 2. Immutable R1 lineage
+
+    R1_decision_package:
+      path: control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1.md
+      sha256: 6903c06d46cdd0278ec7330d56ac158b7179fa96aea3fd45018f6409315d132f
+      immutable_under_R2: true
+    R1_independent_review:
+      path: control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.1-fresh-independent-review.yaml
+      sha256: 93870768399201c4dbe6e10ce2ade6e51b224b49ac31faa7a8f1e3ab24e76265
+      result: BLOCK
+      immutable_under_R2: true
+    protected_source_boundary_freeze_decision:
+      path: control-plane/registry/decisions/2026-07-24-agents-os-phase-5d-m0d-protected-source-boundary-closure-r1-atomic-freeze-decision-v0.1.yaml
+      sha256: 0ecd59f7844dbec681a32b677561a4cf133b827b5950aea2af6689a2ba47c082
+      remains_frozen: true
+
+## 3. R2 exact corrections
+
+### 3.1 Replacement-object closure
+
+Every future Git invocation executed by the R2 runner uses an empty inherited
+environment whose closed Git portion includes:
+
+    GIT_NO_REPLACE_OBJECTS=1
+    GIT_ALTERNATE_OBJECT_DIRECTORIES=
+    GIT_DIR=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git
+    GIT_OBJECT_DIRECTORY=/home/jenn/AGENTS_OS_Workspace/runtime/VCPToolBox/.git/objects
+    GIT_CONFIG_NOSYSTEM=1
+    GIT_CONFIG_GLOBAL=/dev/null
+
+The runner rejects a missing or substituted value in its synthetic fixture.
+The R2 validator includes a replacement-object mutation. No future source run
+may rely on a default Git replacement policy.
+
+### 3.2 Executable subject closure
+
+The runner and scanner are new R2 subjects:
+
+    runner: control-plane/registry/run-phase-5d-m0d-actual-object-only-source-run-r2.py
+    scanner: control-plane/registry/object-only-source-run-r2-scanner.py
+
+The runner accepts no caller-selected root, ref, object ID, tuple, output path,
+or cleanup target. It has only synthetic fixture/self-test modes by default.
+Its actual mode is inert unless a later Jenn decision separately names its
+hash-bound bytes and explicitly selects that mode.
+
+The scanner consumes only a NUL-delimited name-only tree stream. It neither
+invokes Git nor reads a blob. It compares the protected subset against the
+frozen seven-name inventory without printing a name or object identifier.
+
+### 3.3 Path, receipt, temporary-result, and finalizer closure
+
+The runner must:
+
+1. use lstat and exact realpath equality to reject a canonical-root symlink;
+2. reject a symlink Git directory, object directory, object-info directory,
+   alternates file, run root, or receipt target;
+3. create the run root with mkdir mode 0700, then create the ownership marker,
+   then create the temporary result, each by O_CREAT, O_EXCL, and O_NOFOLLOW;
+4. create the final receipt only after finalization, also by O_CREAT, O_EXCL,
+   and O_NOFOLLOW;
+5. block SIGINT, SIGTERM, and SIGHUP before installing their handlers, restore
+   the prior mask only after the handlers are installed, block them again for
+   cleanup and receipt finalization, and run the owned-root finalizer in all
+   catchable interruption paths; and
+6. treat SIGKILL, process crash, missing marker, missing temporary result,
+   residue, receipt collision, no-follow failure, or finalizer failure as a
+   non-success outcome.
+
+The finalizer is restricted to the two literal newly created files and the
+literal run root. It uses no recursive deletion, glob, worktree command, or
+Host cleanup method.
+
+## 4. Atomic R2 review unit
+
+    review_unit: PHASE_5D_M0D_ACTUAL_OBJECT_ONLY_SOURCE_RUN_DECISION_PACKAGE_V0_1_R2_ATOMIC_BUNDLE
+    atomic: true
+    partial_review: forbidden
+    R1_precedence:
+      - R2_replaces_only_the_execution_mechanism_and_decision_surface
+      - R1_all_other_text_remains_historical_and_immutable
+    R2_subjects:
+      - amendment
+      - successor_decision_package
+      - scanner
+      - runner
+      - fixture_builder
+      - synthetic_fixture
+      - validator
+      - review_package_builder
+
+## 5. Required independent attacks
+
+A fresh independent reviewer must at minimum verify:
+
+1. a replace ref cannot alter a checked object while R2 environment is used;
+2. a missing or changed GIT_NO_REPLACE_OBJECTS value is rejected;
+3. a runner/scanner hash, command ID, tuple, or output field substitution is
+   rejected;
+4. a canonical-root or receipt symlink is rejected without following it;
+5. a preexisting receipt, receipt race, missing temporary result, marker
+   mismatch, and cleanup residue fail closed;
+6. SIGINT, SIGTERM, and SIGHUP reach the owned-root finalizer; SIGKILL is never
+   treated as a successful or cleanly observed result;
+7. no synthetic fixture path can call VCPToolBox Git, Host, plugin, runtime,
+   provider, database, authentication, private Memory, sensing, or effect code.
+
+## 6. Non-authority statement
+
+    R2_started: true
+    R2_independent_review_created: false
+    R2_independent_review_result: NOT_RUN
+    actual_object_only_source_run_authorized: false
+    VCPToolBox_Git_command_count: 0
+    VCPToolBox_worktree_operation_count: 0
+    Host_operation_count: 0
+    runtime_or_effect_operation_count: 0
+    Git_delivery_authorized: false
+
+R2 must stop at Fresh Full Atomic Independent Review. It cannot accept, freeze,
+or execute the object-only source run automatically.
