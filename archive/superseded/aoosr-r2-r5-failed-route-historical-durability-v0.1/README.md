@@ -56,15 +56,60 @@ runtime, provider, merge, release, deploy, or publish authority.
 
 ## Provenance and disclosure
 
-The source set was reconciled against:
+`Base` and `mainline` in this bundle mean only this hash-bound remote-tracking
+ref observation:
 
 ```text
-main commit: 2ab3b0ff0d2d92e1fff21802e5c76f4d65c1a84f
-main tree:   bbad8469a397bfd56f4e5c03bb6f04622c7059da
+ref:    refs/remotes/origin/main
+commit: 2ab3b0ff0d2d92e1fff21802e5c76f4d65c1a84f
+tree:   bbad8469a397bfd56f4e5c03bb6f04622c7059da
 ```
 
-It contains 37 objects absent from that tree and three superseded historical
-versions of files that now have different, hardened mainline bytes.
+It never means local `refs/heads/main`.
+
+The source worktree had:
+
+```text
+HEAD: 310a7358f96b6749f0c31dd3e39517c9df87c50c
+tree: 23ee143739e9a60fdade57c934f4f902d23aab94
+```
+
+That HEAD is context only. It does not bind the historical source bytes:
+
+- all 55 candidate paths were absent from that source tree;
+- all 55 candidate paths were `UNTRACKED` (`??`) in the source worktree;
+- all 40 selected paths were therefore also `UNTRACKED`;
+- `source_bytes_commit_bound` is explicitly `false`.
+
+The content-addressed objects and per-object SHA-256 values were first durably
+bound by bundle commit `d4f1812dcac78000764c7dca91f6887ad091d256`
+and tree `8d3a1bd3f50277dc37d0254de307c799e19ba497`. This
+provenance-only successor preserves those object bytes exactly.
+
+The candidate universe is deterministic:
+
+1. Recursively enumerate regular, non-symlink files below
+   `control-plane/registry` whose basename contains the case-sensitive literal
+   `object-only-source-run`, excluding paths containing `__pycache__`
+   (`53` paths).
+2. Add the exact queue paths `v18.8` and `v18.9` listed in the manifest
+   (`2` paths, no overlap).
+3. Sort the resulting `55` repository-relative POSIX paths by ascending UTF-8
+   byte order.
+4. Select a path exactly when it is absent from the bound Base tree or its
+   SHA-256 differs from the bytes at that Base path.
+
+The closure is:
+
+```text
+55 candidates = 15 Base-identical exclusions
+              + 37 Base-missing selections
+              + 3 Base-different selections
+```
+
+The 40 selections are `$.objects`; the 15 exclusions are materialized in
+`$.provenance.selection_closure.excluded_base_identical`. Their complete-set
+digests and serialization are recorded in the manifest.
 
 The opaque objects retain 67 historical `/home/jenn/` path-label occurrences
 and zero `file://` URI occurrences. Those labels are historical scope evidence,
@@ -77,7 +122,7 @@ Run these commands from this directory. They are read-only and do not execute
 any archived object:
 
 ```bash
-python3 -c 'import json; d=json.load(open("manifest.v0.1.json")); assert d["status"] == "BLOCKED" and d["labels"] == ["HISTORICAL_ONLY", "NO_AUTHORITY"] and d["inventory"]["object_count"] == len(d["objects"]) == 40'
+python3 -c 'import json; d=json.load(open("manifest.v0.1.json")); p=d["provenance"]; r=p["selection_closure"]["result"]; assert d["status"] == "BLOCKED" and d["labels"] == ["HISTORICAL_ONLY", "NO_AUTHORITY"] and d["inventory"]["object_count"] == len(d["objects"]) == 40 and p["main_base_ref"] == "refs/remotes/origin/main" and p["source_bytes_commit_bound"] is False and p["selected_source_status_at_capture"] == {"classification":"UNTRACKED","git_porcelain_v1_code":"??","count":40} and r == {"candidate_count":55,"base_identical_excluded_count":15,"missing_from_base_selected_count":37,"different_from_base_selected_count":3,"selected_count":40}'
 
 python3 -c 'import json; d=json.load(open("manifest.v0.1.json")); print("\n".join(o["sha256"] + "  " + o["blob_path"] for o in d["objects"]))' |
   sha256sum --check --strict -

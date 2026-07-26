@@ -15,10 +15,166 @@
     "grants_merge_release_deploy_or_publish": false
   },
   "provenance": {
+    "main_base_ref": "refs/remotes/origin/main",
     "main_base_commit": "2ab3b0ff0d2d92e1fff21802e5c76f4d65c1a84f",
     "main_base_tree": "bbad8469a397bfd56f4e5c03bb6f04622c7059da",
-    "canonical_source_head": "310a7358f96b6749f0c31dd3e39517c9df87c50c",
-    "selection": "post-PR-38 reconciliation of AOOSR R2-R5 local historical bytes that were missing from or different from main",
+    "refs_heads_main_is_base": false,
+    "object_relation_field_semantics": "$.objects[*].relation_to_main is relative only to main_base_commit, never refs/heads/main",
+    "source_worktree_head_at_capture": "310a7358f96b6749f0c31dd3e39517c9df87c50c",
+    "source_worktree_head_tree": "23ee143739e9a60fdade57c934f4f902d23aab94",
+    "source_worktree_context_only": true,
+    "source_bytes_commit_bound": false,
+    "source_head_candidate_path_presence": {
+      "present_count": 0,
+      "missing_count": 55
+    },
+    "candidate_source_status_at_capture": {
+      "classification": "UNTRACKED",
+      "git_porcelain_v1_code": "??",
+      "count": 55
+    },
+    "selected_source_status_at_capture": {
+      "classification": "UNTRACKED",
+      "git_porcelain_v1_code": "??",
+      "count": 40
+    },
+    "initial_bundle_commit": "d4f1812dcac78000764c7dca91f6887ad091d256",
+    "initial_bundle_tree": "8d3a1bd3f50277dc37d0254de307c799e19ba497",
+    "durable_source_byte_binding": "The selected SHA-256 values and content-addressed objects were first durably bound by initial_bundle_commit and initial_bundle_tree. This provenance successor must preserve those object bytes; source_worktree_head_at_capture does not bind them.",
+    "selection_closure": {
+      "candidate_root": "control-plane/registry",
+      "path_form": "repository-relative POSIX path",
+      "ordering": "ascending UTF-8 byte order by original_path",
+      "seed_rules": [
+        {
+          "kind": "recursive_regular_file_basename_substring",
+          "root": "control-plane/registry",
+          "basename_contains_case_sensitive": "object-only-source-run",
+          "excluded_path_segments": [
+            "__pycache__"
+          ],
+          "symlinks_included": false,
+          "count": 53
+        },
+        {
+          "kind": "exact_paths",
+          "paths": [
+            "control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.8.md",
+            "control-plane/registry/reports/2026-07-25-agents-os-active-work-queue-v18.9.md"
+          ],
+          "count": 2,
+          "overlap_with_other_seed_rules": 0
+        }
+      ],
+      "candidate_materialization": {
+        "selected_entries": "$.objects",
+        "excluded_entries": "$.provenance.selection_closure.excluded_base_identical",
+        "candidate_count": 55,
+        "candidate_set_sha256": "36b7e2b9e946d4046a914c3072c717bed3c000bc1f44c6d09bb8df03a37b4916",
+        "serialization": "UTF-8 lines sorted by original_path, each formatted as '<sha256><two spaces><original_path><LF>'"
+      },
+      "inclusion_predicate": "Select a candidate exactly when its path is absent from main_base_tree or its SHA-256 differs from the bytes at that path in main_base_tree.",
+      "result": {
+        "candidate_count": 55,
+        "base_identical_excluded_count": 15,
+        "missing_from_base_selected_count": 37,
+        "different_from_base_selected_count": 3,
+        "selected_count": 40
+      },
+      "excluded_set_sha256": "0b2cbb138f0de67593e907c86bd475624c995586dad2a618260d93742a18aded",
+      "excluded_base_identical": [
+        {
+          "original_path": "control-plane/registry/build-phase-5d-m0d-actual-object-only-source-run-r3-fixture.py",
+          "sha256": "f30b8f1f03354c51f8b5dea6f8a4daca0c5a493721a5bd757671f7fd28dde746",
+          "size_bytes": 729,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-v0.1.yaml",
+          "sha256": "a79cbe9d089a22325165eb51c88e01e30f3007a8f7a2293ec04d5348af460922",
+          "size_bytes": 6152,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/decisions/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-narrow-correction-start-decision-v0.1.yaml",
+          "sha256": "0ddac25b83277637c56ab1be750e9751ee8b2e45b100302864dec793b5f7ff0d",
+          "size_bytes": 2368,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/drafts/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-amendment-v0.1.md",
+          "sha256": "22d03bee4337141de6e8973cf6d0b03a6060c30536d33c413aecf1ae25005575",
+          "size_bytes": 4033,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/examples/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-synthetic-fixture-v0.1.json",
+          "sha256": "1c78df56c9a4627ea6844616a2529879cc1eb058d984c0a54f69423356181256",
+          "size_bytes": 1905,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/object-only-source-run-r2-scanner.py",
+          "sha256": "82bb5693a650e0f4a415b0158933b3c5414a28f2fe6640344fce5d44ec3f9b35",
+          "size_bytes": 4405,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/receipts/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-closeout-v0.1.md",
+          "sha256": "24976d8d6a1d76d60b721b49d0e5478e9b9c91871c65405bf699f861b797c501",
+          "size_bytes": 3108,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-decision-package-v0.3.md",
+          "sha256": "6e042306381bd51efc8a6df4b22856c895d5cd038615320553e05e35d7e4f974",
+          "size_bytes": 3199,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-atomic-independent-review-package-v0.1.manifest.yaml",
+          "sha256": "6dd1839962de4c30a15e09a72c4ce6eff8d1a4874ae56cb9e90f06e68b0581fe",
+          "size_bytes": 6332,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-freeze-decision-package-v0.1.md",
+          "sha256": "ec69a575a0619e3feef2a3ab97e16956794bb02348acc14e75511ff1af78df05",
+          "size_bytes": 6817,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reports/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-atomic-independent-review-package-v0.1.manifest.yaml",
+          "sha256": "f5376a4711cf9dfa533e577d7e084ab47150d676ca8ceab926ef97f166ac9df1",
+          "size_bytes": 5969,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reviews/2026-07-25-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-independent-review-disposition-v0.1.yaml",
+          "sha256": "335d1b0b278cbfb2694169381c3a2c7e4d76af6ea34e27d888caec4481d7cf4d",
+          "size_bytes": 2169,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r2-full-atomic-independent-review.yaml",
+          "sha256": "ecf3688ae4b9e4693d3649c4a7f2e5fc56d476669a4bfe59e0952ef2d99378fe",
+          "size_bytes": 7857,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-author-self-review.yaml",
+          "sha256": "f4e17b19c38b723e266883dca30d6fecfcaee939007e4ba59da6d2500f19c40e",
+          "size_bytes": 2361,
+          "relation_to_base": "BASE_IDENTICAL"
+        },
+        {
+          "original_path": "control-plane/registry/reviews/2026-07-25-yellow-agents-os-phase-5d-m0d-actual-object-only-source-run-r3-full-atomic-independent-review.yaml",
+          "sha256": "42e47847f7b32d413d97f22f4ddf7828f8fa0f19f68e3d6c5b8f17344e2ec916",
+          "size_bytes": 6481,
+          "relation_to_base": "BASE_IDENTICAL"
+        }
+      ]
+    },
     "source_set_sha256": "3487cc4cba6e8e2516a0b91f42ab7a1424903f53919926bd3856c7b689456468",
     "source_set_serialization": "UTF-8 lines sorted by original_path, each formatted as '<sha256><two spaces><original_path><LF>'"
   },
