@@ -1,0 +1,62 @@
+{
+  "phase": {"id": "P5", "subphase": "P5-E", "result": "PASS"},
+  "source_identity": {
+    "implementation_source_id": "MMR0-GIT-INTEGRATION-505ff1b6592bdf3adbe1",
+    "source_manifest_sha256": "43d27272965554e782f47b4814e6746fada349edfd9c14a33b43841b03201efa",
+    "resident_head": "bc398ed5c75d4ca5ba76be24cac700dd3b804fd4",
+    "dirty_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build_identity": {
+    "dependency_manifest_sha256": "c447f442e19232daae04c2ef38c11cb8aea052f095a197da87c8db31a25169d8",
+    "build_command_sha256": "aa06d30c9a37ce74223997eab59ba42cdb65c9bd33239337ee6ed1fd79056314",
+    "toolchain_identity": "sha256:f773e27a37689b1cb641ad8b0215a80ff0d29203fe9505bf874e7cd21004bebb",
+    "binary_artifacts": [
+      {
+        "artifact_id": "mmr0-integration-native-binary",
+        "sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf",
+        "bytes": 5482176,
+        "loaded_identity_verified": true
+      }
+    ],
+    "source_to_binary_receipt_sha256": "4bc325a1660db8aa1f5642ea13ad91cab98d8a59ec6c206eb48766346471bbb5"
+  },
+  "files_changed": [],
+  "semantic_goal": "Revalidate P5-E removal-strength separation on the exact integrated source and source-bound native binary without claiming a new semantic implementation or Controlled Proof authority.",
+  "proof_subset": {
+    "catalog_sha256": "b95fe9c65d2fccee029bb36063ae68db4609748128a8bc00517d9b1e60309a48",
+    "matrix_sha256": "ac3e0a5d20d33a5aef264694befe195b56105bbf0167a69163817cb8eca4de62",
+    "case_ids": ["B11-V1", "B11-V2", "B11-V3", "B11-V4", "B11-V5"],
+    "case_count": 5,
+    "proof_gate": "GATE_P5-E_TARGETED_PROOF_PASS"
+  },
+  "proof_results": [
+    {"case_id": "B11-V1", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V2", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V3", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V4", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V5", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]}
+  ],
+  "proof_authority": {
+    "evidence_manifest_sha256": "dc684c529da04f9f558f4421105cea52667d80f44896df76272a026cee55fc3e",
+    "evidence_reference_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]
+  },
+  "runtime_authority": {
+    "runtime_is_untrusted_sut": true,
+    "runtime_fingerprint": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf",
+    "dev_adapter_id": null,
+    "admitted_proof_adapter": false,
+    "admitted_adapter_identity": null,
+    "authority_admission_reference": null,
+    "authority_manifest_sha256": "d872debb1614421fbf2f17e6c73d84c921d5e14c226146d9715f9d385cedd144"
+  },
+  "controlled_proof_claimed": false,
+  "workspace_state": {
+    "head_before": "bc398ed5c75d4ca5ba76be24cac700dd3b804fd4",
+    "head_after": "bc398ed5c75d4ca5ba76be24cac700dd3b804fd4",
+    "status_sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status_sha256_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diff_manifest_sha256": "43d27272965554e782f47b4814e6746fada349edfd9c14a33b43841b03201efa"
+  },
+  "hard_failures": [],
+  "next_gate": "GATE_P5_COMPLETE"
+}

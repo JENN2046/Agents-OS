@@ -1,0 +1,58 @@
+{
+  "binary": {
+    "bytes": 5482176,
+    "loaded_identity_verified": true,
+    "path": "agents-os-resident.linux-x64-gnu.node",
+    "sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf"
+  },
+  "build_command": "npm run build:release",
+  "build_command_sha256": "aa06d30c9a37ce74223997eab59ba42cdb65c9bd33239337ee6ed1fd79056314",
+  "created_at": "2026-08-24T22:00:07.270228+08:00",
+  "dependency_files": {
+    "Cargo.lock": "f39a86670a1c4014fe1760cac4e15fd931336d70e59d6229a7b85daf79c9f07f",
+    "Cargo.toml": "52740684cd1031ac53f8d33d96e0dffeb066d979623c44fb0883920dd84b109b",
+    "package-lock.json": "e0decc9c9c84fa52f3b9547e0172aaaef793ec5c3ea079e73ac746797c91acd9",
+    "package.json": "23f72427b9db4fb02a1498054be66a9b16bd8ee5f549a0b62b415e9e6407a90b",
+    "rust-toolchain.toml": "7a9b3502eb21ff9f3e6ce60b48f138c581efab2f8fa0fe992005a8e6d602aa94"
+  },
+  "dependency_identity_sha256": "c447f442e19232daae04c2ef38c11cb8aea052f095a197da87c8db31a25169d8",
+  "dual_build_byte_equal": true,
+  "host_presentation_binding": {
+    "bundleId": "sha256:4685b9b51dae0f2b348faee6979cc034e40b927d717c1433d61a47c9686cfcf6",
+    "fileCount": 13,
+    "fixture_not_committed": true,
+    "result": "PASS"
+  },
+  "integrity": {
+    "buildId": "sha256:c24a1873b6bba5c7b09ec563191f955efa9a147ce60698cec00ccffbac99cdc9",
+    "bytes": 3516,
+    "path": "companion-integrity.json",
+    "sha256": "32c30b42307a5c01df4424e299764fa6b52717aa5dd6d3453086c8ebd06e2d52",
+    "verified": true
+  },
+  "isolated_builds": [
+    {
+      "ordinal": 1,
+      "sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf"
+    },
+    {
+      "ordinal": 2,
+      "sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf"
+    }
+  ],
+  "projection_preflight": "PASS",
+  "result": "PASS",
+  "schema": "MMR-0-GIT-INTEGRATION-SOURCE-TO-BINARY-RECEIPT-v0.1",
+  "source_commit": "505ff1b6592bdf3adbe1bb30dc40750aa3e69210",
+  "source_manifest": "/home/jenn/\u6587\u6863/ChatGPT/agents-os-resident/git-integration-evidence-r1/G3_Final_109_Path_Source_Manifest.json",
+  "source_manifest_sha256": "43d27272965554e782f47b4814e6746fada349edfd9c14a33b43841b03201efa",
+  "systemd_template": "PASS",
+  "toolchain": {
+    "cargo": "cargo 1.96.1 (356927216 2026-06-26)",
+    "node": "v22.23.1",
+    "npm": "10.9.8",
+    "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "toolchain_identity_sha256": "f773e27a37689b1cb641ad8b0215a80ff0d29203fe9505bf874e7cd21004bebb"
+}

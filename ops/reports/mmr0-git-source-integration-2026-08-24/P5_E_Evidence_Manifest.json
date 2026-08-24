@@ -1,0 +1,29 @@
+{
+  "document": "MMR-0_GIT_INTEGRATION_P5_E_EVIDENCE_MANIFEST_V1",
+  "evidence_role": "TARGETED_DEVELOPMENT_EVIDENCE_NOT_CONTROLLED_PROOF",
+  "subphase": "P5-E",
+  "artifacts": [
+    {
+      "artifact_id": "p5e-b11-targeted-proof",
+      "path": "B11_Targeted_Proof_Evidence.json",
+      "sha256": "9519df7de3d722f9202261b48bffce96741bf16aed95b421e53edd2efe549648",
+      "bytes": 1246
+    },
+    {
+      "artifact_id": "p5e-b11-targeted-test-log",
+      "path": "B11_Targeted_Test.txt",
+      "sha256": "d82fda77de9bdeaa98978e288e086daff27c0eabdf2f8090fbc3137f83034728",
+      "bytes": 1916
+    }
+  ],
+  "cases": [
+    {"case_id": "B11-V1", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V2", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V3", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V4", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]},
+    {"case_id": "B11-V5", "derived_result": "PASS", "evidence_artifact_ids": ["p5e-b11-targeted-proof", "p5e-b11-targeted-test-log"]}
+  ],
+  "derived_phase_result": "PASS",
+  "controlled_proof_claimed": false,
+  "runtime_self_report_is_proof_authority": false
+}

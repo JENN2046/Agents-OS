@@ -1,0 +1,10 @@
+{
+  "document": "MMR-0_GIT_INTEGRATION_P5_E_PREDECESSOR_LEDGER_V1",
+  "completed": [
+    {
+      "subphase": "P5-D",
+      "result": "PASS",
+      "receipt_sha256": "ba01784096a91af30bdb6c84e4b64a83768ee9d0f43fbd9db2292a4965075767"
+    }
+  ]
+}

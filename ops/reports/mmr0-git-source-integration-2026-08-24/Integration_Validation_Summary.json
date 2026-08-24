@@ -1,0 +1,60 @@
+{
+  "schema": "MMR-0-GIT-SOURCE-INTEGRATION-VALIDATION-SUMMARY-v0.1",
+  "result": "PASS",
+  "base_commit": "cf23960396a3e7a079f614208fcce152c4b29c0f",
+  "source_commit": "505ff1b6592bdf3adbe1bb30dc40750aa3e69210",
+  "build_commit": "bc398ed5c75d4ca5ba76be24cac700dd3b804fd4",
+  "source_manifest_sha256": "43d27272965554e782f47b4814e6746fada349edfd9c14a33b43841b03201efa",
+  "source_to_binary_receipt_sha256": "4bc325a1660db8aa1f5642ea13ad91cab98d8a59ec6c206eb48766346471bbb5",
+  "binary_sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf",
+  "companion_integrity_sha256": "32c30b42307a5c01df4424e299764fa6b52717aa5dd6d3453086c8ebd06e2d52",
+  "rust": {
+    "command": "MMR_P4A_RECOVERY_DOMAIN=/media/jenn/work cargo test --all --locked -- --nocapture",
+    "discovered": 223,
+    "executed": 223,
+    "passed": 223,
+    "failed": 0,
+    "ignored": 0
+  },
+  "node": {
+    "npm_test": {"discovered": 80, "executed": 80, "passed": 80, "failed": 0, "skipped": 0},
+    "companion_integration": {"discovered": 2, "executed": 2, "passed": 2, "failed": 0, "skipped": 0},
+    "companion_stability_60000ms": {"discovered": 2, "executed": 2, "passed": 2, "failed": 0, "skipped": 0}
+  },
+  "checks": {
+    "companion_projection_preflight": "PASS",
+    "systemd_template": "PASS",
+    "host_presentation_source_binding": "PASS",
+    "host_presentation_bundle_id": "sha256:4685b9b51dae0f2b348faee6979cc034e40b927d717c1433d61a47c9686cfcf6"
+  },
+  "durable_A7_V7": {
+    "result": "PASS",
+    "live_source_partition": "/dev/nvme0n1p2",
+    "live_source_disk": "/dev/nvme0n1",
+    "recovery_mount": "/media/jenn/work",
+    "recovery_partition": "/dev/sda1",
+    "recovery_disk": "/dev/sda",
+    "same_relevant_failure_domain": false,
+    "fault_injection": "CPK-FI-7",
+    "queryable_outcome": "PROTECTED",
+    "duplicate_effect_count": 0,
+    "readback_completed": true,
+    "finalized_material_sha256": "96a2afb21e26cd78d734b684a1219b35a8935226e14813ceaf9f26e643f46aef",
+    "readback_material_sha256": "96a2afb21e26cd78d734b684a1219b35a8935226e14813ceaf9f26e643f46aef"
+  },
+  "B11": {"targeted_vectors": "5/5", "failed": 0},
+  "controlled_proof_admissions": [],
+  "temporary_fixture": {
+    "host_adapter_runner_sha256": "57c12fd70a7de2d7c58bd6251cbbcf351421abe8096d694dcd47b36f1e11c23d",
+    "reason": "The test source requires a fixture absent from frozen remote main and outside the authorized 109-path source set.",
+    "committed": false,
+    "removed_after_validation": true
+  },
+  "known_limitations": [
+    "This is targeted development evidence and receipt validation, not MMR Controlled Proof.",
+    "No deployment, service restart, cutover, merge, P6, or P7 execution was authorized or performed.",
+    "The host-adapter test fixture remains an upstream baseline gap and is not silently added to the authorized source set.",
+    "cargo fmt --check is not a PASS gate because the frozen authoritative M0A/M0B/MMR Rust source is not rustfmt-clean; git diff --check passes and exact source hashes are preserved.",
+    "npm ci reported one high-severity dependency advisory; no dependency mutation or audit fix was authorized."
+  ]
+}
