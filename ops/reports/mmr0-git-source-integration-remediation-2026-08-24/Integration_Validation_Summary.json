@@ -1,0 +1,90 @@
+{
+  "A7": {
+    "ack_delivered": false,
+    "duplicate_copy_creation_count": 0,
+    "external_content_sha256": "6f15de82ec7d57323d11f6ded6c948b45e3e190ddf6c90b637e9a9a40f117196",
+    "external_manifest_sha256": "96a2afb21e26cd78d734b684a1219b35a8935226e14813ceaf9f26e643f46aef",
+    "queryable_outcome": "PROTECTED",
+    "result": "PASS_REAL_DURABLE_EXTERNAL_READBACK",
+    "run_id": "pr40-remediation-final-a7-20260824T151343Z-1131970",
+    "targeted_vectors": "11/11"
+  },
+  "B11": {
+    "evidence_description": "SOURCE_TESTED_AND_SOURCE_TO_BINARY_BOUND",
+    "executed_through_release_node_abi": false,
+    "failed": 0,
+    "targeted_vectors": "5/5"
+  },
+  "P6_started": false,
+  "P7_started": false,
+  "base_commit": "cf23960396a3e7a079f614208fcce152c4b29c0f",
+  "binary_sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411",
+  "blocked_historical_head": "29860602dffe4a59c73e275b36b48390552079a1",
+  "build_commit": "c670514e776cda90f46f38abaf3994db77a73cce",
+  "checks": {
+    "companion_projection_preflight": "PASS",
+    "durable_target_requalification": "PASS",
+    "external_host_fixture_exact_regular_non_symlink": "13/13",
+    "host_presentation_source_binding": "PASS",
+    "systemd_template": "PASS"
+  },
+  "companion_integrity_sha256": "fae8e21964a15309f36a5eb3e286cce3979a0dc5f86c8ef887b10538afeb8b14",
+  "controlled_proof_admissions": [],
+  "controlled_proof_claimed": false,
+  "deploy_performed": false,
+  "forbidden_actions_performed": [],
+  "historical_closeout": "BLOCKED_NON_CANONICAL_PRESERVED",
+  "merge_performed": false,
+  "node": {
+    "companion_integration": {
+      "failed": 0,
+      "passed": 2,
+      "skipped": 0,
+      "tests": 2
+    },
+    "companion_stability_60000ms": {
+      "failed": 0,
+      "passed": 2,
+      "skipped": 0,
+      "tests": 2
+    },
+    "core": {
+      "failed": 0,
+      "files": 13,
+      "passed": 82,
+      "skipped": 0,
+      "tests": 82
+    }
+  },
+  "result": "PASS",
+  "rust": {
+    "discovered": 223,
+    "executed": 223,
+    "failed": 0,
+    "ignored": 0,
+    "passed": 223
+  },
+  "schema": "MMR-0-PR40-REMEDIATION-INTEGRATION-VALIDATION-SUMMARY-v0.1",
+  "service_restart_performed": false,
+  "source_commit": "7b111ee51619521863f88a61abcec50b31c2201d",
+  "source_manifest_sha256": "f33bcd75bbeffdd6fce0cd6a69b97f682c00fd61653e360ef966b38e2474a00a",
+  "source_to_binary_receipt_sha256": "f0ea90d7aaf89729c0e29881ae28b5870b6dbf6e7f5332406cc067d7c45c053b",
+  "validator": {
+    "controlled_proof_claimed": false,
+    "derived_case_count": 5,
+    "derived_next_gate": "GATE_P5_COMPLETE",
+    "derived_phase_result": "PASS",
+    "phase": "P5",
+    "pins": {
+      "authority_manifest_sha256": "d872debb1614421fbf2f17e6c73d84c921d5e14c226146d9715f9d385cedd144",
+      "evidence_manifest_sha256": "59ab97209657198e03d776ca12517ea58da5b690095c5f865b53b2795cef8e6d",
+      "phase_matrix_sha256": "9bdc8497650bb8a795aa03a58512d40cd75f91fde7992aca06fb34b1b48746c3",
+      "predecessor_ledger_sha256": "4880a40a2a1ff40a67364b881b81d5509b51ce79c595305954c2b3241a0a0079",
+      "schema_sha256": "a9a5b2bff3cf4dc539a8caec45342d1ba0c554e63d122b5b9656709597258c0b",
+      "subphase_gates_sha256": "0524c28c6968f4efae2e429f9e1b188208bf19ccb38d5ad87040dcd7bc60e7b1"
+    },
+    "receipt_is_proof_authority": false,
+    "result": "PASS_IMPLEMENTATION_RECEIPT_VALIDATION",
+    "subphase": "P5-E"
+  }
+}

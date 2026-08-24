@@ -1,0 +1,12 @@
+{
+  "completed": [
+    {
+      "receipt_sha256": "ba01784096a91af30bdb6c84e4b64a83768ee9d0f43fbd9db2292a4965075767",
+      "result": "PASS",
+      "subphase": "P5-D"
+    }
+  ],
+  "document": "MMR-0_PR40_REMEDIATION_P5_E_PREDECESSOR_LEDGER_V1",
+  "fresh_evidence_claimed": false,
+  "inherited_lineage_only": true
+}

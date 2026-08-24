@@ -1,0 +1,64 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "p5e-b11-targeted-proof",
+      "bytes": 1359,
+      "path": "B11_Targeted_Proof_Evidence.json",
+      "sha256": "df9793dd85e6a604e5c11528ad904c27c54e8b8c25db251ae843db6ccd02f6cf"
+    },
+    {
+      "artifact_id": "p5e-b11-targeted-test-log",
+      "bytes": 702,
+      "path": "B11_Targeted_Test.txt",
+      "sha256": "9d74b9582990e152514c76bd5d73d304038baafa0ba4a707a727c6f013f59a02"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "B11-V1",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V2",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V3",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V4",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V5",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    }
+  ],
+  "controlled_proof_claimed": false,
+  "derived_phase_result": "PASS",
+  "document": "MMR-0_PR40_REMEDIATION_P5_E_EVIDENCE_MANIFEST_V1",
+  "evidence_role": "TARGETED_DEVELOPMENT_EVIDENCE_NOT_CONTROLLED_PROOF",
+  "runtime_self_report_is_proof_authority": false,
+  "subphase": "P5-E"
+}

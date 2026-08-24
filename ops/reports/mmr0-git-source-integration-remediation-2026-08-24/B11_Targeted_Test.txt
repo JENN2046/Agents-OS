@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running unittests src/lib.rs (target/debug/deps/agents_os_resident-fab466b88001ecbb)
+
+running 5 tests
+test local_owner::p5e_tests::b11_v2_rejects_claim_while_acknowledging_history ... ok
+test local_owner::p5e_tests::b11_v3_discloses_old_k1_without_mutating_identity_or_grant ... ok
+test local_owner::p5e_tests::b11_v4_denies_continuity_self_authority ... ok
+test local_owner::p5e_tests::b11_v1_overclaim_downgrades_to_projection_absence ... ok
+test local_owner::p5e_tests::b11_v5_cpk7_quarantines_without_active_current ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 162 filtered out; finished in 1.41s
