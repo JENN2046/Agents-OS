@@ -1840,16 +1840,35 @@ fn wp7_two_clean_runs_and_restart_are_byte_deterministic_without_promotion() {
 }
 
 #[test]
-fn wp0_preserves_the_five_method_napi_surface() {
+fn wp0_preserves_historical_methods_while_local_owner_additions_stay_closed() {
     let source = include_str!("../src/lib.rs");
-    let exports = [
+    let historical_command_exports = [
         "execute_command",
         "execute_query",
         "claim_outbox",
         "acknowledge_outbox",
         "reconcile",
     ];
-    for export in exports {
+    let lifecycle_exports = ["activate_runtime", "runtime_status", "shutdown_runtime"];
+    let local_owner_exports = [
+        "prepare_local_owner_proposal",
+        "submit_local_owner_consent",
+        "execute_local_owner_query",
+        "invalidate_local_owner_proposal",
+    ];
+    // P2-A..P2-H canonical runtime surface: MMR mutation exports added by the
+    // accepted P1/P2 implementation and promoted by Controlled Integration.
+    let mmr_mutation_exports = [
+        "prepare_mmr_mutation",
+        "submit_mmr_mutation_consent",
+        "query_mmr_mutation_core",
+    ];
+    for export in historical_command_exports
+        .into_iter()
+        .chain(lifecycle_exports)
+        .chain(local_owner_exports)
+        .chain(mmr_mutation_exports)
+    {
         let marker = format!("#[napi(js_name = \"{export}\")]");
         assert_eq!(
             source.matches(&marker).count(),
@@ -1857,5 +1876,11 @@ fn wp0_preserves_the_five_method_napi_surface() {
             "missing or duplicate {export}"
         );
     }
-    assert_eq!(source.matches("#[napi(js_name = ").count(), exports.len());
+    assert_eq!(
+        source.matches("#[napi(js_name = ").count(),
+        historical_command_exports.len()
+            + lifecycle_exports.len()
+            + local_owner_exports.len()
+            + mmr_mutation_exports.len()
+    );
 }

@@ -1,6 +1,6 @@
 [package]
 name = "agents-os-resident"
-version = "0.0.0-m0a"
+version = "0.3.0-local-owner.0"
 edition = "2024"
 rust-version = "1.96.1"
 publish = false
