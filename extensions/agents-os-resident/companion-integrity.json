@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "agents-os-resident.companion-integrity.v1",
+  "packageVersion": "0.3.0-local-owner.0",
+  "buildId": "sha256:c24a1873b6bba5c7b09ec563191f955efa9a147ce60698cec00ccffbac99cdc9",
+  "files": [
+    {
+      "path": "activation.js",
+      "byteLength": 12390,
+      "sha256": "a844fafba2f4ac0749d086ad1f9bde81b662ffb180e0f4d425dc29e1e7642220"
+    },
+    {
+      "path": "agents-os-resident.linux-x64-gnu.node",
+      "byteLength": 5482176,
+      "sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf"
+    },
+    {
+      "path": "companion/adapter.js",
+      "byteLength": 25062,
+      "sha256": "c4205ffed8dc1d2e3c5dc7c93bb66eb7dc952d89ebff319851659a9e3f0b694f"
+    },
+    {
+      "path": "companion/client.js",
+      "byteLength": 6526,
+      "sha256": "3f5561b8b06f2f6d14f98fced060deaf5fffb24375a78fbf7372b8273af1d393"
+    },
+    {
+      "path": "companion/constants.js",
+      "byteLength": 1818,
+      "sha256": "2c9801c038218ed2c77ff12aee279599c3cd86359e0b58dbc53b4d76b6a7ba8c"
+    },
+    {
+      "path": "companion/discovery.js",
+      "byteLength": 6221,
+      "sha256": "eff3fb7c4e5f72e8f0827b6a8d99850d926bd13f943e0ffccc1dccfae4f77d87"
+    },
+    {
+      "path": "companion/integrity.js",
+      "byteLength": 4561,
+      "sha256": "e50bf57d2f65af08fc59c8138ca728dc913f440c6fbf86a417fdf6198e709580"
+    },
+    {
+      "path": "companion/probe.js",
+      "byteLength": 2409,
+      "sha256": "9b7cc98838a7d9379e926bb98c8142acdacfd7fcfcb1fb627936100bcaebc849"
+    },
+    {
+      "path": "companion/protocol.js",
+      "byteLength": 8934,
+      "sha256": "6c769db9b110eabc4c9b634f42be0084cf206dd6e34b88c1f167a6524842afe1"
+    },
+    {
+      "path": "companion/resident-daemon.js",
+      "byteLength": 5483,
+      "sha256": "d4ca0424855b88ea2d95b488bf59d6ea4a3c6c20a95fab68248c25bacf884658"
+    },
+    {
+      "path": "companion/server.js",
+      "byteLength": 13100,
+      "sha256": "5d2a9f22ce4bfd267f1ad714d4adaeca0d0cf3d6823f4a4ea28aad524abc6ab3"
+    },
+    {
+      "path": "index.js",
+      "byteLength": 297,
+      "sha256": "3f55b0db7a32a971f7578b4205838496cbae0161c1f14c6d76890881f8630ab2"
+    },
+    {
+      "path": "package-manifest.json",
+      "byteLength": 4789,
+      "sha256": "29f44d736d08c1db3512f52735011ae3017cc69cb30a6628de1bc1ace0b309d3"
+    },
+    {
+      "path": "package.json",
+      "byteLength": 2331,
+      "sha256": "23f72427b9db4fb02a1498054be66a9b16bd8ee5f549a0b62b415e9e6407a90b"
+    },
+    {
+      "path": "plugin-manifest.json.block",
+      "byteLength": 6480,
+      "sha256": "d407605e116395918a537bc884ff2c3bde0ab210ebf179e65314acb3914183be"
+    },
+    {
+      "path": "systemd/agents-os-resident.service.template",
+      "byteLength": 1059,
+      "sha256": "b8cb13df36213dd759eec8da8980fc13dec328154d3467edea1f8f9a2be7f729"
+    },
+    {
+      "path": "tools/build-companion-integrity.mjs",
+      "byteLength": 3650,
+      "sha256": "ea6c0437acbf8c19309debc31574a9e5385322483a2fe60f9fb973f63005e314"
+    },
+    {
+      "path": "tools/render-systemd-unit.mjs",
+      "byteLength": 6267,
+      "sha256": "fd4b8121fc75e4acfd2873e581a865e46f92f8dedc3da75647d23618ba22f404"
+    },
+    {
+      "path": "tools/validate-companion-projection.mjs",
+      "byteLength": 4274,
+      "sha256": "546cf47d0317c371c38006e39dff76adfe1aae5bde56935fd3be755804ad3a95"
+    },
+    {
+      "path": "tools/verify-host-presentation-binding.mjs",
+      "byteLength": 4051,
+      "sha256": "504f2104b6e8aaa3a7976b12f1a45a8ec9389687ed95143b485396445f2aaba0"
+    }
+  ]
+}
