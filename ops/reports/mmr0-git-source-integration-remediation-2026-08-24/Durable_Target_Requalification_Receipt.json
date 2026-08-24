@@ -1,0 +1,16 @@
+{
+  "disk": "/dev/sda",
+  "filesystem": "ntfs3",
+  "live_disk": "/dev/nvme0n1",
+  "live_partition": "/dev/nvme0n1p2",
+  "mount": "/media/jenn/work",
+  "partition": "/dev/sda1",
+  "probe_bytes": 65536,
+  "probe_removed_and_parent_synced": true,
+  "probe_sha256": "ea94f616b78f6f29e8e2b16315927dae9aa61b443741f1fa6048571c0fad1db3",
+  "read_write": true,
+  "result": "PASS",
+  "same_relevant_failure_domain": false,
+  "schema": "MMR-0-PR40-REMEDIATION-DURABLE-TARGET-REQUALIFICATION-v0.1",
+  "write_sync_close_reopen_readback": "PASS"
+}

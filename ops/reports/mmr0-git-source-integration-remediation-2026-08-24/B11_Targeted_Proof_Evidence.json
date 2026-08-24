@@ -1,0 +1,24 @@
+{
+  "binary_sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411",
+  "build_commit": "c670514e776cda90f46f38abaf3994db77a73cce",
+  "companion_integrity_sha256": "fae8e21964a15309f36a5eb3e286cce3979a0dc5f86c8ef887b10538afeb8b14",
+  "controlled_proof_claimed": false,
+  "evidence_description": "SOURCE_TESTED_AND_SOURCE_TO_BINARY_BOUND",
+  "executed_through_release_node_abi": false,
+  "p5e_test_source_sha256": "52b11138c679ecb3a4afe25a1a52653f89de2101db6ac1d70a1cde4fcf95a260",
+  "proof_family": "B11",
+  "result": "PASS",
+  "schema": "MMR-0-PR40-REMEDIATION-B11-TARGETED-EVIDENCE-v0.1",
+  "source_commit": "7b111ee51619521863f88a61abcec50b31c2201d",
+  "source_manifest_sha256": "f33bcd75bbeffdd6fce0cd6a69b97f682c00fd61653e360ef966b38e2474a00a",
+  "source_to_binary_receipt_sha256": "f0ea90d7aaf89729c0e29881ae28b5870b6dbf6e7f5332406cc067d7c45c053b",
+  "targeted_test_log_sha256": "9d74b9582990e152514c76bd5d73d304038baafa0ba4a707a727c6f013f59a02",
+  "targeted_vectors": "5/5",
+  "vectors": {
+    "B11-V1": "REMOVAL_CLAIM_DOWNGRADED / NOT_IN_CURRENT_PROJECTION",
+    "B11-V2": "REMOVAL_CLAIM_REFUSED / HISTORICAL_STATE_ACKNOWLEDGED",
+    "B11-V3": "OLD_K1_DISCLOSED / IDENTITY_INCARNATION_GRANT_UNCHANGED",
+    "B11-V4": "CONTINUITY_SELF_AUTHORITY_DENIED",
+    "B11-V5": "CPK7_PROTECTED_EXCLUSION_QUARANTINED / NO_ACTIVE_CURRENT"
+  }
+}

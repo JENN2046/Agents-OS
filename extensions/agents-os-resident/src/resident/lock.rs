@@ -7,13 +7,13 @@ use fs4::{FileExt, TryLockError};
 
 use super::ResidentError;
 
-pub(super) struct ResidentLock {
+pub(crate) struct ResidentLock {
     file: File,
     held: bool,
 }
 
 impl ResidentLock {
-    pub(super) fn acquire(path: impl AsRef<Path>) -> Result<Self, ResidentError> {
+    pub(crate) fn acquire(path: impl AsRef<Path>) -> Result<Self, ResidentError> {
         let file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -28,7 +28,7 @@ impl ResidentLock {
         }
     }
 
-    pub(super) fn release(mut self) -> Result<(), ResidentError> {
+    pub(crate) fn release(mut self) -> Result<(), ResidentError> {
         self.release_inner()
     }
 

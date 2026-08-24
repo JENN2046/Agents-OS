@@ -1,0 +1,64 @@
+{
+  "binary": {
+    "bytes": 5477672,
+    "loaded_identity_verified": true,
+    "path": "extensions/agents-os-resident/agents-os-resident.linux-x64-gnu.node",
+    "sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411"
+  },
+  "build_command": "npm run build:release",
+  "build_command_sha256": "aa06d30c9a37ce74223997eab59ba42cdb65c9bd33239337ee6ed1fd79056314",
+  "build_commit": "c670514e776cda90f46f38abaf3994db77a73cce",
+  "component_local_host_fixture": {
+    "committed": true,
+    "path": "tests/fixtures/host-adapter-runner.cjs",
+    "sha256": "57c12fd70a7de2d7c58bd6251cbbcf351421abe8096d694dcd47b36f1e11c23d"
+  },
+  "dependency_files": {
+    "Cargo.lock": "f39a86670a1c4014fe1760cac4e15fd931336d70e59d6229a7b85daf79c9f07f",
+    "Cargo.toml": "52740684cd1031ac53f8d33d96e0dffeb066d979623c44fb0883920dd84b109b",
+    "package-lock.json": "e0decc9c9c84fa52f3b9547e0172aaaef793ec5c3ea079e73ac746797c91acd9",
+    "package.json": "4358daec75c29a68a280032d021c79ce283343c8fbaf7fe5cab894cfa5a3175e",
+    "rust-toolchain.toml": "7a9b3502eb21ff9f3e6ce60b48f138c581efab2f8fa0fe992005a8e6d602aa94"
+  },
+  "dependency_identity_sha256": "cf692f6b57c2405113129b8ef4d50b62061022353ee22688a83a278f28186e30",
+  "dual_build_byte_equal": true,
+  "host_presentation_binding": {
+    "bundleId": "sha256:4685b9b51dae0f2b348faee6979cc034e40b927d717c1433d61a47c9686cfcf6",
+    "exact_regular_non_symlink": "13/13",
+    "external_fixture": true,
+    "fileCount": 13,
+    "result": "PASS"
+  },
+  "integrity": {
+    "buildId": "sha256:20a06795daa26828712b663d04384b3bcd6bd3d5239f0d5c86a5cdc551cefa35",
+    "bytes": 3516,
+    "fileCount": 20,
+    "path": "extensions/agents-os-resident/companion-integrity.json",
+    "sha256": "fae8e21964a15309f36a5eb3e286cce3979a0dc5f86c8ef887b10538afeb8b14",
+    "verified": true
+  },
+  "isolated_builds": [
+    {
+      "ordinal": 1,
+      "sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411"
+    },
+    {
+      "ordinal": 2,
+      "sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411"
+    }
+  ],
+  "result": "PASS",
+  "schema": "MMR-0-PR40-REMEDIATION-SOURCE-TO-BINARY-RECEIPT-v0.1",
+  "source_commit": "7b111ee51619521863f88a61abcec50b31c2201d",
+  "source_manifest": "Final_110_Path_Source_Manifest.json",
+  "source_manifest_sha256": "f33bcd75bbeffdd6fce0cd6a69b97f682c00fd61653e360ef966b38e2474a00a",
+  "stale_artifacts_reused": false,
+  "toolchain": {
+    "cargo": "cargo 1.96.1 (356927216 2026-06-26)",
+    "node": "v22.23.1",
+    "npm": "10.9.8",
+    "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "toolchain_identity_sha256": "f773e27a37689b1cb641ad8b0215a80ff0d29203fe9505bf874e7cd21004bebb"
+}

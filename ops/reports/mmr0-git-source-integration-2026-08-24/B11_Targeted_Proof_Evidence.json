@@ -1,0 +1,22 @@
+{
+  "schema": "MMR-0-GIT-INTEGRATION-B11-TARGETED-EVIDENCE-v0.1",
+  "result": "PASS",
+  "proof_family": "B11",
+  "targeted_vectors": "5/5",
+  "source_commit": "505ff1b6592bdf3adbe1bb30dc40750aa3e69210",
+  "integration_head": "bc398ed5c75d4ca5ba76be24cac700dd3b804fd4",
+  "source_manifest_sha256": "43d27272965554e782f47b4814e6746fada349edfd9c14a33b43841b03201efa",
+  "source_to_binary_receipt_sha256": "4bc325a1660db8aa1f5642ea13ad91cab98d8a59ec6c206eb48766346471bbb5",
+  "p5e_test_source_sha256": "52b11138c679ecb3a4afe25a1a52653f89de2101db6ac1d70a1cde4fcf95a260",
+  "binary_sha256": "9afe3aeecf844a54a75559e88b8bfdb4a069cf8e9c9937f3942b12f7ae3075bf",
+  "companion_integrity_sha256": "32c30b42307a5c01df4424e299764fa6b52717aa5dd6d3453086c8ebd06e2d52",
+  "targeted_test_log_sha256": "d82fda77de9bdeaa98978e288e086daff27c0eabdf2f8090fbc3137f83034728",
+  "vectors": {
+    "B11-V1": "REMOVAL_CLAIM_DOWNGRADED / NOT_IN_CURRENT_PROJECTION",
+    "B11-V2": "REMOVAL_CLAIM_REFUSED / HISTORICAL_STATE_ACKNOWLEDGED",
+    "B11-V3": "OLD_K1_DISCLOSED / IDENTITY_INCARNATION_GRANT_UNCHANGED",
+    "B11-V4": "CONTINUITY_SELF_AUTHORITY_DENIED",
+    "B11-V5": "CPK7_PROTECTED_EXCLUSION_QUARANTINED / NO_ACTIVE_CURRENT"
+  },
+  "controlled_proof_claimed": false
+}

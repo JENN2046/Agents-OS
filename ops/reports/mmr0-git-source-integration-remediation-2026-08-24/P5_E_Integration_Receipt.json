@@ -1,0 +1,110 @@
+{
+  "build_identity": {
+    "binary_artifacts": [
+      {
+        "artifact_id": "mmr0-pr40-remediation-native-binary",
+        "bytes": 5477672,
+        "loaded_identity_verified": true,
+        "sha256": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411"
+      }
+    ],
+    "build_command_sha256": "aa06d30c9a37ce74223997eab59ba42cdb65c9bd33239337ee6ed1fd79056314",
+    "dependency_manifest_sha256": "cf692f6b57c2405113129b8ef4d50b62061022353ee22688a83a278f28186e30",
+    "source_to_binary_receipt_sha256": "f0ea90d7aaf89729c0e29881ae28b5870b6dbf6e7f5332406cc067d7c45c053b",
+    "toolchain_identity": "sha256:f773e27a37689b1cb641ad8b0215a80ff0d29203fe9505bf874e7cd21004bebb"
+  },
+  "controlled_proof_claimed": false,
+  "files_changed": [],
+  "hard_failures": [],
+  "next_gate": "GATE_P5_COMPLETE",
+  "phase": {
+    "id": "P5",
+    "result": "PASS",
+    "subphase": "P5-E"
+  },
+  "proof_authority": {
+    "evidence_manifest_sha256": "59ab97209657198e03d776ca12517ea58da5b690095c5f865b53b2795cef8e6d",
+    "evidence_reference_ids": [
+      "p5e-b11-targeted-proof",
+      "p5e-b11-targeted-test-log"
+    ]
+  },
+  "proof_results": [
+    {
+      "case_id": "B11-V1",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V2",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V3",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V4",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    },
+    {
+      "case_id": "B11-V5",
+      "derived_result": "PASS",
+      "evidence_artifact_ids": [
+        "p5e-b11-targeted-proof",
+        "p5e-b11-targeted-test-log"
+      ]
+    }
+  ],
+  "proof_subset": {
+    "case_count": 5,
+    "case_ids": [
+      "B11-V1",
+      "B11-V2",
+      "B11-V3",
+      "B11-V4",
+      "B11-V5"
+    ],
+    "catalog_sha256": "b95fe9c65d2fccee029bb36063ae68db4609748128a8bc00517d9b1e60309a48",
+    "matrix_sha256": "ac3e0a5d20d33a5aef264694befe195b56105bbf0167a69163817cb8eca4de62",
+    "proof_gate": "GATE_P5-E_TARGETED_PROOF_PASS"
+  },
+  "runtime_authority": {
+    "admitted_adapter_identity": null,
+    "admitted_proof_adapter": false,
+    "authority_admission_reference": null,
+    "authority_manifest_sha256": "d872debb1614421fbf2f17e6c73d84c921d5e14c226146d9715f9d385cedd144",
+    "dev_adapter_id": null,
+    "runtime_fingerprint": "88add17a3d01455728ed9338bb0db5292aacb15fb601a65be5170df67adc7411",
+    "runtime_is_untrusted_sut": true
+  },
+  "semantic_goal": "Revalidate P5-E removal-strength separation on the exact PR40 remediation successor source and source-bound native binary without claiming a new semantic implementation or Controlled Proof authority.",
+  "source_identity": {
+    "dirty_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "implementation_source_id": "MMR0-PR40-REMEDIATION-7b111ee51619521863f8",
+    "resident_head": "c670514e776cda90f46f38abaf3994db77a73cce",
+    "source_manifest_sha256": "f33bcd75bbeffdd6fce0cd6a69b97f682c00fd61653e360ef966b38e2474a00a"
+  },
+  "workspace_state": {
+    "diff_manifest_sha256": "f33bcd75bbeffdd6fce0cd6a69b97f682c00fd61653e360ef966b38e2474a00a",
+    "head_after": "c670514e776cda90f46f38abaf3994db77a73cce",
+    "head_before": "c670514e776cda90f46f38abaf3994db77a73cce",
+    "status_sha256_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status_sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

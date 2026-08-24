@@ -1,0 +1,28 @@
+{
+  "fixture": {
+    "bytes": 8388608,
+    "exact_readback": true,
+    "fsync_directory": true,
+    "fsync_file": true,
+    "readback_sha256": "2af1343ebc02379af48287d53cbb531f20dd8aceafff4ae7edd98b88eb552f8e",
+    "removed_after_verification": true,
+    "write_sha256": "2af1343ebc02379af48287d53cbb531f20dd8aceafff4ae7edd98b88eb552f8e"
+  },
+  "live_source": {
+    "parent_disk": "/dev/nvme0n1",
+    "partition": "/dev/nvme0n1p2"
+  },
+  "mount": {
+    "filesystem": "ntfs3",
+    "options": "rw,nosuid,nodev,relatime,uid=1000,gid=1000,acl,iocharset=utf8,prealloc",
+    "parent_disk": "/dev/sda",
+    "read_write": true,
+    "source_partition": "/dev/sda1",
+    "target": "/media/jenn/work"
+  },
+  "qualified_at": "2026-08-24T21:53:57.830009+08:00",
+  "result": "PASS",
+  "same_relevant_failure_domain": false,
+  "schema": "MMR-0-GIT-INTEGRATION-DURABLE-TARGET-QUALIFICATION-v0.1",
+  "source_commit": "505ff1b6592bdf3adbe1bb30dc40750aa3e69210"
+}

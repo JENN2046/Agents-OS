@@ -1,22 +1,31 @@
 {
   "name": "agents-os-resident",
-  "version": "0.0.0-m0a",
+  "version": "0.3.0-local-owner.0",
   "private": true,
-  "description": "Synthetic-only blocked AGENTS OS Phase 5A M0-A resident",
+  "description": "VCP-owned local companion for the consent-gated AGENTS OS Goal/Task profile",
   "main": "index.js",
   "engines": {
     "node": "22.23.1",
     "npm": "10.9.8"
   },
   "scripts": {
-    "build:debug": "napi build --platform",
-    "build:release": "napi build --platform --release",
-    "build:offline": "node tools/build-offline-package.mjs --stage wp4",
-    "check:inert-entrypoint": "node tools/validate-sealed-host-contract.mjs --verify-inert-entrypoint",
-    "check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0",
-    "preview:compatibility": "node tools/validate-sealed-host-contract.mjs --compatibility-preview",
-    "test:offline-packaging": "node tests/offline-packaging.mjs",
-    "verify:offline-witness": "node tools/build-offline-package.mjs --integrated-witness"
+    "build:debug": "napi build --platform --no-js --dts target/native-binding.d.ts",
+    "build:release": "napi build --platform --release --no-js --dts target/native-binding.d.ts",
+    "build:integrity": "node tools/build-companion-integrity.mjs --output companion-integrity.json",
+    "build:companion": "npm run build:release && npm run build:integrity",
+    "legacy:build:offline": "node tools/build-offline-package.mjs --stage wp4",
+    "check:host-behavior": "node --test tests/host-behavior-contract.test.cjs tests/host-loop.test.cjs",
+    "legacy:check:sealed-host": "node tools/validate-sealed-host-contract.mjs --stage wp0",
+    "legacy:preview:compatibility": "node tools/validate-sealed-host-contract.mjs --compatibility-preview",
+    "preview:companion-projection": "node tools/validate-companion-projection.mjs --check",
+    "test": "node --test tests/activation-lifecycle.test.cjs tests/companion-adapter.test.cjs tests/companion-protocol.test.cjs tests/companion-server.test.cjs tests/discovery-bootstrap.test.cjs tests/host-behavior-contract.test.cjs tests/host-loop.test.cjs tests/local-owner-boundary.test.cjs tests/plugin-manager-frozen-result.test.cjs tests/sealed-host-companion-contract.test.mjs tests/systemd-renderer.test.mjs tests/vcpchat-presentation.test.cjs tests/windows-target-quarantine-integration.test.cjs",
+    "test:activation": "node --test tests/activation-lifecycle.test.cjs",
+    "test:companion-integration": "node --test tests/companion-integration.test.cjs",
+    "test:companion-stability": "AGENTS_OS_RESIDENT_STABILITY_MS=60000 node --test tests/companion-integration.test.cjs",
+    "verify:host-presentation-binding": "node tools/verify-host-presentation-binding.mjs --check",
+    "legacy:test:offline-packaging": "node tests/offline-packaging.mjs",
+    "verify:systemd-template": "node tools/render-systemd-unit.mjs --check",
+    "legacy:verify:offline-witness": "node tools/build-offline-package.mjs --integrated-witness"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.7.3"

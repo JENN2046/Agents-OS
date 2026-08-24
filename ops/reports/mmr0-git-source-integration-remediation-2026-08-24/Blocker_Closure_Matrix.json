@@ -1,0 +1,36 @@
+{
+  "blocked_predecessor_head": "29860602dffe4a59c73e275b36b48390552079a1",
+  "blockers": [
+    {
+      "blocker_id": "A7_DURABLE_READBACK_NOT_ACTUALLY_EXECUTED",
+      "evidence": [
+        "A7_Targeted_Proof_Evidence.json",
+        "A7_Targeted_Test.txt",
+        "Durable_Target_Requalification_Receipt.json"
+      ],
+      "status": "CLOSED"
+    },
+    {
+      "blocker_id": "COMMITTED_NODE_TESTS_OMITTED_AND_FAILING",
+      "evidence": [
+        "Node_Test_Matrix.json"
+      ],
+      "status": "CLOSED"
+    },
+    {
+      "blocker_id": "COMPONENT_LOCAL_HOST_TEST_FIXTURE_MISSING",
+      "evidence": [
+        "Final_110_Path_Source_Manifest.json",
+        "Node_Test_Matrix.json"
+      ],
+      "status": "CLOSED"
+    }
+  ],
+  "controlled_proof_claimed": false,
+  "historical_closeout_classification": "BLOCKED_NON_CANONICAL_PRESERVED",
+  "open_blockers": [],
+  "remediation_build_successor": "c670514e776cda90f46f38abaf3994db77a73cce",
+  "remediation_source_successor": "7b111ee51619521863f88a61abcec50b31c2201d",
+  "result": "PASS",
+  "schema": "MMR-0-PR40-REMEDIATION-BLOCKER-CLOSURE-MATRIX-v0.1"
+}
