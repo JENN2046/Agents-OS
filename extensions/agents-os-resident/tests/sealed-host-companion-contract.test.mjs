@@ -43,7 +43,18 @@ test('sealed VCPToolBox direct lifecycle contract remains compatible with the na
   assert.equal(manifest.pluginType, 'hybridservice');
   assert.equal(manifest.communication.protocol, 'direct');
   assert.equal(manifest.entryPoint.script, 'index.js');
-  assert.deepEqual(manifest.capabilities.invocationCommands, []);
+  assert.deepEqual(
+    manifest.capabilities.invocationCommands.map(({ commandIdentifier }) => commandIdentifier),
+    [
+      'PROPOSE_GOAL_MUTATION',
+      'PROPOSE_TASK_MUTATION',
+      'QUERY_GOALS',
+      'QUERY_TASKS'
+    ]
+  );
+  assert.ok(manifest.capabilities.invocationCommands.every(
+    ({ command, commandIdentifier }) => command === commandIdentifier
+  ));
   assert.deepEqual(manifest.configSchema, {});
 
   const entrypointSource = readFileSync(resolve(PACKAGE_ROOT, 'index.js'), 'utf8');

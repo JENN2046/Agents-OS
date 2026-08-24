@@ -15,8 +15,8 @@
 //! does not resolve coordinate conflicts (P4-B) or derive full lineage
 //! relations (P4-C).  PROTECTED claims are delegated to `protection.rs`.
 
-use std::fs;
-use std::io;
+use std::fs::{self, File};
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
 use serde_json::{Value, json};
@@ -53,9 +53,15 @@ impl std::fmt::Display for CheckpointError {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             CheckpointError::Io(error) => write!(formatter, "checkpoint io: {error}"),
-            CheckpointError::Canonical(message) => write!(formatter, "checkpoint canonical: {message}"),
-            CheckpointError::StagingConflict => write!(formatter, "checkpoint staging already exists"),
-            CheckpointError::FinalizationConflict => write!(formatter, "checkpoint final already exists"),
+            CheckpointError::Canonical(message) => {
+                write!(formatter, "checkpoint canonical: {message}")
+            }
+            CheckpointError::StagingConflict => {
+                write!(formatter, "checkpoint staging already exists")
+            }
+            CheckpointError::FinalizationConflict => {
+                write!(formatter, "checkpoint final already exists")
+            }
         }
     }
 }
@@ -63,7 +69,8 @@ impl std::fmt::Display for CheckpointError {
 impl std::error::Error for CheckpointError {}
 
 fn canonical_bytes(value: &Value) -> Result<Vec<u8>, CheckpointError> {
-    let input = serde_json::to_vec(value).map_err(|error| CheckpointError::Canonical(error.to_string()))?;
+    let input =
+        serde_json::to_vec(value).map_err(|error| CheckpointError::Canonical(error.to_string()))?;
     canonicalize_json(&input).map_err(|error| CheckpointError::Canonical(error.to_string()))
 }
 
@@ -74,6 +81,18 @@ fn sha256_hex(bytes: &[u8]) -> String {
         output.push_str(&format!("{byte:02x}"));
     }
     output
+}
+
+fn write_durable_file(path: &Path, bytes: &[u8]) -> Result<(), CheckpointError> {
+    let mut file = File::create(path)?;
+    file.write_all(bytes)?;
+    file.sync_all()?;
+    Ok(())
+}
+
+fn sync_directory(path: &Path) -> Result<(), CheckpointError> {
+    File::open(path)?.sync_all()?;
+    Ok(())
 }
 
 // ===========================================================================
@@ -224,14 +243,19 @@ pub fn create_checkpoint(
     let final_root = checkpoint_root.join("final");
     fs::create_dir_all(&staging_root)?;
     fs::create_dir_all(&final_root)?;
+    sync_directory(checkpoint_root)?;
+    sync_directory(&staging_root)?;
+    sync_directory(&final_root)?;
 
     let staging_dir = staging_root.join(input.coordinate.checkpoint_seq.to_string());
     if staging_dir.exists() {
         return Err(CheckpointError::StagingConflict);
     }
     fs::create_dir(&staging_dir)?;
-    fs::write(staging_dir.join(CONTENT_FILENAME), &content_bytes)?;
-    fs::write(staging_dir.join(MANIFEST_FILENAME), &manifest_bytes)?;
+    sync_directory(&staging_root)?;
+    write_durable_file(&staging_dir.join(CONTENT_FILENAME), &content_bytes)?;
+    write_durable_file(&staging_dir.join(MANIFEST_FILENAME), &manifest_bytes)?;
+    sync_directory(&staging_dir)?;
 
     let final_dir = final_root.join(input.coordinate.checkpoint_seq.to_string());
     if final_dir.exists() {
@@ -239,6 +263,10 @@ pub fn create_checkpoint(
     }
     // Atomic final publication: rename the complete staging directory.
     fs::rename(&staging_dir, &final_dir)?;
+    // The rename is not a durable publication until both affected parent
+    // directories have crossed a filesystem durability barrier.
+    sync_directory(&staging_root)?;
+    sync_directory(&final_root)?;
 
     Ok(CheckpointSummary {
         checkpoint_id: manifest_sha256.clone(),
@@ -314,7 +342,7 @@ pub fn verify_checkpoint(
         Err(_) => {
             return CheckpointVerification::Invalid {
                 reason: CheckpointInvalidReason::ManifestMissingOrInvalid,
-            }
+            };
         }
     };
     if let Some(expected) = expected_manifest_sha256 {
@@ -329,7 +357,7 @@ pub fn verify_checkpoint(
         Err(_) => {
             return CheckpointVerification::Invalid {
                 reason: CheckpointInvalidReason::ManifestMissingOrInvalid,
-            }
+            };
         }
     };
     let expected_content_sha256 = manifest
@@ -347,7 +375,7 @@ pub fn verify_checkpoint(
         Err(_) => {
             return CheckpointVerification::Invalid {
                 reason: CheckpointInvalidReason::ContentMissingOrInvalid,
-            }
+            };
         }
     };
     if sha256_hex(&content_bytes) != expected_content_sha256 {
@@ -639,8 +667,7 @@ pub fn evaluate_coordinate_single_assignment(
         let distinct_content = sorted_unique(group.iter().map(|a| a.content_sha256.clone()));
         let distinct_manifest = sorted_unique(group.iter().map(|a| a.manifest_sha256.clone()));
         let hard_conflict = distinct_content.len() > 1;
-        let artifacts: Vec<CheckpointArtifactRecord> =
-            group.into_iter().cloned().collect();
+        let artifacts: Vec<CheckpointArtifactRecord> = group.into_iter().cloned().collect();
         if hard_conflict {
             conflicting.push(coordinate.clone());
         }
@@ -658,7 +685,11 @@ pub fn evaluate_coordinate_single_assignment(
         a.coordinate
             .incarnation_id
             .cmp(&b.coordinate.incarnation_id)
-            .then(a.coordinate.checkpoint_seq.cmp(&b.coordinate.checkpoint_seq))
+            .then(
+                a.coordinate
+                    .checkpoint_seq
+                    .cmp(&b.coordinate.checkpoint_seq),
+            )
     });
     conflicting.sort_by(|a, b| {
         a.incarnation_id
@@ -727,5 +758,10 @@ pub fn inspect_coordinate_conflicts(roots: &[PathBuf]) -> Value {
 /// the oracle can independently read each artifact's content/manifest bytes.
 pub fn raw_artifact_records(roots: &[PathBuf]) -> Value {
     let artifacts = discover_finalized_checkpoints(roots);
-    json!(artifacts.iter().map(artifact_record_json).collect::<Vec<_>>())
+    json!(
+        artifacts
+            .iter()
+            .map(artifact_record_json)
+            .collect::<Vec<_>>()
+    )
 }

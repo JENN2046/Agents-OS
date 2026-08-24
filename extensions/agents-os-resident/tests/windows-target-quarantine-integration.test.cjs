@@ -131,9 +131,13 @@ test('Windows-target build completes actual native + companion + Host integratio
   });
 
   const integrity = verifyCompanionIntegrity();
-  assert.equal(
-    integrity.buildId,
-    'sha256:47949dfe2e36ed4be3211489f463720ee9f77ffa6f374e25522fe871849b741f'
+  await assert.rejects(
+    startQuarantineDaemon({
+      buildId: `sha256:${'0'.repeat(64)}`,
+      rootPath,
+      socketPath
+    }),
+    { code: 'RESIDENT_INTEGRITY_MISMATCH' }
   );
 
   controller = await startQuarantineDaemon({
