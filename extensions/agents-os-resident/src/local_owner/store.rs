@@ -2407,15 +2407,53 @@ fn recall_projection(connection: &Connection, query: &Value) -> Result<Value, Lo
         if let Some((fact_kind, fingerprint, revision, canonical_bytes)) = resolved {
             let value: Value =
                 serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+            let components = value
+                .get("components")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let provenance = components
+                .get("provenance")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let source = provenance
+                .get("source")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let subject = provenance
+                .get("subject")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let lifecycle = components
+                .get("lifecycle")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let authority = components
+                .get("authority")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let source_ref = require_nonempty_string(source, "ref", 300)?;
+            let source_type = require_nonempty_string(source, "type", 64)?;
+            let subject_ref = require_nonempty_string(subject, "ref", 300)?;
+            let epistemic_state = require_nonempty_string(lifecycle, "epistemicState", 64)?;
+            let lifecycle_state = require_nonempty_string(lifecycle, "lifecycleState", 64)?;
+            let authority_basis_ref =
+                require_nonempty_string(authority, "authorityBasisRef", 300)?;
+            let authority_basis_type =
+                require_nonempty_string(authority, "authorityBasisType", 64)?;
             effective_projection.push(json!({
                 "admitted": true,
-                "authorityBasisRef": value["components"]["authority"]["authorityBasisRef"],
+                "authorityBasisRef": authority_basis_ref,
+                "authorityBasisType": authority_basis_type,
+                "epistemicState": epistemic_state,
                 "factKind": fact_kind,
                 "factFingerprint": fingerprint,
-                "lifecycleState": value["components"]["lifecycle"]["lifecycleState"],
+                "lifecycleState": lifecycle_state,
                 "rank": rank,
                 "revision": as_u64(revision)?,
+                "sourceRef": source_ref,
+                "sourceType": source_type,
                 "stateId": state_id,
+                "subjectRef": subject_ref,
                 "visible": visible,
             }));
         } else {
