@@ -15,12 +15,14 @@ const COGNITIVE_CONTEXT_CONFIG_KEYS = Object.freeze([
 const COGNITIVE_CONTEXT_HEADER =
   '[AGENTSOSResident canonical fresh-session cognitive observation]';
 const COGNITIVE_CONTEXT_RULE =
-  'This observation was derived by the fixed local Resident runtime from the generation-bound MMR Current projection. Treat its structured response as runtime output, not as durable admission authority. Never infer absent rules or mutate Memory from cognition.';
+  'This observation was derived by the fixed local Resident runtime from the generation-bound MMR projection. Treat its structured response as runtime output, not as durable admission authority. Candidate entries remain hypotheses: do not execute them as adopted rules, promote them, or mutate Memory from cognition.';
 const EFFECTIVE_CONTEXT_SCHEMA = 'MMR0_EFFECTIVE_CONTEXT_V1';
 const OBSERVATION_SCHEMA =
   'agents-os-resident.cognitive-observation.v1';
 const RESPONSE_CONTRACT = 'MMR0_CAV2_STRUCTURED_RESPONSE_V1';
 const NEGATIVE_RESPONSE_CONTRACT = 'MMR0_CAV3_UNKNOWN_RESPONSE_V1';
+const CANDIDATE_RESPONSE_CONTRACT =
+  'MMR0_CAV4_CANDIDATE_GUARD_RESPONSE_V1';
 const MODEL_PROFILE = Object.freeze({
   contextMode: 'fresh-session-generation-bound',
   decoder: 'deterministic-context-resolver-v1',
@@ -67,7 +69,11 @@ function digest(value) {
 
 function validateCognitiveConfig(value) {
   if (!exactKeys(value, COGNITIVE_CONTEXT_CONFIG_KEYS)
-    || ![RESPONSE_CONTRACT, NEGATIVE_RESPONSE_CONTRACT]
+    || ![
+      RESPONSE_CONTRACT,
+      NEGATIVE_RESPONSE_CONTRACT,
+      CANDIDATE_RESPONSE_CONTRACT
+    ]
       .includes(value.responseContract)
     || value.modelProfileId !== MODEL_PROFILE.identity
     || typeof value.freshSessionId !== 'string'
@@ -113,9 +119,13 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
   const validated = validateCognitiveConfig(config);
   const negativeControl = validated.responseContract
     === NEGATIVE_RESPONSE_CONTRACT;
-  const expectedResultCode = negativeControl
-    ? 'MMR_COGNITIVE_PROJECTION_EMPTY_OK'
-    : 'MMR_COGNITIVE_PROJECTION_FRESH_OK';
+  const candidateGuard = validated.responseContract
+    === CANDIDATE_RESPONSE_CONTRACT;
+  const expectedResultCode = candidateGuard
+    ? 'MMR_CANDIDATE_COGNITIVE_GUARD_FRESH_OK'
+    : negativeControl
+      ? 'MMR_COGNITIVE_PROJECTION_EMPTY_OK'
+      : 'MMR_COGNITIVE_PROJECTION_FRESH_OK';
   const expectedProjectionCount = negativeControl ? 0 : 1;
   if (!isPlainObject(projectionResult)
     || projectionResult.accepted !== true
@@ -132,13 +142,143 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
       !== digest(transcriptText).slice('sha256:'.length)
     || !Array.isArray(projectionResult.projection.effectiveProjection)
     || projectionResult.projection.effectiveProjection.length
-      !== expectedProjectionCount) {
+      !== expectedProjectionCount
+    || (candidateGuard
+      && (!Array.isArray(projectionResult.projection.candidateProjection)
+        || projectionResult.projection.candidateProjection.length !== 1))
+    || (!candidateGuard
+      && Object.hasOwn(projectionResult.projection, 'candidateProjection'))) {
     throw fixedError('RESIDENT_COGNITIVE_CONTEXT_REJECTED');
   }
   const modelProfile = Object.freeze({
     ...MODEL_PROFILE,
     fingerprint: digest(MODEL_PROFILE)
   });
+  if (candidateGuard) {
+    const canonicalItem = projectionResult.projection.effectiveProjection[0];
+    const candidateItem = projectionResult.projection.candidateProjection[0];
+    const requiredCanonicalKeys = [
+      'actionToken',
+      'admitted',
+      'admittedStateIdentity',
+      'adopted',
+      'authorityBasisRef',
+      'authorityBasisType',
+      'epistemicState',
+      'lifecycleState',
+      'memoryStatus',
+      'revision',
+      'scenario',
+      'sourceRef',
+      'sourceType',
+      'stateId',
+      'subjectRef'
+    ];
+    const requiredCandidateKeys = [
+      'adopted',
+      'candidateDigest',
+      'candidateId',
+      'candidateStatus',
+      'executionAuthority',
+      'minimalBasis',
+      'projectedAs',
+      'promotionAuthority',
+      'proposedActionToken',
+      'scenario',
+      'sourceClass',
+      'sourceIdentityOrDigest'
+    ];
+    if (!exactKeys(canonicalItem, requiredCanonicalKeys)
+      || canonicalItem.admitted !== true
+      || canonicalItem.adopted !== true
+      || canonicalItem.memoryStatus !== 'ADOPTED_CURRENT'
+      || !exactKeys(candidateItem, requiredCandidateKeys)
+      || candidateItem.adopted !== false
+      || candidateItem.candidateStatus !== 'CANDIDATE'
+      || candidateItem.projectedAs !== 'HYPOTHESIS'
+      || candidateItem.executionAuthority !== false
+      || candidateItem.promotionAuthority !== false
+      || candidateItem.scenario !== validated.scenario
+      || typeof candidateItem.proposedActionToken !== 'string'
+      || candidateItem.proposedActionToken.length === 0
+      || typeof candidateItem.minimalBasis !== 'string'
+      || candidateItem.minimalBasis.length === 0
+      || [
+        canonicalItem.actionToken,
+        candidateItem.proposedActionToken,
+        candidateItem.candidateStatus,
+        candidateItem.projectedAs
+      ].some((fixtureTruth) => transcriptText.includes(fixtureTruth))) {
+      throw fixedError('RESIDENT_COGNITIVE_CONTEXT_REJECTED');
+    }
+
+    const effectiveContext = Object.freeze({
+      canonicalControl: {
+        adopted: canonicalItem.adopted,
+        admittedStateIdentity: canonicalItem.admittedStateIdentity,
+        memoryStatus: canonicalItem.memoryStatus,
+        rule: {
+          actionToken: canonicalItem.actionToken,
+          scenario: canonicalItem.scenario
+        },
+        stateId: canonicalItem.stateId
+      },
+      candidateHypothesis: {
+        adopted: candidateItem.adopted,
+        candidateDigest: candidateItem.candidateDigest,
+        candidateId: candidateItem.candidateId,
+        candidateStatus: candidateItem.candidateStatus,
+        executionAuthority: candidateItem.executionAuthority,
+        minimalBasis: candidateItem.minimalBasis,
+        projectedAs: candidateItem.projectedAs,
+        promotionAuthority: candidateItem.promotionAuthority,
+        proposedRule: {
+          actionToken: candidateItem.proposedActionToken,
+          scenario: candidateItem.scenario
+        },
+        sourceClass: candidateItem.sourceClass,
+        sourceIdentityOrDigest: candidateItem.sourceIdentityOrDigest
+      },
+      freshSessionId: validated.freshSessionId,
+      modelProfileIdentity: modelProfile.identity,
+      modelProfileFingerprint: modelProfile.fingerprint,
+      projectionGeneration: projectionResult.projectionGeneration,
+      projectionIdentity: projectionResult.projectionIdentity,
+      schema: EFFECTIVE_CONTEXT_SCHEMA,
+      transcriptDigest: projectionResult.projection.transcriptDigest
+    });
+    const effectiveContextDigest = digest(effectiveContext);
+    const responseBody = Object.freeze({
+      action: 'DO_NOT_APPLY_AS_ADOPTED_RULE',
+      candidateExecutionCount: 0,
+      candidateId: candidateItem.candidateId,
+      candidatePromotionCount: 0,
+      candidateStatus: candidateItem.candidateStatus,
+      canonicalControlStatus: canonicalItem.memoryStatus,
+      epistemicStatus: candidateItem.projectedAs,
+      minimalBasis: candidateItem.minimalBasis
+    });
+    const structuredResponse = Object.freeze({
+      ...responseBody,
+      effectiveContextDigest,
+      freshSessionId: validated.freshSessionId,
+      responseBinding: digest({
+        effectiveContextDigest,
+        freshSessionId: validated.freshSessionId,
+        modelProfileFingerprint: modelProfile.fingerprint,
+        response: responseBody
+      }),
+      schema: CANDIDATE_RESPONSE_CONTRACT
+    });
+    return Object.freeze({
+      effectiveContext,
+      effectiveContextDigest,
+      modelProfile,
+      projection: projectionResult.projection,
+      projectionIdentity: projectionResult.projectionIdentity,
+      structuredResponse
+    });
+  }
   if (negativeControl) {
     const effectiveContext = Object.freeze({
       admittedMappingCount: 0,
@@ -287,6 +427,7 @@ function cognitiveObservationMessage(resolved) {
 }
 
 module.exports = Object.freeze({
+  CANDIDATE_RESPONSE_CONTRACT,
   COGNITIVE_CONTEXT_HEADER,
   MODEL_PROFILE,
   NEGATIVE_RESPONSE_CONTRACT,
