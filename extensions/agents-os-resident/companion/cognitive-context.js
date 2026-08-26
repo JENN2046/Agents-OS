@@ -20,6 +20,7 @@ const EFFECTIVE_CONTEXT_SCHEMA = 'MMR0_EFFECTIVE_CONTEXT_V1';
 const OBSERVATION_SCHEMA =
   'agents-os-resident.cognitive-observation.v1';
 const RESPONSE_CONTRACT = 'MMR0_CAV2_STRUCTURED_RESPONSE_V1';
+const NEGATIVE_RESPONSE_CONTRACT = 'MMR0_CAV3_UNKNOWN_RESPONSE_V1';
 const MODEL_PROFILE = Object.freeze({
   contextMode: 'fresh-session-generation-bound',
   decoder: 'deterministic-context-resolver-v1',
@@ -66,7 +67,8 @@ function digest(value) {
 
 function validateCognitiveConfig(value) {
   if (!exactKeys(value, COGNITIVE_CONTEXT_CONFIG_KEYS)
-    || value.responseContract !== RESPONSE_CONTRACT
+    || ![RESPONSE_CONTRACT, NEGATIVE_RESPONSE_CONTRACT]
+      .includes(value.responseContract)
     || value.modelProfileId !== MODEL_PROFILE.identity
     || typeof value.freshSessionId !== 'string'
     || value.freshSessionId.length === 0
@@ -109,9 +111,15 @@ function projectionRequest(config, transcriptText) {
 
 function resolveCognitiveContext(projectionResult, config, transcriptText) {
   const validated = validateCognitiveConfig(config);
+  const negativeControl = validated.responseContract
+    === NEGATIVE_RESPONSE_CONTRACT;
+  const expectedResultCode = negativeControl
+    ? 'MMR_COGNITIVE_PROJECTION_EMPTY_OK'
+    : 'MMR_COGNITIVE_PROJECTION_FRESH_OK';
+  const expectedProjectionCount = negativeControl ? 0 : 1;
   if (!isPlainObject(projectionResult)
     || projectionResult.accepted !== true
-    || projectionResult.resultCode !== 'MMR_COGNITIVE_PROJECTION_FRESH_OK'
+    || projectionResult.resultCode !== expectedResultCode
     || projectionResult.freshSessionId !== validated.freshSessionId
     || !Number.isSafeInteger(projectionResult.projectionGeneration)
     || !/^sha256:[0-9a-f]{64}$/u.test(projectionResult.projectionIdentity)
@@ -123,8 +131,52 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
     || projectionResult.projection.transcriptDigest
       !== digest(transcriptText).slice('sha256:'.length)
     || !Array.isArray(projectionResult.projection.effectiveProjection)
-    || projectionResult.projection.effectiveProjection.length !== 1) {
+    || projectionResult.projection.effectiveProjection.length
+      !== expectedProjectionCount) {
     throw fixedError('RESIDENT_COGNITIVE_CONTEXT_REJECTED');
+  }
+  const modelProfile = Object.freeze({
+    ...MODEL_PROFILE,
+    fingerprint: digest(MODEL_PROFILE)
+  });
+  if (negativeControl) {
+    const effectiveContext = Object.freeze({
+      admittedMappingCount: 0,
+      freshSessionId: validated.freshSessionId,
+      modelProfileIdentity: modelProfile.identity,
+      modelProfileFingerprint: modelProfile.fingerprint,
+      projectionGeneration: projectionResult.projectionGeneration,
+      projectionIdentity: projectionResult.projectionIdentity,
+      rule: null,
+      schema: EFFECTIVE_CONTEXT_SCHEMA,
+      sourceStatus: null,
+      transcriptDigest: projectionResult.projection.transcriptDigest
+    });
+    const effectiveContextDigest = digest(effectiveContext);
+    const responseBody = Object.freeze({
+      answer: 'UNKNOWN',
+      reasonCode: 'NO_ADMITTED_MAPPING'
+    });
+    const structuredResponse = Object.freeze({
+      ...responseBody,
+      effectiveContextDigest,
+      freshSessionId: validated.freshSessionId,
+      responseBinding: digest({
+        effectiveContextDigest,
+        freshSessionId: validated.freshSessionId,
+        modelProfileFingerprint: modelProfile.fingerprint,
+        response: responseBody
+      }),
+      schema: NEGATIVE_RESPONSE_CONTRACT
+    });
+    return Object.freeze({
+      effectiveContext,
+      effectiveContextDigest,
+      modelProfile,
+      projection: projectionResult.projection,
+      projectionIdentity: projectionResult.projectionIdentity,
+      structuredResponse
+    });
   }
   const item = projectionResult.projection.effectiveProjection[0];
   const requiredItemKeys = [
@@ -159,10 +211,6 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
     throw fixedError('RESIDENT_COGNITIVE_CONTEXT_REJECTED');
   }
 
-  const modelProfile = Object.freeze({
-    ...MODEL_PROFILE,
-    fingerprint: digest(MODEL_PROFILE)
-  });
   const effectiveContext = Object.freeze({
     admittedStateIdentity: item.admittedStateIdentity,
     freshSessionId: validated.freshSessionId,
@@ -241,6 +289,7 @@ function cognitiveObservationMessage(resolved) {
 module.exports = Object.freeze({
   COGNITIVE_CONTEXT_HEADER,
   MODEL_PROFILE,
+  NEGATIVE_RESPONSE_CONTRACT,
   RESPONSE_CONTRACT,
   canonicalJson,
   cognitiveObservationMessage,

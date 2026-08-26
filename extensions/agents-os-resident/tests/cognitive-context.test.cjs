@@ -8,6 +8,7 @@ const { createResidentAdapter } = require('../companion/adapter');
 const {
   COGNITIVE_CONTEXT_HEADER,
   MODEL_PROFILE,
+  NEGATIVE_RESPONSE_CONTRACT,
   RESPONSE_CONTRACT,
   cognitiveObservationMessage,
   digest,
@@ -102,6 +103,69 @@ test('fixed production context resolver binds fresh projection, profile and resp
   assert.match(message.content, new RegExp(COGNITIVE_CONTEXT_HEADER.replace(/[\[\]]/gu, '\\$&'), 'u'));
   assert.match(message.content, new RegExp(actionToken, 'u'));
   assert.match(message.content, /MMR0_EFFECTIVE_CONTEXT_V1/u);
+});
+
+test('negative control resolves only an empty fresh projection to UNKNOWN', () => {
+  const negativeScenario = 'dc5729934679117a03e98e23ad8a89ca';
+  const transcript =
+    `Scenario ${negativeScenario}. Return UNKNOWN when no admitted mapping exists.`;
+  const freshSessionId = 'fresh-session:CAV3:unit-negative';
+  const projection = {
+    effectiveProjection: [],
+    excludedStateIds: [],
+    freshSessionId,
+    projectionGeneration: 19,
+    schema: 'MMR0_COGNITIVE_PROJECTION_V1',
+    transcriptDigest: digest(transcript).slice('sha256:'.length)
+  };
+  const config = {
+    expectedProjectionGeneration: null,
+    freshSessionId,
+    modelProfileId: MODEL_PROFILE.identity,
+    projectionPlan: {
+      items: [{ rank: 1, stateId: 'state:cav3:positive-only', visible: true }],
+      retrieved: []
+    },
+    responseContract: NEGATIVE_RESPONSE_CONTRACT,
+    scenario: negativeScenario
+  };
+  const projectionResult = {
+    accepted: true,
+    durableTransitionCount: 19,
+    freshSessionId,
+    projection,
+    projectionGeneration: 19,
+    projectionIdentity: digest(projection),
+    resultCode: 'MMR_COGNITIVE_PROJECTION_EMPTY_OK'
+  };
+  const resolved = resolveCognitiveContext(
+    projectionResult,
+    config,
+    transcript
+  );
+  assert.equal(resolved.projection.effectiveProjection.length, 0);
+  assert.equal(resolved.effectiveContext.admittedMappingCount, 0);
+  assert.equal(resolved.effectiveContext.rule, null);
+  assert.equal(resolved.structuredResponse.answer, 'UNKNOWN');
+  assert.equal(
+    resolved.structuredResponse.reasonCode,
+    'NO_ADMITTED_MAPPING'
+  );
+  assert.equal(
+    resolved.structuredResponse.effectiveContextDigest,
+    resolved.effectiveContextDigest
+  );
+  assert.throws(
+    () => resolveCognitiveContext(
+      {
+        ...projectionResult,
+        resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK'
+      },
+      config,
+      transcript
+    ),
+    /RESIDENT_COGNITIVE_CONTEXT_REJECTED/u
+  );
 });
 
 test('resolver rejects transcript answer leakage and mismatched projection identity', () => {

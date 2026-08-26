@@ -61,6 +61,8 @@ mod p5e_tests;
 mod p6a_tests;
 #[cfg(test)]
 mod p6b_tests;
+#[cfg(test)]
+mod p6c_tests;
 
 use thread::LocalOwnerThread;
 use continuity::{ContinuityAdmission, derive_admission};

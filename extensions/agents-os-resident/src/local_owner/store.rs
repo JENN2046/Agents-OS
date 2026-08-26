@@ -61,6 +61,7 @@ const SUPPORT_STATE_UNSUPPORTED: &str = "UNSUPPORTED";
 const SUPPORT_STATE_UNKNOWN: &str = "UNKNOWN";
 const COGNITIVE_PROJECTION_SCHEMA: &str = "MMR0_COGNITIVE_PROJECTION_V1";
 const COGNITIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV2_STRUCTURED_RESPONSE_V1";
+const COGNITIVE_NEGATIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV3_UNKNOWN_RESPONSE_V1";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum LocalOwnerFault {
@@ -2514,7 +2515,9 @@ fn cognitive_context_projection(
     )?;
     let fresh_session_id = require_nonempty_string(query, "freshSessionId", 200)?;
     let response_contract = require_nonempty_string(query, "responseContract", 100)?;
-    if response_contract != COGNITIVE_RESPONSE_CONTRACT {
+    if response_contract != COGNITIVE_RESPONSE_CONTRACT
+        && response_contract != COGNITIVE_NEGATIVE_RESPONSE_CONTRACT
+    {
         return Err(LocalOwnerError::InvalidInput);
     }
     let scenario = require_nonempty_string(query, "scenario", 512)?;
@@ -2597,12 +2600,18 @@ fn cognitive_context_projection(
             "subjectRef": item["subjectRef"],
         }));
     }
-    if effective_projection.len() != 1 {
+    let expected_projection_count =
+        usize::from(response_contract == COGNITIVE_RESPONSE_CONTRACT);
+    if effective_projection.len() != expected_projection_count {
         return Ok(json!({
             "accepted": false,
             "freshSessionId": fresh_session_id,
             "projectionGeneration": generation,
-            "resultCode": "CURRENT_STATE_NOT_COGNITIVELY_AVAILABLE",
+            "resultCode": if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+                "NEGATIVE_RULE_APPEARED_IN_PROJECTION"
+            } else {
+                "CURRENT_STATE_NOT_COGNITIVELY_AVAILABLE"
+            },
         }));
     }
 
@@ -2625,7 +2634,11 @@ fn cognitive_context_projection(
         "projection": projection_value,
         "projectionGeneration": generation,
         "projectionIdentity": projection_identity,
-        "resultCode": "MMR_COGNITIVE_PROJECTION_FRESH_OK",
+        "resultCode": if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+            "MMR_COGNITIVE_PROJECTION_EMPTY_OK"
+        } else {
+            "MMR_COGNITIVE_PROJECTION_FRESH_OK"
+        },
     }))
 }
 
