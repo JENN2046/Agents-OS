@@ -12,6 +12,11 @@ const {
 } = require('./constants');
 const { createCompanionClient } = require('./client');
 const {
+  cognitiveObservationMessage,
+  projectionRequest,
+  resolveCognitiveContext
+} = require('./cognitive-context');
+const {
   discoveryBootstrapMessage,
   shouldBootstrapDiscovery
 } = require('./discovery');
@@ -745,12 +750,29 @@ function createResidentAdapter({
       const observation = fixedConsentObservation(result);
       if (observation === null) {
         if (result?.resultCode === 'NO_PENDING_PROPOSAL'
-          && !isConsentSensitiveText(ingress.text)
-          && shouldBootstrapDiscovery(ingress.text)) {
-          return [
-            ...redactedMessages,
-            discoveryBootstrapMessage()
-          ];
+          && !isConsentSensitiveText(ingress.text)) {
+          if (isPlainObject(requestConfig?.agentsOsResidentCognitiveContext)) {
+            const request = projectionRequest(
+              requestConfig.agentsOsResidentCognitiveContext,
+              ingress.text
+            );
+            const projection = await client.cognitiveContext(request);
+            const resolved = resolveCognitiveContext(
+              projection,
+              requestConfig.agentsOsResidentCognitiveContext,
+              ingress.text
+            );
+            return [
+              ...redactedMessages,
+              cognitiveObservationMessage(resolved)
+            ];
+          }
+          if (shouldBootstrapDiscovery(ingress.text)) {
+            return [
+              ...redactedMessages,
+              discoveryBootstrapMessage()
+            ];
+          }
         }
         return redactedMessages;
       }

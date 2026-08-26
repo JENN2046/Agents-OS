@@ -139,6 +139,7 @@ function createCompanionServer({
     'prepareProposal',
     'submitConsent',
     'query',
+    'queryMmrMutationCore',
     'invalidate'
   ];
   if (typeof socketPath !== 'string'
@@ -313,7 +314,9 @@ function createCompanionServer({
               attachmentGeneration: attachment.generation,
               request: request.payload
             };
-        const result = request.operation === 'create_proposal'
+        const result = request.operation === 'cognitive_context'
+          ? await lifecycle.queryMmrMutationCore(request.payload)
+          : request.operation === 'create_proposal'
           ? await lifecycle.prepareProposal(nativeInput)
           : request.operation === 'submit_consent'
             ? await lifecycle.submitConsent(nativeInput)

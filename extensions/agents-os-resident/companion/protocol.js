@@ -24,11 +24,13 @@ const PROTECTED_REQUEST_KEYS = Object.freeze([
 const OPERATIONS = new Set([
   'attach',
   'status',
+  'cognitive_context',
   'create_proposal',
   'submit_consent',
   'query'
 ]);
 const PROTECTED_OPERATIONS = new Set([
+  'cognitive_context',
   'create_proposal',
   'submit_consent',
   'query'

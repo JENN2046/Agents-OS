@@ -214,6 +214,7 @@ function createCompanionClient({
 
   return Object.freeze({
     attach,
+    cognitiveContext: (payload) => protectedExchange('cognitive_context', payload),
     createProposal: (payload) => protectedExchange('create_proposal', payload),
     detach,
     query: (payload) => protectedExchange('query', payload),

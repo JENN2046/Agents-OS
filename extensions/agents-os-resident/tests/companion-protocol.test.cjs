@@ -70,6 +70,31 @@ test('protocol accepts exact status, attach and protected request shapes', () =>
     ).result.resultCode,
     'QUERY_OK'
   );
+
+  const cognitive = parseRequestFrame(Buffer.from(JSON.stringify({
+    ...base,
+    operation: 'cognitive_context',
+    attachmentGeneration: 3,
+    attachmentToken: 'c'.repeat(64),
+    payload: {
+      operation: 'QUERY_MMR_COGNITIVE_CONTEXT',
+      query: {}
+    }
+  })));
+  const cognitiveResponse = operationResponse(cognitive, {
+    resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK'
+  });
+  assert.equal(
+    validateResponseFrame(
+      encodeFrame(cognitiveResponse).subarray(
+        0,
+        encodeFrame(cognitiveResponse).length - 1
+      ),
+      cognitive,
+      integrity
+    ).result.resultCode,
+    'MMR_COGNITIVE_PROJECTION_FRESH_OK'
+  );
 });
 
 test('protocol rejects unknown operations, keys, token shapes and oversized frames', () => {

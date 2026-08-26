@@ -62,6 +62,10 @@ function lifecycleDouble() {
       calls.push(['consent', input]);
       return { resultCode: 'CONSENT_REJECTED', attemptsRemaining: 2 };
     },
+    async queryMmrMutationCore(input) {
+      calls.push(['cognitive', input]);
+      return { resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK' };
+    },
     async query(input) {
       calls.push(['query', input]);
       return { resultCode: 'QUERY_OK', items: [] };
@@ -123,10 +127,15 @@ test('server supports status, one token-bound attachment and protected short req
     operation: 'QUERY_GOALS',
     query: { mode: 'LIST' }
   })).resultCode, 'QUERY_OK');
-  assert.deepEqual(lifecycle.calls.slice(0, 3).map((entry) => entry[0]), [
+  assert.equal((await client.cognitiveContext({
+    operation: 'QUERY_MMR_COGNITIVE_CONTEXT',
+    query: {}
+  })).resultCode, 'MMR_COGNITIVE_PROJECTION_FRESH_OK');
+  assert.deepEqual(lifecycle.calls.slice(0, 4).map((entry) => entry[0]), [
     'prepare',
     'consent',
-    'query'
+    'query',
+    'cognitive'
   ]);
   assert.equal(lifecycle.calls[0][1].attachmentGeneration, 1);
 
