@@ -20,7 +20,7 @@ function fixture() {
   const scenario = 'scenario-opaque-7de937b2';
   const actionToken = 'action-opaque-83c52df1';
   const transcript = `Scenario ${scenario}. Return the fixed structured action and attribution.`;
-  const freshSessionId = 'fresh-session:CAV2:unit';
+  const freshSessionId = `fresh-session:r2:${'1'.repeat(64)}`;
   const projection = {
     effectiveProjection: [{
       actionToken,
@@ -186,6 +186,14 @@ test('resolver rejects transcript answer leakage and mismatched projection ident
     ),
     /RESIDENT_COGNITIVE_CONTEXT_REJECTED/u
   );
+  assert.throws(
+    () => resolveCognitiveContext(
+      projectionResult,
+      { ...config, expectedProjectionGeneration: 99 },
+      transcript
+    ),
+    /RESIDENT_COGNITIVE_CONTEXT_REJECTED/u
+  );
 });
 
 test('Host processMessages injects the generation-bound cognitive observation', async () => {
@@ -204,6 +212,15 @@ test('Host processMessages injects the generation-bound cognitive observation', 
       return projectionResult;
     },
     detach: () => socket.destroy(),
+    mintCognitiveSession: async ({ transcriptDigest }) => {
+      calls.push(['mint', transcriptDigest]);
+      return {
+        freshSessionId: config.freshSessionId,
+        projectionGeneration: projectionResult.projectionGeneration,
+        resultCode: 'MMR_COGNITIVE_SESSION_MINTED',
+        transcriptDigest
+      };
+    },
     submitConsent: async (request) => {
       calls.push(['consent', request]);
       return { resultCode: 'NO_PENDING_PROPOSAL' };
@@ -219,7 +236,11 @@ test('Host processMessages injects the generation-bound cognitive observation', 
   assert.equal(output[0], messages[0]);
   assert.equal(output[1].role, 'system');
   assert.match(output[1].content, new RegExp(actionToken, 'u'));
-  assert.deepEqual(calls.map(([kind]) => kind), ['consent', 'cognitive']);
+  assert.deepEqual(calls.map(([kind]) => kind), [
+    'consent',
+    'mint',
+    'cognitive'
+  ]);
 });
 
 test('Host cognitive path fails closed when the runtime reports stale generation', async () => {
@@ -240,12 +261,18 @@ test('Host cognitive path fails closed when the runtime reports stale generation
       resultCode: 'STALE_PROJECTION_FAIL_CLOSED'
     }),
     detach: () => socket.destroy(),
+    mintCognitiveSession: async ({ transcriptDigest }) => ({
+      freshSessionId: config.freshSessionId,
+      projectionGeneration: 17,
+      resultCode: 'MMR_COGNITIVE_SESSION_MINTED',
+      transcriptDigest
+    }),
     submitConsent: async () => ({ resultCode: 'NO_PENDING_PROPOSAL' })
   };
   const adapter = createResidentAdapter({ createClient: () => client });
   await adapter.initialize();
   const messages = [{ role: 'user', content: transcript }];
-  assert.equal(
+  assert.deepEqual(
     await adapter.processMessages(messages, {
       agentsOsResidentCognitiveContext: {
         ...config,
@@ -254,4 +281,50 @@ test('Host cognitive path fails closed when the runtime reports stale generation
     }),
     messages
   );
+});
+
+test('Host rejects inherited history as fresh and strips stale cognitive observations', async () => {
+  const { config, projectionResult, transcript } = fixture();
+  const prior = cognitiveObservationMessage(resolveCognitiveContext(
+    projectionResult,
+    config,
+    transcript
+  ));
+  const socket = new EventEmitter();
+  socket.destroyed = false;
+  socket.destroy = () => {
+    socket.destroyed = true;
+    socket.emit('close');
+  };
+  let cognitiveCalls = 0;
+  let mintCalls = 0;
+  const client = {
+    attach: async () => ({ socket, response: {} }),
+    cognitiveContext: async () => {
+      cognitiveCalls += 1;
+      return projectionResult;
+    },
+    detach: () => socket.destroy(),
+    mintCognitiveSession: async () => {
+      mintCalls += 1;
+      throw new Error('must not mint for inherited history');
+    },
+    submitConsent: async () => ({ resultCode: 'NO_PENDING_PROPOSAL' })
+  };
+  const adapter = createResidentAdapter({ createClient: () => client });
+  await adapter.initialize();
+  const output = await adapter.processMessages([
+    prior,
+    { role: 'assistant', content: 'inherited assistant turn' },
+    { role: 'user', content: transcript }
+  ], {
+    agentsOsResidentCognitiveContext: config
+  });
+  assert.equal(output.length, 2);
+  assert.deepEqual(output.map(({ role }) => role), ['assistant', 'user']);
+  assert.equal(output.some(({ content }) => (
+    typeof content === 'string' && content.includes(COGNITIVE_CONTEXT_HEADER)
+  )), false);
+  assert.equal(mintCalls, 0);
+  assert.equal(cognitiveCalls, 0);
 });

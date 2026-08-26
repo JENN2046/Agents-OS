@@ -386,7 +386,40 @@ test('CAV3 native companion preserves A while B remains absent end to end', asyn
   const staleOutput = await adapter.processMessages(negativeMessages, {
     agentsOsResidentCognitiveContext: staleConfig
   });
-  assert.equal(staleOutput, negativeMessages);
+  assert.equal(staleOutput.length, 2);
+  assert.ok(
+    observation(staleOutput[1]).effectiveContext.projectionGeneration
+      > oldGeneration
+  );
+
+  await applyRule(
+    lifecycle,
+    negativeStateId,
+    `operation:CAV3:R2:matching:${negativeAction.slice(0, 24)}`,
+    negativeScenario,
+    negativeAction
+  );
+  const admittedMatchingCurrent = await lifecycle.queryMmrMutationCore({
+    operation: 'QUERY_MMR_CURRENT_CORE',
+    query: { stateId: negativeStateId }
+  });
+  assert.notEqual(admittedMatchingCurrent.current, null);
+  const omissionAttack = await lifecycle.queryMmrMutationCore(
+    projectionRequest({
+      ...negativeConfig,
+      expectedProjectionGeneration: null,
+      freshSessionId: 'fresh-session:CAV3:R2:omission-attack'
+    }, negativeTranscript)
+  );
+  assert.equal(omissionAttack.accepted, false);
+  assert.equal(
+    omissionAttack.resultCode,
+    'NEGATIVE_RULE_APPEARED_IN_PROJECTION'
+  );
+  const omissionAttackOutput = await adapter.processMessages(negativeMessages, {
+    agentsOsResidentCognitiveContext: negativeConfig
+  });
+  assert.deepEqual(omissionAttackOutput, negativeMessages);
 
   const staticInputs = [
     'companion/adapter.js',
@@ -403,6 +436,12 @@ test('CAV3 native companion preserves A while B remains absent end to end', asyn
   writeEvidence('p6c_companion_positive_observation.json', positiveObserved);
   writeEvidence('p6c_companion_negative_observation.json', negativeObserved);
   writeEvidence('p6c_companion_stale_rejection.json', stale);
+  writeEvidence('p6c_r2_caller_omission_rejection.json', {
+    admittedMatchingCurrentExists: true,
+    callerPlanContainsMatchingState: false,
+    resultCode: omissionAttack.resultCode,
+    runtimeAcceptedFalseUnknown: false
+  });
   writeEvidence('p6c_companion_runtime_input_scan.json', {
     negativeActionOccurrenceCount: 0,
     negativeMappingOccurrenceCount: 0,

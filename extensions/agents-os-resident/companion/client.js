@@ -217,6 +217,10 @@ function createCompanionClient({
     cognitiveContext: (payload) => protectedExchange('cognitive_context', payload),
     createProposal: (payload) => protectedExchange('create_proposal', payload),
     detach,
+    mintCognitiveSession: (payload) => protectedExchange(
+      'mint_cognitive_session',
+      payload
+    ),
     query: (payload) => protectedExchange('query', payload),
     status: async () => (await exchange(makeRequest('status'))).response,
     submitConsent: (payload) => protectedExchange('submit_consent', payload)

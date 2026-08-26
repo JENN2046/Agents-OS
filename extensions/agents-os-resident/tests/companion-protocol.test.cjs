@@ -120,3 +120,18 @@ test('protocol rejects unknown operations, keys, token shapes and oversized fram
     /RESIDENT_PROTOCOL_REJECTED/
   );
 });
+
+test('protocol rejects duplicate authority keys at every raw JSON object level', () => {
+  const protectedPrefix = `{"schema":"agents-os-resident.local.v2","requestId":"${'b'.repeat(32)}","expectedBuildId":"${integrity.buildId}","operation":"query","attachmentGeneration":3,"attachmentToken":"${'c'.repeat(64)}","payload":`;
+  for (const frame of [
+    `{"schema":"agents-os-resident.local.v2","requestId":"${'b'.repeat(32)}","expectedBuildId":"${integrity.buildId}","operation":"status","operation":"query"}`,
+    `${protectedPrefix}{"operation":"QUERY_GOALS","operation":"QUERY_TASKS","query":{}}}`,
+    `${protectedPrefix}{"operation":"QUERY_GOALS","query":{"mode":"LIST","mode":"CURRENT"}}}`,
+    `${protectedPrefix}{"operation":"QUERY_GOALS","query":{"session":{"generation":1,"generation":2}}}}`
+  ]) {
+    assert.throws(
+      () => parseRequestFrame(Buffer.from(frame)),
+      /RESIDENT_PROTOCOL_REJECTED/u
+    );
+  }
+});

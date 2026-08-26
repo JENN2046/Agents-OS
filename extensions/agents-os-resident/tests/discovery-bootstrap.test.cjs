@@ -17,7 +17,9 @@ const {
 const { validateToolArgs } = require('../companion/adapter');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
-const WORKSPACE_ROOT = path.resolve(PACKAGE_ROOT, '../..');
+const WORKSPACE_ROOT = process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT
+  ? path.resolve(process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT)
+  : path.resolve(PACKAGE_ROOT, '../..');
 const HOST_TOOL_CALL_PARSER = path.resolve(
   WORKSPACE_ROOT,
   'runtime/VCPToolBox/modules/vcpLoop/toolCallParser.js'

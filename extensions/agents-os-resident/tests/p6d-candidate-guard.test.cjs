@@ -473,7 +473,25 @@ test('CAV4 native companion keeps Candidate visible but unadopted', async (t) =>
   const staleOutput = await adapter.processMessages(messages, {
     agentsOsResidentCognitiveContext: staleConfig
   });
-  assert.deepEqual(staleOutput, messages);
+  assert.equal(staleOutput.length, 2);
+  assert.ok(
+    observation(staleOutput[1]).effectiveContext.projectionGeneration
+      > oldGeneration
+  );
+  const historyOutput = await adapter.processMessages([
+    output[1],
+    messages[0]
+  ], {
+    agentsOsResidentCognitiveContext: staleConfig
+  });
+  assert.deepEqual(historyOutput, messages);
+  assert.equal(
+    historyOutput.some(({ content }) => (
+      typeof content === 'string'
+      && content.includes('canonical fresh-session cognitive observation')
+    )),
+    false
+  );
 
   writeEvidence('p6d_companion_observation.json', observed);
   writeEvidence('p6d_companion_stale_rejection.json', stale);

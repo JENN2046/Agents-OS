@@ -26,12 +26,14 @@ const OPERATIONS = new Set([
   'status',
   'cognitive_context',
   'create_proposal',
+  'mint_cognitive_session',
   'submit_consent',
   'query'
 ]);
 const PROTECTED_OPERATIONS = new Set([
   'cognitive_context',
   'create_proposal',
+  'mint_cognitive_session',
   'submit_consent',
   'query'
 ]);
@@ -71,9 +73,11 @@ function parseJsonFrame(frame) {
   if (bytes.length === 0 || bytes.length > MAX_FRAME_BYTES || bytes.includes(0)) {
     throw fixedError('RESIDENT_PROTOCOL_REJECTED');
   }
+  const text = bytes.toString('utf8');
   let value;
   try {
-    value = JSON.parse(bytes.toString('utf8'));
+    value = JSON.parse(text);
+    rejectDuplicateJsonKeys(text);
   } catch {
     throw fixedError('RESIDENT_PROTOCOL_REJECTED');
   }
@@ -81,6 +85,86 @@ function parseJsonFrame(frame) {
     throw fixedError('RESIDENT_PROTOCOL_REJECTED');
   }
   return value;
+}
+
+function rejectDuplicateJsonKeys(text) {
+  let index = 0;
+  const whitespace = () => {
+    while (/\s/u.test(text[index] ?? '')) index += 1;
+  };
+  const stringValue = () => {
+    const start = index;
+    index += 1;
+    while (index < text.length) {
+      if (text[index] === '\\') {
+        index += 2;
+      } else if (text[index] === '"') {
+        index += 1;
+        return JSON.parse(text.slice(start, index));
+      } else {
+        index += 1;
+      }
+    }
+    throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+  };
+  const value = () => {
+    whitespace();
+    if (text[index] === '{') {
+      index += 1;
+      whitespace();
+      const keys = new Set();
+      if (text[index] === '}') {
+        index += 1;
+        return;
+      }
+      while (index < text.length) {
+        if (text[index] !== '"') throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+        const key = stringValue();
+        if (keys.has(key)) throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+        keys.add(key);
+        whitespace();
+        if (text[index] !== ':') throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+        index += 1;
+        value();
+        whitespace();
+        if (text[index] === '}') {
+          index += 1;
+          return;
+        }
+        if (text[index] !== ',') throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+        index += 1;
+        whitespace();
+      }
+      throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+    }
+    if (text[index] === '[') {
+      index += 1;
+      whitespace();
+      if (text[index] === ']') {
+        index += 1;
+        return;
+      }
+      while (index < text.length) {
+        value();
+        whitespace();
+        if (text[index] === ']') {
+          index += 1;
+          return;
+        }
+        if (text[index] !== ',') throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+        index += 1;
+      }
+      throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+    }
+    if (text[index] === '"') {
+      stringValue();
+      return;
+    }
+    while (index < text.length && !/[\s,}\]]/u.test(text[index])) index += 1;
+  };
+  value();
+  whitespace();
+  if (index !== text.length) throw fixedError('RESIDENT_PROTOCOL_REJECTED');
 }
 
 function parseRequestFrame(frame) {

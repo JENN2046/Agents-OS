@@ -424,6 +424,59 @@ fn p6c_cav3_v1_positive_and_negative_absence_chain_is_exact() {
 }
 
 #[test]
+fn p6c_r2_admitted_matching_rule_cannot_be_hidden_by_caller_plan() {
+    let fixture = Cav3Fixture::sealed();
+    let (_parent, kernel) = start_fresh(&fixture);
+    let mut matching = fixture.clone();
+    matching.positive_state_id = fixture.negative_state_id.clone();
+    matching.positive_scenario = fixture.negative_scenario.clone();
+    matching.positive_action = fixture.negative_action.clone();
+    matching.operation_id = format!(
+        "operation:CAV3:R2:matching:{}",
+        &fixture.negative_action[..24]
+    );
+    let prepared = kernel
+        .prepare_mmr_mutation(mutation(&matching))
+        .expect("prepare admitted matching R2 rule");
+    let applied = kernel
+        .submit_mmr_consent(json!({
+            "attachmentGeneration": 1,
+            "ingress": "TYPED_TEXT",
+            "operationId": matching.operation_id,
+            "transcript": prepared["consentPrompt"]
+        }))
+        .expect("commit admitted matching R2 rule");
+    assert_eq!(
+        applied["result"]["resultCode"],
+        "APPLIED_LOCALLY_NOT_MMR_COMMITTED_PROOF"
+    );
+    assert!(
+        !query_current(&kernel, &fixture.negative_state_id)["current"].is_null(),
+        "matching rule must exist in canonical Current"
+    );
+
+    let transcript = format!(
+        "Scenario {}. Return UNKNOWN when no admitted mapping exists.",
+        fixture.negative_scenario
+    );
+    let attacked = cognitive_query(
+        &kernel,
+        &fixture,
+        "fresh-session:CAV3:R2:caller-omission",
+        &fixture.negative_scenario,
+        &transcript,
+        NEGATIVE_RESPONSE_CONTRACT,
+        None,
+    );
+    assert_eq!(attacked["accepted"], false);
+    assert_eq!(
+        attacked["resultCode"],
+        "NEGATIVE_RULE_APPEARED_IN_PROJECTION"
+    );
+    assert_ne!(attacked["resultCode"], "MMR_COGNITIVE_PROJECTION_EMPTY_OK");
+}
+
+#[test]
 fn p6c_cav3_v2_static_transcript_scan_and_stale_rejection_hold() {
     let fixture = Cav3Fixture::sealed();
     let (_parent, restarted) = start_fresh(&fixture);

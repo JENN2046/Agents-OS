@@ -21,7 +21,8 @@ const { createResidentAdapter } = require('../companion/adapter');
 const { createCompanionClient } = require('../companion/client');
 const {
   MODEL_PROFILE,
-  RESPONSE_CONTRACT
+  RESPONSE_CONTRACT,
+  projectionRequest
 } = require('../companion/cognitive-context');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 const { createCompanionServer } = require('../companion/server');
@@ -272,7 +273,11 @@ test('actual native companion binds fresh MMR projection to Host context and res
   assert.equal(observed.structuredResponse.sourceType, SOURCE_TYPE);
   assert.equal(observed.structuredResponse.lifecycleState, LIFECYCLE_STATE);
   assert.equal(observed.structuredResponse.epistemicState, EPISTEMIC_STATE);
-  assert.equal(observed.effectiveContext.freshSessionId, freshSessionId);
+  assert.match(
+    observed.effectiveContext.freshSessionId,
+    /^fresh-session:r2:[0-9a-f]{64}$/u
+  );
+  assert.notEqual(observed.effectiveContext.freshSessionId, freshSessionId);
   assert.equal(observed.modelProfile.providerInvoked, false);
   assert.equal(observed.effectiveContextDigest,
     observed.structuredResponse.effectiveContextDigest);
@@ -292,16 +297,26 @@ test('actual native companion binds fresh MMR projection to Host context and res
     bumpScenario,
     bumpAction
   );
-  const staleOutput = await adapter.processMessages(messages, {
-    agentsOsResidentCognitiveContext: {
-      ...cognitiveConfig(
-        freshSessionId,
-        scenario,
-        positiveStateId,
-        negativeStateId
-      ),
-      expectedProjectionGeneration: oldGeneration
-    }
+  const staleConfig = {
+    ...cognitiveConfig(
+      freshSessionId,
+      scenario,
+      positiveStateId,
+      negativeStateId
+    ),
+    expectedProjectionGeneration: oldGeneration
+  };
+  const stale = await lifecycle.queryMmrMutationCore(
+    projectionRequest(staleConfig, transcript)
+  );
+  assert.equal(stale.accepted, false);
+  assert.equal(stale.resultCode, 'STALE_PROJECTION_FAIL_CLOSED');
+  const remintedOutput = await adapter.processMessages(messages, {
+    agentsOsResidentCognitiveContext: staleConfig
   });
-  assert.equal(staleOutput, messages);
+  assert.equal(remintedOutput.length, 2);
+  assert.ok(
+    observation(remintedOutput[1]).effectiveContext.projectionGeneration
+      > oldGeneration
+  );
 });

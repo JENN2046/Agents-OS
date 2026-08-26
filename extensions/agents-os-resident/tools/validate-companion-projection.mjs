@@ -77,8 +77,11 @@ export function runProjectionPreflight() {
     }), { flag: 'wx', mode: 0o644 });
 
     const staged = verifyCompanionIntegrity({ packageRoot: pluginRoot });
+    const stagedRequire = createRequire(resolve(pluginRoot, 'package.json'));
+    const stagedAdapter = stagedRequire('./companion/adapter.js');
     if (staged.buildId !== sourceIntegrity.buildId
       || staged.packageVersion !== sourceIntegrity.packageVersion
+      || typeof stagedAdapter.createResidentAdapter !== 'function'
       || !existsSync(resolve(pluginRoot, 'plugin-manifest.json'))
       || !existsSync(unitPath)
       || existsSync(resolve(pluginRoot, 'config.env'))) {

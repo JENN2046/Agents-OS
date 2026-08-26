@@ -138,6 +138,9 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
     || projectionResult.projection.freshSessionId !== validated.freshSessionId
     || projectionResult.projection.projectionGeneration
       !== projectionResult.projectionGeneration
+    || (validated.expectedProjectionGeneration !== null
+      && projectionResult.projectionGeneration
+        !== validated.expectedProjectionGeneration)
     || projectionResult.projection.transcriptDigest
       !== digest(transcriptText).slice('sha256:'.length)
     || !Array.isArray(projectionResult.projection.effectiveProjection)
@@ -426,6 +429,13 @@ function cognitiveObservationMessage(resolved) {
   });
 }
 
+function isCognitiveObservationMessage(message) {
+  return isPlainObject(message)
+    && message.role === 'system'
+    && typeof message.content === 'string'
+    && message.content.startsWith(`${COGNITIVE_CONTEXT_HEADER}\n`);
+}
+
 module.exports = Object.freeze({
   CANDIDATE_RESPONSE_CONTRACT,
   COGNITIVE_CONTEXT_HEADER,
@@ -435,6 +445,7 @@ module.exports = Object.freeze({
   canonicalJson,
   cognitiveObservationMessage,
   digest,
+  isCognitiveObservationMessage,
   projectionRequest,
   resolveCognitiveContext,
   validateCognitiveConfig

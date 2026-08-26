@@ -1,31 +1,21 @@
 import { createHash } from 'node:crypto';
 import {
   chmodSync,
+  existsSync,
   lstatSync,
   readFileSync,
   renameSync,
   writeFileSync
 } from 'node:fs';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const PACKAGE_ROOT = resolve(dirname(TOOL_PATH), '..');
 const OUTPUT_PATH = resolve(PACKAGE_ROOT, 'companion-integrity.json');
 const SCHEMA_VERSION = 'agents-os-resident.companion-integrity.v1';
-const INVENTORY = Object.freeze([
-  'activation.js',
+const STATIC_INVENTORY = Object.freeze([
   'agents-os-resident.linux-x64-gnu.node',
-  'companion/adapter.js',
-  'companion/client.js',
-  'companion/constants.js',
-  'companion/discovery.js',
-  'companion/integrity.js',
-  'companion/probe.js',
-  'companion/protocol.js',
-  'companion/resident-daemon.js',
-  'companion/server.js',
-  'index.js',
   'package-manifest.json',
   'package.json',
   'plugin-manifest.json.block',
@@ -35,6 +25,64 @@ const INVENTORY = Object.freeze([
   'tools/validate-companion-projection.mjs',
   'tools/verify-host-presentation-binding.mjs'
 ]);
+const PRODUCTION_ENTRYPOINTS = Object.freeze([
+  'activation.js',
+  'index.js',
+  'companion/adapter.js',
+  'companion/client.js',
+  'companion/resident-daemon.js',
+  'companion/server.js'
+]);
+
+function packageRelative(absolute) {
+  const value = relative(PACKAGE_ROOT, absolute).split(sep).join('/');
+  if (value.startsWith('../') || value === '..') {
+    throw new Error('COMPANION_DEPENDENCY_OUTSIDE_PACKAGE');
+  }
+  return value;
+}
+
+function resolveRelativeModule(sourcePath, specifier) {
+  const base = resolve(PACKAGE_ROOT, dirname(sourcePath), specifier);
+  const candidates = extname(base) === ''
+    ? [`${base}.js`, resolve(base, 'index.js')]
+    : [base];
+  const absolute = candidates.find((candidate) => existsSync(candidate));
+  if (absolute === undefined) {
+    throw new Error('COMPANION_DEPENDENCY_MISSING');
+  }
+  return packageRelative(absolute);
+}
+
+export function productionDependencyClosure() {
+  const discovered = new Set();
+  const queue = [...PRODUCTION_ENTRYPOINTS];
+  while (queue.length > 0) {
+    const sourcePath = queue.shift();
+    if (discovered.has(sourcePath)) continue;
+    const absolute = resolve(PACKAGE_ROOT, sourcePath);
+    const stat = lstatSync(absolute);
+    if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1) {
+      throw new Error('COMPANION_DEPENDENCY_INVALID');
+    }
+    discovered.add(sourcePath);
+    const source = readFileSync(absolute, 'utf8');
+    if (/require\(\s*(?!['"])/u.test(source)) {
+      throw new Error('COMPANION_DYNAMIC_DEPENDENCY_UNSUPPORTED');
+    }
+    for (const match of source.matchAll(/require\(\s*['"](\.[^'"]+)['"]\s*\)/gu)) {
+      const dependency = resolveRelativeModule(sourcePath, match[1]);
+      if (!discovered.has(dependency)) queue.push(dependency);
+    }
+  }
+  return Object.freeze([...discovered].sort());
+}
+
+export function companionIntegrityInventory() {
+  return Object.freeze([
+    ...new Set([...STATIC_INVENTORY, ...productionDependencyClosure()])
+  ].sort());
+}
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -59,7 +107,7 @@ export function buildCompanionIntegrity() {
   const packageJson = JSON.parse(
     readFileSync(resolve(PACKAGE_ROOT, 'package.json'), 'utf8')
   );
-  const files = INVENTORY.map((sourcePath) => {
+  const files = companionIntegrityInventory().map((sourcePath) => {
     const absolute = resolve(PACKAGE_ROOT, sourcePath);
     const rel = relative(PACKAGE_ROOT, absolute).split(sep).join('/');
     const stat = lstatSync(absolute);

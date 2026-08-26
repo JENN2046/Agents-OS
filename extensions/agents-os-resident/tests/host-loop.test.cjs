@@ -10,7 +10,9 @@ const { after, test } = require('node:test');
 const { createResidentAdapter } = require('../companion/adapter');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
-const WORKSPACE_ROOT = path.resolve(PACKAGE_ROOT, '../..');
+const WORKSPACE_ROOT = process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT
+  ? path.resolve(process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT)
+  : path.resolve(PACKAGE_ROOT, '../..');
 const HOST_ROOT = path.resolve(WORKSPACE_ROOT, 'runtime/VCPToolBox');
 const RECORD_STORE_PATH = require.resolve(
   path.resolve(HOST_ROOT, 'modules/toolCallRecordStore.js')

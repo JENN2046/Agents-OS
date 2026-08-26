@@ -123,6 +123,14 @@ function validLifecycleProjection(value) {
     && value.externalEffectsEnabled === false;
 }
 
+function exactKeys(value, expected) {
+  if (!isPlainObject(value)) return false;
+  const actual = Object.keys(value).sort();
+  const wanted = [...expected].sort();
+  return actual.length === wanted.length
+    && actual.every((key, index) => key === wanted[index]);
+}
+
 function createCompanionServer({
   socketPath,
   integrity,
@@ -282,6 +290,7 @@ function createCompanionServer({
         }
         attachment = {
           generation,
+          pendingCognitiveSession: null,
           socket,
           token: randomBytes(32).toString('hex')
         };
@@ -308,6 +317,63 @@ function createCompanionServer({
       }
 
       try {
+        if (request.operation === 'mint_cognitive_session') {
+          if (!exactKeys(request.payload, ['transcriptDigest'])
+            || !/^[0-9a-f]{64}$/u.test(request.payload.transcriptDigest)) {
+            throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
+          }
+          const generationProjection = await lifecycle.queryMmrMutationCore({
+            operation: 'QUERY_MMR_COGNITIVE_GENERATION',
+            query: { transcriptDigest: request.payload.transcriptDigest }
+          });
+          if (!exactKeys(generationProjection, [
+            'accepted',
+            'projectionGeneration',
+            'resultCode',
+            'transcriptDigest'
+          ])
+            || generationProjection.accepted !== true
+            || generationProjection.resultCode
+              !== 'MMR_COGNITIVE_GENERATION_READ_ONLY_OK'
+            || generationProjection.transcriptDigest
+              !== request.payload.transcriptDigest
+            || !Number.isSafeInteger(
+              generationProjection.projectionGeneration
+            )
+            || generationProjection.projectionGeneration < 0) {
+            throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
+          }
+          const freshSessionId = `fresh-session:r2:${randomBytes(32).toString('hex')}`;
+          attachment.pendingCognitiveSession = Object.freeze({
+            attachmentGeneration: attachment.generation,
+            freshSessionId,
+            projectionGeneration: generationProjection.projectionGeneration,
+            transcriptDigest: request.payload.transcriptDigest
+          });
+          writeAndClose(socket, operationResponse(request, {
+            freshSessionId,
+            projectionGeneration: generationProjection.projectionGeneration,
+            resultCode: 'MMR_COGNITIVE_SESSION_MINTED',
+            transcriptDigest: request.payload.transcriptDigest
+          }));
+          return;
+        }
+        if (request.operation === 'cognitive_context') {
+          const query = request.payload?.query;
+          const pending = attachment.pendingCognitiveSession;
+          attachment.pendingCognitiveSession = null;
+          if (!exactKeys(request.payload, ['operation', 'query'])
+            || request.payload.operation !== 'QUERY_MMR_COGNITIVE_CONTEXT'
+            || !isPlainObject(query)
+            || pending === null
+            || pending.attachmentGeneration !== attachment.generation
+            || query.freshSessionId !== pending.freshSessionId
+            || query.expectedProjectionGeneration
+              !== pending.projectionGeneration
+            || query.transcriptDigest !== pending.transcriptDigest) {
+            throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
+          }
+        }
         const nativeInput = request.operation === 'submit_consent'
           ? { ...request.payload, attachmentGeneration: attachment.generation }
           : {
