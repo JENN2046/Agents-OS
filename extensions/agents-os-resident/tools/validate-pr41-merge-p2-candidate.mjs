@@ -28,9 +28,10 @@ import {
   FINDING_STATUS as V3_FINDING_STATUS,
   MODIFICATION_POLICY as V3_MODIFICATION_POLICY,
   PREDECESSOR_COMMIT as V3_PREDECESSOR,
+  RECEIPT_REPLAY_SPEC as V3_REPLAY_SPEC,
   REQUIRED_RECEIPT_IDS as V3_RECEIPT_IDS,
-  canonicalJson as v3CanonicalJson,
   canonicalSha256 as v3CanonicalSha256,
+  compareReceiptReplay as v3CompareReceiptReplay,
   contractBytes as v3ContractBytes,
   contractSha256 as v3ContractSha256,
   evidenceBinding as v3EvidenceBinding,
@@ -784,9 +785,13 @@ export function validateMergeP2Candidate({
 }
 
 const V3_TASKBOOK =
-  '/home/jenn/文档/ChatGPT/agents-os-resident/MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Evidence_Authority_Repair_Taskbook_R2.md';
+  '/home/jenn/文档/ChatGPT/agents-os-resident/MMR-0_TD2_R4_P6_PR41_Validator_Admission_Authority_Repair_Taskbook_R1.md';
 const V3_TASKBOOK_SHA256 =
-  '47dd5776e689994fa8dcdd6d943ee8721a746b7efb84d4bbe99db538301234e9';
+  'df5960a9c00b965d8b842cc685de1095f96ae441ed5c55d759fbe9e8819b4cd2';
+const V3_SINGLE_BLOCKER_CLOSURE =
+  '/home/jenn/文档/ChatGPT/agents-os-resident/MMR-0_TD2_R4_P6_PR41_Single_Blocker_Independent_Validator_Closure_R1.md';
+const V3_SINGLE_BLOCKER_CLOSURE_SHA256 =
+  '03e5795615b304b0651ec79b6813cdab96a85f9b9eb28498470614e957b2be00';
 const V3_ALLOWED_PATHS = Object.freeze([
   'extensions/agents-os-resident/tests/merge-blocking-p2-repair.test.cjs',
   'extensions/agents-os-resident/tools/pr41-validator-evidence-contract.mjs',
@@ -845,7 +850,7 @@ function v3Actual(argv) {
   if (precommit) {
     if (git(['rev-parse', 'HEAD']) !== V3_PREDECESSOR
       || git(['rev-parse', 'HEAD^{tree}'])
-        !== '2492b6371aded13a4afabc1d0ad163e6557d139d'
+        !== '09ea9654669ff5b59d73847c7f0e862735b20e3e'
       || execute('staged_delta', 'git', ['diff', '--cached', '--exit-code']).exitCode !== 0) {
       throw new Error('PRECOMMIT_ADMISSION_MISMATCH');
     }
@@ -894,9 +899,9 @@ function v3SyntheticManifest(actual) {
         evidence: '0'.repeat(64), freeze: '0'.repeat(64)
       },
       hostile_fixture_sha256: '0'.repeat(64),
-      expected_result: 'REJECT',
+      expected_result: V3_REPLAY_SPEC[id].expected_authoritative_outcome,
       execution: {
-        command: `synthetic-seed:${id}`,
+        command: `contract-fixture:${V3_REPLAY_SPEC[id].fixture_class}`,
         exit_code: 1,
         stdout_sha256: v3Sha256(Buffer.alloc(0)),
         stderr_sha256: v3Sha256(Buffer.from(`seed:${id}`, 'utf8'))
@@ -940,6 +945,14 @@ function v3FindingEntries(actual, manifest) {
       contract_sha256: v3ContractSha256(),
       attack_receipt_manifest_sha256: manifestSha,
       required_receipt_ids: V3_RECEIPT_IDS
+    },
+    [V3_FINDING_IDS[3]]: {
+      contract_sha256: v3ContractSha256(),
+      attack_receipt_manifest_sha256: manifestSha,
+      execution_authority_model: 'V3_FULL_REPLAY_ONLY',
+      receipt_replay_contract_sha256: v3CanonicalSha256(V3_REPLAY_SPEC),
+      required_receipt_ids: V3_RECEIPT_IDS,
+      single_blocker_closure_sha256: V3_SINGLE_BLOCKER_CLOSURE_SHA256
     }
   };
   return Object.fromEntries(V3_FINDING_IDS.map((id) => {
@@ -1014,12 +1027,14 @@ function v3Documents(actual, manifest) {
       modification_policy: V3_MODIFICATION_POLICY[id],
       evidence_type: V3_EVIDENCE_TYPE[id],
       resolution: id === V3_FINDING_IDS[2]
-        ? 'typed validator evidence authority repaired; independent closure pending'
-        : 'independent closure authority preserved without modification'
+        ? 'typed validator evidence continuity repaired; independent closure pending'
+        : id === V3_FINDING_IDS[3]
+          ? 'admission is non-authoritative; full receipt replay is required'
+          : 'independent closure authority preserved without modification'
     }])),
     summary: {
-      remaining_merge_blockers: 1,
-      repair_authority: 'VALIDATOR_EVIDENCE_AUTHORITY_ONLY'
+      remaining_merge_blockers: 2,
+      repair_authority: 'VALIDATOR_ADMISSION_AUTHORITY_ONLY'
     }
   };
   const dispositionBytes = v3JsonBytes(disposition);
@@ -1118,7 +1133,10 @@ function v3Fixture(seed, actual, id) {
   disposition.evidence_sha256 = v3Sha256(evidenceBytes);
   let dispositionBytes = v3JsonBytes(disposition);
   if (id === 'MALFORMED_UTF8') {
-    const marker = Buffer.from('typed validator evidence authority repaired', 'utf8');
+    const marker = Buffer.from(
+      'typed validator evidence continuity repaired',
+      'utf8'
+    );
     const offset = dispositionBytes.indexOf(marker);
     if (offset < 0) throw new Error('MALFORMED_UTF8_FIXTURE_MARKER_MISSING');
     dispositionBytes = Buffer.from(dispositionBytes);
@@ -1164,13 +1182,16 @@ function v3RunReceipts(actual, root) {
   mkdirSync(root, { recursive: true, mode: 0o700 });
   const seed = v3Documents(actual, v3SyntheticManifest(actual));
   const receipts = {};
-  for (const id of V3_RECEIPT_IDS) {
+  for (const [id, replaySpec] of Object.entries(V3_REPLAY_SPEC)) {
     const fixtureRoot = resolve(root, id);
     const inputRoot = resolve(fixtureRoot, 'input');
     const outputRoot = resolve(fixtureRoot, 'output');
     mkdirSync(inputRoot, { recursive: true, mode: 0o700 });
     mkdirSync(outputRoot, { recursive: true, mode: 0o700 });
-    const documents = v3Fixture(seed, actual, id);
+    if (replaySpec.expected_authoritative_outcome !== 'REJECT') {
+      throw new Error(`REPLAY_SPEC_OUTCOME_UNSUPPORTED:${id}`);
+    }
+    const documents = v3Fixture(seed, actual, replaySpec.fixture_class);
     const paths = {
       contract: resolve(inputRoot, V3_FILE_NAMES.contract),
       disposition: resolve(inputRoot, V3_FILE_NAMES.disposition),
@@ -1202,9 +1223,9 @@ function v3RunReceipts(actual, root) {
       validator_executable_identity: actual.validatorIdentity,
       input_artifact_hashes: inputArtifactHashes,
       hostile_fixture_sha256: v3CanonicalSha256(inputArtifactHashes),
-      expected_result: 'REJECT',
+      expected_result: replaySpec.expected_authoritative_outcome,
       execution: {
-        command: `node tools/validate-pr41-merge-p2-candidate.mjs --mode v3-admission --fixture ${id}`,
+        command: `node tools/validate-pr41-merge-p2-candidate.mjs --mode v3-admission --contract-fixture ${replaySpec.fixture_class}`,
         exit_code: execution.status,
         stdout_sha256: v3Sha256(Buffer.from(execution.stdout ?? '', 'utf8')),
         stderr_sha256: v3Sha256(Buffer.from(execution.stderr ?? '', 'utf8'))
@@ -1245,13 +1266,24 @@ function v3ReadDocuments(argv) {
 function v3Admission(argv) {
   const actual = v3Actual(argv);
   validateV3AuthorityDocuments({ ...v3ReadDocuments(argv), actual });
-  const outputPath = resolve(v3Argument(argv, '--output'), 'ADMISSION_PASS.json');
+  const outputPath = resolve(
+    v3Argument(argv, '--output'),
+    'STRUCTURAL_SEMANTIC_ADMISSION.json'
+  );
   v3WriteExclusive(outputPath, v3JsonBytes({
-    result: 'PASS_CURRENT_V0_3_AUTHORITY_ADMISSION',
+    result: 'PASS_V0_4_STRUCTURAL_SEMANTIC_ADMISSION',
     candidate_commit: actual.candidateCommit,
-    candidate_tree: actual.candidateTree
+    candidate_tree: actual.candidateTree,
+    execution_replayed: false,
+    execution_authority: false,
+    current_candidate_authority: false
   }));
-  return { outputPath };
+  return {
+    outputPath,
+    executionReplayed: false,
+    executionAuthority: false,
+    currentCandidateAuthority: false
+  };
 }
 
 function v3CreationReceipt(target, bytes) {
@@ -1295,9 +1327,179 @@ function v3Build(argv) {
   return { actual, artifacts, receiptPath };
 }
 
+const V3_RECEIPT_TAMPER_CASES = Object.freeze([
+  'INVENTED_ALL_RECEIPTS',
+  'ONE_INVENTED_RECEIPT',
+  'WRONG_EXIT_CODE',
+  'WRONG_STDOUT_HASH',
+  'WRONG_STDERR_HASH',
+  'WRONG_PASS_ARTIFACT_CLAIM',
+  'WRONG_OUTPUT_MANIFEST',
+  'COMMAND_TAMPERING',
+  'EXPECTED_RESULT_TAMPERING'
+]);
+
+function v3InventReceipt(receipt, suffix) {
+  receipt.execution.command = `never-executed-claim:${suffix}`;
+  receipt.execution.exit_code = 7;
+  receipt.execution.stdout_sha256 = '1'.repeat(64);
+  receipt.execution.stderr_sha256 = '2'.repeat(64);
+  receipt.output.PASS_artifact_created = false;
+  receipt.output.output_files = [];
+  receipt.output.output_manifest_sha256 = v3CanonicalSha256([]);
+  receipt.derived_result = 'PASS';
+}
+
+function v3TamperedManifest(replay, caseId) {
+  const claimed = structuredClone(replay);
+  const firstId = V3_RECEIPT_IDS[0];
+  const receipt = claimed.receipts[firstId];
+  if (caseId === 'INVENTED_ALL_RECEIPTS') {
+    for (const id of V3_RECEIPT_IDS) v3InventReceipt(claimed.receipts[id], id);
+  } else if (caseId === 'ONE_INVENTED_RECEIPT') {
+    v3InventReceipt(receipt, firstId);
+  } else if (caseId === 'WRONG_EXIT_CODE') receipt.execution.exit_code += 1;
+  else if (caseId === 'WRONG_STDOUT_HASH') {
+    receipt.execution.stdout_sha256 = '3'.repeat(64);
+  } else if (caseId === 'WRONG_STDERR_HASH') {
+    receipt.execution.stderr_sha256 = '4'.repeat(64);
+  } else if (caseId === 'WRONG_PASS_ARTIFACT_CLAIM') {
+    receipt.output.PASS_artifact_created = true;
+    receipt.output.output_files = ['invented-pass.json'];
+    receipt.derived_result = 'FAIL';
+  } else if (caseId === 'WRONG_OUTPUT_MANIFEST') {
+    receipt.output.output_manifest_sha256 = '5'.repeat(64);
+  } else if (caseId === 'COMMAND_TAMPERING') {
+    receipt.execution.command = 'claim-controlled-easy-command';
+  } else if (caseId === 'EXPECTED_RESULT_TAMPERING') {
+    receipt.expected_result = 'ACCEPT';
+  } else throw new Error(`TAMPER_CASE_UNSUPPORTED:${caseId}`);
+  return claimed;
+}
+
+function v3WriteDocuments(root, documents) {
+  mkdirSync(root, { recursive: true, mode: 0o700 });
+  const paths = {
+    contract: resolve(root, V3_FILE_NAMES.contract),
+    disposition: resolve(root, V3_FILE_NAMES.disposition),
+    evidence: resolve(root, V3_FILE_NAMES.evidence),
+    freeze: resolve(root, V3_FILE_NAMES.freeze)
+  };
+  for (const [role, path] of Object.entries(paths)) {
+    v3WriteExclusive(path, documents[`${role}Bytes`]);
+  }
+  return paths;
+}
+
+function v3VerifyReceiptTamperCases(actual, replay) {
+  const results = {};
+  for (const caseId of V3_RECEIPT_TAMPER_CASES) {
+    const claimed = v3TamperedManifest(replay, caseId);
+    const documents = v3Documents(actual, claimed);
+    let structuralResult = 'PASS_CLAIMED_EVIDENCE_STRUCTURE';
+    let replayResult = 'UNEXPECTED_PASS';
+    try {
+      const validated = validateV3AuthorityDocuments({ ...documents, actual });
+      v3CompareReceiptReplay(validated.evidence.attack_receipt_manifest, replay);
+    } catch (error) {
+      if (error.message === 'EXECUTION_RECEIPT_REPLAY_MISMATCH') {
+        replayResult = 'REJECTED_RECEIPT_REPLAY_MISMATCH';
+      } else {
+        structuralResult = `REJECTED_${error.message}`;
+        replayResult = 'REJECTED_BEFORE_EXECUTION_AUTHORITY';
+      }
+    }
+    if (replayResult === 'UNEXPECTED_PASS') {
+      throw new Error(`RECEIPT_TAMPER_FALSE_PASS:${caseId}`);
+    }
+    results[caseId] = {
+      claimed_manifest_sha256: v3CanonicalSha256(claimed),
+      structural_result: structuralResult,
+      full_replay_gate: replayResult
+    };
+  }
+  return results;
+}
+
+function v3TamperSuite(argv) {
+  const actual = v3Actual(argv);
+  const outputRoot = resolve(v3Argument(argv, '--output'));
+  mkdirSync(outputRoot, { recursive: true, mode: 0o700 });
+  const replay = v3RunReceipts(
+    actual,
+    resolve(v3Argument(argv, '--receipt-root'))
+  );
+  const canonicalDocuments = v3Documents(actual, replay);
+  const canonicalValidated = validateV3AuthorityDocuments({
+    ...canonicalDocuments,
+    actual
+  });
+  const positiveReplay = v3CompareReceiptReplay(
+    canonicalValidated.evidence.attack_receipt_manifest,
+    replay
+  );
+  const results = v3VerifyReceiptTamperCases(actual, replay);
+
+  const invented = v3TamperedManifest(replay, 'INVENTED_ALL_RECEIPTS');
+  const inventedDocuments = v3Documents(actual, invented);
+  const inventedInputRoot = resolve(outputRoot, 'invented-input');
+  const inventedOutputRoot = resolve(outputRoot, 'invented-admission-output');
+  mkdirSync(inventedOutputRoot, { recursive: true, mode: 0o700 });
+  const paths = v3WriteDocuments(inventedInputRoot, inventedDocuments);
+  const execution = spawnSync(process.execPath, [
+    TOOL_PATH, '--mode', 'v3-admission',
+    '--candidate', actual.candidateCommit, '--candidate-tree', actual.candidateTree,
+    '--contract', paths.contract, '--disposition', paths.disposition,
+    '--evidence', paths.evidence, '--freeze', paths.freeze,
+    '--output', inventedOutputRoot,
+    ...(actual.precommit ? ['--precommit'] : [])
+  ], {
+    cwd: PACKAGE_ROOT,
+    encoding: 'utf8',
+    maxBuffer: 32 * 1024 * 1024
+  });
+  const admissionFiles = readdirSync(inventedOutputRoot).sort();
+  if (execution.status !== 0
+    || admissionFiles.length !== 1
+    || admissionFiles[0] !== 'STRUCTURAL_SEMANTIC_ADMISSION.json') {
+    throw new Error('INVENTED_RECEIPT_STRUCTURAL_ADMISSION_FAILED');
+  }
+  const admission = parseStrictJsonBytes(
+    readFileSync(resolve(inventedOutputRoot, admissionFiles[0])),
+    'INVENTED_RECEIPT_ADMISSION'
+  );
+  if (admission.result !== 'PASS_V0_4_STRUCTURAL_SEMANTIC_ADMISSION'
+    || admission.execution_replayed !== false
+    || admission.execution_authority !== false
+    || admission.current_candidate_authority !== false) {
+    throw new Error('INVENTED_RECEIPT_ADMISSION_AUTHORITY_OVERCLAIM');
+  }
+  const summary = {
+    result: 'PASS_VALIDATOR_ADMISSION_AUTHORITY_TAMPER_MATRIX',
+    candidate_commit: actual.candidateCommit,
+    candidate_tree: actual.candidateTree,
+    contract_replay_spec_sha256: v3CanonicalSha256(V3_REPLAY_SPEC),
+    canonical_replay_match: positiveReplay.replay_match,
+    invented_receipt_admission: {
+      result: admission.result,
+      execution_replayed: false,
+      execution_authority: false,
+      current_candidate_authority: false
+    },
+    cases: results
+  };
+  const outputPath = resolve(outputRoot, 'VALIDATOR_AUTHORITY_TAMPER_MATRIX.json');
+  v3WriteExclusive(outputPath, v3JsonBytes(summary));
+  return { outputPath, summary };
+}
+
 function v3AssertFrozen() {
   if (v3Sha256(readFileSync(V3_TASKBOOK)) !== V3_TASKBOOK_SHA256) {
     throw new Error('V3_TASKBOOK_AUTHORITY_MISMATCH');
+  }
+  if (v3Sha256(readFileSync(V3_SINGLE_BLOCKER_CLOSURE))
+    !== V3_SINGLE_BLOCKER_CLOSURE_SHA256) {
+    throw new Error('V3_SINGLE_BLOCKER_CLOSURE_AUTHORITY_MISMATCH');
   }
   for (const [path, expected] of Object.entries(V3_FROZEN_FILES)) {
     if (v3Sha256(readFileSync(resolve(WORKTREE_ROOT, path))) !== expected) {
@@ -1345,10 +1547,11 @@ function v3Full(argv) {
     documents
   );
   const replay = v3RunReceipts(actual, resolve(v3Argument(argv, '--receipt-root')));
-  if (v3CanonicalJson(replay)
-    !== v3CanonicalJson(validated.evidence.attack_receipt_manifest)) {
-    throw new Error('EXECUTION_RECEIPT_REPLAY_MISMATCH');
-  }
+  const replayAuthority = v3CompareReceiptReplay(
+    validated.evidence.attack_receipt_manifest,
+    replay
+  );
+  const receiptTamperMatrix = v3VerifyReceiptTamperCases(actual, replay);
   const environment = {
     AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT:
       process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT,
@@ -1388,7 +1591,8 @@ function v3Full(argv) {
   if (git(['status', '--porcelain=v1']) !== '') throw new Error('FINAL_WORKTREE_DIRTY');
   const validator = {
     schema: `${V3_CONTRACT_SCHEMA}-CANDIDATE-VALIDATOR`,
-    result: 'PASS_MMR_0_TD2_R4_P6_PR41_REMAINING_VALIDATOR_EVIDENCE_AUTHORITY_REPAIR',
+    result: 'PASS_MMR_0_TD2_R4_P6_PR41_VALIDATOR_ADMISSION_AUTHORITY_REPAIR',
+    authority_result: 'PASS_CURRENT_V0_4_AUTHORITY_VALIDATION',
     authority_sha256: V3_TASKBOOK_SHA256,
     contract_sha256: v3ContractSha256(),
     candidate_commit: actual.candidateCommit,
@@ -1397,8 +1601,14 @@ function v3Full(argv) {
     repair_surface: actual.repairSurface,
     findings: V3_FINDING_STATUS,
     modification_policy: V3_MODIFICATION_POLICY,
-    execution_receipt_manifest_sha256: v3CanonicalSha256(replay),
+    execution_receipt_manifest_sha256: replayAuthority.replay_manifest_sha256,
     execution_receipts_replayed: true,
+    execution_authority: true,
+    current_candidate_authority: true,
+    admission_structural_semantic_only: true,
+    admission_execution_authority: false,
+    contract_replay_spec_sha256: v3CanonicalSha256(V3_REPLAY_SPEC),
+    receipt_tampering_matrix: receiptTamperMatrix,
     strict_UTF8: 'PASS',
     total_typed_schema: 'PASS',
     D25_cross_finding_substitution: 'REJECTED_BY_SEMANTIC_CONTRACT',
@@ -1414,7 +1624,7 @@ function v3Full(argv) {
     predecessor_binary_identity: `sha256:${binaryIdentity.predecessorSha256}`,
     integrity_identity: integrity.buildId,
     production_runtime_semantics_changed: false,
-    independent_single_blocker_closure_review: 'PENDING',
+    independent_validator_authority_closure: 'PENDING',
     VCPToolBox_durable_publication: 'PENDING',
     readiness_merge_validation: 'PENDING',
     PR_41: 'DRAFT',
@@ -1432,6 +1642,7 @@ function main(argv) {
     const mode = argv[modeIndex + 1];
     if (mode === 'v3-admission') return v3Admission(argv);
     if (mode === 'v3-build') return v3Build(argv);
+    if (mode === 'v3-tamper-suite') return v3TamperSuite(argv);
     if (mode === 'v3-full') return v3Full(argv);
     throw new Error(`MODE_UNSUPPORTED:${mode}`);
   }

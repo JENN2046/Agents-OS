@@ -514,7 +514,7 @@ test('strict validator parser preserves exact legacy canonical bytes', async () 
   }
 });
 
-test('v0.3 authority parser rejects malformed UTF-8 and duplicate keys', async () => {
+test('current authority parser rejects malformed UTF-8 and duplicate keys', async () => {
   const { parseStrictJsonBytes } = await tool(
     'tools/pr41-validator-evidence-contract.mjs'
   );
@@ -529,7 +529,7 @@ test('v0.3 authority parser rejects malformed UTF-8 and duplicate keys', async (
   );
 });
 
-test('v0.3 finding evidence bindings are domain and identity separated', async () => {
+test('current finding evidence bindings are domain and identity separated', async () => {
   const {
     EVIDENCE_TYPE,
     FINDING_IDS,
@@ -557,17 +557,58 @@ test('v0.3 finding evidence bindings are domain and identity separated', async (
   }
 });
 
-test('v0.3 contract bytes are exact and reject schema drift', async () => {
+test('v0.4 contract separates structural admission from replay authority', async () => {
   const {
     CONTRACT_DOCUMENT,
+    RECEIPT_REPLAY_SPEC,
     contractBytes,
     validateContractBytes
   } = await tool('tools/pr41-validator-evidence-contract.mjs');
   assert.deepEqual(validateContractBytes(contractBytes()), CONTRACT_DOCUMENT);
+  assert.equal(
+    CONTRACT_DOCUMENT.authority_separation.admission_execution_authority,
+    false
+  );
+  assert.equal(
+    CONTRACT_DOCUMENT.authority_separation.admission_current_candidate_authority,
+    false
+  );
+  assert.equal(
+    CONTRACT_DOCUMENT.authority_separation.full_execution_authority,
+    true
+  );
+  assert.deepEqual(CONTRACT_DOCUMENT.receipt_replay_contract, RECEIPT_REPLAY_SPEC);
   const drifted = JSON.parse(contractBytes().toString('utf8'));
   drifted.unknown = true;
   assert.throws(
     () => validateContractBytes(Buffer.from(JSON.stringify(drifted))),
     /CONTRACT_EXACT_AUTHORITY_MISMATCH/u
   );
+});
+
+test('receipt replay authority rejects every claimant-controlled mismatch', async () => {
+  const { compareReceiptReplay } = await tool(
+    'tools/pr41-validator-evidence-contract.mjs'
+  );
+  const replay = {
+    receipts: {
+      D25: {
+        execution: { command: 'contract-defined-command', exit_code: 1 },
+        output: { output_files: [] }
+      }
+    }
+  };
+  assert.equal(compareReceiptReplay(replay, structuredClone(replay)).replay_match, true);
+  for (const mutate of [
+    (claim) => { claim.receipts.D25.execution.command = 'claim-controlled'; },
+    (claim) => { claim.receipts.D25.execution.exit_code = 2; },
+    (claim) => { claim.receipts.D25.output.output_files = ['invented.json']; }
+  ]) {
+    const claim = structuredClone(replay);
+    mutate(claim);
+    assert.throws(
+      () => compareReceiptReplay(claim, replay),
+      /EXECUTION_RECEIPT_REPLAY_MISMATCH/u
+    );
+  }
 });

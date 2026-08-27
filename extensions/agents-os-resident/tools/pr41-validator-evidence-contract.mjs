@@ -2,18 +2,18 @@ import { createHash } from 'node:crypto';
 import { TextDecoder } from 'node:util';
 
 export const CONTRACT_SCHEMA =
-  'MMR-0-TD2-R4-P6-PR41-VALIDATOR-EVIDENCE-AUTHORITY-v0.3';
-export const CONTRACT_VERSION = 'v0.3';
-export const CONTRACT_DOMAIN = 'MMR0_PR41_VALIDATOR_EVIDENCE_AUTHORITY_V1';
-export const BINDING_DOMAIN = 'MMR0_PR41_FINDING_EVIDENCE_BINDING_V1';
+  'MMR-0-TD2-R4-P6-PR41-VALIDATOR-ADMISSION-AUTHORITY-v0.4';
+export const CONTRACT_VERSION = 'v0.4';
+export const CONTRACT_DOMAIN = 'MMR0_PR41_VALIDATOR_ADMISSION_AUTHORITY_V1';
+export const BINDING_DOMAIN = 'MMR0_PR41_FINDING_EVIDENCE_BINDING_V2';
 export const BASE_COMMIT = 'd2d564a5f29a2dcd5aa8e2a3562039a2ab19bbf9';
 export const PREDECESSOR_COMMIT =
-  'f9872c5bbce416b375ea354ae8536616f3e30cd8';
+  '693c2a31f49b00471a97f8123a2782952463f226';
 export const ARTIFACT_ROLE = Object.freeze({
-  contract: 'VALIDATOR_EVIDENCE_AUTHORITY_CONTRACT',
-  disposition: 'REMAINING_VALIDATOR_REPAIR_DISPOSITION',
-  evidence: 'REMAINING_VALIDATOR_REPAIR_EVIDENCE',
-  freeze: 'REMAINING_VALIDATOR_CANDIDATE_IDENTITY_FREEZE'
+  contract: 'VALIDATOR_ADMISSION_AUTHORITY_CONTRACT',
+  disposition: 'VALIDATOR_ADMISSION_REPAIR_DISPOSITION',
+  evidence: 'VALIDATOR_ADMISSION_REPAIR_EVIDENCE',
+  freeze: 'VALIDATOR_ADMISSION_CANDIDATE_IDENTITY_FREEZE'
 });
 export const AUTHORITY_MODE = Object.freeze({
   current: 'CURRENT_CANDIDATE_AUTHORITY',
@@ -22,18 +22,22 @@ export const AUTHORITY_MODE = Object.freeze({
 export const FINDING_IDS = Object.freeze([
   'MMR0-P6-PR41-R2-P2-003',
   'MMR0-P6-PR41-R2-P2-004',
-  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003'
+  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003',
+  'MMR0-P6-PR41-VALIDATOR-QA-R1-NEW-P2-001'
 ]);
 export const FINDING_STATUS = Object.freeze({
   'MMR0-P6-PR41-R2-P2-003': 'INDEPENDENTLY_CLOSED',
   'MMR0-P6-PR41-R2-P2-004': 'REMAINS_FROZEN_CLOSED',
   'MMR0-P6-PR41-THIRD-R1-NEW-P2-003':
+    'REPAIRED_PENDING_INDEPENDENT_REVIEW',
+  'MMR0-P6-PR41-VALIDATOR-QA-R1-NEW-P2-001':
     'REPAIRED_PENDING_INDEPENDENT_REVIEW'
 });
 export const MODIFICATION_POLICY = Object.freeze({
   'MMR0-P6-PR41-R2-P2-003': 'FROZEN',
   'MMR0-P6-PR41-R2-P2-004': 'FROZEN',
-  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003': 'REPAIR_AUTHORIZED'
+  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003': 'REPAIR_AUTHORIZED',
+  'MMR0-P6-PR41-VALIDATOR-QA-R1-NEW-P2-001': 'REPAIR_AUTHORIZED'
 });
 export const EVIDENCE_TYPE = Object.freeze({
   'MMR0-P6-PR41-R2-P2-003':
@@ -41,7 +45,9 @@ export const EVIDENCE_TYPE = Object.freeze({
   'MMR0-P6-PR41-R2-P2-004':
     'FROZEN_CLIPPY_CONTROL_REFERENCE_V1',
   'MMR0-P6-PR41-THIRD-R1-NEW-P2-003':
-    'VALIDATOR_EVIDENCE_AUTHORITY_REPAIR_V1'
+    'VALIDATOR_TYPED_EVIDENCE_REPAIR_CONTINUITY_V1',
+  'MMR0-P6-PR41-VALIDATOR-QA-R1-NEW-P2-001':
+    'VALIDATOR_ADMISSION_AUTHORITY_REPAIR_V1'
 });
 export const REQUIRED_RECEIPT_IDS = Object.freeze([
   'D25',
@@ -69,17 +75,24 @@ export const REQUIRED_RECEIPT_IDS = Object.freeze([
   'WRONG_NESTED_TYPE'
 ]);
 
+export const RECEIPT_REPLAY_SPEC = Object.freeze(Object.fromEntries(
+  REQUIRED_RECEIPT_IDS.map((id) => [id, Object.freeze({
+    fixture_class: id,
+    expected_authoritative_outcome: 'REJECT'
+  })])
+));
+
 export const CANONICAL_FILE_NAMES = Object.freeze({
   contract:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Evidence_Authority_Contract_R1.yaml',
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Authority_Contract_R1.yaml',
   disposition:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Repair_Disposition_R1.yaml',
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Repair_Disposition_R1.yaml',
   evidence:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Repair_Adversarial_Evidence_R1.json',
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Repair_Adversarial_Evidence_R1.json',
   freeze:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Candidate_Identity_Freeze_R1.yaml',
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Candidate_Identity_Freeze_R1.yaml',
   validator:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Candidate_Validator_Result_R1.json'
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Candidate_Validator_Result_R1.json'
 });
 
 export function sha256(bytes) {
@@ -273,7 +286,7 @@ function assertExactArray(actual, expected, label) {
 
 export const CONTRACT_DOCUMENT = Object.freeze({
   artifact:
-    'MMR-0_TD2_R4_P6_PR41_Remaining_Validator_Evidence_Authority_Contract_R1',
+    'MMR-0_TD2_R4_P6_PR41_Validator_Admission_Authority_Contract_R1',
   schema: CONTRACT_SCHEMA,
   domain: CONTRACT_DOMAIN,
   version: CONTRACT_VERSION,
@@ -315,8 +328,19 @@ export const CONTRACT_DOCUMENT = Object.freeze({
     ]
   },
   execution_receipt_contract: {
-    derived_result: 'EXIT_NONZERO_AND_NO_PASS_ARTIFACT',
+    supplied_receipt_trust_class: 'CLAIMED_EVIDENCE',
+    replay_spec_authority: 'CONTRACT_AND_CANDIDATE_ONLY',
+    derived_result: 'REPLAY_EXIT_NONZERO_AND_NO_OUTPUT_ARTIFACT',
     required_receipt_ids: REQUIRED_RECEIPT_IDS
+  },
+  receipt_replay_contract: RECEIPT_REPLAY_SPEC,
+  authority_separation: {
+    admission_result: 'PASS_V0_4_STRUCTURAL_SEMANTIC_ADMISSION',
+    admission_execution_authority: false,
+    admission_current_candidate_authority: false,
+    full_result: 'PASS_CURRENT_V0_4_AUTHORITY_VALIDATION',
+    full_execution_authority: true,
+    full_replay_match_required: true
   },
   historical_reference_policy: {
     current_candidate_authority: false,
@@ -368,7 +392,7 @@ function validateClippyEvidence(evidence) {
   }
 }
 
-function validateValidatorEvidence(evidence, expectedManifestSha256) {
+function validateTypedContinuityEvidence(evidence, expectedManifestSha256) {
   assertExactKeys(evidence, [
     'attack_receipt_manifest_sha256', 'contract_sha256',
     'required_receipt_ids'
@@ -381,6 +405,28 @@ function validateValidatorEvidence(evidence, expectedManifestSha256) {
     evidence.required_receipt_ids,
     REQUIRED_RECEIPT_IDS,
     'VALIDATOR_REPAIR_RECEIPT_IDS'
+  );
+}
+
+function validateAdmissionAuthorityEvidence(evidence, expectedManifestSha256) {
+  assertExactKeys(evidence, [
+    'attack_receipt_manifest_sha256', 'contract_sha256',
+    'execution_authority_model', 'receipt_replay_contract_sha256',
+    'required_receipt_ids', 'single_blocker_closure_sha256'
+  ], 'VALIDATOR_ADMISSION_AUTHORITY_EVIDENCE');
+  if (evidence.contract_sha256 !== contractSha256()
+    || evidence.attack_receipt_manifest_sha256 !== expectedManifestSha256
+    || evidence.execution_authority_model !== 'V3_FULL_REPLAY_ONLY'
+    || evidence.receipt_replay_contract_sha256
+      !== canonicalSha256(RECEIPT_REPLAY_SPEC)
+    || evidence.single_blocker_closure_sha256
+      !== '03e5795615b304b0651ec79b6813cdab96a85f9b9eb28498470614e957b2be00') {
+    throw new Error('VALIDATOR_ADMISSION_AUTHORITY_EVIDENCE_SEMANTIC_MISMATCH');
+  }
+  assertExactArray(
+    evidence.required_receipt_ids,
+    REQUIRED_RECEIPT_IDS,
+    'VALIDATOR_ADMISSION_AUTHORITY_RECEIPT_IDS'
   );
 }
 
@@ -479,6 +525,17 @@ export function validateReceiptManifest(manifest, actual) {
   return canonicalSha256(manifest);
 }
 
+export function compareReceiptReplay(claimedManifest, replayedManifest) {
+  if (canonicalJson(claimedManifest) !== canonicalJson(replayedManifest)) {
+    throw new Error('EXECUTION_RECEIPT_REPLAY_MISMATCH');
+  }
+  return Object.freeze({
+    execution_authority: true,
+    replay_match: true,
+    replay_manifest_sha256: canonicalSha256(replayedManifest)
+  });
+}
+
 function validateSurface(surface, expected, label) {
   assertExactKeys(surface, ['count', 'exact_paths', 'sha256'], label);
   if (!Number.isInteger(surface.count) || surface.count < 0) {
@@ -560,7 +617,10 @@ export function validateAuthorityDocuments({
     if (id === FINDING_IDS[0]) validateRecoveryEvidence(entry.evidence);
     if (id === FINDING_IDS[1]) validateClippyEvidence(entry.evidence);
     if (id === FINDING_IDS[2]) {
-      validateValidatorEvidence(entry.evidence, manifestSha256);
+      validateTypedContinuityEvidence(entry.evidence, manifestSha256);
+    }
+    if (id === FINDING_IDS[3]) {
+      validateAdmissionAuthorityEvidence(entry.evidence, manifestSha256);
     }
     const expectedBinding = evidenceBinding({
       candidateCommit: actual.candidateCommit,
@@ -641,9 +701,9 @@ export function validateAuthorityDocuments({
   assertExactKeys(disposition.summary, [
     'remaining_merge_blockers', 'repair_authority'
   ], 'DISPOSITION_SUMMARY');
-  if (disposition.summary.remaining_merge_blockers !== 1
+  if (disposition.summary.remaining_merge_blockers !== 2
     || disposition.summary.repair_authority
-      !== 'VALIDATOR_EVIDENCE_AUTHORITY_ONLY') {
+      !== 'VALIDATOR_ADMISSION_AUTHORITY_ONLY') {
     throw new Error('DISPOSITION_SUMMARY_MISMATCH');
   }
   if (disposition.evidence_file !== CANONICAL_FILE_NAMES.evidence
