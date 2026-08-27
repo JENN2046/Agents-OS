@@ -178,10 +178,11 @@ fn canonical_mutation(fixture: &Cav4Fixture) -> Value {
             "mutation":{
                 "components":{
                     "authority":authority("MMR_STATE_CORE", "CREATE", &fixture.canonical_state_id),
-                    "content":{"value":json!({
+                    "content":{"value":{
                         "actionToken":fixture.canonical_action,
-                        "scenario":fixture.canonical_scenario
-                    }).to_string()},
+                        "scenario":fixture.canonical_scenario,
+                        "type":"MMR0_COGNITIVE_RULE_V1"
+                    }},
                     "lifecycle":{"epistemicState":"UNASSESSED","lifecycleState":"P2_B_CREATED"},
                     "plane":{
                         "claimScope":"MMR_STATE_CORE",
@@ -235,6 +236,81 @@ fn candidate_mutation(fixture: &Cav4Fixture) -> Value {
             },
             "operation":"PROPOSE_MMR_MUTATION_CORE"
         }
+    })
+}
+
+fn evidence_mutation(evidence_id: &str, operation_id: &str) -> Value {
+    json!({
+        "attachmentGeneration":1,
+        "request":{"mutation":{
+            "components":{
+                "authority":authority("EVIDENCE_STATE", "CREATE_EVIDENCE", evidence_id),
+                "content":{"value":{
+                    "artifactAvailability":"AVAILABLE",
+                    "derivationAncestors":[],
+                    "description":"independent supporting evidence for Candidate guard",
+                    "originRef":"origin:evidence:CAV4:independent"
+                }},
+                "lifecycle":{
+                    "epistemicState":"UNASSESSED",
+                    "lifecycleState":"P2_F_EVIDENCE_RECORDED"
+                },
+                "plane":{
+                    "claimScope":"EVIDENCE",
+                    "controllerRole":"NON_CONTROLLER",
+                    "interpretationOwnerRef":null,
+                    "objectKind":"EVIDENCE_STATE",
+                    "sharedEventStateId":null
+                },
+                "provenance":provenance(),
+                "transition":{
+                    "predecessorStateFingerprint":null,
+                    "supersedesStateFingerprint":null
+                }
+            },
+            "expectedCurrentFingerprint":null,
+            "mutationType":"CREATE_EVIDENCE",
+            "operationId":operation_id,
+            "targetStateId":evidence_id
+        },"operation":"PROPOSE_MMR_MUTATION_CORE"}
+    })
+}
+
+fn candidate_evidence_mutation(
+    fixture: &Cav4Fixture,
+    evidence_id: &str,
+    expected_candidate_fingerprint: &str,
+    operation_id: &str,
+) -> Value {
+    json!({
+        "attachmentGeneration":1,
+        "request":{"mutation":{
+            "components":{
+                "authority":authority(
+                    "CANDIDATE_STATE",
+                    "ADD_EVIDENCE",
+                    &fixture.candidate_id
+                ),
+                "content":{"value":{"supportingEvidenceRef":evidence_id}},
+                "lifecycle":{"epistemicState":"UNASSESSED","lifecycleState":"CANDIDATE"},
+                "plane":{
+                    "claimScope":"CANDIDATE",
+                    "controllerRole":"NON_CONTROLLER",
+                    "interpretationOwnerRef":null,
+                    "objectKind":"CANDIDATE_STATE",
+                    "sharedEventStateId":null
+                },
+                "provenance":provenance(),
+                "transition":{
+                    "predecessorStateFingerprint":expected_candidate_fingerprint,
+                    "supersedesStateFingerprint":expected_candidate_fingerprint
+                }
+            },
+            "expectedCurrentFingerprint":expected_candidate_fingerprint,
+            "mutationType":"ADD_EVIDENCE",
+            "operationId":operation_id,
+            "targetStateId":fixture.candidate_id
+        },"operation":"PROPOSE_MMR_MUTATION_CORE"}
     })
 }
 
@@ -544,5 +620,103 @@ fn p6d_stale_candidate_projection_and_fixture_leakage_fail_closed() {
                 "plugin-manifest.json.block"
             ]
         }),
+    );
+}
+
+#[test]
+fn p6d_candidate_minimal_basis_preserves_all_admitted_evidence_states() {
+    for (candidate_state, expected) in [
+        (
+            json!({
+                "motivatingEvidenceRef":null,
+                "supportingEvidenceFingerprint":null,
+                "supportingEvidenceRef":null
+            }),
+            "NO_INDEPENDENT_EVIDENCE",
+        ),
+        (
+            json!({
+                "motivatingEvidenceRef":"evidence:motivating",
+                "supportingEvidenceFingerprint":null,
+                "supportingEvidenceRef":null
+            }),
+            "MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION",
+        ),
+        (
+            json!({
+                "motivatingEvidenceRef":"evidence:motivating",
+                "supportingEvidenceFingerprint":"a".repeat(64),
+                "supportingEvidenceRef":"evidence:independent-support"
+            }),
+            "INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY",
+        ),
+    ] {
+        assert_eq!(
+            super::store::candidate_minimal_basis(candidate_state.as_object().unwrap())
+                .expect("valid Candidate evidence basis"),
+            expected
+        );
+    }
+    let inconsistent = json!({
+        "motivatingEvidenceRef":null,
+        "supportingEvidenceFingerprint":null,
+        "supportingEvidenceRef":"evidence:partial"
+    });
+    assert!(matches!(
+        super::store::candidate_minimal_basis(inconsistent.as_object().unwrap()),
+        Err(super::LocalOwnerError::StateCorrupt)
+    ));
+}
+
+#[test]
+fn p6d_admitted_supporting_evidence_is_projected_without_candidate_promotion() {
+    let fixture = Cav4Fixture::sealed();
+    let (_parent, restarted) = start_fresh(&fixture);
+    let evidence_id = "state:evidence:CAV4:independent-support";
+    let evidence_operation = "operation:CAV4:create-independent-support";
+    apply(
+        &restarted,
+        evidence_mutation(evidence_id, evidence_operation),
+        evidence_operation,
+    );
+    let candidate_before = query_candidate(&restarted, &fixture.candidate_id);
+    let predecessor = candidate_before["current"]["factFingerprint"]
+        .as_str()
+        .expect("Candidate fingerprint before evidence");
+    let add_operation = "operation:CAV4:add-independent-support";
+    apply(
+        &restarted,
+        candidate_evidence_mutation(&fixture, evidence_id, predecessor, add_operation),
+        add_operation,
+    );
+    let transcript = format!(
+        "Scenario {}. Evaluate the visible proposed rule safely.",
+        fixture.candidate_scenario
+    );
+    let projection = cognitive_query(
+        &restarted,
+        &fixture,
+        "fresh-session:CAV4:supporting-evidence",
+        &transcript,
+        None,
+    );
+    assert_eq!(projection["accepted"], true);
+    let candidate = &projection["projection"]["candidateProjection"][0];
+    assert_eq!(candidate["candidateStatus"], "CANDIDATE");
+    assert_eq!(candidate["adopted"], false);
+    assert_eq!(candidate["executionAuthority"], false);
+    assert_eq!(candidate["promotionAuthority"], false);
+    assert_eq!(
+        candidate["minimalBasis"],
+        "INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY"
+    );
+    let candidate_after = query_candidate(&restarted, &fixture.candidate_id);
+    assert_eq!(
+        candidate_after["current"]["state"]["candidateState"]["status"],
+        "CANDIDATE"
+    );
+    assert_eq!(
+        candidate_after["current"]["state"]["candidateState"]["supportingEvidenceRef"],
+        evidence_id
     );
 }

@@ -117,7 +117,13 @@ function mutation(stateId, operationId, scenario, actionToken) {
               targetStateId: stateId
             }
           },
-          content: { value: JSON.stringify({ actionToken, scenario }) },
+          content: {
+            value: {
+              actionToken,
+              scenario,
+              type: 'MMR0_COGNITIVE_RULE_V1'
+            }
+          },
           lifecycle: {
             epistemicState: EPISTEMIC_STATE,
             lifecycleState: LIFECYCLE_STATE

@@ -149,6 +149,18 @@ fn provenance() -> Value {
 }
 
 fn mutation(state_id: &str, operation_id: &str, scenario: &str, action: &str) -> Value {
+    mutation_with_value(
+        state_id,
+        operation_id,
+        json!({
+            "actionToken":action,
+            "scenario":scenario,
+            "type":"MMR0_COGNITIVE_RULE_V1"
+        }),
+    )
+}
+
+fn mutation_with_value(state_id: &str, operation_id: &str, content_value: Value) -> Value {
     json!({
         "attachmentGeneration": 1,
         "request": {
@@ -167,7 +179,7 @@ fn mutation(state_id: &str, operation_id: &str, scenario: &str, action: &str) ->
                             "targetStateId": state_id
                         }
                     },
-                    "content": {"value": json!({"actionToken":action,"scenario":scenario}).to_string()},
+                    "content": {"value": content_value},
                     "lifecycle": {
                         "epistemicState": EPISTEMIC_STATE,
                         "lifecycleState": LIFECYCLE_STATE
@@ -213,6 +225,24 @@ fn apply_rule(
             "transcript": prepared["consentPrompt"]
         }))
         .expect("commit CAV2 rule");
+    assert_eq!(
+        applied["result"]["resultCode"],
+        "APPLIED_LOCALLY_NOT_MMR_COMMITTED_PROOF"
+    );
+}
+
+fn apply_value(kernel: &LocalOwnerKernel, state_id: &str, operation_id: &str, value: Value) {
+    let prepared = kernel
+        .prepare_mmr_mutation(mutation_with_value(state_id, operation_id, value))
+        .expect("prepare ordinary/declared Current");
+    let applied = kernel
+        .submit_mmr_consent(json!({
+            "attachmentGeneration": 1,
+            "ingress": "TYPED_TEXT",
+            "operationId": operation_id,
+            "transcript": prepared["consentPrompt"]
+        }))
+        .expect("commit ordinary/declared Current");
     assert_eq!(
         applied["result"]["resultCode"],
         "APPLIED_LOCALLY_NOT_MMR_COMMITTED_PROOF"
@@ -426,4 +456,112 @@ fn p6b_stale_generation_fails_closed_after_canonical_change() {
     assert!(stale.get("projection").is_none());
     assert!(stale["currentProjectionGeneration"].as_u64().unwrap() > old_generation);
     write_evidence("stale_projection_rejection.json", &stale);
+}
+
+#[test]
+fn p6b_typed_rule_lane_ignores_ordinary_current_and_honors_bounded_visibility() {
+    let fixture = Cav2Fixture::sealed();
+    let (_parent, restarted) = start_fresh(&fixture);
+    let ordinary_state = "state:cav2:ordinary-current";
+    apply_value(
+        &restarted,
+        ordinary_state,
+        "operation:CAV2:ordinary-current",
+        json!("a lawful ordinary Current with no cognitive rule semantics"),
+    );
+    apply_value(
+        &restarted,
+        "state:cav2:ordinary-object",
+        "operation:CAV2:ordinary-object",
+        json!({"scenario":fixture.z,"type":"ORDINARY_PROFILE_VALUE"}),
+    );
+    let transcript = format!("Scenario {}. Return the admitted mapping.", fixture.z);
+    let visible = restarted
+        .query_mmr_core(json!({
+            "operation":"QUERY_MMR_COGNITIVE_CONTEXT",
+            "query":{
+                "expectedProjectionGeneration":null,
+                "freshSessionId":"fresh-session:CAV2:typed-lane-visible",
+                "projectionPlan":{"items":[
+                    {"rank":1,"stateId":ordinary_state,"visible":true},
+                    {"rank":2,"stateId":fixture.positive_state_id,"visible":true}
+                ],"retrieved":[]},
+                "responseContract":RESPONSE_CONTRACT,
+                "scenario":fixture.z,
+                "transcriptDigest":sha256_hex(transcript.as_bytes())
+            }
+        }))
+        .expect("ordinary Current must not corrupt typed cognitive scan");
+    assert_eq!(visible["accepted"], true);
+    assert_eq!(
+        visible["projection"]["effectiveProjection"]
+            .as_array()
+            .unwrap()
+            .len(),
+        1
+    );
+    assert_eq!(
+        visible["projection"]["effectiveProjection"][0]["actionToken"],
+        fixture.r
+    );
+
+    for (session, items) in [
+        (
+            "fresh-session:CAV2:typed-lane-hidden",
+            json!([{"rank":1,"stateId":fixture.positive_state_id,"visible":false}]),
+        ),
+        (
+            "fresh-session:CAV2:typed-lane-omitted",
+            json!([{"rank":1,"stateId":ordinary_state,"visible":true}]),
+        ),
+    ] {
+        let unavailable = restarted
+            .query_mmr_core(json!({
+                "operation":"QUERY_MMR_COGNITIVE_CONTEXT",
+                "query":{
+                    "expectedProjectionGeneration":null,
+                    "freshSessionId":session,
+                    "projectionPlan":{"items":items,"retrieved":[]},
+                    "responseContract":RESPONSE_CONTRACT,
+                    "scenario":fixture.z,
+                    "transcriptDigest":sha256_hex(transcript.as_bytes())
+                }
+            }))
+            .expect("bounded omission must fail closed without global autofill");
+        assert_eq!(unavailable["accepted"], false);
+        assert_eq!(
+            unavailable["resultCode"],
+            "CURRENT_STATE_NOT_COGNITIVELY_AVAILABLE"
+        );
+    }
+}
+
+#[test]
+fn p6b_malformed_explicit_cognitive_rule_fails_as_corrupt() {
+    let fixture = Cav2Fixture::sealed();
+    let (_parent, restarted) = start_fresh(&fixture);
+    apply_value(
+        &restarted,
+        "state:cav2:malformed-declared-rule",
+        "operation:CAV2:malformed-declared-rule",
+        json!({"scenario":fixture.z,"type":"MMR0_COGNITIVE_RULE_V1"}),
+    );
+    let error = restarted
+        .query_mmr_core(json!({
+            "operation":"QUERY_MMR_COGNITIVE_CONTEXT",
+            "query":{
+                "expectedProjectionGeneration":null,
+                "freshSessionId":"fresh-session:CAV2:malformed-declared-rule",
+                "projectionPlan":{"items":[{
+                    "rank":1,
+                    "stateId":fixture.positive_state_id,
+                    "visible":true
+                }],"retrieved":[]},
+                "responseContract":RESPONSE_CONTRACT,
+                "scenario":fixture.z,
+                "transcriptDigest":sha256_hex(b"malformed declared rule")
+            }
+        }))
+        .expect_err("malformed explicitly declared rule must fail closed");
+    assert!(matches!(error, super::LocalOwnerError::StateCorrupt));
 }

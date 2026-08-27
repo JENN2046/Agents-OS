@@ -24,26 +24,28 @@ function git(args, options = {}) {
   });
 }
 
-function diagnosticCounts(packageRoot, targetRoot) {
-  const run = spawnSync(
-    'cargo',
-    ['clippy', '--all-targets', '--message-format=json', '--', '-D', 'warnings'],
-    {
-      cwd: packageRoot,
-      encoding: 'utf8',
-      env: { ...process.env, CARGO_TARGET_DIR: targetRoot },
-      maxBuffer: 128 * 1024 * 1024
-    }
-  );
-  const counts = new Map();
+export function parseClippyRun(run) {
+  if (run.error !== undefined || !Number.isInteger(run.status)) {
+    throw new Error('CLIPPY_COMPARISON_INFRASTRUCTURE_FAILURE');
+  }
+  const messages = [];
   for (const line of run.stdout.split('\n')) {
     if (line.length === 0) continue;
-    let message;
     try {
-      message = JSON.parse(line);
+      messages.push(JSON.parse(line));
     } catch {
-      continue;
+      throw new Error('CLIPPY_COMPARISON_INFRASTRUCTURE_FAILURE');
     }
+  }
+  const buildFinished = messages.filter(
+    (message) => message.reason === 'build-finished'
+  );
+  const compilerReached = messages.some((message) => (
+    message.reason === 'compiler-message'
+    || message.reason === 'compiler-artifact'
+  ));
+  const counts = new Map();
+  for (const message of messages) {
     if (message.reason !== 'compiler-message'
       || message.message?.level !== 'error') {
       continue;
@@ -58,7 +60,32 @@ function diagnosticCounts(packageRoot, targetRoot) {
     });
     counts.set(identity, (counts.get(identity) ?? 0) + 1);
   }
+  const errorCount = [...counts.values()].reduce((sum, value) => sum + value, 0);
+  const successfulBuild = run.status === 0
+    && buildFinished.length === 1
+    && buildFinished[0].success === true;
+  const expectedLintFailure = run.status !== 0
+    && buildFinished.length === 1
+    && buildFinished[0].success === false
+    && errorCount > 0;
+  if (!compilerReached || (!successfulBuild && !expectedLintFailure)) {
+    throw new Error('CLIPPY_COMPARISON_INFRASTRUCTURE_FAILURE');
+  }
   return { counts, exitCode: run.status ?? 1 };
+}
+
+function diagnosticCounts(packageRoot, targetRoot) {
+  const run = spawnSync(
+    'cargo',
+    ['clippy', '--all-targets', '--message-format=json', '--', '-D', 'warnings'],
+    {
+      cwd: packageRoot,
+      encoding: 'utf8',
+      env: { ...process.env, CARGO_TARGET_DIR: targetRoot },
+      maxBuffer: 128 * 1024 * 1024
+    }
+  );
+  return parseClippyRun(run);
 }
 
 function addedDiagnostics(base, candidate) {

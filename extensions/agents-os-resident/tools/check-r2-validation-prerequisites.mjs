@@ -32,6 +32,16 @@ const CHAT_FILES = Object.freeze([
   'styles/messageRenderer.css',
   'node_modules/jsdom/package.json'
 ]);
+export const EXPECTED_R2_PREREQUISITES = Object.freeze({
+  VCPChat: Object.freeze({
+    identityOrCommit: 'f743b88b631fae761d68275abd2b131fa92f59ef',
+    sourceBundleSha256: 'ae719c7c228fd7dcce5156e3ce2c59e63f43778a6fa3cc5594d819b339fb65c0'
+  }),
+  VCPToolBox: Object.freeze({
+    identityOrCommit: '028bb4747c148cddf7545421aeced5a261bba8b7',
+    sourceBundleSha256: 'fd4fe5dfb2445c9ce9e4482182c00fba2a1edd4a771cafe9042d513b2f5a2434'
+  })
+});
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -65,8 +75,39 @@ function sourceBundle(root, paths) {
   };
 }
 
-export function checkR2ValidationPrerequisites(environment = process.env) {
+function selectedSourceStatus(root, paths) {
+  try {
+    const porcelain = execFileSync('git', ['status', '--porcelain', '--', ...paths], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    });
+    return Object.freeze({
+      dirtyPolicy: 'HASH_BIND_EXACT_EXERCISED_BYTES',
+      statusSha256: sha256(Buffer.from(porcelain, 'utf8')),
+      worktreeClean: porcelain.length === 0
+    });
+  } catch {
+    throw new Error('GIT_STATUS_UNAVAILABLE');
+  }
+}
+
+export function enforceExpectedRepository(label, actual, expected) {
+  if (actual.identityOrCommit !== expected.identityOrCommit) {
+    throw new Error(`${label}_COMMIT_MISMATCH`);
+  }
+  if (actual.sourceBundle.sha256 !== expected.sourceBundleSha256) {
+    throw new Error(`${label}_SOURCE_BUNDLE_MISMATCH`);
+  }
+  return actual;
+}
+
+export function checkR2ValidationPrerequisites(
+  environment = process.env,
+  expected = EXPECTED_R2_PREREQUISITES
+) {
   const workspaceRoot = environment.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT;
+  const declaredChatRoot = environment.AGENTS_OS_RESIDENT_VCPCHAT_ROOT;
   const recoveryRoot = environment.MMR_P4A_RECOVERY_DOMAIN;
   if (typeof workspaceRoot !== 'string' || workspaceRoot.length === 0) {
     throw new Error('WORKSPACE_ROOT_UNDECLARED');
@@ -74,9 +115,15 @@ export function checkR2ValidationPrerequisites(environment = process.env) {
   if (typeof recoveryRoot !== 'string' || recoveryRoot.length === 0) {
     throw new Error('RECOVERY_DOMAIN_UNDECLARED');
   }
+  if (typeof declaredChatRoot !== 'string' || declaredChatRoot.length === 0) {
+    throw new Error('VCPCHAT_ROOT_UNDECLARED');
+  }
   const canonicalWorkspace = resolve(workspaceRoot);
   const hostRoot = resolve(canonicalWorkspace, 'runtime/VCPToolBox');
   const chatRoot = resolve(canonicalWorkspace, 'runtime/VCPChat');
+  if (resolve(declaredChatRoot) !== chatRoot) {
+    throw new Error('VCPCHAT_CHECKED_ROOT_NOT_EXERCISED_ROOT');
+  }
   const recovery = resolve(recoveryRoot);
   const recoveryStat = statSync(recovery);
   if (!recoveryStat.isDirectory()
@@ -92,6 +139,16 @@ export function checkR2ValidationPrerequisites(environment = process.env) {
   } finally {
     rmSync(probe, { recursive: true, force: true });
   }
+  const chat = enforceExpectedRepository('VCPCHAT', {
+    identityOrCommit: repositoryIdentity(chatRoot),
+    sourceBundle: sourceBundle(chatRoot, CHAT_FILES),
+    selectedSourceStatus: selectedSourceStatus(chatRoot, CHAT_FILES)
+  }, expected.VCPChat);
+  const host = enforceExpectedRepository('VCPTOOLBOX', {
+    identityOrCommit: repositoryIdentity(hostRoot),
+    sourceBundle: sourceBundle(hostRoot, HOST_FILES),
+    selectedSourceStatus: selectedSourceStatus(hostRoot, HOST_FILES)
+  }, expected.VCPToolBox);
   return Object.freeze({
     result: 'R2_VALIDATION_PREREQUISITES_AVAILABLE',
     recoveryDomain: {
@@ -104,13 +161,10 @@ export function checkR2ValidationPrerequisites(environment = process.env) {
       ]
     },
     VCPChat: {
-      identityOrCommit: repositoryIdentity(chatRoot),
-      sourceBundle: sourceBundle(chatRoot, CHAT_FILES)
+      ...chat,
+      checkedRootMatchesExercisedRoot: true
     },
-    VCPToolBox: {
-      identityOrCommit: repositoryIdentity(hostRoot),
-      sourceBundle: sourceBundle(hostRoot, HOST_FILES)
-    }
+    VCPToolBox: host
   });
 }
 

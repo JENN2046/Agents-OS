@@ -153,10 +153,11 @@ fn mutation(fixture: &Cav3Fixture) -> Value {
                             "targetStateId": fixture.positive_state_id
                         }
                     },
-                    "content": {"value": json!({
+                    "content": {"value": {
                         "actionToken": fixture.positive_action,
-                        "scenario": fixture.positive_scenario
-                    }).to_string()},
+                        "scenario": fixture.positive_scenario,
+                        "type": "MMR0_COGNITIVE_RULE_V1"
+                    }},
                     "lifecycle": {
                         "epistemicState": EPISTEMIC_STATE,
                         "lifecycleState": LIFECYCLE_STATE

@@ -139,7 +139,13 @@ function canonicalMutation(stateId, operationId, scenario, actionToken) {
       mutation: {
         components: {
           authority: authority('MMR_STATE_CORE', 'CREATE', stateId),
-          content: { value: JSON.stringify({ actionToken, scenario }) },
+          content: {
+            value: {
+              actionToken,
+              scenario,
+              type: 'MMR0_COGNITIVE_RULE_V1'
+            }
+          },
           lifecycle: {
             epistemicState: 'UNASSESSED',
             lifecycleState: 'P2_B_CREATED'

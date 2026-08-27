@@ -30,6 +30,7 @@ const PRODUCTION_ENTRYPOINTS = Object.freeze([
   'index.js',
   'companion/adapter.js',
   'companion/client.js',
+  'companion/probe.js',
   'companion/resident-daemon.js',
   'companion/server.js'
 ]);

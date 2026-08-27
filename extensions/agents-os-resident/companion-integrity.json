@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:f866520060385e9144c8d7698adc84407d6adccbaea0aad67f0ab3668c552c85",
+  "buildId": "sha256:387f1aed968051213b4a22e5522c0bcc804b6f9ae8ab4b765105b579be632311",
   "files": [
     {
       "path": "activation.js",
@@ -10,8 +10,8 @@
     },
     {
       "path": "agents-os-resident.linux-x64-gnu.node",
-      "byteLength": 5575040,
-      "sha256": "476b39586e07b37a852acfce5ed0947e0dc524cb7f0058a541d60b65708fdc3b"
+      "byteLength": 5575472,
+      "sha256": "f573254e0c45c1b984796b075b74a9a45895bb9a411285d21e3ea85eb8250563"
     },
     {
       "path": "companion/adapter.js",
@@ -25,8 +25,8 @@
     },
     {
       "path": "companion/cognitive-context.js",
-      "byteLength": 16219,
-      "sha256": "3292677c6a4fa750ca6b084ce001039fb4f54c06fb812fad877fe9ebda4a5663"
+      "byteLength": 16332,
+      "sha256": "3c4a68fe8933a1a7bde0f24c93e0b8034a2a0b5d6664cd6a554b29e96b76a61c"
     },
     {
       "path": "companion/constants.js",
@@ -42,6 +42,11 @@
       "path": "companion/integrity.js",
       "byteLength": 4561,
       "sha256": "e50bf57d2f65af08fc59c8138ca728dc913f440c6fbf86a417fdf6198e709580"
+    },
+    {
+      "path": "companion/probe.js",
+      "byteLength": 2409,
+      "sha256": "9b7cc98838a7d9379e926bb98c8142acdacfd7fcfcb1fb627936100bcaebc849"
     },
     {
       "path": "companion/protocol.js",
@@ -70,8 +75,8 @@
     },
     {
       "path": "package.json",
-      "byteLength": 3276,
-      "sha256": "caebfcefc8dbb1f7c3ca9398e1069eac06fc3ad91309acedc1c2acc4dc909023"
+      "byteLength": 3418,
+      "sha256": "f35c09559703e5c3e9100a761fe0b890473e9459d64e1f9469f2727da73c4dbf"
     },
     {
       "path": "plugin-manifest.json.block",
@@ -85,8 +90,8 @@
     },
     {
       "path": "tools/build-companion-integrity.mjs",
-      "byteLength": 5397,
-      "sha256": "38ad1bbabb7ceaa735ce997e36d00ee0b60be945791cf2e123b98daf93e7aef9"
+      "byteLength": 5421,
+      "sha256": "dd5ec441b217b5a14fa813c5dc9ba613e6c2a0a269bfac1ea84217b26ba24629"
     },
     {
       "path": "tools/render-systemd-unit.mjs",

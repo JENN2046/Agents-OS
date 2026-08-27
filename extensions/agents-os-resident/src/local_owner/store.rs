@@ -60,6 +60,7 @@ const SUPPORT_STATE_SUPPORTED: &str = "SUPPORTED";
 const SUPPORT_STATE_UNSUPPORTED: &str = "UNSUPPORTED";
 const SUPPORT_STATE_UNKNOWN: &str = "UNKNOWN";
 const COGNITIVE_PROJECTION_SCHEMA: &str = "MMR0_COGNITIVE_PROJECTION_V1";
+const COGNITIVE_RULE_TYPE: &str = "MMR0_COGNITIVE_RULE_V1";
 const COGNITIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV2_STRUCTURED_RESPONSE_V1";
 const COGNITIVE_NEGATIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV3_UNKNOWN_RESPONSE_V1";
 const COGNITIVE_CANDIDATE_RESPONSE_CONTRACT: &str =
@@ -2494,10 +2495,29 @@ fn recall_projection(connection: &Connection, query: &Value) -> Result<Value, Lo
     }))
 }
 
-fn canonical_cognitive_rules_for_scenario(
+fn declared_cognitive_rule(value: &Value) -> Result<Option<(String, String)>, LocalOwnerError> {
+    let Some(object) = value.as_object() else {
+        return Ok(None);
+    };
+    if object.get("type").and_then(Value::as_str) != Some(COGNITIVE_RULE_TYPE) {
+        return Ok(None);
+    }
+    let rule = require_exact_object(value, &["actionToken", "scenario", "type"])
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    Ok(Some((
+        require_nonempty_string(rule, "actionToken", 512)
+            .map_err(|_| LocalOwnerError::StateCorrupt)?
+            .to_owned(),
+        require_nonempty_string(rule, "scenario", 512)
+            .map_err(|_| LocalOwnerError::StateCorrupt)?
+            .to_owned(),
+    )))
+}
+
+fn canonical_cognitive_rule_count_for_scenario(
     connection: &Connection,
     scenario: &str,
-) -> Result<Vec<Value>, LocalOwnerError> {
+) -> Result<usize, LocalOwnerError> {
     let mut statement = connection.prepare(
         "SELECT p.logical_id,p.current_fact_fingerprint,p.current_fact_revision,f.canonical_bytes FROM current_pointer p JOIN canonical_fact f ON f.fact_kind=p.fact_kind AND f.logical_id=p.logical_id AND f.fact_revision=p.current_fact_revision WHERE p.fact_kind=?1 ORDER BY p.logical_id",
     )?;
@@ -2509,75 +2529,104 @@ fn canonical_cognitive_rules_for_scenario(
             row.get::<_, Vec<u8>>(3)?,
         ))
     })?;
-    let mut projection = Vec::new();
+    let mut count = 0;
     for row in rows {
-        let (state_id, fingerprint, revision, canonical_bytes) = row?;
-        let state: Value = serde_json::from_slice(&canonical_bytes)
-            .map_err(|_| LocalOwnerError::StateCorrupt)?;
+        let (_state_id, _fingerprint, _revision, canonical_bytes) = row?;
+        let state: Value =
+            serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
         let components = state["components"]
             .as_object()
             .ok_or(LocalOwnerError::StateCorrupt)?;
-        let content_value = components["content"]["value"]
-            .as_str()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        let rule: Value = serde_json::from_str(content_value)
-            .map_err(|_| LocalOwnerError::StateCorrupt)?;
-        let rule = require_exact_object(&rule, &["actionToken", "scenario"])
-            .map_err(|_| LocalOwnerError::StateCorrupt)?;
-        let projected_scenario = require_nonempty_string(rule, "scenario", 512)
-            .map_err(|_| LocalOwnerError::StateCorrupt)?;
-        if projected_scenario != scenario {
-            continue;
+        if let Some((_action_token, projected_scenario)) =
+            declared_cognitive_rule(&components["content"]["value"])?
+            && projected_scenario == scenario
+        {
+            count += 1;
         }
-        let provenance = components["provenance"]
-            .as_object()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        let source = provenance["source"]
-            .as_object()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        let subject = provenance["subject"]
-            .as_object()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        let lifecycle = components["lifecycle"]
-            .as_object()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        let authority = components["authority"]
-            .as_object()
-            .ok_or(LocalOwnerError::StateCorrupt)?;
-        projection.push(json!({
-            "actionToken": require_nonempty_string(rule, "actionToken", 512)
-                .map_err(|_| LocalOwnerError::StateCorrupt)?,
-            "admitted": true,
-            "admittedStateIdentity": fingerprint,
-            "authorityBasisRef": require_nonempty_string(
-                authority,
-                "authorityBasisRef",
-                300,
-            )?,
-            "authorityBasisType": require_nonempty_string(
-                authority,
-                "authorityBasisType",
-                64,
-            )?,
-            "epistemicState": require_nonempty_string(
-                lifecycle,
-                "epistemicState",
-                64,
-            )?,
-            "lifecycleState": require_nonempty_string(
-                lifecycle,
-                "lifecycleState",
-                64,
-            )?,
-            "revision": as_u64(revision)?,
-            "scenario": projected_scenario,
-            "sourceRef": require_nonempty_string(source, "ref", 300)?,
-            "sourceType": require_nonempty_string(source, "type", 64)?,
-            "stateId": state_id,
-            "subjectRef": require_nonempty_string(subject, "ref", 300)?,
-        }));
     }
-    Ok(projection)
+    Ok(count)
+}
+
+fn projected_cognitive_rule(
+    connection: &Connection,
+    item: &Value,
+    scenario: Option<&str>,
+) -> Result<Option<Value>, LocalOwnerError> {
+    if item["admitted"] != true
+        || item["visible"] != true
+        || item["factKind"] != MMR_STATE_FACT_KIND
+    {
+        return Ok(None);
+    }
+    let state_id = item["stateId"]
+        .as_str()
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    let current = read_mmr_current(connection, state_id)?.ok_or(LocalOwnerError::StateCorrupt)?;
+    let Some((action_token, projected_scenario)) =
+        declared_cognitive_rule(&current["state"]["components"]["content"]["value"])?
+    else {
+        return Ok(None);
+    };
+    if scenario.is_some_and(|expected| projected_scenario != expected) {
+        return Ok(None);
+    }
+    Ok(Some(json!({
+        "actionToken": action_token,
+        "admitted": true,
+        "admittedStateIdentity": item["factFingerprint"],
+        "authorityBasisRef": item["authorityBasisRef"],
+        "authorityBasisType": item["authorityBasisType"],
+        "epistemicState": item["epistemicState"],
+        "lifecycleState": item["lifecycleState"],
+        "revision": item["revision"],
+        "scenario": projected_scenario,
+        "sourceRef": item["sourceRef"],
+        "sourceType": item["sourceType"],
+        "stateId": state_id,
+        "subjectRef": item["subjectRef"],
+    })))
+}
+
+pub(super) fn candidate_minimal_basis(
+    candidate_state: &Map<String, Value>,
+) -> Result<&'static str, LocalOwnerError> {
+    let supporting_ref_present = !candidate_state["supportingEvidenceRef"].is_null();
+    let supporting_fingerprint_present =
+        !candidate_state["supportingEvidenceFingerprint"].is_null();
+    if supporting_ref_present != supporting_fingerprint_present {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    if supporting_ref_present {
+        Ok("INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY")
+    } else if candidate_state["motivatingEvidenceRef"].is_null() {
+        Ok("NO_INDEPENDENT_EVIDENCE")
+    } else {
+        Ok("MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION")
+    }
+}
+
+fn candidate_initial_description(
+    connection: &Connection,
+    candidate_id: &str,
+) -> Result<String, LocalOwnerError> {
+    let canonical_bytes: Vec<u8> = connection
+        .query_row(
+            "SELECT canonical_bytes FROM canonical_fact WHERE fact_kind=?1 AND logical_id=?2 AND fact_revision=1",
+            params![CANDIDATE_FACT_KIND, candidate_id],
+            |row| row.get(0),
+        )
+        .optional()?
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    let initial: Value =
+        serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+    if initial["mutationType"] != "CREATE_CANDIDATE" {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    initial["components"]["content"]["value"]["description"]
+        .as_str()
+        .filter(|description| !description.is_empty())
+        .map(str::to_owned)
+        .ok_or(LocalOwnerError::StateCorrupt)
 }
 
 /// P6-B bounded cognitive projection for a genuinely fresh Host session.
@@ -2666,10 +2715,21 @@ fn cognitive_context_projection(
             excluded_state_ids.push(state_id.to_owned());
         }
     }
-    let effective_projection = canonical_cognitive_rules_for_scenario(connection, scenario)?;
-    let expected_projection_count =
-        usize::from(response_contract == COGNITIVE_RESPONSE_CONTRACT);
-    if effective_projection.len() != expected_projection_count {
+    let canonical_match_count = canonical_cognitive_rule_count_for_scenario(connection, scenario)?;
+    let mut effective_projection = Vec::new();
+    if response_contract == COGNITIVE_RESPONSE_CONTRACT {
+        for item in projected_items {
+            if let Some(rule) = projected_cognitive_rule(connection, item, Some(scenario))? {
+                effective_projection.push(rule);
+            }
+        }
+    }
+    let available = if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+        canonical_match_count == 0
+    } else {
+        effective_projection.len() == 1
+    };
+    if !available {
         return Ok(json!({
             "accepted": false,
             "freshSessionId": fresh_session_id,
@@ -2764,18 +2824,12 @@ fn candidate_cognitive_context_projection(
             .ok_or(LocalOwnerError::StateCorrupt)?;
         match item["factKind"].as_str() {
             Some(MMR_STATE_FACT_KIND) => {
-                let current = read_mmr_current(connection, state_id)?
-                    .ok_or(LocalOwnerError::StateCorrupt)?;
-                let content_value = current["state"]["components"]["content"]["value"]
-                    .as_str()
-                    .ok_or(LocalOwnerError::StateCorrupt)?;
-                let rule: Value = serde_json::from_str(content_value)
-                    .map_err(|_| LocalOwnerError::StateCorrupt)?;
-                let rule = require_exact_object(&rule, &["actionToken", "scenario"])
-                    .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                let Some(rule) = projected_cognitive_rule(connection, item, None)? else {
+                    excluded_state_ids.push(state_id.to_owned());
+                    continue;
+                };
                 canonical_projection.push(json!({
-                    "actionToken": require_nonempty_string(rule, "actionToken", 512)
-                        .map_err(|_| LocalOwnerError::StateCorrupt)?,
+                    "actionToken": rule["actionToken"],
                     "admitted": true,
                     "admittedStateIdentity": item["factFingerprint"],
                     "adopted": true,
@@ -2785,8 +2839,7 @@ fn candidate_cognitive_context_projection(
                     "lifecycleState": item["lifecycleState"],
                     "memoryStatus": "ADOPTED_CURRENT",
                     "revision": item["revision"],
-                    "scenario": require_nonempty_string(rule, "scenario", 512)
-                        .map_err(|_| LocalOwnerError::StateCorrupt)?,
+                    "scenario": rule["scenario"],
                     "sourceRef": item["sourceRef"],
                     "sourceType": item["sourceType"],
                     "stateId": state_id,
@@ -2805,17 +2858,12 @@ fn candidate_cognitive_context_projection(
                     excluded_state_ids.push(state_id.to_owned());
                     continue;
                 }
-                let description = current["state"]["components"]["content"]["value"]
-                    ["description"]
-                    .as_str()
-                    .ok_or(LocalOwnerError::StateCorrupt)?;
-                let proposed_rule: Value = serde_json::from_str(description)
+                let description = candidate_initial_description(connection, state_id)?;
+                let proposed_rule: Value = serde_json::from_str(&description)
                     .map_err(|_| LocalOwnerError::StateCorrupt)?;
-                let proposed_rule = require_exact_object(
-                    &proposed_rule,
-                    &["proposedActionToken", "scenario"],
-                )
-                .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                let proposed_rule =
+                    require_exact_object(&proposed_rule, &["proposedActionToken", "scenario"])
+                        .map_err(|_| LocalOwnerError::StateCorrupt)?;
                 let proposed_scenario = require_nonempty_string(proposed_rule, "scenario", 512)
                     .map_err(|_| LocalOwnerError::StateCorrupt)?;
                 if proposed_scenario != scenario {
@@ -2828,11 +2876,7 @@ fn candidate_cognitive_context_projection(
                 let fact_fingerprint = item["factFingerprint"]
                     .as_str()
                     .ok_or(LocalOwnerError::StateCorrupt)?;
-                let minimal_basis = if candidate_state["motivatingEvidenceRef"].is_null() {
-                    "NO_INDEPENDENT_EVIDENCE"
-                } else {
-                    "MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION"
-                };
+                let minimal_basis = candidate_minimal_basis(candidate_state)?;
                 candidate_projection.push(json!({
                     "adopted": false,
                     "candidateDigest": format!("sha256:{fact_fingerprint}"),

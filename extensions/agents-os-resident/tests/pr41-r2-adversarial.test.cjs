@@ -43,6 +43,25 @@ function copyIntegrityProjection(root) {
   return manifest;
 }
 
+function assertIntegrityTamper(relativePath) {
+  const root = mkdtempSync(path.join(tmpdir(), 'resident-r2-integrity-tamper-'));
+  chmodSync(root, 0o700);
+  try {
+    copyIntegrityProjection(root);
+    const target = path.join(root, relativePath);
+    writeFileSync(target, Buffer.concat([
+      readFileSync(target),
+      Buffer.from('\n// R2 adversarial tamper\n', 'utf8')
+    ]));
+    assert.throws(
+      () => verifyCompanionIntegrity({ packageRoot: root }),
+      /RESIDENT_INTEGRITY_MISMATCH/u
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
 function candidateFixture(overrides = {}) {
   const scenario = 'scenario-r2-candidate-guard';
   const transcript = `Scenario ${scenario}. Evaluate the visible proposal safely.`;
@@ -133,7 +152,7 @@ function independentCandidateOracle(candidate, structuredResponse) {
   }
 }
 
-test('R2 integrity closure detects cognition tamper and stages a loadable adapter', () => {
+test('R2 integrity closure covers every independent production entrypoint', () => {
   const root = mkdtempSync(path.join(tmpdir(), 'resident-r2-integrity-'));
   chmodSync(root, 0o700);
   try {
@@ -144,6 +163,12 @@ test('R2 integrity closure detects cognition tamper and stages a loadable adapte
       )),
       true
     );
+    assert.equal(
+      manifest.files.some(({ path: relativePath }) => (
+        relativePath === 'companion/probe.js'
+      )),
+      true
+    );
     assert.equal(verifyCompanionIntegrity({ packageRoot: root }).buildId,
       manifest.buildId);
     const stagedRequire = createRequire(path.join(root, 'package.json'));
@@ -151,17 +176,19 @@ test('R2 integrity closure detects cognition tamper and stages a loadable adapte
       typeof stagedRequire('./companion/adapter.js').createResidentAdapter,
       'function'
     );
-    const cognitivePath = path.join(root, 'companion/cognitive-context.js');
-    writeFileSync(cognitivePath, Buffer.concat([
-      readFileSync(cognitivePath),
-      Buffer.from('\n// R2 adversarial tamper\n', 'utf8')
-    ]));
-    assert.throws(
-      () => verifyCompanionIntegrity({ packageRoot: root }),
-      /RESIDENT_INTEGRITY_MISMATCH/u
+    assert.equal(
+      typeof stagedRequire('./companion/probe.js').runProbe,
+      'function'
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
+  }
+  for (const relativePath of [
+    'companion/adapter.js',
+    'companion/cognitive-context.js',
+    'companion/probe.js'
+  ]) {
+    assertIntegrityTamper(relativePath);
   }
 });
 
@@ -218,4 +245,28 @@ test('R2 resolver rejects wrong generation, wrong contract and authority-bearing
       /RESIDENT_COGNITIVE_CONTEXT_REJECTED/u
     );
   }
+  for (const minimalBasis of [
+    'NO_INDEPENDENT_EVIDENCE',
+    'MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION',
+    'INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY'
+  ]) {
+    const supported = candidateFixture({ minimalBasis });
+    assert.equal(
+      resolveCognitiveContext(
+        supported.projectionResult,
+        supported.config,
+        supported.transcript
+      ).structuredResponse.minimalBasis,
+      minimalBasis
+    );
+  }
+  const inventedBasis = candidateFixture({ minimalBasis: 'FIXTURE_SAYS_SUPPORTED' });
+  assert.throws(
+    () => resolveCognitiveContext(
+      inventedBasis.projectionResult,
+      inventedBasis.config,
+      inventedBasis.transcript
+    ),
+    /RESIDENT_COGNITIVE_CONTEXT_REJECTED/u
+  );
 });

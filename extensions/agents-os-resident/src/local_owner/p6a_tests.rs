@@ -29,7 +29,7 @@ struct Cav1Fixture {
     positive_state_id: String,
     negative_state_id: String,
     operation_id: String,
-    positive_content: String,
+    positive_content: Value,
 }
 
 impl Cav1Fixture {
@@ -42,7 +42,11 @@ impl Cav1Fixture {
         let positive_state_id = format!("state:cav1:positive:{}", &z[..24]);
         let negative_state_id = format!("state:cav1:negative:{}", &q[..24]);
         let operation_id = format!("operation:CAV1-V1:{}", &r[..24]);
-        let positive_content = json!({"actionToken": r, "scenario": z}).to_string();
+        let positive_content = json!({
+            "actionToken": r,
+            "scenario": z,
+            "type": "MMR0_COGNITIVE_RULE_V1"
+        });
         Self {
             seed,
             z,

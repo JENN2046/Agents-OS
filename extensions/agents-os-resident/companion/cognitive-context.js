@@ -204,8 +204,11 @@ function resolveCognitiveContext(projectionResult, config, transcriptText) {
       || candidateItem.scenario !== validated.scenario
       || typeof candidateItem.proposedActionToken !== 'string'
       || candidateItem.proposedActionToken.length === 0
-      || typeof candidateItem.minimalBasis !== 'string'
-      || candidateItem.minimalBasis.length === 0
+      || ![
+        'NO_INDEPENDENT_EVIDENCE',
+        'MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION',
+        'INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY'
+      ].includes(candidateItem.minimalBasis)
       || [
         canonicalItem.actionToken,
         candidateItem.proposedActionToken,
