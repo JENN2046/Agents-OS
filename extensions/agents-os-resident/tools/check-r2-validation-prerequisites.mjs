@@ -1,19 +1,28 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
+  closeSync,
+  constants,
+  fsyncSync,
   lstatSync,
   mkdtempSync,
+  openSync,
   readFileSync,
+  realpathSync,
   rmSync,
   statSync,
   writeFileSync
 } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { getuid } from 'node:process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
 const PACKAGE_ROOT = resolve(dirname(TOOL_PATH), '..');
+const RECONCILIATION_FREEZE =
+  '/home/jenn/文档/ChatGPT/agents-os-resident/VCPToolBox_Selected_Source_Canonical_Baseline_R1.yaml';
+const RECONCILIATION_FREEZE_SHA256 =
+  'ff2702214dc630aef213103d0b6cb9982130c1a6f869ded3a9a2e2a30f29d44c';
 const HOST_FILES = Object.freeze([
   'Plugin.js',
   'modules/chatCompletionHandler.js',
@@ -35,10 +44,12 @@ const CHAT_FILES = Object.freeze([
 export const EXPECTED_R2_PREREQUISITES = Object.freeze({
   VCPChat: Object.freeze({
     identityOrCommit: 'f743b88b631fae761d68275abd2b131fa92f59ef',
+    treeOid: 'd7a2ebb9afd3fcb2efb26302ee7176271aa33213',
     sourceBundleSha256: 'ae719c7c228fd7dcce5156e3ce2c59e63f43778a6fa3cc5594d819b339fb65c0'
   }),
   VCPToolBox: Object.freeze({
-    identityOrCommit: '028bb4747c148cddf7545421aeced5a261bba8b7',
+    identityOrCommit: '08a2164b38a8fc01d385998c3d71c4a434c3af9c',
+    treeOid: 'dcea4f0f6fc6d43eee992153d19e7cf18308245e',
     sourceBundleSha256: 'fd4fe5dfb2445c9ce9e4482182c00fba2a1edd4a771cafe9042d513b2f5a2434'
   })
 });
@@ -49,11 +60,17 @@ function sha256(bytes) {
 
 function repositoryIdentity(root) {
   try {
-    return execFileSync('git', ['rev-parse', 'HEAD'], {
-      cwd: root,
+    const identityOrCommit = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: realpathSync(root),
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore']
     }).trim();
+    const treeOid = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], {
+      cwd: realpathSync(root),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    }).trim();
+    return Object.freeze({ identityOrCommit, treeOid });
   } catch {
     throw new Error('GIT_IDENTITY_UNAVAILABLE');
   }
@@ -96,10 +113,124 @@ export function enforceExpectedRepository(label, actual, expected) {
   if (actual.identityOrCommit !== expected.identityOrCommit) {
     throw new Error(`${label}_COMMIT_MISMATCH`);
   }
+  if (actual.treeOid !== expected.treeOid) {
+    throw new Error(`${label}_TREE_MISMATCH`);
+  }
   if (actual.sourceBundle.sha256 !== expected.sourceBundleSha256) {
     throw new Error(`${label}_SOURCE_BUNDLE_MISMATCH`);
   }
+  if (actual.selectedSourceStatus?.worktreeClean !== true) {
+    throw new Error(`${label}_SELECTED_SOURCE_DIRTY`);
+  }
   return actual;
+}
+
+function decodeMountPath(value) {
+  return value
+    .replaceAll('\\040', ' ')
+    .replaceAll('\\011', '\t')
+    .replaceAll('\\012', '\n')
+    .replaceAll('\\134', '\\');
+}
+
+function pathIsWithin(absolute, mountPoint) {
+  return absolute === mountPoint
+    || absolute.startsWith(`${mountPoint.endsWith('/') ? mountPoint : `${mountPoint}/`}`);
+}
+
+function mountIdentity(root, mountsText = readFileSync('/proc/mounts', 'utf8')) {
+  const absolute = realpathSync(root);
+  let best = null;
+  for (const line of mountsText.split('\n')) {
+    const fields = line.split(/\s+/u);
+    if (fields.length < 3) continue;
+    const mountPoint = decodeMountPath(fields[1]);
+    if (!pathIsWithin(absolute, mountPoint)) continue;
+    if (best === null || mountPoint.length > best.mountPoint.length) {
+      best = Object.freeze({
+        fsType: fields[2],
+        mountPoint,
+        source: decodeMountPath(fields[0])
+      });
+    }
+  }
+  if (best === null) throw new Error('RECOVERY_DOMAIN_MOUNT_IDENTITY_UNAVAILABLE');
+  return best;
+}
+
+export function qualifyRecoveryDomain(liveRoot, recoveryRoot) {
+  const live = realpathSync(liveRoot);
+  const recovery = realpathSync(recoveryRoot);
+  const liveStat = statSync(live);
+  const recoveryStat = statSync(recovery);
+  const liveMount = mountIdentity(live);
+  const recoveryMount = mountIdentity(recovery);
+  const volatile = new Set(['tmpfs', 'ramfs']).has(recoveryMount.fsType);
+  const ownerWritable = typeof getuid !== 'function'
+    || (recoveryStat.uid === getuid()
+      && (recoveryStat.mode & constants.S_IWUSR) !== 0);
+  const marker = resolve(recovery, '.PERSISTENCE_PROVEN');
+  let persistenceProven = false;
+  try {
+    const markerStat = lstatSync(marker);
+    persistenceProven = markerStat.isFile() && !markerStat.isSymbolicLink();
+  } catch {
+    persistenceProven = false;
+  }
+  const distinctMount = liveMount.mountPoint !== recoveryMount.mountPoint;
+  const distinctDevice = liveStat.dev !== recoveryStat.dev;
+  const admitted = recoveryStat.isDirectory()
+    && ownerWritable
+    && distinctMount
+    && distinctDevice
+    && !volatile
+    && persistenceProven;
+  return Object.freeze({
+    admitted,
+    classification: admitted
+      ? 'ADMITTED_DURABLE_INDEPENDENT'
+      : 'NOT_ELIGIBLE_FOR_PROTECTED_PROOF',
+    distinctDevice,
+    distinctMount,
+    live: Object.freeze({
+      device: liveStat.dev,
+      fsType: liveMount.fsType,
+      mountPoint: liveMount.mountPoint
+    }),
+    ownerWritable,
+    persistenceProven,
+    recovery: Object.freeze({
+      device: recoveryStat.dev,
+      fsType: recoveryMount.fsType,
+      mountPoint: recoveryMount.mountPoint
+    }),
+    volatile
+  });
+}
+
+function verifyRecoveryWriteAndSync(recovery) {
+  const probe = mkdtempSync(resolve(recovery, 'resident-r2-preflight-'));
+  try {
+    const file = resolve(probe, 'write-probe');
+    writeFileSync(file, 'R2_VALIDATION_PROBE\n', {
+      flag: 'wx',
+      mode: 0o600
+    });
+    const fileDescriptor = openSync(file, 'r');
+    try {
+      fsyncSync(fileDescriptor);
+    } finally {
+      closeSync(fileDescriptor);
+    }
+    const directoryDescriptor = openSync(probe, 'r');
+    try {
+      fsyncSync(directoryDescriptor);
+    } finally {
+      closeSync(directoryDescriptor);
+    }
+  } finally {
+    rmSync(probe, { recursive: true, force: true });
+  }
 }
 
 export function checkR2ValidationPrerequisites(
@@ -118,53 +249,64 @@ export function checkR2ValidationPrerequisites(
   if (typeof declaredChatRoot !== 'string' || declaredChatRoot.length === 0) {
     throw new Error('VCPCHAT_ROOT_UNDECLARED');
   }
-  const canonicalWorkspace = resolve(workspaceRoot);
-  const hostRoot = resolve(canonicalWorkspace, 'runtime/VCPToolBox');
-  const chatRoot = resolve(canonicalWorkspace, 'runtime/VCPChat');
-  if (resolve(declaredChatRoot) !== chatRoot) {
+  const declaredWorkspace = resolve(workspaceRoot);
+  const declaredExercisedChatRoot = resolve(
+    declaredWorkspace,
+    'runtime/VCPChat'
+  );
+  if (resolve(declaredChatRoot) !== declaredExercisedChatRoot) {
     throw new Error('VCPCHAT_CHECKED_ROOT_NOT_EXERCISED_ROOT');
   }
-  const recovery = resolve(recoveryRoot);
-  const recoveryStat = statSync(recovery);
-  if (!recoveryStat.isDirectory()
-    || recoveryStat.dev === statSync(PACKAGE_ROOT).dev) {
-    throw new Error('RECOVERY_DOMAIN_NOT_INDEPENDENT');
+  if (sha256(readFileSync(RECONCILIATION_FREEZE))
+    !== RECONCILIATION_FREEZE_SHA256) {
+    throw new Error('VCPTOOLBOX_BASELINE_FREEZE_MISMATCH');
   }
-  const probe = mkdtempSync(resolve(recovery, 'resident-r2-preflight-'));
-  try {
-    writeFileSync(resolve(probe, 'write-probe'), 'R2_VALIDATION_PROBE\n', {
-      flag: 'wx',
-      mode: 0o600
-    });
-  } finally {
-    rmSync(probe, { recursive: true, force: true });
+  const recovery = realpathSync(resolve(recoveryRoot));
+  const recoveryQualification = qualifyRecoveryDomain(PACKAGE_ROOT, recovery);
+  if (!recoveryQualification.admitted) {
+    throw new Error('RECOVERY_DOMAIN_NOT_INDEPENDENT_OR_DURABLE');
   }
+  verifyRecoveryWriteAndSync(recovery);
+  const canonicalWorkspace = realpathSync(declaredWorkspace);
+  const hostRoot = realpathSync(resolve(canonicalWorkspace, 'runtime/VCPToolBox'));
+  const chatRoot = realpathSync(resolve(canonicalWorkspace, 'runtime/VCPChat'));
+  if (realpathSync(resolve(declaredChatRoot)) !== chatRoot) {
+    throw new Error('VCPCHAT_CHECKED_ROOT_NOT_EXERCISED_ROOT');
+  }
+  const chatIdentity = repositoryIdentity(chatRoot);
   const chat = enforceExpectedRepository('VCPCHAT', {
-    identityOrCommit: repositoryIdentity(chatRoot),
+    ...chatIdentity,
     sourceBundle: sourceBundle(chatRoot, CHAT_FILES),
     selectedSourceStatus: selectedSourceStatus(chatRoot, CHAT_FILES)
   }, expected.VCPChat);
+  const hostIdentity = repositoryIdentity(hostRoot);
   const host = enforceExpectedRepository('VCPTOOLBOX', {
-    identityOrCommit: repositoryIdentity(hostRoot),
+    ...hostIdentity,
     sourceBundle: sourceBundle(hostRoot, HOST_FILES),
     selectedSourceStatus: selectedSourceStatus(hostRoot, HOST_FILES)
   }, expected.VCPToolBox);
   return Object.freeze({
     result: 'R2_VALIDATION_PREREQUISITES_AVAILABLE',
     recoveryDomain: {
-      independentDevice: true,
-      provisioningCheck: 'OWNER_WRITABLE_TEMP_PROBE_PASS',
+      ...recoveryQualification,
+      provisioningCheck: 'OWNER_WRITABLE_FSYNC_PROBE_PASS',
       requiredProperties: [
-        'directory',
+        'durable-nonvolatile-filesystem',
+        'persistence-marker',
         'owner-writable',
-        'device-distinct-from-candidate-worktree'
+        'device-distinct-from-candidate-worktree',
+        'mount-distinct-from-candidate-worktree'
       ]
     },
     VCPChat: {
       ...chat,
       checkedRootMatchesExercisedRoot: true
     },
-    VCPToolBox: host
+    VCPToolBox: {
+      ...host,
+      baselineFreezeSha256: RECONCILIATION_FREEZE_SHA256,
+      checkedRootMatchesExercisedRoot: true
+    }
   });
 }
 

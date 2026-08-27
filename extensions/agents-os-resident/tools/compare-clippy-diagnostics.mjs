@@ -25,7 +25,10 @@ function git(args, options = {}) {
 }
 
 export function parseClippyRun(run) {
-  if (run.error !== undefined || !Number.isInteger(run.status)) {
+  if (run.error !== undefined
+    || !Number.isInteger(run.status)
+    || run.signal !== null && run.signal !== undefined
+    || typeof run.stdout !== 'string') {
     throw new Error('CLIPPY_COMPARISON_INFRASTRUCTURE_FAILURE');
   }
   const messages = [];
@@ -45,14 +48,22 @@ export function parseClippyRun(run) {
     || message.reason === 'compiler-artifact'
   ));
   const counts = new Map();
+  let nonLintCompilerError = false;
   for (const message of messages) {
     if (message.reason !== 'compiler-message'
       || message.message?.level !== 'error') {
       continue;
     }
+    const diagnosticCode = message.message.code?.code;
+    const lintDiagnostic = typeof diagnosticCode === 'string'
+      && /^(?:clippy::[a-z0-9_]+|[a-z][a-z0-9_]*)$/u.test(diagnosticCode);
+    if (!lintDiagnostic) {
+      nonLintCompilerError = true;
+      continue;
+    }
     const primary = message.message.spans?.find((span) => span.is_primary);
     const identity = JSON.stringify({
-      code: message.message.code?.code ?? null,
+      code: diagnosticCode,
       file: primary?.file_name ?? null,
       label: primary?.label ?? null,
       message: message.message.message,
@@ -67,11 +78,21 @@ export function parseClippyRun(run) {
   const expectedLintFailure = run.status !== 0
     && buildFinished.length === 1
     && buildFinished[0].success === false
-    && errorCount > 0;
-  if (!compilerReached || (!successfulBuild && !expectedLintFailure)) {
+    && errorCount > 0
+    && !nonLintCompilerError;
+  if (!compilerReached
+    || buildFinished.length !== 1
+    || nonLintCompilerError
+    || (!successfulBuild && !expectedLintFailure)) {
     throw new Error('CLIPPY_COMPARISON_INFRASTRUCTURE_FAILURE');
   }
-  return { counts, exitCode: run.status ?? 1 };
+  return {
+    classification: successfulBuild
+      ? 'SUCCESS'
+      : 'LINT_DIAGNOSTICS_PRESENT',
+    counts,
+    exitCode: run.status
+  };
 }
 
 function diagnosticCounts(packageRoot, targetRoot) {
@@ -95,6 +116,20 @@ function addedDiagnostics(base, candidate) {
     if (extra > 0) added.push({ count: extra, identity: JSON.parse(identity) });
   }
   return added;
+}
+
+export function compareParsedClippyRuns(baseRun, candidateRun) {
+  const base = parseClippyRun(baseRun);
+  const candidate = parseClippyRun(candidateRun);
+  const addedFindings = addedDiagnostics(base, candidate);
+  return Object.freeze({
+    addedFindings,
+    base,
+    candidate,
+    result: addedFindings.length === 0
+      ? 'CLIPPY_PREDECESSOR_CANDIDATE_DIFF_PASS'
+      : 'CLIPPY_PREDECESSOR_CANDIDATE_DIFF_FAIL'
+  });
 }
 
 export function compareClippyDiagnostics(baseCommit, candidateCommit) {
@@ -128,8 +163,10 @@ export function compareClippyDiagnostics(baseCommit, candidateCommit) {
       candidateCommit,
       baseDiagnosticCount: [...base.counts.values()]
         .reduce((sum, value) => sum + value, 0),
+      baseRunClassification: base.classification,
       candidateDiagnosticCount: [...candidate.counts.values()]
         .reduce((sum, value) => sum + value, 0),
+      candidateRunClassification: candidate.classification,
       addedFindings
     });
   } finally {
