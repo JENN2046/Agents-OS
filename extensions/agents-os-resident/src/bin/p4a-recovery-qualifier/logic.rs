@@ -102,10 +102,10 @@ fn block_name_from_mount(mount: &RecoveryMountIdentity) -> Option<String> {
         let canonical = source
             .canonicalize()
             .unwrap_or_else(|_| source.to_path_buf());
-        if let Some(name) = canonical.file_name().and_then(|value| value.to_str()) {
-            if Path::new("/sys/class/block").join(name).exists() {
-                return Some(name.to_string());
-            }
+        if let Some(name) = canonical.file_name().and_then(|value| value.to_str())
+            && Path::new("/sys/class/block").join(name).exists()
+        {
+            return Some(name.to_string());
         }
     }
     Path::new("/sys/dev/block")
@@ -164,10 +164,9 @@ fn block_dependency_roots(
             .parent()
             .and_then(|path| path.file_name())
             .and_then(|value| value.to_str())
+            && parent != block_name
         {
-            if parent != block_name {
-                return block_dependency_roots(parent, seen);
-            }
+            return block_dependency_roots(parent, seen);
         }
     }
 

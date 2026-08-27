@@ -33,7 +33,7 @@ export const MERGE_BLOCKING_FINDINGS = Object.freeze([
 ]);
 
 const OUTPUT_NAME =
-  'MMR-0_TD2_R4_P6_PR41_Reopened_Blockers_Candidate_Validator_Result_R1.json';
+  'MMR-0_TD2_R4_P6_PR41_Reopened_Blockers_Candidate_Validator_Result_R2.json';
 const ALLOWED_REPAIR_PATHS = Object.freeze([
   'extensions/agents-os-resident/src/bin/p4a-recovery-qualifier/logic.rs',
   'extensions/agents-os-resident/src/bin/p4a-recovery-qualifier/main.rs',
@@ -405,8 +405,10 @@ function assertExactCleanCandidate(candidate) {
   if (!/^[0-9a-f]{40}$/u.test(candidate)) throw new Error('COMMIT_INVALID');
   const head = git(['rev-parse', 'HEAD']);
   const tree = git(['rev-parse', 'HEAD^{tree}']);
+  git(['merge-base', '--is-ancestor', PREDECESSOR, head]);
+  const mergeCommits = git(['rev-list', '--merges', `${PREDECESSOR}..${head}`]);
   if (head !== candidate
-    || git(['rev-parse', 'HEAD^']) !== PREDECESSOR
+    || mergeCommits !== ''
     || git(['rev-parse', 'origin/main']) !== BASE
     || git(['status', '--porcelain']) !== '') {
     throw new Error('CANDIDATE_ADMISSION_MISMATCH');
@@ -707,7 +709,7 @@ export function validateMergeP2Candidate({
     }
   };
   const validator = {
-    schema: 'MMR-0-TD2-R4-P6-PR41-REOPENED-BLOCKERS-CANDIDATE-VALIDATOR-v0.1',
+    schema: 'MMR-0-TD2-R4-P6-PR41-REOPENED-BLOCKERS-CANDIDATE-VALIDATOR-v0.2',
     result:
       'PASS_MMR_0_TD2_R4_P6_PR41_REOPENED_BLOCKERS_REPAIR_CANDIDATE_VALIDATION',
     authoritySha256: AUTHORITY_SHA256,
