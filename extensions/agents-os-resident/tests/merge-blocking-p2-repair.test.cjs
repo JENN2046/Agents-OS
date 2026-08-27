@@ -30,8 +30,8 @@ const LEGACY_VALIDATOR_INPUTS = Object.freeze({
     'e7fe1a9256f01db44c040ba88c784979b10b85bdbe68b00b59c5cfb5637accba'
 });
 const EXPECTED_FINDING_STATUSES = Object.freeze({
-  'MMR0-P6-PR41-R2-P2-003': 'REPAIRED_PENDING_INDEPENDENT_REVIEW',
-  'MMR0-P6-PR41-R2-P2-004': 'FROZEN_CLOSED',
+  'MMR0-P6-PR41-R2-P2-003': 'INDEPENDENTLY_CLOSED',
+  'MMR0-P6-PR41-R2-P2-004': 'REMAINS_FROZEN_CLOSED',
   'MMR0-P6-PR41-THIRD-R1-NEW-P2-003':
     'REPAIRED_PENDING_INDEPENDENT_REVIEW'
 });
@@ -512,4 +512,62 @@ test('strict validator parser preserves exact legacy canonical bytes', async () 
     );
     assert.doesNotThrow(() => parseStrictJsonBytes(bytes, name));
   }
+});
+
+test('v0.3 authority parser rejects malformed UTF-8 and duplicate keys', async () => {
+  const { parseStrictJsonBytes } = await tool(
+    'tools/pr41-validator-evidence-contract.mjs'
+  );
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from([0x7b, 0x22, 0x78, 0x22, 0x3a,
+      0x22, 0xff, 0x22, 0x7d]), 'MALFORMED_UTF8'),
+    /MALFORMED_UTF8_MALFORMED_UTF8/u
+  );
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from('{"x":1,"x":2}'), 'DUPLICATE'),
+    /DUPLICATE_DUPLICATE_KEY:x/u
+  );
+});
+
+test('v0.3 finding evidence bindings are domain and identity separated', async () => {
+  const {
+    EVIDENCE_TYPE,
+    FINDING_IDS,
+    FINDING_STATUS,
+    evidenceBinding
+  } = await tool('tools/pr41-validator-evidence-contract.mjs');
+  const base = {
+    artifactRole: 'candidate_authority',
+    candidateCommit: '1'.repeat(40),
+    candidateTree: '2'.repeat(40),
+    evidence: { result: 'PASS' },
+    evidenceType: EVIDENCE_TYPE[FINDING_IDS[0]],
+    findingId: FINDING_IDS[0],
+    status: FINDING_STATUS[FINDING_IDS[0]]
+  };
+  const binding = evidenceBinding(base);
+  for (const mutation of [
+    { findingId: FINDING_IDS[1] },
+    { candidateCommit: '3'.repeat(40) },
+    { candidateTree: '4'.repeat(40) },
+    { evidenceType: EVIDENCE_TYPE[FINDING_IDS[1]] },
+    { status: FINDING_STATUS[FINDING_IDS[1]] }
+  ]) {
+    assert.notEqual(evidenceBinding({ ...base, ...mutation }), binding);
+  }
+});
+
+test('v0.3 contract bytes are exact and reject schema drift', async () => {
+  const {
+    CONTRACT_DOCUMENT,
+    contractBytes,
+    validateContractBytes
+  } = await tool('tools/pr41-validator-evidence-contract.mjs');
+  assert.deepEqual(validateContractBytes(contractBytes()), CONTRACT_DOCUMENT);
+  const drifted = JSON.parse(contractBytes().toString('utf8'));
+  drifted.unknown = true;
+  assert.throws(
+    () => validateContractBytes(Buffer.from(JSON.stringify(drifted))),
+    /CONTRACT_EXACT_AUTHORITY_MISMATCH/u
+  );
 });
