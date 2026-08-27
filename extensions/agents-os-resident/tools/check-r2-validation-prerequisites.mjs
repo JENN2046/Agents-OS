@@ -2,7 +2,6 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
   closeSync,
-  constants,
   fsyncSync,
   lstatSync,
   mkdtempSync,
@@ -10,10 +9,8 @@ import {
   readFileSync,
   realpathSync,
   rmSync,
-  statSync,
   writeFileSync
 } from 'node:fs';
-import { getuid } from 'node:process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -125,87 +122,40 @@ export function enforceExpectedRepository(label, actual, expected) {
   return actual;
 }
 
-function decodeMountPath(value) {
-  return value
-    .replaceAll('\\040', ' ')
-    .replaceAll('\\011', '\t')
-    .replaceAll('\\012', '\n')
-    .replaceAll('\\134', '\\');
-}
-
-function pathIsWithin(absolute, mountPoint) {
-  return absolute === mountPoint
-    || absolute.startsWith(`${mountPoint.endsWith('/') ? mountPoint : `${mountPoint}/`}`);
-}
-
-function mountIdentity(root, mountsText = readFileSync('/proc/mounts', 'utf8')) {
-  const absolute = realpathSync(root);
-  let best = null;
-  for (const line of mountsText.split('\n')) {
-    const fields = line.split(/\s+/u);
-    if (fields.length < 3) continue;
-    const mountPoint = decodeMountPath(fields[1]);
-    if (!pathIsWithin(absolute, mountPoint)) continue;
-    if (best === null || mountPoint.length > best.mountPoint.length) {
-      best = Object.freeze({
-        fsType: fields[2],
-        mountPoint,
-        source: decodeMountPath(fields[0])
-      });
-    }
+function runCanonicalRecoveryQualifier(arguments_, input) {
+  let output;
+  try {
+    output = execFileSync('cargo', [
+      'run', '--quiet', '--bin', 'p4a-recovery-qualifier', '--', ...arguments_
+    ], {
+      cwd: PACKAGE_ROOT,
+      encoding: 'utf8',
+      input,
+      maxBuffer: 16 * 1024 * 1024,
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+  } catch {
+    throw new Error('CANONICAL_RECOVERY_QUALIFIER_FAILED');
   }
-  if (best === null) throw new Error('RECOVERY_DOMAIN_MOUNT_IDENTITY_UNAVAILABLE');
-  return best;
+  try {
+    return Object.freeze(JSON.parse(output));
+  } catch {
+    throw new Error('CANONICAL_RECOVERY_QUALIFIER_OUTPUT_INVALID');
+  }
 }
 
 export function qualifyRecoveryDomain(liveRoot, recoveryRoot) {
-  const live = realpathSync(liveRoot);
-  const recovery = realpathSync(recoveryRoot);
-  const liveStat = statSync(live);
-  const recoveryStat = statSync(recovery);
-  const liveMount = mountIdentity(live);
-  const recoveryMount = mountIdentity(recovery);
-  const volatile = new Set(['tmpfs', 'ramfs']).has(recoveryMount.fsType);
-  const ownerWritable = typeof getuid !== 'function'
-    || (recoveryStat.uid === getuid()
-      && (recoveryStat.mode & constants.S_IWUSR) !== 0);
-  const marker = resolve(recovery, '.PERSISTENCE_PROVEN');
-  let persistenceProven = false;
-  try {
-    const markerStat = lstatSync(marker);
-    persistenceProven = markerStat.isFile() && !markerStat.isSymbolicLink();
-  } catch {
-    persistenceProven = false;
-  }
-  const distinctMount = liveMount.mountPoint !== recoveryMount.mountPoint;
-  const distinctDevice = liveStat.dev !== recoveryStat.dev;
-  const admitted = recoveryStat.isDirectory()
-    && ownerWritable
-    && distinctMount
-    && distinctDevice
-    && !volatile
-    && persistenceProven;
-  return Object.freeze({
-    admitted,
-    classification: admitted
-      ? 'ADMITTED_DURABLE_INDEPENDENT'
-      : 'NOT_ELIGIBLE_FOR_PROTECTED_PROOF',
-    distinctDevice,
-    distinctMount,
-    live: Object.freeze({
-      device: liveStat.dev,
-      fsType: liveMount.fsType,
-      mountPoint: liveMount.mountPoint
-    }),
-    ownerWritable,
-    persistenceProven,
-    recovery: Object.freeze({
-      device: recoveryStat.dev,
-      fsType: recoveryMount.fsType,
-      mountPoint: recoveryMount.mountPoint
-    }),
-    volatile
-  });
+  return runCanonicalRecoveryQualifier([
+    '--live', realpathSync(liveRoot),
+    '--recovery', realpathSync(recoveryRoot)
+  ]);
+}
+
+export function qualifyRecoveryFixtureIdentity(fixtureIdentity) {
+  return runCanonicalRecoveryQualifier(
+    ['--classify-json'],
+    `${JSON.stringify(fixtureIdentity)}\n`
+  );
 }
 
 function verifyRecoveryWriteAndSync(recovery) {
@@ -287,6 +237,12 @@ export function checkR2ValidationPrerequisites(
   }, expected.VCPToolBox);
   return Object.freeze({
     result: 'R2_VALIDATION_PREREQUISITES_AVAILABLE',
+    resolvedExecutionRoots: {
+      validationWorkspaceRoot: canonicalWorkspace,
+      VCPChatRoot: chatRoot,
+      recoveryDomain: recovery,
+      matchFrozenEnvironment: true
+    },
     recoveryDomain: {
       ...recoveryQualification,
       provisioningCheck: 'OWNER_WRITABLE_FSYNC_PROBE_PASS',
@@ -295,7 +251,8 @@ export function checkR2ValidationPrerequisites(
         'persistence-marker',
         'owner-writable',
         'device-distinct-from-candidate-worktree',
-        'mount-distinct-from-candidate-worktree'
+        'mount-distinct-from-candidate-worktree',
+        'underlying-failure-domain-distinct-from-candidate-worktree'
       ]
     },
     VCPChat: {

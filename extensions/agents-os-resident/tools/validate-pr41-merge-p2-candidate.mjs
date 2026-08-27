@@ -21,11 +21,11 @@ const require = createRequire(import.meta.url);
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 
 export const BASE = 'd2d564a5f29a2dcd5aa8e2a3562039a2ab19bbf9';
-export const PREDECESSOR = '154df26456ebf662702002668206623dbb308ff6';
+export const PREDECESSOR = 'c8a253a97e0e60b3bd3530742a1c8a7e1b7a23ad';
 export const AUTHORITY_PATH =
-  '/home/jenn/文档/ChatGPT/agents-os-resident/MMR-0_TD2_R4_P6_PR41_Third_Full_Independent_Review_R1.md';
+  '/home/jenn/文档/ChatGPT/agents-os-resident/MMR-0_TD2_R4_P6_PR41_Narrow_Closure_Reopened_Blockers_Repair_Taskbook_R3.md';
 export const AUTHORITY_SHA256 =
-  '80c0311087302bc5cd644d31f487f2fee7158e543b9cddc93e231e2d2c537ce3';
+  '68db3de5fb57f4962b1659dfe3495faee08b0dff3e4644eee94a14682adf7952';
 export const MERGE_BLOCKING_FINDINGS = Object.freeze([
   'MMR0-P6-PR41-R2-P2-003',
   'MMR0-P6-PR41-R2-P2-004',
@@ -33,15 +33,21 @@ export const MERGE_BLOCKING_FINDINGS = Object.freeze([
 ]);
 
 const OUTPUT_NAME =
-  'MMR-0_TD2_R4_P6_PR41_Merge_P2_Candidate_Validator_Result_R1.json';
-const PRODUCTION_SEMANTIC_PATHS = Object.freeze([
-  'extensions/agents-os-resident/src/local_owner/store.rs',
-  'extensions/agents-os-resident/companion/adapter.js',
-  'extensions/agents-os-resident/companion/client.js',
-  'extensions/agents-os-resident/companion/cognitive-context.js',
-  'extensions/agents-os-resident/companion/protocol.js',
-  'extensions/agents-os-resident/companion/server.js'
+  'MMR-0_TD2_R4_P6_PR41_Reopened_Blockers_Candidate_Validator_Result_R1.json';
+const ALLOWED_REPAIR_PATHS = Object.freeze([
+  'extensions/agents-os-resident/src/bin/p4a-recovery-qualifier/logic.rs',
+  'extensions/agents-os-resident/src/bin/p4a-recovery-qualifier/main.rs',
+  'extensions/agents-os-resident/src/local_owner/p4a_tests.rs',
+  'extensions/agents-os-resident/tests/merge-blocking-p2-repair.test.cjs',
+  'extensions/agents-os-resident/tools/check-r2-validation-prerequisites.mjs',
+  'extensions/agents-os-resident/tools/validate-pr41-merge-p2-candidate.mjs'
 ]);
+export const EXPECTED_FINDING_STATUSES = Object.freeze({
+  'MMR0-P6-PR41-R2-P2-003': 'REPAIRED_PENDING_INDEPENDENT_REVIEW',
+  'MMR0-P6-PR41-R2-P2-004': 'FROZEN_CLOSED',
+  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003':
+    'REPAIRED_PENDING_INDEPENDENT_REVIEW'
+});
 
 function argument(argv, name) {
   const index = argv.indexOf(name);
@@ -67,13 +73,123 @@ function git(args, encoding = 'utf8') {
   return encoding === null ? result.stdout : result.stdout.trim();
 }
 
+function strictJsonScanner(text, label) {
+  let index = 0;
+  function whitespace() {
+    while (/\s/u.test(text[index] ?? '')) index += 1;
+  }
+  function string() {
+    if (text[index] !== '"') throw new Error(`${label}_JSON_STRING_EXPECTED`);
+    const start = index;
+    index += 1;
+    while (index < text.length) {
+      const character = text[index];
+      if (character === '"') {
+        index += 1;
+        return JSON.parse(text.slice(start, index));
+      }
+      if (character === '\\') {
+        index += 1;
+        if (text[index] === 'u') {
+          if (!/^[0-9a-fA-F]{4}$/u.test(text.slice(index + 1, index + 5))) {
+            throw new Error(`${label}_JSON_ESCAPE_INVALID`);
+          }
+          index += 5;
+          continue;
+        }
+        if (!/^["\\/bfnrt]$/u.test(text[index] ?? '')) {
+          throw new Error(`${label}_JSON_ESCAPE_INVALID`);
+        }
+      } else if (character.charCodeAt(0) < 0x20) {
+        throw new Error(`${label}_JSON_CONTROL_CHARACTER`);
+      }
+      index += 1;
+    }
+    throw new Error(`${label}_JSON_STRING_UNTERMINATED`);
+  }
+  function value() {
+    whitespace();
+    if (text[index] === '{') return object();
+    if (text[index] === '[') return array();
+    if (text[index] === '"') {
+      string();
+      return;
+    }
+    for (const literal of ['true', 'false', 'null']) {
+      if (text.startsWith(literal, index)) {
+        index += literal.length;
+        return;
+      }
+    }
+    const number = text.slice(index).match(/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/u)?.[0];
+    if (number) {
+      index += number.length;
+      return;
+    }
+    throw new Error(`${label}_JSON_VALUE_INVALID`);
+  }
+  function object() {
+    index += 1;
+    whitespace();
+    const keys = new Set();
+    if (text[index] === '}') {
+      index += 1;
+      return;
+    }
+    while (true) {
+      whitespace();
+      const key = string();
+      if (keys.has(key)) throw new Error(`${label}_DUPLICATE_KEY:${key}`);
+      keys.add(key);
+      whitespace();
+      if (text[index] !== ':') throw new Error(`${label}_JSON_COLON_EXPECTED`);
+      index += 1;
+      value();
+      whitespace();
+      if (text[index] === '}') {
+        index += 1;
+        return;
+      }
+      if (text[index] !== ',') throw new Error(`${label}_JSON_COMMA_EXPECTED`);
+      index += 1;
+    }
+  }
+  function array() {
+    index += 1;
+    whitespace();
+    if (text[index] === ']') {
+      index += 1;
+      return;
+    }
+    while (true) {
+      value();
+      whitespace();
+      if (text[index] === ']') {
+        index += 1;
+        return;
+      }
+      if (text[index] !== ',') throw new Error(`${label}_JSON_COMMA_EXPECTED`);
+      index += 1;
+    }
+  }
+  value();
+  whitespace();
+  if (index !== text.length) throw new Error(`${label}_JSON_TRAILING_BYTES`);
+}
+
+export function parseStrictJsonBytes(bytes, label = 'DOCUMENT') {
+  const text = Buffer.from(bytes).toString('utf8');
+  strictJsonScanner(text, label);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`${label}_NOT_CANONICAL_JSON_DOCUMENT`);
+  }
+}
+
 function readJsonDocument(path, label) {
   const bytes = readFileSync(path);
-  try {
-    return Object.freeze({ bytes, value: JSON.parse(bytes.toString('utf8')) });
-  } catch {
-    throw new Error(`${label}_NOT_CANONICAL_JSON_YAML`);
-  }
+  return Object.freeze({ bytes, value: parseStrictJsonBytes(bytes, label) });
 }
 
 export function surfaceIdentity(paths) {
@@ -105,6 +221,7 @@ export function validateCandidateIdentityFreeze(freeze, actual) {
   if (!identity || typeof identity !== 'object' || Array.isArray(identity)) {
     throw new Error('CANDIDATE_IDENTITY_FREEZE_MISSING');
   }
+  assertExactKeys(identity, Object.keys(expected), 'CANDIDATE_IDENTITY');
   for (const [key, value] of Object.entries(expected)) {
     if (identity[key] !== value) {
       throw new Error(`CANDIDATE_IDENTITY_FREEZE_MISMATCH:${key}`);
@@ -113,32 +230,114 @@ export function validateCandidateIdentityFreeze(freeze, actual) {
   return Object.freeze(expected);
 }
 
+function assertExactKeys(object, expected, label) {
+  if (!object || typeof object !== 'object' || Array.isArray(object)) {
+    throw new Error(`${label}_OBJECT_REQUIRED`);
+  }
+  const actual = Object.keys(object).sort();
+  const required = [...expected].sort();
+  if (actual.length !== required.length
+    || actual.some((key, index) => key !== required[index])) {
+    throw new Error(`${label}_EXACT_SHAPE_INVALID`);
+  }
+}
+
+function assertExactFindingSet(object, findingIds, label) {
+  if (!object || typeof object !== 'object' || Array.isArray(object)) {
+    throw new Error(`${label}_MISSING`);
+  }
+  const actual = Object.keys(object).sort();
+  const expected = [...findingIds].sort();
+  if (actual.length !== expected.length
+    || actual.some((id, index) => id !== expected[index])) {
+    throw new Error(`${label}_EXACT_SET_INVALID`);
+  }
+}
+
 export function validateFindingDisposition(
   disposition,
   findingIds = MERGE_BLOCKING_FINDINGS
 ) {
-  if (disposition?.summary?.total !== findingIds.length
-    || disposition?.summary?.closed !== findingIds.length
-    || disposition?.summary?.merge_blockers_remaining !== 0) {
+  assertExactFindingSet(disposition?.findings, findingIds, 'FINDING_DISPOSITION');
+  assertExactKeys(disposition?.summary, [
+    'remaining_reopened_blockers',
+    'reopened_blockers_total',
+    'repaired'
+  ], 'FINDING_DISPOSITION_SUMMARY');
+  if (disposition?.summary?.reopened_blockers_total !== 2
+    || disposition?.summary?.repaired !== 2
+    || disposition?.summary?.remaining_reopened_blockers !== 0) {
     throw new Error('FINDING_DISPOSITION_SUMMARY_INVALID');
   }
   const validated = {};
   for (const id of findingIds) {
     const finding = disposition?.findings?.[id];
+    assertExactKeys(finding, [
+      'attack_result',
+      'evidence_ref',
+      'evidence_sha256',
+      'production_changed',
+      'resolution',
+      'status'
+    ], `FINDING_DISPOSITION:${id}`);
     if (!finding
-      || finding.status !== 'CLOSED'
-      || finding.production_changed !== false
+      || finding.status !== EXPECTED_FINDING_STATUSES[id]
+      || typeof finding.production_changed !== 'boolean'
       || typeof finding.evidence_ref !== 'string'
       || finding.evidence_ref.length === 0
       || !/^[0-9a-f]{64}$/u.test(finding.evidence_sha256)
       || finding.attack_result !== 'PASS') {
       throw new Error(`FINDING_DISPOSITION_INVALID:${id}`);
     }
+    if (finding.production_changed !== false) {
+      throw new Error(`FINDING_PRODUCTION_SCOPE_INVALID:${id}`);
+    }
     validated[id] = Object.freeze({
       attackResult: finding.attack_result,
       evidenceRef: finding.evidence_ref,
       evidenceSha256: finding.evidence_sha256,
+      productionChanged: finding.production_changed,
       status: finding.status
+    });
+  }
+  return Object.freeze(validated);
+}
+
+export function validateRepairEvidence(
+  evidence,
+  findingIds = MERGE_BLOCKING_FINDINGS
+) {
+  assertExactFindingSet(evidence?.findings, findingIds, 'EVIDENCE_FINDINGS');
+  const validated = {};
+  for (const id of findingIds) {
+    const entry = evidence.findings[id];
+    assertExactKeys(entry, [
+      'evidence',
+      'evidence_binding_sha256',
+      'finding_id',
+      'status',
+      'validation_or_attack_result'
+    ], `EVIDENCE_FINDING:${id}`);
+    if (entry.finding_id !== id
+      || entry.status !== EXPECTED_FINDING_STATUSES[id]
+      || entry.validation_or_attack_result !== 'PASS'
+      || !entry.evidence
+      || typeof entry.evidence !== 'object'
+      || Array.isArray(entry.evidence)
+      || Object.keys(entry.evidence).length === 0
+      || !/^[0-9a-f]{64}$/u.test(entry.evidence_binding_sha256)) {
+      throw new Error(`EVIDENCE_FINDING_INVALID:${id}`);
+    }
+    const actualBinding = sha256(Buffer.from(
+      JSON.stringify(entry.evidence),
+      'utf8'
+    ));
+    if (actualBinding !== entry.evidence_binding_sha256) {
+      throw new Error(`EVIDENCE_FINDING_BINDING_MISMATCH:${id}`);
+    }
+    validated[id] = Object.freeze({
+      evidenceBindingSha256: actualBinding,
+      status: entry.status
     });
   }
   return Object.freeze(validated);
@@ -267,12 +466,39 @@ export function validateMergeP2Candidate({
     throw new Error('REPAIR_SCOPE_CONTAMINATION');
   }
   if (repairDelta.sortedPathList.some((path) => (
-    PRODUCTION_SEMANTIC_PATHS.includes(path)
+    !ALLOWED_REPAIR_PATHS.includes(path)
   ))) {
-    throw new Error('REPAIR_SCOPE_EXPANDED_TO_PRODUCTION');
+    throw new Error('REPAIR_SCOPE_OUTSIDE_R3_ALLOWLIST');
+  }
+  if (repairDelta.sortedPathList.includes(
+    'extensions/agents-os-resident/tools/compare-clippy-diagnostics.mjs'
+  )) {
+    throw new Error('FROZEN_CLIPPY_COMPARATOR_MODIFIED');
   }
 
   const freezeDocument = readJsonDocument(freezePath, 'IDENTITY_FREEZE');
+  assertExactKeys(freezeDocument.value, [
+    'append_only', 'artifact', 'authority', 'candidate_identity',
+    'created_at', 'state'
+  ], 'IDENTITY_FREEZE');
+  assertExactKeys(freezeDocument.value.authority, [
+    'adversarial_evidence_sha256',
+    'finding_disposition_sha256',
+    'repair_taskbook_sha256'
+  ], 'IDENTITY_FREEZE_AUTHORITY');
+  assertExactKeys(freezeDocument.value.state, [
+    'draft', 'independent_two_blocker_closure_review', 'merged',
+    'p7', 'ready'
+  ], 'IDENTITY_FREEZE_STATE');
+  if (freezeDocument.value.authority.repair_taskbook_sha256 !== AUTHORITY_SHA256
+    || freezeDocument.value.state.draft !== true
+    || freezeDocument.value.state.ready !== false
+    || freezeDocument.value.state.merged !== false
+    || freezeDocument.value.state.independent_two_blocker_closure_review
+      !== 'PENDING'
+    || freezeDocument.value.state.p7 !== 'NOT_STARTED') {
+    throw new Error('IDENTITY_FREEZE_AUTHORITY_OR_STATE_INVALID');
+  }
   validateCandidateIdentityFreeze(freezeDocument.value, {
     candidateCommit: candidate,
     candidateTree: admission.tree,
@@ -283,19 +509,62 @@ export function validateMergeP2Candidate({
     dispositionPath,
     'REPAIR_DISPOSITION'
   );
+  assertExactKeys(dispositionDocument.value, [
+    'append_only', 'artifact', 'authority', 'authority_sha256',
+    'created_at', 'explicit_non_actions', 'findings', 'summary'
+  ], 'REPAIR_DISPOSITION');
+  if (dispositionDocument.value.authority_sha256 !== AUTHORITY_SHA256
+    || dispositionDocument.value.append_only !== true) {
+    throw new Error('REPAIR_DISPOSITION_AUTHORITY_INVALID');
+  }
   const dispositionFindings = validateFindingDisposition(
     dispositionDocument.value
   );
   const evidenceDocument = readJsonDocument(evidencePath, 'REPAIR_EVIDENCE');
+  assertExactKeys(evidenceDocument.value, [
+    'append_only', 'artifact', 'base_commit', 'candidate_predecessor',
+    'canonical_compatibility', 'created_at', 'findings',
+    'frozen_clippy_regression', 'recovery_parity', 'regression',
+    'reopened_blocker_attacks', 'result', 'scope', 'validator_attacks'
+  ], 'REPAIR_EVIDENCE');
   const repairEvidenceSha256 = verifyEvidenceBindings(
     dispositionFindings,
     evidencePath,
     evidenceDocument.bytes
   );
+  const perFindingEvidence = validateRepairEvidence(evidenceDocument.value);
+  if (freezeDocument.value.authority.finding_disposition_sha256
+      !== sha256(dispositionDocument.bytes)
+    || freezeDocument.value.authority.adversarial_evidence_sha256
+      !== repairEvidenceSha256) {
+    throw new Error('IDENTITY_FREEZE_EVIDENCE_BINDING_MISMATCH');
+  }
   if (evidenceDocument.value?.result
-    !== 'PASS_MERGE_BLOCKING_P2_PRECOMMIT_VALIDATION'
-    || evidenceDocument.value?.merge_blocker_attacks !== 'PASS') {
+    !== 'PASS_REOPENED_BLOCKERS_PRECOMMIT_VALIDATION'
+    || evidenceDocument.value?.reopened_blocker_attacks !== 'PASS') {
     throw new Error('REPAIR_EVIDENCE_RESULT_INVALID');
+  }
+  if (!evidenceDocument.value.recovery_parity
+    || Object.values(evidenceDocument.value.recovery_parity).some((entry) => (
+      entry?.fixture_identity_match !== true || entry?.parity !== true
+    ))
+    || !evidenceDocument.value.validator_attacks
+    || Object.values(evidenceDocument.value.validator_attacks).some(
+      (result) => result !== 'REJECTED'
+    )
+    || !evidenceDocument.value.canonical_compatibility
+    || Object.values(evidenceDocument.value.canonical_compatibility).some(
+      (result) => result !== 'PASS'
+    )
+    || evidenceDocument.value.frozen_clippy_regression?.status
+      !== 'FROZEN_CLOSED'
+    || evidenceDocument.value.frozen_clippy_regression?.implementation_modified
+      !== false
+    || evidenceDocument.value.frozen_clippy_regression?.regression !== 'PASS'
+    || evidenceDocument.value.scope?.production_runtime_semantics_changed
+      !== false
+    || evidenceDocument.value.scope?.frozen_clippy_comparator_changed !== false) {
+    throw new Error('REPAIR_EVIDENCE_MATRIX_INVALID');
   }
 
   const environment = {
@@ -416,6 +685,7 @@ export function validateMergeP2Candidate({
   };
   const validatorClosure = {
     dispositionFindings,
+    perFindingEvidence,
     freezeSha256: sha256(freezeDocument.bytes),
     fullPrSurface,
     repairDelta
@@ -423,20 +693,23 @@ export function validateMergeP2Candidate({
   const findingResults = {
     'MMR0-P6-PR41-R2-P2-003': {
       evidenceSha256: closureEvidenceSha256(prerequisiteClosure),
-      status: 'CLOSED'
+      status: EXPECTED_FINDING_STATUSES['MMR0-P6-PR41-R2-P2-003']
     },
     'MMR0-P6-PR41-R2-P2-004': {
       evidenceSha256: closureEvidenceSha256(clippyClosure),
-      status: 'CLOSED'
+      status: EXPECTED_FINDING_STATUSES['MMR0-P6-PR41-R2-P2-004']
     },
     'MMR0-P6-PR41-THIRD-R1-NEW-P2-003': {
       evidenceSha256: closureEvidenceSha256(validatorClosure),
-      status: 'CLOSED'
+      status: EXPECTED_FINDING_STATUSES[
+        'MMR0-P6-PR41-THIRD-R1-NEW-P2-003'
+      ]
     }
   };
   const validator = {
-    schema: 'MMR-0-TD2-R4-P6-PR41-MERGE-P2-CANDIDATE-VALIDATOR-v0.1',
-    result: 'MERGE_BLOCKING_P2_REPAIR_CANDIDATE_VALIDATION_PASS',
+    schema: 'MMR-0-TD2-R4-P6-PR41-REOPENED-BLOCKERS-CANDIDATE-VALIDATOR-v0.1',
+    result:
+      'PASS_MMR_0_TD2_R4_P6_PR41_REOPENED_BLOCKERS_REPAIR_CANDIDATE_VALIDATION',
     authoritySha256: AUTHORITY_SHA256,
     candidateIdentityFreezeSha256: sha256(freezeDocument.bytes),
     baseCommit: BASE,
@@ -463,10 +736,12 @@ export function validateMergeP2Candidate({
     nodeFull: 'PASS',
     companionIntegration: 'PASS',
     hostBinding: 'PASS',
-    productionSemanticFilesChanged: false,
+    validationOnlyP4AQualifierAuthorityChanged: true,
+    productionRuntimeSemanticsChanged: false,
     worktreeClean: true,
-    independentMergeBlockerClosureReview: 'PENDING',
-    mergeReadinessDecision: 'PENDING',
+    independentTwoBlockerClosureReview: 'PENDING',
+    VCPToolBoxDurablePublication: 'PENDING',
+    readinessMergeValidation: 'PENDING',
     controlledProofClaimed: false
   };
   const outputPath = resolve(outputRoot, OUTPUT_NAME);

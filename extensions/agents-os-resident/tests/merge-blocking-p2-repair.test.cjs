@@ -5,6 +5,8 @@ const {
   chmodSync,
   mkdtempSync,
   mkdirSync,
+  readFileSync,
+  readdirSync,
   rmSync,
   writeFileSync
 } = require('node:fs');
@@ -17,6 +19,22 @@ const PACKAGE_ROOT = path.resolve(__dirname, '..');
 const CLEAN_EXTERNAL_WORKSPACE =
   '/home/jenn/VCPToolBox-Selected-Source-Reconciliation';
 const VALID_RECOVERY_DOMAIN = '/media/jenn/work';
+const CANONICAL_EVIDENCE_ROOT =
+  '/home/jenn/文档/ChatGPT/agents-os-resident';
+const LEGACY_VALIDATOR_INPUTS = Object.freeze({
+  'MMR-0_TD2_R4_P6_PR41_Merge_P2_Candidate_Identity_Freeze_R1.yaml':
+    '3ef0993f3386585f1aef22839fcec96f78dded7b8293d4e6cf78c10ee791c4e5',
+  'MMR-0_TD2_R4_P6_PR41_Merge_Blocking_P2_Repair_Disposition_R1.yaml':
+    'ea3ae821b49fdf46e7e38df7efc22a13fb2b5d747926ed56d5b7295f8cb2f1a5',
+  'MMR-0_TD2_R4_P6_PR41_Merge_Blocking_P2_Repair_Adversarial_Evidence_R1.json':
+    'e7fe1a9256f01db44c040ba88c784979b10b85bdbe68b00b59c5cfb5637accba'
+});
+const EXPECTED_FINDING_STATUSES = Object.freeze({
+  'MMR0-P6-PR41-R2-P2-003': 'REPAIRED_PENDING_INDEPENDENT_REVIEW',
+  'MMR0-P6-PR41-R2-P2-004': 'FROZEN_CLOSED',
+  'MMR0-P6-PR41-THIRD-R1-NEW-P2-003':
+    'REPAIRED_PENDING_INDEPENDENT_REVIEW'
+});
 
 async function tool(relativePath) {
   return import(pathToFileURL(path.join(PACKAGE_ROOT, relativePath)).href);
@@ -57,13 +75,62 @@ function validDisposition(findingIds, evidenceSha256 = 'e'.repeat(64)) {
         'MMR-0_TD2_R4_P6_PR41_Merge_Blocking_P2_Repair_Adversarial_Evidence_R1.json',
       evidence_sha256: evidenceSha256,
       production_changed: false,
-      status: 'CLOSED'
+      resolution: 'bounded repair evidence',
+      status: EXPECTED_FINDING_STATUSES[id]
     }])),
     summary: {
-      closed: findingIds.length,
-      merge_blockers_remaining: 0,
-      total: findingIds.length
+      remaining_reopened_blockers: 0,
+      reopened_blockers_total: 2,
+      repaired: 2
     }
+  };
+}
+
+function frozenFixture({
+  device,
+  domain,
+  filesystemType = 'ext4',
+  mount,
+  ownerWritable = true,
+  path: fixturePath,
+  persistenceProven = true,
+  source
+}) {
+  return {
+    requestedPath: fixturePath,
+    canonicalRealpath: fixturePath,
+    mount: {
+      source,
+      target: mount,
+      filesystemType,
+      mountId: device,
+      majorMinor: `0:${device}`
+    },
+    stDev: device,
+    underlyingDevice: domain,
+    relevantFailureDomainIdentity: [domain],
+    isDirectory: true,
+    ownerWritable,
+    persistenceProven,
+    volatile: ['tmpfs', 'ramfs'].includes(filesystemType)
+  };
+}
+
+function validEvidence(findingIds) {
+  return {
+    findings: Object.fromEntries(findingIds.map((id) => {
+      const evidence = { attack: `${id}:PASS` };
+      return [id, {
+        finding_id: id,
+        status: EXPECTED_FINDING_STATUSES[id],
+        validation_or_attack_result: 'PASS',
+        evidence,
+        evidence_binding_sha256: require('node:crypto')
+          .createHash('sha256')
+          .update(JSON.stringify(evidence))
+          .digest('hex')
+      }];
+    }))
   };
 }
 
@@ -112,6 +179,16 @@ test('merge blocker P2-003 uses the exact clean exercised roots', async () => {
   assert.equal(accepted.VCPToolBox.selectedSourceStatus.worktreeClean, true);
   assert.equal(accepted.VCPChat.selectedSourceStatus.worktreeClean, true);
   assert.equal(accepted.VCPToolBox.checkedRootMatchesExercisedRoot, true);
+  assert.equal(
+    accepted.resolvedExecutionRoots.validationWorkspaceRoot,
+    CLEAN_EXTERNAL_WORKSPACE
+  );
+  assert.equal(
+    accepted.resolvedExecutionRoots.VCPChatRoot,
+    `${CLEAN_EXTERNAL_WORKSPACE}/runtime/VCPChat`
+  );
+  assert.equal(accepted.resolvedExecutionRoots.recoveryDomain, VALID_RECOVERY_DOMAIN);
+  assert.equal(accepted.resolvedExecutionRoots.matchFrozenEnvironment, true);
   assert.throws(
     () => checkR2ValidationPrerequisites({
       ...environment,
@@ -122,7 +199,10 @@ test('merge blocker P2-003 uses the exact clean exercised roots', async () => {
 });
 
 test('merge blocker P2-003 mirrors durable P4-A recovery admission', async () => {
-  const { qualifyRecoveryDomain } = await tool(
+  const {
+    qualifyRecoveryDomain,
+    qualifyRecoveryFixtureIdentity
+  } = await tool(
     'tools/check-r2-validation-prerequisites.mjs'
   );
   const owned = mkdtempSync(path.join(tmpdir(), 'resident-p2-recovery-'));
@@ -140,9 +220,60 @@ test('merge blocker P2-003 mirrors durable P4-A recovery admission', async () =>
   mkdirSync(shmRoot, { mode: 0o700 });
   writeFileSync(path.join(shmRoot, '.PERSISTENCE_PROVEN'), 'fixture\n');
   try {
+    const sameBefore = readdirSync(sameDevice).sort();
+    const markerBefore = readFileSync(path.join(
+      sameDevice,
+      '.PERSISTENCE_PROVEN'
+    ));
     const same = qualifyRecoveryDomain(PACKAGE_ROOT, sameDevice);
     assert.equal(same.admitted, false);
     assert.equal(same.distinctDevice, false);
+    assert.equal(same.qualifierSideEffectFree, true);
+    assert.deepEqual(readdirSync(sameDevice).sort(), sameBefore);
+    assert.deepEqual(
+      readFileSync(path.join(sameDevice, '.PERSISTENCE_PROVEN')),
+      markerBefore
+    );
+
+    const liveIdentity = frozenFixture({
+      device: 100,
+      domain: 'block:nvme0n1',
+      mount: '/',
+      path: '/live',
+      source: '/dev/nvme0n1p2'
+    });
+    const bindIdentity = frozenFixture({
+      device: 100,
+      domain: 'block:nvme0n1',
+      mount: '/bind',
+      path: '/bind',
+      source: '/dev/nvme0n1p2'
+    });
+    const sameBind = qualifyRecoveryFixtureIdentity({
+      live: liveIdentity,
+      recovery: bindIdentity
+    });
+    assert.deepEqual(sameBind.live, liveIdentity);
+    assert.deepEqual(sameBind.recovery, bindIdentity);
+    assert.equal(sameBind.admitted, false);
+    assert.equal(sameBind.distinctMount, true);
+    assert.equal(sameBind.distinctDevice, false);
+    assert.equal(sameBind.distinctRelevantFailureDomain, false);
+
+    const loopIdentity = frozenFixture({
+      device: 200,
+      domain: 'block:nvme0n1',
+      mount: '/loop',
+      path: '/loop',
+      source: '/dev/loop21'
+    });
+    const loopOnLive = qualifyRecoveryFixtureIdentity({
+      live: liveIdentity,
+      recovery: loopIdentity
+    });
+    assert.equal(loopOnLive.admitted, false);
+    assert.equal(loopOnLive.distinctDevice, true);
+    assert.equal(loopOnLive.distinctRelevantFailureDomain, false);
 
     const volatile = qualifyRecoveryDomain(PACKAGE_ROOT, shmRoot);
     assert.equal(volatile.admitted, false);
@@ -158,6 +289,9 @@ test('merge blocker P2-003 mirrors durable P4-A recovery admission', async () =>
     assert.equal(valid.persistenceProven, true);
     assert.equal(valid.distinctDevice, true);
     assert.equal(valid.distinctMount, true);
+    assert.equal(valid.distinctRelevantFailureDomain, true);
+    assert.equal(valid.live.underlyingDevice, 'block:nvme0n1');
+    assert.equal(valid.recovery.underlyingDevice, 'block:sda');
   } finally {
     chmodSync(nonWritable, 0o700);
     rmSync(shmRoot, { recursive: true, force: true });
@@ -222,9 +356,11 @@ test('merge blocker THIRD-R1-NEW-P2-003 rejects open findings and identity drift
     BASE,
     MERGE_BLOCKING_FINDINGS,
     PREDECESSOR,
+    parseStrictJsonBytes,
     surfaceIdentity,
     validateCandidateIdentityFreeze,
-    validateFindingDisposition
+    validateFindingDisposition,
+    validateRepairEvidence
   } = await tool('tools/validate-pr41-merge-p2-candidate.mjs');
   const fullPrSurface = surfaceIdentity(['b', 'a', 'c']);
   const repairDelta = surfaceIdentity(['b']);
@@ -258,7 +394,7 @@ test('merge blocker THIRD-R1-NEW-P2-003 rejects open findings and identity drift
   );
 
   const allOpen = validDisposition(MERGE_BLOCKING_FINDINGS);
-  for (const finding of Object.values(allOpen.findings)) finding.status = 'OPEN';
+  allOpen.findings['MMR0-P6-PR41-R2-P2-003'].status = 'OPEN';
   assert.throws(
     () => validateFindingDisposition(allOpen),
     /FINDING_DISPOSITION_INVALID/u
@@ -281,4 +417,99 @@ test('merge blocker THIRD-R1-NEW-P2-003 rejects open findings and identity drift
     }, actual),
     /CANDIDATE_IDENTITY_FREEZE_MISMATCH:full_pr_surface_sha256/u
   );
+
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from(
+      '{"findings":{"MMR0-P6-PR41-R2-P2-003":{},"MMR0-P6-PR41-R2-P2-003":{}}}',
+      'utf8'
+    ), 'ATTACK'),
+    /ATTACK_DUPLICATE_KEY:MMR0-P6-PR41-R2-P2-003/u
+  );
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from(
+      '{"findings":{"x":{"evidence":{},"evidence":{}}}}',
+      'utf8'
+    ), 'ATTACK'),
+    /ATTACK_DUPLICATE_KEY:evidence/u
+  );
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from(
+      '{"summary":{},"summary":{}}',
+      'utf8'
+    ), 'ATTACK'),
+    /ATTACK_DUPLICATE_KEY:summary/u
+  );
+  assert.throws(
+    () => parseStrictJsonBytes(Buffer.from(
+      'findings:\n  x: {}\n',
+      'utf8'
+    ), 'ATTACK'),
+    /ATTACK_JSON_VALUE_INVALID/u
+  );
+
+  const evidence = validEvidence(MERGE_BLOCKING_FINDINGS);
+  assert.equal(
+    Object.keys(validateRepairEvidence(evidence)).length,
+    MERGE_BLOCKING_FINDINGS.length
+  );
+  for (const invalidEntry of [undefined, null, {}, []]) {
+    const attack = validEvidence(MERGE_BLOCKING_FINDINGS);
+    attack.findings['MMR0-P6-PR41-R2-P2-003'] = invalidEntry;
+    assert.throws(
+      () => validateRepairEvidence(attack),
+      /EVIDENCE_FINDING/u
+    );
+  }
+  const wrongBinding = validEvidence(MERGE_BLOCKING_FINDINGS);
+  wrongBinding.findings['MMR0-P6-PR41-R2-P2-003'].evidence_binding_sha256 =
+    '0'.repeat(64);
+  assert.throws(
+    () => validateRepairEvidence(wrongBinding),
+    /EVIDENCE_FINDING_BINDING_MISMATCH/u
+  );
+  const extraFinding = validEvidence(MERGE_BLOCKING_FINDINGS);
+  extraFinding.findings.unexpected = {};
+  assert.throws(
+    () => validateRepairEvidence(extraFinding),
+    /EVIDENCE_FINDINGS_EXACT_SET_INVALID/u
+  );
+
+  const missingDisposition = validDisposition(MERGE_BLOCKING_FINDINGS);
+  delete missingDisposition.findings['MMR0-P6-PR41-R2-P2-003'];
+  assert.throws(
+    () => validateFindingDisposition(missingDisposition),
+    /FINDING_DISPOSITION_EXACT_SET_INVALID/u
+  );
+  const extraDisposition = validDisposition(MERGE_BLOCKING_FINDINGS);
+  extraDisposition.findings.unexpected = {};
+  assert.throws(
+    () => validateFindingDisposition(extraDisposition),
+    /FINDING_DISPOSITION_EXACT_SET_INVALID/u
+  );
+  assert.throws(
+    () => validateCandidateIdentityFreeze({
+      candidate_identity: {
+        ...freeze.candidate_identity,
+        unknown_schema_field: true
+      }
+    }, actual),
+    /CANDIDATE_IDENTITY_EXACT_SHAPE_INVALID/u
+  );
+});
+
+test('strict validator parser preserves exact legacy canonical bytes', async () => {
+  const { parseStrictJsonBytes } = await tool(
+    'tools/validate-pr41-merge-p2-candidate.mjs'
+  );
+  const { createHash } = require('node:crypto');
+  for (const [name, expectedSha256] of Object.entries(
+    LEGACY_VALIDATOR_INPUTS
+  )) {
+    const bytes = readFileSync(path.join(CANONICAL_EVIDENCE_ROOT, name));
+    assert.equal(
+      createHash('sha256').update(bytes).digest('hex'),
+      expectedSha256
+    );
+    assert.doesNotThrow(() => parseStrictJsonBytes(bytes, name));
+  }
 });

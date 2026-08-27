@@ -29,6 +29,13 @@ use super::protection::{
     ProtectionVerdict, ReadbackVerificationEvidence, evaluate_protection_claim,
 };
 
+#[path = "../bin/p4a-recovery-qualifier/logic.rs"]
+mod canonical_recovery_qualifier;
+use canonical_recovery_qualifier::{
+    RecoveryFixtureIdentity, RecoveryMountIdentity, classify_recovery_identities,
+    qualify_recovery_fixture,
+};
+
 // ===========================================================================
 // Fixtures
 // ===========================================================================
@@ -175,52 +182,113 @@ fn rehydrate_a7_v7_claim(
     })
 }
 
-/// Filesystem type of the mount containing `path` (from /proc/mounts).
-fn mount_fs_type(path: &Path) -> Option<String> {
-    let absolute = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
-    let mounts = std::fs::read_to_string("/proc/mounts").ok()?;
-    let mut best: Option<(usize, String)> = None;
-    for line in mounts.lines() {
-        let fields: Vec<&str> = line.split_whitespace().collect();
-        if fields.len() < 3 {
-            continue;
-        }
-        let mount = fields[1].replace("\\040", " ");
-        let fstype = fields[2].to_string();
-        if absolute.starts_with(&mount) {
-            let depth = mount.len();
-            if best
-                .as_ref()
-                .map_or(true, |(current_depth, _)| depth > *current_depth)
-            {
-                best = Some((depth, fstype));
-            }
-        }
-    }
-    best.map(|(_, fstype)| fstype)
+/// Admit a recovery fixture for durable independent PROTECTED evidence.
+/// The validation-only qualifier is the sole decision authority used by both
+/// this Rust proof path and the Node prerequisite preflight.
+fn classify_recovery_fixture(live_root: &Path, recovery_mount: &Path) -> Value {
+    serde_json::to_value(
+        qualify_recovery_fixture(live_root, recovery_mount)
+            .expect("canonical recovery fixture qualification"),
+    )
+    .expect("serialize recovery fixture qualification")
 }
 
-/// Admit a recovery fixture for durable independent PROTECTED evidence.
-/// A fixture is admitted ONLY if it is a distinct mount, a distinct device,
-/// non-volatile (not tmpfs/ramfs), and carries the harness persistence marker.
-fn classify_recovery_fixture(live_root: &Path, recovery_mount: &Path) -> Value {
-    let live = fault_domain_identity(live_root).expect("live domain identity");
-    let recovery = fault_domain_identity(recovery_mount).expect("recovery domain identity");
-    let independent = domains_are_independent(&live, &recovery);
-    let fs_type = mount_fs_type(recovery_mount).unwrap_or_default();
-    let volatile = fs_type == "tmpfs" || fs_type == "ramfs";
-    let persistence_proven = recovery_mount.join(".PERSISTENCE_PROVEN").is_file();
-    let admitted = independent && !volatile && persistence_proven;
-    json!({
-        "live_domain": {"mount": live.mount_point, "device": live.device_id},
-        "recovery_domain": {"mount": recovery.mount_point, "device": recovery.device_id, "fs": fs_type},
-        "distinct_mount": live.mount_point != recovery.mount_point,
-        "distinct_device": live.device_id != recovery.device_id,
-        "volatile": volatile,
-        "persistence_proven": persistence_proven,
-        "admitted": admitted,
-        "classification": if admitted { "ADMITTED_DURABLE_INDEPENDENT" } else { "NOT_ELIGIBLE_FOR_PROTECTED_PROOF" },
-    })
+fn frozen_recovery_identity(
+    path: &str,
+    mount: &str,
+    source: &str,
+    filesystem_type: &str,
+    device: u64,
+    failure_domain: &str,
+) -> RecoveryFixtureIdentity {
+    RecoveryFixtureIdentity {
+        requested_path: path.to_string(),
+        canonical_realpath: path.to_string(),
+        mount: RecoveryMountIdentity {
+            source: source.to_string(),
+            target: mount.to_string(),
+            filesystem_type: filesystem_type.to_string(),
+            mount_id: device,
+            major_minor: format!("0:{device}"),
+        },
+        st_dev: device,
+        underlying_device: failure_domain.to_string(),
+        relevant_failure_domain_identity: vec![failure_domain.to_string()],
+        is_directory: true,
+        owner_writable: true,
+        persistence_proven: true,
+        volatile: matches!(filesystem_type, "tmpfs" | "ramfs"),
+    }
+}
+
+#[test]
+fn p4a_recovery_qualifier_canonical_attack_matrix() {
+    let live =
+        frozen_recovery_identity("/live", "/", "/dev/nvme0n1p2", "ext4", 100, "block:nvme0n1");
+
+    let same_device_bind = frozen_recovery_identity(
+        "/bind",
+        "/bind",
+        "/dev/nvme0n1p2",
+        "ext4",
+        100,
+        "block:nvme0n1",
+    );
+    let same_device = classify_recovery_identities(live.clone(), same_device_bind);
+    assert!(!same_device.admitted);
+    assert!(!same_device.distinct_device);
+    assert!(!same_device.distinct_relevant_failure_domain);
+
+    let loop_on_live = frozen_recovery_identity(
+        "/loop",
+        "/loop",
+        "/dev/loop21",
+        "ext4",
+        200,
+        "block:nvme0n1",
+    );
+    let loop_result = classify_recovery_identities(live.clone(), loop_on_live);
+    assert!(!loop_result.admitted);
+    assert!(loop_result.distinct_device);
+    assert!(!loop_result.distinct_relevant_failure_domain);
+
+    let tmpfs = frozen_recovery_identity(
+        "/dev/shm/fixture",
+        "/dev/shm",
+        "tmpfs",
+        "tmpfs",
+        300,
+        "virtual:tmpfs:tmpfs",
+    );
+    let tmpfs_result = classify_recovery_identities(live.clone(), tmpfs);
+    assert!(!tmpfs_result.admitted);
+    assert!(tmpfs_result.volatile);
+
+    let mut non_writable = frozen_recovery_identity(
+        "/readonly",
+        "/readonly",
+        "/dev/sdb1",
+        "ext4",
+        400,
+        "block:sdb",
+    );
+    non_writable.owner_writable = false;
+    let non_writable_result = classify_recovery_identities(live.clone(), non_writable);
+    assert!(!non_writable_result.admitted);
+    assert!(!non_writable_result.owner_writable);
+
+    let valid = frozen_recovery_identity(
+        "/media/jenn/work",
+        "/media/jenn/work",
+        "/dev/sda1",
+        "ntfs3",
+        500,
+        "block:sda",
+    );
+    let valid_result = classify_recovery_identities(live, valid);
+    assert!(valid_result.admitted);
+    assert!(valid_result.distinct_relevant_failure_domain);
+    assert!(valid_result.qualifier_side_effect_free);
 }
 
 /// Assert the durable recovery fixture is admitted (fail-closed otherwise).
