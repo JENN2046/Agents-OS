@@ -21,7 +21,7 @@ const VCPCHAT_ROOT = process.env.AGENTS_OS_RESIDENT_VCPCHAT_ROOT
   ? path.resolve(process.env.AGENTS_OS_RESIDENT_VCPCHAT_ROOT)
   : DEFAULT_VCPCHAT_ROOT;
 const { JSDOM } = require(
-  path.resolve(DEFAULT_VCPCHAT_ROOT, 'node_modules/jsdom')
+  path.resolve(VCPCHAT_ROOT, 'node_modules/jsdom')
 );
 const {
   initialize,

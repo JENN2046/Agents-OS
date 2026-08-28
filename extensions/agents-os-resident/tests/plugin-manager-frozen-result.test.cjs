@@ -5,7 +5,9 @@ const Module = require('node:module');
 const path = require('node:path');
 const test = require('node:test');
 
-const WORKSPACE_ROOT = path.resolve(__dirname, '../../..');
+const WORKSPACE_ROOT = process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT
+  ? path.resolve(process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT)
+  : path.resolve(__dirname, '../../..');
 const HOST_SOURCE = path.resolve(
   WORKSPACE_ROOT,
   'runtime/VCPToolBox/Plugin.js'

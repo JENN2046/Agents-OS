@@ -12,6 +12,13 @@ const {
 } = require('./constants');
 const { createCompanionClient } = require('./client');
 const {
+  cognitiveObservationMessage,
+  digest,
+  isCognitiveObservationMessage,
+  projectionRequest,
+  resolveCognitiveContext
+} = require('./cognitive-context');
+const {
   discoveryBootstrapMessage,
   shouldBootstrapDiscovery
 } = require('./discovery');
@@ -734,6 +741,12 @@ function createResidentAdapter({
 
   async function processMessages(messages, requestConfig) {
     let redactedMessages = redactConsentSensitiveMessages(messages);
+    const inheritedCognitiveObservation = redactedMessages
+      .some(isCognitiveObservationMessage);
+    if (inheritedCognitiveObservation) {
+      redactedMessages = redactedMessages
+        .filter((message) => !isCognitiveObservationMessage(message));
+    }
     try {
       if (!client || !attachment || attachment.destroyed) return redactedMessages;
       const ingress = latestUserIngress(messages, requestConfig);
@@ -745,12 +758,58 @@ function createResidentAdapter({
       const observation = fixedConsentObservation(result);
       if (observation === null) {
         if (result?.resultCode === 'NO_PENDING_PROPOSAL'
-          && !isConsentSensitiveText(ingress.text)
-          && shouldBootstrapDiscovery(ingress.text)) {
-          return [
-            ...redactedMessages,
-            discoveryBootstrapMessage()
-          ];
+          && !isConsentSensitiveText(ingress.text)) {
+          if (isPlainObject(requestConfig?.agentsOsResidentCognitiveContext)) {
+            if (inheritedCognitiveObservation
+              || redactedMessages.length !== 1
+              || ingress.index !== 0) {
+              return redactedMessages;
+            }
+            const transcriptDigest = digest(ingress.text)
+              .slice('sha256:'.length);
+            const minted = await client.mintCognitiveSession({
+              transcriptDigest
+            });
+            if (!exactKeys(minted, [
+              'freshSessionId',
+              'projectionGeneration',
+              'resultCode',
+              'transcriptDigest'
+            ])
+              || minted.resultCode !== 'MMR_COGNITIVE_SESSION_MINTED'
+              || minted.transcriptDigest !== transcriptDigest
+              || typeof minted.freshSessionId !== 'string'
+              || !minted.freshSessionId.startsWith('fresh-session:r2:')
+              || !Number.isSafeInteger(minted.projectionGeneration)
+              || minted.projectionGeneration < 0) {
+              throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
+            }
+            const cognitiveConfig = {
+              ...requestConfig.agentsOsResidentCognitiveContext,
+              expectedProjectionGeneration: minted.projectionGeneration,
+              freshSessionId: minted.freshSessionId
+            };
+            const request = projectionRequest(
+              cognitiveConfig,
+              ingress.text
+            );
+            const projection = await client.cognitiveContext(request);
+            const resolved = resolveCognitiveContext(
+              projection,
+              cognitiveConfig,
+              ingress.text
+            );
+            return [
+              ...redactedMessages,
+              cognitiveObservationMessage(resolved)
+            ];
+          }
+          if (shouldBootstrapDiscovery(ingress.text)) {
+            return [
+              ...redactedMessages,
+              discoveryBootstrapMessage()
+            ];
+          }
         }
         return redactedMessages;
       }

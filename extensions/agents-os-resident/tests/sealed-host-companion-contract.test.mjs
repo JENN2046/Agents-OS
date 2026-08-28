@@ -8,7 +8,9 @@ import { fileURLToPath } from 'node:url';
 
 const TEST_PATH = fileURLToPath(import.meta.url);
 const PACKAGE_ROOT = resolve(dirname(TEST_PATH), '..');
-const WORKSPACE_ROOT = resolve(PACKAGE_ROOT, '../..');
+const WORKSPACE_ROOT = process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT
+  ? resolve(process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT)
+  : resolve(PACKAGE_ROOT, '../..');
 const VCP_ROOT = resolve(WORKSPACE_ROOT, 'runtime/VCPToolBox');
 const FIXTURE = JSON.parse(readFileSync(
   resolve(PACKAGE_ROOT, 'fixtures/sealed-vcptoolbox-host-contract.v0.1.json'),

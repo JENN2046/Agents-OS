@@ -62,6 +62,19 @@ function lifecycleDouble() {
       calls.push(['consent', input]);
       return { resultCode: 'CONSENT_REJECTED', attemptsRemaining: 2 };
     },
+    async queryMmrMutationCore(input) {
+      if (input.operation === 'QUERY_MMR_COGNITIVE_GENERATION') {
+        calls.push(['generation', input]);
+        return {
+          accepted: true,
+          projectionGeneration: 7,
+          resultCode: 'MMR_COGNITIVE_GENERATION_READ_ONLY_OK',
+          transcriptDigest: input.query.transcriptDigest
+        };
+      }
+      calls.push(['cognitive', input]);
+      return { resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK' };
+    },
     async query(input) {
       calls.push(['query', input]);
       return { resultCode: 'QUERY_OK', items: [] };
@@ -123,10 +136,46 @@ test('server supports status, one token-bound attachment and protected short req
     operation: 'QUERY_GOALS',
     query: { mode: 'LIST' }
   })).resultCode, 'QUERY_OK');
-  assert.deepEqual(lifecycle.calls.slice(0, 3).map((entry) => entry[0]), [
+  const transcriptDigest = 'd'.repeat(64);
+  const minted = await client.mintCognitiveSession({ transcriptDigest });
+  assert.equal(minted.resultCode, 'MMR_COGNITIVE_SESSION_MINTED');
+  assert.equal(minted.projectionGeneration, 7);
+  assert.match(minted.freshSessionId, /^fresh-session:r2:[0-9a-f]{64}$/u);
+  const cognitiveRequest = {
+    operation: 'QUERY_MMR_COGNITIVE_CONTEXT',
+    query: {
+      expectedProjectionGeneration: minted.projectionGeneration,
+      freshSessionId: minted.freshSessionId,
+      transcriptDigest
+    }
+  };
+  assert.equal((await client.cognitiveContext(cognitiveRequest)).resultCode,
+    'MMR_COGNITIVE_PROJECTION_FRESH_OK');
+  await assert.rejects(
+    client.cognitiveContext(cognitiveRequest),
+    /RESIDENT_PROTOCOL_REJECTED/u
+  );
+  const wrongGenerationMint = await client.mintCognitiveSession({
+    transcriptDigest
+  });
+  await assert.rejects(
+    client.cognitiveContext({
+      ...cognitiveRequest,
+      query: {
+        ...cognitiveRequest.query,
+        expectedProjectionGeneration:
+          wrongGenerationMint.projectionGeneration + 1,
+        freshSessionId: wrongGenerationMint.freshSessionId
+      }
+    }),
+    /RESIDENT_PROTOCOL_REJECTED/u
+  );
+  assert.deepEqual(lifecycle.calls.slice(0, 5).map((entry) => entry[0]), [
     'prepare',
     'consent',
-    'query'
+    'query',
+    'generation',
+    'cognitive'
   ]);
   assert.equal(lifecycle.calls[0][1].attachmentGeneration, 1);
 
@@ -141,6 +190,14 @@ test('server supports status, one token-bound attachment and protected short req
   assert.equal((await client.status()).adapterAttachmentState, 'DETACHED');
   assert.equal(lifecycle.calls.at(-1)[0], 'invalidate');
   assert.equal(lifecycle.calls.at(-1)[1].attachmentGeneration, 1);
+
+  await second.attach();
+  await assert.rejects(
+    second.cognitiveContext(cognitiveRequest),
+    /RESIDENT_PROTOCOL_REJECTED/u
+  );
+  second.detach();
+  await new Promise((resolve) => setImmediate(resolve));
 
   await server.stop();
   assert.equal(existsSync(temporary.socketPath), false);

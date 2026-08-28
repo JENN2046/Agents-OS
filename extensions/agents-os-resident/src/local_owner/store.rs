@@ -59,6 +59,14 @@ const EVIDENCE_AVAILABILITY_UNAVAILABLE: &str = "UNAVAILABLE";
 const SUPPORT_STATE_SUPPORTED: &str = "SUPPORTED";
 const SUPPORT_STATE_UNSUPPORTED: &str = "UNSUPPORTED";
 const SUPPORT_STATE_UNKNOWN: &str = "UNKNOWN";
+const COGNITIVE_PROJECTION_SCHEMA: &str = "MMR0_COGNITIVE_PROJECTION_V1";
+const COGNITIVE_RULE_TYPE: &str = "MMR0_COGNITIVE_RULE_V1";
+const COGNITIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV2_STRUCTURED_RESPONSE_V1";
+const COGNITIVE_NEGATIVE_RESPONSE_CONTRACT: &str = "MMR0_CAV3_UNKNOWN_RESPONSE_V1";
+const COGNITIVE_CANDIDATE_RESPONSE_CONTRACT: &str =
+    "MMR0_CAV4_CANDIDATE_GUARD_RESPONSE_V1";
+const COGNITIVE_CANDIDATE_PROJECTION_SCHEMA: &str =
+    "MMR0_CANDIDATE_COGNITIVE_PROJECTION_V1";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum LocalOwnerFault {
@@ -2407,15 +2415,53 @@ fn recall_projection(connection: &Connection, query: &Value) -> Result<Value, Lo
         if let Some((fact_kind, fingerprint, revision, canonical_bytes)) = resolved {
             let value: Value =
                 serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+            let components = value
+                .get("components")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let provenance = components
+                .get("provenance")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let source = provenance
+                .get("source")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let subject = provenance
+                .get("subject")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let lifecycle = components
+                .get("lifecycle")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let authority = components
+                .get("authority")
+                .and_then(Value::as_object)
+                .ok_or(LocalOwnerError::StateCorrupt)?;
+            let source_ref = require_nonempty_string(source, "ref", 300)?;
+            let source_type = require_nonempty_string(source, "type", 64)?;
+            let subject_ref = require_nonempty_string(subject, "ref", 300)?;
+            let epistemic_state = require_nonempty_string(lifecycle, "epistemicState", 64)?;
+            let lifecycle_state = require_nonempty_string(lifecycle, "lifecycleState", 64)?;
+            let authority_basis_ref =
+                require_nonempty_string(authority, "authorityBasisRef", 300)?;
+            let authority_basis_type =
+                require_nonempty_string(authority, "authorityBasisType", 64)?;
             effective_projection.push(json!({
                 "admitted": true,
-                "authorityBasisRef": value["components"]["authority"]["authorityBasisRef"],
+                "authorityBasisRef": authority_basis_ref,
+                "authorityBasisType": authority_basis_type,
+                "epistemicState": epistemic_state,
                 "factKind": fact_kind,
                 "factFingerprint": fingerprint,
-                "lifecycleState": value["components"]["lifecycle"]["lifecycleState"],
+                "lifecycleState": lifecycle_state,
                 "rank": rank,
                 "revision": as_u64(revision)?,
+                "sourceRef": source_ref,
+                "sourceType": source_type,
                 "stateId": state_id,
+                "subjectRef": subject_ref,
                 "visible": visible,
             }));
         } else {
@@ -2446,6 +2492,448 @@ fn recall_projection(connection: &Connection, query: &Value) -> Result<Value, Lo
         "durableTransitionCount": as_u64(transition_count)?,
         "effectiveProjection": effective_projection,
         "retrievedUnadmitted": retrieved_unadmitted,
+    }))
+}
+
+fn declared_cognitive_rule(value: &Value) -> Result<Option<(String, String)>, LocalOwnerError> {
+    let Some(object) = value.as_object() else {
+        return Ok(None);
+    };
+    if object.get("type").and_then(Value::as_str) != Some(COGNITIVE_RULE_TYPE) {
+        return Ok(None);
+    }
+    let rule = require_exact_object(value, &["actionToken", "scenario", "type"])
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    Ok(Some((
+        require_nonempty_string(rule, "actionToken", 512)
+            .map_err(|_| LocalOwnerError::StateCorrupt)?
+            .to_owned(),
+        require_nonempty_string(rule, "scenario", 512)
+            .map_err(|_| LocalOwnerError::StateCorrupt)?
+            .to_owned(),
+    )))
+}
+
+fn canonical_cognitive_rule_count_for_scenario(
+    connection: &Connection,
+    scenario: &str,
+) -> Result<usize, LocalOwnerError> {
+    let mut statement = connection.prepare(
+        "SELECT p.logical_id,p.current_fact_fingerprint,p.current_fact_revision,f.canonical_bytes FROM current_pointer p JOIN canonical_fact f ON f.fact_kind=p.fact_kind AND f.logical_id=p.logical_id AND f.fact_revision=p.current_fact_revision WHERE p.fact_kind=?1 ORDER BY p.logical_id",
+    )?;
+    let rows = statement.query_map([MMR_STATE_FACT_KIND], |row| {
+        Ok((
+            row.get::<_, String>(0)?,
+            row.get::<_, String>(1)?,
+            row.get::<_, i64>(2)?,
+            row.get::<_, Vec<u8>>(3)?,
+        ))
+    })?;
+    let mut count = 0;
+    for row in rows {
+        let (_state_id, _fingerprint, _revision, canonical_bytes) = row?;
+        let state: Value =
+            serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+        let components = state["components"]
+            .as_object()
+            .ok_or(LocalOwnerError::StateCorrupt)?;
+        if let Some((_action_token, projected_scenario)) =
+            declared_cognitive_rule(&components["content"]["value"])?
+            && projected_scenario == scenario
+        {
+            count += 1;
+        }
+    }
+    Ok(count)
+}
+
+fn projected_cognitive_rule(
+    connection: &Connection,
+    item: &Value,
+    scenario: Option<&str>,
+) -> Result<Option<Value>, LocalOwnerError> {
+    if item["admitted"] != true
+        || item["visible"] != true
+        || item["factKind"] != MMR_STATE_FACT_KIND
+    {
+        return Ok(None);
+    }
+    let state_id = item["stateId"]
+        .as_str()
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    let current = read_mmr_current(connection, state_id)?.ok_or(LocalOwnerError::StateCorrupt)?;
+    let Some((action_token, projected_scenario)) =
+        declared_cognitive_rule(&current["state"]["components"]["content"]["value"])?
+    else {
+        return Ok(None);
+    };
+    if scenario.is_some_and(|expected| projected_scenario != expected) {
+        return Ok(None);
+    }
+    Ok(Some(json!({
+        "actionToken": action_token,
+        "admitted": true,
+        "admittedStateIdentity": item["factFingerprint"],
+        "authorityBasisRef": item["authorityBasisRef"],
+        "authorityBasisType": item["authorityBasisType"],
+        "epistemicState": item["epistemicState"],
+        "lifecycleState": item["lifecycleState"],
+        "revision": item["revision"],
+        "scenario": projected_scenario,
+        "sourceRef": item["sourceRef"],
+        "sourceType": item["sourceType"],
+        "stateId": state_id,
+        "subjectRef": item["subjectRef"],
+    })))
+}
+
+pub(super) fn candidate_minimal_basis(
+    candidate_state: &Map<String, Value>,
+) -> Result<&'static str, LocalOwnerError> {
+    let supporting_ref_present = !candidate_state["supportingEvidenceRef"].is_null();
+    let supporting_fingerprint_present =
+        !candidate_state["supportingEvidenceFingerprint"].is_null();
+    if supporting_ref_present != supporting_fingerprint_present {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    if supporting_ref_present {
+        Ok("INDEPENDENT_SUPPORTING_EVIDENCE_ADMITTED_NOT_PROMOTION_AUTHORITY")
+    } else if candidate_state["motivatingEvidenceRef"].is_null() {
+        Ok("NO_INDEPENDENT_EVIDENCE")
+    } else {
+        Ok("MOTIVATING_EVIDENCE_ONLY_NOT_VALIDATION")
+    }
+}
+
+fn candidate_initial_description(
+    connection: &Connection,
+    candidate_id: &str,
+) -> Result<String, LocalOwnerError> {
+    let canonical_bytes: Vec<u8> = connection
+        .query_row(
+            "SELECT canonical_bytes FROM canonical_fact WHERE fact_kind=?1 AND logical_id=?2 AND fact_revision=1",
+            params![CANDIDATE_FACT_KIND, candidate_id],
+            |row| row.get(0),
+        )
+        .optional()?
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    let initial: Value =
+        serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+    if initial["mutationType"] != "CREATE_CANDIDATE" {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    initial["components"]["content"]["value"]["description"]
+        .as_str()
+        .filter(|description| !description.is_empty())
+        .map(str::to_owned)
+        .ok_or(LocalOwnerError::StateCorrupt)
+}
+
+/// P6-B bounded cognitive projection for a genuinely fresh Host session.
+///
+/// The caller supplies only a scenario, a transcript digest, a stable session
+/// identity, and a bounded projection plan. The opaque action and its exact
+/// source/status are read from canonical Current bytes here. A projection is
+/// bound to the latest durable event generation; an old expected generation
+/// is rejected before any content can be returned. This function is read-only
+/// and intentionally does not select or call a provider/model.
+fn cognitive_context_projection(
+    connection: &Connection,
+    query: &Value,
+) -> Result<Value, LocalOwnerError> {
+    let query = require_exact_object(
+        query,
+        &[
+            "expectedProjectionGeneration",
+            "freshSessionId",
+            "projectionPlan",
+            "responseContract",
+            "scenario",
+            "transcriptDigest",
+        ],
+    )?;
+    let fresh_session_id = require_nonempty_string(query, "freshSessionId", 200)?;
+    let response_contract = require_nonempty_string(query, "responseContract", 100)?;
+    if response_contract != COGNITIVE_RESPONSE_CONTRACT
+        && response_contract != COGNITIVE_NEGATIVE_RESPONSE_CONTRACT
+        && response_contract != COGNITIVE_CANDIDATE_RESPONSE_CONTRACT
+    {
+        return Err(LocalOwnerError::InvalidInput);
+    }
+    let scenario = require_nonempty_string(query, "scenario", 512)?;
+    let transcript_digest = require_sha256_value(
+        query
+            .get("transcriptDigest")
+            .ok_or(LocalOwnerError::InvalidInput)?,
+    )?;
+    let projection_plan = query
+        .get("projectionPlan")
+        .ok_or(LocalOwnerError::InvalidInput)?;
+    require_exact_object(projection_plan, &["items", "retrieved"])?;
+
+    let generation: i64 = connection.query_row(
+        "SELECT COALESCE(MAX(event_sequence),0) FROM event",
+        [],
+        |row| row.get(0),
+    )?;
+    let generation = as_u64(generation)?;
+    let expected_generation = match query.get("expectedProjectionGeneration") {
+        Some(Value::Null) => None,
+        Some(Value::Number(_)) => Some(require_u64(query, "expectedProjectionGeneration")?),
+        _ => return Err(LocalOwnerError::InvalidInput),
+    };
+    if expected_generation.is_some_and(|expected| expected != generation) {
+        return Ok(json!({
+            "accepted": false,
+            "currentProjectionGeneration": generation,
+            "expectedProjectionGeneration": expected_generation,
+            "freshSessionId": fresh_session_id,
+            "resultCode": "STALE_PROJECTION_FAIL_CLOSED",
+        }));
+    }
+
+    let projection = recall_projection(connection, &json!({"plan": projection_plan}))?;
+    let projected_items = projection["effectiveProjection"]
+        .as_array()
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    if response_contract == COGNITIVE_CANDIDATE_RESPONSE_CONTRACT {
+        return candidate_cognitive_context_projection(
+            connection,
+            &projection,
+            projected_items,
+            fresh_session_id,
+            scenario,
+            transcript_digest,
+            generation,
+        );
+    }
+    let mut excluded_state_ids = Vec::new();
+    for item in projected_items {
+        if (item["admitted"] != true || item["visible"] != true)
+            && let Some(state_id) = item["stateId"].as_str()
+        {
+            excluded_state_ids.push(state_id.to_owned());
+        }
+    }
+    let canonical_match_count = canonical_cognitive_rule_count_for_scenario(connection, scenario)?;
+    let mut effective_projection = Vec::new();
+    if response_contract == COGNITIVE_RESPONSE_CONTRACT {
+        for item in projected_items {
+            if let Some(rule) = projected_cognitive_rule(connection, item, Some(scenario))? {
+                effective_projection.push(rule);
+            }
+        }
+    }
+    let available = if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+        canonical_match_count == 0
+    } else {
+        effective_projection.len() == 1
+    };
+    if !available {
+        return Ok(json!({
+            "accepted": false,
+            "freshSessionId": fresh_session_id,
+            "projectionGeneration": generation,
+            "resultCode": if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+                "NEGATIVE_RULE_APPEARED_IN_PROJECTION"
+            } else {
+                "CURRENT_STATE_NOT_COGNITIVELY_AVAILABLE"
+            },
+        }));
+    }
+
+    let projection_value = json!({
+        "effectiveProjection": effective_projection,
+        "excludedStateIds": excluded_state_ids,
+        "freshSessionId": fresh_session_id,
+        "projectionGeneration": generation,
+        "schema": COGNITIVE_PROJECTION_SCHEMA,
+        "transcriptDigest": transcript_digest,
+    });
+    let projection_identity = format!(
+        "sha256:{}",
+        sha256_hex(&canonical_value_bytes(&projection_value)?)
+    );
+    Ok(json!({
+        "accepted": true,
+        "durableTransitionCount": projection["durableTransitionCount"],
+        "freshSessionId": fresh_session_id,
+        "projection": projection_value,
+        "projectionGeneration": generation,
+        "projectionIdentity": projection_identity,
+        "resultCode": if response_contract == COGNITIVE_NEGATIVE_RESPONSE_CONTRACT {
+            "MMR_COGNITIVE_PROJECTION_EMPTY_OK"
+        } else {
+            "MMR_COGNITIVE_PROJECTION_FRESH_OK"
+        },
+    }))
+}
+
+fn cognitive_projection_generation(
+    connection: &Connection,
+    query: &Value,
+) -> Result<Value, LocalOwnerError> {
+    let query = require_exact_object(query, &["transcriptDigest"])?;
+    let transcript_digest = require_sha256_value(
+        query
+            .get("transcriptDigest")
+            .ok_or(LocalOwnerError::InvalidInput)?,
+    )?;
+    let generation: i64 = connection.query_row(
+        "SELECT COALESCE(MAX(event_sequence),0) FROM event",
+        [],
+        |row| row.get(0),
+    )?;
+    Ok(json!({
+        "accepted": true,
+        "projectionGeneration": as_u64(generation)?,
+        "resultCode": "MMR_COGNITIVE_GENERATION_READ_ONLY_OK",
+        "transcriptDigest": transcript_digest,
+    }))
+}
+
+/// P6-D Candidate lane for the existing fresh-session cognitive projection.
+///
+/// Candidate facts already have an authority-checked durable lifecycle in
+/// `MMR_CANDIDATE_CORE`; this bridge is read-only and does not create another
+/// Candidate store. It derives epistemic status from the fact kind and the
+/// stored Candidate lifecycle, never from fixture hints. The Current control
+/// remains a separate adopted lane so cognition cannot flatten both classes.
+fn candidate_cognitive_context_projection(
+    connection: &Connection,
+    projection: &Value,
+    projected_items: &[Value],
+    fresh_session_id: &str,
+    scenario: &str,
+    transcript_digest: &str,
+    generation: u64,
+) -> Result<Value, LocalOwnerError> {
+    let mut canonical_projection = Vec::new();
+    let mut candidate_projection = Vec::new();
+    let mut excluded_state_ids = Vec::new();
+
+    for item in projected_items {
+        if item["admitted"] != true || item["visible"] != true {
+            if let Some(state_id) = item["stateId"].as_str() {
+                excluded_state_ids.push(state_id.to_owned());
+            }
+            continue;
+        }
+        let state_id = item["stateId"]
+            .as_str()
+            .ok_or(LocalOwnerError::StateCorrupt)?;
+        match item["factKind"].as_str() {
+            Some(MMR_STATE_FACT_KIND) => {
+                let Some(rule) = projected_cognitive_rule(connection, item, None)? else {
+                    excluded_state_ids.push(state_id.to_owned());
+                    continue;
+                };
+                canonical_projection.push(json!({
+                    "actionToken": rule["actionToken"],
+                    "admitted": true,
+                    "admittedStateIdentity": item["factFingerprint"],
+                    "adopted": true,
+                    "authorityBasisRef": item["authorityBasisRef"],
+                    "authorityBasisType": item["authorityBasisType"],
+                    "epistemicState": item["epistemicState"],
+                    "lifecycleState": item["lifecycleState"],
+                    "memoryStatus": "ADOPTED_CURRENT",
+                    "revision": item["revision"],
+                    "scenario": rule["scenario"],
+                    "sourceRef": item["sourceRef"],
+                    "sourceType": item["sourceType"],
+                    "stateId": state_id,
+                    "subjectRef": item["subjectRef"],
+                }));
+            }
+            Some(CANDIDATE_FACT_KIND) => {
+                let current = read_candidate_current(connection, state_id)?
+                    .ok_or(LocalOwnerError::StateCorrupt)?;
+                let candidate_state = current["state"]["candidateState"]
+                    .as_object()
+                    .ok_or(LocalOwnerError::StateCorrupt)?;
+                let candidate_status = require_nonempty_string(candidate_state, "status", 32)
+                    .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                if candidate_status != CANDIDATE_STATUS_CANDIDATE {
+                    excluded_state_ids.push(state_id.to_owned());
+                    continue;
+                }
+                let description = candidate_initial_description(connection, state_id)?;
+                let proposed_rule: Value = serde_json::from_str(&description)
+                    .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                let proposed_rule =
+                    require_exact_object(&proposed_rule, &["proposedActionToken", "scenario"])
+                        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                let proposed_scenario = require_nonempty_string(proposed_rule, "scenario", 512)
+                    .map_err(|_| LocalOwnerError::StateCorrupt)?;
+                if proposed_scenario != scenario {
+                    excluded_state_ids.push(state_id.to_owned());
+                    continue;
+                }
+                let source_ref = item["sourceRef"]
+                    .as_str()
+                    .ok_or(LocalOwnerError::StateCorrupt)?;
+                let fact_fingerprint = item["factFingerprint"]
+                    .as_str()
+                    .ok_or(LocalOwnerError::StateCorrupt)?;
+                let minimal_basis = candidate_minimal_basis(candidate_state)?;
+                candidate_projection.push(json!({
+                    "adopted": false,
+                    "candidateDigest": format!("sha256:{fact_fingerprint}"),
+                    "candidateId": state_id,
+                    "candidateStatus": candidate_status,
+                    "executionAuthority": false,
+                    "minimalBasis": minimal_basis,
+                    "projectedAs": "HYPOTHESIS",
+                    "promotionAuthority": false,
+                    "proposedActionToken": require_nonempty_string(
+                        proposed_rule,
+                        "proposedActionToken",
+                        512,
+                    )
+                    .map_err(|_| LocalOwnerError::StateCorrupt)?,
+                    "scenario": proposed_scenario,
+                    "sourceClass": item["sourceType"],
+                    "sourceIdentityOrDigest": format!(
+                        "sha256:{}",
+                        sha256_hex(source_ref.as_bytes())
+                    ),
+                }));
+            }
+            _ => excluded_state_ids.push(state_id.to_owned()),
+        }
+    }
+
+    if canonical_projection.len() != 1 || candidate_projection.len() != 1 {
+        return Ok(json!({
+            "accepted": false,
+            "freshSessionId": fresh_session_id,
+            "projectionGeneration": generation,
+            "resultCode": "CANDIDATE_GUARD_INPUT_NOT_COGNITIVELY_AVAILABLE",
+        }));
+    }
+
+    let projection_value = json!({
+        "candidateProjection": candidate_projection,
+        "effectiveProjection": canonical_projection,
+        "excludedStateIds": excluded_state_ids,
+        "freshSessionId": fresh_session_id,
+        "projectionGeneration": generation,
+        "schema": COGNITIVE_CANDIDATE_PROJECTION_SCHEMA,
+        "transcriptDigest": transcript_digest,
+    });
+    let projection_identity = format!(
+        "sha256:{}",
+        sha256_hex(&canonical_value_bytes(&projection_value)?)
+    );
+    Ok(json!({
+        "accepted": true,
+        "durableTransitionCount": projection["durableTransitionCount"],
+        "freshSessionId": fresh_session_id,
+        "projection": projection_value,
+        "projectionGeneration": generation,
+        "projectionIdentity": projection_identity,
+        "resultCode": "MMR_CANDIDATE_COGNITIVE_GUARD_FRESH_OK",
     }))
 }
 
@@ -3961,6 +4449,12 @@ impl LocalOwnerStore {
                     "projection": recall_projection(&self.connection, query)?,
                     "resultCode": "MMR_RECALL_PROJECTION_READ_ONLY_OK",
                 }))
+            }
+            "QUERY_MMR_COGNITIVE_CONTEXT" => {
+                cognitive_context_projection(&self.connection, query)
+            }
+            "QUERY_MMR_COGNITIVE_GENERATION" => {
+                cognitive_projection_generation(&self.connection, query)
             }
             "QUERY_MMR_ACK_TRACE" => {
                 // P2-H OBS-ACK: read-only acknowledgement disposition per

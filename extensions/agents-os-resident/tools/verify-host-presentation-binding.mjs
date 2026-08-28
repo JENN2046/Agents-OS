@@ -43,9 +43,10 @@ function hasExactKeys(value, expectedKeys) {
 
 function resolveWorkspaceRoot() {
   const candidates = [
+    process.env.AGENTS_OS_RESIDENT_VALIDATION_WORKSPACE_ROOT,
     resolve(PACKAGE_ROOT, '../..'),
     resolve(PACKAGE_ROOT, '../../../..')
-  ];
+  ].filter((candidate) => typeof candidate === 'string');
   for (const candidate of candidates) {
     if (SOURCE_PATHS.every((sourcePath) => (
       existsSync(resolve(candidate, sourcePath))
