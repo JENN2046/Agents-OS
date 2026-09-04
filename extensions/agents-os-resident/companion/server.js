@@ -359,6 +359,8 @@ function createCompanionServer({
           const result = await publishMemoryBody({
             payload: request.payload, presenceSession, lifecycle, activationConfig,
             isCurrent: () => !stopping && !target.socket.destroyed
+              && !socket.destroyed && !socket.closed
+              && !socket.readableEnded && !socket.writableEnded
               && attachment === target && target.presenceSession === presenceSession
               && request.attachmentToken === target.token
               && request.attachmentGeneration === target.generation

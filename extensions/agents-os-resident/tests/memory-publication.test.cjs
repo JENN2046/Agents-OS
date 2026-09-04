@@ -198,6 +198,43 @@ test('publication needs Presence and an attached authenticated session', async (
   noPublication(f);
 });
 
+test('cancelled publication connections cannot write after delayed requery while attachment remains active', async (t) => {
+  for (const cancellation of ['request timeout', 'request disconnect']) {
+    await t.test(cancellation, { timeout: 5000 }, async (t) => {
+      const f = await fixture(t);
+      let release;
+      let started;
+      const ready = new Promise((resolve) => { started = resolve; });
+      let first = true;
+      f.setQuery(async (request) => {
+        if (first) {
+          first = false;
+          started();
+          await new Promise((resolve) => { release = resolve; });
+        }
+        return contextFor(request);
+      });
+      const requestSocket = net.createConnection(f.socketPath);
+      t.after(() => requestSocket.destroy());
+      requestSocket.on('error', () => {});
+      const closed = new Promise((resolve) => requestSocket.once('close', resolve));
+      requestSocket.once('connect', () => requestSocket.write(encodeFrame(f.request())));
+      await ready;
+      if (cancellation === 'request disconnect') requestSocket.destroy();
+      await closed;
+      // The separate attachment and its fresh Presence remain usable even
+      // though this short publication request was cancelled or timed out.
+      assert.equal((await f.client.status()).adapterAttachmentState, 'ATTACHED');
+      release();
+      await new Promise((resolve) => setImmediate(resolve));
+      noPublication(f);
+      const result = await f.client.publishMemoryBody(input());
+      assert.equal(result.receipt.publicationStatus, 'PUBLISHED_NON_CURRENT');
+      assert.equal(result.receipt.current, false);
+    });
+  }
+});
+
 test('a pending Presence query cannot graft an old session onto a new attachment', async (t) => {
   const f = await fixture(t);
   let release;

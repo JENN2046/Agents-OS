@@ -17,4 +17,11 @@ Object.defineProperty(hostContract, 'sealProviderAttempt', {
   writable: false
 });
 
+Object.defineProperty(hostContract, 'publishMemoryBody', {
+  configurable: false,
+  enumerable: false,
+  value: adapter.publishMemoryBody,
+  writable: false
+});
+
 module.exports = Object.freeze(hostContract);

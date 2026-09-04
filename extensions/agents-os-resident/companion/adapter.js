@@ -1056,6 +1056,15 @@ function createResidentAdapter({
     });
   }
 
+  async function publishMemoryBody(input) {
+    if (!client || !attachment || attachment.destroyed || !activePresenceBinding) {
+      throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+    }
+    // Reuse the client that owns this Host's sole attachment and Presence.
+    // The daemon rechecks that session before its noncurrent publication.
+    return client.publishMemoryBody(input);
+  }
+
   const adapterApi = {
     getLifecycleStatus,
     initialize,
@@ -1067,6 +1076,12 @@ function createResidentAdapter({
     configurable: false,
     enumerable: false,
     value: sealProviderAttempt,
+    writable: false
+  });
+  Object.defineProperty(adapterApi, 'publishMemoryBody', {
+    configurable: false,
+    enumerable: false,
+    value: publishMemoryBody,
     writable: false
   });
   return Object.freeze(adapterApi);

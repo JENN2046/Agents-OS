@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:7d6ea16c1e9c110396e435887e7df2ade793310bb0d9f310365bca4ea4f474dc",
+  "buildId": "sha256:ac5ba9c4425870d99881e3fe1e066a79ca0afbb3fabe870b7fec403204458a12",
   "files": [
     {
       "path": "activation.js",
@@ -15,8 +15,8 @@
     },
     {
       "path": "companion/adapter.js",
-      "byteLength": 35400,
-      "sha256": "e9b24cfe05f0bf1fb175093947433f2f0bdff016a3ca38bce1add2b209704511"
+      "byteLength": 35957,
+      "sha256": "d827cf9f58f5c723dc93293e5a210f38864d80bb07896f969218a759bf12fd5c"
     },
     {
       "path": "companion/client.js",
@@ -85,13 +85,13 @@
     },
     {
       "path": "companion/server.js",
-      "byteLength": 20201,
-      "sha256": "1dac0dc920c37eaea6fbf9bf4dc9b801121f7fa8ae9ab52ef5df1196fdf0757e"
+      "byteLength": 20318,
+      "sha256": "32910d568d8a83528249a27f54c38e4d9dbb05115304e9a9482f15238e007672"
     },
     {
       "path": "index.js",
-      "byteLength": 513,
-      "sha256": "873986fe5382f3ef418e16d692e2ab8bfea31f2e49d1ce54ff8e3d8e27488819"
+      "byteLength": 675,
+      "sha256": "f3d392ccf9eb490f7f9bd15c76fec74ba0853f2d25e47b6270c717808e4c1b77"
     },
     {
       "path": "package-manifest.json",
@@ -100,8 +100,8 @@
     },
     {
       "path": "package.json",
-      "byteLength": 4667,
-      "sha256": "07d0714026c17eeb245d084a095377994ccd27fccdb8b1e003a88959ca2cf75e"
+      "byteLength": 4745,
+      "sha256": "ff681feec324d94dcae00c29a7c0f48fb6045d66f0ddf52b00c4b1ba4eec0bed"
     },
     {
       "path": "plugin-manifest.json.block",

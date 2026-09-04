@@ -87,12 +87,15 @@ changes the host service and does not qualify a live installation.
 
 ## Memory publication across the identity boundary
 
-The Host uses the private companion client's `publishMemoryBody` method on the
-same authenticated attachment used for Presence. It supplies only a UTF-8
+The Host package entry and adapter expose a non-enumerable internal
+`publishMemoryBody` method. After `processMessages` establishes Presence, it
+reuses the same client's authenticated attachment; no second client is needed.
+The caller supplies only a UTF-8
 `Buffer` body (at most 1 MiB), typed `memoryId`, and `operationRef`. The client
 binds the request to its established Presence identity, authority generation,
 and context; callers cannot select filesystem roots. The daemon re-queries
-native Presence and rejects a stale context or a replaced/detached session
+native Presence and rejects a stale context, a replaced/detached session, or a
+closed/timed-out publication request
 before calling its private `MemoryBodyWriter` backend.
 
 Publication runs under the daemon UID. The system unit permits writes to its
