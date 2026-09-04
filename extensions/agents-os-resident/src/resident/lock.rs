@@ -21,6 +21,10 @@ impl ResidentLock {
             .truncate(false)
             .open(path)
             .map_err(ResidentError::LockIo)?;
+        Self::acquire_file(file)
+    }
+
+    pub(crate) fn acquire_file(file: File) -> Result<Self, ResidentError> {
         match FileExt::try_lock(&file) {
             Ok(()) => Ok(Self { file, held: true }),
             Err(TryLockError::WouldBlock) => Err(ResidentError::LockUnavailable),

@@ -6,11 +6,11 @@
 use std::fs::File;
 use std::io::Read;
 use std::os::unix::fs::MetadataExt;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 use rusqlite::Connection;
-use rustix::fs::{Mode, OFlags, ResolveFlags, openat2};
+use rustix::fs::{CWD, Mode, OFlags, ResolveFlags, openat2};
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
 
@@ -193,6 +193,7 @@ pub(super) struct MemoryReadVerification {
 #[derive(Clone, Debug)]
 pub(super) struct MemoryBodyVerifier {
     root: Arc<File>,
+    root_path: PathBuf,
 }
 
 #[derive(Clone)]
@@ -276,10 +277,12 @@ impl MemoryBodyVerifier {
         {
             return Err(LocalOwnerError::MemoryBodyLocatorRejected);
         }
-        let fd = rustix::fs::open(
+        let fd = openat2(
+            CWD,
             &canonical_root,
             OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
             Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
         )
         .map_err(|_| LocalOwnerError::MemoryBodyLocatorRejected)?;
         let file = File::from(fd);
@@ -291,7 +294,38 @@ impl MemoryBodyVerifier {
         }
         Ok(Self {
             root: Arc::new(file),
+            root_path: canonical_root,
         })
+    }
+
+    pub(super) fn root_identity(&self) -> Result<(u64, u64), LocalOwnerError> {
+        let metadata = self
+            .root
+            .metadata()
+            .map_err(|_| LocalOwnerError::MemoryBodyUnavailable)?;
+        if !metadata.file_type().is_dir()
+            || metadata.uid() != rustix::process::getuid().as_raw()
+            || metadata.mode() & 0o777 != 0o700
+        {
+            return Err(LocalOwnerError::MemoryBodyLocatorRejected);
+        }
+        Ok((metadata.dev(), metadata.ino()))
+    }
+
+    pub(super) fn root_path_matches(&self) -> Result<bool, LocalOwnerError> {
+        let rebound = openat2(
+            CWD,
+            &self.root_path,
+            OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
+            Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+        )
+        .map_err(|_| LocalOwnerError::MemoryBodyUnavailable)?;
+        let rebound = File::from(rebound);
+        let metadata = rebound
+            .metadata()
+            .map_err(|_| LocalOwnerError::MemoryBodyUnavailable)?;
+        Ok(self.root_identity()? == (metadata.dev(), metadata.ino()))
     }
 
     pub(super) fn verify_for_mutation(

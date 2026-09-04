@@ -8,11 +8,12 @@
 use std::fs::File;
 use std::io::{Read, Write};
 use std::os::unix::fs::MetadataExt;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use fs4::FileExt;
 use rustix::fs::{
-    AtFlags, Mode, OFlags, RenameFlags, ResolveFlags, openat2, renameat, renameat_with, unlinkat,
+    AtFlags, CWD, Mode, OFlags, RenameFlags, ResolveFlags, openat2, renameat, renameat_with,
+    unlinkat,
 };
 use serde_json::{Map, Value, json};
 
@@ -26,7 +27,7 @@ use super::store::{
 };
 use super::{
     LOCAL_OWNER_DATABASE_FILENAME, LocalOwnerError, LocalOwnerKernel, PROFILE_ID,
-    acquire_activation_lock,
+    RetainedActivationRoot, acquire_activation_lock,
 };
 use crate::resident::lock::ResidentLock;
 
@@ -295,6 +296,14 @@ pub enum WitnessCasOutcome {
 /// for binding the selector to a rollback domain outside the Resident root.
 /// The coordinator never interprets a generic I/O not-found as absence.
 pub trait ContinuityWitnessProvider {
+    fn protected_root_identity(&self) -> Result<Option<(u64, u64)>, LocalOwnerError> {
+        Ok(None)
+    }
+
+    fn protected_root_path_matches(&self) -> Result<bool, LocalOwnerError> {
+        Ok(true)
+    }
+
     fn read(&mut self, selector: &TrustedWitnessSelector) -> WitnessReadOutcome;
 
     fn enroll_if_absent(
@@ -318,6 +327,7 @@ pub trait ContinuityWitnessProvider {
 /// cannot select a slot, report ABSENT, or supply record bytes.
 pub(crate) struct ProtectedFileWitnessProvider {
     root: File,
+    root_path: PathBuf,
     selector: TrustedWitnessSelector,
 }
 
@@ -346,10 +356,12 @@ impl ProtectedFileWitnessProvider {
         {
             return Err(LocalOwnerError::ContinuityEvidenceUnavailable);
         }
-        let fd = rustix::fs::open(
+        let fd = openat2(
+            CWD,
             &canonical_root,
             OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
             Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
         )
         .map_err(|_| LocalOwnerError::ContinuityEvidenceUnavailable)?;
         let file = File::from(fd);
@@ -387,6 +399,7 @@ impl ProtectedFileWitnessProvider {
         selector.validate()?;
         Ok(Self {
             root: file,
+            root_path: canonical_root,
             selector,
         })
     }
@@ -590,6 +603,36 @@ impl ProtectedFileWitnessProvider {
 }
 
 impl ContinuityWitnessProvider for ProtectedFileWitnessProvider {
+    fn protected_root_identity(&self) -> Result<Option<(u64, u64)>, LocalOwnerError> {
+        let metadata = self
+            .root
+            .metadata()
+            .map_err(|_| LocalOwnerError::ContinuityEvidenceUnavailable)?;
+        if !metadata.file_type().is_dir()
+            || metadata.uid() != rustix::process::getuid().as_raw()
+            || metadata.mode() & 0o777 != 0o700
+        {
+            return Err(LocalOwnerError::ContinuityEvidenceUnavailable);
+        }
+        Ok(Some((metadata.dev(), metadata.ino())))
+    }
+
+    fn protected_root_path_matches(&self) -> Result<bool, LocalOwnerError> {
+        let rebound = openat2(
+            CWD,
+            &self.root_path,
+            OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
+            Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+        )
+        .map_err(|_| LocalOwnerError::ContinuityEvidenceUnavailable)?;
+        let rebound = File::from(rebound);
+        let metadata = rebound
+            .metadata()
+            .map_err(|_| LocalOwnerError::ContinuityEvidenceUnavailable)?;
+        Ok(self.protected_root_identity()? == Some((metadata.dev(), metadata.ino())))
+    }
+
     fn read(&mut self, selector: &TrustedWitnessSelector) -> WitnessReadOutcome {
         self.read_record(selector)
     }
@@ -780,7 +823,7 @@ pub fn declared_restore_with_witness_provider<P: ContinuityWitnessProvider>(
     {
         return consume_kernel_with_error(kernel, LocalOwnerError::ContinuitySuccessorExists);
     }
-    let database_path = kernel.root.join(LOCAL_OWNER_DATABASE_FILENAME);
+    let database_path = kernel.database_path.clone();
     let local_before = inspect_continuity(&database_path)?;
     if local_before
         .current
@@ -866,9 +909,11 @@ pub fn reconcile_declared_restore_with_witness_provider<P: ContinuityWitnessProv
     provider: &mut P,
 ) -> Result<LocalOwnerKernel, LocalOwnerError> {
     selector.validate()?;
-    super::validate_root(root)?;
-    let lock = acquire_activation_lock(root)?;
-    let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
+    let activation_root = RetainedActivationRoot::open(root)?;
+    require_protected_root_separation(&activation_root, provider, None, false)?;
+    let lock = acquire_activation_lock(&activation_root)?;
+    require_protected_root_separation(&activation_root, provider, None, true)?;
+    let database_path = activation_root.child_path(LOCAL_OWNER_DATABASE_FILENAME);
     let link = inspect_latest_declared_restore_witness_link(&database_path)?
         .ok_or(LocalOwnerError::WitnessReconciliationRequired)?;
     let observed = match provider.read(selector) {
@@ -904,6 +949,7 @@ pub fn reconcile_declared_restore_with_witness_provider<P: ContinuityWitnessProv
         Some(&present_evidence(selector, &successor)),
         None,
         None,
+        activation_root,
         lock,
     )?;
     if kernel.health()?["continuityAdmission"]["relation"] != "MATCH" {
@@ -929,6 +975,41 @@ fn consume_kernel_with_error<T>(
 ) -> Result<T, LocalOwnerError> {
     let _ = kernel.shutdown();
     Err(error)
+}
+
+fn require_protected_root_separation<P: ContinuityWitnessProvider>(
+    activation_root: &RetainedActivationRoot,
+    provider: &P,
+    memory_body_verifier: Option<&MemoryBodyVerifier>,
+    require_path_match: bool,
+) -> Result<(), LocalOwnerError> {
+    let activation_identity = activation_root.identity()?;
+    let witness_identity = provider.protected_root_identity()?;
+    let memory_identity = memory_body_verifier
+        .map(MemoryBodyVerifier::root_identity)
+        .transpose()?;
+    let identities = [Some(activation_identity), witness_identity, memory_identity]
+        .into_iter()
+        .flatten()
+        .collect::<Vec<_>>();
+    for left in 0..identities.len() {
+        for right in left + 1..identities.len() {
+            if identities[left] == identities[right] {
+                return Err(LocalOwnerError::ContinuityEvidenceUnavailable);
+            }
+        }
+    }
+    if require_path_match
+        && (!activation_root.path_matches()?
+            || !provider.protected_root_path_matches()?
+            || memory_body_verifier
+                .map(MemoryBodyVerifier::root_path_matches)
+                .transpose()?
+                == Some(false))
+    {
+        return Err(LocalOwnerError::ContinuityEvidenceUnavailable);
+    }
+    Ok(())
 }
 
 /// Start through the minimal Witness enrollment/read-back coordinator.
@@ -962,13 +1043,66 @@ pub fn start_with_witness_and_memory_body_root<P: ContinuityWitnessProvider>(
     genesis_provisioning_authority: Option<&Value>,
     memory_body_root: Option<&Path>,
 ) -> Result<LocalOwnerKernel, LocalOwnerError> {
+    start_with_witness_and_memory_body_root_inner(
+        root,
+        selector,
+        provider,
+        genesis_provisioning_authority,
+        memory_body_root,
+        || {},
+    )
+}
+
+#[cfg(test)]
+pub(super) fn start_with_witness_and_memory_body_root_with_post_lock_hook<
+    P: ContinuityWitnessProvider,
+    F: FnOnce(),
+>(
+    root: &Path,
+    selector: &TrustedWitnessSelector,
+    provider: &mut P,
+    genesis_provisioning_authority: Option<&Value>,
+    memory_body_root: Option<&Path>,
+    post_lock_hook: F,
+) -> Result<LocalOwnerKernel, LocalOwnerError> {
+    start_with_witness_and_memory_body_root_inner(
+        root,
+        selector,
+        provider,
+        genesis_provisioning_authority,
+        memory_body_root,
+        post_lock_hook,
+    )
+}
+
+fn start_with_witness_and_memory_body_root_inner<P: ContinuityWitnessProvider, F: FnOnce()>(
+    root: &Path,
+    selector: &TrustedWitnessSelector,
+    provider: &mut P,
+    genesis_provisioning_authority: Option<&Value>,
+    memory_body_root: Option<&Path>,
+    post_lock_hook: F,
+) -> Result<LocalOwnerKernel, LocalOwnerError> {
     selector.validate()?;
-    super::validate_root(root)?;
+    let activation_root = RetainedActivationRoot::open(root)?;
     let memory_body_verifier = memory_body_root
         .map(|body_root| MemoryBodyVerifier::open(body_root, root))
         .transpose()?;
-    let lock = acquire_activation_lock(root)?;
-    let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
+    require_protected_root_separation(
+        &activation_root,
+        provider,
+        memory_body_verifier.as_ref(),
+        false,
+    )?;
+    let lock = acquire_activation_lock(&activation_root)?;
+    post_lock_hook();
+    require_protected_root_separation(
+        &activation_root,
+        provider,
+        memory_body_verifier.as_ref(),
+        true,
+    )?;
+    let database_path = activation_root.child_path(LOCAL_OWNER_DATABASE_FILENAME);
     let local = inspect_continuity(&database_path)?;
     match provider.read(selector) {
         WitnessReadOutcome::PresentValid(record) => {
@@ -988,6 +1122,7 @@ pub fn start_with_witness_and_memory_body_root<P: ContinuityWitnessProvider>(
                 Some(&present_evidence(selector, &record)),
                 None,
                 memory_body_verifier,
+                activation_root,
                 lock,
             )
         }
@@ -1002,6 +1137,7 @@ pub fn start_with_witness_and_memory_body_root<P: ContinuityWitnessProvider>(
                     provider,
                     provisioning,
                     memory_body_verifier,
+                    activation_root,
                     lock,
                 )
             } else if enrollment_reconciliation_eligible(&local) {
@@ -1016,6 +1152,7 @@ pub fn start_with_witness_and_memory_body_root<P: ContinuityWitnessProvider>(
                     Some(&present_evidence(selector, &record)),
                     None,
                     memory_body_verifier,
+                    activation_root,
                     lock,
                 )
             } else {
@@ -1035,6 +1172,7 @@ fn bootstrap_and_enroll<P: ContinuityWitnessProvider>(
     provider: &mut P,
     provisioning: &Value,
     memory_body_verifier: Option<MemoryBodyVerifier>,
+    activation_root: RetainedActivationRoot,
     lock: ResidentLock,
 ) -> Result<LocalOwnerKernel, LocalOwnerError> {
     let mut kernel = LocalOwnerKernel::start_with_acquired_lock(
@@ -1042,6 +1180,7 @@ fn bootstrap_and_enroll<P: ContinuityWitnessProvider>(
         Some(&absent_evidence(selector)),
         Some(provisioning),
         memory_body_verifier,
+        activation_root,
         lock,
     )?;
     let anchor = kernel

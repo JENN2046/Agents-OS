@@ -5,6 +5,7 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt, symlink};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use rustix::fs::{CWD, RenameFlags, renameat_with};
 use serde_json::{Value, json};
 
 use super::memory::{MEMORY_INVENTORY_SLOT, MemoryBodyVerifier};
@@ -20,7 +21,7 @@ use super::witness::{
     TrustedWitnessSelector, WitnessCasOutcome, WitnessEnrollOutcome, WitnessReadOutcome,
     continuity_commitment, declared_restore_with_witness_provider,
     reconcile_declared_restore_with_witness_provider, start_with_witness_and_memory_body_root,
-    start_with_witness_provider,
+    start_with_witness_and_memory_body_root_with_post_lock_hook, start_with_witness_provider,
 };
 use super::{
     LOCAL_OWNER_DATABASE_FILENAME, LOCAL_OWNER_LOCK_FILENAME, LOCAL_OWNER_ROOT_LEAF,
@@ -1124,6 +1125,159 @@ fn protected_file_genesis_is_private_canonical_and_restarts_as_match_without_cal
         std::fs::read(&record_path).expect("read Witness record after restart"),
         enrolled_bytes,
         "ordinary restart must not rewrite the enrolled Witness record"
+    );
+}
+
+#[test]
+fn protected_file_genesis_rejects_resident_witness_directory_exchange_before_any_write() {
+    let fixture = protected_witness_fixture("ROOT-EXCHANGE");
+    let mut provider =
+        ProtectedFileWitnessProvider::open(&fixture.protected_root, &fixture.resident_root)
+            .expect("retain the original protected Witness root");
+    let selector = provider.selector().clone();
+    renameat_with(
+        CWD,
+        &fixture.resident_root,
+        CWD,
+        &fixture.protected_root,
+        RenameFlags::EXCHANGE,
+    )
+    .expect("exchange sibling root identities");
+
+    expect_code(
+        start_with_witness_and_memory_body_root(
+            &fixture.resident_root,
+            &selector,
+            &mut provider,
+            Some(&protected_provisioning(
+                "ROOT-EXCHANGE",
+                "PRIVATE-ROOT-EXCHANGE",
+            )),
+            None,
+        ),
+        "EXTERNAL_EVIDENCE_UNAVAILABLE",
+    );
+    for root in [&fixture.resident_root, &fixture.protected_root] {
+        assert_eq!(
+            std::fs::read_dir(root)
+                .expect("read exchanged protected root")
+                .count(),
+            0,
+            "no lock, database, or Witness record may be written after identity collapse",
+        );
+    }
+}
+
+#[test]
+fn protected_file_genesis_rechecks_all_root_bindings_after_activation_lock() {
+    let fixture = protected_witness_fixture("POST-LOCK-ROOT-EXCHANGE");
+    let mut provider =
+        ProtectedFileWitnessProvider::open(&fixture.protected_root, &fixture.resident_root)
+            .expect("retain the original protected Witness root");
+    let selector = provider.selector().clone();
+    expect_code(
+        start_with_witness_and_memory_body_root_with_post_lock_hook(
+            &fixture.resident_root,
+            &selector,
+            &mut provider,
+            Some(&protected_provisioning(
+                "POST-LOCK-ROOT-EXCHANGE",
+                "PRIVATE-POST-LOCK-ROOT-EXCHANGE",
+            )),
+            None,
+            || {
+                renameat_with(
+                    CWD,
+                    &fixture.resident_root,
+                    CWD,
+                    &fixture.protected_root,
+                    RenameFlags::EXCHANGE,
+                )
+                .expect("exchange protected roots after lock acquisition");
+            },
+        ),
+        "EXTERNAL_EVIDENCE_UNAVAILABLE",
+    );
+    assert!(
+        !fixture
+            .resident_root
+            .join(LOCAL_OWNER_DATABASE_FILENAME)
+            .exists()
+    );
+    assert!(
+        !fixture
+            .protected_root
+            .join(LOCAL_OWNER_DATABASE_FILENAME)
+            .exists()
+    );
+    assert_eq!(
+        std::fs::read_dir(&fixture.resident_root)
+            .expect("read original Witness root after exchange")
+            .count(),
+        0,
+        "the retained Witness root must receive neither local state nor enrollment",
+    );
+    assert_eq!(
+        std::fs::read_dir(&fixture.protected_root)
+            .expect("read original Resident root after exchange")
+            .count(),
+        1,
+        "only the pre-initialization activation lock may exist",
+    );
+    assert!(
+        fixture
+            .protected_root
+            .join(LOCAL_OWNER_LOCK_FILENAME)
+            .is_file()
+    );
+}
+
+#[test]
+fn protected_file_genesis_rechecks_witness_memory_pair_after_activation_lock() {
+    let fixture = protected_witness_fixture("POST-LOCK-MEMORY-EXCHANGE");
+    let memory_root = fixture._parent.path().join("private-memory-bodies");
+    std::fs::create_dir(&memory_root).expect("create private Memory body root");
+    std::fs::set_permissions(&memory_root, std::fs::Permissions::from_mode(0o700))
+        .expect("protect private Memory body root");
+    let mut provider =
+        ProtectedFileWitnessProvider::open(&fixture.protected_root, &fixture.resident_root)
+            .expect("retain the original protected Witness root");
+    let selector = provider.selector().clone();
+    expect_code(
+        start_with_witness_and_memory_body_root_with_post_lock_hook(
+            &fixture.resident_root,
+            &selector,
+            &mut provider,
+            Some(&protected_provisioning(
+                "POST-LOCK-MEMORY-EXCHANGE",
+                "PRIVATE-POST-LOCK-MEMORY-EXCHANGE",
+            )),
+            Some(&memory_root),
+            || {
+                renameat_with(
+                    CWD,
+                    &fixture.protected_root,
+                    CWD,
+                    &memory_root,
+                    RenameFlags::EXCHANGE,
+                )
+                .expect("exchange Witness and Memory roots after lock acquisition");
+            },
+        ),
+        "EXTERNAL_EVIDENCE_UNAVAILABLE",
+    );
+    assert!(!fixture.resident_root.join(LOCAL_OWNER_DATABASE_FILENAME).exists());
+    assert_eq!(
+        std::fs::read_dir(&fixture.protected_root)
+            .expect("read exchanged Memory root")
+            .count(),
+        0,
+    );
+    assert_eq!(
+        std::fs::read_dir(&memory_root)
+            .expect("read exchanged Witness root")
+            .count(),
+        0,
     );
 }
 
