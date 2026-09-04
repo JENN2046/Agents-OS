@@ -180,7 +180,8 @@ function parseProvisionArgs(result) {
   const memoryBodyRootPath = parseOptionalAbsolutePath(result, '--memory-body-root');
   const authorityFilePath = parseOptionalAbsolutePath(result, '--genesis-authority-file');
   if ([rootPath, witnessRootPath, memoryBodyRootPath, authorityFilePath]
-    .some((value) => value === null)) {
+    .some((value) => value === null)
+    || path.basename(rootPath) !== 'agents-os-resident-local-owner-v1') {
     throw fixedError('RESIDENT_DAEMON_CONFIGURATION_INVALID');
   }
   requireDisjointRoots(rootPath, witnessRootPath, memoryBodyRootPath);

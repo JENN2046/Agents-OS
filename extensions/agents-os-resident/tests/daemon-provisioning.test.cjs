@@ -216,6 +216,9 @@ test('provision parser is one exact profile and protected serve has no genesis b
   reject(provisionArgv(fixture, {
     '--memory-body-root': `${fixture.quarantine}/alias/../private-memory-bodies`
   }));
+  reject(provisionArgv(fixture, {
+    '--root': path.join(fixture.quarantine, 'wrong-resident-leaf')
+  }));
 
   reject(serveArgv(fixture, [
     '--genesis-provisioning-authority',
@@ -228,6 +231,35 @@ test('provision parser is one exact profile and protected serve has no genesis b
   reject(serveArgv(fixture).map((value) => value === fixture.witnessRootPath
     ? fixture.rootPath
     : value));
+});
+
+test('provision rejects an invalid Resident leaf before creating protected roots', async (t) => {
+  const fixture = createFixture(t);
+  removeFixtureRoots(fixture);
+  const invalidRoot = path.join(fixture.quarantine, 'wrong-resident-leaf');
+  let integrityCalls = 0;
+  let lifecycleCalls = 0;
+  await assert.rejects(
+    provisionResident({
+      argv: provisionArgv(fixture, { '--root': invalidRoot }),
+      verifyIntegrity: () => {
+        integrityCalls += 1;
+        return { buildId: BUILD_ID };
+      },
+      createLifecycle: () => {
+        lifecycleCalls += 1;
+        throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+      }
+    }),
+    { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' }
+  );
+  assert.equal(integrityCalls, 0);
+  assert.equal(lifecycleCalls, 0);
+  for (const rootPath of [
+    invalidRoot,
+    fixture.witnessRootPath,
+    fixture.memoryBodyRootPath
+  ]) assert.equal(lstatSync(rootPath, { throwIfNoEntry: false }), undefined);
 });
 
 test('root-only preparation creates exact protected roots once and preserves identity', (t) => {

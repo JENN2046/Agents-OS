@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:bc91d39baa488786f55c0fac7d02201e45831511534ab16a77912a7abc298e56",
+  "buildId": "sha256:100a4ac1b2fa720963070c184293a3a32c055ade32fa950fe8dbcd0201d05622",
   "files": [
     {
       "path": "activation.js",
@@ -15,8 +15,8 @@
     },
     {
       "path": "companion/adapter.js",
-      "byteLength": 34237,
-      "sha256": "ad572ee50380eac0117ce3beb972505969b7cbdb2fdb1f0168570ef309aeef09"
+      "byteLength": 35354,
+      "sha256": "1ac66e236ccff6c793701afa74355eebfde0c8eb31d0aeac29e7421eff3791ab"
     },
     {
       "path": "companion/client.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "companion/presence-context.js",
-      "byteLength": 31890,
-      "sha256": "549139fb9a938aeccdf64a5fa6abc6df822cde22891ad1e063ac585994b56093"
+      "byteLength": 32314,
+      "sha256": "c6762042ca722a3f6710e21d8993bb799c6c37442d0e689bc87bad9540b2d766"
     },
     {
       "path": "companion/probe.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "companion/resident-daemon.js",
-      "byteLength": 24601,
-      "sha256": "de66d9d06a5021aa3c8a762aa74f900de4c04eaf6ebb362d48f023b34213fd2a"
+      "byteLength": 24672,
+      "sha256": "c2eaae2af671c5de6cb1e241b3ebb121ad61a7658104cba21fcb0634f11beaed"
     },
     {
       "path": "companion/server.js",

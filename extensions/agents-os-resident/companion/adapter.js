@@ -629,13 +629,35 @@ function createResidentAdapter({
   let client = null;
   let attachment = null;
   let activePresenceBinding = null;
+  let activePresenceFlight = null;
+  let presenceProjectionTail = Promise.resolve();
   let state = DETACHED_STATE;
+
+  async function projectPresence(flight, payload) {
+    let release;
+    const predecessor = presenceProjectionTail;
+    presenceProjectionTail = new Promise((resolve) => { release = resolve; });
+    await predecessor;
+    try {
+      if (activePresenceFlight !== flight) {
+        throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+      }
+      const projection = await client.presenceContext(payload);
+      if (activePresenceFlight !== flight) {
+        throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+      }
+      return projection;
+    } finally {
+      release();
+    }
+  }
 
   function detachFailClosed() {
     const activeClient = client;
     client = null;
     attachment = null;
     activePresenceBinding = null;
+    activePresenceFlight = null;
     state = DETACHED_STATE;
     try {
       activeClient?.detach?.();
@@ -650,6 +672,7 @@ function createResidentAdapter({
     client = null;
     attachment = null;
     activePresenceBinding = null;
+    activePresenceFlight = null;
     state = DETACHED_STATE;
     const deadline = now() + retryWindowMs;
     let lastError = fixedError('RESIDENT_COMPANION_UNAVAILABLE');
@@ -668,6 +691,7 @@ function createResidentAdapter({
             client = null;
             attachment = null;
             activePresenceBinding = null;
+            activePresenceFlight = null;
             state = DETACHED_STATE;
           }
         });
@@ -787,7 +811,11 @@ function createResidentAdapter({
     const presenceRequested = isPlainObject(
       requestConfig?.agentsOsResidentPresenceContext
     );
-    if (presenceRequested) activePresenceBinding = null;
+    const presenceFlight = presenceRequested ? Object.freeze({}) : null;
+    if (presenceRequested) {
+      activePresenceBinding = null;
+      activePresenceFlight = presenceFlight;
+    }
     const inheritedCognitiveObservation = redactedMessages
       .some(isCognitiveObservationMessage);
     const inheritedPresenceCarrier = redactedMessages
@@ -810,6 +838,9 @@ function createResidentAdapter({
         if (result?.resultCode === 'NO_PENDING_PROPOSAL'
           && !isConsentSensitiveText(ingress.text)) {
           if (presenceRequested) {
+            if (activePresenceFlight !== presenceFlight) {
+              throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+            }
             if (inheritedPresenceCarrier) {
               return redactedMessages;
             }
@@ -819,7 +850,7 @@ function createResidentAdapter({
               requestConfig.agentsOsResidentPresenceContext,
               transcriptDigest
             );
-            const projection = await client.presenceContext(payload);
+            const projection = await projectPresence(presenceFlight, payload);
             const resolved = resolvePresenceContext(projection, {
               attachmentGeneration: projection?.attachmentGeneration,
               expectedSlots: payload.expectedSlots,
@@ -902,7 +933,7 @@ function createResidentAdapter({
       ];
     } catch {
       if (presenceRequested) {
-        detachFailClosed();
+        if (activePresenceFlight === presenceFlight) detachFailClosed();
         throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
       }
       return redactedMessages;

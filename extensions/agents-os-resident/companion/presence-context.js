@@ -325,6 +325,22 @@ function validMemoryProjection(memory) {
       && adopted.bodyAvailability === 'VERIFIED' ? 'CURRENT' : 'UNKNOWN');
 }
 
+function validMemoryIdentityRelation(value) {
+  const adopted = value.memory.adopted;
+  if (adopted.authorityRelation === null) return true;
+  if (adopted.identityOpaqueId !== value.identity.opaqueId) return false;
+  if (adopted.authorityGeneration === value.identity.authorityGeneration) {
+    return true;
+  }
+  return adopted.authorityGeneration + 1
+      === value.identity.authorityGeneration
+    && adopted.bodyAvailability === 'UNKNOWN'
+    && adopted.currentness === 'UNKNOWN'
+    && isPlainObject(value.witness)
+    && value.witness.authorityRelation === 'SAME'
+    && value.witness.relation === 'MATCH';
+}
+
 function validOneRingProjection(oneRing) {
   if (!exactKeys(oneRing, [
     'binding',
@@ -591,10 +607,7 @@ function validPresenceShape(value) {
     && value.identity.authorityGeneration > 0
     && /^resident:v1:[0-9a-f]{64}$/u.test(value.identity.opaqueId)
     && validMemoryProjection(value.memory)
-    && (value.memory.adopted.authorityRelation === null
-      || (value.memory.adopted.authorityGeneration
-          === value.identity.authorityGeneration
-        && value.memory.adopted.identityOpaqueId === value.identity.opaqueId))
+    && validMemoryIdentityRelation(value)
     && (value.memory.adopted.bodyAvailability === 'UNKNOWN'
       || value.capabilities.memoryBodyEnabled === true)
     && validOneRingProjection(value.oneRing)

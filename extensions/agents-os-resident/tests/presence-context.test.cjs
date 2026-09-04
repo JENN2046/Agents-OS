@@ -634,6 +634,41 @@ test('Memory availability is fresh, low-disclosure and independent from retireme
   }
 });
 
+test('declared-restore predecessor Memory remains an honest UNKNOWN projection', () => {
+  const material = contextMaterial({ binding: 'UNKNOWN' });
+  material.identity.authorityGeneration = 8;
+  material.work.authorityGeneration = 8;
+  material.memory.adopted = adoptedMemory({
+    availability: 'UNKNOWN',
+    currentness: 'UNKNOWN'
+  });
+  material.memory.mappingFactFingerprint = 'a'.repeat(64);
+  const resolved = resolvePresenceContext(
+    contextFromMaterial(material),
+    nativeRequest()
+  );
+  assert.equal(resolved.identity.authorityGeneration, 8);
+  assert.equal(resolved.memory.adopted.authorityGeneration, 7);
+  assert.equal(resolved.memory.adopted.bodyAvailability, 'UNKNOWN');
+  assert.equal(resolved.memory.adopted.currentness, 'UNKNOWN');
+  assert.equal(resolved.oneRing.sessionAvailability, 'UNKNOWN');
+  assert.equal(resolved.providerAttemptEligible, false);
+
+  for (const mutate of [
+    (value) => { value.memory.adopted.authorityGeneration = 6; },
+    (value) => { value.memory.adopted.bodyAvailability = 'VERIFIED'; },
+    (value) => { value.witness.authorityRelation = 'DESCENDANT'; },
+    (value) => { value.witness.relation = 'LOCAL_DESCENDS_FROM_WITNESS'; }
+  ]) {
+    const invalid = structuredClone(material);
+    mutate(invalid);
+    assert.throws(
+      () => resolvePresenceContext(contextFromMaterial(invalid), nativeRequest()),
+      /RESIDENT_PRESENCE_CONTEXT_REJECTED/u
+    );
+  }
+});
+
 test('Presence request shape rejects caller authority/status and private-body smuggling', () => {
   const normalized = presencePayload({
     oneRing: oneRingInput()
@@ -868,6 +903,61 @@ test('a newer Presence binding invalidates an older single-flight seal', async (
   );
   assert.equal(calls.filter(([kind]) => kind === 'seal').length, 0);
   assert.equal(adapter.getLifecycleStatus().attachmentState, 'DETACHED');
+});
+
+test('a superseded Presence projection cannot overwrite the newer binding', async () => {
+  const { calls, client } = adapterFixture();
+  const originalPresenceContext = client.presenceContext;
+  const releases = [];
+  client.presenceContext = async (payload) => {
+    await new Promise((resolve) => releases.push(resolve));
+    return originalPresenceContext(payload);
+  };
+  const adapter = createResidentAdapter({ createClient: () => client });
+  await adapter.initialize();
+  const config = {
+    agentsOsResidentPresenceContext: {
+      oneRing: oneRingInput()
+    }
+  };
+  const firstPending = adapter.processMessages(
+    [{ role: 'user', content: 'overlapping Presence A' }],
+    config
+  );
+  while (releases.length < 1) await new Promise(setImmediate);
+  const secondPending = adapter.processMessages(
+    [{ role: 'user', content: 'overlapping Presence B' }],
+    config
+  );
+  await new Promise(setImmediate);
+  assert.equal(releases.length, 1, 'Presence projections must be serialized');
+  releases[0]();
+  await assert.rejects(
+    firstPending,
+    (error) => error.code === 'RESIDENT_PRESENCE_CONTEXT_REJECTED'
+  );
+  while (releases.length < 2) await new Promise(setImmediate);
+  releases[1]();
+  const second = await secondPending;
+  const secondBinding = Object.getOwnPropertyDescriptor(
+    second,
+    '__agentsOsResidentPresence'
+  ).value;
+  assert.equal(adapter.getLifecycleStatus().attachmentState, 'ATTACHED');
+
+  const finalBodyText = JSON.stringify({ messages: second, model: 'model-b' });
+  const sealed = await adapter.sealProviderAttempt({
+    attemptId: `attempt:vcp:r1:${'c'.repeat(64)}`,
+    binding: secondBinding,
+    credentialSlotRef: 'credential-slot:vcp-toolbox:primary',
+    finalBodyText,
+    method: 'POST',
+    ordinal: 1,
+    providerPathId: 'VCP-CHAT-COMPLETIONS',
+    target: 'https://provider.invalid/v1/chat/completions'
+  });
+  assert.equal(sealed.body, finalBodyText);
+  assert.equal(calls.filter(([kind]) => kind === 'seal').length, 1);
 });
 
 test('explicit Presence failure detaches and fails closed with a fixed low-disclosure code', async () => {
