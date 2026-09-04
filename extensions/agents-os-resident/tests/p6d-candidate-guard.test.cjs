@@ -26,6 +26,10 @@ const {
   projectionRequest
 } = require('../companion/cognitive-context');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
+
+function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
+  return Object.freeze({ pid: expectedPid ?? process.pid });
+}
 const { createCompanionServer } = require('../companion/server');
 
 const PROFILE_ID = 'resident:LOCAL_OWNER_SESSION_V1:jenn';
@@ -345,7 +349,11 @@ test('CAV4 native companion keeps Candidate visible but unadopted', async (t) =>
   });
   await server.start();
   adapter = createResidentAdapter({
-    createClient: () => createCompanionClient({ integrity, socketPath })
+    createClient: () => createCompanionClient({
+      authenticateDaemon: authenticateCurrentProcess,
+      integrity,
+      socketPath
+    })
   });
   await adapter.initialize();
 

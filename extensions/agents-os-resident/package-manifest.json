@@ -31,6 +31,7 @@
     "presence_intent_authority": "BOOLEAN_INTENT_ONLY_HOST_REQUIRES_TRUSTED_ONERING_BINDING_META_V2",
     "provider_attempt_seal_effect": "MATERIAL_SEALED_PROVIDER_NOT_INVOKED",
     "provider_attempt_seal_surface": "NON_ENUMERABLE_INTERNAL_DIRECT_V1",
+    "provider_attempt_daemon_authentication": "SYSTEMD_MAIN_PID_UNIX_CONNECTED_PEER_V1",
     "provider_body_binding": "EXACT_UTF8_BYTES_HASHED_IN_ADAPTER_V1",
     "provider_presence_concurrency": "SINGLE_FLIGHT_FAIL_CLOSED_V1",
     "shutdown_detaches_adapter": true,

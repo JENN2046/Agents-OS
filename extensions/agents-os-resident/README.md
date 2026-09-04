@@ -11,6 +11,13 @@ permanent cutover, or device/model/provider replacement. Its VCPToolBox
 projection must retain `plugin-manifest.json.block`; an enabled
 `plugin-manifest.json` is forbidden.
 
+Authority-bearing companion exchanges authenticate the already-connected
+Unix peer against the active systemd unit's exact `MainPID` before any attach
+or protected request bytes are sent. Socket path ownership and mode remain
+necessary profile checks, but are not treated as daemon identity. A path
+replacement owned by the same UID therefore fails closed before a fabricated
+Presence or provider-attempt seal can be accepted.
+
 ## Protected roots and one-shot Witness provisioning
 
 After package installation has created the current-owner `0700` state parent,

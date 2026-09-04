@@ -25,6 +25,10 @@ const INTEGRITY = Object.freeze({
   packageVersion: '0.3.0-local-owner.0'
 });
 
+function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
+  return Object.freeze({ pid: expectedPid ?? process.pid });
+}
+
 function activeProjection() {
   return {
     activationState: 'ACTIVE_LOCAL_OWNER',
@@ -328,6 +332,7 @@ test('companion injects attachment/fresh identity and explicitly dispatches Pres
   });
   await server.start();
   const client = createCompanionClient({
+    authenticateDaemon: authenticateCurrentProcess,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });

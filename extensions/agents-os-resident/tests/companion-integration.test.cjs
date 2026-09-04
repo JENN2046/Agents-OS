@@ -19,6 +19,9 @@ const { spawn, spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const { createCompanionClient } = require('../companion/client');
+const {
+  authenticateConnectedDaemon
+} = require('../companion/daemon-peer-auth');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
@@ -339,6 +342,7 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   const host = spawn(process.execPath, [HOST_RUNNER_PATH], {
     cwd: PACKAGE_ROOT,
     env: childEnvironment({
+      AGENTS_OS_RESIDENT_TEST_DAEMON_PID: String(first.pid),
       XDG_RUNTIME_DIR: path.dirname(path.dirname(socketPath))
     }),
     stdio: ['ignore', 'ignore', 'ignore', 'ipc']
@@ -481,7 +485,16 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   });
   children.add(restarted);
   await waitForActive({ socketPath, integrity, child: restarted });
-  const replayClient = createCompanionClient({ socketPath, integrity });
+  const replayClient = createCompanionClient({
+    authenticateDaemon(socket, connectedPath, { expectedPid } = {}) {
+      return authenticateConnectedDaemon(socket, connectedPath, {
+        expectedPid: expectedPid ?? restarted.pid,
+        resolveExpectedPid: () => restarted.pid
+      });
+    },
+    socketPath,
+    integrity
+  });
   await replayClient.attach();
   const replay = await replayClient.submitConsent({
     ingress: 'FINAL_VOICE_TRANSCRIPT',

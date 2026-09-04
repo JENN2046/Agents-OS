@@ -27,6 +27,7 @@ const {
   resolvePresenceContext,
   resolveProviderAttemptSeal
 } = require('./presence-context');
+const { authenticateConnectedDaemon } = require('./daemon-peer-auth');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -85,12 +86,14 @@ function createCompanionClient({
   socketPath = resolveDefaultSocketPath(),
   integrity = verifyCompanionIntegrity(),
   createConnection = (options) => net.createConnection(options),
+  authenticateDaemon = authenticateConnectedDaemon,
   handshakeTimeoutMs = HANDSHAKE_TIMEOUT_MS
 } = {}) {
   if (!integrity
     || typeof integrity.buildId !== 'string'
     || typeof integrity.packageVersion !== 'string'
-    || typeof createConnection !== 'function') {
+    || typeof createConnection !== 'function'
+    || typeof authenticateDaemon !== 'function') {
     throw fixedError('RESIDENT_CLIENT_CONFIGURATION_INVALID');
   }
 
@@ -114,11 +117,16 @@ function createCompanionClient({
     return Object.freeze(request);
   }
 
-  function exchange(request, { keepOpen = false } = {}) {
+  function exchange(request, {
+    authenticate = false,
+    expectedDaemonPid,
+    keepOpen = false
+  } = {}) {
     validateSocketTrust(socketPath);
     return new Promise((resolve, reject) => {
       let settled = false;
       let bytes = Buffer.alloc(0);
+      let daemonIdentity = null;
       const socket = createConnection({ path: socketPath });
       const fail = (error) => {
         if (settled) return;
@@ -134,8 +142,21 @@ function createCompanionClient({
       };
       const onTimeout = () => fail(fixedError('RESIDENT_COMPANION_UNAVAILABLE'));
       const onError = (error) => fail(error);
-      const onConnect = () => {
+      const onConnect = async () => {
         try {
+          if (authenticate) {
+            daemonIdentity = await authenticateDaemon(socket, socketPath, {
+              expectedPid: expectedDaemonPid
+            });
+            if (!daemonIdentity
+              || !Number.isSafeInteger(daemonIdentity.pid)
+              || daemonIdentity.pid < 1
+              || (expectedDaemonPid !== undefined
+                && daemonIdentity.pid !== expectedDaemonPid)) {
+              throw fixedError('RESIDENT_DAEMON_IDENTITY_REJECTED');
+            }
+          }
+          if (settled || socket.destroyed) return;
           socket.write(encodeFrame(request));
         } catch (error) {
           fail(error);
@@ -166,9 +187,16 @@ function createCompanionClient({
           socket.on('error', () => {});
           if (!keepOpen) {
             socket.end();
-            resolve(Object.freeze({ response }));
+            resolve(Object.freeze({
+              response,
+              daemonIdentity
+            }));
           } else {
-            resolve(Object.freeze({ response, socket }));
+            resolve(Object.freeze({
+              response,
+              socket,
+              daemonIdentity
+            }));
           }
         } catch (error) {
           fail(error);
@@ -191,8 +219,12 @@ function createCompanionClient({
     }
     attachment = null;
     const request = makeRequest('attach');
-    const result = await exchange(request, { keepOpen: true });
+    const result = await exchange(request, {
+      authenticate: true,
+      keepOpen: true
+    });
     attachment = {
+      daemonPid: result.daemonIdentity.pid,
       generation: result.response.attachmentGeneration,
       response: result.response,
       socket: result.socket,
@@ -208,7 +240,10 @@ function createCompanionClient({
 
   async function protectedExchange(operation, payload) {
     const request = makeRequest(operation, payload);
-    return (await exchange(request)).response.result;
+    return (await exchange(request, {
+      authenticate: true,
+      expectedDaemonPid: attachment.daemonPid
+    })).response.result;
   }
 
   async function presenceContext(payload) {

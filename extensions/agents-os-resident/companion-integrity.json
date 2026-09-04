@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:100a4ac1b2fa720963070c184293a3a32c055ade32fa950fe8dbcd0201d05622",
+  "buildId": "sha256:bdb4307bbf35e5db6c01f39e2e075eadd0dd617abb461c4253089c547e1946a0",
   "files": [
     {
       "path": "activation.js",
@@ -15,13 +15,13 @@
     },
     {
       "path": "companion/adapter.js",
-      "byteLength": 35354,
-      "sha256": "1ac66e236ccff6c793701afa74355eebfde0c8eb31d0aeac29e7421eff3791ab"
+      "byteLength": 35400,
+      "sha256": "e9b24cfe05f0bf1fb175093947433f2f0bdff016a3ca38bce1add2b209704511"
     },
     {
       "path": "companion/client.js",
-      "byteLength": 8031,
-      "sha256": "d20e4e0164f95ed201c851e29c3e9bccf05fb315dacdbb6ce357f1cfb105a09c"
+      "byteLength": 9141,
+      "sha256": "9aa03bf1157887c73d4b9aaee5628d35c12c32fe9b80b62a34015a368becf8b5"
     },
     {
       "path": "companion/cognitive-context.js",
@@ -32,6 +32,11 @@
       "path": "companion/constants.js",
       "byteLength": 1818,
       "sha256": "2c9801c038218ed2c77ff12aee279599c3cd86359e0b58dbc53b4d76b6a7ba8c"
+    },
+    {
+      "path": "companion/daemon-peer-auth.js",
+      "byteLength": 5110,
+      "sha256": "aac92f1b7c533b16bff9744ad0acc0b74183aa98bfcc3009b01a3c7067aca938"
     },
     {
       "path": "companion/discovery.js",
@@ -80,13 +85,13 @@
     },
     {
       "path": "package-manifest.json",
-      "byteLength": 5354,
-      "sha256": "a41b82bcf29460e95474f9b0324a635d75579ee34d3d209422b19479c7bb1921"
+      "byteLength": 5443,
+      "sha256": "50b702e62ed1685165a63ee6767c6fc291b404cd2dc7bb0e4e89e918c4f530e3"
     },
     {
       "path": "package.json",
-      "byteLength": 4264,
-      "sha256": "03a5a07cbf039900d2cf0577a0582d9e991c2698f11e00227189f7c81e3fd956"
+      "byteLength": 4372,
+      "sha256": "7b82db4aa280edf8405557a0eb63153615392bc726f5595f7086a591605685a6"
     },
     {
       "path": "plugin-manifest.json.block",

@@ -120,6 +120,10 @@ test('active package is behavior-bound and exposes the direct hybridservice cont
 
   assert.equal(metadata.host_contract.vcp_commit_bound, false);
   assert.equal(
+    metadata.host_contract.provider_attempt_daemon_authentication,
+    'SYSTEMD_MAIN_PID_UNIX_CONNECTED_PEER_V1'
+  );
+  assert.equal(
     metadata.host_contract.structured_argument_transport,
     'DIRECT_OBJECT_OR_EXACT_COMPACT_JSON_OBJECT_STRING'
   );

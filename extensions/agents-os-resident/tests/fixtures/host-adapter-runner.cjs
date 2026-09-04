@@ -6,7 +6,28 @@ process.dlopen = () => {
   throw error;
 };
 
-const adapter = require('../../index');
+const { createResidentAdapter } = require('../../companion/adapter');
+const { createCompanionClient } = require('../../companion/client');
+const {
+  authenticateConnectedDaemon
+} = require('../../companion/daemon-peer-auth');
+
+const expectedDaemonPid = Number(
+  process.env.AGENTS_OS_RESIDENT_TEST_DAEMON_PID
+);
+if (!Number.isSafeInteger(expectedDaemonPid) || expectedDaemonPid < 1) {
+  throw new Error('TEST_DAEMON_PID_REQUIRED');
+}
+const adapter = createResidentAdapter({
+  createClient: () => createCompanionClient({
+    authenticateDaemon(socket, socketPath, { expectedPid } = {}) {
+      return authenticateConnectedDaemon(socket, socketPath, {
+        expectedPid: expectedPid ?? expectedDaemonPid,
+        resolveExpectedPid: () => expectedDaemonPid
+      });
+    }
+  })
+});
 
 function hostExecutionContext(context) {
   if (context?.sourceNode !== 'post') return context;

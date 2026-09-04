@@ -1756,6 +1756,9 @@ async function startWorkerRuntime(role, config) {
     await server.start();
     adapter = createResidentAdapter({
       createClient: () => createCompanionClient({
+        authenticateDaemon(_socket, _socketPath, { expectedPid } = {}) {
+          return Object.freeze({ pid: expectedPid ?? process.pid });
+        },
         integrity,
         socketPath: config.sockets[role]
       })

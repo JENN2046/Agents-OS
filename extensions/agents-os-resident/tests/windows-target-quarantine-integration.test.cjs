@@ -25,6 +25,10 @@ const ALLOWED_STATE = new Set([
   'agents-os-resident-local-owner-v1.sqlite3-journal'
 ]);
 
+function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
+  return Object.freeze({ pid: expectedPid ?? process.pid });
+}
+
 function createGoalRequest() {
   return {
     operation: 'PROPOSE_GOAL_MUTATION',
@@ -155,7 +159,11 @@ test('Windows-target build completes actual native + companion + Host integratio
   assert.equal(status.externalEffectsEnabled, false);
 
   adapter = createResidentAdapter({
-    createClient: () => createCompanionClient({ socketPath, integrity }),
+    createClient: () => createCompanionClient({
+      authenticateDaemon: authenticateCurrentProcess,
+      socketPath,
+      integrity
+    }),
     retryWindowMs: 0
   });
   const attached = await adapter.initialize();
@@ -255,7 +263,11 @@ test('Windows-target build completes actual native + companion + Host integratio
     continuityEvidence: quarantineRestartEvidence(status.continuityAnchor),
     genesisProvisioningAuthority: null
   });
-  replayClient = createCompanionClient({ socketPath, integrity });
+  replayClient = createCompanionClient({
+    authenticateDaemon: authenticateCurrentProcess,
+    socketPath,
+    integrity
+  });
   await replayClient.attach();
   const replay = await replayClient.submitConsent({
     ingress: 'FINAL_VOICE_TRANSCRIPT',

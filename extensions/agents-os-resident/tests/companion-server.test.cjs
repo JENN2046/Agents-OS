@@ -20,6 +20,10 @@ const INTEGRITY = Object.freeze({
   packageVersion: '0.3.0-local-owner.0'
 });
 
+function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
+  return Object.freeze({ pid: expectedPid ?? process.pid });
+}
+
 function activeProjection() {
   return {
     activationState: 'ACTIVE_LOCAL_OWNER',
@@ -124,6 +128,7 @@ test('server supports status, one token-bound attachment and protected short req
 
   assert.equal((await server.start()).commandChannelEnabled, true);
   const client = createCompanionClient({
+    authenticateDaemon: authenticateCurrentProcess,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });
@@ -188,6 +193,7 @@ test('server supports status, one token-bound attachment and protected short req
   assert.equal(lifecycle.calls[0][1].attachmentGeneration, 1);
 
   const second = createCompanionClient({
+    authenticateDaemon: authenticateCurrentProcess,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });
