@@ -15,6 +15,10 @@ use std::sync::{LazyLock, Mutex};
 
 use napi::Env;
 use napi_derive::napi;
+use rustix::fs::{
+    FileType, Mode, OFlags, ResolveFlags, fchmod, fstat, fsync, mkdirat, openat2,
+};
+use rustix::fs::CWD;
 use serde_json::{Value, json};
 
 pub mod canonical;
@@ -120,6 +124,106 @@ fn register_cleanup_once(env: Env) -> napi::Result<()> {
         // token only exists to support explicit removal, which WP4 never does.
     }
     Ok(())
+}
+
+fn canonical_absolute_path(value: &str) -> bool {
+    let mut components = Path::new(value).components();
+    matches!(components.next(), Some(std::path::Component::RootDir))
+        && components.all(|component| matches!(component, std::path::Component::Normal(_)))
+}
+
+fn single_normal_component(value: &str) -> bool {
+    let mut components = Path::new(value).components();
+    matches!(components.next(), Some(std::path::Component::Normal(_)))
+        && components.next().is_none()
+}
+
+fn protected_directory_profile(stat: &rustix::fs::Stat) -> bool {
+    FileType::from_raw_mode(stat.st_mode) == FileType::Directory
+        && stat.st_uid == rustix::process::geteuid().as_raw()
+        && stat.st_mode & 0o7777 == 0o700
+}
+
+fn prepare_protected_root_at_impl<F>(
+    parent_path: &str,
+    expected_parent_device: u64,
+    expected_parent_inode: u64,
+    leaf: &str,
+    after_parent_open: F,
+) -> Result<(), ()>
+where
+    F: FnOnce(),
+{
+    if !canonical_absolute_path(parent_path) || !single_normal_component(leaf) {
+        return Err(());
+    }
+    let directory_flags = OFlags::RDONLY
+        | OFlags::DIRECTORY
+        | OFlags::NOFOLLOW
+        | OFlags::CLOEXEC
+        | OFlags::NONBLOCK;
+    let parent = openat2(
+        CWD,
+        parent_path,
+        directory_flags,
+        Mode::empty(),
+        ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+    )
+    .map_err(|_| ())?;
+    let parent_before = fstat(&parent).map_err(|_| ())?;
+    if !protected_directory_profile(&parent_before)
+        || parent_before.st_dev != expected_parent_device
+        || parent_before.st_ino != expected_parent_inode
+    {
+        return Err(());
+    }
+
+    after_parent_open();
+    mkdirat(&parent, leaf, Mode::from_raw_mode(0o700)).map_err(|_| ())?;
+    let root = openat2(
+        &parent,
+        leaf,
+        directory_flags,
+        Mode::empty(),
+        ResolveFlags::BENEATH | ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+    )
+    .map_err(|_| ())?;
+    fchmod(&root, Mode::from_raw_mode(0o700)).map_err(|_| ())?;
+    let root_stat = fstat(&root).map_err(|_| ())?;
+    let parent_after = fstat(&parent).map_err(|_| ())?;
+    if !protected_directory_profile(&root_stat)
+        || parent_before.st_dev != parent_after.st_dev
+        || parent_before.st_ino != parent_after.st_ino
+        || !protected_directory_profile(&parent_after)
+    {
+        return Err(());
+    }
+    fsync(&root).map_err(|_| ())?;
+    fsync(&parent).map_err(|_| ())?;
+    Ok(())
+}
+
+#[napi(js_name = "prepare_protected_root_at")]
+pub fn prepare_protected_root_at(
+    parent_path: String,
+    expected_parent_device: String,
+    expected_parent_inode: String,
+    leaf: String,
+) -> napi::Result<()> {
+    let expected_parent_device = expected_parent_device
+        .parse::<u64>()
+        .map_err(|_| napi::Error::from_reason("RESIDENT_PROVISIONING_ROOT_REJECTED"))?;
+    let expected_parent_inode = expected_parent_inode
+        .parse::<u64>()
+        .map_err(|_| napi::Error::from_reason("RESIDENT_PROVISIONING_ROOT_REJECTED"))?;
+    prepare_protected_root_at_impl(
+        &parent_path,
+        expected_parent_device,
+        expected_parent_inode,
+        &leaf,
+        || {},
+    )
+    .map_err(|_| napi::Error::from_reason("RESIDENT_PROVISIONING_ROOT_REJECTED"))
 }
 
 fn native_boundary(env: Env) -> napi::Result<std::sync::MutexGuard<'static, NativeBoundaryState>> {
@@ -813,6 +917,7 @@ mod tests {
     use crate::napi_frame::Disposition;
     use crate::reducers::command_intake::HOME_INTENT_COMMAND_TYPE_ID;
     use serde_json::json;
+    use std::os::unix::fs::symlink;
 
     fn local_owner_boundary_with_profile(
         profile: NativeActivationProfile,
@@ -826,6 +931,34 @@ mod tests {
             activation_mode: NativeActivationMode::LocalOwnerSession,
             activation_profile: Some(profile),
         }
+    }
+
+    #[test]
+    fn protected_root_creation_stays_on_retained_parent_after_path_replacement() {
+        let fixture = tempfile::tempdir().unwrap();
+        let parent = fixture.path().join("validated-parent");
+        let retained_parent = fixture.path().join("retained-parent");
+        let replacement = fixture.path().join("replacement");
+        std::fs::create_dir(&parent).unwrap();
+        std::fs::create_dir(&replacement).unwrap();
+        std::fs::set_permissions(&parent, std::fs::Permissions::from_mode(0o700)).unwrap();
+        std::fs::set_permissions(&replacement, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let parent_stat = std::fs::metadata(&parent).unwrap();
+
+        prepare_protected_root_at_impl(
+            parent.to_str().unwrap(),
+            parent_stat.dev(),
+            parent_stat.ino(),
+            "protected-witness",
+            || {
+                std::fs::rename(&parent, &retained_parent).unwrap();
+                symlink(&replacement, &parent).unwrap();
+            },
+        )
+        .unwrap();
+
+        assert!(retained_parent.join("protected-witness").is_dir());
+        assert!(!replacement.join("protected-witness").exists());
     }
 
     #[test]

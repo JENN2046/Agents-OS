@@ -1864,12 +1864,14 @@ fn wp0_preserves_historical_methods_while_local_owner_additions_stay_closed() {
         "query_mmr_mutation_core",
     ];
     let presence_exports = ["query_presence_context", "seal_provider_attempt"];
+    let provisioning_exports = ["prepare_protected_root_at"];
     for export in historical_command_exports
         .into_iter()
         .chain(lifecycle_exports)
         .chain(local_owner_exports)
         .chain(mmr_mutation_exports)
         .chain(presence_exports)
+        .chain(provisioning_exports)
     {
         let marker = format!("#[napi(js_name = \"{export}\")]");
         assert_eq!(
@@ -1885,5 +1887,6 @@ fn wp0_preserves_historical_methods_while_local_owner_additions_stay_closed() {
             + local_owner_exports.len()
             + mmr_mutation_exports.len()
             + presence_exports.len()
+            + provisioning_exports.len()
     );
 }

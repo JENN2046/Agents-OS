@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:30f6ab86040ed0922915033e3cd14019da6e2ce69ba72aa2e292e18941734e19",
+  "buildId": "sha256:670bead5e8247355b8dcb718b8698f0502ac7172ec945431da0da311ee32b90c",
   "files": [
     {
       "path": "activation.js",
@@ -10,8 +10,8 @@
     },
     {
       "path": "agents-os-resident.linux-x64-gnu.node",
-      "byteLength": 5978488,
-      "sha256": "0c2a3aeaea2b4ce03bffee762ed12c2d6cf6da80ea45be5ceffb41e8fbf0557d"
+      "byteLength": 5990768,
+      "sha256": "4b449c43415dcfedc363ddfe1157d6fbd20a8cfc241ceba564ab4b8009d8b5a2"
     },
     {
       "path": "companion/adapter.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "companion/resident-daemon.js",
-      "byteLength": 24511,
-      "sha256": "1dbe1fe641bfe1b66c7531e4d053c1f5bfe3f6c5d3e9b6a41c6cad7d03996f1b"
+      "byteLength": 24601,
+      "sha256": "de66d9d06a5021aa3c8a762aa74f900de4c04eaf6ebb362d48f023b34213fd2a"
     },
     {
       "path": "companion/server.js",

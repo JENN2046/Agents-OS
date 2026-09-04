@@ -3,11 +3,8 @@
 const {
   closeSync,
   constants: fsConstants,
-  fchmodSync,
   fstatSync,
-  fsyncSync,
   lstatSync,
-  mkdirSync,
   openSync,
   readSync,
   realpathSync
@@ -406,21 +403,15 @@ function sameRootIdentity(left, right) {
     && left.path === right.path;
 }
 
-function createProtectedRoot(plan) {
+function createProtectedRoot(plan, prepareProtectedRootAt) {
   if (!plan.created) return plan.identity;
-  let rootFd = null;
-  let parentFd = null;
   try {
-    mkdirSync(plan.rootPath, { mode: 0o700 });
-    rootFd = openSync(plan.rootPath, PROTECTED_ROOT_OPEN_FLAGS);
-    fchmodSync(rootFd, 0o700);
-    fsyncSync(rootFd);
-    closeSync(rootFd);
-    rootFd = null;
-    parentFd = openSync(path.dirname(plan.rootPath), PROTECTED_ROOT_OPEN_FLAGS);
-    fsyncSync(parentFd);
-    closeSync(parentFd);
-    parentFd = null;
+    prepareProtectedRootAt(
+      path.dirname(plan.rootPath),
+      plan.parentIdentity.dev.toString(10),
+      plan.parentIdentity.ino.toString(10),
+      path.basename(plan.rootPath)
+    );
     const parentAfter = inspectProtectedRoot(path.dirname(plan.rootPath));
     if (!sameRootIdentity(plan.parentIdentity, parentAfter)) {
       throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
@@ -428,22 +419,24 @@ function createProtectedRoot(plan) {
     return inspectProtectedRoot(plan.rootPath);
   } catch {
     throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
-  } finally {
-    for (const fd of [rootFd, parentFd]) {
-      if (fd !== null) {
-        try {
-          closeSync(fd);
-        } catch {
-          // The fixed failure above remains authoritative.
-        }
-      }
-    }
   }
 }
 
-function prepareProtectedRoots(rootPaths) {
+function prepareProtectedRoots(
+  rootPaths,
+  loadNative = () => require('../agents-os-resident.linux-x64-gnu.node')
+) {
   const plans = rootPaths.map(inspectRootPlan);
-  plans.forEach(createProtectedRoot);
+  if (plans.some((plan) => plan.created)) {
+    const binding = loadNative();
+    if (typeof binding?.prepare_protected_root_at !== 'function') {
+      throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
+    }
+    plans.forEach((plan) => createProtectedRoot(
+      plan,
+      binding.prepare_protected_root_at
+    ));
+  }
   validateProvisioningRoots(rootPaths);
 }
 
@@ -666,6 +659,7 @@ async function startDaemon({
 async function provisionResident({
   argv = process.argv.slice(2),
   verifyIntegrity = verifyCompanionIntegrity,
+  loadNative = () => require('../agents-os-resident.linux-x64-gnu.node'),
   createLifecycle = () => createResidentLifecycle(),
   // Negative-control injection only: this profile must never create a server.
   createServer = createCompanionServer
@@ -683,7 +677,7 @@ async function provisionResident({
     args.rootPath,
     args.witnessRootPath,
     args.memoryBodyRootPath
-  ]);
+  ], loadNative);
   const genesisProvisioningAuthority = readGenesisAuthorityFile(
     args.authorityFilePath
   );
@@ -710,7 +704,8 @@ async function provisionResident({
 
 function prepareResidentRoots({
   argv = process.argv.slice(2),
-  verifyIntegrity = verifyCompanionIntegrity
+  verifyIntegrity = verifyCompanionIntegrity,
+  loadNative = () => require('../agents-os-resident.linux-x64-gnu.node')
 } = {}) {
   const args = parseDaemonArgs(argv);
   if (args.operation !== 'prepare-roots') {
@@ -724,7 +719,7 @@ function prepareResidentRoots({
     args.rootPath,
     args.witnessRootPath,
     args.memoryBodyRootPath
-  ]);
+  ], loadNative);
   return Object.freeze({
     operation: 'prepare-roots',
     result: PREPARE_ROOTS_RESULT

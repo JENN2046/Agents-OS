@@ -9,6 +9,7 @@ const {
   mkdtempSync,
   readdirSync,
   realpathSync,
+  renameSync,
   rmSync,
   symlinkSync,
   writeFileSync
@@ -283,6 +284,46 @@ test('root-only preparation creates exact protected roots once and preserves ide
     fixture.memoryBodyRootPath
   ].map(rootProfile);
   assert.deepEqual(secondProfiles, firstProfiles);
+});
+
+test('root-only preparation rejects parent replacement before descriptor acquisition', (t) => {
+  const fixture = createFixture(t);
+  const stateParent = path.join(fixture.quarantine, 'state-parent');
+  const retainedParent = path.join(fixture.quarantine, 'retained-parent');
+  const replacementParent = path.join(fixture.quarantine, 'replacement-parent');
+  mkdirSync(stateParent, { mode: 0o700 });
+  mkdirSync(replacementParent, { mode: 0o700 });
+  const replacedFixture = {
+    ...fixture,
+    rootPath: path.join(stateParent, 'agents-os-resident-local-owner-v1'),
+    witnessRootPath: path.join(stateParent, 'protected-witness'),
+    memoryBodyRootPath: path.join(stateParent, 'private-memory-bodies')
+  };
+
+  assert.throws(
+    () => prepareResidentRoots({
+      argv: prepareRootsArgv(replacedFixture),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      loadNative: () => {
+        renameSync(stateParent, retainedParent);
+        symlinkSync(replacementParent, stateParent);
+        return require('../agents-os-resident.linux-x64-gnu.node');
+      }
+    }),
+    { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+  );
+  for (const leaf of [
+    'agents-os-resident-local-owner-v1',
+    'protected-witness',
+    'private-memory-bodies'
+  ]) {
+    assert.equal(lstatSync(path.join(replacementParent, leaf), {
+      throwIfNoEntry: false
+    }), undefined);
+    assert.equal(lstatSync(path.join(retainedParent, leaf), {
+      throwIfNoEntry: false
+    }), undefined);
+  }
 });
 
 test('root-only preparation fails closed before creation for unsafe existing state', async (t) => {
