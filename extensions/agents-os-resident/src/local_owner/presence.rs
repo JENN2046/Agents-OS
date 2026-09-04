@@ -728,35 +728,41 @@ fn one_ring_projection(
         .and_then(Value::as_array)
         .filter(|values| !values.is_empty() && values.len() <= MAX_FRONTEND_SOURCES)
         .ok_or(LocalOwnerError::StateCorrupt)?;
-    let mut unique_frontends = BTreeSet::new();
-    for frontend in frontend_sources {
-        let digest = stored_prefixed_sha256(Some(frontend))?;
-        if !unique_frontends.insert(digest.to_owned()) {
-            return Err(LocalOwnerError::StateCorrupt);
-        }
-    }
     let frontend_principals = content
         .get("frontendPrincipalSha256")
         .and_then(Value::as_array)
         .filter(|values| !values.is_empty() && values.len() <= MAX_FRONTEND_SOURCES)
         .ok_or(LocalOwnerError::StateCorrupt)?;
+    if frontend_sources.len() != frontend_principals.len() {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    let mut unique_frontends = BTreeSet::new();
     let mut unique_principals = BTreeSet::new();
-    for principal in frontend_principals {
-        let digest = stored_prefixed_sha256(Some(principal))?;
-        if !unique_principals.insert(digest.to_owned()) {
+    let mut enrolled_frontend_pairs = Vec::with_capacity(frontend_sources.len());
+    for (frontend, principal) in frontend_sources.iter().zip(frontend_principals) {
+        let source_digest = stored_prefixed_sha256(Some(frontend))?;
+        let principal_digest = stored_prefixed_sha256(Some(principal))?;
+        if !unique_frontends.insert(source_digest.to_owned())
+            || !unique_principals.insert(principal_digest.to_owned())
+        {
             return Err(LocalOwnerError::StateCorrupt);
         }
+        enrolled_frontend_pairs.push((source_digest, principal_digest));
     }
     let binding_matches = identity_opaque_id == identity.opaque_id
         && authority_generation == identity.authority_generation
         && external_key_sha256.as_deref() == Some(bound_external_key)
         && input.frontend_plane.as_deref() == Some(bound_frontend_plane)
-        && frontend_principal_sha256
-            .as_deref()
-            .is_some_and(|digest| unique_principals.contains(digest))
         && frontend_source_sha256
             .as_deref()
-            .is_some_and(|digest| unique_frontends.contains(digest));
+            .zip(frontend_principal_sha256.as_deref())
+            .is_some_and(|(source, principal)| {
+                enrolled_frontend_pairs
+                    .iter()
+                    .any(|(bound_source, bound_principal)| {
+                        *bound_source == source && *bound_principal == principal
+                    })
+            });
     let binding = if !metadata_complete {
         "UNKNOWN"
     } else if binding_matches {

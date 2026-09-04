@@ -733,6 +733,27 @@ fn m2_onering_converges_authorized_frontends_only_through_one_opaque_key() {
         assert_eq!(context["providerAttemptEligible"], true);
     }
 
+    for (suffix, principal, source) in [
+        ('4', &principals[1], sources[0]),
+        ('5', &principals[0], sources[1]),
+    ] {
+        let unenrolled_pair = kernel
+            .query_presence_context(presence_request(
+                1,
+                suffix,
+                one_ring_input(
+                    Some(&external_key),
+                    Some("VCP_CHAT"),
+                    Some(principal),
+                    Some(source),
+                ),
+            ))
+            .expect("individually enrolled values cannot authorize a crossed pair");
+        assert_eq!(unenrolled_pair["oneRing"]["binding"], "MISMATCH");
+        assert_eq!(unenrolled_pair["oneRing"]["sessionAvailability"], "UNKNOWN");
+        assert_eq!(unenrolled_pair["providerAttemptEligible"], false);
+    }
+
     let different_key_same_frontend = kernel
         .query_presence_context(presence_request(
             1,
@@ -758,6 +779,51 @@ fn m2_onering_converges_authorized_frontends_only_through_one_opaque_key() {
         identity
     );
     kernel.shutdown().expect("multi-frontend identity shutdown");
+
+    let (_parent, root) = presence_root();
+    let kernel = admitted_kernel(&root);
+    let (identity, generation) = identity_projection(&kernel);
+    let mut unpaired = binding_content(
+        &identity,
+        generation,
+        &external_key,
+        "VCP_CHAT",
+        &principals[0],
+        sources[0],
+    );
+    unpaired["frontendSourceSha256"] = json!([
+        digest_text(
+            "agents-os.local-owner.onering-frontend-source.v1",
+            sources[0],
+        ),
+        digest_text(
+            "agents-os.local-owner.onering-frontend-source.v1",
+            sources[1],
+        ),
+    ]);
+    apply_mmr(
+        &kernel,
+        state_create(
+            "state:presence:onering-binding:v1",
+            "operation:PRESENCE:onering:unpaired-frontend",
+            unpaired,
+        ),
+        "operation:PRESENCE:onering:unpaired-frontend",
+    );
+    assert!(matches!(
+        kernel.query_presence_context(presence_request(
+            1,
+            '6',
+            one_ring_input(
+                Some(&external_key),
+                Some("VCP_CHAT"),
+                Some(&principals[0]),
+                Some(sources[0]),
+            ),
+        )),
+        Err(LocalOwnerError::StateCorrupt)
+    ));
+    kernel.shutdown().expect("unpaired frontend shutdown");
 }
 
 #[test]
