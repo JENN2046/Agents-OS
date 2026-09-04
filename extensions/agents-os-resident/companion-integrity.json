@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:263501922394bc79088ac42f15db43dc2c60021df5b98d6cbc013425bd43e8cf",
+  "buildId": "sha256:30f6ab86040ed0922915033e3cd14019da6e2ce69ba72aa2e292e18941734e19",
   "files": [
     {
       "path": "activation.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "companion/resident-daemon.js",
-      "byteLength": 20053,
-      "sha256": "cec89176d82d5e8f799afe43c2f887388ea5f4121dbbd2c0759e91ecbad22c71"
+      "byteLength": 24511,
+      "sha256": "1dbe1fe641bfe1b66c7531e4d053c1f5bfe3f6c5d3e9b6a41c6cad7d03996f1b"
     },
     {
       "path": "companion/server.js",
@@ -85,8 +85,8 @@
     },
     {
       "path": "package.json",
-      "byteLength": 4170,
-      "sha256": "5a6c7ebfd0deead68f025e45405fae8e376d383f069113446bcd4a7cf4599b90"
+      "byteLength": 4264,
+      "sha256": "03a5a07cbf039900d2cf0577a0582d9e991c2698f11e00227189f7c81e3fd956"
     },
     {
       "path": "plugin-manifest.json.block",
@@ -110,8 +110,8 @@
     },
     {
       "path": "tools/validate-companion-projection.mjs",
-      "byteLength": 4560,
-      "sha256": "5da2c9f9e6bc43997c1bccafd0b8e7bc9d3836da9b987ca2a178cf7d3b2b558d"
+      "byteLength": 6119,
+      "sha256": "d3f741543a3d97abca98c390a9cf1e8b35304f681e3ab79b7076bee126ed8037"
     },
     {
       "path": "tools/verify-host-presentation-binding.mjs",

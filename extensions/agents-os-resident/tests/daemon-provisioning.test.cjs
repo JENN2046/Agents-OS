@@ -4,8 +4,11 @@ const assert = require('node:assert/strict');
 const {
   chmodSync,
   linkSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
+  realpathSync,
   rmSync,
   symlinkSync,
   writeFileSync
@@ -17,6 +20,7 @@ const test = require('node:test');
 const {
   exitCodeFor,
   parseDaemonArgs,
+  prepareResidentRoots,
   provisionResident,
   startDaemon
 } = require('../companion/resident-daemon');
@@ -26,6 +30,7 @@ const {
 } = require('../companion/constants');
 
 const BUILD_ID = `sha256:${'a'.repeat(64)}`;
+const PREPARED = 'RESIDENT_PROTECTED_ROOTS_PREPARED';
 const SUCCESS = 'RESIDENT_WITNESS_PROVISIONED';
 
 function canonicalAuthority(overrides = {}) {
@@ -86,6 +91,47 @@ function provisionArgv(fixture, overrides = {}) {
     '--expected-build-id', values['--expected-build-id'],
     '--genesis-authority-file', values['--genesis-authority-file']
   ];
+}
+
+function prepareRootsArgv(fixture, overrides = {}) {
+  const values = {
+    '--expected-build-id': BUILD_ID,
+    '--memory-body-root': fixture.memoryBodyRootPath,
+    '--operation': 'prepare-roots',
+    '--root': fixture.rootPath,
+    '--witness-root': fixture.witnessRootPath,
+    ...overrides
+  };
+  return [
+    '--operation', values['--operation'],
+    '--root', values['--root'],
+    '--witness-root', values['--witness-root'],
+    '--memory-body-root', values['--memory-body-root'],
+    '--expected-build-id', values['--expected-build-id']
+  ];
+}
+
+function removeFixtureRoots(fixture) {
+  for (const rootPath of [
+    fixture.rootPath,
+    fixture.witnessRootPath,
+    fixture.memoryBodyRootPath
+  ]) {
+    rmSync(rootPath, { recursive: true });
+  }
+}
+
+function rootProfile(rootPath) {
+  const stat = lstatSync(rootPath);
+  return {
+    canonical: realpathSync.native(rootPath) === rootPath,
+    dev: stat.dev,
+    directory: stat.isDirectory(),
+    ino: stat.ino,
+    mode: stat.mode & 0o777,
+    symlink: stat.isSymbolicLink(),
+    uid: stat.uid
+  };
 }
 
 function serveArgv(fixture, extras = []) {
@@ -181,6 +227,166 @@ test('provision parser is one exact profile and protected serve has no genesis b
   reject(serveArgv(fixture).map((value) => value === fixture.witnessRootPath
     ? fixture.rootPath
     : value));
+});
+
+test('root-only preparation creates exact protected roots once and preserves identity', (t) => {
+  const fixture = createFixture(t);
+  removeFixtureRoots(fixture);
+  const argv = prepareRootsArgv(fixture);
+  assert.deepEqual(parseDaemonArgs(argv), {
+    authorityFilePath: null,
+    continuityEvidence: null,
+    expectedBuildId: BUILD_ID,
+    genesisProvisioningAuthority: null,
+    memoryBodyRootPath: fixture.memoryBodyRootPath,
+    operation: 'prepare-roots',
+    rootPath: fixture.rootPath,
+    socketPath: null,
+    witnessRootPath: fixture.witnessRootPath
+  });
+
+  const first = prepareResidentRoots({
+    argv,
+    verifyIntegrity: () => ({ buildId: BUILD_ID })
+  });
+  assert.deepEqual(first, {
+    operation: 'prepare-roots',
+    result: PREPARED
+  });
+  const firstProfiles = [
+    fixture.rootPath,
+    fixture.witnessRootPath,
+    fixture.memoryBodyRootPath
+  ].map(rootProfile);
+  for (const profile of firstProfiles) {
+    assert.equal(profile.directory, true);
+    assert.equal(profile.symlink, false);
+    assert.equal(profile.canonical, true);
+    assert.equal(profile.uid, process.geteuid());
+    assert.equal(profile.mode, 0o700);
+  }
+  assert.equal(new Set(firstProfiles.map(
+    (profile) => `${profile.dev}:${profile.ino}`
+  )).size, 3);
+  assert.deepEqual(readdirSync(fixture.rootPath), []);
+  assert.deepEqual(readdirSync(fixture.witnessRootPath), []);
+  assert.deepEqual(readdirSync(fixture.memoryBodyRootPath), []);
+
+  const second = prepareResidentRoots({
+    argv,
+    verifyIntegrity: () => ({ buildId: BUILD_ID })
+  });
+  assert.deepEqual(second, first);
+  const secondProfiles = [
+    fixture.rootPath,
+    fixture.witnessRootPath,
+    fixture.memoryBodyRootPath
+  ].map(rootProfile);
+  assert.deepEqual(secondProfiles, firstProfiles);
+});
+
+test('root-only preparation fails closed before creation for unsafe existing state', async (t) => {
+  await t.test('wrong mode', (inner) => {
+    const fixture = createFixture(inner);
+    removeFixtureRoots(fixture);
+    mkdirSync(fixture.witnessRootPath, { mode: 0o750 });
+    assert.throws(
+      () => prepareResidentRoots({
+        argv: prepareRootsArgv(fixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID })
+      }),
+      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+    );
+    assert.equal(lstatSync(fixture.witnessRootPath).mode & 0o777, 0o750);
+    assert.equal(lstatSync(fixture.rootPath, { throwIfNoEntry: false }), undefined);
+    assert.equal(
+      lstatSync(fixture.memoryBodyRootPath, { throwIfNoEntry: false }),
+      undefined
+    );
+  });
+
+  await t.test('symlink', (inner) => {
+    const fixture = createFixture(inner);
+    removeFixtureRoots(fixture);
+    const outside = path.join(fixture.quarantine, 'outside');
+    mkdirSync(outside, { mode: 0o700 });
+    symlinkSync(outside, fixture.witnessRootPath);
+    assert.throws(
+      () => prepareResidentRoots({
+        argv: prepareRootsArgv(fixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID })
+      }),
+      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+    );
+    assert.equal(lstatSync(fixture.witnessRootPath).isSymbolicLink(), true);
+    assert.equal(lstatSync(fixture.rootPath, { throwIfNoEntry: false }), undefined);
+    assert.equal(
+      lstatSync(fixture.memoryBodyRootPath, { throwIfNoEntry: false }),
+      undefined
+    );
+  });
+
+  await t.test('wrong type', (inner) => {
+    const fixture = createFixture(inner);
+    removeFixtureRoots(fixture);
+    writeFileSync(fixture.witnessRootPath, '', { flag: 'wx', mode: 0o600 });
+    assert.throws(
+      () => prepareResidentRoots({
+        argv: prepareRootsArgv(fixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID })
+      }),
+      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+    );
+    assert.equal(lstatSync(fixture.witnessRootPath).isFile(), true);
+    assert.equal(lstatSync(fixture.rootPath, { throwIfNoEntry: false }), undefined);
+    assert.equal(
+      lstatSync(fixture.memoryBodyRootPath, { throwIfNoEntry: false }),
+      undefined
+    );
+  });
+
+  await t.test('overlapping topology', (inner) => {
+    const fixture = createFixture(inner);
+    assert.throws(
+      () => parseDaemonArgs(prepareRootsArgv(fixture, {
+        '--memory-body-root': path.join(fixture.witnessRootPath, 'memory')
+      })),
+      { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' }
+    );
+  });
+});
+
+test('ordinary one-shot provisioning reuses source-owned root preparation', async (t) => {
+  const fixture = createFixture(t);
+  removeFixtureRoots(fixture);
+  let initializeCalls = 0;
+  const result = await provisionResident({
+    argv: provisionArgv(fixture),
+    verifyIntegrity: () => ({ buildId: BUILD_ID }),
+    createLifecycle: () => ({
+      initialize: async () => {
+        initializeCalls += 1;
+      },
+      shutdown: async () => {}
+    })
+  });
+  assert.deepEqual(result, {
+    operation: 'provision',
+    result: SUCCESS
+  });
+  assert.equal(initializeCalls, 1);
+  for (const rootPath of [
+    fixture.rootPath,
+    fixture.witnessRootPath,
+    fixture.memoryBodyRootPath
+  ]) {
+    const profile = rootProfile(rootPath);
+    assert.equal(profile.canonical, true);
+    assert.equal(profile.directory, true);
+    assert.equal(profile.mode, 0o700);
+    assert.equal(profile.symlink, false);
+    assert.equal(profile.uid, process.geteuid());
+  }
 });
 
 test('one-shot provisioning verifies integrity, initializes, shuts down, and never starts a server', async (t) => {
@@ -315,7 +521,7 @@ test('serve and provision entrypoints reject the other operation before lifecycl
   assert.equal(serverCalls, 0);
 });
 
-test('manual provisioning requires three existing canonical current-owner 0700 roots', async (t) => {
+test('provisioning rejects unsafe existing protected roots without repair', async (t) => {
   for (const key of ['rootPath', 'witnessRootPath', 'memoryBodyRootPath']) {
     await t.test(`${key} mode`, async (inner) => {
       const fixture = createFixture(inner);
@@ -337,21 +543,6 @@ test('manual provisioning requires three existing canonical current-owner 0700 r
       assert.equal(lifecycleCalls, 0);
     });
   }
-
-  await t.test('missing root', async (inner) => {
-    const fixture = createFixture(inner);
-    rmSync(fixture.memoryBodyRootPath, { recursive: true });
-    await assert.rejects(
-      provisionResident({
-        argv: provisionArgv(fixture),
-        verifyIntegrity: () => ({ buildId: BUILD_ID }),
-        createLifecycle: () => {
-          throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
-        }
-      }),
-      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
-    );
-  });
 
   await t.test('symlinked root or ancestor', async (inner) => {
     const fixture = createFixture(inner);

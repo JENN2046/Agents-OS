@@ -2,8 +2,11 @@ import {
   chmodSync,
   copyFileSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
+  realpathSync,
   readFileSync,
   rmSync,
   writeFileSync
@@ -61,14 +64,46 @@ export function runProjectionPreflight() {
   try {
     mkdirSync(pluginRoot, { recursive: true, mode: 0o700 });
     copyBoundPackage(pluginRoot, sourceIntegrity);
-    for (const directory of [
-      stateRoot,
-      activationRoot,
-      witnessRoot,
-      memoryBodyRoot
-    ]) {
-      mkdirSync(directory, { mode: 0o700 });
-      chmodSync(directory, 0o700);
+    mkdirSync(stateRoot, { mode: 0o700 });
+    chmodSync(stateRoot, 0o700);
+    const stagedRequire = createRequire(resolve(pluginRoot, 'package.json'));
+    const stagedDaemon = stagedRequire('./companion/resident-daemon.js');
+    const rootArgs = [
+      '--operation', 'prepare-roots',
+      '--root', activationRoot,
+      '--witness-root', witnessRoot,
+      '--memory-body-root', memoryBodyRoot,
+      '--expected-build-id', sourceIntegrity.buildId
+    ];
+    if ([activationRoot, witnessRoot, memoryBodyRoot]
+      .some((directory) => existsSync(directory))) {
+      throw new Error('COMPANION_PROJECTION_ROOTS_NOT_FRESH');
+    }
+    stagedDaemon.prepareResidentRoots({ argv: rootArgs });
+    const firstRootIdentities = [activationRoot, witnessRoot, memoryBodyRoot]
+      .map((directory) => {
+        const stat = lstatSync(directory);
+        if (!stat.isDirectory()
+          || stat.isSymbolicLink()
+          || stat.uid !== process.geteuid()
+          || (stat.mode & 0o777) !== 0o700
+          || realpathSync.native(directory) !== directory
+          || readdirSync(directory).length !== 0) {
+          throw new Error('COMPANION_PROJECTION_ROOT_PROFILE_INVALID');
+        }
+        return `${stat.dev}:${stat.ino}`;
+      });
+    if (new Set(firstRootIdentities).size !== 3) {
+      throw new Error('COMPANION_PROJECTION_ROOT_TOPOLOGY_INVALID');
+    }
+    stagedDaemon.prepareResidentRoots({ argv: rootArgs });
+    const secondRootIdentities = [activationRoot, witnessRoot, memoryBodyRoot]
+      .map((directory) => {
+        const stat = lstatSync(directory);
+        return `${stat.dev}:${stat.ino}`;
+      });
+    if (JSON.stringify(secondRootIdentities) !== JSON.stringify(firstRootIdentities)) {
+      throw new Error('COMPANION_PROJECTION_ROOT_IDEMPOTENCY_INVALID');
     }
     mkdirSync(dirname(unitPath), { recursive: true, mode: 0o700 });
     const renderedUnit = renderSystemdUnit({
@@ -82,7 +117,6 @@ export function runProjectionPreflight() {
     writeFileSync(unitPath, renderedUnit, { flag: 'wx', mode: 0o644 });
 
     const staged = verifyCompanionIntegrity({ packageRoot: pluginRoot });
-    const stagedRequire = createRequire(resolve(pluginRoot, 'package.json'));
     const stagedAdapter = stagedRequire('./companion/adapter.js');
     if (staged.buildId !== sourceIntegrity.buildId
       || staged.packageVersion !== sourceIntegrity.packageVersion

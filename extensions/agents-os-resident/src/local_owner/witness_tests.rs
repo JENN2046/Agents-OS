@@ -3,10 +3,11 @@
 use std::fs::OpenOptions;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt, symlink};
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use serde_json::{Value, json};
 
-use super::memory::MEMORY_INVENTORY_SLOT;
+use super::memory::{MEMORY_INVENTORY_SLOT, MemoryBodyVerifier};
 use super::memory_tests::{
     BODY as MEMORY_BODY, MEMORY_ID, apply as apply_memory, authority_content, candidate_create,
     candidate_fingerprint, inventory_content, state_fingerprint, state_mutation, write_body,
@@ -63,6 +64,79 @@ struct SyntheticWitnessProvider {
     cas_observed_local_generations: Vec<u64>,
     operations: Vec<&'static str>,
     observed_unlocked_call: bool,
+}
+
+#[test]
+fn source_owned_root_preparation_is_idempotent_and_admitted_by_native_profiles() {
+    let package_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let integrity: Value = serde_json::from_slice(
+        &std::fs::read(package_root.join("companion-integrity.json"))
+            .expect("read companion integrity"),
+    )
+    .expect("parse companion integrity");
+    let build_id = integrity["buildId"]
+        .as_str()
+        .expect("integrity build ID");
+    let parent = tempfile::tempdir().expect("temporary source-owned root parent");
+    std::fs::set_permissions(parent.path(), std::fs::Permissions::from_mode(0o700))
+        .expect("protect source-owned root parent");
+    let resident_root = parent.path().join(LOCAL_OWNER_ROOT_LEAF);
+    let witness_root = parent.path().join("protected-witness");
+    let memory_root = parent.path().join("private-memory-bodies");
+    let invoke = || {
+        Command::new("node")
+            .arg(package_root.join("companion/resident-daemon.js"))
+            .args([
+                "--operation",
+                "prepare-roots",
+                "--root",
+                resident_root.to_str().expect("resident root UTF-8"),
+                "--witness-root",
+                witness_root.to_str().expect("Witness root UTF-8"),
+                "--memory-body-root",
+                memory_root.to_str().expect("Memory root UTF-8"),
+                "--expected-build-id",
+                build_id,
+            ])
+            .output()
+            .expect("execute source-owned root preparation")
+    };
+
+    let first = invoke();
+    assert!(first.status.success());
+    assert_eq!(first.stdout, b"RESIDENT_PROTECTED_ROOTS_PREPARED\n");
+    assert!(first.stderr.is_empty());
+    let first_identities = [&resident_root, &witness_root, &memory_root].map(|root| {
+        let metadata = std::fs::symlink_metadata(root).expect("prepared root metadata");
+        assert!(metadata.file_type().is_dir());
+        assert!(!metadata.file_type().is_symlink());
+        assert_eq!(metadata.uid(), rustix::process::getuid().as_raw());
+        assert_eq!(metadata.mode() & 0o777, 0o700);
+        assert_eq!(std::fs::canonicalize(root).expect("canonical root"), *root);
+        assert_eq!(
+            std::fs::read_dir(root)
+                .expect("read prepared root")
+                .count(),
+            0
+        );
+        (metadata.dev(), metadata.ino())
+    });
+    assert_eq!(first_identities.into_iter().collect::<std::collections::HashSet<_>>().len(), 3);
+
+    ProtectedFileWitnessProvider::open(&witness_root, &resident_root)
+        .expect("source-owned Witness root admitted");
+    MemoryBodyVerifier::open(&memory_root, &resident_root)
+        .expect("source-owned Memory root admitted");
+
+    let second = invoke();
+    assert!(second.status.success());
+    assert_eq!(second.stdout, b"RESIDENT_PROTECTED_ROOTS_PREPARED\n");
+    assert!(second.stderr.is_empty());
+    let second_identities = [&resident_root, &witness_root, &memory_root].map(|root| {
+        let metadata = std::fs::symlink_metadata(root).expect("reprepared root metadata");
+        (metadata.dev(), metadata.ino())
+    });
+    assert_eq!(second_identities, first_identities);
 }
 
 impl SyntheticWitnessProvider {

@@ -3,8 +3,11 @@
 const {
   closeSync,
   constants: fsConstants,
+  fchmodSync,
   fstatSync,
+  fsyncSync,
   lstatSync,
+  mkdirSync,
   openSync,
   readSync,
   realpathSync
@@ -25,6 +28,7 @@ const GENESIS_PROVISIONING_PROTOCOL = 'MMR0_GENESIS_PROVISIONING_V1';
 const LOCAL_OWNER_RESIDENT_ID = 'resident:LOCAL_OWNER_SESSION_V1:jenn';
 const MAX_AUTHORITY_FILE_BYTES = 4096;
 const MAX_AUTHORITY_TOKEN_BYTES = 300;
+const PREPARE_ROOTS_RESULT = 'RESIDENT_PROTECTED_ROOTS_PREPARED';
 const PROVISIONING_RESULT = 'RESIDENT_WITNESS_PROVISIONED';
 
 const ALL_DAEMON_ARGUMENTS = new Set([
@@ -56,6 +60,14 @@ const PROVISION_ARGUMENTS = new Set([
   '--witness-root'
 ]);
 const PROVISION_REQUIRED_ARGUMENTS = [...PROVISION_ARGUMENTS];
+const PREPARE_ROOTS_ARGUMENTS = new Set([
+  '--expected-build-id',
+  '--memory-body-root',
+  '--operation',
+  '--root',
+  '--witness-root'
+]);
+const PREPARE_ROOTS_REQUIRED_ARGUMENTS = [...PREPARE_ROOTS_ARGUMENTS];
 const AUTHORITY_KEYS = [
   'authorityId',
   'protocol',
@@ -188,6 +200,38 @@ function parseProvisionArgs(result) {
   });
 }
 
+function parsePrepareRootsArgs(result) {
+  if (result['--operation'] !== 'prepare-roots'
+    || Object.keys(result).length !== PREPARE_ROOTS_REQUIRED_ARGUMENTS.length
+    || PREPARE_ROOTS_REQUIRED_ARGUMENTS.some(
+      (key) => !Object.hasOwn(result, key)
+    )
+    || Object.keys(result).some((key) => !PREPARE_ROOTS_ARGUMENTS.has(key))
+    || !validExpectedBuildId(result)) {
+    throw fixedError('RESIDENT_DAEMON_CONFIGURATION_INVALID');
+  }
+  const rootPath = parseOptionalAbsolutePath(result, '--root');
+  const witnessRootPath = parseOptionalAbsolutePath(result, '--witness-root');
+  const memoryBodyRootPath = parseOptionalAbsolutePath(result, '--memory-body-root');
+  if ([rootPath, witnessRootPath, memoryBodyRootPath]
+    .some((value) => value === null)
+    || path.basename(rootPath) !== 'agents-os-resident-local-owner-v1') {
+    throw fixedError('RESIDENT_DAEMON_CONFIGURATION_INVALID');
+  }
+  requireDisjointRoots(rootPath, witnessRootPath, memoryBodyRootPath);
+  return Object.freeze({
+    authorityFilePath: null,
+    continuityEvidence: null,
+    expectedBuildId: result['--expected-build-id'],
+    genesisProvisioningAuthority: null,
+    memoryBodyRootPath,
+    operation: 'prepare-roots',
+    rootPath,
+    socketPath: null,
+    witnessRootPath
+  });
+}
+
 function parseServeArgs(result) {
   if (Object.hasOwn(result, '--operation')
     || Object.keys(result).some((key) => !SERVE_ARGUMENTS.has(key))
@@ -228,9 +272,12 @@ function parseServeArgs(result) {
 
 function parseDaemonArgs(argv) {
   const result = parseArgumentPairs(argv);
-  return Object.hasOwn(result, '--operation')
-    ? parseProvisionArgs(result)
-    : parseServeArgs(result);
+  if (!Object.hasOwn(result, '--operation')) {
+    return parseServeArgs(result);
+  }
+  return result['--operation'] === 'prepare-roots'
+    ? parsePrepareRootsArgs(result)
+    : parseProvisionArgs(result);
 }
 
 function sameDescriptor(left, right) {
@@ -329,6 +376,75 @@ function validateProvisioningRoots(rootPaths) {
       }
     }
   }
+}
+
+function inspectRootPlan(rootPath) {
+  try {
+    lstatSync(rootPath, { bigint: true });
+    return Object.freeze({
+      created: false,
+      identity: inspectProtectedRoot(rootPath),
+      parentIdentity: null,
+      rootPath
+    });
+  } catch (error) {
+    if (error?.code !== 'ENOENT') {
+      throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
+    }
+  }
+  return Object.freeze({
+    created: true,
+    identity: null,
+    parentIdentity: inspectProtectedRoot(path.dirname(rootPath)),
+    rootPath
+  });
+}
+
+function sameRootIdentity(left, right) {
+  return left.dev === right.dev
+    && left.ino === right.ino
+    && left.path === right.path;
+}
+
+function createProtectedRoot(plan) {
+  if (!plan.created) return plan.identity;
+  let rootFd = null;
+  let parentFd = null;
+  try {
+    mkdirSync(plan.rootPath, { mode: 0o700 });
+    rootFd = openSync(plan.rootPath, PROTECTED_ROOT_OPEN_FLAGS);
+    fchmodSync(rootFd, 0o700);
+    fsyncSync(rootFd);
+    closeSync(rootFd);
+    rootFd = null;
+    parentFd = openSync(path.dirname(plan.rootPath), PROTECTED_ROOT_OPEN_FLAGS);
+    fsyncSync(parentFd);
+    closeSync(parentFd);
+    parentFd = null;
+    const parentAfter = inspectProtectedRoot(path.dirname(plan.rootPath));
+    if (!sameRootIdentity(plan.parentIdentity, parentAfter)) {
+      throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
+    }
+    return inspectProtectedRoot(plan.rootPath);
+  } catch {
+    throw fixedError('RESIDENT_PROVISIONING_ROOT_REJECTED');
+  } finally {
+    for (const fd of [rootFd, parentFd]) {
+      if (fd !== null) {
+        try {
+          closeSync(fd);
+        } catch {
+          // The fixed failure above remains authoritative.
+        }
+      }
+    }
+  }
+}
+
+function prepareProtectedRoots(rootPaths) {
+  const plans = rootPaths.map(inspectRootPlan);
+  plans.forEach(createProtectedRoot);
+  validateProvisioningRoots(rootPaths);
 }
 
 function readExactFile(fd, byteLength) {
@@ -563,7 +679,7 @@ async function provisionResident({
   if (integrity.buildId !== args.expectedBuildId) {
     throw fixedError('RESIDENT_INTEGRITY_MISMATCH');
   }
-  validateProvisioningRoots([
+  prepareProtectedRoots([
     args.rootPath,
     args.witnessRootPath,
     args.memoryBodyRootPath
@@ -592,6 +708,29 @@ async function provisionResident({
   });
 }
 
+function prepareResidentRoots({
+  argv = process.argv.slice(2),
+  verifyIntegrity = verifyCompanionIntegrity
+} = {}) {
+  const args = parseDaemonArgs(argv);
+  if (args.operation !== 'prepare-roots') {
+    throw fixedError('RESIDENT_DAEMON_CONFIGURATION_INVALID');
+  }
+  const integrity = verifyIntegrity();
+  if (integrity.buildId !== args.expectedBuildId) {
+    throw fixedError('RESIDENT_INTEGRITY_MISMATCH');
+  }
+  prepareProtectedRoots([
+    args.rootPath,
+    args.witnessRootPath,
+    args.memoryBodyRootPath
+  ]);
+  return Object.freeze({
+    operation: 'prepare-roots',
+    result: PREPARE_ROOTS_RESULT
+  });
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   let requested;
@@ -606,6 +745,16 @@ async function main() {
     try {
       await provisionResident({ argv });
       process.stdout.write(`${PROVISIONING_RESULT}\n`);
+    } catch (error) {
+      process.exit(exitCodeFor(error));
+    }
+    return;
+  }
+
+  if (requested.operation === 'prepare-roots') {
+    try {
+      const result = prepareResidentRoots({ argv });
+      process.stdout.write(`${result.result}\n`);
     } catch (error) {
       process.exit(exitCodeFor(error));
     }
@@ -658,6 +807,7 @@ module.exports = Object.freeze({
   exitCodeFor,
   main,
   parseDaemonArgs,
+  prepareResidentRoots,
   provisionResident,
   startDaemon
 });

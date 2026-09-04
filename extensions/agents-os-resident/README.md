@@ -11,11 +11,28 @@ permanent cutover, or device/model/provider replacement. Its VCPToolBox
 projection must retain `plugin-manifest.json.block`; an enabled
 `plugin-manifest.json` is forbidden.
 
-## Protected Witness one-shot provisioning
+## Protected roots and one-shot Witness provisioning
 
-Fresh protected-Witness state is enrolled only through the explicit one-shot
-provisioning profile. Create three mutually disjoint, current-owner `0700`
-directories first, obtain the sealed build ID, and run:
+After package installation has created the current-owner `0700` state parent,
+prepare the three mutually disjoint Resident roots through the source-owned,
+root-only profile:
+
+```sh
+npm run prepare:protected-roots -- \
+  --root /absolute/agents-os-resident-local-owner-v1 \
+  --witness-root /absolute/protected-witness \
+  --memory-body-root /absolute/private-memory-bodies \
+  --expected-build-id sha256:<64-lowercase-hex>
+```
+
+The command creates only absent roots as current-owner `0700` directories. An
+existing exact root is accepted without changing its device/inode; a symlink,
+wrong type, wrong owner, wrong mode, noncanonical path, unsafe parent or
+overlapping topology fails closed without destructive repair. It does not read
+an authority file, initialize Resident state or enroll a Witness.
+
+Fresh protected-Witness state is then enrolled only through the explicit
+one-shot provisioning profile. Obtain the sealed build ID and run:
 
 ```sh
 npm run provision:witness -- \
