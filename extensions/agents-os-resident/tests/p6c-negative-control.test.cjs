@@ -29,9 +29,7 @@ const {
 } = require('../companion/cognitive-context');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 
-function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
-  return Object.freeze({ pid: expectedPid ?? process.pid });
-}
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 const { createCompanionServer } = require('../companion/server');
 
 const PROFILE_ID = 'resident:LOCAL_OWNER_SESSION_V1:jenn';
@@ -282,7 +280,8 @@ test('CAV3 native companion preserves A while B remains absent end to end', asyn
   await server.start();
   adapter = createResidentAdapter({
     createClient: () => createCompanionClient({
-      authenticateDaemon: authenticateCurrentProcess,
+      loadIdentityPolicy: () => null,
+      authenticateDaemon: authenticateFixtureDaemon,
       integrity,
       socketPath
     })

@@ -107,6 +107,9 @@ export function runProjectionPreflight() {
     }
     mkdirSync(dirname(unitPath), { recursive: true, mode: 0o700 });
     const renderedUnit = renderSystemdUnit({
+      daemonUid: process.getuid(),
+      clientUid: process.getuid() === 65534 ? 65533 : 65534,
+      socketGid: process.getgid(),
       activationRoot,
       buildId: sourceIntegrity.buildId,
       memoryBodyRoot,

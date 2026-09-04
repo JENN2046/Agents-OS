@@ -16,6 +16,7 @@ test('native addon remains companion-only and the transport is AF_UNIX-only', ()
   const activation = source('activation.js');
   const daemon = source('companion/resident-daemon.js');
   const server = source('companion/server.js');
+  const peerAuthentication = source('companion/daemon-peer-auth.js');
   const activeRuntimeSources = [
     entrypoint,
     activation,
@@ -23,7 +24,7 @@ test('native addon remains companion-only and the transport is AF_UNIX-only', ()
     server,
     source('companion/adapter.js'),
     source('companion/client.js'),
-    source('companion/daemon-peer-auth.js'),
+    peerAuthentication,
     source('companion/discovery.js'),
     source('companion/protocol.js')
   ].join('\n');
@@ -32,8 +33,11 @@ test('native addon remains companion-only and the transport is AF_UNIX-only', ()
   assert.match(activation, /agents-os-resident\.linux-x64-gnu\.node/);
   assert.match(daemon, /require\(['"]\.\.\/activation['"]\)/);
   assert.match(server, /server\.listen\(socketPath\)/);
-  assert.match(activeRuntimeSources, /\/usr\/bin\/systemctl/);
-  assert.match(activeRuntimeSources, /\/usr\/bin\/ss/);
+  assert.doesNotMatch(activeRuntimeSources, /\/usr\/bin\/(?:systemctl|ss)\b/);
+  assert.match(peerAuthentication, /connectedPeerCredentials/);
+  assert.match(peerAuthentication, /stdio: \[descriptor, 'pipe', 'pipe'\]/);
+  assert.doesNotMatch(peerAuthentication, /process\.dlopen|\.node\b|require\(['"]\.\.\/activation['"]\)/);
+  assert.match(source('src/bin/resident-peer-credentials.rs'), /sockopt::socket_peercred\(&socket\)/);
   assert.doesNotMatch(
     activeRuntimeSources,
     /node:(?:http|https|http2|dgram|tls)|\bfetch\s*\(|\bWebSocket\b|\bNotification\b/

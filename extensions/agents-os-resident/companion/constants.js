@@ -25,18 +25,11 @@ function fixedError(code) {
   return error;
 }
 
-function resolveDefaultSocketPath(runtimeDirectory = process.env.XDG_RUNTIME_DIR) {
+function resolveDefaultSocketPath() {
   if (process.platform !== 'linux') {
     throw fixedError('RESIDENT_RUNTIME_PLATFORM_UNSUPPORTED');
   }
-  if (typeof runtimeDirectory !== 'string'
-    || runtimeDirectory.length === 0
-    || runtimeDirectory.includes('\0')
-    || !path.isAbsolute(runtimeDirectory)
-    || path.normalize(runtimeDirectory) !== runtimeDirectory) {
-    throw fixedError('RESIDENT_RUNTIME_DIR_UNAVAILABLE');
-  }
-  return path.join(runtimeDirectory, RUNTIME_DIRECTORY_LEAF, SOCKET_LEAF);
+  return path.join('/run', RUNTIME_DIRECTORY_LEAF, SOCKET_LEAF);
 }
 
 module.exports = Object.freeze({

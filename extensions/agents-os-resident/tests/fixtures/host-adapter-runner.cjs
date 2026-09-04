@@ -8,9 +8,8 @@ process.dlopen = () => {
 
 const { createResidentAdapter } = require('../../companion/adapter');
 const { createCompanionClient } = require('../../companion/client');
-const {
-  authenticateConnectedDaemon
-} = require('../../companion/daemon-peer-auth');
+const path = require('node:path');
+const { authenticateFixtureDaemon } = require('./transport-identity.cjs');
 
 const expectedDaemonPid = Number(
   process.env.AGENTS_OS_RESIDENT_TEST_DAEMON_PID
@@ -20,10 +19,11 @@ if (!Number.isSafeInteger(expectedDaemonPid) || expectedDaemonPid < 1) {
 }
 const adapter = createResidentAdapter({
   createClient: () => createCompanionClient({
+    socketPath: path.join(process.env.XDG_RUNTIME_DIR, 'agents-os-resident', 'control.sock'),
+    loadIdentityPolicy: () => null,
     authenticateDaemon(socket, socketPath, { expectedPid } = {}) {
-      return authenticateConnectedDaemon(socket, socketPath, {
-        expectedPid: expectedPid ?? expectedDaemonPid,
-        resolveExpectedPid: () => expectedDaemonPid
+      return authenticateFixtureDaemon(socket, socketPath, {
+        expectedPid: expectedPid ?? expectedDaemonPid
       });
     }
   })

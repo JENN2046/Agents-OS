@@ -27,6 +27,7 @@ const {
 } = require('../activation');
 const { createResidentAdapter } = require('../companion/adapter');
 const { createCompanionClient } = require('../companion/client');
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 const { MemoryBodyWriter } = require('../companion/memory-body-writer');
 const {
@@ -40,7 +41,7 @@ const {
 const { createCompanionServer } = require('../companion/server');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
-const DAEMON_PATH = path.join(PACKAGE_ROOT, 'companion', 'resident-daemon.js');
+const DAEMON_PATH = path.join(__dirname, 'fixtures', 'resident-daemon-runner.cjs');
 const FETCH_HARNESS = Symbol.for(
   'agents-os-resident.provider-fetch-harness.v1'
 );
@@ -1756,9 +1757,8 @@ async function startWorkerRuntime(role, config) {
     await server.start();
     adapter = createResidentAdapter({
       createClient: () => createCompanionClient({
-        authenticateDaemon(_socket, _socketPath, { expectedPid } = {}) {
-          return Object.freeze({ pid: expectedPid ?? process.pid });
-        },
+        loadIdentityPolicy: () => null,
+        authenticateDaemon: authenticateFixtureDaemon,
         integrity,
         socketPath: config.sockets[role]
       })

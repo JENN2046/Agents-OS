@@ -15,6 +15,7 @@ const PACKAGE_ROOT = resolve(dirname(TOOL_PATH), '..');
 const OUTPUT_PATH = resolve(PACKAGE_ROOT, 'companion-integrity.json');
 const SCHEMA_VERSION = 'agents-os-resident.companion-integrity.v1';
 const STATIC_INVENTORY = Object.freeze([
+  'resident-peer-credentials',
   'agents-os-resident.linux-x64-gnu.node',
   'companion/memory-body-writer.js',
   'package-manifest.json',

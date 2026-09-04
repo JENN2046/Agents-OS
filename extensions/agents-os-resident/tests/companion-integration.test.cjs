@@ -19,14 +19,12 @@ const { spawn, spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const { createCompanionClient } = require('../companion/client');
-const {
-  authenticateConnectedDaemon
-} = require('../companion/daemon-peer-auth');
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
-const DAEMON_PATH = path.resolve(PACKAGE_ROOT, 'companion/resident-daemon.js');
-const PROBE_PATH = path.resolve(PACKAGE_ROOT, 'companion/probe.js');
+const DAEMON_PATH = path.join(__dirname, 'fixtures', 'resident-daemon-runner.cjs');
+const PROBE_PATH = path.join(__dirname, 'fixtures', 'probe-runner.cjs');
 const HOST_RUNNER_PATH = path.resolve(
   PACKAGE_ROOT,
   'tests/fixtures/host-adapter-runner.cjs'
@@ -236,7 +234,14 @@ async function waitForActive({ socketPath, integrity, child, timeoutMs = 5000 })
     if (child.exitCode !== null) throw new Error('DAEMON_EXITED_BEFORE_READY');
     if (existsSync(socketPath)) {
       try {
-        const client = createCompanionClient({ socketPath, integrity });
+        const client = createCompanionClient({
+          socketPath,
+          integrity,
+          loadIdentityPolicy: () => null,
+          authenticateDaemon: (socket, connectedPath) => authenticateFixtureDaemon(
+            socket, connectedPath, { expectedPid: child.pid }
+          )
+        });
         const response = await client.status();
         if (response.activationState === 'ACTIVE_LOCAL_OWNER') return response;
       } catch {
@@ -332,7 +337,7 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
 
   const probe = spawnSync(process.execPath, [PROBE_PATH, '--socket', socketPath], {
     cwd: PACKAGE_ROOT,
-    env: childEnvironment(),
+    env: childEnvironment({ AGENTS_OS_RESIDENT_TEST_DAEMON_PID: String(first.pid) }),
     encoding: 'utf8'
   });
   assert.equal(probe.status, 0);
@@ -449,7 +454,14 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   });
   assert.equal(after.items.length, 1);
 
-  const client = createCompanionClient({ socketPath, integrity });
+  const client = createCompanionClient({
+    socketPath,
+    integrity,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: (socket, connectedPath) => authenticateFixtureDaemon(
+      socket, connectedPath, { expectedPid: first.pid }
+    )
+  });
   const second = spawnDaemon({
     rootPath,
     socketPath: secondSocketPath,
@@ -486,10 +498,10 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   children.add(restarted);
   await waitForActive({ socketPath, integrity, child: restarted });
   const replayClient = createCompanionClient({
+    loadIdentityPolicy: () => null,
     authenticateDaemon(socket, connectedPath, { expectedPid } = {}) {
-      return authenticateConnectedDaemon(socket, connectedPath, {
-        expectedPid: expectedPid ?? restarted.pid,
-        resolveExpectedPid: () => restarted.pid
+      return authenticateFixtureDaemon(socket, connectedPath, {
+        expectedPid: expectedPid ?? restarted.pid
       });
     },
     socketPath,

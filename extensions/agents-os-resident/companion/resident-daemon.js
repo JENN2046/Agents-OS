@@ -10,6 +10,8 @@ const {
   realpathSync
 } = require('node:fs');
 const path = require('node:path');
+const { loadDaemonIdentityPolicy, requireProtectedStatePath }
+  = require('./daemon-identity-policy');
 const { TextDecoder } = require('node:util');
 
 const { createResidentLifecycle } = require('../activation');
@@ -575,7 +577,9 @@ function exitCodeFor(error) {
     'RESIDENT_INTEGRITY_MISMATCH',
     'RESIDENT_INTEGRITY_UNAVAILABLE',
     'RESIDENT_PROVISIONING_AUTHORITY_REJECTED',
-    'RESIDENT_PROVISIONING_ROOT_REJECTED'
+    'RESIDENT_PROVISIONING_ROOT_REJECTED',
+    'RESIDENT_DAEMON_IDENTITY_UNTRUSTED',
+    'RESIDENT_DAEMON_IDENTITY_UNAVAILABLE'
   ].includes(error?.code)) {
     return 64;
   }
@@ -598,6 +602,7 @@ async function startDaemon({
   argv = process.argv.slice(2),
   verifyIntegrity = verifyCompanionIntegrity,
   createLifecycle = () => createResidentLifecycle(),
+  loadIdentityPolicy = () => loadDaemonIdentityPolicy({ role: 'daemon' }),
   createServer = createCompanionServer
 } = {}) {
   const args = parseDaemonArgs(argv);
@@ -607,6 +612,17 @@ async function startDaemon({
   const integrity = verifyIntegrity();
   if (integrity.buildId !== args.expectedBuildId) {
     throw fixedError('RESIDENT_INTEGRITY_MISMATCH');
+  }
+  const identityPolicy = loadIdentityPolicy();
+  if (identityPolicy && (identityPolicy.buildId !== integrity.buildId
+    || identityPolicy.packageRoot !== path.resolve(__dirname, '..')
+    || identityPolicy.nodeBinary !== process.execPath)) {
+    throw fixedError('RESIDENT_DAEMON_IDENTITY_UNTRUSTED');
+  }
+  if (identityPolicy) {
+    for (const root of [args.rootPath, args.witnessRootPath, args.memoryBodyRootPath]) {
+      requireProtectedStatePath(root, identityPolicy.daemonUid);
+    }
   }
 
   const lifecycle = createLifecycle();
@@ -627,6 +643,7 @@ async function startDaemon({
   };
 
   server = createServer({
+    identityPolicy,
     socketPath: args.socketPath,
     integrity,
     lifecycle,
@@ -727,8 +744,7 @@ function prepareResidentRoots({
   });
 }
 
-async function main() {
-  const argv = process.argv.slice(2);
+async function main(argv = process.argv.slice(2), { start = startDaemon } = {}) {
   let requested;
   try {
     requested = parseDaemonArgs(argv);
@@ -789,7 +805,7 @@ async function main() {
   });
 
   try {
-    controller = await startDaemon({ argv });
+    controller = await start({ argv });
   } catch (error) {
     process.exit(exitCodeFor(error));
   }

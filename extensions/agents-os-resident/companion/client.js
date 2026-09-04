@@ -28,6 +28,8 @@ const {
   resolveProviderAttemptSeal
 } = require('./presence-context');
 const { authenticateConnectedDaemon } = require('./daemon-peer-auth');
+const { SOCKET_PATH, loadDaemonIdentityPolicy, requireRootOwnedPath }
+  = require('./daemon-identity-policy');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -40,7 +42,7 @@ function currentUid() {
   return process.getuid();
 }
 
-function validateSocketTrust(socketPath) {
+function validateSocketTrust(socketPath, policy = null) {
   let parentStat;
   let socketStat;
   try {
@@ -59,15 +61,21 @@ function validateSocketTrust(socketPath) {
     }
     throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
   }
-  const uid = currentUid();
+  const uid = policy?.daemonUid ?? currentUid();
+  if (policy) {
+    if (socketPath !== SOCKET_PATH) throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
+    requireRootOwnedPath(path.dirname(path.dirname(socketPath)), 'directory');
+  }
   if (!parentStat.isDirectory()
     || parentStat.isSymbolicLink()
     || parentStat.uid !== uid
-    || mode(parentStat) !== 0o700
+    || mode(parentStat) !== (policy ? 0o750 : 0o700)
+    || (policy && parentStat.gid !== policy.socketGid)
     || !socketStat.isSocket()
     || socketStat.isSymbolicLink()
     || socketStat.uid !== uid
-    || mode(socketStat) !== 0o600) {
+    || mode(socketStat) !== (policy ? 0o660 : 0o600)
+    || (policy && socketStat.gid !== policy.socketGid)) {
     throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
   }
 }
@@ -87,13 +95,15 @@ function createCompanionClient({
   integrity = verifyCompanionIntegrity(),
   createConnection = (options) => net.createConnection(options),
   authenticateDaemon = authenticateConnectedDaemon,
+  loadIdentityPolicy = loadDaemonIdentityPolicy,
   handshakeTimeoutMs = HANDSHAKE_TIMEOUT_MS
 } = {}) {
   if (!integrity
     || typeof integrity.buildId !== 'string'
     || typeof integrity.packageVersion !== 'string'
     || typeof createConnection !== 'function'
-    || typeof authenticateDaemon !== 'function') {
+    || typeof authenticateDaemon !== 'function'
+    || typeof loadIdentityPolicy !== 'function') {
     throw fixedError('RESIDENT_CLIENT_CONFIGURATION_INVALID');
   }
 
@@ -122,7 +132,11 @@ function createCompanionClient({
     expectedDaemonPid,
     keepOpen = false
   } = {}) {
-    validateSocketTrust(socketPath);
+    const policy = loadIdentityPolicy();
+    if (policy && policy.buildId !== integrity.buildId) {
+      throw fixedError('RESIDENT_INTEGRITY_MISMATCH');
+    }
+    validateSocketTrust(socketPath, policy);
     return new Promise((resolve, reject) => {
       let settled = false;
       let bytes = Buffer.alloc(0);
@@ -146,7 +160,8 @@ function createCompanionClient({
         try {
           if (authenticate) {
             daemonIdentity = await authenticateDaemon(socket, socketPath, {
-              expectedPid: expectedDaemonPid
+              expectedPid: expectedDaemonPid,
+              policy
             });
             if (!daemonIdentity
               || !Number.isSafeInteger(daemonIdentity.pid)
@@ -164,6 +179,10 @@ function createCompanionClient({
       };
       const onData = (chunk) => {
         if (settled) return;
+        if (authenticate && daemonIdentity === null) {
+          fail(fixedError('RESIDENT_DAEMON_IDENTITY_REJECTED'));
+          return;
+        }
         bytes = Buffer.concat([bytes, chunk]);
         if (bytes.length > MAX_FRAME_BYTES) {
           fail(fixedError('RESIDENT_PROTOCOL_REJECTED'));
@@ -290,7 +309,9 @@ function createCompanionClient({
     presenceContext,
     query: (payload) => protectedExchange('query', payload),
     sealProviderAttempt,
-    status: async () => (await exchange(makeRequest('status'))).response,
+    status: async () => (await exchange(makeRequest('status'), {
+      authenticate: true
+    })).response,
     submitConsent: (payload) => protectedExchange('submit_consent', payload)
   });
 }

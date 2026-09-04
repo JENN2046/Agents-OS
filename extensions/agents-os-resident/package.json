@@ -12,7 +12,7 @@
     "build:debug": "napi build --platform --no-js --dts target/native-binding.d.ts",
     "build:release": "napi build --platform --release --no-js --dts target/native-binding.d.ts",
     "build:integrity": "node tools/build-companion-integrity.mjs --output companion-integrity.json",
-    "build:companion": "npm run build:release && npm run build:integrity",
+    "build:companion": "npm run build:release && npm run build:peer-credentials && npm run build:integrity",
     "check:r2-prerequisites": "node tools/check-r2-validation-prerequisites.mjs --check",
     "legacy:build:offline": "node tools/build-offline-package.mjs --stage wp4",
     "check:host-behavior": "node --test tests/host-behavior-contract.test.cjs tests/host-loop.test.cjs",
@@ -41,7 +41,8 @@
     "verify:host-presentation-binding": "node tools/verify-host-presentation-binding.mjs --check",
     "legacy:test:offline-packaging": "node tests/offline-packaging.mjs",
     "verify:systemd-template": "node tools/render-systemd-unit.mjs --check",
-    "legacy:verify:offline-witness": "node tools/build-offline-package.mjs --integrated-witness"
+    "legacy:verify:offline-witness": "node tools/build-offline-package.mjs --integrated-witness",
+    "build:peer-credentials": "cargo build --locked --offline --release --bin resident-peer-credentials && node tools/stage-peer-credentials.mjs"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.7.3"

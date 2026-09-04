@@ -11,12 +11,79 @@ permanent cutover, or device/model/provider replacement. Its VCPToolBox
 projection must retain `plugin-manifest.json.block`; an enabled
 `plugin-manifest.json` is forbidden.
 
-Authority-bearing companion exchanges authenticate the already-connected
-Unix peer against the active systemd unit's exact `MainPID` before any attach
-or protected request bytes are sent. Socket path ownership and mode remain
-necessary profile checks, but are not treated as daemon identity. A path
-replacement owned by the same UID therefore fails closed before a fabricated
-Presence or provider-attempt seal can be accepted.
+Companion exchanges authenticate the already-connected Unix peer through
+kernel `SO_PEERCRED`, before sending attach, status, or protected request bytes.
+The daemon runs under a dedicated non-root UID, different from the client UID.
+The expected identities and build are pinned by the root-owned, non-secret
+`/etc/agents-os-resident/daemon-identity.json`. The client checks the policy,
+every code-path ancestor, the interpreter, and the complete installed integrity
+inventory before using the private `resident-peer-credentials` helper. The helper
+inherits the connected socket; it does not load the native Resident in the Host,
+read protocol data, resolve the socket pathname again, or invoke `ss`/`systemctl`.
+Each attachment also pins the daemon PID. The server admits only the enrolled
+client UID. A host-UID impersonator cannot satisfy the kernel daemon-UID check,
+even if it controls the entire user-level systemd manager.
+
+This assumes an intact client/verifier and a trusted OS administrator; it does
+not protect a client whose code or process the attacker has already modified,
+or defend against root/kernel compromise. Authentication establishes the enrolled
+OS principal, not a trusted person behind every process sharing the client UID.
+
+## System identity installation contract
+
+The source-owned unit is now a **system service**, not a user service. The old
+same-UID installation is not accepted by the default client. Missing, malformed,
+writable, symlinked, or mismatched identity policy fails closed, with no legacy
+fallback. This source change does not install accounts or policy, switch the
+existing live service, or migrate/enroll existing continuity state.
+
+Before a separately authorized installation, prepare these public artifacts:
+
+- A dedicated daemon account and a client access group, with the daemon's primary
+  group equal to the configured `socketGid`; the client must belong to that group.
+- The reviewed package and Node interpreter beneath root-owned ancestors,
+  non-writable by group/others. All integrity entries, the manifest, and the
+  executable helper must be root-owned regular files, without symlink traversal.
+  The helper is an ordinary executable, never setuid/setgid.
+- Three distinct daemon-owned `0700` state roots beneath ancestors owned by root
+  or the daemon and not writable by group/others. Keep mutable state outside the
+  root-owned code tree. Existing state requires its own controlled migration;
+  do not run fresh provisioning over an enrolled Witness.
+- The system unit under root management and its matching identity policy at the
+  fixed path above, root-owned mode `0644`. The policy pins the package build ID.
+  The system unit creates `/run/agents-os-resident` as daemon UID/access group,
+  mode `0750`; the daemon creates `control.sock` with mode `0660`.
+
+The renderer produces both files without installing either. Example numeric IDs
+below are placeholders for explicitly selected installation identities:
+
+```sh
+node tools/render-systemd-unit.mjs \
+  --daemon-uid 2001 --client-uid 2002 --socket-gid 2002 \
+  --node /usr/local/bin/node --plugin-root /opt/agents-os-resident \
+  --activation-root /var/lib/agents-os-resident/agents-os-resident-local-owner-v1 \
+  --witness-root /var/lib/agents-os-resident/protected-witness \
+  --memory-body-root /var/lib/agents-os-resident/private-memory-bodies \
+  --output /absolute/review/agents-os-resident.service \
+  --identity-output /absolute/review/daemon-identity.json
+```
+
+The output parent directory and configured protected roots must already exist;
+the roots must match their daemon-owner profile.
+`npm run verify:systemd-template` is a disposable structural check, not
+qualification of an installed service. Rebuild with `npm run build:companion`;
+this also builds/stages the private Rust helper and includes it in the integrity
+manifest. `iproute2`, a particular `ss` path, and a user D-Bus manager are not
+transport dependencies. Linux/glibc and the pinned Node/Rust package targets
+remain required.
+
+`node --test tests/daemon-peer-auth.test.cjs` covers policy rejection, actual
+connected-FD credentials, and same-UID impersonation. For an opt-in real cross-UID
+transport test, set `AGENTS_OS_RESIDENT_CROSS_UID_IMAGE` to an already-present
+official Node image ID and run `node --test tests/cross-uid-daemon-identity.test.cjs`.
+It uses a disposable container with no network, a read-only root, synthetic
+root-owned installation files, and two non-root UIDs. It never installs or
+changes the host service and does not qualify a live installation.
 
 ## Protected roots and one-shot Witness provisioning
 

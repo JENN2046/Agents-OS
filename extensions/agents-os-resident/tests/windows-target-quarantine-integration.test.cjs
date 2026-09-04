@@ -25,9 +25,7 @@ const ALLOWED_STATE = new Set([
   'agents-os-resident-local-owner-v1.sqlite3-journal'
 ]);
 
-function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
-  return Object.freeze({ pid: expectedPid ?? process.pid });
-}
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 
 function createGoalRequest() {
   return {
@@ -107,7 +105,7 @@ async function startQuarantineDaemon({
     && genesisProvisioningAuthority !== undefined) {
     argv.push('--genesis-provisioning-authority', genesisProvisioningAuthority);
   }
-  return startDaemon({ argv });
+  return startDaemon({ argv, loadIdentityPolicy: () => null });
 }
 
 test('Windows-target build completes actual native + companion + Host integration in disposable state', async (t) => {
@@ -149,7 +147,12 @@ test('Windows-target build completes actual native + companion + Host integratio
     rootPath,
     socketPath
   });
-  const statusClient = createCompanionClient({ socketPath, integrity });
+  const statusClient = createCompanionClient({
+    socketPath,
+    integrity,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon
+  });
   const status = await statusClient.status();
   assert.equal(status.activationState, 'ACTIVE_LOCAL_OWNER');
   assert.equal(status.runtimeUsable, false);
@@ -160,7 +163,8 @@ test('Windows-target build completes actual native + companion + Host integratio
 
   adapter = createResidentAdapter({
     createClient: () => createCompanionClient({
-      authenticateDaemon: authenticateCurrentProcess,
+      loadIdentityPolicy: () => null,
+      authenticateDaemon: authenticateFixtureDaemon,
       socketPath,
       integrity
     }),
@@ -264,7 +268,8 @@ test('Windows-target build completes actual native + companion + Host integratio
     genesisProvisioningAuthority: null
   });
   replayClient = createCompanionClient({
-    authenticateDaemon: authenticateCurrentProcess,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon,
     socketPath,
     integrity
   });

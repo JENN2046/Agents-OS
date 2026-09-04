@@ -25,9 +25,7 @@ const INTEGRITY = Object.freeze({
   packageVersion: '0.3.0-local-owner.0'
 });
 
-function authenticateCurrentProcess(_socket, _socketPath, { expectedPid } = {}) {
-  return Object.freeze({ pid: expectedPid ?? process.pid });
-}
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 
 function activeProjection() {
   return {
@@ -332,7 +330,8 @@ test('companion injects attachment/fresh identity and explicitly dispatches Pres
   });
   await server.start();
   const client = createCompanionClient({
-    authenticateDaemon: authenticateCurrentProcess,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });

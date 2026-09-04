@@ -3,14 +3,19 @@ import {
   chmodSync,
   mkdirSync,
   mkdtempSync,
+  readFileSync,
   rmSync,
   symlinkSync
 } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { renderSystemdUnit } from '../tools/render-systemd-unit.mjs';
+import {
+  renderDaemonIdentityPolicy,
+  renderSystemdUnit
+} from '../tools/render-systemd-unit.mjs';
 
 function fixture(t) {
   const root = mkdtempSync(path.join(
@@ -19,7 +24,7 @@ function fixture(t) {
   ));
   chmodSync(root, 0o700);
   const pluginRoot = path.join(root, 'plugin');
-  const stateRoot = path.join(pluginRoot, 'state');
+  const stateRoot = path.join(root, 'state');
   const activationRoot = path.join(
     stateRoot,
     'agents-os-resident-local-owner-v1'
@@ -40,6 +45,9 @@ function fixture(t) {
   return {
     activationRoot,
     buildId: `sha256:${'d'.repeat(64)}`,
+    daemonUid: process.getuid(),
+    clientUid: process.getuid() === 65534 ? 65533 : 65534,
+    socketGid: process.getgid(),
     memoryBodyRoot,
     nodeBinary: '/usr/bin/node',
     pluginRoot,
@@ -53,6 +61,9 @@ function renderConfig(value) {
   return {
     activationRoot: value.activationRoot,
     buildId: value.buildId,
+    daemonUid: value.daemonUid,
+    clientUid: value.clientUid,
+    socketGid: value.socketGid,
     memoryBodyRoot: value.memoryBodyRoot,
     nodeBinary: value.nodeBinary,
     pluginRoot: value.pluginRoot,
@@ -69,10 +80,12 @@ test('systemd renderer binds exact protected argv and least-privilege root acces
   assert.match(rendered, /ProtectSystem=strict/);
   assert.match(rendered, /^RestrictSUIDSGID=no$/mu);
   assert.doesNotMatch(rendered, /^RestrictSUIDSGID=yes$/mu);
-  assert.match(rendered, /RuntimeDirectoryMode=0700/);
+  assert.match(rendered, /RuntimeDirectoryMode=0750/);
+  assert.ok(rendered.includes(`\nUser=${roots.daemonUid}\n`));
+  assert.ok(rendered.includes(`\nGroup=${roots.socketGid}\n`));
   assert.match(rendered, /StandardOutput=null/);
   assert.match(rendered, /StandardError=null/);
-  assert.match(rendered, /WantedBy=default\.target/);
+  assert.match(rendered, /WantedBy=multi-user\.target/);
   const execStart = rendered.split('\n').find((line) =>
     line.startsWith('ExecStart='));
   assert.equal(execStart, [
@@ -81,7 +94,7 @@ test('systemd renderer binds exact protected argv and least-privilege root acces
     '--root',
     roots.activationRoot,
     '--socket',
-    '%t/agents-os-resident/control.sock',
+    '/run/agents-os-resident/control.sock',
     '--expected-build-id',
     roots.buildId,
     '--witness-root',
@@ -104,6 +117,116 @@ test('systemd renderer binds exact protected argv and least-privilege root acces
   assert.doesNotMatch(rendered, /BindsTo=/);
   assert.doesNotMatch(rendered, /MemoryDenyWriteExecute=/);
   assert.doesNotMatch(rendered, /SystemCallFilter=/);
+});
+
+test('identity policy binds exactly the same daemon, client, group and build as the unit', (t) => {
+  const roots = fixture(t);
+  const config = renderConfig(roots);
+  const policy = renderDaemonIdentityPolicy(config);
+  assert.deepEqual(policy, {
+    schema: 'agents-os-resident.daemon-identity.v1',
+    daemonUid: roots.daemonUid,
+    clientUid: roots.clientUid,
+    socketGid: roots.socketGid,
+    packageRoot: roots.pluginRoot,
+    nodeBinary: roots.nodeBinary,
+    buildId: roots.buildId
+  });
+  assert.ok(Object.isFrozen(policy));
+  assert.ok(!roots.activationRoot.startsWith(`${roots.pluginRoot}/`));
+  assert.doesNotThrow(() => renderSystemdUnit(config));
+});
+
+test('both projections reject shared, root, malformed and missing identities', (t) => {
+  const roots = fixture(t);
+  const config = renderConfig(roots);
+  for (const render of [renderSystemdUnit, renderDaemonIdentityPolicy]) {
+    assert.throws(() => render({ ...config, clientUid: config.daemonUid }),
+      /SYSTEMD_RENDER_INPUT_INVALID/);
+    for (const key of ['daemonUid', 'clientUid', 'socketGid']) {
+      for (const value of [0, -1, 1.5, '1000', null, NaN, Infinity, 0xffffffff]) {
+        assert.throws(() => render({ ...config, [key]: value }),
+          /SYSTEMD_RENDER_INPUT_INVALID/);
+      }
+      const missing = { ...config };
+      delete missing[key];
+      assert.throws(() => render(missing), /SYSTEMD_RENDER_INPUT_INVALID/);
+    }
+    assert.throws(() => render({
+      ...config,
+      daemonUid: config.clientUid,
+      clientUid: config.daemonUid
+    }), /SYSTEMD_RENDER_PROTECTED_ROOT_INVALID/);
+    assert.doesNotThrow(() => render({
+      ...config, clientUid: 0xfffffffe, socketGid: 0xfffffffe
+    }));
+  }
+});
+
+test('CLI renders a matching policy and unit only with explicit distinct numeric identities', (t) => {
+  const roots = fixture(t);
+  const output = path.join(roots.root, 'resident.service');
+  const identityOutput = path.join(roots.root, 'daemon-identity.json');
+  const cli = new URL('../tools/render-systemd-unit.mjs', import.meta.url);
+  const args = [
+    cli.pathname,
+    '--activation-root', roots.activationRoot,
+    '--client-uid', String(roots.clientUid),
+    '--daemon-uid', String(roots.daemonUid),
+    '--identity-output', identityOutput,
+    '--memory-body-root', roots.memoryBodyRoot,
+    '--node', roots.nodeBinary,
+    '--output', output,
+    '--plugin-root', roots.pluginRoot,
+    '--socket-gid', String(roots.socketGid),
+    '--witness-root', roots.witnessRoot
+  ];
+  const result = spawnSync(process.execPath, args, { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  const policy = JSON.parse(readFileSync(identityOutput, 'utf8'));
+  const unit = readFileSync(output, 'utf8');
+  assert.deepEqual(policy, renderDaemonIdentityPolicy({
+    ...renderConfig(roots), buildId: policy.buildId
+  }));
+  assert.ok(unit.includes(`--expected-build-id ${policy.buildId}`));
+  assert.ok(unit.includes(`\nUser=${policy.daemonUid}\n`));
+  assert.ok(unit.includes(`\nGroup=${policy.socketGid}\n`));
+  const daemonIndex = args.indexOf('--daemon-uid') + 1;
+  for (const badUid of ['0', '-1', '1.5', '1e3', '01000', '4294967295']) {
+    const invalid = [...args];
+    invalid[daemonIndex] = badUid;
+    assert.equal(spawnSync(process.execPath, invalid).status, 1);
+    assert.equal(readFileSync(output, 'utf8'), unit);
+    assert.equal(readFileSync(identityOutput, 'utf8'), `${JSON.stringify(policy, null, 2)}\n`);
+  }
+  const sameOutput = [...args];
+  sameOutput[sameOutput.indexOf('--identity-output') + 1] = output;
+  assert.equal(spawnSync(process.execPath, sameOutput).status, 1);
+  assert.equal(readFileSync(output, 'utf8'), unit);
+  assert.equal(readFileSync(identityOutput, 'utf8'), `${JSON.stringify(policy, null, 2)}\n`);
+  const aliasParent = path.join(roots.root, 'output-alias');
+  symlinkSync(roots.root, aliasParent, 'dir');
+  for (const aliasedTarget of [path.basename(output), path.basename(identityOutput)]) {
+    const aliasedOutput = [...args];
+    aliasedOutput[aliasedOutput.indexOf('--identity-output') + 1]
+      = path.join(aliasParent, aliasedTarget);
+    assert.equal(spawnSync(process.execPath, aliasedOutput).status, 1);
+    assert.equal(readFileSync(output, 'utf8'), unit);
+    assert.equal(readFileSync(identityOutput, 'utf8'), `${JSON.stringify(policy, null, 2)}\n`);
+  }
+  const missing = args.filter((_, index) => index !== daemonIndex
+    && index !== daemonIndex - 1);
+  assert.equal(spawnSync(process.execPath, missing).status, 1);
+});
+
+test('--check is explicitly disposable structural verification', () => {
+  const result = spawnSync(process.execPath, [
+    new URL('../tools/render-systemd-unit.mjs', import.meta.url).pathname,
+    '--check'
+  ], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout,
+    'SYSTEMD_UNIT_STRUCTURAL_CHECK_PASSED; NOT_INSTALLATION_QUALIFICATION\n');
 });
 
 test('systemd renderer rejects caller continuity mixing and missing protected roots', (t) => {
