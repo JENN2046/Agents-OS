@@ -40,6 +40,16 @@ test('isolated real-kernel cross-UID daemon transport qualification', {
     assert.equal(evidence.impostorReceivedBytes, 0);
     assert.equal(evidence.protectedRewriteDenials, 9);
     assert.equal(evidence.hostOwnedStateAncestorRejected, true);
+    assert.equal(evidence.memoryPublicationAccepted, true);
+    assert.equal(evidence.publicationCurrent, false);
+    assert.equal(evidence.publicationAuthoritative, false);
+    assert.equal(evidence.publishedBodyOwnerUid, 2001);
+    assert.equal(evidence.publishedBodyFileCount, 1);
+    assert.equal(evidence.rawHostBodyRootAccessDenied, true);
+    assert.equal(evidence.rawHostPublishedBodyAccessDenied, true);
+    assert.equal(evidence.negativeRequestsRejected, 5);
+    assert.equal(evidence.rootRendererChecksPassed, true);
+    assert.equal(evidence.publicationPresenceRequeried, true);
     assert.equal(evidence.installationQualification, false);
     t.diagnostic(JSON.stringify(evidence));
   } finally {

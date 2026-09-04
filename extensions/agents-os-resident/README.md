@@ -85,6 +85,32 @@ It uses a disposable container with no network, a read-only root, synthetic
 root-owned installation files, and two non-root UIDs. It never installs or
 changes the host service and does not qualify a live installation.
 
+## Memory publication across the identity boundary
+
+The Host uses the private companion client's `publishMemoryBody` method on the
+same authenticated attachment used for Presence. It supplies only a UTF-8
+`Buffer` body (at most 1 MiB), typed `memoryId`, and `operationRef`. The client
+binds the request to its established Presence identity, authority generation,
+and context; callers cannot select filesystem roots. The daemon re-queries
+native Presence and rejects a stale context or a replaced/detached session
+before calling its private `MemoryBodyWriter` backend.
+
+Publication runs under the daemon UID. The system unit permits writes to its
+Memory body root and Resident root; Witness stays read-only. Host processes
+cannot directly construct a writer against the installed daemon-owned roots.
+The existing in-process writer remains a daemon backend and disposable-test
+primitive. Its old Host filesystem access pattern is not supported by the
+cross-UID installation.
+
+The private authenticated socket operation returns only the existing body
+descriptor and `PUBLISHED_NON_CURRENT`, `UNVERIFIED_WRITER_RECEIPT` receipt.
+It does not write formal Memory state, adopt a candidate, or claim currentness;
+the native verifier/adoption path remains authoritative. No model-facing tool,
+plugin schema, or native method is added. Only publication frames receive the
+bounded larger allowance needed for 1 MiB bodies; ordinary protocol frames
+remain limited to 64 KiB. Invalid payloads, unknown keys, invalid UTF-8/base64,
+oversize bodies, and stale bindings fail closed before publication.
+
 ## Protected roots and one-shot Witness provisioning
 
 After package installation has created the current-owner `0700` state parent,

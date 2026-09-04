@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {
   chmodSync,
+  chownSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -31,6 +32,9 @@ function fixture(t) {
   );
   const witnessRoot = path.join(stateRoot, 'protected-witness');
   const memoryBodyRoot = path.join(stateRoot, 'private-memory-bodies');
+  const currentUid = process.getuid();
+  const daemonUid = currentUid === 0 ? 2001 : currentUid;
+  const socketGid = process.getgid() === 0 ? 2002 : process.getgid();
   for (const directory of [
     pluginRoot,
     stateRoot,
@@ -41,13 +45,18 @@ function fixture(t) {
     mkdirSync(directory, { mode: 0o700 });
     chmodSync(directory, 0o700);
   }
+  if (currentUid === 0) {
+    for (const directory of [activationRoot, witnessRoot, memoryBodyRoot]) {
+      chownSync(directory, daemonUid, socketGid);
+    }
+  }
   t.after(() => rmSync(root, { force: true, recursive: true }));
   return {
     activationRoot,
     buildId: `sha256:${'d'.repeat(64)}`,
-    daemonUid: process.getuid(),
-    clientUid: process.getuid() === 65534 ? 65533 : 65534,
-    socketGid: process.getgid(),
+    daemonUid,
+    clientUid: currentUid === 0 ? 2002 : daemonUid === 65534 ? 65533 : 65534,
+    socketGid,
     memoryBodyRoot,
     nodeBinary: '/usr/bin/node',
     pluginRoot,
@@ -104,11 +113,11 @@ test('systemd renderer binds exact protected argv and least-privilege root acces
   ].join(' '));
   assert.equal(
     rendered.split('\n').find((line) => line.startsWith('ReadOnlyPaths=')),
-    `ReadOnlyPaths=${roots.pluginRoot} ${roots.witnessRoot} ${roots.memoryBodyRoot}`
+    `ReadOnlyPaths=${roots.pluginRoot} ${roots.witnessRoot}`
   );
   assert.equal(
     rendered.split('\n').find((line) => line.startsWith('ReadWritePaths=')),
-    `ReadWritePaths=${roots.activationRoot}`
+    `ReadWritePaths=${roots.activationRoot} ${roots.memoryBodyRoot}`
   );
   assert.doesNotMatch(rendered, /--continuity-evidence/);
   assert.doesNotMatch(rendered, /--genesis-authority-file/);
@@ -267,6 +276,7 @@ test('systemd renderer rejects aliased, nested, missing and non-owner-only roots
   const nestedMemory = path.join(roots.witnessRoot, 'nested-memory');
   mkdirSync(nestedMemory, { mode: 0o700 });
   chmodSync(nestedMemory, 0o700);
+  if (process.getuid() === 0) chownSync(nestedMemory, roots.daemonUid, roots.socketGid);
   assert.throws(
     () => renderSystemdUnit({ ...config, memoryBodyRoot: nestedMemory }),
     /SYSTEMD_RENDER_PROTECTED_ROOT_OVERLAP/
@@ -288,7 +298,13 @@ test('systemd renderer rejects aliased, nested, missing and non-owner-only roots
     /SYSTEMD_RENDER_INPUT_INVALID/
   );
 
+  // Root fixtures need only CAP_CHOWN, not CAP_FOWNER, to change this owned
+  // disposable directory's mode and restore its synthetic daemon ownership.
+  if (process.getuid() === 0) chownSync(roots.memoryBodyRoot, 0, roots.socketGid);
   chmodSync(roots.memoryBodyRoot, 0o755);
+  if (process.getuid() === 0) {
+    chownSync(roots.memoryBodyRoot, roots.daemonUid, roots.socketGid);
+  }
   assert.throws(
     () => renderSystemdUnit(config),
     /SYSTEMD_RENDER_PROTECTED_ROOT_INVALID/

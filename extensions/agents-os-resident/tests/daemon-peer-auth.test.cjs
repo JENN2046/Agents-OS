@@ -134,6 +134,25 @@ test('native helper identifies a real connected Unix peer without external tools
   } });
 });
 
+test('helper restores nonblocking socket mode on success and failure', async (t) => {
+  const { client } = await socketFixture(t);
+  const assertNonblocking = () => {
+    const flags = fs.readFileSync(`/proc/self/fdinfo/${client._handle.fd}`, 'utf8')
+      .match(/^flags:\s+([0-7]+)$/m)[1];
+    assert.ok(Number.parseInt(flags, 8) & 0o4000);
+  };
+  connectedPeerCredentials(client);
+  assertNonblocking();
+  for (const failure of ['throw', 'malformed']) {
+    assert.throws(() => connectedPeerCredentials(client, { execute() {
+      assert.equal(client._handle.setBlocking(true), 0);
+      if (failure === 'throw') throw new Error('helper failed');
+      return 'invalid credentials';
+    } }), /IDENTITY_UNAVAILABLE/);
+    assertNonblocking();
+  }
+});
+
 test('connection identity survives pathname replacement', async (t) => {
   const { client, socketPath, root } = await socketFixture(t);
   fs.renameSync(socketPath, path.join(root, 'old.sock'));

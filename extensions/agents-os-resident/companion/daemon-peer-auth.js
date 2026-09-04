@@ -26,8 +26,10 @@ function connectedPeerCredentials(socket, {
   helperPath = path.resolve(__dirname, '..', HELPER_NAME),
   execute = execFileSync
 } = {}) {
-  const descriptor = socket?._handle?.fd;
-  if (!Number.isSafeInteger(descriptor) || descriptor < 0) {
+  const handle = socket?._handle;
+  const descriptor = handle?.fd;
+  if (!Number.isSafeInteger(descriptor) || descriptor < 0
+    || typeof handle.setBlocking !== 'function') {
     throw fixedError('RESIDENT_DAEMON_IDENTITY_UNAVAILABLE');
   }
   try {
@@ -36,6 +38,13 @@ function connectedPeerCredentials(socket, {
       stdio: [descriptor, 'pipe', 'pipe'], maxBuffer: 128, timeout: 1000
     }));
   } catch { throw fixedError('RESIDENT_DAEMON_IDENTITY_UNAVAILABLE'); }
+  finally {
+    // Child stdio setup clears O_NONBLOCK on the shared open file description.
+    // Restore it even when the helper fails, before Node can write any frames.
+    if (handle.setBlocking(false) !== 0) {
+      throw fixedError('RESIDENT_DAEMON_IDENTITY_UNAVAILABLE');
+    }
+  }
 }
 
 function authenticateConnectedDaemon(socket, socketPath, {

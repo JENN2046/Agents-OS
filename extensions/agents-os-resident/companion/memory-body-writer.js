@@ -1,12 +1,14 @@
 'use strict';
 
 /*
- * Host/VCP-private primitive. A trusted in-process adapter must select the two
- * startup roots and bind expectedIdentityOpaqueId to an authorized Resident.
+ * Daemon-private filesystem primitive. The authenticated publication handler
+ * selects startup roots and binds expectedIdentityOpaqueId to fresh Presence.
  * Each publication may select only a Memory id beneath that bound identity.
  * The roots must remain mount-stable: this module rejects path and symlink
  * aliases but does not claim to authenticate callers or detect same-device bind mounts.
- * Do not re-export this module through a socket, public protocol, or model API.
+ * Do not re-export this filesystem primitive through a public/model API.
+ * The private daemon operation accepts only body data and bound identity claims,
+ * never caller-selected roots; its receipt is noncurrent and nonauthoritative.
  */
 
 const { createHash, randomBytes } = require('node:crypto');

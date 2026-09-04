@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:d6f9e870d7b75c267accad7c82e4fb547f75944d631f4a7e96a3dafc2674fa7f",
+  "buildId": "sha256:7d6ea16c1e9c110396e435887e7df2ade793310bb0d9f310365bca4ea4f474dc",
   "files": [
     {
       "path": "activation.js",
@@ -20,8 +20,8 @@
     },
     {
       "path": "companion/client.js",
-      "byteLength": 10087,
-      "sha256": "197213cb38456cbe9a5c2a95acf702f4c8d318b71d728761532088bfcc588da1"
+      "byteLength": 10749,
+      "sha256": "fb054f83682da4b41772963ecd99bc47d6b5b2e5322e58f112805d531b537c6b"
     },
     {
       "path": "companion/cognitive-context.js",
@@ -30,8 +30,8 @@
     },
     {
       "path": "companion/constants.js",
-      "byteLength": 1475,
-      "sha256": "3fa1c4a1ccef8e6af8b0ba7d55459c13e4a9b48b85712a77ffd31cd20370dc1a"
+      "byteLength": 1672,
+      "sha256": "0bc3611c54c1712b8c329eaf76a752d0ceb6b98a5ff6a25108919b6cc1d17c91"
     },
     {
       "path": "companion/daemon-identity-policy.js",
@@ -40,8 +40,8 @@
     },
     {
       "path": "companion/daemon-peer-auth.js",
-      "byteLength": 2849,
-      "sha256": "c42c702aa82fcc7757cfa918faa49c672f6b0226aa498628ecfadf5e26b9d8ba"
+      "byteLength": 3211,
+      "sha256": "1f61992f6aef0046ad224b40a8b0c89580dfba26fde0b1a648022abe9f52c8ef"
     },
     {
       "path": "companion/discovery.js",
@@ -55,8 +55,13 @@
     },
     {
       "path": "companion/memory-body-writer.js",
-      "byteLength": 26974,
-      "sha256": "4864aea8db610b6c8dbd6f4a9306006ddbc015cede456f7d0652d3147fba9408"
+      "byteLength": 27128,
+      "sha256": "aab728157f982261d95c3ac62cac32e7a338cce903041657f89ddb1f32642f07"
+    },
+    {
+      "path": "companion/memory-publication.js",
+      "byteLength": 4421,
+      "sha256": "d9a745d134ff505b96393f6fb359b6a7b0093021fc4b125f6588fae792b015ea"
     },
     {
       "path": "companion/presence-context.js",
@@ -70,8 +75,8 @@
     },
     {
       "path": "companion/protocol.js",
-      "byteLength": 11357,
-      "sha256": "de793304648c6c6f5cde8670ca88a3e101e5d3d29488159f6206fa3c7595c98e"
+      "byteLength": 11846,
+      "sha256": "2097f1fdd9dad86c284400cc1bf74ee81e40b22682b7c00ffb3304b5ac61e785"
     },
     {
       "path": "companion/resident-daemon.js",
@@ -80,8 +85,8 @@
     },
     {
       "path": "companion/server.js",
-      "byteLength": 18997,
-      "sha256": "63f5b467f94fcc745513b25a4d4179125a587429b10ea1b63c4e2384e69b967e"
+      "byteLength": 20201,
+      "sha256": "1dac0dc920c37eaea6fbf9bf4dc9b801121f7fa8ae9ab52ef5df1196fdf0757e"
     },
     {
       "path": "index.js",
@@ -91,12 +96,12 @@
     {
       "path": "package-manifest.json",
       "byteLength": 5443,
-      "sha256": "50b702e62ed1685165a63ee6767c6fc291b404cd2dc7bb0e4e89e918c4f530e3"
+      "sha256": "3a53e183b386883410a98074caf9c0839b46efd4186c994b6d69f6386690b4e5"
     },
     {
       "path": "package.json",
-      "byteLength": 4553,
-      "sha256": "fea5702e0e0a13fa1244cab13eee254c58c75a741d6bd89a64c847b9a0f20d6c"
+      "byteLength": 4667,
+      "sha256": "07d0714026c17eeb245d084a095377994ccd27fccdb8b1e003a88959ca2cf75e"
     },
     {
       "path": "plugin-manifest.json.block",
@@ -111,7 +116,7 @@
     {
       "path": "systemd/agents-os-resident.service.template",
       "byteLength": 1086,
-      "sha256": "0d14925a6b44dca0cbe2bf921b8e0a401646a71fc6ec11be20cbc3f3eea2e1fa"
+      "sha256": "4d50c33ad8bebb05a500a943d093b0e553176bc26a30abc5bc665b6f0802e8e0"
     },
     {
       "path": "tools/build-companion-integrity.mjs",
@@ -120,13 +125,13 @@
     },
     {
       "path": "tools/render-systemd-unit.mjs",
-      "byteLength": 12660,
-      "sha256": "ae3e2a4568e3ee6defd7b79973f872701d11ac44137b63be8f255681e2c6cf57"
+      "byteLength": 13243,
+      "sha256": "85b6fa2d2ed207ee866366e56e39d2614fe1c4a4293b7f605cafd2cb999ede4f"
     },
     {
       "path": "tools/validate-companion-projection.mjs",
-      "byteLength": 6250,
-      "sha256": "28d1f7f83f25519b6fe82735880226d475a8563789d1958b05e344af886ae444"
+      "byteLength": 6678,
+      "sha256": "253f83f2f05c6a2b40b382f4d75958477647af62e015a2e4b1bcddb3934ef1bb"
     },
     {
       "path": "tools/verify-host-presentation-binding.mjs",

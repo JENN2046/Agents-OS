@@ -1,5 +1,6 @@
 import {
   chmodSync,
+  chownSync,
   copyFileSync,
   existsSync,
   lstatSync,
@@ -105,11 +106,20 @@ export function runProjectionPreflight() {
     if (JSON.stringify(secondRootIdentities) !== JSON.stringify(firstRootIdentities)) {
       throw new Error('COMPANION_PROJECTION_ROOT_IDEMPOTENCY_INVALID');
     }
+    const currentUid = process.getuid();
+    const daemonUid = currentUid === 0 ? 2001 : currentUid;
+    const socketGid = process.getgid() === 0 ? 2002 : process.getgid();
+    if (currentUid === 0) {
+      // Only the fresh, empty fixture roots above acquire the synthetic UID.
+      for (const directory of [activationRoot, witnessRoot, memoryBodyRoot]) {
+        chownSync(directory, daemonUid, socketGid);
+      }
+    }
     mkdirSync(dirname(unitPath), { recursive: true, mode: 0o700 });
     const renderedUnit = renderSystemdUnit({
-      daemonUid: process.getuid(),
-      clientUid: process.getuid() === 65534 ? 65533 : 65534,
-      socketGid: process.getgid(),
+      daemonUid,
+      clientUid: currentUid === 0 ? 2002 : daemonUid === 65534 ? 65533 : 65534,
+      socketGid,
       activationRoot,
       buildId: sourceIntegrity.buildId,
       memoryBodyRoot,
@@ -130,9 +140,9 @@ export function runProjectionPreflight() {
       || !renderedUnit.includes(
         `--witness-root ${witnessRoot} --memory-body-root ${memoryBodyRoot}`
       )
-      || !renderedUnit.includes(`ReadWritePaths=${activationRoot}`)
+      || !renderedUnit.includes(`\nReadWritePaths=${activationRoot} ${memoryBodyRoot}\n`)
       || !renderedUnit.includes(
-        `ReadOnlyPaths=${pluginRoot} ${witnessRoot} ${memoryBodyRoot}`
+        `\nReadOnlyPaths=${pluginRoot} ${witnessRoot}\n`
       )
       || renderedUnit.includes('--continuity-evidence')
       || renderedUnit.includes('--genesis-provisioning-authority')) {

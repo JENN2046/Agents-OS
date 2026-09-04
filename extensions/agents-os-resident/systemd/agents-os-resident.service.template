@@ -30,8 +30,8 @@ RestrictSUIDSGID=no
 LockPersonality=yes
 RestrictAddressFamilies=AF_UNIX
 IPAddressDeny=any
-ReadOnlyPaths=@@PLUGIN_ROOT@@ @@WITNESS_ROOT@@ @@MEMORY_BODY_ROOT@@
-ReadWritePaths=@@ACTIVATION_ROOT@@
+ReadOnlyPaths=@@PLUGIN_ROOT@@ @@WITNESS_ROOT@@
+ReadWritePaths=@@ACTIVATION_ROOT@@ @@MEMORY_BODY_ROOT@@
 StandardOutput=null
 StandardError=null
 

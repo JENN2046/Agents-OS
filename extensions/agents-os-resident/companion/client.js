@@ -20,6 +20,7 @@ const {
   validateResponseFrame
 } = require('./protocol');
 const { verifyCompanionIntegrity } = require('./integrity');
+const { publicationPayload } = require('./memory-publication');
 const {
   nativeProviderAttemptRequest,
   parsePresencePayload,
@@ -172,7 +173,10 @@ function createCompanionClient({
             }
           }
           if (settled || socket.destroyed) return;
-          socket.write(encodeFrame(request));
+          const frame = encodeFrame(request);
+          socket.write(frame, () => {
+            if (request.operation === 'publish_memory_body') frame.fill(0);
+          });
         } catch (error) {
           fail(error);
         }
@@ -226,6 +230,9 @@ function createCompanionClient({
       socket.on('data', onData);
       socket.once('timeout', onTimeout);
       socket.once('error', onError);
+      socket.once('close', () => {
+        if (!settled) fail(fixedError('RESIDENT_COMPANION_UNAVAILABLE'));
+      });
     });
   }
 
@@ -289,6 +296,16 @@ function createCompanionClient({
     return resolveProviderAttemptSeal(result, normalized, presenceSession);
   }
 
+  async function publishMemoryBody(input) {
+    if (!attachment) throw fixedError('RESIDENT_ATTACHMENT_REQUIRED');
+    const payload = publicationPayload(input, attachment.presenceSession);
+    try {
+      return await protectedExchange('publish_memory_body', payload);
+    } finally {
+      payload.bodyBase64 = '';
+    }
+  }
+
   function detach() {
     const socket = attachment?.socket;
     attachment = null;
@@ -307,6 +324,7 @@ function createCompanionClient({
       payload
     ),
     presenceContext,
+    publishMemoryBody,
     query: (payload) => protectedExchange('query', payload),
     sealProviderAttempt,
     status: async () => (await exchange(makeRequest('status'), {

@@ -6,11 +6,16 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
+const { once } = require('node:events');
 const { pathToFileURL } = require('node:url');
 const PACKAGE = '/opt/resident';
 const SOCKET = '/run/agents-os-resident/control.sock';
 const POLICY = '/etc/agents-os-resident/daemon-identity.json';
+const BODY_ROOT = '/run/private-memory-bodies';
+const RESIDENT_ROOT = '/run/qualified-state';
+const BODY = Buffer.from('# Synthetic cross-UID publication fixture\n');
+const MEMORY_ID = `memory:v1:${'c'.repeat(64)}`;
 const DAEMON_UID = 2001;
 const CLIENT_UID = 2002;
 const GID = 2002;
@@ -30,21 +35,29 @@ async function daemon() {
   const integrity = moduleAt('integrity').verifyCompanionIntegrity();
   let statusCalls = 0;
   let queryCalls = 0;
+  let presenceCalls = 0;
   const lifecycle = {
     initialize: async () => active,
     status: async () => { statusCalls += 1; return active; },
     query: async () => { queryCalls += 1; return { fixtureQuery: true }; },
     shutdown: async () => ({}), prepareProposal: async () => ({}),
     submitConsent: async () => ({}), queryMmrMutationCore: async () => ({}),
-    queryPresenceContext: async () => ({}), sealProviderAttempt: async () => ({}),
+    queryPresenceContext: async (input) => {
+      presenceCalls += 1;
+      return require('./memory-publication-presence.cjs').contextFor(input);
+    },
+    sealProviderAttempt: async () => ({}),
     invalidate: async () => ({})
   };
   const server = moduleAt('server').createCompanionServer({
     socketPath: SOCKET, identityPolicy, integrity, lifecycle,
-    activationConfig: {}, healthIntervalMs: 600000
+    activationConfig: {
+      AGENTS_OS_RESIDENT_ROOT: RESIDENT_ROOT,
+      AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: BODY_ROOT
+    }, healthIntervalMs: 600000
   });
   process.on('message', async (command) => {
-    if (command === 'counts') send({ statusCalls, queryCalls });
+    if (command === 'counts') send({ statusCalls, queryCalls, presenceCalls });
     if (command === 'stop') {
       await server.stop(); send({ stopped: true }); process.disconnect();
     }
@@ -64,29 +77,84 @@ async function client() {
     assert.equal(status.buildId, attach.response.buildId);
     const query = await connection.query({ operation: 'QUERY_GOALS', query: { mode: 'LIST' } });
     assert.deepEqual(query, { fixtureQuery: true });
-    send({ positiveExchanges: 3 });
+    const publication = {
+      body: BODY, memoryId: MEMORY_ID,
+      operationRef: 'operation:synthetic:cross-uid-publication'
+    };
+    await assert.rejects(connection.publishMemoryBody(publication));
+    const presence = await connection.presenceContext(
+      require('./memory-publication-presence.cjs').presencePayload()
+    );
+    for (const invalid of [
+      { ...publication, memoryId: 'memory:v1:../../escape' },
+      { ...publication, body: Buffer.from([0x80]) },
+      { ...publication, identityOpaqueId: `resident:v1:${'f'.repeat(64)}` }
+    ]) await assert.rejects(connection.publishMemoryBody(invalid));
+    const forged = await rawExchange({
+      schema: moduleAt('constants').PROTOCOL_SCHEMA,
+      operation: 'publish_memory_body', requestId: 'b'.repeat(32),
+      expectedBuildId: attach.response.buildId,
+      attachmentGeneration: attach.response.attachmentGeneration,
+      attachmentToken: attach.response.attachmentToken,
+      payload: {
+        bodyBase64: BODY.toString('base64'), memoryId: MEMORY_ID,
+        operationRef: publication.operationRef,
+        expectedContextId: presence.contextId,
+        expectedIdentityOpaqueId: `resident:v1:${'f'.repeat(64)}`,
+        expectedAuthorityGeneration: presence.identity.authorityGeneration
+      }
+    });
+    assert.equal(JSON.parse(forged.toString()).accepted, false);
+    send({ negativeRequestsRejected: 5 });
+    assert.equal((await once(process, 'message'))[0], 'publish');
+    const result = await connection.publishMemoryBody(publication);
+    assert.equal(result.receipt.current, false);
+    assert.equal(result.receipt.authoritative, false);
+    assert.equal(result.receipt.publicationStatus, 'PUBLISHED_NON_CURRENT');
+    assert.equal(result.descriptor.bodyByteLength, BODY.length);
+    assert.equal(JSON.stringify(result).includes(BODY.toString()), false);
+    const [, , identityDigest, memoryDigest, bodyDigest] = result.descriptor.bodyRef.split(':');
+    const bodyPath = path.join(BODY_ROOT, identityDigest, memoryDigest, `${bodyDigest}.body`);
+    assert.throws(() => fs.readFileSync(bodyPath), { code: 'EACCES' });
+    assert.throws(() => fs.writeFileSync(bodyPath, 'host overwrite'), { code: 'EACCES' });
+    send({ positiveExchanges: 3, memoryPublicationAccepted: true,
+      publicationCurrent: false, publicationAuthoritative: false,
+      rawHostPublishedBodyAccessDenied: true });
   } finally { connection.detach(); }
+}
+
+async function rawExchange(frame) {
+  const socket = net.createConnection(SOCKET);
+  const received = [];
+  await new Promise((resolve, reject) => {
+    socket.on('error', (error) => {
+      if (!['ECONNRESET', 'EPIPE'].includes(error.code)) reject(error);
+    });
+    socket.on('data', (bytes) => { received.push(bytes); });
+    socket.once('connect', () => socket.write(moduleAt('protocol').encodeFrame(frame)));
+    socket.once('close', resolve);
+    socket.setTimeout(3000, () => { socket.destroy(); reject(new Error('request not rejected')); });
+  });
+  return Buffer.concat(received);
 }
 
 async function wrongClient() {
   // Deliberately bypass client-side admission to exercise daemon admission.
   // GID allows connecting, but the real peer UID is unregistered.
   const policy = JSON.parse(fs.readFileSync(POLICY, 'utf8'));
-  const socket = net.createConnection(SOCKET);
-  let receivedBytes = 0;
-  await new Promise((resolve, reject) => {
-    socket.on('error', (error) => {
-      if (!['ECONNRESET', 'EPIPE'].includes(error.code)) reject(error);
-    });
-    socket.on('data', (bytes) => { receivedBytes += bytes.length; });
-    socket.once('connect', () => socket.write(moduleAt('protocol').encodeFrame({
-      schema: moduleAt('constants').PROTOCOL_SCHEMA,
-      operation: 'status', requestId: 'a'.repeat(32), expectedBuildId: policy.buildId
-    })));
-    socket.once('close', resolve);
-    socket.setTimeout(3000, () => { socket.destroy(); reject(new Error('wrong UID not rejected')); });
-  });
-  assert.equal(receivedBytes, 0);
+  const base = { schema: moduleAt('constants').PROTOCOL_SCHEMA,
+    requestId: 'a'.repeat(32), expectedBuildId: policy.buildId };
+  for (const frame of [
+    { ...base, operation: 'status' },
+    { ...base, operation: 'publish_memory_body', attachmentGeneration: 1,
+      attachmentToken: 'a'.repeat(64), payload: {
+        bodyBase64: BODY.toString('base64'), memoryId: MEMORY_ID,
+        operationRef: 'operation:synthetic:unregistered-publication',
+        expectedContextId: `sha256:${'a'.repeat(64)}`,
+        expectedIdentityOpaqueId: `resident:v1:${'1'.repeat(64)}`,
+        expectedAuthorityGeneration: 7
+      } }
+  ]) assert.equal((await rawExchange(frame)).length, 0);
   send({ rejected: true });
 }
 
@@ -108,7 +176,9 @@ async function rewriteAttempts() {
   }
   assert.throws(() => fs.unlinkSync(SOCKET),
     (error) => ['EACCES', 'EPERM'].includes(error.code));
-  send({ denied });
+  assert.throws(() => fs.readdirSync(BODY_ROOT), { code: 'EACCES' });
+  assert.throws(() => fs.writeFileSync(`${BODY_ROOT}/host-body`, BODY), { code: 'EACCES' });
+  send({ denied, rawHostBodyRootAccessDenied: true });
 }
 
 async function stateAncestors() {
@@ -192,6 +262,16 @@ async function orchestrate() {
   assert.equal(process.getuid(), 0);
   assert.ok(fs.existsSync('/.dockerenv'), 'fixture requires disposable container');
   assert.equal(fs.realpathSync('/source'), '/source');
+  for (const argv of [
+    ['/source/tools/render-systemd-unit.mjs', '--check'],
+    ['--test', '/source/tests/systemd-renderer.test.mjs']
+  ]) {
+    const check = spawnSync(process.execPath, argv, {
+      cwd: '/source', encoding: 'utf8', timeout: 10000,
+      env: { LANG: 'C', LC_ALL: 'C' }
+    });
+    assert.equal(check.status, 0, check.stderr || check.stdout);
+  }
   const builder = await import(pathToFileURL('/source/tools/build-companion-integrity.mjs'));
   const manifest = builder.buildCompanionIntegrity();
   assert.deepEqual(JSON.parse(fs.readFileSync('/source/companion-integrity.json', 'utf8')),
@@ -214,6 +294,8 @@ async function orchestrate() {
   fs.chownSync(path.dirname(SOCKET), DAEMON_UID, GID);
   fs.mkdirSync('/run/qualified-state', { mode: 0o700 });
   fs.chownSync('/run/qualified-state', DAEMON_UID, GID);
+  fs.mkdirSync(BODY_ROOT, { mode: 0o700 });
+  fs.chownSync(BODY_ROOT, DAEMON_UID, GID);
   fs.mkdirSync('/run/host-state', { mode: 0o755 });
   fs.chownSync('/run/host-state', CLIENT_UID, GID);
   fs.mkdirSync('/run/host-state/daemon-leaf', { mode: 0o700 });
@@ -221,13 +303,40 @@ async function orchestrate() {
   const stateEvidence = await oneShot('state-ancestors', DAEMON_UID);
   const daemonProcess = startChild('daemon', DAEMON_UID);
   assert.deepEqual(await daemonProcess.next(), { ready: true });
-  const positive = await oneShot('client', CLIENT_UID);
-  const rewrites = await oneShot('rewrite', CLIENT_UID);
+  const clientProcess = startChild('client', CLIENT_UID);
+  const negativeEvidence = await clientProcess.next();
+  assert.equal(negativeEvidence.negativeRequestsRejected, 5);
+  assert.deepEqual(fs.readdirSync(BODY_ROOT), [], 'invalid requests wrote body artifacts');
   const before = await request(daemonProcess, 'counts');
+  assert.equal(before.presenceCalls, 1);
   await oneShot('wrong-client', 2003);
   const after = await request(daemonProcess, 'counts');
   assert.deepEqual(after, before, 'wrong UID reached lifecycle dispatch');
   assert.equal(after.queryCalls, 1);
+  assert.deepEqual(fs.readdirSync(BODY_ROOT), [], 'unregistered client wrote body artifacts');
+  clientProcess.child.send('publish');
+  const positive = await clientProcess.next();
+  await clientProcess.ended;
+  const publicationCounts = await request(daemonProcess, 'counts');
+  assert.equal(publicationCounts.presenceCalls, 2, 'daemon must requery current Presence before publication');
+  assert.equal(publicationCounts.queryCalls, 1);
+  const publishedFiles = [];
+  function inspectBodyTree(directory) {
+    const metadata = fs.lstatSync(directory);
+    assert.equal(metadata.uid, DAEMON_UID);
+    assert.equal(metadata.mode & 0o777, metadata.isDirectory() ? 0o700 : 0o600);
+    if (metadata.isDirectory()) {
+      for (const leaf of fs.readdirSync(directory)) inspectBodyTree(path.join(directory, leaf));
+    } else {
+      assert.equal(metadata.nlink, 1);
+      assert.deepEqual(fs.readFileSync(directory), BODY);
+      publishedFiles.push(directory);
+    }
+  }
+  inspectBodyTree(BODY_ROOT);
+  assert.equal(publishedFiles.length, 1);
+  assert.deepEqual(fs.readdirSync(RESIDENT_ROOT), [], 'body publication mutated formal lifecycle storage');
+  const rewrites = await oneShot('rewrite', CLIENT_UID);
   await request(daemonProcess, 'stop');
   await daemonProcess.ended;
   fs.mkdirSync('/run/host-impostor', { mode: 0o700 });
@@ -244,10 +353,15 @@ async function orchestrate() {
   await request(impostorProcess, 'stop');
   await impostorProcess.ended;
   process.stdout.write('CROSS_UID_TRANSPORT_FIXTURE_PASS\n');
-  process.stdout.write(`${JSON.stringify({ ...positive, ...stateEvidence,
+  process.stdout.write(`${JSON.stringify({ ...positive, ...stateEvidence, ...negativeEvidence,
     wrongUidDispatched: after.statusCalls - before.statusCalls,
     impostorReceivedBytes: impostorCounts.receivedBytes,
     protectedRewriteDenials: rewrites.denied,
+    rawHostBodyRootAccessDenied: rewrites.rawHostBodyRootAccessDenied,
+    publishedBodyOwnerUid: DAEMON_UID,
+    publishedBodyFileCount: publishedFiles.length,
+    rootRendererChecksPassed: true,
+    publicationPresenceRequeried: true,
     installationQualification: false, buildId: manifest.buildId,
     nodeVersion: process.version,
     glibcVersion: process.report.getReport().header.glibcVersionRuntime

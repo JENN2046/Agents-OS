@@ -1,5 +1,6 @@
 import {
   chmodSync,
+  chownSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -242,6 +243,8 @@ export function renderSystemdUnit(config) {
     || !rendered.includes('--socket /run/agents-os-resident/control.sock ')
     || !rendered.includes('\nRuntimeDirectoryMode=0750\n')
     || !rendered.includes('\nWantedBy=multi-user.target\n')
+    || !rendered.includes(`\nReadOnlyPaths=${pluginRoot} ${witnessRoot}\n`)
+    || !rendered.includes(`\nReadWritePaths=${activationRoot} ${memoryBodyRoot}\n`)
     || !rendered.includes('RestrictAddressFamilies=AF_UNIX')
     || !rendered.includes('IPAddressDeny=any')
     || !rendered.includes('StandardOutput=null')
@@ -342,13 +345,21 @@ function main(argv) {
         mkdirSync(directory, { mode: 0o700 });
         chmodSync(directory, 0o700);
       }
-      const daemonUid = process.getuid();
+      const currentUid = process.getuid();
+      const daemonUid = currentUid === 0 ? 2001 : currentUid;
+      const socketGid = process.getgid() === 0 ? 2002 : process.getgid();
+      if (currentUid === 0) {
+        // These three empty roots were created above in this disposable fixture.
+        for (const directory of [activationRoot, witnessRoot, memoryBodyRoot]) {
+          chownSync(directory, daemonUid, socketGid);
+        }
+      }
       const config = {
         activationRoot,
         buildId: integrity.buildId,
         daemonUid,
-        clientUid: daemonUid === 65534 ? 65533 : 65534,
-        socketGid: process.getgid(),
+        clientUid: currentUid === 0 ? 2002 : daemonUid === 65534 ? 65533 : 65534,
+        socketGid,
         memoryBodyRoot,
         nodeBinary: process.execPath,
         pluginRoot,

@@ -20,7 +20,7 @@ const {
   HANDSHAKE_TIMEOUT_MS,
   HEALTH_INTERVAL_MS,
   MAX_CONNECTIONS,
-  MAX_FRAME_BYTES,
+  MAX_PUBLICATION_FRAME_BYTES,
   fixedError
 } = require('./constants');
 const {
@@ -40,6 +40,7 @@ const {
   resolvePresenceContext,
   resolveProviderAttemptSeal
 } = require('./presence-context');
+const { publishMemoryBody } = require('./memory-publication');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -258,6 +259,7 @@ function createCompanionServer({
 
     socket.on('error', () => {});
     socket.once('close', () => {
+      bytes.fill(0);
       connections.delete(socket);
       if (attachment?.socket === socket) {
         const detached = attachment;
@@ -272,8 +274,12 @@ function createCompanionServer({
         socket.destroy();
         return;
       }
+      const previous = bytes;
       bytes = Buffer.concat([bytes, chunk]);
-      if (bytes.length > MAX_FRAME_BYTES) {
+      previous.fill(0);
+      chunk.fill(0);
+      if (bytes.length > MAX_PUBLICATION_FRAME_BYTES) {
+        bytes.fill(0);
         socket.destroy();
         return;
       }
@@ -291,6 +297,8 @@ function createCompanionServer({
       } catch {
         socket.destroy();
         return;
+      } finally {
+        bytes.fill(0);
       }
       if (request.expectedBuildId !== integrity.buildId) {
         writeAndClose(socket, rejectionResponse(request, 'BUILD_MISMATCH'));
@@ -345,6 +353,20 @@ function createCompanionServer({
       }
 
       try {
+        if (request.operation === 'publish_memory_body') {
+          const target = attachment;
+          const presenceSession = target.presenceSession;
+          const result = await publishMemoryBody({
+            payload: request.payload, presenceSession, lifecycle, activationConfig,
+            isCurrent: () => !stopping && !target.socket.destroyed
+              && attachment === target && target.presenceSession === presenceSession
+              && request.attachmentToken === target.token
+              && request.attachmentGeneration === target.generation
+              && presenceSession?.nativeRequest?.attachmentGeneration === target.generation
+          });
+          writeAndClose(socket, operationResponse(request, result));
+          return;
+        }
         if (request.operation === 'mint_cognitive_session') {
           if (!exactKeys(request.payload, ['transcriptDigest'])
             || !/^[0-9a-f]{64}$/u.test(request.payload.transcriptDigest)) {
@@ -403,14 +425,18 @@ function createCompanionServer({
           }
         }
         if (request.operation === 'presence_context') {
+          const target = attachment;
           const payload = parsePresencePayload(request.payload);
           const nativeRequest = nativePresenceRequest(payload, {
-            attachmentGeneration: attachment.generation,
+            attachmentGeneration: target.generation,
             freshPresenceId: `fresh-presence:r1:${randomBytes(32).toString('hex')}`
           });
           const raw = await lifecycle.queryPresenceContext(nativeRequest);
           const context = resolvePresenceContext(raw, nativeRequest);
-          attachment.presenceSession = Object.freeze({
+          if (attachment !== target || target.socket.destroyed || stopping) {
+            throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+          }
+          target.presenceSession = Object.freeze({
             context,
             nativeRequest
           });
