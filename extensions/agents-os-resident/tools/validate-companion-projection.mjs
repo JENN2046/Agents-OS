@@ -20,10 +20,6 @@ const PACKAGE_ROOT = resolve(dirname(TOOL_PATH), '..');
 const require = createRequire(import.meta.url);
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 const PREFIX = 'agents-os-resident-projection-';
-export const PREFLIGHT_CONTINUITY_EVIDENCE_JSON =
-  '{"availability":"AVAILABLE","evidenceId":"evidence:projection-preflight","protocol":"MMR0_CONTINUITY_EVIDENCE_V1","state":"EMPTY","witnessId":"witness:projection-preflight"}';
-export const PREFLIGHT_GENESIS_PROVISIONING_AUTHORITY_JSON =
-  '{"authorityId":"authority:projection-preflight","protocol":"MMR0_GENESIS_PROVISIONING_V1","provisioningId":"provisioning:projection-preflight","residentId":"resident:LOCAL_OWNER_SESSION_V1:jenn"}';
 
 function copyBoundPackage(packageRoot, integrity) {
   for (const file of integrity.files) {
@@ -53,28 +49,37 @@ export function runProjectionPreflight() {
   const ownedRoot = mkdtempSync(resolve(tmpdir(), PREFIX));
   chmodSync(ownedRoot, 0o700);
   const pluginRoot = resolve(ownedRoot, 'Plugin/AGENTSOSResident');
+  const stateRoot = resolve(pluginRoot, 'state');
   const activationRoot = resolve(
-    pluginRoot,
-    'state/agents-os-resident-local-owner-v1'
+    stateRoot,
+    'agents-os-resident-local-owner-v1'
   );
+  const witnessRoot = resolve(stateRoot, 'protected-witness');
+  const memoryBodyRoot = resolve(stateRoot, 'private-memory-bodies');
   const unitPath = resolve(ownedRoot, 'systemd/agents-os-resident.service');
 
   try {
     mkdirSync(pluginRoot, { recursive: true, mode: 0o700 });
     copyBoundPackage(pluginRoot, sourceIntegrity);
-    mkdirSync(activationRoot, { recursive: true, mode: 0o700 });
-    chmodSync(resolve(pluginRoot, 'state'), 0o700);
-    chmodSync(activationRoot, 0o700);
+    for (const directory of [
+      stateRoot,
+      activationRoot,
+      witnessRoot,
+      memoryBodyRoot
+    ]) {
+      mkdirSync(directory, { mode: 0o700 });
+      chmodSync(directory, 0o700);
+    }
     mkdirSync(dirname(unitPath), { recursive: true, mode: 0o700 });
-    writeFileSync(unitPath, renderSystemdUnit({
-      continuityEvidenceJson: PREFLIGHT_CONTINUITY_EVIDENCE_JSON,
-      genesisProvisioningAuthorityJson:
-        PREFLIGHT_GENESIS_PROVISIONING_AUTHORITY_JSON,
+    const renderedUnit = renderSystemdUnit({
+      activationRoot,
+      buildId: sourceIntegrity.buildId,
+      memoryBodyRoot,
       nodeBinary: process.execPath,
       pluginRoot,
-      activationRoot,
-      buildId: sourceIntegrity.buildId
-    }), { flag: 'wx', mode: 0o644 });
+      witnessRoot
+    });
+    writeFileSync(unitPath, renderedUnit, { flag: 'wx', mode: 0o644 });
 
     const staged = verifyCompanionIntegrity({ packageRoot: pluginRoot });
     const stagedRequire = createRequire(resolve(pluginRoot, 'package.json'));
@@ -84,7 +89,16 @@ export function runProjectionPreflight() {
       || typeof stagedAdapter.createResidentAdapter !== 'function'
       || !existsSync(resolve(pluginRoot, 'plugin-manifest.json'))
       || !existsSync(unitPath)
-      || existsSync(resolve(pluginRoot, 'config.env'))) {
+      || existsSync(resolve(pluginRoot, 'config.env'))
+      || !renderedUnit.includes(
+        `--witness-root ${witnessRoot} --memory-body-root ${memoryBodyRoot}`
+      )
+      || !renderedUnit.includes(`ReadWritePaths=${activationRoot}`)
+      || !renderedUnit.includes(
+        `ReadOnlyPaths=${pluginRoot} ${witnessRoot} ${memoryBodyRoot}`
+      )
+      || renderedUnit.includes('--continuity-evidence')
+      || renderedUnit.includes('--genesis-provisioning-authority')) {
       throw new Error('COMPANION_PROJECTION_INVALID');
     }
     return Object.freeze({

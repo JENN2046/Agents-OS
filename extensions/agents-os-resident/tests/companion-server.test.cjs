@@ -75,6 +75,14 @@ function lifecycleDouble() {
       calls.push(['cognitive', input]);
       return { resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK' };
     },
+    async queryPresenceContext(input) {
+      calls.push(['presence', input]);
+      return input;
+    },
+    async sealProviderAttempt(input) {
+      calls.push(['seal', input]);
+      return input;
+    },
     async query(input) {
       calls.push(['query', input]);
       return { resultCode: 'QUERY_OK', items: [] };

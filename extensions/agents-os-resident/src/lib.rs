@@ -9,7 +9,7 @@
 #![allow(deprecated)]
 
 use std::path::{Path, PathBuf};
-use std::os::unix::fs::PermissionsExt;
+use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{LazyLock, Mutex};
 
@@ -31,6 +31,7 @@ use local_owner::{
     LOCAL_OWNER_DATABASE_FILENAME, LOCAL_OWNER_LOCK_FILENAME, LOCAL_OWNER_ROOT_LEAF,
     LocalOwnerKernel,
 };
+use local_owner::witness::{ProtectedFileWitnessProvider, start_with_witness_and_memory_body_root};
 use reducers::command_intake::validate_submission;
 use resident::{
     RESIDENT_LOCK_FILENAME, ResidentKernel, ResidentKernelConfig, SYNTHETIC_DATABASE_FILENAME,
@@ -57,7 +58,15 @@ struct NativeBoundaryState {
     stopped: bool,
     configured: bool,
     activation_mode: NativeActivationMode,
-    activation_root: Option<PathBuf>,
+    activation_profile: Option<NativeActivationProfile>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct NativeActivationProfile {
+    mode: NativeActivationMode,
+    root: PathBuf,
+    memory_body_root: Option<PathBuf>,
+    witness_root: Option<PathBuf>,
 }
 
 static NATIVE_BOUNDARY: LazyLock<Mutex<NativeBoundaryState>> = LazyLock::new(|| {
@@ -68,7 +77,7 @@ static NATIVE_BOUNDARY: LazyLock<Mutex<NativeBoundaryState>> = LazyLock::new(|| 
         stopped: false,
         configured: false,
         activation_mode: NativeActivationMode::Inactive,
-        activation_root: None,
+        activation_profile: None,
     })
 });
 static CLEANUP_REGISTERED: AtomicBool = AtomicBool::new(false);
@@ -100,7 +109,7 @@ fn register_cleanup_once(env: Env) -> napi::Result<()> {
                     let _ = kernel.shutdown();
                 }
                 boundary.activation_mode = NativeActivationMode::Inactive;
-                boundary.activation_root = None;
+                boundary.activation_profile = None;
             }
         });
         if let Err(error) = registration {
@@ -145,6 +154,9 @@ fn validate_existing_real_directory(root: &Path) -> Result<PathBuf, String> {
         .map_err(|_| "activation root must already exist".to_owned())?;
     if !metadata.file_type().is_dir() || metadata.file_type().is_symlink() {
         return Err("activation root must be a real directory".to_owned());
+    }
+    if metadata.uid() != rustix::process::getuid().as_raw() {
+        return Err("activation root must be owned by the current uid".to_owned());
     }
     let canonical = std::fs::canonicalize(root)
         .map_err(|_| "activation root could not be canonicalized".to_owned())?;
@@ -224,6 +236,32 @@ struct ActivationRequest {
     root: PathBuf,
     continuity_evidence: Option<Value>,
     genesis_provisioning_authority: Option<Value>,
+    memory_body_root: Option<PathBuf>,
+    witness_root: Option<PathBuf>,
+}
+
+impl ActivationRequest {
+    fn profile(&self) -> NativeActivationProfile {
+        NativeActivationProfile {
+            mode: self.mode,
+            root: self.root.clone(),
+            memory_body_root: self.memory_body_root.clone(),
+            witness_root: self.witness_root.clone(),
+        }
+    }
+}
+
+fn require_matching_active_profile(
+    boundary: &NativeBoundaryState,
+    requested: &ActivationRequest,
+) -> napi::Result<()> {
+    if boundary.activation_profile.as_ref() == Some(&requested.profile()) {
+        Ok(())
+    } else {
+        Err(activation_error(
+            "native boundary is already active under another binding",
+        ))
+    }
 }
 
 fn parse_activation_request(input: &Value) -> Result<ActivationRequest, napi::Error> {
@@ -262,18 +300,29 @@ fn parse_activation_request(input: &Value) -> Result<ActivationRequest, napi::Er
             (None, None)
         }
         NativeActivationMode::LocalOwnerSession => {
-            let expected = [
+            let legacy = [
                 "activationConfirmation",
                 "activationMode",
                 "continuityEvidence",
                 "genesisProvisioningAuthority",
                 "rootPath",
             ];
-            if object.len() != expected.len()
-                || expected.iter().any(|key| !object.contains_key(*key))
+            let presence = [
+                "activationConfirmation",
+                "activationMode",
+                "continuityEvidence",
+                "genesisProvisioningAuthority",
+                "memoryBodyRootPath",
+                "rootPath",
+                "witnessRootPath",
+            ];
+            if !((object.len() == legacy.len()
+                && legacy.iter().all(|key| object.contains_key(*key)))
+                || (object.len() == presence.len()
+                    && presence.iter().all(|key| object.contains_key(*key))))
             {
                 return Err(activation_error(
-                    "local-owner activation requires exact continuity and provisioning inputs",
+                    "local-owner activation requires one exact supported input profile",
                 ));
             }
             (
@@ -300,11 +349,47 @@ fn parse_activation_request(input: &Value) -> Result<ActivationRequest, napi::Er
         NativeActivationMode::Inactive => unreachable!(),
     }
     .map_err(activation_error)?;
+    let optional_path = |key: &str| -> Result<Option<PathBuf>, napi::Error> {
+        match object.get(key) {
+            None | Some(Value::Null) => Ok(None),
+            Some(Value::String(value))
+                if !value.is_empty() && !value.contains('\0') && Path::new(value).is_absolute() =>
+            {
+                let path = PathBuf::from(value);
+                let canonical = std::fs::canonicalize(&path)
+                    .map_err(|_| activation_error("protected root path is invalid"))?;
+                if canonical != path {
+                    return Err(activation_error("protected root path is invalid"));
+                }
+                Ok(Some(canonical))
+            }
+            _ => Err(activation_error("protected root path is invalid")),
+        }
+    };
+    let memory_body_root = optional_path("memoryBodyRootPath")?;
+    let witness_root = optional_path("witnessRootPath")?;
+    let protected_roots_overlap = memory_body_root
+        .as_deref()
+        .zip(witness_root.as_deref())
+        .is_some_and(|(memory, witness)| {
+            memory == witness || memory.starts_with(witness) || witness.starts_with(memory)
+        });
+    if mode == NativeActivationMode::LocalOwnerSession
+        && ((memory_body_root.is_some() && witness_root.is_none())
+            || (witness_root.is_some() && continuity_evidence.is_some())
+            || protected_roots_overlap)
+    {
+        return Err(activation_error(
+            "Witness-managed activation has an invalid authority input combination",
+        ));
+    }
     Ok(ActivationRequest {
         mode,
         root,
         continuity_evidence,
         genesis_provisioning_authority,
+        memory_body_root,
+        witness_root,
     })
 }
 
@@ -417,23 +502,17 @@ pub fn activate_runtime(env: Env, input: Value) -> napi::Result<Value> {
         ));
     }
     if boundary.kernel.is_some() || boundary.local_owner.is_some() {
-        if boundary.activation_mode == requested.mode
-            && boundary.activation_root.as_ref() == Some(&requested.root)
-        {
-            return match requested.mode {
-                NativeActivationMode::LocalOwnerSession => local_owner_active_projection(
-                    boundary
-                        .local_owner
-                        .as_ref()
-                        .ok_or_else(|| activation_error("local-owner runtime is inactive"))?,
-                )
-                .map_err(activation_error),
-                _ => Ok(active_projection(requested.mode)),
-            };
-        }
-        return Err(activation_error(
-            "native boundary is already active under another binding",
-        ));
+        require_matching_active_profile(&boundary, &requested)?;
+        return match requested.mode {
+            NativeActivationMode::LocalOwnerSession => local_owner_active_projection(
+                boundary
+                    .local_owner
+                    .as_ref()
+                    .ok_or_else(|| activation_error("local-owner runtime is inactive"))?,
+            )
+            .map_err(activation_error),
+            _ => Ok(active_projection(requested.mode)),
+        };
     }
 
     let result: Result<Value, String> = match requested.mode {
@@ -455,12 +534,27 @@ pub fn activate_runtime(env: Env, input: Value) -> napi::Result<Value> {
             Ok(active_projection(requested.mode))
         })(),
         NativeActivationMode::LocalOwnerSession => (|| {
-            let kernel = LocalOwnerKernel::start(
-                &requested.root,
-                requested.continuity_evidence.as_ref(),
-                requested.genesis_provisioning_authority.as_ref(),
-            )
-            .map_err(|error| error.fixed_code().to_owned())?;
+            let kernel = if let Some(witness_root) = requested.witness_root.as_deref() {
+                let mut provider =
+                    ProtectedFileWitnessProvider::open(witness_root, &requested.root)
+                        .map_err(|error| error.fixed_code().to_owned())?;
+                let selector = provider.selector().clone();
+                start_with_witness_and_memory_body_root(
+                    &requested.root,
+                    &selector,
+                    &mut provider,
+                    requested.genesis_provisioning_authority.as_ref(),
+                    requested.memory_body_root.as_deref(),
+                )
+                .map_err(|error| error.fixed_code().to_owned())?
+            } else {
+                LocalOwnerKernel::start(
+                    &requested.root,
+                    requested.continuity_evidence.as_ref(),
+                    requested.genesis_provisioning_authority.as_ref(),
+                )
+                .map_err(|error| error.fixed_code().to_owned())?
+            };
             let projection = local_owner_active_projection(&kernel)?;
             boundary.local_owner = Some(kernel);
             Ok(projection)
@@ -470,11 +564,12 @@ pub fn activate_runtime(env: Env, input: Value) -> napi::Result<Value> {
 
     match result {
         Ok(projection) => {
+            let activation_profile = requested.profile();
             boundary.startup_error = None;
             boundary.stopped = false;
             boundary.configured = true;
             boundary.activation_mode = requested.mode;
-            boundary.activation_root = Some(requested.root);
+            boundary.activation_profile = Some(activation_profile);
             Ok(projection)
         }
         Err(error) => {
@@ -484,7 +579,7 @@ pub fn activate_runtime(env: Env, input: Value) -> napi::Result<Value> {
             boundary.stopped = true;
             boundary.configured = true;
             boundary.activation_mode = requested.mode;
-            boundary.activation_root = None;
+            boundary.activation_profile = None;
             Err(activation_error(error))
         }
     }
@@ -499,7 +594,7 @@ pub fn shutdown_runtime(env: Env) -> napi::Result<Value> {
             .map_err(|_| activation_error("native boundary lock is poisoned"))?;
         boundary.stopped = true;
         boundary.activation_mode = NativeActivationMode::Inactive;
-        boundary.activation_root = None;
+        boundary.activation_profile = None;
         (boundary.kernel.take(), boundary.local_owner.take())
     };
 
@@ -563,6 +658,22 @@ pub fn query_mmr_mutation_core(env: Env, input: Value) -> napi::Result<Value> {
     let state = native_boundary(env)?;
     local_owner_kernel(&state)?
         .query_mmr_core(input)
+        .map_err(|error| native_error(error.fixed_code()))
+}
+
+#[napi(js_name = "query_presence_context")]
+pub fn query_presence_context(env: Env, input: Value) -> napi::Result<Value> {
+    let state = native_boundary(env)?;
+    local_owner_kernel(&state)?
+        .query_presence_context(input)
+        .map_err(|error| native_error(error.fixed_code()))
+}
+
+#[napi(js_name = "seal_provider_attempt")]
+pub fn seal_provider_attempt(env: Env, input: Value) -> napi::Result<Value> {
+    let state = native_boundary(env)?;
+    local_owner_kernel(&state)?
+        .seal_provider_attempt(input)
         .map_err(|error| native_error(error.fixed_code()))
 }
 
@@ -702,6 +813,100 @@ mod tests {
     use crate::napi_frame::Disposition;
     use crate::reducers::command_intake::HOME_INTENT_COMMAND_TYPE_ID;
     use serde_json::json;
+
+    fn local_owner_boundary_with_profile(
+        profile: NativeActivationProfile,
+    ) -> NativeBoundaryState {
+        NativeBoundaryState {
+            kernel: None,
+            local_owner: None,
+            startup_error: None,
+            stopped: false,
+            configured: true,
+            activation_mode: NativeActivationMode::LocalOwnerSession,
+            activation_profile: Some(profile),
+        }
+    }
+
+    #[test]
+    fn local_owner_active_profile_is_exact_across_legacy_and_protected_roots() {
+        let parent = tempfile::tempdir().unwrap();
+        let resident_root = parent.path().join(LOCAL_OWNER_ROOT_LEAF);
+        let witness_a = parent.path().join("witness-a");
+        let witness_b = parent.path().join("witness-b");
+        let memory_a = parent.path().join("memory-a");
+        let memory_b = parent.path().join("memory-b");
+        let nested_memory = witness_a.join("nested-memory");
+        for root in [
+            &resident_root,
+            &witness_a,
+            &witness_b,
+            &memory_a,
+            &memory_b,
+            &nested_memory,
+        ] {
+            std::fs::create_dir(root).unwrap();
+            std::fs::set_permissions(root, std::fs::Permissions::from_mode(0o700)).unwrap();
+        }
+
+        let request = |witness_root: Option<&Path>, memory_body_root: Option<&Path>| {
+            let mut value = json!({
+                "activationConfirmation": "I_ACCEPT_LOCAL_OWNER_SESSION_V1_RUNTIME_UNUSABLE",
+                "activationMode": LOCAL_OWNER_ACTIVATION_MODE,
+                "continuityEvidence": null,
+                "genesisProvisioningAuthority": null,
+                "rootPath": resident_root,
+            });
+            if let Some(object) = value.as_object_mut() {
+                if witness_root.is_some() || memory_body_root.is_some() {
+                    object.insert(
+                        "memoryBodyRootPath".to_owned(),
+                        memory_body_root.map_or(Value::Null, |path| json!(path)),
+                    );
+                    object.insert(
+                        "witnessRootPath".to_owned(),
+                        witness_root.map_or(Value::Null, |path| json!(path)),
+                    );
+                }
+            }
+            parse_activation_request(&value)
+        };
+
+        let legacy = request(None, None).unwrap();
+        let protected_a = request(Some(&witness_a), Some(&memory_a)).unwrap();
+        let protected_witness_b = request(Some(&witness_b), Some(&memory_a)).unwrap();
+        let protected_memory_b = request(Some(&witness_a), Some(&memory_b)).unwrap();
+
+        let legacy_boundary = local_owner_boundary_with_profile(legacy.profile());
+        assert!(require_matching_active_profile(&legacy_boundary, &protected_a).is_err());
+
+        let protected_boundary = local_owner_boundary_with_profile(protected_a.profile());
+        assert!(require_matching_active_profile(&protected_boundary, &legacy).is_err());
+        assert!(require_matching_active_profile(
+            &protected_boundary,
+            &protected_witness_b,
+        )
+        .is_err());
+        assert!(require_matching_active_profile(
+            &protected_boundary,
+            &protected_memory_b,
+        )
+        .is_err());
+        assert!(
+            require_matching_active_profile(&protected_boundary, &protected_a).is_ok()
+        );
+
+        assert_eq!(protected_a.witness_root.as_deref(), Some(witness_a.as_path()));
+        assert_eq!(
+            protected_a.memory_body_root.as_deref(),
+            Some(memory_a.as_path()),
+        );
+
+        let noncanonical_witness = witness_a.join("..").join("witness-a");
+        assert!(request(Some(&noncanonical_witness), Some(&memory_a)).is_err());
+        assert!(request(Some(&witness_a), Some(&witness_a)).is_err());
+        assert!(request(Some(&witness_a), Some(&nested_memory)).is_err());
+    }
 
     #[test]
     fn explicit_activation_root_accepts_only_the_dedicated_owned_inventory() {

@@ -10,8 +10,12 @@ const {
   createResidentLifecycle,
   parseActivationConfig
 } = require('../activation');
+const { parseDaemonArgs } = require('../companion/resident-daemon');
 
 const ROOT = '/tmp/agents-os-resident-local-owner-v1';
+const WITNESS_ROOT = '/tmp/agents-os-resident-protected-witness-v1';
+const MEMORY_BODY_ROOT = '/tmp/agents-os-resident-memory-body-v1';
+const BUILD_ID = `sha256:${'a'.repeat(64)}`;
 
 function active() {
   return {
@@ -68,6 +72,8 @@ function fakeNative() {
     prepare_mmr_mutation: (input) => input,
     submit_mmr_mutation_consent: (input) => input,
     query_mmr_mutation_core: (input) => input,
+    query_presence_context: (input) => input,
+    seal_provider_attempt: (input) => input,
     execute_local_owner_query: (input) => input,
     invalidate_local_owner_proposal: (input) => input
   };
@@ -105,6 +111,96 @@ test('activation config rejects implicit, legacy and non-dedicated roots', () =>
   }), (error) => error.code === 'INVALID_ACTIVATION_CONFIRMATION');
 });
 
+test('protected roots form one fail-closed activation authority profile', async () => {
+  const protectedConfig = {
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_GENESIS_PROVISIONING_AUTHORITY: {
+      protocol: 'MMR0_GENESIS_PROVISIONING_V1'
+    },
+    AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: MEMORY_BODY_ROOT,
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: WITNESS_ROOT
+  };
+  const parsed = parseActivationConfig(protectedConfig);
+  assert.equal(parsed.continuityEvidence, null);
+  assert.equal(parsed.memoryBodyRootPath, MEMORY_BODY_ROOT);
+  assert.equal(parsed.witnessRootPath, WITNESS_ROOT);
+
+  assert.throws(() => parseActivationConfig({
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: MEMORY_BODY_ROOT
+  }), (error) => error.code === 'INVALID_PROTECTED_ROOT_BINDING');
+  assert.throws(() => parseActivationConfig({
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_CONTINUITY_EVIDENCE: {},
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: WITNESS_ROOT
+  }), (error) => error.code === 'INVALID_WITNESS_AUTHORITY_INPUT');
+  assert.throws(() => parseActivationConfig({
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: `${WITNESS_ROOT}/../witness`
+  }), (error) => error.code === 'INVALID_WITNESS_ROOT');
+  assert.throws(() => parseActivationConfig({
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: `${WITNESS_ROOT}/memory`,
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: WITNESS_ROOT
+  }), (error) => error.code === 'INVALID_PROTECTED_ROOT_BINDING');
+  assert.throws(() => parseActivationConfig({
+    ...CONFIG,
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: ROOT
+  }), (error) => error.code === 'INVALID_PROTECTED_ROOT_BINDING');
+
+  let activationInput;
+  const native = fakeNative();
+  native.activate_runtime = (input) => {
+    activationInput = input;
+    return active();
+  };
+  const lifecycle = createResidentLifecycle({ loadNative: () => native });
+  await lifecycle.initialize(protectedConfig);
+  assert.deepEqual(activationInput, {
+    activationConfirmation: ACTIVATION_CONFIRMATION,
+    activationMode: ACTIVATION_MODE_LOCAL_OWNER_SESSION_V1,
+    continuityEvidence: null,
+    genesisProvisioningAuthority: {
+      protocol: 'MMR0_GENESIS_PROVISIONING_V1'
+    },
+    memoryBodyRootPath: MEMORY_BODY_ROOT,
+    rootPath: ROOT,
+    witnessRootPath: WITNESS_ROOT
+  });
+  await assert.rejects(
+    lifecycle.initialize(CONFIG),
+    (error) => error.code === 'ACTIVE_RECONFIGURATION_REJECTED'
+  );
+  await lifecycle.shutdown();
+});
+
+test('daemon arguments preserve protected roots and reject mixed authority inputs', () => {
+  const parsed = parseDaemonArgs([
+    '--root', ROOT,
+    '--socket', '/tmp/agents-os-resident.sock',
+    '--expected-build-id', BUILD_ID,
+    '--witness-root', WITNESS_ROOT,
+    '--memory-body-root', MEMORY_BODY_ROOT
+  ]);
+  assert.equal(parsed.continuityEvidence, null);
+  assert.equal(parsed.memoryBodyRootPath, MEMORY_BODY_ROOT);
+  assert.equal(parsed.witnessRootPath, WITNESS_ROOT);
+
+  assert.throws(() => parseDaemonArgs([
+    '--root', ROOT,
+    '--socket', '/tmp/agents-os-resident.sock',
+    '--expected-build-id', BUILD_ID,
+    '--memory-body-root', MEMORY_BODY_ROOT
+  ]), { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' });
+  assert.throws(() => parseDaemonArgs([
+    '--root', ROOT,
+    '--socket', '/tmp/agents-os-resident.sock',
+    '--expected-build-id', BUILD_ID,
+    '--continuity-evidence', '{}',
+    '--witness-root', WITNESS_ROOT
+  ]), { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' });
+});
+
 test('local-owner lifecycle binds native operations and shuts down', async () => {
   const lifecycle = createResidentLifecycle({ loadNative: fakeNative });
   const result = await lifecycle.initialize(CONFIG);
@@ -124,6 +220,14 @@ test('local-owner lifecycle binds native operations and shuts down', async () =>
   );
   assert.deepEqual(
     await lifecycle.invalidate({ attachmentGeneration: 1 }),
+    { attachmentGeneration: 1 }
+  );
+  assert.deepEqual(
+    await lifecycle.queryPresenceContext({ attachmentGeneration: 1 }),
+    { attachmentGeneration: 1 }
+  );
+  assert.deepEqual(
+    await lifecycle.sealProviderAttempt({ attachmentGeneration: 1 }),
     { attachmentGeneration: 1 }
   );
   const stopped = await lifecycle.shutdown();
@@ -159,6 +263,16 @@ test('CommonJS entrypoint is native-inert and exports the four Host methods', ()
       'processToolCall',
       'shutdown'
     ]);
+    const sealDescriptor = Object.getOwnPropertyDescriptor(
+      entrypoint,
+      'sealProviderAttempt'
+    );
+    assert.ok(sealDescriptor);
+    assert.equal(sealDescriptor.enumerable, false);
+    assert.equal(sealDescriptor.configurable, false);
+    assert.equal(sealDescriptor.writable, false);
+    assert.equal(typeof sealDescriptor.value, 'function');
+    assert.equal(Object.isFrozen(entrypoint), true);
   } finally {
     process.dlopen = original;
   }

@@ -26,12 +26,19 @@
     "proposal_challenge_forwarding": "NEVER_TO_MODEL_OR_SERIALIZED_TOOL_RESULT",
     "human_tool_proposal_compatibility": "RAW_HOST_RESPONSE_V1",
     "structured_argument_transport": "DIRECT_OBJECT_OR_EXACT_COMPACT_JSON_OBJECT_STRING",
+    "internal_provider_attempt_seal_export": "sealProviderAttempt",
+    "presence_binding_transport": "NON_ENUMERABLE_MESSAGE_ARRAY_OWN_PROPERTY_V2_AUTHORITY_AND_EVENT_CUT",
+    "presence_intent_authority": "BOOLEAN_INTENT_ONLY_HOST_REQUIRES_TRUSTED_ONERING_BINDING_META_V2",
+    "provider_attempt_seal_effect": "MATERIAL_SEALED_PROVIDER_NOT_INVOKED",
+    "provider_attempt_seal_surface": "NON_ENUMERABLE_INTERNAL_DIRECT_V1",
+    "provider_body_binding": "EXACT_UTF8_BYTES_HASHED_IN_ADAPTER_V1",
+    "provider_presence_concurrency": "SINGLE_FLIGHT_FAIL_CLOSED_V1",
     "shutdown_detaches_adapter": true,
     "vcp_commit_bound": false
   },
   "host_presentation_source_binding": {
     "schemaVersion": "agents-os-resident.host-presentation-source-binding.v1",
-    "bundleId": "sha256:4685b9b51dae0f2b348faee6979cc034e40b927d717c1433d61a47c9686cfcf6",
+    "bundleId": "sha256:21c2eb72a6b3cb65b501561f6bfc17466c596cde959ce8ad9c0936eb9cbec4d9",
     "canonicalization": "ORDERED_PATH_BYTE_LENGTH_SHA256_JSON_V1",
     "files": [
       {
@@ -41,8 +48,8 @@
       },
       {
         "path": "runtime/VCPToolBox/modules/chatCompletionHandler.js",
-        "byteLength": 59328,
-        "sha256": "b8afa615faef319f47e84301172452001c05aa6dec62cd2d7898901a4cff53ba"
+        "byteLength": 74384,
+        "sha256": "a609fd24fc2b839090c2db708cfb6c7c34ae01daa71f3a891aadde3b529d3285"
       },
       {
         "path": "runtime/VCPToolBox/modules/handlers/nonStreamHandler.js",

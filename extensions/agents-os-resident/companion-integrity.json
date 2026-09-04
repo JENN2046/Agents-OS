@@ -1,27 +1,27 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:387f1aed968051213b4a22e5522c0bcc804b6f9ae8ab4b765105b579be632311",
+  "buildId": "sha256:263501922394bc79088ac42f15db43dc2c60021df5b98d6cbc013425bd43e8cf",
   "files": [
     {
       "path": "activation.js",
-      "byteLength": 12390,
-      "sha256": "a844fafba2f4ac0749d086ad1f9bde81b662ffb180e0f4d425dc29e1e7642220"
+      "byteLength": 15067,
+      "sha256": "11e21f6d5308a188e407fd1bfa84bec28e1fe9d7095afa57b75e70b83f31873f"
     },
     {
       "path": "agents-os-resident.linux-x64-gnu.node",
-      "byteLength": 5575472,
-      "sha256": "f573254e0c45c1b984796b075b74a9a45895bb9a411285d21e3ea85eb8250563"
+      "byteLength": 5978488,
+      "sha256": "0c2a3aeaea2b4ce03bffee762ed12c2d6cf6da80ea45be5ceffb41e8fbf0557d"
     },
     {
       "path": "companion/adapter.js",
-      "byteLength": 27361,
-      "sha256": "1927524fcf4b2892e2cc6befc82312cda353b9f66f646fc7f9b3e74ea87698fa"
+      "byteLength": 34237,
+      "sha256": "ad572ee50380eac0117ce3beb972505969b7cbdb2fdb1f0168570ef309aeef09"
     },
     {
       "path": "companion/client.js",
-      "byteLength": 6721,
-      "sha256": "84625602677a17d97cbdb738bd8efd5911410b37c9eaae253e2a19ba2fdb7596"
+      "byteLength": 8031,
+      "sha256": "d20e4e0164f95ed201c851e29c3e9bccf05fb315dacdbb6ce357f1cfb105a09c"
     },
     {
       "path": "companion/cognitive-context.js",
@@ -44,39 +44,49 @@
       "sha256": "e50bf57d2f65af08fc59c8138ca728dc913f440c6fbf86a417fdf6198e709580"
     },
     {
+      "path": "companion/memory-body-writer.js",
+      "byteLength": 26974,
+      "sha256": "4864aea8db610b6c8dbd6f4a9306006ddbc015cede456f7d0652d3147fba9408"
+    },
+    {
+      "path": "companion/presence-context.js",
+      "byteLength": 31890,
+      "sha256": "549139fb9a938aeccdf64a5fa6abc6df822cde22891ad1e063ac585994b56093"
+    },
+    {
       "path": "companion/probe.js",
       "byteLength": 2409,
       "sha256": "9b7cc98838a7d9379e926bb98c8142acdacfd7fcfcb1fb627936100bcaebc849"
     },
     {
       "path": "companion/protocol.js",
-      "byteLength": 11259,
-      "sha256": "80dcbd04cb38884962639fd421e4d3165dc53e9fc37971f25ba815dcaf81ed71"
+      "byteLength": 11357,
+      "sha256": "de793304648c6c6f5cde8670ca88a3e101e5d3d29488159f6206fa3c7595c98e"
     },
     {
       "path": "companion/resident-daemon.js",
-      "byteLength": 5483,
-      "sha256": "d4ca0424855b88ea2d95b488bf59d6ea4a3c6c20a95fab68248c25bacf884658"
+      "byteLength": 20053,
+      "sha256": "cec89176d82d5e8f799afe43c2f887388ea5f4121dbbd2c0759e91ecbad22c71"
     },
     {
       "path": "companion/server.js",
-      "byteLength": 16297,
-      "sha256": "431dab9bab019c7ac02fa3c9f94c727866219d6705315079be60efb6bd9b7f8b"
+      "byteLength": 17987,
+      "sha256": "bdf0b4932a2c534bfbcb6baff82a714ae5503fdfeed6c2b0291c66d8216e8f38"
     },
     {
       "path": "index.js",
-      "byteLength": 297,
-      "sha256": "3f55b0db7a32a971f7578b4205838496cbae0161c1f14c6d76890881f8630ab2"
+      "byteLength": 513,
+      "sha256": "873986fe5382f3ef418e16d692e2ab8bfea31f2e49d1ce54ff8e3d8e27488819"
     },
     {
       "path": "package-manifest.json",
-      "byteLength": 4789,
-      "sha256": "29f44d736d08c1db3512f52735011ae3017cc69cb30a6628de1bc1ace0b309d3"
+      "byteLength": 5354,
+      "sha256": "a41b82bcf29460e95474f9b0324a635d75579ee34d3d209422b19479c7bb1921"
     },
     {
       "path": "package.json",
-      "byteLength": 3418,
-      "sha256": "f35c09559703e5c3e9100a761fe0b890473e9459d64e1f9469f2727da73c4dbf"
+      "byteLength": 4170,
+      "sha256": "5a6c7ebfd0deead68f025e45405fae8e376d383f069113446bcd4a7cf4599b90"
     },
     {
       "path": "plugin-manifest.json.block",
@@ -85,23 +95,23 @@
     },
     {
       "path": "systemd/agents-os-resident.service.template",
-      "byteLength": 1059,
-      "sha256": "b8cb13df36213dd759eec8da8980fc13dec328154d3467edea1f8f9a2be7f729"
+      "byteLength": 1040,
+      "sha256": "2d7741088786996cc4be240887be29cca46adf45601bc9b7479d1fca6d1a637b"
     },
     {
       "path": "tools/build-companion-integrity.mjs",
-      "byteLength": 5421,
-      "sha256": "dd5ec441b217b5a14fa813c5dc9ba613e6c2a0a269bfac1ea84217b26ba24629"
+      "byteLength": 5458,
+      "sha256": "be1c5f22f247b08b3ec82a31c198ee81567f5902c812c70b4b0ff1343a160f8f"
     },
     {
       "path": "tools/render-systemd-unit.mjs",
-      "byteLength": 6267,
-      "sha256": "fd4b8121fc75e4acfd2873e581a865e46f92f8dedc3da75647d23618ba22f404"
+      "byteLength": 8954,
+      "sha256": "1a657ebe89a62ad3fdc738560a90a08e03bc6685893bc34657d122a20166c13f"
     },
     {
       "path": "tools/validate-companion-projection.mjs",
-      "byteLength": 4486,
-      "sha256": "730f1281f73ce56b0e8c552bd5e3958581191775fa3bb751204595bdcbda4491"
+      "byteLength": 4560,
+      "sha256": "5da2c9f9e6bc43997c1bccafd0b8e7bc9d3836da9b987ca2a178cf7d3b2b558d"
     },
     {
       "path": "tools/verify-host-presentation-binding.mjs",

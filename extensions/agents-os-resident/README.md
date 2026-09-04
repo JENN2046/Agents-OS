@@ -1,12 +1,48 @@
 # AGENTS OS Resident
 
-This directory is the Jenn-owned external source package for the frozen Phase
-5A M0-A deterministic orchestrator core.
+This directory is the Jenn-owned source package for the local-owner Resident.
+It contains the continuity, protected-Witness admission, Presence, Memory and
+Current Work/Life paths used by the bounded local runtime, together with their
+source-owned systemd projection and tests.
 
-The package is synthetic-only and runtime-unusable. Its compatibility
-projection is `Plugin/AGENTSOSResident/` in a clean linked VCPToolBox worktree
-at commit `555b3b538f6eb736e530c2912de678c5941f9985`. The projection must retain
-`plugin-manifest.json.block`; an enabled `plugin-manifest.json` is forbidden.
+The package remains private and locally scoped. This source integration does
+not claim M6 sustained-real-use closure, production readiness, E3/P5,
+permanent cutover, or device/model/provider replacement. Its VCPToolBox
+projection must retain `plugin-manifest.json.block`; an enabled
+`plugin-manifest.json` is forbidden.
+
+## Protected Witness one-shot provisioning
+
+Fresh protected-Witness state is enrolled only through the explicit one-shot
+provisioning profile. Create three mutually disjoint, current-owner `0700`
+directories first, obtain the sealed build ID, and run:
+
+```sh
+npm run provision:witness -- \
+  --root /absolute/agents-os-resident-local-owner-v1 \
+  --witness-root /absolute/protected-witness \
+  --memory-body-root /absolute/private-memory-bodies \
+  --expected-build-id sha256:<64-lowercase-hex> \
+  --genesis-authority-file /absolute/genesis-authority.json
+```
+
+The authority file is a current-owner, `0600`, single-link regular file at its
+exact canonical path. It contains at most 4096 bytes of strict UTF-8 and one
+canonical JSON object, without a trailing newline, in this exact key order:
+
+```json
+{"authorityId":"authority:<trusted-id>","protocol":"MMR0_GENESIS_PROVISIONING_V1","provisioningId":"provisioning:<trusted-id>","residentId":"resident:LOCAL_OWNER_SESSION_V1:jenn"}
+```
+
+Success prints only `RESIDENT_WITNESS_PROVISIONED` and exits after native
+initialization and shutdown; no socket is started. Re-running provisioning
+against an enrolled Witness is rejected and must not be treated as idempotent
+success. The long-running systemd unit contains neither the authority file nor
+inline genesis data and starts only after enrollment, using the protected
+Witness as its continuity source. The one-shot command does not globally
+consume a credential: after success, the trusted operator must remove, revoke,
+or otherwise govern the authority file according to its issuing policy. It
+must never be copied into the long-running unit.
 
 WP0 establishes the deterministic package layout and WP1 establishes strict
 canonical JSON/JCS/SHA-256 primitives. WP2 adds the synthetic Resident

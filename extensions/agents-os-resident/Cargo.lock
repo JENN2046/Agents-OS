@@ -11,6 +11,7 @@ dependencies = [
  "napi-build",
  "napi-derive",
  "rusqlite",
+ "rustix",
  "serde",
  "serde_json",
  "sha2",

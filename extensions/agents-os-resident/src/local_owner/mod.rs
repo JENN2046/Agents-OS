@@ -13,10 +13,18 @@ use crate::resident::lock::ResidentLock;
 pub mod consent;
 pub mod checkpoint;
 pub mod continuity;
+mod memory;
+#[cfg(test)]
+mod memory_tests;
+mod presence;
 pub mod schema;
 pub mod protection;
 pub mod store;
 mod thread;
+pub mod witness;
+#[cfg(test)]
+mod witness_tests;
+mod work_source;
 #[cfg(test)]
 mod p1_tests;
 #[cfg(test)]
@@ -65,9 +73,12 @@ mod p6b_tests;
 mod p6c_tests;
 #[cfg(test)]
 mod p6d_tests;
+#[cfg(test)]
+mod presence_tests;
 
 use thread::LocalOwnerThread;
 use continuity::{ContinuityAdmission, derive_admission};
+use memory::MemoryBodyVerifier;
 
 pub const PACKAGE_VERSION: &str = "0.3.0-local-owner.0";
 pub const PROFILE_ID: &str = "resident:LOCAL_OWNER_SESSION_V1:jenn";
@@ -111,6 +122,12 @@ pub enum LocalOwnerError {
     ContinuityAdmissionDenied,
     #[error("continuity activation was interrupted")]
     ContinuityActivationInterrupted,
+    #[error("declared restore requires exact Witness reconciliation")]
+    WitnessReconciliationRequired,
+    #[error("Presence context changed before the provider attempt could be sealed")]
+    PresenceContextStale,
+    #[error("Presence OneRing binding is unavailable or mismatched")]
+    PresenceBindingDenied,
     #[error("MMR mutation is not authorized in the current slice")]
     MmrMutationNotAuthorized,
     #[error("MMR Current relation conflicts with the requested predecessor")]
@@ -155,6 +172,20 @@ pub enum LocalOwnerError {
     MmrCandidateStatusChangeRejected,
     #[error("summary support cannot be resolved from the available durable state")]
     MmrSummarySupportUnresolved,
+    #[error("private Memory body verifier is unavailable")]
+    MemoryBodyVerifierUnavailable,
+    #[error("private Memory body locator is rejected")]
+    MemoryBodyLocatorRejected,
+    #[error("private Memory body does not match its admitted descriptor")]
+    MemoryBodyMismatch,
+    #[error("private Memory body is unavailable")]
+    MemoryBodyUnavailable,
+    #[error("private Memory body verification is stale")]
+    MemoryVerificationStale,
+    #[error("reserved Memory authority profile is rejected")]
+    MemoryAuthorityProfileRejected,
+    #[error("reserved Work source projection profile is rejected")]
+    WorkSourceProfileRejected,
     #[error("local-owner response lost after commit")]
     ResponseLostAfterCommit,
     #[error("local-owner injected crash")]
@@ -187,6 +218,9 @@ impl LocalOwnerError {
             Self::ContinuityLineageConflict => "LINEAGE_CONFLICT",
             Self::ContinuityAdmissionDenied => "CONTINUITY_ADMISSION_DENIED",
             Self::ContinuityActivationInterrupted => "CONTINUITY_ACTIVATION_INTERRUPTED",
+            Self::WitnessReconciliationRequired => "RECONCILIATION_REQUIRED",
+            Self::PresenceContextStale => "PRESENCE_CONTEXT_STALE",
+            Self::PresenceBindingDenied => "PRESENCE_BINDING_DENIED",
             Self::MmrMutationNotAuthorized => "MMR_MUTATION_NOT_AUTHORIZED",
             Self::MmrCurrentConflict => "MMR_CURRENT_CONFLICT",
             Self::MmrOperationIdConflict => "MMR_OPERATION_ID_CONFLICT",
@@ -209,6 +243,13 @@ impl LocalOwnerError {
             Self::MmrSummarySelfEvidenceRejected => "MMR_SUMMARY_SELF_EVIDENCE_REJECTED",
             Self::MmrCandidateStatusChangeRejected => "MMR_CANDIDATE_STATUS_CHANGE_REJECTED",
             Self::MmrSummarySupportUnresolved => "MMR_SUMMARY_SUPPORT_UNRESOLVED",
+            Self::MemoryBodyVerifierUnavailable => "MEMORY_BODY_VERIFIER_UNAVAILABLE",
+            Self::MemoryBodyLocatorRejected => "MEMORY_BODY_LOCATOR_REJECTED",
+            Self::MemoryBodyMismatch => "MEMORY_BODY_MISMATCH",
+            Self::MemoryBodyUnavailable => "MEMORY_BODY_UNAVAILABLE",
+            Self::MemoryVerificationStale => "MEMORY_VERIFICATION_STALE",
+            Self::MemoryAuthorityProfileRejected => "MEMORY_AUTHORITY_PROFILE_REJECTED",
+            Self::WorkSourceProfileRejected => "WORK_SOURCE_PROFILE_REJECTED",
             Self::ResponseLostAfterCommit => "LOCAL_OWNER_RESPONSE_LOST_AFTER_COMMIT",
             Self::InjectedCrash => "LOCAL_OWNER_INJECTED_CRASH",
             Self::Io(_) => "LOCAL_OWNER_IO_FAILED",
@@ -231,19 +272,52 @@ impl LocalOwnerKernel {
         continuity_evidence: Option<&Value>,
         genesis_provisioning_authority: Option<&Value>,
     ) -> Result<Self, LocalOwnerError> {
-        validate_root(root)?;
-        ensure_private_state_file(&root.join(LOCAL_OWNER_LOCK_FILENAME))?;
-        let lock = ResidentLock::acquire(root.join(LOCAL_OWNER_LOCK_FILENAME))?;
-        let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
-        if database_path.exists() {
-            validate_private_state_file(&database_path)?;
-        }
-        let local = store::inspect_continuity(&database_path)?;
-        let admission = derive_admission(
-            &local,
+        Self::start_with_memory_body_root(
+            root,
             continuity_evidence,
             genesis_provisioning_authority,
-        )?;
+            None,
+        )
+    }
+
+    /// Starts the local-owner kernel with an optional external private Memory
+    /// body root. The path is consumed only at startup; mutations can never
+    /// provide or replace it.
+    #[doc(hidden)]
+    pub fn start_with_memory_body_root(
+        root: &Path,
+        continuity_evidence: Option<&Value>,
+        genesis_provisioning_authority: Option<&Value>,
+        memory_body_root: Option<&Path>,
+    ) -> Result<Self, LocalOwnerError> {
+        validate_root(root)?;
+        let memory_body_verifier = memory_body_root
+            .map(|body_root| MemoryBodyVerifier::open(body_root, root))
+            .transpose()?;
+        let lock = acquire_activation_lock(root)?;
+        Self::start_with_acquired_lock(
+            root,
+            continuity_evidence,
+            genesis_provisioning_authority,
+            memory_body_verifier,
+            lock,
+        )
+    }
+
+    /// Completes startup while retaining an already-acquired Resident lock.
+    /// Witness admission uses this seam so external read/enrollment and local
+    /// admission share one inspect-to-return critical section.
+    fn start_with_acquired_lock(
+        root: &Path,
+        continuity_evidence: Option<&Value>,
+        genesis_provisioning_authority: Option<&Value>,
+        memory_body_verifier: Option<MemoryBodyVerifier>,
+        lock: ResidentLock,
+    ) -> Result<Self, LocalOwnerError> {
+        let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
+        let local = store::inspect_continuity(&database_path)?;
+        let admission =
+            derive_admission(&local, continuity_evidence, genesis_provisioning_authority)?;
         if !admission.admitted {
             return Err(admission.denial_error());
         }
@@ -261,6 +335,7 @@ impl LocalOwnerKernel {
             database_path,
             process_nonce,
             admission.genesis_authorized,
+            memory_body_verifier,
         )?;
         Ok(Self {
             root: root.to_path_buf(),
@@ -365,6 +440,22 @@ impl LocalOwnerKernel {
             .query_mmr(input)
     }
 
+    pub fn query_presence_context(&self, input: Value) -> Result<Value, LocalOwnerError> {
+        self.require_presence_eligibility()?;
+        self.ledger
+            .as_ref()
+            .ok_or(LocalOwnerError::ThreadUnavailable)?
+            .query_presence(input, self.admission.clone())
+    }
+
+    pub fn seal_provider_attempt(&self, input: Value) -> Result<Value, LocalOwnerError> {
+        self.require_presence_eligibility()?;
+        self.ledger
+            .as_ref()
+            .ok_or(LocalOwnerError::ThreadUnavailable)?
+            .seal_provider_attempt(input, self.admission.clone())
+    }
+
     #[doc(hidden)]
     pub fn submit_consent_with_fault(
         &self,
@@ -442,6 +533,28 @@ impl LocalOwnerKernel {
             Err(LocalOwnerError::ContinuityAdmissionDenied)
         }
     }
+
+    fn require_presence_eligibility(&self) -> Result<(), LocalOwnerError> {
+        if self.admission.admitted && self.admission.grant_count == 1 {
+            Ok(())
+        } else {
+            Err(LocalOwnerError::ContinuityAdmissionDenied)
+        }
+    }
+}
+
+/// Acquire the single existing Resident activation lock after validating the
+/// whole local root. Callers retain it through admission and thread startup;
+/// this deliberately does not introduce a separate Witness lock.
+fn acquire_activation_lock(root: &Path) -> Result<ResidentLock, LocalOwnerError> {
+    validate_root(root)?;
+    ensure_private_state_file(&root.join(LOCAL_OWNER_LOCK_FILENAME))?;
+    let lock = ResidentLock::acquire(root.join(LOCAL_OWNER_LOCK_FILENAME))?;
+    let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
+    if database_path.exists() {
+        validate_private_state_file(&database_path)?;
+    }
+    Ok(lock)
 }
 
 fn ensure_private_state_file(path: &Path) -> Result<(), LocalOwnerError> {
@@ -471,6 +584,7 @@ fn validate_private_state_file(path: &Path) -> Result<(), LocalOwnerError> {
 fn validate_private_state_metadata(metadata: &std::fs::Metadata) -> Result<(), LocalOwnerError> {
     if !metadata.is_file()
         || metadata.file_type().is_symlink()
+        || metadata.uid() != rustix::process::getuid().as_raw()
         || metadata.nlink() != 1
         || metadata.permissions().mode() & 0o777 != 0o600
     {
@@ -488,6 +602,7 @@ fn validate_root(root: &Path) -> Result<(), LocalOwnerError> {
     let metadata = std::fs::symlink_metadata(root).map_err(LocalOwnerError::Io)?;
     if !metadata.is_dir()
         || metadata.file_type().is_symlink()
+        || metadata.uid() != rustix::process::getuid().as_raw()
         || metadata.permissions().mode() & 0o777 != 0o700
     {
         return Err(LocalOwnerError::InvalidInput);

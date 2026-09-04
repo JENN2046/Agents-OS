@@ -19,6 +19,13 @@ const {
   resolveCognitiveContext
 } = require('./cognitive-context');
 const {
+  isPresenceCarrierMessage,
+  parseProviderAttemptPayload,
+  presenceCarrierMessage,
+  presencePayload,
+  resolvePresenceContext
+} = require('./presence-context');
+const {
   discoveryBootstrapMessage,
   shouldBootstrapDiscovery
 } = require('./discovery');
@@ -145,6 +152,9 @@ const SYNTHETIC_USER_PREFIXES = Object.freeze([
   '[系统提示:]',
   '[系统邀请指令:]'
 ]);
+const PRESENCE_BINDING_PROPERTY = '__agentsOsResidentPresence';
+const PRESENCE_BINDING_SCHEMA =
+  'agents-os-resident.provider-presence-binding.v2';
 
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -360,6 +370,35 @@ function latestUserIngress(messages, requestConfig) {
 
 function latestUserText(messages, requestConfig) {
   return latestUserIngress(messages, requestConfig)?.text ?? null;
+}
+
+function bindPresenceToMessages(messages, context, carrier) {
+  if (!Array.isArray(messages)
+    || !isPlainObject(context)
+    || !isPlainObject(carrier)
+    || typeof carrier.content !== 'string') {
+    throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+  }
+  const binding = Object.freeze({
+    attachmentGeneration: context.attachmentGeneration,
+    authorityGeneration: context.identity.authorityGeneration,
+    carrierContentSha256: digest(carrier.content),
+    contextId: context.contextId,
+    freshPresenceId: context.freshPresenceId,
+    projectionGeneration: context.projectionGeneration,
+    schema: PRESENCE_BINDING_SCHEMA
+  });
+  try {
+    Object.defineProperty(messages, PRESENCE_BINDING_PROPERTY, {
+      configurable: false,
+      enumerable: false,
+      value: binding,
+      writable: false
+    });
+  } catch {
+    throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+  }
+  return messages;
 }
 
 function messageTextForRedaction(message) {
@@ -589,12 +628,14 @@ function createResidentAdapter({
 
   let client = null;
   let attachment = null;
+  let activePresenceBinding = null;
   let state = DETACHED_STATE;
 
   function detachFailClosed() {
     const activeClient = client;
     client = null;
     attachment = null;
+    activePresenceBinding = null;
     state = DETACHED_STATE;
     try {
       activeClient?.detach?.();
@@ -608,6 +649,7 @@ function createResidentAdapter({
     if (attachment && !attachment.destroyed) return activeProjection();
     client = null;
     attachment = null;
+    activePresenceBinding = null;
     state = DETACHED_STATE;
     const deadline = now() + retryWindowMs;
     let lastError = fixedError('RESIDENT_COMPANION_UNAVAILABLE');
@@ -625,6 +667,7 @@ function createResidentAdapter({
           if (attachment === result.socket) {
             client = null;
             attachment = null;
+            activePresenceBinding = null;
             state = DETACHED_STATE;
           }
         });
@@ -741,11 +784,18 @@ function createResidentAdapter({
 
   async function processMessages(messages, requestConfig) {
     let redactedMessages = redactConsentSensitiveMessages(messages);
+    const presenceRequested = isPlainObject(
+      requestConfig?.agentsOsResidentPresenceContext
+    );
+    if (presenceRequested) activePresenceBinding = null;
     const inheritedCognitiveObservation = redactedMessages
       .some(isCognitiveObservationMessage);
-    if (inheritedCognitiveObservation) {
+    const inheritedPresenceCarrier = redactedMessages
+      .some(isPresenceCarrierMessage);
+    if (inheritedCognitiveObservation || inheritedPresenceCarrier) {
       redactedMessages = redactedMessages
-        .filter((message) => !isCognitiveObservationMessage(message));
+        .filter((message) => !isCognitiveObservationMessage(message)
+          && !isPresenceCarrierMessage(message));
     }
     try {
       if (!client || !attachment || attachment.destroyed) return redactedMessages;
@@ -759,6 +809,35 @@ function createResidentAdapter({
       if (observation === null) {
         if (result?.resultCode === 'NO_PENDING_PROPOSAL'
           && !isConsentSensitiveText(ingress.text)) {
+          if (presenceRequested) {
+            if (inheritedPresenceCarrier) {
+              return redactedMessages;
+            }
+            const transcriptDigest = digest(ingress.text)
+              .slice('sha256:'.length);
+            const payload = presencePayload(
+              requestConfig.agentsOsResidentPresenceContext,
+              transcriptDigest
+            );
+            const projection = await client.presenceContext(payload);
+            const resolved = resolvePresenceContext(projection, {
+              attachmentGeneration: projection?.attachmentGeneration,
+              expectedSlots: payload.expectedSlots,
+              freshPresenceId: projection?.freshPresenceId,
+              oneRing: payload.oneRing,
+              transcriptDigest: payload.transcriptDigest
+            });
+            const carrier = presenceCarrierMessage(resolved, messages);
+            const boundMessages = bindPresenceToMessages([
+              ...redactedMessages,
+              carrier
+            ], resolved, carrier);
+            activePresenceBinding = Object.getOwnPropertyDescriptor(
+              boundMessages,
+              PRESENCE_BINDING_PROPERTY
+            ).value;
+            return boundMessages;
+          }
           if (isPlainObject(requestConfig?.agentsOsResidentCognitiveContext)) {
             if (inheritedCognitiveObservation
               || redactedMessages.length !== 1
@@ -822,6 +901,10 @@ function createResidentAdapter({
         canonicalObservationMessage(observation)
       ];
     } catch {
+      if (presenceRequested) {
+        detachFailClosed();
+        throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+      }
       return redactedMessages;
     }
   }
@@ -838,6 +921,98 @@ function createResidentAdapter({
     });
   }
 
+  async function sealProviderAttempt(input) {
+    if (!client || !attachment || attachment.destroyed) {
+      detachFailClosed();
+      throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+    }
+    const sealClient = client;
+    const sealAttachment = attachment;
+    const sealBinding = activePresenceBinding;
+    try {
+      if (!exactKeys(input, [
+        'attemptId',
+        'binding',
+        'credentialSlotRef',
+        'finalBodyText',
+        'method',
+        'ordinal',
+        'providerPathId',
+        'target'
+      ])
+        || input.binding !== sealBinding
+        || !Object.isFrozen(sealBinding)
+        || typeof input.attemptId !== 'string'
+        || !/^attempt:vcp:r1:[0-9a-f]{64}$/u.test(input.attemptId)
+        || typeof input.credentialSlotRef !== 'string'
+        || !/^credential-slot:[a-z0-9][a-z0-9:._-]{0,175}$/u.test(
+          input.credentialSlotRef
+        )
+        || /(?:bearer|sk-)/iu.test(input.credentialSlotRef)
+        || typeof input.finalBodyText !== 'string'
+        || input.finalBodyText.length === 0
+        || input.method !== 'POST'
+        || !Number.isSafeInteger(input.ordinal)
+        || input.ordinal < 1
+        || input.providerPathId !== 'VCP-CHAT-COMPLETIONS'
+        || typeof input.target !== 'string'
+        || input.target.length === 0
+        || Buffer.byteLength(input.target, 'utf8') > 2048) {
+        throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+      }
+      let target;
+      let finalBody;
+      try {
+        target = new URL(input.target);
+        finalBody = JSON.parse(input.finalBodyText);
+      } catch {
+        throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+      }
+      if (!['http:', 'https:'].includes(target.protocol)
+        || target.username !== ''
+        || target.password !== ''
+        || !isPlainObject(finalBody)
+        || typeof finalBody.model !== 'string'
+        || finalBody.model.length === 0
+        || Buffer.byteLength(finalBody.model, 'utf8') > 512
+        || !Array.isArray(finalBody.messages)) {
+        throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+      }
+      const carriers = finalBody.messages.filter(isPresenceCarrierMessage);
+      if (carriers.length !== 1
+        || digest(carriers[0].content) !== sealBinding.carrierContentSha256) {
+        throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+      }
+      const payload = parseProviderAttemptPayload({
+        attempt: {
+          attemptId: input.attemptId,
+          bodyByteLength: Buffer.byteLength(input.finalBodyText, 'utf8'),
+          bodySha256: digest(input.finalBodyText),
+          credentialSlotRef: input.credentialSlotRef,
+          method: input.method,
+          ordinal: input.ordinal,
+          providerPathId: input.providerPathId,
+          selectedModelSha256: digest(finalBody.model),
+          targetSha256: digest(input.target)
+        },
+        expectedAuthorityGeneration: sealBinding.authorityGeneration,
+        expectedContextId: sealBinding.contextId,
+        expectedProjectionGeneration: sealBinding.projectionGeneration
+      });
+      const seal = await sealClient.sealProviderAttempt(payload);
+      if (client !== sealClient
+        || attachment !== sealAttachment
+        || attachment.destroyed
+        || activePresenceBinding !== sealBinding) {
+        throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+      }
+      return Object.freeze({ body: input.finalBodyText, seal });
+    } catch {
+      detachFailClosed();
+      throw fixedError('RESIDENT_PROVIDER_ATTEMPT_SEAL_REJECTED');
+    }
+  }
+
   function getLifecycleStatus() {
     return Object.freeze({
       attachmentState: state,
@@ -847,13 +1022,20 @@ function createResidentAdapter({
     });
   }
 
-  return Object.freeze({
+  const adapterApi = {
     getLifecycleStatus,
     initialize,
     processMessages,
     processToolCall,
     shutdown
+  };
+  Object.defineProperty(adapterApi, 'sealProviderAttempt', {
+    configurable: false,
+    enumerable: false,
+    value: sealProviderAttempt,
+    writable: false
   });
+  return Object.freeze(adapterApi);
 }
 
 module.exports = Object.freeze({

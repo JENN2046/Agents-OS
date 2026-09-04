@@ -29,6 +29,14 @@ const {
   rejectionResponse,
   statusResponse
 } = require('./protocol');
+const {
+  nativePresenceRequest,
+  nativeProviderAttemptRequest,
+  parsePresencePayload,
+  parseProviderAttemptPayload,
+  resolvePresenceContext,
+  resolveProviderAttemptSeal
+} = require('./presence-context');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -148,6 +156,8 @@ function createCompanionServer({
     'submitConsent',
     'query',
     'queryMmrMutationCore',
+    'queryPresenceContext',
+    'sealProviderAttempt',
     'invalidate'
   ];
   if (typeof socketPath !== 'string'
@@ -291,6 +301,7 @@ function createCompanionServer({
         attachment = {
           generation,
           pendingCognitiveSession: null,
+          presenceSession: null,
           socket,
           token: randomBytes(32).toString('hex')
         };
@@ -373,6 +384,36 @@ function createCompanionServer({
             || query.transcriptDigest !== pending.transcriptDigest) {
             throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
           }
+        }
+        if (request.operation === 'presence_context') {
+          const payload = parsePresencePayload(request.payload);
+          const nativeRequest = nativePresenceRequest(payload, {
+            attachmentGeneration: attachment.generation,
+            freshPresenceId: `fresh-presence:r1:${randomBytes(32).toString('hex')}`
+          });
+          const raw = await lifecycle.queryPresenceContext(nativeRequest);
+          const context = resolvePresenceContext(raw, nativeRequest);
+          attachment.presenceSession = Object.freeze({
+            context,
+            nativeRequest
+          });
+          writeAndClose(socket, operationResponse(request, context));
+          return;
+        }
+        if (request.operation === 'seal_provider_attempt') {
+          const payload = parseProviderAttemptPayload(request.payload);
+          const presenceSession = attachment.presenceSession;
+          if (presenceSession === null) {
+            throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+          }
+          const nativeRequest = nativeProviderAttemptRequest(
+            payload,
+            presenceSession
+          );
+          const raw = await lifecycle.sealProviderAttempt(nativeRequest);
+          const seal = resolveProviderAttemptSeal(raw, payload, presenceSession);
+          writeAndClose(socket, operationResponse(request, seal));
+          return;
         }
         const nativeInput = request.operation === 'submit_consent'
           ? { ...request.payload, attachmentGeneration: attachment.generation }

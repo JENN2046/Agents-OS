@@ -1,11 +1,25 @@
 import {
   chmodSync,
   lstatSync,
+  mkdirSync,
+  mkdtempSync,
   readFileSync,
+  realpathSync,
   renameSync,
+  rmSync,
   writeFileSync
 } from 'node:fs';
-import { dirname, isAbsolute, normalize, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  join,
+  normalize,
+  relative,
+  resolve,
+  sep
+} from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const TOOL_PATH = fileURLToPath(import.meta.url);
@@ -18,10 +32,18 @@ const INTEGRITY_PATH = resolve(PACKAGE_ROOT, 'companion-integrity.json');
 const REQUIRED_PLACEHOLDERS = Object.freeze([
   '@@ACTIVATION_ROOT@@',
   '@@BUILD_ID@@',
-  '@@CONTINUITY_EVIDENCE_JSON@@',
-  '@@GENESIS_PROVISIONING_AUTHORITY_JSON@@',
+  '@@MEMORY_BODY_ROOT@@',
   '@@NODE_BINARY@@',
-  '@@PLUGIN_ROOT@@'
+  '@@PLUGIN_ROOT@@',
+  '@@WITNESS_ROOT@@'
+]);
+const RENDER_KEYS = Object.freeze([
+  'activationRoot',
+  'buildId',
+  'memoryBodyRoot',
+  'nodeBinary',
+  'pluginRoot',
+  'witnessRoot'
 ]);
 
 function isPlainObject(value) {
@@ -32,20 +54,12 @@ function isPlainObject(value) {
   return prototype === Object.prototype || prototype === null;
 }
 
-function serializedJsonObject(value, name) {
-  if (typeof value !== 'string' || value.length === 0 || value.includes('\0')) {
-    throw new Error(`SYSTEMD_RENDER_INPUT_INVALID:${name}`);
-  }
-  let parsed;
-  try {
-    parsed = JSON.parse(value);
-  } catch {
-    throw new Error(`SYSTEMD_RENDER_INPUT_INVALID:${name}`);
-  }
-  if (!isPlainObject(parsed)) {
-    throw new Error(`SYSTEMD_RENDER_INPUT_INVALID:${name}`);
-  }
-  return value;
+function hasExactKeys(value, expected) {
+  if (!isPlainObject(value)) return false;
+  const actual = Object.keys(value).sort();
+  const wanted = [...expected].sort();
+  return actual.length === wanted.length
+    && actual.every((key, index) => key === wanted[index]);
 }
 
 function safeAbsolute(value) {
@@ -53,7 +67,58 @@ function safeAbsolute(value) {
     && value.length > 0
     && isAbsolute(value)
     && normalize(value) === value
-    && !/[\0\r\n\t ]/.test(value);
+    && !/[\0\r\n\t %$\\'"]/.test(value);
+}
+
+function protectedRoot(value) {
+  if (!safeAbsolute(value)) {
+    throw new Error('SYSTEMD_RENDER_PROTECTED_ROOT_INVALID');
+  }
+  try {
+    const stat = lstatSync(value);
+    const canonical = realpathSync.native(value);
+    const uid = typeof process.getuid === 'function' ? process.getuid() : null;
+    if (!stat.isDirectory()
+      || stat.isSymbolicLink()
+      || canonical !== value
+      || uid === null
+      || stat.uid !== uid
+      || (stat.mode & 0o777) !== 0o700) {
+      throw new Error('SYSTEMD_RENDER_PROTECTED_ROOT_INVALID');
+    }
+    return Object.freeze({
+      device: stat.dev,
+      inode: stat.ino,
+      path: canonical
+    });
+  } catch (error) {
+    if (error?.message === 'SYSTEMD_RENDER_PROTECTED_ROOT_INVALID') {
+      throw error;
+    }
+    throw new Error('SYSTEMD_RENDER_PROTECTED_ROOT_INVALID');
+  }
+}
+
+function pathContains(parent, child) {
+  const result = relative(parent, child);
+  return result === ''
+    || (result !== '..'
+      && !result.startsWith(`..${sep}`)
+      && !isAbsolute(result));
+}
+
+function validateProtectedRoots(values) {
+  const roots = values.map(protectedRoot);
+  for (let left = 0; left < roots.length; left += 1) {
+    for (let right = left + 1; right < roots.length; right += 1) {
+      if ((roots[left].device === roots[right].device
+          && roots[left].inode === roots[right].inode)
+        || pathContains(roots[left].path, roots[right].path)
+        || pathContains(roots[right].path, roots[left].path)) {
+        throw new Error('SYSTEMD_RENDER_PROTECTED_ROOT_OVERLAP');
+      }
+    }
+  }
 }
 
 function parseIntegrity() {
@@ -64,26 +129,29 @@ function parseIntegrity() {
   return manifest;
 }
 
-export function renderSystemdUnit({
-  continuityEvidenceJson,
-  genesisProvisioningAuthorityJson,
-  nodeBinary,
-  pluginRoot,
-  activationRoot,
-  buildId
-}) {
+export function renderSystemdUnit(config) {
+  if (!hasExactKeys(config, RENDER_KEYS)) {
+    throw new Error('SYSTEMD_RENDER_INPUT_INVALID');
+  }
+  const {
+    activationRoot,
+    buildId,
+    memoryBodyRoot,
+    nodeBinary,
+    pluginRoot,
+    witnessRoot
+  } = config;
   if (!safeAbsolute(nodeBinary)
     || !safeAbsolute(pluginRoot)
     || !safeAbsolute(activationRoot)
+    || !safeAbsolute(memoryBodyRoot)
+    || !safeAbsolute(witnessRoot)
     || !/^sha256:[0-9a-f]{64}$/.test(buildId)
-    || !activationRoot.startsWith(`${pluginRoot}/state/`)) {
+    || !activationRoot.startsWith(`${pluginRoot}/state/`)
+    || basename(activationRoot) !== 'agents-os-resident-local-owner-v1') {
     throw new Error('SYSTEMD_RENDER_INPUT_INVALID');
   }
-  serializedJsonObject(continuityEvidenceJson, 'CONTINUITY_EVIDENCE_JSON');
-  serializedJsonObject(
-    genesisProvisioningAuthorityJson,
-    'GENESIS_PROVISIONING_AUTHORITY_JSON'
-  );
+  validateProtectedRoots([activationRoot, witnessRoot, memoryBodyRoot]);
   const templateStat = lstatSync(TEMPLATE_PATH);
   if (!templateStat.isFile() || templateStat.isSymbolicLink()) {
     throw new Error('SYSTEMD_TEMPLATE_INVALID');
@@ -95,13 +163,18 @@ export function renderSystemdUnit({
     }
   }
   rendered = rendered
-    .replaceAll('@@CONTINUITY_EVIDENCE_JSON@@', continuityEvidenceJson)
-    .replaceAll('@@GENESIS_PROVISIONING_AUTHORITY_JSON@@', genesisProvisioningAuthorityJson)
     .replaceAll('@@NODE_BINARY@@', nodeBinary)
     .replaceAll('@@PLUGIN_ROOT@@', pluginRoot)
     .replaceAll('@@ACTIVATION_ROOT@@', activationRoot)
+    .replaceAll('@@WITNESS_ROOT@@', witnessRoot)
+    .replaceAll('@@MEMORY_BODY_ROOT@@', memoryBodyRoot)
     .replaceAll('@@BUILD_ID@@', buildId);
+  const restrictSuidSgid = rendered
+    .split('\n')
+    .filter((line) => line.startsWith('RestrictSUIDSGID='));
   if (REQUIRED_PLACEHOLDERS.some((placeholder) => rendered.includes(placeholder))
+    || restrictSuidSgid.length !== 1
+    || restrictSuidSgid[0] !== 'RestrictSUIDSGID=no'
     || !rendered.includes('RestrictAddressFamilies=AF_UNIX')
     || !rendered.includes('IPAddressDeny=any')
     || !rendered.includes('StandardOutput=null')
@@ -119,25 +192,43 @@ function parseArgs(argv) {
   if (argv.length === 1 && argv[0] === '--check') {
     return Object.freeze({ check: true });
   }
+  if (argv.length === 0 || argv.length % 2 !== 0) {
+    throw new Error('SYSTEMD_RENDER_ARGUMENTS_INVALID');
+  }
   const parsed = {};
   for (let index = 0; index < argv.length; index += 2) {
-    parsed[argv[index]] = argv[index + 1];
+    const key = argv[index];
+    const value = argv[index + 1];
+    if (![
+      '--activation-root',
+      '--memory-body-root',
+      '--node',
+      '--output',
+      '--plugin-root',
+      '--witness-root'
+    ].includes(key)
+      || typeof value !== 'string'
+      || value.length === 0
+      || Object.hasOwn(parsed, key)) {
+      throw new Error('SYSTEMD_RENDER_ARGUMENTS_INVALID');
+    }
+    parsed[key] = value;
   }
   if (!Object.hasOwn(parsed, '--activation-root')
-    || !Object.hasOwn(parsed, '--continuity-evidence')
-    || !Object.hasOwn(parsed, '--genesis-provisioning-authority')
+    || !Object.hasOwn(parsed, '--memory-body-root')
     || !Object.hasOwn(parsed, '--node')
     || !Object.hasOwn(parsed, '--output')
-    || !Object.hasOwn(parsed, '--plugin-root')) {
+    || !Object.hasOwn(parsed, '--plugin-root')
+    || !Object.hasOwn(parsed, '--witness-root')) {
     throw new Error('SYSTEMD_RENDER_ARGUMENTS_INVALID');
   }
   return Object.freeze({
     activationRoot: parsed['--activation-root'],
-    continuityEvidenceJson: parsed['--continuity-evidence'],
-    genesisProvisioningAuthorityJson: parsed['--genesis-provisioning-authority'],
+    memoryBodyRoot: parsed['--memory-body-root'],
     nodeBinary: parsed['--node'],
     output: parsed['--output'],
-    pluginRoot: parsed['--plugin-root']
+    pluginRoot: parsed['--plugin-root'],
+    witnessRoot: parsed['--witness-root']
   });
 }
 
@@ -145,14 +236,38 @@ function main(argv) {
   const args = parseArgs(argv);
   const integrity = parseIntegrity();
   if (args.check) {
-    renderSystemdUnit({
-      continuityEvidenceJson: '{"availability":"AVAILABLE","evidenceId":"evidence:check","protocol":"MMR0_CONTINUITY_EVIDENCE_V1","state":"EMPTY","witnessId":"witness:check"}',
-      genesisProvisioningAuthorityJson: '{"authorityId":"authority:check","protocol":"MMR0_GENESIS_PROVISIONING_V1","provisioningId":"provisioning:check","residentId":"resident:LOCAL_OWNER_SESSION_V1:jenn"}',
-      nodeBinary: process.execPath,
-      pluginRoot: PACKAGE_ROOT,
-      activationRoot: resolve(PACKAGE_ROOT, 'state/agents-os-resident-local-owner-v1'),
-      buildId: integrity.buildId
-    });
+    const root = mkdtempSync(join(tmpdir(), 'agents-os-resident-systemd-check-'));
+    try {
+      chmodSync(root, 0o700);
+      const pluginRoot = resolve(root, 'plugin');
+      const stateRoot = resolve(pluginRoot, 'state');
+      const activationRoot = resolve(
+        stateRoot,
+        'agents-os-resident-local-owner-v1'
+      );
+      const witnessRoot = resolve(stateRoot, 'protected-witness');
+      const memoryBodyRoot = resolve(stateRoot, 'private-memory-bodies');
+      for (const directory of [
+        pluginRoot,
+        stateRoot,
+        activationRoot,
+        witnessRoot,
+        memoryBodyRoot
+      ]) {
+        mkdirSync(directory, { mode: 0o700 });
+        chmodSync(directory, 0o700);
+      }
+      renderSystemdUnit({
+        activationRoot,
+        buildId: integrity.buildId,
+        memoryBodyRoot,
+        nodeBinary: process.execPath,
+        pluginRoot,
+        witnessRoot
+      });
+    } finally {
+      rmSync(root, { force: true, recursive: true });
+    }
     process.stdout.write('SYSTEMD_UNIT_TEMPLATE_VERIFIED\n');
     return;
   }
@@ -160,12 +275,12 @@ function main(argv) {
     throw new Error('SYSTEMD_RENDER_OUTPUT_PATH_INVALID');
   }
   const rendered = renderSystemdUnit({
-    continuityEvidenceJson: args.continuityEvidenceJson,
-    genesisProvisioningAuthorityJson: args.genesisProvisioningAuthorityJson,
+    activationRoot: args.activationRoot,
+    buildId: integrity.buildId,
+    memoryBodyRoot: args.memoryBodyRoot,
     nodeBinary: args.nodeBinary,
     pluginRoot: args.pluginRoot,
-    activationRoot: args.activationRoot,
-    buildId: integrity.buildId
+    witnessRoot: args.witnessRoot
   });
   const temporary = `${args.output}.tmp-${process.pid}`;
   writeFileSync(temporary, rendered, { flag: 'wx', mode: 0o644 });

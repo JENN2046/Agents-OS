@@ -27,6 +27,8 @@ const OPERATIONS = new Set([
   'cognitive_context',
   'create_proposal',
   'mint_cognitive_session',
+  'presence_context',
+  'seal_provider_attempt',
   'submit_consent',
   'query'
 ]);
@@ -34,6 +36,8 @@ const PROTECTED_OPERATIONS = new Set([
   'cognitive_context',
   'create_proposal',
   'mint_cognitive_session',
+  'presence_context',
+  'seal_provider_attempt',
   'submit_consent',
   'query'
 ]);

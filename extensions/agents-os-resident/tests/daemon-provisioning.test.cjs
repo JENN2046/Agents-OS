@@ -1,0 +1,484 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const {
+  chmodSync,
+  linkSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync
+} = require('node:fs');
+const { tmpdir } = require('node:os');
+const path = require('node:path');
+const test = require('node:test');
+
+const {
+  exitCodeFor,
+  parseDaemonArgs,
+  provisionResident,
+  startDaemon
+} = require('../companion/resident-daemon');
+const {
+  ACTIVATION_CONFIRMATION,
+  ACTIVATION_MODE
+} = require('../companion/constants');
+
+const BUILD_ID = `sha256:${'a'.repeat(64)}`;
+const SUCCESS = 'RESIDENT_WITNESS_PROVISIONED';
+
+function canonicalAuthority(overrides = {}) {
+  return JSON.stringify({
+    authorityId: 'authority:SELFTEST:ONE-SHOT',
+    protocol: 'MMR0_GENESIS_PROVISIONING_V1',
+    provisioningId: 'provisioning:SELFTEST:ONE-SHOT',
+    residentId: 'resident:LOCAL_OWNER_SESSION_V1:jenn',
+    ...overrides
+  });
+}
+
+function createFixture(t, authorityBytes = canonicalAuthority()) {
+  const quarantine = mkdtempSync(
+    path.join(tmpdir(), 'agents-os-resident-provisioning-unit-')
+  );
+  chmodSync(quarantine, 0o700);
+  const rootPath = path.join(
+    quarantine,
+    'agents-os-resident-local-owner-v1'
+  );
+  const witnessRootPath = path.join(quarantine, 'protected-witness');
+  const memoryBodyRootPath = path.join(quarantine, 'private-memory-bodies');
+  mkdirSync(rootPath, { mode: 0o700 });
+  mkdirSync(witnessRootPath, { mode: 0o700 });
+  mkdirSync(memoryBodyRootPath, { mode: 0o700 });
+  const authorityFilePath = path.join(quarantine, 'genesis-authority.json');
+  writeFileSync(authorityFilePath, authorityBytes, {
+    flag: 'wx',
+    mode: 0o600
+  });
+  chmodSync(authorityFilePath, 0o600);
+  t.after(() => rmSync(quarantine, { recursive: true, force: true }));
+  return {
+    authorityFilePath,
+    memoryBodyRootPath,
+    quarantine,
+    rootPath,
+    witnessRootPath
+  };
+}
+
+function provisionArgv(fixture, overrides = {}) {
+  const values = {
+    '--expected-build-id': BUILD_ID,
+    '--genesis-authority-file': fixture.authorityFilePath,
+    '--memory-body-root': fixture.memoryBodyRootPath,
+    '--operation': 'provision',
+    '--root': fixture.rootPath,
+    '--witness-root': fixture.witnessRootPath,
+    ...overrides
+  };
+  return [
+    '--operation', values['--operation'],
+    '--root', values['--root'],
+    '--witness-root', values['--witness-root'],
+    '--memory-body-root', values['--memory-body-root'],
+    '--expected-build-id', values['--expected-build-id'],
+    '--genesis-authority-file', values['--genesis-authority-file']
+  ];
+}
+
+function serveArgv(fixture, extras = []) {
+  return [
+    '--root', fixture.rootPath,
+    '--socket', path.join(fixture.quarantine, 'runtime', 'control.sock'),
+    '--expected-build-id', BUILD_ID,
+    '--witness-root', fixture.witnessRootPath,
+    '--memory-body-root', fixture.memoryBodyRootPath,
+    ...extras
+  ];
+}
+
+async function assertAuthorityRejected(t, authorityBytes, mutate = null) {
+  const fixture = createFixture(t, authorityBytes);
+  mutate?.(fixture);
+  let lifecycleCalls = 0;
+  await assert.rejects(
+    provisionResident({
+      argv: provisionArgv(fixture),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => {
+        lifecycleCalls += 1;
+        throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+      }
+    }),
+    (error) => error.code === 'RESIDENT_PROVISIONING_AUTHORITY_REJECTED'
+      && error.message === 'RESIDENT_PROVISIONING_AUTHORITY_REJECTED'
+  );
+  assert.equal(lifecycleCalls, 0);
+}
+
+test('provision parser is one exact profile and protected serve has no genesis bypass', (t) => {
+  const fixture = createFixture(t);
+  const valid = provisionArgv(fixture);
+  assert.deepEqual(parseDaemonArgs(valid), {
+    authorityFilePath: fixture.authorityFilePath,
+    continuityEvidence: null,
+    expectedBuildId: BUILD_ID,
+    genesisProvisioningAuthority: null,
+    memoryBodyRootPath: fixture.memoryBodyRootPath,
+    operation: 'provision',
+    rootPath: fixture.rootPath,
+    socketPath: null,
+    witnessRootPath: fixture.witnessRootPath
+  });
+
+  const reject = (argv) => assert.throws(
+    () => parseDaemonArgs(argv),
+    {
+      code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID',
+      message: 'RESIDENT_DAEMON_CONFIGURATION_INVALID'
+    }
+  );
+  for (const required of [
+    '--operation',
+    '--root',
+    '--witness-root',
+    '--memory-body-root',
+    '--expected-build-id',
+    '--genesis-authority-file'
+  ]) {
+    const index = valid.indexOf(required);
+    reject([...valid.slice(0, index), ...valid.slice(index + 2)]);
+  }
+  reject([...valid, '--socket', '/tmp/forbidden.sock']);
+  reject([...valid, '--continuity-evidence', '{}']);
+  reject([...valid, '--genesis-provisioning-authority', canonicalAuthority()]);
+  reject([...valid, '--root', fixture.rootPath]);
+  reject([...valid, '--unknown']);
+  reject(valid.map((value) => value === 'provision' ? 'PROVISION' : value));
+  reject(valid.map((value) => value === fixture.authorityFilePath
+    ? 'relative-authority.json'
+    : value));
+  reject(provisionArgv(fixture, {
+    '--witness-root': fixture.rootPath
+  }));
+  reject(provisionArgv(fixture, {
+    '--witness-root': path.join(fixture.rootPath, 'nested-witness')
+  }));
+  reject(provisionArgv(fixture, {
+    '--memory-body-root': `${fixture.quarantine}/alias/../private-memory-bodies`
+  }));
+
+  reject(serveArgv(fixture, [
+    '--genesis-provisioning-authority',
+    canonicalAuthority()
+  ]));
+  reject(serveArgv(fixture, [
+    '--continuity-evidence',
+    '{}'
+  ]));
+  reject(serveArgv(fixture).map((value) => value === fixture.witnessRootPath
+    ? fixture.rootPath
+    : value));
+});
+
+test('one-shot provisioning verifies integrity, initializes, shuts down, and never starts a server', async (t) => {
+  const fixture = createFixture(t);
+  const events = [];
+  let activationConfig;
+  let serverCalls = 0;
+  const result = await provisionResident({
+    argv: provisionArgv(fixture),
+    verifyIntegrity: () => {
+      events.push('integrity');
+      return { buildId: BUILD_ID };
+    },
+    createLifecycle: () => {
+      events.push('create-lifecycle');
+      return {
+        initialize: async (config) => {
+          events.push('initialize');
+          activationConfig = config;
+        },
+        shutdown: async () => {
+          events.push('shutdown');
+        }
+      };
+    },
+    createServer: () => {
+      serverCalls += 1;
+      throw new Error('SERVER_MUST_NOT_BE_CREATED');
+    }
+  });
+  assert.deepEqual(events, [
+    'integrity',
+    'create-lifecycle',
+    'initialize',
+    'shutdown'
+  ]);
+  assert.equal(serverCalls, 0);
+  assert.deepEqual(activationConfig, {
+    AGENTS_OS_RESIDENT_ACTIVATION_CONFIRMATION: ACTIVATION_CONFIRMATION,
+    AGENTS_OS_RESIDENT_ACTIVATION_MODE: ACTIVATION_MODE,
+    AGENTS_OS_RESIDENT_GENESIS_PROVISIONING_AUTHORITY: JSON.parse(
+      canonicalAuthority()
+    ),
+    AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: fixture.memoryBodyRootPath,
+    AGENTS_OS_RESIDENT_ROOT: fixture.rootPath,
+    AGENTS_OS_RESIDENT_WITNESS_ROOT: fixture.witnessRootPath
+  });
+  assert.deepEqual(result, {
+    operation: 'provision',
+    result: SUCCESS
+  });
+
+  let lifecycleCalls = 0;
+  await assert.rejects(
+    provisionResident({
+      argv: provisionArgv(fixture, {
+        '--expected-build-id': `sha256:${'0'.repeat(64)}`
+      }),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => {
+        lifecycleCalls += 1;
+      }
+    }),
+    { code: 'RESIDENT_INTEGRITY_MISMATCH' }
+  );
+  assert.equal(lifecycleCalls, 0);
+
+  await assert.rejects(
+    provisionResident({
+      argv: provisionArgv(fixture, {
+        '--expected-build-id': `sha256:${'0'.repeat(64)}`,
+        '--genesis-authority-file': path.join(
+          fixture.quarantine,
+          'authority-must-not-be-read.json'
+        )
+      }),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => {
+        throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+      }
+    }),
+    { code: 'RESIDENT_INTEGRITY_MISMATCH' }
+  );
+
+  await assert.rejects(
+    provisionResident({
+      argv: provisionArgv(fixture),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => ({
+        initialize: async () => {},
+        shutdown: async () => {
+          throw new Error('PRIVATE_SHUTDOWN_DETAIL');
+        }
+      })
+    }),
+    {
+      code: 'RESIDENT_PROVISIONING_FAILED',
+      message: 'RESIDENT_PROVISIONING_FAILED'
+    }
+  );
+  assert.equal(exitCodeFor({ code: 'RESIDENT_PROVISIONING_FAILED' }), 73);
+});
+
+test('serve and provision entrypoints reject the other operation before lifecycle or server creation', async (t) => {
+  const fixture = createFixture(t);
+  let lifecycleCalls = 0;
+  let serverCalls = 0;
+  await assert.rejects(
+    startDaemon({
+      argv: provisionArgv(fixture),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => {
+        lifecycleCalls += 1;
+      },
+      createServer: () => {
+        serverCalls += 1;
+      }
+    }),
+    { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' }
+  );
+  await assert.rejects(
+    provisionResident({
+      argv: serveArgv(fixture),
+      verifyIntegrity: () => ({ buildId: BUILD_ID }),
+      createLifecycle: () => {
+        lifecycleCalls += 1;
+      }
+    }),
+    { code: 'RESIDENT_DAEMON_CONFIGURATION_INVALID' }
+  );
+  assert.equal(lifecycleCalls, 0);
+  assert.equal(serverCalls, 0);
+});
+
+test('manual provisioning requires three existing canonical current-owner 0700 roots', async (t) => {
+  for (const key of ['rootPath', 'witnessRootPath', 'memoryBodyRootPath']) {
+    await t.test(`${key} mode`, async (inner) => {
+      const fixture = createFixture(inner);
+      chmodSync(fixture[key], 0o750);
+      let lifecycleCalls = 0;
+      await assert.rejects(
+        provisionResident({
+          argv: provisionArgv(fixture),
+          verifyIntegrity: () => ({ buildId: BUILD_ID }),
+          createLifecycle: () => {
+            lifecycleCalls += 1;
+          }
+        }),
+        {
+          code: 'RESIDENT_PROVISIONING_ROOT_REJECTED',
+          message: 'RESIDENT_PROVISIONING_ROOT_REJECTED'
+        }
+      );
+      assert.equal(lifecycleCalls, 0);
+    });
+  }
+
+  await t.test('missing root', async (inner) => {
+    const fixture = createFixture(inner);
+    rmSync(fixture.memoryBodyRootPath, { recursive: true });
+    await assert.rejects(
+      provisionResident({
+        argv: provisionArgv(fixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID }),
+        createLifecycle: () => {
+          throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+        }
+      }),
+      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+    );
+  });
+
+  await t.test('symlinked root or ancestor', async (inner) => {
+    const fixture = createFixture(inner);
+    const target = path.join(fixture.quarantine, 'actual-witness');
+    const alias = path.join(fixture.quarantine, 'aliased-witness');
+    mkdirSync(target, { mode: 0o700 });
+    symlinkSync(target, alias);
+    const aliasedFixture = { ...fixture, witnessRootPath: alias };
+    await assert.rejects(
+      provisionResident({
+        argv: provisionArgv(aliasedFixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID }),
+        createLifecycle: () => {
+          throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+        }
+      }),
+      { code: 'RESIDENT_PROVISIONING_ROOT_REJECTED' }
+    );
+  });
+});
+
+test('authority file accepts only stable owner 0600 O_NOFOLLOW canonical UTF-8 JSON', async (t) => {
+  await t.test('pretty or trailing JSON', async (inner) => {
+    await assertAuthorityRejected(inner, `${JSON.stringify(
+      JSON.parse(canonicalAuthority()),
+      null,
+      2
+    )}\n`);
+  });
+  await t.test('wrong key order', async (inner) => {
+    await assertAuthorityRejected(inner, JSON.stringify({
+      residentId: 'resident:LOCAL_OWNER_SESSION_V1:jenn',
+      provisioningId: 'provisioning:SELFTEST:ONE-SHOT',
+      protocol: 'MMR0_GENESIS_PROVISIONING_V1',
+      authorityId: 'authority:SELFTEST:ONE-SHOT'
+    }));
+  });
+  await t.test('extra key', async (inner) => {
+    await assertAuthorityRejected(inner, canonicalAuthority({ extra: false }));
+  });
+  await t.test('missing key', async (inner) => {
+    await assertAuthorityRejected(inner, JSON.stringify({
+      authorityId: 'authority:SELFTEST:ONE-SHOT',
+      protocol: 'MMR0_GENESIS_PROVISIONING_V1',
+      residentId: 'resident:LOCAL_OWNER_SESSION_V1:jenn'
+    }));
+  });
+  await t.test('wrong protocol', async (inner) => {
+    await assertAuthorityRejected(inner, canonicalAuthority({
+      protocol: 'MMR0_GENESIS_PROVISIONING_V2'
+    }));
+  });
+  await t.test('non-canonical token', async (inner) => {
+    await assertAuthorityRejected(inner, canonicalAuthority({
+      authorityId: 'authority:has whitespace'
+    }));
+  });
+  await t.test('UTF-8 BOM', async (inner) => {
+    await assertAuthorityRejected(inner, Buffer.concat([
+      Buffer.from([0xef, 0xbb, 0xbf]),
+      Buffer.from(canonicalAuthority(), 'utf8')
+    ]));
+  });
+  await t.test('invalid UTF-8', async (inner) => {
+    await assertAuthorityRejected(inner, Buffer.from([0xc3, 0x28]));
+  });
+  await t.test('empty file', async (inner) => {
+    await assertAuthorityRejected(inner, Buffer.alloc(0));
+  });
+  await t.test('oversize', async (inner) => {
+    await assertAuthorityRejected(inner, Buffer.alloc(4097, 0x61));
+  });
+  await t.test('0644 mode', async (inner) => {
+    await assertAuthorityRejected(inner, canonicalAuthority(), (fixture) => {
+      chmodSync(fixture.authorityFilePath, 0o644);
+    });
+  });
+  await t.test('hard link', async (inner) => {
+    await assertAuthorityRejected(inner, canonicalAuthority(), (fixture) => {
+      linkSync(
+        fixture.authorityFilePath,
+        path.join(fixture.quarantine, 'authority-hardlink.json')
+      );
+    });
+  });
+  await t.test('final symlink', async (inner) => {
+    const fixture = createFixture(inner);
+    const target = path.join(fixture.quarantine, 'authority-target.json');
+    writeFileSync(target, canonicalAuthority(), { mode: 0o600 });
+    chmodSync(target, 0o600);
+    rmSync(fixture.authorityFilePath);
+    symlinkSync(target, fixture.authorityFilePath);
+    let lifecycleCalls = 0;
+    await assert.rejects(
+      provisionResident({
+        argv: provisionArgv(fixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID }),
+        createLifecycle: () => {
+          lifecycleCalls += 1;
+        }
+      }),
+      { code: 'RESIDENT_PROVISIONING_AUTHORITY_REJECTED' }
+    );
+    assert.equal(lifecycleCalls, 0);
+  });
+  await t.test('symlinked ancestor', async (inner) => {
+    const fixture = createFixture(inner);
+    const actual = path.join(fixture.quarantine, 'actual-authority-directory');
+    const alias = path.join(fixture.quarantine, 'authority-directory-alias');
+    mkdirSync(actual, { mode: 0o700 });
+    const target = path.join(actual, 'genesis-authority.json');
+    writeFileSync(target, canonicalAuthority(), { mode: 0o600 });
+    chmodSync(target, 0o600);
+    symlinkSync(actual, alias);
+    const aliasedFixture = {
+      ...fixture,
+      authorityFilePath: path.join(alias, 'genesis-authority.json')
+    };
+    await assert.rejects(
+      provisionResident({
+        argv: provisionArgv(aliasedFixture),
+        verifyIntegrity: () => ({ buildId: BUILD_ID }),
+        createLifecycle: () => {
+          throw new Error('LIFECYCLE_MUST_NOT_BE_CREATED');
+        }
+      }),
+      { code: 'RESIDENT_PROVISIONING_AUTHORITY_REJECTED' }
+    );
+  });
+});

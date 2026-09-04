@@ -5,7 +5,9 @@ use std::fs::File;
 use std::io::Read;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use rusqlite::{Connection, OpenFlags, OptionalExtension, Transaction, TransactionBehavior, params};
+use rusqlite::{
+    Connection, OpenFlags, OptionalExtension, Transaction, TransactionBehavior, params,
+};
 use serde_json::{Map, Value, json};
 use unicode_normalization::UnicodeNormalization;
 
@@ -17,7 +19,15 @@ use super::consent::{
     normalize_transcript, parse_transcript,
 };
 use super::continuity::{ContinuityAnchor, LocalContinuitySnapshot};
+use super::memory::{
+    MemoryBodyVerifier, MemoryVerificationReceipt, validate_reserved_memory_mutation,
+    validate_stored_reserved_memory_value, verify_memory_authority_integrity,
+};
 use super::schema;
+use super::work_source::{
+    reject_reserved_work_projection_mutation, validate_stored_no_work_projection,
+    verify_no_stored_work_projection,
+};
 use super::{LocalOwnerError, PROFILE_ID};
 
 pub const DEFAULT_PROPOSAL_TTL_SECONDS: u64 = 300;
@@ -127,12 +137,25 @@ fn validate_mmr_core_mutation(
     if plane_required {
         require_exact_map_keys(
             components,
-            &["authority", "content", "lifecycle", "plane", "provenance", "transition"],
+            &[
+                "authority",
+                "content",
+                "lifecycle",
+                "plane",
+                "provenance",
+                "transition",
+            ],
         )?;
     } else {
         require_exact_map_keys(
             components,
-            &["authority", "content", "lifecycle", "provenance", "transition"],
+            &[
+                "authority",
+                "content",
+                "lifecycle",
+                "provenance",
+                "transition",
+            ],
         )?;
     }
     let content = require_exact_object(&components["content"], &["value"])?;
@@ -483,9 +506,7 @@ fn validate_mmr_provenance(
     let actor_valid = match mutation_actor_type {
         "NOBAO" => mutation_actor_ref.starts_with("actor:nobao:"),
         "EXPLICIT_HUMAN_OPERATOR" => mutation_actor_ref.starts_with("actor:human:"),
-        "SYNTHETIC_TEST_HARNESS" => {
-            mutation_actor_ref.starts_with("actor:synthetic-test-harness:")
-        }
+        "SYNTHETIC_TEST_HARNESS" => mutation_actor_ref.starts_with("actor:synthetic-test-harness:"),
         _ => false,
     };
     if !subject_ref.starts_with("subject:")
@@ -785,10 +806,11 @@ fn validate_stored_mmr_core_state(value: &Value) -> Result<(), LocalOwnerError> 
         &synthetic_mutation,
         protocol != "MMR0_EXPLICIT_MUTATION_CORE_V2",
     ) {
-        Ok(_) => Ok(()),
-        Err(LocalOwnerError::MmrProvenanceRequired) => {
-            Err(LocalOwnerError::MmrProvenanceRequired)
+        Ok(_) => {
+            validate_stored_reserved_memory_value(value)?;
+            validate_stored_no_work_projection(value)
         }
+        Err(LocalOwnerError::MmrProvenanceRequired) => Err(LocalOwnerError::MmrProvenanceRequired),
         Err(LocalOwnerError::MmrSourceAuthorityMismatch) => {
             Err(LocalOwnerError::MmrSourceAuthorityMismatch)
         }
@@ -848,9 +870,7 @@ fn mutation_fact_kind(
     target_state_id: &str,
 ) -> Result<&'static str, LocalOwnerError> {
     let kind = match mutation_type {
-        "CREATE_COMMITMENT" | "FULFILL_COMMITMENT" | "RELEASE_COMMITMENT" => {
-            COMMITMENT_FACT_KIND
-        }
+        "CREATE_COMMITMENT" | "FULFILL_COMMITMENT" | "RELEASE_COMMITMENT" => COMMITMENT_FACT_KIND,
         "CREATE_EVIDENCE" => EVIDENCE_FACT_KIND,
         "CREATE_CANDIDATE" => CANDIDATE_FACT_KIND,
         "CREATE_SUMMARY" => SUMMARY_FACT_KIND,
@@ -906,9 +926,7 @@ fn decode_mmr_fact(
 /// Verifies the identity relation used to publish MMR Current.  The pointer's
 /// stored identity is not authority: the referenced fact is resolved and its
 /// identity is recomputed from canonical bytes before the relation is trusted.
-fn verify_mmr_current_pointer_integrity(
-    connection: &Connection,
-) -> Result<(), LocalOwnerError> {
+fn verify_mmr_current_pointer_integrity(connection: &Connection) -> Result<(), LocalOwnerError> {
     let mut statement = connection.prepare(
         "SELECT p.logical_id,p.current_fact_revision,p.current_fact_ref,p.current_fact_fingerprint,p.pointer_version,f.fact_ref,f.subject_ref,f.canonical_bytes,f.fact_fingerprint,f.predecessor_fact_fingerprint FROM current_pointer p LEFT JOIN canonical_fact f ON f.fact_kind=p.fact_kind AND f.logical_id=p.logical_id AND f.fact_revision=p.current_fact_revision WHERE p.fact_kind='MMR_STATE_CORE' ORDER BY p.logical_id",
     )?;
@@ -966,9 +984,7 @@ fn verify_mmr_current_pointer_integrity(
                 LocalOwnerError::MmrSourceAuthorityMismatch
             }
             LocalOwnerError::MmrAuthorityScopeDenied => LocalOwnerError::MmrAuthorityScopeDenied,
-            LocalOwnerError::MmrSourceScopeEscalation => {
-                LocalOwnerError::MmrSourceScopeEscalation
-            }
+            LocalOwnerError::MmrSourceScopeEscalation => LocalOwnerError::MmrSourceScopeEscalation,
             LocalOwnerError::MmrObserverControllerPromotion => {
                 LocalOwnerError::MmrObserverControllerPromotion
             }
@@ -992,9 +1008,7 @@ fn verify_mmr_current_pointer_integrity(
 /// the same fact identity.  Exactly one Current must point at the chain head.
 /// Any break is a hard stop: the Runtime must not continue Active on a state
 /// whose required transition cannot be audited, and no repair is fabricated.
-fn verify_mmr_transition_history_integrity(
-    connection: &Connection,
-) -> Result<(), LocalOwnerError> {
+fn verify_mmr_transition_history_integrity(connection: &Connection) -> Result<(), LocalOwnerError> {
     let mut state_ids = BTreeSet::new();
     let mut id_statement = connection.prepare(
         "SELECT DISTINCT logical_id FROM canonical_fact WHERE fact_kind='MMR_STATE_CORE' ORDER BY logical_id",
@@ -1145,7 +1159,7 @@ fn read_kind_current(
     })))
 }
 
-fn read_mmr_current(
+pub(super) fn read_mmr_current(
     connection: &Connection,
     state_id: &str,
 ) -> Result<Option<Value>, LocalOwnerError> {
@@ -1402,8 +1416,12 @@ fn validate_stored_mmr_commitment_state(value: &Value) -> Result<(), LocalOwnerE
         return Err(LocalOwnerError::StateCorrupt);
     }
     let mutation_type = require_string(object, "mutationType", 32)?;
-    if !["CREATE_COMMITMENT", "FULFILL_COMMITMENT", "RELEASE_COMMITMENT"]
-        .contains(&mutation_type)
+    if ![
+        "CREATE_COMMITMENT",
+        "FULFILL_COMMITMENT",
+        "RELEASE_COMMITMENT",
+    ]
+    .contains(&mutation_type)
     {
         return Err(LocalOwnerError::StateCorrupt);
     }
@@ -1599,6 +1617,10 @@ fn validate_mmr_candidate_creation(
     mutation_object: &Map<String, Value>,
 ) -> Result<(), LocalOwnerError> {
     let target = require_nonempty_string(mutation_object, "targetStateId", 200)?;
+    if target.starts_with(super::memory::MEMORY_CANDIDATE_PREFIX) {
+        validate_reserved_memory_mutation(connection, mutation_object)?;
+        return Ok(());
+    }
     let content = mutation_object["components"]["content"]["value"]
         .as_object()
         .ok_or(LocalOwnerError::InvalidInput)?;
@@ -1649,7 +1671,7 @@ fn read_evidence_current(
     read_kind_current(connection, EVIDENCE_FACT_KIND, evidence_id)
 }
 
-fn read_candidate_current(
+pub(super) fn read_candidate_current(
     connection: &Connection,
     candidate_id: &str,
 ) -> Result<Option<Value>, LocalOwnerError> {
@@ -1896,9 +1918,12 @@ fn validate_stored_mmr_evidence_state(value: &Value) -> Result<(), LocalOwnerErr
             "stateId",
         ],
     )?;
-    validate_stored_mmr_fact_common(object, EVIDENCE_PROTOCOL, &["CREATE_EVIDENCE"], |revision| {
-        revision == 1
-    })?;
+    validate_stored_mmr_fact_common(
+        object,
+        EVIDENCE_PROTOCOL,
+        &["CREATE_EVIDENCE"],
+        |revision| revision == 1,
+    )?;
     let identity = require_exact_object(
         &object["evidenceIdentity"],
         &[
@@ -2007,7 +2032,8 @@ fn validate_stored_mmr_candidate_state(value: &Value) -> Result<(), LocalOwnerEr
         return Err(LocalOwnerError::StateCorrupt);
     }
     let _ = require_nonempty_string(candidate, "motivatingEvidenceRef", 200);
-    Ok(())
+    validate_stored_reserved_memory_value(value)?;
+    validate_stored_no_work_projection(value)
 }
 
 fn validate_stored_mmr_summary_state(value: &Value) -> Result<(), LocalOwnerError> {
@@ -2970,9 +2996,8 @@ fn verify_kind_chain_integrity(
         state_ids.insert(id?);
     }
     let mut pointer_ids = BTreeSet::new();
-    let mut pointer_statement = connection.prepare(
-        "SELECT logical_id FROM current_pointer WHERE fact_kind=?1 ORDER BY logical_id",
-    )?;
+    let mut pointer_statement = connection
+        .prepare("SELECT logical_id FROM current_pointer WHERE fact_kind=?1 ORDER BY logical_id")?;
     let pointer_rows = pointer_statement.query_map([fact_kind], |row| row.get::<_, String>(0))?;
     for id in pointer_rows {
         pointer_ids.insert(id?);
@@ -3076,16 +3101,22 @@ fn verify_kind_chain_integrity(
 }
 
 fn verify_p2f_kind_integrity(connection: &Connection) -> Result<(), LocalOwnerError> {
-    verify_kind_chain_integrity(connection, EVIDENCE_FACT_KIND, &["MMR_EVIDENCE_CORE_CREATED"])?;
+    verify_kind_chain_integrity(
+        connection,
+        EVIDENCE_FACT_KIND,
+        &["MMR_EVIDENCE_CORE_CREATED"],
+    )?;
     verify_kind_chain_integrity(
         connection,
         CANDIDATE_FACT_KIND,
-        &["MMR_CANDIDATE_CORE_CREATED", "MMR_CANDIDATE_CORE_EVIDENCE_ADDED"],
+        &[
+            "MMR_CANDIDATE_CORE_CREATED",
+            "MMR_CANDIDATE_CORE_EVIDENCE_ADDED",
+        ],
     )?;
     verify_kind_chain_integrity(connection, SUMMARY_FACT_KIND, &["MMR_SUMMARY_CORE_CREATED"])?;
     Ok(())
 }
-
 
 /// Verifies the identity relation used to publish commitment Current.  The
 /// pointer's stored identity is not authority: the referenced fact is resolved
@@ -3100,12 +3131,10 @@ fn verify_commitment_pointer_integrity(connection: &Connection) -> Result<(), Lo
         commitment_ids.insert(id?);
     }
     let mut pointer_ids = BTreeSet::new();
-    let mut pointer_statement = connection.prepare(
-        "SELECT logical_id FROM current_pointer WHERE fact_kind=?1 ORDER BY logical_id",
-    )?;
-    let pointer_rows = pointer_statement.query_map([COMMITMENT_FACT_KIND], |row| {
-        row.get::<_, String>(0)
-    })?;
+    let mut pointer_statement = connection
+        .prepare("SELECT logical_id FROM current_pointer WHERE fact_kind=?1 ORDER BY logical_id")?;
+    let pointer_rows =
+        pointer_statement.query_map([COMMITMENT_FACT_KIND], |row| row.get::<_, String>(0))?;
     for id in pointer_rows {
         pointer_ids.insert(id?);
     }
@@ -3130,15 +3159,8 @@ fn verify_commitment_pointer_integrity(connection: &Connection) -> Result<(), Lo
         let mut expected_revision = 1_u64;
         let mut previous_fingerprint: Option<String> = None;
         for row in rows {
-            let (
-                revision,
-                fact_ref,
-                subject_ref,
-                bytes,
-                fingerprint,
-                predecessor,
-                event_sequence,
-            ) = row?;
+            let (revision, fact_ref, subject_ref, bytes, fingerprint, predecessor, event_sequence) =
+                row?;
             let revision = as_u64(revision)?;
             if revision != expected_revision || predecessor != previous_fingerprint {
                 return Err(LocalOwnerError::MmrTransitionHistoryBroken);
@@ -3441,7 +3463,16 @@ fn mmr_committed_operation_outcome(
             },
         )
         .optional()?;
-    let Some((fact_kind, state_id, revision, operation_fingerprint, basis_ref, basis_type, predecessor)) = row else {
+    let Some((
+        fact_kind,
+        state_id,
+        revision,
+        operation_fingerprint,
+        basis_ref,
+        basis_type,
+        predecessor,
+    )) = row
+    else {
         return Ok(None);
     };
     let revision = as_u64(revision)?;
@@ -3627,6 +3658,7 @@ struct PendingMmrProposal {
     mutation_type: String,
     target_state_id: String,
     request: Value,
+    memory_verification: Option<MemoryVerificationReceipt>,
     challenge: Challenge,
     expires_at_unix_ms: u64,
     failed_attempts: u8,
@@ -3641,6 +3673,7 @@ struct MutationCommit {
 
 pub struct LocalOwnerStore {
     connection: Connection,
+    memory_body_verifier: Option<MemoryBodyVerifier>,
     pending: Option<PendingProposal>,
     pending_mmr: BTreeMap<String, PendingMmrProposal>,
     // P2-H OBS-ACK: read-only caller-visible acknowledgement disposition per
@@ -3653,6 +3686,20 @@ impl LocalOwnerStore {
         database_path: &std::path::Path,
         process_nonce: Option<&[u8]>,
         initialize_genesis: bool,
+    ) -> Result<Self, LocalOwnerError> {
+        Self::open_admitted_with_memory_verifier(
+            database_path,
+            process_nonce,
+            initialize_genesis,
+            None,
+        )
+    }
+
+    pub(super) fn open_admitted_with_memory_verifier(
+        database_path: &std::path::Path,
+        process_nonce: Option<&[u8]>,
+        initialize_genesis: bool,
+        memory_body_verifier: Option<MemoryBodyVerifier>,
     ) -> Result<Self, LocalOwnerError> {
         let flags = OpenFlags::SQLITE_OPEN_READ_WRITE
             | OpenFlags::SQLITE_OPEN_NO_MUTEX
@@ -3692,8 +3739,11 @@ impl LocalOwnerStore {
         verify_mmr_transition_history_integrity(&connection)?;
         verify_commitment_pointer_integrity(&connection)?;
         verify_p2f_kind_integrity(&connection)?;
+        verify_memory_authority_integrity(&connection)?;
+        verify_no_stored_work_projection(&connection)?;
         Ok(Self {
             connection,
+            memory_body_verifier,
             pending: None,
             pending_mmr: BTreeMap::new(),
             ack_trace: BTreeMap::new(),
@@ -3707,6 +3757,8 @@ impl LocalOwnerStore {
         verify_mmr_transition_history_integrity(&self.connection)?;
         verify_commitment_pointer_integrity(&self.connection)?;
         verify_p2f_kind_integrity(&self.connection)?;
+        verify_memory_authority_integrity(&self.connection)?;
+        verify_no_stored_work_projection(&self.connection)?;
         let snapshot = continuity_snapshot_on(&self.connection)?;
         let anchor = snapshot.current.ok_or(LocalOwnerError::StateCorrupt)?;
         Ok(json!({
@@ -3743,7 +3795,13 @@ impl LocalOwnerStore {
                 "protectionOutcome",
                 "restoredFrom",
             ],
-            &["exclusionConstraints", "projectionStates", "requestedClaim", "restoreMode"],
+            &[
+                "exclusionConstraints",
+                "projectionStates",
+                "requestedClaim",
+                "restoreMode",
+                "witnessPredecessorCommitment",
+            ],
         )?;
         let checkpoint_identity = require_nonempty_string(object, "checkpointIdentity", 300)?;
         let restored_from = require_nonempty_string(object, "restoredFrom", 300)?;
@@ -3771,6 +3829,11 @@ impl LocalOwnerStore {
             return Err(LocalOwnerError::InvalidInput);
         }
         if restored_from != checkpoint_identity {
+            return Err(LocalOwnerError::InvalidInput);
+        }
+        let witness_predecessor_commitment =
+            optional_string(object, "witnessPredecessorCommitment", 71)?;
+        if witness_predecessor_commitment.is_some_and(|value| !is_prefixed_sha256(value)) {
             return Err(LocalOwnerError::InvalidInput);
         }
 
@@ -3824,6 +3887,7 @@ impl LocalOwnerStore {
             lineage_authority,
             projection_states,
             exclusion_constraints,
+            witness_predecessor_commitment,
         )
     }
 
@@ -3944,10 +4008,7 @@ impl LocalOwnerStore {
         }))
     }
 
-    pub fn prepare_mmr_mutation(
-        &mut self,
-        input: &Value,
-    ) -> Result<Value, LocalOwnerError> {
+    pub fn prepare_mmr_mutation(&mut self, input: &Value) -> Result<Value, LocalOwnerError> {
         verify_mmr_current_pointer_integrity(&self.connection)?;
         let object = require_exact_object(input, &["attachmentGeneration", "request"])?;
         let generation = require_u64(object, "attachmentGeneration")?;
@@ -4088,20 +4149,30 @@ impl LocalOwnerStore {
         }
         match mutation_type {
             "CREATE_EVIDENCE" => validate_mmr_evidence_identity(&self.connection, mutation_object)?,
-            "CREATE_CANDIDATE" => validate_mmr_candidate_creation(&self.connection, mutation_object)?,
+            "CREATE_CANDIDATE" => {
+                validate_mmr_candidate_creation(&self.connection, mutation_object)?
+            }
             "CREATE_SUMMARY" => validate_mmr_summary_creation(&self.connection, mutation_object)?,
             "ADD_EVIDENCE" => {
                 if mutation_fact_kind(&self.connection, mutation_type, target_state_id)?
                     == CANDIDATE_FACT_KIND
                 {
-                    validate_mmr_candidate_evidence_transition(
-                        &self.connection,
-                        mutation_object,
-                    )?;
+                    validate_mmr_candidate_evidence_transition(&self.connection, mutation_object)?;
                 }
             }
             _ => {}
         }
+        reject_reserved_work_projection_mutation(mutation_object)?;
+        let memory_binding = validate_reserved_memory_mutation(&self.connection, mutation_object)?;
+        let memory_verification = match memory_binding {
+            Some(binding) => Some(
+                self.memory_body_verifier
+                    .as_ref()
+                    .ok_or(LocalOwnerError::MemoryBodyVerifierUnavailable)?
+                    .verify_for_mutation(&binding, operation_id, &operation_fingerprint)?,
+            ),
+            None => None,
+        };
         let consent_kind = mmr_consent_kind(mutation_type)?;
         let challenge = self.unique_mmr_challenge(consent_kind)?;
         let prompt = challenge.prompt(consent_kind);
@@ -4116,9 +4187,9 @@ impl LocalOwnerStore {
                     mutation_type: mutation_type.to_owned(),
                     target_state_id: target_state_id.to_owned(),
                     request: request.clone(),
+                    memory_verification,
                     challenge,
-                    expires_at_unix_ms: unix_ms()?
-                        + DEFAULT_PROPOSAL_TTL_SECONDS * 1000,
+                    expires_at_unix_ms: unix_ms()? + DEFAULT_PROPOSAL_TTL_SECONDS * 1000,
                     failed_attempts: 0,
                 },
             )
@@ -4146,15 +4217,24 @@ impl LocalOwnerStore {
     ) -> Result<Value, LocalOwnerError> {
         let object = require_exact_object(
             input,
-            &["attachmentGeneration", "ingress", "operationId", "transcript"],
+            &[
+                "attachmentGeneration",
+                "ingress",
+                "operationId",
+                "transcript",
+            ],
         )?;
         let generation = require_u64(object, "attachmentGeneration")?;
         let operation_id = require_nonempty_string(object, "operationId", 200)?;
         let ingress = require_string(object, "ingress", 64)?;
         let transcript = require_string(object, "transcript", 4096)?;
         if generation == 0
-            || !["TYPED_TEXT", "FINAL_VOICE_TRANSCRIPT", "PARTIAL_VOICE_TRANSCRIPT"]
-                .contains(&ingress)
+            || ![
+                "TYPED_TEXT",
+                "FINAL_VOICE_TRANSCRIPT",
+                "PARTIAL_VOICE_TRANSCRIPT",
+            ]
+            .contains(&ingress)
         {
             return Err(LocalOwnerError::InvalidInput);
         }
@@ -4172,15 +4252,21 @@ impl LocalOwnerStore {
         }
         let consent_kind = mmr_consent_kind(&pending.mutation_type)?;
         match parse_transcript(transcript, consent_kind, &pending.challenge) {
-            ConsentParse::Cancel => Ok(json!({"accepted": false, "resultCode": "PROPOSAL_CANCELLED"})),
+            ConsentParse::Cancel => {
+                Ok(json!({"accepted": false, "resultCode": "PROPOSAL_CANCELLED"}))
+            }
             ConsentParse::Reject => {
                 pending.failed_attempts += 1;
                 if pending.failed_attempts >= 3 {
-                    Ok(json!({"accepted": false, "attemptsRemaining": 0, "resultCode": "PROPOSAL_INVALIDATED"}))
+                    Ok(
+                        json!({"accepted": false, "attemptsRemaining": 0, "resultCode": "PROPOSAL_INVALIDATED"}),
+                    )
                 } else {
                     let attempts_remaining = 3 - pending.failed_attempts;
                     self.pending_mmr.insert(operation_id.to_owned(), pending);
-                    Ok(json!({"accepted": false, "attemptsRemaining": attempts_remaining, "resultCode": "CONSENT_REJECTED"}))
+                    Ok(
+                        json!({"accepted": false, "attemptsRemaining": attempts_remaining, "resultCode": "CONSENT_REJECTED"}),
+                    )
                 }
             }
             ConsentParse::Approve => {
@@ -4226,10 +4312,8 @@ impl LocalOwnerStore {
                         Err(LocalOwnerError::InjectedCrash)
                     }
                     Err(LocalOwnerError::MmrCurrentConflict) => {
-                        let mutation_object = validate_mmr_core_mutation(
-                            &pending.request["mutation"],
-                            true,
-                        )?;
+                        let mutation_object =
+                            validate_mmr_core_mutation(&pending.request["mutation"], true)?;
                         let cutpoint = kind_current_metadata(
                             &self.connection,
                             mutation_fact_kind(
@@ -4326,6 +4410,8 @@ impl LocalOwnerStore {
     }
 
     pub fn query_mmr_core(&self, input: &Value) -> Result<Value, LocalOwnerError> {
+        verify_memory_authority_integrity(&self.connection)?;
+        verify_no_stored_work_projection(&self.connection)?;
         let object = require_exact_object(input, &["operation", "query"])?;
         let query = object.get("query").ok_or(LocalOwnerError::InvalidInput)?;
         match require_string(object, "operation", 64)? {
@@ -4339,7 +4425,9 @@ impl LocalOwnerStore {
                         "history": read_mmr_history(&self.connection, state_id)?,
                         "resultCode": "MMR_CURRENT_CORE_QUERY_OK",
                     })),
-                    None => Ok(json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_CURRENT_CORE_QUERY_OK"})),
+                    None => Ok(
+                        json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_CURRENT_CORE_QUERY_OK"}),
+                    ),
                 }
             }
             "QUERY_MMR_OPERATION_CORE" => {
@@ -4365,7 +4453,9 @@ impl LocalOwnerStore {
                         "history": read_commitment_history(&self.connection, state_id)?,
                         "resultCode": "MMR_COMMITMENT_CORE_QUERY_OK",
                     })),
-                    None => Ok(json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_COMMITMENT_CORE_QUERY_OK"})),
+                    None => Ok(
+                        json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_COMMITMENT_CORE_QUERY_OK"}),
+                    ),
                 }
             }
             "QUERY_MMR_EVIDENCE_CORE" => {
@@ -4378,7 +4468,9 @@ impl LocalOwnerStore {
                         "history": read_evidence_history(&self.connection, state_id)?,
                         "resultCode": "MMR_EVIDENCE_CORE_QUERY_OK",
                     })),
-                    None => Ok(json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_EVIDENCE_CORE_QUERY_OK"})),
+                    None => Ok(
+                        json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_EVIDENCE_CORE_QUERY_OK"}),
+                    ),
                 }
             }
             "QUERY_MMR_CANDIDATE_CORE" => {
@@ -4391,7 +4483,9 @@ impl LocalOwnerStore {
                         "history": read_candidate_history(&self.connection, state_id)?,
                         "resultCode": "MMR_CANDIDATE_CORE_QUERY_OK",
                     })),
-                    None => Ok(json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_CANDIDATE_CORE_QUERY_OK"})),
+                    None => Ok(
+                        json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_CANDIDATE_CORE_QUERY_OK"}),
+                    ),
                 }
             }
             "QUERY_MMR_SUMMARY_CORE" => {
@@ -4404,7 +4498,9 @@ impl LocalOwnerStore {
                         "history": read_summary_history(&self.connection, state_id)?,
                         "resultCode": "MMR_SUMMARY_CORE_QUERY_OK",
                     })),
-                    None => Ok(json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_SUMMARY_CORE_QUERY_OK"})),
+                    None => Ok(
+                        json!({"accepted": true, "current": null, "history": [], "resultCode": "MMR_SUMMARY_CORE_QUERY_OK"}),
+                    ),
                 }
             }
             "QUERY_MMR_SUMMARY_SUPPORT" => {
@@ -4436,23 +4532,17 @@ impl LocalOwnerStore {
                     "resultCode": "MMR_SUMMARY_SUPPORT_QUERY_OK",
                 }))
             }
-            "QUERY_MMR_PERSISTENCE_INSPECT" => {
-                Ok(json!({
-                    "accepted": true,
-                    "inspect": persistence_inspect(&self.connection)?,
-                    "resultCode": "MMR_PERSISTENCE_INSPECT_OK",
-                }))
-            }
-            "QUERY_MMR_RECALL_PROJECTION" => {
-                Ok(json!({
-                    "accepted": true,
-                    "projection": recall_projection(&self.connection, query)?,
-                    "resultCode": "MMR_RECALL_PROJECTION_READ_ONLY_OK",
-                }))
-            }
-            "QUERY_MMR_COGNITIVE_CONTEXT" => {
-                cognitive_context_projection(&self.connection, query)
-            }
+            "QUERY_MMR_PERSISTENCE_INSPECT" => Ok(json!({
+                "accepted": true,
+                "inspect": persistence_inspect(&self.connection)?,
+                "resultCode": "MMR_PERSISTENCE_INSPECT_OK",
+            })),
+            "QUERY_MMR_RECALL_PROJECTION" => Ok(json!({
+                "accepted": true,
+                "projection": recall_projection(&self.connection, query)?,
+                "resultCode": "MMR_RECALL_PROJECTION_READ_ONLY_OK",
+            })),
+            "QUERY_MMR_COGNITIVE_CONTEXT" => cognitive_context_projection(&self.connection, query),
             "QUERY_MMR_COGNITIVE_GENERATION" => {
                 cognitive_projection_generation(&self.connection, query)
             }
@@ -4485,6 +4575,46 @@ impl LocalOwnerStore {
             }
             _ => Err(LocalOwnerError::InvalidInput),
         }
+    }
+
+    pub fn query_presence_context(
+        &self,
+        input: &Value,
+        admission: &super::continuity::ContinuityAdmission,
+    ) -> Result<Value, LocalOwnerError> {
+        schema::verify(&self.connection)?;
+        verify_event_and_epoch_chains(&self.connection)?;
+        verify_mmr_current_pointer_integrity(&self.connection)?;
+        verify_mmr_transition_history_integrity(&self.connection)?;
+        verify_p2f_kind_integrity(&self.connection)?;
+        verify_memory_authority_integrity(&self.connection)?;
+        verify_no_stored_work_projection(&self.connection)?;
+        super::presence::query_presence_context(
+            &self.connection,
+            self.memory_body_verifier.as_ref(),
+            input,
+            admission,
+        )
+    }
+
+    pub fn seal_provider_attempt(
+        &self,
+        input: &Value,
+        admission: &super::continuity::ContinuityAdmission,
+    ) -> Result<Value, LocalOwnerError> {
+        schema::verify(&self.connection)?;
+        verify_event_and_epoch_chains(&self.connection)?;
+        verify_mmr_current_pointer_integrity(&self.connection)?;
+        verify_mmr_transition_history_integrity(&self.connection)?;
+        verify_p2f_kind_integrity(&self.connection)?;
+        verify_memory_authority_integrity(&self.connection)?;
+        verify_no_stored_work_projection(&self.connection)?;
+        super::presence::seal_provider_attempt(
+            &self.connection,
+            self.memory_body_verifier.as_ref(),
+            input,
+            admission,
+        )
     }
 
     pub fn prepare_proposal(&mut self, input: &Value) -> Result<Value, LocalOwnerError> {
@@ -4526,10 +4656,8 @@ impl LocalOwnerStore {
             "agents-os.local-owner.proposal.v1",
             &canonical_request_bytes,
         );
-        let command_fingerprint = domain_fingerprint(
-            "agents-os.local-owner.command.v1",
-            &canonical_request_bytes,
-        );
+        let command_fingerprint =
+            domain_fingerprint("agents-os.local-owner.command.v1", &canonical_request_bytes);
         if self
             .connection
             .query_row(
@@ -4549,11 +4677,11 @@ impl LocalOwnerStore {
 
         let consent_kind = consent_kind_for(&command_type);
         let now = unix_ms()?;
-        let replaced_commitment = self.pending.as_ref().map(|pending| {
-            consent_commitment(&pending.challenge.prompt(pending.consent_kind))
-        });
-        let challenge =
-            self.unique_challenge(consent_kind, replaced_commitment.as_deref())?;
+        let replaced_commitment = self
+            .pending
+            .as_ref()
+            .map(|pending| consent_commitment(&pending.challenge.prompt(pending.consent_kind)));
+        let challenge = self.unique_challenge(consent_kind, replaced_commitment.as_deref())?;
         let replaced = self.pending.take().is_some();
         let prompt = challenge.prompt(consent_kind);
         self.pending = Some(PendingProposal {
@@ -4587,10 +4715,8 @@ impl LocalOwnerStore {
         input: &Value,
         fault: LocalOwnerFault,
     ) -> Result<Value, LocalOwnerError> {
-        let object = require_exact_object(
-            input,
-            &["attachmentGeneration", "ingress", "transcript"],
-        )?;
+        let object =
+            require_exact_object(input, &["attachmentGeneration", "ingress", "transcript"])?;
         let generation = require_u64(object, "attachmentGeneration")?;
         if generation == 0 {
             return Err(LocalOwnerError::InvalidInput);
@@ -4760,14 +4886,14 @@ impl LocalOwnerStore {
             return Err(LocalOwnerError::TransitionRejected);
         }
         let commit = match command_type {
-            "CREATE_GOAL_BUNDLE" => commit_create_goal_bundle(
-                &transaction,
-                pending,
-                &payload,
-                commitment,
-            )?,
-            "START_GOAL" | "PAUSE_GOAL" | "RESUME_GOAL"
-            | "REQUEST_COMPLETION_REVIEW" | "CLOSE_GOAL_ACHIEVED" => {
+            "CREATE_GOAL_BUNDLE" => {
+                commit_create_goal_bundle(&transaction, pending, &payload, commitment)?
+            }
+            "START_GOAL"
+            | "PAUSE_GOAL"
+            | "RESUME_GOAL"
+            | "REQUEST_COMPLETION_REVIEW"
+            | "CLOSE_GOAL_ACHIEVED" => {
                 commit_goal_transition(&transaction, pending, &payload, commitment)?
             }
             "START_TASK" | "PAUSE_TASK" | "RESUME_TASK" => {
@@ -4864,6 +4990,38 @@ impl LocalOwnerStore {
                 Err(LocalOwnerError::MmrOperationIdConflict)
             };
         }
+        // Reserved Memory mutations carry only an internal operation-bound
+        // receipt. Commit re-resolves the canonical descriptor and re-hashes
+        // the protected body before opening a transaction.
+        let mutation_object = validate_mmr_core_mutation(&pending.request["mutation"], true)?;
+        reject_reserved_work_projection_mutation(mutation_object)?;
+        let memory_binding = validate_reserved_memory_mutation(&self.connection, mutation_object)?;
+        let commit_memory_verification = match (&pending.memory_verification, memory_binding) {
+            (Some(prepared), Some(binding)) => {
+                let committed = self
+                    .memory_body_verifier
+                    .as_ref()
+                    .ok_or(LocalOwnerError::MemoryBodyVerifierUnavailable)?
+                    .verify_for_mutation(
+                        &binding,
+                        &pending.operation_id,
+                        &pending.operation_fingerprint,
+                    )?;
+                if &committed != prepared {
+                    return Err(LocalOwnerError::MemoryVerificationStale);
+                }
+                Some(committed)
+            }
+            (None, None) => None,
+            _ => return Err(LocalOwnerError::MemoryVerificationStale),
+        };
+        // Keep the commit-time verified file object alive through the SQLite
+        // transaction. The final pre-commit check below must bind the same
+        // inode and metadata to the exact locator; the prepare-time object is
+        // deliberately not sufficient.
+        let mut commit_pending = pending.clone();
+        commit_pending.memory_verification = commit_memory_verification;
+        let pending = &commit_pending;
         if matches!(
             pending.mutation_type.as_str(),
             "CREATE_COMMITMENT" | "FULFILL_COMMITMENT" | "RELEASE_COMMITMENT"
@@ -4872,17 +5030,17 @@ impl LocalOwnerStore {
         }
         match pending.mutation_type.as_str() {
             "CREATE_EVIDENCE" => {
-                return self.commit_evidence_mutation(pending, consent_commitment_value, fault)
+                return self.commit_evidence_mutation(pending, consent_commitment_value, fault);
             }
             "CREATE_CANDIDATE" => {
                 return self.commit_candidate_creation_mutation(
                     pending,
                     consent_commitment_value,
                     fault,
-                )
+                );
             }
             "CREATE_SUMMARY" => {
-                return self.commit_summary_mutation(pending, consent_commitment_value, fault)
+                return self.commit_summary_mutation(pending, consent_commitment_value, fault);
             }
             "ADD_EVIDENCE"
                 if mutation_fact_kind(
@@ -4895,7 +5053,7 @@ impl LocalOwnerStore {
                     pending,
                     consent_commitment_value,
                     fault,
-                )
+                );
             }
             _ => {}
         }
@@ -4924,16 +5082,15 @@ impl LocalOwnerStore {
         let expected_current = mutation_object["expectedCurrentFingerprint"].as_str();
         let (revision, predecessor) = match (mutation_type, current) {
             ("CREATE", None) if expected_current.is_none() => (1_u64, None),
-            ("REVISE" | "SUPERSEDE" | "RETIRE" | "ADD_EVIDENCE", Some((current_revision, current_fingerprint)))
-                if expected_current == Some(current_fingerprint.as_str()) =>
-            {
-                (
-                    current_revision
-                        .checked_add(1)
-                        .ok_or(LocalOwnerError::StateCorrupt)?,
-                    Some(current_fingerprint),
-                )
-            }
+            (
+                "REVISE" | "SUPERSEDE" | "RETIRE" | "ADD_EVIDENCE",
+                Some((current_revision, current_fingerprint)),
+            ) if expected_current == Some(current_fingerprint.as_str()) => (
+                current_revision
+                    .checked_add(1)
+                    .ok_or(LocalOwnerError::StateCorrupt)?,
+                Some(current_fingerprint),
+            ),
             _ => return Err(LocalOwnerError::MmrCurrentConflict),
         };
         validate_mmr_plane_transition(&transaction, mutation_object)?;
@@ -5017,10 +5174,7 @@ impl LocalOwnerStore {
             "predecessorEventFingerprint": previous_event_fingerprint,
         });
         let event_bytes = canonical_value_bytes(&event_value)?;
-        let event_fingerprint = domain_fingerprint(
-            "agents-os.local-owner.event.v1",
-            &event_bytes,
-        );
+        let event_fingerprint = domain_fingerprint("agents-os.local-owner.event.v1", &event_bytes);
         transaction.execute(
             "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_fingerprint,predecessor_event_fingerprint,canonical_bytes,event_fingerprint) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",
             params![
@@ -5105,6 +5259,9 @@ impl LocalOwnerStore {
         if visible["factFingerprint"] != fact_fingerprint {
             return Err(LocalOwnerError::StateCorrupt);
         }
+        if let Some(receipt) = &pending.memory_verification {
+            receipt.ensure_stable()?;
+        }
         transaction.commit()?;
         if fault == MmrCoreFault::AfterTransactionBeforeResponse {
             return Err(LocalOwnerError::ResponseLostAfterCommit);
@@ -5153,8 +5310,12 @@ impl LocalOwnerStore {
         let mutation_object = validate_mmr_core_mutation(mutation, true)?;
         let mutation_type = require_string(mutation_object, "mutationType", 32)?;
         if mutation_type != pending.mutation_type
-            || !["CREATE_COMMITMENT", "FULFILL_COMMITMENT", "RELEASE_COMMITMENT"]
-                .contains(&mutation_type)
+            || ![
+                "CREATE_COMMITMENT",
+                "FULFILL_COMMITMENT",
+                "RELEASE_COMMITMENT",
+            ]
+            .contains(&mutation_type)
         {
             return Err(LocalOwnerError::MmrMutationNotAuthorized);
         }
@@ -5165,15 +5326,12 @@ impl LocalOwnerStore {
             (
                 "FULFILL_COMMITMENT" | "RELEASE_COMMITMENT",
                 Some((current_revision, current_fingerprint)),
-            ) if expected_current == Some(current_fingerprint.as_str()) =>
-            {
-                (
-                    current_revision
-                        .checked_add(1)
-                        .ok_or(LocalOwnerError::StateCorrupt)?,
-                    Some(current_fingerprint),
-                )
-            }
+            ) if expected_current == Some(current_fingerprint.as_str()) => (
+                current_revision
+                    .checked_add(1)
+                    .ok_or(LocalOwnerError::StateCorrupt)?,
+                Some(current_fingerprint),
+            ),
             _ => return Err(LocalOwnerError::MmrCurrentConflict),
         };
         validate_mmr_plane_transition(&transaction, mutation_object)?;
@@ -5251,10 +5409,7 @@ impl LocalOwnerStore {
             "predecessorEventFingerprint": previous_event_fingerprint,
         });
         let event_bytes = canonical_value_bytes(&event_value)?;
-        let event_fingerprint = domain_fingerprint(
-            "agents-os.local-owner.event.v1",
-            &event_bytes,
-        );
+        let event_fingerprint = domain_fingerprint("agents-os.local-owner.event.v1", &event_bytes);
         transaction.execute(
             "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_fingerprint,predecessor_event_fingerprint,canonical_bytes,event_fingerprint) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",
             params![
@@ -5421,10 +5576,7 @@ impl LocalOwnerStore {
             "predecessorEventFingerprint": previous_event_fingerprint,
         });
         let event_bytes = canonical_value_bytes(&event_value)?;
-        let event_fingerprint = domain_fingerprint(
-            "agents-os.local-owner.event.v1",
-            &event_bytes,
-        );
+        let event_fingerprint = domain_fingerprint("agents-os.local-owner.event.v1", &event_bytes);
         transaction.execute(
             "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_fingerprint,predecessor_event_fingerprint,canonical_bytes,event_fingerprint) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",
             params![
@@ -5505,6 +5657,9 @@ impl LocalOwnerStore {
         if visible["factFingerprint"] != fact_fingerprint {
             return Err(LocalOwnerError::StateCorrupt);
         }
+        if let Some(receipt) = &pending.memory_verification {
+            receipt.ensure_stable()?;
+        }
         transaction.commit()?;
         if fault == MmrCoreFault::AfterTransactionBeforeResponse {
             return Err(LocalOwnerError::ResponseLostAfterCommit);
@@ -5562,8 +5717,16 @@ impl LocalOwnerStore {
         }
         validate_mmr_plane_transition(&transaction, mutation_object)?;
         validate_mmr_evidence_identity(&transaction, mutation_object)?;
-        let (components, authority, grant, _provenance, mutation_actor, subject_ref, basis_ref, basis_type) =
-            p2f_bundle_parts(mutation_object)?;
+        let (
+            components,
+            authority,
+            grant,
+            _provenance,
+            mutation_actor,
+            subject_ref,
+            basis_ref,
+            basis_type,
+        ) = p2f_bundle_parts(mutation_object)?;
         let content = mutation_object["components"]["content"]["value"].clone();
         let state_value = json!({
             "components": components,
@@ -5607,7 +5770,10 @@ impl LocalOwnerStore {
             validate_stored_mmr_evidence_state,
             read_evidence_current,
         )?;
-        Ok(merge_result(result, json!({"evidenceId": pending.target_state_id})))
+        Ok(merge_result(
+            result,
+            json!({"evidenceId": pending.target_state_id}),
+        ))
     }
 
     /// Create a Candidate whose status is exactly CANDIDATE.  The Candidate's
@@ -5651,8 +5817,16 @@ impl LocalOwnerStore {
         }
         validate_mmr_plane_transition(&transaction, mutation_object)?;
         validate_mmr_candidate_creation(&transaction, mutation_object)?;
-        let (components, authority, grant, _provenance, mutation_actor, subject_ref, basis_ref, basis_type) =
-            p2f_bundle_parts(mutation_object)?;
+        let (
+            components,
+            authority,
+            grant,
+            _provenance,
+            mutation_actor,
+            subject_ref,
+            basis_ref,
+            basis_type,
+        ) = p2f_bundle_parts(mutation_object)?;
         let content = mutation_object["components"]["content"]["value"].clone();
         let state_value = json!({
             "candidateState": {
@@ -5698,7 +5872,10 @@ impl LocalOwnerStore {
             validate_stored_mmr_candidate_state,
             read_candidate_current,
         )?;
-        Ok(merge_result(result, json!({"candidateId": pending.target_state_id, "status": CANDIDATE_STATUS_CANDIDATE})))
+        Ok(merge_result(
+            result,
+            json!({"candidateId": pending.target_state_id, "status": CANDIDATE_STATUS_CANDIDATE}),
+        ))
     }
 
     /// Create a derived Summary bound to an admitted evidence fact.
@@ -5741,8 +5918,16 @@ impl LocalOwnerStore {
         }
         validate_mmr_plane_transition(&transaction, mutation_object)?;
         validate_mmr_summary_creation(&transaction, mutation_object)?;
-        let (components, authority, grant, _provenance, mutation_actor, subject_ref, basis_ref, basis_type) =
-            p2f_bundle_parts(mutation_object)?;
+        let (
+            components,
+            authority,
+            grant,
+            _provenance,
+            mutation_actor,
+            subject_ref,
+            basis_ref,
+            basis_type,
+        ) = p2f_bundle_parts(mutation_object)?;
         let plane = mutation_object["components"]["plane"]
             .as_object()
             .ok_or(LocalOwnerError::InvalidInput)?;
@@ -5789,7 +5974,10 @@ impl LocalOwnerStore {
             validate_stored_mmr_summary_state,
             read_summary_current,
         )?;
-        Ok(merge_result(result, json!({"summaryId": pending.target_state_id, "supportEvidenceRef": support_ref})))
+        Ok(merge_result(
+            result,
+            json!({"summaryId": pending.target_state_id, "supportEvidenceRef": support_ref}),
+        ))
     }
 
     /// Explicit ADD_EVIDENCE transition on a Candidate: only a truly distinct,
@@ -5851,14 +6039,22 @@ impl LocalOwnerStore {
         };
         validate_mmr_plane_transition(&transaction, mutation_object)?;
         validate_mmr_candidate_evidence_transition(&transaction, mutation_object)?;
-        let (components, authority, grant, _provenance, mutation_actor, subject_ref, basis_ref, basis_type) =
-            p2f_bundle_parts(mutation_object)?;
+        let (
+            components,
+            authority,
+            grant,
+            _provenance,
+            mutation_actor,
+            subject_ref,
+            basis_ref,
+            basis_type,
+        ) = p2f_bundle_parts(mutation_object)?;
         let content = mutation_object["components"]["content"]["value"]
             .as_object()
             .ok_or(LocalOwnerError::InvalidInput)?;
         let support_ref = require_nonempty_string(content, "supportingEvidenceRef", 200)?;
-        let evidence_current =
-            read_evidence_current(&transaction, support_ref)?.ok_or(LocalOwnerError::StateCorrupt)?;
+        let evidence_current = read_evidence_current(&transaction, support_ref)?
+            .ok_or(LocalOwnerError::StateCorrupt)?;
         let evidence_fingerprint = evidence_current["factFingerprint"]
             .as_str()
             .ok_or(LocalOwnerError::StateCorrupt)?;
@@ -6024,18 +6220,112 @@ pub fn inspect_continuity(
     continuity_snapshot_on(&connection)
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(super) struct DeclaredRestoreWitnessLink {
+    pub anchor: ContinuityAnchor,
+    pub checkpoint_identity: String,
+    pub gap: Value,
+    pub lineage_authority: String,
+    pub restored_from: String,
+    pub witness_predecessor_commitment: String,
+}
+
+/// Recover the exact local half of an interrupted declared-restore finalize.
+///
+/// This is intentionally limited to a restore that is still the newest local
+/// event. Any later local event would make the finalize interval ambiguous
+/// and therefore remains blocked rather than being inferred as safe.
+pub(super) fn inspect_latest_declared_restore_witness_link(
+    database_path: &std::path::Path,
+) -> Result<Option<DeclaredRestoreWitnessLink>, LocalOwnerError> {
+    let snapshot = inspect_continuity(database_path)?;
+    let Some(current) = snapshot.current else {
+        return Ok(None);
+    };
+    let Some(anchor) = snapshot.authority_anchors.last().cloned() else {
+        return Ok(None);
+    };
+    if current != anchor {
+        return Ok(None);
+    }
+
+    let connection = Connection::open_with_flags(
+        database_path,
+        OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX,
+    )?;
+    connection.busy_timeout(std::time::Duration::ZERO)?;
+    let (event_kind, canonical_bytes): (String, Vec<u8>) = connection
+        .query_row(
+            "SELECT event_kind,canonical_bytes FROM event WHERE event_sequence=?1",
+            [as_i64(anchor.event_sequence)?],
+            |row| Ok((row.get(0)?, row.get(1)?)),
+        )
+        .optional()?
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    if event_kind != "RESIDENT_DISASTER_RESTORED" {
+        return Ok(None);
+    }
+    let event: Value =
+        serde_json::from_slice(&canonical_bytes).map_err(|_| LocalOwnerError::StateCorrupt)?;
+    if canonical_value_bytes(&event)? != canonical_bytes
+        || event["eventKind"] != event_kind
+        || event["eventSequence"].as_u64() != Some(anchor.event_sequence)
+        || event["aggregateRevision"].as_u64() != Some(anchor.authority_epoch)
+        || event["aggregateRef"] != PROFILE_ID
+    {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    let payload = event
+        .get("payload")
+        .and_then(Value::as_object)
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    let checkpoint_identity = require_nonempty_string(payload, "checkpointIdentity", 300)
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    let restored_from = require_nonempty_string(payload, "restoredFrom", 300)
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    let lineage_authority = require_nonempty_string(payload, "lineageAuthority", 300)
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    let predecessor = require_nonempty_string(payload, "witnessPredecessorCommitment", 71)
+        .map_err(|_| LocalOwnerError::StateCorrupt)?;
+    let gap = payload
+        .get("gap")
+        .and_then(Value::as_object)
+        .filter(|gap| {
+            gap.len() == 3
+                && gap.get("known").and_then(Value::as_bool).is_some()
+                && gap.get("possible").and_then(Value::as_bool).is_some()
+                && gap
+                    .get("claim")
+                    .and_then(Value::as_str)
+                    .is_some_and(|value| !value.trim().is_empty() && value.len() <= 300)
+        })
+        .ok_or(LocalOwnerError::StateCorrupt)?;
+    if checkpoint_identity != restored_from
+        || lineage_authority.starts_with("local:")
+        || !is_prefixed_sha256(predecessor)
+    {
+        return Err(LocalOwnerError::StateCorrupt);
+    }
+    Ok(Some(DeclaredRestoreWitnessLink {
+        anchor,
+        checkpoint_identity: checkpoint_identity.to_owned(),
+        gap: Value::Object(gap.clone()),
+        lineage_authority: lineage_authority.to_owned(),
+        restored_from: restored_from.to_owned(),
+        witness_predecessor_commitment: predecessor.to_owned(),
+    }))
+}
+
 fn continuity_snapshot_on(
     connection: &Connection,
 ) -> Result<LocalContinuitySnapshot, LocalOwnerError> {
-    let resident_id: String = connection.query_row(
-        "SELECT resident_id FROM resident_identity",
-        [],
-        |row| row.get(0),
-    )?;
+    let resident_id: String =
+        connection.query_row("SELECT resident_id FROM resident_identity", [], |row| {
+            row.get(0)
+        })?;
     let mut event_fingerprints = BTreeMap::new();
-    let mut event_statement = connection.prepare(
-        "SELECT event_sequence,event_fingerprint FROM event ORDER BY event_sequence",
-    )?;
+    let mut event_statement = connection
+        .prepare("SELECT event_sequence,event_fingerprint FROM event ORDER BY event_sequence")?;
     let event_rows = event_statement.query_map([], |row| {
         Ok((row.get::<_, i64>(0)?, row.get::<_, String>(1)?))
     })?;
@@ -6087,7 +6377,10 @@ fn continuity_snapshot_on(
     })
 }
 
-fn validate_operation_command_pair(operation: &str, command_type: &str) -> Result<(), LocalOwnerError> {
+fn validate_operation_command_pair(
+    operation: &str,
+    command_type: &str,
+) -> Result<(), LocalOwnerError> {
     let allowed = match operation {
         "PROPOSE_GOAL_MUTATION" => &schema::COMMAND_TYPES[..6],
         "PROPOSE_TASK_MUTATION" => &schema::COMMAND_TYPES[6..],
@@ -6268,10 +6561,7 @@ fn state_binding_for(
     }
 }
 
-fn close_goal_binding(
-    connection: &Connection,
-    payload: &Value,
-) -> Result<Value, LocalOwnerError> {
+fn close_goal_binding(connection: &Connection, payload: &Value) -> Result<Value, LocalOwnerError> {
     let goal_id = payload["goalId"]
         .as_str()
         .ok_or(LocalOwnerError::InvalidInput)?;
@@ -6348,10 +6638,7 @@ fn validate_create_payload(payload: &Value) -> Result<(), LocalOwnerError> {
 
     let mut selected = BTreeMap::new();
     for (index, criterion) in criteria.iter().enumerate() {
-        let criterion = require_exact_object(
-            criterion,
-            &["description", "selectedTaskOrdinal"],
-        )?;
+        let criterion = require_exact_object(criterion, &["description", "selectedTaskOrdinal"])?;
         require_nonempty_string(criterion, "description", 1000)?;
         let task_ordinal = require_u64(criterion, "selectedTaskOrdinal")?;
         if task_ordinal == 0 || task_ordinal > tasks.len() as u64 {
@@ -6362,10 +6649,7 @@ fn validate_create_payload(payload: &Value) -> Result<(), LocalOwnerError> {
 
     let mut supported_criteria = BTreeSet::new();
     for (index, task) in tasks.iter().enumerate() {
-        let task = require_exact_object(
-            task,
-            &["description", "supportsCriteria", "title"],
-        )?;
+        let task = require_exact_object(task, &["description", "supportsCriteria", "title"])?;
         require_nonempty_string(task, "title", 200)?;
         require_string(task, "description", 2000)?;
         let supports = require_array(task, "supportsCriteria", 1, 20)?;
@@ -6703,10 +6987,11 @@ fn commit_task_transition(
         .ok_or(LocalOwnerError::StateCorrupt)?;
     let (next_status, activity_commitment) = match pending.command_type.as_str() {
         "START_TASK" if current_status == "READY" => {
-            let goal_id: String =
-                transaction.query_row("SELECT goal_id FROM task WHERE task_id=?1", [task_id], |row| {
-                    row.get(0)
-                })?;
+            let goal_id: String = transaction.query_row(
+                "SELECT goal_id FROM task WHERE task_id=?1",
+                [task_id],
+                |row| row.get(0),
+            )?;
             let goal = current_state(transaction, "GOAL_STATE", &goal_id)?;
             if goal.value["status"] != "ACTIVE" {
                 return Err(LocalOwnerError::TransitionRejected);
@@ -7093,10 +7378,11 @@ fn commit_criterion_decisions(
     for row in rows {
         decisions.push(row?);
     }
-    let criterion_count: i64 =
-        transaction.query_row("SELECT COUNT(*) FROM criterion WHERE goal_id=?1", [goal_id], |row| {
-            row.get(0)
-        })?;
+    let criterion_count: i64 = transaction.query_row(
+        "SELECT COUNT(*) FROM criterion WHERE goal_id=?1",
+        [goal_id],
+        |row| row.get(0),
+    )?;
     if decisions.len() as i64 != criterion_count {
         return Err(LocalOwnerError::TransitionRejected);
     }
@@ -7218,10 +7504,7 @@ fn append_fact(
         "predecessorEventFingerprint": previous_event_fingerprint,
     });
     let event_bytes = canonical_value_bytes(&event_value)?;
-    let event_fingerprint = domain_fingerprint(
-        "agents-os.local-owner.event.v1",
-        &event_bytes,
-    );
+    let event_fingerprint = domain_fingerprint("agents-os.local-owner.event.v1", &event_bytes);
     transaction.execute(
         "INSERT INTO event(event_sequence,event_id,event_kind,aggregate_ref,aggregate_revision,command_fingerprint,predecessor_event_fingerprint,canonical_bytes,event_fingerprint) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",
         params![
@@ -7360,10 +7643,11 @@ fn query_goals(connection: &Connection, query: &Value) -> Result<Value, LocalOwn
                 [goal_id],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )?;
-            let task_count: i64 =
-                connection.query_row("SELECT COUNT(*) FROM task WHERE goal_id=?1", [goal_id], |row| {
-                    row.get(0)
-                })?;
+            let task_count: i64 = connection.query_row(
+                "SELECT COUNT(*) FROM task WHERE goal_id=?1",
+                [goal_id],
+                |row| row.get(0),
+            )?;
             let progress = goal_progress(connection, goal_id)?;
             Ok(json!({
                 "accepted": true,
@@ -7502,8 +7786,7 @@ fn query_tasks(connection: &Connection, query: &Value) -> Result<Value, LocalOwn
                         row.get::<_, String>(3)?,
                         row.get::<_, Vec<u8>>(4)?,
                     ))
-                },
-            )?;
+                })?;
             let mut items = Vec::new();
             for row in rows {
                 let (task_id, goal_id, title, description, state_bytes) = row?;
@@ -7549,9 +7832,7 @@ fn replay_response(
         )
         .optional()?;
     bytes
-        .map(|bytes| {
-            serde_json::from_slice(&bytes).map_err(|_| LocalOwnerError::StateCorrupt)
-        })
+        .map(|bytes| serde_json::from_slice(&bytes).map_err(|_| LocalOwnerError::StateCorrupt))
         .transpose()
 }
 
@@ -7583,14 +7864,17 @@ fn verify_event_and_epoch_chains(connection: &Connection) -> Result<(), LocalOwn
         |row| row.get(0),
     )?;
     let identity_total: i64 =
-        connection.query_row("SELECT COUNT(*) FROM resident_identity", [], |row| row.get(0))?;
+        connection.query_row("SELECT COUNT(*) FROM resident_identity", [], |row| {
+            row.get(0)
+        })?;
     let incarnation_total: i64 =
-        connection.query_row("SELECT COUNT(*) FROM resident_incarnation", [], |row| row.get(0))?;
-    let epoch_total: i64 = connection.query_row(
-        "SELECT COUNT(*) FROM resident_authority_epoch",
-        [],
-        |row| row.get(0),
-    )?;
+        connection.query_row("SELECT COUNT(*) FROM resident_incarnation", [], |row| {
+            row.get(0)
+        })?;
+    let epoch_total: i64 =
+        connection.query_row("SELECT COUNT(*) FROM resident_authority_epoch", [], |row| {
+            row.get(0)
+        })?;
     let identity_valid = if epoch_total == 0 {
         identities == 0 && identity_total == 0 && incarnation_total == 0
     } else {
@@ -7616,7 +7900,16 @@ fn verify_event_and_epoch_chains(connection: &Connection) -> Result<(), LocalOwn
     })?;
     let mut previous: Option<(u64, String, String)> = None;
     for row in rows {
-        let (epoch, generation, incarnation, expected_previous, previous_fp, previous_incarnation, fingerprint, event_sequence) = row?;
+        let (
+            epoch,
+            generation,
+            incarnation,
+            expected_previous,
+            previous_fp,
+            previous_incarnation,
+            fingerprint,
+            event_sequence,
+        ) = row?;
         let epoch = as_u64(epoch)?;
         if generation != as_i64(epoch)? {
             return Err(LocalOwnerError::EpochChainBroken);
@@ -7697,17 +7990,23 @@ fn verify_event_and_epoch_chains(connection: &Connection) -> Result<(), LocalOwn
 }
 
 trait QueryConnection {
-    fn query_event_rows(&self) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error>;
+    fn query_event_rows(
+        &self,
+    ) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error>;
 }
 
 impl QueryConnection for Connection {
-    fn query_event_rows(&self) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error> {
+    fn query_event_rows(
+        &self,
+    ) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error> {
         query_event_rows(self)
     }
 }
 
 impl QueryConnection for Transaction<'_> {
-    fn query_event_rows(&self) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error> {
+    fn query_event_rows(
+        &self,
+    ) -> Result<Vec<(i64, Option<String>, String, Vec<u8>)>, rusqlite::Error> {
         query_event_rows(self)
     }
 }
@@ -7764,17 +8063,15 @@ fn append_authority_epoch(
             |row| Ok((row.get(0)?,row.get(1)?,row.get(2)?)),
         )
         .optional()?;
-    let authority_epoch = previous
-        .as_ref()
-        .map_or(1_u64, |value| as_u64(value.0).unwrap_or(u64::MAX).saturating_add(1));
+    let authority_epoch = previous.as_ref().map_or(1_u64, |value| {
+        as_u64(value.0).unwrap_or(u64::MAX).saturating_add(1)
+    });
     if authority_epoch == u64::MAX {
         return Err(LocalOwnerError::EpochChainBroken);
     }
     let event_sequence = next_event_sequence(&transaction)?;
-    let nonce_commitment = domain_fingerprint(
-        "agents-os.local-owner.process-nonce.v1",
-        process_nonce,
-    );
+    let nonce_commitment =
+        domain_fingerprint("agents-os.local-owner.process-nonce.v1", process_nonce);
     let incarnation_id = format!("incarnation:local-owner:{}", &nonce_commitment[..32]);
     let value = json!({
         "authorityEpoch": authority_epoch,
@@ -7847,6 +8144,7 @@ fn append_disaster_restore_epoch(
     lineage_authority: &str,
     projection_states: Vec<Value>,
     exclusion_constraints: Vec<Value>,
+    witness_predecessor_commitment: Option<&str>,
 ) -> Result<Value, LocalOwnerError> {
     if process_nonce.len() < 32 {
         return Err(LocalOwnerError::RandomnessUnavailable);
@@ -7861,12 +8159,10 @@ fn append_disaster_restore_epoch(
         .checked_add(1)
         .ok_or(LocalOwnerError::EpochChainBroken)?;
     let event_sequence = next_event_sequence(&transaction)?;
-    let nonce_commitment = domain_fingerprint(
-        "agents-os.local-owner.process-nonce.v1",
-        process_nonce,
-    );
+    let nonce_commitment =
+        domain_fingerprint("agents-os.local-owner.process-nonce.v1", process_nonce);
     let incarnation_id = format!("incarnation:local-owner:{}", &nonce_commitment[..32]);
-    let payload = json!({
+    let mut payload = json!({
         "authorityEpoch": authority_epoch,
         "authorityGeneration": authority_epoch,
         "checkpointIdentity": checkpoint_identity,
@@ -7886,6 +8182,15 @@ fn append_disaster_restore_epoch(
         "residentId": PROFILE_ID,
         "exclusionConstraints": exclusion_constraints.clone(),
     });
+    if let Some(commitment) = witness_predecessor_commitment {
+        payload
+            .as_object_mut()
+            .ok_or(LocalOwnerError::StateCorrupt)?
+            .insert(
+                "witnessPredecessorCommitment".to_owned(),
+                Value::String(commitment.to_owned()),
+            );
+    }
     let epoch_fingerprint = domain_fingerprint(
         "agents-os.local-owner.authority-epoch.v1",
         &canonical_value_bytes(&payload)?,
@@ -8000,7 +8305,10 @@ fn parse_exclusion_constraints(value: Option<&Value>) -> Result<Vec<Value>, Loca
     values
         .iter()
         .map(|value| {
-            let object = require_exact_object(value, &["authorityRef", "evidenceRef", "stateId", "strength"])?;
+            let object = require_exact_object(
+                value,
+                &["authorityRef", "evidenceRef", "stateId", "strength"],
+            )?;
             let _ = require_nonempty_string(object, "authorityRef", 300)?;
             let _ = require_nonempty_string(object, "evidenceRef", 300)?;
             let _ = require_nonempty_string(object, "stateId", 300)?;
@@ -8014,18 +8322,17 @@ fn parse_exclusion_constraints(value: Option<&Value>) -> Result<Vec<Value>, Loca
 }
 
 fn next_event_sequence(connection: &Connection) -> Result<u64, LocalOwnerError> {
-    let current: i64 =
-        connection.query_row("SELECT COALESCE(MAX(event_sequence),0) FROM event", [], |row| {
-            row.get(0)
-        })?;
+    let current: i64 = connection.query_row(
+        "SELECT COALESCE(MAX(event_sequence),0) FROM event",
+        [],
+        |row| row.get(0),
+    )?;
     as_u64(current)?
         .checked_add(1)
         .ok_or(LocalOwnerError::EventChainBroken)
 }
 
-fn latest_event_fingerprint(
-    connection: &Connection,
-) -> Result<Option<String>, LocalOwnerError> {
+fn latest_event_fingerprint(connection: &Connection) -> Result<Option<String>, LocalOwnerError> {
     connection
         .query_row(
             "SELECT event_fingerprint FROM event ORDER BY event_sequence DESC LIMIT 1",
@@ -8036,12 +8343,12 @@ fn latest_event_fingerprint(
         .map_err(Into::into)
 }
 
-fn canonical_value_bytes(value: &Value) -> Result<Vec<u8>, LocalOwnerError> {
+pub(super) fn canonical_value_bytes(value: &Value) -> Result<Vec<u8>, LocalOwnerError> {
     let bytes = serde_json::to_vec(value).map_err(|_| LocalOwnerError::InvalidInput)?;
     canonicalize_json(&bytes).map_err(|_| LocalOwnerError::InvalidInput)
 }
 
-fn domain_fingerprint(domain: &str, bytes: &[u8]) -> String {
+pub(super) fn domain_fingerprint(domain: &str, bytes: &[u8]) -> String {
     let mut input = Vec::with_capacity(domain.len() + bytes.len() + 1);
     input.extend_from_slice(domain.as_bytes());
     input.push(0);
@@ -8149,8 +8456,11 @@ fn require_nonempty_string<'a>(
     key: &str,
     maximum_bytes: usize,
 ) -> Result<&'a str, LocalOwnerError> {
-    require_string(object, key, maximum_bytes)
-        .and_then(|value| (!value.trim().is_empty()).then_some(value).ok_or(LocalOwnerError::InvalidInput))
+    require_string(object, key, maximum_bytes).and_then(|value| {
+        (!value.trim().is_empty())
+            .then_some(value)
+            .ok_or(LocalOwnerError::InvalidInput)
+    })
 }
 
 fn optional_string<'a>(
@@ -8162,6 +8472,15 @@ fn optional_string<'a>(
         .get(key)
         .map(|_| require_string(object, key, maximum_bytes))
         .transpose()
+}
+
+fn is_prefixed_sha256(value: &str) -> bool {
+    value.strip_prefix("sha256:").is_some_and(|digest| {
+        digest.len() == 64
+            && digest
+                .bytes()
+                .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+    })
 }
 
 fn require_u64(object: &Map<String, Value>, key: &str) -> Result<u64, LocalOwnerError> {
@@ -8244,12 +8563,8 @@ mod tests {
     fn expired_pending_proposal_is_invalidated_without_writes() {
         let parent = tempfile::tempdir().unwrap();
         let database_path = parent.path().join("local-owner.sqlite3");
-        let mut store = LocalOwnerStore::open_admitted(
-            &database_path,
-            Some(&[0x5a_u8; 32]),
-            true,
-        )
-        .unwrap();
+        let mut store =
+            LocalOwnerStore::open_admitted(&database_path, Some(&[0x5a_u8; 32]), true).unwrap();
         let proposal = store
             .prepare_proposal(&json!({
                 "attachmentGeneration": 1,

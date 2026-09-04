@@ -20,6 +20,13 @@ const {
   validateResponseFrame
 } = require('./protocol');
 const { verifyCompanionIntegrity } = require('./integrity');
+const {
+  nativeProviderAttemptRequest,
+  parsePresencePayload,
+  parseProviderAttemptPayload,
+  resolvePresenceContext,
+  resolveProviderAttemptSeal
+} = require('./presence-context');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -204,6 +211,30 @@ function createCompanionClient({
     return (await exchange(request)).response.result;
   }
 
+  async function presenceContext(payload) {
+    const normalized = parsePresencePayload(payload);
+    const result = await protectedExchange('presence_context', normalized);
+    const nativeRequest = {
+      attachmentGeneration: result?.attachmentGeneration,
+      expectedSlots: normalized.expectedSlots,
+      freshPresenceId: result?.freshPresenceId,
+      oneRing: normalized.oneRing,
+      transcriptDigest: normalized.transcriptDigest
+    };
+    const context = resolvePresenceContext(result, nativeRequest);
+    if (!attachment) throw fixedError('RESIDENT_ATTACHMENT_REQUIRED');
+    attachment.presenceSession = Object.freeze({ context, nativeRequest });
+    return context;
+  }
+
+  async function sealProviderAttempt(payload) {
+    const normalized = parseProviderAttemptPayload(payload);
+    const presenceSession = attachment?.presenceSession;
+    nativeProviderAttemptRequest(normalized, presenceSession);
+    const result = await protectedExchange('seal_provider_attempt', normalized);
+    return resolveProviderAttemptSeal(result, normalized, presenceSession);
+  }
+
   function detach() {
     const socket = attachment?.socket;
     attachment = null;
@@ -221,7 +252,9 @@ function createCompanionClient({
       'mint_cognitive_session',
       payload
     ),
+    presenceContext,
     query: (payload) => protectedExchange('query', payload),
+    sealProviderAttempt,
     status: async () => (await exchange(makeRequest('status'))).response,
     submitConsent: (payload) => protectedExchange('submit_consent', payload)
   });
