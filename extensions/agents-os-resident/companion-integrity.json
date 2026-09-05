@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:d751181bb184bdefd891dd7ab270800f98ace30f37c08d983b561b4562ee7cc6",
+  "buildId": "sha256:5d8e3804568d5a0d8dcf6e09b694036f4fb4e968818b61ed61d5579ae3441796",
   "files": [
     {
       "path": "activation.js",
@@ -89,6 +89,11 @@
       "sha256": "eed948fb704edd1770edad29744909803ecf2960b71606c3adcfd1685c511ae9"
     },
     {
+      "path": "deployment/hardened-installation-contract.v1.json",
+      "byteLength": 3983,
+      "sha256": "a7569b8b098901c1ee5a4204bb94841de9f5637f00f703ee84a4acef5cb7871e"
+    },
+    {
       "path": "index.js",
       "byteLength": 675,
       "sha256": "f3d392ccf9eb490f7f9bd15c76fec74ba0853f2d25e47b6270c717808e4c1b77"
@@ -100,8 +105,8 @@
     },
     {
       "path": "package.json",
-      "byteLength": 4745,
-      "sha256": "ff681feec324d94dcae00c29a7c0f48fb6045d66f0ddf52b00c4b1ba4eec0bed"
+      "byteLength": 5061,
+      "sha256": "25c1c6aa2bd66fb42de3e50cf200034aa38c7d492973bd2ca71ec4e41bfbea75"
     },
     {
       "path": "plugin-manifest.json.block",
@@ -120,13 +125,18 @@
     },
     {
       "path": "tools/build-companion-integrity.mjs",
-      "byteLength": 5489,
-      "sha256": "a7f2ba6d79212758c16d721ad813230067b14a87285d08dd1135a0d5f9b4dadb"
+      "byteLength": 5587,
+      "sha256": "0aec08df58455a0cfa34925e9a2e60ed6105e36fab70c3604f5de0c8a317c751"
     },
     {
       "path": "tools/render-systemd-unit.mjs",
       "byteLength": 13243,
       "sha256": "85b6fa2d2ed207ee866366e56e39d2614fe1c4a4293b7f605cafd2cb999ede4f"
+    },
+    {
+      "path": "tools/stage-hardened-installation.mjs",
+      "byteLength": 64609,
+      "sha256": "b4e7e4a676963140a7b4dda6199d174a7f18e03b5a4bbf32b25973ae5ffd6940"
     },
     {
       "path": "tools/validate-companion-projection.mjs",

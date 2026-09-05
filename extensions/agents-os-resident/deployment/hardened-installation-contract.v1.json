@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "agents-os-resident.hardened-installation.v1",
+  "transactions": {
+    "stage1": {
+      "preview": "preview-identities",
+      "apply": "apply-identities",
+      "scope": "os-identities-only",
+      "receipt": "agents-os-resident.resolved-identity-receipt.v1"
+    },
+    "stage2": {
+      "preview": "preview-install",
+      "apply": "apply-stage-only",
+      "requiresStage1Receipt": true,
+      "scope": "staged-installation-only"
+    },
+    "observation": {
+      "request": "preview-observation-request",
+      "observe": "observe-installation",
+      "requestSchema": "agents-os-resident.installation-observation-request.v1",
+      "receiptSchema": "agents-os-resident.installation-observation-receipt.v1",
+      "observerVersion": "HARDENED_INSTALLATION_OBSERVER_V1",
+      "scope": "resident-installation-namespaces-read-only"
+    }
+  },
+  "platform": {
+    "os": "linux",
+    "architecture": "x86_64",
+    "libc": "glibc"
+  },
+  "identities": {
+    "daemonUser": "agents-os-resident",
+    "daemonGroup": "agents-os-resident",
+    "clientGroup": "agents-os-resident-clients",
+    "allocation": "dynamic-system",
+    "systemRangeSource": "/etc/login.defs",
+    "systemRangeDefaults": {
+      "uidMin": 100,
+      "uidMax": 999,
+      "gidMin": 100,
+      "gidMax": 999
+    },
+    "groupAllocator": "/usr/sbin/groupadd --system",
+    "userAllocator": "/usr/sbin/useradd --system",
+    "daemonHome": "/nonexistent",
+    "daemonShell": "/usr/sbin/nologin"
+  },
+  "paths": {
+    "packageRoot": "/opt/agents-os-resident",
+    "configRoot": "/etc/agents-os-resident",
+    "stateRoot": "/var/lib/agents-os-resident",
+    "residentRoot": "/var/lib/agents-os-resident/agents-os-resident-local-owner-v1",
+    "witnessRoot": "/var/lib/agents-os-resident/protected-witness",
+    "memoryBodyRoot": "/var/lib/agents-os-resident/private-memory-bodies",
+    "daemonIdentity": "/etc/agents-os-resident/daemon-identity.json",
+    "systemUnit": "/etc/systemd/system/agents-os-resident.service",
+    "nodeBinary": "/opt/agents-os-resident/runtime/node-v22.23.1-linux-x64/bin/node"
+  },
+  "nodeRuntime": {
+    "version": "22.23.1",
+    "versionOutput": "v22.23.1",
+    "distributionArchitecture": "linux-x64",
+    "archiveName": "node-v22.23.1-linux-x64.tar.xz",
+    "archiveMember": "node-v22.23.1-linux-x64/bin/node",
+    "officialUrl": "https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.xz",
+    "officialChecksumSource": "https://nodejs.org/dist/v22.23.1/SHASUMS256.txt",
+    "sha256": "9749e988f437343b7fa832c69ded82a312e41a03116d766797ac14f6f9eee578",
+    "acquisition": "operator-supplied-official-archive",
+    "selectionOrder": [
+      "existing-exact-dedicated-runtime",
+      "operator-supplied-official-archive"
+    ],
+    "hostNodeReuse": false,
+    "networkDuringApply": false
+  },
+  "package": {
+    "inventoryManifest": "companion-integrity.json",
+    "inventoryMode": "manifest-exact-files-only",
+    "regularFileMode": "0644",
+    "executableFiles": {
+      "resident-peer-credentials": "0755"
+    },
+    "owner": "root",
+    "group": "root"
+  },
+  "ownership": {
+    "packageRoot": { "owner": "root", "group": "root", "mode": "0755" },
+    "configRoot": { "owner": "root", "group": "root", "mode": "0755" },
+    "stateRoot": { "owner": "daemon", "group": "daemon", "mode": "0700" },
+    "protectedRoots": { "owner": "daemon", "group": "daemon", "mode": "0700" },
+    "daemonIdentity": { "owner": "root", "group": "root", "mode": "0644" },
+    "systemUnit": { "owner": "root", "group": "root", "mode": "0644" },
+    "nodeBinary": { "owner": "root", "group": "root", "mode": "0755" }
+  },
+  "systemd": {
+    "scope": "system",
+    "unitName": "agents-os-resident.service",
+    "runtimeGroup": "client",
+    "daemonReload": "explicit-only"
+  },
+  "safety": {
+    "defaultOperation": "preview-identities",
+    "applyOperation": "stage-only",
+    "activationOperations": [],
+    "continuityInitialization": false,
+    "witnessEnrollment": false
+  }
+}

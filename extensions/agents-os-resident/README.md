@@ -37,10 +37,20 @@ writable, symlinked, or mismatched identity policy fails closed, with no legacy
 fallback. This source change does not install accounts or policy, switch the
 existing live service, or migrate/enroll existing continuity state.
 
+The exact allocation contract is
+`deployment/hardened-installation-contract.v1.json`. It freezes the names
+`agents-os-resident` (daemon user and private primary group) and
+`agents-os-resident-clients` (socket/client access group), while deliberately
+leaving numeric IDs to the operating system's dynamic system-identity
+allocator. The installer resolves the allocated UID/GIDs immediately and
+feeds those exact numbers into ownership, policy, and unit rendering. It never
+scans for or invents a numeric ID.
+
 Before a separately authorized installation, prepare these public artifacts:
 
-- A dedicated daemon account and a client access group, with the daemon's primary
-  group equal to the configured `socketGid`; the client must belong to that group.
+- A dedicated daemon account with its private primary group, plus the distinct
+  client access group. The system service's effective group and configured
+  `socketGid` are the client access group; the client must belong to that group.
 - The reviewed package and Node interpreter beneath root-owned ancestors,
   non-writable by group/others. All integrity entries, the manifest, and the
   executable helper must be root-owned regular files, without symlink traversal.
@@ -55,7 +65,7 @@ Before a separately authorized installation, prepare these public artifacts:
   mode `0750`; the daemon creates `control.sock` with mode `0660`.
 
 The renderer produces both files without installing either. Example numeric IDs
-below are placeholders for explicitly selected installation identities:
+below are placeholders for IDs resolved by the allocation contract:
 
 ```sh
 node tools/render-systemd-unit.mjs \
@@ -76,6 +86,147 @@ this also builds/stages the private Rust helper and includes it in the integrity
 manifest. `iproute2`, a particular `ss` path, and a user D-Bus manager are not
 transport dependencies. Linux/glibc and the pinned Node/Rust package targets
 remain required.
+
+### Hardened stage-only installer
+
+`tools/stage-hardened-installation.mjs` is the only source-owned root installer
+surface for this profile. Dynamic OS identity allocation and filesystem
+installation are two independently approved transactions:
+
+```text
+preview-identities -> apply-identities -> resolved identity receipt
+preview-install    -> apply-stage-only
+```
+
+The first transaction creates only the named daemon/private group/client group.
+The second requires the first transaction's receipt and contains only the
+client membership plus staged installation. Neither transaction exposes start,
+restart, enable, preset, Witness enrollment, or continuity initialization.
+
+The frozen Linux x86_64 layout is:
+
+```text
+/opt/agents-os-resident
+/etc/agents-os-resident/daemon-identity.json
+/var/lib/agents-os-resident/agents-os-resident-local-owner-v1
+/var/lib/agents-os-resident/protected-witness
+/var/lib/agents-os-resident/private-memory-bodies
+/etc/systemd/system/agents-os-resident.service
+```
+
+The dedicated Node interpreter is reused or installed at
+`/opt/agents-os-resident/runtime/node-v22.23.1-linux-x64/bin/node`. Apply is
+offline. Before the installation preview, the operator supplies the official
+Node archive named by the contract. Preview checks its pinned official SHA-256,
+extracts it in non-root temporary storage, executes the extracted interpreter
+for the exact version, and binds the archive and executable identities into the
+approved installation digest. Apply revalidates those bytes before its first
+mutation and never downloads a runtime, uses a VCP runtime, or accepts an
+unbound host `node`. An existing binary at that exact dedicated path is reused
+only when its root-owned mode and bytes exactly match the interpreter extracted
+from the verified archive.
+
+First preview the named identity state. The plan contains canonical executable
+and argv arrays, not shell commands or predicted numeric IDs:
+
+```sh
+npm run preview:identity-allocation
+```
+
+After separate approval, allocate only the missing compatible identities and
+save the successful `RESOLVED_IDENTITY_RECEIPT` output. Identity allocation is
+idempotent and reusable, but multiple Unix account operations are not atomic.
+A partial failure reports completed operations and never deletes or renumbers
+them; a new preview can reuse exact-compatible identities and continue.
+
+```sh
+sudo node tools/stage-hardened-installation.mjs \
+  --apply-identities \
+  --approved-plan-digest sha256:<approved-identity-plan-digest> \
+  > /absolute/review/resolved-identity-receipt.json
+```
+
+Acquire `node-v22.23.1-linux-x64.tar.xz` from the contract's official URL and
+verify it against the official `SHASUMS256.txt`. Then create the independently
+approved installation plan; preview without the archive or identity receipt is
+rejected:
+
+```sh
+npm run preview:hardened-install -- \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz
+```
+
+For a fresh installation, the unprivileged preview above directly observes the
+complete namespace. After a hardened installation, the daemon-owned `0700`
+state root deliberately prevents the client UID from traversing it. A direct
+repeat preview then fails with `INSTALL_PRIVILEGED_OBSERVATION_REQUIRED`; it
+never treats access denial as absence. Generate a bounded request with the
+candidate, observe only the four contract-defined state directory objects with
+the already-installed root-pinned and integrity-verified installer, then give
+that metadata-only receipt back to the unprivileged candidate preview:
+
+```sh
+node tools/stage-hardened-installation.mjs \
+  --preview-observation-request \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz \
+  > /absolute/review/installation-observation-request.json
+
+sudo /opt/agents-os-resident/runtime/node-v22.23.1-linux-x64/bin/node \
+  /opt/agents-os-resident/tools/stage-hardened-installation.mjs \
+  --observe-installation \
+  --observation-request /absolute/review/installation-observation-request.json \
+  > /absolute/review/installation-observation-receipt.json
+
+node tools/stage-hardened-installation.mjs \
+  --preview-install \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz \
+  --observation-receipt /absolute/review/installation-observation-receipt.json
+```
+
+Never invoke the candidate/worktree script through `sudo`: JavaScript begins
+loading before an in-process admission check can protect root. The privileged
+command above therefore names only the previously installed interpreter and
+installer. Observer admission additionally requires that its package root,
+installer, contract, manifest, and manifest-bound files are root-pinned and
+pass companion integrity; a non-installed copy is rejected. It accepts no arbitrary path option,
+does not traverse the protected directories, and emits no Witness or Memory
+contents. The receipt is read-only evidence, not mutation approval. Stage-2
+apply ignores it and reobserves the live filesystem with root authority before
+the first mutation.
+
+The installation plan binds the concrete daemon/client UID/GIDs, current
+membership, validated Node artifact, every target path's observed
+absence/type/symlink, canonical path, ownership, mode and link count, plus file
+size/hash where applicable. Existing regular installation files, including the
+dedicated Node executable, must have exactly one hard link before approval. It
+also binds the desired package/config/state/unit inventory. Apply reobserves
+all of these before its first Stage-2 mutation; any drift rejects the plan with
+zero Stage-2 mutation. After reviewing this second plan, apply only its digest:
+
+```sh
+sudo node tools/stage-hardened-installation.mjs \
+  --apply-stage-only \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz \
+  --approved-plan-digest sha256:<approved-installation-plan-digest>
+```
+
+`--daemon-reload` is optional and is the only systemd command exposed. When it
+is needed, include it in both `--preview-install` and `--apply-stage-only` so
+the separate systemd mutation is bound by the approved installation digest.
+The installer copies only files bound by `companion-integrity.json`, runs the
+existing `prepare-roots` primitive as the allocated daemon principal, and uses
+the existing renderer for both the unit and daemon identity policy. It does not
+copy a development checkout or turn `plugin-manifest.json.block` into an
+enabled plugin. `daemon-identity.json` is OS/package/peer-auth policy only; it
+does not adopt a logical Resident, generation, Event, Witness, or authority.
 
 `node --test tests/daemon-peer-auth.test.cjs` covers policy rejection, actual
 connected-FD credentials, and same-UID impersonation. For an opt-in real cross-UID
