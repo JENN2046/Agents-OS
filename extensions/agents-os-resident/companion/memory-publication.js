@@ -1,12 +1,13 @@
 'use strict';
 
 const { isUtf8 } = require('node:buffer');
-const { MAX_MEMORY_BODY_BYTES, fixedError } = require('./constants');
+const { HANDSHAKE_TIMEOUT_MS, MAX_MEMORY_BODY_BYTES, fixedError } = require('./constants');
 const { hasExactKeys } = require('./protocol');
 const { resolvePresenceContext } = require('./presence-context');
 
 const PAYLOAD_KEYS = ['bodyBase64', 'memoryId', 'operationRef',
-  'expectedContextId', 'expectedIdentityOpaqueId', 'expectedAuthorityGeneration'];
+  'expectedContextId', 'expectedIdentityOpaqueId', 'expectedAuthorityGeneration',
+  'deadlineUnixMs'];
 const MEMORY_ID = /^memory:v1:[0-9a-f]{64}$/u;
 const RESIDENT_ID = /^resident:v1:[0-9a-f]{64}$/u;
 const DIGEST = /^sha256:[0-9a-f]{64}$/u;
@@ -30,7 +31,7 @@ function requireSession(session, payload) {
     || context.identity?.authorityGeneration !== payload.expectedAuthorityGeneration) reject();
 }
 
-function publicationPayload(input, session) {
+function publicationPayload(input, session, deadlineUnixMs = Date.now() + HANDSHAKE_TIMEOUT_MS) {
   if (!hasExactKeys(input, ['body', 'memoryId', 'operationRef'])
     || !Buffer.isBuffer(input.body) || !isUtf8(input.body)
     || !validReference(input.memoryId, input.operationRef)) reject();
@@ -38,6 +39,7 @@ function publicationPayload(input, session) {
     throw fixedError('MEMORY_BODY_PUBLICATION_OVERSIZE');
   }
   const payload = {
+    deadlineUnixMs,
     bodyBase64: input.body.toString('base64'),
     memoryId: input.memoryId,
     operationRef: input.operationRef,
@@ -58,7 +60,9 @@ function decodePublication(payload) {
     || typeof payload.expectedIdentityOpaqueId !== 'string'
     || !RESIDENT_ID.test(payload.expectedIdentityOpaqueId)
     || !Number.isSafeInteger(payload.expectedAuthorityGeneration)
-    || payload.expectedAuthorityGeneration < 1) reject();
+    || payload.expectedAuthorityGeneration < 1
+    || !Number.isSafeInteger(payload.deadlineUnixMs)
+    || payload.deadlineUnixMs < 1) reject();
   if (payload.bodyBase64.length > Math.ceil(MAX_MEMORY_BODY_BYTES / 3) * 4) {
     throw fixedError('MEMORY_BODY_PUBLICATION_OVERSIZE');
   }
@@ -92,8 +96,8 @@ async function publishMemoryBody({ payload, presenceSession, lifecycle,
       residentRoot: activationConfig?.AGENTS_OS_RESIDENT_ROOT,
       expectedIdentityOpaqueId: context.identity.opaqueId
     });
-    return writer.publish({ body, memoryId: payload.memoryId,
-      operationRef: payload.operationRef });
+    return writer.publishForDaemon({ body, memoryId: payload.memoryId,
+      operationRef: payload.operationRef }, { checkCurrent: isCurrent });
   } finally {
     body?.fill(0);
     writer?.close();

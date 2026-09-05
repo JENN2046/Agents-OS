@@ -94,9 +94,10 @@ The caller supplies only a UTF-8
 `Buffer` body (at most 1 MiB), typed `memoryId`, and `operationRef`. The client
 binds the request to its established Presence identity, authority generation,
 and context; callers cannot select filesystem roots. The daemon re-queries
-native Presence and rejects a stale context, a replaced/detached session, or a
-closed/timed-out publication request
-before calling its private `MemoryBodyWriter` backend.
+native Presence and checks the bound session, observed request cancellation,
+and a monotonic preparation deadline before the final content-addressed link.
+The deadline is bounded by both the client request and the server connection
+budget and is rechecked after synchronous preparation I/O.
 
 Publication runs under the daemon UID. The system unit permits writes to its
 Memory body root and Resident root; Witness stays read-only. Host processes
@@ -112,7 +113,21 @@ the native verifier/adoption path remains authoritative. No model-facing tool,
 plugin schema, or native method is added. Only publication frames receive the
 bounded larger allowance needed for 1 MiB bodies; ordinary protocol frames
 remain limited to 64 KiB. Invalid payloads, unknown keys, invalid UTF-8/base64,
-oversize bodies, and stale bindings fail closed before publication.
+oversize bodies, and stale bindings fail closed before publication starts.
+
+Once a publication frame has been sent, a timeout, disconnect, or rejected
+response is reported conservatively as `MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN`.
+A final link or its durability sync can outlast the deadline; completed file
+publication cannot be cancelled by losing its reply. Retry the same identity,
+`memoryId`, body bytes, and `operationRef` through the current authenticated
+Presence session. The daemon reopens an existing final leaf without following
+symlinks and checks its owner, permissions, single link, size, full content hash,
+and stable path/inode before returning the same descriptor and receipt.
+It never overwrites or deletes that existing leaf. This deduplicates exact
+content placement; it is not an operation-reference ledger or formal adoption.
+Unexpected metadata or crash residues such as multiple links remain rejected;
+this path does not automatically repair them.
+The standalone writer's default duplicate-conflict behavior is unchanged.
 
 ## Protected roots and one-shot Witness provisioning
 

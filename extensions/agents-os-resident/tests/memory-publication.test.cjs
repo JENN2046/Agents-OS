@@ -29,7 +29,7 @@ function rehash(context) {
   return context;
 }
 
-async function fixture(t) {
+async function fixture(t, { createConnection } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-publication-'));
   const residentRoot = path.join(root, 'resident');
   const bodyRoot = path.join(root, 'body');
@@ -58,7 +58,8 @@ async function fixture(t) {
     activationConfig: { AGENTS_OS_RESIDENT_ROOT: residentRoot,
       AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT: bodyRoot } });
   const client = createCompanionClient({ socketPath, integrity: INTEGRITY,
-    loadIdentityPolicy: () => null, authenticateDaemon: authenticateFixtureDaemon });
+    loadIdentityPolicy: () => null, authenticateDaemon: authenticateFixtureDaemon,
+    ...(createConnection ? { createConnection } : {}) });
   t.after(async () => { client.detach(); await server.stop(); fs.rmSync(root, { recursive: true, force: true }); });
   await server.start();
   const attachment = (await client.attach()).response;
@@ -70,7 +71,8 @@ async function fixture(t) {
   const request = (overrides = {}) => ({ schema: PROTOCOL_SCHEMA,
     requestId: '1'.repeat(32), expectedBuildId: INTEGRITY.buildId,
     operation: 'publish_memory_body', attachmentToken: attachment.attachmentToken,
-    attachmentGeneration: attachment.attachmentGeneration, payload, ...overrides });
+    attachmentGeneration: attachment.attachmentGeneration, ...overrides,
+    payload: { deadlineUnixMs: Date.now() + 1000, ...(overrides.payload ?? payload) } });
   return { client, bodyRoot, residentRoot, socketPath, context, payload, request,
     setQuery: (next) => { query = next; }, count: () => queryCount };
 }
@@ -109,6 +111,58 @@ test('private publication writes exact 1 MiB body and returns only a noncurrent 
   assert.deepEqual(fs.readdirSync(f.residentRoot), []);
   assert.equal(body[0], 0x61, 'caller-owned body is not wiped');
   assert.doesNotMatch(JSON.stringify(result), /private synthetic|bodyRoot|residentRoot|operationRef"/u);
+  assert.deepEqual(await f.client.publishMemoryBody(input(body)), result,
+    'same-session exact-content retry is idempotent');
+});
+
+test('a lost publication response is unknown and same-session retry recovers the exact receipt', async (t) => {
+  let loseResponse = false;
+  let completed;
+  const f = await fixture(t, { createConnection(options) {
+    const socket = net.createConnection(options);
+    const emit = socket.emit;
+    socket.emit = function(event, ...args) {
+      if (event === 'data' && loseResponse) {
+        loseResponse = false;
+        completed = JSON.parse(args[0].toString('utf8')).result;
+        socket.destroy();
+        return false;
+      }
+      return emit.call(this, event, ...args);
+    };
+    return socket;
+  } });
+  loseResponse = true;
+  await assert.rejects(f.client.publishMemoryBody(input()),
+    { code: 'MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN' });
+  assert.ok(completed);
+  assert.deepEqual(await f.client.publishMemoryBody(input()), completed);
+  assert.equal(completed.receipt.current, false);
+  assert.equal(completed.receipt.authoritative, false);
+});
+
+test('client deadline during delayed requery reports unknown without blocking the next publication', async (t) => {
+  const f = await fixture(t);
+  let release;
+  let started;
+  const ready = new Promise((resolve) => { started = resolve; });
+  let first = true;
+  f.setQuery(async (request) => {
+    if (first) {
+      first = false;
+      started();
+      await new Promise((resolve) => { release = resolve; });
+    }
+    return contextFor(request);
+  });
+  const pending = f.client.publishMemoryBody(input());
+  const rejected = assert.rejects(pending, { code: 'MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN' });
+  await ready;
+  await rejected;
+  release();
+  await new Promise((resolve) => setImmediate(resolve));
+  noPublication(f);
+  assert.equal((await f.client.publishMemoryBody(input())).receipt.current, false);
 });
 
 test('publication rejects malformed body and path/identity injections before native query or writes', async (t) => {
@@ -119,6 +173,8 @@ test('publication rejects malformed body and path/identity injections before nat
     { ...f.payload, memoryId: { path: '/tmp/injected' } },
     { ...f.payload, expectedIdentityOpaqueId: {} },
     { ...f.payload, operationRef: 'bad\u0000reference' },
+    { ...f.payload, deadlineUnixMs: 0 },
+    { ...f.payload, deadlineUnixMs: 'tomorrow' },
     { ...f.payload, bodyBase64: 'YQ' },
     { ...f.payload, bodyBase64: 'YR==' },
     { ...f.payload, bodyBase64: '/w==' },
@@ -127,7 +183,7 @@ test('publication rejects malformed body and path/identity injections before nat
   for (const payload of badPayloads) {
     const response = await rawExchange(f.socketPath, f.request({ payload }));
     assert.equal(response.accepted, false);
-    assert.equal(response.errorCategory, 'REQUEST_REJECTED');
+    assert.equal(response.errorCategory, 'PUBLICATION_OUTCOME_UNKNOWN');
   }
   await assert.rejects(f.client.publishMemoryBody(input(Buffer.from([0xff]))));
   await assert.rejects(f.client.publishMemoryBody(input(Buffer.alloc(MAX_MEMORY_BODY_BYTES + 1))));

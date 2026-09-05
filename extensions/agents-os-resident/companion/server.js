@@ -245,6 +245,7 @@ function createCompanionServer({
   }
 
   function handleConnection(socket) {
+    const acceptedAt = process.hrtime.bigint();
     if (identityPolicy) {
       try { authenticateConnectedClient(socket, identityPolicy); }
       catch { socket.destroy(); return; }
@@ -356,9 +357,19 @@ function createCompanionServer({
         if (request.operation === 'publish_memory_body') {
           const target = attachment;
           const presenceSession = target.presenceSession;
+          const remainingMs = Number.isSafeInteger(request.payload.deadlineUnixMs)
+            ? Math.max(0, Math.min(handshakeTimeoutMs,
+              request.payload.deadlineUnixMs - Date.now())) : 0;
+          const requestDeadline = process.hrtime.bigint()
+            + BigInt(Math.floor(remainingMs * 1e6));
+          const connectionDeadline = acceptedAt
+            + BigInt(Math.floor(handshakeTimeoutMs * 1e6));
+          const commitDeadline = requestDeadline < connectionDeadline
+            ? requestDeadline : connectionDeadline;
           const result = await publishMemoryBody({
             payload: request.payload, presenceSession, lifecycle, activationConfig,
             isCurrent: () => !stopping && !target.socket.destroyed
+              && process.hrtime.bigint() < commitDeadline
               && !socket.destroyed && !socket.closed
               && !socket.readableEnded && !socket.writableEnded
               && attachment === target && target.presenceSession === presenceSession
@@ -475,7 +486,9 @@ function createCompanionServer({
             : await lifecycle.query(nativeInput);
         writeAndClose(socket, operationResponse(request, result));
       } catch {
-        writeAndClose(socket, rejectionResponse(request, 'REQUEST_REJECTED'));
+        writeAndClose(socket, rejectionResponse(request,
+          request.operation === 'publish_memory_body'
+            ? 'PUBLICATION_OUTCOME_UNKNOWN' : 'REQUEST_REJECTED'));
       }
     });
   }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:ac5ba9c4425870d99881e3fe1e066a79ca0afbb3fabe870b7fec403204458a12",
+  "buildId": "sha256:d751181bb184bdefd891dd7ab270800f98ace30f37c08d983b561b4562ee7cc6",
   "files": [
     {
       "path": "activation.js",
@@ -20,8 +20,8 @@
     },
     {
       "path": "companion/client.js",
-      "byteLength": 10749,
-      "sha256": "fb054f83682da4b41772963ecd99bc47d6b5b2e5322e58f112805d531b537c6b"
+      "byteLength": 11478,
+      "sha256": "025e2cdfc72d42549b52f148ecab237740d32e251c76298192a26d4b43142b68"
     },
     {
       "path": "companion/cognitive-context.js",
@@ -55,13 +55,13 @@
     },
     {
       "path": "companion/memory-body-writer.js",
-      "byteLength": 27128,
-      "sha256": "aab728157f982261d95c3ac62cac32e7a338cce903041657f89ddb1f32642f07"
+      "byteLength": 30259,
+      "sha256": "311d9e1fb6edaf68260fa4ea71c3db5f89a9ee716349cc1ae23b787fd3923049"
     },
     {
       "path": "companion/memory-publication.js",
-      "byteLength": 4421,
-      "sha256": "d9a745d134ff505b96393f6fb359b6a7b0093021fc4b125f6588fae792b015ea"
+      "byteLength": 4660,
+      "sha256": "e672243207be46a209ad4dacefb5400a1d578fc711f195151feee03f29c027aa"
     },
     {
       "path": "companion/presence-context.js",
@@ -75,8 +75,8 @@
     },
     {
       "path": "companion/protocol.js",
-      "byteLength": 11846,
-      "sha256": "2097f1fdd9dad86c284400cc1bf74ee81e40b22682b7c00ffb3304b5ac61e785"
+      "byteLength": 11957,
+      "sha256": "15b6962c77a67222746b856dc1e06690a46256c792ae6d097eed8941a49721c0"
     },
     {
       "path": "companion/resident-daemon.js",
@@ -85,8 +85,8 @@
     },
     {
       "path": "companion/server.js",
-      "byteLength": 20318,
-      "sha256": "32910d568d8a83528249a27f54c38e4d9dbb05115304e9a9482f15238e007672"
+      "byteLength": 21068,
+      "sha256": "eed948fb704edd1770edad29744909803ecf2960b71606c3adcfd1685c511ae9"
     },
     {
       "path": "index.js",

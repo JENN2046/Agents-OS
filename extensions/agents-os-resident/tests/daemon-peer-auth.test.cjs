@@ -5,9 +5,11 @@ const fs = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
 const { tmpdir } = require('node:os');
+const { createRequire } = require('node:module');
+const vm = require('node:vm');
 const test = require('node:test');
 const { createCompanionClient } = require('../companion/client');
-const { authenticateConnectedDaemon, connectedPeerCredentials,
+const { connectedPeerCredentials,
   parsePeerCredentials } = require('../companion/daemon-peer-auth');
 const { parseIdentityPolicy, requirePolicyRole, requireRootOwnedPath,
   requireProtectedStatePath, SOCKET_PATH } = require('../companion/daemon-identity-policy');
@@ -18,10 +20,31 @@ const INTEGRITY = Object.freeze({ buildId: `sha256:${'e'.repeat(64)}`,
   packageVersion: '0.3.0-local-owner.0' });
 const POLICY = Object.freeze({
   schema: 'agents-os-resident.daemon-identity.v1',
-  daemonUid: process.getuid() + 10000, clientUid: process.getuid(),
-  socketGid: process.getgid(), packageRoot: path.resolve(__dirname, '..'),
+  daemonUid: 2001, clientUid: 2002,
+  socketGid: 2002, packageRoot: path.resolve(__dirname, '..'),
   nodeBinary: process.execPath, buildId: INTEGRITY.buildId
 });
+
+// Exercise the production authenticator with an explicitly modeled client
+// role, independently of the account running this fixture. Kernel credential
+// discovery still observes the real connected peer and the real process UID;
+// no process-global identity is monkey-patched and production accepts no root
+// principal. The standalone role tests below cover both root rejection and the
+// enrolled synthetic client role.
+const authPath = path.resolve(__dirname, '../companion/daemon-peer-auth.js');
+const authRequire = createRequire(authPath);
+const authModule = { exports: {} };
+vm.runInNewContext(fs.readFileSync(authPath, 'utf8'), {
+  module: authModule, __dirname: path.dirname(authPath), process,
+  require(specifier) {
+    const imported = authRequire(specifier);
+    if (specifier !== './daemon-identity-policy') return imported;
+    return { ...imported, requirePolicyRole(policy, role) {
+      requirePolicyRole(policy, role, POLICY.clientUid);
+    } };
+  }
+}, { filename: authPath });
+const { authenticateConnectedDaemon } = authModule.exports;
 
 async function socketFixture(t) {
   const root = fs.mkdtempSync(path.join(tmpdir(), 'resident-peer-auth-'));
@@ -66,8 +89,11 @@ test('identity policy requires distinct non-root principals and exact schema', (
     }))), /RESIDENT_DAEMON_IDENTITY_UNTRUSTED/);
   }
   assert.throws(() => parseIdentityPolicy(Buffer.alloc(8193)), /UNTRUSTED/);
-  assert.throws(() => requirePolicyRole(POLICY, 'daemon'), /UNTRUSTED/);
-  requirePolicyRole(POLICY, 'client');
+  assert.throws(() => requirePolicyRole(POLICY, 'daemon', POLICY.clientUid), /UNTRUSTED/);
+  assert.throws(() => requirePolicyRole(POLICY, 'client', 0), /UNTRUSTED/);
+  assert.throws(() => requirePolicyRole(POLICY, 'daemon', 0), /UNTRUSTED/);
+  requirePolicyRole(POLICY, 'client', POLICY.clientUid);
+  requirePolicyRole(POLICY, 'daemon', POLICY.daemonUid);
 });
 
 test('root-owned leaf cannot launder writable, symlink, or host-owned ancestors', () => {
@@ -89,8 +115,15 @@ test('root-owned leaf cannot launder writable, symlink, or host-owned ancestors'
   }), /UNTRUSTED/);
 });
 
-test('actual host-writable checkout is rejected as an installation trust anchor', () => {
-  assert.throws(() => requireRootOwnedPath(POLICY.packageRoot, 'directory'), /UNTRUSTED/);
+test('a real temporary hierarchy cannot serve as a root-owned installation trust anchor', (t) => {
+  const parent = fs.mkdtempSync(path.join(tmpdir(), 'resident-untrusted-installation-'));
+  const root = path.join(parent, 'package');
+  t.after(() => fs.rmSync(parent, { recursive: true, force: true }));
+  fs.mkdirSync(root, { mode: 0o700 });
+  fs.chmodSync(parent, 0o777);
+  // The fixture is beneath an explicitly writable ancestor, including when
+  // root runs this suite from a valid installation with a private TMPDIR.
+  assert.throws(() => requireRootOwnedPath(root, 'directory'), /UNTRUSTED/);
 });
 
 test('protected daemon-owned roots reject host-controlled ancestor directories', () => {

@@ -142,14 +142,20 @@ function createCompanionClient({
       let settled = false;
       let bytes = Buffer.alloc(0);
       let daemonIdentity = null;
+      let publicationSent = false;
+      let publicationTimer;
       const socket = createConnection({ path: socketPath });
       const fail = (error) => {
         if (settled) return;
         settled = true;
+        clearTimeout(publicationTimer);
         socket.destroy();
-        reject(mapTransportError(error));
+        reject(publicationSent
+          ? fixedError('MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN')
+          : mapTransportError(error));
       };
       const cleanup = () => {
+        clearTimeout(publicationTimer);
         socket.off('data', onData);
         socket.off('timeout', onTimeout);
         socket.off('error', onError);
@@ -173,7 +179,12 @@ function createCompanionClient({
             }
           }
           if (settled || socket.destroyed) return;
+          if (request.operation === 'publish_memory_body'
+            && Date.now() >= request.payload.deadlineUnixMs) {
+            throw fixedError('RESIDENT_COMPANION_UNAVAILABLE');
+          }
           const frame = encodeFrame(request);
+          publicationSent = request.operation === 'publish_memory_body';
           socket.write(frame, () => {
             if (request.operation === 'publish_memory_body') frame.fill(0);
           });
@@ -226,6 +237,10 @@ function createCompanionClient({
         }
       };
       socket.setTimeout(handshakeTimeoutMs);
+      if (request.operation === 'publish_memory_body') {
+        publicationTimer = setTimeout(onTimeout,
+          Math.max(0, request.payload.deadlineUnixMs - Date.now()));
+      }
       socket.once('connect', onConnect);
       socket.on('data', onData);
       socket.once('timeout', onTimeout);
@@ -298,7 +313,8 @@ function createCompanionClient({
 
   async function publishMemoryBody(input) {
     if (!attachment) throw fixedError('RESIDENT_ATTACHMENT_REQUIRED');
-    const payload = publicationPayload(input, attachment.presenceSession);
+    const payload = publicationPayload(input, attachment.presenceSession,
+      Date.now() + handshakeTimeoutMs);
     try {
       return await protectedExchange('publish_memory_body', payload);
     } finally {

@@ -97,6 +97,7 @@ async function client() {
       attachmentGeneration: attach.response.attachmentGeneration,
       attachmentToken: attach.response.attachmentToken,
       payload: {
+        deadlineUnixMs: Date.now() + 1000,
         bodyBase64: BODY.toString('base64'), memoryId: MEMORY_ID,
         operationRef: publication.operationRef,
         expectedContextId: presence.contextId,
@@ -108,6 +109,8 @@ async function client() {
     send({ negativeRequestsRejected: 5 });
     assert.equal((await once(process, 'message'))[0], 'publish');
     const result = await connection.publishMemoryBody(publication);
+    const retry = await connection.publishMemoryBody(publication);
+    assert.deepEqual(retry, result, 'identical authenticated retry must return the same verified descriptor and receipt');
     assert.equal(result.receipt.current, false);
     assert.equal(result.receipt.authoritative, false);
     assert.equal(result.receipt.publicationStatus, 'PUBLISHED_NON_CURRENT');
@@ -119,6 +122,7 @@ async function client() {
     assert.throws(() => fs.writeFileSync(bodyPath, 'host overwrite'), { code: 'EACCES' });
     send({ positiveExchanges: 3, memoryPublicationAccepted: true,
       publicationCurrent: false, publicationAuthoritative: false,
+      exactPublicationRetryAccepted: true,
       rawHostPublishedBodyAccessDenied: true });
   } finally { connection.detach(); }
 }
@@ -148,6 +152,7 @@ async function wrongClient() {
     { ...base, operation: 'status' },
     { ...base, operation: 'publish_memory_body', attachmentGeneration: 1,
       attachmentToken: 'a'.repeat(64), payload: {
+        deadlineUnixMs: Date.now() + 1000,
         bodyBase64: BODY.toString('base64'), memoryId: MEMORY_ID,
         operationRef: 'operation:synthetic:unregistered-publication',
         expectedContextId: `sha256:${'a'.repeat(64)}`,
@@ -264,7 +269,8 @@ async function orchestrate() {
   assert.equal(fs.realpathSync('/source'), '/source');
   for (const argv of [
     ['/source/tools/render-systemd-unit.mjs', '--check'],
-    ['--test', '/source/tests/systemd-renderer.test.mjs']
+    ['--test', '/source/tests/systemd-renderer.test.mjs'],
+    ['--test', '/source/tests/daemon-peer-auth.test.cjs']
   ]) {
     const check = spawnSync(process.execPath, argv, {
       cwd: '/source', encoding: 'utf8', timeout: 10000,
@@ -318,7 +324,7 @@ async function orchestrate() {
   const positive = await clientProcess.next();
   await clientProcess.ended;
   const publicationCounts = await request(daemonProcess, 'counts');
-  assert.equal(publicationCounts.presenceCalls, 2, 'daemon must requery current Presence before publication');
+  assert.equal(publicationCounts.presenceCalls, 3, 'daemon must requery current Presence before publication and retry');
   assert.equal(publicationCounts.queryCalls, 1);
   const publishedFiles = [];
   function inspectBodyTree(directory) {
@@ -361,6 +367,7 @@ async function orchestrate() {
     publishedBodyOwnerUid: DAEMON_UID,
     publishedBodyFileCount: publishedFiles.length,
     rootRendererChecksPassed: true,
+    rootPeerAuthChecksPassed: true,
     publicationPresenceRequeried: true,
     installationQualification: false, buildId: manifest.buildId,
     nodeVersion: process.version,

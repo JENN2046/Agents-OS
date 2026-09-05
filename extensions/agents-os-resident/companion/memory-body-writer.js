@@ -54,6 +54,7 @@ const HEX_DIGEST = /^[0-9a-f]{64}$/u;
 const FIXED_PUBLICATION_ERRORS = new Set([
   'MEMORY_BODY_PUBLICATION_CONFLICT',
   'MEMORY_BODY_PUBLICATION_OVERSIZE',
+  'MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN',
   'MEMORY_BODY_PUBLICATION_REJECTED',
   'MEMORY_BODY_PUBLICATION_UNAVAILABLE',
   'MEMORY_BODY_WRITER_ROOT_REJECTED'
@@ -66,7 +67,8 @@ const BODY_TEMP_OPEN_FLAGS = fsConstants.O_RDWR
   | fsConstants.O_CREAT
   | fsConstants.O_EXCL
   | fsConstants.O_NOFOLLOW;
-const BODY_REOPEN_FLAGS = fsConstants.O_RDONLY | fsConstants.O_NOFOLLOW;
+const BODY_REOPEN_FLAGS = fsConstants.O_RDONLY | fsConstants.O_NOFOLLOW
+  | fsConstants.O_NONBLOCK;
 const MAX_TEMP_CREATE_ATTEMPTS = 16;
 
 function hasFixedCode(error, code) {
@@ -355,7 +357,7 @@ function createTemporaryBody(memoryDirectoryFd, bodyDigest) {
   throw fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
 }
 
-function validateExactOpenBody(fd, expectedDigest, expectedLength) {
+function validateExactOpenBody(fd, expectedDigest, expectedLength, checkCurrent = () => {}) {
   let readBuffer;
   try {
     const before = fstatSync(fd, { bigint: true });
@@ -386,6 +388,7 @@ function validateExactOpenBody(fd, expectedDigest, expectedLength) {
       }
       hasher.update(readBuffer.subarray(0, read));
       readBuffer.fill(0, 0, read);
+      checkCurrent();
     }
     readBuffer.fill(0);
 
@@ -427,11 +430,12 @@ function unlinkRetainedTemporaryBody(temporaryPath, fd) {
   return true;
 }
 
-function writeExactBody(memoryDirectoryFd, bodyDigest, body) {
+function writeExactBody(memoryDirectoryFd, bodyDigest, body, checkCurrent = () => {}, daemonMode = false) {
   const bodyPath = finalBodyPath(memoryDirectoryFd, bodyDigest);
   let temporary;
   let durable;
   let failure;
+  let linkAttempted = false;
   try {
     temporary = createTemporaryBody(memoryDirectoryFd, bodyDigest);
     fchmodSync(temporary.fd, 0o600);
@@ -459,19 +463,24 @@ function writeExactBody(memoryDirectoryFd, bodyDigest, body) {
         throw fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
       }
       offset += written;
+      checkCurrent();
     }
     fsyncSync(temporary.fd);
+    checkCurrent();
     const verifiedTemporary = validateExactOpenBody(
       temporary.fd,
       bodyDigest,
-      body.length
+      body.length,
+      checkCurrent
     );
     const durableTemporary = lstatSync(temporary.path, { bigint: true });
     if (!sameFileRevision(verifiedTemporary, durableTemporary)) {
       throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
     }
 
+    checkCurrent();
     try {
+      linkAttempted = true;
       linkSync(temporary.path, bodyPath);
     } catch (error) {
       if (error?.code === 'EEXIST') {
@@ -479,6 +488,7 @@ function writeExactBody(memoryDirectoryFd, bodyDigest, body) {
       }
       throw fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
     }
+    checkCurrent();
     const retainedAfterPublish = fstatSync(temporary.fd, { bigint: true });
     const published = lstatSync(bodyPath, { bigint: true });
     const temporaryLink = lstatSync(temporary.path, { bigint: true });
@@ -496,9 +506,11 @@ function writeExactBody(memoryDirectoryFd, bodyDigest, body) {
     // writer does not guess provenance or auto-clean that narrow residue.
     // The Rust verifier keeps nlink=1 mandatory and therefore fails closed.
     fsyncSync(memoryDirectoryFd);
+    checkCurrent();
     unlinkRetainedTemporaryBody(temporary.path, temporary.fd);
     temporary.path = undefined;
     fsyncSync(memoryDirectoryFd);
+    checkCurrent();
 
     durable = fstatSync(temporary.fd, { bigint: true });
     const durableLink = lstatSync(bodyPath, { bigint: true });
@@ -512,7 +524,9 @@ function writeExactBody(memoryDirectoryFd, bodyDigest, body) {
       throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
     }
   } catch (error) {
-    failure = FIXED_PUBLICATION_ERRORS.has(error?.code)
+    failure = daemonMode && linkAttempted && error?.code !== 'MEMORY_BODY_PUBLICATION_CONFLICT'
+      ? fixedError('MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN')
+      : FIXED_PUBLICATION_ERRORS.has(error?.code)
       ? error
       : fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
   } finally {
@@ -573,6 +587,38 @@ function validateDurableBody(
   }
 }
 
+// Used only by the daemon's retry-capable publication path. An existing name
+// is never overwritten or removed: every byte and the stable protected inode
+// must match before it can satisfy an uncertain earlier publication attempt.
+function openExistingExactBody(memoryDirectoryFd, bodyDigest, bodyLength, checkCurrent) {
+  const bodyPath = finalBodyPath(memoryDirectoryFd, bodyDigest);
+  let fd;
+  let verified = false;
+  try {
+    try {
+      fd = openSync(bodyPath, BODY_REOPEN_FLAGS);
+    } catch (error) {
+      if (error?.code === 'ENOENT') return null;
+      throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+    }
+    const durable = validateExactOpenBody(fd, bodyDigest, bodyLength, checkCurrent);
+    const linked = lstatSync(bodyPath, { bigint: true });
+    if (!sameFileRevision(durable, linked)) {
+      throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+    }
+    verified = true;
+    checkCurrent();
+    fsyncSync(fd);
+    checkCurrent();
+    return { durable, fd };
+  } catch (error) {
+    if (fd !== undefined) closeSync(fd);
+    if (verified) throw fixedError('MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN');
+    if (isFixedPublicationError(error)) throw error;
+    throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+  }
+}
+
 function sameFileRevision(left, right) {
   return sameDirectoryIdentity(left, right)
     && left.size === right.size
@@ -584,7 +630,8 @@ function reopenExactBody(
   memoryDirectoryFd,
   bodyDigest,
   durable,
-  bodyLength
+  bodyLength,
+  checkCurrent = () => {}
 ) {
   const bodyPath = `/proc/self/fd/${memoryDirectoryFd}/${bodyDigest}.body`;
   let fd;
@@ -623,6 +670,7 @@ function reopenExactBody(
       }
       hasher.update(readBuffer.subarray(0, read));
       readBuffer.fill(0, 0, read);
+      checkCurrent();
     }
     readBuffer.fill(0);
 
@@ -778,10 +826,25 @@ class MemoryBodyWriter {
   }
 
   publish(value) {
+    return this.#publish(value, () => {}, false);
+  }
+
+  publishForDaemon(value, { checkCurrent } = {}) {
+    if (typeof checkCurrent !== 'function') {
+      throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+    }
+    const guard = () => {
+      if (checkCurrent() !== true) throw fixedError('MEMORY_BODY_PUBLICATION_REJECTED');
+    };
+    return this.#publish(value, guard, true);
+  }
+
+  #publish(value, checkCurrent, allowExactRetry) {
     let input;
     try {
       input = normalizePublicationInput(value);
-      return this.#publishExact(input);
+      checkCurrent();
+      return this.#publishExact(input, checkCurrent, allowExactRetry);
     } catch (error) {
       if (isFixedPublicationError(error)) throw error;
       throw fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
@@ -790,7 +853,7 @@ class MemoryBodyWriter {
     }
   }
 
-  #publishExact(input) {
+  #publishExact(input, checkCurrent, allowExactRetry) {
     if (this.#closed) {
       throw fixedError('MEMORY_BODY_PUBLICATION_UNAVAILABLE');
     }
@@ -808,6 +871,7 @@ class MemoryBodyWriter {
       input.operationRef
     );
     const bodyDigest = sha256(input.body);
+    checkCurrent();
 
     let identityDirectoryFd;
     let memoryDirectoryFd;
@@ -822,11 +886,28 @@ class MemoryBodyWriter {
         identityDirectoryFd,
         memoryDigest
       );
-      bodyFile = writeExactBody(memoryDirectoryFd, bodyDigest, input.body);
+      checkCurrent();
+      if (allowExactRetry) {
+        bodyFile = openExistingExactBody(memoryDirectoryFd, bodyDigest,
+          input.body.length, checkCurrent);
+      }
+      if (!bodyFile) {
+        try {
+          bodyFile = writeExactBody(memoryDirectoryFd, bodyDigest, input.body, checkCurrent, allowExactRetry);
+        } catch (error) {
+          if (!allowExactRetry || error?.code !== 'MEMORY_BODY_PUBLICATION_CONFLICT') throw error;
+          bodyFile = openExistingExactBody(memoryDirectoryFd, bodyDigest,
+            input.body.length, checkCurrent);
+          if (!bodyFile) throw error;
+        }
+      }
 
       fsyncSync(memoryDirectoryFd);
+      checkCurrent();
       fsyncSync(identityDirectoryFd);
+      checkCurrent();
       fsyncSync(this.#bodyRoot.fd);
+      checkCurrent();
 
       validateChildDirectory(
         identityDirectoryFd,
@@ -852,8 +933,10 @@ class MemoryBodyWriter {
         memoryDirectoryFd,
         bodyDigest,
         bodyFile.durable,
-        input.body.length
+        input.body.length,
+        checkCurrent
       );
+      checkCurrent();
     } catch (error) {
       failure = FIXED_PUBLICATION_ERRORS.has(error?.code)
         ? error
@@ -872,7 +955,10 @@ class MemoryBodyWriter {
         }
       }
     }
-    if (failure !== undefined) throw failure;
+    if (failure !== undefined) {
+      if (allowExactRetry && bodyFile) throw fixedError('MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN');
+      throw failure;
+    }
 
     return publicationResult({
       bodyDigest,

@@ -20,6 +20,7 @@ const { tmpdir } = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const { Worker } = require('node:worker_threads');
+const { performance } = require('node:perf_hooks');
 
 const {
   BODY_DESCRIPTOR_SCHEMA,
@@ -89,6 +90,25 @@ function writerConfig(roots) {
     expectedIdentityOpaqueId: IDENTITY,
     residentRoot: roots.residentRoot
   };
+}
+
+function writerWithFilesystemHook(name, hook) {
+  const modulePath = require.resolve('../companion/memory-body-writer');
+  const previousModule = require.cache[modulePath];
+  const nodeFs = require('node:fs');
+  const previous = nodeFs[name];
+  try {
+    nodeFs[name] = (...args) => hook(previous, ...args);
+    delete require.cache[modulePath];
+    return require(modulePath).MemoryBodyWriter;
+  } finally {
+    nodeFs[name] = previous;
+    require.cache[modulePath] = previousModule;
+  }
+}
+
+function blockSynchronously(milliseconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
 }
 
 function expectedLocation(body = BODY) {
@@ -974,4 +994,148 @@ test('limits the module surface and serialized instance discloses no bound paths
     'MEMORY_BODY_WRITER_ROOT_REJECTED',
     [SENTINEL_TEXT, roots.bodyRoot, roots.residentRoot]
   );
+});
+
+test('daemon deadlines expire during blocking write/file sync before the final link', async (t) => {
+  for (const operation of ['writeSync', 'fsyncSync']) {
+    await t.test(operation, (t) => {
+      const roots = fixture(t);
+      let blocked = false;
+      let deadline = Infinity;
+      const SlowWriter = writerWithFilesystemHook(operation, (original, fd, ...args) => {
+        const result = original(fd, ...args);
+        if (!blocked && require('node:fs').fstatSync(fd).isFile()) {
+          blocked = true;
+          deadline = performance.now() + 20;
+          blockSynchronously(40);
+        }
+        return result;
+      });
+      const writer = new SlowWriter(writerConfig(roots));
+      t.after(() => writer.close());
+      let timerRan = false;
+      const timer = setTimeout(() => { timerRan = true; }, 10);
+      t.after(() => clearTimeout(timer));
+      assert.throws(() => writer.publishForDaemon({ body: BODY, memoryId: MEMORY,
+        operationRef: 'operation:deadline:prelink' },
+      { checkCurrent: () => performance.now() < deadline }), /MEMORY_BODY_PUBLICATION_REJECTED/u);
+      assert.equal(blocked, true);
+      assert.equal(timerRan, false, 'deadline check works while event-loop timers cannot run');
+      const location = expectedLocation();
+      const memoryDirectory = path.join(roots.bodyRoot, location.identityDigest, location.memoryDigest);
+      assert.deepEqual(readdirSync(memoryDirectory), [], 'no final body or retained temporary body');
+      const retry = new MemoryBodyWriter(writerConfig(roots));
+      t.after(() => retry.close());
+      assert.equal(retry.publishForDaemon({ body: BODY, memoryId: MEMORY,
+        operationRef: 'operation:deadline:prelink' }, { checkCurrent: () => true })
+        .receipt.publicationStatus, 'PUBLISHED_NON_CURRENT');
+    });
+  }
+});
+
+test('daemon unknown outcomes after slow link/directory sync support exact-content retry without replacing final inode', async (t) => {
+  for (const operation of ['linkSync', 'fsyncSync']) {
+    await t.test(operation, (t) => {
+      const roots = fixture(t);
+      let blocked = false;
+      let deadline = Infinity;
+      const SlowWriter = writerWithFilesystemHook(operation, (original, ...args) => {
+        const result = original(...args);
+        if (!blocked && (operation === 'linkSync'
+          || require('node:fs').fstatSync(args[0]).isDirectory())) {
+          blocked = true;
+          deadline = performance.now() + 20;
+          blockSynchronously(40);
+        }
+        return result;
+      });
+      const writer = new SlowWriter(writerConfig(roots));
+      t.after(() => writer.close());
+      const request = { body: BODY, memoryId: MEMORY, operationRef: 'operation:deadline:unknown-outcome' };
+      assert.throws(() => writer.publishForDaemon(request,
+        { checkCurrent: () => performance.now() < deadline }), /MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN/u);
+      assert.equal(blocked, true);
+      const location = expectedLocation();
+      const memoryDirectory = path.join(roots.bodyRoot, location.identityDigest, location.memoryDigest);
+      const bodyPath = path.join(memoryDirectory, `${location.bodyDigest}.body`);
+      const before = lstatSync(bodyPath, { bigint: true });
+      assert.equal(before.nlink, 1n);
+      assert.deepEqual(readFileSync(bodyPath), BODY);
+      const retry = new MemoryBodyWriter(writerConfig(roots));
+      t.after(() => retry.close());
+      const receipt = retry.publishForDaemon(request, { checkCurrent: () => true });
+      assert.equal(receipt.receipt.current, false);
+      assert.equal(receipt.receipt.authoritative, false);
+      assert.deepEqual(retry.publishForDaemon(request, { checkCurrent: () => true }), receipt,
+        'a lost response may be retried without changing the publication');
+      assert.equal(lstatSync(bodyPath, { bigint: true }).ino, before.ino);
+      assert.deepEqual(readdirSync(memoryDirectory), [`${location.bodyDigest}.body`]);
+      assert.throws(() => retry.publish(request), /MEMORY_BODY_PUBLICATION_CONFLICT/u,
+        'legacy strict writer semantics are unchanged');
+    });
+  }
+});
+
+test('daemon exact-content retry rejects tampered content, mode, hardlinks and symlinks without repair', async (t) => {
+  for (const mutation of ['content', 'mode', 'hardlink', 'symlink']) {
+    await t.test(mutation, (t) => {
+      const roots = fixture(t);
+      const writer = new MemoryBodyWriter(writerConfig(roots));
+      t.after(() => writer.close());
+      const request = { body: BODY, memoryId: MEMORY, operationRef: 'operation:retry:tamper' };
+      writer.publish(request);
+      const location = expectedLocation();
+      const bodyPath = path.join(roots.bodyRoot, location.identityDigest, location.memoryDigest,
+        `${location.bodyDigest}.body`);
+      if (mutation === 'content') writeFileSync(bodyPath, Buffer.alloc(BODY.length, 0x61));
+      if (mutation === 'mode') chmodSync(bodyPath, 0o644);
+      if (mutation === 'hardlink') require('node:fs').linkSync(bodyPath, path.join(roots.parent, 'other-link'));
+      if (mutation === 'symlink') {
+        renameSync(bodyPath, path.join(roots.parent, 'original-body'));
+        symlinkSync(path.join(roots.parent, 'original-body'), bodyPath);
+      }
+      const before = lstatSync(bodyPath, { bigint: true });
+      const bytes = readFileSync(bodyPath);
+      assert.throws(() => writer.publishForDaemon(request, { checkCurrent: () => true }),
+        /MEMORY_BODY_PUBLICATION_REJECTED/u);
+      const after = lstatSync(bodyPath, { bigint: true });
+      for (const key of ['ino', 'dev', 'mode', 'nlink', 'size', 'mtimeNs', 'ctimeNs']) {
+        assert.equal(after[key], before[key]);
+      }
+      assert.deepEqual(readFileSync(bodyPath), bytes);
+    });
+  }
+});
+
+test('daemon retry rejects a substituted FIFO without blocking on open', (t) => {
+  const roots = fixture(t);
+  const writer = new MemoryBodyWriter(writerConfig(roots));
+  t.after(() => writer.close());
+  const request = { body: BODY, memoryId: MEMORY, operationRef: 'operation:retry:fifo' };
+  writer.publish(request);
+  const location = expectedLocation();
+  const bodyPath = path.join(roots.bodyRoot, location.identityDigest, location.memoryDigest,
+    `${location.bodyDigest}.body`);
+  unlinkSync(bodyPath);
+  const { spawnSync } = require('node:child_process');
+  const made = spawnSync('mkfifo', ['-m', '600', bodyPath], { encoding: 'utf8' });
+  assert.equal(made.status, 0, 'Linux FIFO test fixture creation succeeds');
+  const script = `
+    const { MemoryBodyWriter } = require(process.argv[1]);
+    const writer = new MemoryBodyWriter(JSON.parse(process.argv[2]));
+    try {
+      writer.publishForDaemon({ body: Buffer.from(process.argv[3], 'base64'),
+        memoryId: process.argv[4], operationRef: 'operation:retry:fifo' },
+        { checkCurrent: () => true });
+      process.exitCode = 1;
+    } catch (error) {
+      process.stdout.write(error.code);
+    } finally { writer.close(); }
+  `;
+  const result = spawnSync(process.execPath, ['-e', script,
+    require.resolve('../companion/memory-body-writer'), JSON.stringify(writerConfig(roots)),
+    BODY.toString('base64'), MEMORY], { encoding: 'utf8', timeout: 1500 });
+  assert.equal(result.status, 0, result.error?.code);
+  assert.equal(result.stdout, 'MEMORY_BODY_PUBLICATION_REJECTED');
+  assert.equal(lstatSync(bodyPath).isFIFO(), true);
 });
