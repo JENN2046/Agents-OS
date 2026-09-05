@@ -18,12 +18,14 @@ const STATIC_INVENTORY = Object.freeze([
   'resident-peer-credentials',
   'agents-os-resident.linux-x64-gnu.node',
   'companion/memory-body-writer.js',
+  'deployment/hardened-installation-contract.v1.json',
   'package-manifest.json',
   'package.json',
   'plugin-manifest.json.block',
   'systemd/agents-os-resident.service.template',
   'tools/build-companion-integrity.mjs',
   'tools/render-systemd-unit.mjs',
+  'tools/stage-hardened-installation.mjs',
   'tools/validate-companion-projection.mjs',
   'tools/verify-host-presentation-binding.mjs'
 ]);
