@@ -12,6 +12,14 @@
       "apply": "apply-stage-only",
       "requiresStage1Receipt": true,
       "scope": "staged-installation-only"
+    },
+    "observation": {
+      "request": "preview-observation-request",
+      "observe": "observe-installation",
+      "requestSchema": "agents-os-resident.installation-observation-request.v1",
+      "receiptSchema": "agents-os-resident.installation-observation-receipt.v1",
+      "observerVersion": "HARDENED_INSTALLATION_OBSERVER_V1",
+      "scope": "resident-installation-namespaces-read-only"
     }
   },
   "platform": {

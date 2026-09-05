@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import {
   chmodSync,
   existsSync,
+  linkSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -21,10 +22,12 @@ import test from 'node:test';
 import {
   applyIdentityPlan,
   applyStageOnly,
+  createInstallationObservationReceipt,
   createIdentityPlan,
   loadInstallationContract,
   observeFilesystemPath,
-  previewInstallation
+  previewInstallation,
+  previewInstallationObservationRequest
 } from '../tools/stage-hardened-installation.mjs';
 
 function sha256(bytes) {
@@ -33,6 +36,14 @@ function sha256(bytes) {
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function canonicalDigest(value) {
+  const walk = (input) => Array.isArray(input) ? input.map(walk)
+    : input !== null && typeof input === 'object'
+      ? Object.fromEntries(Object.keys(input).sort().map((key) => [key, walk(input[key])]))
+      : input;
+  return `sha256:${sha256(Buffer.from(JSON.stringify(walk(value)), 'utf8'))}`;
 }
 
 function fixture(t) {
@@ -86,6 +97,7 @@ function fixture(t) {
   };
   const operations = [];
   let failIdentityKind = null;
+  let denyProtectedObservation = false;
   const named = () => ({
     daemonUser: state.daemonUser,
     daemonGroup: state.daemonGroup,
@@ -118,6 +130,10 @@ function fixture(t) {
       }
     },
     observeFilesystemPath(destination) {
+      if (denyProtectedObservation && path.relative(contract.paths.stateRoot, destination)
+        .split(path.sep)[0] !== '..') {
+        throw new Error('INSTALL_PRIVILEGED_OBSERVATION_REQUIRED');
+      }
       const observed = observeFilesystemPath(destination);
       const owner = virtualOwnership.get(destination);
       return owner === undefined || !observed.exists ? observed : { ...observed, ...owner };
@@ -176,6 +192,11 @@ function fixture(t) {
     },
     daemonReload() { operations.push(['daemon-reload']); }
   };
+  const privilegedObserveFilesystemPath = (destination) => {
+    const observed = observeFilesystemPath(destination);
+    const owner = virtualOwnership.get(destination);
+    return owner === undefined || !observed.exists ? observed : { ...observed, ...owner };
+  };
 
   const stage1 = () => {
     const plan = createIdentityPlan({ identityState: named(), contract });
@@ -194,9 +215,11 @@ function fixture(t) {
     archiveTree,
     contract,
     operations,
+    privilegedObserveFilesystemPath,
     repack,
     root,
     setFailIdentityKind(value) { failIdentityKind = value; },
+    setDenyProtectedObservation(value) { denyProtectedObservation = value; },
     setVirtualOwner(destination, uid, gid) { virtualOwnership.set(destination, { uid, gid }); },
     stage1,
     stage2Plan,
@@ -214,6 +237,13 @@ test('contract freezes two approvals, named dynamic identities, paths, and Node 
     stage2: {
       preview: 'preview-install', apply: 'apply-stage-only',
       requiresStage1Receipt: true, scope: 'staged-installation-only'
+    },
+    observation: {
+      request: 'preview-observation-request', observe: 'observe-installation',
+      requestSchema: 'agents-os-resident.installation-observation-request.v1',
+      receiptSchema: 'agents-os-resident.installation-observation-receipt.v1',
+      observerVersion: 'HARDENED_INSTALLATION_OBSERVER_V1',
+      scope: 'resident-installation-namespaces-read-only'
     }
   });
   assert.equal(contract.identities.daemonUser, 'agents-os-resident');
@@ -335,7 +365,8 @@ test('Stage 2 preview requires receipt and Node, and binds identities, artifact,
   assert.equal(plan.nodeArtifact.validatedVersion, 'v22.23.1');
   assert.ok(plan.filesystemPreconditions.length > plan.files.length);
   assert.ok(plan.filesystemPreconditions.every((entry) =>
-    Object.hasOwn(entry.observed, 'exists') && Object.hasOwn(entry.observed, 'inode')));
+    Object.hasOwn(entry.observed, 'exists') && Object.hasOwn(entry.observed, 'inode')
+      && Object.hasOwn(entry.observed, 'nlink')));
   assert.match(plan.planDigest, /^sha256:[0-9a-f]{64}$/u);
   assert.deepEqual(value.operations, []);
 
@@ -508,6 +539,128 @@ test('two-stage disposable flow installs exact stage-only projection without aut
   }
 });
 
+test('repeat preview fails closed for client EACCES and succeeds with bounded observation receipt', (t) => {
+  const value = fixture(t);
+  const receipt = value.stage1().receipt;
+  const firstPlan = value.stage2Plan(receipt);
+  applyStageOnly({
+    plan: firstPlan, approvedPlanDigest: firstPlan.planDigest,
+    clientUser: value.state.clientUser.name, nodeArchive: value.archive,
+    adapter: value.adapter, contract: value.contract
+  });
+  value.operations.length = 0;
+  value.setDenyProtectedObservation(true);
+  assert.throws(() => value.stage2Plan(receipt), /INSTALL_PRIVILEGED_OBSERVATION_REQUIRED/u);
+  assert.deepEqual(value.operations, []);
+
+  const request = previewInstallationObservationRequest({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter, contract: value.contract
+  });
+  const observationReceipt = createInstallationObservationReceipt({
+    request, observer: value.privilegedObserveFilesystemPath, contract: value.contract
+  });
+  const repeatPlan = previewInstallation({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter,
+    observationReceipt, contract: value.contract
+  });
+  assert.equal(repeatPlan.planDigest.startsWith('sha256:'), true);
+  assert.equal(observationReceipt.continuityAuthority, false);
+  assert.deepEqual(request.paths.map((entry) => entry.path).sort(), [
+    value.contract.paths.stateRoot,
+    value.contract.paths.residentRoot,
+    value.contract.paths.witnessRoot,
+    value.contract.paths.memoryBodyRoot
+  ].sort());
+});
+
+test('privileged observation request rejects paths outside Resident namespaces', (t) => {
+  const value = fixture(t);
+  const receipt = value.stage1().receipt;
+  const request = clone(previewInstallationObservationRequest({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter, contract: value.contract
+  }));
+  request.paths[0] = { path: '/etc/shadow', expectedKind: 'control-file' };
+  const unsigned = clone(request);
+  delete unsigned.requestDigest;
+  request.requestDigest = canonicalDigest(unsigned);
+  assert.throws(() => createInstallationObservationReceipt({
+    request, observer: value.privilegedObserveFilesystemPath, contract: value.contract
+  }), /INSTALL_OBSERVATION_REQUEST_INVALID/u);
+  const privateBodyRequest = clone(previewInstallationObservationRequest({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter, contract: value.contract
+  }));
+  privateBodyRequest.paths.push({
+    path: path.join(value.contract.paths.memoryBodyRoot, 'private-body'),
+    expectedKind: 'package-file'
+  });
+  privateBodyRequest.paths.sort((left, right) => left.path.localeCompare(right.path));
+  const privateUnsigned = clone(privateBodyRequest);
+  delete privateUnsigned.requestDigest;
+  privateBodyRequest.requestDigest = canonicalDigest(privateUnsigned);
+  assert.throws(() => createInstallationObservationReceipt({
+    request: privateBodyRequest,
+    observer: value.privilegedObserveFilesystemPath,
+    contract: value.contract
+  }), /INSTALL_OBSERVATION_REQUEST_INVALID/u);
+  assert.deepEqual(value.operations.filter(([kind]) => kind !== 'identity'), []);
+});
+
+test('observation receipt is preview input only and root reobservation rejects stale state', (t) => {
+  const value = fixture(t);
+  const receipt = value.stage1().receipt;
+  const request = previewInstallationObservationRequest({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter, contract: value.contract
+  });
+  const observationReceipt = createInstallationObservationReceipt({
+    request, observer: value.privilegedObserveFilesystemPath, contract: value.contract
+  });
+  const plan = previewInstallation({
+    clientUser: value.state.clientUser.name, identityReceipt: receipt,
+    nodeArchive: value.archive, adapter: value.adapter,
+    observationReceipt, contract: value.contract
+  });
+  mkdirSync(value.contract.paths.stateRoot, { mode: 0o700 });
+  value.setVirtualOwner(value.contract.paths.stateRoot, value.state.daemonUser.uid,
+    value.state.daemonGroup.gid);
+  value.operations.length = 0;
+  assertStage2DriftRejected(value, plan, receipt);
+});
+
+test('existing hard-linked Node is rejected before Stage 2 approval', (t) => {
+  const value = fixture(t);
+  const receipt = value.stage1().receipt;
+  const plan = value.stage2Plan(receipt);
+  applyStageOnly({
+    plan, approvedPlanDigest: plan.planDigest,
+    clientUser: value.state.clientUser.name, nodeArchive: value.archive,
+    adapter: value.adapter, contract: value.contract
+  });
+  linkSync(value.contract.paths.nodeBinary, path.join(value.root, 'node-hardlink'));
+  value.operations.length = 0;
+  assert.throws(() => value.stage2Plan(receipt), /INSTALL_FILESYSTEM_PRECONDITION_INVALID/u);
+  assert.deepEqual(value.operations, []);
+});
+
+test('Node nlink drift after preview rejects before every Stage 2 mutation', (t) => {
+  const value = fixture(t);
+  const receipt = value.stage1().receipt;
+  const first = value.stage2Plan(receipt);
+  applyStageOnly({
+    plan: first, approvedPlanDigest: first.planDigest,
+    clientUser: value.state.clientUser.name, nodeArchive: value.archive,
+    adapter: value.adapter, contract: value.contract
+  });
+  const plan = value.stage2Plan(receipt);
+  linkSync(value.contract.paths.nodeBinary, path.join(value.root, 'node-hardlink'));
+  value.operations.length = 0;
+  assertStage2DriftRejected(value, plan, receipt);
+});
+
 test('daemon-reload is a separately bound Stage 2 mutation choice', (t) => {
   const value = fixture(t);
   const receipt = value.stage1().receipt;
@@ -532,6 +685,9 @@ test('installer has no activation path and CLI separates the two approvals', () 
   assert.doesNotMatch(source, /systemctl['"], \[['"](?:start|restart|enable|preset)/u);
   assert.doesNotMatch(source, /enable-now|socket-activate|continuity-admit/u);
   assert.match(source, /systemctl['"], \[['"]daemon-reload['"]\]/u);
+  assert.match(source, /PACKAGE_ROOT !== contract\.paths\.packageRoot/u);
+  assert.match(source, /requireRootOwnedPath\(TOOL_PATH, 'file'\)/u);
+  assert.match(source, /verifyCompanionIntegrity\(\{ packageRoot: PACKAGE_ROOT \}\)/u);
   const missingNode = spawnSync(process.execPath, [
     tool.pathname, '--preview-install', '--client-user', 'fixture-client',
     '--identity-receipt', '/does/not/matter'

@@ -158,9 +158,53 @@ npm run preview:hardened-install -- \
   --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz
 ```
 
-This plan binds the concrete daemon/client UID/GIDs, current membership,
-validated Node artifact, every target path's observed absence/type/symlink,
-canonical path, ownership and mode, plus file size/hash where applicable. It
+For a fresh installation, the unprivileged preview above directly observes the
+complete namespace. After a hardened installation, the daemon-owned `0700`
+state root deliberately prevents the client UID from traversing it. A direct
+repeat preview then fails with `INSTALL_PRIVILEGED_OBSERVATION_REQUIRED`; it
+never treats access denial as absence. Generate a bounded request with the
+candidate, observe only the four contract-defined state directory objects with
+the already-installed root-pinned and integrity-verified installer, then give
+that metadata-only receipt back to the unprivileged candidate preview:
+
+```sh
+node tools/stage-hardened-installation.mjs \
+  --preview-observation-request \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz \
+  > /absolute/review/installation-observation-request.json
+
+sudo /opt/agents-os-resident/runtime/node-v22.23.1-linux-x64/bin/node \
+  /opt/agents-os-resident/tools/stage-hardened-installation.mjs \
+  --observe-installation \
+  --observation-request /absolute/review/installation-observation-request.json \
+  > /absolute/review/installation-observation-receipt.json
+
+node tools/stage-hardened-installation.mjs \
+  --preview-install \
+  --client-user "$USER" \
+  --identity-receipt /absolute/review/resolved-identity-receipt.json \
+  --node-archive /absolute/node-v22.23.1-linux-x64.tar.xz \
+  --observation-receipt /absolute/review/installation-observation-receipt.json
+```
+
+Never invoke the candidate/worktree script through `sudo`: JavaScript begins
+loading before an in-process admission check can protect root. The privileged
+command above therefore names only the previously installed interpreter and
+installer. Observer admission additionally requires that its package root,
+installer, contract, manifest, and manifest-bound files are root-pinned and
+pass companion integrity; a non-installed copy is rejected. It accepts no arbitrary path option,
+does not traverse the protected directories, and emits no Witness or Memory
+contents. The receipt is read-only evidence, not mutation approval. Stage-2
+apply ignores it and reobserves the live filesystem with root authority before
+the first mutation.
+
+The installation plan binds the concrete daemon/client UID/GIDs, current
+membership, validated Node artifact, every target path's observed
+absence/type/symlink, canonical path, ownership, mode and link count, plus file
+size/hash where applicable. Existing regular installation files, including the
+dedicated Node executable, must have exactly one hard link before approval. It
 also binds the desired package/config/state/unit inventory. Apply reobserves
 all of these before its first Stage-2 mutation; any drift rejects the plan with
 zero Stage-2 mutation. After reviewing this second plan, apply only its digest:

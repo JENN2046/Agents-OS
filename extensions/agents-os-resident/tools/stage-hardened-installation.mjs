@@ -36,6 +36,7 @@ const CONTRACT_PATH = resolve(
 );
 const require = createRequire(import.meta.url);
 const { verifyCompanionIntegrity } = require('../companion/integrity');
+const { requireRootOwnedPath } = require('../companion/daemon-identity-policy');
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -96,6 +97,16 @@ export function loadInstallationContract(path = CONTRACT_PATH) {
     || contract.transactions?.stage2?.preview !== 'preview-install'
     || contract.transactions?.stage2?.apply !== 'apply-stage-only'
     || contract.transactions?.stage2?.requiresStage1Receipt !== true
+    || contract.transactions?.observation?.request !== 'preview-observation-request'
+    || contract.transactions?.observation?.observe !== 'observe-installation'
+    || contract.transactions?.observation?.requestSchema
+      !== 'agents-os-resident.installation-observation-request.v1'
+    || contract.transactions?.observation?.receiptSchema
+      !== 'agents-os-resident.installation-observation-receipt.v1'
+    || contract.transactions?.observation?.observerVersion
+      !== 'HARDENED_INSTALLATION_OBSERVER_V1'
+    || contract.transactions?.observation?.scope
+      !== 'resident-installation-namespaces-read-only'
     || contract.platform?.os !== 'linux'
     || contract.platform?.architecture !== 'x86_64'
     || identities?.daemonUser !== 'agents-os-resident'
@@ -692,12 +703,20 @@ function observedType(stat) {
 }
 
 export function observeFilesystemPath(path) {
-  const before = lstatSync(path, { throwIfNoEntry: false });
+  let before;
+  try {
+    before = lstatSync(path, { throwIfNoEntry: false });
+  } catch (error) {
+    if (error?.code === 'EACCES' || error?.code === 'EPERM') {
+      throw new Error('INSTALL_PRIVILEGED_OBSERVATION_REQUIRED');
+    }
+    throw error;
+  }
   if (before === undefined) {
     return Object.freeze({
       exists: false, type: null, symlink: false, canonicalPath: null,
       uid: null, gid: null, mode: null, size: null, sha256: null,
-      device: null, inode: null
+      device: null, inode: null, nlink: null
     });
   }
   const type = observedType(before);
@@ -734,8 +753,41 @@ export function observeFilesystemPath(path) {
     size,
     sha256: fileSha,
     device: String(before.dev),
-    inode: String(before.ino)
+    inode: String(before.ino),
+    nlink: before.nlink
   });
+}
+
+function validateObservedFilesystemState(observed) {
+  if (!exactKeys(observed, [
+    'exists', 'type', 'symlink', 'canonicalPath', 'uid', 'gid', 'mode',
+    'size', 'sha256', 'device', 'inode', 'nlink'
+  ])) throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+  if (observed.exists === false) {
+    if (observed.type !== null || observed.symlink !== false
+      || ['canonicalPath', 'uid', 'gid', 'mode', 'size', 'sha256', 'device', 'inode', 'nlink']
+        .some((key) => observed[key] !== null)) {
+      throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+    }
+    return observed;
+  }
+  if (observed.exists !== true || typeof observed.type !== 'string'
+    || typeof observed.symlink !== 'boolean'
+    || !Number.isSafeInteger(observed.uid) || !Number.isSafeInteger(observed.gid)
+    || !/^[0-7]{4}$/u.test(observed.mode)
+    || typeof observed.device !== 'string' || typeof observed.inode !== 'string'
+    || !Number.isSafeInteger(observed.nlink) || observed.nlink < 1) {
+    throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+  }
+  if (observed.type === 'regular-file') {
+    if (!Number.isSafeInteger(observed.size) || observed.size < 0
+      || !/^[0-9a-f]{64}$/u.test(observed.sha256)) {
+      throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+    }
+  } else if (observed.size !== null || observed.sha256 !== null) {
+    throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+  }
+  return observed;
 }
 
 function filesystemSpecs(plan, contract) {
@@ -770,6 +822,122 @@ function filesystemSpecs(plan, contract) {
     if (!specs.has(path)) add({ path, kind: 'dependency-directory' });
   }
   return [...specs.values()].sort((left, right) => left.path.localeCompare(right.path));
+}
+
+function observerPathAllowed(candidate, contract) {
+  return [
+    contract.paths.stateRoot,
+    contract.paths.residentRoot,
+    contract.paths.witnessRoot,
+    contract.paths.memoryBodyRoot
+  ].includes(candidate);
+}
+
+function observationRequestBase(plan, contract) {
+  return Object.freeze({
+    schemaVersion: contract.transactions.observation.requestSchema,
+    observerContract: Object.freeze({
+      version: contract.transactions.observation.observerVersion,
+      scope: contract.transactions.observation.scope
+    }),
+    deploymentContractIdentity: planDigest(contract),
+    paths: Object.freeze(filesystemSpecs(plan, contract)
+      .filter((spec) => observerPathAllowed(spec.path, contract))
+      .map((spec) => Object.freeze({ path: spec.path, expectedKind: spec.kind })))
+  });
+}
+
+export function createInstallationObservationRequest(plan, contract = loadInstallationContract()) {
+  const base = observationRequestBase(plan, contract);
+  return Object.freeze({ ...base, requestDigest: planDigest(base) });
+}
+
+function validateInstallationObservationRequest(request, contract, { requireContractIdentity = true } = {}) {
+  if (!exactKeys(request, [
+    'schemaVersion', 'observerContract', 'deploymentContractIdentity', 'paths', 'requestDigest'
+  ])
+    || request.schemaVersion !== contract.transactions.observation.requestSchema
+    || !exactKeys(request.observerContract, ['version', 'scope'])
+    || request.observerContract.version !== contract.transactions.observation.observerVersion
+    || request.observerContract.scope !== contract.transactions.observation.scope
+    || !/^sha256:[0-9a-f]{64}$/u.test(request.deploymentContractIdentity)
+    || requireContractIdentity && request.deploymentContractIdentity !== planDigest(contract)
+    || !Array.isArray(request.paths)
+    || request.requestDigest !== planDigest(Object.fromEntries(
+      Object.entries(request).filter(([key]) => key !== 'requestDigest')
+    ))) {
+    throw new Error('INSTALL_OBSERVATION_REQUEST_INVALID');
+  }
+  let previous = null;
+  for (const entry of request.paths) {
+    if (!exactKeys(entry, ['path', 'expectedKind'])
+      || !safeAbsolute(entry.path)
+      || !observerPathAllowed(entry.path, contract)
+      || !['directory', 'package-file', 'node', 'control-file'].includes(entry.expectedKind)
+      || previous !== null && previous.localeCompare(entry.path) >= 0) {
+      throw new Error('INSTALL_OBSERVATION_REQUEST_INVALID');
+    }
+    previous = entry.path;
+  }
+  return request;
+}
+
+export function createInstallationObservationReceipt({
+  request,
+  observer = observeFilesystemPath,
+  contract = loadInstallationContract()
+}) {
+  validateInstallationObservationRequest(request, contract, { requireContractIdentity: false });
+  const base = Object.freeze({
+    schemaVersion: contract.transactions.observation.receiptSchema,
+    observerContract: Object.freeze({
+      version: contract.transactions.observation.observerVersion
+    }),
+    deploymentContract: Object.freeze({ identity: request.deploymentContractIdentity }),
+    requestDigest: request.requestDigest,
+    observations: Object.freeze(request.paths.map((entry) => Object.freeze({
+      path: entry.path,
+      expectedKind: entry.expectedKind,
+      observed: observer(entry.path)
+    }))),
+    continuityAuthority: false
+  });
+  return Object.freeze({ ...base, receiptDigest: planDigest(base) });
+}
+
+function validateInstallationObservationReceipt(receipt, request, contract) {
+  validateInstallationObservationRequest(request, contract);
+  if (!exactKeys(receipt, [
+    'schemaVersion', 'observerContract', 'deploymentContract', 'requestDigest',
+    'observations', 'continuityAuthority', 'receiptDigest'
+  ])
+    || receipt.schemaVersion !== contract.transactions.observation.receiptSchema
+    || !exactKeys(receipt.observerContract, ['version'])
+    || receipt.observerContract.version !== contract.transactions.observation.observerVersion
+    || !exactKeys(receipt.deploymentContract, ['identity'])
+    || receipt.deploymentContract.identity !== request.deploymentContractIdentity
+    || receipt.requestDigest !== request.requestDigest
+    || receipt.continuityAuthority !== false
+    || !Array.isArray(receipt.observations)
+    || receipt.receiptDigest !== planDigest(Object.fromEntries(
+      Object.entries(receipt).filter(([key]) => key !== 'receiptDigest')
+    ))) {
+    throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+  }
+  const expected = request.paths;
+  if (receipt.observations.length !== expected.length) {
+    throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+  }
+  for (let index = 0; index < expected.length; index += 1) {
+    const actual = receipt.observations[index];
+    if (!exactKeys(actual, ['path', 'expectedKind', 'observed'])
+      || actual.path !== expected[index].path
+      || actual.expectedKind !== expected[index].expectedKind) {
+      throw new Error('INSTALL_OBSERVATION_RECEIPT_INVALID');
+    }
+    validateObservedFilesystemState(actual.observed);
+  }
+  return receipt;
 }
 
 function expectedOperation(spec, observed) {
@@ -831,8 +999,9 @@ function validateFilesystemPreconditions(plan, contract) {
       }
       continue;
     }
-    if (observed.type !== 'regular-file' || observed.uid !== spec.uid
-      || observed.gid !== spec.gid || observed.mode !== spec.mode) {
+    if (observed.type !== 'regular-file' || observed.nlink !== 1
+      || observed.uid !== spec.uid || observed.gid !== spec.gid
+      || observed.mode !== spec.mode) {
       throw new Error('INSTALL_FILESYSTEM_PRECONDITION_INVALID');
     }
     if (spec.kind === 'node'
@@ -885,7 +1054,7 @@ function identityStateMatchesReceipt(state, receipt) {
     && state.clientGroup.gid === receipt.clientGroup.gid;
 }
 
-function previewInstallationBundle({
+function installationDraft({
   clientUser,
   identityReceipt,
   nodeArchive,
@@ -909,10 +1078,39 @@ function previewInstallationBundle({
     daemonReload,
     contract
   });
+  return Object.freeze({ draft, node, identityState });
+}
+
+export function previewInstallationObservationRequest(options) {
+  const { draft } = installationDraft(options);
+  return createInstallationObservationRequest(draft, options.contract ?? loadInstallationContract());
+}
+
+function previewInstallationBundle({
+  clientUser,
+  identityReceipt,
+  nodeArchive,
+  adapter,
+  observationReceipt = null,
+  daemonReload = false,
+  contract = loadInstallationContract()
+}) {
+  const { draft, node, identityState } = installationDraft({
+    clientUser, identityReceipt, nodeArchive, adapter, daemonReload, contract
+  });
+  const request = createInstallationObservationRequest(draft, contract);
+  let receiptByPath = null;
+  if (observationReceipt !== null) {
+    validateInstallationObservationReceipt(observationReceipt, request, contract);
+    receiptByPath = new Map(observationReceipt.observations.map(
+      (entry) => [entry.path, entry.observed]
+    ));
+  }
+  const directObserver = adapter.observeFilesystemPath ?? observeFilesystemPath;
   const filesystemPreconditions = observeFilesystemPreconditions(
     draft,
     contract,
-    adapter.observeFilesystemPath ?? observeFilesystemPath
+    (path) => receiptByPath?.get(path) ?? directObserver(path)
   );
   const plan = createInstallationPlan({
     clientUser,
@@ -1191,6 +1389,7 @@ function atomicInstall(path, bytes, mode, uid, gid) {
   if (existsSync(path)) {
     const existing = lstatSync(path);
     if (!existing.isFile() || existing.isSymbolicLink()
+      || existing.nlink !== 1
       || existing.uid !== uid || existing.gid !== gid
       || (existing.mode & 0o7777) !== mode) {
       throw new Error('INSTALL_DESTINATION_CONFLICT');
@@ -1205,6 +1404,17 @@ function atomicInstall(path, bytes, mode, uid, gid) {
   } finally {
     if (existsSync(temporary)) unlinkSync(temporary);
   }
+}
+
+function assertRootPinnedObserver(contract) {
+  if (process.geteuid() !== 0 || PACKAGE_ROOT !== contract.paths.packageRoot) {
+    throw new Error('INSTALL_OBSERVER_NOT_ROOT_PINNED');
+  }
+  requireRootOwnedPath(PACKAGE_ROOT, 'directory');
+  requireRootOwnedPath(TOOL_PATH, 'file');
+  requireRootOwnedPath(CONTRACT_PATH, 'file');
+  requireRootOwnedPath(resolve(PACKAGE_ROOT, 'companion-integrity.json'), 'file');
+  verifyCompanionIntegrity({ packageRoot: PACKAGE_ROOT });
 }
 
 export function createHostAdapter({ requireRoot = false } = {}) {
@@ -1261,7 +1471,7 @@ export function createHostAdapter({ requireRoot = false } = {}) {
     installControlFile(path, bytes, mode, uid, gid) {
       if (existsSync(path)) {
         const stat = lstatSync(path);
-        if (!stat.isFile() || stat.isSymbolicLink()
+        if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1
           || stat.uid !== uid || stat.gid !== gid
           || (stat.mode & 0o7777) !== mode
           || !readFileSync(path).equals(bytes)) {
@@ -1298,6 +1508,7 @@ function parseArgs(argv) {
     const key = argv[index];
     if ([
       '--preview-identities', '--apply-identities',
+      '--preview-observation-request', '--observe-installation',
       '--preview-install', '--apply-stage-only'
     ].includes(key)) {
       if (parsed.operation !== undefined) throw new Error('INSTALL_ARGUMENTS_INVALID');
@@ -1306,7 +1517,7 @@ function parseArgs(argv) {
       parsed.daemonReload = true;
     } else if ([
       '--client-user', '--node-archive', '--identity-receipt',
-      '--approved-plan-digest'
+      '--approved-plan-digest', '--observation-request', '--observation-receipt'
     ].includes(key)) {
       if (parsed[key] !== undefined || index + 1 >= argv.length) {
         throw new Error('INSTALL_ARGUMENTS_INVALID');
@@ -1318,14 +1529,25 @@ function parseArgs(argv) {
     }
   }
   const identityOperation = ['preview-identities', 'apply-identities'].includes(parsed.operation);
-  const installOperation = ['preview-install', 'apply-stage-only'].includes(parsed.operation);
+  const installOperation = [
+    'preview-observation-request', 'preview-install', 'apply-stage-only'
+  ].includes(parsed.operation);
+  const observerOperation = parsed.operation === 'observe-installation';
   if (parsed.operation === undefined
     || (identityOperation && (parsed['--client-user'] !== undefined
       || parsed['--node-archive'] !== undefined || parsed['--identity-receipt'] !== undefined))
     || (installOperation && (parsed['--client-user'] === undefined
       || parsed['--node-archive'] === undefined || parsed['--identity-receipt'] === undefined))
+    || (observerOperation && (parsed['--observation-request'] === undefined
+      || parsed['--client-user'] !== undefined || parsed['--node-archive'] !== undefined
+      || parsed['--identity-receipt'] !== undefined))
+    || (!observerOperation && parsed['--observation-request'] !== undefined)
+    || (observerOperation && parsed['--approved-plan-digest'] !== undefined)
+    || (parsed['--observation-receipt'] !== undefined
+      && parsed.operation !== 'preview-install')
     || (parsed.daemonReload
-      && !['preview-install', 'apply-stage-only'].includes(parsed.operation))
+      && !['preview-observation-request', 'preview-install', 'apply-stage-only']
+        .includes(parsed.operation))
     || (parsed.operation.startsWith('apply-')
       && parsed['--approved-plan-digest'] === undefined)
     || (parsed.operation.startsWith('preview-')
@@ -1345,10 +1567,25 @@ function readIdentityReceipt(path, contract) {
   return validateIdentityReceipt(JSON.parse(readFileSync(canonicalPath, 'utf8')), contract);
 }
 
+function readBoundedJson(path, invalidCode) {
+  const canonicalPath = resolve(path);
+  const stat = lstatSync(canonicalPath);
+  if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1
+    || realpathSync.native(canonicalPath) !== canonicalPath || stat.size > 16 * 1024 * 1024) {
+    throw new Error(invalidCode);
+  }
+  try {
+    return JSON.parse(readFileSync(canonicalPath, 'utf8'));
+  } catch {
+    throw new Error(invalidCode);
+  }
+}
+
 function main(argv) {
   const args = parseArgs(argv);
   const contract = loadInstallationContract();
-  const applying = args.operation.startsWith('apply-');
+  const applying = args.operation.startsWith('apply-')
+    || args.operation === 'observe-installation';
   const adapter = createHostAdapter({ requireRoot: applying });
   if (args.operation === 'preview-identities') {
     const plan = createIdentityPlan({
@@ -1374,13 +1611,39 @@ function main(argv) {
     )}\n`);
     return;
   }
+  if (args.operation === 'observe-installation') {
+    assertRootPinnedObserver(contract);
+    const request = readBoundedJson(
+      args['--observation-request'], 'INSTALL_OBSERVATION_REQUEST_INVALID'
+    );
+    const receipt = createInstallationObservationReceipt({
+      request, observer: adapter.observeFilesystemPath ?? observeFilesystemPath, contract
+    });
+    process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+    return;
+  }
   const clientUser = args['--client-user'];
   const identityReceipt = readIdentityReceipt(args['--identity-receipt'], contract);
+  if (args.operation === 'preview-observation-request') {
+    const request = previewInstallationObservationRequest({
+      clientUser,
+      identityReceipt,
+      nodeArchive: resolve(args['--node-archive']),
+      adapter,
+      daemonReload: args.daemonReload,
+      contract
+    });
+    process.stdout.write(`${JSON.stringify(request, null, 2)}\n`);
+    return;
+  }
+  const observationReceipt = args['--observation-receipt'] === undefined ? null
+    : readBoundedJson(args['--observation-receipt'], 'INSTALL_OBSERVATION_RECEIPT_INVALID');
   const plan = previewInstallation({
     clientUser,
     identityReceipt,
     nodeArchive: resolve(args['--node-archive']),
     adapter,
+    observationReceipt,
     daemonReload: args.daemonReload,
     contract
   });
