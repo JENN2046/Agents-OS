@@ -20,6 +20,8 @@ const INTEGRITY = Object.freeze({
   packageVersion: '0.3.0-local-owner.0'
 });
 
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
+
 function activeProjection() {
   return {
     activationState: 'ACTIVE_LOCAL_OWNER',
@@ -75,6 +77,14 @@ function lifecycleDouble() {
       calls.push(['cognitive', input]);
       return { resultCode: 'MMR_COGNITIVE_PROJECTION_FRESH_OK' };
     },
+    async queryPresenceContext(input) {
+      calls.push(['presence', input]);
+      return input;
+    },
+    async sealProviderAttempt(input) {
+      calls.push(['seal', input]);
+      return input;
+    },
     async query(input) {
       calls.push(['query', input]);
       return { resultCode: 'QUERY_OK', items: [] };
@@ -116,6 +126,8 @@ test('server supports status, one token-bound attachment and protected short req
 
   assert.equal((await server.start()).commandChannelEnabled, true);
   const client = createCompanionClient({
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });
@@ -180,6 +192,8 @@ test('server supports status, one token-bound attachment and protected short req
   assert.equal(lifecycle.calls[0][1].attachmentGeneration, 1);
 
   const second = createCompanionClient({
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon,
     socketPath: temporary.socketPath,
     integrity: INTEGRITY
   });

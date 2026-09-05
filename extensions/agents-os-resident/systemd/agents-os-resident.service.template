@@ -5,15 +5,17 @@ StartLimitBurst=3
 
 [Service]
 Type=simple
+User=@@DAEMON_UID@@
+Group=@@SOCKET_GID@@
 WorkingDirectory=@@PLUGIN_ROOT@@
-ExecStart=@@NODE_BINARY@@ @@PLUGIN_ROOT@@/companion/resident-daemon.js --root @@ACTIVATION_ROOT@@ --socket %t/agents-os-resident/control.sock --expected-build-id @@BUILD_ID@@ --continuity-evidence '@@CONTINUITY_EVIDENCE_JSON@@' --genesis-provisioning-authority '@@GENESIS_PROVISIONING_AUTHORITY_JSON@@'
+ExecStart=@@NODE_BINARY@@ @@PLUGIN_ROOT@@/companion/resident-daemon.js --root @@ACTIVATION_ROOT@@ --socket /run/agents-os-resident/control.sock --expected-build-id @@BUILD_ID@@ --witness-root @@WITNESS_ROOT@@ --memory-body-root @@MEMORY_BODY_ROOT@@
 Restart=on-failure
 RestartSec=2
 RestartPreventExitStatus=64 73
 TimeoutStopSec=20
 KillSignal=SIGTERM
 RuntimeDirectory=agents-os-resident
-RuntimeDirectoryMode=0700
+RuntimeDirectoryMode=0750
 RuntimeDirectoryPreserve=restart
 UMask=0077
 NoNewPrivileges=yes
@@ -24,14 +26,14 @@ ProtectHome=read-only
 ProtectKernelTunables=yes
 ProtectKernelModules=yes
 ProtectControlGroups=yes
-RestrictSUIDSGID=yes
+RestrictSUIDSGID=no
 LockPersonality=yes
 RestrictAddressFamilies=AF_UNIX
 IPAddressDeny=any
-ReadOnlyPaths=@@PLUGIN_ROOT@@
-ReadWritePaths=@@ACTIVATION_ROOT@@
+ReadOnlyPaths=@@PLUGIN_ROOT@@ @@WITNESS_ROOT@@
+ReadWritePaths=@@ACTIVATION_ROOT@@ @@MEMORY_BODY_ROOT@@
 StandardOutput=null
 StandardError=null
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

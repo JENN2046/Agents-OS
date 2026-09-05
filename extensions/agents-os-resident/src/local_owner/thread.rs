@@ -6,6 +6,8 @@ use std::thread::{self, JoinHandle};
 
 use serde_json::Value;
 
+use super::continuity::ContinuityAdmission;
+use super::memory::MemoryBodyVerifier;
 use super::store::{LocalOwnerFault, LocalOwnerStore, MmrCoreFault};
 use super::LocalOwnerError;
 
@@ -31,6 +33,16 @@ enum Command {
     },
     QueryMmr {
         input: Value,
+        response: Sender<Result<Value, LocalOwnerError>>,
+    },
+    QueryPresence {
+        input: Value,
+        admission: ContinuityAdmission,
+        response: Sender<Result<Value, LocalOwnerError>>,
+    },
+    SealProviderAttempt {
+        input: Value,
+        admission: ContinuityAdmission,
         response: Sender<Result<Value, LocalOwnerError>>,
     },
     Query {
@@ -66,16 +78,18 @@ impl LocalOwnerThread {
         database_path: PathBuf,
         process_nonce: Option<Vec<u8>>,
         initialize_genesis: bool,
+        memory_body_verifier: Option<MemoryBodyVerifier>,
     ) -> Result<Self, LocalOwnerError> {
         let (command_tx, command_rx) = mpsc::channel();
         let (startup_tx, startup_rx) = mpsc::sync_channel(1);
         let join = thread::Builder::new()
             .name("agents-os-local-owner-ledger".to_owned())
             .spawn(move || {
-                let mut store = match LocalOwnerStore::open_admitted(
+                let mut store = match LocalOwnerStore::open_admitted_with_memory_verifier(
                     &database_path,
                     process_nonce.as_deref(),
                     initialize_genesis,
+                    memory_body_verifier,
                 ) {
                     Ok(store) => {
                         let _ = startup_tx.send(Ok(()));
@@ -113,6 +127,24 @@ impl LocalOwnerThread {
                         }
                         Command::QueryMmr { input, response } => {
                             let _ = response.send(store.query_mmr_core(&input));
+                        }
+                        Command::QueryPresence {
+                            input,
+                            admission,
+                            response,
+                        } => {
+                            let _ = response.send(
+                                store.query_presence_context(&input, &admission),
+                            );
+                        }
+                        Command::SealProviderAttempt {
+                            input,
+                            admission,
+                            response,
+                        } => {
+                            let _ = response.send(
+                                store.seal_provider_attempt(&input, &admission),
+                            );
                         }
                         Command::Query { input, response } => {
                             let _ = response.send(store.query(&input));
@@ -206,6 +238,30 @@ impl LocalOwnerThread {
 
     pub fn query_mmr(&self, input: Value) -> Result<Value, LocalOwnerError> {
         self.request(|response| Command::QueryMmr { input, response })
+    }
+
+    pub fn query_presence(
+        &self,
+        input: Value,
+        admission: ContinuityAdmission,
+    ) -> Result<Value, LocalOwnerError> {
+        self.request(|response| Command::QueryPresence {
+            input,
+            admission,
+            response,
+        })
+    }
+
+    pub fn seal_provider_attempt(
+        &self,
+        input: Value,
+        admission: ContinuityAdmission,
+    ) -> Result<Value, LocalOwnerError> {
+        self.request(|response| Command::SealProviderAttempt {
+            input,
+            admission,
+            response,
+        })
     }
 
     pub fn invalidate(&self, attachment_generation: u64) -> Result<Value, LocalOwnerError> {

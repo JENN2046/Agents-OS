@@ -13,6 +13,9 @@ const ACTIVATION_ROOT_LEAF = 'agents-os-resident-local-owner-v1';
 const RUNTIME_DIRECTORY_LEAF = 'agents-os-resident';
 const SOCKET_LEAF = 'control.sock';
 const MAX_FRAME_BYTES = 64 * 1024;
+const MAX_MEMORY_BODY_BYTES = 1024 * 1024;
+const MAX_PUBLICATION_FRAME_BYTES = Math.ceil(MAX_MEMORY_BODY_BYTES / 3) * 4
+  + MAX_FRAME_BYTES;
 const HANDSHAKE_TIMEOUT_MS = 1000;
 const ADAPTER_RETRY_WINDOW_MS = 5000;
 const ADAPTER_RETRY_DELAY_MS = 100;
@@ -25,18 +28,11 @@ function fixedError(code) {
   return error;
 }
 
-function resolveDefaultSocketPath(runtimeDirectory = process.env.XDG_RUNTIME_DIR) {
+function resolveDefaultSocketPath() {
   if (process.platform !== 'linux') {
     throw fixedError('RESIDENT_RUNTIME_PLATFORM_UNSUPPORTED');
   }
-  if (typeof runtimeDirectory !== 'string'
-    || runtimeDirectory.length === 0
-    || runtimeDirectory.includes('\0')
-    || !path.isAbsolute(runtimeDirectory)
-    || path.normalize(runtimeDirectory) !== runtimeDirectory) {
-    throw fixedError('RESIDENT_RUNTIME_DIR_UNAVAILABLE');
-  }
-  return path.join(runtimeDirectory, RUNTIME_DIRECTORY_LEAF, SOCKET_LEAF);
+  return path.join('/run', RUNTIME_DIRECTORY_LEAF, SOCKET_LEAF);
 }
 
 module.exports = Object.freeze({
@@ -53,6 +49,8 @@ module.exports = Object.freeze({
   INACTIVE_STATE,
   MAX_CONNECTIONS,
   MAX_FRAME_BYTES,
+  MAX_MEMORY_BODY_BYTES,
+  MAX_PUBLICATION_FRAME_BYTES,
   PROTOCOL_SCHEMA,
   RUNTIME_DIRECTORY_LEAF,
   SOCKET_LEAF,

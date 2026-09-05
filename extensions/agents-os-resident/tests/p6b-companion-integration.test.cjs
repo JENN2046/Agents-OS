@@ -25,6 +25,8 @@ const {
   projectionRequest
 } = require('../companion/cognitive-context');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
+
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 const { createCompanionServer } = require('../companion/server');
 
 const PROFILE_ID = 'resident:LOCAL_OWNER_SESSION_V1:jenn';
@@ -250,7 +252,12 @@ test('actual native companion binds fresh MMR projection to Host context and res
   });
   await server.start();
   adapter = createResidentAdapter({
-    createClient: () => createCompanionClient({ integrity, socketPath })
+    createClient: () => createCompanionClient({
+      loadIdentityPolicy: () => null,
+      authenticateDaemon: authenticateFixtureDaemon,
+      integrity,
+      socketPath
+    })
   });
   await adapter.initialize();
 

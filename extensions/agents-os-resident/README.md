@@ -1,12 +1,183 @@
 # AGENTS OS Resident
 
-This directory is the Jenn-owned external source package for the frozen Phase
-5A M0-A deterministic orchestrator core.
+This directory is the Jenn-owned source package for the local-owner Resident.
+It contains the continuity, protected-Witness admission, Presence, Memory and
+Current Work/Life paths used by the bounded local runtime, together with their
+source-owned systemd projection and tests.
 
-The package is synthetic-only and runtime-unusable. Its compatibility
-projection is `Plugin/AGENTSOSResident/` in a clean linked VCPToolBox worktree
-at commit `555b3b538f6eb736e530c2912de678c5941f9985`. The projection must retain
-`plugin-manifest.json.block`; an enabled `plugin-manifest.json` is forbidden.
+The package remains private and locally scoped. This source integration does
+not claim M6 sustained-real-use closure, production readiness, E3/P5,
+permanent cutover, or device/model/provider replacement. Its VCPToolBox
+projection must retain `plugin-manifest.json.block`; an enabled
+`plugin-manifest.json` is forbidden.
+
+Companion exchanges authenticate the already-connected Unix peer through
+kernel `SO_PEERCRED`, before sending attach, status, or protected request bytes.
+The daemon runs under a dedicated non-root UID, different from the client UID.
+The expected identities and build are pinned by the root-owned, non-secret
+`/etc/agents-os-resident/daemon-identity.json`. The client checks the policy,
+every code-path ancestor, the interpreter, and the complete installed integrity
+inventory before using the private `resident-peer-credentials` helper. The helper
+inherits the connected socket; it does not load the native Resident in the Host,
+read protocol data, resolve the socket pathname again, or invoke `ss`/`systemctl`.
+Each attachment also pins the daemon PID. The server admits only the enrolled
+client UID. A host-UID impersonator cannot satisfy the kernel daemon-UID check,
+even if it controls the entire user-level systemd manager.
+
+This assumes an intact client/verifier and a trusted OS administrator; it does
+not protect a client whose code or process the attacker has already modified,
+or defend against root/kernel compromise. Authentication establishes the enrolled
+OS principal, not a trusted person behind every process sharing the client UID.
+
+## System identity installation contract
+
+The source-owned unit is now a **system service**, not a user service. The old
+same-UID installation is not accepted by the default client. Missing, malformed,
+writable, symlinked, or mismatched identity policy fails closed, with no legacy
+fallback. This source change does not install accounts or policy, switch the
+existing live service, or migrate/enroll existing continuity state.
+
+Before a separately authorized installation, prepare these public artifacts:
+
+- A dedicated daemon account and a client access group, with the daemon's primary
+  group equal to the configured `socketGid`; the client must belong to that group.
+- The reviewed package and Node interpreter beneath root-owned ancestors,
+  non-writable by group/others. All integrity entries, the manifest, and the
+  executable helper must be root-owned regular files, without symlink traversal.
+  The helper is an ordinary executable, never setuid/setgid.
+- Three distinct daemon-owned `0700` state roots beneath ancestors owned by root
+  or the daemon and not writable by group/others. Keep mutable state outside the
+  root-owned code tree. Existing state requires its own controlled migration;
+  do not run fresh provisioning over an enrolled Witness.
+- The system unit under root management and its matching identity policy at the
+  fixed path above, root-owned mode `0644`. The policy pins the package build ID.
+  The system unit creates `/run/agents-os-resident` as daemon UID/access group,
+  mode `0750`; the daemon creates `control.sock` with mode `0660`.
+
+The renderer produces both files without installing either. Example numeric IDs
+below are placeholders for explicitly selected installation identities:
+
+```sh
+node tools/render-systemd-unit.mjs \
+  --daemon-uid 2001 --client-uid 2002 --socket-gid 2002 \
+  --node /usr/local/bin/node --plugin-root /opt/agents-os-resident \
+  --activation-root /var/lib/agents-os-resident/agents-os-resident-local-owner-v1 \
+  --witness-root /var/lib/agents-os-resident/protected-witness \
+  --memory-body-root /var/lib/agents-os-resident/private-memory-bodies \
+  --output /absolute/review/agents-os-resident.service \
+  --identity-output /absolute/review/daemon-identity.json
+```
+
+The output parent directory and configured protected roots must already exist;
+the roots must match their daemon-owner profile.
+`npm run verify:systemd-template` is a disposable structural check, not
+qualification of an installed service. Rebuild with `npm run build:companion`;
+this also builds/stages the private Rust helper and includes it in the integrity
+manifest. `iproute2`, a particular `ss` path, and a user D-Bus manager are not
+transport dependencies. Linux/glibc and the pinned Node/Rust package targets
+remain required.
+
+`node --test tests/daemon-peer-auth.test.cjs` covers policy rejection, actual
+connected-FD credentials, and same-UID impersonation. For an opt-in real cross-UID
+transport test, set `AGENTS_OS_RESIDENT_CROSS_UID_IMAGE` to an already-present
+official Node image ID and run `node --test tests/cross-uid-daemon-identity.test.cjs`.
+It uses a disposable container with no network, a read-only root, synthetic
+root-owned installation files, and two non-root UIDs. It never installs or
+changes the host service and does not qualify a live installation.
+
+## Memory publication across the identity boundary
+
+The Host package entry and adapter expose a non-enumerable internal
+`publishMemoryBody` method. After `processMessages` establishes Presence, it
+reuses the same client's authenticated attachment; no second client is needed.
+The caller supplies only a UTF-8
+`Buffer` body (at most 1 MiB), typed `memoryId`, and `operationRef`. The client
+binds the request to its established Presence identity, authority generation,
+and context; callers cannot select filesystem roots. The daemon re-queries
+native Presence and checks the bound session, observed request cancellation,
+and a monotonic preparation deadline before the final content-addressed link.
+The deadline is bounded by both the client request and the server connection
+budget and is rechecked after synchronous preparation I/O.
+
+Publication runs under the daemon UID. The system unit permits writes to its
+Memory body root and Resident root; Witness stays read-only. Host processes
+cannot directly construct a writer against the installed daemon-owned roots.
+The existing in-process writer remains a daemon backend and disposable-test
+primitive. Its old Host filesystem access pattern is not supported by the
+cross-UID installation.
+
+The private authenticated socket operation returns only the existing body
+descriptor and `PUBLISHED_NON_CURRENT`, `UNVERIFIED_WRITER_RECEIPT` receipt.
+It does not write formal Memory state, adopt a candidate, or claim currentness;
+the native verifier/adoption path remains authoritative. No model-facing tool,
+plugin schema, or native method is added. Only publication frames receive the
+bounded larger allowance needed for 1 MiB bodies; ordinary protocol frames
+remain limited to 64 KiB. Invalid payloads, unknown keys, invalid UTF-8/base64,
+oversize bodies, and stale bindings fail closed before publication starts.
+
+Once a publication frame has been sent, a timeout, disconnect, or rejected
+response is reported conservatively as `MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN`.
+A final link or its durability sync can outlast the deadline; completed file
+publication cannot be cancelled by losing its reply. Retry the same identity,
+`memoryId`, body bytes, and `operationRef` through the current authenticated
+Presence session. The daemon reopens an existing final leaf without following
+symlinks and checks its owner, permissions, single link, size, full content hash,
+and stable path/inode before returning the same descriptor and receipt.
+It never overwrites or deletes that existing leaf. This deduplicates exact
+content placement; it is not an operation-reference ledger or formal adoption.
+Unexpected metadata or crash residues such as multiple links remain rejected;
+this path does not automatically repair them.
+The standalone writer's default duplicate-conflict behavior is unchanged.
+
+## Protected roots and one-shot Witness provisioning
+
+After package installation has created the current-owner `0700` state parent,
+prepare the three mutually disjoint Resident roots through the source-owned,
+root-only profile:
+
+```sh
+npm run prepare:protected-roots -- \
+  --root /absolute/agents-os-resident-local-owner-v1 \
+  --witness-root /absolute/protected-witness \
+  --memory-body-root /absolute/private-memory-bodies \
+  --expected-build-id sha256:<64-lowercase-hex>
+```
+
+The command creates only absent roots as current-owner `0700` directories. An
+existing exact root is accepted without changing its device/inode; a symlink,
+wrong type, wrong owner, wrong mode, noncanonical path, unsafe parent or
+overlapping topology fails closed without destructive repair. It does not read
+an authority file, initialize Resident state or enroll a Witness.
+
+Fresh protected-Witness state is then enrolled only through the explicit
+one-shot provisioning profile. Obtain the sealed build ID and run:
+
+```sh
+npm run provision:witness -- \
+  --root /absolute/agents-os-resident-local-owner-v1 \
+  --witness-root /absolute/protected-witness \
+  --memory-body-root /absolute/private-memory-bodies \
+  --expected-build-id sha256:<64-lowercase-hex> \
+  --genesis-authority-file /absolute/genesis-authority.json
+```
+
+The authority file is a current-owner, `0600`, single-link regular file at its
+exact canonical path. It contains at most 4096 bytes of strict UTF-8 and one
+canonical JSON object, without a trailing newline, in this exact key order:
+
+```json
+{"authorityId":"authority:<trusted-id>","protocol":"MMR0_GENESIS_PROVISIONING_V1","provisioningId":"provisioning:<trusted-id>","residentId":"resident:LOCAL_OWNER_SESSION_V1:jenn"}
+```
+
+Success prints only `RESIDENT_WITNESS_PROVISIONED` and exits after native
+initialization and shutdown; no socket is started. Re-running provisioning
+against an enrolled Witness is rejected and must not be treated as idempotent
+success. The long-running systemd unit contains neither the authority file nor
+inline genesis data and starts only after enrollment, using the protected
+Witness as its continuity source. The one-shot command does not globally
+consume a credential: after success, the trusted operator must remove, revoke,
+or otherwise govern the authority file according to its issuing policy. It
+must never be copied into the long-running unit.
 
 WP0 establishes the deterministic package layout and WP1 establishes strict
 canonical JSON/JCS/SHA-256 primitives. WP2 adds the synthetic Resident

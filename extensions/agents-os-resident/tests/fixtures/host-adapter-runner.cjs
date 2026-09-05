@@ -6,7 +6,28 @@ process.dlopen = () => {
   throw error;
 };
 
-const adapter = require('../../index');
+const { createResidentAdapter } = require('../../companion/adapter');
+const { createCompanionClient } = require('../../companion/client');
+const path = require('node:path');
+const { authenticateFixtureDaemon } = require('./transport-identity.cjs');
+
+const expectedDaemonPid = Number(
+  process.env.AGENTS_OS_RESIDENT_TEST_DAEMON_PID
+);
+if (!Number.isSafeInteger(expectedDaemonPid) || expectedDaemonPid < 1) {
+  throw new Error('TEST_DAEMON_PID_REQUIRED');
+}
+const adapter = createResidentAdapter({
+  createClient: () => createCompanionClient({
+    socketPath: path.join(process.env.XDG_RUNTIME_DIR, 'agents-os-resident', 'control.sock'),
+    loadIdentityPolicy: () => null,
+    authenticateDaemon(socket, socketPath, { expectedPid } = {}) {
+      return authenticateFixtureDaemon(socket, socketPath, {
+        expectedPid: expectedPid ?? expectedDaemonPid
+      });
+    }
+  })
+});
 
 function hostExecutionContext(context) {
   if (context?.sourceNode !== 'post') return context;

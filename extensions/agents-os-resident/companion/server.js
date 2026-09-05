@@ -9,6 +9,9 @@ const {
 } = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
+const { authenticateConnectedClient } = require('./daemon-peer-auth');
+const { SOCKET_PATH, requireRootOwnedPath, requirePolicyRole }
+  = require('./daemon-identity-policy');
 
 const {
   ACTIVE_STATE,
@@ -17,7 +20,7 @@ const {
   HANDSHAKE_TIMEOUT_MS,
   HEALTH_INTERVAL_MS,
   MAX_CONNECTIONS,
-  MAX_FRAME_BYTES,
+  MAX_PUBLICATION_FRAME_BYTES,
   fixedError
 } = require('./constants');
 const {
@@ -29,6 +32,15 @@ const {
   rejectionResponse,
   statusResponse
 } = require('./protocol');
+const {
+  nativePresenceRequest,
+  nativeProviderAttemptRequest,
+  parsePresencePayload,
+  parseProviderAttemptPayload,
+  resolvePresenceContext,
+  resolveProviderAttemptSeal
+} = require('./presence-context');
+const { publishMemoryBody } = require('./memory-publication');
 
 function mode(stat) {
   return stat.mode & 0o777;
@@ -41,7 +53,7 @@ function uid() {
   return process.getuid();
 }
 
-function validateRuntimeDirectory(socketPath) {
+function validateRuntimeDirectory(socketPath, identityPolicy = null) {
   const parent = path.dirname(socketPath);
   let stat;
   try {
@@ -54,12 +66,13 @@ function validateRuntimeDirectory(socketPath) {
   if (!stat.isDirectory()
     || stat.isSymbolicLink()
     || stat.uid !== uid()
-    || mode(stat) !== 0o700) {
+    || mode(stat) !== (identityPolicy ? 0o750 : 0o700)
+    || (identityPolicy && stat.gid !== identityPolicy.socketGid)) {
     throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
   }
 }
 
-function inspectExistingSocket(socketPath) {
+function inspectExistingSocket(socketPath, identityPolicy = null) {
   let stat;
   try {
     stat = lstatSync(socketPath);
@@ -70,7 +83,8 @@ function inspectExistingSocket(socketPath) {
   if (!stat.isSocket()
     || stat.isSymbolicLink()
     || stat.uid !== uid()
-    || mode(stat) !== 0o600) {
+    || mode(stat) !== (identityPolicy ? 0o660 : 0o600)
+    || (identityPolicy && stat.gid !== identityPolicy.socketGid)) {
     throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
   }
   return stat;
@@ -97,9 +111,9 @@ function socketHasListener(socketPath, timeoutMs = 100) {
   });
 }
 
-async function prepareSocketLeaf(socketPath) {
-  validateRuntimeDirectory(socketPath);
-  if (inspectExistingSocket(socketPath) === null) return;
+async function prepareSocketLeaf(socketPath, identityPolicy = null) {
+  validateRuntimeDirectory(socketPath, identityPolicy);
+  if (inspectExistingSocket(socketPath, identityPolicy) === null) return;
   if (await socketHasListener(socketPath)) throw fixedError('RESIDENT_SOCKET_IN_USE');
   try {
     unlinkSync(socketPath);
@@ -136,6 +150,7 @@ function createCompanionServer({
   integrity,
   lifecycle,
   activationConfig,
+  identityPolicy = null,
   healthIntervalMs = HEALTH_INTERVAL_MS,
   handshakeTimeoutMs = HANDSHAKE_TIMEOUT_MS,
   onRuntimeFailure = async () => {}
@@ -148,6 +163,8 @@ function createCompanionServer({
     'submitConsent',
     'query',
     'queryMmrMutationCore',
+    'queryPresenceContext',
+    'sealProviderAttempt',
     'invalidate'
   ];
   if (typeof socketPath !== 'string'
@@ -163,6 +180,13 @@ function createCompanionServer({
   }
 
   let server = null;
+  if (identityPolicy) {
+    requirePolicyRole(identityPolicy, 'daemon');
+    if (socketPath !== SOCKET_PATH || process.getgid() !== identityPolicy.socketGid) {
+      throw fixedError('RESIDENT_DAEMON_IDENTITY_UNTRUSTED');
+    }
+    requireRootOwnedPath(path.dirname(path.dirname(socketPath)), 'directory');
+  }
   let attachment = null;
   let generation = 0;
   let healthTimer = null;
@@ -221,6 +245,11 @@ function createCompanionServer({
   }
 
   function handleConnection(socket) {
+    const acceptedAt = process.hrtime.bigint();
+    if (identityPolicy) {
+      try { authenticateConnectedClient(socket, identityPolicy); }
+      catch { socket.destroy(); return; }
+    }
     if (stopping || connections.size >= MAX_CONNECTIONS) {
       socket.destroy();
       return;
@@ -231,6 +260,7 @@ function createCompanionServer({
 
     socket.on('error', () => {});
     socket.once('close', () => {
+      bytes.fill(0);
       connections.delete(socket);
       if (attachment?.socket === socket) {
         const detached = attachment;
@@ -245,8 +275,12 @@ function createCompanionServer({
         socket.destroy();
         return;
       }
+      const previous = bytes;
       bytes = Buffer.concat([bytes, chunk]);
-      if (bytes.length > MAX_FRAME_BYTES) {
+      previous.fill(0);
+      chunk.fill(0);
+      if (bytes.length > MAX_PUBLICATION_FRAME_BYTES) {
+        bytes.fill(0);
         socket.destroy();
         return;
       }
@@ -264,6 +298,8 @@ function createCompanionServer({
       } catch {
         socket.destroy();
         return;
+      } finally {
+        bytes.fill(0);
       }
       if (request.expectedBuildId !== integrity.buildId) {
         writeAndClose(socket, rejectionResponse(request, 'BUILD_MISMATCH'));
@@ -291,6 +327,7 @@ function createCompanionServer({
         attachment = {
           generation,
           pendingCognitiveSession: null,
+          presenceSession: null,
           socket,
           token: randomBytes(32).toString('hex')
         };
@@ -317,6 +354,32 @@ function createCompanionServer({
       }
 
       try {
+        if (request.operation === 'publish_memory_body') {
+          const target = attachment;
+          const presenceSession = target.presenceSession;
+          const remainingMs = Number.isSafeInteger(request.payload.deadlineUnixMs)
+            ? Math.max(0, Math.min(handshakeTimeoutMs,
+              request.payload.deadlineUnixMs - Date.now())) : 0;
+          const requestDeadline = process.hrtime.bigint()
+            + BigInt(Math.floor(remainingMs * 1e6));
+          const connectionDeadline = acceptedAt
+            + BigInt(Math.floor(handshakeTimeoutMs * 1e6));
+          const commitDeadline = requestDeadline < connectionDeadline
+            ? requestDeadline : connectionDeadline;
+          const result = await publishMemoryBody({
+            payload: request.payload, presenceSession, lifecycle, activationConfig,
+            isCurrent: () => !stopping && !target.socket.destroyed
+              && process.hrtime.bigint() < commitDeadline
+              && !socket.destroyed && !socket.closed
+              && !socket.readableEnded && !socket.writableEnded
+              && attachment === target && target.presenceSession === presenceSession
+              && request.attachmentToken === target.token
+              && request.attachmentGeneration === target.generation
+              && presenceSession?.nativeRequest?.attachmentGeneration === target.generation
+          });
+          writeAndClose(socket, operationResponse(request, result));
+          return;
+        }
         if (request.operation === 'mint_cognitive_session') {
           if (!exactKeys(request.payload, ['transcriptDigest'])
             || !/^[0-9a-f]{64}$/u.test(request.payload.transcriptDigest)) {
@@ -374,6 +437,40 @@ function createCompanionServer({
             throw fixedError('RESIDENT_COGNITIVE_SESSION_REJECTED');
           }
         }
+        if (request.operation === 'presence_context') {
+          const target = attachment;
+          const payload = parsePresencePayload(request.payload);
+          const nativeRequest = nativePresenceRequest(payload, {
+            attachmentGeneration: target.generation,
+            freshPresenceId: `fresh-presence:r1:${randomBytes(32).toString('hex')}`
+          });
+          const raw = await lifecycle.queryPresenceContext(nativeRequest);
+          const context = resolvePresenceContext(raw, nativeRequest);
+          if (attachment !== target || target.socket.destroyed || stopping) {
+            throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+          }
+          target.presenceSession = Object.freeze({
+            context,
+            nativeRequest
+          });
+          writeAndClose(socket, operationResponse(request, context));
+          return;
+        }
+        if (request.operation === 'seal_provider_attempt') {
+          const payload = parseProviderAttemptPayload(request.payload);
+          const presenceSession = attachment.presenceSession;
+          if (presenceSession === null) {
+            throw fixedError('RESIDENT_PRESENCE_CONTEXT_REJECTED');
+          }
+          const nativeRequest = nativeProviderAttemptRequest(
+            payload,
+            presenceSession
+          );
+          const raw = await lifecycle.sealProviderAttempt(nativeRequest);
+          const seal = resolveProviderAttemptSeal(raw, payload, presenceSession);
+          writeAndClose(socket, operationResponse(request, seal));
+          return;
+        }
         const nativeInput = request.operation === 'submit_consent'
           ? { ...request.payload, attachmentGeneration: attachment.generation }
           : {
@@ -389,7 +486,9 @@ function createCompanionServer({
             : await lifecycle.query(nativeInput);
         writeAndClose(socket, operationResponse(request, result));
       } catch {
-        writeAndClose(socket, rejectionResponse(request, 'REQUEST_REJECTED'));
+        writeAndClose(socket, rejectionResponse(request,
+          request.operation === 'publish_memory_body'
+            ? 'PUBLICATION_OUTCOME_UNKNOWN' : 'REQUEST_REJECTED'));
       }
     });
   }
@@ -412,7 +511,7 @@ function createCompanionServer({
       }
     }
     try {
-      if (inspectExistingSocket(socketPath) !== null) unlinkSync(socketPath);
+      if (inspectExistingSocket(socketPath, identityPolicy) !== null) unlinkSync(socketPath);
     } catch {
       // RuntimeDirectory cleanup remains the final owner of a stale leaf.
     }
@@ -427,7 +526,7 @@ function createCompanionServer({
       if (!validLifecycleProjection(activation) || !await runtimeIsActive()) {
         throw fixedError('RESIDENT_RUNTIME_INACTIVE');
       }
-      await prepareSocketLeaf(socketPath);
+      await prepareSocketLeaf(socketPath, identityPolicy);
       server = net.createServer(handleConnection);
       server.on('error', () => {
         if (!stopping) void onRuntimeFailure('RESIDENT_SERVER_RUNTIME_FAILURE');
@@ -445,8 +544,8 @@ function createCompanionServer({
         server.once('listening', onListening);
         server.listen(socketPath);
       });
-      chmodSync(socketPath, 0o600);
-      if (inspectExistingSocket(socketPath) === null) {
+      chmodSync(socketPath, identityPolicy ? 0o660 : 0o600);
+      if (inspectExistingSocket(socketPath, identityPolicy) === null) {
         throw fixedError('RESIDENT_SOCKET_UNTRUSTED');
       }
       healthTimer = setInterval(async () => {

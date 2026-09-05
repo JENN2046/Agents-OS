@@ -3,9 +3,11 @@
 
 use std::fs::{File, OpenOptions};
 use std::io::Read;
+use std::os::fd::AsRawFd;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 
+use rustix::fs::{CWD, Mode, OFlags, ResolveFlags, openat2};
 use serde_json::Value;
 
 use crate::resident::lock::ResidentLock;
@@ -13,10 +15,18 @@ use crate::resident::lock::ResidentLock;
 pub mod consent;
 pub mod checkpoint;
 pub mod continuity;
+mod memory;
+#[cfg(test)]
+mod memory_tests;
+mod presence;
 pub mod schema;
 pub mod protection;
 pub mod store;
 mod thread;
+pub mod witness;
+#[cfg(test)]
+mod witness_tests;
+mod work_source;
 #[cfg(test)]
 mod p1_tests;
 #[cfg(test)]
@@ -65,15 +75,83 @@ mod p6b_tests;
 mod p6c_tests;
 #[cfg(test)]
 mod p6d_tests;
+#[cfg(test)]
+mod presence_tests;
 
 use thread::LocalOwnerThread;
 use continuity::{ContinuityAdmission, derive_admission};
+use memory::MemoryBodyVerifier;
 
 pub const PACKAGE_VERSION: &str = "0.3.0-local-owner.0";
 pub const PROFILE_ID: &str = "resident:LOCAL_OWNER_SESSION_V1:jenn";
 pub const LOCAL_OWNER_DATABASE_FILENAME: &str = "agents-os-resident-local-owner-v1.sqlite3";
 pub const LOCAL_OWNER_LOCK_FILENAME: &str = "agents-os-resident-local-owner-v1.lock";
 pub const LOCAL_OWNER_ROOT_LEAF: &str = "agents-os-resident-local-owner-v1";
+
+pub(super) struct RetainedActivationRoot {
+    requested: PathBuf,
+    directory: File,
+}
+
+impl RetainedActivationRoot {
+    fn open(root: &Path) -> Result<Self, LocalOwnerError> {
+        let before = std::fs::symlink_metadata(root).map_err(LocalOwnerError::Io)?;
+        validate_root(root)?;
+        let fd = openat2(
+            CWD,
+            root,
+            OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
+            Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+        )
+        .map_err(|error| LocalOwnerError::Io(error.into()))?;
+        let directory = File::from(fd);
+        let opened = directory.metadata().map_err(LocalOwnerError::Io)?;
+        if opened.dev() != before.dev()
+            || opened.ino() != before.ino()
+            || !valid_root_metadata(&opened)
+        {
+            return Err(LocalOwnerError::InvalidInput);
+        }
+        let retained = Self {
+            requested: root.to_path_buf(),
+            directory,
+        };
+        validate_root_inventory(&retained.child_path(""))?;
+        Ok(retained)
+    }
+
+    pub(super) fn identity(&self) -> Result<(u64, u64), LocalOwnerError> {
+        let metadata = self.directory.metadata().map_err(LocalOwnerError::Io)?;
+        if !valid_root_metadata(&metadata) {
+            return Err(LocalOwnerError::InvalidInput);
+        }
+        Ok((metadata.dev(), metadata.ino()))
+    }
+
+    pub(super) fn path_matches(&self) -> Result<bool, LocalOwnerError> {
+        let rebound = openat2(
+            CWD,
+            &self.requested,
+            OFlags::RDONLY | OFlags::DIRECTORY | OFlags::NOFOLLOW | OFlags::CLOEXEC,
+            Mode::empty(),
+            ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+        )
+        .map_err(|error| LocalOwnerError::Io(error.into()))?;
+        let rebound = File::from(rebound);
+        let metadata = rebound.metadata().map_err(LocalOwnerError::Io)?;
+        Ok(valid_root_metadata(&metadata) && self.identity()? == (metadata.dev(), metadata.ino()))
+    }
+
+    fn child_path(&self, leaf: &str) -> PathBuf {
+        let root = PathBuf::from(format!("/proc/self/fd/{}", self.directory.as_raw_fd()));
+        if leaf.is_empty() {
+            root
+        } else {
+            root.join(leaf)
+        }
+    }
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum LocalOwnerError {
@@ -111,6 +189,12 @@ pub enum LocalOwnerError {
     ContinuityAdmissionDenied,
     #[error("continuity activation was interrupted")]
     ContinuityActivationInterrupted,
+    #[error("declared restore requires exact Witness reconciliation")]
+    WitnessReconciliationRequired,
+    #[error("Presence context changed before the provider attempt could be sealed")]
+    PresenceContextStale,
+    #[error("Presence OneRing binding is unavailable or mismatched")]
+    PresenceBindingDenied,
     #[error("MMR mutation is not authorized in the current slice")]
     MmrMutationNotAuthorized,
     #[error("MMR Current relation conflicts with the requested predecessor")]
@@ -155,6 +239,20 @@ pub enum LocalOwnerError {
     MmrCandidateStatusChangeRejected,
     #[error("summary support cannot be resolved from the available durable state")]
     MmrSummarySupportUnresolved,
+    #[error("private Memory body verifier is unavailable")]
+    MemoryBodyVerifierUnavailable,
+    #[error("private Memory body locator is rejected")]
+    MemoryBodyLocatorRejected,
+    #[error("private Memory body does not match its admitted descriptor")]
+    MemoryBodyMismatch,
+    #[error("private Memory body is unavailable")]
+    MemoryBodyUnavailable,
+    #[error("private Memory body verification is stale")]
+    MemoryVerificationStale,
+    #[error("reserved Memory authority profile is rejected")]
+    MemoryAuthorityProfileRejected,
+    #[error("reserved Work source projection profile is rejected")]
+    WorkSourceProfileRejected,
     #[error("local-owner response lost after commit")]
     ResponseLostAfterCommit,
     #[error("local-owner injected crash")]
@@ -187,6 +285,9 @@ impl LocalOwnerError {
             Self::ContinuityLineageConflict => "LINEAGE_CONFLICT",
             Self::ContinuityAdmissionDenied => "CONTINUITY_ADMISSION_DENIED",
             Self::ContinuityActivationInterrupted => "CONTINUITY_ACTIVATION_INTERRUPTED",
+            Self::WitnessReconciliationRequired => "RECONCILIATION_REQUIRED",
+            Self::PresenceContextStale => "PRESENCE_CONTEXT_STALE",
+            Self::PresenceBindingDenied => "PRESENCE_BINDING_DENIED",
             Self::MmrMutationNotAuthorized => "MMR_MUTATION_NOT_AUTHORIZED",
             Self::MmrCurrentConflict => "MMR_CURRENT_CONFLICT",
             Self::MmrOperationIdConflict => "MMR_OPERATION_ID_CONFLICT",
@@ -209,6 +310,13 @@ impl LocalOwnerError {
             Self::MmrSummarySelfEvidenceRejected => "MMR_SUMMARY_SELF_EVIDENCE_REJECTED",
             Self::MmrCandidateStatusChangeRejected => "MMR_CANDIDATE_STATUS_CHANGE_REJECTED",
             Self::MmrSummarySupportUnresolved => "MMR_SUMMARY_SUPPORT_UNRESOLVED",
+            Self::MemoryBodyVerifierUnavailable => "MEMORY_BODY_VERIFIER_UNAVAILABLE",
+            Self::MemoryBodyLocatorRejected => "MEMORY_BODY_LOCATOR_REJECTED",
+            Self::MemoryBodyMismatch => "MEMORY_BODY_MISMATCH",
+            Self::MemoryBodyUnavailable => "MEMORY_BODY_UNAVAILABLE",
+            Self::MemoryVerificationStale => "MEMORY_VERIFICATION_STALE",
+            Self::MemoryAuthorityProfileRejected => "MEMORY_AUTHORITY_PROFILE_REJECTED",
+            Self::WorkSourceProfileRejected => "WORK_SOURCE_PROFILE_REJECTED",
             Self::ResponseLostAfterCommit => "LOCAL_OWNER_RESPONSE_LOST_AFTER_COMMIT",
             Self::InjectedCrash => "LOCAL_OWNER_INJECTED_CRASH",
             Self::Io(_) => "LOCAL_OWNER_IO_FAILED",
@@ -220,6 +328,8 @@ impl LocalOwnerError {
 
 pub struct LocalOwnerKernel {
     root: PathBuf,
+    database_path: PathBuf,
+    _activation_root: RetainedActivationRoot,
     ledger: Option<LocalOwnerThread>,
     lock: Option<ResidentLock>,
     admission: ContinuityAdmission,
@@ -231,19 +341,64 @@ impl LocalOwnerKernel {
         continuity_evidence: Option<&Value>,
         genesis_provisioning_authority: Option<&Value>,
     ) -> Result<Self, LocalOwnerError> {
-        validate_root(root)?;
-        ensure_private_state_file(&root.join(LOCAL_OWNER_LOCK_FILENAME))?;
-        let lock = ResidentLock::acquire(root.join(LOCAL_OWNER_LOCK_FILENAME))?;
-        let database_path = root.join(LOCAL_OWNER_DATABASE_FILENAME);
-        if database_path.exists() {
-            validate_private_state_file(&database_path)?;
-        }
-        let local = store::inspect_continuity(&database_path)?;
-        let admission = derive_admission(
-            &local,
+        Self::start_with_memory_body_root(
+            root,
             continuity_evidence,
             genesis_provisioning_authority,
+            None,
+        )
+    }
+
+    /// Starts the local-owner kernel with an optional external private Memory
+    /// body root. The path is consumed only at startup; mutations can never
+    /// provide or replace it.
+    #[doc(hidden)]
+    pub fn start_with_memory_body_root(
+        root: &Path,
+        continuity_evidence: Option<&Value>,
+        genesis_provisioning_authority: Option<&Value>,
+        memory_body_root: Option<&Path>,
+    ) -> Result<Self, LocalOwnerError> {
+        let activation_root = RetainedActivationRoot::open(root)?;
+        let memory_body_verifier = memory_body_root
+            .map(|body_root| MemoryBodyVerifier::open(body_root, root))
+            .transpose()?;
+        require_activation_memory_separation(
+            &activation_root,
+            memory_body_verifier.as_ref(),
+            false,
         )?;
+        let lock = acquire_activation_lock(&activation_root)?;
+        require_activation_memory_separation(
+            &activation_root,
+            memory_body_verifier.as_ref(),
+            true,
+        )?;
+        Self::start_with_acquired_lock(
+            root,
+            continuity_evidence,
+            genesis_provisioning_authority,
+            memory_body_verifier,
+            activation_root,
+            lock,
+        )
+    }
+
+    /// Completes startup while retaining an already-acquired Resident lock.
+    /// Witness admission uses this seam so external read/enrollment and local
+    /// admission share one inspect-to-return critical section.
+    fn start_with_acquired_lock(
+        root: &Path,
+        continuity_evidence: Option<&Value>,
+        genesis_provisioning_authority: Option<&Value>,
+        memory_body_verifier: Option<MemoryBodyVerifier>,
+        activation_root: RetainedActivationRoot,
+        lock: ResidentLock,
+    ) -> Result<Self, LocalOwnerError> {
+        let database_path = activation_root.child_path(LOCAL_OWNER_DATABASE_FILENAME);
+        let local = store::inspect_continuity(&database_path)?;
+        let admission =
+            derive_admission(&local, continuity_evidence, genesis_provisioning_authority)?;
         if !admission.admitted {
             return Err(admission.denial_error());
         }
@@ -258,12 +413,15 @@ impl LocalOwnerKernel {
             None
         };
         let ledger = LocalOwnerThread::start(
-            database_path,
+            database_path.clone(),
             process_nonce,
             admission.genesis_authorized,
+            memory_body_verifier,
         )?;
         Ok(Self {
             root: root.to_path_buf(),
+            database_path,
+            _activation_root: activation_root,
             ledger: Some(ledger),
             lock: Some(lock),
             admission,
@@ -299,8 +457,7 @@ impl LocalOwnerKernel {
         &mut self,
         continuity_evidence: &Value,
     ) -> Result<Value, LocalOwnerError> {
-        let database_path = self.root.join(LOCAL_OWNER_DATABASE_FILENAME);
-        let local = store::inspect_continuity(&database_path)?;
+        let local = store::inspect_continuity(&self.database_path)?;
         let next = derive_admission(&local, Some(continuity_evidence), None)?;
         if self.admission.authority_relation
             == Some(continuity::AuthorityRelation::SuccessorExists)
@@ -363,6 +520,22 @@ impl LocalOwnerKernel {
             .as_ref()
             .ok_or(LocalOwnerError::ThreadUnavailable)?
             .query_mmr(input)
+    }
+
+    pub fn query_presence_context(&self, input: Value) -> Result<Value, LocalOwnerError> {
+        self.require_presence_eligibility()?;
+        self.ledger
+            .as_ref()
+            .ok_or(LocalOwnerError::ThreadUnavailable)?
+            .query_presence(input, self.admission.clone())
+    }
+
+    pub fn seal_provider_attempt(&self, input: Value) -> Result<Value, LocalOwnerError> {
+        self.require_presence_eligibility()?;
+        self.ledger
+            .as_ref()
+            .ok_or(LocalOwnerError::ThreadUnavailable)?
+            .seal_provider_attempt(input, self.admission.clone())
     }
 
     #[doc(hidden)]
@@ -442,6 +615,59 @@ impl LocalOwnerKernel {
             Err(LocalOwnerError::ContinuityAdmissionDenied)
         }
     }
+
+    fn require_presence_eligibility(&self) -> Result<(), LocalOwnerError> {
+        if self.admission.admitted && self.admission.grant_count == 1 {
+            Ok(())
+        } else {
+            Err(LocalOwnerError::ContinuityAdmissionDenied)
+        }
+    }
+}
+
+/// Acquire the single existing Resident activation lock after validating the
+/// whole local root. Callers retain it through admission and thread startup;
+/// this deliberately does not introduce a separate Witness lock.
+fn acquire_activation_lock(root: &RetainedActivationRoot) -> Result<ResidentLock, LocalOwnerError> {
+    let lock_file = open_private_state_file_at(root, LOCAL_OWNER_LOCK_FILENAME, true)?
+        .ok_or(LocalOwnerError::InvalidInput)?;
+    let lock = ResidentLock::acquire_file(lock_file)?;
+    let _ = open_private_state_file_at(root, LOCAL_OWNER_DATABASE_FILENAME, false)?;
+    Ok(lock)
+}
+
+fn open_private_state_file_at(
+    root: &RetainedActivationRoot,
+    leaf: &str,
+    create: bool,
+) -> Result<Option<File>, LocalOwnerError> {
+    let flags = OFlags::RDWR | OFlags::NOFOLLOW | OFlags::CLOEXEC;
+    let opened = match openat2(
+        &root.directory,
+        leaf,
+        flags,
+        Mode::empty(),
+        ResolveFlags::BENEATH | ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+    ) {
+        Ok(fd) => Some(File::from(fd)),
+        Err(error) if error == rustix::io::Errno::NOENT && create => {
+            let fd = openat2(
+                &root.directory,
+                leaf,
+                flags | OFlags::CREATE | OFlags::EXCL,
+                Mode::from_raw_mode(0o600),
+                ResolveFlags::BENEATH | ResolveFlags::NO_SYMLINKS | ResolveFlags::NO_MAGICLINKS,
+            )
+            .map_err(|error| LocalOwnerError::Io(error.into()))?;
+            Some(File::from(fd))
+        }
+        Err(error) if error == rustix::io::Errno::NOENT => None,
+        Err(error) => return Err(LocalOwnerError::Io(error.into())),
+    };
+    if let Some(file) = opened.as_ref() {
+        validate_private_state_metadata(&file.metadata().map_err(LocalOwnerError::Io)?)?;
+    }
+    Ok(opened)
 }
 
 fn ensure_private_state_file(path: &Path) -> Result<(), LocalOwnerError> {
@@ -463,14 +689,10 @@ fn ensure_private_state_file(path: &Path) -> Result<(), LocalOwnerError> {
     Ok(())
 }
 
-fn validate_private_state_file(path: &Path) -> Result<(), LocalOwnerError> {
-    let metadata = std::fs::symlink_metadata(path).map_err(LocalOwnerError::Io)?;
-    validate_private_state_metadata(&metadata)
-}
-
 fn validate_private_state_metadata(metadata: &std::fs::Metadata) -> Result<(), LocalOwnerError> {
     if !metadata.is_file()
         || metadata.file_type().is_symlink()
+        || metadata.uid() != rustix::process::getuid().as_raw()
         || metadata.nlink() != 1
         || metadata.permissions().mode() & 0o777 != 0o600
     {
@@ -486,16 +708,24 @@ fn validate_root(root: &Path) -> Result<(), LocalOwnerError> {
         return Err(LocalOwnerError::InvalidInput);
     }
     let metadata = std::fs::symlink_metadata(root).map_err(LocalOwnerError::Io)?;
-    if !metadata.is_dir()
-        || metadata.file_type().is_symlink()
-        || metadata.permissions().mode() & 0o777 != 0o700
-    {
+    if !valid_root_metadata(&metadata) {
         return Err(LocalOwnerError::InvalidInput);
     }
     let canonical = std::fs::canonicalize(root).map_err(LocalOwnerError::Io)?;
     if canonical != root {
         return Err(LocalOwnerError::InvalidInput);
     }
+    validate_root_inventory(root)
+}
+
+fn valid_root_metadata(metadata: &std::fs::Metadata) -> bool {
+    metadata.is_dir()
+        && !metadata.file_type().is_symlink()
+        && metadata.uid() == rustix::process::getuid().as_raw()
+        && metadata.permissions().mode() & 0o777 == 0o700
+}
+
+fn validate_root_inventory(root: &Path) -> Result<(), LocalOwnerError> {
     let allowed = [
         LOCAL_OWNER_DATABASE_FILENAME,
         LOCAL_OWNER_LOCK_FILENAME,
@@ -510,6 +740,25 @@ fn validate_root(root: &Path) -> Result<(), LocalOwnerError> {
             .map_err(|_| LocalOwnerError::InvalidInput)?;
         if !file_type.is_file() || file_type.is_symlink() || !allowed.contains(&name.as_str()) {
             return Err(LocalOwnerError::InvalidInput);
+        }
+    }
+    Ok(())
+}
+
+fn require_activation_memory_separation(
+    activation_root: &RetainedActivationRoot,
+    memory_body_verifier: Option<&MemoryBodyVerifier>,
+    require_path_match: bool,
+) -> Result<(), LocalOwnerError> {
+    let activation_identity = activation_root.identity()?;
+    if require_path_match && !activation_root.path_matches()? {
+        return Err(LocalOwnerError::InvalidInput);
+    }
+    if let Some(memory) = memory_body_verifier {
+        if activation_identity == memory.root_identity()?
+            || (require_path_match && !memory.root_path_matches()?)
+        {
+            return Err(LocalOwnerError::MemoryBodyLocatorRejected);
         }
     }
     Ok(())

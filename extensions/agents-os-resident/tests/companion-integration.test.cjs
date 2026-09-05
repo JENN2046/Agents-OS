@@ -10,7 +10,8 @@ const {
   readlinkSync,
   readdirSync,
   rmSync,
-  statSync
+  statSync,
+  writeFileSync
 } = require('node:fs');
 const { tmpdir } = require('node:os');
 const path = require('node:path');
@@ -18,11 +19,12 @@ const { spawn, spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const { createCompanionClient } = require('../companion/client');
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
 const { verifyCompanionIntegrity } = require('../companion/integrity');
 
 const PACKAGE_ROOT = path.resolve(__dirname, '..');
-const DAEMON_PATH = path.resolve(PACKAGE_ROOT, 'companion/resident-daemon.js');
-const PROBE_PATH = path.resolve(PACKAGE_ROOT, 'companion/probe.js');
+const DAEMON_PATH = path.join(__dirname, 'fixtures', 'resident-daemon-runner.cjs');
+const PROBE_PATH = path.join(__dirname, 'fixtures', 'probe-runner.cjs');
 const HOST_RUNNER_PATH = path.resolve(
   PACKAGE_ROOT,
   'tests/fixtures/host-adapter-runner.cjs'
@@ -51,7 +53,9 @@ function spawnDaemon({
   socketPath,
   buildId,
   continuityEvidence,
-  genesisProvisioningAuthority
+  genesisProvisioningAuthority,
+  memoryBodyRootPath,
+  witnessRootPath
 }) {
   const args = [
     DAEMON_PATH,
@@ -71,11 +75,76 @@ function spawnDaemon({
       genesisProvisioningAuthority
     );
   }
+  if (memoryBodyRootPath !== undefined) {
+    args.push('--memory-body-root', memoryBodyRootPath);
+  }
+  if (witnessRootPath !== undefined) {
+    args.push('--witness-root', witnessRootPath);
+  }
   return spawn(process.execPath, args, {
     cwd: PACKAGE_ROOT,
     env: childEnvironment(),
     stdio: 'ignore'
   });
+}
+
+function runProvision({
+  rootPath,
+  buildId,
+  authorityFilePath,
+  memoryBodyRootPath,
+  witnessRootPath
+}) {
+  return spawnSync(process.execPath, [
+    DAEMON_PATH,
+    '--operation',
+    'provision',
+    '--root',
+    rootPath,
+    '--witness-root',
+    witnessRootPath,
+    '--memory-body-root',
+    memoryBodyRootPath,
+    '--expected-build-id',
+    buildId,
+    '--genesis-authority-file',
+    authorityFilePath
+  ], {
+    cwd: PACKAGE_ROOT,
+    encoding: 'utf8',
+    env: childEnvironment(),
+    timeout: 10000
+  });
+}
+
+function snapshotFile(filePath) {
+  const metadata = statSync(filePath, { bigint: true });
+  return Object.freeze({
+    bytes: readFileSync(filePath),
+    identity: Object.freeze({
+      ctimeNs: metadata.ctimeNs,
+      dev: metadata.dev,
+      ino: metadata.ino,
+      mode: metadata.mode,
+      mtimeNs: metadata.mtimeNs,
+      nlink: metadata.nlink,
+      size: metadata.size
+    })
+  });
+}
+
+function assertFileUnchanged(filePath, snapshot) {
+  const metadata = statSync(filePath, { bigint: true });
+  assert.deepEqual(readFileSync(filePath), snapshot.bytes);
+  assert.deepEqual({
+    ctimeNs: metadata.ctimeNs,
+    dev: metadata.dev,
+    ino: metadata.ino,
+    mode: metadata.mode,
+    mtimeNs: metadata.mtimeNs,
+    nlink: metadata.nlink,
+    size: metadata.size
+  }, snapshot.identity);
 }
 
 // Canonical external fixtures mirroring src/local_owner/p1_tests.rs. These are
@@ -165,7 +234,14 @@ async function waitForActive({ socketPath, integrity, child, timeoutMs = 5000 })
     if (child.exitCode !== null) throw new Error('DAEMON_EXITED_BEFORE_READY');
     if (existsSync(socketPath)) {
       try {
-        const client = createCompanionClient({ socketPath, integrity });
+        const client = createCompanionClient({
+          socketPath,
+          integrity,
+          loadIdentityPolicy: () => null,
+          authenticateDaemon: (socket, connectedPath) => authenticateFixtureDaemon(
+            socket, connectedPath, { expectedPid: child.pid }
+          )
+        });
         const response = await client.status();
         if (response.activationState === 'ACTIVE_LOCAL_OWNER') return response;
       } catch {
@@ -261,7 +337,7 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
 
   const probe = spawnSync(process.execPath, [PROBE_PATH, '--socket', socketPath], {
     cwd: PACKAGE_ROOT,
-    env: childEnvironment(),
+    env: childEnvironment({ AGENTS_OS_RESIDENT_TEST_DAEMON_PID: String(first.pid) }),
     encoding: 'utf8'
   });
   assert.equal(probe.status, 0);
@@ -271,6 +347,7 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   const host = spawn(process.execPath, [HOST_RUNNER_PATH], {
     cwd: PACKAGE_ROOT,
     env: childEnvironment({
+      AGENTS_OS_RESIDENT_TEST_DAEMON_PID: String(first.pid),
       XDG_RUNTIME_DIR: path.dirname(path.dirname(socketPath))
     }),
     stdio: ['ignore', 'ignore', 'ignore', 'ipc']
@@ -377,7 +454,14 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   });
   assert.equal(after.items.length, 1);
 
-  const client = createCompanionClient({ socketPath, integrity });
+  const client = createCompanionClient({
+    socketPath,
+    integrity,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: (socket, connectedPath) => authenticateFixtureDaemon(
+      socket, connectedPath, { expectedPid: first.pid }
+    )
+  });
   const second = spawnDaemon({
     rootPath,
     socketPath: secondSocketPath,
@@ -413,7 +497,16 @@ test('actual companion + Host attachment consent flow is atomic, replayable and 
   });
   children.add(restarted);
   await waitForActive({ socketPath, integrity, child: restarted });
-  const replayClient = createCompanionClient({ socketPath, integrity });
+  const replayClient = createCompanionClient({
+    loadIdentityPolicy: () => null,
+    authenticateDaemon(socket, connectedPath, { expectedPid } = {}) {
+      return authenticateFixtureDaemon(socket, connectedPath, {
+        expectedPid: expectedPid ?? restarted.pid
+      });
+    },
+    socketPath,
+    integrity
+  });
   await replayClient.attach();
   const replay = await replayClient.submitConsent({
     ingress: 'FINAL_VOICE_TRANSCRIPT',
@@ -438,4 +531,164 @@ test('daemon without canonical continuity inputs fails closed before READY', asy
   assert.equal(exit.signal, null);
   assert.equal(existsSync(socketPath), false);
   t.after(() => rmSync(quarantine, { recursive: true, force: true }));
+});
+
+test('one-shot provisioning enrolls Witness once and ordinary daemon restarts without genesis', async (t) => {
+  const quarantine = mkdtempSync(path.join(tmpdir(), 'agents-os-resident-witness-it-'));
+  chmodSync(quarantine, 0o700);
+  const rootPath = path.join(quarantine, 'agents-os-resident-local-owner-v1');
+  const witnessRootPath = path.join(quarantine, 'protected-witness');
+  const memoryBodyRootPath = path.join(quarantine, 'private-memory-bodies');
+  mkdirSync(rootPath, { mode: 0o700 });
+  mkdirSync(witnessRootPath, { mode: 0o700 });
+  mkdirSync(memoryBodyRootPath, { mode: 0o700 });
+  const socketPath = createRuntimeDirectory(quarantine, 'run-witness-primary');
+  const restartSocketPath = createRuntimeDirectory(quarantine, 'run-witness-restart');
+  const invalidSocketPath = createRuntimeDirectory(quarantine, 'run-witness-invalid');
+  const wrongRootSocketPath = createRuntimeDirectory(quarantine, 'run-witness-wrong-root');
+  const wrongRootParent = path.join(quarantine, 'wrong-resident');
+  const wrongRootPath = path.join(wrongRootParent, 'agents-os-resident-local-owner-v1');
+  mkdirSync(wrongRootPath, { recursive: true, mode: 0o700 });
+  chmodSync(wrongRootParent, 0o700);
+  chmodSync(wrongRootPath, 0o700);
+  const authorityFilePath = path.join(quarantine, 'genesis-authority.json');
+  writeFileSync(authorityFilePath, genesisProvisioningAuthority(), {
+    flag: 'wx',
+    mode: 0o600
+  });
+  chmodSync(authorityFilePath, 0o600);
+  const integrity = verifyCompanionIntegrity();
+  const children = new Set();
+
+  t.after(async () => {
+    for (const child of children) {
+      if (child.exitCode === null) {
+        child.kill('SIGTERM');
+        try {
+          await waitForExit(child);
+        } catch {
+          child.kill('SIGKILL');
+        }
+      }
+    }
+    rmSync(quarantine, { recursive: true, force: true });
+  });
+
+  const inlineAuthority = spawnDaemon({
+    rootPath,
+    socketPath: invalidSocketPath,
+    buildId: integrity.buildId,
+    genesisProvisioningAuthority: genesisProvisioningAuthority(),
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  children.add(inlineAuthority);
+  assert.notEqual((await waitForExit(inlineAuthority)).code, 0);
+  assert.equal(existsSync(invalidSocketPath), false);
+  assert.deepEqual(readdirSync(witnessRootPath), []);
+  assert.deepEqual(readdirSync(rootPath), []);
+
+  const provisioned = runProvision({
+    rootPath,
+    buildId: integrity.buildId,
+    authorityFilePath,
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  assert.equal(provisioned.error, undefined);
+  assert.equal(provisioned.status, 0);
+  assert.equal(provisioned.signal, null);
+  assert.equal(provisioned.stdout, 'RESIDENT_WITNESS_PROVISIONED\n');
+  assert.equal(provisioned.stderr, '');
+  assert.equal(existsSync(socketPath), false);
+  assert.deepEqual(readdirSync(memoryBodyRootPath), []);
+
+  const witnessEntries = readdirSync(witnessRootPath);
+  assert.equal(witnessEntries.length, 1);
+  assert.match(witnessEntries[0], /^[0-9a-f]{64}\.witness\.json$/u);
+  const witnessPath = path.join(witnessRootPath, witnessEntries[0]);
+  const databasePath = path.join(
+    rootPath,
+    'agents-os-resident-local-owner-v1.sqlite3'
+  );
+  const witnessSnapshot = snapshotFile(witnessPath);
+  const databaseSnapshot = snapshotFile(databasePath);
+  assert.equal(statSync(witnessPath).mode & 0o777, 0o600);
+  assert.equal(statSync(witnessPath).nlink, 1);
+  assert.equal(statSync(databasePath).mode & 0o777, 0o600);
+  assert.equal(statSync(databasePath).nlink, 1);
+  assert.equal(statSync(rootPath).mode & 0o777, 0o700);
+  assert.equal(statSync(witnessRootPath).mode & 0o777, 0o700);
+  assert.equal(statSync(memoryBodyRootPath).mode & 0o777, 0o700);
+
+  const first = spawnDaemon({
+    rootPath,
+    socketPath,
+    buildId: integrity.buildId,
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  children.add(first);
+  const ready = await waitForActive({ socketPath, integrity, child: first });
+  assert.equal(typeof ready.continuityAnchor?.eventSequence, 'number');
+  assertFileUnchanged(witnessPath, witnessSnapshot);
+  assertFileUnchanged(databasePath, databaseSnapshot);
+
+  const wrongResident = spawnDaemon({
+    rootPath: wrongRootPath,
+    socketPath: wrongRootSocketPath,
+    buildId: integrity.buildId,
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  children.add(wrongResident);
+  assert.notEqual((await waitForExit(wrongResident)).code, 0);
+  assert.deepEqual(readdirSync(wrongRootPath), [
+    'agents-os-resident-local-owner-v1.lock'
+  ]);
+  assert.equal(
+    existsSync(path.join(wrongRootPath, 'agents-os-resident-local-owner-v1.sqlite3')),
+    false
+  );
+  assert.deepEqual(readdirSync(witnessRootPath), witnessEntries);
+  assertFileUnchanged(witnessPath, witnessSnapshot);
+  assertFileUnchanged(databasePath, databaseSnapshot);
+
+  first.kill('SIGTERM');
+  assert.deepEqual(await waitForExit(first), { code: 0, signal: null });
+  const restarted = spawnDaemon({
+    rootPath,
+    socketPath: restartSocketPath,
+    buildId: integrity.buildId,
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  children.add(restarted);
+  const restartedReady = await waitForActive({
+    socketPath: restartSocketPath,
+    integrity,
+    child: restarted
+  });
+  assert.deepEqual(restartedReady.continuityAnchor, ready.continuityAnchor);
+  assert.deepEqual(readdirSync(witnessRootPath), witnessEntries);
+  assertFileUnchanged(witnessPath, witnessSnapshot);
+  assertFileUnchanged(databasePath, databaseSnapshot);
+  restarted.kill('SIGTERM');
+  assert.deepEqual(await waitForExit(restarted), { code: 0, signal: null });
+
+  const replayedProvision = runProvision({
+    rootPath,
+    buildId: integrity.buildId,
+    authorityFilePath,
+    memoryBodyRootPath,
+    witnessRootPath
+  });
+  assert.equal(replayedProvision.error, undefined);
+  assert.equal(replayedProvision.status, 73);
+  assert.equal(replayedProvision.signal, null);
+  assert.equal(replayedProvision.stdout, '');
+  assert.equal(replayedProvision.stderr, '');
+  assertFileUnchanged(witnessPath, witnessSnapshot);
+  assertFileUnchanged(databasePath, databaseSnapshot);
+  assert.deepEqual(readdirSync(memoryBodyRootPath), []);
 });

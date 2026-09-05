@@ -5,6 +5,7 @@ const {
   ATTACHED_STATE,
   DETACHED_STATE,
   MAX_FRAME_BYTES,
+  MAX_PUBLICATION_FRAME_BYTES,
   PROTOCOL_SCHEMA,
   fixedError
 } = require('./constants');
@@ -27,6 +28,9 @@ const OPERATIONS = new Set([
   'cognitive_context',
   'create_proposal',
   'mint_cognitive_session',
+  'presence_context',
+  'publish_memory_body',
+  'seal_provider_attempt',
   'submit_consent',
   'query'
 ]);
@@ -34,6 +38,9 @@ const PROTECTED_OPERATIONS = new Set([
   'cognitive_context',
   'create_proposal',
   'mint_cognitive_session',
+  'presence_context',
+  'publish_memory_body',
+  'seal_provider_attempt',
   'submit_consent',
   'query'
 ]);
@@ -43,6 +50,7 @@ const REJECTION_CATEGORIES = new Set([
   'BUILD_MISMATCH',
   'GENERATION_MISMATCH',
   'REQUEST_REJECTED',
+  'PUBLICATION_OUTCOME_UNKNOWN',
   'RUNTIME_INACTIVE',
   'TOKEN_MISMATCH'
 ]);
@@ -68,9 +76,10 @@ function hasExactKeys(value, expectedKeys) {
     && actual.every((key, index) => key === expected[index]);
 }
 
-function parseJsonFrame(frame) {
+function parseJsonFrame(frame, maximumBytes = MAX_FRAME_BYTES) {
   const bytes = Buffer.isBuffer(frame) ? frame : Buffer.from(frame, 'utf8');
-  if (bytes.length === 0 || bytes.length > MAX_FRAME_BYTES || bytes.includes(0)) {
+  if (bytes.length === 0 || bytes.length > maximumBytes || bytes.includes(0)
+    || !require('node:buffer').isUtf8(bytes)) {
     throw fixedError('RESIDENT_PROTOCOL_REJECTED');
   }
   const text = bytes.toString('utf8');
@@ -168,7 +177,11 @@ function rejectDuplicateJsonKeys(text) {
 }
 
 function parseRequestFrame(frame) {
-  const request = parseJsonFrame(frame);
+  const request = parseJsonFrame(frame, MAX_PUBLICATION_FRAME_BYTES);
+  if (request.operation !== 'publish_memory_body'
+    && Buffer.byteLength(frame) > MAX_FRAME_BYTES) {
+    throw fixedError('RESIDENT_PROTOCOL_REJECTED');
+  }
   if (!OPERATIONS.has(request.operation)
     || request.schema !== PROTOCOL_SCHEMA
     || !REQUEST_ID.test(request.requestId)
@@ -191,7 +204,9 @@ function parseRequestFrame(frame) {
 
 function encodeFrame(value) {
   const bytes = Buffer.from(`${JSON.stringify(value)}\n`, 'utf8');
-  if (bytes.length > MAX_FRAME_BYTES) {
+  const maximumBytes = value.operation === 'publish_memory_body'
+    && value.payload !== undefined ? MAX_PUBLICATION_FRAME_BYTES : MAX_FRAME_BYTES;
+  if (bytes.length > maximumBytes) {
     throw fixedError('RESIDENT_PROTOCOL_REJECTED');
   }
   return bytes;
@@ -293,7 +308,8 @@ function validateResponseFrame(frame, request, expectedIntegrity) {
       RUNTIME_INACTIVE: 'RESIDENT_RUNTIME_INACTIVE',
       ATTACHMENT_REQUIRED: 'RESIDENT_ATTACHMENT_REQUIRED',
       TOKEN_MISMATCH: 'RESIDENT_ATTACHMENT_REJECTED',
-      GENERATION_MISMATCH: 'RESIDENT_ATTACHMENT_REJECTED'
+      GENERATION_MISMATCH: 'RESIDENT_ATTACHMENT_REJECTED',
+      PUBLICATION_OUTCOME_UNKNOWN: 'MEMORY_BODY_PUBLICATION_OUTCOME_UNKNOWN'
     }[response.errorCategory] || 'RESIDENT_PROTOCOL_REJECTED';
     throw fixedError(mapped);
   }

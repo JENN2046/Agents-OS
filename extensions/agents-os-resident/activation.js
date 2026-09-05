@@ -22,6 +22,28 @@ function isPlainObject(value) {
       || Object.getPrototypeOf(value) === null);
 }
 
+function parseProtectedRootPath(value, code, label) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  if (typeof value !== 'string'
+    || value.length === 0
+    || value.includes('\0')
+    || !path.isAbsolute(value)
+    || path.normalize(value) !== value) {
+    throw boundaryError(code, `${label} must be an absolute normalized path or null`);
+  }
+  return value;
+}
+
+function pathsOverlap(left, right) {
+  const relative = path.relative(left, right);
+  return relative === ''
+    || (relative !== '..'
+      && !relative.startsWith(`..${path.sep}`)
+      && !path.isAbsolute(relative));
+}
+
 function parseActivationConfig(config) {
   if (!isPlainObject(config)) {
     throw boundaryError('INVALID_ACTIVATION_CONFIG', 'config must be a plain object');
@@ -70,12 +92,51 @@ function parseActivationConfig(config) {
       'genesis provisioning authority must be an externally supplied object or null'
     );
   }
+  const witnessRootPath = parseProtectedRootPath(
+    config.AGENTS_OS_RESIDENT_WITNESS_ROOT,
+    'INVALID_WITNESS_ROOT',
+    'witness root'
+  );
+  const memoryBodyRootPath = parseProtectedRootPath(
+    config.AGENTS_OS_RESIDENT_MEMORY_BODY_ROOT,
+    'INVALID_MEMORY_BODY_ROOT',
+    'memory body root'
+  );
+  if (memoryBodyRootPath !== null && witnessRootPath === null) {
+    throw boundaryError(
+      'INVALID_PROTECTED_ROOT_BINDING',
+      'memory body verification requires a protected witness root'
+    );
+  }
+  if ((witnessRootPath !== null
+      && (pathsOverlap(rootPath, witnessRootPath)
+        || pathsOverlap(witnessRootPath, rootPath)))
+    || (memoryBodyRootPath !== null
+      && (pathsOverlap(rootPath, memoryBodyRootPath)
+        || pathsOverlap(memoryBodyRootPath, rootPath)))
+    || (witnessRootPath !== null
+      && memoryBodyRootPath !== null
+      && (pathsOverlap(witnessRootPath, memoryBodyRootPath)
+        || pathsOverlap(memoryBodyRootPath, witnessRootPath)))) {
+    throw boundaryError(
+      'INVALID_PROTECTED_ROOT_BINDING',
+      'Resident, Witness and Memory roots must be mutually disjoint'
+    );
+  }
+  if (witnessRootPath !== null && continuityEvidence !== null) {
+    throw boundaryError(
+      'INVALID_WITNESS_AUTHORITY_INPUT',
+      'caller continuity evidence is forbidden when the protected witness is configured'
+    );
+  }
   return Object.freeze({
     enabled: true,
     mode: ACTIVATION_MODE_LOCAL_OWNER_SESSION_V1,
     rootPath,
     continuityEvidence,
-    genesisProvisioningAuthority
+    genesisProvisioningAuthority,
+    memoryBodyRootPath,
+    witnessRootPath
   });
 }
 
@@ -183,10 +244,13 @@ function createResidentLifecycle({
       return { initialized: false, activationState: ACTIVATION_MODE_DISABLED, runtimeUsable: false };
     }
     if (state === ACTIVE_STATE) {
-      if (activation.mode !== requested.mode || activation.rootPath !== requested.rootPath) {
+      if (activation.mode !== requested.mode
+        || activation.rootPath !== requested.rootPath
+        || activation.memoryBodyRootPath !== requested.memoryBodyRootPath
+        || activation.witnessRootPath !== requested.witnessRootPath) {
         throw boundaryError(
           'ACTIVE_RECONFIGURATION_REJECTED',
-          'an active resident cannot be rebound to another activation root'
+          'an active resident cannot be rebound to another protected-root profile'
         );
       }
       await status();
@@ -209,6 +273,8 @@ function createResidentLifecycle({
       'prepare_mmr_mutation',
       'submit_mmr_mutation_consent',
       'query_mmr_mutation_core',
+      'query_presence_context',
+      'seal_provider_attempt',
       'execute_local_owner_query',
       'invalidate_local_owner_proposal'
     ];
@@ -228,7 +294,9 @@ function createResidentLifecycle({
         activationMode: requested.mode,
         continuityEvidence: requested.continuityEvidence,
         genesisProvisioningAuthority: requested.genesisProvisioningAuthority,
-        rootPath: requested.rootPath
+        memoryBodyRootPath: requested.memoryBodyRootPath,
+        rootPath: requested.rootPath,
+        witnessRootPath: requested.witnessRootPath
       });
       activationReturned = true;
       validateNativeActivationResult(result);
@@ -313,6 +381,16 @@ function createResidentLifecycle({
     return requireActiveNative().query_mmr_mutation_core(input);
   }
 
+  async function queryPresenceContext(input) {
+    await status();
+    return requireActiveNative().query_presence_context(input);
+  }
+
+  async function sealProviderAttempt(input) {
+    await status();
+    return requireActiveNative().seal_provider_attempt(input);
+  }
+
   async function invalidate(input) {
     if (state !== ACTIVE_STATE || !residentNative) {
       return { invalidated: true, resultCode: 'PENDING_PROPOSAL_INVALIDATED' };
@@ -351,6 +429,8 @@ function createResidentLifecycle({
     prepareProposal,
     query,
     queryMmrMutationCore,
+    queryPresenceContext,
+    sealProviderAttempt,
     shutdown,
     status,
     submitMmrMutationConsent,

@@ -25,6 +25,8 @@ const ALLOWED_STATE = new Set([
   'agents-os-resident-local-owner-v1.sqlite3-journal'
 ]);
 
+const { authenticateFixtureDaemon } = require('./fixtures/transport-identity.cjs');
+
 function createGoalRequest() {
   return {
     operation: 'PROPOSE_GOAL_MUTATION',
@@ -103,7 +105,7 @@ async function startQuarantineDaemon({
     && genesisProvisioningAuthority !== undefined) {
     argv.push('--genesis-provisioning-authority', genesisProvisioningAuthority);
   }
-  return startDaemon({ argv });
+  return startDaemon({ argv, loadIdentityPolicy: () => null });
 }
 
 test('Windows-target build completes actual native + companion + Host integration in disposable state', async (t) => {
@@ -145,7 +147,12 @@ test('Windows-target build completes actual native + companion + Host integratio
     rootPath,
     socketPath
   });
-  const statusClient = createCompanionClient({ socketPath, integrity });
+  const statusClient = createCompanionClient({
+    socketPath,
+    integrity,
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon
+  });
   const status = await statusClient.status();
   assert.equal(status.activationState, 'ACTIVE_LOCAL_OWNER');
   assert.equal(status.runtimeUsable, false);
@@ -155,7 +162,12 @@ test('Windows-target build completes actual native + companion + Host integratio
   assert.equal(status.externalEffectsEnabled, false);
 
   adapter = createResidentAdapter({
-    createClient: () => createCompanionClient({ socketPath, integrity }),
+    createClient: () => createCompanionClient({
+      loadIdentityPolicy: () => null,
+      authenticateDaemon: authenticateFixtureDaemon,
+      socketPath,
+      integrity
+    }),
     retryWindowMs: 0
   });
   const attached = await adapter.initialize();
@@ -255,7 +267,12 @@ test('Windows-target build completes actual native + companion + Host integratio
     continuityEvidence: quarantineRestartEvidence(status.continuityAnchor),
     genesisProvisioningAuthority: null
   });
-  replayClient = createCompanionClient({ socketPath, integrity });
+  replayClient = createCompanionClient({
+    loadIdentityPolicy: () => null,
+    authenticateDaemon: authenticateFixtureDaemon,
+    socketPath,
+    integrity
+  });
   await replayClient.attach();
   const replay = await replayClient.submitConsent({
     ingress: 'FINAL_VOICE_TRANSCRIPT',
