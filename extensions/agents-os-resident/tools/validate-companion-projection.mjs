@@ -26,6 +26,10 @@ const { verifyCompanionIntegrity } = require('../companion/integrity');
 const PREFIX = 'agents-os-resident-projection-';
 
 function copyBoundPackage(packageRoot, integrity) {
+  if (existsSync(resolve(packageRoot, 'plugin-manifest.json'))
+    || integrity.files.some((file) => file.path === 'plugin-manifest.json')) {
+    throw new Error('COMPANION_PROJECTION_INVALID');
+  }
   for (const file of integrity.files) {
     const destination = resolve(packageRoot, file.path);
     mkdirSync(dirname(destination), { recursive: true, mode: 0o700 });
@@ -37,7 +41,7 @@ function copyBoundPackage(packageRoot, integrity) {
   );
   copyFileSync(
     resolve(PACKAGE_ROOT, 'plugin-manifest.json.block'),
-    resolve(packageRoot, 'plugin-manifest.json')
+    resolve(packageRoot, 'plugin-manifest.json.block')
   );
 }
 
@@ -134,7 +138,8 @@ export function runProjectionPreflight() {
     if (staged.buildId !== sourceIntegrity.buildId
       || staged.packageVersion !== sourceIntegrity.packageVersion
       || typeof stagedAdapter.createResidentAdapter !== 'function'
-      || !existsSync(resolve(pluginRoot, 'plugin-manifest.json'))
+      || !existsSync(resolve(pluginRoot, 'plugin-manifest.json.block'))
+      || existsSync(resolve(pluginRoot, 'plugin-manifest.json'))
       || !existsSync(unitPath)
       || existsSync(resolve(pluginRoot, 'config.env'))
       || !renderedUnit.includes(
