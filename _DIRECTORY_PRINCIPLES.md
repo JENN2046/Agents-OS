@@ -1,5 +1,11 @@
 # Directory Principles V1.1
 
+入口修订 `2026-09-13.1`：[AGENTS.md](AGENTS.md) 是唯一根操作规则入口；
+[WORKSPACE_MANIFEST.md](WORKSPACE_MANIFEST.md) 维护项目职责；
+[WORKSPACE_MAP.md](WORKSPACE_MAP.md) 接替本文件的跨机器路径定位用途。
+以下 WSL／Windows 路径及迁移约定保留其原环境语境，本次未重新核实；
+分层、安全和私有状态约束保持有效，不因路径映射而扩权。
+
 目录不是为了收纳文件。  
 目录是为了表达边界。
 

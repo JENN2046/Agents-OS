@@ -1,0 +1,517 @@
+{
+  "finished_at": "2026-09-13T03:47:00.667009+00:00",
+  "status": "PASS",
+  "checks_passed": 119,
+  "checks": [
+    {
+      "check": "historical_state_byte_identical",
+      "passed": true
+    },
+    {
+      "check": "historical_sha256",
+      "passed": true
+    },
+    {
+      "check": "current_state_at_most_60_lines",
+      "passed": true
+    },
+    {
+      "check": "existing_AGENTS_sections_1_to_10_unchanged",
+      "passed": true
+    },
+    {
+      "check": "authority_registry_data_unchanged",
+      "passed": true
+    },
+    {
+      "check": "registry_readme_review_date_current",
+      "passed": true
+    },
+    {
+      "check": "registry_readme_review_exists",
+      "passed": true
+    },
+    {
+      "check": "pilot_registry_only_review_metadata_changed",
+      "passed": true
+    },
+    {
+      "check": "eleven_worktrees_nine_repositories",
+      "passed": true
+    },
+    {
+      "check": "unique_worktree_ids",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-core_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "vcp-next_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "jenn-extensions_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-main_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "colameta-e0_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "harness_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "harness_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "codex-router_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "codex-router_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-backend_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "photo-control_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-control_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "photo-frontend_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "image-lab_path_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_branch_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_head_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_remotes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_tracked_changes_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_untracked_entries_matches_observation",
+      "passed": true
+    },
+    {
+      "check": "image-lab_source_path_exists",
+      "passed": true
+    },
+    {
+      "check": "all_deployments_explicitly_unknown",
+      "passed": true
+    },
+    {
+      "check": "historical_machines_not_marked_observed",
+      "passed": true
+    },
+    {
+      "check": "original_root_git_still_empty",
+      "passed": true
+    },
+    {
+      "check": "control-plane_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "control-chain_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "machine_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "dashboard_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "task-producer_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "workbench_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "active-loop_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "resident_exists_in_source_tree",
+      "passed": true
+    },
+    {
+      "check": "edited_markdown_relative_links_resolve_in_checkout_or_source_tree",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_AGENTS.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_CURRENT_STATE.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_README.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_WORKSPACE_MANIFEST.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_WORKSPACE_MAP.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path__DIRECTORY_PRINCIPLES.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path__MIGRATION_MAP.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path__ROOT_POLICY.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_control-plane/registry/README.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_control-plane/registry/WORKSPACE_REGISTRY.yaml",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_governance/SECURITY_BOUNDARIES.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/inventory/README.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/inventory/machines-and-repositories.v1.json",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/reports/workspace-orientation-20260913/CURRENT_STATE.previous.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/reports/workspace-orientation-20260913/README.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/reports/workspace-orientation-20260913/reviews/navigation-review.md",
+      "passed": true
+    },
+    {
+      "check": "doc_only_path_ops/validation/README.md",
+      "passed": true
+    },
+    {
+      "check": "diff_whitespace",
+      "passed": true
+    }
+  ],
+  "current_state_lines": 43,
+  "historical_bytes": 407592,
+  "historical_sha256": "d414dccf05f427b834158a1db5dea23420355895c51fad02ea01dbdaa47cada2",
+  "changed_paths": [
+    "AGENTS.md",
+    "CURRENT_STATE.md",
+    "README.md",
+    "WORKSPACE_MANIFEST.md",
+    "WORKSPACE_MAP.md",
+    "_DIRECTORY_PRINCIPLES.md",
+    "_MIGRATION_MAP.md",
+    "_ROOT_POLICY.md",
+    "control-plane/registry/README.md",
+    "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+    "control-plane/registry/drafts/document-registry.v0.1.example.yaml",
+    "governance/SECURITY_BOUNDARIES.md",
+    "governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md",
+    "ops/inventory/README.md",
+    "ops/inventory/machines-and-repositories.v1.json",
+    "ops/reports/workspace-orientation-20260913/CURRENT_STATE.previous.md",
+    "ops/reports/workspace-orientation-20260913/README.md",
+    "ops/reports/workspace-orientation-20260913/reviews/navigation-review.md",
+    "ops/reports/workspace-orientation-20260913/validation-summary.json",
+    "ops/validation/README.md"
+  ],
+  "source_tree_links_not_materialized": [],
+  "limits": [
+    "Explicit safe documentation and inventory scope only; not full workspace or deployment verification."
+  ],
+  "final_review": {
+    "status": "NO_ACTIONABLE_FINDINGS",
+    "evidence": "ops/reports/workspace-orientation-20260913/reviews/navigation-review.md",
+    "scope": "navigation, inventory consistency, review metadata and truthful validation limits; no live deployment review"
+  }
+}

@@ -1,5 +1,13 @@
 # control-plane/registry
 
+Navigation revision: `2026-09-13.1`. Start with [root AGENTS.md](../../AGENTS.md)
+for operating rules. [WORKSPACE_MAP.md](../../WORKSPACE_MAP.md) and its inventory
+own the current machine/source/deployment observations; `WORKSPACE_REGISTRY.yaml`
+retains project authority declarations, not proof of installed locations.
+The new orientation documents and ops inventory are outside this directory's
+existing Document Registry pilot; their explicit validation is recorded in the
+[orientation receipt](../../ops/reports/workspace-orientation-20260913/README.md).
+
 Purpose:
 - Hold AGENTS OS registry guidance, authority registry data, and example
   registry material.

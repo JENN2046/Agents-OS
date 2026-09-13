@@ -1,5 +1,12 @@
 # Security Boundaries
 
+Entry clarification (`2026-09-13.1`): start with [root AGENTS.md](../AGENTS.md).
+This file remains the security reference, not a competing operating entry.
+Its A0–A4 permission labels are the legacy safety taxonomy; do not equate them
+with the A0–A3 automation classes in root section 7. Apply the explicit behavior
+and scope constraints, including root sections 2 and 5 and current user limits.
+No new standing authorization or security-boundary relaxation is introduced.
+
 This document defines the canonical hard boundaries of AGENTS OS Workspace.
 
 Authoritative location:

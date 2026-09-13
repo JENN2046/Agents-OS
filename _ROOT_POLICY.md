@@ -1,6 +1,12 @@
 # AGENTS OS Workspace Root Policy
 
-Canonical development root:
+Navigation status (`2026-09-13.1`): [AGENTS.md](AGENTS.md) is the root rule
+entry. [WORKSPACE_MAP.md](WORKSPACE_MAP.md) supersedes this file for current
+machine lookup. The path statements below describe the documented WSL/Windows
+environment, which was not reverified on 2026-09-13. Its private-state and
+safe-transfer constraints remain applicable within their existing scope.
+
+Documented WSL development root:
 
 /home/jenn/AGENTS_OS_Workspace
 

@@ -1,5 +1,11 @@
 # AGENTS OS Migration Map
 
+Status: historical WSL/Windows migration checklist, preserved; not a live
+multi-machine inventory. Navigation revision: `2026-09-13.1`.
+Use [WORKSPACE_MAP.md](WORKSPACE_MAP.md) for current machine/repository facts
+and [AGENTS.md](AGENTS.md) for the root rule entry. The `pending` rows below
+are historical claims, not newly verified tasks or permission to move files.
+
 Canonical WSL Root:
 
 /home/jenn/AGENTS_OS_Workspace

@@ -1,5 +1,9 @@
 # Validation Scripts
 
+Navigation revision: `2026-09-13.1`. Start with [root AGENTS.md](../../AGENTS.md).
+The execution, output and safety constraints below retain their HEAD wording.
+This candidate supplies navigation only; it does not adopt new authorization.
+
 Status: validation script index. Guidance only; not authorization to execute
 scripts.
 

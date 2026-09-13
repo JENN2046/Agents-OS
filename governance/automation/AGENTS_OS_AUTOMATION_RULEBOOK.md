@@ -1,5 +1,10 @@
 # AGENTS OS Automation Rulebook
 
+Entry clarification (`2026-09-13.1`): [root AGENTS.md](../../AGENTS.md) is
+the sole root operating-rule entry. This rulebook retains its existing
+specialization; machine facts are in [WORKSPACE_MAP.md](../../WORKSPACE_MAP.md).
+The documented WSL scope below does not grant authority on another machine.
+
 Status: active
 Date: 2026-07-05
 Owner: Jenn

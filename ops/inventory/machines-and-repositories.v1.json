@@ -1,0 +1,746 @@
+{
+  "schema_version": "agents-os.workspace-observations.v1",
+  "status": "observations_only_not_authorization",
+  "observed_at": "2026-09-13T03:32:30.729815+00:00",
+  "project": {
+    "repository": "https://github.com/JENN2046/Agents-OS",
+    "baseline_branch": "main",
+    "baseline_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+    "baseline_commit_time": "2026-09-05T00:24:04Z",
+    "structure_document": "WORKSPACE_MANIFEST.md",
+    "rule_entry": "AGENTS.md",
+    "navigation_revision": "2026-09-13.1"
+  },
+  "evidence_limits": [
+    "Tencent Cloud host identity is verified; other host/platform claims retain their stated evidence limits.",
+    "Historical WSL and Windows roots have not been accessed in this task.",
+    "Remote root tree is not a complete deployment inventory of external repositories.",
+    "No raw logs, runtime configuration, secrets, private state or personal memory read.",
+    "VCP next runtime path confirmed by Jenn on 2026-09-13; bounded process metadata inspected. No artifact-version or health verification performed.",
+    "Source HEAD is not deployed artifact version.",
+    "This inventory is not a loader manifest, policy grant, sync instruction or deployment configuration."
+  ],
+  "workspaces": [
+    {
+      "id": "linux-observed",
+      "root": "/mnt/datadisk0/apps/AGENTS_OS_Workspace",
+      "evidence": "direct_observation",
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "root_git": {
+        "status": "empty_git_directory",
+        "branch": null,
+        "head": null,
+        "remote_configured": false,
+        "intended_repository": "https://github.com/JENN2046/Agents-OS",
+        "intended_repository_evidence": "Jenn explicitly identified this repository in the current task"
+      },
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "platform_observation": {
+        "vendor": "Tencent Cloud",
+        "product": "CVM",
+        "application_host_label": "腾讯云服务器",
+        "verified_at": "2026-09-13T04:09:16.137539+00:00",
+        "method": "DMI vendor/product and Codex project registry; no instance metadata read"
+      }
+    },
+    {
+      "id": "wsl-documented",
+      "root": "/home/jenn/AGENTS_OS_Workspace",
+      "evidence": "documented_not_reverified",
+      "observed_at": null,
+      "source_document": "https://github.com/JENN2046/Agents-OS/blob/6e2f8fcf4a19c70a72a4c91a69e870746e35cae7/WORKSPACE_MANIFEST.md",
+      "root_git": {
+        "status": "unverified",
+        "branch": null,
+        "head": null
+      },
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "application_registration": {
+        "observed_at": "2026-09-13T04:09:16.137539+00:00",
+        "method": "Codex list_projects",
+        "host_id": "local",
+        "projects": [
+          {
+            "label": "AGENTS_OS",
+            "path": "/home/jenn/AGENTS_OS_Workspace",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          },
+          {
+            "label": "Photo_Studio",
+            "path": "/home/jenn/AGENTS_OS_Workspace/domains",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          },
+          {
+            "label": "agents-os-executor",
+            "path": "/home/jenn/AGENTS_OS_Workspace/infrastructure/agents-os-executor",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          },
+          {
+            "label": "AI-Video",
+            "path": "/home/jenn/AGENTS_OS_Workspace/AI-Video-Production-Local-Bridge",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          },
+          {
+            "label": "runtime",
+            "path": "/home/jenn/AGENTS_OS_Workspace/runtime",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          },
+          {
+            "label": "colameta",
+            "path": "/home/jenn/src/colameta-dev",
+            "host_id": "local",
+            "is_git_repository_reported": true
+          }
+        ],
+        "limit": "Application registration only; local files, Git changes, WSL platform and deployment not inspected."
+      }
+    },
+    {
+      "id": "windows-reference",
+      "root": "A:\\AGENTS_OS_Workspace",
+      "evidence": "documented_not_reverified",
+      "observed_at": null,
+      "source_document": "https://github.com/JENN2046/Agents-OS/blob/6e2f8fcf4a19c70a72a4c91a69e870746e35cae7/_MIGRATION_MAP.md",
+      "role": "historical_reference_not_execution_root",
+      "root_git": {
+        "status": "unverified",
+        "branch": null,
+        "head": null
+      },
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "docs-review",
+      "root": "/home/ubuntu/Agents-OS-docs-20260913",
+      "evidence": "task_created_sparse_checkout",
+      "observed_at": "2026-09-13T03:32:30Z",
+      "branch": "docs/workspace-orientation-20260913",
+      "baseline_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "role": "local_documentation_review_not_runtime",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    }
+  ],
+  "checkouts": [
+    {
+      "id": "vcp-core",
+      "repository_id": "vcptoolbox",
+      "workspace_id": "linux-observed",
+      "path": "runtime/VCPToolBox-upstream-core",
+      "branch": "codex/phase1-clean-core-plugin-contract",
+      "head": "6f6cf84d0ecfad333e9b15a39b3a87ccb126d684",
+      "tracking": "origin/main",
+      "tracked_changes": 361,
+      "untracked_entries": 260,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/lioensky/VCPToolBox"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Jenn identifies next as the VCP runtime. PM2 manager cwd and a Node process under vcp-chatgpt-app-r0a were observed here; these do not establish a second formal VCP instance. Core roles and dependency scope remain to be checked."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "e34acb52f062ca301cbc54e52ae5f8af9315d17b",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": 8,
+        "behind": 28
+      },
+      "organization_constraint": "Contains shared Git metadata used by next plus process cwd references; do not treat as an unused duplicate.",
+      "process_metadata_observation": {
+        "observed_at": "2026-09-13T11:48:38.839647+00:00",
+        "method": "Read /proc/<pid>/cwd, exe and comm only; no command-line, environment, runtime configuration or logs read.",
+        "cwd_presence_is_service_verification": false
+      }
+    },
+    {
+      "id": "vcp-next",
+      "repository_id": "vcptoolbox",
+      "workspace_id": "linux-observed",
+      "path": "runtime/VCPToolBox-upstream-next",
+      "branch": "update/merge-20260905-r1",
+      "head": "1dbbd29edf05254935c27a315eedca3a3f049d99",
+      "tracking": null,
+      "tracked_changes": 364,
+      "untracked_entries": 278,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/lioensky/VCPToolBox"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "runtime_path_owner_confirmed",
+        "runtime_path": "/mnt/datadisk0/apps/AGENTS_OS_Workspace/runtime/VCPToolBox-upstream-next",
+        "version": null,
+        "verified_at": null,
+        "evidence": {
+          "kind": "owner_statement",
+          "confirmed_by": "Jenn",
+          "confirmed_on": "2026-09-13",
+          "statement": "VCP的真正运行目录是next那个",
+          "recorded_at": "2026-09-13T11:48:38.839647+00:00"
+        },
+        "reason": "Runtime directory confirmed by owner. Deployed artifact version and service health remain unverified; dirty source HEAD is not a deployment version."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "e34acb52f062ca301cbc54e52ae5f8af9315d17b",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": 10,
+        "behind": 9
+      },
+      "organization_constraint": "Active VCP runtime directory; preserve current service and uncommitted changes. Shared Git metadata is in vcp-core/.git.",
+      "process_metadata_observation": {
+        "observed_at": "2026-09-13T11:48:38.839647+00:00",
+        "method": "Read /proc/<pid>/cwd, exe and comm only; no command-line, environment, runtime configuration or logs read.",
+        "cwd_presence_is_service_verification": false
+      }
+    },
+    {
+      "id": "jenn-extensions",
+      "repository_id": "jenn-extensions",
+      "workspace_id": "linux-observed",
+      "path": "extensions/Jenn-VCP-Extensions",
+      "branch": "codex/r0a-authority-baseline",
+      "head": "7fcc5d93e2f81099ec6f434fcb106f8efe54fdf0",
+      "tracking": null,
+      "tracked_changes": 14,
+      "untracked_entries": 41,
+      "remotes": [],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": null
+    },
+    {
+      "id": "colameta-main",
+      "repository_id": "colameta",
+      "workspace_id": "linux-observed",
+      "path": "execution/runners/colameta",
+      "branch": "main",
+      "head": "b516c0ae6f5bf8f5b22ff5add6cea187babe1f83",
+      "tracking": "upstream/main",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/colameta"
+        },
+        {
+          "name": "upstream",
+          "repository": "https://github.com/riccilnl/colameta"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "9920d7b77f77c4c4710bc621f4cf68edf5ca3775",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "colameta-e0",
+      "repository_id": "colameta",
+      "workspace_id": "linux-observed",
+      "path": "runtime/worktrees/colameta-self-e0",
+      "branch": "evolution/e0-baseline",
+      "head": "9c92f05d90c9ed143829225be5499aaa7210ad1b",
+      "tracking": null,
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/colameta"
+        },
+        {
+          "name": "upstream",
+          "repository": "https://github.com/riccilnl/colameta"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "9920d7b77f77c4c4710bc621f4cf68edf5ca3775",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "harness",
+      "repository_id": "harness",
+      "workspace_id": "linux-observed",
+      "path": "execution/Codex_Autonomous_Work_Harness",
+      "branch": "master",
+      "head": "1c496afb2e04cf92e0c1b66c98b3611c09488ad7",
+      "tracking": "origin/master",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/Codex_Autonomous_Work_Harness"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "master",
+        "head": "1c496afb2e04cf92e0c1b66c98b3611c09488ad7",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": true,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "codex-router",
+      "repository_id": "codex-router",
+      "workspace_id": "linux-observed",
+      "path": "governance/codex-router",
+      "branch": "fix/p1-controlled-output-safety",
+      "head": "ddde28ca523865c852b71aacb0e92482ce4096e9",
+      "tracking": "origin/main",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/codex-router"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "a1e03b6d1207d5df5372e5c23a49c5a93b2951f6",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "photo-backend",
+      "repository_id": "photo-backend",
+      "workspace_id": "linux-observed",
+      "path": "domains/Photo_Studio_OS_Backend",
+      "branch": "main",
+      "head": "1a86dca491080613d75c692e36a5ee21c755d0b6",
+      "tracking": "origin/main",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/Photo_Studio_OS_Backend"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "cea97b581e84fb03ef4af69db71b1ad4d10b6db2",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "photo-control",
+      "repository_id": "photo-control",
+      "workspace_id": "linux-observed",
+      "path": "domains/Photo_Studio_OS_Control",
+      "branch": "main",
+      "head": "2391a4a4282b547d7b9c3b57a02685c2ecb256a2",
+      "tracking": "origin/main",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/Photo_Studio_OS_Control"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "2569aa374acc5e6888177f3516b8bbeae4be3e2a",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "photo-frontend",
+      "repository_id": "photo-frontend",
+      "workspace_id": "linux-observed",
+      "path": "domains/Photo_Studio_OS_Frontend",
+      "branch": "main",
+      "head": "3c3d7b4a03cabcd0bf158984b596be0e104b75b1",
+      "tracking": "origin/main",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/Photo_Studio_OS_Frontend"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "main",
+        "head": "aa52ec3d828bec104350d7b5ba8b709902ad0a84",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    },
+    {
+      "id": "image-lab",
+      "repository_id": "image-lab",
+      "workspace_id": "linux-observed",
+      "path": "domains/agent-image-lab",
+      "branch": "master",
+      "head": "6d8bba6803499316528bfc67e6f88b00dc07172e",
+      "tracking": "origin/master",
+      "tracked_changes": 0,
+      "untracked_entries": 0,
+      "remotes": [
+        {
+          "name": "origin",
+          "repository": "https://github.com/JENN2046/agent-image-lab"
+        }
+      ],
+      "observed_at": "2026-09-13T03:32:30.729815+00:00",
+      "evidence_method": "git --no-optional-locks: status, branch, rev-parse, for-each-ref, remote; metadata only",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      },
+      "remote_reference_observation": {
+        "remote": "origin",
+        "branch": "master",
+        "head": "984f52236ab6233982d7a7f29a16e8176e9a63de",
+        "observed_on": "2026-09-13",
+        "evidence_method": "git ls-remote during preceding read-only audit in this task; no fetch/pull",
+        "head_equal": false,
+        "ahead": null,
+        "behind": null
+      }
+    }
+  ],
+  "repository_relationships": [
+    {
+      "repository_id": "vcptoolbox",
+      "worktrees": [
+        "vcp-core",
+        "vcp-next"
+      ],
+      "observed_common_git_directory": "/mnt/datadisk0/apps/AGENTS_OS_Workspace/runtime/VCPToolBox-upstream-core/.git"
+    },
+    {
+      "repository_id": "colameta",
+      "worktrees": [
+        "colameta-main",
+        "colameta-e0"
+      ],
+      "observed_common_git_directory": "/mnt/datadisk0/apps/AGENTS_OS_Workspace/execution/runners/colameta/.git"
+    }
+  ],
+  "declaration_differences": [
+    {
+      "component": "vcptoolbox",
+      "declared_repository": "https://github.com/JENN2046/VCPToolBox",
+      "observed_origin": "https://github.com/lioensky/VCPToolBox",
+      "declaration_source": "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+      "resolution": "Record both; do not rewrite remotes or infer sync target."
+    },
+    {
+      "component": "jenn-extensions",
+      "declared_repository": "https://github.com/JENN2046/Jenn-VCP-Extensions",
+      "observed_origin": null,
+      "declaration_source": "control-plane/registry/WORKSPACE_REGISTRY.yaml",
+      "resolution": "Target unconfigured; confirm content scope before remote association."
+    },
+    {
+      "component": "image-lab",
+      "declared_layer": "labs",
+      "observed_relative_path": "domains/agent-image-lab",
+      "resolution": "Path alias only; no automatic move."
+    }
+  ],
+  "repository_components": [
+    {
+      "id": "control-plane",
+      "source_relative_path": "control-plane",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "control-chain",
+      "source_relative_path": "execution/agents-os-control-chain",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "machine",
+      "source_relative_path": "execution/agents-os-machine",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "dashboard",
+      "source_relative_path": "execution/agents-os-dashboard",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "task-producer",
+      "source_relative_path": "execution/agents-os-task-producer",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "workbench",
+      "source_relative_path": "execution/agents-os-workbench",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "active-loop",
+      "source_relative_path": "execution/codex-appserver-active-loop",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    },
+    {
+      "id": "resident",
+      "source_relative_path": "extensions/agents-os-resident",
+      "source_evidence_commit": "6e2f8fcf4a19c70a72a4c91a69e870746e35cae7",
+      "deployment": {
+        "status": "unverified",
+        "runtime_path": null,
+        "version": null,
+        "verified_at": null,
+        "evidence": null,
+        "reason": "Only source/Git metadata inspected; no service, process, container, health or runtime configuration inspection."
+      }
+    }
+  ],
+  "unobserved_expected_paths": [
+    {
+      "workspace_id": "linux-observed",
+      "relative_path": "runtime/VCPToolBox",
+      "status": "absent_at_expected_path",
+      "observed_on": "2026-09-13",
+      "limit": "Does not prove component is absent elsewhere or not deployed."
+    },
+    {
+      "workspace_id": "linux-observed",
+      "relative_path": "governance/Bounded-High-Autonomy",
+      "status": "absent_at_expected_path",
+      "observed_on": "2026-09-13",
+      "limit": "Does not prove component is absent elsewhere or not deployed."
+    },
+    {
+      "workspace_id": "linux-observed",
+      "relative_path": "interfaces/VCPChat",
+      "status": "absent_at_expected_path",
+      "observed_on": "2026-09-13",
+      "limit": "Does not prove component is absent elsewhere or not deployed."
+    }
+  ]
+}

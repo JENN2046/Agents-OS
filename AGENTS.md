@@ -1,13 +1,43 @@
 # AGENTS.md: AGENTS OS Workspace Nobao Operating Rules
 
-This file is the root operating instruction for agents working inside
-`/home/jenn/AGENTS_OS_Workspace`.
+This file is the single root operating-rule entry point for this Agents-OS
+repository checkout. Machine locations are documented in
+[WORKSPACE_MAP.md](WORKSPACE_MAP.md); a path mapping never transfers a
+machine-specific permission or standing authorization.
+
+Navigation revision: `2026-09-13.1`. Effective in checkouts adopting this
+revision; not retroactively applied to another workspace. Sections 1–10 retain
+their existing permission, review, Memory, Git and hard-stop rules. This revision
+does not grant additional capability or authorize remote publication.
 
 It is the AGENTS.md-ready runtime version of Nobao's active prompt. The longer
 role charter remains in `labs/` for identity, tone, and governance reference;
 this file is the concise execution contract for daily work.
 
 ## 0. Authority And Scope
+
+### Current entry points and replacement scope
+
+| Question | Current entry | Relationship to earlier material |
+|---|---|---|
+| What rules apply? | This `AGENTS.md`, then applicable local constraints | Sole root rule entry; never replaces higher-priority instructions or Jenn's current request |
+| What safety limits apply? | [Security boundaries](governance/SECURITY_BOUNDARIES.md), interpreted with sections 2 and 5 below | Keep explicit hard stops; legacy A0–A4 labels are not the A0–A3 automation classes in section 7 |
+| What is current? | [CURRENT_STATE.md](CURRENT_STATE.md) | Candidate daily overview; historical full text remains in original D and is not admitted to this candidate |
+| What belongs where? | [WORKSPACE_MANIFEST.md](WORKSPACE_MANIFEST.md) | Project responsibilities; does not claim machine installation or runtime readiness |
+| Which machine, path, branch or deployment? | [WORKSPACE_MAP.md](WORKSPACE_MAP.md) and its inventory | Replaces universal use of the older WSL/Windows path claims; old observations remain attributed |
+| How does automation specialize these rules? | [Automation rulebook](governance/automation/AGENTS_OS_AUTOMATION_RULEBOOK.md) | Specialization, not a second root authority |
+
+Earlier `_ROOT_POLICY.md`, `_DIRECTORY_PRINCIPLES.md`, `_MIGRATION_MAP.md`,
+registry and validation READMEs now point here. Only navigation and cross-machine
+location explanations are updated where explicitly marked. Existing validation
+approval wording, specific safety constraints and task-specific gates are retained.
+History is evidence, not current authorization.
+
+The original observed workspace at `/mnt/datadisk0/apps/AGENTS_OS_Workspace`
+has its own local instructions. This checkout does not silently replace those
+instructions or resolve its missing root Git metadata.
+
+### Instruction precedence
 
 - Follow higher-priority system, developer, and current user instructions first.
 - Follow Jenn's current explicit request before older workspace plans or notes.
@@ -39,10 +69,10 @@ If any reference path is missing, search the workspace index, labs/, and governa
 Missing or stale reference paths do not expand permissions or weaken P3.
 ```
 
-Canonical workspace facts:
+Documented WSL workspace facts (not a live observation of another machine):
 
 ```text
-Canonical root: /home/jenn/AGENTS_OS_Workspace
+Documented WSL root: /home/jenn/AGENTS_OS_Workspace
 Windows archive / asset / evidence storage is not the canonical execution root.
 Agent runners, Codex tasks, tests, Docker, databases, and validation scripts run from Linux paths.
 state-private/ is denied by default.

@@ -1,3 +1,8 @@
+# Navigation revision 2026-09-13.1: root AGENTS.md is the operating-rule entry.
+# Existing authority data below is retained without schema or permission changes.
+# canonical_root/windows_reference_root describe the documented WSL environment;
+# use WORKSPACE_MAP.md and ops/inventory/machines-and-repositories.v1.json for
+# per-machine observations. Declared URLs are not observed Git remote settings.
 workspace:
   name: AGENTS_OS_Workspace
   owner: JENN2046
