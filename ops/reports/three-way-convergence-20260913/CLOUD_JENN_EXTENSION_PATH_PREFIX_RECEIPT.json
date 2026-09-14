@@ -1,0 +1,213 @@
+{
+  "receipt_type": "CLOUD_JENN_EXTENSION_PATH_PREFIX_RECEIPT",
+  "scope": "cloud-jenn-extension-nine-suffix-git-metadata",
+  "observed_at_utc": "2026-09-14T06:59:34.190455+00:00",
+  "verified_at_utc": "2026-09-14T06:59:34.292468+00:00",
+  "source": {
+    "head": "7fcc5d93e2f81099ec6f434fcb106f8efe54fdf0",
+    "tree": "e91ba28a0db76dd8b8c7f58ceff17ce3d16f648b",
+    "branch": "codex/r0a-authority-baseline",
+    "refs_sha256": "e9bcc59fc289e487fc5b67286f27d1b990e809c891ad507b8bb22099de8a5de0",
+    "index_sha256": "382d238f88867d287a02d6ac150287de87b2e3f0fc17d8eda275a991ad56bc6f",
+    "remote_count": 0
+  },
+  "source_entry_location": "ROOT",
+  "source_entry_relative_prefix": "",
+  "root_relative_results": [
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/deliveryTaskPlanProjection.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/index.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/stdio-entrypoint.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/package-manifest.json",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/adapter-profile-manifest.json",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "tests/photostudio-delivery-tasks-planning.test.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "tests/photostudio-delivery-tasks-output-limit.test.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "README.AGENTS_OS.md",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "README.md",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    }
+  ],
+  "suffix_match_rule": "EXACT_OR_SLASH_PREFIX_PLUS_LISTED_ROOT_RELATIVE_PATH",
+  "admitted_relative_prefixes": [
+    "",
+    "extensions/Jenn-VCP-Extensions/",
+    "Jenn-VCP-Extensions/"
+  ],
+  "ordinary_suffix_matches": [],
+  "withheld_match_counts": {
+    "head": 2,
+    "index": 2
+  },
+  "source_before_after_unchanged": true,
+  "source_body_read": false,
+  "runtime_verified": false,
+  "untracked_or_ignored_content_read": false,
+  "history_fetched": false,
+  "classification": "ROOT_CONFIRMED_WITH_WITHHELD_MATCHES",
+  "residual_uncertainties": [
+    "WITHHELD_MATCHES_NOT_ATTRIBUTED",
+    "NO_GLOBAL_SOURCE_ABSENCE_INFERENCE",
+    "POINT_IN_TIME_RACES",
+    "ORDINARY_PRIVATE_BRANCH_NOTIFICATIONS",
+    "EXTERNAL_INTEGRATIONS_NOT_EXHAUSTIVELY_VERIFIED"
+  ]
+}
