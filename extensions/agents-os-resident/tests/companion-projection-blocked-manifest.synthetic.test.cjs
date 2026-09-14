@@ -1,5 +1,6 @@
 'use strict';
 
+// Run: node --test tests/companion-projection-blocked-manifest.synthetic.test.cjs
 // Execute the real ESM projection logic with an entirely synthetic filesystem.
 // No Companion implementation, native module, renderer, service or provider loads.
 // This test verifies projection naming/refusal, not native or integrity readiness.
@@ -171,23 +172,44 @@ async function project(options = {}) {
     ['node:path', { dirname, resolve }], ['node:module', { createRequire }],
     ['node:url', { fileURLToPath }], ['./render-systemd-unit.mjs', { renderSystemdUnit }]
   ]);
-  const module = new vm.SourceTextModule(source, {
-    context, identifier: 'synthetic-projection-under-test',
-    initializeImportMeta(meta) {
-      meta.url = `file://${SOURCE_ROOT}/tools/validate-companion-projection.mjs`;
+  // Adapt only this module's declared ESM bindings for the stable VM API.
+  // The validator functions and CLI body below those declarations are unchanged.
+  const seenImports = new Set();
+  let executable = source.replace(
+    /^import\s+\{([^}]+)\}\s+from\s+(['"])([^'"]+)\2;\r?$/gmu,
+    (_declaration, bindings, _quote, specifier) => {
+      assert.ok(imports.has(specifier), `unadmitted ESM import ${specifier}`);
+      assert.equal(seenImports.has(specifier), false, 'duplicate ESM import');
+      seenImports.add(specifier);
+      const names = bindings.split(',').map((name) => name.trim()).filter(Boolean);
+      assert.ok(names.length > 0);
+      for (const name of names) {
+        assert.match(name, /^[A-Za-z_$][A-Za-z0-9_$]*$/u);
+        assert.ok(Object.hasOwn(imports.get(specifier), name), `unadmitted binding ${name}`);
+      }
+      return `const { ${names.join(', ')} } = imports.get(${JSON.stringify(specifier)});`;
     }
-  });
-  await module.link((specifier) => {
-    assert.ok(imports.has(specifier), `unadmitted ESM import ${specifier}`);
-    const values = imports.get(specifier);
-    return new vm.SyntheticModule(Object.keys(values), function () {
-      for (const [name, value] of Object.entries(values)) this.setExport(name, value);
-    }, { context });
-  });
-  await module.evaluate();
+  );
+  assert.deepEqual([...seenImports].sort(), [...imports.keys()].sort());
+  for (const [declaration, bound] of [
+    ['const TOOL_PATH = fileURLToPath(import.meta.url);',
+      'const TOOL_PATH = fileURLToPath(moduleUrl);'],
+    ['const require = createRequire(import.meta.url);',
+      'const require = createRequire(moduleUrl);'],
+    ['export function runProjectionPreflight()', 'function runProjectionPreflight()']
+  ]) {
+    assert.equal(executable.split(declaration).length, 2, 'one exact ESM declaration');
+    executable = executable.replace(declaration, bound);
+  }
+  assert.doesNotMatch(executable, /^\s*(?:import|export)\s/mu);
+  const namespace = vm.compileFunction(
+    `'use strict';\n${executable}\nreturn { runProjectionPreflight };`,
+    ['imports', 'moduleUrl'],
+    { parsingContext: context, filename: 'synthetic-projection-under-test' }
+  )(imports, `file://${SOURCE_ROOT}/tools/validate-companion-projection.mjs`);
   let result;
   let error;
-  try { result = module.namespace.runProjectionPreflight(); }
+  try { result = namespace.runProjectionPreflight(); }
   catch (caught) { error = caught; }
   return { result, error, calls, snapshot, files };
 }

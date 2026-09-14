@@ -1,7 +1,7 @@
 {
   "schemaVersion": "agents-os-resident.companion-integrity.v1",
   "packageVersion": "0.3.0-local-owner.0",
-  "buildId": "sha256:d751181bb184bdefd891dd7ab270800f98ace30f37c08d983b561b4562ee7cc6",
+  "buildId": "sha256:87c091d68efb12828702a6ddf74d837633b269387ca05f550145700d85fad95b",
   "files": [
     {
       "path": "activation.js",
@@ -130,8 +130,8 @@
     },
     {
       "path": "tools/validate-companion-projection.mjs",
-      "byteLength": 6678,
-      "sha256": "253f83f2f05c6a2b40b382f4d75958477647af62e015a2e4b1bcddb3934ef1bb"
+      "byteLength": 6954,
+      "sha256": "76db4cb87550674083565ee0cd1126c4434a8b44e708c1232a42d4535167386f"
     },
     {
       "path": "tools/verify-host-presentation-binding.mjs",
