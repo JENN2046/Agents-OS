@@ -1,0 +1,194 @@
+{
+  "receipt_type": "CLOUD_JENN_EXTENSION_SOURCE_IDENTITY_RECEIPT",
+  "observed_at_utc": "2026-09-14T06:30:39.684611+00:00",
+  "scope": "cloud-jenn-extension",
+  "source": {
+    "head": "7fcc5d93e2f81099ec6f434fcb106f8efe54fdf0",
+    "tree": "e91ba28a0db76dd8b8c7f58ceff17ce3d16f648b",
+    "branch": "codex/r0a-authority-baseline",
+    "is_shallow": false,
+    "remote_count": 0,
+    "root_commits": [
+      "5ba73ff58a7074641b1d8dc69848fdc4f5b8a1e2"
+    ],
+    "history_object_metadata_completeness": "HEAD_ANCESTOR_COMMIT_METADATA_COMPLETE"
+  },
+  "paths": [
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/deliveryTaskPlanProjection.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/index.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/stdio-entrypoint.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/package-manifest.json",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "PhotoStudioPackages/DeliveryTasksPlanningAdapter/adapter-profile-manifest.json",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "tests/photostudio-delivery-tasks-planning.test.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "tests/photostudio-delivery-tasks-output-limit.test.cjs",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "README.AGENTS_OS.md",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    },
+    {
+      "path": "README.md",
+      "head": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      },
+      "index": {
+        "exists": false,
+        "type": null,
+        "mode": null,
+        "blob_oid": null,
+        "object_size": null,
+        "classification": "ABSENT"
+      }
+    }
+  ],
+  "source_before_after_unchanged": true,
+  "source_body_read": false,
+  "runtime_verified": false,
+  "classification": "BOUNDED_GIT_METADATA_ONLY",
+  "activity_attribution": "UNKNOWN"
+}
