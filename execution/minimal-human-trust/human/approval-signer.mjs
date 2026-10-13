@@ -103,10 +103,10 @@ if(process.argv[1]===fileURLToPath(import.meta.url))try{
     const reviewedIntent=firstTrustReviewedIntent(checked);
     process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',
       firstTrustOsConfirmationOnly:true,proposalHash:checked.proposalHash,
-      reviewedIntent,approval:null})+'\\n');
+      reviewedIntent,approval:null})+'\n');
    }else{
     const result=signed(humanApprovalBody(checked),credentialKey(policy.humanPublicKey));
-    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',approval:result})+'\\n');
+    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',approval:result})+'\n');
    }
  }
 }catch{process.stdout.write('{"ok":false,"error":"HUMAN_SIGNER_REFUSED"}\n');process.exitCode=1;}
