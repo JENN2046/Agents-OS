@@ -36,11 +36,13 @@ function readSnapshot(path,readProtected=protectedRuntimeFile){
  return v;
 }
 export function inspectSingleWriterHandoff({
- handoff,enrollmentAuthorityPublicKey,grant,verifiedStopProofHashes,
+ handoff,enrollmentAuthorityPublicKey,issuerPublicKey,grant,verifiedStopProofHashes,
  readUnit=readLegacyOwnerUnit,readProtected=protectedRuntimeFile,
  lockExists=p=>fs.existsSync(p),now=Date.now(),euid=process.geteuid(),
 }){
  need(euid===0,'ROOT_REQUIRED');
+ const g=verified(grant,issuerPublicKey,'r16.workspace.v1');
+ need(g.id==='r16-projects-daily','HANDOFF_GRANT_SCOPE');
  const b=verified(handoff,enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
  need(b.mode==='recovery_only'&&b.oldWriterClosed===true&&
    b.grantId==='r16-projects-daily'&&b.grantHash===digest(grant)&&
