@@ -38,4 +38,9 @@ jobs:
             execution/minimal-human-trust/test/single-writer-handoff-preflight.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Whitespace consistency
-        run: git diff --check HEAD^ HEAD
+        run: |
+          # Preserve raw historical TAP evidence byte-for-byte; check source changes.
+          git diff --check HEAD^ HEAD -- \
+            ':(glob)execution/minimal-human-trust/**/*.mjs' \
+            ':(glob)execution/minimal-human-trust/**/*.py' \
+            .github/workflows/g1d-first-trust-bootstrap.yml
