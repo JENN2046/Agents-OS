@@ -33,7 +33,10 @@ export function inspectFirstTrustRecoveryPublication({
   return Object.freeze({
     schema:'mht.first-trust-r17-signer-admission.v1',
     status:'HUMAN_AND_SIGNED_RECOVERY_INSPECTED',
-    grantId:human.grantId,sourceReleaseId:human.sourceReleaseId,
+    grantId:human.grantId,grantHash:human.grantHash,
+    humanPublicKey:human.humanPublicKey,humanUid:human.humanUid,
+    enrollmentExpiresAt:human.enrollmentExpiresAt,
+    sourceReleaseId:human.sourceReleaseId,
     targetReleaseId:human.targetReleaseId,
     reviewedManifestHash:human.reviewedManifestHash,
     humanApprovalReceiptHash:human.osReceiptHash,
