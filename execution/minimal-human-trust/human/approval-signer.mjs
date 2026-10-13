@@ -6,7 +6,7 @@ import {createPrivateKey} from 'node:crypto';
 import {protectedRuntimeFile} from '../authority/runtime-manifest.mjs';
 import {verified,exportPublicKey,signed} from '../src/lease-core.mjs';
 import {readBoundedOnceInput} from '../src/minimal-trust-issuer-once.mjs';
-import {validateHumanProposal,humanApprovalBody,PROJECTS_ROOT} from './approval-policy.mjs';
+import {validateHumanProposal,humanApprovalBody,firstTrustReviewedIntent,PROJECTS_ROOT} from './approval-policy.mjs';
 const BASE='/etc/minimal-human-trust/';
 const reject=()=>{throw Error('HUMAN_SIGNER_REFUSED');};
 function load(){
@@ -74,6 +74,11 @@ if(process.argv[1]===fileURLToPath(import.meta.url))try{
  if(!input||Object.keys(input).sort().join(',')!=='operation,proposalHash'||
    !['preview','sign'].includes(input.operation))reject();
  const {checked,policy,roots}=load();
+ // Initial enrollment has no Human signing key. Only a pre-pinned
+ // Release-root-signed first-use proposal may enter OS confirmation.
+ // Never mint or install Human authority from this review path.
+ const firstUse=checked.body.action==='enroll_human'&&!fs.existsSync(BASE+'issuer.json');
+ if(!firstUse){
  // Enrollment is independently signed and installed. UID or polkit alone
  // must never make a caller-provided public key into Human Authority.
  const installed=JSON.parse(protectedRuntimeFile(BASE+'issuer.json'));
@@ -85,12 +90,23 @@ if(process.argv[1]===fileURLToPath(import.meta.url))try{
    enrolled.humanPublicKey!==policy.humanPublicKey||enrolled.grantId!==policy.grantId||
    enrolled.grantHash!==policy.grantHash||enrolled.releaseHash!==policy.releaseHash)reject();
  if(checked.body.action!=='revoke_grant'&&Date.now()>=enrolled.expiresAt)reject();
+ }
  if(input.operation==='preview'){
    if(input.proposalHash!==null)reject();
    process.stdout.write(JSON.stringify({ok:true,proposalHash:checked.proposalHash,summary:checked.summary})+'\n');
  }else{
    if(input.proposalHash!==checked.proposalHash)reject();
-   const result=signed(humanApprovalBody(checked),credentialKey(policy.humanPublicKey));
-   process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',approval:result})+'\n');
+   if(firstUse){
+    // Root broker journals this unsigned record only AFTER fresh polkit.
+    // A protected publisher must verify the durable OS confirmation before
+    // any enrollment or R17 signing. This signer never self-enrolls.
+    const reviewedIntent=firstTrustReviewedIntent(checked);
+    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',
+      firstTrustOsConfirmationOnly:true,proposalHash:checked.proposalHash,
+      reviewedIntent,approval:null})+'\\n');
+   }else{
+    const result=signed(humanApprovalBody(checked),credentialKey(policy.humanPublicKey));
+    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',approval:result})+'\\n');
+   }
  }
 }catch{process.stdout.write('{"ok":false,"error":"HUMAN_SIGNER_REFUSED"}\n');process.exitCode=1;}
