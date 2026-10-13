@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=R16 · 确认授权操作
+Comment=确认已审核的具体授权目标并验证本机身份
+Exec=/usr/bin/python3 -I /usr/lib/minimal-human-trust/human/approval-window.py
+Terminal=false
+Categories=Settings;

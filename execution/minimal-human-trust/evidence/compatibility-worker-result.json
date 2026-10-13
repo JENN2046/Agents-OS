@@ -1,0 +1,93 @@
+{
+  "schema": "g1d.compatibility-worker.v1",
+  "result": "PARTIAL",
+  "tests": {
+    "scoped": 46,
+    "passed": 46,
+    "failed": 0,
+    "command": "NODE_PATH=/home/jenn/AGENTS_OS_Workspace/runtime/VCPChat/node_modules node --test test/cloud-signed-delivery.test.mjs test/signed-business-stop.test.mjs test/four-role-actual-chain.test.mjs test/workspace-dispatcher-native-admission.test.mjs test/runtime-business-stop.test.mjs test/app-business-stop-races.test.mjs",
+    "evidence": "compatibility-targeted.tap"
+  },
+  "files": {
+    "src/cloud-delivery-projector.mjs": "4aa735d115d34ba40dc8e07a55cee0737cf2391547905c5d2adae69bbb16aa4f",
+    "src/signed-business-stop.mjs": "5c635130e565faa8f3768a3a63f8dcdb0b97236fade4118f652036bc14b686e8",
+    "deployment/cloud-configuration-receiver.mjs": "4d289c502f915fcbd1717b4dd12002b07df14f11b8dfc881c707e71142868ab3",
+    "test/cloud-signed-delivery.test.mjs": "b5e04fe82bb0d59210601dbdb44f87d713aa5d1e055a771c7f7cdec7f2bce140",
+    "test/signed-business-stop.test.mjs": "67a0d42a8729bc4cfd6eff76db4d5de127d33e672b416365c6d0616db6486c9d",
+    "test/four-role-actual-chain.test.mjs": "21cb19e61bc1bd32dce2a254f486a8865c48d5633f10fd91f9fc237ab1d52ba2",
+    "test/fixtures/actual-adapters-manifest.json": "229bdc5808ad9ddf66e01c585850a4fe163a429f10668bced0a470a375dbaf18",
+    "app/workspace-host.mjs": "93bdc9f56207a95dc8ff34b032da2a182009442abd268b0b2598ed19b733ed7f",
+    "bridge/workspace-private-router.mjs": "f73527134bca2c22d6d9a1063691feff07cc2f819d2554541fa7f5cb177f4762",
+    "src/runtime-business-stop.mjs": "5b2b4b2ed9516dd3254eb8178c2ece3f52a2acbfb928ab2370992e292c7447c3",
+    "host/workspace-dispatcher.mjs": "87e577c459888de8fd5a819ecd9fe30da866d39b70606129e3ea819716f897d4",
+    "test/runtime-business-stop.test.mjs": "69c466b7a2425a04c733f51896da489cd27fb6bc9d96bf1b5608ee2e9a4a31a1",
+    "test/app-business-stop-races.test.mjs": "278cbd72c3bac6b1b3193ec0d9f43b59fb3c50e44a75a2c4864d78f6791da937"
+  },
+  "implemented": [
+    "Independent protected release-key pin required at cloud receiver; no self-selected replacement trust root.",
+    "Recovery delivery has connectRequested=false and does not provision credentials, initialize execution ledgers, or reconcile service startup.",
+    "Signed revision monotonicity and grant/revocation rollback checks; lost reply reuses exact envelope.",
+    "Cloud projection exact readback and projectedDigest receipt; crash between writes can recover by identical revision.",
+    "Private v2 business-stop inspection binds release hash, each runtime version, grant version, epoch and expected per-role results hash.",
+    "Actual App/Bridge/Native/ProjectForge source logic runs isolated write/read/lost-write-reply/reconcile/stop/Human signed revoke/normal-close sequence.",
+    "Expired release may serve stop/revocation and exact interrupted-projection retry only when envelope exactly matches trusted prior release; active connect requests still enforce live release expiry.",
+    "Actual private App/Bridge/Native v2 stop-evidence producers derive proofs from durable stop epoch, local protected ledgers, verified runtime binding and actual zero live-work counters.",
+    "Durable stop cannot be cleared by Native connection-request resume; App keeps explicit reconcileStopped while public business rejects.",
+    "Actual all-role test stops on lost-write UNKNOWN, rejects unequal unresolved projections, reconciles without dispatch and verifies same epoch/release plus corresponding result hashes.",
+    "Historical stop evidence inspection remains available after exact pinned release expiry.",
+    "App complete executor/transport/admission/control lifecycle is counted; business dispatch rechecks durable fence after asynchronous gaps, and close waits all admitted work."
+  ],
+  "gaps": [
+    "Human OS authority admission and trusted protected socket paths remain untested here.",
+    "Cloud tests inject protected reads/writes; no production delivery or root installation.",
+    "Source bundle depends on exact external APP Crown and Native SQLite dependencies; do not report self-contained package.",
+    "Existing production two UNKNOWN were not read, replayed, cleared, or settled.",
+    "Runtime stop producers are candidate-only; real protected signers/systemd runtime and restart admission have not been installed or verified by this worker.",
+    "Unmodified formal APP broad public contract suite has two failing assertions; cannot claim full public contract regression PASS."
+  ],
+  "productionMutation": false,
+  "testEvidenceSha256": "5ceb4b1a1be7ac81b03822d009d9ac86554ba3c0042a48812a50fed8dff503b4",
+  "independentReviewFix": "P1 expired Release blocked stop/revocation delivery; fixed with exact historical-release pin and four negative/recovery cases.",
+  "adapterSourceStatus": "App and Bridge include reviewed private stop additions; baseline and final hashes kept separately. Native dispatcher includes durable stop fence and live queue work accounting.",
+  "independentReviewFixes": [
+    "Expired Release blocked stop/revocation: exact historical pin with active expiry retained.",
+    "App stop attester omitted control/allocation/admission promises: complete lifecycle tracked; delayed allocation recovery and admission regressions prove no post-fence dispatch and STOP_BUSY while live."
+  ],
+  "publicCrownRegression": {
+    "tests": 410,
+    "passed": 408,
+    "failed": 2,
+    "evidence": "public-crown-contract.tap",
+    "sha256": "d228714ea3ec807a263306c6545df198f12054ada4cae55e2fddb628a39f8b1a",
+    "scope": "Unmodified formal APP project public Crown contract + executor tests; no candidate adapters imported",
+    "failures": [
+      "Resolver descriptor expected older description without invocation_hints sentence.",
+      "Legacy V4 Owner loader synthetic fixture rejected at project-forge-crown-admission.mjs:709."
+    ],
+    "notRepaired": "Formal source outside candidate worker scope; results remain failures.",
+    "command": "node --test /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown-executor.test.mjs",
+    "initialCwd": "/home/jenn/AGENTS_OS_Workspace/ops/g1d-trusted-os-activation-20261013-r1/source",
+    "candidateRelated": false,
+    "comparison": {
+      "command": "node --test --test-name-pattern='real MCP descriptor exposes Crown action union but no model-selectable transport mode|V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads' /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs",
+      "cwd": "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2",
+      "result": "2 selected tests, 0 pass, 2 fail with same assertions",
+      "evidence": "public-crown-external-baseline-recheck.tap",
+      "sha256": "678974faa8c0158a6dcc68e6f5e21ae551052a5c1d5831c8d84bb29ff7b89f66",
+      "scope": "Same unmodified external formal APP sources; no G1D candidate modules imported. This establishes independent current-baseline reproduction, not proof of when the failures first arose."
+    },
+    "failureNames": [
+      "real MCP descriptor exposes Crown action union but no model-selectable transport mode",
+      "V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads"
+    ],
+    "sourceFiles": {
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs": "000b41633f938a8e1bde76e940794a72707a4d943ecece495661d30bde62c089",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown-executor.test.mjs": "afabe33fcbe3b36d800a0f5e90f7be2823a7129d14cceba5ac8690c9ca6f44d1",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/server.mjs": "850ae246a6d5a0d7490884c01b349be6ede6af20782e5e62a392dc98cb1777f6",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown.mjs": "0bf5de32cb1c8e63aa0409dd6075387cd40005685e033423213d4c1335b3d686",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-executor.mjs": "01f09efacf4169f88215815824acec8f4e9e1c5d2451d3e872dd4dad2bb49033",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs": "9e305d6c3c8c47ad08b859b028fcc729d795771cdfb38e03ab84de378060715a",
+      "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs": "39f815e46d9ad2e73df19875ae165398f8959c53f78d2dd52f32ff0bacb2e8e4"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "g1d.public-source-fixture.v1",
+  "purpose": "Actual public adapters with reviewed private business-stop additions, isolated only",
+  "files": {
+    "app/workspace-host.mjs": {
+      "source": "/home/jenn/AGENTS_OS_Workspace/projects/r16-owner-services/app/workspace-host.mjs",
+      "sha256": "93bdc9f56207a95dc8ff34b032da2a182009442abd268b0b2598ed19b733ed7f",
+      "baselineSha256": "8e429c17dc2157ff768c429d4c6dd858d3e6afa86fb384e7d74795c2c659d9f9",
+      "modification": "Private durable business stop and runtime evidence methods; public actions unchanged"
+    },
+    "bridge/workspace-private-router.mjs": {
+      "source": "/home/jenn/AGENTS_OS_Workspace/projects/r16-owner-services/bridge/workspace-private-router.mjs",
+      "sha256": "f73527134bca2c22d6d9a1063691feff07cc2f819d2554541fa7f5cb177f4762",
+      "baselineSha256": "480498c6286a6990e7fe4c95cf5928111cd6925d8804cf68ef7b836eedb15404",
+      "modification": "Private durable business stop and runtime evidence methods; public actions unchanged"
+    }
+  },
+  "externalTestDependencies": [
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-executor.mjs",
+      "sha256": "01f09efacf4169f88215815824acec8f4e9e1c5d2451d3e872dd4dad2bb49033"
+    },
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown.mjs",
+      "sha256": "0bf5de32cb1c8e63aa0409dd6075387cd40005685e033423213d4c1335b3d686"
+    },
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs",
+      "sha256": "9e305d6c3c8c47ad08b859b028fcc729d795771cdfb38e03ab84de378060715a"
+    },
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/projects/r16-vcpchat-pinned/VCPDistributedServer/Plugin/ProjectForge/ProjectForgeService.js",
+      "sha256": "508efa0b843c32112f7d809f36aa36e8c9b0b0216ce41e3053641f159286494b"
+    },
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/projects/r16-vcpchat-pinned/VCPDistributedServer/Plugin/ProjectForge/crownAuthority.js",
+      "sha256": "5df3531b820915ab07a658546ea8cc3878c760bc64cdf36c44b492abdf17b3bf"
+    },
+    {
+      "path": "/home/jenn/AGENTS_OS_Workspace/runtime/VCPChat/node_modules/better-sqlite3/package.json",
+      "sha256": "6c9ea355190dfce3646ad4d2a31c9506de36d884a6461b3655a2a0c4ba3d1695"
+    }
+  ],
+  "limits": [
+    "App HTTP and Native distribution use in-process transport adapters; no real service sockets.",
+    "Human initial Grant approval is synthetic; no OS identity admission.",
+    "External runtime dependencies are not included in the source ZIP and must match before reproducing."
+  ]
+}

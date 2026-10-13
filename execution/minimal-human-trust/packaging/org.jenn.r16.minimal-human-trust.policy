@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>R16</vendor>
+  <action id="org.jenn.r16.minimal-human-trust.approve">
+    <description>Confirm the exact R16 authorization target</description>
+    <message>Authenticate to confirm the exact R16 action, target, version and digest shown.</message>
+    <defaults><allow_any>no</allow_any><allow_inactive>no</allow_inactive><allow_active>auth_self</allow_active></defaults>
+  </action>
+</policyconfig>

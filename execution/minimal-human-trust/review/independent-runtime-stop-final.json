@@ -1,0 +1,50 @@
+{
+  "schema": "g1d.independent-runtime-stop-review.v1",
+  "decision": "PASS_FOR_NONPRODUCTION_PR",
+  "openP1InReviewedScope": 0,
+  "files": {
+    "app/workspace-host.mjs": "93bdc9f56207a95dc8ff34b032da2a182009442abd268b0b2598ed19b733ed7f",
+    "bridge/workspace-private-router.mjs": "f73527134bca2c22d6d9a1063691feff07cc2f819d2554541fa7f5cb177f4762",
+    "host/workspace-dispatcher.mjs": "87e577c459888de8fd5a819ecd9fe30da866d39b70606129e3ea819716f897d4",
+    "src/runtime-business-stop.mjs": "5b2b4b2ed9516dd3254eb8178c2ece3f52a2acbfb928ab2370992e292c7447c3",
+    "src/signed-business-stop.mjs": "5c635130e565faa8f3768a3a63f8dcdb0b97236fade4118f652036bc14b686e8",
+    "test/app-business-stop-races.test.mjs": "278cbd72c3bac6b1b3193ec0d9f43b59fb3c50e44a75a2c4864d78f6791da937",
+    "test/runtime-business-stop.test.mjs": "69c466b7a2425a04c733f51896da489cd27fb6bc9d96bf1b5608ee2e9a4a31a1",
+    "test/four-role-actual-chain.test.mjs": "21cb19e61bc1bd32dce2a254f486a8865c48d5633f10fd91f9fc237ab1d52ba2"
+  },
+  "independentTests": {
+    "pass": 46,
+    "fail": 0,
+    "skip": 0,
+    "evidence": "review/runtime-stop-final-tests.tap",
+    "scope": [
+      "app-business-stop-races",
+      "runtime-business-stop",
+      "four-role-actual-chain",
+      "workspace-dispatcher-native-admission",
+      "signed-business-stop",
+      "cloud-signed-delivery"
+    ]
+  },
+  "closedP1": {
+    "id": "G1D-SEC-APP-STOP-RACE",
+    "description": "Prior App stop evidence omitted live allocation/admission/control promises and allocation could dispatch after an async recovery gap. Fixed lifecycle counter tracks whole executor plus transport, admission and control promises; business dispatch rechecks fence after recovery and before control transport. Delayed recovery and delayed admission regressions pass."
+  },
+  "verifiedProperties": [
+    "App evidence refuses while live work remains; zero-inflight no longer inferred solely from final write map.",
+    "Executor wrapper preserves nonenumerable requiresTrustedContext and pending/resolvePending/close methods; reconcile is tracked and preserves results.",
+    "App, Bridge and Native establish persisted stop epoch and refuse epoch replacement. Native reconnection request cannot reopen persisted business stop.",
+    "Runtime attesters use own role signer, current protected ledger and participant results, exact release/runtime versions and matching epoch.",
+    "Native/Bridge/App preserve UNKNOWN, and authenticated reconcile after business stop resolves an actually executed synthetic lost-reply write without redispatch.",
+    "Read-only stop inspection explicitly grants no deployment or UNKNOWN-clearing permission."
+  ],
+  "limits": [
+    "Actual-adapter tests run in process with disposable keys/workspaces/SQLite; they are not deployed production endpoint attestation.",
+    "Protected real Human enrollment, admitted signed release, exact single-writer handoff and actual production three-role stop evidence remain mandatory.",
+    "Current host existing NOPASSWD ALL admin access is not changed by this candidate. This is not a defense against a root-capable agent; no new general root API was added.",
+    "Production two UNKNOWN records were not read, cleared or replayed by reviewer tests."
+  ],
+  "reviewerProductionMutation": false,
+  "reviewerPrivilegedExecution": false,
+  "reviewerSecretAccess": false
+}

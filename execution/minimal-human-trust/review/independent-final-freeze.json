@@ -1,0 +1,162 @@
+{
+  "schema": "g1d.independent-final-freeze.v1",
+  "decision": "PASS_EXACT_NONPRODUCTION_SOURCE_FREEZE",
+  "productionStatus": "BLOCKED",
+  "g1dVerified": false,
+  "sourceManifest": "evidence/source-freeze.json",
+  "sourceManifestSha256": "0b88a1718ac81d2b4755a3235521a97e87d23756ab0e2be76960b01826bb926e",
+  "sourceFileCount": 49,
+  "files": {
+    "README.md": "ee65805e71ebb35a37f40749b2cc7a14bfc453dfd2af1e0ae87ef201a0f53bcb",
+    "app/workspace-host.mjs": "93bdc9f56207a95dc8ff34b032da2a182009442abd268b0b2598ed19b733ed7f",
+    "authority/runtime-manifest.mjs": "c13c4e5fa7564f75def6326caabe70291b88629e9b062fdc0d1060fc40b3871a",
+    "authority/transaction-publish.mjs": "741da7d9a22f89578128afd7be7eb45b5d0572a50a31934859ec7d1484654d7d",
+    "bridge/workspace-private-router.mjs": "f73527134bca2c22d6d9a1063691feff07cc2f819d2554541fa7f5cb177f4762",
+    "deployment/cloud-configuration-receiver.mjs": "4d289c502f915fcbd1717b4dd12002b07df14f11b8dfc881c707e71142868ab3",
+    "deployment/initialize-cloud-ledger.mjs": "175bf24b06b402f16f43a801b1990e620b739ca9d208b3ba83c84bca16a46103",
+    "host/workspace-dispatcher.mjs": "87e577c459888de8fd5a819ecd9fe30da866d39b70606129e3ea819716f897d4",
+    "human/README.md": "0f57bdff2c7e980e174b4925a8967327f2d51393f4428f941538f0a65a0ec4ee",
+    "human/approval-broker.py": "d5dd2b35bc4a4365c9a8ef9b0e2dbfbf0586c1538ee4d1bbe8dbc09db4de03d7",
+    "human/approval-policy.mjs": "56e256015e0f237fce129e72c0b7fd085422fc5a675f2b48051ecf6d01134a9a",
+    "human/approval-signer.mjs": "b1494cd4a0c06041a03cb0b3737668922149005f485b6354faecf4e15f8e3ba6",
+    "human/approval-window.py": "cc3558c177f61452cd4766fb4edfc53088d2ba8a59c4cc93768d09a4850c1ad3",
+    "packaging/minimal-human-trust-approval.desktop": "c369b7980e7899e9c106671377b0926ad274c3ef41abc84abc823765f4a68373",
+    "packaging/minimal-human-trust-approval.socket": "51114541dc569be5f23b1212c3cb9f14535ad078139894f863d5f9470f4a34dc",
+    "packaging/minimal-human-trust-approval@.service": "fbc47bd18baeb95834a7b17ca10c593b52a2402ac5da316e4e1d381a340523da",
+    "packaging/minimal-human-trust-human.socket": "6a2c9ab419b309019fc783f8e0072ac5089085652be8e48a587b66eb11d6f29c",
+    "packaging/minimal-human-trust-human@.service": "b1713c37362b1bf72cd834e1d5f50e036a95a778f42c506f9e2dfb9d88b7ce7a",
+    "packaging/minimal-human-trust-issuer.socket": "898d9986d29dbc04155b00f4b5e5da6488082f2a17a37c1cce7b930c94ff447b",
+    "packaging/minimal-human-trust-issuer@.service": "2405ec98b7710115421f2c7625729e2e35abb4cfe0dc0a3d627b969a1823fdb9",
+    "packaging/org.jenn.r16.minimal-human-trust.policy": "ed6be67daf606d773286b3b6a53a8fd01ae982e6bf8957efedfe2a40d85dab94",
+    "src/cloud-delivery-projector.mjs": "4aa735d115d34ba40dc8e07a55cee0737cf2391547905c5d2adae69bbb16aa4f",
+    "src/control-clock.mjs": "b94a364ff6738c9c924c41f9ec164234612f6803e2feee77acde24bde6fa89b1",
+    "src/lease-core.mjs": "2992dcbd27a878ab5baa77ad9d3489441d496dc2ce5aea1dcd78ae89f8d204a8",
+    "src/minimal-trust-issuer-once.mjs": "ef9d7678f9d61d716d37f8f04392a5b3874d832503806d2a7e4f4fac86a210d2",
+    "src/minimal-trust-issuer.mjs": "bb556fb2679bb25e57f5a193d990a723d34c3829959cd516faa68648c500f822",
+    "src/runtime-business-stop.mjs": "5b2b4b2ed9516dd3254eb8178c2ece3f52a2acbfb928ab2370992e292c7447c3",
+    "src/signed-business-stop.mjs": "5c635130e565faa8f3768a3a63f8dcdb0b97236fade4118f652036bc14b686e8",
+    "src/systemd-issuer-credential.mjs": "4067f80197d6c3b7dc89c4602d9aa28aa274d3c8bfeeb69cbdadc4ae5a8bf0bb",
+    "src/trusted-launcher.mjs": "c1866fdfe0d0fd6fffe5682c0051ea3b978698c340a9598e65d710b538a4895a",
+    "test/app-business-stop-races.test.mjs": "278cbd72c3bac6b1b3193ec0d9f43b59fb3c50e44a75a2c4864d78f6791da937",
+    "test/cloud-signed-delivery.test.mjs": "b5e04fe82bb0d59210601dbdb44f87d713aa5d1e055a771c7f7cdec7f2bce140",
+    "test/fixtures/actual-adapters-manifest.json": "229bdc5808ad9ddf66e01c585850a4fe163a429f10668bced0a470a375dbaf18",
+    "test/fixtures/issuer-once-child.mjs": "50724a3afcc5e632cbf77c2abc45480639372f2e42cc8ee6878b6e43559b4973",
+    "test/four-role-actual-chain.test.mjs": "21cb19e61bc1bd32dce2a254f486a8865c48d5633f10fd91f9fc237ab1d52ba2",
+    "test/human-approval-broker.test.py": "36c7d53aed4fcb4bdd0d3e9152dd4c0cff577ef962f2b11f23b7d953a3849df5",
+    "test/human-approval-credential.test.mjs": "a9565336fd8c61a1d884fe3847b189245e7cd3d61e6f341bd3d253c201cc9d48",
+    "test/human-approval-policy.test.mjs": "d20f27806a9429a4caf63b9e473e402b83d4c67e8eed3d27e5f35af12b1a1b9e",
+    "test/issuer-os-entry.test.mjs": "37e3e22f73677c9a1979aedffcdab096f649e4bc71ea7d690d4ca8db0301f60f",
+    "test/minimal-trust-issuer.test.mjs": "48e7d4a3dc376f0fe9ed1ce8cb7135851c85b2f94e12e1685189ce52badeb796",
+    "test/r16-lease-protocol-compat.test.mjs": "8d7c0883dfe045f03805cf12dcd34e17b45086c7752f1842598bc82b280adfc4",
+    "test/runtime-business-stop.test.mjs": "69c466b7a2425a04c733f51896da489cd27fb6bc9d96bf1b5608ee2e9a4a31a1",
+    "test/signed-business-stop.test.mjs": "67a0d42a8729bc4cfd6eff76db4d5de127d33e672b416365c6d0616db6486c9d",
+    "test/systemd-credential-provenance.test.mjs": "9affc91ac3ba8c4ce6dd22dd3e8e63d33254a8349ac9ee2452379b14bd27d103",
+    "test/trusted-launcher.test.mjs": "ca306d9d39786e07c53ad55b7890fc11a6da79789fd68a44b1f9eaa1d1ab1a24",
+    "test/workspace-dispatcher-native-admission.test.mjs": "2cea4adba4219b5f6c79ad21dc4f38d298b242810ecad74e3a2174476e7a6753",
+    "tools/credential-probe.mjs": "94cd0755ddd4e2cd9a5f9944e87f8dea09065cce525295b2ed889c1a054fd5d2",
+    "tools/provision-synthetic-key.mjs": "95165144206dd4fd97c4c12ae947252a4e8d77bcda68634bdbaf1ef1f24e2e41",
+    "tools/socket-credential-probe.mjs": "6c43e8bf2e483c0fed651bf313bc59ad856d51424e4c8fa0da5095b78fad67f5"
+  },
+  "missingCriticalFiles": [],
+  "sourceHashMismatches": [],
+  "priorReviews": {
+    "independent-security-final.json": "26c6499d14d44bbf474f36fc089bafaf9167eeee4e1a4223f143bf888c282723",
+    "independent-integrated-final.json": "3934b84e67f7d2b7a32d34190c44952ec1bd0c8048affd9e948f7473aa434fd8",
+    "independent-human-final.json": "c7160ce3ffe98add789eebf3be409d4e2baede7526a07be91fbd58d89898daa3",
+    "independent-runtime-stop-final.json": "c90f52e9dc0ed17fded00ab372a334a44ea1418c43522c68162ce7ca4e4569a0"
+  },
+  "supersededPins": [
+    {
+      "review": "independent-security-final.json",
+      "file": "packaging/minimal-human-trust-issuer.socket",
+      "priorSha256": "887d9959de2f1f08c5e03cdeebc94d64697a2b6a5993290af447c6075dac41fe",
+      "finalSha256": "898d9986d29dbc04155b00f4b5e5da6488082f2a17a37c1cce7b930c94ff447b",
+      "coveredBy": "independent-final-freeze.json"
+    },
+    {
+      "review": "independent-security-final.json",
+      "file": "packaging/minimal-human-trust-human.socket",
+      "priorSha256": "9fc325281309d3a5410e913246d09dc1ce9c0043e079b3309dcd55a62f788320",
+      "finalSha256": "6a2c9ab419b309019fc783f8e0072ac5089085652be8e48a587b66eb11d6f29c",
+      "coveredBy": "independent-final-freeze.json"
+    },
+    {
+      "review": "independent-integrated-final.json",
+      "file": "src/signed-business-stop.mjs",
+      "priorSha256": "993781e6712a86d032b3946edc062bfd6b5e76648e7a3d14481d80b59f1afe29",
+      "finalSha256": "5c635130e565faa8f3768a3a63f8dcdb0b97236fade4118f652036bc14b686e8",
+      "coveredBy": "independent-runtime-stop-final.json + independent-final-freeze.json"
+    },
+    {
+      "review": "independent-integrated-final.json",
+      "file": "test/signed-business-stop.test.mjs",
+      "priorSha256": "83294542d9380acb48a0d9adae0a821a73897eb4b8b96441f5375e43f95112e9",
+      "finalSha256": "67a0d42a8729bc4cfd6eff76db4d5de127d33e672b416365c6d0616db6486c9d",
+      "coveredBy": "independent-runtime-stop-final.json + independent-final-freeze.json"
+    },
+    {
+      "review": "independent-integrated-final.json",
+      "file": "test/four-role-actual-chain.test.mjs",
+      "priorSha256": "3f5a5e61391ad805462ab4cfce26cadfb3d14477718512b72f7267ce53d30791",
+      "finalSha256": "21cb19e61bc1bd32dce2a254f486a8865c48d5633f10fd91f9fc237ab1d52ba2",
+      "coveredBy": "independent-runtime-stop-final.json + independent-final-freeze.json"
+    },
+    {
+      "review": "independent-integrated-final.json",
+      "file": "test/fixtures/actual-adapters-manifest.json",
+      "priorSha256": "e4d49707ee9fe50da394070aad3210fabcd5442aaf65277604f2f5694535fbbd",
+      "finalSha256": "229bdc5808ad9ddf66e01c585850a4fe163a429f10668bced0a470a375dbaf18",
+      "coveredBy": "independent-final-freeze.json"
+    }
+  ],
+  "supplementalReview": {
+    "sockets": "Both Accept=yes sockets retain fixed names/paths, permissions and connection caps; removed Service=...@.service only. Default same-basename template mapping matches actual isolated PID1 socket validation; no broader executable or listener path introduced.",
+    "fixture": "Candidate App/Bridge hashes replace baseline hashes explicitly; baseline digests retained for provenance, modifications disclosed. All final candidate pins and external test-dependency digests rechecked. Fixture does not claim production installation or real Human authority.",
+    "stopTests": "Signed stop source and exact Release/history validation plus actual runtime producers were reviewed in independent-runtime-stop-final; current signed-stop and chain tests included in that 46-test independent run. This freeze now explicitly pins all test digests."
+  },
+  "finalSuiteEvidence": {
+    "node": {
+      "pass": 170,
+      "fail": 0,
+      "skip": 0,
+      "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9"
+    },
+    "python": {
+      "pass": 10,
+      "fail": 0,
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    },
+    "fullSuiteRerunByThisFreezeAudit": false,
+    "method": "Read and hash-checked final main-controller test outputs; earlier independent scoped runs retained."
+  },
+  "fixtureBindingChecks": {
+    "app/workspace-host.mjs": {
+      "candidateSha256": "93bdc9f56207a95dc8ff34b032da2a182009442abd268b0b2598ed19b733ed7f",
+      "baselineSha256": "8e429c17dc2157ff768c429d4c6dd858d3e6afa86fb384e7d74795c2c659d9f9",
+      "candidateNotClaimedUnmodified": true
+    },
+    "bridge/workspace-private-router.mjs": {
+      "candidateSha256": "f73527134bca2c22d6d9a1063691feff07cc2f819d2554541fa7f5cb177f4762",
+      "baselineSha256": "480498c6286a6990e7fe4c95cf5928111cd6925d8804cf68ef7b836eedb15404",
+      "candidateNotClaimedUnmodified": true
+    }
+  },
+  "externalTestDependencyHashesMatch": true,
+  "actualOsEvidence": {
+    "socket-credential-proof.json": "8d4f8fb6e7014bf8d2115a6e4e2ad8767b1ad56111c6d352fe7f3a292bc42cae",
+    "bounded-socket-proof.json": "c35a6475624e569f4c166a5492af2bec2556facf5f1eb5f4ffa10dbd840ce9b1"
+  },
+  "finalReceiptSha256": "77c7ece568dd615884cc0140c82d18bf596aefac5f6223987a1881c4edfa77f0",
+  "remainingGates": [
+    "Real independently trusted Human enrollment and fresh OS confirmation not performed",
+    "Exact formal signed release and single-writer production handoff not admitted",
+    "No candidate production cloud publication or production role attestation",
+    "Production UNKNOWN settlement, formal business cutover and old Owner retirement remain outside this completion claim"
+  ],
+  "securityBoundary": "Existing NOPASSWD ALL is unchanged. This scoped mechanism introduces no generic root API, but does not defend against an already root-capable agent. Root-owned files and synthetic signatures are not evidence of genuine Human approval.",
+  "externalBaseline": "408/410 on unchanged formal APP is recorded separately by main controller; not counted as passing candidate tests or independently rerun here.",
+  "reviewerSourceMutation": false,
+  "reviewerProductionMutation": false,
+  "reviewerPrivilegedExecution": false,
+  "reviewerSecretAccess": false
+}

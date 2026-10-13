@@ -1,0 +1,36 @@
+{
+  "schema": "g1d.real-bounded-socket.v1",
+  "observedAt": "2026-10-13T14:50:42.066346+00:00",
+  "cases": [
+    {
+      "case": "valid_no_eof",
+      "elapsedSeconds": 0.219,
+      "result": {
+        "status": "PASS",
+        "unit": "minimal-human-trust-issuer@0-24584-1573442_1570724-1000.service",
+        "expectedPublicKeyMatched": true,
+        "privateKeyDisclosed": false,
+        "productionCredentialUsed": false
+      }
+    },
+    {
+      "case": "over_limit",
+      "elapsedSeconds": 0.207,
+      "result": {
+        "status": "REFUSED",
+        "privateKeyDisclosed": false
+      }
+    },
+    {
+      "case": "incomplete_timeout",
+      "elapsedSeconds": 5.185,
+      "result": {
+        "status": "REFUSED",
+        "privateKeyDisclosed": false
+      }
+    }
+  ],
+  "noActiveInstances": true,
+  "instanceResults": "Id=minimal-human-trust-issuer@2-20483-1573442_1570724-1000.service\nActiveState=failed\nResult=exit-code\nExecMainCode=1\nExecMainStatus=1\n\nId=minimal-human-trust-issuer@1-36866-1573442_1570724-1000.service\nActiveState=failed\nResult=exit-code\nExecMainCode=1\nExecMainStatus=1\n",
+  "scope": "real PID1 + synthetic encrypted credential + actual bounded input reader; no business operations"
+}

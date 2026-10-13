@@ -1,0 +1,34 @@
+[Unit]
+Description=R16 one exact Human approval via uncached local OS identity
+After=polkit.service
+[Service]
+Type=exec
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I /usr/lib/minimal-human-trust/human/approval-broker.py
+StandardInput=socket
+StandardOutput=socket
+StandardError=null
+LoadCredentialEncrypted=human-approval-key:/etc/credstore.encrypted/minimal-human-trust/human-approval-key.cred
+StateDirectory=minimal-human-trust/human-approval
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_UNIX
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+LimitCORE=0
+RuntimeMaxSec=180
+TimeoutStopSec=5
+SendSIGKILL=no
+MemoryMax=128M
+TasksMax=16
+Restart=no

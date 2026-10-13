@@ -1,0 +1,37 @@
+[Unit]
+Description=Minimal Human Trust issuer, one authenticated socket request per process
+After=local-fs.target
+
+[Service]
+Type=exec
+User=root
+Group=root
+ExecStart=/usr/bin/node /usr/lib/minimal-human-trust/src/trusted-launcher.mjs
+StandardInput=socket
+StandardOutput=socket
+StandardError=null
+LoadCredentialEncrypted=issuer-signing-key:/etc/credstore.encrypted/r16-issuer/issuer-signing-key.cred
+StateDirectory=minimal-human-trust
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/minimal-human-trust
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_UNIX
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+LimitCORE=0
+TimeoutStartSec=20
+RuntimeMaxSec=15
+TimeoutStopSec=5
+SendSIGKILL=no
+MemoryMax=128M
+TasksMax=32
+Restart=no

@@ -1,0 +1,15 @@
+Id=r16-owner.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/r16-owner.service
+InvocationID=be0797bf4be14fe98c59aad4a9ec2dbd
+MainPID=484427
+
+Id=r16-native.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/r16-native.service
+InvocationID=22616fcd2503468e8f53f2663e5ae604
+MainPID=484539

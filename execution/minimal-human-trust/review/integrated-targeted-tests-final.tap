@@ -1,0 +1,232 @@
+TAP version 13
+# Subtest: new on-demand publisher emits issuer-signed revision 88 with recovery_only never opening new business
+ok 1 - new on-demand publisher emits issuer-signed revision 88 with recovery_only never opening new business
+  ---
+  duration_ms: 18.547346
+  type: 'test'
+  ...
+# Subtest: cloud receiver consumes identical existing R16 signed contract and persists exact control
+ok 2 - cloud receiver consumes identical existing R16 signed contract and persists exact control
+  ---
+  duration_ms: 14.507421
+  type: 'test'
+  ...
+# Subtest: lost remote ACK retries the exact same signed envelope and does not allocate revision 89
+ok 3 - lost remote ACK retries the exact same signed envelope and does not allocate revision 89
+  ---
+  duration_ms: 17.4933
+  type: 'test'
+  ...
+# Subtest: cloud receiver refuses forgery and rollback while retaining last accepted config
+ok 4 - cloud receiver refuses forgery and rollback while retaining last accepted config
+  ---
+  duration_ms: 11.572158
+  type: 'test'
+  ...
+# Subtest: cloud delivery cannot be minted from an arbitrary replacement Issuer key
+ok 5 - cloud delivery cannot be minted from an arbitrary replacement Issuer key
+  ---
+  duration_ms: 5.791288
+  type: 'test'
+  ...
+# Subtest: no prior signed delivery cannot reset the cloud revision to one
+ok 6 - no prior signed delivery cannot reset the cloud revision to one
+  ---
+  duration_ms: 4.499507
+  type: 'test'
+  ...
+# Subtest: recovery-only publisher refuses active mode even if caller requests it
+ok 7 - recovery-only publisher refuses active mode even if caller requests it
+  ---
+  duration_ms: 3.084734
+  type: 'test'
+  ...
+# Subtest: new revocation version changes the public status without expanding scope
+ok 8 - new revocation version changes the public status without expanding scope
+  ---
+  duration_ms: 7.096806
+  type: 'test'
+  ...
+# Subtest: private keys and synthetic OS bootstrap never enter the cloud public configuration
+ok 9 - private keys and synthetic OS bootstrap never enter the cloud public configuration
+  ---
+  duration_ms: 7.032095
+  type: 'test'
+  ...
+# Subtest: receiver refuses missing independent Release pin and issuer-signed root substitution
+ok 10 - receiver refuses missing independent Release pin and issuer-signed root substitution
+  ---
+  duration_ms: 7.628353
+  type: 'test'
+  ...
+# Subtest: higher revision cannot restore revoked authority or reduce its version
+ok 11 - higher revision cannot restore revoked authority or reduce its version
+  ---
+  duration_ms: 14.95988
+  type: 'test'
+  ...
+# Subtest: publisher refuses cached binding that does not describe the cached envelope
+ok 12 - publisher refuses cached binding that does not describe the cached envelope
+  ---
+  duration_ms: 8.372378
+  type: 'test'
+  ...
+# Subtest: crash between public projection writes leaves durable intent and exact retry repairs it
+ok 13 - crash between public projection writes leaves durable intent and exact retry repairs it
+  ---
+  duration_ms: 13.071469
+  type: 'test'
+  ...
+# Subtest: failed projection readback cannot report STORED or call lifecycle reconciler
+ok 14 - failed projection readback cannot report STORED or call lifecycle reconciler
+  ---
+  duration_ms: 7.372123
+  type: 'test'
+  ...
+# Subtest: recovery publication never provisions execution ledgers or credentials and cannot start services
+ok 15 - recovery publication never provisions execution ledgers or credentials and cannot start services
+  ---
+  duration_ms: 7.950307
+  type: 'test'
+  ...
+# Subtest: partial stop projection survives Release expiry and exact retry without credential or lifecycle effects
+ok 16 - partial stop projection survives Release expiry and exact retry without credential or lifecycle effects
+  ---
+  duration_ms: 15.826705
+  type: 'test'
+  ...
+# Subtest: post-expiry signed revocation advances control but never opens business
+ok 17 - post-expiry signed revocation advances control but never opens business
+  ---
+  duration_ms: 10.386975
+  type: 'test'
+  ...
+# Subtest: expired active connection request remains rejected even with valid issuer signature
+ok 18 - expired active connection request remains rejected even with valid issuer signature
+  ---
+  duration_ms: 9.540889
+  type: 'test'
+  ...
+# Subtest: recovery cannot use an unpinned replacement historical release or bootstrap unknown history
+ok 19 - recovery cannot use an unpinned replacement historical release or bootstrap unknown history
+  ---
+  duration_ms: 8.339647
+  type: 'test'
+  ...
+# Subtest: actual App Bridge Native ProjectForge execute under on-demand Minimal Trust, then refuse new business and retain reconcile
+ok 20 - actual App Bridge Native ProjectForge execute under on-demand Minimal Trust, then refuse new business and retain reconcile
+  ---
+  duration_ms: 2120.007959
+  type: 'test'
+  ...
+# Subtest: all three issuer-authorized role stop attestations match one frozen cloud revision
+ok 21 - all three issuer-authorized role stop attestations match one frozen cloud revision
+  ---
+  duration_ms: 10.099747
+  type: 'test'
+  ...
+# Subtest: one role missing blocks the complete stop barrier
+ok 22 - one role missing blocks the complete stop barrier
+  ---
+  duration_ms: 3.783324
+  type: 'test'
+  ...
+# Subtest: forged Native signed stop is rejected
+ok 23 - forged Native signed stop is rejected
+  ---
+  duration_ms: 3.916413
+  type: 'test'
+  ...
+# Subtest: wrong stop epoch cannot be reused at the next recovery attempt
+ok 24 - wrong stop epoch cannot be reused at the next recovery attempt
+  ---
+  duration_ms: 3.195561
+  type: 'test'
+  ...
+# Subtest: one role still admitting new work blocks release
+ok 25 - one role still admitting new work blocks release
+  ---
+  duration_ms: 2.937237
+  type: 'test'
+  ...
+# Subtest: one role with in-flight business blocks release even when stop flag says true
+ok 26 - one role with in-flight business blocks release even when stop flag says true
+  ---
+  duration_ms: 3.970785
+  type: 'test'
+  ...
+# Subtest: changing exact two unresolved targets blocks all three stop proofs
+ok 27 - changing exact two unresolved targets blocks all three stop proofs
+  ---
+  duration_ms: 5.451943
+  type: 'test'
+  ...
+# Subtest: stale or future dated stop receipt cannot be replayed
+ok 28 - stale or future dated stop receipt cannot be replayed
+  ---
+  duration_ms: 3.325485
+  type: 'test'
+  ...
+# Subtest: a cloud control that still allows business means freeze has not occurred
+ok 29 - a cloud control that still allows business means freeze has not occurred
+  ---
+  duration_ms: 2.818134
+  type: 'test'
+  ...
+# Subtest: stale cloud revision blocks new stop receipt
+ok 30 - stale cloud revision blocks new stop receipt
+  ---
+  duration_ms: 3.241428
+  type: 'test'
+  ...
+# Subtest: role key cannot be reused for a different role
+ok 31 - role key cannot be reused for a different role
+  ---
+  duration_ms: 4.087124
+  type: 'test'
+  ...
+# Subtest: release and review manifest must match every signed stop body
+ok 32 - release and review manifest must match every signed stop body
+  ---
+  duration_ms: 2.268193
+  type: 'test'
+  ...
+# Subtest: same release name with different body is rejected by exact release digest
+ok 33 - same release name with different body is rejected by exact release digest
+  ---
+  duration_ms: 3.39747
+  type: 'test'
+  ...
+# Subtest: signed role receipt must bind actual role runtime and corresponding result digest
+ok 34 - signed role receipt must bind actual role runtime and corresponding result digest
+  ---
+  duration_ms: 9.411066
+  type: 'test'
+  ...
+# Subtest: revoked control permits stop inspection without permitting business or clearing UNKNOWN
+ok 35 - revoked control permits stop inspection without permitting business or clearing UNKNOWN
+  ---
+  duration_ms: 4.143519
+  type: 'test'
+  ...
+# Subtest: missing result target or legacy v1 receipt never qualifies as new stop evidence
+ok 36 - missing result target or legacy v1 receipt never qualifies as new stop evidence
+  ---
+  duration_ms: 3.871069
+  type: 'test'
+  ...
+# Subtest: real Native/SQLite grant composition preserves result and history, refuses replay and foreign paths
+ok 37 - real Native/SQLite grant composition preserves result and history, refuses replay and foreign paths
+  ---
+  duration_ms: 581.595802
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2250.755651

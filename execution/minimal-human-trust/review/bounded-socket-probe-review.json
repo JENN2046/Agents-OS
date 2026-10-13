@@ -1,0 +1,31 @@
+{
+  "schema": "g1d.bounded-socket-probe-review.v1",
+  "decision": "NO_P1_BLOCKER_FOR_THREE_STATELESS_ISOLATED_REQUESTS",
+  "files": {
+    "tools/socket-credential-probe.mjs": "6c43e8bf2e483c0fed651bf313bc59ad856d51424e4c8fa0da5095b78fad67f5",
+    "src/minimal-trust-issuer-once.mjs": "ef9d7678f9d61d716d37f8f04392a5b3874d832503806d2a7e4f4fac86a210d2",
+    "src/minimal-trust-issuer.mjs": "bb556fb2679bb25e57f5a193d990a723d34c3829959cd516faa68648c500f822",
+    "src/lease-core.mjs": "2992dcbd27a878ab5baa77ad9d3489441d496dc2ce5aea1dcd78ae89f8d204a8",
+    "src/control-clock.mjs": "b94a364ff6738c9c924c41f9ec164234612f6803e2feee77acde24bde6fa89b1",
+    "src/systemd-issuer-credential.mjs": "4067f80197d6c3b7dc89c4602d9aa28aa274d3c8bfeeb69cbdadc4ae5a8bf0bb"
+  },
+  "scope": [
+    "Fixed credential_proof request uses existing synthetic fixture only",
+    "Oversized request refused before credential access",
+    "Unfinished line times out via fixed 5-second reader"
+  ],
+  "observations": [
+    "Imported issuer modules remain inert under socket probe main entry",
+    "No calls to issuer, grant, nonce or production ledger routines",
+    "Credential signature is on fixed test challenge and only boolean identity status is returned"
+  ],
+  "conditions": [
+    "Previously reviewed sandbox including LimitCORE0 and NoNewPrivileges",
+    "Exact exclusive root-owned immutable file copies and post-copy SHA verification",
+    "Record timing and actual instance exit for timeout; REFUSED alone is not causal proof",
+    "Stop and remove only exact created test units after absence of active instances",
+    "No automatic restart or replay"
+  ],
+  "productionMutation": false,
+  "privilegedExecutionByReviewer": false
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "g1d.independent-synthetic-os-probe-review.v1",
+  "decision": "NO_P1_BLOCKER_FOR_DESCRIBED_ISOLATED_EXECUTION",
+  "files": {
+    "tools/provision-synthetic-key.mjs": "95165144206dd4fd97c4c12ae947252a4e8d77bcda68634bdbaf1ef1f24e2e41",
+    "tools/credential-probe.mjs": "94cd0755ddd4e2cd9a5f9944e87f8dea09065cce525295b2ed889c1a054fd5d2",
+    "src/systemd-issuer-credential.mjs": "4067f80197d6c3b7dc89c4602d9aa28aa274d3c8bfeeb69cbdadc4ae5a8bf0bb"
+  },
+  "conditions": [
+    "Existing legitimate admin path only",
+    "Exclusive new root-owned nonwritable source destination and root0700 state destination; reject existing partial path",
+    "Recheck installed hashes before root execution",
+    "Set LimitCORE=0 and NoNewPrivileges=yes with finite runtime, fixed LoadCredentialEncrypted synthetic file, no restart",
+    "Keep partial objects and do not automatically rerun on unknown outcome"
+  ],
+  "scope": [
+    "Generate new synthetic Ed25519 key in root memory",
+    "Use existing host-key metadata and systemd-creds encrypted output; never output private bytes",
+    "Actual PID1 credential mount provenance check and signing/public identity comparison",
+    "No production credential or ledger use; no socket activation at this step"
+  ],
+  "limitations": [
+    "Does not prove production signer identity, Human authorization, single-writer cutover or production readiness",
+    "Provisioning spawnSync timeout uses SIGTERM; unusual unresponsive utility must be treated unknown, never auto-killed or retried"
+  ],
+  "reviewerPrivilegedExecution": false
+}

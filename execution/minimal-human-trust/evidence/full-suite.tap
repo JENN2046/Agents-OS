@@ -1,0 +1,1031 @@
+TAP version 13
+# Subtest: stop during allocation recovery refuses evidence while live and never sends new allocation afterwards
+ok 1 - stop during allocation recovery refuses evidence while live and never sends new allocation afterwards
+  ---
+  duration_ms: 31.891678
+  type: 'test'
+  ...
+# Subtest: stop during admission resolve tracks live control and prevents post-await participant preparation
+ok 2 - stop during admission resolve tracks live control and prevents post-await participant preparation
+  ---
+  duration_ms: 12.062093
+  type: 'test'
+  ...
+# Subtest: lifecycle wrapper preserves hidden trusted-context marker and every public executor method
+ok 3 - lifecycle wrapper preserves hidden trusted-context marker and every public executor method
+  ---
+  duration_ms: 5.356338
+  type: 'test'
+  ...
+# Subtest: new on-demand publisher emits issuer-signed revision 88 with recovery_only never opening new business
+ok 4 - new on-demand publisher emits issuer-signed revision 88 with recovery_only never opening new business
+  ---
+  duration_ms: 34.056311
+  type: 'test'
+  ...
+# Subtest: cloud receiver consumes identical existing R16 signed contract and persists exact control
+ok 5 - cloud receiver consumes identical existing R16 signed contract and persists exact control
+  ---
+  duration_ms: 37.417785
+  type: 'test'
+  ...
+# Subtest: lost remote ACK retries the exact same signed envelope and does not allocate revision 89
+ok 6 - lost remote ACK retries the exact same signed envelope and does not allocate revision 89
+  ---
+  duration_ms: 27.22969
+  type: 'test'
+  ...
+# Subtest: cloud receiver refuses forgery and rollback while retaining last accepted config
+ok 7 - cloud receiver refuses forgery and rollback while retaining last accepted config
+  ---
+  duration_ms: 18.025508
+  type: 'test'
+  ...
+# Subtest: cloud delivery cannot be minted from an arbitrary replacement Issuer key
+ok 8 - cloud delivery cannot be minted from an arbitrary replacement Issuer key
+  ---
+  duration_ms: 5.195797
+  type: 'test'
+  ...
+# Subtest: no prior signed delivery cannot reset the cloud revision to one
+ok 9 - no prior signed delivery cannot reset the cloud revision to one
+  ---
+  duration_ms: 9.441837
+  type: 'test'
+  ...
+# Subtest: recovery-only publisher refuses active mode even if caller requests it
+ok 10 - recovery-only publisher refuses active mode even if caller requests it
+  ---
+  duration_ms: 4.178353
+  type: 'test'
+  ...
+# Subtest: new revocation version changes the public status without expanding scope
+ok 11 - new revocation version changes the public status without expanding scope
+  ---
+  duration_ms: 9.830014
+  type: 'test'
+  ...
+# Subtest: private keys and synthetic OS bootstrap never enter the cloud public configuration
+ok 12 - private keys and synthetic OS bootstrap never enter the cloud public configuration
+  ---
+  duration_ms: 10.316665
+  type: 'test'
+  ...
+# Subtest: receiver refuses missing independent Release pin and issuer-signed root substitution
+ok 13 - receiver refuses missing independent Release pin and issuer-signed root substitution
+  ---
+  duration_ms: 11.33455
+  type: 'test'
+  ...
+# Subtest: higher revision cannot restore revoked authority or reduce its version
+ok 14 - higher revision cannot restore revoked authority or reduce its version
+  ---
+  duration_ms: 12.436184
+  type: 'test'
+  ...
+# Subtest: publisher refuses cached binding that does not describe the cached envelope
+ok 15 - publisher refuses cached binding that does not describe the cached envelope
+  ---
+  duration_ms: 8.643472
+  type: 'test'
+  ...
+# Subtest: crash between public projection writes leaves durable intent and exact retry repairs it
+ok 16 - crash between public projection writes leaves durable intent and exact retry repairs it
+  ---
+  duration_ms: 13.74854
+  type: 'test'
+  ...
+# Subtest: failed projection readback cannot report STORED or call lifecycle reconciler
+ok 17 - failed projection readback cannot report STORED or call lifecycle reconciler
+  ---
+  duration_ms: 8.702884
+  type: 'test'
+  ...
+# Subtest: recovery publication never provisions execution ledgers or credentials and cannot start services
+ok 18 - recovery publication never provisions execution ledgers or credentials and cannot start services
+  ---
+  duration_ms: 7.929546
+  type: 'test'
+  ...
+# Subtest: partial stop projection survives Release expiry and exact retry without credential or lifecycle effects
+ok 19 - partial stop projection survives Release expiry and exact retry without credential or lifecycle effects
+  ---
+  duration_ms: 22.466672
+  type: 'test'
+  ...
+# Subtest: post-expiry signed revocation advances control but never opens business
+ok 20 - post-expiry signed revocation advances control but never opens business
+  ---
+  duration_ms: 10.516359
+  type: 'test'
+  ...
+# Subtest: expired active connection request remains rejected even with valid issuer signature
+ok 21 - expired active connection request remains rejected even with valid issuer signature
+  ---
+  duration_ms: 7.794753
+  type: 'test'
+  ...
+# Subtest: recovery cannot use an unpinned replacement historical release or bootstrap unknown history
+ok 22 - recovery cannot use an unpinned replacement historical release or bootstrap unknown history
+  ---
+  duration_ms: 9.624479
+  type: 'test'
+  ...
+# Subtest: actual App Bridge Native ProjectForge execute under on-demand Minimal Trust, then refuse new business and retain reconcile
+ok 23 - actual App Bridge Native ProjectForge execute under on-demand Minimal Trust, then refuse new business and retain reconcile
+  ---
+  duration_ms: 1638.745152
+  type: 'test'
+  ...
+# Subtest: only exact system slice or escaped template slice can establish approval service origin
+ok 24 - only exact system slice or escaped template slice can establish approval service origin
+  ---
+  duration_ms: 2.685728
+  type: 'test'
+  ...
+# Subtest: credential is read from exact root-owned read-only mount under authenticated unit
+ok 25 - credential is read from exact root-owned read-only mount under authenticated unit
+  ---
+  duration_ms: 1.240954
+  type: 'test'
+  ...
+# Subtest: device mismatch, zero length, setuid mode and duplicate unified cgroups reject
+ok 26 - device mismatch, zero length, setuid mode and duplicate unified cgroups reject
+  ---
+  duration_ms: 2.383563
+  type: 'test'
+  ...
+# Subtest: writable or ambiguous mounts and nonroot runtime never read credential
+ok 27 - writable or ambiguous mounts and nonroot runtime never read credential
+  ---
+  duration_ms: 0.335157
+  type: 'test'
+  ...
+# Subtest: exact revoke proof pins target/version/hash/nonce and grants no new capability
+ok 28 - exact revoke proof pins target/version/hash/nonce and grants no new capability
+  ---
+  duration_ms: 9.290944
+  type: 'test'
+  ...
+# Subtest: plain uid, unknown action and unsigned caller target cannot produce approval
+ok 29 - plain uid, unknown action and unsigned caller target cannot produce approval
+  ---
+  duration_ms: 2.633491
+  type: 'test'
+  ...
+# Subtest: publisher impostor and protected proposal digest mismatch reject
+ok 30 - publisher impostor and protected proposal digest mismatch reject
+  ---
+  duration_ms: 1.837821
+  type: 'test'
+  ...
+# Subtest: grant, version, exactrelease and currentgrant hash substitutions reject
+ok 31 - grant, version, exactrelease and currentgrant hash substitutions reject
+  ---
+  duration_ms: 6.750248
+  type: 'test'
+  ...
+# Subtest: fresh exact nonce expires while human is confirming
+ok 32 - fresh exact nonce expires while human is confirming
+  ---
+  duration_ms: 3.04989
+  type: 'test'
+  ...
+# Subtest: create grant constrained to projects real scope and existing ProjectForge actions only
+ok 33 - create grant constrained to projects real scope and existing ProjectForge actions only
+  ---
+  duration_ms: 7.543543
+  type: 'test'
+  ...
+# Subtest: trust replacement is explicit oldroot to newroot and cannot expand permissions
+ok 34 - trust replacement is explicit oldroot to newroot and cannot expand permissions
+  ---
+  duration_ms: 3.270543
+  type: 'test'
+  ...
+# Subtest: enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+ok 35 - enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+  ---
+  duration_ms: 3.427778
+  type: 'test'
+  ...
+# Subtest: human identity enrollment binds registered UID, subject, grant hash and exact signed Release
+ok 36 - human identity enrollment binds registered UID, subject, grant hash and exact signed Release
+  ---
+  duration_ms: 10.379833
+  type: 'test'
+  ...
+# Subtest: unregistered human identity cannot substitute its own enrollment public key
+ok 37 - unregistered human identity cannot substitute its own enrollment public key
+  ---
+  duration_ms: 2.380668
+  type: 'test'
+  ...
+# Subtest: human UID drift rejects approval even if enrollment issuer signs it
+ok 38 - human UID drift rejects approval even if enrollment issuer signs it
+  ---
+  duration_ms: 2.511802
+  type: 'test'
+  ...
+# Subtest: expired enrollment authenticates recovery identity without extending business authorization
+ok 39 - expired enrollment authenticates recovery identity without extending business authorization
+  ---
+  duration_ms: 3.758136
+  type: 'test'
+  ...
+# Subtest: new issuer key replacement cannot be selected by caller
+ok 40 - new issuer key replacement cannot be selected by caller
+  ---
+  duration_ms: 2.709412
+  type: 'test'
+  ...
+# Subtest: ordinary business mode cannot start before a formal cutover
+ok 41 - ordinary business mode cannot start before a formal cutover
+  ---
+  duration_ms: 1.71435
+  type: 'test'
+  ...
+# Subtest: extra config field cannot smuggle a user chosen credential path
+ok 42 - extra config field cannot smuggle a user chosen credential path
+  ---
+  duration_ms: 1.654367
+  type: 'test'
+  ...
+# Subtest: socket line framing forbids second JSON message, trailing junk and a null request
+ok 43 - socket line framing forbids second JSON message, trailing junk and a null request
+  ---
+  duration_ms: 1.625594
+  type: 'test'
+  ...
+# Subtest: human approval cannot cross the Issuer socket lane
+ok 44 - human approval cannot cross the Issuer socket lane
+  ---
+  duration_ms: 0.530273
+  type: 'test'
+  ...
+# Subtest: issuer envelope cannot cross the root-only Human socket lane
+ok 45 - issuer envelope cannot cross the root-only Human socket lane
+  ---
+  duration_ms: 0.581679
+  type: 'test'
+  ...
+# Subtest: trusted per-request entry derives mode, keys, human identity and fixed store paths from installed policy
+ok 46 - trusted per-request entry derives mode, keys, human identity and fixed store paths from installed policy
+  ---
+  duration_ms: 3.202636
+  type: 'test'
+  ...
+# Subtest: root-only human socket passes only the exact human proof
+ok 47 - root-only human socket passes only the exact human proof
+  ---
+  duration_ms: 3.190744
+  type: 'test'
+  ...
+# Subtest: trusted launcher rejects execution under a regular user in the real runtime
+ok 48 - trusted launcher rejects execution under a regular user in the real runtime
+  ---
+  duration_ms: 0.424425
+  type: 'test'
+  ...
+# Subtest: trusted launcher binds proposed Native runtime to signed Release before importing its entry
+ok 49 - trusted launcher binds proposed Native runtime to signed Release before importing its entry
+  ---
+  duration_ms: 5.152737
+  type: 'test'
+  ...
+# Subtest: coherent attacker config and self-signed enrollment cannot replace independent roots
+ok 50 - coherent attacker config and self-signed enrollment cannot replace independent roots
+  ---
+  duration_ms: 3.689026
+  type: 'test'
+  ...
+# Subtest: same release id with different signed body fails exact release binding
+ok 51 - same release id with different signed body fails exact release binding
+  ---
+  duration_ms: 1.891922
+  type: 'test'
+  ...
+# Subtest: unsigned handoff, open writer, or missing participant evidence prevents activation admission
+ok 52 - unsigned handoff, open writer, or missing participant evidence prevents activation admission
+  ---
+  duration_ms: 5.487373
+  type: 'test'
+  ...
+# Subtest: bounded socket input accepts one line without waiting for EOF
+ok 53 - bounded socket input accepts one line without waiting for EOF
+  ---
+  duration_ms: 1.611467
+  type: 'test'
+  ...
+# Subtest: bounded socket input refuses oversized and multi-frame input before parse
+ok 54 - bounded socket input refuses oversized and multi-frame input before parse
+  ---
+  duration_ms: 1.039496
+  type: 'test'
+  ...
+# Subtest: socket input deadline refuses a client that never sends a complete line
+ok 55 - socket input deadline refuses a client that never sends a complete line
+  ---
+  duration_ms: 5000.956854
+  type: 'test'
+  ...
+# Subtest: no Owner daemon: one-shot issuer opens, serves signed fresh, then releases both stores
+ok 56 - no Owner daemon: one-shot issuer opens, serves signed fresh, then releases both stores
+  ---
+  duration_ms: 61.895542
+  type: 'test'
+  ...
+# Subtest: full three-party signed lease lifecycle, Native result and issuer close without Owner daemon
+ok 57 - full three-party signed lease lifecycle, Native result and issuer close without Owner daemon
+  ---
+  duration_ms: 58.806949
+  type: 'test'
+  ...
+# Subtest: persistent nonce fence refuses exact replay across separate one-shot invocations
+ok 58 - persistent nonce fence refuses exact replay across separate one-shot invocations
+  ---
+  duration_ms: 15.525898
+  type: 'test'
+  ...
+# Subtest: wrong peer signature is rejected before committing replay nonce
+ok 59 - wrong peer signature is rejected before committing replay nonce
+  ---
+  duration_ms: 9.930612
+  type: 'test'
+  ...
+# Subtest: stale, future and structurally expanded signed requests are denied
+ok 60 - stale, future and structurally expanded signed requests are denied
+  ---
+  duration_ms: 11.20614
+  type: 'test'
+  ...
+# Subtest: recovery-only mode denies new business issuance, yet allows existing grant proof and fresh challenge
+ok 61 - recovery-only mode denies new business issuance, yet allows existing grant proof and fresh challenge
+  ---
+  duration_ms: 14.685585
+  type: 'test'
+  ...
+# Subtest: another issuer key, replaced release and foreign project are rejected
+ok 62 - another issuer key, replaced release and foreign project are rejected
+  ---
+  duration_ms: 7.545487
+  type: 'test'
+  ...
+# Subtest: revoke requires a distinct signed Human Authority proof and blocks replay
+ok 63 - revoke requires a distinct signed Human Authority proof and blocks replay
+  ---
+  duration_ms: 31.657179
+  type: 'test'
+  ...
+# Subtest: unsigned or wrong-scope Human approval cannot revoke
+ok 64 - unsigned or wrong-scope Human approval cannot revoke
+  ---
+  duration_ms: 8.257169
+  type: 'test'
+  ...
+# Subtest: missing durable replay journal refuses before emitting any issuer grant reply
+ok 65 - missing durable replay journal refuses before emitting any issuer grant reply
+  ---
+  duration_ms: 6.091074
+  type: 'test'
+  ...
+# Subtest: heartbeat is verified and returns a per-lease maintenance snapshot
+ok 66 - heartbeat is verified and returns a per-lease maintenance snapshot
+  ---
+  duration_ms: 13.452866
+  type: 'test'
+  ...
+# Subtest: human approval target is exact, expiry is strict, and issuer ledger stays unchanged
+ok 67 - human approval target is exact, expiry is strict, and issuer ledger stays unchanged
+  ---
+  duration_ms: 8.936471
+  type: 'test'
+  ...
+# Subtest: fresh and revoke acknowledgements cannot be cross-role relayed
+ok 68 - fresh and revoke acknowledgements cannot be cross-role relayed
+  ---
+  duration_ms: 12.665873
+  type: 'test'
+  ...
+# Subtest: human revocation proof must pin exact grant hash and signed release id
+ok 69 - human revocation proof must pin exact grant hash and signed release id
+  ---
+  duration_ms: 9.850983
+  type: 'test'
+  ...
+# Subtest: closing replay journal while one issuer session is live cannot create a second writer
+ok 70 - closing replay journal while one issuer session is live cannot create a second writer
+  ---
+  duration_ms: 9.214401
+  type: 'test'
+  ...
+# Subtest: fresh challenge and repeated failed human approval cannot be silently upgraded to a grant mutation
+ok 71 - fresh challenge and repeated failed human approval cannot be silently upgraded to a grant mutation
+  ---
+  duration_ms: 7.346455
+  type: 'test'
+  ...
+# Subtest: durable replay fence survives actual short-lived child process exits
+ok 72 - durable replay fence survives actual short-lived child process exits
+  ---
+  duration_ms: 99.698066
+  type: 'test'
+  ...
+# Subtest: all three revocation acknowledgements close the signed Human revoke lifecycle
+ok 73 - all three revocation acknowledgements close the signed Human revoke lifecycle
+  ---
+  duration_ms: 44.970585
+  type: 'test'
+  ...
+# Subtest: untrusted role request cannot create, widen, or revoke a Human grant
+ok 74 - untrusted role request cannot create, widen, or revoke a Human grant
+  ---
+  duration_ms: 9.905946
+  type: 'test'
+  ...
+# Subtest: configured Human enrollment Grant hash never authorizes a different persisted Grant
+ok 75 - configured Human enrollment Grant hash never authorizes a different persisted Grant
+  ---
+  duration_ms: 7.075407
+  type: 'test'
+  ...
+# Subtest: intent survives expiry and different-nonce mutation is blocked after crash before effect
+ok 76 - intent survives expiry and different-nonce mutation is blocked after crash before effect
+  ---
+  duration_ms: 11.296369
+  type: 'test'
+  ...
+# Subtest: crash after durable result allows result lookup without executing again
+ok 77 - crash after durable result allows result lookup without executing again
+  ---
+  duration_ms: 15.132171
+  type: 'test'
+  ...
+# Subtest: human revoke after effect crash preserves UNKNOWN and never repeats under new nonce
+ok 78 - human revoke after effect crash preserves UNKNOWN and never repeats under new nonce
+  ---
+  duration_ms: 10.630383
+  type: 'test'
+  ...
+# Subtest: expired release still permits authenticated recovery revoke but never new business
+ok 79 - expired release still permits authenticated recovery revoke but never new business
+  ---
+  duration_ms: 9.394128
+  type: 'test'
+  ...
+# Subtest: handoff initializes only against exact closed issuer snapshot and remains durably bound
+ok 80 - handoff initializes only against exact closed issuer snapshot and remains durably bound
+  ---
+  duration_ms: 11.223513
+  type: 'test'
+  ...
+# Subtest: actual child exits at intent, effect and result boundaries preserve durable outcome
+    # Subtest: after_intent
+    ok 1 - after_intent
+      ---
+      duration_ms: 51.576893
+      type: 'test'
+      ...
+    # Subtest: after_effect
+    ok 2 - after_effect
+      ---
+      duration_ms: 62.2042
+      type: 'test'
+      ...
+    # Subtest: after_result
+    ok 3 - after_result
+      ---
+      duration_ms: 62.215942
+      type: 'test'
+      ...
+    1..3
+ok 81 - actual child exits at intent, effect and result boundaries preserve durable outcome
+  ---
+  duration_ms: 176.544691
+  type: 'test'
+  ...
+# Subtest: malformed close request does not consume intent or disable fresh human revocation
+ok 82 - malformed close request does not consume intent or disable fresh human revocation
+  ---
+  duration_ms: 12.118479
+  type: 'test'
+  ...
+# Subtest: real UNKNOWN close remains preserved while independent human revoke succeeds
+ok 83 - real UNKNOWN close remains preserved while independent human revoke succeeds
+  ---
+  duration_ms: 38.564432
+  type: 'test'
+  ...
+# Subtest: prepare status returns original durable lease after response loss, including revoked cleanup
+ok 84 - prepare status returns original durable lease after response loss, including revoked cleanup
+  ---
+  duration_ms: 59.023475
+  type: 'test'
+  ...
+# Subtest: signed NOT_ISSUED requires closed issuance window, binds fresh query and rejects late prepare
+ok 85 - signed NOT_ISSUED requires closed issuance window, binds fresh query and rejects late prepare
+  ---
+  duration_ms: 29.332878
+  type: 'test'
+  ...
+# Subtest: three signed endpoints activate, execute exactly once, and renew twice past old two-day cutoff
+ok 86 - three signed endpoints activate, execute exactly once, and renew twice past old two-day cutoff
+  ---
+  duration_ms: 99.271638
+  type: 'test'
+  ...
+# Subtest: an in-flight or UNKNOWN operation blocks close; only verified native result reconciles it
+ok 87 - an in-flight or UNKNOWN operation blocks close; only verified native result reconciles it
+  ---
+  duration_ms: 37.60771
+  type: 'test'
+  ...
+# Subtest: new prepared leases cannot write; stale, missing, wrong-role, and forged close evidence reject
+ok 88 - new prepared leases cannot write; stale, missing, wrong-role, and forged close evidence reject
+  ---
+  duration_ms: 33.134996
+  type: 'test'
+  ...
+# Subtest: activation response loss is idempotent at issuer and participants; cannot reopen old generation
+ok 89 - activation response loss is idempotent at issuer and participants; cannot reopen old generation
+  ---
+  duration_ms: 37.208833
+  type: 'test'
+  ...
+# Subtest: revocation is durable, all roles ACK stop, fresh connection cannot use cached old grant
+ok 90 - revocation is durable, all roles ACK stop, fresh connection cannot use cached old grant
+  ---
+  duration_ms: 34.076779
+  type: 'test'
+  ...
+# Subtest: offline participant loses new-operation authority by one hour, but authenticated result cleanup remains
+ok 91 - offline participant loses new-operation authority by one hour, but authenticated result cleanup remains
+  ---
+  duration_ms: 22.663811
+  type: 'test'
+  ...
+# Subtest: restart invalidates cached fresh and converts interrupted operations to UNKNOWN without executing again
+ok 92 - restart invalidates cached fresh and converts interrupted operations to UNKNOWN without executing again
+  ---
+  duration_ms: 23.498103
+  type: 'test'
+  ...
+# Subtest: replay with same ID but different payload is refused and no repeated execution occurs
+ok 93 - replay with same ID but different payload is refused and no repeated execution occurs
+  ---
+  duration_ms: 20.00299
+  type: 'test'
+  ...
+# Subtest: unapproved release/signature, scope expansion, peer impersonation, and stale request fail closed
+ok 94 - unapproved release/signature, scope expansion, peer impersonation, and stale request fail closed
+  ---
+  duration_ms: 12.839739
+  type: 'test'
+  ...
+# Subtest: pending allocation is narrowed to create_project, normal lease can only narrow signed grant
+ok 95 - pending allocation is narrowed to create_project, normal lease can only narrow signed grant
+  ---
+  duration_ms: 16.587155
+  type: 'test'
+  ...
+# Subtest: fresh challenge is bound to current process nonce and cannot replay after disconnect
+ok 96 - fresh challenge is bound to current process nonce and cannot replay after disconnect
+  ---
+  duration_ms: 14.023014
+  type: 'test'
+  ...
+# Subtest: path traversal, symlink, hardlink, workspace replacement and incorrect registry binding reject
+ok 97 - path traversal, symlink, hardlink, workspace replacement and incorrect registry binding reject
+  ---
+  duration_ms: 10.491623
+  type: 'test'
+  ...
+# Subtest: clock rollback blocks transactions and new operation admission
+ok 98 - clock rollback blocks transactions and new operation admission
+  ---
+  duration_ms: 17.899912
+  type: 'test'
+  ...
+# Subtest: single writer lock, file mode checks, and symlink state reject unsafe stores
+ok 99 - single writer lock, file mode checks, and symlink state reject unsafe stores
+  ---
+  duration_ms: 8.400708
+  type: 'test'
+  ...
+# Subtest: durable commit acknowledgement loss restores committed state; no state rollback on reopening
+ok 100 - durable commit acknowledgement loss restores committed state; no state rollback on reopening
+  ---
+  duration_ms: 0.932977
+  type: 'test'
+  ...
+# Subtest: dead process writer lock recovers without deleting live lock or replaying state
+ok 101 - dead process writer lock recovers without deleting live lock or replaying state
+  ---
+  duration_ms: 36.719818
+  type: 'test'
+  ...
+# Subtest: different terminal ledgers prevent activation even with otherwise valid role signatures
+ok 102 - different terminal ledgers prevent activation even with otherwise valid role signatures
+  ---
+  duration_ms: 19.555583
+  type: 'test'
+  ...
+# Subtest: normal final close is three-end durable and future generation never reopens closed capability
+ok 103 - normal final close is three-end durable and future generation never reopens closed capability
+  ---
+  duration_ms: 46.35098
+  type: 'test'
+  ...
+# Subtest: stop persists admission closure before reporting unresolved work, and cleanup can complete after expiry
+ok 104 - stop persists admission closure before reporting unresolved work, and cleanup can complete after expiry
+  ---
+  duration_ms: 29.70274
+  type: 'test'
+  ...
+# Subtest: expired preparation delivered to only one endpoint can retire without reusing a write credential
+ok 105 - expired preparation delivered to only one endpoint can retire without reusing a write credential
+  ---
+  duration_ms: 58.815575
+  type: 'test'
+  ...
+# Subtest: Native proves never-dispatched only after durable drain; missing peers reconcile without replay
+ok 106 - Native proves never-dispatched only after durable drain; missing peers reconcile without replay
+  ---
+  duration_ms: 40.088294
+  type: 'test'
+  ...
+# Subtest: Native cannot certify never-dispatched for an in-flight operation
+ok 107 - Native cannot certify never-dispatched for an in-flight operation
+  ---
+  duration_ms: 26.445872
+  type: 'test'
+  ...
+# Subtest: two-stage drain reconciles an operation absent at Native before final stop
+ok 108 - two-stage drain reconciles an operation absent at Native before final stop
+  ---
+  duration_ms: 28.811842
+  type: 'test'
+  ...
+# Subtest: closed generations archive durably while active snapshots remain bounded and old receipts remain available
+ok 109 - closed generations archive durably while active snapshots remain bounded and old receipts remain available
+  ---
+  duration_ms: 217.009209
+  type: 'test'
+  ...
+# Subtest: UNKNOWN admission pauses only the affected project until a real terminal result is reconciled
+ok 110 - UNKNOWN admission pauses only the affected project until a real terminal result is reconciled
+  ---
+  duration_ms: 20.52112
+  type: 'test'
+  ...
+# Subtest: issuer restores archived preparation after state commit fails, without issuing a different lease
+ok 111 - issuer restores archived preparation after state commit fails, without issuing a different lease
+  ---
+  duration_ms: 10.887484
+  type: 'test'
+  ...
+# Subtest: issuer restores the original activation certificate after its commit acknowledgement is lost
+ok 112 - issuer restores the original activation certificate after its commit acknowledgement is lost
+  ---
+  duration_ms: 19.734948
+  type: 'test'
+  ...
+# Subtest: participant restores completed final close after archive write but failed state rename
+ok 113 - participant restores completed final close after archive write but failed state rename
+  ---
+  duration_ms: 26.915652
+  type: 'test'
+  ...
+# Subtest: replayed historical close ACK never discards a newer prepared generation
+ok 114 - replayed historical close ACK never discards a newer prepared generation
+  ---
+  duration_ms: 38.150957
+  type: 'test'
+  ...
+# Subtest: Owner grant remains usable five days later without reissuing a Crown time window
+ok 115 - Owner grant remains usable five days later without reissuing a Crown time window
+  ---
+  duration_ms: 25.005676
+  type: 'test'
+  ...
+# Subtest: signed lost FindSymbol result closes the already-draining generation without pretending execution outcome
+ok 116 - signed lost FindSymbol result closes the already-draining generation without pretending execution outcome
+  ---
+  duration_ms: 32.752349
+  type: 'test'
+  ...
+# Subtest: lost read cannot terminalize writes, nonallowlisted reads, non-UNKNOWN work, or forged App requests
+ok 117 - lost read cannot terminalize writes, nonallowlisted reads, non-UNKNOWN work, or forged App requests
+  ---
+  duration_ms: 24.488368
+  type: 'test'
+  ...
+# Subtest: forged read-loss receipt can never settle an edit operation on App or Bridge
+ok 118 - forged read-loss receipt can never settle an edit operation on App or Bridge
+  ---
+  duration_ms: 24.384604
+  type: 'test'
+  ...
+# Subtest: stop requires durable local admission fence and survives journal reopen
+ok 119 - stop requires durable local admission fence and survives journal reopen
+  ---
+  duration_ms: 31.94091
+  type: 'test'
+  ...
+# Subtest: different epoch cannot silently reset a stopped journal
+ok 120 - different epoch cannot silently reset a stopped journal
+  ---
+  duration_ms: 5.376366
+  type: 'test'
+  ...
+# Subtest: runtime work counter and wrong signer prevent stop evidence
+ok 121 - runtime work counter and wrong signer prevent stop evidence
+  ---
+  duration_ms: 2.966214
+  type: 'test'
+  ...
+# Subtest: unknown is preserved and only recorded results change the evidence digest
+ok 122 - unknown is preserved and only recorded results change the evidence digest
+  ---
+  duration_ms: 3.209789
+  type: 'test'
+  ...
+# Subtest: stale inflight journal row is retained as unresolved, never reclassified as completed
+ok 123 - stale inflight journal row is retained as unresolved, never reclassified as completed
+  ---
+  duration_ms: 3.804733
+  type: 'test'
+  ...
+# Subtest: all three issuer-authorized role stop attestations match one frozen cloud revision
+ok 124 - all three issuer-authorized role stop attestations match one frozen cloud revision
+  ---
+  duration_ms: 18.036619
+  type: 'test'
+  ...
+# Subtest: one role missing blocks the complete stop barrier
+ok 125 - one role missing blocks the complete stop barrier
+  ---
+  duration_ms: 5.638186
+  type: 'test'
+  ...
+# Subtest: forged Native signed stop is rejected
+ok 126 - forged Native signed stop is rejected
+  ---
+  duration_ms: 4.966017
+  type: 'test'
+  ...
+# Subtest: wrong stop epoch cannot be reused at the next recovery attempt
+ok 127 - wrong stop epoch cannot be reused at the next recovery attempt
+  ---
+  duration_ms: 10.445096
+  type: 'test'
+  ...
+# Subtest: one role still admitting new work blocks release
+ok 128 - one role still admitting new work blocks release
+  ---
+  duration_ms: 7.64331
+  type: 'test'
+  ...
+# Subtest: one role with in-flight business blocks release even when stop flag says true
+ok 129 - one role with in-flight business blocks release even when stop flag says true
+  ---
+  duration_ms: 6.349187
+  type: 'test'
+  ...
+# Subtest: changing exact two unresolved targets blocks all three stop proofs
+ok 130 - changing exact two unresolved targets blocks all three stop proofs
+  ---
+  duration_ms: 8.401159
+  type: 'test'
+  ...
+# Subtest: stale or future dated stop receipt cannot be replayed
+ok 131 - stale or future dated stop receipt cannot be replayed
+  ---
+  duration_ms: 9.890768
+  type: 'test'
+  ...
+# Subtest: a cloud control that still allows business means freeze has not occurred
+ok 132 - a cloud control that still allows business means freeze has not occurred
+  ---
+  duration_ms: 3.950155
+  type: 'test'
+  ...
+# Subtest: stale cloud revision blocks new stop receipt
+ok 133 - stale cloud revision blocks new stop receipt
+  ---
+  duration_ms: 4.137767
+  type: 'test'
+  ...
+# Subtest: role key cannot be reused for a different role
+ok 134 - role key cannot be reused for a different role
+  ---
+  duration_ms: 4.062957
+  type: 'test'
+  ...
+# Subtest: release and review manifest must match every signed stop body
+ok 135 - release and review manifest must match every signed stop body
+  ---
+  duration_ms: 3.66428
+  type: 'test'
+  ...
+# Subtest: same release name with different body is rejected by exact release digest
+ok 136 - same release name with different body is rejected by exact release digest
+  ---
+  duration_ms: 5.28284
+  type: 'test'
+  ...
+# Subtest: signed role receipt must bind actual role runtime and corresponding result digest
+ok 137 - signed role receipt must bind actual role runtime and corresponding result digest
+  ---
+  duration_ms: 10.765615
+  type: 'test'
+  ...
+# Subtest: revoked control permits stop inspection without permitting business or clearing UNKNOWN
+ok 138 - revoked control permits stop inspection without permitting business or clearing UNKNOWN
+  ---
+  duration_ms: 3.444199
+  type: 'test'
+  ...
+# Subtest: missing result target or legacy v1 receipt never qualifies as new stop evidence
+ok 139 - missing result target or legacy v1 receipt never qualifies as new stop evidence
+  ---
+  duration_ms: 4.259525
+  type: 'test'
+  ...
+# Subtest: exact historical release still permits stop evidence inspection after runtime expiry
+ok 140 - exact historical release still permits stop evidence inspection after runtime expiry
+  ---
+  duration_ms: 4.160279
+  type: 'test'
+  ...
+# Subtest: kernel cgroup and read-only tmpfs bind the exact privileged credential
+ok 141 - kernel cgroup and read-only tmpfs bind the exact privileged credential
+  ---
+  duration_ms: 2.855185
+  type: 'test'
+  ...
+# Subtest: human lane is derived from cgroup, not caller input
+ok 142 - human lane is derived from cgroup, not caller input
+  ---
+  duration_ms: 0.512129
+  type: 'test'
+  ...
+# Subtest: non-root cannot impersonate system service
+ok 143 - non-root cannot impersonate system service
+  ---
+  duration_ms: 0.56602
+  type: 'test'
+  ...
+# Subtest: rejects non-system unit
+ok 144 - rejects non-system unit
+  ---
+  duration_ms: 0.244508
+  type: 'test'
+  ...
+# Subtest: rejects legacy Owner unit
+ok 145 - rejects legacy Owner unit
+  ---
+  duration_ms: 0.31499
+  type: 'test'
+  ...
+# Subtest: rejects duplicated cgroup
+ok 146 - rejects duplicated cgroup
+  ---
+  duration_ms: 0.171351
+  type: 'test'
+  ...
+# Subtest: rejects missing real mount
+ok 147 - rejects missing real mount
+  ---
+  duration_ms: 0.322614
+  type: 'test'
+  ...
+# Subtest: rejects regular disk
+ok 148 - rejects regular disk
+  ---
+  duration_ms: 0.184706
+  type: 'test'
+  ...
+# Subtest: rejects writable tmpfs
+ok 149 - rejects writable tmpfs
+  ---
+  duration_ms: 0.545671
+  type: 'test'
+  ...
+# Subtest: rejects duplicated mount
+ok 150 - rejects duplicated mount
+  ---
+  duration_ms: 3.45063
+  type: 'test'
+  ...
+# Subtest: rejects symlinked credential directory
+ok 151 - rejects symlinked credential directory
+  ---
+  duration_ms: 0.377266
+  type: 'test'
+  ...
+# Subtest: rejects group-writable parent
+ok 152 - rejects group-writable parent
+  ---
+  duration_ms: 0.183364
+  type: 'test'
+  ...
+# Subtest: rejects foreign-owned credential
+ok 153 - rejects foreign-owned credential
+  ---
+  duration_ms: 0.172503
+  type: 'test'
+  ...
+# Subtest: rejects hardlink credential
+ok 154 - rejects hardlink credential
+  ---
+  duration_ms: 0.163255
+  type: 'test'
+  ...
+# Subtest: rejects wrong credential device
+ok 155 - rejects wrong credential device
+  ---
+  duration_ms: 0.264405
+  type: 'test'
+  ...
+# Subtest: rejects oversized credential
+ok 156 - rejects oversized credential
+  ---
+  duration_ms: 0.167994
+  type: 'test'
+  ...
+# Subtest: rejects weak credential mode
+ok 157 - rejects weak credential mode
+  ---
+  duration_ms: 0.131155
+  type: 'test'
+  ...
+# Subtest: CREDENTIALS_DIRECTORY cannot redirect a kernel-bound path
+ok 158 - CREDENTIALS_DIRECTORY cannot redirect a kernel-bound path
+  ---
+  duration_ms: 0.182712
+  type: 'test'
+  ...
+# Subtest: actual manifest verifier authenticates every fixture byte for expired recovery-only release
+ok 159 - actual manifest verifier authenticates every fixture byte for expired recovery-only release
+  ---
+  duration_ms: 9.536724
+  type: 'test'
+  ...
+# Subtest: new active mode is denied even with otherwise valid signed release
+ok 160 - new active mode is denied even with otherwise valid signed release
+  ---
+  duration_ms: 1.504026
+  type: 'test'
+  ...
+# Subtest: coherent self-signed release and keys cannot replace independently pinned roots
+ok 161 - coherent self-signed release and keys cannot replace independently pinned roots
+  ---
+  duration_ms: 1.206458
+  type: 'test'
+  ...
+# Subtest: signed release body drift with unchanged release id is denied by exact root hash
+ok 162 - signed release body drift with unchanged release id is denied by exact root hash
+  ---
+  duration_ms: 1.166854
+  type: 'test'
+  ...
+# Subtest: unsigned installed code changes are rejected by real installed-manifest verifier
+ok 163 - unsigned installed code changes are rejected by real installed-manifest verifier
+  ---
+  duration_ms: 1.590648
+  type: 'test'
+  ...
+# Subtest: manifest replacement cannot redirect bootstrap entry without approved release digest
+ok 164 - manifest replacement cannot redirect bootstrap entry without approved release digest
+  ---
+  duration_ms: 5.053612
+  type: 'test'
+  ...
+# Subtest: future release and missing signed transitive dependency never reach dynamic import
+ok 165 - future release and missing signed transitive dependency never reach dynamic import
+  ---
+  duration_ms: 2.709563
+  type: 'test'
+  ...
+# Subtest: nonroot gate rejects before reading any root configuration
+ok 166 - nonroot gate rejects before reading any root configuration
+  ---
+  duration_ms: 0.129453
+  type: 'test'
+  ...
+# Subtest: real Native/SQLite grant composition preserves result and history, refuses replay and foreign paths
+ok 167 - real Native/SQLite grant composition preserves result and history, refuses replay and foreign paths
+  ---
+  duration_ms: 501.461335
+  type: 'test'
+  ...
+1..167
+# tests 170
+# suites 0
+# pass 170
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5176.371419

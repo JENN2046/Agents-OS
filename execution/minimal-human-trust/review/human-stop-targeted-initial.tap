@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: exact revoke proof pins target/version/hash/nonce and grants no new capability
+ok 1 - exact revoke proof pins target/version/hash/nonce and grants no new capability
+  ---
+  duration_ms: 6.555393
+  type: 'test'
+  ...
+# Subtest: plain uid, unknown action and unsigned caller target cannot produce approval
+ok 2 - plain uid, unknown action and unsigned caller target cannot produce approval
+  ---
+  duration_ms: 1.978027
+  type: 'test'
+  ...
+# Subtest: publisher impostor and protected proposal digest mismatch reject
+ok 3 - publisher impostor and protected proposal digest mismatch reject
+  ---
+  duration_ms: 1.416755
+  type: 'test'
+  ...
+# Subtest: grant, version, exactrelease and currentgrant hash substitutions reject
+ok 4 - grant, version, exactrelease and currentgrant hash substitutions reject
+  ---
+  duration_ms: 5.063697
+  type: 'test'
+  ...
+# Subtest: fresh exact nonce expires while human is confirming
+ok 5 - fresh exact nonce expires while human is confirming
+  ---
+  duration_ms: 1.350691
+  type: 'test'
+  ...
+# Subtest: create grant constrained to projects real scope and existing ProjectForge actions only
+ok 6 - create grant constrained to projects real scope and existing ProjectForge actions only
+  ---
+  duration_ms: 4.794202
+  type: 'test'
+  ...
+# Subtest: trust replacement is explicit oldroot to newroot and cannot expand permissions
+ok 7 - trust replacement is explicit oldroot to newroot and cannot expand permissions
+  ---
+  duration_ms: 2.135601
+  type: 'test'
+  ...
+# Subtest: enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+ok 8 - enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+  ---
+  duration_ms: 1.75601
+  type: 'test'
+  ...
+# Subtest: stop requires durable local admission fence and survives journal reopen
+ok 9 - stop requires durable local admission fence and survives journal reopen
+  ---
+  duration_ms: 10.210411
+  type: 'test'
+  ...
+# Subtest: different epoch cannot silently reset a stopped journal
+ok 10 - different epoch cannot silently reset a stopped journal
+  ---
+  duration_ms: 1.597002
+  type: 'test'
+  ...
+# Subtest: runtime work counter and wrong signer prevent stop evidence
+ok 11 - runtime work counter and wrong signer prevent stop evidence
+  ---
+  duration_ms: 1.788451
+  type: 'test'
+  ...
+# Subtest: unknown is preserved and only recorded results change the evidence digest
+ok 12 - unknown is preserved and only recorded results change the evidence digest
+  ---
+  duration_ms: 3.041279
+  type: 'test'
+  ...
+# Subtest: stale inflight journal row is retained as unresolved, never reclassified as completed
+ok 13 - stale inflight journal row is retained as unresolved, never reclassified as completed
+  ---
+  duration_ms: 2.404806
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 89.520302

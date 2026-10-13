@@ -1,0 +1,60 @@
+{
+  "schema": "g1d.independent-security-review.v1",
+  "scope": "Initial archived candidate; concurrent source changes observed; findings require final revision re-review",
+  "production_mutation": false,
+  "secret_access": false,
+  "baseline_zip_sha256": "4a8f2ec0641181e91b98bac0c94396ae02d0c61cced3a31294e551a3c59ff8b5",
+  "findings": [
+    {
+      "id": "G1D-SEC-01",
+      "priority": "P1",
+      "state": "CONFIRMED_SYNTHETIC",
+      "path": "src/minimal-trust-issuer-once.mjs",
+      "line": 38,
+      "finding": "Enrollment authority and Release verification keys come from the same replaceable policy object. Replacing enrollment key, enrollment signature and Human key together is accepted with original issuer and Release preserved. Root-owned policy restricts who writes it but does not bind installation to an independently established trust root.",
+      "fix": "Require independently protected enrollment, issuer and release root pins; do not provision pins by trusting arbitrary candidate config. Test simultaneous key/signature replacement."
+    },
+    {
+      "id": "G1D-SEC-02",
+      "priority": "P1",
+      "state": "SOURCE_CONFIRMED_OS_REPRO_REQUIRED",
+      "path": "src/minimal-trust-issuer-once.mjs",
+      "line": 78,
+      "finding": "fs.readFileSync(0) buffers socket input until EOF before checking max bytes. Type=exec with TimeoutStartSec only does not bound post-exec request duration. Authorized socket clients can hold privileged processes indefinitely or stream beyond intended input limit.",
+      "fix": "Bound byte accumulation while reading, enforce input deadline, finite runtime/memory/concurrency, verify half-close and no-EOF behavior on real systemd socket."
+    },
+    {
+      "id": "G1D-SEC-03",
+      "priority": "P1",
+      "state": "BASELINE_CONFIRMED_CONCURRENT_FIX_OBSERVED",
+      "path": "src/minimal-trust-issuer.mjs",
+      "line": 26,
+      "finding": "Archive baseline records only used nonce id/time/kind before issuer effect; no exact request digest, result state, or reconciliation API. Crash after reservation rejects replay but cannot distinguish pre-effect from completed-and-reply-lost. Concurrent new replay v2 changes are not yet frozen or independently reviewed.",
+      "fix": "Durable INTENT/RESULT journal, exact request/effect binding, authenticated status, never rerun unresolved effect; fault tests at intent/effect/result boundaries."
+    },
+    {
+      "id": "G1D-SEC-04",
+      "priority": "P1",
+      "state": "SOURCE_CONFIRMED_CONTRACT_DECISION_NEEDED",
+      "path": "src/trusted-launcher.mjs",
+      "line": 24,
+      "finding": "Unconditional current-time Release admission before routing rejects Human revoke and all cleanup after Release expiry. Enrollment expiry similarly rejects revoke. No independently authenticated emergency revocation path supplied.",
+      "fix": "Separate immutable installed-code trust from new-business expiry; explicitly authorized recovery-only expired release path must still validate exact signatures and active human authority without auto renewal."
+    }
+  ],
+  "positive_findings": [
+    "Protected entry fixes recovery_only through root-owned config; JSON request cannot override mode, key paths or state paths.",
+    "ProtectedStore lifetime lock blocks a second writer to the same directory. This is not sufficient to prove old Owner and a cloned new directory cannot create two authoritative histories.",
+    "Cloud projector binds existing signed prior delivery, monotonic revision and exact idempotent publication.",
+    "Credential origin checks actual process cgroup, fixed path, read-only tmpfs/ramfs, uid/mode and Ed25519 identity. Real systemd test remains necessary."
+  ],
+  "tests": {
+    "command": "node --test test/*.test.mjs",
+    "pass": 108,
+    "fail": 1,
+    "failure": "workspace-dispatcher-native-admission.test.mjs could not load better-sqlite3 from formal Native tree",
+    "runtime": "Node 22.23.1",
+    "historical_109_pass_not_reasserted": true
+  },
+  "deployment_gate": "BLOCKED_UNTIL_REVISED_SOURCE_AND_REAL_OS_EVIDENCE_REVIEWED"
+}
