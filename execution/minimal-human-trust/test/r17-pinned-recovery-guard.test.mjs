@@ -30,7 +30,7 @@ test('unreviewed Release ID and missing exact digest refuse admission',()=>{
  nope(()=>inspectReviewedR17MigrationEvidence({},'abc',()=>{}),'REVIEW_NOT_EXACT');
 });
 test('non-live Crown proof verifier does not authorize recovery',()=>{
- const p=policy();nope(()=>inspectRecoveryMigrationEvidence({},p,null),'R17_MIGRATION_REJECTED');
+ const p=policy();nope(()=>inspectRecoveryMigrationEvidence({},p,null),'TRUSTED_VERIFIER_MISSING');
 });
 test('even a correctly pinned policy with no production states is denied',()=>{
  const p=policy();assert.throws(()=>inspectRecoveryMigrationEvidence({},p,()=>{}));
