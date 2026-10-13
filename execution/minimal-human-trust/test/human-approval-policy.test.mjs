@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {generateKeyPairSync,randomUUID} from 'node:crypto';
 import {signed,exportPublicKey,digest,ACTIONS} from '../src/lease-core.mjs';
-import {validateHumanProposal,humanApprovalBody,PROJECTS_ROOT} from '../human/approval-policy.mjs';
+import {validateHumanProposal,humanApprovalBody,firstTrustReviewedIntent,PROJECTS_ROOT} from '../human/approval-policy.mjs';
 const key=()=>generateKeyPairSync('ed25519').privateKey;
 function fixture(action='revoke_grant',target={}){
  const issuer=key(),publisher=key(),enroller=key(),human=key(),now=1792000000000;
@@ -51,7 +51,32 @@ test('trust replacement is explicit oldroot to newroot and cannot expand permiss
  rewrite(f,{target:{...f.proposal.body.target,permissionsUnchanged:false}});assert.throws(()=>validateHumanProposal(f));
 });
 test('enrollment proposal is exact identity approval artifact, never an automatic enrollment signature',()=>{
- const f=fixture('enroll_human');rewrite(f,{target:{humanUid:1000,humanSubject:'local-human:1000',humanPublicKey:f.policy.humanPublicKey,enrollmentExpiresAt:f.now+86400000}});
- const result=humanApprovalBody(validateHumanProposal(f),{now:f.now});assert.equal(result.schema,'mht.human-reviewed-change.v1');
+ const f=fixture('enroll_human');rewrite(f,{target:{humanUid:1000,humanSubject:'local-human:1000',humanPublicKey:f.policy.humanPublicKey,enrollmentExpiresAt:f.now+86400000,targetReleaseId:'r16-daily-20261012-r17',reviewedManifestHash:digest('exact-R17-reviewed-source')}});
+ const checked=validateHumanProposal(f);
+ const result=humanApprovalBody(checked,{now:f.now});assert.equal(result.schema,'mht.human-reviewed-change.v1');
+ const first=firstTrustReviewedIntent(checked);
+ assert.equal(first.targetReleaseId,'r16-daily-20261012-r17');
+ assert.equal(first.reviewedManifestHash,f.proposal.body.target.reviewedManifestHash);
+ assert.equal(first.mayInstall,false);
+ assert.equal(first.maySignRelease,false);
+ assert.equal(first.mayHandoffIssuer,false);
  rewrite(f,{target:{...f.proposal.body.target,humanPublicKey:exportPublicKey(key())}});assert.throws(()=>validateHumanProposal(f));
+});
+
+test('first enrollment can only target exact R17 reviewed manifest and Human key',()=>{
+ const base=fixture('enroll_human');
+ const target={humanUid:1000,humanSubject:'local-human:1000',humanPublicKey:base.policy.humanPublicKey,
+   enrollmentExpiresAt:base.now+86400000,targetReleaseId:'r16-daily-20261012-r17',
+   reviewedManifestHash:digest('reviewed-R17')};
+ for(const change of [
+   {targetReleaseId:'r16-daily-20261012-r18'},
+   {reviewedManifestHash:'0'.repeat(63)},
+   {humanUid:0},{humanSubject:'agent-user'},
+   {enrollmentExpiresAt:base.now-1},
+ ]){
+   const f=fixture('enroll_human');
+   rewrite(f,{target:{...target,humanPublicKey:f.policy.humanPublicKey,...change}});
+   assert.throws(()=>validateHumanProposal(f));
+ }
+ assert.throws(()=>firstTrustReviewedIntent(validateHumanProposal(fixture())));
 });
