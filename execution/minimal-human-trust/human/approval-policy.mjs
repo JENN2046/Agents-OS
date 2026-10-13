@@ -46,10 +46,11 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
      p.target.newRootHash!==p.target.oldRootHash&&p.target.permissionsUnchanged===true,'HUMAN_SCOPE_EXPANSION');
  }
  if(p.action==='enroll_human'){
-   exact(p.target,['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt']);
+   exact(p.target,['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt','targetReleaseId','reviewedManifestHash']);
    publicKey(p.target.humanPublicKey);
    need(p.target.humanUid===1000&&p.target.humanSubject==='local-human:1000'&&
-     p.target.humanPublicKey===policy.humanPublicKey&&Number.isSafeInteger(p.target.enrollmentExpiresAt)&&
+     p.target.humanPublicKey===policy.humanPublicKey&&p.target.targetReleaseId==='r16-daily-20261012-r17'&&
+     hash(p.target.reviewedManifestHash)&&Number.isSafeInteger(p.target.enrollmentExpiresAt)&&
      p.target.enrollmentExpiresAt>now&&p.target.enrollmentExpiresAt<=now+366*86400000,'HUMAN_ENROLLMENT_TARGET');
  }
  return Object.freeze({body:p,proposalHash:policy.proposalHash,summary:{action:p.action,grantId:p.grantId,
@@ -68,4 +69,24 @@ export function humanApprovalBody(checked,{now=Date.now()}={}){
  return {schema:'mht.human-reviewed-change.v1',action:p.action,proposalHash:checked.proposalHash,
    grantId:p.grantId,expectedVersion:p.expectedVersion,expectedGrantHash:p.expectedGrantHash,
    releaseHash:p.releaseHash,nonce:p.nonce,issuedAt:now,target:p.target};
+}
+
+/**
+ * First enrollment has no Human signing key yet. The signed proposal may
+ * be shown to the trusted OS broker, but this is NOT a signed enrollment,
+ * a release, or an issuer handoff.
+ */
+export function firstTrustReviewedIntent(checked){
+ need(checked?.body?.action==='enroll_human','FIRST_TRUST_ONLY');
+ const p=checked.body,t=p.target;
+ exact(t,['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt','targetReleaseId','reviewedManifestHash']);
+ need(t.humanUid===1000&&t.humanSubject==='local-human:1000'&&
+   t.targetReleaseId==='r16-daily-20261012-r17'&&hash(t.reviewedManifestHash),'FIRST_TRUST_SCOPE');
+ return Object.freeze({schema:'mht.first-trust-reviewed-intent.v1',
+   proposalHash:checked.proposalHash,grantId:p.grantId,grantVersion:p.expectedVersion,
+   grantHash:p.expectedGrantHash,sourceReleaseId:p.releaseId,sourceReleaseHash:p.releaseHash,
+   targetReleaseId:t.targetReleaseId,reviewedManifestHash:t.reviewedManifestHash,
+   humanUid:t.humanUid,humanSubject:t.humanSubject,humanPublicKey:t.humanPublicKey,
+   enrollmentExpiresAt:t.enrollmentExpiresAt,nonce:p.nonce,
+   mayInstall:false,maySignRelease:false,mayHandoffIssuer:false});
 }
