@@ -1,0 +1,36 @@
+name: G1D First Trust Bootstrap
+on:
+  push:
+    branches:
+      - agent/g1d-trusted-os-activation-r1
+    paths:
+      - 'execution/minimal-human-trust/**'
+      - '.github/workflows/g1d-first-trust-bootstrap.yml'
+  pull_request:
+    paths:
+      - 'execution/minimal-human-trust/**'
+      - '.github/workflows/g1d-first-trust-bootstrap.yml'
+permissions:
+  contents: read
+jobs:
+  bootstrap-source-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source syntax
+        run: |
+          find execution/minimal-human-trust -type f -name '*.mjs' -print0 |
+            xargs -0 -n1 node --check
+          python3 -B -m py_compile execution/minimal-human-trust/human/approval-broker.py
+      - name: First Human trust and issuer tests
+        run: |
+          node --test \
+            execution/minimal-human-trust/test/human-approval-policy.test.mjs \
+            execution/minimal-human-trust/test/first-trust-journal.test.mjs \
+            execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
+      - name: Whitespace consistency
+        run: git diff --check HEAD^ HEAD
