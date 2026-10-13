@@ -35,6 +35,7 @@ jobs:
             execution/minimal-human-trust/test/first-trust-journal.test.mjs \
             execution/minimal-human-trust/test/first-trust-release-builder.test.mjs \
             execution/minimal-human-trust/test/r17-pinned-recovery-guard.test.mjs \
+            execution/minimal-human-trust/test/single-writer-handoff-preflight.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Whitespace consistency
         run: git diff --check HEAD^ HEAD
