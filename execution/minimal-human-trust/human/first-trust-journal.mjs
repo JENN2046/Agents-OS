@@ -47,6 +47,9 @@ export function inspectFirstTrustJournal({
     'FIRST_TRUST_SOURCE_CHANGED');
   need(reviewManifest?.schema==='r16.reviewed-installation.v1'&&
     reviewManifest.releaseId===intent.targetReleaseId&&
+    reviewManifest.artifacts&&
+    equals(Object.keys(reviewManifest.artifacts).sort(),['app','bridge','native'])&&
+    Array.isArray(reviewManifest.localFiles)&&reviewManifest.localFiles.length>0&&
     digest(reviewManifest)===intent.reviewedManifestHash,'FIRST_TRUST_REVIEW_CHANGED');
   need(intent.humanUid===1000&&intent.humanSubject==='local-human:1000'&&
     checked.body.issuedAt<=now&&now<checked.body.expiresAt,'FIRST_TRUST_HUMAN_TARGET');
