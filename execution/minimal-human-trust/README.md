@@ -17,6 +17,16 @@ the running R15 Owner service and is not an approved production release.
 - Current production registration, signed release, single-writer handoff and live
   cloud delivery remain gated. Synthetic credentials are never production roots.
 
+## Protected pending proposal production
+
+The uninstalled minimal-human-trust-proposal.service now endorses one exact
+first enrollment or first cutover proposal through the original Release root,
+before the separate native Human ceremony. Its complete freeze, independently
+checked pre-Human evidence, durable one-shot journal and immutable fixed pending
+files do not sign a Release, enroll Human or install anything.
+See [PROTECTED_HUMAN_PROPOSAL_R1.md](PROTECTED_HUMAN_PROPOSAL_R1.md) for exact inputs,
+expiry/crash semantics and the remaining real key/install/signing approval gates.
+
 ## First-use signing sequence
 
 The fixed publisher accepts only `mht.first-trust-publisher-stage-plan.v2`.

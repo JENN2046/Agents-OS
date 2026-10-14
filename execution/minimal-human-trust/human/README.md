@@ -69,3 +69,9 @@ Until these conditions hold, the honest state is blocked before Human enrollment
 or production activation. The source tests validate isolated policy/protocol
 behavior; they do not establish a real polkit authentication, Human presence,
 credential provisioning, enrollment or production authorization.
+
+The uninstalled fixed proposal producer now supplies a Release-root-endorsed
+request without fabricating a prior Human journal. Its closed input, credential/
+byte checks and immutable pending publication are documented in
+[PROTECTED_HUMAN_PROPOSAL_R1.md](../PROTECTED_HUMAN_PROPOSAL_R1.md). A signed pending
+proposal is still not Human approval, enrollment or installation permission.

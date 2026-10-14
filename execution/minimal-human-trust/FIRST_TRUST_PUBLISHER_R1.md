@@ -17,6 +17,16 @@ Two OS-sealed credentials are checked against the actual root-owned, read-only s
 
 This patch does not generate or install a production private key. The Host Admin must admit the initial enrollment root, Human public key and exact package via a genuine local consent ceremony. Test fixture identities are never authority.
 
+## Pending proposal before the Human ceremony
+
+The separate uninstalled fixed minimal-human-trust-proposal.service produces
+only a precise pending proposal using the original Release key. Its private
+INTENT/RESULT precedes exclusive same-byte pending/policy publication, and the
+stage plan receives the envelope digest without a circular dependency.
+It never loads the enrollment key or issues a Release. See
+[PROTECTED_HUMAN_PROPOSAL_R1.md](PROTECTED_HUMAN_PROPOSAL_R1.md). Real key provenance,
+code/input installation and production proposal signing need separate approval.
+
 ## Fixed root-owned input files
 
 - /etc/minimal-human-trust/first-trust-code.json: reviewed source freeze and code fingerprints.

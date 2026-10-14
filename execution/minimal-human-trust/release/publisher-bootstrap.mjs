@@ -13,6 +13,9 @@ const fail=()=>{throw new Error('FIRST_TRUST_BOOTSTRAP_REFUSED');};
 const need=x=>{if(!x)fail();};
 const hash=b=>createHash('sha256').update(b).digest('hex');
 export const REVIEWED_SOURCE_FILES=Object.freeze([
+ 'release/human-proposal-bootstrap.mjs','release/human-proposal-once.mjs',
+ 'release/human-proposal-inputs.mjs','release/human-proposal-credential.mjs',
+ 'release/human-proposal-transaction.mjs','packaging/minimal-human-trust-proposal.service',
  'release/publisher-bootstrap.mjs',
  'release/publisher-once.mjs','release/publisher-credential.mjs',
  'release/publisher-transaction.mjs','release/publisher-inputs.mjs',

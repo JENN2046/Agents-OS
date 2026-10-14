@@ -50,6 +50,11 @@ jobs:
             execution/minimal-human-trust/test/first-cutover-signer.test.mjs \
             execution/minimal-human-trust/test/first-cutover-transaction.test.mjs \
             execution/minimal-human-trust/test/human-approval-bootstrap.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-bootstrap.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-credential.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-transaction.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-publication.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-wiring.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Human broker Python regression
         run: |
@@ -59,15 +64,17 @@ jobs:
         run: |
           # CI Node resides in hostedtoolcache; the real unit remains pinned
           # to the production /usr/bin/node, independently checked on Jenn.
-          unit=execution/minimal-human-trust/packaging/minimal-human-trust-publisher.service
-          if test -x /usr/bin/node; then
-            systemd-analyze verify "$unit"
-          else
-            tmp="$(mktemp -d)"
-            trap 'rm -rf "$tmp"' EXIT
-            sed "s#^ExecStart=/usr/bin/node #ExecStart=$(command -v node) #" "$unit" > "$tmp/minimal-human-trust-publisher.service"
-            systemd-analyze verify "$tmp/minimal-human-trust-publisher.service"
-          fi
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service; do
+            unit="execution/minimal-human-trust/packaging/$name"
+            if test -x /usr/bin/node; then
+              systemd-analyze verify "$unit"
+            else
+              sed "s#^ExecStart=/usr/bin/node #ExecStart=$(command -v node) #" "$unit" > "$tmp/$name"
+              systemd-analyze verify "$tmp/$name"
+            fi
+          done
       - name: Whitespace consistency
         run: |
           # Preserve raw historical TAP evidence byte-for-byte; check source changes.

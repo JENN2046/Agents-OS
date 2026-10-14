@@ -22,10 +22,10 @@ function checkedStageTarget(p,now){
    c.issuedAt===p.issuedAt&&c.expiresAt===p.expiresAt,'HUMAN_STAGE_AUTHORIZATION_CHANGED');
  return c;
 }
-export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
- exact(policy,['schema','proposalHash','grantId','grantHash','grantVersion','releaseHash','releaseId',
+export function inspectUnsignedHumanProposal({body,policyTemplate:policy,roots,now=Date.now()}){
+ exact(policy,['schema','grantId','grantHash','grantVersion','releaseHash','releaseId',
    'humanPublicKey','workspaceId','workspaceRoot','workspaceDev','workspaceIno','installationProfile']);
- need(policy.schema==='mht.human-pending-policy.v1'&&hash(policy.proposalHash)&&
+ need(policy.schema==='mht.human-pending-policy-template.v1'&&
    hash(policy.grantHash)&&hash(policy.releaseHash)&&id(policy.grantId)&&id(policy.releaseId)&&id(policy.workspaceId)&&
    Number.isSafeInteger(policy.grantVersion)&&policy.grantVersion>=1&&policy.workspaceRoot===PROJECTS_ROOT&&Number.isSafeInteger(policy.workspaceDev)&&policy.workspaceDev>=0&&
    Number.isSafeInteger(policy.workspaceIno)&&policy.workspaceIno>0&&
@@ -35,14 +35,12 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
  publicKey(policy.humanPublicKey);
  need(![roots.issuerPublicKey,roots.releasePublicKey,roots.enrollmentAuthorityPublicKey].includes(policy.humanPublicKey),'HUMAN_KEY_SEPARATION');
  need(roots.schema==='mht.trust-roots.v1'&&roots.grantId===policy.grantId&&
-   roots.releaseHash===policy.releaseHash&&roots.installationProfile===policy.installationProfile&&
-   digest(proposal)===policy.proposalHash,'HUMAN_ROOT_BINDING');
- // A separately admitted release publisher prepares a concrete proposal.
- // Merely writing an unsigned request as the desktop user grants nothing.
- const p=verified(proposal,roots.releasePublicKey,'mht.human-proposal.v1');
+   roots.releaseHash===policy.releaseHash&&roots.installationProfile===policy.installationProfile,'HUMAN_ROOT_BINDING');
+ // This validates an unsigned target only; it grants no signing or Human authority.
+ const p=body;
  exact(p,['schema','action','grantId','expectedVersion','expectedGrantHash','releaseId','releaseHash',
    'nonce','issuedAt','expiresAt','target']);
- need(['revoke_grant','create_grant','change_trust','enroll_human','first_cutover_handoff'].includes(p.action)&&
+ need(p.schema==='mht.human-proposal.v1'&&['revoke_grant','create_grant','change_trust','enroll_human','first_cutover_handoff'].includes(p.action)&&
    p.grantId===policy.grantId&&p.expectedVersion===policy.grantVersion&&p.expectedGrantHash===policy.grantHash&&
    p.releaseId===policy.releaseId&&p.releaseHash===policy.releaseHash&&id(p.nonce)&&p.nonce.length>=16&&
    Number.isSafeInteger(p.issuedAt)&&Number.isSafeInteger(p.expiresAt)&&p.issuedAt<=now&&now<p.expiresAt&&
@@ -73,11 +71,24 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
    need(t.grantId===p.grantId&&t.grantHash===p.expectedGrantHash&&t.grantVersion===p.expectedVersion&&
      t.sourceReleaseId===p.releaseId&&t.sourceReleaseHash===p.releaseHash,'FIRST_CUTOVER_PROPOSAL_DRIFT');
  }
- return Object.freeze({body:p,proposalHash:policy.proposalHash,summary:{action:p.action,grantId:p.grantId,
+ return Object.freeze({body:p,summary:{action:p.action,grantId:p.grantId,
    expectedVersion:p.expectedVersion,expectedGrantHash:p.expectedGrantHash,releaseId:p.releaseId,
    releaseHash:p.releaseHash,nonce:p.nonce,issuedAt:p.issuedAt,expiresAt:p.expiresAt,
    workspaceRoot:policy.workspaceRoot,workspaceDev:policy.workspaceDev,workspaceIno:policy.workspaceIno,target:p.target,
    installationProfile:policy.installationProfile}});
+}
+// Signed admission retains the independently pinned whole-envelope digest.
+export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
+ exact(policy,['schema','proposalHash','grantId','grantHash','grantVersion','releaseHash','releaseId',
+   'humanPublicKey','workspaceId','workspaceRoot','workspaceDev','workspaceIno','installationProfile']);
+ need(policy.schema==='mht.human-pending-policy.v1'&&hash(policy.proposalHash)&&
+   digest(proposal)===policy.proposalHash,'HUMAN_ROOT_BINDING');
+ validateTrustRoots(roots);
+ const body=verified(proposal,roots.releasePublicKey,'mht.human-proposal.v1');
+ const {proposalHash,...template}=policy;
+ const checked=inspectUnsignedHumanProposal({body,policyTemplate:{...template,
+   schema:'mht.human-pending-policy-template.v1'},roots,now});
+ return Object.freeze({...checked,proposalHash});
 }
 export function humanApprovalBody(checked,{now=Date.now()}={}){
  const p=checked.body;
