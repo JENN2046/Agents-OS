@@ -24,10 +24,22 @@ export function createWorkspaceBridge({store,directory,pluginManager,wss,crown,g
  check(store instanceof ProtectedStore&&store.snapshot().kind==='r16.workspace-bridge.v1');
  check(typeof pluginManager?.processToolCall==='function'&&typeof wss?.getDistributedServerSnapshot==='function'&&typeof crown?.verifyCall==='function');
  const g=verified(grant,issuerKey,'r16.workspace.v1'),appKey=publicKey(g.peers.app.publicKey),nativeKey=publicKey(g.peers.native.publicKey);
- const participants=new Map(),inflight=new Map();let identity=null,closing=false,connected=false,freshUntil=0;
+ const participants=new Map(),inflight=new Map(),liveExchanges=new Set();let identity=null,closing=false,connected=false,freshUntil=0,closePromise=null;
  const actualVersion=calculateRuntimeVersion(runtimeFiles,{entry:runtimeEntry});
  check(actualVersion===versions.bridge,'RELEASE_NOT_APPROVED');
- const approved=()=>verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});approved();
+ const approved=()=>verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});
+ // A signed historical R15 may be reopened only for existing durable recovery.
+ // approved() remains current-time authorization for ALL new business.
+ const historical=verified(release,releaseKey,'r16.release.v1');
+ if(now()>=historical.notAfter&&now()>=historical.issuedAt){
+  const prior=store.snapshot();
+  check(prior.businessStop||prior.revoked||
+    (Array.isArray(prior.projects)&&prior.projects.length>0)||
+    (Array.isArray(prior.calls)&&prior.calls.some(o=>['UNKNOWN','INFLIGHT'].includes(o.status)))||
+    (Array.isArray(prior.routes)&&prior.routes.some(o=>['UNKNOWN','INFLIGHT'].includes(o.status))),
+    'RECOVERY_ONLY_REQUIRED');
+  verifyRelease(release,releaseKey,{versions,actions:g.actions,now:historical.issuedAt});
+ }else approved();
  store.transact(s=>{s.challenge=null;for(const c of s.calls)if(c.status==='INFLIGHT')c.status='UNKNOWN';for(const r of s.routes)if(r.status==='INFLIGHT')r.status='UNKNOWN';});
  function disconnect(){connected=false;freshUntil=0;for(const e of participants.values())e.participant.disconnect();}
  function registry(){
@@ -115,7 +127,11 @@ export function createWorkspaceBridge({store,directory,pluginManager,wss,crown,g
  }
  async function nativeControl(args){
   exact(args,['command','proof']);const c=verified(args.proof,appKey,'r16.workspace-control.v1');
-  if(store.snapshot().businessStop){const cleanup=['status','close','drain','stop','reconcile','control_status','fresh'].includes(c.operation)||(c.operation==='issuer'&&['fresh','acknowledgeRevocation','closeLease','prepareStatus','heartbeat'].includes(c.data?.operation));check(cleanup,'BUSINESS_STOPPED');}
+  const cleanup=['status','close','drain','stop','reconcile','control_status','fresh'].includes(c.operation)||
+    (c.operation==='issuer'&&['fresh','acknowledgeRevocation','closeLease','prepareStatus','heartbeat'].includes(c.data?.operation));
+  // Native WorkspaceControl previously skipped release expiry validation.
+  if(!cleanup)approved();
+  if(store.snapshot().businessStop)check(cleanup,'BUSINESS_STOPPED');
   check(c.grantId===g.id&&c.channel===g.channel&&c.issuedAt<=now()&&now()<c.expiresAt&&c.expiresAt-c.issuedAt<=30000,'AUTHORITY_REJECTED');
   // Signed Native controls enforce fresh issuer state themselves. In particular,
   // issuer:fresh must be reachable before Bridge freshness exists (no auth cycle).
@@ -152,7 +168,7 @@ export function createWorkspaceBridge({store,directory,pluginManager,wss,crown,g
    }
   })();inflight.set(operation.id,work);try{return await work;}finally{inflight.delete(operation.id);}
  }
- async function exchange({route,payload}){
+ async function exchangeRequest({route,payload}){
   check(!closing,'SERVICE_STOPPING');const r=verified(route,appKey,'r16.workspace-route.v1');
   exact(r,['schema','id','target','payloadHash','issuedAt','expiresAt']);id(r.id);
   check(['bridge','native'].includes(r.target)&&r.payloadHash===digest(payload)&&Number.isSafeInteger(r.issuedAt)&&Number.isSafeInteger(r.expiresAt)&&r.issuedAt<=now()&&now()<r.expiresAt&&r.expiresAt-r.issuedAt<=30000,'AUTHORITY_REJECTED');
@@ -171,19 +187,36 @@ export function createWorkspaceBridge({store,directory,pluginManager,wss,crown,g
    store.transact(s=>{const record=s.routes.find(x=>x.id===r.id);if(record)record.status='UNKNOWN';s.routes=s.routes.filter(x=>x.status==='INFLIGHT').concat(s.routes.filter(x=>x.status!=='INFLIGHT').slice(-32));});throw error;
   }
  }
+ async function exchange(request){
+  check(!closing,'SERVICE_STOPPING');
+  // Track until the response is archived and the route journal committed.
+  const work=exchangeRequest(request);
+  liveExchanges.add(work);
+  try{return await work;}finally{liveExchanges.delete(work);}
+ }
  return Object.freeze({exchange,
   suspendBusiness({stopEpoch}){return establishBusinessStop(store,stopEpoch);},
   businessStopEvidence({revision,reviewDigest}){
    const participantStates=store.snapshot().projects.map(id=>participant(id).participant.snapshot());
    return signRuntimeBusinessStop({store,role:'bridge',signingKey,grant,release,revision,reviewDigest,
-    busy:(closing?1:0)+inflight.size+store.snapshot().routes.filter(r=>r.status==='INFLIGHT').length,participantStates,now:now()});
+    busy:(closing?1:0)+inflight.size+liveExchanges.size+store.snapshot().routes.filter(r=>r.status==='INFLIGHT').length,participantStates,now:now()});
   },
   register(router){check(typeof router?.post==='function');router.post('/workspace/exchange',async(req,res)=>{
    try{check(LOOPBACK.has(req.socket?.remoteAddress),'LOOPBACK_REQUIRED');exact(req.body,['route','payload']);res.json(await exchange(req.body));}
    catch(e){const code=typeof e?.code==='string'&&/^[A-Z_]{1,64}$/.test(e.code)?e.code:'WORKSPACE_UNAVAILABLE';res.status(['BAD_SIGNATURE','LOOPBACK_REQUIRED','AUTHORITY_REJECTED'].includes(code)?403:code==='RECOVERY_UNRESOLVED'?409:503).json({status:code});}
   });},
   disconnect,
-  async close(){closing=true;await Promise.allSettled([...inflight.values()]);for(const entry of participants.values()){entry.participant.disconnect();entry.store.close();}store.close();},
-  status(){return {connected,revoked:store.snapshot().revoked,activeCalls:inflight.size};}
+  async close(){
+   if(closePromise)return closePromise;
+   closing=true;
+   closePromise=(async()=>{
+    await Promise.allSettled([...liveExchanges]);
+    await Promise.allSettled([...inflight.values()]);
+    for(const entry of participants.values()){entry.participant.disconnect();entry.store.close();}
+    store.close();
+   })();
+   return closePromise;
+  },
+  status(){return {connected,revoked:store.snapshot().revoked,activeCalls:inflight.size+liveExchanges.size};}
  });
 }
