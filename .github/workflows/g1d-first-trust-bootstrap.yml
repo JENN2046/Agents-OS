@@ -36,7 +36,14 @@ jobs:
             execution/minimal-human-trust/test/first-trust-release-builder.test.mjs \
             execution/minimal-human-trust/test/r17-pinned-recovery-guard.test.mjs \
             execution/minimal-human-trust/test/single-writer-handoff-preflight.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-credential.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-transaction.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-wiring.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
+      - name: Human broker Python regression
+        run: python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
+      - name: Protected publisher unit syntax
+        run: systemd-analyze verify execution/minimal-human-trust/packaging/minimal-human-trust-publisher.service
       - name: Whitespace consistency
         run: |
           # Preserve raw historical TAP evidence byte-for-byte; check source changes.
