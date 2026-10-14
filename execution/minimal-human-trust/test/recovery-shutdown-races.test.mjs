@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {generateKeyPairSync,randomUUID} from 'node:crypto';
 import {ProtectedStore,signed,verified,digest,exportPublicKey,ACTIONS} from '../src/lease-core.mjs';
 import {establishBusinessStop} from '../src/runtime-business-stop.mjs';
@@ -17,7 +18,7 @@ function fixture(t,{expired=true}={}){
  const grant=signed({schema:'r16.workspace.v1',id:'isolated-grant',version:1,createdAt:now-60000,
   workspace:{id:'isolated-ws',root:directory,dev:fs.statSync(directory).dev,ino:fs.statSync(directory).ino},
   actions:ACTIONS,channel:'main',peers},keys.issuer);
- const runtimeFiles={'workspace-private-router.mjs':path.resolve('bridge/workspace-private-router.mjs')};
+ const runtimeFiles={'workspace-private-router.mjs':fileURLToPath(new URL('../bridge/workspace-private-router.mjs',import.meta.url))};
  const versions={app:digest('app-runtime'),bridge:calculateRuntimeVersion(runtimeFiles),native:digest('native-runtime')};
  const release=signed({schema:'r16.release.v1',id:'r16-test-r15',issuedAt:now-60000,
   notAfter:expired?now-1:now+60000,formats:['r16.workspace.v1'],versions,actions:ACTIONS,permissionVersion:1},keys.release);
