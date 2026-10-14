@@ -1,0 +1,37 @@
+{
+  "tests": 410,
+  "passed": 408,
+  "failed": 2,
+  "evidence": "public-crown-contract.tap",
+  "sha256": "d228714ea3ec807a263306c6545df198f12054ada4cae55e2fddb628a39f8b1a",
+  "scope": "Unmodified formal APP project public Crown contract + executor tests; no candidate adapters imported",
+  "failures": [
+    "Resolver descriptor expected older description without invocation_hints sentence.",
+    "Legacy V4 Owner loader synthetic fixture rejected at project-forge-crown-admission.mjs:709."
+  ],
+  "notRepaired": "Formal source outside candidate worker scope; results remain failures.",
+  "command": "node --test /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown-executor.test.mjs",
+  "initialCwd": "/home/jenn/AGENTS_OS_Workspace/ops/g1d-trusted-os-activation-20261013-r1/source",
+  "candidateRelated": false,
+  "comparison": {
+    "command": "node --test --test-name-pattern='real MCP descriptor exposes Crown action union but no model-selectable transport mode|V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads' /home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs",
+    "cwd": "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2",
+    "result": "2 selected tests, 0 pass, 2 fail with same assertions",
+    "evidence": "public-crown-external-baseline-recheck.tap",
+    "sha256": "678974faa8c0158a6dcc68e6f5e21ae551052a5c1d5831c8d84bb29ff7b89f66",
+    "scope": "Same unmodified external formal APP sources; no G1D candidate modules imported. This establishes independent current-baseline reproduction, not proof of when the failures first arose."
+  },
+  "failureNames": [
+    "real MCP descriptor exposes Crown action union but no model-selectable transport mode",
+    "V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads"
+  ],
+  "sourceFiles": {
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs": "000b41633f938a8e1bde76e940794a72707a4d943ecece495661d30bde62c089",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown-executor.test.mjs": "afabe33fcbe3b36d800a0f5e90f7be2823a7129d14cceba5ac8690c9ca6f44d1",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/server.mjs": "850ae246a6d5a0d7490884c01b349be6ede6af20782e5e62a392dc98cb1777f6",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown.mjs": "0bf5de32cb1c8e63aa0409dd6075387cd40005685e033423213d4c1335b3d686",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-executor.mjs": "01f09efacf4169f88215815824acec8f4e9e1c5d2451d3e872dd4dad2bb49033",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs": "9e305d6c3c8c47ad08b859b028fcc729d795771cdfb38e03ab84de378060715a",
+    "/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs": "39f815e46d9ad2e73df19875ae165398f8959c53f78d2dd52f32ff0bacb2e8e4"
+  }
+}

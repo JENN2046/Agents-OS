@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: real MCP descriptor exposes Crown action union but no model-selectable transport mode
+not ok 1 - real MCP descriptor exposes Crown action union but no model-selectable transport mode
+  ---
+  duration_ms: 162.028302
+  type: 'test'
+  location: '/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:222:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability. When present, projection.invocation_hints identifies a separately approved facade only; it does not create a catalog identity or establish live capability.'
+    - 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability.'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability.'
+  actual: 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability. When present, projection.invocation_hints identifies a separately approved facade only; it does not create a catalog identity or establish live capability.'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:250:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads
+not ok 2 - V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads
+  ---
+  duration_ms: 63.069028
+  type: 'test'
+  location: '/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:687:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10
+      if (!condition) { const e = new Error(code); e.code = code; throw e; }
+                                  ^
+    
+    Error: AUTHORITY_REJECTED
+        at requireThat (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10:31)
+        at Module.loadProductionCrownOwnerBinding (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs:709:10)
+        at file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/[eval1]:41:17 {
+      code: 'AUTHORITY_REJECTED'
+    }
+    
+    Node.js v22.23.1
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    requireThat (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10:31)
+    Module.loadProductionCrownOwnerBinding (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs:709:10)
+    file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/[eval1]:41:17 {
+    TestContext.<anonymous> (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:691:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 517.886983

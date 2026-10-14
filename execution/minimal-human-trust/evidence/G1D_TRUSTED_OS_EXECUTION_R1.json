@@ -1,0 +1,82 @@
+{
+  "task": "G1D_TRUSTED_OS_ACTIVATION_AND_HUMAN_AUTHORITY_R1",
+  "observedAt": "2026-10-13T15:09:25.864802+00:00",
+  "runtimeRelease": "r16-daily-20261012-r15",
+  "sourceManifest": "source-freeze.json",
+  "sourceManifestSha256": "0b88a1718ac81d2b4755a3235521a97e87d23756ab0e2be76960b01826bb926e",
+  "productionMutation": false,
+  "productionUnknownsMutated": false,
+  "status": "PASS_ISOLATED_OS_MECHANISM",
+  "adminAuthority": "existing local jenn sudo NOPASSWD ALL; no denial or bypass",
+  "protectedInstallation": "/opt/g1d-os-validation-r1",
+  "credentialFixture": "/var/lib/g1d-os-validation-r1",
+  "credentialSource": "synthetic Ed25519 generated privately by root; encrypted using existing systemd host key",
+  "hostKeyContentReadByAgent": false,
+  "transientInvocation": "d3b47f8ac3754854adcd60e22cf9c267",
+  "transientExitCode": 0,
+  "socketEvidence": "socket-credential-proof.json",
+  "temporarySocketStopped": true,
+  "temporaryUnitsRemovedAfterNormalExit": true,
+  "rootFixtureRetained": true,
+  "formalProductionCredentialVerified": false,
+  "validation": {
+    "passed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "full-suite.tap",
+    "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9",
+    "python": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "human-python-tests.txt",
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    }
+  },
+  "runtimeEvidence": {
+    "local": "local-public-reality.json",
+    "cloud": "cloud-public-reality.json",
+    "serviceCloseout": "service-closeout.json"
+  },
+  "remainingRisks": [
+    "Real Human enrollment and fresh OS authentication not performed",
+    "Formal signed candidate release and exact single-writer handoff not admitted",
+    "No candidate production cloud publication; existing Owner remains active",
+    "Physical power loss not tested; process exits/crashes, replay and actual socket timeout tested",
+    "Current host existing NOPASSWD ALL unchanged; not a defense against root-capable agents"
+  ],
+  "boundedSocketEvidence": "bounded-socket-proof.json",
+  "finalServiceMetadata": "service-closeout.json",
+  "candidateStaticValidation": "syntax-result.json",
+  "noActiveIsolatedInstances": true,
+  "failedNegativeUnitsRetained": true,
+  "scope": "Real root-owned synthetic credential mechanism and bounded input proof, not full protected production issuer admission",
+  "initialGitAudit": {
+    "rootHead": "cac587134160f8001b7d4d94bdf2d425ca8f060c",
+    "rootBranch": "agent/phase-5d-m0d-implementation-start",
+    "dirtyEntries": 392,
+    "modified": 44,
+    "untracked": 348,
+    "rootHistoryPushed": false,
+    "deliveryBase": "2cb9419ee01456d85c7e9ad2739d7ac198c93d3f",
+    "deliveryBranch": "agent/g1d-trusted-os-activation-r1",
+    "deliveryMethod": "clean clone of approved private repository; scoped candidate only"
+  },
+  "actualOsVersions": {
+    "localSystemd": "259.5",
+    "cloudSystemd": "255.4",
+    "localNode": "22.23.1",
+    "localNodePath": "/usr/bin/node",
+    "cloudNode": "24.15.0"
+  },
+  "rootProofSourceHashes": {
+    "src/systemd-issuer-credential.mjs": "4067f80197d6c3b7dc89c4602d9aa28aa274d3c8bfeeb69cbdadc4ae5a8bf0bb",
+    "tools/provision-synthetic-key.mjs": "95165144206dd4fd97c4c12ae947252a4e8d77bcda68634bdbaf1ef1f24e2e41",
+    "tools/credential-probe.mjs": "94cd0755ddd4e2cd9a5f9944e87f8dea09065cce525295b2ed889c1a054fd5d2",
+    "tools/socket-credential-probe.mjs": "6c43e8bf2e483c0fed651bf313bc59ad856d51424e4c8fa0da5095b78fad67f5"
+  },
+  "temporaryBoundedSocketUnitHashes": {
+    "socket": "728a27c2830e3551e20f5f2d010d262e4a40d45f5488c14c84f3a67219734816",
+    "service": "9739fc64d26195922902ae3cff6ca37a5f295477a19379f3ab4ff2d311129eca"
+  },
+  "productionCredentialMetadataCaveat": "Protected credential path existence under unprivileged stat and empty systemctl property output were inconclusive; no missing-production-credential claim."
+}

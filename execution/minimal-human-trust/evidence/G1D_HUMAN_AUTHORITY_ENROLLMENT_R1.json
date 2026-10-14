@@ -1,0 +1,54 @@
+{
+  "task": "G1D_TRUSTED_OS_ACTIVATION_AND_HUMAN_AUTHORITY_R1",
+  "observedAt": "2026-10-13T15:09:25.864802+00:00",
+  "runtimeRelease": "r16-daily-20261012-r15",
+  "sourceManifest": "source-freeze.json",
+  "sourceManifestSha256": "0b88a1718ac81d2b4755a3235521a97e87d23756ab0e2be76960b01826bb926e",
+  "productionMutation": false,
+  "productionUnknownsMutated": false,
+  "status": "BLOCKED_REAL_ENROLLMENT_NOT_ESTABLISHED",
+  "candidateTests": "12 Node + 10 Python independently passed; included in main validation above",
+  "realHumanEnrollmentPerformed": false,
+  "uidAloneAccepted": false,
+  "newCrownFixedTermPermitCreated": false,
+  "rootsInstalledInProduction": false,
+  "remaining": [
+    "Independent real Human key enrollment and trusted root provenance",
+    "Admitted signed release covering entire UI/broker/signer dependency graph",
+    "Effective polkit override audit and actual Jenn OS confirmation",
+    "Grant/trust/enrollment artifacts have no mutation consumer; no actual enrollment is claimed"
+  ],
+  "validation": {
+    "passed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "full-suite.tap",
+    "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9",
+    "python": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "human-python-tests.txt",
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    }
+  },
+  "runtimeEvidence": {
+    "local": "local-public-reality.json",
+    "cloud": "cloud-public-reality.json",
+    "serviceCloseout": "service-closeout.json"
+  },
+  "remainingRisks": [
+    "Real Human enrollment and fresh OS authentication not performed",
+    "Formal signed candidate release and exact single-writer handoff not admitted",
+    "No candidate production cloud publication; existing Owner remains active",
+    "Physical power loss not tested; process exits/crashes, replay and actual socket timeout tested",
+    "Current host existing NOPASSWD ALL unchanged; not a defense against root-capable agents"
+  ],
+  "implemented": [
+    "Fixed local native confirmation window and one-shot SO_PEERCRED/polkit broker",
+    "Exact signed target/action/version/hash/nonce validation with pinned roots",
+    "Root-only durable intent/result and enrolled-key credential identity checks",
+    "Revoke proof plus APPROVED_NOT_APPLIED artifacts for Grant/trust/enrollment proposals"
+  ],
+  "humanUiInstalled": false,
+  "actualPolkitConfirmation": false
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=R16 exact Human approval, on-demand only
+[Socket]
+ListenStream=/run/minimal-human-trust/approval.sock
+SocketUser=root
+SocketGroup=1000
+SocketMode=0660
+DirectoryMode=0755
+Accept=yes
+MaxConnections=1
+RemoveOnStop=yes
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: only exact system slice or escaped template slice can establish approval service origin
+ok 1 - only exact system slice or escaped template slice can establish approval service origin
+  ---
+  duration_ms: 1.12258
+  type: 'test'
+  ...
+# Subtest: credential is read from exact root-owned read-only mount under authenticated unit
+ok 2 - credential is read from exact root-owned read-only mount under authenticated unit
+  ---
+  duration_ms: 0.840352
+  type: 'test'
+  ...
+# Subtest: device mismatch, zero length, setuid mode and duplicate unified cgroups reject
+ok 3 - device mismatch, zero length, setuid mode and duplicate unified cgroups reject
+  ---
+  duration_ms: 1.087124
+  type: 'test'
+  ...
+# Subtest: writable or ambiguous mounts and nonroot runtime never read credential
+ok 4 - writable or ambiguous mounts and nonroot runtime never read credential
+  ---
+  duration_ms: 0.248715
+  type: 'test'
+  ...
+# Subtest: exact revoke proof pins target/version/hash/nonce and grants no new capability
+ok 5 - exact revoke proof pins target/version/hash/nonce and grants no new capability
+  ---
+  duration_ms: 6.125453
+  type: 'test'
+  ...
+# Subtest: plain uid, unknown action and unsigned caller target cannot produce approval
+ok 6 - plain uid, unknown action and unsigned caller target cannot produce approval
+  ---
+  duration_ms: 1.788126
+  type: 'test'
+  ...
+# Subtest: publisher impostor and protected proposal digest mismatch reject
+ok 7 - publisher impostor and protected proposal digest mismatch reject
+  ---
+  duration_ms: 1.282821
+  type: 'test'
+  ...
+# Subtest: grant, version, exactrelease and currentgrant hash substitutions reject
+ok 8 - grant, version, exactrelease and currentgrant hash substitutions reject
+  ---
+  duration_ms: 5.837944
+  type: 'test'
+  ...
+# Subtest: fresh exact nonce expires while human is confirming
+ok 9 - fresh exact nonce expires while human is confirming
+  ---
+  duration_ms: 1.415519
+  type: 'test'
+  ...
+# Subtest: create grant constrained to projects real scope and existing ProjectForge actions only
+ok 10 - create grant constrained to projects real scope and existing ProjectForge actions only
+  ---
+  duration_ms: 4.719883
+  type: 'test'
+  ...
+# Subtest: trust replacement is explicit oldroot to newroot and cannot expand permissions
+ok 11 - trust replacement is explicit oldroot to newroot and cannot expand permissions
+  ---
+  duration_ms: 1.572563
+  type: 'test'
+  ...
+# Subtest: enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+ok 12 - enrollment proposal is exact identity approval artifact, never an automatic enrollment signature
+  ---
+  duration_ms: 1.73111
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 94.686969

@@ -1,0 +1,62 @@
+{
+  "task": "G1D_TRUSTED_OS_ACTIVATION_AND_HUMAN_AUTHORITY_R1",
+  "observedAt": "2026-10-13T15:09:25.864802+00:00",
+  "runtimeRelease": "r16-daily-20261012-r15",
+  "sourceManifest": "source-freeze.json",
+  "sourceManifestSha256": "0b88a1718ac81d2b4755a3235521a97e87d23756ab0e2be76960b01826bb926e",
+  "productionMutation": false,
+  "productionUnknownsMutated": false,
+  "status": "ISOLATED_OS_PROOF_CLOSED_PRODUCTION_NOT_INSTALLED",
+  "actualChanges": [
+    "root-owned /opt/g1d-os-validation-r1: reviewed credential proof code",
+    "root-only /var/lib/g1d-os-validation-r1: encrypted synthetic credential and public expected identity",
+    "temporary /run/systemd/system two probe units, removed after verified inactive"
+  ],
+  "productionServicesRestarted": [],
+  "rollbackPerformed": [
+    "Normally stopped both isolated socket proof runs after instances ended",
+    "Removed only matching created runtime unit files after hash verification; daemon-reload",
+    "Confirmed no active isolated instances and unchanged production service invocation IDs"
+  ],
+  "retainedArtifacts": "Root proof code and encrypted synthetic fixture retained; no enabled service. Two negative-case failed unit states retained intentionally.",
+  "productionInstallContract": [
+    "independent Human enrollment and formal signed exact source Release",
+    "verify true same-epoch role closure and old issuer closed before binding protected snapshot",
+    "never activate new issuer against old Owner live writable ledger",
+    "provision cloud independent release pin using existing trusted release procedure",
+    "readback signed exact publication and monotonic revision; preserve reply-loss UNKNOWN",
+    "no G2 UNKNOWN settlement, G3 business cutover or G4 Owner retirement in this task"
+  ],
+  "validation": {
+    "passed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "full-suite.tap",
+    "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9",
+    "python": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "human-python-tests.txt",
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    }
+  },
+  "runtimeEvidence": {
+    "local": "local-public-reality.json",
+    "cloud": "cloud-public-reality.json",
+    "serviceCloseout": "service-closeout.json"
+  },
+  "remainingRisks": [
+    "Real Human enrollment and fresh OS authentication not performed",
+    "Formal signed candidate release and exact single-writer handoff not admitted",
+    "No candidate production cloud publication; existing Owner remains active",
+    "Physical power loss not tested; process exits/crashes, replay and actual socket timeout tested",
+    "Current host existing NOPASSWD ALL unchanged; not a defense against root-capable agents"
+  ],
+  "packagingInstalledForProduction": false,
+  "rollbackContract": [
+    "Keep all old deployment evidence/markers and both production UNKNOWN",
+    "Do not admit any new writer until exact old-writer closure and signed handoff verified",
+    "If future admission or readback is UNKNOWN, stop new admission and reconcile exact receipt; never blind retry or restore expired authorization",
+    "Do not disable old Owner or enter production UNKNOWN settlement/business cutover in this task"
+  ]
+}

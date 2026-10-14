@@ -1,0 +1,50 @@
+{
+  "schema": "g1d.independent-integrated-review.v1",
+  "decision": "PASS_FOR_NONPRODUCTION_REVIEWABLE_PR",
+  "openP1InReviewedScope": 0,
+  "productionReadiness": "BLOCKED",
+  "files": {
+    "src/cloud-delivery-projector.mjs": "4aa735d115d34ba40dc8e07a55cee0737cf2391547905c5d2adae69bbb16aa4f",
+    "deployment/cloud-configuration-receiver.mjs": "4d289c502f915fcbd1717b4dd12002b07df14f11b8dfc881c707e71142868ab3",
+    "src/signed-business-stop.mjs": "993781e6712a86d032b3946edc062bfd6b5e76648e7a3d14481d80b59f1afe29",
+    "test/cloud-signed-delivery.test.mjs": "b5e04fe82bb0d59210601dbdb44f87d713aa5d1e055a771c7f7cdec7f2bce140",
+    "test/signed-business-stop.test.mjs": "83294542d9380acb48a0d9adae0a821a73897eb4b8b96441f5375e43f95112e9",
+    "test/four-role-actual-chain.test.mjs": "3f5a5e61391ad805462ab4cfce26cadfb3d14477718512b72f7267ce53d30791",
+    "test/workspace-dispatcher-native-admission.test.mjs": "2cea4adba4219b5f6c79ad21dc4f38d298b242810ecad74e3a2174476e7a6753",
+    "test/fixtures/actual-adapters-manifest.json": "e4d49707ee9fe50da394070aad3210fabcd5442aaf65277604f2f5694535fbbd",
+    "G1D_ROOT_ROLLOUT_GATES_R1.md": "e6947778e43e7cad46159a01cbeaf57cd379500e3f5aa35b173ffa188dcf3f55"
+  },
+  "independentTargetedTests": {
+    "pass": 37,
+    "fail": 0,
+    "skip": 0,
+    "evidence": "review/integrated-targeted-tests-final.tap",
+    "command": "NODE_PATH=/home/jenn/AGENTS_OS_Workspace/runtime/VCPChat/node_modules node --test test/cloud-signed-delivery.test.mjs test/signed-business-stop.test.mjs test/four-role-actual-chain.test.mjs test/workspace-dispatcher-native-admission.test.mjs"
+  },
+  "findings": [
+    {
+      "id": "G1D-SEC-06",
+      "severity": "P1",
+      "state": "FIXED_AND_INDEPENDENTLY_RETESTED",
+      "description": "Partially persisted stop projection could not resume after Release expiry. Exact prior signed historical Release may now be used only for stop/revoke delivery; active connection still requires currently valid Release. Tested lost-write resume, no lifecycle/credential effects, post-expiry revocation, rejected expired activation and rejected alternate historical release."
+    }
+  ],
+  "verifiedProperties": [
+    "Recovery-only projector hardcodes connectRequested=false. Receiver recovery path skips execution-ledger initialization, credential creation and service reconciliation.",
+    "Cloud receiver independently pins releasePublicKey, prevents grant replacement and revoked-status/version rollback, and checks exact public/control readback before STORED.",
+    "Lost reply retries same signed envelope and revision; failed projections preserve durable intent and cannot report completed readback.",
+    "Stopped-v2 validator authenticates each distinct role, exact Release digest, runtime version, revision, epoch, review digest and corresponding results digest; it explicitly does not claim actual runtime stopped or deployment permission.",
+    "Actual-adapter integration executes real ProjectForge engine using temp SQLite and project directory, preserves and reconciles synthetic lost-reply result without redispatch.",
+    "Actual-chain test uses synthetic keys/Human approval and in-process transport; no production service sockets or genuine human identity admission.",
+    "Reviewed targeted tests inject in-memory receiver IO and lifecycle functions; no hidden production configuration or credential writes observed."
+  ],
+  "limits": [
+    "145-test full-suite evidence was read before four newly added expiry regressions; parent must refresh final integrated count.",
+    "This review does not approve production installation, production credentials, UNKNOWN settlement, business cutover or Owner retirement.",
+    "Production independently trusted Human enrollment, exact signed Release/handoff, verified single-writer transition, and real same-epoch runtime stop attestations remain unclosed gates.",
+    "Cloud signed configuration receiver remains a deployment component with privileged non-recovery functions; pass is for reviewed recovery branch and nonproduction PR, not permission to invoke production entry."
+  ],
+  "reviewerPrivilegedExecution": false,
+  "reviewerProductionMutation": false,
+  "reviewerSecretAccess": false
+}

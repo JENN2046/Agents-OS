@@ -1,0 +1,57 @@
+{
+  "schema": "g1d.independent-final-security-review.v1",
+  "decision": "NO_OPEN_P1_FOR_ISOLATED_SOCKET_ACCEPTANCE",
+  "productionDecision": "BLOCKED_UNMET_TRUST_AND_COMPATIBILITY_GATES",
+  "files": {
+    "src/minimal-trust-issuer.mjs": "bb556fb2679bb25e57f5a193d990a723d34c3829959cd516faa68648c500f822",
+    "src/minimal-trust-issuer-once.mjs": "ef9d7678f9d61d716d37f8f04392a5b3874d832503806d2a7e4f4fac86a210d2",
+    "src/trusted-launcher.mjs": "c1866fdfe0d0fd6fffe5682c0051ea3b978698c340a9598e65d710b538a4895a",
+    "src/systemd-issuer-credential.mjs": "4067f80197d6c3b7dc89c4602d9aa28aa274d3c8bfeeb69cbdadc4ae5a8bf0bb",
+    "packaging/minimal-human-trust-issuer@.service": "2405ec98b7710115421f2c7625729e2e35abb4cfe0dc0a3d627b969a1823fdb9",
+    "packaging/minimal-human-trust-human@.service": "b1713c37362b1bf72cd834e1d5f50e036a95a778f42c506f9e2dfb9d88b7ce7a",
+    "packaging/minimal-human-trust-issuer.socket": "887d9959de2f1f08c5e03cdeebc94d64697a2b6a5993290af447c6075dac41fe",
+    "packaging/minimal-human-trust-human.socket": "9fc325281309d3a5410e913246d09dc1ce9c0043e079b3309dcd55a62f788320"
+  },
+  "tests": {
+    "pass": 69,
+    "fail": 0,
+    "command": "node --test test/issuer-os-entry.test.mjs test/minimal-trust-issuer.test.mjs test/systemd-credential-provenance.test.mjs",
+    "evidence": "review/final-review-targeted-tests-v2.tap"
+  },
+  "closedFindings": [
+    {
+      "id": "G1D-SEC-01",
+      "status": "Source fixed: separate protected trust-roots file binds exact issuer/release/enrollment roots, release digest and handoff digest. Production provenance of those roots remains an installation gate."
+    },
+    {
+      "id": "G1D-SEC-02",
+      "status": "Source fixed: fixed byte/time streaming input, bounded systemd runtime/memory/tasks/connections. Socket proof confirms actual generated Accept=yes instance passes provenance parser."
+    },
+    {
+      "id": "G1D-SEC-03",
+      "status": "Source improved: INTENT/RESULT exact request/result hashes and authenticated query, persistent UNKNOWN without blind replay. Fault tests cover actual child exits at intent/effect/result phases."
+    },
+    {
+      "id": "G1D-SEC-04",
+      "status": "Source fixed for protected recovery_only: exact historical Release remains verified while expiry cannot block cleanup/revoke. No new prepare/activate permitted."
+    },
+    {
+      "id": "G1D-SEC-05",
+      "status": "Final revision fixes newly discovered malformed-close poisoning of Human revoke. Malformed input preflight prevents reservation; distinct UNKNOWN close no longer blocks valid Human revoke. Unknown Human revoke remains fail-closed; both regressions pass."
+    }
+  ],
+  "remainingGates": [
+    "Production independently trusted Human enrollment and exact human intent are not proven by synthetic keys or UID1000",
+    "Production formal Release must include reviewed files and be signed through authorized existing trust root",
+    "Actual old-writer close plus exact durable issuer snapshot and real epoch-bound App/Bridge/Native receipts required before production state admission",
+    "Synthetic systemd credential/socket proof is not full Issuer protocol or production signing identity acceptance",
+    "UNKNOWN may remain unresolved; status does not claim historical completion or authorize replay; production UNKNOWN settlement remains outside task"
+  ],
+  "actualOsEvidenceRead": {
+    "path": "evidence/socket-credential-proof.json",
+    "sha256": "8d4f8fb6e7014bf8d2115a6e4e2ad8767b1ad56111c6d352fe7f3a292bc42cae",
+    "scope": "Actual AF_UNIX Accept=yes with encrypted synthetic credential; not full protocol"
+  },
+  "reviewerProductionMutation": false,
+  "reviewerSecretAccess": false
+}

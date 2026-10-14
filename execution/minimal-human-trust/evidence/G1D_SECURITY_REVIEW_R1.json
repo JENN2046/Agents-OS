@@ -1,0 +1,72 @@
+{
+  "task": "G1D_TRUSTED_OS_ACTIVATION_AND_HUMAN_AUTHORITY_R1",
+  "observedAt": "2026-10-13T15:09:25.864802+00:00",
+  "runtimeRelease": "r16-daily-20261012-r15",
+  "sourceManifest": "source-freeze.json",
+  "sourceManifestSha256": "0b88a1718ac81d2b4755a3235521a97e87d23756ab0e2be76960b01826bb926e",
+  "productionMutation": false,
+  "productionUnknownsMutated": false,
+  "status": "INDEPENDENT_SCOPED_REVIEW_PASS_PRODUCTION_GATES_OPEN",
+  "fixed": [
+    "self-authorizing configurable trust roots",
+    "unbounded socket input/lifetime",
+    "durable nonce INTENT/result crash gap",
+    "expiry disabling authenticated recovery",
+    "unrelated UNKNOWN preventing Human revocation",
+    "native relay rejected despite independently signed role proof",
+    "cloud release-root substitution and false recovery lifecycle effects",
+    "Expired release disabled interrupted cloud recovery delivery",
+    "Human broker wrong local Node path, cgroup template and deadline handling",
+    "App premature stop proof and post-await allocation dispatch race"
+  ],
+  "initialReview": "../review/independent-security-initial.json",
+  "finalIssuerReview": "../review/independent-security-final.json",
+  "integrationReview": "../review/independent-integrated-final.json",
+  "fullSuite": {
+    "passed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "full-suite.tap",
+    "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9",
+    "python": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "human-python-tests.txt",
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    }
+  },
+  "syntaxFiles": 35,
+  "validation": {
+    "passed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "full-suite.tap",
+    "sha256": "981675011c7cb296bd5c9af9db71df430f19b4ab0a4dbccbcd9f79b6f11ffad9",
+    "python": {
+      "passed": 10,
+      "failed": 0,
+      "evidence": "human-python-tests.txt",
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    }
+  },
+  "runtimeEvidence": {
+    "local": "local-public-reality.json",
+    "cloud": "cloud-public-reality.json",
+    "serviceCloseout": "service-closeout.json"
+  },
+  "remainingRisks": [
+    "Real Human enrollment and fresh OS authentication not performed",
+    "Formal signed candidate release and exact single-writer handoff not admitted",
+    "No candidate production cloud publication; existing Owner remains active",
+    "Physical power loss not tested; process exits/crashes, replay and actual socket timeout tested",
+    "Current host existing NOPASSWD ALL unchanged; not a defense against root-capable agents"
+  ],
+  "humanReview": "../review/independent-human-final.json",
+  "runtimeStopReview": "../review/independent-runtime-stop-final.json",
+  "finalFreezeReview": "../review/independent-final-freeze.json",
+  "reviewLimit": "Scoped nonproduction source review; no production readiness claim",
+  "independentFreezeReview": {
+    "path": "../review/independent-final-freeze.json",
+    "sha256": "61507ac0715ddf0739ac879f6758841ac52384ad378e4da4f5102255f1f3d9bd"
+  }
+}

@@ -1,0 +1,84 @@
+name: G1D First Trust Bootstrap
+on:
+  push:
+    branches:
+      - agent/g1d-trusted-os-activation-r1
+    paths:
+      - 'execution/minimal-human-trust/**'
+      - '.github/workflows/g1d-first-trust-bootstrap.yml'
+  pull_request:
+    paths:
+      - 'execution/minimal-human-trust/**'
+      - '.github/workflows/g1d-first-trust-bootstrap.yml'
+permissions:
+  contents: read
+jobs:
+  bootstrap-source-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source syntax
+        run: |
+          find execution/minimal-human-trust -type f -name '*.mjs' -print0 |
+            xargs -0 -n1 node --check
+          python3 -B -m py_compile execution/minimal-human-trust/human/approval-broker.py
+      - name: First Human trust and issuer tests
+        run: |
+          node --test \
+            execution/minimal-human-trust/test/human-approval-policy.test.mjs \
+            execution/minimal-human-trust/test/first-trust-journal.test.mjs \
+            execution/minimal-human-trust/test/first-trust-release-builder.test.mjs \
+            execution/minimal-human-trust/test/r17-pinned-recovery-guard.test.mjs \
+            execution/minimal-human-trust/test/single-writer-handoff-preflight.test.mjs \
+            execution/minimal-human-trust/test/recovery-shutdown-races.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-credential.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-transaction.test.mjs \
+            execution/minimal-human-trust/test/first-trust-publisher-wiring.test.mjs \
+            execution/minimal-human-trust/test/first-trust-stage-publication.test.mjs \
+            execution/minimal-human-trust/test/staged-r17-handoff-admission.test.mjs \
+            execution/minimal-human-trust/test/recovery-handoff.test.mjs \
+            execution/minimal-human-trust/test/recovery-handoff-builder.test.mjs \
+            execution/minimal-human-trust/test/cutover-transaction.test.mjs \
+            execution/minimal-human-trust/test/stage-installer-rehearsal.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-admission.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-signer.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-transaction.test.mjs \
+            execution/minimal-human-trust/test/human-approval-bootstrap.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-bootstrap.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-credential.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-transaction.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-publication.test.mjs \
+            execution/minimal-human-trust/test/human-proposal-wiring.test.mjs \
+            execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
+      - name: Human broker Python regression
+        run: |
+          python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
+          python3 -B execution/minimal-human-trust/test/human-approval-window.test.py
+      - name: Protected publisher unit syntax
+        run: |
+          # CI Node resides in hostedtoolcache; the real unit remains pinned
+          # to the production /usr/bin/node, independently checked on Jenn.
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service; do
+            unit="execution/minimal-human-trust/packaging/$name"
+            if test -x /usr/bin/node; then
+              systemd-analyze verify "$unit"
+            else
+              sed "s#^ExecStart=/usr/bin/node #ExecStart=$(command -v node) #" "$unit" > "$tmp/$name"
+              systemd-analyze verify "$tmp/$name"
+            fi
+          done
+      - name: Whitespace consistency
+        run: |
+          # Preserve raw historical TAP evidence byte-for-byte; check source changes.
+          git diff --check HEAD^ HEAD -- \
+            ':(glob)execution/minimal-human-trust/**/*.mjs' \
+            ':(glob)execution/minimal-human-trust/**/*.py' \
+            .github/workflows/g1d-first-trust-bootstrap.yml

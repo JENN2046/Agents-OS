@@ -1,0 +1,52 @@
+{
+  "schema": "g1d.independent-human-candidate-review.v1",
+  "decision": "PASS_NONPRODUCTION_CANDIDATE",
+  "openP1InHumanScope": 0,
+  "files": {
+    "human/approval-broker.py": "d5dd2b35bc4a4365c9a8ef9b0e2dbfbf0586c1538ee4d1bbe8dbc09db4de03d7",
+    "human/approval-signer.mjs": "b1494cd4a0c06041a03cb0b3737668922149005f485b6354faecf4e15f8e3ba6",
+    "human/approval-policy.mjs": "56e256015e0f237fce129e72c0b7fd085422fc5a675f2b48051ecf6d01134a9a",
+    "human/approval-window.py": "cc3558c177f61452cd4766fb4edfc53088d2ba8a59c4cc93768d09a4850c1ad3",
+    "human/README.md": "0f57bdff2c7e980e174b4925a8967327f2d51393f4428f941538f0a65a0ec4ee",
+    "packaging/minimal-human-trust-approval.socket": "51114541dc569be5f23b1212c3cb9f14535ad078139894f863d5f9470f4a34dc",
+    "packaging/minimal-human-trust-approval@.service": "fbc47bd18baeb95834a7b17ca10c593b52a2402ac5da316e4e1d381a340523da",
+    "packaging/minimal-human-trust-approval.desktop": "c369b7980e7899e9c106671377b0926ad274c3ef41abc84abc823765f4a68373",
+    "packaging/org.jenn.r16.minimal-human-trust.policy": "ed6be67daf606d773286b3b6a53a8fd01ae982e6bf8957efedfe2a40d85dab94"
+  },
+  "tests": {
+    "node": {
+      "pass": 12,
+      "fail": 0,
+      "evidence": "review/human-final-node.tap"
+    },
+    "python": {
+      "pass": 10,
+      "fail": 0,
+      "command": "python3 -B test/human-approval-broker.test.py"
+    }
+  },
+  "closedFindings": [
+    "Broker now uses root-owned existing local /usr/bin/node; cloud-only binary path removed.",
+    "Cgroup parser handles exact direct and default template slice paths while rejecting foreign contexts.",
+    "Human confirmation has absolute60s deadline, polkit90s and service180s; previous5s confirmation defect corrected.",
+    "Local pkcheck --help confirms --details option used by current broker."
+  ],
+  "reviewedProperties": [
+    "SO_PEERCRED UID/GID and process starttime are checked before and after action-specific OS authentication. UID alone cannot approve.",
+    "Proposal signature and independent root pins bind exact action, grant/version/hash, release/hash, nonce, expiry and workspace device/inode; signer revalidates.",
+    "Credential loading is fixed to actual approval service read-only systemd mount and enrolled Human public key; no arbitrary key path.",
+    "Separate Human key and existing independent enrollment required; no identity generation or auto enrollment.",
+    "Root journal intent is exclusive and durable before signature; ambiguous outcome retained.",
+    "Window receives APPROVED_NOT_APPLIED status only; no mutation consumer or service activation invoked."
+  ],
+  "unclosedProductionGates": [
+    "Actual independently trusted Human enrollment and matching encrypted key are not established by these tests.",
+    "Full signed release and fixed launcher admission must cover all Human source/dependencies before installation.",
+    "Effective installed polkit rules must be audited to exclude silent allow overrides; real user presence/authentication still untested.",
+    "Grant/trust/enrollment change approval artifacts have no mutation consumer and must not be described as applied authority."
+  ],
+  "actualHumanAuthorizationPerformed": false,
+  "reviewerProductionMutation": false,
+  "reviewerPrivilegedExecution": false,
+  "reviewerSecretAccess": false
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "g1d.independent-reproduction.v1",
+  "syntheticOnly": true,
+  "productionTouched": false,
+  "originalIssuerAndReleaseRetained": true,
+  "enrollmentAndHumanRootReplacedTogether": true,
+  "replacedIdentityAccepted": true,
+  "conclusion": "CONFIRMED_RUNTIME_HAS_NO_INDEPENDENT_ENROLLMENT_ROOT_PIN"
+}

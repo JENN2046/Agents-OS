@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=R17 · 首次恢复接管确认
+Comment=核对限定恢复接管目标并验证本机身份，尚不应用
+Exec=/usr/bin/python3 -I /usr/lib/minimal-human-trust/human/approval-window.py --first-cutover
+Terminal=false
+Categories=Settings;

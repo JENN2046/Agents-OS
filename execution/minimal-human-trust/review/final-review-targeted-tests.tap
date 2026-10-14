@@ -1,0 +1,413 @@
+TAP version 13
+# Subtest: human identity enrollment binds registered UID, subject, grant hash and exact signed Release
+ok 1 - human identity enrollment binds registered UID, subject, grant hash and exact signed Release
+  ---
+  duration_ms: 7.302395
+  type: 'test'
+  ...
+# Subtest: unregistered human identity cannot substitute its own enrollment public key
+ok 2 - unregistered human identity cannot substitute its own enrollment public key
+  ---
+  duration_ms: 1.470081
+  type: 'test'
+  ...
+# Subtest: human UID drift rejects approval even if enrollment issuer signs it
+ok 3 - human UID drift rejects approval even if enrollment issuer signs it
+  ---
+  duration_ms: 1.749095
+  type: 'test'
+  ...
+# Subtest: expired enrollment authenticates recovery identity without extending business authorization
+ok 4 - expired enrollment authenticates recovery identity without extending business authorization
+  ---
+  duration_ms: 4.034667
+  type: 'test'
+  ...
+# Subtest: new issuer key replacement cannot be selected by caller
+ok 5 - new issuer key replacement cannot be selected by caller
+  ---
+  duration_ms: 4.317248
+  type: 'test'
+  ...
+# Subtest: ordinary business mode cannot start before a formal cutover
+ok 6 - ordinary business mode cannot start before a formal cutover
+  ---
+  duration_ms: 1.382306
+  type: 'test'
+  ...
+# Subtest: extra config field cannot smuggle a user chosen credential path
+ok 7 - extra config field cannot smuggle a user chosen credential path
+  ---
+  duration_ms: 1.381114
+  type: 'test'
+  ...
+# Subtest: socket line framing forbids second JSON message, trailing junk and a null request
+ok 8 - socket line framing forbids second JSON message, trailing junk and a null request
+  ---
+  duration_ms: 1.187901
+  type: 'test'
+  ...
+# Subtest: human approval cannot cross the Issuer socket lane
+ok 9 - human approval cannot cross the Issuer socket lane
+  ---
+  duration_ms: 0.467067
+  type: 'test'
+  ...
+# Subtest: issuer envelope cannot cross the root-only Human socket lane
+ok 10 - issuer envelope cannot cross the root-only Human socket lane
+  ---
+  duration_ms: 0.436259
+  type: 'test'
+  ...
+# Subtest: trusted per-request entry derives mode, keys, human identity and fixed store paths from installed policy
+ok 11 - trusted per-request entry derives mode, keys, human identity and fixed store paths from installed policy
+  ---
+  duration_ms: 2.851396
+  type: 'test'
+  ...
+# Subtest: root-only human socket passes only the exact human proof
+ok 12 - root-only human socket passes only the exact human proof
+  ---
+  duration_ms: 2.696835
+  type: 'test'
+  ...
+# Subtest: trusted launcher rejects execution under a regular user in the real runtime
+ok 13 - trusted launcher rejects execution under a regular user in the real runtime
+  ---
+  duration_ms: 0.301457
+  type: 'test'
+  ...
+# Subtest: trusted launcher binds proposed Native runtime to signed Release before importing its entry
+ok 14 - trusted launcher binds proposed Native runtime to signed Release before importing its entry
+  ---
+  duration_ms: 3.867844
+  type: 'test'
+  ...
+# Subtest: coherent attacker config and self-signed enrollment cannot replace independent roots
+ok 15 - coherent attacker config and self-signed enrollment cannot replace independent roots
+  ---
+  duration_ms: 2.559196
+  type: 'test'
+  ...
+# Subtest: same release id with different signed body fails exact release binding
+ok 16 - same release id with different signed body fails exact release binding
+  ---
+  duration_ms: 1.024154
+  type: 'test'
+  ...
+# Subtest: unsigned handoff, open writer, or missing participant evidence prevents activation admission
+ok 17 - unsigned handoff, open writer, or missing participant evidence prevents activation admission
+  ---
+  duration_ms: 5.975072
+  type: 'test'
+  ...
+# Subtest: bounded socket input accepts one line without waiting for EOF
+ok 18 - bounded socket input accepts one line without waiting for EOF
+  ---
+  duration_ms: 1.907773
+  type: 'test'
+  ...
+# Subtest: bounded socket input refuses oversized and multi-frame input before parse
+ok 19 - bounded socket input refuses oversized and multi-frame input before parse
+  ---
+  duration_ms: 0.93189
+  type: 'test'
+  ...
+# Subtest: socket input deadline refuses a client that never sends a complete line
+ok 20 - socket input deadline refuses a client that never sends a complete line
+  ---
+  duration_ms: 5002.768179
+  type: 'test'
+  ...
+# Subtest: no Owner daemon: one-shot issuer opens, serves signed fresh, then releases both stores
+ok 21 - no Owner daemon: one-shot issuer opens, serves signed fresh, then releases both stores
+  ---
+  duration_ms: 46.631533
+  type: 'test'
+  ...
+# Subtest: full three-party signed lease lifecycle, Native result and issuer close without Owner daemon
+ok 22 - full three-party signed lease lifecycle, Native result and issuer close without Owner daemon
+  ---
+  duration_ms: 59.36529
+  type: 'test'
+  ...
+# Subtest: persistent nonce fence refuses exact replay across separate one-shot invocations
+ok 23 - persistent nonce fence refuses exact replay across separate one-shot invocations
+  ---
+  duration_ms: 13.367998
+  type: 'test'
+  ...
+# Subtest: wrong peer signature is rejected before committing replay nonce
+ok 24 - wrong peer signature is rejected before committing replay nonce
+  ---
+  duration_ms: 11.103133
+  type: 'test'
+  ...
+# Subtest: stale, future and structurally expanded signed requests are denied
+ok 25 - stale, future and structurally expanded signed requests are denied
+  ---
+  duration_ms: 10.258438
+  type: 'test'
+  ...
+# Subtest: recovery-only mode denies new business issuance, yet allows existing grant proof and fresh challenge
+ok 26 - recovery-only mode denies new business issuance, yet allows existing grant proof and fresh challenge
+  ---
+  duration_ms: 14.471651
+  type: 'test'
+  ...
+# Subtest: another issuer key, replaced release and foreign project are rejected
+ok 27 - another issuer key, replaced release and foreign project are rejected
+  ---
+  duration_ms: 8.979035
+  type: 'test'
+  ...
+# Subtest: revoke requires a distinct signed Human Authority proof and blocks replay
+ok 28 - revoke requires a distinct signed Human Authority proof and blocks replay
+  ---
+  duration_ms: 35.942787
+  type: 'test'
+  ...
+# Subtest: unsigned or wrong-scope Human approval cannot revoke
+ok 29 - unsigned or wrong-scope Human approval cannot revoke
+  ---
+  duration_ms: 7.073776
+  type: 'test'
+  ...
+# Subtest: missing durable replay journal refuses before emitting any issuer grant reply
+ok 30 - missing durable replay journal refuses before emitting any issuer grant reply
+  ---
+  duration_ms: 6.678513
+  type: 'test'
+  ...
+# Subtest: heartbeat is verified and returns a per-lease maintenance snapshot
+ok 31 - heartbeat is verified and returns a per-lease maintenance snapshot
+  ---
+  duration_ms: 13.884989
+  type: 'test'
+  ...
+# Subtest: human approval target is exact, expiry is strict, and issuer ledger stays unchanged
+ok 32 - human approval target is exact, expiry is strict, and issuer ledger stays unchanged
+  ---
+  duration_ms: 7.45445
+  type: 'test'
+  ...
+# Subtest: fresh and revoke acknowledgements cannot be cross-role relayed
+ok 33 - fresh and revoke acknowledgements cannot be cross-role relayed
+  ---
+  duration_ms: 11.877518
+  type: 'test'
+  ...
+# Subtest: human revocation proof must pin exact grant hash and signed release id
+ok 34 - human revocation proof must pin exact grant hash and signed release id
+  ---
+  duration_ms: 10.137249
+  type: 'test'
+  ...
+# Subtest: closing replay journal while one issuer session is live cannot create a second writer
+ok 35 - closing replay journal while one issuer session is live cannot create a second writer
+  ---
+  duration_ms: 10.574932
+  type: 'test'
+  ...
+# Subtest: fresh challenge and repeated failed human approval cannot be silently upgraded to a grant mutation
+ok 36 - fresh challenge and repeated failed human approval cannot be silently upgraded to a grant mutation
+  ---
+  duration_ms: 7.755426
+  type: 'test'
+  ...
+# Subtest: durable replay fence survives actual short-lived child process exits
+ok 37 - durable replay fence survives actual short-lived child process exits
+  ---
+  duration_ms: 108.543464
+  type: 'test'
+  ...
+# Subtest: all three revocation acknowledgements close the signed Human revoke lifecycle
+ok 38 - all three revocation acknowledgements close the signed Human revoke lifecycle
+  ---
+  duration_ms: 50.566363
+  type: 'test'
+  ...
+# Subtest: untrusted role request cannot create, widen, or revoke a Human grant
+ok 39 - untrusted role request cannot create, widen, or revoke a Human grant
+  ---
+  duration_ms: 9.896617
+  type: 'test'
+  ...
+# Subtest: configured Human enrollment Grant hash never authorizes a different persisted Grant
+ok 40 - configured Human enrollment Grant hash never authorizes a different persisted Grant
+  ---
+  duration_ms: 8.088852
+  type: 'test'
+  ...
+# Subtest: intent survives expiry and different-nonce mutation is blocked after crash before effect
+ok 41 - intent survives expiry and different-nonce mutation is blocked after crash before effect
+  ---
+  duration_ms: 10.144603
+  type: 'test'
+  ...
+# Subtest: crash after durable result allows result lookup without executing again
+ok 42 - crash after durable result allows result lookup without executing again
+  ---
+  duration_ms: 14.91864
+  type: 'test'
+  ...
+# Subtest: human revoke after effect crash preserves UNKNOWN and never repeats under new nonce
+ok 43 - human revoke after effect crash preserves UNKNOWN and never repeats under new nonce
+  ---
+  duration_ms: 14.345103
+  type: 'test'
+  ...
+# Subtest: expired release still permits authenticated recovery revoke but never new business
+ok 44 - expired release still permits authenticated recovery revoke but never new business
+  ---
+  duration_ms: 9.101534
+  type: 'test'
+  ...
+# Subtest: handoff initializes only against exact closed issuer snapshot and remains durably bound
+ok 45 - handoff initializes only against exact closed issuer snapshot and remains durably bound
+  ---
+  duration_ms: 10.854256
+  type: 'test'
+  ...
+# Subtest: actual child exits at intent, effect and result boundaries preserve durable outcome
+    # Subtest: after_intent
+    ok 1 - after_intent
+      ---
+      duration_ms: 53.760672
+      type: 'test'
+      ...
+    # Subtest: after_effect
+    ok 2 - after_effect
+      ---
+      duration_ms: 52.546331
+      type: 'test'
+      ...
+    # Subtest: after_result
+    ok 3 - after_result
+      ---
+      duration_ms: 55.893608
+      type: 'test'
+      ...
+    1..3
+ok 46 - actual child exits at intent, effect and result boundaries preserve durable outcome
+  ---
+  duration_ms: 162.72673
+  type: 'test'
+  ...
+# Subtest: kernel cgroup and read-only tmpfs bind the exact privileged credential
+ok 47 - kernel cgroup and read-only tmpfs bind the exact privileged credential
+  ---
+  duration_ms: 2.370142
+  type: 'test'
+  ...
+# Subtest: human lane is derived from cgroup, not caller input
+ok 48 - human lane is derived from cgroup, not caller input
+  ---
+  duration_ms: 0.502684
+  type: 'test'
+  ...
+# Subtest: non-root cannot impersonate system service
+ok 49 - non-root cannot impersonate system service
+  ---
+  duration_ms: 0.619574
+  type: 'test'
+  ...
+# Subtest: rejects non-system unit
+ok 50 - rejects non-system unit
+  ---
+  duration_ms: 0.288652
+  type: 'test'
+  ...
+# Subtest: rejects legacy Owner unit
+ok 51 - rejects legacy Owner unit
+  ---
+  duration_ms: 0.203793
+  type: 'test'
+  ...
+# Subtest: rejects duplicated cgroup
+ok 52 - rejects duplicated cgroup
+  ---
+  duration_ms: 0.119394
+  type: 'test'
+  ...
+# Subtest: rejects missing real mount
+ok 53 - rejects missing real mount
+  ---
+  duration_ms: 0.229471
+  type: 'test'
+  ...
+# Subtest: rejects regular disk
+ok 54 - rejects regular disk
+  ---
+  duration_ms: 0.153388
+  type: 'test'
+  ...
+# Subtest: rejects writable tmpfs
+ok 55 - rejects writable tmpfs
+  ---
+  duration_ms: 0.618321
+  type: 'test'
+  ...
+# Subtest: rejects duplicated mount
+ok 56 - rejects duplicated mount
+  ---
+  duration_ms: 1.543169
+  type: 'test'
+  ...
+# Subtest: rejects symlinked credential directory
+ok 57 - rejects symlinked credential directory
+  ---
+  duration_ms: 0.440908
+  type: 'test'
+  ...
+# Subtest: rejects group-writable parent
+ok 58 - rejects group-writable parent
+  ---
+  duration_ms: 0.17583
+  type: 'test'
+  ...
+# Subtest: rejects foreign-owned credential
+ok 59 - rejects foreign-owned credential
+  ---
+  duration_ms: 0.15987
+  type: 'test'
+  ...
+# Subtest: rejects hardlink credential
+ok 60 - rejects hardlink credential
+  ---
+  duration_ms: 0.180118
+  type: 'test'
+  ...
+# Subtest: rejects wrong credential device
+ok 61 - rejects wrong credential device
+  ---
+  duration_ms: 0.269696
+  type: 'test'
+  ...
+# Subtest: rejects oversized credential
+ok 62 - rejects oversized credential
+  ---
+  duration_ms: 0.181951
+  type: 'test'
+  ...
+# Subtest: rejects weak credential mode
+ok 63 - rejects weak credential mode
+  ---
+  duration_ms: 0.165982
+  type: 'test'
+  ...
+# Subtest: CREDENTIALS_DIRECTORY cannot redirect a kernel-bound path
+ok 64 - CREDENTIALS_DIRECTORY cannot redirect a kernel-bound path
+  ---
+  duration_ms: 0.210756
+  type: 'test'
+  ...
+1..64
+# tests 67
+# suites 0
+# pass 67
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5114.606673

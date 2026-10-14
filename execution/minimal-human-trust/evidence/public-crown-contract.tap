@@ -1,0 +1,2519 @@
+TAP version 13
+# Subtest: default disabled and incomplete configuration perform no admission/send/helper
+ok 1 - default disabled and incomplete configuration perform no admission/send/helper
+  ---
+  duration_ms: 7.755879
+  type: 'test'
+  ...
+# Subtest: schema-invalid requests and rejected admission send zero
+ok 2 - schema-invalid requests and rejected admission send zero
+  ---
+  duration_ms: 1.966371
+  type: 'test'
+  ...
+# Subtest: verified transport returns honest synthetic unavailable result without invented native nodes
+ok 3 - verified transport returns honest synthetic unavailable result without invented native nodes
+  ---
+  duration_ms: 4.971747
+  type: 'test'
+  ...
+# Subtest: send exceptions, timeout, malformed or lost replies always UNKNOWN and never retry/fallback
+ok 4 - send exceptions, timeout, malformed or lost replies always UNKNOWN and never retry/fallback
+  ---
+  duration_ms: 40.697796
+  type: 'test'
+  ...
+# Subtest: verified pre-dispatch refusal stays failure with one send and no fallback
+ok 5 - verified pre-dispatch refusal stays failure with one send and no fallback
+  ---
+  duration_ms: 1.005723
+  type: 'test'
+  ...
+# Subtest: wrong project/session/command/root receipts and schema-invalid success become UNKNOWN
+ok 6 - wrong project/session/command/root receipts and schema-invalid success become UNKNOWN
+  ---
+  duration_ms: 8.358226
+  type: 'test'
+  ...
+# Subtest: known helper callback receives existing metadata; structured Todos cannot fallback to helper
+ok 7 - known helper callback receives existing metadata; structured Todos cannot fallback to helper
+  ---
+  duration_ms: 3.049489
+  type: 'test'
+  ...
+# Subtest: trusted admission receives frozen canonical request and caller mutation cannot change signed content
+ok 8 - trusted admission receives frozen canonical request and caller mutation cannot change signed content
+  ---
+  duration_ms: 0.964144
+  type: 'test'
+  ...
+# Subtest: disabled executor and invalid schema dispatch nothing
+ok 9 - disabled executor and invalid schema dispatch nothing
+  ---
+  duration_ms: 1.626905
+  type: 'test'
+  ...
+# Subtest: bind, independent sessions, status and close are process-local
+ok 10 - bind, independent sessions, status and close are process-local
+  ---
+  duration_ms: 7.595348
+  type: 'test'
+  ...
+# Subtest: a restarted APP executor cannot inherit sessions
+ok 11 - a restarted APP executor cannot inherit sessions
+  ---
+  duration_ms: 1.591429
+  type: 'test'
+  ...
+# Subtest: drift requires new bind and old session remains stale
+ok 12 - drift requires new bind and old session remains stale
+  ---
+  duration_ms: 2.592122
+  type: 'test'
+  ...
+# Subtest: origin requires new bind and old session remains stale
+ok 13 - origin requires new bind and old session remains stale
+  ---
+  duration_ms: 5.645579
+  type: 'test'
+  ...
+# Subtest: bound actions reattest GetProject before one exact mutation and preserve empty bytes
+ok 14 - bound actions reattest GetProject before one exact mutation and preserve empty bytes
+  ---
+  duration_ms: 5.050424
+  type: 'test'
+  ...
+# Subtest: project override never reaches native transport
+ok 15 - project override never reaches native transport
+  ---
+  duration_ms: 1.510738
+  type: 'test'
+  ...
+# Subtest: receipt root drift prevents write and stales session
+ok 16 - receipt root drift prevents write and stales session
+  ---
+  duration_ms: 1.964508
+  type: 'test'
+  ...
+# Subtest: create selects exact unique workspace root without ambient subpath
+ok 17 - create selects exact unique workspace root without ambient subpath
+  ---
+  duration_ms: 3.991803
+  type: 'test'
+  ...
+# Subtest: ambiguous alias and disabled workspace reject before mutation
+ok 18 - ambiguous alias and disabled workspace reject before mutation
+  ---
+  duration_ms: 4.486699
+  type: 'test'
+  ...
+# Subtest: create receipt workspace mismatch returns UNKNOWN and retains reconciliation record
+ok 19 - create receipt workspace mismatch returns UNKNOWN and retains reconciliation record
+  ---
+  duration_ms: 2.01939
+  type: 'test'
+  ...
+# Subtest: every write demands exact owner intent; no fallback
+ok 20 - every write demands exact owner intent; no fallback
+  ---
+  duration_ms: 2.273245
+  type: 'test'
+  ...
+# Subtest: closing session during grant admission prevents native write
+ok 21 - closing session during grant admission prevents native write
+  ---
+  duration_ms: 3.9476
+  type: 'test'
+  ...
+# Subtest: unknown mutation blocks resubmission and reconciles cached exact receipt without new effects
+ok 22 - unknown mutation blocks resubmission and reconciles cached exact receipt without new effects
+  ---
+  duration_ms: 5.853488
+  type: 'test'
+  ...
+# Subtest: bytes-only or misattributed reconciliation retains UNKNOWN
+ok 23 - bytes-only or misattributed reconciliation retains UNKNOWN
+  ---
+  duration_ms: 11.600005
+  type: 'test'
+  ...
+# Subtest: lost semantic rejection resolves only on authoritative cached rejected outcome
+ok 24 - lost semantic rejection resolves only on authoritative cached rejected outcome
+  ---
+  duration_ms: 6.611757
+  type: 'test'
+  ...
+# Subtest: origin change cannot reconcile unknown outcome automatically
+ok 25 - origin change cannot reconcile unknown outcome automatically
+  ---
+  duration_ms: 5.834132
+  type: 'test'
+  ...
+# Subtest: preflight timeout aborts before mutation with no mutation ledger
+ok 26 - preflight timeout aborts before mutation with no mutation ledger
+  ---
+  duration_ms: 15.046707
+  type: 'test'
+  ...
+# Subtest: unknown reply envelope, missing receipt identity, wrong receipt IDs stay UNKNOWN
+ok 27 - unknown reply envelope, missing receipt identity, wrong receipt IDs stay UNKNOWN
+  ---
+  duration_ms: 18.50454
+  type: 'test'
+  ...
+# Subtest: rollback exact target and supplied receipt IDs remain authoritative
+ok 28 - rollback exact target and supplied receipt IDs remain authoritative
+  ---
+  duration_ms: 4.036547
+  type: 'test'
+  ...
+# Subtest: truncation cannot remove mutation evidence
+ok 29 - truncation cannot remove mutation evidence
+  ---
+  duration_ms: 5.12285
+  type: 'test'
+  ...
+# Subtest: session and pending bounds fail closed before additional mutation
+ok 30 - session and pending bounds fail closed before additional mutation
+  ---
+  duration_ms: 8.073663
+  type: 'test'
+  ...
+# Subtest: unproven write error cannot erase pending outcome by choosing a different error code
+ok 31 - unproven write error cannot erase pending outcome by choosing a different error code
+  ---
+  duration_ms: 4.831434
+  type: 'test'
+  ...
+# Subtest: proven oversized result maps RESULT_TOO_LARGE without claiming truncated success
+ok 32 - proven oversized result maps RESULT_TOO_LARGE without claiming truncated success
+  ---
+  duration_ms: 10.860251
+  type: 'test'
+  ...
+# Subtest: bound reads cannot return a failure receipt attributed to another project
+ok 33 - bound reads cannot return a failure receipt attributed to another project
+  ---
+  duration_ms: 3.578068
+  type: 'test'
+  ...
+# Subtest: all public read variants retain deterministic command and exact bound project
+ok 34 - all public read variants retain deterministic command and exact bound project
+  ---
+  duration_ms: 14.418421
+  type: 'test'
+  ...
+# Subtest: all edit branches, structured Todo and report use one native mutation and preserve null evidence
+ok 35 - all edit branches, structured Todo and report use one native mutation and preserve null evidence
+  ---
+  duration_ms: 12.012357
+  type: 'test'
+  ...
+# Subtest: oversized cached exact receipt resolves UNKNOWN as RESULT_TOO_LARGE
+ok 36 - oversized cached exact receipt resolves UNKNOWN as RESULT_TOO_LARGE
+  ---
+  duration_ms: 8.762413
+  type: 'test'
+  ...
+# Subtest: verified identity refusal fences session even after root/workspace restoration
+ok 37 - verified identity refusal fences session even after root/workspace restoration
+  ---
+  duration_ms: 31.0633
+  type: 'test'
+  ...
+# Subtest: transient owner refusal does not permanently stale an unchanged session
+ok 38 - transient owner refusal does not permanently stale an unchanged session
+  ---
+  duration_ms: 3.770408
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/action" omitted cannot yield success or replay
+ok 39 - G5 CreateFile critical "/action" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.857725
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/action" array_items cannot yield success or replay
+ok 40 - G5 CreateFile critical "/action" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.658733
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/action" text_bytes cannot yield success or replay
+ok 41 - G5 CreateFile critical "/action" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 6.335521
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/authority" omitted cannot yield success or replay
+ok 42 - G5 CreateFile critical "/authority" omitted cannot yield success or replay
+  ---
+  duration_ms: 7.007277
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/authority" array_items cannot yield success or replay
+ok 43 - G5 CreateFile critical "/authority" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.548386
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/authority" text_bytes cannot yield success or replay
+ok 44 - G5 CreateFile critical "/authority" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.133429
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_id" omitted cannot yield success or replay
+ok 45 - G5 CreateFile critical "/project_id" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.034695
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_id" array_items cannot yield success or replay
+ok 46 - G5 CreateFile critical "/project_id" array_items cannot yield success or replay
+  ---
+  duration_ms: 6.276419
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_id" text_bytes cannot yield success or replay
+ok 47 - G5 CreateFile critical "/project_id" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 7.946376
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_session_id" omitted cannot yield success or replay
+ok 48 - G5 CreateFile critical "/project_session_id" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.322324
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_session_id" array_items cannot yield success or replay
+ok 49 - G5 CreateFile critical "/project_session_id" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.366536
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_session_id" text_bytes cannot yield success or replay
+ok 50 - G5 CreateFile critical "/project_session_id" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.137197
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/command" omitted cannot yield success or replay
+ok 51 - G5 CreateFile critical "/command" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.292267
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/command" array_items cannot yield success or replay
+ok 52 - G5 CreateFile critical "/command" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.599632
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/command" text_bytes cannot yield success or replay
+ok 53 - G5 CreateFile critical "/command" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.598611
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/mutation_class" omitted cannot yield success or replay
+ok 54 - G5 CreateFile critical "/mutation_class" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.944929
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/mutation_class" array_items cannot yield success or replay
+ok 55 - G5 CreateFile critical "/mutation_class" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.997868
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/mutation_class" text_bytes cannot yield success or replay
+ok 56 - G5 CreateFile critical "/mutation_class" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.770493
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/completion_verified" omitted cannot yield success or replay
+ok 57 - G5 CreateFile critical "/completion_verified" omitted cannot yield success or replay
+  ---
+  duration_ms: 9.499813
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/completion_verified" array_items cannot yield success or replay
+ok 58 - G5 CreateFile critical "/completion_verified" array_items cannot yield success or replay
+  ---
+  duration_ms: 6.18053
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/completion_verified" text_bytes cannot yield success or replay
+ok 59 - G5 CreateFile critical "/completion_verified" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.257251
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/result_status" omitted cannot yield success or replay
+ok 60 - G5 CreateFile critical "/result_status" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.009297
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/result_status" array_items cannot yield success or replay
+ok 61 - G5 CreateFile critical "/result_status" array_items cannot yield success or replay
+  ---
+  duration_ms: 7.386328
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/result_status" text_bytes cannot yield success or replay
+ok 62 - G5 CreateFile critical "/result_status" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.968201
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/error" omitted cannot yield success or replay
+ok 63 - G5 CreateFile critical "/error" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.175689
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/error" array_items cannot yield success or replay
+ok 64 - G5 CreateFile critical "/error" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.426789
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/error" text_bytes cannot yield success or replay
+ok 65 - G5 CreateFile critical "/error" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.386414
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding" omitted cannot yield success or replay
+ok 66 - G5 CreateFile critical "/project_binding" omitted cannot yield success or replay
+  ---
+  duration_ms: 6.486803
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding" array_items cannot yield success or replay
+ok 67 - G5 CreateFile critical "/project_binding" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.357019
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding" text_bytes cannot yield success or replay
+ok 68 - G5 CreateFile critical "/project_binding" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 10.484416
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/node_id" omitted cannot yield success or replay
+ok 69 - G5 CreateFile critical "/node_id" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.627113
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/node_id" array_items cannot yield success or replay
+ok 70 - G5 CreateFile critical "/node_id" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.123862
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/node_id" text_bytes cannot yield success or replay
+ok 71 - G5 CreateFile critical "/node_id" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.306752
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/batch_id" omitted cannot yield success or replay
+ok 72 - G5 CreateFile critical "/batch_id" omitted cannot yield success or replay
+  ---
+  duration_ms: 4.518779
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/batch_id" array_items cannot yield success or replay
+ok 73 - G5 CreateFile critical "/batch_id" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.275554
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/batch_id" text_bytes cannot yield success or replay
+ok 74 - G5 CreateFile critical "/batch_id" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 6.393128
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_id" omitted cannot yield success or replay
+ok 75 - G5 CreateFile critical "/project_binding/workspace_id" omitted cannot yield success or replay
+  ---
+  duration_ms: 6.318067
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_id" array_items cannot yield success or replay
+ok 76 - G5 CreateFile critical "/project_binding/workspace_id" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.16551
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_id" text_bytes cannot yield success or replay
+ok 77 - G5 CreateFile critical "/project_binding/workspace_id" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.233267
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_alias" omitted cannot yield success or replay
+ok 78 - G5 CreateFile critical "/project_binding/workspace_alias" omitted cannot yield success or replay
+  ---
+  duration_ms: 9.47693
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_alias" array_items cannot yield success or replay
+ok 79 - G5 CreateFile critical "/project_binding/workspace_alias" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.315629
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/workspace_alias" text_bytes cannot yield success or replay
+ok 80 - G5 CreateFile critical "/project_binding/workspace_alias" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.666566
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/project_root" omitted cannot yield success or replay
+ok 81 - G5 CreateFile critical "/project_binding/project_root" omitted cannot yield success or replay
+  ---
+  duration_ms: 4.859477
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/project_root" array_items cannot yield success or replay
+ok 82 - G5 CreateFile critical "/project_binding/project_root" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.844018
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/project_binding/project_root" text_bytes cannot yield success or replay
+ok 83 - G5 CreateFile critical "/project_binding/project_root" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.509722
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result" omitted cannot yield success or replay
+ok 84 - G5 CreateFile critical "/native_result" omitted cannot yield success or replay
+  ---
+  duration_ms: 4.621001
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result" array_items cannot yield success or replay
+ok 85 - G5 CreateFile critical "/native_result" array_items cannot yield success or replay
+  ---
+  duration_ms: 5.642172
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result" text_bytes cannot yield success or replay
+ok 86 - G5 CreateFile critical "/native_result" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.689388
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details" omitted cannot yield success or replay
+ok 87 - G5 CreateFile critical "/native_result/details" omitted cannot yield success or replay
+  ---
+  duration_ms: 4.922535
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details" array_items cannot yield success or replay
+ok 88 - G5 CreateFile critical "/native_result/details" array_items cannot yield success or replay
+  ---
+  duration_ms: 9.112419
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details" text_bytes cannot yield success or replay
+ok 89 - G5 CreateFile critical "/native_result/details" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.686152
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/nodeId" omitted cannot yield success or replay
+ok 90 - G5 CreateFile critical "/native_result/details/nodeId" omitted cannot yield success or replay
+  ---
+  duration_ms: 4.643492
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/nodeId" array_items cannot yield success or replay
+ok 91 - G5 CreateFile critical "/native_result/details/nodeId" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.481209
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/nodeId" text_bytes cannot yield success or replay
+ok 92 - G5 CreateFile critical "/native_result/details/nodeId" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 5.043791
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/batchId" omitted cannot yield success or replay
+ok 93 - G5 CreateFile critical "/native_result/details/batchId" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.190667
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/batchId" array_items cannot yield success or replay
+ok 94 - G5 CreateFile critical "/native_result/details/batchId" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.702222
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "/native_result/details/batchId" text_bytes cannot yield success or replay
+ok 95 - G5 CreateFile critical "/native_result/details/batchId" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.764349
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "" omitted cannot yield success or replay
+ok 96 - G5 CreateFile critical "" omitted cannot yield success or replay
+  ---
+  duration_ms: 5.351357
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "" array_items cannot yield success or replay
+ok 97 - G5 CreateFile critical "" array_items cannot yield success or replay
+  ---
+  duration_ms: 4.742237
+  type: 'test'
+  ...
+# Subtest: G5 CreateFile critical "" text_bytes cannot yield success or replay
+ok 98 - G5 CreateFile critical "" text_bytes cannot yield success or replay
+  ---
+  duration_ms: 4.362407
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target omitted preserves unresolved outcome without replay
+ok 99 - G5 Rollback critical /rollback_target omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 6.220565
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target array_items preserves unresolved outcome without replay
+ok 100 - G5 Rollback critical /rollback_target array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.948349
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target text_bytes preserves unresolved outcome without replay
+ok 101 - G5 Rollback critical /rollback_target text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.870133
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/kind omitted preserves unresolved outcome without replay
+ok 102 - G5 Rollback critical /rollback_target/kind omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.75651
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/kind array_items preserves unresolved outcome without replay
+ok 103 - G5 Rollback critical /rollback_target/kind array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.864763
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/kind text_bytes preserves unresolved outcome without replay
+ok 104 - G5 Rollback critical /rollback_target/kind text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.543872
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/id omitted preserves unresolved outcome without replay
+ok 105 - G5 Rollback critical /rollback_target/id omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.612531
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/id array_items preserves unresolved outcome without replay
+ok 106 - G5 Rollback critical /rollback_target/id array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.722717
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/id text_bytes preserves unresolved outcome without replay
+ok 107 - G5 Rollback critical /rollback_target/id text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.749967
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/path omitted preserves unresolved outcome without replay
+ok 108 - G5 Rollback critical /rollback_target/path omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.683975
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/path array_items preserves unresolved outcome without replay
+ok 109 - G5 Rollback critical /rollback_target/path array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.511722
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /rollback_target/path text_bytes preserves unresolved outcome without replay
+ok 110 - G5 Rollback critical /rollback_target/path text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.957867
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /node_id omitted preserves unresolved outcome without replay
+ok 111 - G5 Rollback critical /node_id omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 3.081208
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /node_id array_items preserves unresolved outcome without replay
+ok 112 - G5 Rollback critical /node_id array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.679897
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /node_id text_bytes preserves unresolved outcome without replay
+ok 113 - G5 Rollback critical /node_id text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.598454
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /batch_id omitted preserves unresolved outcome without replay
+ok 114 - G5 Rollback critical /batch_id omitted preserves unresolved outcome without replay
+  ---
+  duration_ms: 8.582136
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /batch_id array_items preserves unresolved outcome without replay
+ok 115 - G5 Rollback critical /batch_id array_items preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.480003
+  type: 'test'
+  ...
+# Subtest: G5 Rollback critical /batch_id text_bytes preserves unresolved outcome without replay
+ok 116 - G5 Rollback critical /batch_id text_bytes preserves unresolved outcome without replay
+  ---
+  duration_ms: 2.675578
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_id" omitted cannot establish a session
+ok 117 - G5 bind_project critical "/project_id" omitted cannot establish a session
+  ---
+  duration_ms: 1.268675
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_id" array_items cannot establish a session
+ok 118 - G5 bind_project critical "/project_id" array_items cannot establish a session
+  ---
+  duration_ms: 1.129775
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_id" text_bytes cannot establish a session
+ok 119 - G5 bind_project critical "/project_id" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.899574
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding" omitted cannot establish a session
+ok 120 - G5 bind_project critical "/project_binding" omitted cannot establish a session
+  ---
+  duration_ms: 0.887652
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding" array_items cannot establish a session
+ok 121 - G5 bind_project critical "/project_binding" array_items cannot establish a session
+  ---
+  duration_ms: 0.823882
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding" text_bytes cannot establish a session
+ok 122 - G5 bind_project critical "/project_binding" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.932897
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_id" omitted cannot establish a session
+ok 123 - G5 bind_project critical "/project_binding/workspace_id" omitted cannot establish a session
+  ---
+  duration_ms: 0.861744
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_id" array_items cannot establish a session
+ok 124 - G5 bind_project critical "/project_binding/workspace_id" array_items cannot establish a session
+  ---
+  duration_ms: 0.836796
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_id" text_bytes cannot establish a session
+ok 125 - G5 bind_project critical "/project_binding/workspace_id" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.992448
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_alias" omitted cannot establish a session
+ok 126 - G5 bind_project critical "/project_binding/workspace_alias" omitted cannot establish a session
+  ---
+  duration_ms: 0.797763
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_alias" array_items cannot establish a session
+ok 127 - G5 bind_project critical "/project_binding/workspace_alias" array_items cannot establish a session
+  ---
+  duration_ms: 0.807451
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/workspace_alias" text_bytes cannot establish a session
+ok 128 - G5 bind_project critical "/project_binding/workspace_alias" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.772546
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/project_root" omitted cannot establish a session
+ok 129 - G5 bind_project critical "/project_binding/project_root" omitted cannot establish a session
+  ---
+  duration_ms: 0.852286
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/project_root" array_items cannot establish a session
+ok 130 - G5 bind_project critical "/project_binding/project_root" array_items cannot establish a session
+  ---
+  duration_ms: 0.757077
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "/project_binding/project_root" text_bytes cannot establish a session
+ok 131 - G5 bind_project critical "/project_binding/project_root" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.779269
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "" omitted cannot establish a session
+ok 132 - G5 bind_project critical "" omitted cannot establish a session
+  ---
+  duration_ms: 0.855702
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "" array_items cannot establish a session
+ok 133 - G5 bind_project critical "" array_items cannot establish a session
+  ---
+  duration_ms: 0.973612
+  type: 'test'
+  ...
+# Subtest: G5 bind_project critical "" text_bytes cannot establish a session
+ok 134 - G5 bind_project critical "" text_bytes cannot establish a session
+  ---
+  duration_ms: 0.838439
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_id" omitted cannot establish a session
+ok 135 - G5 create_project critical "/project_id" omitted cannot establish a session
+  ---
+  duration_ms: 1.636704
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_id" array_items cannot establish a session
+ok 136 - G5 create_project critical "/project_id" array_items cannot establish a session
+  ---
+  duration_ms: 1.492303
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_id" text_bytes cannot establish a session
+ok 137 - G5 create_project critical "/project_id" text_bytes cannot establish a session
+  ---
+  duration_ms: 1.526858
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding" omitted cannot establish a session
+ok 138 - G5 create_project critical "/project_binding" omitted cannot establish a session
+  ---
+  duration_ms: 1.524454
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding" array_items cannot establish a session
+ok 139 - G5 create_project critical "/project_binding" array_items cannot establish a session
+  ---
+  duration_ms: 1.468219
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding" text_bytes cannot establish a session
+ok 140 - G5 create_project critical "/project_binding" text_bytes cannot establish a session
+  ---
+  duration_ms: 1.520807
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_id" omitted cannot establish a session
+ok 141 - G5 create_project critical "/project_binding/workspace_id" omitted cannot establish a session
+  ---
+  duration_ms: 1.966902
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_id" array_items cannot establish a session
+ok 142 - G5 create_project critical "/project_binding/workspace_id" array_items cannot establish a session
+  ---
+  duration_ms: 1.823373
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_id" text_bytes cannot establish a session
+ok 143 - G5 create_project critical "/project_binding/workspace_id" text_bytes cannot establish a session
+  ---
+  duration_ms: 1.747211
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_alias" omitted cannot establish a session
+ok 144 - G5 create_project critical "/project_binding/workspace_alias" omitted cannot establish a session
+  ---
+  duration_ms: 2.142621
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_alias" array_items cannot establish a session
+ok 145 - G5 create_project critical "/project_binding/workspace_alias" array_items cannot establish a session
+  ---
+  duration_ms: 2.180232
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/workspace_alias" text_bytes cannot establish a session
+ok 146 - G5 create_project critical "/project_binding/workspace_alias" text_bytes cannot establish a session
+  ---
+  duration_ms: 1.914463
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/project_root" omitted cannot establish a session
+ok 147 - G5 create_project critical "/project_binding/project_root" omitted cannot establish a session
+  ---
+  duration_ms: 1.599634
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/project_root" array_items cannot establish a session
+ok 148 - G5 create_project critical "/project_binding/project_root" array_items cannot establish a session
+  ---
+  duration_ms: 1.809007
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "/project_binding/project_root" text_bytes cannot establish a session
+ok 149 - G5 create_project critical "/project_binding/project_root" text_bytes cannot establish a session
+  ---
+  duration_ms: 5.820906
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "" omitted cannot establish a session
+ok 150 - G5 create_project critical "" omitted cannot establish a session
+  ---
+  duration_ms: 1.534743
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "" array_items cannot establish a session
+ok 151 - G5 create_project critical "" array_items cannot establish a session
+  ---
+  duration_ms: 1.468409
+  type: 'test'
+  ...
+# Subtest: G5 create_project critical "" text_bytes cannot establish a session
+ok 152 - G5 create_project critical "" text_bytes cannot establish a session
+  ---
+  duration_ms: 2.055237
+  type: 'test'
+  ...
+# Subtest: G5 noncritical read array_items partial metadata remains truthful truncated success
+ok 153 - G5 noncritical read array_items partial metadata remains truthful truncated success
+  ---
+  duration_ms: 2.49472
+  type: 'test'
+  ...
+# Subtest: G5 noncritical read text_bytes partial metadata remains truthful truncated success
+ok 154 - G5 noncritical read text_bytes partial metadata remains truthful truncated success
+  ---
+  duration_ms: 2.214316
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /node_id omitted refuses incomplete receipt without replay
+ok 155 - G5 EditCode target_replace critical /node_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.242359
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /node_id array_items refuses incomplete receipt without replay
+ok 156 - G5 EditCode target_replace critical /node_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.964098
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /node_id text_bytes refuses incomplete receipt without replay
+ok 157 - G5 EditCode target_replace critical /node_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.964399
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /batch_id omitted refuses incomplete receipt without replay
+ok 158 - G5 EditCode target_replace critical /batch_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.918173
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /batch_id array_items refuses incomplete receipt without replay
+ok 159 - G5 EditCode target_replace critical /batch_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.08258
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+ok 160 - G5 EditCode target_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 4.34862
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+ok 161 - G5 EditCode target_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.971192
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+ok 162 - G5 EditCode target_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.938381
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+ok 163 - G5 EditCode target_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.219797
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+ok 164 - G5 EditCode target_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.135039
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+ok 165 - G5 EditCode target_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 6.524885
+  type: 'test'
+  ...
+# Subtest: G5 EditCode target_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+ok 166 - G5 EditCode target_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.387411
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /node_id omitted refuses incomplete receipt without replay
+ok 167 - G5 EditCode line_replace critical /node_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.823628
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /node_id array_items refuses incomplete receipt without replay
+ok 168 - G5 EditCode line_replace critical /node_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.88358
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /node_id text_bytes refuses incomplete receipt without replay
+ok 169 - G5 EditCode line_replace critical /node_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.198568
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /batch_id omitted refuses incomplete receipt without replay
+ok 170 - G5 EditCode line_replace critical /batch_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.91677
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /batch_id array_items refuses incomplete receipt without replay
+ok 171 - G5 EditCode line_replace critical /batch_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.427717
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+ok 172 - G5 EditCode line_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.414973
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+ok 173 - G5 EditCode line_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.019112
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+ok 174 - G5 EditCode line_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 4.686944
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+ok 175 - G5 EditCode line_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.782641
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+ok 176 - G5 EditCode line_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.2052
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+ok 177 - G5 EditCode line_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 4.238605
+  type: 'test'
+  ...
+# Subtest: G5 EditCode line_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+ok 178 - G5 EditCode line_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.673858
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /node_id omitted refuses incomplete receipt without replay
+ok 179 - G5 EditCode symbol_replace critical /node_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 6.727043
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /node_id array_items refuses incomplete receipt without replay
+ok 180 - G5 EditCode symbol_replace critical /node_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.216521
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /node_id text_bytes refuses incomplete receipt without replay
+ok 181 - G5 EditCode symbol_replace critical /node_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.861096
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /batch_id omitted refuses incomplete receipt without replay
+ok 182 - G5 EditCode symbol_replace critical /batch_id omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.784873
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /batch_id array_items refuses incomplete receipt without replay
+ok 183 - G5 EditCode symbol_replace critical /batch_id array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.435873
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+ok 184 - G5 EditCode symbol_replace critical /batch_id text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 2.98579
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+ok 185 - G5 EditCode symbol_replace critical /native_result/details/nodeId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.039129
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+ok 186 - G5 EditCode symbol_replace critical /native_result/details/nodeId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.593347
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+ok 187 - G5 EditCode symbol_replace critical /native_result/details/nodeId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.120421
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+ok 188 - G5 EditCode symbol_replace critical /native_result/details/batchId omitted refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.30658
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+ok 189 - G5 EditCode symbol_replace critical /native_result/details/batchId array_items refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.743698
+  type: 'test'
+  ...
+# Subtest: G5 EditCode symbol_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+ok 190 - G5 EditCode symbol_replace critical /native_result/details/batchId text_bytes refuses incomplete receipt without replay
+  ---
+  duration_ms: 3.852292
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation omitted cannot clear UNKNOWN
+ok 191 - G5 completion attribution /native_result/reconciliation omitted cannot clear UNKNOWN
+  ---
+  duration_ms: 13.565113
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation array_items cannot clear UNKNOWN
+ok 192 - G5 completion attribution /native_result/reconciliation array_items cannot clear UNKNOWN
+  ---
+  duration_ms: 5.326821
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation text_bytes cannot clear UNKNOWN
+ok 193 - G5 completion attribution /native_result/reconciliation text_bytes cannot clear UNKNOWN
+  ---
+  duration_ms: 6.029817
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_id omitted cannot clear UNKNOWN
+ok 194 - G5 completion attribution /native_result/reconciliation/request_id omitted cannot clear UNKNOWN
+  ---
+  duration_ms: 5.274543
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_id array_items cannot clear UNKNOWN
+ok 195 - G5 completion attribution /native_result/reconciliation/request_id array_items cannot clear UNKNOWN
+  ---
+  duration_ms: 5.11226
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_id text_bytes cannot clear UNKNOWN
+ok 196 - G5 completion attribution /native_result/reconciliation/request_id text_bytes cannot clear UNKNOWN
+  ---
+  duration_ms: 4.977808
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_sha256 omitted cannot clear UNKNOWN
+ok 197 - G5 completion attribution /native_result/reconciliation/request_sha256 omitted cannot clear UNKNOWN
+  ---
+  duration_ms: 4.972759
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_sha256 array_items cannot clear UNKNOWN
+ok 198 - G5 completion attribution /native_result/reconciliation/request_sha256 array_items cannot clear UNKNOWN
+  ---
+  duration_ms: 5.610312
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/request_sha256 text_bytes cannot clear UNKNOWN
+ok 199 - G5 completion attribution /native_result/reconciliation/request_sha256 text_bytes cannot clear UNKNOWN
+  ---
+  duration_ms: 5.27229
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/target_sha256 omitted cannot clear UNKNOWN
+ok 200 - G5 completion attribution /native_result/reconciliation/target_sha256 omitted cannot clear UNKNOWN
+  ---
+  duration_ms: 8.549144
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/target_sha256 array_items cannot clear UNKNOWN
+ok 201 - G5 completion attribution /native_result/reconciliation/target_sha256 array_items cannot clear UNKNOWN
+  ---
+  duration_ms: 5.269304
+  type: 'test'
+  ...
+# Subtest: G5 completion attribution /native_result/reconciliation/target_sha256 text_bytes cannot clear UNKNOWN
+ok 202 - G5 completion attribution /native_result/reconciliation/target_sha256 text_bytes cannot clear UNKNOWN
+  ---
+  duration_ms: 5.127199
+  type: 'test'
+  ...
+# Subtest: G5 trim repair initial bind rejects raw padded identity without session/effects leading ASCII
+ok 203 - G5 trim repair initial bind rejects raw padded identity without session/effects leading ASCII
+  ---
+  duration_ms: 1.820218
+  type: 'test'
+  ...
+# Subtest: G5 trim repair reattest fences padded root before write dispatch leading ASCII
+ok 204 - G5 trim repair reattest fences padded root before write dispatch leading ASCII
+  ---
+  duration_ms: 2.767692
+  type: 'test'
+  ...
+# Subtest: G5 trim repair initial bind rejects raw padded identity without session/effects trailing ASCII
+ok 205 - G5 trim repair initial bind rejects raw padded identity without session/effects trailing ASCII
+  ---
+  duration_ms: 1.417704
+  type: 'test'
+  ...
+# Subtest: G5 trim repair reattest fences padded root before write dispatch trailing ASCII
+ok 206 - G5 trim repair reattest fences padded root before write dispatch trailing ASCII
+  ---
+  duration_ms: 2.326425
+  type: 'test'
+  ...
+# Subtest: G5 trim repair initial bind rejects raw padded identity without session/effects Unicode padding
+ok 207 - G5 trim repair initial bind rejects raw padded identity without session/effects Unicode padding
+  ---
+  duration_ms: 1.470373
+  type: 'test'
+  ...
+# Subtest: G5 trim repair reattest fences padded root before write dispatch Unicode padding
+ok 208 - G5 trim repair reattest fences padded root before write dispatch Unicode padding
+  ---
+  duration_ms: 2.3183
+  type: 'test'
+  ...
+# Subtest: G5 trim repair isolated bind and reattest preserve canonical internal-space root
+ok 209 - G5 trim repair isolated bind and reattest preserve canonical internal-space root
+  ---
+  duration_ms: 2.497225
+  type: 'test'
+  ...
+# Subtest: G7 production executor missing or self-declared host context dispatches zero
+ok 210 - G7 production executor missing or self-declared host context dispatches zero
+  ---
+  duration_ms: 1.921497
+  type: 'test'
+  ...
+# Subtest: G7 production session status and close require same verified host admission
+ok 211 - G7 production session status and close require same verified host admission
+  ---
+  duration_ms: 3.850819
+  type: 'test'
+  ...
+# Subtest: G7 production UNKNOWN keeps one mutation and private exact reconciliation requires context
+ok 212 - G7 production UNKNOWN keeps one mutation and private exact reconciliation requires context
+  ---
+  duration_ms: 10.688809
+  type: 'test'
+  ...
+# Subtest: G7 production authority revoked after dispatch preserves UNKNOWN ledger
+ok 213 - G7 production authority revoked after dispatch preserves UNKNOWN ledger
+  ---
+  duration_ms: 7.905148
+  type: 'test'
+  ...
+# Subtest: G7 production wrong isolated receipt stays UNKNOWN and never replays
+ok 214 - G7 production wrong isolated receipt stays UNKNOWN and never replays
+  ---
+  duration_ms: 3.004364
+  type: 'test'
+  ...
+# Subtest: G5 trim repair real isolated executor retains raw status until actual MCP boundary
+ok 215 - G5 trim repair real isolated executor retains raw status until actual MCP boundary
+  ---
+  duration_ms: 220.141072
+  type: 'test'
+  ...
+# Subtest: ordinary task UNKNOWN blocks different mutations and fresh sessions before dispatch until exact reconciliation
+ok 216 - ordinary task UNKNOWN blocks different mutations and fresh sessions before dispatch until exact reconciliation
+  ---
+  duration_ms: 19.093052
+  type: 'test'
+  ...
+# Subtest: private task deadline shortens every read/preflight/write proof in the last sixty seconds
+ok 217 - private task deadline shortens every read/preflight/write proof in the last sixty seconds
+  ---
+  duration_ms: 8.820702
+  type: 'test'
+  ...
+# Subtest: private task deadline rejects expired calls before descriptor, grant or dispatch
+ok 218 - private task deadline rejects expired calls before descriptor, grant or dispatch
+  ---
+  duration_ms: 2.070696
+  type: 'test'
+  ...
+# Subtest: private task deadline validates integer bounds and rechecks expiry after awaited grant
+ok 219 - private task deadline validates integer bounds and rechecks expiry after awaited grant
+  ---
+  duration_ms: 1.366528
+  type: 'test'
+  ...
+# Subtest: default and a later private task deadline preserve the maximum sixty-second proof lifetime
+ok 220 - default and a later private task deadline preserve the maximum sixty-second proof lifetime
+  ---
+  duration_ms: 10.624619
+  type: 'test'
+  ...
+# Subtest: Crown v1 exposes exactly the frozen seventeen action literals
+ok 221 - Crown v1 exposes exactly the frozen seventeen action literals
+  ---
+  duration_ms: 6.836417
+  type: 'test'
+  ...
+# Subtest: representative variants for all Crown actions pass handler-owned strict validation
+ok 222 - representative variants for all Crown actions pass handler-owned strict validation
+  ---
+  duration_ms: 7.518604
+  type: 'test'
+  ...
+# Subtest: public callers cannot select exact/helper/raw transport modes
+ok 223 - public callers cannot select exact/helper/raw transport modes
+  ---
+  duration_ms: 2.449075
+  type: 'test'
+  ...
+# Subtest: schema-invalid requests return exact stable error shape and never dispatch
+ok 224 - schema-invalid requests return exact stable error shape and never dispatch
+  ---
+  duration_ms: 4.055552
+  type: 'test'
+  ...
+# Subtest: deterministic routing is adapter-owned
+ok 225 - deterministic routing is adapter-owned
+  ---
+  duration_ms: 1.646692
+  type: 'test'
+  ...
+# Subtest: trim=true fields canonicalize while frozen trim=false fields remain byte-faithful
+ok 226 - trim=true fields canonicalize while frozen trim=false fields remain byte-faithful
+  ---
+  duration_ms: 0.730818
+  type: 'test'
+  ...
+# Subtest: empty target replacement output is valid but empty target is rejected
+ok 227 - empty target replacement output is valid but empty target is rejected
+  ---
+  duration_ms: 0.795809
+  type: 'test'
+  ...
+# Subtest: missing live Crown executor fails closed without generic fallback
+ok 228 - missing live Crown executor fails closed without generic fallback
+  ---
+  duration_ms: 0.458328
+  type: 'test'
+  ...
+# Subtest: mock executor receives only canonical request plus deterministic route metadata
+ok 229 - mock executor receives only canonical request plus deterministic route metadata
+  ---
+  duration_ms: 1.078519
+  type: 'test'
+  ...
+# Subtest: real MCP descriptor exposes Crown action union but no model-selectable transport mode
+not ok 230 - real MCP descriptor exposes Crown action union but no model-selectable transport mode
+  ---
+  duration_ms: 174.779004
+  type: 'test'
+  location: '/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:222:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability. When present, projection.invocation_hints identifies a separately approved facade only; it does not create a catalog identity or establish live capability.'
+    - 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability.'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability.'
+  actual: 'Read the current VCP catalog to resolve a capability intent, exact tool identifier, or returned tool_ref. Returns identity, catalog availability and bounded native descriptive contracts only. enabled, online and available describe dynamic_tool_catalog only; the separate ProjectForge Crown channel is not evaluated. Resolution does not execute tools, establish safety, infer parameter schemas, or authorize execution. Use vcp_project_forge separately for authorized ProjectForge actions; use vcp_call_tool separately for other authorized native actions. Neither catalog availability nor resolution establishes Crown execution capability. When present, projection.invocation_hints identifies a separately approved facade only; it does not create a catalog identity or establish live capability.'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:250:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: real MCP handler preserves Crown schema error wire and dispatches zero times
+ok 231 - real MCP handler preserves Crown schema error wire and dispatches zero times
+  ---
+  duration_ms: 63.24296
+  type: 'test'
+  ...
+# Subtest: real MCP handler fails closed when Crown executor is not configured
+ok 232 - real MCP handler fails closed when Crown executor is not configured
+  ---
+  duration_ms: 60.405178
+  type: 'test'
+  ...
+# Subtest: Crown output state consistency is enforced
+ok 233 - Crown output state consistency is enforced
+  ---
+  duration_ms: 0.30456
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested positive todo add
+ok 234 - G5 R4 nested positive todo add
+  ---
+  duration_ms: 0.283861
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested positive todo update
+ok 235 - G5 R4 nested positive todo update
+  ---
+  duration_ms: 0.245359
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested positive todo remove
+ok 236 - G5 R4 nested positive todo remove
+  ---
+  duration_ms: 0.334336
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested positive line edit
+ok 237 - G5 R4 nested positive line edit
+  ---
+  duration_ms: 0.380853
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested positive symbol edit
+ok 238 - G5 R4 nested positive symbol edit
+  ---
+  duration_ms: 0.276527
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo missing discriminator
+ok 239 - G5 R4 nested forbidden/unknown todo missing discriminator
+  ---
+  duration_ms: 0.697596
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo unknown discriminator
+ok 240 - G5 R4 nested forbidden/unknown todo unknown discriminator
+  ---
+  duration_ms: 0.505597
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo add missing title
+ok 241 - G5 R4 nested forbidden/unknown todo add missing title
+  ---
+  duration_ms: 0.503283
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo add seq forbidden
+ok 242 - G5 R4 nested forbidden/unknown todo add seq forbidden
+  ---
+  duration_ms: 0.45938
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo add status forbidden
+ok 243 - G5 R4 nested forbidden/unknown todo add status forbidden
+  ---
+  duration_ms: 0.499506
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo status title forbidden
+ok 244 - G5 R4 nested forbidden/unknown todo status title forbidden
+  ---
+  duration_ms: 0.514864
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo status note forbidden
+ok 245 - G5 R4 nested forbidden/unknown todo status note forbidden
+  ---
+  duration_ms: 0.379059
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo status invalid enum
+ok 246 - G5 R4 nested forbidden/unknown todo status invalid enum
+  ---
+  duration_ms: 0.573583
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo update status forbidden
+ok 247 - G5 R4 nested forbidden/unknown todo update status forbidden
+  ---
+  duration_ms: 0.367778
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo remove note forbidden
+ok 248 - G5 R4 nested forbidden/unknown todo remove note forbidden
+  ---
+  duration_ms: 0.439513
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo remove status forbidden
+ok 249 - G5 R4 nested forbidden/unknown todo remove status forbidden
+  ---
+  duration_ms: 0.500136
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo add unknown field
+ok 250 - G5 R4 nested forbidden/unknown todo add unknown field
+  ---
+  duration_ms: 0.355455
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo status unknown field
+ok 251 - G5 R4 nested forbidden/unknown todo status unknown field
+  ---
+  duration_ms: 0.404107
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo update unknown field
+ok 252 - G5 R4 nested forbidden/unknown todo update unknown field
+  ---
+  duration_ms: 0.348272
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo remove unknown field
+ok 253 - G5 R4 nested forbidden/unknown todo remove unknown field
+  ---
+  duration_ms: 0.359693
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo seq zero
+ok 254 - G5 R4 nested forbidden/unknown todo seq zero
+  ---
+  duration_ms: 0.450133
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown todo seq fractional
+ok 255 - G5 R4 nested forbidden/unknown todo seq fractional
+  ---
+  duration_ms: 0.744323
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown edit missing discriminator
+ok 256 - G5 R4 nested forbidden/unknown edit missing discriminator
+  ---
+  duration_ms: 0.847036
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown edit unknown discriminator
+ok 257 - G5 R4 nested forbidden/unknown edit unknown discriminator
+  ---
+  duration_ms: 0.810517
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown target line field forbidden
+ok 258 - G5 R4 nested forbidden/unknown target line field forbidden
+  ---
+  duration_ms: 0.387336
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown target missing replace
+ok 259 - G5 R4 nested forbidden/unknown target missing replace
+  ---
+  duration_ms: 0.51824
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown line target forbidden
+ok 260 - G5 R4 nested forbidden/unknown line target forbidden
+  ---
+  duration_ms: 0.365434
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown line missing content
+ok 261 - G5 R4 nested forbidden/unknown line missing content
+  ---
+  duration_ms: 0.521295
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown line noninteger
+ok 262 - G5 R4 nested forbidden/unknown line noninteger
+  ---
+  duration_ms: 0.490819
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown symbol missing content
+ok 263 - G5 R4 nested forbidden/unknown symbol missing content
+  ---
+  duration_ms: 0.530263
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown symbol target forbidden
+ok 264 - G5 R4 nested forbidden/unknown symbol target forbidden
+  ---
+  duration_ms: 0.458418
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown edit target_replace unknown field
+ok 265 - G5 R4 nested forbidden/unknown edit target_replace unknown field
+  ---
+  duration_ms: 0.522939
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown edit line_replace unknown field
+ok 266 - G5 R4 nested forbidden/unknown edit line_replace unknown field
+  ---
+  duration_ms: 0.573753
+  type: 'test'
+  ...
+# Subtest: G5 R4 nested forbidden/unknown edit symbol_replace unknown field
+ok 267 - G5 R4 nested forbidden/unknown edit symbol_replace unknown field
+  ---
+  duration_ms: 0.441857
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 project_id ASCII exact and canonical bytes
+ok 268 - G5 UTF8 project_id ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.223057
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 project_id ASCII plus one rejected dispatch zero
+ok 269 - G5 UTF8 project_id ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.437168
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 project_id Chinese exact and canonical bytes
+ok 270 - G5 UTF8 project_id Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.119534
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 project_id Chinese plus one rejected dispatch zero
+ok 271 - G5 UTF8 project_id Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.323135
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_id ASCII exact and canonical bytes
+ok 272 - G5 UTF8 workspace_id ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.238807
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_id ASCII plus one rejected dispatch zero
+ok 273 - G5 UTF8 workspace_id ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.385472
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_id Chinese exact and canonical bytes
+ok 274 - G5 UTF8 workspace_id Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.202469
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_id Chinese plus one rejected dispatch zero
+ok 275 - G5 UTF8 workspace_id Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.408996
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_alias ASCII exact and canonical bytes
+ok 276 - G5 UTF8 workspace_alias ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.321933
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_alias ASCII plus one rejected dispatch zero
+ok 277 - G5 UTF8 workspace_alias ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.518861
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_alias Chinese exact and canonical bytes
+ok 278 - G5 UTF8 workspace_alias Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.275455
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 workspace_alias Chinese plus one rejected dispatch zero
+ok 279 - G5 UTF8 workspace_alias Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.309719
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 name ASCII exact and canonical bytes
+ok 280 - G5 UTF8 name ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.210414
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 name ASCII plus one rejected dispatch zero
+ok 281 - G5 UTF8 name ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.342481
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 name Chinese exact and canonical bytes
+ok 282 - G5 UTF8 name Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.194835
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 name Chinese plus one rejected dispatch zero
+ok 283 - G5 UTF8 name Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.460963
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 path ASCII exact and canonical bytes
+ok 284 - G5 UTF8 path ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.258434
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 path ASCII plus one rejected dispatch zero
+ok 285 - G5 UTF8 path ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.654745
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 path Chinese exact and canonical bytes
+ok 286 - G5 UTF8 path Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.17617
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 path Chinese plus one rejected dispatch zero
+ok 287 - G5 UTF8 path Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.444382
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 reason ASCII exact and canonical bytes
+ok 288 - G5 UTF8 reason ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.310602
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 reason ASCII plus one rejected dispatch zero
+ok 289 - G5 UTF8 reason ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.309018
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 reason Chinese exact and canonical bytes
+ok 290 - G5 UTF8 reason Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.247653
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 reason Chinese plus one rejected dispatch zero
+ok 291 - G5 UTF8 reason Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.307196
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol ASCII exact and canonical bytes
+ok 292 - G5 UTF8 symbol ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.21387
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol ASCII plus one rejected dispatch zero
+ok 293 - G5 UTF8 symbol ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.33134
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol Chinese exact and canonical bytes
+ok 294 - G5 UTF8 symbol Chinese exact and canonical bytes
+  ---
+  duration_ms: 2.13703
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol Chinese plus one rejected dispatch zero
+ok 295 - G5 UTF8 symbol Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.354714
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit.symbol ASCII exact and canonical bytes
+ok 296 - G5 UTF8 edit.symbol ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.327753
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit.symbol ASCII plus one rejected dispatch zero
+ok 297 - G5 UTF8 edit.symbol ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.375533
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit.symbol Chinese exact and canonical bytes
+ok 298 - G5 UTF8 edit.symbol Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.25631
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit.symbol Chinese plus one rejected dispatch zero
+ok 299 - G5 UTF8 edit.symbol Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.320109
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 conclusion ASCII exact and canonical bytes
+ok 300 - G5 UTF8 conclusion ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.353902
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 conclusion ASCII plus one rejected dispatch zero
+ok 301 - G5 UTF8 conclusion ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.320089
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 conclusion Chinese exact and canonical bytes
+ok 302 - G5 UTF8 conclusion Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.267932
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 conclusion Chinese plus one rejected dispatch zero
+ok 303 - G5 UTF8 conclusion Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.337542
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo title ASCII exact and canonical bytes
+ok 304 - G5 UTF8 todo title ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.288119
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo title ASCII plus one rejected dispatch zero
+ok 305 - G5 UTF8 todo title ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.453298
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo title Chinese exact and canonical bytes
+ok 306 - G5 UTF8 todo title Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.232625
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo title Chinese plus one rejected dispatch zero
+ok 307 - G5 UTF8 todo title Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.357449
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content ASCII exact and canonical bytes
+ok 308 - G5 UTF8 content ASCII exact and canonical bytes
+  ---
+  duration_ms: 3.11978
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content ASCII plus one rejected dispatch zero
+ok 309 - G5 UTF8 content ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 1.087767
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content ASCII raw outer whitespace counts
+ok 310 - G5 UTF8 content ASCII raw outer whitespace counts
+  ---
+  duration_ms: 1.06826
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content Chinese exact and canonical bytes
+ok 311 - G5 UTF8 content Chinese exact and canonical bytes
+  ---
+  duration_ms: 2.434217
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content Chinese plus one rejected dispatch zero
+ok 312 - G5 UTF8 content Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 1.809417
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 content Chinese raw outer whitespace counts
+ok 313 - G5 UTF8 content Chinese raw outer whitespace counts
+  ---
+  duration_ms: 1.076055
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note ASCII exact and canonical bytes
+ok 314 - G5 UTF8 todo note ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.344655
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note ASCII plus one rejected dispatch zero
+ok 315 - G5 UTF8 todo note ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.321031
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note ASCII raw outer whitespace counts
+ok 316 - G5 UTF8 todo note ASCII raw outer whitespace counts
+  ---
+  duration_ms: 0.35825
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note Chinese exact and canonical bytes
+ok 317 - G5 UTF8 todo note Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.210614
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note Chinese plus one rejected dispatch zero
+ok 318 - G5 UTF8 todo note Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.294141
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 todo note Chinese raw outer whitespace counts
+ok 319 - G5 UTF8 todo note Chinese raw outer whitespace counts
+  ---
+  duration_ms: 0.281778
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target ASCII exact and canonical bytes
+ok 320 - G5 UTF8 edit target ASCII exact and canonical bytes
+  ---
+  duration_ms: 0.826457
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target ASCII plus one rejected dispatch zero
+ok 321 - G5 UTF8 edit target ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 0.564336
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target ASCII raw outer whitespace counts
+ok 322 - G5 UTF8 edit target ASCII raw outer whitespace counts
+  ---
+  duration_ms: 0.46477
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target Chinese exact and canonical bytes
+ok 323 - G5 UTF8 edit target Chinese exact and canonical bytes
+  ---
+  duration_ms: 0.761065
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target Chinese plus one rejected dispatch zero
+ok 324 - G5 UTF8 edit target Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 0.505958
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit target Chinese raw outer whitespace counts
+ok 325 - G5 UTF8 edit target Chinese raw outer whitespace counts
+  ---
+  duration_ms: 0.460072
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace ASCII exact and canonical bytes
+ok 326 - G5 UTF8 edit replace ASCII exact and canonical bytes
+  ---
+  duration_ms: 2.452721
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace ASCII plus one rejected dispatch zero
+ok 327 - G5 UTF8 edit replace ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 1.056528
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace ASCII raw outer whitespace counts
+ok 328 - G5 UTF8 edit replace ASCII raw outer whitespace counts
+  ---
+  duration_ms: 0.978191
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace Chinese exact and canonical bytes
+ok 329 - G5 UTF8 edit replace Chinese exact and canonical bytes
+  ---
+  duration_ms: 5.832148
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace Chinese plus one rejected dispatch zero
+ok 330 - G5 UTF8 edit replace Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 2.197093
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 edit replace Chinese raw outer whitespace counts
+ok 331 - G5 UTF8 edit replace Chinese raw outer whitespace counts
+  ---
+  duration_ms: 1.299643
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content ASCII exact and canonical bytes
+ok 332 - G5 UTF8 line content ASCII exact and canonical bytes
+  ---
+  duration_ms: 2.254941
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content ASCII plus one rejected dispatch zero
+ok 333 - G5 UTF8 line content ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 1.149422
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content ASCII raw outer whitespace counts
+ok 334 - G5 UTF8 line content ASCII raw outer whitespace counts
+  ---
+  duration_ms: 0.989742
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content Chinese exact and canonical bytes
+ok 335 - G5 UTF8 line content Chinese exact and canonical bytes
+  ---
+  duration_ms: 2.28075
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content Chinese plus one rejected dispatch zero
+ok 336 - G5 UTF8 line content Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 1.706936
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 line content Chinese raw outer whitespace counts
+ok 337 - G5 UTF8 line content Chinese raw outer whitespace counts
+  ---
+  duration_ms: 1.500068
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content ASCII exact and canonical bytes
+ok 338 - G5 UTF8 symbol content ASCII exact and canonical bytes
+  ---
+  duration_ms: 2.666311
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content ASCII plus one rejected dispatch zero
+ok 339 - G5 UTF8 symbol content ASCII plus one rejected dispatch zero
+  ---
+  duration_ms: 1.206248
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content ASCII raw outer whitespace counts
+ok 340 - G5 UTF8 symbol content ASCII raw outer whitespace counts
+  ---
+  duration_ms: 3.75022
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content Chinese exact and canonical bytes
+ok 341 - G5 UTF8 symbol content Chinese exact and canonical bytes
+  ---
+  duration_ms: 2.631807
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content Chinese plus one rejected dispatch zero
+ok 342 - G5 UTF8 symbol content Chinese plus one rejected dispatch zero
+  ---
+  duration_ms: 1.814707
+  type: 'test'
+  ...
+# Subtest: G5 UTF8 symbol content Chinese raw outer whitespace counts
+ok 343 - G5 UTF8 symbol content Chinese raw outer whitespace counts
+  ---
+  duration_ms: 1.152849
+  type: 'test'
+  ...
+# Subtest: G5 ASCII ID node_id 32/33 and trim
+ok 344 - G5 ASCII ID node_id 32/33 and trim
+  ---
+  duration_ms: 1.182012
+  type: 'test'
+  ...
+# Subtest: G5 ASCII ID batch_id 32/33 and trim
+ok 345 - G5 ASCII ID batch_id 32/33 and trim
+  ---
+  duration_ms: 1.168307
+  type: 'test'
+  ...
+# Subtest: G5 ASCII ID to_node_id 32/33 and trim
+ok 346 - G5 ASCII ID to_node_id 32/33 and trim
+  ---
+  duration_ms: 1.201079
+  type: 'test'
+  ...
+# Subtest: G5 UUID exact ASCII trim and format constraints
+ok 347 - G5 UUID exact ASCII trim and format constraints
+  ---
+  duration_ms: 0.95609
+  type: 'test'
+  ...
+# Subtest: G5 Todo 1/32 accepted 0/33 rejected
+ok 348 - G5 Todo 1/32 accepted 0/33 rejected
+  ---
+  duration_ms: 1.073028
+  type: 'test'
+  ...
+# Subtest: G5 actual MCP invalid matrix exact wire and native dispatch zero
+ok 349 - G5 actual MCP invalid matrix exact wire and native dispatch zero
+  ---
+  duration_ms: 71.93399
+  type: 'test'
+  ...
+# Subtest: G5 actual MCP deterministic first sixteen issues and overflow
+ok 350 - G5 actual MCP deterministic first sixteen issues and overflow
+  ---
+  duration_ms: 53.959772
+  type: 'test'
+  ...
+# Subtest: G5 output project_binding.project_root ASCII exact/+1 bounds
+ok 351 - G5 output project_binding.project_root ASCII exact/+1 bounds
+  ---
+  duration_ms: 0.536204
+  type: 'test'
+  ...
+# Subtest: G5 R4 output project_binding.project_root ASCII trims before measurement
+ok 352 - G5 R4 output project_binding.project_root ASCII trims before measurement
+  ---
+  duration_ms: 0.132868
+  type: 'test'
+  ...
+# Subtest: G5 output project_binding.project_root Chinese exact/+1 bounds
+ok 353 - G5 output project_binding.project_root Chinese exact/+1 bounds
+  ---
+  duration_ms: 0.169748
+  type: 'test'
+  ...
+# Subtest: G5 R4 output project_binding.project_root Chinese trims before measurement
+ok 354 - G5 R4 output project_binding.project_root Chinese trims before measurement
+  ---
+  duration_ms: 0.190327
+  type: 'test'
+  ...
+# Subtest: G5 output project_status ASCII exact/+1 bounds
+ok 355 - G5 output project_status ASCII exact/+1 bounds
+  ---
+  duration_ms: 0.166412
+  type: 'test'
+  ...
+# Subtest: G5 R4 output project_status ASCII trims before measurement
+ok 356 - G5 R4 output project_status ASCII trims before measurement
+  ---
+  duration_ms: 0.088235
+  type: 'test'
+  ...
+# Subtest: G5 output project_status Chinese exact/+1 bounds
+ok 357 - G5 output project_status Chinese exact/+1 bounds
+  ---
+  duration_ms: 0.111879
+  type: 'test'
+  ...
+# Subtest: G5 R4 output project_status Chinese trims before measurement
+ok 358 - G5 R4 output project_status Chinese trims before measurement
+  ---
+  duration_ms: 0.070983
+  type: 'test'
+  ...
+# Subtest: G5 output report_status ASCII exact/+1 bounds
+ok 359 - G5 output report_status ASCII exact/+1 bounds
+  ---
+  duration_ms: 0.108623
+  type: 'test'
+  ...
+# Subtest: G5 R4 output report_status ASCII trims before measurement
+ok 360 - G5 R4 output report_status ASCII trims before measurement
+  ---
+  duration_ms: 0.082014
+  type: 'test'
+  ...
+# Subtest: G5 output report_status Chinese exact/+1 bounds
+ok 361 - G5 output report_status Chinese exact/+1 bounds
+  ---
+  duration_ms: 0.098374
+  type: 'test'
+  ...
+# Subtest: G5 R4 output report_status Chinese trims before measurement
+ok 362 - G5 R4 output report_status Chinese trims before measurement
+  ---
+  duration_ms: 0.068468
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_id ASCII exact/+1 trim
+ok 363 - G5 output shared project_id ASCII exact/+1 trim
+  ---
+  duration_ms: 0.200826
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_id Chinese exact/+1 trim
+ok 364 - G5 output shared project_id Chinese exact/+1 trim
+  ---
+  duration_ms: 0.108703
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_binding.workspace_id ASCII exact/+1 trim
+ok 365 - G5 output shared project_binding.workspace_id ASCII exact/+1 trim
+  ---
+  duration_ms: 0.113402
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_binding.workspace_id Chinese exact/+1 trim
+ok 366 - G5 output shared project_binding.workspace_id Chinese exact/+1 trim
+  ---
+  duration_ms: 0.107551
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_binding.workspace_alias ASCII exact/+1 trim
+ok 367 - G5 output shared project_binding.workspace_alias ASCII exact/+1 trim
+  ---
+  duration_ms: 0.127298
+  type: 'test'
+  ...
+# Subtest: G5 output shared project_binding.workspace_alias Chinese exact/+1 trim
+ok 368 - G5 output shared project_binding.workspace_alias Chinese exact/+1 trim
+  ---
+  duration_ms: 0.12278
+  type: 'test'
+  ...
+# Subtest: G5 output JSON serialized native/detail ASCII exact/+1
+ok 369 - G5 output JSON serialized native/detail ASCII exact/+1
+  ---
+  duration_ms: 5.14976
+  type: 'test'
+  ...
+# Subtest: G5 error message ASCII raw 4096/+1
+ok 370 - G5 error message ASCII raw 4096/+1
+  ---
+  duration_ms: 0.244938
+  type: 'test'
+  ...
+# Subtest: G5 output JSON serialized native/detail Chinese exact/+1
+ok 371 - G5 output JSON serialized native/detail Chinese exact/+1
+  ---
+  duration_ms: 2.609625
+  type: 'test'
+  ...
+# Subtest: G5 error message Chinese raw 4096/+1
+ok 372 - G5 error message Chinese raw 4096/+1
+  ---
+  duration_ms: 0.12329
+  type: 'test'
+  ...
+# Subtest: G5 partial array_items known/unknown total and zero valid
+ok 373 - G5 partial array_items known/unknown total and zero valid
+  ---
+  duration_ms: 0.329196
+  type: 'test'
+  ...
+# Subtest: G5 partial array_items invalid type/count/foreign branch fields rejected
+ok 374 - G5 partial array_items invalid type/count/foreign branch fields rejected
+  ---
+  duration_ms: 0.563325
+  type: 'test'
+  ...
+# Subtest: G5 partial text_bytes known/unknown total and zero valid
+ok 375 - G5 partial text_bytes known/unknown total and zero valid
+  ---
+  duration_ms: 0.171461
+  type: 'test'
+  ...
+# Subtest: G5 partial text_bytes invalid type/count/foreign branch fields rejected
+ok 376 - G5 partial text_bytes invalid type/count/foreign branch fields rejected
+  ---
+  duration_ms: 0.368279
+  type: 'test'
+  ...
+# Subtest: G5 completeness full state matrix and strict truncation object
+ok 377 - G5 completeness full state matrix and strict truncation object
+  ---
+  duration_ms: 0.504354
+  type: 'test'
+  ...
+# Subtest: G5 output strict nested evidence objects and changed-file bounds
+ok 378 - G5 output strict nested evidence objects and changed-file bounds
+  ---
+  duration_ms: 1.395031
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 omitted ASCII
+ok 379 - G5 output pointer 512/+1 omitted ASCII
+  ---
+  duration_ms: 0.185077
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 array_items ASCII
+ok 380 - G5 output pointer 512/+1 array_items ASCII
+  ---
+  duration_ms: 0.117169
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 text_bytes ASCII
+ok 381 - G5 output pointer 512/+1 text_bytes ASCII
+  ---
+  duration_ms: 0.114835
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 omitted Chinese
+ok 382 - G5 output pointer 512/+1 omitted Chinese
+  ---
+  duration_ms: 0.085981
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 array_items Chinese
+ok 383 - G5 output pointer 512/+1 array_items Chinese
+  ---
+  duration_ms: 0.111198
+  type: 'test'
+  ...
+# Subtest: G5 output pointer 512/+1 text_bytes Chinese
+ok 384 - G5 output pointer 512/+1 text_bytes Chinese
+  ---
+  duration_ms: 0.110346
+  type: 'test'
+  ...
+# Subtest: G5 truncation omitted/partial max64 and foreign discriminator rejected
+ok 385 - G5 truncation omitted/partial max64 and foreign discriminator rejected
+  ---
+  duration_ms: 0.965548
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw project_root ASCII
+ok 386 - G5 trim repair shared schema preserves raw project_root ASCII
+  ---
+  duration_ms: 0.231293
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw project_root Chinese
+ok 387 - G5 trim repair shared schema preserves raw project_root Chinese
+  ---
+  duration_ms: 0.109325
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw project_status ASCII
+ok 388 - G5 trim repair shared schema preserves raw project_status ASCII
+  ---
+  duration_ms: 0.09612
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw project_status Chinese
+ok 389 - G5 trim repair shared schema preserves raw project_status Chinese
+  ---
+  duration_ms: 0.077255
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw report_status ASCII
+ok 390 - G5 trim repair shared schema preserves raw report_status ASCII
+  ---
+  duration_ms: 0.089157
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared schema preserves raw report_status Chinese
+ok 391 - G5 trim repair shared schema preserves raw report_status Chinese
+  ---
+  duration_ms: 0.071463
+  type: 'test'
+  ...
+# Subtest: G5 trim repair facade and actual MCP normalize project_status ASCII
+ok 392 - G5 trim repair facade and actual MCP normalize project_status ASCII
+  ---
+  duration_ms: 60.280243
+  type: 'test'
+  ...
+# Subtest: G5 trim repair facade and actual MCP normalize project_status Chinese
+ok 393 - G5 trim repair facade and actual MCP normalize project_status Chinese
+  ---
+  duration_ms: 58.695748
+  type: 'test'
+  ...
+# Subtest: G5 trim repair facade and actual MCP normalize report_status ASCII
+ok 394 - G5 trim repair facade and actual MCP normalize report_status ASCII
+  ---
+  duration_ms: 42.581051
+  type: 'test'
+  ...
+# Subtest: G5 trim repair facade and actual MCP normalize report_status Chinese
+ok 395 - G5 trim repair facade and actual MCP normalize report_status Chinese
+  ---
+  duration_ms: 44.094324
+  type: 'test'
+  ...
+# Subtest: G5 trim repair padded root is stable UNKNOWN in facade and actual MCP leading ASCII
+ok 396 - G5 trim repair padded root is stable UNKNOWN in facade and actual MCP leading ASCII
+  ---
+  duration_ms: 41.054964
+  type: 'test'
+  ...
+# Subtest: G5 trim repair padded root is stable UNKNOWN in facade and actual MCP trailing ASCII
+ok 397 - G5 trim repair padded root is stable UNKNOWN in facade and actual MCP trailing ASCII
+  ---
+  duration_ms: 49.325056
+  type: 'test'
+  ...
+# Subtest: G5 trim repair padded root is stable UNKNOWN in facade and actual MCP Unicode padding
+ok 398 - G5 trim repair padded root is stable UNKNOWN in facade and actual MCP Unicode padding
+  ---
+  duration_ms: 50.49186
+  type: 'test'
+  ...
+# Subtest: G5 trim repair padded root is stable UNKNOWN in facade and actual MCP padded exact byte limit
+ok 399 - G5 trim repair padded root is stable UNKNOWN in facade and actual MCP padded exact byte limit
+  ---
+  duration_ms: 49.052014
+  type: 'test'
+  ...
+# Subtest: G5 trim repair canonical and null root facade/MCP success canonical
+ok 400 - G5 trim repair canonical and null root facade/MCP success canonical
+  ---
+  duration_ms: 46.318658
+  type: 'test'
+  ...
+# Subtest: G5 trim repair canonical and null root facade/MCP success internal space
+ok 401 - G5 trim repair canonical and null root facade/MCP success internal space
+  ---
+  duration_ms: 48.337146
+  type: 'test'
+  ...
+# Subtest: G5 trim repair canonical and null root facade/MCP success null
+ok 402 - G5 trim repair canonical and null root facade/MCP success null
+  ---
+  duration_ms: 47.379363
+  type: 'test'
+  ...
+# Subtest: G5 trim repair status preserves existing empty/control behavior empty
+ok 403 - G5 trim repair status preserves existing empty/control behavior empty
+  ---
+  duration_ms: 43.175003
+  type: 'test'
+  ...
+# Subtest: G5 trim repair status preserves existing empty/control behavior whitespace
+ok 404 - G5 trim repair status preserves existing empty/control behavior whitespace
+  ---
+  duration_ms: 39.068856
+  type: 'test'
+  ...
+# Subtest: G5 trim repair status preserves existing empty/control behavior null
+ok 405 - G5 trim repair status preserves existing empty/control behavior null
+  ---
+  duration_ms: 37.625023
+  type: 'test'
+  ...
+# Subtest: G5 trim repair status preserves existing empty/control behavior internal control
+ok 406 - G5 trim repair status preserves existing empty/control behavior internal control
+  ---
+  duration_ms: 42.369335
+  type: 'test'
+  ...
+# Subtest: G5 trim repair status preserves existing empty/control behavior internal spaces
+ok 407 - G5 trim repair status preserves existing empty/control behavior internal spaces
+  ---
+  duration_ms: 37.723328
+  type: 'test'
+  ...
+# Subtest: G5 trim repair shared root keeps existing internal-control validation behavior
+ok 408 - G5 trim repair shared root keeps existing internal-control validation behavior
+  ---
+  duration_ms: 0.147135
+  type: 'test'
+  ...
+# Subtest: G5 trim repair output fallback preserves full issue count over sixteen
+ok 409 - G5 trim repair output fallback preserves full issue count over sixteen
+  ---
+  duration_ms: 35.015979
+  type: 'test'
+  ...
+# Subtest: V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads
+not ok 410 - V4 protected production Owner loader enforces MAC exact scope paths source time and monotone phase with no live reads
+  ---
+  duration_ms: 63.453364
+  type: 'test'
+  location: '/home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:687:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10
+      if (!condition) { const e = new Error(code); e.code = code; throw e; }
+                                  ^
+    
+    Error: AUTHORITY_REJECTED
+        at requireThat (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10:31)
+        at Module.loadProductionCrownOwnerBinding (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs:709:10)
+        at file:///home/jenn/AGENTS_OS_Workspace/ops/g1d-trusted-os-activation-20261013-r1/source/[eval1]:41:17 {
+      code: 'AUTHORITY_REJECTED'
+    }
+    
+    Node.js v22.23.1
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    requireThat (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-transport.mjs:10:31)
+    Module.loadProductionCrownOwnerBinding (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/src/project-forge-crown-admission.mjs:709:10)
+    file:///home/jenn/AGENTS_OS_Workspace/ops/g1d-trusted-os-activation-20261013-r1/source/[eval1]:41:17 {
+    TestContext.<anonymous> (file:///home/jenn/AGENTS_OS_Workspace/projects/vcp-app-r16-working-source-r2/test/project-forge-crown.test.mjs:691:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..410
+# tests 410
+# suites 0
+# pass 408
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1772.910676

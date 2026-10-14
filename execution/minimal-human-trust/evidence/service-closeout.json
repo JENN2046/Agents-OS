@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-13T15:03:02.577Z",
+  "scope": "selected service metadata only",
+  "local": "Id=r16-owner.service\nActiveState=active\nSubState=running\nInvocationID=be0797bf4be14fe98c59aad4a9ec2dbd\nMainPID=484427\n\nId=r16-native.service\nActiveState=active\nSubState=running\nInvocationID=22616fcd2503468e8f53f2663e5ae604\nMainPID=484539\n",
+  "cloud": "MainPID=4120668\nId=r16-app.service\nActiveState=active\nSubState=running\nInvocationID=da2d03fc2ec4464ba58c6eb2ed728bfe\n\nMainPID=3997894\nId=r16-bridge.service\nActiveState=active\nSubState=running\nInvocationID=3e2f9852276845e2ad56b9c37f96b4e1\n",
+  "isolatedUnits": "● minimal-human-trust-issuer@1-36866-1573442_1570724-1000.service not-found failed failed minimal-human-trust-issuer@1-36866-1573442_1570724-1000.service\n● minimal-human-trust-issuer@2-20483-1573442_1570724-1000.service not-found failed failed minimal-human-trust-issuer@2-20483-1573442_1570724-1000.service\n",
+  "productionInvocationIdsUnchanged": true,
+  "testFailureStatesRetainedIntentionally": true
+}
