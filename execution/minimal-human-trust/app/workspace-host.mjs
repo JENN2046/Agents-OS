@@ -30,7 +30,20 @@ export function createWorkspaceHost({store,directory,grant,release,versions,sign
  channelCapability,crown,createCrownExecutor,exchange,now=Date.now}) {
  check(store instanceof ProtectedStore&&store.snapshot().kind==='r16.app-workspace.v1');
  const g=verified(grant,issuerKey,'r16.workspace.v1'),appKey=publicKey(g.peers.app.publicKey),nativeKey=publicKey(g.peers.native.publicKey);
- verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});
+ // A previously signed R15 release may be expired during an interrupted
+ // close/reconcile. Authenticate it at its ORIGINAL issue time only when
+ // durable local state actually needs recovery. New business still uses
+ // current(), which always verifies the release at the current time.
+ const historical=verified(release,releaseKey,'r16.release.v1');
+ if(now()>=historical.notAfter&&now()>=historical.issuedAt){
+  const prior=store.snapshot();
+  check(prior.businessStop||prior.revoked||
+    (Array.isArray(prior.projects)&&prior.projects.length>0)||
+    (Array.isArray(prior.operations)&&prior.operations.some(o=>['UNKNOWN','INFLIGHT'].includes(o.status)))||
+    (Array.isArray(prior.allocations)&&prior.allocations.some(o=>['UNKNOWN','INFLIGHT'].includes(o.status))),
+    'RECOVERY_ONLY_REQUIRED');
+  verifyRelease(release,releaseKey,{versions,actions:g.actions,now:historical.issuedAt});
+ }else verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});
  check(Buffer.isBuffer(channelCapability)&&channelCapability.length>=32&&typeof exchange==='function');
  const capabilityHash=createHash('sha256').update(channelCapability).digest();
  const contexts=new WeakMap(),entries=new Map(),rotations=new Map(),authorized=new Map(),inflight=new Map();
