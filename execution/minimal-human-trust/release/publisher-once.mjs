@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
-import {canonical,digest,verified,verifyRelease,ACTIONS} from '../src/lease-core.mjs';
+import {canonical,digest,verified,verifyRelease,ACTIONS,ROLES} from '../src/lease-core.mjs';
 import {protectedRuntimeFile,runtimeVersion} from '../authority/runtime-manifest.mjs';
 import {readPublisherPrivateKeys} from './publisher-credential.mjs';
 import {inspectPublisherInputs} from './publisher-inputs.mjs';
