@@ -44,7 +44,7 @@ test('symlink, hardlink and weak modes cannot become protected output',t=>{
    const other=path.join(f.directory,'other');fs.writeFileSync(other,canonical(f.artifacts.proposal),{mode:0o600});
    if(variant==='symlink')fs.symlinkSync(other,p);
    else if(variant==='hardlink')fs.linkSync(other,p);
-   else fs.writeFileSync(p,canonical(f.artifacts.proposal),{mode:0o644});
+   else{fs.writeFileSync(p,canonical(f.artifacts.proposal),{mode:0o644});fs.chmodSync(p,0o644);}
    assert.throws(()=>f.publish());assert.equal(fs.existsSync(path.join(f.directory,'human-policy.json')),false);
  }
 });

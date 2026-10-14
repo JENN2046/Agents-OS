@@ -200,7 +200,7 @@ test('lock symlink and replacement are refused',t=>{
 });
 test('weak and hardlinked lock files cannot authorize signing',t=>{
  const f=fixture(t),lock=path.join(f.directory,'.lock'),other=path.join(f.directory,'lock-other');
- fs.writeFileSync(lock,'',{mode:0o644});throws(()=>f.issue(),'HUMAN_PROPOSAL_LOCK_UNTRUSTED');
+ fs.writeFileSync(lock,'',{mode:0o644});fs.chmodSync(lock,0o644);throws(()=>f.issue(),'HUMAN_PROPOSAL_LOCK_UNTRUSTED');
  fs.chmodSync(lock,0o600);fs.linkSync(lock,other);
  throws(()=>f.issue(),'HUMAN_PROPOSAL_LOCK_UNTRUSTED');assert.equal(f.signs(),0);
 });
