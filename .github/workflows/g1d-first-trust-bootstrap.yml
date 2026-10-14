@@ -40,6 +40,8 @@ jobs:
             execution/minimal-human-trust/test/first-trust-publisher-credential.test.mjs \
             execution/minimal-human-trust/test/first-trust-publisher-transaction.test.mjs \
             execution/minimal-human-trust/test/first-trust-publisher-wiring.test.mjs \
+            execution/minimal-human-trust/test/first-trust-stage-publication.test.mjs \
+            execution/minimal-human-trust/test/staged-r17-handoff-admission.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Human broker Python regression
         run: python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py

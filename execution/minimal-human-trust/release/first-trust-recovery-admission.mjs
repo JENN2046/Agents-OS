@@ -16,6 +16,10 @@ export function inspectFirstTrustRecoveryPublication({
   // In production, firstTrust.readProtected MUST be the fixed root-owned
   // reader and existingR15Evidence MUST come from verified fixed OS paths.
   const human=inspectFirstTrustJournal(firstTrust);
+  need(human.stageAuthorization&&
+    digest(existingR15Evidence)===human.stageAuthorization.recoveryEvidenceDigest&&
+    digest(existingR15Evidence.issuerState)===human.stageAuthorization.issuerSnapshotHash,
+    'FIRST_TRUST_STAGE_EVIDENCE_CHANGED');
   const recovery=inspectReviewedR17MigrationEvidence(existingR15Evidence,
     human.reviewedManifestHash,verifyCrownCall);
   need(recovery.status==='PENDING_TRUSTED_QUIESCENCE_AND_SIGNER'&&
@@ -40,6 +44,8 @@ export function inspectFirstTrustRecoveryPublication({
     targetReleaseId:human.targetReleaseId,
     reviewedManifestHash:human.reviewedManifestHash,
     humanApprovalReceiptHash:human.osReceiptHash,
+    stageAuthorization:human.stageAuthorization,
+    stageAuthorizationHash:human.stageAuthorizationHash,
     oldOwnerSnapshotDigest:recovery.exact_owner_snapshot_digest,
     operations:rows.map(x=>Object.freeze({projectId:x.project_id,operationId:x.operation_id,
       generation:x.generation,operationHash:x.operation_sha256,replayAllowed:false})),

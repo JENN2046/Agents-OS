@@ -15,7 +15,39 @@ the running R15 Owner service and is not an approved production release.
 - Current production registration, signed release, single-writer handoff and live
   cloud delivery remain gated. Synthetic credentials are never production roots.
 
-## Validation
+## First-use signing sequence
+
+The fixed publisher accepts only `mht.first-trust-publisher-stage-plan.v2`.
+Its complete `STAGE_ONLY` authorization and digest are embedded in the
+Release-root-signed Human proposal, displayed by the native broker and bound
+to the protected OS journal. They pin the R15/Grant, exact R17 reviewed file
+manifest, complete trust roots, source freeze, reviewed installer source,
+unchanged original UNKNOWN evidence, issuer snapshot, epochs and five-minute
+window. The fixed reviewed-installer path is
+`/etc/minimal-human-trust/stage-installer-reviewed.mjs`; the signer only hashes
+it and never executes it. Trusted installation and key-holder provenance are
+separate, explicit native-administrator prerequisites, not granted by the plan.
+
+Stage-only signing no longer demands a STOP format that installed R15 cannot
+produce. It still verifies the two original signed readonly UNKNOWN records
+and closure of all other projects, rechecks complete physical file coverage
+before credential access, and re-reads protected inputs/issuer state before
+and after signing. Frozen stage evidence can age only within the same
+five-minute Human window; it cannot be refreshed or substituted after approval.
+The transaction still reserves/fsyncs INTENT first; intent-only is UNKNOWN and
+must never be blindly retried. Its output is `SIGNED_STAGED_NOT_INSTALLED` with
+no install, business, UNKNOWN settlement or issuer-handoff authority.
+
+The separate staged-R17 handoff inspection requires the durable matching
+stage INTENT/RESULT, exact signed R17, **fresh R17** three-role STOP proofs in
+the approved stop epoch, signed handoff epoch, actual inactive/masked old
+Owner, no writer lock, and identical protected issuer snapshots. STOP expiry
+remains at most 30 seconds. This inspection is read-only and cannot install,
+activate or start a writer. Restricted R17 STOP instrumentation and any actual
+installation/signing/business interruption still require their precise native
+authorization; an isolated test cannot supply it.
+
+## Validation commands
 
 On the pinned Jenn host, run:
 

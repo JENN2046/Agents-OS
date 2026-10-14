@@ -16,7 +16,8 @@ const sha=b=>createHash('sha256').update(b).digest('hex');
 
 /** Pure, unsigned, closed-form R17 release body. This function cannot sign.
  * A parent trusted root service must already have inspected Human confirmation,
- * both original read-UNKNOWN states, and the exact signed stop barrier.
+ * both original read-UNKNOWN states and the exact stage-only plan. The signed
+ * stop barrier remains mandatory before installation/handoff, not staging.
  */
 export function deriveExactR17Release({
   sourceRelease,reviewManifest,reviewedManifestHash,now=Date.now(),
@@ -36,26 +37,37 @@ export function deriveExactR17Release({
   need(m.artifacts&&same(Object.keys(m.artifacts).sort(),ROLES)&&
     Array.isArray(m.localFiles)&&m.localFiles.length>0&&
     typeof readFile==='function','FIRST_TRUST_REVIEW_FORMAT');
-  const versions={};
+  const versions={},physicalFiles=new Map();
+  let expectedBindings=0;
   for(const role of ROLES){
     validateRuntimeManifest(m.artifacts[role],role);
     versions[role]=runtimeVersion(m.artifacts[role],role);
+    for(const [artifactPath,expected] of Object.entries(m.artifacts[role].files)){
+      need(!/[\x00-\x1f\x7f]/.test(artifactPath),'FIRST_TRUST_FILE_SCOPE');
+      const target='/opt/r16/releases/r16-daily-20261012-r17/'+artifactPath;
+      need(!physicalFiles.has(target)||physicalFiles.get(target)===expected,
+        'FIRST_TRUST_ROLE_OVERLAP');
+      physicalFiles.set(target,expected);
+      expectedBindings++;
+    }
   }
+  need(m.localFiles.length===expectedBindings,'FIRST_TRUST_FILE_COVERAGE');
   const seen=new Set();
   for(const file of m.localFiles){
     need(file&&Object.keys(file).sort().join(',')==='artifactPath,path,role,sha256'&&
       ROLES.includes(file.role)&&hash(file.sha256)&&
-      typeof file.path==='string'&&
-      (file.path.startsWith('/opt/r16/releases/r16-daily-20261012-r17/')||
-       file.path.startsWith('/usr/lib/r16-owner/'))&&
-      !file.path.includes('..')&&!file.path.includes('\\')&&
-      !file.path.includes('\0')&&
-      !seen.has(file.path)&&
+      typeof file.artifactPath==='string'&&
+      file.path==='/opt/r16/releases/r16-daily-20261012-r17/'+file.artifactPath&&
+      Object.hasOwn(m.artifacts[file.role].files,file.artifactPath)&&
+      !seen.has(file.role+'\0'+file.artifactPath)&&
       m.artifacts[file.role].files[file.artifactPath]===file.sha256,
       'FIRST_TRUST_FILE_SCOPE');
-    seen.add(file.path);
-    need(sha(readFile(file.path))===file.sha256,'FIRST_TRUST_FILE_DRIFT');
+    seen.add(file.role+'\0'+file.artifactPath);
   }
+  // The full role binding set is required, but shared physical paths are read
+  // exactly once only after all mappings and overlaps have been validated.
+  for(const [target,expected] of physicalFiles)
+    need(sha(readFile(target))===expected,'FIRST_TRUST_FILE_DRIFT');
   need(same(sourceRelease.formats,['r16.workspace.v1'])&&
     sourceRelease.permissionVersion===1&&same(sourceRelease.actions,ACTIONS),
     'FIRST_TRUST_PERMISSION_DRIFT');
@@ -101,11 +113,12 @@ export function signFirstTrustRecoveryArtifacts({
   const enrollment=signed(enrollmentBody,enrollmentSigningKey);
   verified(enrollment,firstTrust.trustRoots.enrollmentAuthorityPublicKey,
     'mht.human-enrollment.v1');
-  return Object.freeze({schema:'mht.first-trust-staged-signatures.v1',
+  return Object.freeze({schema:'mht.first-trust-staged-signatures.v2',
     status:'SIGNED_STAGED_NOT_INSTALLED',oldReleaseId:oldRelease.id,
     reviewedManifestHash:admission.reviewedManifestHash,
     osApprovalReceiptHash:admission.humanApprovalReceiptHash,
     firstTrustAdmissionDigest:admission.admissionDigest,
+    stageAuthorizationHash:admission.stageAuthorizationHash,
     release,enrollment,
     grantUnchanged:true,mayInstall:false,mayActivateBusiness:false,
     mayHandoffIssuer:false,maySettleUnknown:false});

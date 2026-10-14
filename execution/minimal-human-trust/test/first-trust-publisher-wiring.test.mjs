@@ -41,6 +41,7 @@ function fixture(){
    enrollmentExpiresAt:now+86400000,
    humanApprovalReceiptHash:digest('human-os-approval'),
    admissionDigest:digest('first-trust-inspected'),grantId:grant.body.id,
+   stageAuthorizationHash:digest('exact-stage-only-plan'),
    grantHash:digest(grant),humanPublicKey:exportPublicKey(humanKey),
    humanUid:1000}};
  const enrolled=signed({schema:'mht.human-enrollment.v1',
@@ -49,12 +50,13 @@ function fixture(){
    humanPublicKey:exportPublicKey(humanKey),humanUid:1000,
    humanSubject:'local-human:1000',releaseHash:digest(release),
    releaseId:r17.id},enrollmentKey);
- const signedResult={schema:'mht.first-trust-staged-signatures.v1',
+ const signedResult={schema:'mht.first-trust-staged-signatures.v2',
    status:'SIGNED_STAGED_NOT_INSTALLED',
    oldReleaseId:'r16-daily-20261012-r15',
    reviewedManifestHash:admission.admission.reviewedManifestHash,
    osApprovalReceiptHash:admission.admission.humanApprovalReceiptHash,
    firstTrustAdmissionDigest:admission.admission.admissionDigest,
+   stageAuthorizationHash:admission.admission.stageAuthorizationHash,
    release,enrollment:enrolled,grantUnchanged:true,mayInstall:false,
    mayActivateBusiness:false,mayHandoffIssuer:false,maySettleUnknown:false};
  const pub={grant,release:prior};

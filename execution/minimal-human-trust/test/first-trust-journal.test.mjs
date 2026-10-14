@@ -4,6 +4,7 @@ import {generateKeyPairSync,randomUUID} from 'node:crypto';
 import {signed,exportPublicKey,digest,ACTIONS,ROLES} from '../src/lease-core.mjs';
 import {validateHumanProposal,firstTrustReviewedIntent,PROJECTS_ROOT} from '../human/approval-policy.mjs';
 import {inspectFirstTrustJournal} from '../human/first-trust-journal.mjs';
+import {STAGE_CONSTRAINTS} from '../authority/stage-authorization.mjs';
 
 const pair=()=>generateKeyPairSync('ed25519').privateKey;
 function fixture(){
@@ -26,12 +27,21 @@ function fixture(){
    issuerPublicKey:exportPublicKey(issuerKey),releasePublicKey:exportPublicKey(releaseKey),
    enrollmentAuthorityPublicKey:exportPublicKey(enrollmentKey),
    releaseHash:digest(sourceRelease),handoffHash:digest('handoff'),installationProfile:'isolated'};
+ const stageAuthorization={schema:'mht.first-trust-stage-authorization.v2',phase:'STAGE_ONLY',
+   sourceReleaseId:'r16-daily-20261012-r15',targetReleaseId:'r16-daily-20261012-r17',
+   grantId:'r16-projects-daily',grantHash:digest(sourceGrant),grantVersion:1,
+   r15PublicConfigDigest:digest('public-config'),reviewedManifestHash:digest(reviewManifest),
+   recoveryEvidenceDigest:digest('evidence'),sourceFreezeDigest:digest('source-freeze'),
+   installerHash:digest('installer'),issuerSnapshotHash:digest('issuer-snapshot'),trustRootsDigest:digest(trustRoots),
+   stopEpoch:randomUUID(),handoffEpoch:1,issuedAt:now-20000,expiresAt:now+30000,
+   constraints:{...STAGE_CONSTRAINTS}};
  const body={schema:'mht.human-proposal.v1',action:'enroll_human',grantId:'r16-projects-daily',
    expectedVersion:1,expectedGrantHash:digest(sourceGrant),releaseId:'r16-daily-20261012-r15',
    releaseHash:digest(sourceRelease),nonce:randomUUID(),issuedAt:now-20000,
    expiresAt:now+30000,target:{humanUid:1000,humanSubject:'local-human:1000',
      humanPublicKey:exportPublicKey(humanKey),enrollmentExpiresAt:now+86400000,
-     targetReleaseId:'r16-daily-20261012-r17',reviewedManifestHash:digest(reviewManifest)}};
+     targetReleaseId:'r16-daily-20261012-r17',reviewedManifestHash:digest(reviewManifest),
+     stageAuthorizationHash:digest(stageAuthorization),stageAuthorization}};
  const proposal=signed(body,releaseKey);
  const policy={schema:'mht.human-pending-policy.v1',proposalHash:digest(proposal),grantId:'r16-projects-daily',
    grantHash:digest(sourceGrant),grantVersion:1,releaseHash:digest(sourceRelease),releaseId:'r16-daily-20261012-r15',
@@ -57,6 +67,8 @@ test('one OS-confirmed first Human proposal is read and bound to expired genuine
  assert.equal(result.sourceReleaseId,'r16-daily-20261012-r15');
  assert.equal(result.targetReleaseId,'r16-daily-20261012-r17');
  assert.equal(result.reviewedManifestHash,digest(f.args.reviewManifest));
+ assert.deepEqual(result.stageAuthorization,f.args.proposal.body.target.stageAuthorization);
+ assert.equal(result.stageAuthorizationHash,digest(result.stageAuthorization));
  assert.equal(result.signerAuthority,false);
  assert.equal(result.mayInstall,false);
  assert.equal(result.maySignRelease,false);
@@ -118,4 +130,19 @@ test('an extra capability or a false applied state is rejected',()=>{
 test('pending first trust intent expires and cannot be reused for another release',()=>{
  const f=fixture();f.args.now=f.now+50000;
  reject(()=>inspectFirstTrustJournal(f.args));
+});
+test('protected journal cannot substitute the stage plan displayed to Human',()=>{
+ for(const field of ['installerHash','sourceFreezeDigest','issuerSnapshotHash','trustRootsDigest','handoffEpoch']){
+  const f=fixture(),result=structuredClone(f.files.get(f.base+'.result.json'));
+  result.reviewedIntent.stageAuthorization[field]=field==='handoffEpoch'?2:digest('different');
+  result.reviewedIntent.stageAuthorizationHash=digest(result.reviewedIntent.stageAuthorization);
+  f.files.set(f.base+'.result.json',result);
+  assert.throws(()=>inspectFirstTrustJournal(f.args),{code:'FIRST_TRUST_RESULT_CONFLICT'});
+ }
+});
+test('legacy protected enrollment record without complete stage core is refused',()=>{
+ const f=fixture(),result=structuredClone(f.files.get(f.base+'.result.json'));
+ delete result.reviewedIntent.stageAuthorization;delete result.reviewedIntent.stageAuthorizationHash;
+ f.files.set(f.base+'.result.json',result);
+ assert.throws(()=>inspectFirstTrustJournal(f.args),{code:'FIRST_TRUST_RESULT_CONFLICT'});
 });

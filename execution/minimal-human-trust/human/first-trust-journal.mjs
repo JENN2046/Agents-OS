@@ -72,6 +72,8 @@ export function inspectFirstTrustJournal({
   return Object.freeze({schema:'mht.first-trust-journal-inspection.v1',
     status:'OS_CONFIRMED_NOT_APPLIED',sourceReleaseId:source.id,
     targetReleaseId:intent.targetReleaseId,reviewedManifestHash:intent.reviewedManifestHash,
+    stageAuthorizationHash:intent.stageAuthorizationHash,
+    stageAuthorization:intent.stageAuthorization,
     grantHash:intent.grantHash,grantId:intent.grantId,
     humanUid:intent.humanUid,humanPublicKey:intent.humanPublicKey,
     enrollmentExpiresAt:intent.enrollmentExpiresAt,

@@ -72,4 +72,24 @@ class Tests(unittest.TestCase):
   self.assertEqual(p.seconds,49)
   with mock.patch.object(b.time,'monotonic',side_effect=[100,161]):
    with self.assertRaises(b.Refused):b.read_request(p)
+ def test_complete_stage_plan_is_identical_in_native_preview_and_polkit(self):
+  core={'schema':'mht.first-trust-stage-authorization.v2','phase':'STAGE_ONLY',
+    'sourceReleaseId':'r16-daily-20261012-r15','targetReleaseId':'r16-daily-20261012-r17',
+    'grantId':'r16-projects-daily','grantHash':'5'*64,'grantVersion':1,
+    'r15PublicConfigDigest':'6'*64,'reviewedManifestHash':'7'*64,'recoveryEvidenceDigest':'8'*64,
+    'sourceFreezeDigest':'1'*64,'installerHash':'2'*64,'issuerSnapshotHash':'3'*64,'trustRootsDigest':'9'*64,
+    'stopEpoch':'12345678-1234-1234-1234-123456789abc','handoffEpoch':7,
+    'issuedAt':1792000000000,'expiresAt':1792000060000,
+    'constraints':{'mayInstall':False,'mayActivateBusiness':False,'mayHandoffIssuer':False,
+      'maySettleUnknown':False,'requireSignedThreeRoleStop':True,
+      'requireProtectedSameEpochIssuerSnapshot':True,'requireOldWriterFenced':True}}
+  summary={'action':'enroll_human','target':{'stageAuthorizationHash':'4'*64,'stageAuthorization':core}}
+  self.assertLess(len(json.dumps(summary).encode()),8192)
+  preview=lambda *args:{'summary':summary,'proposalHash':'a'*64}
+  b.handle(self.peer,preview,self.auth,self.sign)
+  self.assertEqual(self.peer.sent[0]['summary'],summary)
+  authorized=self.calls[0][2]
+  self.assertEqual(authorized['target'],summary['target'])
+  self.assertEqual(authorized['target']['stageAuthorization'],core)
+  self.assertIn('confirmationChallenge',authorized)
 if __name__=='__main__':unittest.main()

@@ -1,6 +1,7 @@
 // Pure target validation. No authorization is inferred from UID or this module.
 import {canonical,digest,verified,publicKey,ACTIONS} from '../src/lease-core.mjs';
 import {validateTrustRoots} from '../src/minimal-trust-issuer-once.mjs';
+import {validateStageAuthorization} from '../authority/stage-authorization.mjs';
 const fail=code=>{throw Object.assign(new Error(code),{code});};
 const need=(value,code='HUMAN_TARGET_REJECTED')=>{if(!value)fail(code);};
 const exact=(value,names)=>need(value&&typeof value==='object'&&!Array.isArray(value)&&
@@ -8,6 +9,18 @@ const exact=(value,names)=>need(value&&typeof value==='object'&&!Array.isArray(v
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const id=x=>typeof x==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(x);
 export const PROJECTS_ROOT='/home/jenn/AGENTS_OS_Workspace/projects';
+const enrollmentFields=['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt',
+  'targetReleaseId','reviewedManifestHash','stageAuthorizationHash','stageAuthorization'];
+function checkedStageTarget(p,now){
+ exact(p.target,enrollmentFields);
+ const t=p.target,c=validateStageAuthorization(t.stageAuthorization,{now});
+ need(hash(t.stageAuthorizationHash)&&digest(c)===t.stageAuthorizationHash&&
+   c.sourceReleaseId===p.releaseId&&c.targetReleaseId===t.targetReleaseId&&
+   c.grantId===p.grantId&&c.grantHash===p.expectedGrantHash&&
+   c.grantVersion===p.expectedVersion&&c.reviewedManifestHash===t.reviewedManifestHash&&
+   c.issuedAt===p.issuedAt&&c.expiresAt===p.expiresAt,'HUMAN_STAGE_AUTHORIZATION_CHANGED');
+ return c;
+}
 export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
  exact(policy,['schema','proposalHash','grantId','grantHash','grantVersion','releaseHash','releaseId',
    'humanPublicKey','workspaceId','workspaceRoot','workspaceDev','workspaceIno','installationProfile']);
@@ -46,7 +59,8 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
      p.target.newRootHash!==p.target.oldRootHash&&p.target.permissionsUnchanged===true,'HUMAN_SCOPE_EXPANSION');
  }
  if(p.action==='enroll_human'){
-   exact(p.target,['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt','targetReleaseId','reviewedManifestHash']);
+   const stageAuthorization=checkedStageTarget(p,now);
+   need(stageAuthorization.trustRootsDigest===digest(roots),'HUMAN_STAGE_ROOTS_CHANGED');
    publicKey(p.target.humanPublicKey);
    need(p.target.humanUid===1000&&p.target.humanSubject==='local-human:1000'&&
      p.target.humanPublicKey===policy.humanPublicKey&&p.target.targetReleaseId==='r16-daily-20261012-r17'&&
@@ -55,7 +69,8 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
  }
  return Object.freeze({body:p,proposalHash:policy.proposalHash,summary:{action:p.action,grantId:p.grantId,
    expectedVersion:p.expectedVersion,expectedGrantHash:p.expectedGrantHash,releaseId:p.releaseId,
-   releaseHash:p.releaseHash,nonce:p.nonce,workspaceRoot:policy.workspaceRoot,workspaceDev:policy.workspaceDev,workspaceIno:policy.workspaceIno,target:p.target,
+   releaseHash:p.releaseHash,nonce:p.nonce,issuedAt:p.issuedAt,expiresAt:p.expiresAt,
+   workspaceRoot:policy.workspaceRoot,workspaceDev:policy.workspaceDev,workspaceIno:policy.workspaceIno,target:p.target,
    installationProfile:policy.installationProfile}});
 }
 export function humanApprovalBody(checked,{now=Date.now()}={}){
@@ -72,20 +87,23 @@ export function humanApprovalBody(checked,{now=Date.now()}={}){
 }
 
 /**
- * First enrollment has no Human signing key yet. The signed proposal may
+ * First enrollment has no installed Human authority yet. The real Human key
+ * credential is admitted separately before the packaged service starts.
+ * The signed proposal may
  * be shown to the trusted OS broker, but this is NOT a signed enrollment,
  * a release, or an issuer handoff.
  */
 export function firstTrustReviewedIntent(checked){
  need(checked?.body?.action==='enroll_human','FIRST_TRUST_ONLY');
  const p=checked.body,t=p.target;
- exact(t,['humanUid','humanSubject','humanPublicKey','enrollmentExpiresAt','targetReleaseId','reviewedManifestHash']);
+ const stageAuthorization=checkedStageTarget(p,p.issuedAt);
  need(t.humanUid===1000&&t.humanSubject==='local-human:1000'&&
    t.targetReleaseId==='r16-daily-20261012-r17'&&hash(t.reviewedManifestHash),'FIRST_TRUST_SCOPE');
  return Object.freeze({schema:'mht.first-trust-reviewed-intent.v1',
    proposalHash:checked.proposalHash,grantId:p.grantId,grantVersion:p.expectedVersion,
    grantHash:p.expectedGrantHash,sourceReleaseId:p.releaseId,sourceReleaseHash:p.releaseHash,
    targetReleaseId:t.targetReleaseId,reviewedManifestHash:t.reviewedManifestHash,
+   stageAuthorizationHash:t.stageAuthorizationHash,stageAuthorization,
    humanUid:t.humanUid,humanSubject:t.humanSubject,humanPublicKey:t.humanPublicKey,
    enrollmentExpiresAt:t.enrollmentExpiresAt,nonce:p.nonce,
    mayInstall:false,maySignRelease:false,mayHandoffIssuer:false});
