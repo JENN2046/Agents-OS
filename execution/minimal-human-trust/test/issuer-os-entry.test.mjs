@@ -123,7 +123,8 @@ test('trusted launcher rejects execution under a regular user in the real runtim
 test('trusted launcher binds proposed Native runtime to signed Release before importing its entry',()=>{
  const f=setup();
  const files=Object.fromEntries([ENTRY,'src/systemd-issuer-credential.mjs',
-   'src/minimal-trust-issuer.mjs','src/lease-core.mjs','src/control-clock.mjs']
+   'src/minimal-trust-issuer.mjs','src/lease-core.mjs','src/control-clock.mjs',
+   'authority/recovery-handoff.mjs','migration/r17-one-time-recovery-admission.mjs']
      .map(x=>[x,digest('tested-bundle:'+x)]));
  const manifest={schema:'r16.runtime-code.v1',role:'native',entry:'host/native-runner.mjs',
    files:{...files,'host/native-runner.mjs':digest('existing-native')}};
@@ -143,6 +144,13 @@ test('trusted launcher binds proposed Native runtime to signed Release before im
  },verify:()=>version});
  assert.ok(approved.entry.endsWith('/'+ENTRY));
  assert.equal(approved.release,release.body.id);
+ for(const dependency of ['authority/recovery-handoff.mjs','migration/r17-one-time-recovery-admission.mjs']){
+   const incomplete={...manifest,files:{...manifest.files}};
+   delete incomplete.files[dependency];
+   paths.set(directory+'/native-manifest.json',Buffer.from(JSON.stringify(incomplete)));
+   assert.throws(()=>inspectReviewedTrustRuntime({euid:0,now:()=>f.now,
+     readFile:p=>paths.get(p),verify:()=>version}));
+ }
  const changed={...manifest,files:{...manifest.files,[ENTRY]:digest('tampered')}};
  paths.set(directory+'/native-manifest.json',Buffer.from(JSON.stringify(changed)));
  assert.throws(()=>inspectReviewedTrustRuntime({euid:0,now:()=>f.now,

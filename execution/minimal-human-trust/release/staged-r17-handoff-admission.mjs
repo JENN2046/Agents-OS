@@ -8,6 +8,8 @@ import {EXACT_R17_MIGRATION_SCOPE} from '../migration/r17-one-time-recovery-admi
 import {verifySignedBusinessStop} from '../src/signed-business-stop.mjs';
 import {inspectSingleWriterHandoff,readLegacyOwnerUnit} from './single-writer-handoff-preflight.mjs';
 import {inspectFirstTrustJournal} from '../human/first-trust-journal.mjs';
+import {handoffSchema,verifyRecoveryHandoff,inspectRecoveryIssuerSnapshot}
+  from '../authority/recovery-handoff.mjs';
 
 const PLAN='/etc/minimal-human-trust/first-trust-publication.json';
 const TX='/var/lib/minimal-human-trust/first-trust-publication';
@@ -133,14 +135,27 @@ export function inspectStagedR17HandoffAdmission({
    expectedRevision,expectedReviewDigest:a.reviewedManifestHash,
    expectedUnresolvedIds:operationIds,expectedResultsHashes,stopEpoch:a.stopEpoch,now});
  const proofHashes=Object.fromEntries(stopped.proofHashes.map(row=>[row.role,row.proofDigest]));
- const handoffBody=verified(handoff,roots.enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
+ const recovery=handoffSchema(handoff)==='mht.issuer-handoff.v2';
+ const handoffBody=recovery?verifyRecoveryHandoff(handoff,roots.enrollmentAuthorityPublicKey,
+   {grantId:grant.id,release:staged.release,mode:'recovery_only',grantHash:a.grantHash,
+     issuerPublicKey:roots.issuerPublicKey}):
+   verified(handoff,roots.enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
  exact(handoffBody,['schema','grantId','grantHash','releaseHash','issuerSnapshotHash',
-   'installationProfile','epoch','mode','oldWriterClosed','participantClosureHashes','issuedAt','expiresAt']);
+   'installationProfile','epoch','mode','oldWriterClosed','participantClosureHashes','issuedAt','expiresAt',
+   ...(recovery?['recoveryAdmission']:[])]);
  need(handoffBody.releaseHash===digest(staged.release)&&handoffBody.epoch===a.handoffEpoch&&
    handoffBody.installationProfile===roots.installationProfile&&
    Number.isSafeInteger(handoffBody.issuedAt)&&handoffBody.issuedAt<=now&&
    now-handoffBody.issuedAt<=30000,
    'STAGED_HANDOFF_EPOCH_OR_SNAPSHOT_DRIFT');
+ if(recovery){
+   const certificate=handoffBody.recoveryAdmission;
+   need(certificate.stageAuthorizationHash===digest(a)&&
+     certificate.reviewedManifestHash===a.reviewedManifestHash&&
+     certificate.recoveryEvidenceDigest===a.recoveryEvidenceDigest&&
+     certificate.sourceReleaseHash===digest(priorPublicConfig.release),
+     'STAGED_HANDOFF_RECOVERY_ADMISSION_DRIFT');
+ }
  // Closing/fencing can legitimately change the stage-time ledger. The newly
  // signed handoff must pin the final fresh exact old/new snapshot; the earlier
  // core.issuerSnapshotHash is not a substitute for actual closed-state proof.
@@ -148,7 +163,11 @@ export function inspectStagedR17HandoffAdmission({
    const bytes=readProtected(file);
    if(SNAPSHOTS.has(file)){
      const state=JSON.parse(bytes.toString());
-     need(Number.isSafeInteger(state?.maxNow)&&state.maxNow<=now&&now-state.maxNow<=30000,
+     // maxNow is the ledger's last WRITE time, not the time of this READ.
+     // v2 binds a fresh signed observation of the complete unchanged wrapper.
+     // It never updates maxNow just to make an old ledger look fresh.
+     need(Number.isSafeInteger(state?.maxNow)&&state.maxNow>=0&&state.maxNow<=now&&
+       (recovery||now-state.maxNow<=30000),
        'STAGED_HANDOFF_SNAPSHOT_NOT_FRESH');
    }
    return bytes;
@@ -164,6 +183,12 @@ export function inspectStagedR17HandoffAdmission({
    issuerPublicKey:roots.issuerPublicKey,grant:priorPublicConfig.grant,
    verifiedStopProofHashes:proofHashes,readProtected:readFreshSnapshot,
    readUnit:readFencedUnit,lockExists,now,euid});
+ if(recovery){
+   const wrapper=JSON.parse(readFreshSnapshot('/var/lib/r16-owner/issuer/state.json').toString());
+   inspectRecoveryIssuerSnapshot({snapshot:wrapper.data,wrapper,
+     admission:handoffBody.recoveryAdmission,grantId:grant.id,
+     issuerPublicKey:roots.issuerPublicKey,releasePublicKey:roots.releasePublicKey,now});
+ }
  need(same(read(PLAN),plan)&&same(read(TX+'/intent.json'),intent)&&
    same(read(TX+'/result.json'),result)&&same(read(BASE+'human-pending.json'),proposal)&&
    same(read(BASE+'human-policy.json'),policy)&&digest(roots)===a.trustRootsDigest&&

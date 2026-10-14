@@ -5,6 +5,8 @@ import {
   ProtectedStore, createIssuer, issuerInitialState, exportPublicKey,
   canonical, digest, verified, verifyRelease, ROLES
 } from './lease-core.mjs';
+import {verifyRecoveryHandoff,inspectRecoveryIssuerSnapshot}
+  from '../authority/recovery-handoff.mjs';
 
 const MAX_INPUT_BYTES=262144;
 const nonceRE=/^[A-Za-z0-9_-]{16,128}$/;
@@ -229,6 +231,7 @@ export function runMinimalTrustOnce({
   issuerPublicKey,grantId,release,resolveProject,humanAuthorityPublicKey,
   expectedGrantHash=null,mode='active',now=Date.now,fault=()=>{},
   envelope=null,ownerApproval=null,handoffBinding=null,
+  enrollmentAuthorityPublicKey=null,
 }){
   ensure(typeof issuerDirectory==='string'&&typeof replayDirectory==='string'&&
     issuerDirectory!==replayDirectory,'TRUST_DIRECTORIES');
@@ -237,14 +240,32 @@ export function runMinimalTrustOnce({
   try {
     replayStore=new ProtectedStore({directory:replayDirectory,create:false,now});
     if(handoffBinding!==null){
-      exact(handoffBinding,['handoffHash','issuerSnapshotHash','epoch','admissionExpiresAt']);
+      const recovery=Object.hasOwn(handoffBinding,'recoveryHandoff');
+      exact(handoffBinding,['handoffHash','issuerSnapshotHash','epoch','admissionExpiresAt',
+        ...(recovery?['recoveryHandoff']:[])]);
+      // An unsigned exception supplied by a role is never an admission. The
+      // installed policy must carry the actual independently signed v2 handoff.
+      const recoveryBody=recovery?verifyRecoveryHandoff(handoffBinding.recoveryHandoff,
+        enrollmentAuthorityPublicKey,{grantId,release,mode,issuerPublicKey}):null;
+      if(recovery)ensure(digest(handoffBinding.recoveryHandoff)===handoffBinding.handoffHash&&
+        recoveryBody.issuerSnapshotHash===handoffBinding.issuerSnapshotHash&&
+        recoveryBody.epoch===handoffBinding.epoch&&
+        recoveryBody.expiresAt===handoffBinding.admissionExpiresAt&&
+        digest(issuerStore.snapshot().grants[0]?.grant)===recoveryBody.grantHash,
+        'HANDOFF_BINDING');
       const previous=replayStore.snapshot().handoff;
       if(previous!==null)ensure(equal(previous,handoffBinding),'HANDOFF_BINDING');
       else{
         const snapshot=issuerStore.snapshot();
-        ensure(now()<handoffBinding.admissionExpiresAt&&digest(snapshot)===handoffBinding.issuerSnapshotHash&&snapshot.grants.length===1&&
-          snapshot.grants[0].projects.every(p=>p.active===null&&p.pending===null)&&
+        const t=now();
+        ensure(t<handoffBinding.admissionExpiresAt&&digest(snapshot)===handoffBinding.issuerSnapshotHash&&snapshot.grants.length===1&&
+          (recovery||snapshot.grants[0].projects.every(p=>p.active===null&&p.pending===null))&&
           replayEntries(replayStore).length===0,'HANDOFF_SNAPSHOT');
+        if(recovery){
+          ensure(recoveryBody.issuedAt<=t&&t-recoveryBody.issuedAt<=30000,'HANDOFF_SNAPSHOT');
+          inspectRecoveryIssuerSnapshot({snapshot,wrapper:issuerStore.state,
+            admission:recoveryBody.recoveryAdmission,grantId,issuerPublicKey,releasePublicKey,now:t});
+        }
         replayStore.transact(s=>{s.handoff=handoffBinding;});
       }
     }

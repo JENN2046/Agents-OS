@@ -26,7 +26,7 @@ const eq=(a,b)=>canonical(a)===canonical(b);
 const clone=x=>JSON.parse(canonical(x));
 const shape=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const entry=(rows,id,field='id')=>Array.isArray(rows)?rows.find(x=>x?.[field]===id):null;
-function certifiedClosedProject(project,grant,issuerPublicKey){
+export function certifiedClosedProject(project,grant,issuerPublicKey){
   if(project?.active!==null||project?.pending!==null||!Array.isArray(project.history)||project.history.length===0)return false;
   const last=project.history.at(-1);
   if(!last?.closed||!last?.stopEvidence||!last?.lease)return false;

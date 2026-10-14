@@ -9,7 +9,9 @@ the running R15 Owner service and is not an approved production release.
 - The issuer is one request per process; no new resident Owner daemon.
 - The protected entry accepts recovery only. Caller input cannot enable business.
 - Issuer, release and Human enrollment roots are independently installed pins.
-- A signed handoff and exact closed snapshot are required before first admission.
+- A signed handoff and exact protected snapshot are required before first admission.
+  v1 still requires all leases closed; v2 admits only the two pinned old read
+  UNKNOWN leases, under a distinct signed recovery attestation and recovery mode.
 - Existing production UNKNOWN records are neither cleared nor replayed.
 - Human consent is separate from UID membership and ordinary role signatures.
 - Current production registration, signed release, single-writer handoff and live
@@ -46,6 +48,49 @@ remains at most 30 seconds. This inspection is read-only and cannot install,
 activate or start a writer. Restricted R17 STOP instrumentation and any actual
 installation/signing/business interruption still require their precise native
 authorization; an isolated test cannot supply it.
+
+## Exact recovery handoff and isolated cutover rehearsal
+
+`mht.issuer-handoff.v2` carries an enrollment-root-signed `recoveryAdmission`.
+It pins the original two operation IDs/hashes/generations and exact signed old
+leases, R15/R17, stage authorization, original recovery evidence, review, whole
+issuer data digest and persisted wrapper digest. Operation hashes never come
+from issuer project rows. The certificate builder calls the original exhaustive
+migration/Crown verifier before constructing that attestation; matching fixture
+labels or newly signed synthetic operations cannot substitute for original bytes.
+
+The one-request receiver validates this signed exception under both issuer and
+replay locks before its first durable binding. Other projects must have genuine
+signed closure; any extra pending/active project, substituted lease or changed
+snapshot refuses admission. The existing v1 all-closed rule remains unchanged.
+After registration v2 still requires the exact R17 and recovery-only mode, even
+after its initial short window expires. It never issues new business leases or
+settles/replays an UNKNOWN. Cleanup may advance the new ledger only through its
+existing signed protocols; old state is never restored over those results.
+
+Fresh snapshot observation is different from `maxNow`, the journal's last WRITE
+time. v2 binds an explicit fresh signed observation and full wrapper hash while
+rereading the fenced Owner and identical snapshots. It does not update old
+ledger timestamps merely to pass a freshness check.
+
+`release/stage-installer-reviewed.mjs` is currently **isolated rehearsal only**.
+Its exported rehearsal accepts isolated signed inputs and mandatory virtual OS
+read callbacks, and derives every output below one private user-owned `/tmp`
+directory. It verifies exact physical bindings and stage/STOP/snapshot proofs,
+then exercises `INTENT -> ARTIFACTS -> COMMIT` publication with real atomic file
+writes and fsync. Every write/rename checkpoint rechecks the clock and writer.
+INTENT-only is UNKNOWN and never repeats its effect; durable ARTIFACTS resume
+only the identical bytes. A recorded COMMIT is read-only and cannot overwrite an
+advanced new ledger. Empty precreated replay directories get a state file;
+nonempty replay journals are never reset.
+
+**Its CLI always refuses production installation.** The current generic
+`change_trust` Human flow requires an already installed issuer and cannot yet
+approve this first cutover. STAGE_ONLY's `mayInstall`, `mayHandoffIssuer` and
+`maySettleUnknown` remain false. Real administrator/Human enrollment, a typed
+native cutover approval, credential provenance and a rehearsed same-epoch STOP
+window must be completed before a production installer can be admitted. There
+is no production credential provisioning or signer entry in this rehearsal.
 
 ## Validation commands
 
@@ -85,8 +130,8 @@ actor who already controls root. It adds no generic privileged command API.
 
 ## Deployment
 
-The packaging directory is source only. Do not install it against production
-credentials or ledgers until the six `G1D_*_R1.json` reports under `evidence/` and
-the final reviewed-source manifest have passed their stated gates. Evidence and
-review documents distinguish actual OS checks, isolated code tests and unperformed
-production operations. No production-ready or G1D_VERIFIED claim is made.
+The packaging directory is source only. Historical R1 evidence/reviews are
+immutable snapshots, not acceptance of later source. Every new delivery needs
+its own exact-head source/physical manifests, actual regression logs, independent
+review and native production gates. Never rewrite an old PASS/hash/test count
+to bind it to new code. No production-ready or G1D_VERIFIED claim is made.

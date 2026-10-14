@@ -42,7 +42,8 @@ export function inspectReviewedTrustRuntime({
   const manifest=JSON.parse(readFile(directory+'/native-manifest.json'));
   if(manifest.files?.[ENTRY]===undefined||runtimeVersion(manifest,'native')!==r.versions.native)refuse();
   for(const expected of ['src/systemd-issuer-credential.mjs','src/minimal-trust-issuer.mjs',
-    'src/lease-core.mjs','src/control-clock.mjs']){
+    'src/lease-core.mjs','src/control-clock.mjs',
+    'authority/recovery-handoff.mjs','migration/r17-one-time-recovery-admission.mjs']){
     if(!manifest.files?.[expected])refuse();
   }
   if(verify(manifest,directory,{role:'native',readFile})!==r.versions.native)refuse();

@@ -8,6 +8,8 @@ import {fileURLToPath} from 'node:url';
 import {verified,publicKey,exportPublicKey,digest,resolveRegisteredProject} from './lease-core.mjs';
 import {loadRootIssuerPrivateKey} from './systemd-issuer-credential.mjs';
 import {runMinimalTrustOnce} from './minimal-trust-issuer.mjs';
+import {handoffSchema,verifyRecoveryHandoff}
+  from '../authority/recovery-handoff.mjs';
 
 export const TRUST_ROOTS_PATH='/etc/minimal-human-trust/trust-roots.json';
 export const CONFIG_PATH='/etc/minimal-human-trust/issuer.json';
@@ -70,8 +72,13 @@ export function validateInstalledTrustPolicy(value,{trustRoots,publicKeyHint=nul
     enrollment.releaseId===release.id&&enrollment.releaseHash===roots.releaseHash&&enrollment.grantId===value.grantId&&
     Number.isSafeInteger(enrollment.enrolledAt)&&Number.isSafeInteger(enrollment.expiresAt)&&
     enrollment.enrolledAt<=now&&enrollment.expiresAt>enrollment.enrolledAt&&hash(enrollment.grantHash),'HUMAN_ENROLLMENT_MISMATCH');
-  const handoff=verified(value.handoff,roots.enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
-  exact(handoff,'schema,grantId,grantHash,releaseHash,issuerSnapshotHash,installationProfile,epoch,mode,oldWriterClosed,participantClosureHashes,issuedAt,expiresAt');
+  const recovery=handoffSchema(value.handoff)==='mht.issuer-handoff.v2';
+  const handoff=recovery?verifyRecoveryHandoff(value.handoff,roots.enrollmentAuthorityPublicKey,
+    {grantId:value.grantId,release:value.release,mode:value.mode,grantHash:enrollment.grantHash,
+      issuerPublicKey:roots.issuerPublicKey}):
+    verified(value.handoff,roots.enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
+  exact(handoff,'schema,grantId,grantHash,releaseHash,issuerSnapshotHash,installationProfile,epoch,mode,oldWriterClosed,participantClosureHashes,issuedAt,expiresAt'+
+    (recovery?',recoveryAdmission':''));
   exact(handoff.participantClosureHashes,'app,bridge,native');
   need(handoff.grantId===value.grantId&&handoff.grantHash===enrollment.grantHash&&
     handoff.releaseHash===roots.releaseHash&&handoff.installationProfile===roots.installationProfile&&
@@ -82,7 +89,8 @@ export function validateInstalledTrustPolicy(value,{trustRoots,publicKeyHint=nul
   need(publicKeyHint===null||publicKeyHint===roots.issuerPublicKey,'MHT_KEY_BINDING');
   return {release,grantHash:enrollment.grantHash,issuerPublicKey:roots.issuerPublicKey,
     humanAuthorityPublicKey:value.humanAuthorityPublicKey,mode:'recovery_only',installationProfile:roots.installationProfile,
-    handoffBinding:{handoffHash:roots.handoffHash,issuerSnapshotHash:handoff.issuerSnapshotHash,epoch:handoff.epoch,admissionExpiresAt:handoff.expiresAt}};
+    handoffBinding:{handoffHash:roots.handoffHash,issuerSnapshotHash:handoff.issuerSnapshotHash,epoch:handoff.epoch,
+      admissionExpiresAt:handoff.expiresAt,...(recovery?{recoveryHandoff:value.handoff}:{})}};
 }
 // A single complete line is read under fixed byte/time limits. Never wait for
 // EOF on an accepted socket; never read an unbounded file descriptor first.
@@ -151,6 +159,7 @@ export async function runProtectedOnce({
     issuerDirectory:policy.installationProfile==='isolated'?'/var/lib/minimal-human-trust/isolated/issuer':JOURNAL_ISSUER,
     replayDirectory:policy.installationProfile==='isolated'?'/var/lib/minimal-human-trust/isolated/replay':JOURNAL_REPLAY,
     handoffBinding:policy.handoffBinding,
+    enrollmentAuthorityPublicKey:runtime.enrollmentAuthorityPublicKey,
     issuerPrivateKey:secret,issuerPublicKey:runtime.issuerPublicKey,
     releasePublicKey:runtime.releasePublicKey,release:runtime.release,
     grantId:runtime.grantId,humanAuthorityPublicKey:runtime.humanAuthorityPublicKey,

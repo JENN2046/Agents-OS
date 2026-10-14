@@ -5,6 +5,8 @@ import fs from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {canonical,digest,verified,ROLES} from '../src/lease-core.mjs';
 import {protectedRuntimeFile} from '../authority/runtime-manifest.mjs';
+import {handoffSchema,validateRecoveryAdmission,HANDOFF_FIELDS}
+  from '../authority/recovery-handoff.mjs';
 const fail=c=>{throw Object.assign(new Error(c),{code:c});};
 const need=(x,c='OWNER_WRITER_UNVERIFIED')=>{if(!x)fail(c);};
 const same=(a,b)=>canonical(a)===canonical(b);
@@ -43,7 +45,14 @@ export function inspectSingleWriterHandoff({
  need(euid===0,'ROOT_REQUIRED');
  const g=verified(grant,issuerPublicKey,'r16.workspace.v1');
  need(g.id==='r16-projects-daily','HANDOFF_GRANT_SCOPE');
- const b=verified(handoff,enrollmentAuthorityPublicKey,'mht.issuer-handoff.v1');
+ const schema=handoffSchema(handoff);
+ const b=verified(handoff,enrollmentAuthorityPublicKey,schema);
+ if(schema==='mht.issuer-handoff.v2'){
+   need(same(Object.keys(b).sort(),[...HANDOFF_FIELDS,'recoveryAdmission'].sort()),'HANDOFF_SHAPE');
+   const a=validateRecoveryAdmission(b.recoveryAdmission);
+   need(a.issuerSnapshotHash===b.issuerSnapshotHash&&a.observedAt<=now&&
+     now-a.observedAt<=30000,'HANDOFF_OBSERVATION_EXPIRED');
+ }
  need(b.mode==='recovery_only'&&b.oldWriterClosed===true&&
    b.grantId==='r16-projects-daily'&&b.grantHash===digest(grant)&&
    typeof b.issuerSnapshotHash==='string'&&/^[a-f0-9]{64}$/.test(b.issuerSnapshotHash)&&
@@ -63,6 +72,8 @@ export function inspectSingleWriterHandoff({
  const finalOld=readSnapshot(OLD,readProtected);
  need(same(first,finalOld)&&same(first,candidate)&&
    digest(first.data)===b.issuerSnapshotHash,'ISSUER_SNAPSHOT_CHANGED');
+ if(schema==='mht.issuer-handoff.v2')need(digest(first)===b.recoveryAdmission.issuerStateFileHash,
+   'ISSUER_SNAPSHOT_CHANGED');
  noWriters();readUnit();
  return Object.freeze({schema:'mht.single-writer-preflight.v1',
    status:'OLD_SERVICE_INACTIVE_MASKED_AND_SNAPSHOT_EXACT',

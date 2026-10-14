@@ -10,7 +10,9 @@ const sha=x=>createHash('sha256').update(x).digest('hex');
 function fixture(){
  const time=1791900000000,issuer=pair(),publisher=pair(),enroller=pair();
  const id='r16-daily-g1d-isolated-fixture',directory='/opt/r16/releases/'+id;
- const names=[ENTRY,'src/systemd-issuer-credential.mjs','src/minimal-trust-issuer.mjs','src/lease-core.mjs','src/control-clock.mjs'];
+ const names=[ENTRY,'src/systemd-issuer-credential.mjs','src/minimal-trust-issuer.mjs',
+  'src/lease-core.mjs','src/control-clock.mjs','authority/recovery-handoff.mjs',
+  'migration/r17-one-time-recovery-admission.mjs'];
  const content=new Map(names.map(name=>[name,fs.readFileSync(new URL('../'+name,import.meta.url))]));
  content.set('host/native-runner.mjs',Buffer.from('// synthetic manifest member only'));
  const manifest={schema:'r16.runtime-code.v1',role:'native',entry:'host/native-runner.mjs',

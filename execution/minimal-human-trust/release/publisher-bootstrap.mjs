@@ -18,6 +18,8 @@ export const REVIEWED_SOURCE_FILES=Object.freeze([
  'release/publisher-transaction.mjs','release/publisher-inputs.mjs',
  'release/first-trust-release-builder.mjs',
  'release/first-trust-recovery-admission.mjs',
+ 'release/recovery-handoff-builder.mjs','release/stage-installer-reviewed.mjs',
+ 'release/cutover-transaction.mjs',
  'migration/r17-one-time-recovery-admission.mjs',
  'human/first-trust-journal.mjs','human/approval-policy.mjs',
  'human/approval-signer.mjs','human/approval-broker.py','human/approval-window.py',
@@ -27,11 +29,13 @@ export const REVIEWED_SOURCE_FILES=Object.freeze([
  'packaging/org.jenn.r16.minimal-human-trust.policy',
  'packaging/minimal-human-trust-publisher.service',
  'authority/stage-authorization.mjs',
+ 'authority/recovery-handoff.mjs',
  'release/staged-r17-handoff-admission.mjs',
  'release/single-writer-handoff-preflight.mjs',
  'src/lease-core.mjs','src/control-clock.mjs',
  'src/minimal-trust-issuer-once.mjs','src/systemd-issuer-credential.mjs',
  'src/minimal-trust-issuer.mjs','src/signed-business-stop.mjs',
+ 'src/trusted-launcher.mjs',
  'src/cloud-delivery-projector.mjs','authority/runtime-manifest.mjs',
 ]);
 function rootRead(file,max=32*1024*1024){
