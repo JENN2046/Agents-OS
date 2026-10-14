@@ -48,7 +48,7 @@ export async function verifiedR15CrownVerifier({
  return imported.verifyCall;
 }
 
-export function validateStagedPublisherResult(result,{pub,roots,admission,now}){
+export function validateStagedPublisherResult(result,{pub,roots,admission,reviewManifest,now}){
  need(result?.schema==='mht.first-trust-staged-signatures.v1'&&
    result.status==='SIGNED_STAGED_NOT_INSTALLED'&&
    result.oldReleaseId==='r16-daily-20261012-r15'&&
@@ -58,7 +58,33 @@ export function validateStagedPublisherResult(result,{pub,roots,admission,now}){
    result.grantUnchanged===true&&result.mayInstall===false&&
    result.mayActivateBusiness===false&&result.mayHandoffIssuer===false&&
    result.maySettleUnknown===false,'PUBLISHER_OUTPUT_SCOPE');
+ // A valid Release signature does NOT by itself prove that its payload is
+ // the exact Human-reviewed R17. Re-derive all signed version/clock fields
+ // from the root-pinned R17 installation manifest on every result readback.
+ need(reviewManifest?.schema==='r16.reviewed-installation.v1'&&
+   reviewManifest.releaseId==='r16-daily-20261012-r17'&&
+   digest(reviewManifest)===admission.admission.reviewedManifestHash&&
+   reviewManifest.artifacts&&same(Object.keys(reviewManifest.artifacts).sort(),ROLES),
+   'PUBLISHER_REVIEW_CHANGED');
+ const previous=verified(pub.release,roots.releasePublicKey,'r16.release.v1');
+ const signedGrant=verified(pub.grant,roots.issuerPublicKey,'r16.workspace.v1');
+ need(previous.id==='r16-daily-20261012-r15'&&
+   signedGrant.id==='r16-projects-daily'&&
+   digest(pub.grant)===admission.admission.grantHash,
+   'PUBLISHER_TRUST_ROOT_DRIFT');
+ verifyRelease(pub.release,roots.releasePublicKey,
+   {versions:previous.versions,actions:signedGrant.actions,now:previous.issuedAt});
+ const expectedVersions=Object.fromEntries(ROLES.map(role=>
+   [role,runtimeVersion(reviewManifest.artifacts[role],role)]));
  const signedRelease=verified(result.release,roots.releasePublicKey,'r16.release.v1');
+ need(same(signedRelease.versions,expectedVersions)&&
+   signedRelease.issuedAt===reviewManifest.issuedAt&&
+   signedRelease.notAfter===reviewManifest.notAfter&&
+   signedRelease.issuedAt>=previous.issuedAt&&
+   same(signedRelease.formats,previous.formats)&&
+   same(signedRelease.actions,previous.actions)&&
+   signedRelease.permissionVersion===previous.permissionVersion,
+   'PUBLISHER_RELEASE_TARGET_DRIFT');
  need(signedRelease.id==='r16-daily-20261012-r17'&&
    signedRelease.issuedAt<=now&&
    same(signedRelease.actions,ACTIONS)&&
@@ -72,7 +98,8 @@ export function validateStagedPublisherResult(result,{pub,roots,admission,now}){
    enrolled.grantHash===admission.admission.grantHash&&
    enrolled.humanPublicKey===admission.admission.humanPublicKey&&
    enrolled.humanUid===1000&&enrolled.humanSubject==='local-human:1000'&&
-   enrolled.enrolledAt<=now&&enrolled.expiresAt>now,
+   enrolled.enrolledAt<=now&&enrolled.expiresAt>now&&
+   enrolled.expiresAt===admission.admission.enrollmentExpiresAt,
    'PUBLISHER_ENROLLMENT_DRIFT');
  need(pub.grant?.body?.id===enrolled.grantId,'PUBLISHER_GRANT_DRIFT');
  return true;
@@ -134,7 +161,7 @@ export async function runPublisherOnce({
    sourceReleaseId:'r16-daily-20261012-r15',
    targetReleaseId:'r16-daily-20261012-r17'};
  const verifyResult=signedResult=>validateStagedPublisherResult(signedResult,{
-   pub,roots,admission:inspected,now:t});
+   pub,roots,admission:inspected,reviewManifest,now:t});
  return stage({directory:TX,identity:approved,
    uid:0,verifyResult,
    sign:()=>{
