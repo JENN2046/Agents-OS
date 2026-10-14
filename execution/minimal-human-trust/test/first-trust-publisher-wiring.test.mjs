@@ -22,12 +22,23 @@ function fixture(){
  const roots={releasePublicKey:exportPublicKey(releaseKey),
    enrollmentAuthorityPublicKey:exportPublicKey(enrollmentKey),
    issuerPublicKey:exportPublicKey(issuerKey)};
+ const artifacts=Object.fromEntries(ROLES.map(role=>{
+   const entry=role+'/main.mjs';
+   return [role,{schema:'r16.runtime-code.v1',role,entry,files:{[entry]:digest('reviewed-'+role)}}];
+ }));
+ const versions=Object.fromEntries(ROLES.map(role=>[role,runtimeVersion(artifacts[role],role)]));
  const r17={schema:'r16.release.v1',id:'r16-daily-20261012-r17',
    issuedAt:now-1000,notAfter:now+86400000,formats:['r16.workspace.v1'],
-   versions:Object.fromEntries(ROLES.map(x=>[x,digest('version-'+x)])),
-   actions:ACTIONS,permissionVersion:1};
+   versions,actions:ACTIONS,permissionVersion:1};
+ const reviewManifest={schema:'r16.reviewed-installation.v1',releaseId:r17.id,
+   issuedAt:r17.issuedAt,notAfter:r17.notAfter,artifacts,
+   localFiles:[{role:'app',artifactPath:'app/main.mjs',
+     path:'/opt/r16/releases/r16-daily-20261012-r17/app/main.mjs',sha256:digest('reviewed-app')}]};
  const release=signed(r17,releaseKey);
- const admission={admission:{reviewedManifestHash:digest('reviewed-r17'),
+ const prior=signed({...r17,id:'r16-daily-20261012-r15',issuedAt:now-86400000,
+   notAfter:now-1000},releaseKey);
+ const admission={admission:{reviewedManifestHash:digest(reviewManifest),
+   enrollmentExpiresAt:now+86400000,
    humanApprovalReceiptHash:digest('human-os-approval'),
    admissionDigest:digest('first-trust-inspected'),grantId:grant.body.id,
    grantHash:digest(grant),humanPublicKey:exportPublicKey(humanKey),
@@ -46,42 +57,42 @@ function fixture(){
    firstTrustAdmissionDigest:admission.admission.admissionDigest,
    release,enrollment:enrolled,grantUnchanged:true,mayInstall:false,
    mayActivateBusiness:false,mayHandoffIssuer:false,maySettleUnknown:false};
- const pub={grant};
+ const pub={grant,release:prior};
  return {now,grant,roots,releaseKey,enrollmentKey,issuerKey,humanKey,r17,
-   release,enrolled,admission,signedResult,pub};
+   release,enrolled,admission,signedResult,pub,reviewManifest};
 }
 test('publisher validates independently signed R17 and Human enrollment only as staged',()=>{
  const f=fixture();
  assert.equal(validateStagedPublisherResult(f.signedResult,{pub:f.pub,roots:f.roots,
-   admission:f.admission,now:f.now}),true);
+   admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}),true);
 });
 test('an invalid enrollment signer cannot be smuggled into signed stage',()=>{
  const f=fixture();f.signedResult.enrollment=signed(f.signedResult.enrollment.body,pair());
  refuse(()=>validateStagedPublisherResult(f.signedResult,{
-   pub:f.pub,roots:f.roots,admission:f.admission,now:f.now}));
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}));
 });
 test('enrolled identity cannot be changed after Human reviewed exact public key',()=>{
  const f=fixture();
  f.signedResult.enrollment=signed({...f.enrolled.body,humanPublicKey:exportPublicKey(pair())},f.enrollmentKey);
  refuse(()=>validateStagedPublisherResult(f.signedResult,{
-   pub:f.pub,roots:f.roots,admission:f.admission,now:f.now}));
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}));
 });
 test('changing verified R17 permissions is always rejected',()=>{
  const f=fixture();
  const wrong=signed({...f.r17,permissionVersion:2},f.releaseKey);
  f.signedResult.release=wrong;
  refuse(()=>validateStagedPublisherResult(f.signedResult,{
-   pub:f.pub,roots:f.roots,admission:f.admission,now:f.now}));
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}));
 });
 test('staged release cannot claim it has been installed or activated',()=>{
  const f=fixture();f.signedResult.mayInstall=true;
  refuse(()=>validateStagedPublisherResult(f.signedResult,{
-   pub:f.pub,roots:f.roots,admission:f.admission,now:f.now}));
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}));
 });
 test('an unsigned foreign Release cannot be passed to output verifier',()=>{
  const f=fixture();f.signedResult.release=signed(f.r17,pair());
  refuse(()=>validateStagedPublisherResult(f.signedResult,{
-   pub:f.pub,roots:f.roots,admission:f.admission,now:f.now}));
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}));
 });
 test('root-reviewed source freeze requires all required transitive files and hashes',()=>{
  const bytes=Buffer.from('reviewed-synthetic-code-v1');
@@ -132,4 +143,30 @@ test('unsigned or incomplete OS inputs cannot reach the protected sign operation
  const plan={schema:'mht.first-trust-publisher-plan.v1'};
  refuse(()=>inspectPublisherInputs({plan,roots:{},publicConfig:{},
    evidence:{},firstTrust:{},verifyCrownCall:()=>{}}));
+});
+
+test('a valid Release-root signature for UNREVIEWED R17 code is refused',()=>{
+ const f=fixture(),changed=signed({...f.r17,
+   versions:{...f.r17.versions,app:digest('unreviewed-app')}},f.releaseKey);
+ f.signedResult.release=changed;
+ // Even a matching enrollment-root re-signature must not bypass the reviewed manifest.
+ f.signedResult.enrollment=signed({...f.enrolled.body,releaseHash:digest(changed)},f.enrollmentKey);
+ assert.throws(()=>validateStagedPublisherResult(f.signedResult,{
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}),
+   {code:'PUBLISHER_RELEASE_TARGET_DRIFT'});
+});
+test('a trusted enrollment signature cannot silently extend Human consent',()=>{
+ const f=fixture();
+ f.signedResult.enrollment=signed({...f.enrolled.body,
+   expiresAt:f.enrolled.body.expiresAt+86400000},f.enrollmentKey);
+ assert.throws(()=>validateStagedPublisherResult(f.signedResult,{
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}),
+   {code:'PUBLISHER_ENROLLMENT_DRIFT'});
+});
+test('root-reviewed target cannot be replaced between sign and readback',()=>{
+ const f=fixture();
+ f.reviewManifest.artifacts.native.files['native/main.mjs']=digest('new-nonreviewed-code');
+ assert.throws(()=>validateStagedPublisherResult(f.signedResult,{
+   pub:f.pub,roots:f.roots,admission:f.admission,reviewManifest:f.reviewManifest,now:f.now}),
+   {code:'PUBLISHER_REVIEW_CHANGED'});
 });
