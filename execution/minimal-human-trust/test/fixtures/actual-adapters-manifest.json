@@ -10,7 +10,7 @@
     },
     "bridge/workspace-private-router.mjs": {
       "source": "/home/jenn/AGENTS_OS_Workspace/projects/r16-owner-services/bridge/workspace-private-router.mjs",
-      "sha256": "3160c1d79f464ae53e5c8b4dd07f9db33afac1610d853ed538e06af0c3c7a1a2",
+      "sha256": "a8a58264ecf4238dfc7c7b01db4509190fad35efbe2ca24260d31db34f217fe6",
       "baselineSha256": "480498c6286a6990e7fe4c95cf5928111cd6925d8804cf68ef7b836eedb15404",
       "modification": "Private durable business stop and runtime evidence methods; public actions unchanged; expired-R15 recovery-only and full exchange shutdown barrier"
     }
