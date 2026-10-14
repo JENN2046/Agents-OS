@@ -130,8 +130,8 @@ export function createWorkspaceBridge({store,directory,pluginManager,wss,crown,g
   const cleanup=['status','close','drain','stop','reconcile','control_status','fresh'].includes(c.operation)||
     (c.operation==='issuer'&&['fresh','acknowledgeRevocation','closeLease','prepareStatus','heartbeat'].includes(c.data?.operation));
   // Native WorkspaceControl previously skipped release expiry validation.
-  if(!cleanup)approved();
   if(store.snapshot().businessStop)check(cleanup,'BUSINESS_STOPPED');
+  if(!cleanup)approved();
   check(c.grantId===g.id&&c.channel===g.channel&&c.issuedAt<=now()&&now()<c.expiresAt&&c.expiresAt-c.issuedAt<=30000,'AUTHORITY_REJECTED');
   // Signed Native controls enforce fresh issuer state themselves. In particular,
   // issuer:fresh must be reachable before Bridge freshness exists (no auth cycle).
