@@ -1,5 +1,6 @@
 """Pure display/protocol tests only. Never creates Tk, GUI, socket or polkit."""
 import base64,hashlib,importlib.util,json,unittest,unittest.mock as mock
+import builtins
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('approval_window',Path(__file__).parent.parent/'human'/'approval-window.py')
 w=importlib.util.module_from_spec(spec);spec.loader.exec_module(w)
@@ -21,8 +22,8 @@ class Tests(unittest.TestCase):
    with self.assertRaises(RuntimeError):w.confirmation_lane(args)
  def test_first_cutover_displays_impact_complete_target_and_public_fingerprints_without_gui(self):
   summary,raw=cutover();original=json.dumps(summary,sort_keys=True)
-  with mock.patch.object(w.tk,'Tk',side_effect=AssertionError('must not open GUI')):
-   display=w.format_confirmation_summary(summary,'a'*64)
+  display=w.format_confirmation_summary(summary,'a'*64)
+  self.assertFalse(hasattr(w,'tk'),'pure formatter must not load the GUI toolkit')
   self.assertIn('首次恢复接管',display['title'])
   for text in ['当前尚未执行','停业务','封锁旧写者','UNKNOWN','不结算','不重放','不启用正常业务','向前修复','尚未应用']:
    self.assertIn(text,display['intro'])
@@ -49,4 +50,14 @@ class Tests(unittest.TestCase):
   for field,value in [('phase','STAGE_ONLY'),('oldRootHash',None),('newRootTemplateHash','bad')]:
    summary,_=cutover();summary['target'][field]=value
    with self.assertRaises(RuntimeError):w.format_confirmation_summary(summary,'a'*64)
+ def test_module_and_formatter_work_when_tkinter_is_unavailable(self):
+  original=builtins.__import__
+  def no_gui(name,*args,**kwargs):
+   if name=='tkinter' or name.startswith('tkinter.'):
+    raise ModuleNotFoundError('GUI toolkit intentionally unavailable in pure test')
+   return original(name,*args,**kwargs)
+  with mock.patch.object(builtins,'__import__',side_effect=no_gui):
+   isolated=importlib.util.module_from_spec(spec);spec.loader.exec_module(isolated)
+   summary,_=cutover();display=isolated.format_confirmation_summary(summary,'a'*64)
+   self.assertIn('首次恢复接管',display['title'])
 if __name__=='__main__':unittest.main()

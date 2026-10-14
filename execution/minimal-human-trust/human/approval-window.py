@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """Native confirmation of the broker's fixed target. Never asks for a Key."""
-import base64,hashlib,json,os,socket,stat,struct,sys,tkinter as tk
+import base64,hashlib,json,os,socket,stat,struct,sys
 from datetime import datetime,timezone
-from tkinter import messagebox
 SOCKET='/run/minimal-human-trust/approval.sock'
 def confirmation_lane(argv):
     if argv==[]:return 'standard'
@@ -70,6 +69,8 @@ def line(peer):
 def main():
     lane=confirmation_lane(sys.argv[1:])
     if os.getuid()!=1000:raise RuntimeError()
+    import tkinter as tk
+    from tkinter import messagebox
     st=os.lstat(SOCKET)
     if not stat.S_ISSOCK(st.st_mode) or st.st_uid!=0 or st.st_mode&0o007:raise RuntimeError()
     peer=socket.socket(socket.AF_UNIX);peer.settimeout(175);peer.connect(SOCKET)
@@ -102,4 +103,10 @@ def main():
 if __name__=='__main__':
     try:main()
     except Exception:
-        window=tk.Tk();window.withdraw();messagebox.showerror('R16','当前没有已认可的待确认操作，或可信授权入口尚未就绪。');window.destroy();raise SystemExit(1)
+        try:
+            import tkinter as tk
+            from tkinter import messagebox
+            window=tk.Tk();window.withdraw();messagebox.showerror('R16','当前没有已认可的待确认操作，或可信授权入口尚未就绪。');window.destroy()
+        except Exception:
+            print('本机确认窗口尚未就绪；需要 Tkinter 和桌面会话。未完成授权。',file=sys.stderr)
+        raise SystemExit(1)
