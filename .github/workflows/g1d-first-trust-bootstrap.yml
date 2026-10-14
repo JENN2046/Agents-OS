@@ -43,7 +43,18 @@ jobs:
       - name: Human broker Python regression
         run: python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
       - name: Protected publisher unit syntax
-        run: systemd-analyze verify execution/minimal-human-trust/packaging/minimal-human-trust-publisher.service
+        run: |
+          # CI Node resides in hostedtoolcache; the real unit remains pinned
+          # to the production /usr/bin/node, independently checked on Jenn.
+          unit=execution/minimal-human-trust/packaging/minimal-human-trust-publisher.service
+          if test -x /usr/bin/node; then
+            systemd-analyze verify "$unit"
+          else
+            tmp="$(mktemp -d)"
+            trap 'rm -rf "$tmp"' EXIT
+            sed "s#^ExecStart=/usr/bin/node #ExecStart=$(command -v node) #" "$unit" > "$tmp/minimal-human-trust-publisher.service"
+            systemd-analyze verify "$tmp/minimal-human-trust-publisher.service"
+          fi
       - name: Whitespace consistency
         run: |
           # Preserve raw historical TAP evidence byte-for-byte; check source changes.
