@@ -2,7 +2,7 @@
 """One socket activation, one fixed proposal, one fresh OS approval; no apply."""
 import hashlib,json,os,re,secrets,socket,stat,struct,subprocess,time
 NODE='/usr/bin/node'
-SIGNER='/usr/lib/minimal-human-trust/human/approval-signer.mjs'
+SIGNER='/usr/lib/minimal-human-trust/human/approval-bootstrap.mjs'
 ACTION='org.jenn.r16.minimal-human-trust.approve'
 STATE='/var/lib/minimal-human-trust/human-approval'
 class Refused(Exception): pass
@@ -35,7 +35,7 @@ def invoke_signer(operation,proposal_hash):
         child.terminate()
         raise Refused() # no kill, retry, second child, or success claim
     need(child.returncode==0 and len(out)<=262144)
-    value=json.loads(out);need(value.get('ok') is True);return value
+    value=json.loads(out);need(isinstance(value,dict) and value.get('ok') is True);return value
 def read_request(peer):
     raw=b'';deadline=time.monotonic()+60
     while b'\n' not in raw:
@@ -56,6 +56,33 @@ def fresh_polkit(subject,summary,call=subprocess.Popen):
     except subprocess.TimeoutExpired:
         child.terminate();raise Refused()
     need(result==0)
+def confirmation_packet(summary,proposal_hash,challenge):
+    need(isinstance(summary,dict) and isinstance(proposal_hash,str) and re.fullmatch('[a-f0-9]{64}',proposal_hash))
+    # Both UI and polkit receive the entire same object. Oversize input refuses
+    # before prompting; neither transport truncates an authorization target.
+    details=json.dumps({**summary,'confirmationChallenge':challenge},sort_keys=True,separators=(',',':'),ensure_ascii=True)
+    need(len(details)<=8192)
+    packet=(json.dumps({'status':'CONFIRM_EXACT_TARGET','proposalHash':proposal_hash,
+      'challenge':challenge,'summary':summary})+'\n').encode()
+    need(len(packet)<=16384)
+    return packet
+def validate_signer_result(result,proposal_hash,action,lane):
+    need(isinstance(result,dict) and result.get('ok') is True and result.get('status')=='APPROVED_NOT_APPLIED')
+    if 'proposalHash' in result:need(result['proposalHash']==proposal_hash)
+    if lane=='first_cutover':
+        need(set(result)=={'ok','status','proposalHash','approval'} and result['proposalHash']==proposal_hash)
+        approval=result['approval']
+        need(isinstance(approval,dict) and set(approval)=={'body','signature'} and
+          isinstance(approval['signature'],str) and re.fullmatch('[A-Za-z0-9_-]{86}',approval['signature']))
+        body=approval['body']
+        need(isinstance(body,dict) and body.get('schema')=='mht.first-cutover-authorization.v1' and
+          body.get('action')==action and body.get('proposalHash')==proposal_hash)
+    else:
+        approval=result.get('approval')
+        if isinstance(approval,dict) and isinstance(approval.get('body'),dict):
+            body=approval['body']
+            if 'action' in body:need(body['action']==action)
+            if 'proposalHash' in body:need(body['proposalHash']==proposal_hash)
 def protected_state():
     current='/'
     for part in STATE.split('/')[1:]:
@@ -74,11 +101,22 @@ def write_once(name,value):
 def handle(peer,preview=invoke_signer,authorize=fresh_polkit,sign=invoke_signer):
     pid,uid,gid=struct.unpack('3i',peer.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))
     need(uid==1000 and gid==1000);subject=process_identity(pid,uid)
-    p=preview('preview',None);summary=p['summary'];challenge=secrets.token_hex(32)
-    peer.sendall((json.dumps({'status':'CONFIRM_EXACT_TARGET','proposalHash':p['proposalHash'],
-      'challenge':challenge,'summary':summary})+'\n').encode())
+    # Protocol upgrade: an explicit first frame selects one fixed confirmation
+    # lane. There is deliberately no missing-frame or legacy-lane fallback.
+    selection=read_request(peer)
+    need(isinstance(selection,dict) and set(selection)=={'operation','lane'} and
+      selection['operation']=='select_confirmation' and selection['lane'] in ['standard','first_cutover'])
+    lane=selection['lane'];need(process_identity(pid,uid)==subject)
+    preview_operation='preview_first_cutover' if lane=='first_cutover' else 'preview'
+    sign_operation='sign_first_cutover' if lane=='first_cutover' else 'sign'
+    p=preview(preview_operation,None);need(isinstance(p,dict) and isinstance(p.get('summary'),dict))
+    summary=p['summary'];action=summary.get('action')
+    need(action=='first_cutover_handoff' if lane=='first_cutover' else
+      action in ['revoke_grant','create_grant','change_trust','enroll_human'])
+    challenge=secrets.token_hex(32)
+    peer.sendall(confirmation_packet(summary,p.get('proposalHash'),challenge))
     reply=read_request(peer)
-    need(set(reply)=={'confirm','proposalHash','challenge'} and reply['confirm'] is True and
+    need(isinstance(reply,dict) and set(reply)=={'confirm','proposalHash','challenge'} and reply['confirm'] is True and
       reply['proposalHash']==p['proposalHash'] and reply['challenge']==challenge)
     need(process_identity(pid,uid)==subject)
     authorize(subject,{**summary,'confirmationChallenge':challenge})
@@ -88,7 +126,8 @@ def handle(peer,preview=invoke_signer,authorize=fresh_polkit,sign=invoke_signer)
     protected_state();record=p['proposalHash'];need(re.fullmatch('[a-f0-9]{64}',record))
     write_once(record+'.intent.json',{'schema':'mht.human-os-intent.v1','proposalHash':record,
       'peerUid':uid,'processStart':subject[1],'confirmedAt':int(time.time()*1000),'challengeHash':hashlib.sha256(challenge.encode()).hexdigest()})
-    result=sign('sign',record)
+    result=sign(sign_operation,record)
+    validate_signer_result(result,record,action,lane)
     write_once(record+'.result.json',result)
     peer.sendall((json.dumps({'status':'APPROVED_NOT_APPLIED','proposalHash':record})+'\n').encode())
 if __name__=='__main__':

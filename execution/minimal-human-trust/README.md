@@ -84,13 +84,50 @@ only the identical bytes. A recorded COMMIT is read-only and cannot overwrite an
 advanced new ledger. Empty precreated replay directories get a state file;
 nonempty replay journals are never reset.
 
-**Its CLI always refuses production installation.** The current generic
-`change_trust` Human flow requires an already installed issuer and cannot yet
-approve this first cutover. STAGE_ONLY's `mayInstall`, `mayHandoffIssuer` and
+**Its CLI always refuses production installation.** The generic `change_trust`
+flow requires an installed issuer. A separately typed first Native confirmation
+entry now validates the signed stage and enrollment without that dependency.
+It remains uninstalled and has never confirmed an actual Human. STAGE_ONLY's
+`mayInstall`, `mayHandoffIssuer` and
 `maySettleUnknown` remain false. Real administrator/Human enrollment, a typed
 native cutover approval, credential provenance and a rehearsed same-epoch STOP
 window must be completed before a production installer can be admitted. There
 is no production credential provisioning or signer entry in this rehearsal.
+
+## First Native Human confirmation entry
+
+The native window accepts only its fixed `--first-cutover` route or the standard
+route. The existing socket uses an exact first `select_confirmation` frame; the
+broker rejects missing/cross-lane frames, obtains kernel UID/process identity,
+shows the entire fixed proposal and public-root fingerprints, then requests a
+fresh polkit check. No new daemon, credential input or account migration is added.
+This is an explicit protocol upgrade; old clients are not silently rerouted.
+
+The fixed Node approval bootstrap verifies root/unit provenance and every frozen
+source byte before dynamic signer import or key access. Only the dedicated
+`first_cutover_handoff` action uses signed staged enrollment as Human authority;
+generic grant/trust actions retain their installed-enrollment requirements. The
+new route uses distinct pending files and cannot overwrite the original Stage
+proposal or OS receipt. It validates complete source/installer closure and the
+unchanged protected snapshot before confirming or signing. Canonical SPKI keys
+prevent padding aliases from defeating root/Human separation.
+
+The target pins R15/Grant, signed R17, exact stage/result/review/evidence, full
+snapshot, freeze/installer, old roots, epochs and a complete new-root template.
+Only the future signed handoffHash is absent from that template. It permits the
+specifically reviewed stop/fence/recovery handoff, with no business activation,
+UNKNOWN settlement or replay. The signed consent pins the full proposal hash,
+nonce, target and original short expiration; the broker keeps unique fsynced
+INTENT/RESULT. No credential path or missing issuer file can select this route.
+
+Read-only final admission requires both the genuine Human signature and protected
+OS receipt, then fresh post-confirmation R17 control delivery/STOP/handoff and
+snapshot, actual old-writer fence and exact completed roots. The isolated native
+Human rehearsal rechecks that admission at every publication guard and binds its
+Human/OS/nonce/stage/handoff/root hashes into INTENT, ARTIFACTS and receipt. A
+historical COMMIT grants no fresh authority and never restores an advanced ledger.
+These implemented source paths are not a real Human ceremony, installation,
+signing run, service stop, production cutover or production acceptance.
 
 ## Validation commands
 
@@ -99,6 +136,7 @@ On the pinned Jenn host, run:
 ```sh
 NODE_PATH=/home/jenn/AGENTS_OS_Workspace/runtime/VCPChat/node_modules node --test test/*.test.mjs
 python3 -B test/human-approval-broker.test.py
+python3 -B test/human-approval-window.test.py
 ```
 
 The actual ProjectForge/SQLite acceptance imports the exact external files listed

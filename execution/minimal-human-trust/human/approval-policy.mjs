@@ -2,6 +2,7 @@
 import {canonical,digest,verified,publicKey,ACTIONS} from '../src/lease-core.mjs';
 import {validateTrustRoots} from '../src/minimal-trust-issuer-once.mjs';
 import {validateStageAuthorization} from '../authority/stage-authorization.mjs';
+import {validateFirstCutoverTarget,firstCutoverApprovalBody} from '../authority/first-cutover-authorization.mjs';
 const fail=code=>{throw Object.assign(new Error(code),{code});};
 const need=(value,code='HUMAN_TARGET_REJECTED')=>{if(!value)fail(code);};
 const exact=(value,names)=>need(value&&typeof value==='object'&&!Array.isArray(value)&&
@@ -41,7 +42,7 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
  const p=verified(proposal,roots.releasePublicKey,'mht.human-proposal.v1');
  exact(p,['schema','action','grantId','expectedVersion','expectedGrantHash','releaseId','releaseHash',
    'nonce','issuedAt','expiresAt','target']);
- need(['revoke_grant','create_grant','change_trust','enroll_human'].includes(p.action)&&
+ need(['revoke_grant','create_grant','change_trust','enroll_human','first_cutover_handoff'].includes(p.action)&&
    p.grantId===policy.grantId&&p.expectedVersion===policy.grantVersion&&p.expectedGrantHash===policy.grantHash&&
    p.releaseId===policy.releaseId&&p.releaseHash===policy.releaseHash&&id(p.nonce)&&p.nonce.length>=16&&
    Number.isSafeInteger(p.issuedAt)&&Number.isSafeInteger(p.expiresAt)&&p.issuedAt<=now&&now<p.expiresAt&&
@@ -67,6 +68,11 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
      hash(p.target.reviewedManifestHash)&&Number.isSafeInteger(p.target.enrollmentExpiresAt)&&
      p.target.enrollmentExpiresAt>now&&p.target.enrollmentExpiresAt<=now+366*86400000,'HUMAN_ENROLLMENT_TARGET');
  }
+ if(p.action==='first_cutover_handoff'){
+   const t=validateFirstCutoverTarget(p.target,{roots});
+   need(t.grantId===p.grantId&&t.grantHash===p.expectedGrantHash&&t.grantVersion===p.expectedVersion&&
+     t.sourceReleaseId===p.releaseId&&t.sourceReleaseHash===p.releaseHash,'FIRST_CUTOVER_PROPOSAL_DRIFT');
+ }
  return Object.freeze({body:p,proposalHash:policy.proposalHash,summary:{action:p.action,grantId:p.grantId,
    expectedVersion:p.expectedVersion,expectedGrantHash:p.expectedGrantHash,releaseId:p.releaseId,
    releaseHash:p.releaseHash,nonce:p.nonce,issuedAt:p.issuedAt,expiresAt:p.expiresAt,
@@ -76,6 +82,7 @@ export function validateHumanProposal({proposal,policy,roots,now=Date.now()}){
 export function humanApprovalBody(checked,{now=Date.now()}={}){
  const p=checked.body;
  need(now>=p.issuedAt&&now<p.expiresAt,'HUMAN_CONFIRMATION_EXPIRED');
+ if(p.action==='first_cutover_handoff')return firstCutoverApprovalBody(checked,{now});
  if(p.action==='revoke_grant')return {schema:'mht.human-authorization.v1',action:p.action,
    grantId:p.grantId,expectedVersion:p.expectedVersion,expectedGrantHash:p.expectedGrantHash,
    releaseId:p.releaseId,issuedAt:now,nonce:p.nonce};

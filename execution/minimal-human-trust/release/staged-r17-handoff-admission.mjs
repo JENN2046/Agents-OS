@@ -23,15 +23,12 @@ const exact=(value,fields)=>need(value&&Object.getPrototypeOf(value)===Object.pr
   same(Object.keys(value).sort(),fields.slice().sort()),'STAGED_HANDOFF_SHAPE');
 const operationIds=EXACT_R17_MIGRATION_SCOPE.projects.map(row=>row.operationId);
 
-export function inspectStagedR17HandoffAdmission({
- priorPublicConfig,roots,reviewManifest,delivery,receipts,expectedRevision,
- expectedResultsHashes,handoff,readProtected=protectedRuntimeFile,
- readUnit=readLegacyOwnerUnit,lockExists=p=>fs.existsSync(p),
+export function inspectPublishedFirstTrustStage({
+ priorPublicConfig,roots,reviewManifest,readProtected=protectedRuntimeFile,
  now=Date.now(),euid=process.geteuid(),
 }={}){
  need(euid===0,'ROOT_REQUIRED');
- need(Number.isSafeInteger(now)&&now>0&&typeof readProtected==='function'&&
-   typeof readUnit==='function'&&typeof lockExists==='function','STAGED_HANDOFF_INPUT');
+ need(Number.isSafeInteger(now)&&now>0&&typeof readProtected==='function','STAGED_HANDOFF_INPUT');
  const read=file=>JSON.parse(readProtected(file).toString());
  const plan=read(PLAN),intent=read(TX+'/intent.json'),result=read(TX+'/result.json');
  exact(plan,['schema','authorization','humanProposalHash']);
@@ -129,6 +126,28 @@ export function inspectStagedR17HandoffAdmission({
    enrollment.enrolledAt===intent.approvedAt&&Number.isSafeInteger(enrollment.expiresAt)&&
    enrollment.expiresAt>enrollment.enrolledAt&&now<enrollment.expiresAt,
    'STAGED_HANDOFF_ENROLLMENT_DRIFT');
+ need(same(read(PLAN),plan)&&same(read(TX+'/intent.json'),intent)&&
+   same(read(TX+'/result.json'),result)&&same(read(BASE+'human-pending.json'),proposal)&&
+   same(read(BASE+'human-policy.json'),policy)&&digest(roots)===a.trustRootsDigest&&
+   digest(reviewManifest)===a.reviewedManifestHash&&
+   same(readHistoricalHuman(),human),
+   'STAGED_HANDOFF_DURABLE_STATE_CHANGED');
+ return Object.freeze({status:'PUBLISHED_R17_STAGE_INSPECTED',a,grant,prior,human,versions,staged,enrollment,r17,plan,intent,result,proposal,policy});
+}
+
+export function inspectStagedR17HandoffAdmission({
+ priorPublicConfig,roots,reviewManifest,delivery,receipts,expectedRevision,
+ expectedResultsHashes,handoff,readProtected=protectedRuntimeFile,
+ readUnit=readLegacyOwnerUnit,lockExists=p=>fs.existsSync(p),
+ now=Date.now(),euid=process.geteuid(),
+}={}){
+ need(typeof readUnit==='function'&&typeof lockExists==='function','STAGED_HANDOFF_INPUT');
+ const stage=inspectPublishedFirstTrustStage({priorPublicConfig,roots,reviewManifest,readProtected,now,euid});
+ const {a,grant,prior,human,versions,staged,enrollment,r17,plan,intent,result,proposal,policy}=stage;
+ const read=file=>JSON.parse(readProtected(file).toString());
+ const readHistoricalHuman=()=>inspectFirstTrustJournal({proposal,policy,trustRoots:roots,
+   sourceRelease:priorPublicConfig.release,sourceGrant:priorPublicConfig.grant,
+   reviewManifest,now:intent.approvedAt,readProtected,isInstalled:()=>false});
  const stopped=verifySignedBusinessStop({grant:priorPublicConfig.grant,
    issuerPublicKey:roots.issuerPublicKey,release:staged.release,
    releasePublicKey:roots.releasePublicKey,delivery,receipts,

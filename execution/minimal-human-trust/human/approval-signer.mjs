@@ -7,21 +7,19 @@ import {protectedRuntimeFile} from '../authority/runtime-manifest.mjs';
 import {verified,exportPublicKey,signed} from '../src/lease-core.mjs';
 import {readBoundedOnceInput} from '../src/minimal-trust-issuer-once.mjs';
 import {validateHumanProposal,humanApprovalBody,firstTrustReviewedIntent,PROJECTS_ROOT} from './approval-policy.mjs';
+import {digest} from '../src/lease-core.mjs';
+import {FIRST_CUTOVER_PENDING,FIRST_CUTOVER_POLICY,inspectFirstCutoverInputs,inspectFirstCutoverSigningIntent} from './first-cutover-admission.mjs';
 const BASE='/etc/minimal-human-trust/';
 const reject=()=>{throw Error('HUMAN_SIGNER_REFUSED');};
-function load(){
- const proposal=JSON.parse(protectedRuntimeFile(BASE+'human-pending.json'));
- const policy=JSON.parse(protectedRuntimeFile(BASE+'human-policy.json'));
- const roots=JSON.parse(protectedRuntimeFile(BASE+'trust-roots.json'));
- const checked=validateHumanProposal({proposal,policy,roots});
+function workspaceIdentity(){
  let current='';
  for(const part of PROJECTS_ROOT.split('/').filter(Boolean)){
    current+='/'+part;const st=fs.lstatSync(current);
    if(st.isSymbolicLink()||!st.isDirectory())reject();
  }
  const scope=fs.statSync(PROJECTS_ROOT);
- if(fs.realpathSync(PROJECTS_ROOT)!==PROJECTS_ROOT||scope.dev!==policy.workspaceDev||scope.ino!==policy.workspaceIno)reject();
- return {checked,policy,roots};
+ if(fs.realpathSync(PROJECTS_ROOT)!==PROJECTS_ROOT)reject();
+ return {dev:scope.dev,ino:scope.ino};
 }
 export function approvalUnit(cgroup){
  if(typeof cgroup!=='string'||cgroup.length>8192)reject();
@@ -68,45 +66,80 @@ function credentialKey(expected){
  }finally{bytes.fill(0);}
 }
 
-if(process.argv[1]===fileURLToPath(import.meta.url))try{
- if(process.geteuid()!==0||process.argv.length!==2)reject();
- const input=JSON.parse((await readBoundedOnceInput()).toString());
- if(!input||Object.keys(input).sort().join(',')!=='operation,proposalHash'||
-   !['preview','sign'].includes(input.operation))reject();
- const {checked,policy,roots}=load();
- // Initial enrollment has no Human signing key. Only a pre-pinned
- // Release-root-signed first-use proposal may enter OS confirmation.
- // Never mint or install Human authority from this review path.
- const firstUse=checked.body.action==='enroll_human'&&!fs.existsSync(BASE+'issuer.json');
- if(!firstUse){
- // Enrollment is independently signed and installed. UID or polkit alone
- // must never make a caller-provided public key into Human Authority.
- const installed=JSON.parse(protectedRuntimeFile(BASE+'issuer.json'));
- const enrolled=verified(installed.enrollment,roots.enrollmentAuthorityPublicKey,'mht.human-enrollment.v1');
- if(Object.keys(enrolled).sort().join(',')!=='enrolledAt,expiresAt,grantHash,grantId,humanPublicKey,humanSubject,humanUid,releaseHash,releaseId,schema'||
-   !Number.isSafeInteger(enrolled.enrolledAt)||!Number.isSafeInteger(enrolled.expiresAt)||
-   enrolled.enrolledAt>Date.now()||enrolled.expiresAt<=enrolled.enrolledAt||enrolled.releaseId!==policy.releaseId||
-   enrolled.humanUid!==1000||enrolled.humanSubject!=='local-human:1000'||
-   enrolled.humanPublicKey!==policy.humanPublicKey||enrolled.grantId!==policy.grantId||
-   enrolled.grantHash!==policy.grantHash||enrolled.releaseHash!==policy.releaseHash)reject();
- if(checked.body.action!=='revoke_grant'&&Date.now()>=enrolled.expiresAt)reject();
- }
- if(input.operation==='preview'){
-   if(input.proposalHash!==null)reject();
-   process.stdout.write(JSON.stringify({ok:true,proposalHash:checked.proposalHash,summary:checked.summary})+'\n');
- }else{
-   if(input.proposalHash!==checked.proposalHash)reject();
-   if(firstUse){
-    // Root broker journals this unsigned record only AFTER fresh polkit.
-    // A protected publisher must verify the durable OS confirmation before
-    // any enrollment or R17 signing. This signer never self-enrolls.
-    const reviewedIntent=firstTrustReviewedIntent(checked);
-    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',
-      firstTrustOsConfirmationOnly:true,proposalHash:checked.proposalHash,
-      reviewedIntent,approval:null})+'\n');
+export const readApprovalInput=async()=>JSON.parse((await readBoundedOnceInput()).toString());
+
+export function runHumanApprovalOperation({input,readProtected=protectedRuntimeFile,
+ now=Date.now,loadHumanKey=credentialKey,readWorkspaceIdentity=workspaceIdentity,
+ euid=process.geteuid()}={}){
+ if(euid!==0||!input||Object.keys(input).sort().join(',')!=='operation,proposalHash'||
+   !['preview','sign','preview_first_cutover','sign_first_cutover'].includes(input.operation)||
+   typeof now!=='function')reject();
+ const cutover=input.operation.endsWith('_first_cutover'),preview=input.operation.startsWith('preview');
+ const read=file=>JSON.parse(readProtected(file).toString());
+ const load=()=>{
+   const proposal=read(cutover?FIRST_CUTOVER_PENDING:BASE+'human-pending.json');
+   const policy=read(cutover?FIRST_CUTOVER_POLICY:BASE+'human-policy.json');
+   const roots=read(BASE+'trust-roots.json');
+   const time=now(),checked=validateHumanProposal({proposal,policy,roots,now:time});
+   if(cutover!==(checked.body.action==='first_cutover_handoff'))reject();
+   const scope=readWorkspaceIdentity();
+   if(scope.dev!==policy.workspaceDev||scope.ino!==policy.workspaceIno)reject();
+   let firstUse=false;
+   if(cutover){
+     const priorPublicConfig=read('/run/r16-owner/public-config.json');
+     const reviewManifest=read(BASE+'reviewed-installation.json');
+     const inspected=inspectFirstCutoverInputs({proposal,policy,roots,priorPublicConfig,
+       reviewManifest,readProtected,now:time,euid});
+     if(inspected.humanPublicKey!==policy.humanPublicKey)reject();
    }else{
-    const result=signed(humanApprovalBody(checked),credentialKey(policy.humanPublicKey));
-    process.stdout.write(JSON.stringify({ok:true,status:'APPROVED_NOT_APPLIED',approval:result})+'\n');
+     // Only the separately typed enrollment action has OS-only first-use intent.
+     firstUse=checked.body.action==='enroll_human'&&!fs.existsSync(BASE+'issuer.json');
+     if(!firstUse){
+       const installed=read(BASE+'issuer.json');
+       const enrolled=verified(installed.enrollment,roots.enrollmentAuthorityPublicKey,'mht.human-enrollment.v1');
+       if(Object.keys(enrolled).sort().join(',')!=='enrolledAt,expiresAt,grantHash,grantId,humanPublicKey,humanSubject,humanUid,releaseHash,releaseId,schema'||
+         !Number.isSafeInteger(enrolled.enrolledAt)||!Number.isSafeInteger(enrolled.expiresAt)||
+         enrolled.enrolledAt>time||enrolled.expiresAt<=enrolled.enrolledAt||enrolled.releaseId!==policy.releaseId||
+         enrolled.humanUid!==1000||enrolled.humanSubject!=='local-human:1000'||
+         enrolled.humanPublicKey!==policy.humanPublicKey||enrolled.grantId!==policy.grantId||
+         enrolled.grantHash!==policy.grantHash||enrolled.releaseHash!==policy.releaseHash)reject();
+       if(checked.body.action!=='revoke_grant'&&time>=enrolled.expiresAt)reject();
+     }
    }
+   return {checked,policy,roots,firstUse,time};
+ };
+ const current=load();
+ if(preview){
+   if(input.proposalHash!==null)reject();
+   return {ok:true,proposalHash:current.checked.proposalHash,summary:current.checked.summary};
  }
-}catch{process.stdout.write('{"ok":false,"error":"HUMAN_SIGNER_REFUSED"}\n');process.exitCode=1;}
+ if(input.proposalHash!==current.checked.proposalHash)reject();
+ if(current.firstUse){
+   return {ok:true,status:'APPROVED_NOT_APPLIED',firstTrustOsConfirmationOnly:true,
+     proposalHash:current.checked.proposalHash,reviewedIntent:firstTrustReviewedIntent(current.checked),approval:null};
+ }
+ const osIntent=cutover?inspectFirstCutoverSigningIntent({checked:current.checked,readProtected,now:current.time}):null;
+ if(cutover){
+   let recorded=false;
+   try{readProtected('/var/lib/minimal-human-trust/human-approval/'+current.checked.proposalHash+'.result.json');recorded=true;}
+   catch(e){if(e.code!=='ENOENT')throw e;}
+   if(recorded)reject();
+ }
+ const again=load();
+ if(again.time<current.time||digest(again.checked)!==digest(current.checked)||
+   digest(again.policy)!==digest(current.policy)||digest(again.roots)!==digest(current.roots))reject();
+ const key=loadHumanKey(current.policy.humanPublicKey);
+ if(exportPublicKey(key)!==current.policy.humanPublicKey)reject();
+ const signTime=now();if(signTime<again.time)reject();
+ const result=signed(humanApprovalBody(current.checked,{now:signTime}),key);
+ const after=load();
+ if(after.time<signTime||digest(after.checked)!==digest(current.checked)||
+   digest(after.policy)!==digest(current.policy)||digest(after.roots)!==digest(current.roots))reject();
+ if(cutover&&digest(inspectFirstCutoverSigningIntent({checked:current.checked,readProtected,
+   now:after.time}))!==digest(osIntent))reject();
+ return {ok:true,status:'APPROVED_NOT_APPLIED',...(cutover?{proposalHash:current.checked.proposalHash}:{}),approval:result};
+}
+
+if(process.argv[1]===fileURLToPath(import.meta.url)){
+ process.stdout.write('{"ok":false,"error":"HUMAN_SIGNER_REQUIRES_REVIEWED_BOOTSTRAP"}\n');process.exitCode=1;
+}

@@ -3,11 +3,15 @@ from pathlib import Path
 spec=importlib.util.spec_from_file_location('broker',Path(__file__).parent.parent/'human'/'approval-broker.py')
 b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)
 class Peer:
- def __init__(self,uid=1000,confirm=True):self.uid=uid;self.confirm=confirm;self.sent=[]
+ def __init__(self,uid=1000,confirm=True,lane='standard',selection=None):
+  self.uid=uid;self.confirm=confirm;self.sent=[];self.reads=0
+  self.selection=selection if selection is not None else {'operation':'select_confirmation','lane':lane}
  def getsockopt(self,*args):return struct.pack('3i',123,self.uid,self.uid)
  def settimeout(self,*args):pass
  def sendall(self,raw):self.sent.append(json.loads(raw))
  def recv(self,size):
+  self.reads+=1
+  if self.reads==1:return (json.dumps(self.selection)+'\n').encode()
   preview=self.sent[0]
   return (json.dumps({'confirm':self.confirm,'proposalHash':preview['proposalHash'],'challenge':preview['challenge']})+'\n').encode()
 class Tests(unittest.TestCase):
@@ -92,4 +96,73 @@ class Tests(unittest.TestCase):
   self.assertEqual(authorized['target'],summary['target'])
   self.assertEqual(authorized['target']['stageAuthorization'],core)
   self.assertIn('confirmationChallenge',authorized)
+ def cutover_fixture(self):
+  summary={'action':'first_cutover_handoff','target':{'schema':'mht.first-cutover-target.v1',
+    'phase':'FIRST_NATIVE_RECOVERY_CUTOVER','stopEpoch':'12345678-1234-1234-1234-123456789abc',
+    'stageIntentHash':'1'*64,'stageResultHash':'2'*64,'installerHash':'3'*64,'sourceFreezeDigest':'4'*64,
+    'constraints':{'mayActivateBusiness':False,'maySettleUnknown':False,'mayReplayUnknown':False}}}
+  preview=lambda operation,digest:(self.calls.append(('preview-operation',operation)) or
+    {'ok':True,'summary':summary,'proposalHash':'a'*64})
+  def sign(operation,digest):
+   self.calls.append(('sign-operation',operation))
+   return {'ok':True,'status':'APPROVED_NOT_APPLIED','proposalHash':digest,
+    'approval':{'body':{'schema':'mht.first-cutover-authorization.v1','action':'first_cutover_handoff',
+      'proposalHash':digest},'signature':'S'*86}}
+  return summary,preview,sign
+ def test_cutover_lane_selects_exact_bootstrap_operations_and_preserves_target_in_os_journal(self):
+  summary,preview,sign=self.cutover_fixture()
+  b.handle(Peer(lane='first_cutover'),preview,self.auth,sign)
+  self.assertEqual(self.calls[0],('preview-operation','preview_first_cutover'))
+  self.assertEqual(self.calls[1][0],'polkit');self.assertEqual(self.calls[1][2]['target'],summary['target'])
+  self.assertEqual(self.calls[2],('sign-operation','sign_first_cutover'))
+  self.assertEqual(len(self.records),2)
+  self.assertEqual(self.records[1][1]['approval']['body']['schema'],'mht.first-cutover-authorization.v1')
+  self.assertEqual(self.records[0][1]['peerUid'],1000)
+ def test_missing_extra_or_unknown_lane_frame_has_no_legacy_fallback(self):
+  for selection in [{},{'confirm':True},{'operation':'select_confirmation','lane':'admin'},
+   {'operation':'select_confirmation','lane':'standard','extra':True},
+   {'operation':'run_command','lane':'first_cutover'},['standard']]:
+   with self.subTest(selection=selection):
+    with self.assertRaises(b.Refused):b.handle(Peer(selection=selection),lambda *args:self.fail('preview'),self.auth,self.sign)
+  self.assertEqual(self.records,[]);self.assertEqual(self.calls,[])
+ def test_cutover_and_standard_actions_cannot_cross_selected_lanes(self):
+  summary,preview,sign=self.cutover_fixture()
+  with self.assertRaises(b.Refused):b.handle(Peer(lane='standard'),preview,self.auth,sign)
+  with self.assertRaises(b.Refused):b.handle(Peer(lane='first_cutover'),self.preview,self.auth,self.sign)
+  self.assertEqual(self.records,[])
+  self.assertFalse(any(isinstance(value,tuple) and value[0]=='polkit' for value in self.calls))
+ def test_cutover_cancel_or_denied_fresh_polkit_never_creates_identity_or_intent(self):
+  summary,preview,sign=self.cutover_fixture()
+  with self.assertRaises(b.Refused):b.handle(Peer(lane='first_cutover',confirm=False),preview,self.auth,sign)
+  self.assertEqual(self.records,[])
+  self.assertFalse(any(isinstance(value,tuple) and value[0]=='sign-operation' for value in self.calls))
+  self.calls.clear()
+  def deny(*args):raise b.Refused()
+  with self.assertRaises(b.Refused):b.handle(Peer(lane='first_cutover'),preview,deny,sign)
+  self.assertEqual(self.records,[])
+  self.assertFalse(any(isinstance(value,tuple) and value[0]=='sign-operation' for value in self.calls))
+ def test_oversize_complete_target_refuses_before_preview_prompt_and_polkit(self):
+  preview=lambda *args:{'summary':{'action':'first_cutover_handoff','target':{'data':'x'*9000}},'proposalHash':'a'*64}
+  peer=Peer(lane='first_cutover')
+  with self.assertRaises(b.Refused):b.handle(peer,preview,self.auth,self.sign)
+  self.assertEqual(peer.sent,[]);self.assertEqual(self.records,[]);self.assertEqual(self.calls,[])
+ def test_cutover_result_substitution_retains_intent_and_never_sends_success(self):
+  for change in [lambda r:r.update(status='INSTALLED'),lambda r:r.update(proposalHash='b'*64),
+   lambda r:r.update(extra='authority'),lambda r:r['approval']['body'].update(proposalHash='b'*64),
+   lambda r:r['approval']['body'].update(action='change_trust'),lambda r:r.update(approval=None)]:
+   with self.subTest(change=change):
+    self.records.clear();self.calls.clear();summary,preview,sign=self.cutover_fixture();peer=Peer(lane='first_cutover')
+    def wrong(operation,digest):
+     value=sign(operation,digest);change(value);return value
+    with self.assertRaises(b.Refused):b.handle(peer,preview,self.auth,wrong)
+    self.assertEqual(len(self.records),1);self.assertEqual(len(peer.sent),1)
+ def test_bad_standard_status_retains_intent_and_never_claims_application(self):
+  with self.assertRaises(b.Refused):b.handle(self.peer,self.preview,self.auth,
+   lambda *args:{'ok':True,'status':'APPLIED'})
+  self.assertEqual(len(self.records),1);self.assertEqual(len(self.peer.sent),1)
+ def test_bootstrap_fixed_path_cannot_be_selected_by_client_frame(self):
+  self.assertEqual(b.SIGNER,'/usr/lib/minimal-human-trust/human/approval-bootstrap.mjs')
+  with self.assertRaises(b.Refused):b.handle(Peer(selection={'operation':'select_confirmation',
+   'lane':'first_cutover','signer':'/tmp/unsafe.mjs'}),self.preview,self.auth,self.sign)
+  self.assertEqual(self.records,[])
 if __name__=='__main__':unittest.main()

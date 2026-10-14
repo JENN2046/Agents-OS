@@ -13,6 +13,7 @@ import {verifyInstalledManifest} from '../authority/runtime-manifest.mjs';
 import {deriveExactR17Release} from './first-trust-release-builder.mjs';
 import {inspectStagedR17HandoffAdmission} from './staged-r17-handoff-admission.mjs';
 import {runCutoverTransaction} from './cutover-transaction.mjs';
+import {inspectFirstCutoverHandoffAdmission} from '../human/first-cutover-admission.mjs';
 
 const need=(ok,code)=>{if(!ok)throw Object.assign(new Error(code),{code});};
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -51,7 +52,7 @@ export function isolatedCutoverLayout(directory){
  * are derived beneath one private /tmp directory; no production file is opened
  * by this module. The mandatory read callbacks have no real-OS default.
  */
-export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,fault=()=>{}}){
+export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,fault=()=>{},firstCutoverHumanArgs=null}){
   const layout=isolatedCutoverLayout(directory);
   need(handoffArgs?.roots?.installationProfile==='isolated'&&
     handoffArgs.handoff?.body?.schema==='mht.issuer-handoff.v2'&&
@@ -59,6 +60,8 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
     typeof now==='function'&&typeof fault==='function','ISOLATED_REHEARSAL_ONLY');
   const roots=copy(handoffArgs.roots),review=copy(handoffArgs.reviewManifest);
   const sourceGrant=copy(handoffArgs.priorPublicConfig.grant),handoff=copy(handoffArgs.handoff);
+  const intendedFinalRoots={...roots,releaseHash:handoff.body.releaseHash,handoffHash:digest(handoff)};
+  let nativeHumanAdmission=null;
   const journal=layout.transaction+'/INTENT.json';
   let savedIdentity=null;
   if(fs.existsSync(journal)){
@@ -80,6 +83,13 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
       digest(handoffArgs.handoff)===digest(handoff)&&
       digest(handoffArgs.priorPublicConfig.grant)===digest(sourceGrant),
       'ISOLATED_REHEARSAL_INPUT_DRIFT');
+    if(firstCutoverHumanArgs){
+      const fresh=inspectFirstCutoverHandoffAdmission({humanArgs:firstCutoverHumanArgs,
+        finalRoots:intendedFinalRoots,handoffArgs,now:at});
+      need(nativeHumanAdmission===null||digest(fresh)===digest(nativeHumanAdmission),
+        'ISOLATED_REHEARSAL_HUMAN_DRIFT');
+      nativeHumanAdmission=fresh;
+    }
     return value;
   };
   // Physical file coverage and all signed stage/STOP/snapshot gates pass before
@@ -106,13 +116,14 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
     file==='/opt/r16/releases/'+review.releaseId+'/native-manifest.json'?bytes(review.artifacts.native):read(file);
   inspectReviewedTrustRuntime({euid:0,now:()=>firstNow,readFile:prospectiveRead,
     verify:(m,dir,o)=>verifyInstalledManifest(m,dir,{...o,readFile:prospectiveRead})});
-  const expiresAt=Math.min(handoff.body.expiresAt,
+  const expiresAt=Math.min(handoff.body.expiresAt,nativeHumanAdmission?.expiresAt??Infinity,
     ...ROLES.map(role=>handoffArgs.receipts[role].body.expiresAt));
   const identity={schema:'mht.cutover-intent.v1',issuedAt:firstNow,expiresAt,
     profile:'ISOLATED_REHEARSAL_ONLY',handoffHash:digest(handoff),
     stageIntentHash:inspection.stageIntentHash,stageResultHash:inspection.stageResultHash,
     recoveryAdmissionHash:digest(handoff.body.recoveryAdmission),
-    issuerStateFileHash:digest(wrapper),reviewedManifestHash:digest(review)};
+    issuerStateFileHash:digest(wrapper),reviewedManifestHash:digest(review),
+    ...(nativeHumanAdmission?{nativeHumanAdmission}: {})};
   // Stable preparation identity is recovered from the durable journal; its
   // window is never silently extended after a partial attempt.
   let originalIdentity=identity;
@@ -126,7 +137,8 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
     issuerSnapshotHash:digest(wrapper.data),issuerStateFileHash:digest(wrapper),
     stageIntentHash:inspection.stageIntentHash,stageResultHash:inspection.stageResultHash,
     realHumanEnrolled:false,realOsStopAttested:false,productionChanged:false,
-    mayActivateBusiness:false,maySettleUnknown:false,mayReplayUnknown:false};
+    mayActivateBusiness:false,maySettleUnknown:false,mayReplayUnknown:false,
+    ...(nativeHumanAdmission?{nativeHumanAdmission}: {})};
   const values={issuerState:wrapper,replayState:{schema:1,revision:0,maxNow:0,data:replayInitialState()},
     stageRootsArchive:roots,roots:activeRoots,issuerConfig:config,receipt,
     ...Object.fromEntries(ROLES.map(role=>[role+'Manifest',review.artifacts[role]]))};
@@ -135,7 +147,7 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
     beforeSha256:slot==='roots'?sha(bytes(roots)):null}));
   const artifacts={schema:'mht.cutover-artifacts.v1',files:plannedTargets.map(spec=>
     ({...spec,bytesBase64:bytes(values[spec.slot]).toString('base64')})),
-    evidence:{handoff,inspection,receipt}};
+    evidence:{handoff,inspection,receipt,...(nativeHumanAdmission?{nativeHumanAdmission}: {})}};
   const artifactHash=digest(artifacts);
   for(const dir of [layout.transaction,layout.installed,layout.installed+'/issuer',layout.installed+'/replay']){
     if(!fs.existsSync(dir))fs.mkdirSync(dir,{mode:0o700});
@@ -154,6 +166,11 @@ export function rehearseRecoveryCutover({directory,handoffArgs,now=Date.now,faul
     },
   });
   return Object.freeze({...receipt,transaction,layout,mayInstall:false,mayStartIssuer:false});
+}
+
+export function rehearseFirstNativeHumanCutover({humanArgs,...args}={}){
+  need(humanArgs&&typeof humanArgs==='object','ISOLATED_REHEARSAL_HUMAN_REQUIRED');
+  return rehearseRecoveryCutover({...args,firstCutoverHumanArgs:humanArgs});
 }
 
 if(process.argv[1]===fileURLToPath(import.meta.url)){

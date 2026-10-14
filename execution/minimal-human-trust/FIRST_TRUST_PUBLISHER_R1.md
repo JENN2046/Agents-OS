@@ -60,9 +60,12 @@ minutes earlier. The helper itself provides no signing or installation authority
 
 The cutover transaction and private /tmp rehearsal exercise durable
 INTENT/ARTIFACTS/COMMIT, identical-byte crash recovery and read-only historical
-COMMIT readback. The formal installer CLI is blocked pending an exact first-use
-native Human cutover gate. An already installed issuer is required by generic
-change_trust, so that generic flow cannot stand in for first-cutover consent.
+COMMIT readback. A separate typed first-cutover Human entry now validates signed
+stage enrollment and exact source/root targets without an installed issuer. It
+uses independent pending files, a freeze-first approval bootstrap and fresh OS
+consent, then read-only machine gates. The formal installer CLI remains blocked
+pending actual native Human consent and production installer admission. Generic
+change_trust still requires an installed issuer and does not supply this consent.
 See README.md for current boundaries. Historical evidence/review R1 files remain
 immutable; this source documentation does not rebind their old acceptance.
 

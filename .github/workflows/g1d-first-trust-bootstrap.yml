@@ -46,9 +46,15 @@ jobs:
             execution/minimal-human-trust/test/recovery-handoff-builder.test.mjs \
             execution/minimal-human-trust/test/cutover-transaction.test.mjs \
             execution/minimal-human-trust/test/stage-installer-rehearsal.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-admission.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-signer.test.mjs \
+            execution/minimal-human-trust/test/first-cutover-transaction.test.mjs \
+            execution/minimal-human-trust/test/human-approval-bootstrap.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Human broker Python regression
-        run: python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
+        run: |
+          python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
+          python3 -B execution/minimal-human-trust/test/human-approval-window.test.py
       - name: Protected publisher unit syntax
         run: |
           # CI Node resides in hostedtoolcache; the real unit remains pinned
