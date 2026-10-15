@@ -57,7 +57,7 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     const st=fs.statSync(g.workspace.root);check(st.dev===g.workspace.dev&&st.ino===g.workspace.ino,'WORKSPACE_REPLACED');
   }
   function assertCurrent() {
-    check((!closing||active.size>0)&&fresh&&!store.snapshot().revoked&&!store.snapshot().admissionStopped&&!store.snapshot().businessStop,'GRANT_REVOKED');validateWorkspace();
+    check((!closing||active.size>0)&&fresh&&!store.snapshot().revoked&&!store.snapshot().admissionStopped&&!store.snapshot().businessStop&&!store.snapshot().recoveryOnly,'GRANT_REVOKED');validateWorkspace();
     verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});
   }
   function lookup(projectId) {check(engine,'AUTHORITY_UNAVAILABLE');const p=engine.lookupProject(projectId);return {id:p.id,workspaceId:p.workspaceId,root:p.root};}
@@ -81,6 +81,30 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     const p=createParticipant({store:pstore,role:'native',signingKey,issuerKey,releaseKey,resolveProject});
     p.pair({grant});entry={participant:p,store:pstore};participants.set(projectId,entry);
     store.transact(s=>{if(!s.projects.includes(projectId))s.projects.push(projectId);});return entry;
+  }
+  function recoveryFence({allowClosedRelease=false}={}) {
+    const state=store.snapshot();
+    const projects=state.projects.map(projectId=>{
+      const p=participant(projectId).participant;
+      return {state:p.snapshot(),status:p.status()};
+    });
+    // A lost result fences business, not the authenticated transport needed to
+    // recover it. Persist this independently of Owner's connectRequested flag.
+    if(projects.some(p=>p.status.unresolved.length>0)){
+      if(!state.recoveryOnly||!state.admissionStopped)
+        store.transact(s=>{s.recoveryOnly=true;s.admissionStopped=true;});
+    }else if(allowClosedRelease&&state.recoveryOnly&&
+      projects.every(p=>!p.state.active&&!p.state.pending&&!p.state.closing)&&
+      !state.controls.some(c=>['UNKNOWN','INFLIGHT'].includes(c.status))&&
+      state.pending.every(p=>p.status==='CREATED')){
+      // Only a successful live ACTIVE freshness check may reach this branch.
+      // Preserve independent STOP/disconnect fences. Owner must still confirm
+      // connection and every new lease still needs its normal signed admission.
+      try{validateWorkspace();verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});}
+      catch{return true;} // Expiry/drift must not cut off cleanup transport.
+      store.transact(s=>{s.recoveryOnly=false;});
+    }
+    return store.snapshot().recoveryOnly===true;
   }
   function authorizeCall(p) {
     const context=contexts.get(p.request_id);
@@ -148,7 +172,8 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
       check(allowRevoked,'GRANT_REVOKED');return {status:'REVOKED',verifiedLiveFresh:true};
     }
     for(const projectId of store.snapshot().projects)await freshParticipant(participant(projectId));
-    fresh=true;if(store.snapshot().admissionStopped){check(allowRevoked,'GRANT_REVOKED');return {status:'CLEANUP_ONLY',verifiedLiveFresh:true};}assertCurrent();return {status:'CONNECTED',verifiedLiveFresh:true};
+    fresh=true;recoveryFence({allowClosedRelease:true});
+    if(store.snapshot().admissionStopped||store.snapshot().recoveryOnly){check(allowRevoked,'GRANT_REVOKED');return {status:'CLEANUP_ONLY',verifiedLiveFresh:true};}assertCurrent();return {status:'CONNECTED',verifiedLiveFresh:true};
   }
   async function discovery(operation,data) {
     exact(data,['proof']);check(engine,'AUTHORITY_UNAVAILABLE');
@@ -370,13 +395,14 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     },
     setConnectionRequested(requested){
       check(typeof requested==='boolean','INVALID_REQUEST');
-      store.transact(s=>{s.admissionStopped=!!s.businessStop||!requested||s.revoked;});
+      store.transact(s=>{s.admissionStopped=!!s.businessStop||!!s.recoveryOnly||!requested||s.revoked;});
       if(!requested||store.snapshot().revoked)drainBusiness();
       return {businessStopped:store.snapshot().admissionStopped};
     },
     async prepareConnection(remote){
       check(!closing,'RECOVERY_REQUIRED');await controlQueue;await Promise.allSettled([...active]);
-      const cleanup=store.snapshot().revoked||store.snapshot().admissionStopped;
+      const recovering=recoveryFence();
+      const cleanup=recovering||store.snapshot().revoked||store.snapshot().admissionStopped;
       if(!cleanup)assertCurrent();
       const snapshots=[...participants.entries()].map(([projectId,entry])=>({projectId,state:entry.participant.snapshot(),status:entry.participant.status()}));
       check(cleanup||snapshots.every(x=>x.status.unresolved.length===0),'RECOVERY_UNRESOLVED');
@@ -395,7 +421,9 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
       store.transact(s=>{if(s.connection?.generation===generation){s.connection.closed=true;}});
     },
     connectedIdentity(value,generation){
-      const cleanup=store.snapshot().revoked||store.snapshot().admissionStopped;
+      crown.identityCheck(value);
+      const recovering=recoveryFence();
+      const cleanup=recovering||store.snapshot().revoked||store.snapshot().admissionStopped;
       if(!cleanup)assertCurrent();
       if(generation!==undefined)store.transact(s=>{check(s.connection?.generation===generation&&!s.connection.closed,'CONNECTION_STALE');s.connection.origin=value.originId;});
       transportIdentity=clone(value);return cleanup?{cleanupOnly:true}:describe(value);
