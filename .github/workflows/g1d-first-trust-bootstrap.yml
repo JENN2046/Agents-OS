@@ -37,6 +37,7 @@ jobs:
             execution/minimal-human-trust/test/r17-pinned-recovery-guard.test.mjs \
             execution/minimal-human-trust/test/single-writer-handoff-preflight.test.mjs \
             execution/minimal-human-trust/test/recovery-shutdown-races.test.mjs \
+            execution/minimal-human-trust/test/native-recovery-fence-release.test.mjs \
             execution/minimal-human-trust/test/first-trust-publisher-credential.test.mjs \
             execution/minimal-human-trust/test/first-trust-publisher-transaction.test.mjs \
             execution/minimal-human-trust/test/first-trust-publisher-wiring.test.mjs \
