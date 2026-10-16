@@ -59,6 +59,84 @@ def fixture():
  backend=Backend()
  return approval,backend,journal,now
 
+def add_registered_project(backend,project,*,phase='active'):
+ """Opaque history fixtures; real signed project validation belongs to reader."""
+ host=json.loads(backend.files['host/state.json']['bytes'])
+ registration={'project':{'id':project,'workspaceId':'synthetic-workspace','root':'/synthetic/projects/'+project},'initialized':True,
+               'transition':{'syntheticHistoricalTransition':'PRESERVED'} if phase=='transition' else None,
+               'retirement':{'syntheticRetirement':'PRESERVED'} if phase=='closing' else None}
+ host['data']['projects'].append(registration);backend.files['host/state.json']['bytes']=m.canonical(host)
+ old=json.loads(backend.files['host/project-p2vox/state.json']['bytes'])
+ old['data']={'kind':'r16.participant.v1','role':'app','active':{'syntheticLease':project} if phase in ('active','closing') else None,
+              'closing':{'syntheticLease':project} if phase=='closing' else None,'pending':None,
+              'operations':[{'id':project+'-known','projectId':project,'status':'KNOWN','resultHash':'a'*64}],
+              'closed':[{'syntheticHistory':project}]}
+ for base,raw in [('state.json',m.canonical(old)),('.lock',backend.files['host/project-p2vox/.lock']['bytes']),
+                  ('archive-extra-history.json',m.canonical({'syntheticHistoricalBytes':project,'phase':phase}))]:
+  backend.files['host/project-'+project+'/'+base]={**copy.deepcopy(backend.files['host/state.json']),'bytes':raw}
+
+class CompleteRegisteredGraphTests(unittest.TestCase):
+ def many(self):
+  a,b,j,t=fixture()
+  for index in range(7):add_registered_project(b,'extra_'+str(index),phase=('active','closing','transition')[index%3])
+  return a,b,j,t
+ def test_nine_registered_projects_preserve_all_bytes_and_only_original_two_unknown_bindings(self):
+  a,b,j,t=self.many();before=copy.deepcopy(b.files)
+  result=m.Driver(b,j,lambda:t[0]).run(a)
+  self.assertEqual(result['status'],'CONTROLLED_CRASH_STOPPED_NOT_DRAINED');self.assertEqual(result['drainStatus'],'UNPROVEN')
+  self.assertEqual(b.files,before);self.assertEqual(b.kill_calls,1)
+  manifest=j.read()['checkpoint']['files'];self.assertEqual(set(manifest),set(before))
+  self.assertEqual(len([name for name in manifest if name.endswith('/state.json')]),10)
+  for name,row in before.items():
+   self.assertEqual(manifest[name]['sha256'],m.sha(row['bytes']));self.assertEqual(manifest[name]['mode'],row['mode'])
+  self.assertEqual(set(a['expectedOriginalUnknown']),set(m.ORIGINAL_IDS));self.assertEqual(set(a['expectedLeaseBindings']),set(m.ORIGINAL_IDS))
+ def test_unregistered_project_directory_and_missing_registered_state_refuse(self):
+  for variant in ('unknown-dir','missing-state'):
+   with self.subTest(variant=variant):
+    a,b,j,t=self.many()
+    if variant=='unknown-dir':
+     host=json.loads(b.files['host/state.json']['bytes']);host['data']['projects']=[row for row in host['data']['projects'] if row['project']['id']!='extra_0'];b.files['host/state.json']['bytes']=m.canonical(host)
+    else:del b.files['host/project-extra_0/state.json']
+    with self.assertRaises(m.Refused):m.checkpoint_manifest(b.checkpoint(a['target']),a)
+    self.assertEqual(b.kill_calls,0)
+ def test_duplicate_unsafe_empty_and_nonstring_registered_ids_refuse(self):
+  for bad in ('p2vox','../foreign','x/y','x\\y','.','',True,None,'x'*129):
+   with self.subTest(bad=bad):
+    a,b,j,t=self.many();host=json.loads(b.files['host/state.json']['bytes']);host['data']['projects'][-1]['project']['id']=bad;b.files['host/state.json']['bytes']=m.canonical(host)
+    with self.assertRaisesRegex(m.Refused,'REGISTERED_PROJECT_GRAPH_DRIFT'):m.checkpoint_manifest(b.checkpoint(a['target']),a)
+ def test_extra_project_unknown_inflight_or_wrong_role_is_not_a_closed_record(self):
+  for field,status in [('operations','UNKNOWN'),('operations','INFLIGHT'),('allocations','UNKNOWN'),('controls','INFLIGHT'),('role','native')]:
+   with self.subTest(field=field,status=status):
+    a,b,j,t=self.many();name='host/project-extra_0/state.json';row=json.loads(b.files[name]['bytes'])
+    if field=='role':row['data']['role']=status
+    else:row['data'].setdefault(field,[]).append({'id':'foreign-unresolved','status':status})
+    b.files[name]['bytes']=m.canonical(row)
+    with self.assertRaises(m.Refused):m.checkpoint_manifest(b.checkpoint(a['target']),a)
+ def test_extra_project_files_keep_exact_metadata_and_post_signal_no_byte_drift(self):
+  for variant in ('mode','uid','nlink','symlink','wrapper','bytes-after-signal'):
+   with self.subTest(variant=variant):
+    a,b,j,t=self.many();name='host/project-extra_0/state.json'
+    if variant=='bytes-after-signal':
+     b.signal_mode='unknown-live';m.Driver(b,j,lambda:t[0]).run(a);row=json.loads(b.files[name]['bytes']);row['revision']+=1;b.files[name]['bytes']=m.canonical(row)
+     b.row.update(processExited=True,members=[],frozen=False,freezeOwner=None)
+     self.assertEqual(m.Driver(b,j,lambda:t[0]).run(a)['status'],'RECOVERY_REQUIRED_AFTER_SIGNAL');self.assertEqual(b.kill_calls,1)
+    else:
+     if variant=='wrapper':row=json.loads(b.files[name]['bytes']);row['data']['kind']='not-a-participant';b.files[name]['bytes']=m.canonical(row)
+     else:b.files[name][variant]={'mode':0o644,'uid':0,'nlink':2,'symlink':True}[variant]
+     with self.assertRaises(m.Refused):m.checkpoint_manifest(b.checkpoint(a['target']),a)
+ def test_extra_project_missing_or_stale_lock_still_requires_original_bound_proof(self):
+  for variant in ('missing','stale'):
+   a,b,j,t=self.many();checkpoint=b.checkpoint(a['target']);name='host/project-extra_0/.lock'
+   if variant=='missing':
+    del checkpoint['files'][name]
+    with self.assertRaisesRegex(m.Refused,'REGISTERED_WRITER_LOCK_MISSING'):m.checkpoint_manifest(checkpoint,a)
+    checkpoint['missingLockProofs']={name:{'stateSha256':m.sha(checkpoint['files']['host/project-extra_0/state.json']['bytes']),'dirDev':1,'dirIno':20,'targetBootId':a['target']['bootId'],'capturePhase':'FROZEN'}}
+   else:
+    lock=json.loads(checkpoint['files'][name]['bytes']);lock.update(pid=999999,start='11111');checkpoint['files'][name]['bytes']=m.canonical(lock)
+    with self.assertRaisesRegex(m.Refused,'OTHER_OR_AMBIGUOUS_STORE_WRITER'):m.checkpoint_manifest(checkpoint,a)
+    checkpoint['staleLockProofs']={name:{'lockSha256':m.sha(checkpoint['files'][name]['bytes']),'pid':999999,'startTicks':'11111','observedStartTicks':None,'bootId':a['target']['bootId']}}
+   manifest=m.checkpoint_manifest(checkpoint,a);self.assertIn('host/project-extra_0/state.json',manifest['files'])
+
 class Tests(unittest.TestCase):
  def invoke(self,a,b,j,now,fault=lambda point:None): return m.Driver(b,j,lambda:now[0],fault).run(a)
  def mutate(self,b,name,fn):

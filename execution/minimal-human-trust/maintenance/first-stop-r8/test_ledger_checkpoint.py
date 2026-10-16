@@ -68,6 +68,39 @@ def fixture():
         put(parent+'/archive-offline.json',{'id':'historical','status':'KNOWN','hash':'4'*64})
     return {'schema':'r16.source-app-durable-checkpoint.v1','completeRegisteredFileSet':True,'otherWriterPids':[],'files':files},target,pub,pins,issuer,peers
 
+def add_history(c,target,pub,issuer,peers):
+    """Nine registered stores matching old-core reachable phase shapes.
+
+    Synthetic IDs/keys/operation data only. No live state is imported here.
+    """
+    host=m.parse(c['files']['host/state.json']['bytes']);g=pub['grant']['body']
+    def put(name,value):c['files'][name]={'bytes':raw(value),'regular':True,'symlink':False,'uid':1000,'nlink':1,'mode':0o600}
+    ids=[]
+    for index,(gen,count) in enumerate([(83,0),(6,12),(4,12),(7,18),(2,0),(1,0),(1,0)]):
+        pid=('pending-history-' if index>=5 else 'history-')+str(index);ids.append(pid)
+        p={'id':pid,'workspaceId':g['workspace']['id'],'root':g['workspace']['root']+'/'+pid}
+        l=sign({'schema':'r16.lease.v1','phase':'PREPARED','grantId':g['id'],'grantVersion':1,'grantHash':m.digest(pub['grant']),'project':p,'channel':'main','versions':pub['versions'],'actions':g['actions'],'generation':gen,'previousGeneration':gen-1,'issuedAt':10,'expiresAt':3600010,'renewAt':2700010,'requestId':'request-'+pid,'releaseHash':m.digest(pub['release'])},issuer)
+        a=sign({'schema':'r16.activation.v1','grantId':g['id'],'grantVersion':1,'projectId':pid,'generation':gen,'leaseHash':m.digest(l),'evidenceHash':'2'*64,'activatedAt':11},issuer)
+        state={'kind':'r16.participant.v1','role':'app','grant':pub['grant'],'version':1,'lastGeneration':gen,'active':{'lease':l,'activation':a} if index<4 else None,'pending':None,'closing':l if index==0 else None,'operations':[],'closed':[],'stopped':[],'archiveHead':None,'fresh':None,'challenge':None}
+        reg={'project':p,'initialized':True,'transition':None,'retirement':{'lease':l} if index==0 else None}
+        if index>=4:
+            stopped=sign({'schema':'r16.stopped.v1','role':'app','peerId':g['peers']['app']['id'],'grantId':g['id'],'grantVersion':1,'projectId':pid,'generation':gen,'leaseHash':m.digest(l),'requestId':l['body']['requestId'],'durableClosed':True,'pending':0,'resultsHash':m.digest([])},peers['app'])
+            state['stopped']=[stopped];put('host/project-'+pid+'/archive-stop-'+m.digest(l)+'.json',stopped)
+            closed=sign({'schema':'r16.closed.v1','grantId':g['id'],'projectId':pid,'generation':gen,'leaseHash':m.digest(l),'evidenceHash':'2'*64,'closedAt':12},issuer)
+            reg['closedGeneration']=gen;put('host/archive-app-close-'+pid+'-'+str(gen)+'.json',closed)
+        if index==6:
+            reg['transition']={'request':{'schema':'r16.prepare.v1','requestId':'next-'+pid,'grantId':g['id'],'grantVersion':1,'project':p,'channel':'main','versions':pub['versions'],'actions':g['actions'],'issuedAt':20},'proofs':None,'submitted':False,'lease':None,'activation':None}
+        for i in range(count):
+            oid=pid+'-operation-'+str(i)
+            op=sign({'schema':'r16.operation.v1','id':oid,'grantId':g['id'],'projectId':pid,'generation':gen,'leaseHash':m.digest(l),'channel':'main','action':g['actions'][0],'payloadHash':'3'*64},peers['app'])
+            host['data']['operations'].append({'id':oid,'projectId':pid,'operation':op,'status':'KNOWN','resultHash':'4'*64})
+            state['operations'].append({'id':oid,'projectId':pid,'generation':gen,'hash':m.digest(op),'status':'KNOWN','outcome':'COMPLETED','resultHash':'4'*64})
+        host['data']['projects'].append(reg)
+        put('host/project-'+pid+'/state.json',{'schema':1,'revision':1,'maxNow':20,'data':state})
+        put('host/project-'+pid+'/.lock',{'schema':1,'pid':target['pid'],'start':target['startTicks'],'nonce':'synthetic-offline-lock'})
+    put('host/state.json',host)
+    return ids
+
 class SemanticTests(unittest.TestCase):
     def setUp(self): self.c,self.t,self.p,self.pins,self.issuer,self.peers=fixture()
     def validate(self): return m._validate(self.c,self.t,self.p,100,m.digest(self.p),m.digest(self.p['grant']),self.pins)
@@ -194,11 +227,14 @@ class SemanticTests(unittest.TestCase):
         payload={'audience':'r16-crown-isolated-session-v1','request_id':'offline','issued_at':1,'expires_at':60001}
         encoded=raw(payload);private=self.peers['app']
         wire={'schema':1,'key_id':m.bytehash(m._b64(key(private))),'payload_b64':base64.b64encode(encoded).decode(),'signature_b64':base64.b64encode(private.sign(encoded)).decode()}
-        op=sign({'schema':'r16.operation.v1','id':'offline','grantId':'r16-projects-daily','payloadHash':m.digest(payload)},private)
-        self.c['files']['host/archive-offline.json']['bytes']=raw({'operation':op,'proof':wire})
+        body=copy.deepcopy(m.parse(self.c['files']['host/state.json']['bytes'])['data']['operations'][0]['operation']['body']);body.update(id='offline',payloadHash=m.digest(payload))
+        op=sign(body,private)
+        row={'operation':op,'proof':wire}
+        self.c['files']['host/archive-app-call-offline.json']=copy.deepcopy(self.c['files']['host/archive-offline.json'])
+        self.c['files']['host/archive-app-call-offline.json']['bytes']=raw(row)
         self.validate()
         wire['signature_b64']=base64.b64encode(b'0'*64).decode()
-        self.c['files']['host/archive-offline.json']['bytes']=raw({'operation':op,'proof':wire})
+        self.c['files']['host/archive-app-call-offline.json']['bytes']=raw(row)
         with self.assertRaisesRegex(m.Refused,'CROWN_PROOF_INVALID'):self.validate()
     def test_unbound_crown_history_cannot_change_signed_operation_payload(self):
         payload={'audience':'r16-crown-isolated-session-v1','request_id':'offline','issued_at':1,'expires_at':60001}
@@ -220,6 +256,208 @@ class SemanticTests(unittest.TestCase):
             bad=copy.deepcopy(accepted);bad['data']['accepted']['body']['revision']=17
             with self.assertRaises(m.Refused):m.validate_cloud_authority(self.p,control,cutover,bad)
             with self.assertRaises(m.Refused):m.validate_cloud_authority(self.p,control,{**cutover,'releaseId':'other'},accepted)
+
+class HistoricalProjectTests(unittest.TestCase):
+    def setUp(self):
+        self.c,self.t,self.p,self.pins,self.issuer,self.peers=fixture()
+        self.ids=add_history(self.c,self.t,self.p,self.issuer,self.peers)
+    validate=SemanticTests.validate
+    edit=SemanticTests.edit
+    def data(self,pid):return m.parse(self.c['files']['host/project-'+pid+'/state.json']['bytes'])['data']
+    def setdata(self,pid,value):self.edit('host/project-'+pid+'/state.json',lambda x:x.update(data=value))
+    def test_all_nine_registered_current_retiring_closed_and_unsigned_prepare_are_verified(self):
+        before=copy.deepcopy(self.c['files']);original=fixture()
+        result=self.validate();att=result['attestation']
+        self.assertEqual(att['registeredProjectCount'],9);self.assertEqual(att['drainStatus'],'UNPROVEN')
+        self.assertEqual(att['projectPhaseCounts'],{'active':6,'closing':3,'pending':0,'retirement':3,'transition':1})
+        self.assertEqual(set(result['expectedLeaseBindings']),set(self.pins));self.assertEqual(result['expectedOriginalUnknown'],{p:{**pin,'status':'UNKNOWN','resultHash':None} for p,pin in self.pins.items()})
+        self.assertEqual(self.c['files'],before);self.assertNotIn('files',result)
+        for pid in self.ids:self.assertNotIn(pid,m.canonical(att))
+    def test_historical_participant_wrong_grant_role_or_version_refused(self):
+        for k,v in [('grant',None),('version',True),('role','native')]:
+            self.setUp();self.edit('host/project-'+self.ids[1]+'/state.json',lambda x:x['data'].update({k:v}))
+            with self.assertRaisesRegex(m.Refused,'PARTICIPANT_GRANT_DRIFT'):self.validate()
+    def test_every_historical_collection_rejects_new_unknown_and_inflight(self):
+        for pidindex in (0,1,4,6):
+            for field in ('operations','allocations','controls'):
+                for status in ('UNKNOWN','INFLIGHT'):
+                    self.setUp();self.edit('host/project-'+self.ids[pidindex]+'/state.json',lambda x:x['data'].setdefault(field,[]).append({'id':'foreign','status':status}))
+                    with self.assertRaises(m.Refused):self.validate()
+    def test_historical_signed_active_lease_wrong_project_or_release_or_activation_refused(self):
+        for change in ('project','release','activation','signature'):
+            self.setUp();pid=self.ids[1];data=self.data(pid);active=data['active']
+            if change=='activation':
+                b=active['activation']['body'];b['generation']+=1;active['activation']=sign(b,self.issuer)
+            elif change=='signature':active['lease']['signature']='A'*86
+            else:
+                b=active['lease']['body']
+                if change=='project':b['project']['id']=self.ids[2]
+                else:b['releaseHash']='0'*64
+                active['lease']=sign(b,self.issuer)
+            self.setdata(pid,data)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_historical_retirement_cannot_replace_or_advance_the_signed_generation(self):
+        pid=self.ids[0];wrong=self.data(self.ids[1])['active']['lease']
+        self.edit('host/state.json',lambda x:x['data']['projects'][2].update(retirement={'lease':wrong}))
+        with self.assertRaises(m.Refused):self.validate()
+    def test_unsigned_prepare_stage_is_not_a_caller_drain_override(self):
+        for change in ('submitted','requestScope','activation','lease','proofs'):
+            self.setUp()
+            def mutate(x):
+                tr=x['data']['projects'][-1]['transition']
+                if change=='submitted':tr['submitted']=True
+                elif change=='requestScope':tr['request']['project']['workspaceId']='other'
+                elif change=='activation':tr['activation']=self.data(self.ids[1])['active']['activation']
+                elif change=='lease':tr['lease']=self.data(self.ids[1])['active']['lease']
+                else:tr['proofs']={}
+            self.edit('host/state.json',mutate)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_unsigned_unsubmitted_historical_versions_preserved_without_authority(self):
+        original=self.validate()
+        self.edit('host/state.json',lambda x:x['data']['projects'][-1]['transition']['request'].update(versions={r:'0'*64 for r in self.p['versions']}))
+        before=copy.deepcopy(self.c['files']);result=self.validate()
+        self.assertEqual(self.c['files'],before)
+        self.assertEqual(result['expectedSemanticBindingsDigest'],original['expectedSemanticBindingsDigest'])
+        self.assertEqual(result['expectedLeaseBindings'],original['expectedLeaseBindings'])
+        self.assertNotEqual(result['attestation']['checkpointManifestDigest'],original['attestation']['checkpointManifestDigest'])
+        self.assertEqual(result['attestation']['drainStatus'],'UNPROVEN')
+    def test_inert_historical_versions_still_need_exact_roles_and_valid_hashes(self):
+        versions={r:'0'*64 for r in self.p['versions']}
+        malformed=[None,[],{**versions,'foreign':'0'*64},{r:v for r,v in versions.items() if r!='app'}, {**versions,'app':'g'*64},{**versions,'app':'A'*64},{**versions,'app':'0'*63},{**versions,'app':True}]
+        for value in malformed:
+            self.setUp();self.edit('host/state.json',lambda x:x['data']['projects'][-1]['transition']['request'].update(versions=value))
+            with self.assertRaisesRegex(m.Refused,'PROJECT_TRANSITION_REQUEST_DRIFT'):self.validate()
+    def test_historical_versions_are_never_accepted_once_any_effect_evidence_exists(self):
+        for field in ('submitted','proofs','lease','activation'):
+            self.setUp()
+            def mutate(x):
+                transition=x['data']['projects'][-1]['transition']
+                request=transition['request'];request['versions']={r:'0'*64 for r in self.p['versions']}
+                if field=='submitted':transition['submitted']=True
+                elif field=='proofs':transition['proofs']={r:sign(request,k) for r,k in self.peers.items()}
+                else:transition[field]=copy.deepcopy(self.data(self.ids[1])['active'][field])
+            self.edit('host/state.json',mutate)
+            with self.assertRaisesRegex(m.Refused,'PROJECT_TRANSITION_REQUEST_DRIFT'):self.validate()
+    def prepared(self):
+        pid=self.ids[1];data=self.data(pid);l=copy.deepcopy(data['active']['lease']['body']);l.update(generation=l['generation']+1,previousGeneration=l['generation'],requestId='new-prepare')
+        request={k:l[k] for k in ('requestId','grantId','grantVersion','project','channel','versions','actions','issuedAt')};request['schema']='r16.prepare.v1'
+        lease=sign(l,self.issuer);tr={'request':request,'proofs':{r:sign(request,k) for r,k in self.peers.items()},'submitted':True,'lease':lease,'activation':None}
+        self.edit('host/state.json',lambda x:x['data']['projects'][3].update(transition=tr))
+        data['pending']={'lease':lease,'closed':False,'evidence':None};self.setdata(pid,data)
+        return pid,tr
+    def test_three_signed_prepare_and_pending_phase_are_verified_not_executed(self):
+        self.prepared();result=self.validate();self.assertEqual(result['attestation']['projectPhaseCounts']['pending'],1)
+        self.assertEqual(result['attestation']['drainStatus'],'UNPROVEN')
+    def test_prepare_proof_role_request_generation_or_pending_binding_drift_rejected(self):
+        for change in ('role','request','generation','pending'):
+            self.setUp();pid,tr=self.prepared()
+            def mutate(x):
+                transition=x['data']['projects'][3]['transition']
+                if change=='role':transition['proofs']['native']=sign(tr['request'],self.peers['app'])
+                elif change=='request':transition['request']['requestId']='another'
+                elif change=='generation':
+                    l=copy.deepcopy(tr['lease']['body']);l.update(generation=99,previousGeneration=98);transition['lease']=sign(l,self.issuer)
+                else:transition['lease']=self.data(self.ids[2])['active']['lease']
+            self.edit('host/state.json',mutate)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_closed_generation_requires_actual_signed_issuer_archive(self):
+        pid=self.ids[4];name='host/archive-app-close-'+pid+'-2.json'
+        del self.c['files'][name]
+        with self.assertRaisesRegex(m.Refused,'PROJECT_CLOSED_PROOF_MISSING'):self.validate()
+    def test_stopped_proof_wrong_project_role_generation_or_archive_name_refused(self):
+        for change in ('project','role','generation','name'):
+            self.setUp();pid=self.ids[4];data=self.data(pid);proof=copy.deepcopy(data['stopped'][0]);b=proof['body']
+            if change=='project':b['projectId']=self.ids[5]
+            elif change=='role':b['peerId']='foreign-peer'
+            elif change=='generation':b['generation']+=1
+            else:
+                name=next(n for n in self.c['files'] if n.startswith('host/project-'+pid+'/archive-stop-'))
+                self.c['files'][name.replace(b['leaseHash'],'0'*64)]=self.c['files'].pop(name)
+            if change!='name':data['stopped']=[sign(b,self.peers['app'])];self.setdata(pid,data)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_known_history_must_match_signed_app_operation_and_result_hash(self):
+        for change in ('operationHash','result','generation','outcome','unsigned'):
+            self.setUp();pid=self.ids[1];data=self.data(pid);row=data['operations'][0]
+            if change=='operationHash':row['hash']='0'*64
+            elif change=='result':row['resultHash']='0'*64
+            elif change=='generation':row['generation']+=1
+            elif change=='outcome':row['outcome']='UNREVIEWED'
+            else:row['id']='unregistered-operation'
+            self.setdata(pid,data)
+            with self.assertRaises(m.Refused):self.validate()
+    def archive_history(self):
+        pid=self.ids[1];data=self.data(pid);record=data['operations'].pop(0);base='host/project-'+pid
+        def put(name,value):self.c['files'][name]={'bytes':raw(value),'regular':True,'symlink':False,'uid':1000,'nlink':1,'mode':0o600}
+        put(base+'/archive-operation-'+m.digest(record['id'])+'.json',record)
+        generation={'schema':'r16.generation-archive.v1','generation':record['generation'],'previous':None,'records':[{'id':record['id'],'hash':m.digest(record)}]}
+        name='generation-'+str(record['generation'])+'-'+m.digest(generation)
+        put(base+'/archive-'+name+'.json',generation);data['archiveHead']={'name':name,'hash':m.digest(generation)};self.setdata(pid,data)
+        return pid,name,record
+    def test_known_generation_archive_chain_and_signed_operation_are_bound(self):
+        self.archive_history();self.validate()
+    def app_call(self):
+        pid=self.ids[1];host=m.parse(self.c['files']['host/state.json']['bytes'])
+        row=next(x for x in host['data']['operations'] if x['projectId']==pid)
+        body=copy.deepcopy(row['operation']['body']);payload={'audience':'r16-crown-isolated-session-v1','request_id':row['id'],'issued_at':1,'expires_at':60001}
+        body['payloadHash']=m.digest(payload);row['operation']=sign(body,self.peers['app'])
+        self.c['files']['host/state.json']['bytes']=raw(host)
+        data=self.data(pid);data['operations'][0]['hash']=m.digest(row['operation']);self.setdata(pid,data)
+        encoded=raw(payload);wire={'schema':1,'key_id':m.bytehash(m._b64(key(self.peers['app']))),'payload_b64':base64.b64encode(encoded).decode(),'signature_b64':base64.b64encode(self.peers['app'].sign(encoded)).decode()}
+        template=copy.deepcopy(self.c['files']['host/archive-offline.json'])
+        call='host/archive-app-call-'+row['id']+'.json';record='host/archive-app-operation-'+row['id']+'.json'
+        self.c['files'][call]={**template,'bytes':raw({'operation':row['operation'],'proof':wire})}
+        self.c['files'][record]={**template,'bytes':raw(row)}
+        return call,record
+    def test_original_app_call_pair_and_app_operation_row_can_coexist_same_id(self):
+        call,record=self.app_call();self.validate()
+        self.assertEqual(set(m.parse(self.c['files'][call]['bytes'])),{'operation','proof'})
+        self.assertIn('status',m.parse(self.c['files'][record]['bytes']))
+    def test_app_call_filename_signature_payload_and_shape_are_bound(self):
+        for change in ('name','signature','payload','shape'):
+            self.setUp();call,_=self.app_call()
+            if change=='name':self.c['files'][call.replace('app-call-','app-call-foreign-')]=self.c['files'].pop(call)
+            elif change=='signature':self.edit(call,lambda x:x['operation'].update(signature='A'*86))
+            elif change=='shape':self.edit(call,lambda x:x.update(status='KNOWN'))
+            else:
+                def mutate(x):
+                    body=x['operation']['body'];body['payloadHash']='0'*64;x['operation']=sign(body,self.peers['app'])
+                self.edit(call,mutate)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_app_operation_archive_name_and_record_result_are_bound(self):
+        for change in ('name','result'):
+            self.setUp();_,record=self.app_call()
+            if change=='name':self.c['files'][record.replace('app-operation-','app-operation-foreign-')]=self.c['files'].pop(record)
+            else:self.edit(record,lambda x:x.update(resultHash='0'*64))
+            with self.assertRaises(m.Refused):self.validate()
+    def test_archived_generation_hash_missing_record_and_unsigned_record_are_refused(self):
+        for change in ('hash','missing','record','cycle'):
+            self.setUp();pid,name,record=self.archive_history();base='host/project-'+pid
+            if change=='hash':self.edit(base+'/state.json',lambda x:x['data']['archiveHead'].update(hash='0'*64))
+            elif change=='missing':del self.c['files'][base+'/archive-operation-'+m.digest(record['id'])+'.json']
+            elif change=='record':self.edit(base+'/archive-operation-'+m.digest(record['id'])+'.json',lambda x:x.update(hash='0'*64))
+            else:self.edit(base+'/archive-'+name+'.json',lambda x:x.update(previous={'name':name,'hash':m.digest(x)}))
+            with self.assertRaises(m.Refused):self.validate()
+    def test_unregistered_store_missing_store_and_duplicate_graph_do_not_become_allowed(self):
+        for change in ('unregistered','missing','duplicate','unsafe','foreignRoot'):
+            self.setUp();pid=self.ids[0]
+            if change=='unregistered':self.c['files']['host/project-unregistered/state.json']=copy.deepcopy(self.c['files']['host/project-'+pid+'/state.json'])
+            elif change=='missing':del self.c['files']['host/project-'+pid+'/state.json']
+            else:
+                def mutate(x):
+                    rows=x['data']['projects']
+                    if change=='duplicate':rows.append(copy.deepcopy(rows[-1]))
+                    elif change=='unsafe':rows[-1]['project']['id']='../escape'
+                    else:rows[-1]['project']['root']='/foreign/workspace'
+                self.edit('host/state.json',mutate)
+            with self.assertRaises(m.Refused):self.validate()
+    def test_extra_store_missing_and_stale_locks_require_derived_proofs(self):
+        pid=self.ids[4];base='host/project-'+pid;del self.c['files'][base+'/.lock']
+        with self.assertRaisesRegex(m.Refused,'REGISTERED_WRITER_LOCK_UNPROVEN'):self.validate()
+        self.c['missingLockProofs']=m._missing_lock_proofs(self.c['files'],{base:(1,123)},self.t,'FROZEN');self.validate()
+        row=self.c['files']['host/project-'+self.ids[5]+'/.lock'];lock=m.parse(row['bytes']);lock.update(pid=777,start='888');row['bytes']=raw(lock)
+        with self.assertRaisesRegex(m.Refused,'FOREIGN_STORE_WRITER'):self.validate()
+        with patch.object(m,'_start',side_effect=FileNotFoundError):self.c['staleLockProofs']=m._stale_lock_proofs(self.c['files'],self.t)
+        self.validate()
 
 class ReaderTests(unittest.TestCase):
     def setUp(self):self.tmp=tempfile.TemporaryDirectory();self.root=Path(self.tmp.name);self.addCleanup(self.tmp.cleanup)
@@ -372,13 +610,15 @@ class ReaderTests(unittest.TestCase):
         with self.assertRaises(m.Refused):self.target_state('123456',members='4343\n111\n')
         file=self.root/'state.json';file.write_bytes(b'{}');st=file.stat();proc=self.make_proc(file,flags='0100001')
         with self.assertRaisesRegex(m.Refused,'FOREIGN_WRITABLE_FD'):m._scan_writers({'x':(st.st_dev,st.st_ino)},{},4343,proc=proc)
-    def registered_capture(self,*,missing=False,wrong_inode=False,changed=False):
+    def registered_capture(self,*,missing=False,wrong_inode=False,changed=False,history=False):
         """Real capture orchestration, real tree reader and signed validation.
 
         Only fixed production file reads, root context and kernel observations
         are replaced by this local fixture. No actual protected read occurs.
         """
-        c,t,p,pins,issuer,_=fixture();root=self.root/'capture-host';root.mkdir(mode=0o700)
+        c,t,p,pins,issuer,peers=fixture()
+        if history:add_history(c,t,p,issuer,peers)
+        root=self.root/'capture-host';root.mkdir(mode=0o700)
         for name,row in c['files'].items():
             path=root/name.removeprefix('host/');path.parent.mkdir(parents=True,exist_ok=True,mode=0o700)
             path.write_bytes(row['bytes']);path.chmod(0o600)
@@ -405,6 +645,10 @@ class ReaderTests(unittest.TestCase):
         self.assertTrue(result['attestation']['sealedRegistrationVerified'])
         self.assertEqual(result['attestation']['registrationHash'],h)
         self.assertTrue(result['attestation']['signatureVerification']);self.assertEqual(result['attestation']['sourceDeliveryRevision'],16)
+    def test_registry_real_capture_pipeline_nine_store_registered_graph(self):
+        result,h=self.registered_capture(history=True)
+        self.assertTrue(result['attestation']['sealedRegistrationVerified']);self.assertEqual(result['attestation']['registeredProjectCount'],9)
+        self.assertEqual(len(result['expectedLeaseBindings']),2);self.assertEqual(result['attestation']['drainStatus'],'UNPROVEN')
     def test_registry_missing_refuses_real_capture(self):
         with self.assertRaisesRegex(m.Refused,'SEALED_REGISTRATION_MISSING'):self.registered_capture(missing=True)
     def test_registry_replaced_host_inode_refuses_before_reading_any_ledger_file(self):

@@ -168,15 +168,194 @@ def _crown_wire(wire,pub):
 
 def raw_equal_canonical(raw,value): return raw == canonical(value).encode()
 
+def _registered_projects(host, grant=None):
+    """The protected host graph, not the two UNKNOWN pins, owns child stores.
+
+    This is an inventory check, never a claim that these projects are drained.
+    Original remember()/entry() retains closed and pending project registrations.
+    """
+    rows=host.get('projects')
+    need(isinstance(rows,list) and 0<len(rows)<=4096,'REGISTERED_PROJECT_GRAPH_DRIFT')
+    result={}
+    for row in rows:
+        need(type(row) is dict and set(row)<= {'project','initialized','transition','retirement','closedGeneration'} and {'project','initialized','transition','retirement'}<=set(row),'REGISTERED_PROJECT_BINDING_DRIFT')
+        p=row['project']
+        need(type(p) is dict and set(p)=={'id','workspaceId','root'} and isinstance(p['id'],str) and re.fullmatch('[A-Za-z0-9_-]{1,128}',p['id']) and p['id'] not in result and isinstance(p['workspaceId'],str) and isinstance(p['root'],str) and row['initialized'] is True,'REGISTERED_PROJECT_BINDING_DRIFT')
+        if grant is not None:
+            need(p['workspaceId']==grant['workspace']['id'] and p['root'].startswith(grant['workspace']['root']+'/'),'REGISTERED_PROJECT_BINDING_DRIFT')
+        result[p['id']]=row
+    return result
+
+def _historical_project(reg, participant, parsed, pub, grant):
+    """Mirror reachable old App phases without treating them as tool activity.
+
+    A protected unsigned prepare request may exist before its three signatures.
+    Every signature that exists is checked; submitted/lease/activation phases
+    must carry their prior proofs. Expired signed history is not re-authorized.
+    """
+    project=reg['project'];pid=project['id'];base='host/project-'+pid
+    need(participant.get('role')=='app' and participant.get('grant')==pub['grant'] and type(participant.get('version')) is int and participant['version']==grant['version'],'PARTICIPANT_GRANT_DRIFT')
+    last=participant.get('lastGeneration')
+    need(type(last) is int and last>=0,'PROJECT_GENERATION_DRIFT')
+    def lease(envelope, current=True):
+        b=verified(envelope,pub['issuerPublicKey'],'r16.lease.v1')
+        need(set(b)=={'schema','phase','grantId','grantVersion','grantHash','project','channel','versions','actions','generation','previousGeneration','issuedAt','expiresAt','renewAt','requestId','releaseHash'} and b['phase']=='PREPARED' and b['grantId']==grant['id'] and type(b['grantVersion']) is int and b['grantVersion']==grant['version'] and b['grantHash']==digest(pub['grant']) and b['project']==project and b['channel']==grant['channel'] and type(b['generation']) is int and b['generation']>0 and type(b['previousGeneration']) is int and b['generation']==b['previousGeneration']+1 and type(b['issuedAt']) is int and b['issuedAt']>=0 and b['expiresAt']==b['issuedAt']+3600000 and b['renewAt']==b['expiresAt']-900000 and isinstance(b['requestId'],str) and b['requestId'] and isinstance(b['actions'],list) and b['actions'] and len(set(b['actions']))==len(b['actions']) and set(b['actions'])<=set(grant['actions']) and type(b['versions']) is dict and set(b['versions'])==set(pub['versions']) and all(isinstance(x,str) and re.fullmatch('[0-9a-f]{64}',x) for x in b['versions'].values()) and isinstance(b['releaseHash'],str) and re.fullmatch('[0-9a-f]{64}',b['releaseHash']),'PROJECT_LEASE_BINDING_DRIFT')
+        if current:need(b['releaseHash']==digest(pub['release']) and b['versions']==pub['versions'],'PROJECT_CURRENT_RELEASE_DRIFT')
+        return b
+    def activation(envelope,l):
+        a=verified(envelope,pub['issuerPublicKey'],'r16.activation.v1');b=l['body']
+        need(set(a)=={'schema','grantId','grantVersion','projectId','generation','leaseHash','evidenceHash','activatedAt'} and a['grantId']==grant['id'] and type(a['grantVersion']) is int and a['grantVersion']==grant['version'] and a['projectId']==pid and a['generation']==b['generation'] and a['leaseHash']==digest(l) and isinstance(a['evidenceHash'],str) and re.fullmatch('[0-9a-f]{64}',a['evidenceHash']) and type(a['activatedAt']) is int and b['issuedAt']<=a['activatedAt']<b['expiresAt'],'PROJECT_ACTIVATION_DRIFT')
+    def scoped(value):
+        if isinstance(value,list):
+            for item in value:scoped(item)
+        elif isinstance(value,dict):
+            b=value.get('body')
+            if isinstance(b,dict) and 'signature' in value:
+                if 'projectId' in b:need(b['projectId']==pid,'PROJECT_SIGNED_SCOPE_DRIFT')
+                if 'grantVersion' in b:need(type(b['grantVersion']) is int and b['grantVersion']==grant['version'],'PROJECT_SIGNED_SCOPE_DRIFT')
+                if b.get('schema')=='r16.lease.v1':lease(value,False)
+                if b.get('schema') in ('r16.stopped.v1','r16.close.v1'):
+                    fields={'schema','role','peerId','grantId','grantVersion','projectId','leaseHash','requestId','durableClosed','pending','resultsHash'}|({'generation'} if b['schema']=='r16.stopped.v1' else {'oldGeneration','newGeneration'})
+                    need(set(b)==fields and b.get('role')=='app' and b.get('peerId')==grant['peers']['app']['id'] and b.get('durableClosed') is True and type(b.get('pending')) is int and b['pending']==0 and isinstance(b.get('requestId'),str) and b['requestId'] and all(isinstance(b.get(k),str) and re.fullmatch('[0-9a-f]{64}',b[k]) for k in ('resultsHash','leaseHash')),'PROJECT_CLOSURE_DRIFT')
+                    if b['schema']=='r16.stopped.v1':need(type(b['generation']) is int and 0<b['generation']<=last,'PROJECT_CLOSURE_DRIFT')
+                    else:need(type(b['oldGeneration']) is int and b['oldGeneration']>=0 and type(b['newGeneration']) is int and b['newGeneration']==b['oldGeneration']+1 and b['oldGeneration']<=last,'PROJECT_CLOSURE_DRIFT')
+            for item in value.values():scoped(item)
+    for name,value in parsed.items():
+        if name.startswith(base+'/') and not name.endswith('/.lock'):
+            scoped(value)
+            if name.startswith(base+'/archive-stop-') or name.startswith(base+'/archive-close-'):
+                schema='r16.stopped.v1' if name.startswith(base+'/archive-stop-') else 'r16.close.v1'
+                b=verified(value,pub['peers']['app']['publicKey'],schema)
+                need(name==base+'/archive-'+('stop-' if schema=='r16.stopped.v1' else 'close-')+b['leaseHash']+'.json','PROJECT_CLOSURE_ARCHIVE_DRIFT')
+    active=participant.get('active');pending=participant.get('pending');closing=participant.get('closing')
+    if active is not None:
+        need(type(active) is dict and set(active)=={'lease','activation'},'PROJECT_ACTIVE_PHASE_DRIFT')
+        b=lease(active['lease']);activation(active['activation'],active['lease'])
+        need(b['generation']==last,'PROJECT_GENERATION_DRIFT')
+    if pending is not None:
+        need(type(pending) is dict and set(pending)=={'lease','closed','evidence'} and type(pending['closed']) is bool,'PROJECT_PENDING_PHASE_DRIFT')
+        b=lease(pending['lease']);need(b['previousGeneration']==last,'PROJECT_GENERATION_DRIFT')
+        need(pending['closed']==(pending['evidence'] is not None),'PROJECT_PENDING_PHASE_DRIFT')
+        if pending['evidence'] is not None:
+            e=verified(pending['evidence'],pub['peers']['app']['publicKey'],'r16.close.v1')
+            need(e.get('oldGeneration')==last and e.get('newGeneration')==b['generation'] and e.get('leaseHash')==digest(pending['lease']) and e.get('requestId')==b['requestId'],'PROJECT_CLOSURE_DRIFT')
+    if closing is not None:
+        b=lease(closing);need(b['generation']==last or b['previousGeneration']==last,'PROJECT_GENERATION_DRIFT')
+        if pending is not None:need(closing==pending['lease'],'PROJECT_CLOSING_DRIFT')
+    retirement=reg['retirement']
+    if retirement is not None:
+        need(type(retirement) is dict and set(retirement)=={'lease'},'PROJECT_RETIREMENT_DRIFT');b=lease(retirement['lease'])
+        need(b['generation']==last or b['previousGeneration']==last,'PROJECT_GENERATION_DRIFT')
+        if closing is not None:need(retirement['lease']==closing,'PROJECT_RETIREMENT_DRIFT')
+    transition=reg['transition']
+    if transition is not None:
+        need(type(transition) is dict and set(transition)=={'request','proofs','submitted','lease','activation'} and type(transition['submitted']) is bool,'PROJECT_TRANSITION_DRIFT')
+        r=transition['request']
+        need(type(r) is dict and set(r)=={'schema','requestId','grantId','grantVersion','project','channel','versions','actions','issuedAt'} and r['schema']=='r16.prepare.v1' and isinstance(r['requestId'],str) and r['requestId'] and r['grantId']==grant['id'] and type(r['grantVersion']) is int and r['grantVersion']==grant['version'] and r['project']==project and r['channel']==grant['channel'] and isinstance(r['actions'],list) and r['actions'] and len(set(r['actions']))==len(r['actions']) and set(r['actions'])<=set(grant['actions']) and type(r['issuedAt']) is int and r['issuedAt']>=0,'PROJECT_TRANSITION_REQUEST_DRIFT')
+        versions=r['versions']
+        inert=transition['submitted'] is False and all(transition[k] is None for k in ('proofs','lease','activation'))
+        # Original rotate() persists the unsigned request before any proof or
+        # issuer call. A release update can leave its historical version map.
+        # Preserve that inert record; never treat it as approval or submit it.
+        # Every effect-bearing phase still binds the pinned current Release.
+        need(type(versions) is dict and set(versions)==set(pub['versions']) and all(isinstance(x,str) and re.fullmatch('[0-9a-f]{64}',x) for x in versions.values()) and (inert or versions==pub['versions']),'PROJECT_TRANSITION_REQUEST_DRIFT')
+        proofs=transition['proofs']
+        if proofs is not None:
+            need(type(proofs) is dict and set(proofs)=={'app','bridge','native'},'PROJECT_PREPARE_PROOFS_DRIFT')
+            for role in proofs:need(verified(proofs[role],pub['peers'][role]['publicKey'],'r16.prepare.v1')==r,'PROJECT_PREPARE_PROOFS_DRIFT')
+        need(not transition['submitted'] or proofs is not None,'PROJECT_TRANSITION_DRIFT')
+        if transition['lease'] is not None:
+            b=lease(transition['lease']);need(transition['submitted'] and proofs is not None and all(b[k]==r[k] for k in ('requestId','grantId','grantVersion','project','channel','versions','actions')),'PROJECT_TRANSITION_LEASE_DRIFT')
+            need(b['previousGeneration']==last or active is not None and active['lease']==transition['lease'] and b['generation']==last,'PROJECT_TRANSITION_GENERATION_DRIFT')
+            if pending is not None:need(pending['lease']==transition['lease'],'PROJECT_TRANSITION_LEASE_DRIFT')
+        if transition['activation'] is not None:
+            need(transition['lease'] is not None,'PROJECT_TRANSITION_DRIFT');activation(transition['activation'],transition['lease'])
+    stopped=participant.get('stopped');closed=participant.get('closed')
+    need(isinstance(stopped,list) and len(stopped)<=8 and isinstance(closed,list) and len(closed)<=8,'PROJECT_CLOSURE_DRIFT')
+    for proof in stopped:
+        b=verified(proof,pub['peers']['app']['publicKey'],'r16.stopped.v1')
+        need(type(b.get('generation')) is int and 0<b['generation']<=last,'PROJECT_CLOSURE_DRIFT')
+    for item in closed:
+        need(type(item) is dict and set(item)=={'generation','evidence'} and type(item['generation']) is int and item['generation']>=0,'PROJECT_CLOSURE_DRIFT')
+        b=verified(item['evidence'],pub['peers']['app']['publicKey'],'r16.close.v1')
+        need(b.get('oldGeneration')==item['generation'] and b.get('newGeneration')==item['generation']+1,'PROJECT_CLOSURE_DRIFT')
+    if 'closedGeneration' in reg:
+        gen=reg['closedGeneration'];need(type(gen) is int and 0<gen<=last,'PROJECT_CLOSED_GENERATION_DRIFT')
+        name='host/archive-app-close-'+pid+'-'+str(gen)+'.json'
+        need(name in parsed,'PROJECT_CLOSED_PROOF_MISSING')
+        b=verified(parsed[name],pub['issuerPublicKey'],'r16.closed.v1')
+        need(b.get('grantId')==grant['id'] and b.get('projectId')==pid and b.get('generation')==gen,'PROJECT_CLOSED_GENERATION_DRIFT')
+    return {'active':active is not None,'pending':pending is not None,'closing':closing is not None,'transition':transition is not None,'retirement':retirement is not None}
+
+def _operation_history(host,projects,parsed,pub,grant):
+    """Bind unsigned participant records back to App-signed operation history.
+
+    Complete archives are read in memory, including the generation hash chain.
+    This neither reconciles a result nor authorizes/replays an old operation.
+    """
+    signed_rows={}
+    def operation(envelope):
+        o=verified(envelope,pub['peers']['app']['publicKey'],'r16.operation.v1')
+        need(set(o)=={'schema','id','grantId','projectId','generation','leaseHash','channel','action','payloadHash'} and isinstance(o.get('id'),str) and re.fullmatch('[A-Za-z0-9_-]{1,128}',o['id']) and o.get('grantId')==grant['id'] and o.get('projectId') in projects and type(o.get('generation')) is int and o['generation']>0 and o.get('channel')==grant['channel'] and o.get('action') in grant['actions'] and all(isinstance(o.get(k),str) and re.fullmatch('[0-9a-f]{64}',o[k]) for k in ('leaseHash','payloadHash')),'HOST_OPERATION_BINDING_DRIFT')
+        return o
+    def hostrow(row):
+        need(type(row) is dict and type(row.get('operation')) is dict,'HOST_OPERATION_BINDING_DRIFT')
+        o=operation(row['operation'])
+        need(row.get('id')==o['id'] and row.get('projectId')==o['projectId'],'HOST_OPERATION_BINDING_DRIFT')
+        if row.get('status')=='KNOWN':need(isinstance(row.get('resultHash'),str) and re.fullmatch('[0-9a-f]{64}',row['resultHash']),'HOST_OPERATION_RESULT_DRIFT')
+        old=signed_rows.get(o['id']);need(old is None or old==row,'HOST_OPERATION_HISTORY_CONFLICT');signed_rows[o['id']]=row
+    for row in host['operations']:hostrow(row)
+    for name,value in parsed.items():
+        if name.startswith('host/archive-app-operation-'):
+            hostrow(value)
+            need(name=='host/archive-app-operation-'+value['id']+'.json','HOST_OPERATION_ARCHIVE_NAME_DRIFT')
+        if name.startswith('host/archive-app-call-'):
+            need(type(value) is dict and set(value)=={'operation','proof'},'HOST_CALL_ARCHIVE_DRIFT')
+            op=operation(value['operation'])
+            need(name=='host/archive-app-call-'+op.get('id','')+'.json','HOST_CALL_ARCHIVE_DRIFT')
+            # Reuse complete operation field/scope checks without inventing a
+            # durable outcome: original app-call archives carry only this pair.
+            wire=_crown_wire(value['proof'],pub)
+            need(op['id']==wire['request_id'] and op['payloadHash']==digest(wire),'CROWN_OPERATION_BINDING_DRIFT')
+        if name.startswith('host/archive-app-close-'):
+            b=verified(value,pub['issuerPublicKey'],'r16.closed.v1')
+            need(b.get('projectId') in projects and type(b.get('generation')) is int and b['generation']>0 and name=='host/archive-app-close-'+b['projectId']+'-'+str(b['generation'])+'.json','HOST_CLOSED_ARCHIVE_DRIFT')
+        if name.startswith('host/') and name.count('/')==1 and isinstance(value,dict):
+            b=value.get('body',{})
+            if isinstance(b,dict) and 'projectId' in b:need(b['projectId'] in projects,'HOST_HISTORY_PROJECT_DRIFT')
+    for pid in projects:
+        base='host/project-'+pid;participant=parsed[base+'/state.json']['data']
+        def record(row):
+            need(type(row) is dict and isinstance(row.get('id'),str) and row.get('projectId')==pid and type(row.get('generation')) is int and row['generation']>0,'PARTICIPANT_OPERATION_BINDING_DRIFT')
+            hostrow=signed_rows.get(row['id']);need(hostrow is not None,'PARTICIPANT_SIGNED_OPERATION_MISSING')
+            op=hostrow['operation']
+            need(row.get('hash')==digest(op) and row['generation']==op['body']['generation'] and row['projectId']==op['body']['projectId'] and row.get('status')==hostrow.get('status') and row.get('resultHash')==hostrow.get('resultHash'),'PARTICIPANT_OPERATION_BINDING_DRIFT')
+            if row['status']=='KNOWN':need(row.get('outcome') in ('COMPLETED','REJECTED','NOT_EXECUTED'),'PARTICIPANT_OPERATION_RESULT_DRIFT')
+        for row in participant['operations']:record(row)
+        for name,value in parsed.items():
+            if name.startswith(base+'/archive-operation-'):
+                need(name==base+'/archive-operation-'+digest(value.get('id'))+'.json','OPERATION_ARCHIVE_NAME_DRIFT');record(value)
+        head=participant.get('archiveHead');seen=set()
+        while head is not None:
+            need(type(head) is dict and set(head)=={'name','hash'} and isinstance(head['name'],str) and re.fullmatch('generation-[0-9]+-[0-9a-f]{64}',head['name']) and head['name'] not in seen,'GENERATION_ARCHIVE_CHAIN_DRIFT')
+            seen.add(head['name']);name=base+'/archive-'+head['name']+'.json'
+            need(name in parsed,'GENERATION_ARCHIVE_MISSING');value=parsed[name]
+            need(type(value) is dict and set(value)=={'schema','generation','previous','records'} and value['schema']=='r16.generation-archive.v1' and type(value['generation']) is int and 0<=value['generation']<=participant['lastGeneration'] and digest(value)==head['hash'] and head['name']=='generation-'+str(value['generation'])+'-'+digest(value) and isinstance(value['records'],list),'GENERATION_ARCHIVE_CHAIN_DRIFT')
+            ids=set()
+            for row in value['records']:
+                need(type(row) is dict and set(row)=={'id','hash'} and isinstance(row['id'],str) and row['id'] not in ids,'GENERATION_ARCHIVE_RECORD_DRIFT');ids.add(row['id'])
+                archived=base+'/archive-operation-'+digest(row['id'])+'.json'
+                need(archived in parsed and digest(parsed[archived])==row['hash'],'GENERATION_ARCHIVE_RECORD_DRIFT')
+            head=value['previous']
+
 def _validate(checkpoint, target, pub, now, anchor, grant_anchor, pins):
     g, _ = _public(pub, now, anchor, grant_anchor)
     need(checkpoint.get('schema') == 'r16.source-app-durable-checkpoint.v1' and checkpoint.get('completeRegisteredFileSet') is True and checkpoint.get('otherWriterPids') == [], 'INCOMPLETE_CHECKPOINT')
     files = checkpoint['files'];parsed = {name:parse(row['bytes']) for name,row in files.items()}
     host = _wrapper(parsed['host/state.json'], 'r16.app-workspace.v1')
-    registered = host.get('projects')
-    need(isinstance(registered,list) and len(registered) == len(pins) and sorted(x.get('project',{}).get('id','') for x in registered) == sorted(pins), 'REGISTERED_PROJECT_GRAPH_DRIFT')
-    projects = {x['project']['id']:x for x in registered}
-    expected_dirs = {'host'} | {'host/project-'+p for p in pins}
+    projects = _registered_projects(host,g)
+    need(set(pins)<=set(projects),'REGISTERED_PROJECT_GRAPH_DRIFT')
+    expected_dirs = {'host'} | {'host/project-'+p for p in projects}
     for name, value in parsed.items():
         parent, base = name.rsplit('/',1)
         need(parent in expected_dirs and (base in ('state.json','.lock') or re.fullmatch('archive-[A-Za-z0-9_-]+[.]json',base)), 'STORE_FILE_SCOPE_REFUSED')
@@ -238,9 +417,16 @@ def _validate(checkpoint, target, pub, now, anchor, grant_anchor, pins):
         elif isinstance(value,list):
             for item in value: unresolved(item)
     for value in parsed.values(): unresolved(value)
+    phases=[]
+    for project,reg in projects.items():
+        participant=_wrapper(parsed['host/project-'+project+'/state.json'],'r16.participant.v1')
+        # Preserve the precise original-two checks/codes above. The same full
+        # structural checks also cover those stores and every historical store.
+        phases.append(_historical_project(reg,participant,parsed,pub,g))
+    _operation_history(host,projects,parsed,pub,g)
     binding = digest({'originalUnknown':unknown,'leaseBindings':leases})
     manifest = {n:{'sha256':bytehash(r['bytes']),'mode':r['mode'],'bytes':len(r['bytes'])} for n,r in files.items()}
-    return {'expectedOriginalUnknown':unknown,'expectedLeaseBindings':leases,'expectedSemanticBindingsDigest':binding,'attestation':{'schema':'r16.r15-app-ledger-attestation.v1','sourcePublicConfigDigest':anchor,'grantHash':grant_anchor,'signatureVerification':True,'originalUnknownCount':2,'registeredProjectCount':2,'fileCount':len(files),'totalBytes':sum(len(x['bytes']) for x in files.values()),'checkpointManifestDigest':digest(manifest),'semanticBindingsDigest':binding,'otherDurableInflight':0,'foreignOpenWriters':0,'staleLockProofs':checkpoint.get('staleLockProofs',{}),'missingLockProofs':checkpoint.get('missingLockProofs',{}),'drainStatus':'UNPROVEN'}}
+    return {'expectedOriginalUnknown':unknown,'expectedLeaseBindings':leases,'expectedSemanticBindingsDigest':binding,'attestation':{'schema':'r16.r15-app-ledger-attestation.v1','sourcePublicConfigDigest':anchor,'grantHash':grant_anchor,'signatureVerification':True,'originalUnknownCount':2,'registeredProjectCount':len(projects),'registeredProjectGraphDigest':digest(host['projects']),'registeredDirectorySetDigest':digest(sorted(expected_dirs)),'projectPhaseCounts':{k:sum(p[k] for p in phases) for k in ('active','pending','closing','transition','retirement')},'fileCount':len(files),'totalBytes':sum(len(x['bytes']) for x in files.values()),'checkpointManifestDigest':digest(manifest),'semanticBindingsDigest':binding,'otherDurableInflight':0,'foreignOpenWriters':0,'staleLockProofs':checkpoint.get('staleLockProofs',{}),'missingLockProofs':checkpoint.get('missingLockProofs',{}),'drainStatus':'UNPROVEN'}}
 
 def validate_checkpoint(checkpoint, target, public_config, now_ms):
     """Production fixed policy. Returns only bindings and bounded attestation."""
@@ -320,7 +506,7 @@ def registration_bindings(record):
 
 def read_store_tree(root=STORE, *, expected_root_identity=None):
     """Complete descriptor-relative bounded enumeration; never follows links."""
-    files={};identities={};dirs={};total=0
+    files={};identities={};dirs={};total=0;registered_names=set();host_before=None
     def walk(fd,relative):
         nonlocal total
         before=os.fstat(fd);need(before.st_uid == 1000 and stat.S_IMODE(before.st_mode) == 0o700,'STORE_DIRECTORY_REFUSED')
@@ -330,7 +516,7 @@ def read_store_tree(root=STORE, *, expected_root_identity=None):
             need(not name.startswith(('.next','.reclaim')),'TEMPORARY_STORE_FILE_PRESENT')
             st=os.stat(name,dir_fd=fd,follow_symlinks=False);rel=relative+'/'+name
             if stat.S_ISDIR(st.st_mode):
-                need(relative == 'host' and name in {'project-'+p for p in PINS},'UNREGISTERED_STORE_DIRECTORY')
+                need(relative == 'host' and name in registered_names,'UNREGISTERED_STORE_DIRECTORY')
                 child=os.open(name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd)
                 try: need(_identity(os.fstat(child)) == _identity(st),'STORE_DIRECTORY_CHANGED');walk(child,rel)
                 finally: os.close(child)
@@ -340,11 +526,19 @@ def read_store_tree(root=STORE, *, expected_root_identity=None):
                 total+=len(raw);need(total<=MAX_BYTES and len(files)<MAX_FILES,'STORE_CAPACITY_REFUSED')
                 files[rel]={'bytes':raw,'regular':True,'symlink':False,'uid':st.st_uid,'nlink':st.st_nlink,'mode':stat.S_IMODE(st.st_mode)}
                 identities[rel]=(st.st_dev,st.st_ino)
+                if rel=='host/state.json':need(raw==host_before,'REGISTERED_PROJECT_GRAPH_CHANGED')
         need(names == sorted(os.listdir(fd)) and _identity(os.fstat(fd)) == _identity(before),'STORE_DIRECTORY_CHANGED')
+        if relative=='host':need(set(n for n in names if n.startswith('project-'))==registered_names,'REGISTERED_STORE_MISSING')
     fd=_open_directory(root,leaf_uid=1000,leaf_mode=0o700)
     try:
+        st=os.fstat(fd);need(st.st_uid==1000 and stat.S_IMODE(st.st_mode)==0o700,'STORE_DIRECTORY_REFUSED')
         if expected_root_identity is not None:
             st=os.fstat(fd);need((st.st_dev,st.st_ino)==expected_root_identity,'SEALED_APP_DIRECTORY_IDENTITY_DRIFT')
+        # Read the protected registered graph before selecting child paths.
+        # Re-read it during enumeration, and repeat this whole tree in capture.
+        host_before,_=_read_at(fd,'state.json',uid=1000,mode=0o600)
+        graph=_registered_projects(_wrapper(parse(host_before),'r16.app-workspace.v1'))
+        registered_names={'project-'+p for p in graph}
         walk(fd,'host')
     finally: os.close(fd)
     return files,identities,dirs

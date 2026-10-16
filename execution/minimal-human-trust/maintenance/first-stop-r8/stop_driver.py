@@ -89,10 +89,9 @@ def checkpoint_manifest(checkpoint,a):
  need(checkpoint.get('otherWriterPids')==[],'OTHER_STORE_WRITER_PRESENT')
  rows=checkpoint.get('files');need(isinstance(rows,dict) and 3<=len(rows)<=100000,'CHECKPOINT_FILES_REQUIRED')
  parsed={};manifest={};total_bytes=0
- required={'host/state.json',*[f'host/project-{p}/state.json' for p in ORIGINAL_IDS]}
  for name,row in rows.items():
   need(isinstance(name,str) and len(name)<=512 and not name.startswith('/') and '\\' not in name and '\0' not in name and all(x not in ('','.','..') for x in name.split('/')),'CHECKPOINT_PATH_REFUSED')
-  parts=name.split('/');need(parts[0]=='host' and len(parts) in (2,3) and (len(parts)==2 or parts[1] in ['project-'+p for p in ORIGINAL_IDS]),'CHECKPOINT_SCOPE_REFUSED')
+  parts=name.split('/');need(parts[0]=='host' and len(parts) in (2,3) and (len(parts)==2 or parts[1].startswith('project-') and re.fullmatch('[A-Za-z0-9_-]{1,128}',parts[1][len('project-'):])),'CHECKPOINT_SCOPE_REFUSED')
   base=parts[-1]
   need(not base.startswith(('.next','.reclaim')),'TEMPORARY_STORE_FILE_PRESENT')
   need(base in ('state.json','.lock') or re.fullmatch('archive-[A-Za-z0-9_-]+[.]json',base),'UNREVIEWED_STORE_FILE_PRESENT')
@@ -114,24 +113,35 @@ def checkpoint_manifest(checkpoint,a):
     proof=checkpoint.get('staleLockProofs',{}).get(name)
     need(isinstance(proof,dict) and set(proof)=={'lockSha256','pid','startTicks','observedStartTicks','bootId'} and proof['lockSha256']==sha(raw) and proof['pid']==value['pid'] and proof['startTicks']==value['start'] and proof['bootId']==a['target']['bootId'] and (proof['observedStartTicks'] is None or isinstance(proof['observedStartTicks'],str) and re.fullmatch('[1-9][0-9]*',proof['observedStartTicks'])) and proof['observedStartTicks']!=value['start'],'OTHER_OR_AMBIGUOUS_STORE_WRITER')
   parsed[name]=value;manifest[name]={'sha256':sha(raw),'mode':row['mode'],'uid':row['uid'],'nlink':row['nlink'],'bytes':len(raw)}
+ need('host/state.json' in parsed,'REGISTERED_STORE_MISSING')
+ def state(name,kind):
+  wrapper=parsed[name]
+  need(set(wrapper)=={'schema','revision','maxNow','data'} and type(wrapper['schema']) is int and wrapper['schema']==1 and type(wrapper['revision']) is int and wrapper['revision']>=0 and type(wrapper['maxNow']) is int and wrapper['maxNow']>=0 and isinstance(wrapper['data'],dict) and wrapper['data'].get('kind')==kind,'CORRUPT_STORE_STATE')
+  return wrapper['data']
+ host=state('host/state.json','r16.app-workspace.v1');unknown={};leases={};other_inflight=0
+ projects=host.get('projects')
+ need(isinstance(projects,list) and len(ORIGINAL_IDS)<=len(projects)<=4096 and all(isinstance(x,dict) and isinstance(x.get('project'),dict) for x in projects),'REGISTERED_PROJECT_GRAPH_DRIFT')
+ registered=[x['project'].get('id') for x in projects]
+ need(all(isinstance(p,str) and re.fullmatch('[A-Za-z0-9_-]{1,128}',p) for p in registered) and len(set(registered))==len(registered) and set(ORIGINAL_IDS)<=set(registered),'REGISTERED_PROJECT_GRAPH_DRIFT')
+ # The protected reader authenticates this complete root-registered graph.
+ # Preserve every registered participant, not only the two pinned UNKNOWNs.
+ directories={'host',*['host/project-'+p for p in registered]}
+ need(all(name.rsplit('/',1)[0] in directories for name in parsed),'CHECKPOINT_SCOPE_REFUSED')
+ required={directory+'/state.json' for directory in directories}
  need(required<=set(parsed),'REGISTERED_STORE_MISSING')
  for state_name in required:
   lock_name=state_name.rsplit('/',1)[0]+'/.lock'
   if lock_name in parsed: continue
   proof=checkpoint.get('missingLockProofs',{}).get(lock_name)
   need(isinstance(proof,dict) and set(proof)=={'stateSha256','dirDev','dirIno','targetBootId','capturePhase'} and proof['stateSha256']==manifest[state_name]['sha256'] and type(proof['dirDev']) is int and proof['dirDev']>=0 and type(proof['dirIno']) is int and proof['dirIno']>0 and proof['targetBootId']==a['target']['bootId'] and proof['capturePhase'] in ('BASELINE_NOT_DRAIN_PROOF','FROZEN','EXITED'),'REGISTERED_WRITER_LOCK_MISSING')
- def state(name,kind):
-  wrapper=parsed[name]
-  need(set(wrapper)=={'schema','revision','maxNow','data'} and type(wrapper['schema']) is int and wrapper['schema']==1 and type(wrapper['revision']) is int and wrapper['revision']>=0 and type(wrapper['maxNow']) is int and wrapper['maxNow']>=0 and isinstance(wrapper['data'],dict) and wrapper['data'].get('kind')==kind,'CORRUPT_STORE_STATE')
-  return wrapper['data']
- host=state('host/state.json','r16.app-workspace.v1');unknown={};leases={};other_inflight=0
- projects=host.get('projects');need(isinstance(projects,list) and len(projects)==len(ORIGINAL_IDS) and all(isinstance(x,dict) and isinstance(x.get('project'),dict) for x in projects),'REGISTERED_PROJECT_GRAPH_DRIFT')
- need(sorted(x['project'].get('id','') for x in projects)==sorted(ORIGINAL_IDS),'REGISTERED_PROJECT_GRAPH_DRIFT')
+ for project in registered:
+  participant=state('host/project-'+project+'/state.json','r16.participant.v1')
+  need(participant.get('role')=='app','PARTICIPANT_ROLE_DRIFT')
  for name,value in parsed.items():
   if name.endswith('/state.json'):
    data=value.get('data',{})
    for field in ('operations','allocations','controls'):
-    items=data.get(field,[]);need(isinstance(items,list),'CORRUPT_STORE_STATE')
+    items=data.get(field,[]);need(isinstance(items,list) and all(isinstance(row,dict) for row in items),'CORRUPT_STORE_STATE')
     other_inflight+=sum(1 for row in items if row.get('status')=='INFLIGHT')
     for row in items:
      if row.get('status')!='UNKNOWN': continue

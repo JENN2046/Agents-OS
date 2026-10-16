@@ -8,7 +8,7 @@ import hashlib,json,re
 from pathlib import Path
 
 OLD_SOURCE='/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-app-recovery-r6'
-NEW_SOURCE=OLD_SOURCE.rsplit('/',1)[0]+'/maintenance-first-stop-r8'
+NEW_SOURCE=OLD_SOURCE.rsplit('/',1)[0]+'/maintenance-first-stop-r8-r2'
 OLD_CLOUD='/home/ubuntu/r16-maintenance-app-recovery-r6-candidate'
 NEW_CLOUD='/home/ubuntu/r16-maintenance-first-stop-r8-candidate'
 ADOPTION_SCHEMA='r16.first-stop-successor-adoption.v1'

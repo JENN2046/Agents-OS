@@ -6,8 +6,10 @@ Jenn 已批准一次 `ONE_TIME_CONTROLLED_CRASH_STOP_SOURCE_APP` 规则例外，
 
 ## 入口顺序
 
+先运行 `RUN_IN_DESKTOP_TERMINAL.py preflight`：验证候选封存后仅在内存加载只读检查器，核验真实完整基线；不安装 root 源码、不创建 journal 或现场批准、不冻结、不发信号。它通过也不等于已经批准或完成停机，正式 `stop` 仍重新检查现场并要求准确终端确认。
+
 1. 原生 sudo 管理员认证；校验封存源码，安装仅供此次维护使用的 root 源码副本。核对原 PID/start/boot/invocation、原 R15 公共代码、旧 Grant/发行签名和 ACTIVE revision 16。
-2. 受保护只读检查现有 root SEALED 账本登记与目录 dev/ino、完整 App 树、两笔原 UNKNOWN、原租约签名，以及其他写者；不导出私有原文。
+2. 受保护只读检查现有 root SEALED 账本登记与目录 dev/ino、完整 App 注册图及其全部项目目录、两笔原 UNKNOWN、原租约签名，以及其他写者；不导出私有原文。两笔 UNKNOWN 所属项目不是完整项目清单。
 3. 终端显示准确待执行摘要，用户输入现场的 `STOP <摘要前16位>`。窗口五分钟，不续期。
 4. 保持原先 SendSIGKILL=no，安装本次 owned 自动/手工重启保护；直接写固定 cgroup.freeze=1，核实内核完成冻结。
 5. 冻结后重新核验全树、签名、原两笔 UNKNOWN/租约和所有文件。root 独占 journal 封存文件哈希/模式，持久化 SIGNAL_INTENT，再通过绑定原进程的 pidfd 最多发送一次 SIGKILL。
@@ -31,6 +33,8 @@ Jenn 已批准一次 `ONE_TIME_CONTROLLED_CRASH_STOP_SOURCE_APP` 规则例外，
 停机入口本身不会签发或安装。后续维护签发/安装仍由新胶囊自己的准确原生批准入口执行。围栏一经交给维护 plan，旧停机恢复入口不能删除维护围栏；后续失败由新 plan 的回滚流程处理，其原 SOURCE App baseline 为 stopped，不能宣称自动恢复了原 App 运行。
 
 ## 验证边界
+
+R8 初版的隔离账本只有两个项目，未覆盖生产现有的九个注册项目，真实入口在终端确认、冻结和信号之前以 `UNREGISTERED_STORE_DIRECTORY` 拒绝。R8-R2 保留初版源码与回执，完整纳入既有注册图，同时加入只读真实基线预检；不删除或忽略历史目录，不改业务账本，不把未决租约或历史 transition 宣称为已经结清。
 
 所有 `test_*.py` 都是离线故障/签名/文件测试，无生产 root、SSH、业务调用或信号。`manual_real_fixture.py` 仅手动运行一次可丢弃 user-systemd 服务，通过真实 R8 Driver/LinuxBackend、原 R15 ProtectedStore、synthetic 签名账本、真实 kernel freeze/pidfd/锁恢复验证组合。单位名、cgroup 和源码路径有明确测试映射；该演练不是生产管理员准入或生产验收。
 

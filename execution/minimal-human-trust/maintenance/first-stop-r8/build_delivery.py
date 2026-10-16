@@ -7,8 +7,8 @@ R6=Path('/home/jenn/Documents/Codex/2026-10-15/G1D-R15-APP-RECOVERY-R6')
 R6_ARCHIVE=R6.with_suffix('.tar.gz')
 OLD_SHA='a3b1ef9e0310af3bf942aff8fc002b97205f5ac1e444127f8d6b7a5f9cc631d1'
 POLICY='98552704b8bb8be9881318e8e8b12406448ea25f60951715a437198004ac4234'
-MAINT=Path('/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-first-stop-r8')
-DELIVERY=Path('/home/jenn/Documents/Codex/2026-10-15/G1D-R15-FIRST-STOP-R8/delivery')
+MAINT=Path('/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-first-stop-r8-r2')
+DELIVERY=Path('/home/jenn/Documents/Codex/2026-10-15/G1D-R15-FIRST-STOP-R8-R2/delivery')
 RUNTIME=('bootstrap.py','common_safe.py','native_entry.py','stop_driver.py','linux_backend.py','ledger_checkpoint.py','handoff.py')
 def sha(raw):return hashlib.sha256(raw).hexdigest()
 def canonical(x):return json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
