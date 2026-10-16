@@ -11,7 +11,7 @@ Jenn 已批准一次 `ONE_TIME_CONTROLLED_CRASH_STOP_SOURCE_APP` 规则例外，
 3. 终端显示准确待执行摘要，用户输入现场的 `STOP <摘要前16位>`。窗口五分钟，不续期。
 4. 保持原先 SendSIGKILL=no，安装本次 owned 自动/手工重启保护；直接写固定 cgroup.freeze=1，核实内核完成冻结。
 5. 冻结后重新核验全树、签名、原两笔 UNKNOWN/租约和所有文件。root 独占 journal 封存文件哈希/模式，持久化 SIGNAL_INTENT，再通过绑定原进程的 pidfd 最多发送一次 SIGKILL。
-6. 核实原进程退出、cgroup 空、完整文件字节/模式未变、重启保护仍有效，才签出 `CONTROLLED_CRASH_STOPPED_NOT_DRAINED` 状态回执（不是密码学生产签发）。信号不明不补发。
+6. 核实原进程退出、cgroup 空、完整文件字节/模式未变、重启保护仍有效，才写出 `CONTROLLED_CRASH_STOPPED_NOT_DRAINED` 状态回执。信号不明不补发。
 
 请求可能断开，上游已接收的任务可能继续；不能保证零在途，不能自动重试、结清或删除 UNKNOWN。重启保护属于本次 boot；不要把重启云机当作维护恢复办法。
 

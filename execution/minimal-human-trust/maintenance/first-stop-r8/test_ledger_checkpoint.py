@@ -5,12 +5,13 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import stat
 import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
-from contextlib import ExitStack
+from contextlib import ExitStack,contextmanager
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
@@ -21,6 +22,20 @@ def b64(raw): return base64.urlsafe_b64encode(raw).decode().rstrip('=')
 def key(k): return b64(k.public_key().public_bytes(serialization.Encoding.DER,serialization.PublicFormat.SubjectPublicKeyInfo))
 def sign(body,k): return {'body':copy.deepcopy(body),'signature':b64(k.sign(b'R16-SIGNED\0'+m.canonical(body).encode()))}
 def raw(value): return m.canonical(value).encode()
+@contextmanager
+def fixture_metadata_uid(uid=1000):
+    """Only private temporary-tree calls enter this adapter, never production.
+
+    GitHub's runner UID differs from the fixed service UID. Keep every real
+    inode/mode/time field; translate UID only in this fixture's OS test seam.
+    Runtime reader and its UID-1000 guard are unchanged.
+    """
+    real_fstat=os.fstat;real_stat=os.stat
+    class Metadata:
+        def __init__(self,actual):self.actual=actual;self.st_uid=uid
+        def __getattr__(self,name):return getattr(self.actual,name)
+    with patch.object(m.os,'fstat',side_effect=lambda fd:Metadata(real_fstat(fd))),patch.object(m.os,'stat',side_effect=lambda *args,**kwargs:Metadata(real_stat(*args,**kwargs))):
+        yield
 def registered(app_identity=(1,2)):
     value={'schema':'r16.cloud-ledger-registration.v1','grantId':'r16-projects-daily','phase':'SEALED','specs':copy.deepcopy(m.REGISTRY_SPECS),'identities':[{'role':'app','dev':app_identity[0],'ino':app_identity[1]},{'role':'bridge','dev':9,'ino':8},{'role':'gateway','dev':9,'ino':9}]}
     return value,m.bytehash(raw(value))
@@ -168,8 +183,9 @@ class SemanticTests(unittest.TestCase):
     def test_canonical_matches_original_node_utf16_and_lone_surrogate(self):
         value={'\ue000':1,'\U00010000':2,'unicode':'\U0001f600','lone':'\ud800','line':'\u2028','minus':0}
         script="const fs=require('fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));function c(x){return x===null||typeof x!=='object'?JSON.stringify(x):Array.isArray(x)?'['+x.map(c).join(',')+']':'{'+Object.keys(x).sort().map(k=>JSON.stringify(k)+':'+c(x[k])).join(',')+'}'};process.stdout.write(c(x));"
-        node=subprocess.run(['/usr/bin/node','-e',script],input=json.dumps(value).encode(),capture_output=True,check=True)
-        self.assertEqual(m.canonical(value).encode(),node.stdout)
+        executable=shutil.which('node');self.assertIsNotNone(executable,'Node is required for the independent canonical comparison')
+        result=subprocess.run([executable,'-e',script],input=json.dumps(value).encode(),capture_output=True,check=True)
+        self.assertEqual(m.canonical(value).encode(),result.stdout)
     def test_expired_release_and_wrong_app_key_refuse(self):
         with self.assertRaisesRegex(m.Refused,'SOURCE_RELEASE_INVALID'):m._validate(self.c,self.t,self.p,99999999,m.digest(self.p),m.digest(self.p['grant']),self.pins)
         envelope=self.p['grant'];envelope['signature']=b64(self.peers['app'].sign(b'R16-SIGNED\0'+m.canonical(envelope['body']).encode()))
@@ -265,9 +281,16 @@ class ReaderTests(unittest.TestCase):
         return opened
     def test_real_fixture_complete_tree_reader_and_original_bytes(self):
         root,c,*_=self.tree()
-        with patch.object(m,'_open_directory',self.opener(root)):
-            files,ids,dirs=m.read_store_tree(root)
-        self.assertEqual(files,c['files']);self.assertEqual(len(ids),9);self.assertEqual(len(dirs),3)
+        # Simulate GitHub's logical UID even when this host actually uses 1000.
+        # The inner test seam translates only UID, preserving all real fields.
+        with fixture_metadata_uid(1001):
+            with patch.object(m,'_open_directory',self.opener(root)),fixture_metadata_uid(1000):
+                files,ids,dirs=m.read_store_tree(root)
+            self.assertEqual(files,c['files']);self.assertEqual(len(ids),9);self.assertEqual(len(dirs),3)
+            # Without the test translation, the production UID-1000 guard must
+            # reject the same tree observed as UID 1001.
+            with patch.object(m,'_open_directory',self.opener(root)):
+                with self.assertRaisesRegex(m.Refused,'STORE_DIRECTORY_REFUSED'):m.read_store_tree(root)
     def test_real_tree_temp_extra_directory_and_unreviewed_file_refused(self):
         root,*_=self.tree()
         for name,isdir in [('.next-partial',False),('.reclaim',False),('unregistered',True),('secret-file',False)]:
@@ -275,7 +298,7 @@ class ReaderTests(unittest.TestCase):
             if isdir:file.mkdir(mode=0o700)
             else:file.write_bytes(b'{}');file.chmod(0o600)
             try:
-                with patch.object(m,'_open_directory',self.opener(root)):
+                with patch.object(m,'_open_directory',self.opener(root)),fixture_metadata_uid(1000):
                     with self.assertRaises(m.Refused):m.read_store_tree(root)
             finally:
                 if isdir:file.rmdir()
@@ -283,7 +306,7 @@ class ReaderTests(unittest.TestCase):
     def test_directory_and_file_symlink_real_tree_rejected(self):
         root,*_=self.tree();outside=self.root/'outside';outside.mkdir(mode=0o700)
         os.symlink(outside,root/'extra')
-        with patch.object(m,'_open_directory',self.opener(root)):
+        with patch.object(m,'_open_directory',self.opener(root)),fixture_metadata_uid(1000):
             with self.assertRaises(m.Refused):m.read_store_tree(root)
     def test_complete_capture_pipeline_offline_no_realroot_no_proc(self):
         root,c,t,p,pins=self.tree()
@@ -368,6 +391,7 @@ class ReaderTests(unittest.TestCase):
             self.assertEqual(path,m.STORE)
             return os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
         with ExitStack() as stack:
+            stack.enter_context(fixture_metadata_uid(1000))
             patches=[patch.object(m.os,'geteuid',return_value=0),patch.object(m.platform,'node',return_value=m.HOST),patch.object(m,'_target_state',return_value='FROZEN'),patch.object(m,'read_public',side_effect=lambda path:copy.deepcopy(public[path])),patch.object(m,'read_accepted',return_value=accepted),patch.object(m,'_open_directory',side_effect=opened),patch.object(m,'PUBLIC_DIGEST',m.digest(p)),patch.object(m,'GRANT_DIGEST',m.digest(p['grant'])),patch.object(m,'APP_VERSION',p['versions']['app']),patch.object(m,'PINS',pins),patch.object(m,'DELIVERY_DIGEST',m.digest(delivery)),patch.object(m.time,'time',return_value=0.1),patch.object(m,'_scan_writers')]
             if missing:patches.append(patch.object(m,'read_registration',side_effect=m.Refused('SEALED_REGISTRATION_MISSING')))
             elif changed:patches.append(patch.object(m,'read_registration',side_effect=[(record,h),({**record,'phase':'PREPARING'},'f'*64)]))
