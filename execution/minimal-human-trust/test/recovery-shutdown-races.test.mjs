@@ -124,3 +124,5 @@ test('Bridge close waits for entire WorkspaceControl route to archive after remo
 });
 
 import "./app-os-shutdown.test.mjs";
+
+import "./fixtures/release-r6-regression.mjs";

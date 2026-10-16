@@ -37,3 +37,12 @@ integration's copied R4 package is unchanged test input and does not contain the
 App fix. It deliberately has no executable launcher, capsule or signing
 approval. Do not install it or reuse an aborted R4 transaction. Existing R4
 journals and the independent original-service recovery receipt are preserved.
+
+R6 App+Native physical assembly and protected adapter sources are tracked in
+`release-r6/`. Its portable transaction and Python suites run in the existing
+CI shutdown entry; full physical staging additionally requires the reviewed
+12,592-file local package. The independent verifier and deterministic builder
+are in `release-r6/tools`. First installation remains blocked before service
+changes until the original running App has an actual safe stopped proof. The
+source tree and offline package do not create an APPLY launcher, native
+admission, approval window or production signature.
