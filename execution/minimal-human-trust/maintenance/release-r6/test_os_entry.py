@@ -76,7 +76,9 @@ class EntryTests(unittest.TestCase):
         return raw
     def write(self,p,value): p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(e.canonical(value))
     def action(self,op): return e.os_action(op)
-    def baseline(self): return self.action('baseline')
+    def baseline(self):
+        cloud={'status':'CLOUD_BASELINE_SAVED','planHash':self.h,'baseline':{u:e.snapshot_json(self.rows[u]) for u in ('r16-app.service','r16-bridge.service')}}
+        with mock.patch.object(e,'cloud_rpc',return_value=cloud): return self.action('baseline')
     def quiesce(self): self.baseline();return self.action('quiesce')
     def journal(self): return e.read_json(self.state/'os-journal.json')
 
@@ -280,6 +282,7 @@ class EntryTests(unittest.TestCase):
     def test_cloud_effect_stop_lost_reply_rejected_on_second_stop(self):
         u='r16-app.service'
         with mock.patch.object(e.socket,'gethostname',return_value=e.CLOUD):
+            e.cloud_helper(['baseline',self.h],None)
             e.cloud_helper(['fence',u,self.h],None);self.crash=('stop',u)
             with self.assertRaises(Crash): e.cloud_helper(['stop',u,self.h],None)
             self.crash=None
@@ -561,6 +564,150 @@ class EntryTests(unittest.TestCase):
         with self.assertRaisesRegex(q.Refused,'PLAN_HASH_REQUIRED'):q.Controller(self.Fake()).baseline('wrong')
 
 
+    def test_baseline_real_exclusive_link_crash_pair_recovers_exact_new_journal(self):
+        path=self.state/'cloud-os-journal.json';pending=self.state/'.cloud-os-journal.json.pending'
+        rows={u:e.snapshot_json(self.rows[u]) for u in ('r16-app.service','r16-bridge.service')}
+        old=e.os.unlink
+        def crash(path,*args,**kwargs):
+            if Path(path)==pending:raise Crash()
+            return old(path,*args,**kwargs)
+        with mock.patch.object(e.os,'unlink',side_effect=crash),self.assertRaises(Crash):e.Journal(path).new(self.h,rows)
+        self.assertEqual(path.stat().st_nlink,2);self.assertEqual(path.stat().st_ino,pending.stat().st_ino)
+        real_stat=e.os.fstat;real_lstat=Path.lstat
+        class RootMetadata:
+            def __init__(self,value):self.value=value
+            def __getattr__(self,name):return 0 if name=='st_uid' else getattr(self.value,name)
+        with mock.patch.object(e.os,'fstat',side_effect=lambda fd:RootMetadata(real_stat(fd))),mock.patch.object(Path,'lstat',lambda p:RootMetadata(real_lstat(p))):
+            journal=e.Journal(path);value=journal.read()
+        self.assertEqual(value['planHash'],self.h);self.assertFalse(pending.exists());self.assertEqual(path.stat().st_nlink,1)
+        self.assertEqual(value['events'],[]);self.assertFalse(self.effects)
+
+    def test_baseline_pending_pair_with_third_link_or_non_new_state_refuses(self):
+        path=self.state/'cloud-os-journal.json';pending=self.state/'.cloud-os-journal.json.pending'
+        rows={u:e.snapshot_json(self.rows[u]) for u in ('r16-app.service','r16-bridge.service')}
+        e.Journal(path).new(self.h,rows);os.link(path,pending);third=self.state/'foreign-link';os.link(path,third)
+        with self.assertRaisesRegex(e.Refused,'JOURNAL_PENDING_PAIR_REFUSED'):e.Journal(path).read()
+        self.assertTrue(pending.exists());self.assertEqual(path.stat().st_nlink,3)
+
+    def test_pending_pair_wrong_plan_or_mode_is_preserved_not_cleaned(self):
+        real_stat=e.os.fstat;real_lstat=Path.lstat
+        class RootMetadata:
+            def __init__(self,value):self.value=value
+            def __getattr__(self,name):return 0 if name=='st_uid' else getattr(self.value,name)
+        rows={u:e.snapshot_json(self.rows[u]) for u in ('r16-app.service','r16-bridge.service')}
+        for label,h,mode in (('wrong-plan','0'*64,0o600),('wrong-mode',self.h,0o644)):
+            with self.subTest(label=label):
+                path=self.state/(label+'.json');pending=self.state/('.'+label+'.json.pending')
+                e.Journal(path).new(h,rows);path.chmod(mode);os.link(path,pending)
+                before=path.read_bytes()
+                with mock.patch.object(e.os,'fstat',side_effect=lambda fd:RootMetadata(real_stat(fd))),mock.patch.object(Path,'lstat',lambda p:RootMetadata(real_lstat(p))),self.assertRaisesRegex(e.Refused,'JOURNAL_PENDING_PAIR_REFUSED'):e.Journal(path).read()
+                self.assertEqual(path.read_bytes(),before);self.assertTrue(pending.exists());self.assertEqual(path.stat().st_nlink,2)
+
+    def test_cloud_baseline_saves_both_roles_before_any_fence_and_idempotent_exact(self):
+        self.stopped_app()
+        with mock.patch.object(e.socket,'gethostname',return_value=e.CLOUD):
+            value=e.execute(['cloud-helper','baseline',self.h])
+            raw=(self.state/'cloud-os-journal.json').read_bytes()
+            self.assertEqual(set(value['baseline']),{'r16-app.service','r16-bridge.service'})
+            self.assertEqual(e.execute(['cloud-helper','baseline',self.h]),value)
+            self.assertEqual((self.state/'cloud-os-journal.json').read_bytes(),raw)
+            js=e.read_json(self.state/'cloud-os-journal.json');self.assertEqual(js['events'],[]);self.assertIsNone(js['pending'])
+            e.cloud_helper(['fence','r16-app.service',self.h],None)
+            self.assertEqual(set(e.read_json(self.state/'cloud-os-journal.json')['originalBaseline']),set(value['baseline']))
+        self.assertEqual(self.effects,[('fence','r16-app.service')])
+
+    def test_cloud_baseline_drift_or_partial_existing_map_is_never_overwritten(self):
+        with mock.patch.object(e.socket,'gethostname',return_value=e.CLOUD):
+            e.cloud_helper(['baseline',self.h],None)
+            original=(self.state/'cloud-os-journal.json').read_bytes()
+            u='r16-app.service';self.rows[u]=replace(self.rows[u],main_start=9999)
+            with self.assertRaisesRegex(e.Refused,'CLOUD_BASELINE_READBACK_DRIFT'):e.cloud_helper(['baseline',self.h],None)
+            self.assertEqual((self.state/'cloud-os-journal.json').read_bytes(),original)
+            js=e.read_json(self.state/'cloud-os-journal.json');del js['originalBaseline'][u];self.write(self.state/'cloud-os-journal.json',js)
+            with self.assertRaisesRegex(e.Refused,'CLOUD_BASELINE_READBACK_DRIFT'):e.cloud_helper(['baseline',self.h],None)
+        self.assertFalse(self.effects)
+
+    def test_cloud_fence_cannot_create_partial_or_missing_baseline(self):
+        with mock.patch.object(e.socket,'gethostname',return_value=e.CLOUD):
+            with self.assertRaisesRegex(e.Refused,'REMOTE_COMPLETE_BASELINE_REQUIRED'):e.cloud_helper(['fence','r16-app.service',self.h],None)
+        self.assertFalse((self.state/'cloud-os-journal.json').exists());self.assertFalse(self.effects)
+
+    def test_local_baseline_requires_exact_cloud_sample_before_local_save(self):
+        cloud={'status':'CLOUD_BASELINE_SAVED','planHash':self.h,'baseline':{u:e.snapshot_json(self.rows[u]) for u in ('r16-app.service','r16-bridge.service')}}
+        cloud['baseline']['r16-app.service']['main_start']+=1
+        with mock.patch.object(e,'cloud_rpc',return_value=cloud),self.assertRaisesRegex(e.Refused,'CLOUD_BASELINE_SAMPLE_DRIFT'):self.action('baseline')
+        self.assertFalse((self.state/'os-journal.json').exists());self.assertFalse(self.effects)
+
+    def test_local_repeated_baseline_detects_drift_without_overwrite(self):
+        self.baseline();raw=(self.state/'os-journal.json').read_bytes()
+        self.rows['r16-owner.service']=replace(self.rows['r16-owner.service'],main_start=90000)
+        with self.assertRaisesRegex(e.Refused,'BASELINE_READBACK_DRIFT'):self.baseline()
+        self.assertEqual((self.state/'os-journal.json').read_bytes(),raw);self.assertFalse(self.effects)
+
+    def test_source_stopped_app_must_still_be_stopped_after_unfence(self):
+        for drift in ({'active':'active','sub':'running','main_pid':900,'main_start':9000,'members':(900,)},
+                      {'control_pid':800,'control_start':8000}, {'members':(800,)},
+                      {'pending_job':True}, {'daemon_reload_needed':True}, {'code_phase':'TARGET'}):
+            with self.subTest(drift=drift):
+                self.stopped_app();self.quiesce();old=self.Fake.unfence;outer=self
+                def change(backend,u,h):
+                    old(backend,u,h)
+                    if u=='r16-app.service':outer.rows[u]=replace(outer.rows[u],**drift)
+                with mock.patch.object(self.Fake,'unfence',change):value=self.action('resume')
+                self.assertEqual(value['status'],'RESTORE_PARTIAL');self.assertIn('r16-app.service',value['unconfirmedUnits'])
+                self.assertNotIn(('start','r16-app.service'),self.effects)
+                # Each subcase is a separate fresh synthetic transaction.
+                (self.state/'os-journal.json').unlink();self.effects.clear()
+                for i,(u,host) in enumerate(q.ROLE_HOST.items()):
+                    self.rows[u]=q.Snapshot(u,host,'active','running',100+i,0,1000+i,0,(100+i,),0,tuple(q.CODE_PINS[u].items()),None,False,send_sigkill='no',kill_signal='15',code_phase='SOURCE' if u in q.ROLE_SELECTORS else 'STATIC')
+
+    def test_stop_waits_for_final_job_settlement_without_repeating_stop(self):
+        u=q.STOP_ORDER[0];clock=[0.0];controller=q.Controller;outer=self
+        old=self.Fake.stop
+        def stopped_job(backend,unit,h):
+            old(backend,unit,h)
+            if unit==u:outer.rows[u]=replace(outer.rows[u],pending_job=True)
+        def sleep(seconds):
+            clock[0]+=seconds
+            if clock[0]>=.1:self.rows[u]=replace(self.rows[u],pending_job=False)
+        with mock.patch.object(self.Fake,'stop',stopped_job),mock.patch.object(q,'Controller',side_effect=lambda backend:controller(backend,now=lambda:clock[0],sleep=sleep)):
+            self.assertEqual(self.quiesce()['status'],'OS_QUIESCENT_FIXED_ROLES_ONLY')
+        self.assertEqual(self.effects.count(('stop',u)),1);self.assertGreaterEqual(clock[0],.1)
+
+    def test_permanent_stop_job_refuses_at_graceful_deadline_no_replay(self):
+        u=q.STOP_ORDER[0];clock=[0.0];controller=q.Controller;outer=self;old=self.Fake.stop
+        def stopped_job(backend,unit,h):
+            old(backend,unit,h)
+            if unit==u:outer.rows[u]=replace(outer.rows[u],pending_job=True)
+        with mock.patch.object(self.Fake,'stop',stopped_job),mock.patch.object(q,'Controller',side_effect=lambda backend:controller(backend,now=lambda:clock[0],sleep=lambda seconds:clock.__setitem__(0,clock[0]+seconds))),self.assertRaisesRegex(q.Refused,'GRACEFUL_STOP_INCOMPLETE'):
+            self.quiesce()
+        self.assertEqual(self.effects.count(('stop',u)),1)
+
+    def test_start_waits_for_job_settlement_without_second_start(self):
+        self.stopped_app();self.quiesce();u='r16-owner.service';old=self.Fake.start;outer=self;waits=[]
+        def started_job(backend,unit,h):
+            old(backend,unit,h)
+            if unit==u:outer.rows[u]=replace(outer.rows[u],pending_job=True)
+        def settle(seconds):waits.append(seconds);self.rows[u]=replace(self.rows[u],pending_job=False)
+        with mock.patch.object(self.Fake,'start',started_job),mock.patch.object(e.time,'sleep',side_effect=settle):
+            self.assertEqual(self.action('resume')['status'],'OS_ACTIVE')
+        self.assertTrue(waits);self.assertEqual(self.effects.count(('start',u)),1)
+
+    def test_recovery_cannot_return_os_active_after_deadline_crossed_in_read(self):
+        self.stopped_app();self.quiesce();old=self.Fake.inspect;outer=self;clock=[1.0]
+        def slow(backend,unit,h=''):
+            result=old(backend,unit,h)
+            if unit=='r16-owner.service':outer.at=outer.plan['rollbackDeadline'];clock[0]+=1800
+            return result
+        with mock.patch.object(self.Fake,'inspect',slow),mock.patch.object(e.time,'monotonic',side_effect=lambda:clock[0]):self.assertEqual(self.action('resume')['status'],'RESTORE_PARTIAL')
+        self.assertFalse(any(op in ('start','unfence') for op,u in self.effects))
+
+    def test_pending_job_refuses_baseline_before_any_effect(self):
+        self.rows['r16-app.service']=replace(self.rows['r16-app.service'],pending_job=True)
+        with self.assertRaisesRegex(q.Refused,'PREEXISTING_FENCE_OR_UNIT_DRIFT'):self.baseline()
+        self.assertFalse(self.effects)
+
+
 class BootstrapEnvironmentTests(unittest.TestCase):
     def test_mutating_launcher_reports_pending_and_recovery_with_nonzero_exit(self):
         for action in ('bootstrap-local','continue'):
@@ -699,5 +846,106 @@ class PublicManifestReaderTests(unittest.TestCase):
                 required=next(name for name in files if name in {p[len(directory)+1:] for p in pins if p.startswith(directory+'/')});manifest['files'][required]='0'*64
                 corrupt=json.dumps(manifest,sort_keys=True,separators=(',',':')).encode();self.files[manifest_name].write_bytes(corrupt);versions[role][phase]=q.sha(corrupt)
                 with mock.patch.object(q,'ROLE_VERSIONS',versions),self.reader() as read,self.assertRaisesRegex(q.Refused,'ROLE_MANIFEST_CODE_PIN_DRIFT'):q.selected_code_pins(unit,read)
+
+class StableManagerAndExpiryTests(unittest.TestCase):
+    def setUp(self):
+        self.backend=q.RealBackend.__new__(q.RealBackend);self.backend.host=q.LOCAL;self.backend._admitted=None
+        self.unit='r16-owner.service';self.h='a'*64;self.shows=[];self.clock=1.0;self.effect=[]
+        self.data={'Id':self.unit,'ActiveState':'active','SubState':'running','MainPID':'200','ControlPID':'0',
+                   'ControlGroup':'/system.slice/'+self.unit,'NRestarts':'0','Restart':'no','RefuseManualStart':'no',
+                   'DropInPaths':'','NeedDaemonReload':'no','SendSIGKILL':'no','KillSignal':'15','Job':''}
+        self.read=b'code';self.pins={'/fixed/code.py':q.sha(self.read)}
+        def regular(name):
+            if name==q.dropin(self.unit):raise FileNotFoundError()
+            return self.read
+        self.patches=[mock.patch.object(self.backend,'_root'),mock.patch.object(self.backend,'_local'),
+            mock.patch.object(self.backend,'_read_regular',side_effect=regular),
+            mock.patch.object(q,'selected_code_pins',return_value=('STATIC',self.pins)),
+            mock.patch.object(self.backend,'_start',side_effect=lambda pid,group:1000 if pid else 0),
+            mock.patch.object(self.backend,'_members',return_value=(200,)),
+            mock.patch.object(self.backend,'_run',return_value=b'{"type":"a(sbbsi)","data":[]}'),
+            mock.patch.object(q.time,'sleep'),mock.patch.object(q.time,'monotonic',side_effect=lambda:self.clock),
+            mock.patch.object(q.subprocess,'run',side_effect=AssertionError('REAL_SUBPROCESS_PROHIBITED'))]
+        for patch in self.patches:patch.start();self.addCleanup(patch.stop)
+        self.manager=mock.patch.object(self.backend,'_manager',return_value=self.data).start();self.addCleanup(mock.patch.stopall)
+
+    def test_torn_mainpid_membership_retries_only_after_lifecycle_change(self):
+        stopped={**self.data,'ActiveState':'inactive','SubState':'dead','MainPID':'0','ControlGroup':''}
+        self.manager.side_effect=[self.data,stopped,stopped,stopped]
+        with mock.patch.object(self.backend,'_members',return_value=()):row=self.backend.inspect(self.unit,self.h)
+        self.assertTrue(row.stopped());self.assertEqual(self.manager.call_count,4)
+
+    def test_torn_controlpid_membership_resamples_only_manager_proven_change(self):
+        before={**self.data,'ControlPID':'201'}
+        self.manager.side_effect=[before,self.data,self.data,self.data]
+        self.assertEqual(self.backend.inspect(self.unit,self.h).control_pid,0)
+        self.assertEqual(self.manager.call_count,4)
+
+    def test_disappeared_proc_with_manager_transition_can_be_resampled(self):
+        stopped={**self.data,'ActiveState':'inactive','SubState':'dead','MainPID':'0','ControlGroup':''}
+        self.manager.side_effect=[self.data,stopped,stopped,stopped]
+        with mock.patch.object(self.backend,'_start',side_effect=lambda pid,group:(_ for _ in ()).throw(q.Refused('PID_IDENTITY_UNAVAILABLE')) if pid else 0),mock.patch.object(self.backend,'_members',return_value=()):
+            self.assertTrue(self.backend.inspect(self.unit,self.h).stopped())
+
+    def test_stable_mainpid_outside_cgroup_is_not_retried_or_suppressed(self):
+        with mock.patch.object(self.backend,'_members',return_value=()),self.assertRaisesRegex(q.Refused,'MAIN_PID_OUTSIDE_CGROUP'):self.backend.inspect(self.unit,self.h)
+        self.assertEqual(self.manager.call_count,2)
+
+    def test_stable_proc_group_mismatch_and_pid_reuse_remain_hard_errors(self):
+        for error in ('PID_CGROUP_DRIFT','PID_REUSED_DURING_INSPECTION'):
+            with self.subTest(error=error),mock.patch.object(self.backend,'_start',side_effect=q.Refused(error)),self.assertRaisesRegex(q.Refused,error):self.backend.inspect(self.unit,self.h)
+        with mock.patch.object(self.backend,'_start',side_effect=[1000,0,1001]),self.assertRaisesRegex(q.Refused,'PID_REUSED_DURING_INSPECTION'):self.backend.inspect(self.unit,self.h)
+
+    def test_policy_drift_is_not_mistaken_for_lifecycle_race(self):
+        self.manager.side_effect=[self.data,{**self.data,'MainPID':'0','Restart':'always'}]
+        with self.assertRaisesRegex(q.Refused,'MANAGER_POLICY_DRIFT'):self.backend.inspect(self.unit,self.h)
+
+    def test_repeated_manager_transition_is_bounded_and_never_mutates(self):
+        self.manager.side_effect=[{**self.data,'NRestarts':str(i)} for i in range(6)]
+        with self.assertRaisesRegex(q.Refused,'MANAGER_LIFECYCLE_UNSTABLE'):self.backend.inspect(self.unit,self.h)
+        self.assertEqual(self.manager.call_count,6)
+
+    def test_cgroup_members_second_read_must_match(self):
+        with mock.patch.object(self.backend,'_members',side_effect=[(200,),(200,201)]),self.assertRaisesRegex(q.Refused,'CGROUP_MEMBERSHIP_DRIFT'):self.backend.inspect(self.unit,self.h)
+
+    def test_stable_job_is_exposed_and_missing_job_field_refuses(self):
+        self.manager.return_value={**self.data,'Job':'42 /org/freedesktop/systemd1/job/42'}
+        self.assertTrue(self.backend.inspect(self.unit,self.h).pending_job)
+        self.manager.return_value={**self.data,'Job':'0'};self.assertFalse(self.backend.inspect(self.unit,self.h).pending_job)
+        # Actual manager parser, not a defaulting synthetic dictionary.
+        raw='\n'.join(k+'='+v for k,v in self.data.items() if k!='Job').encode()
+        with mock.patch.object(self.backend,'_run',return_value=raw),self.assertRaisesRegex(q.Refused,'MANAGER_METADATA_INCOMPLETE'):q.RealBackend._manager(self.backend,self.unit)
+
+    def permit(self,state='ABORT_RESTORING'):
+        p=q._Permit(q._BRAND,self.h,10.0,{});p.state=state;self.backend._admitted=p;return p
+
+    def test_expired_restore_permit_has_no_bypass(self):
+        self.permit();self.clock=10
+        with self.assertRaisesRegex(q.Refused,'ADMISSION_EXPIRED'):self.backend._require_admitted(self.h)
+
+    def test_slow_stop_and_start_inspection_cannot_cross_last_effect_deadline(self):
+        for operation in ('stop','start'):
+            self.permit();self.clock=1
+            row=q.Snapshot(self.unit,q.LOCAL,'active','running',200,0,1000,0,(200,),0,(),
+                           q.sha(q.fence_bytes(self.h)) if operation=='stop' else None,operation=='stop',send_sigkill='no',kill_signal='15')
+            def slow(*args):self.clock=10;return row
+            with mock.patch.object(self.backend,'inspect',side_effect=slow),mock.patch.object(self.backend,'_run',wraps=q.RealBackend._run.__get__(self.backend)) as run,self.assertRaisesRegex(q.Refused,'ADMISSION_EXPIRED'):getattr(self.backend,operation)(self.unit,self.h)
+            self.assertEqual(run.call_count,1)
+
+    def test_unlink_guard_is_after_slow_fence_read(self):
+        self.permit()
+        def slow(name):self.clock=10;return q.fence_bytes(self.h)
+        with mock.patch.object(self.backend,'_read_regular',side_effect=slow),mock.patch.object(q.os,'unlink') as unlink,self.assertRaisesRegex(q.Refused,'ADMISSION_EXPIRED'):self.backend.unfence(self.unit,self.h)
+        unlink.assert_not_called()
+
+    def test_daemon_reload_guard_is_immediately_before_subprocess(self):
+        self.permit();self.clock=10
+        with self.assertRaisesRegex(q.Refused,'ADMISSION_EXPIRED'):q.RealBackend._run(self.backend,('/usr/bin/systemctl','daemon-reload'))
+
+    def test_fence_file_create_rechecks_after_directory_checks(self):
+        self.permit('FENCING')
+        def slow(*args):self.clock=10
+        with mock.patch.object(self.backend,'_mkdir_root',side_effect=slow),mock.patch.object(q.Path,'exists',return_value=False),mock.patch.object(q.os,'open') as opened,self.assertRaisesRegex(q.Refused,'ADMISSION_EXPIRED'):self.backend.fence(self.unit,self.h)
+        opened.assert_not_called()
 
 if __name__=='__main__': unittest.main()

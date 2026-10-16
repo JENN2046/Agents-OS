@@ -34,7 +34,7 @@ SSH = ('/usr/bin/ssh', '-F', '/dev/null', '-T', '-o', 'BatchMode=yes', '-o', 'Id
        '-o', 'ClearAllForwardings=yes', 'ubuntu@159.75.139.246')
 PROPERTIES = ('Id', 'ActiveState', 'SubState', 'MainPID', 'ControlPID', 'ControlGroup',
               'NRestarts', 'Restart', 'RefuseManualStart', 'DropInPaths', 'NeedDaemonReload',
-              'SendSIGKILL', 'KillSignal')
+              'SendSIGKILL', 'KillSignal', 'Job')
 CGROUP_ROOT = '/sys/fs/cgroup'
 FENCE_ROOT = '/run/r16-maintenance-os-r6'
 BLOCKED_START_PATH = FENCE_ROOT + '/business-start-is-not-authorized'
@@ -143,6 +143,7 @@ class Snapshot:
     send_sigkill: str | None = None
     kill_signal: str | None = None
     code_phase: str | None = None
+    pending_job: bool = False
 
     def graceful_only(self):
         # systemctl show represents SIGTERM numerically as KillSignal=15.
@@ -207,10 +208,12 @@ class RealBackend:
         p = self._admitted
         need(isinstance(p, _Permit) and p.brand is _BRAND and p.plan_hash == plan_hash and
              p.state in ('FENCING', 'STOPPING', 'ABORT_RESTORING'), 'PROTECTED_INSTALLER_ADMISSION_REQUIRED')
-        need(p.state == 'ABORT_RESTORING' or time.monotonic() < p.expires_at, 'ADMISSION_EXPIRED')
+        need(time.monotonic() < p.expires_at, 'ADMISSION_EXPIRED')
 
     def _run(self, argv, timeout=10):
         self._root()
+        if tuple(argv[:2]) in (('/usr/bin/systemctl','stop'),('/usr/bin/systemctl','start'),('/usr/bin/systemctl','daemon-reload')):
+            self._require_admitted(self._admitted.plan_hash if self._admitted else '')
         result = subprocess.run(tuple(argv), input=b'', stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                 env=ENV, timeout=timeout, check=False)
         need(result.returncode == 0 and len(result.stdout) <= 262144, 'OS_COMMAND_FAILED')
@@ -277,12 +280,16 @@ class RealBackend:
         if not root.exists():
             return ()
         members = set()
-        for directory, subdirs, _ in os.walk(root, followlinks=False):
-            need(not Path(directory).is_symlink() and all(not (Path(directory) / n).is_symlink() for n in subdirs), 'CGROUP_SYMLINK')
-            for value in (Path(directory) / 'cgroup.procs').read_text().split():
-                need(value.isdigit(), 'CGROUP_CONTENT_REFUSED')
-                members.add(int(value))
-            need(len(members) <= 8192, 'CGROUP_CAPACITY_REFUSED')
+        def denied(_error): raise Refused('CGROUP_METADATA_UNAVAILABLE')
+        try:
+            for directory, subdirs, _ in os.walk(root, followlinks=False, onerror=denied):
+                need(not Path(directory).is_symlink() and all(not (Path(directory) / n).is_symlink() for n in subdirs), 'CGROUP_SYMLINK')
+                for value in (Path(directory) / 'cgroup.procs').read_text().split():
+                    need(value.isdigit(), 'CGROUP_CONTENT_REFUSED')
+                    members.add(int(value))
+                need(len(members) <= 8192, 'CGROUP_CAPACITY_REFUSED')
+        except OSError:
+            raise Refused('CGROUP_METADATA_UNAVAILABLE') from None
         return tuple(sorted(members))
 
     def inspect(self, unit, plan_hash=''):
@@ -290,6 +297,7 @@ class RealBackend:
         if ROLE_HOST[unit] != self.host:
             raw = self._remote(unit, 'inspect', plan_hash)
             try:
+                need(type(raw.get('pending_job')) is bool, 'REMOTE_JOB_METADATA_REQUIRED')
                 raw['members'] = tuple(raw['members']);raw['code_hashes'] = tuple(tuple(x) for x in raw['code_hashes'])
                 value = Snapshot(**raw)
                 need(value.unit == unit and value.host == ROLE_HOST[unit], 'REMOTE_IDENTITY_REFUSED')
@@ -301,8 +309,37 @@ class RealBackend:
             except Exception:
                 raise Refused('REMOTE_READBACK_REFUSED') from None
         self._root();self._local(unit)
+        # A process may exit between systemd and proc/cgroup reads. Retry only
+        # when the manager itself proves a torn lifecycle sample. A stable
+        # identity error, policy drift or reused PID remains a hard refusal.
+        lifecycle = ('ActiveState','SubState','MainPID','ControlPID','ControlGroup','NRestarts','Job')
+        identity_errors = {'PID_IDENTITY_UNAVAILABLE','PID_CGROUP_DRIFT','MAIN_PID_OUTSIDE_CGROUP',
+                           'CONTROL_PID_OUTSIDE_CGROUP','PID_REUSED_DURING_INSPECTION','CGROUP_MEMBERSHIP_DRIFT','CGROUP_METADATA_UNAVAILABLE'}
+        for attempt in range(3):
+            before = self._manager(unit)
+            error = None
+            try: value = self._inspect_sample(unit, plan_hash, before)
+            except Refused as caught:
+                if caught.code not in identity_errors: raise
+                error = caught
+            after = self._manager(unit)
+            need(all(before.get(k) == after.get(k) for k in PROPERTIES if k not in lifecycle), 'MANAGER_POLICY_DRIFT')
+            changed = any(before.get(k) != after.get(k) for k in lifecycle)
+            if changed:
+                need(attempt < 2, 'MANAGER_LIFECYCLE_UNSTABLE')
+                time.sleep(.01)
+                continue
+            if error: raise error
+            return value
+        raise Refused('MANAGER_LIFECYCLE_UNSTABLE')
+
+    def _manager(self, unit):
         raw = self._run(('/usr/bin/systemctl', 'show', unit, '--property=' + ','.join(PROPERTIES))).decode()
         data = dict(line.split('=', 1) for line in raw.splitlines() if '=' in line)
+        need(all(k in data for k in PROPERTIES), 'MANAGER_METADATA_INCOMPLETE')
+        return data
+
+    def _inspect_sample(self, unit, plan_hash, data):
         need(data.get('Id') == unit, 'UNIT_IDENTITY_REFUSED')
         need(data.get('SendSIGKILL') == 'no' and data.get('KillSignal') == '15', 'UNSAFE_MANAGER_STOP_POLICY')
         pid, control = int(data['MainPID']), int(data['ControlPID'])
@@ -316,6 +353,7 @@ class RealBackend:
         if pid: need(pid in members, 'MAIN_PID_OUTSIDE_CGROUP')
         if control: need(control in members, 'CONTROL_PID_OUTSIDE_CGROUP')
         need(main_start == self._start(pid, group) and control_start == self._start(control, group), 'PID_REUSED_DURING_INSPECTION')
+        need(members == self._members(unit), 'CGROUP_MEMBERSHIP_DRIFT')
         fence_hash = None
         try:
             fence_hash = sha(self._read_regular(dropin(unit)))
@@ -339,10 +377,11 @@ class RealBackend:
                          data.get('NeedDaemonReload') == 'no' and mandatory_guard and not Path(BLOCKED_START_PATH).exists())
         return Snapshot(unit, self.host, data['ActiveState'], data['SubState'], pid, control, main_start,
                         control_start, members, int(data['NRestarts']), code_hashes, fence_hash, effective,
-                        data.get('NeedDaemonReload') != 'no', data['SendSIGKILL'], data['KillSignal'],code_phase)
+                        data.get('NeedDaemonReload') != 'no', data['SendSIGKILL'], data['KillSignal'],code_phase,data['Job'] not in ('','0'))
 
-    def _mkdir_root(self, directory, mode):
+    def _mkdir_root(self, directory, mode, plan_hash):
         path = Path(directory)
+        self._require_admitted(plan_hash)
         path.mkdir(mode=mode, parents=True, exist_ok=True)
         cursor = Path('/')
         for part in path.parts[1:]:
@@ -356,14 +395,17 @@ class RealBackend:
         if ROLE_HOST[unit] != self.host:
             return self._remote(unit, 'fence', plan_hash)
         self._root();self._local(unit)
-        self._mkdir_root(FENCE_ROOT, 0o700)
+        self._mkdir_root(FENCE_ROOT, 0o700, plan_hash)
         need(not Path(BLOCKED_START_PATH).exists(), 'START_GUARD_ALREADY_EXISTS')
-        path = dropin(unit);self._mkdir_root(str(Path(path).parent), 0o755)
+        path = dropin(unit);self._mkdir_root(str(Path(path).parent), 0o755, plan_hash)
+        self._require_admitted(plan_hash)
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644)
         try:
             raw = fence_bytes(plan_hash)
             offset = 0
-            while offset < len(raw): offset += os.write(fd, raw[offset:])
+            while offset < len(raw):
+                self._require_admitted(plan_hash)
+                offset += os.write(fd, raw[offset:])
             os.fsync(fd)
         finally:
             os.close(fd)
@@ -377,6 +419,7 @@ class RealBackend:
             return self._remote(unit, 'unfence', plan_hash)
         self._root();self._local(unit)
         need(self._read_regular(dropin(unit)) == fence_bytes(plan_hash), 'FOREIGN_FENCE_REFUSED')
+        self._require_admitted(plan_hash)
         os.unlink(dropin(unit))
         self._run(('/usr/bin/systemctl', 'daemon-reload'))
         need(self.inspect(unit, plan_hash).fence_hash is None, 'FENCE_REMOVAL_UNCONFIRMED')
@@ -386,6 +429,7 @@ class RealBackend:
         self._require_admitted(plan_hash)
         current = self.inspect(unit, plan_hash)
         need(current.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
+        need(not current.pending_job, 'PENDING_MANAGER_JOB')
         need(current.fence_effective, 'STOP_REQUIRES_EFFECTIVE_FENCE')
         if ROLE_HOST[unit] != self.host:
             return self._remote(unit, 'stop', plan_hash)
@@ -398,7 +442,8 @@ class RealBackend:
         if ROLE_HOST[unit] != self.host:
             return self._remote(unit, 'start', plan_hash)
         self._root();self._local(unit)
-        need(self.inspect(unit, plan_hash).fence_hash is None, 'START_WHILE_FENCED_REFUSED')
+        row = self.inspect(unit, plan_hash)
+        need(row.fence_hash is None and not row.pending_job, 'START_WHILE_FENCED_OR_JOB_REFUSED')
         self._run(('/usr/bin/systemctl', 'start', '--no-block', unit))
 
 
@@ -414,10 +459,11 @@ class Controller:
         for unit, row in result.items():
             need(row.unit == unit and row.host == ROLE_HOST[unit] and row.active in ('active', 'inactive', 'failed'), 'BASELINE_UNSTABLE')
             need(row.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
-            need(not row.fence_hash and not row.daemon_reload_needed, 'PREEXISTING_FENCE_OR_UNIT_DRIFT')
+            need(not row.fence_hash and not row.daemon_reload_needed and not row.pending_job, 'PREEXISTING_FENCE_OR_UNIT_DRIFT')
         return result
 
     def _same_original(self, original, observed):
+        need(not observed.pending_job and not original.pending_job, 'PENDING_MANAGER_JOB')
         need(original.graceful_only() and observed.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
         need(observed.unit == original.unit and observed.host == original.host and observed.process_identity() == original.process_identity(), 'PID_OR_STARTTIME_DRIFT')
         need(observed.code_hashes == original.code_hashes and observed.restarts == original.restarts, 'CODE_OR_RESTART_DRIFT')
@@ -453,7 +499,7 @@ class Controller:
                     need(current.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
                     need(current.fence_effective, 'FENCE_DRIFT')
                     need(current.restarts == permit.baseline[unit].restarts, 'AUTOMATIC_RESTART_DETECTED')
-                    if current.stopped(): break
+                    if current.stopped() and not current.pending_job: break
                     need(current.main_pid in (0, permit.baseline[unit].main_pid) and
                          (not current.main_pid or current.main_start == permit.baseline[unit].main_start), 'PID_REUSE_OR_NEW_WRITER')
                     need(self.now() < end and self.now() < permit.expires_at, 'GRACEFUL_STOP_INCOMPLETE')
@@ -478,7 +524,7 @@ class Controller:
         for unit in ROLE_HOST:
             current = self.backend.inspect(unit, permit.plan_hash)
             need(current.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
-            need(current.stopped() and current.fence_effective and not current.daemon_reload_needed, 'LIVE_WRITER_OR_UNFENCED')
+            need(current.stopped() and current.fence_effective and not current.daemon_reload_needed and not current.pending_job, 'LIVE_WRITER_OR_UNFENCED')
             need(current.restarts == permit.baseline[unit].restarts and compatible_code(permit.baseline[unit],current), 'AUTOMATIC_RESTART_OR_CODE_DRIFT')
             rows.append({'unit': unit, 'host': current.host, 'mainPid': 0, 'controlPid': 0,
                          'cgroupEmpty': True, 'automaticStartFenced': True,

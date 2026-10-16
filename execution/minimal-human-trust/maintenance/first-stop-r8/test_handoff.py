@@ -117,13 +117,21 @@ class Tests(unittest.TestCase):
 def module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 
+HISTORICAL_READER = HERE/'fixtures/R6_BEFORE_STABLE_SAMPLING_quiescence.py.txt'
+HISTORICAL_ENTRY = HERE/'fixtures/R6_BEFORE_STABLE_SAMPLING_os_entry.py.txt'
+HISTORICAL_SOURCE_PINS = {'quiescence.py': '48e46644ae56c72229d90f7031a8c0fea682f635a20d0114c8e54dff7e4409ff', 'os_entry.py': '1b0fe40afb73e5c2833ed9ac4266de258953b9d2fef6d4b1025a70efe9c951c1'}
+
 def frozen_r6_fixture_bytes(name):
     """Reconstruct only the reviewed old reader fragment, then recheck old pin.
 
     Keeps R6_SOURCE_PINS historical and immutable while engineering source has
     the repaired reader. This is test-only, never an installer/build override.
     """
-    raw=(HERE.parent/'release-r6'/name).read_bytes()
+    # Exact public pre-change bytes from reviewed Git 2f2dffd; future runtime
+    # changes cannot silently rewrite the historical R6/R3 fixture authority.
+    fixture={'quiescence.py':HISTORICAL_READER,'os_entry.py':HISTORICAL_ENTRY}.get(name)
+    raw=(fixture if fixture else HERE.parent/'release-r6'/name).read_bytes()
+    if fixture and build.sha(raw)!=HISTORICAL_SOURCE_PINS[name]:raise AssertionError('HISTORICAL_SOURCE_FIXTURE_DRIFT')
     if name=='quiescence.py' and build.sha(raw)==build.REPAIRED_READER_SHA:
         patch=json.loads((HERE/'fixtures/R6_PRE_MANIFEST_READER_FIX.json').read_bytes())
         if patch['oldReaderSha256']!=build.ORIGINAL_READER_SHA or patch['newReaderSha256']!=build.REPAIRED_READER_SHA:raise AssertionError('FROZEN_READER_FIXTURE_DRIFT')
@@ -178,7 +186,7 @@ class BuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='r8-repaired-build-') as tmp:
             base=Path(tmp);source,pin=self.r3_fixture(base);before={str(p.relative_to(source)):(build.sha(p.read_bytes()),p.stat().st_mode&0o777) for p in source.rglob('*') if p.is_file()}
             out=base/'new-r3'
-            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin):result=build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin):result=build.build_repaired_r3(source,out,'1'*64,HISTORICAL_READER)
             entry=module('r8_r3_repaired_entry_fixture',out/'os_entry.py');q=module('r8_r3_repaired_reader_fixture',out/'quiescence.py')
             self.assertEqual(str(entry.SOURCE),build.R3_SOURCE);self.assertEqual(str(entry.CLOUD_SOURCE),build.R3_CLOUD)
             self.assertEqual(entry.ROOT,h.SUCCESSOR_ROOT);self.assertEqual(entry.STATE,h.SUCCESSOR_STATE)
@@ -193,7 +201,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(before,{str(p.relative_to(source)):(build.sha(p.read_bytes()),p.stat().st_mode&0o777) for p in source.rglob('*') if p.is_file()})
     def test_repaired_r3_refuses_unpinned_base_or_arbitrary_replacement_before_output(self):
         with tempfile.TemporaryDirectory(prefix='r8-repaired-refuse-') as tmp:
-            base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'out';reader=HERE.parent/'release-r6/quiescence.py'
+            base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'out';reader=HISTORICAL_READER
             with self.assertRaisesRegex(ValueError,'ORIGINAL_FROZEN_R6_CAPSULE_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,reader)
             bad=base/'wrong-reader.py';bad.write_bytes(reader.read_bytes()+b'\n');bad.chmod(0o644)
             with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EXACT_REPAIRED_READER_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,bad)
@@ -212,7 +220,7 @@ class BuildTests(unittest.TestCase):
                 elif drift=='bytes':payload.write_bytes(b'corrupt bytes')
                 elif drift=='mode':payload.chmod(0o644)
                 else:payload.unlink();payload.symlink_to(source/'run.mjs')
-                with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaises(ValueError):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+                with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaises(ValueError):build.build_repaired_r3(source,out,'1'*64,HISTORICAL_READER)
                 self.assertFalse(out.exists())
     def test_repaired_r3_copy_phase_drift_never_publishes_source_freeze(self):
         with tempfile.TemporaryDirectory(prefix='r8-repaired-copy-fault-') as tmp:
@@ -223,15 +231,15 @@ class BuildTests(unittest.TestCase):
                     calls.append(path)
                     if len(calls)==2:return raw+b'changed during copy'
                 return raw
-            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),mock.patch.object(build,'_regular_bytes',side_effect=drift),self.assertRaisesRegex(ValueError,'PACKAGE_COPY_INPUT_CHANGED'):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),mock.patch.object(build,'_regular_bytes',side_effect=drift),self.assertRaisesRegex(ValueError,'PACKAGE_COPY_INPUT_CHANGED'):build.build_repaired_r3(source,out,'1'*64,HISTORICAL_READER)
             self.assertFalse((out/'SOURCE_FREEZE.json').exists());self.assertFalse((out/'package/payload/bin/tool').exists())
     def test_repaired_r3_never_overwrites_nonempty_output_and_default_builder_stays_r2(self):
         with tempfile.TemporaryDirectory(prefix='r8-repaired-output-') as tmp:
             base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'occupied';out.mkdir();(out/'audit').write_bytes(b'preserve')
-            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,HISTORICAL_READER)
             self.assertEqual((out/'audit').read_bytes(),b'preserve')
             empty=base/'empty';empty.mkdir();link=base/'symlink-output';link.symlink_to(empty,target_is_directory=True)
-            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,link,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,link,'1'*64,HISTORICAL_READER)
             self.assertEqual(list(empty.iterdir()),[])
             old=base/'old-default';build.build(self.SOURCE,old,'1'*64)
             entry=module('r8_default_source_still_r2',old/'os_entry.py')

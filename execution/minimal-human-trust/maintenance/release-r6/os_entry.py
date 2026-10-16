@@ -34,7 +34,7 @@ UNIT = 'r16-native-recovery-maintenance-r6.service'
 UNIT_FILE = Path('/etc/systemd/system')/UNIT
 HELPER = Path('/usr/libexec/r16-maintenance-os-r6')
 SUDOERS = Path('/etc/sudoers.d/r16-maintenance-os-r6')
-Q_SHA = '48e46644ae56c72229d90f7031a8c0fea682f635a20d0114c8e54dff7e4409ff'
+Q_SHA = '279193bdc2457444d455bf35d48e9bf3f98d0483efddac6138fd40dccf417f74'
 SCOPE = 'STOP_FIXED_ROLES_PRESERVE_ALL_LEDGERS'
 MAX_JSON = 1048576
 CAPSULE_LIMIT = 16*MAX_JSON
@@ -240,6 +240,27 @@ class Journal:
     def __init__(self, path): self.path = Path(path);self.value = None
     def read(self):
         temp = self.path.parent / ('.'+self.path.name+'.pending')
+        if temp.exists() and self.path.exists():
+            before=self.path.lstat();pending=temp.lstat()
+            if (before.st_dev,before.st_ino)==(pending.st_dev,pending.st_ino):
+                # A new journal's exclusive link may have reached disk before
+                # its pending name was removed. Recover only that exact pair.
+                need(stat.S_ISREG(before.st_mode) and before.st_uid==0 and before.st_nlink==2 and
+                     before.st_mode&0o7777==0o600, 'JOURNAL_PENDING_PAIR_REFUSED')
+                fd=os.open(self.path,os.O_RDONLY|os.O_NOFOLLOW)
+                try:
+                    fields=lambda x:(x.st_dev,x.st_ino,x.st_mode,x.st_uid,x.st_gid,x.st_nlink,x.st_size,x.st_mtime_ns,x.st_ctime_ns)
+                    opened=os.fstat(fd);raw=os.read(fd,MAX_JSON+1);after=os.fstat(fd)
+                    need(len(raw)==before.st_size<=MAX_JSON and fields(before)==fields(opened)==fields(after)==fields(temp.lstat())==fields(self.path.lstat()), 'JOURNAL_PENDING_PAIR_REFUSED')
+                    candidate=json.loads(raw)
+                    need(candidate.get('schema')=='r16.os-maintenance-journal.v3' and candidate.get('planHash')==plan_hash(read_json(STATE/'plan.json')) and
+                         candidate.get('phase')=='NEW' and candidate.get('cycle')==0 and candidate.get('pending') is None and
+                         all(candidate.get(k)==[] for k in ('events','touched','stop_attempts','stopped')) and
+                         candidate.get('baseline')==candidate.get('originalBaseline') and
+                         set(candidate.get('baseline',{})) in (set(('r16-app.service','r16-bridge.service')),set(load_q().ROLE_HOST)),
+                         'JOURNAL_PENDING_PAIR_REFUSED')
+                finally:os.close(fd)
+                os.unlink(temp);sync_dir(self.path.parent)
         if temp.exists():
             candidate = read_json(temp)
             need(candidate.get('schema') == 'r16.os-maintenance-journal.v3' and ishash(candidate.get('planHash')), 'JOURNAL_PENDING_REFUSED')
@@ -309,19 +330,26 @@ def os_action(action):
             original=None
             if unit=='r16-app.service' and journal.path.exists(): journal.read();original=snapshot(q,journal.value['originalBaseline'][unit])
             expected_stopped=bool(original and original.stopped() and row.code_phase=='SOURCE')
-            if expected_stopped: need(row.stopped() and not row.fence_hash and row.graceful_only(),'ORIGINAL_APP_STOPPED_BASELINE_NOT_RESTORED')
-            else: need(row.active=='active' and row.sub=='running' and row.main_pid>0 and row.main_start>0 and row.main_pid in row.members and not row.fence_hash and not row.daemon_reload_needed and row.graceful_only(), 'FIXED_ROLE_NOT_RUNNING')
+            if expected_stopped: need(row.stopped() and not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(),'ORIGINAL_APP_STOPPED_BASELINE_NOT_RESTORED')
+            else: need(row.active=='active' and row.sub=='running' and row.main_pid>0 and row.main_start>0 and row.main_pid in row.members and not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(), 'FIXED_ROLE_NOT_RUNNING')
             actors.append({'unit':unit,'host':row.host,'mainPid':row.main_pid,'mainStartTicks':row.main_start,'codePinsValid':True,'cgroupMembershipValid':True,'ownedFenceAbsent':True,'expectedStopped':expected_stopped})
         return {'status':'ACTUAL_FIXED_ROLES_EXPECTED_STATE' if any(x['expectedStopped'] for x in actors) else 'ACTUAL_FIXED_ROLES_RUNNING','planHash':h,'actors':actors,'businessReadinessClaim':False}
     if action == 'baseline':
-        if journal.path.exists():
-            journal.read();need(journal.value['planHash']==h,'JOURNAL_PLAN_DRIFT')
-            return {'status':'BASELINE_SAVED','planHash':h,'roles':len(journal.value['originalBaseline'])}
+        # Persist both cloud roles before any effective-fence fast path can
+        # skip an RPC. Cloud samples its own roles under its existing lock.
+        cloud = cloud_rpc(q, 'baseline', h)
+        need(cloud.get('status')=='CLOUD_BASELINE_SAVED' and cloud.get('planHash')==h and
+             set(cloud.get('baseline',{}))=={'r16-app.service','r16-bridge.service'}, 'CLOUD_BASELINE_REFUSED')
         backend = q.RealBackend();rows = q.Controller(backend).baseline(h)
         need(all((unit=='r16-app.service' and row.stopped()) or (row.active=='active' and row.sub=='running' and row.main_pid>0 and row.main_start>0 and row.main_pid in row.members) for unit,row in rows.items()),'SOURCE_ROLES_NOT_RUNNING')
         need(all(row.code_phase in ('SOURCE','STATIC') for row in rows.values()),'BASELINE_REQUIRES_SOURCE_CODE')
-        journal.new(h, {u: snapshot_json(row) for u, row in rows.items()})
-        return {'status': 'BASELINE_SAVED', 'planHash': h, 'roles': len(rows)}
+        values = {u:snapshot_json(row) for u,row in rows.items()}
+        need(all(snapshot(q,cloud['baseline'][u])==rows[u] for u in cloud['baseline']), 'CLOUD_BASELINE_SAMPLE_DRIFT')
+        if journal.path.exists():
+            journal.read();need(journal.value['planHash']==h,'JOURNAL_PLAN_DRIFT')
+            need(canonical(journal.value['originalBaseline'])==canonical(values) and canonical(journal.value['baseline'])==canonical(values), 'BASELINE_READBACK_DRIFT')
+        else: journal.new(h, values)
+        return {'status':'BASELINE_SAVED','planHash':h,'roles':len(rows)}
     journal.read();need(journal.value['planHash'] == h, 'JOURNAL_PLAN_DRIFT')
     backend = durable_backend(q, journal);controller = q.Controller(backend);p = journal.permit(q, plan)
     if action in ('quiesce','requiesce') and journal.value['phase']=='QUIESCENT':
@@ -366,6 +394,7 @@ def restore_roles(q, backend, journal, plan, h):
     for unit in q.START_ORDER:
         original = snapshot(q, journal.value['originalBaseline'][unit])
         try:
+            need(now_ms()<plan['rollbackDeadline'], 'RECOVERY_WINDOW_EXPIRED')
             if unit=='r16-native.service':
                 owner=backend.inspect('r16-owner.service',h)
                 need(owner.active=='active' and owner.sub=='running' and owner.main_pid>0,'OWNER_NOT_RUNNING_FOR_NATIVE')
@@ -374,9 +403,14 @@ def restore_roles(q, backend, journal, plan, h):
             if row.fence_hash: backend.unfence(unit,h)
             target_app_start=bool(unit=='r16-app.service' and original.stopped() and original.code_phase=='SOURCE' and row.code_phase=='TARGET')
             if target_app_start: need(plan.get('activationScope')=='START_REVIEWED_TARGET_APP_IF_SOURCE_ALREADY_STOPPED','TARGET_APP_ACTIVATION_SCOPE_REQUIRED')
-            if original.active != 'active' and not target_app_start: continue
+            if original.active != 'active' and not target_app_start:
+                row = backend.inspect(unit,h)
+                need(unit=='r16-app.service' and original.stopped() and original.code_phase=='SOURCE' and row.code_phase=='SOURCE' and
+                     row.stopped() and not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(),
+                     'ORIGINAL_APP_STOPPED_BASELINE_NOT_RESTORED')
+                continue
             row = backend.inspect(unit,h)
-            need(not row.fence_hash and row.graceful_only(), 'RESTORE_FENCE_OR_POLICY_DRIFT')
+            need(not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(), 'RESTORE_FENCE_OR_POLICY_DRIFT')
             if row.active != 'active' or row.sub != 'running':
                 need(row.stopped(), 'RESTORE_PROCESS_UNCERTAIN')
                 prior = [e for e in journal.value['events'] if e['cycle'] == journal.value['cycle'] and e['unit'] == unit and e['operation']=='start' and e['state']=='INTENT']
@@ -385,11 +419,12 @@ def restore_roles(q, backend, journal, plan, h):
                 end = time.monotonic()+15
                 while True:
                     row = backend.inspect(unit, h)
-                    if row.active == 'active' and row.sub == 'running' and row.main_pid and not row.fence_hash: break
+                    if row.active == 'active' and row.sub == 'running' and row.main_pid and not row.fence_hash and not row.pending_job and not row.daemon_reload_needed: break
                     need(time.monotonic()<end and now_ms()<plan['rollbackDeadline'], 'RESTORE_UNCONFIRMED');time.sleep(.05)
             active.append(unit)
         except Exception:
             errors.extend(q.START_ORDER[q.START_ORDER.index(unit):]);break
+    if now_ms()>=plan['rollbackDeadline']: errors.extend(q.START_ORDER)
     journal.value['phase'] = 'OS_ACTIVE' if not errors else 'RESTORE_PARTIAL';journal.save()
     return {'status': journal.value['phase'], 'activeUnits':active, 'unconfirmedUnits':sorted(set(errors)), 'businessReadinessClaim':False, 'planHash':h}
 
@@ -644,6 +679,24 @@ def cloud_helper(args, data):
         need(op != 'readback' or data is not None, 'PUBLICATION_REQUEST_REQUIRED')
         raw = command((CLOUD_NODE, str(ROOT/'cloud.mjs'), op), canonical(data), timeout=120)
         return json.loads(raw)
+    if op == 'baseline':
+        need(len(args)==2 and args[1]==h and data is None, 'HELPER_PLAN_REFUSED')
+        need(now_ms()<plan['expiresAt'], 'FORWARD_WINDOW_EXPIRED')
+        q=load_q();backend=q.RealBackend();rows={}
+        for unit in ('r16-app.service','r16-bridge.service'):
+            row=backend.inspect(unit,h)
+            need(row.graceful_only() and not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and
+                 row.code_phase==('SOURCE' if unit=='r16-app.service' else 'STATIC'), 'CLOUD_BASELINE_UNSTABLE')
+            need((unit=='r16-app.service' and row.stopped()) or
+                 (row.active=='active' and row.sub=='running' and row.main_pid>0 and row.main_start>0 and row.main_pid in row.members), 'SOURCE_ROLES_NOT_RUNNING')
+            rows[unit]=snapshot_json(row)
+        need(now_ms()<plan['expiresAt'], 'FORWARD_WINDOW_EXPIRED')
+        journal=Journal(STATE/'cloud-os-journal.json')
+        if journal.path.exists():
+            journal.read();need(journal.value['planHash']==h,'JOURNAL_PLAN_DRIFT')
+            need(canonical(journal.value['baseline'])==canonical(rows) and canonical(journal.value['originalBaseline'])==canonical(rows), 'CLOUD_BASELINE_READBACK_DRIFT')
+        else: journal.new(h,rows)
+        return {'status':'CLOUD_BASELINE_SAVED','planHash':h,'baseline':rows}
     if op == 'begin-cycle':
         need(len(args)==2 and args[1]==h and data=={'cycle':1}, 'RECOVERY_CYCLE_REFUSED')
         q = load_q();backend = q.RealBackend();journal = Journal(STATE/'cloud-os-journal.json');journal.read()
@@ -658,8 +711,10 @@ def cloud_helper(args, data):
     q = load_q();backend = q.RealBackend()
     if op == 'inspect': return snapshot_json(backend.inspect(unit, h))
     journal = Journal(STATE/'cloud-os-journal.json')
-    if not journal.path.exists(): journal.new(h, {})
-    else: journal.read()
+    need(journal.path.exists(), 'REMOTE_COMPLETE_BASELINE_REQUIRED')
+    journal.read()
+    need(set(journal.value['originalBaseline'])=={'r16-app.service','r16-bridge.service'} and
+         set(journal.value['baseline'])=={'r16-app.service','r16-bridge.service'}, 'REMOTE_COMPLETE_BASELINE_REQUIRED')
     need(journal.value['planHash'] == h, 'JOURNAL_PLAN_DRIFT')
     need(recovery or journal.value['cycle']==1 or now_ms()<plan['expiresAt'], 'FORWARD_WINDOW_EXPIRED')
     if journal.value['pending']:
@@ -672,8 +727,9 @@ def cloud_helper(args, data):
     row = backend.inspect(unit, h)
     if op == 'fence':
         need(not row.fence_hash or row.fence_effective, 'PREEXISTING_FENCE')
-        if unit not in journal.value['originalBaseline']: journal.value['originalBaseline'][unit]=snapshot_json(row)
-        journal.value['baseline'][unit] = snapshot_json(row)
+        if journal.value['cycle']==0:
+            need(snapshot(q,journal.value['baseline'][unit])==row, 'REMOTE_BASELINE_READBACK_DRIFT')
+        else: journal.value['baseline'][unit] = snapshot_json(row)
     else:
         need(unit in journal.value['baseline'], 'REMOTE_BASELINE_REQUIRED')
     if op == 'start':
