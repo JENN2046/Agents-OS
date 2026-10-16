@@ -110,7 +110,17 @@ def node_facts(host):
  need(r.returncode==0 and 0<len(r.stdout)<=65536,'R10_SOURCE_BUSINESS_OR_SELECTORS_NOT_PRESERVED');value=json.loads(r.stdout);need(type(value) is dict and value.get('publicConfigHash')==PUBLIC_SHA,'R10_SOURCE_PUBLIC_CONFIG_DRIFT');return value
 def cloud_checkpoint(sources):
  with component('r10_prior_checkpoint_only',sources['prior-compensation.py']) as m:
-  prior={'compensation.py':sources['prior-compensation.py'],'native_guard.py':sources['prior-native-guard.py'],'LOCAL_EVIDENCE.json':sources['prior-evidence.json']};backend=m.FixedBackend(CLOUD,m.parse(prior['LOCAL_EVIDENCE.json']),prior);need(backend.checkpoint()==CHECKPOINT,'R10_ORIGINAL_CHECKPOINT_CHANGED');return CHECKPOINT
+  prior={'compensation.py':sources['prior-compensation.py'],'native_guard.py':sources['prior-native-guard.py'],'LOCAL_EVIDENCE.json':sources['prior-evidence.json']}
+  # The frozen reader compares the entire accepted-store wrapper. Its clock may
+  # advance while unchanged business data is fully read. Resample only this
+  # exact refusal, at most twice; every attempt runs the unmodified full reader.
+  for attempt in range(3):
+   backend=m.FixedBackend(CLOUD,m.parse(prior['LOCAL_EVIDENCE.json']),prior)
+   try:value=backend.checkpoint()
+   except Exception as error:
+    if getattr(error,'code',None)!='AUTHORITY_CONFIGURATION_CHANGED' or attempt==2:raise
+    continue
+   need(value==CHECKPOINT,'R10_ORIGINAL_CHECKPOINT_CHANGED');return CHECKPOINT
 @contextlib.contextmanager
 def old_read_locks(asset,host):
  fds=[]
@@ -133,7 +143,7 @@ def host_facts(manifest,sources,host):
 def cloud_facts(manifest,sources):return host_facts(manifest,sources,CLOUD)
 REMOTE_READER=r'''import hashlib,json,os,stat,sys,types
 from pathlib import Path
-B=Path('/home/ubuntu/r16-maintenance-recovered-r10-candidate')
+B=Path('/home/ubuntu/r16-maintenance-recovered-r10-r2-candidate')
 def need(v):
  if not v:raise ValueError('R10_SEALED_CLOUD_READER_REFUSED')
 def read(p,maxsize=16*1024*1024):

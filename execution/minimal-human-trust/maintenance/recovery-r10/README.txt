@@ -21,7 +21,7 @@ extra files, symlinks, hardlinks or an incomplete/foreign target refuse; no
 copy fallback. Protected package directories remain 0700, target directories
 0755 and the original marker 0600, as actually read back on both hosts.
 
-The ordinary cloud staging step moves only the existing user candidate's
+The ordinary cloud staging step moves only the exact R10-R1 user candidate's
 public package into the new user candidate using NOREPLACE. It verifies every
 file before and after the move and publishes SOURCE_FREEZE last. Old protected
 packages, roots and historical records are not moved or deleted.
@@ -62,3 +62,14 @@ No agent types Human Enter, administrator passwords or native approval text.
 
 No merge, R17 activation, identity enrollment or production business acceptance
 is implied by these source tests, the physical package or preflight receipts.
+
+The first R10 engineering candidate refused final read-only preflight because
+the pinned original checkpoint compares the entire changing authority wrapper.
+R2 leaves that old reader and all historical bytes unchanged: only the exact
+AUTHORITY_CONFIGURATION_CHANGED code may trigger at most three complete
+read-only checkpoint captures. Nothing from a failed capture is reused; every
+success still requires the full original strict validator and exact checkpoint.
+Other failures and exhausted attempts refuse. No sleep, native deadline reset
+or effect retry is added. Both surrounding source-data reads must still match.
+R1 physical package/preflight evidence remain; new R2 ordinary candidates bind
+the corrected source HEAD and capsule before any native confirmation.

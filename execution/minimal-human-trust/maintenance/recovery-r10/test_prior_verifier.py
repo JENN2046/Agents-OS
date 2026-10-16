@@ -65,6 +65,7 @@ class Protocol(unittest.TestCase):
   manifest={'schema':'synthetic','files':{},'payloadFiles':{},'planTemplate':{}};facts={'schema':'r16.r10.host-source-facts.v1','host':p.CLOUD,'originalCheckpointDigest':p.CHECKPOINT,'oldR9AuthorityReused':False};packet={'schema':'r16.r10.sealed-cloud-facts.v1','capsuleHash':p.digest(manifest),'facts':facts}
   with patch.object(p.subprocess,'run',return_value=types.SimpleNamespace(returncode=0,stdout=p.canonical(packet))) as run:self.assertEqual(p.fresh_cloud(manifest),facts)
   argv=run.call_args.args[0];self.assertIn('-T',argv);self.assertIn('sudo -n',argv[-1]);self.assertIn('/usr/bin/python3 -I -B -',argv[-1]);self.assertNotIn('/usr/libexec/',argv[-1]);self.assertIn(b'EXPECTED_CAP=',run.call_args.kwargs['input']);self.assertNotIn('native_identity',p.REMOTE_READER);self.assertNotIn('bootstrap',p.REMOTE_READER)
+  self.assertIn("B=Path("+repr(k.CLOUD_SOURCE)+")",p.REMOTE_READER)
  def test_remote_mismatch_timeout_or_extra_output_never_passes(self):
   for stdout,status in ((b'{}',0),(b'{bad}',0),(b'{}',78),(b'x'*65537,0)):
    with patch.object(p.subprocess,'run',return_value=types.SimpleNamespace(returncode=status,stdout=stdout)):
@@ -84,6 +85,69 @@ class Protocol(unittest.TestCase):
   for raw in (good.replace(b'failed',b'active'),good.replace(b'MainPID=0',b'MainPID=42'),good.replace(b'Job=0',b'Job=21')):
    with patch.object(p.subprocess,'run',return_value=types.SimpleNamespace(returncode=0,stdout=raw)):
     with self.assertRaisesRegex(p.Refused,'STILL_ACTIVE'):p.manager_inactive()
+
+class CheckpointResampling(unittest.TestCase):
+ """Run the real resampling function and real sealed-module loading boundary.
+ The small backend is synthetic, not a production ledger/crypto substitute.
+ It records every construction and checkpoint invocation; no result booleans.
+ """
+ def invoke(self,outcomes,constructor_error=False):
+  raw=('''import json
+outcomes=OUTCOMES
+builds=[]
+calls=[]
+errors=[]
+parse=json.loads
+class FixtureRefused(Exception):
+ def __init__(self,code):self.code=code;super().__init__(code)
+class FixedBackend:
+ def __init__(self,host,evidence,sources):
+  assert host=='VM-0-12-ubuntu' and evidence=={'fixture':'sealed-only'}
+  assert set(sources)=={'compensation.py','native_guard.py','LOCAL_EVIDENCE.json'}
+  builds.append(self)
+  if CONSTRUCTOR_ERROR:raise FixtureRefused('AUTHORITY_CONFIGURATION_CHANGED')
+ def checkpoint(self):
+  calls.append(self)
+  kind,value=outcomes[len(calls)-1]
+  if kind=='value':return value
+  error=FixtureRefused(value) if kind=='code' else RuntimeError(value)
+  errors.append(error);raise error
+'''.replace('OUTCOMES',repr(outcomes)).replace('CONSTRUCTOR_ERROR',repr(constructor_error))).encode()
+  source={'prior-compensation.py':raw,'prior-native-guard.py':b'synthetic public guard','prior-evidence.json':b'{"fixture":"sealed-only"}'}
+  original=p.component;observed={}
+  @contextlib.contextmanager
+  def inspect_loaded(name,data):
+   with original(name,data) as m:
+    observed['module']=m;yield m
+  try:
+   with patch.object(p,'component',inspect_loaded):value=p.cloud_checkpoint(source)
+  except Exception as error:return None,error,observed['module']
+  return value,None,observed['module']
+ def test_success_on_first_second_or_third_full_call(self):
+  for refusals in range(3):
+   with self.subTest(refusals=refusals):
+    value,error,m=self.invoke([('code','AUTHORITY_CONFIGURATION_CHANGED')]*refusals+[('value',p.CHECKPOINT)])
+    self.assertIsNone(error);self.assertEqual(value,p.CHECKPOINT);self.assertEqual(len(m.calls),refusals+1);self.assertEqual(m.builds,m.calls);self.assertEqual(len(set(map(id,m.calls))),refusals+1)
+ def test_three_consistency_refusals_raise_last_original_error_without_fourth_call(self):
+  value,error,m=self.invoke([('code','AUTHORITY_CONFIGURATION_CHANGED')]*3+[('value',p.CHECKPOINT)])
+  self.assertIsNone(value);self.assertIs(error,m.errors[-1]);self.assertEqual(error.code,'AUTHORITY_CONFIGURATION_CHANGED');self.assertEqual(len(m.calls),3)
+ def test_any_other_typed_refusal_is_immediate_even_after_resampling(self):
+  for code in ('CHECKPOINT_CHANGED','PUBLIC_CONFIGURATION_CHANGED','SEALED_REGISTRATION_CHANGED','FULL_ORIGINAL_BUSINESS_CHECKPOINT_CHANGED','AUTHORITY_CONFIGURATION_CHANGED_EXTRA'):
+   for retries in (0,1):
+    with self.subTest(code=code,retries=retries):
+     value,error,m=self.invoke([('code','AUTHORITY_CONFIGURATION_CHANGED')]*retries+[('code',code),('value',p.CHECKPOINT)])
+     self.assertIsNone(value);self.assertIs(error,m.errors[-1]);self.assertEqual(error.code,code);self.assertEqual(len(m.calls),retries+1)
+ def test_same_message_without_exact_typed_code_is_not_retried(self):
+  value,error,m=self.invoke([('message','AUTHORITY_CONFIGURATION_CHANGED'),('value',p.CHECKPOINT)])
+  self.assertIsNone(value);self.assertIsInstance(error,RuntimeError);self.assertIs(error,m.errors[0]);self.assertEqual(len(m.calls),1)
+ def test_successful_reader_wrong_checkpoint_digest_is_not_retried(self):
+  for retries in (0,1):
+   with self.subTest(retries=retries):
+    value,error,m=self.invoke([('code','AUTHORITY_CONFIGURATION_CHANGED')]*retries+[('value','0'*64),('value',p.CHECKPOINT)])
+    self.assertIsNone(value);self.assertIsInstance(error,p.Refused);self.assertEqual(error.code,'R10_ORIGINAL_CHECKPOINT_CHANGED');self.assertEqual(len(m.calls),retries+1)
+ def test_constructor_refusal_is_not_a_reader_consistency_retry(self):
+  value,error,m=self.invoke([('value',p.CHECKPOINT)],constructor_error=True)
+  self.assertIsNone(value);self.assertEqual(error.code,'AUTHORITY_CONFIGURATION_CHANGED');self.assertEqual(len(m.builds),1);self.assertEqual(m.calls,[])
 
 class NodeMemoryProtocol(unittest.TestCase):
  """Execute actual cloud branch with ONLY import boundaries replaced by synthetic IO.

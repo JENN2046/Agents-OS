@@ -8,9 +8,9 @@ from pathlib import Path
 import importlib.util
 _spec=importlib.util.spec_from_file_location('r10_stage_constants',Path(__file__).with_name('constants.py'));C=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(C)
 SOURCE=C.OUT
-OLD_CLOUD='/home/ubuntu/r16-maintenance-recovered-r9-candidate'
+OLD_CLOUD='/home/ubuntu/r16-maintenance-recovered-r10-candidate'
 NEW_CLOUD=C.CLOUD_SOURCE
-OLD_CAP=C.R9_CAP
+OLD_CAP='9204e1593887c75134c9d9bf626273ee19b191dac2874a9bf440c4d4cb1ca659'
 SSH=('/usr/bin/ssh','-F','/dev/null','-T','-o','BatchMode=yes','-o','IdentityAgent=none','-o','IdentitiesOnly=yes','-i','/home/jenn/.ssh/TXY_159_75_139_246_ed25519','-o','StrictHostKeyChecking=yes','-o','UpdateHostKeys=no','-o','UserKnownHostsFile=/etc/r16-owner/ssh_known_hosts','-o','GlobalKnownHostsFile=/dev/null','-o','ConnectTimeout=8','-o','ClearAllForwardings=yes','ubuntu@159.75.139.246')
 REMOTE=r'''
 import base64,ctypes,hashlib,json,os,stat,sys
