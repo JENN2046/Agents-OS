@@ -22,7 +22,7 @@ export function assertUncommittedSource({context,artifacts,baseline,cloud,local,
   assertPreserved(context.before,current);
   return {status:'SOURCE_CONFIGURATION_UNCHANGED',sourceDeliveryHash:artifacts.sourceDeliveryHash};
 }
-function remote(action,plan,input={}){return command('/usr/bin/ssh',[...SSH,'/usr/bin/sudo -n /usr/libexec/r16-maintenance-os-r6 '+action+' '+digest(plan)],{planHash:digest(plan),...input},30000);}
+export function remote(action,plan,input={}){return command('/usr/bin/ssh',[...SSH,'/usr/bin/sudo -n /usr/libexec/r16-maintenance-os-r6 '+action+' '+digest(plan)],{planHash:digest(plan),...input},action==='stage'?150000:30000);}
 export async function runFixedMaintenance(){
   rootContext();const plan=json(STATE+'/plan.json'),context=json(STATE+'/context.json');verifyCapsule(plan);
   need(context.schema==='r16.native-recovery-context.v3'&&context.planHash===digest(plan),'ROOT_CONTEXT_PLAN_MISMATCH');

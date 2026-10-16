@@ -1,4 +1,5 @@
 import './r6-driver-precommit.test.mjs';
+import './r6-transport-timeout.test.mjs';
 import './transaction.test.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';

@@ -119,7 +119,7 @@ def module(name,path):
 
 HISTORICAL_READER = HERE/'fixtures/R6_BEFORE_STABLE_SAMPLING_quiescence.py.txt'
 HISTORICAL_ENTRY = HERE/'fixtures/R6_BEFORE_STABLE_SAMPLING_os_entry.py.txt'
-HISTORICAL_SOURCE_PINS = {'quiescence.py': '48e46644ae56c72229d90f7031a8c0fea682f635a20d0114c8e54dff7e4409ff', 'os_entry.py': '1b0fe40afb73e5c2833ed9ac4266de258953b9d2fef6d4b1025a70efe9c951c1'}
+HISTORICAL_SOURCE_PINS = {'quiescence.py': '48e46644ae56c72229d90f7031a8c0fea682f635a20d0114c8e54dff7e4409ff', 'os_entry.py': '1b0fe40afb73e5c2833ed9ac4266de258953b9d2fef6d4b1025a70efe9c951c1', 'run.mjs': '0fe10a99ad06b991ca962ceadaf759fbc974980e1072dcbe2f5f84f26ab6ba9f', 'io.mjs': '0f0c1007dc33e6abaf5359954f4d1b6af0add79d3e3493eb1015e1792b3134b2'}
 
 def frozen_r6_fixture_bytes(name):
     """Reconstruct only the reviewed old reader fragment, then recheck old pin.
@@ -127,9 +127,12 @@ def frozen_r6_fixture_bytes(name):
     Keeps R6_SOURCE_PINS historical and immutable while engineering source has
     the repaired reader. This is test-only, never an installer/build override.
     """
-    # Exact public pre-change bytes from reviewed Git 2f2dffd; future runtime
+    # Exact public pre-change bytes from reviewed Git 2f2dffd (Q/entry) and
+    # 7c53be2 (transport); future runtime
     # changes cannot silently rewrite the historical R6/R3 fixture authority.
-    fixture={'quiescence.py':HISTORICAL_READER,'os_entry.py':HISTORICAL_ENTRY}.get(name)
+    fixture={'quiescence.py':HISTORICAL_READER,'os_entry.py':HISTORICAL_ENTRY,
+             'run.mjs':HERE/'fixtures/R6_BEFORE_TRANSPORT_TIMEOUT_run.mjs.txt',
+             'io.mjs':HERE/'fixtures/R6_BEFORE_TRANSPORT_TIMEOUT_io.mjs.txt'}.get(name)
     raw=(fixture if fixture else HERE.parent/'release-r6'/name).read_bytes()
     if fixture and build.sha(raw)!=HISTORICAL_SOURCE_PINS[name]:raise AssertionError('HISTORICAL_SOURCE_FIXTURE_DRIFT')
     if name=='quiescence.py' and build.sha(raw)==build.REPAIRED_READER_SHA:

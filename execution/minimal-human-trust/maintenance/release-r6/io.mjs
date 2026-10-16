@@ -54,6 +54,9 @@ export function verifyCapsule(plan){
 }
 export function command(file,args,input,timeout=30000){
   const r=spawnSync(file,args,{input:input===undefined?undefined:Buffer.from(canonical(input)),encoding:'utf8',timeout,maxBuffer:16*1024*1024,env:{PATH:'/usr/bin:/bin',LANG:'C'},stdio:['pipe','pipe','ignore']});
+  // A terminated SSH client does not establish whether its remote stage ended.
+  // Never accept partial JSON as success after the child deadline was exceeded.
+  need(r.error?.code!=='ETIMEDOUT','FIXED_COMMAND_TIMEOUT');
   let value;try{value=JSON.parse(r.stdout);}catch{}
   if(r.status!==0)need(false,typeof value?.code==='string'&&/^[A-Z0-9_]{1,80}$/.test(value.code)?value.code:'FIXED_COMMAND_FAILED');
   need(value&&typeof value==='object'&&!Array.isArray(value),'FIXED_COMMAND_RESPONSE_INVALID');return value;
