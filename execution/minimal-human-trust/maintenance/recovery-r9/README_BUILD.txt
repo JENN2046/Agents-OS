@@ -21,7 +21,10 @@ stage.py CAPSULE_SHA256 uses ordinary UID1000 SSH only. It verifies the exact
 old user candidate package and moves that directory, using NOREPLACE on the
 same filesystem, into the new user candidate. This avoids a duplicate package
 on the small cloud disk. Protected old ROOT/STATE packages, records, plans and
-business data stay intact. It rechecks the complete destination bytes/modes and
+business data stay intact. For an exact public package with private 0700 directories, it admits only
+0700/0755 root-to-leaf directories, verifies every file first, then normalizes
+only those same directory inodes to 0755 in the moved candidate. It rechecks
+the complete destination bytes/modes and
 runtime files before publishing SOURCE_FREEZE and a verified staging report.
 A failed or ambiguous stage is inspected first; it never invokes an installer.
 Before any native bootstrap, this ordinary engineering move is reversible by

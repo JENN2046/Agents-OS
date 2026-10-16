@@ -28,10 +28,16 @@ class StageTests(unittest.TestCase):
    result=self.run_code(data,prefix,code);self.assertEqual(result.returncode,0,result.stderr.decode());report=json.loads(result.stdout)
    self.assertTrue(report['publicPackageMoved']);self.assertFalse((old/'package').exists());self.assertEqual((new/'package').stat().st_ino,identity);self.assertEqual(sha((new/'SOURCE_FREEZE.json').read_bytes()),data['capsuleHash'])
    again=self.run_code(data,prefix,code);self.assertEqual(again.returncode,0,again.stderr.decode());self.assertFalse(json.loads(again.stdout)['publicPackageMoved'])
+ def test_private_public_package_directories_normalized_only_after_verified_move(self):
+  with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
+   old,new,data,prefix,code=self.setup_fixture(Path(tmp))
+   for directory,_,_ in os.walk(old/'package'):Path(directory).chmod(0o700)
+   result=self.run_code(data,prefix,code);self.assertEqual(result.returncode,0,result.stderr.decode());report=json.loads(result.stdout)
+   self.assertEqual(report['publicDirectoriesNormalized'],3);self.assertTrue(all(Path(d).stat().st_mode&0o777==0o755 for d,_,_ in os.walk(new/'package')));self.assertFalse((old/'package').exists())
  def test_post_move_bytes_drift_cannot_publish_verified_manifest(self):
   with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
    old,new,data,prefix,code=self.setup_fixture(Path(tmp))
-   code=code.replace("closure=verify_package(new/'package')","(new/'package/payload/fixture.mjs').write_bytes(b'concurrent drift')\nclosure=verify_package(new/'package')")
+   code=code.replace("closure,_=verify_package(new/'package')","(new/'package/payload/fixture.mjs').write_bytes(b'concurrent drift')\nclosure,_=verify_package(new/'package')")
    result=self.run_code(data,prefix,code);self.assertNotEqual(result.returncode,0);self.assertIn(b'PUBLIC_PACKAGE_BYTE_OR_MODE_DRIFT',result.stderr);self.assertFalse((new/'SOURCE_FREEZE.json').exists());self.assertFalse(result.stdout)
  def test_existing_destination_package_refuses_ambiguous_second_move(self):
   with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:

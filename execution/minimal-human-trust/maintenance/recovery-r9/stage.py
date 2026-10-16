@@ -20,7 +20,7 @@ def canon(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()
 need(os.getuid()==os.geteuid()==1000,'ORDINARY_UID1000_REQUIRED')
 data=json.load(sys.stdin);old=Path(OLD);new=Path(NEW);f=json.loads(base64.b64decode(data['manifest'],validate=True));need(sha(base64.b64decode(data['manifest']))==data['capsuleHash'] and len(f['files'])==19 and len(f['payloadFiles'])==12600,'R9_CAPSULE_OR_COUNTS_DRIFT')
 def name(n):need(isinstance(n,str) and not n.startswith('/') and '\\' not in n and all(x not in ('','.','..') for x in n.split('/')),'STAGE_RELATIVE_PATH_REFUSED');return n
-def safe_dir(p,create=False):
+def safe_dir(p,create=False,private=False):
  cur=Path('/')
  for bit in p.parts[1:]:
   cur/=bit
@@ -28,7 +28,7 @@ def safe_dir(p,create=False):
    try:cur.mkdir(mode=0o755);cur.chmod(0o755)
    except FileExistsError:pass
   s=cur.lstat();need(stat.S_ISDIR(s.st_mode) and s.st_uid in (0,1000) and not s.st_mode&0o022,'STAGE_PARENT_REFUSED')
- need(p.lstat().st_uid==1000 and stat.S_IMODE(p.lstat().st_mode)==0o755,'STAGE_CANDIDATE_OWNER_REFUSED')
+ need(p.lstat().st_uid==1000 and stat.S_IMODE(p.lstat().st_mode) in ((0o700,0o755) if private else (0o755,)),'STAGE_CANDIDATE_OWNER_REFUSED')
 def read(p,maximum=67108864):
  fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
  try:
@@ -42,12 +42,12 @@ def read(p,maximum=67108864):
  finally:os.close(fd)
 safe_dir(old);safe_dir(new,True)
 old_freeze=json.loads(read(old/'SOURCE_FREEZE.json')[0]);need(sha(read(old/'SOURCE_FREEZE.json')[0])==OLD_CAP and old_freeze['payloadFiles']==f['payloadFiles'],'EXACT_OLD_PUBLIC_PACKAGE_REQUIRED')
-package=new/'package' if os.path.lexists(new/'package') else old/'package';safe_dir(package)
-def verify_package(package):
- actual=set()
+package=new/'package' if os.path.lexists(new/'package') else old/'package';safe_dir(package,private=True)
+def verify_package(package,private=False):
+ actual=set();directory_pins={}
  def fail(e):raise e
  for directory,children,files in os.walk(package,followlinks=False,onerror=fail):
-  p=Path(directory);safe_dir(p)
+  p=Path(directory);safe_dir(p,private=private);s=p.lstat();directory_pins[str(p.relative_to(package))]=(s.st_dev,s.st_ino,s.st_uid,s.st_gid,stat.S_IMODE(s.st_mode))
   for n in children:need(stat.S_ISDIR((p/n).lstat().st_mode),'PUBLIC_PACKAGE_SYMLINK_DIRECTORY_REFUSED')
   for n in files:actual.add(str((p/n).relative_to(package)))
  need(actual==set(f['payloadFiles']),'PUBLIC_PACKAGE_FILE_SET_DRIFT');inventory=json.loads(read(package/'metadata/PAYLOAD_INVENTORY.json')[0]);closure={}
@@ -55,8 +55,8 @@ def verify_package(package):
   raw,mode=read(package/name(n));expected=inventory[n[8:]]['mode'] if n.startswith('payload/') else 0o644
   need(sha(raw)==pin and mode==expected,'PUBLIC_PACKAGE_BYTE_OR_MODE_DRIFT');closure[n]={'sha256':pin,'mode':mode,'bytes':len(raw)}
  need(sha(canon(closure))=='c7bc7ba7fa3fb0fbc5099ef28709059a5116a5943cc9aecd75bc17cb1abbafd8','INDEPENDENT_PUBLIC_PACKAGE_CLOSURE_DRIFT')
- return closure
-closure=verify_package(package)
+ return closure,directory_pins
+closure,directory_pins=verify_package(package,private=True)
 def emit(p,raw):
  p.parent.mkdir(parents=True,exist_ok=True,mode=0o755)
  cursor=p.parent
@@ -80,11 +80,19 @@ if package==old/'package':
  finally:os.close(oldfd);os.close(newfd)
 else:need(not os.path.lexists(old/'package'),'DUPLICATED_OR_AMBIGUOUS_PUBLIC_PACKAGE')
 after=(new/'package').lstat();need((before.st_dev,before.st_ino)==(after.st_dev,after.st_ino),'PUBLIC_PACKAGE_MOVE_IDENTITY_DRIFT')
-closure=verify_package(new/'package')
+normalized=0
+for relative,pin in directory_pins.items():
+ p=new/'package'/relative;safe_dir(p,private=True);fd=os.open(p,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+ try:
+  s=os.fstat(fd);named=p.lstat();current=(s.st_dev,s.st_ino,s.st_uid,s.st_gid,stat.S_IMODE(s.st_mode))
+  need(current==pin and (named.st_dev,named.st_ino)==(s.st_dev,s.st_ino),'PUBLIC_PACKAGE_DIRECTORY_CHANGED')
+  if pin[-1]==0o700:os.fchmod(fd,0o755);os.fsync(fd);normalized+=1
+ finally:os.close(fd)
+closure,_=verify_package(new/'package')
 for n,pin in f['files'].items():need(sha(read(new/name(n))[0])==pin,'FINAL_STAGED_RUNTIME_DRIFT')
 emit(new/'SOURCE_FREEZE.json',base64.b64decode(data['manifest'],validate=True))
 need(read(new/'SOURCE_FREEZE.json')==(base64.b64decode(data['manifest'],validate=True),0o644),'FINAL_STAGED_MANIFEST_DRIFT')
-print(json.dumps({'status':'R9_ORDINARY_PUBLIC_STAGE_VERIFIED','capsuleHash':data['capsuleHash'],'packageFiles':12600,'packageClosureHash':sha(canon(closure)),'publicPackageMoved':moved,'packageDirectoryDev':str(after.st_dev),'packageDirectoryInode':str(after.st_ino),'oldProtectedRootAndStateUnchanged':True,'sourceUserDirectory':OLD,'destinationUserDirectory':NEW,'rootActions':False,'rollbackEngineeringMove':'If no native bootstrap has occurred, verify the same complete closure and rename package back with NOREPLACE; no service action.'},sort_keys=True))
+print(json.dumps({'status':'R9_ORDINARY_PUBLIC_STAGE_VERIFIED','capsuleHash':data['capsuleHash'],'packageFiles':12600,'packageClosureHash':sha(canon(closure)),'publicPackageMoved':moved,'publicDirectoriesNormalized':normalized,'packageDirectoryDev':str(after.st_dev),'packageDirectoryInode':str(after.st_ino),'oldProtectedRootAndStateUnchanged':True,'sourceUserDirectory':OLD,'destinationUserDirectory':NEW,'rootActions':False,'rollbackEngineeringMove':'If no native bootstrap has occurred, verify the same complete closure and rename package back with NOREPLACE; no service action.'},sort_keys=True))
 '''
 def stage(cap):
  if os.getuid()!=1000 or os.geteuid()!=1000:raise SystemExit('ORDINARY_USER_REQUIRED')
