@@ -1,0 +1,31 @@
+{
+  "files": {
+    "cloud.mjs": "98dea5f43e12d492ba4840b1408de6afc42891dbfc55a9635e006ff2bb52bd54",
+    "context.mjs": "b0db0dce79d39472030082481482abf42e5dca45afd9ee49ce3fb721486bf509",
+    "io.mjs": "0f0c1007dc33e6abaf5359954f4d1b6af0add79d3e3493eb1015e1792b3134b2",
+    "legacy/control-clock.mjs": "b94a364ff6738c9c924c41f9ec164234612f6803e2feee77acde24bde6fa89b1",
+    "legacy/lease-core.mjs": "889232f53d5c014138a7004df32c8e4f4f6c16703b6d53fa75ce0cbcf53e43b9",
+    "local.mjs": "64fc4b87b866e3ed5776a77daec6fd8d19b3c50db5d23677d5109875b8423917",
+    "maintenance-release-base.mjs": "e3f2560e80ed23aa1c534673be817c862e961f2fdea492e78a646ba0ddf828b0",
+    "os_entry.py": "71defd117b6b489980913d7dc510b2f922280d3fe7ef683d66aee7332c0e9828",
+    "publication.mjs": "c63e4c80c346f2e2c880142f082358814fcc97ac6a8dc7e3072aab6da80ad61c",
+    "quiescence.py": "0387912333782b6fa243b6a9ea122f53391aacfb86c1e6a528cba8fd0ed723f2",
+    "release-publication-base.mjs": "e019bff3a4a720ab05a97490a04d883c96194946a745f3b5df5cc090a66a8ccf",
+    "run.mjs": "0fe10a99ad06b991ca962ceadaf759fbc974980e1072dcbe2f5f84f26ab6ba9f",
+    "state.mjs": "55f431d22de7fbc311efe7824c4e68c8af92bc475da87f58768605d463cd83e3",
+    "transaction-driver.mjs": "12adbaed23a423814fa3049556abcc0f2205e5ae6e75af42886b12270120b32a"
+  },
+  "planTemplate": {
+    "activationScope": "START_REVIEWED_TARGET_APP_IF_SOURCE_ALREADY_STOPPED",
+    "grantHash": "00ac437d66143e627132975555d06396d69ff69616f630d19e3622627e15c5e6",
+    "osScope": "STOP_FIXED_ROLES_PRESERVE_ALL_LEDGERS",
+    "packageInventoryHash": "7802620d4bd156dbdf72248f1f5c6823832991af2d91d75a49637a32880843bd",
+    "schema": "r16.native-recovery-maintenance.plan.v3",
+    "sourceDeliveryHash": "5ee11707da0d3a524550db92f8c0a5a80b7a8dac8c97f5a907b47fc956c6ec44",
+    "sourceDeliveryRevision": 16,
+    "sourcePublicConfigDigest": "be3ff2b5125f8212206d2848bb32889c3c6b50a8ca56aa3b1a4bc4359591bbdb",
+    "targetAppVersion": "34731b300ccad9a1fbfd45b07422d847e8989d7e9dc052b0dda939cd99adb500",
+    "targetNativeVersion": "2516e881b0622b3ac2d53c454e6ccf9950441c5cb3c26a53500b45d3b1dbe7b4",
+    "targetReleaseId": "r16-daily-20261015-r15-app-recovery-r6"
+  }
+}

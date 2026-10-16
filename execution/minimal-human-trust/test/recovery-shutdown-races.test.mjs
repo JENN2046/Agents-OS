@@ -128,3 +128,5 @@ import "./app-os-shutdown.test.mjs";
 import "./fixtures/release-r6-regression.mjs";
 
 import "./fixtures/first-stop-r7-regression.mjs";
+
+import "./fixtures/first-stop-r8-regression.mjs";
