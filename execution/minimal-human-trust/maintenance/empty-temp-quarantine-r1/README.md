@@ -6,7 +6,7 @@ Jenn 已批准 SHA-256 `1ee6217b557dbce981211929201864bfbdde0b278e84b4081937354b
 
 `preflight` 验封后在内存完整读取登记树和这一空文件，核对原进程、文件身份及所有进程对该 inode 的 FD/mapping；不安装辅助源码、mkdir、取写锁、创建批准、冻结或搬移。输出明确标为完整清单通过，不能声称含临时文件的现场已经通过 R8 完整账本验收。
 
-`execute` 必须从真实前台终端认证管理员并核对准确 `QUARANTINE` 对象。确认后创建独占 root journal 和本次 owned 重启保护，冻结同一原 PID 的 singleton cgroup，重新完整读取文件清单，再持久化一次搬移 intent。仅 `renameat2(RENAME_NOREPLACE)` 同文件系统搬移原 inode 到 root 700 隔离目录；不替换、不复制成新 inode、不删除原物。普通 state、所有归档、锁、`.reclaim`、两笔 UNKNOWN 与租约不改字节或模式。
+`execute` 须由管理员亲自在真实前台终端启动。启动后先认证管理员、安装约 221 KB 已封存辅助源码并创建 root 维护目录/独占锁，再展示准确 `QUARANTINE` 对象。聊天中的施工批准不能代替管理员主动启动这一步；Agent 只能打开说明窗口等待本人启动。准确确认后才发布事务 journal 并创建本次 owned 重启保护，冻结同一原 PID 的 singleton cgroup，重新完整读取文件清单，再持久化一次搬移 intent。仅 `renameat2(RENAME_NOREPLACE)` 同文件系统搬移原 inode 到 root 700 隔离目录；不替换、不复制成新 inode、不删除原物。普通 state、所有归档、锁、`.reclaim`、两笔 UNKNOWN 与租约不改字节或模式。
 
 搬移后调用未修改的 R8 `LedgerCheckpoint.capture`，真实完整验签原登记、原两笔 UNKNOWN 及全部项目，再核普通文件全清单、字节与身份未变，最后撤自己的冻结与重启保护。原 PID 继续运行；可能仍存在内存 ProtectedStore poisoned 状态，因此不宣称业务可用、成功 drain 或完成安装。此入口没有信号、pidfd、进程启动、正式签发、发行安装或 Owner 切换操作。
 
