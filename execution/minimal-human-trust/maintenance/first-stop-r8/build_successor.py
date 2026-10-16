@@ -4,13 +4,18 @@ No installer, signing or service call. Payload bytes/Release IDs are preserved.
 The caller supplies an empty disposable output directory; SOURCE_FREEZE is
 rebuilt over the modified source. Never rewrite the historical R6 capsule.
 """
-import hashlib,json,re
+import hashlib,json,re,stat
 from pathlib import Path
 
 OLD_SOURCE='/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-app-recovery-r6'
 NEW_SOURCE=OLD_SOURCE.rsplit('/',1)[0]+'/maintenance-first-stop-r8-r2'
 OLD_CLOUD='/home/ubuntu/r16-maintenance-app-recovery-r6-candidate'
 NEW_CLOUD='/home/ubuntu/r16-maintenance-first-stop-r8-candidate'
+R3_SOURCE=OLD_SOURCE.rsplit('/',1)[0]+'/maintenance-first-stop-r8-r3'
+R3_CLOUD='/home/ubuntu/r16-maintenance-first-stop-r8-r3-candidate'
+FROZEN_R6_FREEZE_SHA='0b9b1d2bb83f105c0b2ff514536ea777964d49d97ede3f1d06e83961a6fe82a0'
+ORIGINAL_READER_SHA='0387912333782b6fa243b6a9ea122f53391aacfb86c1e6a528cba8fd0ed723f2'
+REPAIRED_READER_SHA='48e46644ae56c72229d90f7031a8c0fea682f635a20d0114c8e54dff7e4409ff'
 ADOPTION_SCHEMA='r16.first-stop-successor-adoption.v1'
 POLICY_EXCEPTION='98552704b8bb8be9881318e8e8b12406448ea25f60951715a437198004ac4234'
 FIRST_STOP_JS='''export function firstStopEvidence(adoption,plan){
@@ -94,12 +99,12 @@ def replace_once(text,old,new):
     if text.count(old)!=1: raise ValueError('FROZEN_SOURCE_PATCH_CONTEXT_DRIFT: '+old[:70])
     return text.replace(old,new,1)
 
-def transform(name,raw,q_hash=None):
+def transform(name,raw,q_hash=None,*,successor_source=None,successor_cloud=None):
     if not name.endswith(('.py','.mjs')): return raw
     text=raw.decode()
     # Capsule/operator paths only. Preserve r16-daily-...recovery-r6 payload
     # directory/version and every package/payload pin.
-    text=text.replace(OLD_SOURCE,NEW_SOURCE).replace(OLD_CLOUD,NEW_CLOUD)
+    text=text.replace(OLD_SOURCE,successor_source or NEW_SOURCE).replace(OLD_CLOUD,successor_cloud or NEW_CLOUD)
     text=text.replace('/r16-maintenance/recovery-r6','/r16-maintenance/recovery-r8')
     text=text.replace('r16-native-recovery-maintenance-r6.service','r16-native-recovery-maintenance-r8.service')
     text=text.replace('r16-maintenance-os-r6','r16-maintenance-os-r8')
@@ -164,7 +169,92 @@ def build(source,out,stop_capsule_hash):
         'targetReleaseUnchanged':updated['planTemplate']['targetReleaseId']==freeze['planTemplate']['targetReleaseId'],
         'firstStopCapsuleHash':stop_capsule_hash,'installed':False}
 
+def _safe_member(name):
+    if not isinstance(name,str) or not name or name.startswith('/') or '\\' in name or any(x in ('','.','..') for x in name.split('/')):raise ValueError('SOURCE_PATH_REFUSED')
+    return name
+
+def _regular_bytes(path,maximum=64*1024*1024):
+    before=path.lstat()
+    if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_mode&0o022 or before.st_size>maximum:raise ValueError('BUILD_INPUT_FILE_REFUSED')
+    raw=path.read_bytes();after=path.lstat()
+    identity=lambda x:(x.st_dev,x.st_ino,x.st_mode,x.st_nlink,x.st_size,x.st_mtime_ns,x.st_ctime_ns)
+    if len(raw)!=before.st_size or identity(before)!=identity(after):raise ValueError('BUILD_INPUT_CHANGED')
+    return raw
+
+def build_repaired_r3(source,out,stop_capsule_hash,repaired_reader):
+    """Exact old/new reader override into a new source and complete package.
+
+    This is a local builder, never bootstrap/supersession or authorization.
+    No original byte, inode, plan or protected runtime path is changed.
+    """
+    source,out,repaired_reader=Path(source),Path(out),Path(repaired_reader)
+    if out.is_symlink() or out.exists() and not out.is_dir():raise ValueError('EMPTY_NEW_OUTPUT_REQUIRED')
+    if out.resolve().is_relative_to(source.resolve()) or out.exists() and any(out.iterdir()):raise ValueError('EMPTY_NEW_OUTPUT_REQUIRED')
+    if not isinstance(stop_capsule_hash,str) or re.fullmatch('[0-9a-f]{64}',stop_capsule_hash) is None:raise ValueError('EXACT_FIRST_STOP_CAPSULE_HASH_REQUIRED')
+    freeze_raw=_regular_bytes(source/'SOURCE_FREEZE.json',16*1024*1024)
+    if sha(freeze_raw)!=FROZEN_R6_FREEZE_SHA:raise ValueError('ORIGINAL_FROZEN_R6_CAPSULE_REQUIRED')
+    freeze=json.loads(freeze_raw)
+    if set(freeze)!={'schema','files','payloadFiles','planTemplate'} or freeze['schema']!='r16.native-recovery-source-freeze.v3' or len(freeze['files'])!=14:raise ValueError('ORIGINAL_FROZEN_R6_SCOPE_REFUSED')
+    if freeze['files'].get('quiescence.py')!=ORIGINAL_READER_SHA:raise ValueError('ORIGINAL_READER_PIN_REQUIRED')
+    original={}
+    for name,pin in freeze['files'].items():
+        raw=_regular_bytes(source/_safe_member(name),4*1024*1024)
+        if sha(raw)!=pin:raise ValueError('FROZEN_SOURCE_DRIFT: '+name)
+        original[name]=raw
+    repaired=_regular_bytes(repaired_reader,4*1024*1024)
+    if sha(repaired)!=REPAIRED_READER_SHA:raise ValueError('EXACT_REPAIRED_READER_REQUIRED')
+    package=source/'package';actual=set()
+    for path in package.rglob('*'):
+        metadata=path.lstat()
+        if stat.S_ISDIR(metadata.st_mode):
+            if stat.S_IMODE(metadata.st_mode)!=0o755:raise ValueError('PACKAGE_DIRECTORY_MODE_REFUSED')
+        elif stat.S_ISREG(metadata.st_mode):actual.add(str(path.relative_to(package)))
+        else:raise ValueError('PACKAGE_SPECIAL_FILE_REFUSED')
+    if actual!=set(freeze['payloadFiles']):raise ValueError('PACKAGE_INVENTORY_DRIFT')
+    inventory_raw=_regular_bytes(package/'metadata/PAYLOAD_INVENTORY.json',16*1024*1024)
+    if sha(inventory_raw)!=freeze['payloadFiles'].get('metadata/PAYLOAD_INVENTORY.json'):raise ValueError('PACKAGE_INVENTORY_PIN_REQUIRED')
+    inventory=json.loads(inventory_raw)
+    if not isinstance(inventory,dict):raise ValueError('PACKAGE_INVENTORY_SHAPE_REFUSED')
+    modes={};total=0;payload_hashes={}
+    for name,pin in freeze['payloadFiles'].items():
+        _safe_member(name)
+        if not name.startswith(('metadata/','payload/')):raise ValueError('PACKAGE_PATH_REFUSED')
+        mode=inventory[name[len('payload/'):]]['mode'] if name.startswith('payload/') else 0o644
+        if type(mode) is not int or mode&~0o755 or mode&0o022:raise ValueError('PACKAGE_MODE_REFUSED')
+        raw=_regular_bytes(package/name)
+        if sha(raw)!=pin or stat.S_IMODE((package/name).lstat().st_mode)!=mode:raise ValueError('PACKAGE_BYTE_OR_MODE_DRIFT')
+        if name.startswith('payload/'):
+            key=name[len('payload/'):];row=inventory[key]
+            if row.get('sha256')!=pin or row.get('bytes')!=len(raw):raise ValueError('PACKAGE_INVENTORY_BINDING_DRIFT')
+            payload_hashes[key]=pin
+        total+=len(raw)
+        if total>512*1024*1024:raise ValueError('PACKAGE_CAPACITY_REFUSED')
+        modes[name]=mode
+    # Existing R6 plan hashes the path->payload SHA map, not pretty inventory
+    # metadata bytes (which carry additional baseline/provenance fields).
+    if set(payload_hashes)!=set(inventory) or sha(canonical(payload_hashes))!=freeze['planTemplate']['packageInventoryHash']:raise ValueError('PACKAGE_INVENTORY_BINDING_DRIFT')
+    inputs={**original,'quiescence.py':repaired}
+    result={name:transform(name,raw,successor_source=R3_SOURCE,successor_cloud=R3_CLOUD) for name,raw in inputs.items() if name!='os_entry.py'}
+    result['os_entry.py']=transform('os_entry.py',inputs['os_entry.py'],sha(result['quiescence.py']),successor_source=R3_SOURCE,successor_cloud=R3_CLOUD)
+    updated={**freeze,'files':{name:sha(raw) for name,raw in sorted(result.items())},'planTemplate':{**freeze['planTemplate'],'firstStopCapsuleHash':stop_capsule_hash,'firstStopPolicyExceptionProposalHash':POLICY_EXCEPTION}}
+    out.mkdir(parents=True,exist_ok=True);out.chmod(0o755)
+    def emit(name,raw,mode):
+        target=out/_safe_member(name);target.parent.mkdir(parents=True,exist_ok=True)
+        cursor=target.parent
+        while cursor!=out:cursor.chmod(0o755);cursor=cursor.parent
+        with target.open('xb') as file:file.write(raw)
+        target.chmod(mode)
+    for name,raw in sorted(result.items()):emit(name,raw,0o644)
+    for name,pin in sorted(freeze['payloadFiles'].items()):
+        raw=_regular_bytes(package/name)
+        if sha(raw)!=pin or stat.S_IMODE((package/name).lstat().st_mode)!=modes[name]:raise ValueError('PACKAGE_COPY_INPUT_CHANGED')
+        emit('package/'+name,raw,modes[name])
+    emit('SOURCE_FREEZE.json',canonical(updated),0o644)
+    return {'schema':'r16.repaired-reader-successor-source-build.v1','originalSourceFreezeSha256':sha(freeze_raw),'originalReaderSha256':ORIGINAL_READER_SHA,'reviewedReaderOverrideSha256':sha(repaired),'sourceFreezeSha256':sha(canonical(updated)),'quiescenceSha256':sha(result['quiescence.py']),'osEntrySha256':sha(result['os_entry.py']),'sourceFiles':len(result),'physicalPackageFilesVerifiedAndCopied':len(modes),'payloadBytes':total,'payloadPinsUnchanged':updated['payloadFiles']==freeze['payloadFiles'],'targetAndTrustTemplateUnchanged':{k:v for k,v in updated['planTemplate'].items() if k not in ('firstStopCapsuleHash','firstStopPolicyExceptionProposalHash')}==freeze['planTemplate'],'localCandidateSource':R3_SOURCE,'cloudCandidateSource':R3_CLOUD,'installed':False,'newNativeApprovalRequired':True,'oldPlanAuthorityExtended':False}
+
 if __name__=='__main__':
     import sys
+    if len(sys.argv)==6 and sys.argv[1]=='--repaired-reader-r3':
+        print(json.dumps(build_repaired_r3(*sys.argv[2:]),sort_keys=True));raise SystemExit(0)
     if len(sys.argv)!=4: raise SystemExit('usage: build_successor.py FROZEN_R6_SOURCE EMPTY_OUTPUT FIRST_STOP_CAPSULE_SHA256')
     print(json.dumps(build(*sys.argv[1:]),sort_keys=True))

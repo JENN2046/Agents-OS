@@ -8,8 +8,10 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -603,5 +605,99 @@ class BootstrapEnvironmentTests(unittest.TestCase):
         self.assertEqual(created,[('/a/b',0o700),('/a/b/c',0o700)])
         entries['/a']=0o775
         with mock.patch.object(e,'Path',VirtualPath),self.assertRaisesRegex(e.Refused,'ROOT_DIRECTORY_REFUSED'):e.mkdir('/a/b/c')
+
+class PublicManifestReaderTests(unittest.TestCase):
+    """Actual read loop on temporary files under fixed-path metadata fixtures.
+
+    No root/production/config/command access. Fixture UID adaptation changes
+    only ownership, preserving real inode/length/mode/timestamps and bytes.
+    """
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
+        self.base=Path(self.tmp.name);self.files={};self.parent_mode=0o755;self.override={};self.named_override={};self.read_calls=0
+        self.backend=q.RealBackend.__new__(q.RealBackend)
+    def put(self,name,raw):
+        path=self.base/str(len(self.files));path.write_bytes(raw);path.chmod(0o644);self.files[name]=path;return path
+    @contextlib.contextmanager
+    def reader(self,*,chunk=65536,truncate=False):
+        outer=self;real_open=os.open;real_read=os.read;real_fstat=os.fstat
+        class RootMetadata:
+            def __init__(self,value,changes=None):self.value=value;self.st_uid=0;self.__dict__.update(changes or {})
+            def __getattr__(self,name):return getattr(self.value,name)
+        class FixedPath:
+            def __init__(self,value):self.value=str(value)
+            @property
+            def parts(self):return Path(self.value).parts
+            def __truediv__(self,part):return FixedPath(self.value.rstrip('/')+'/'+part)
+            def lstat(self):
+                if self.value in outer.files:return RootMetadata(outer.files[self.value].lstat(),outer.named_override)
+                return types.SimpleNamespace(st_mode=stat.S_IFDIR|outer.parent_mode,st_uid=0)
+        def opened(filename,flags):
+            outer.assertIn(filename,outer.files,'no production path may be opened')
+            outer.assertTrue(flags&os.O_NOFOLLOW);outer.assertTrue(flags&os.O_NONBLOCK)
+            return real_open(outer.files[filename],flags)
+        def read(fd,length):
+            outer.read_calls+=1
+            if truncate and outer.read_calls>1:return b''
+            return real_read(fd,min(length,chunk))
+        with mock.patch.object(q,'Path',FixedPath),mock.patch.object(q.os,'open',side_effect=opened),mock.patch.object(q.os,'fstat',side_effect=lambda fd:RootMetadata(real_fstat(fd),outer.override)),mock.patch.object(q.os,'read',side_effect=read):
+            yield self.backend._read_regular
+    def test_app_and_native_source_and_target_real_observed_sizes_exceed_old_256k(self):
+        for directory in (q.SOURCE_RELEASE,q.TARGET_RELEASE):
+            for role,size in (('app',572939),('native',1183523)):
+                name=directory+'/'+role+'-manifest.json';raw=b'x'*size;self.put(name,raw)
+                with self.reader() as read:self.assertEqual(read(name),raw)
+        self.assertEqual(len(q.PUBLIC_ROLE_MANIFESTS),4)
+    def test_manifest_eight_mib_exact_bound_passes_one_byte_more_refuses(self):
+        name=q.SOURCE_RELEASE+'/native-manifest.json';path=self.put(name,b'')
+        with path.open('r+b') as file:file.truncate(q.ROLE_MANIFEST_MAX_BYTES)
+        with self.reader() as read:self.assertEqual(len(read(name)),q.ROLE_MANIFEST_MAX_BYTES)
+        with path.open('r+b') as file:file.truncate(q.ROLE_MANIFEST_MAX_BYTES+1)
+        before=self.read_calls
+        with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_FILE_REFUSED'):read(name)
+        self.assertEqual(self.read_calls,before,'oversize metadata must refuse before reading')
+    def test_other_os_files_keep_256k_bound_including_selectors_and_code(self):
+        for name in ('/etc/r16-cloud/app-host.json','/run/r16-owner/public-config.json',q.SOURCE_RELEASE+'/app/app-runner.mjs','/run/systemd/system/r16-app.service.d/'+q.DROPIN_NAME):
+            path=self.put(name,b'x'*q.OS_FILE_MAX_BYTES)
+            with self.reader() as read:self.assertEqual(len(read(name)),q.OS_FILE_MAX_BYTES)
+            with path.open('ab') as file:file.write(b'x')
+            with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_FILE_REFUSED'):read(name)
+    def test_suffix_lookalike_alias_or_unapproved_role_does_not_expand_bound(self):
+        for name in ('/other/app-manifest.json',q.SOURCE_RELEASE+'/bridge-manifest.json',q.SOURCE_RELEASE+'/../r16-daily-20261012-r15/app-manifest.json',q.SOURCE_RELEASE+'/app-manifest.json.backup'):
+            self.put(name,b'x'*(q.OS_FILE_MAX_BYTES+1))
+            with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_FILE_REFUSED'):read(name)
+    def test_short_regular_reads_are_accumulated_to_exact_file_length(self):
+        name=q.SOURCE_RELEASE+'/native-manifest.json';raw=b'x'*1183523;self.put(name,raw)
+        with self.reader(chunk=4096) as read:self.assertEqual(read(name),raw)
+        self.assertGreater(self.read_calls,100)
+    def test_truncated_read_replaced_path_or_changed_metadata_refuses(self):
+        name=q.SOURCE_RELEASE+'/app-manifest.json';path=self.put(name,b'x'*572939)
+        with self.reader(truncate=True) as read,self.assertRaisesRegex(q.Refused,'OS_FILE_DRIFT'):read(name)
+        for field,value in (('st_ino',path.stat().st_ino+1),('st_mtime_ns',1),('st_ctime_ns',1),('st_uid',1000),('st_mode',stat.S_IFREG|0o600)):
+            self.named_override={field:value}
+            with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_FILE_DRIFT'):read(name)
+    def test_large_public_file_still_needs_safe_parents_owner_inode_and_mode(self):
+        name=q.SOURCE_RELEASE+'/app-manifest.json';self.put(name,b'x'*572939)
+        for field,value in (('st_uid',1000),('st_nlink',2),('st_mode',stat.S_IFREG|0o666),('st_mode',stat.S_IFIFO|0o644)):
+            self.override={field:value}
+            with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_FILE_REFUSED'):read(name)
+        self.override={};self.parent_mode=0o775
+        with self.reader() as read,self.assertRaisesRegex(q.Refused,'OS_PATH_REFUSED'):read(name)
+    def test_large_role_manifests_pass_actual_selector_scope_and_version_and_code_pin_checks(self):
+        for unit,(role,selector,public) in q.ROLE_SELECTORS.items():
+            for phase,directory in (('SOURCE',q.SOURCE_RELEASE),('TARGET',q.TARGET_RELEASE)):
+                pins=q.expected_code_pins(unit,phase);files={p[len(directory)+1:]:h for p,h in pins.items() if p.startswith(directory+'/')}
+                files.update({'fixture/dependency-'+str(i)+'.mjs':'a'*64 for i in range(14000 if role=='native' else 7000)})
+                manifest={'schema':'r16.runtime-code.v1','role':role,'files':files};raw=json.dumps(manifest,sort_keys=True,separators=(',',':')).encode();self.assertGreater(len(raw),262144)
+                manifest_name=directory+'/'+role+'-manifest.json';self.put(manifest_name,raw)
+                self.put(selector,json.dumps({'schema':'r16.'+role+'-host.v1','publicConfiguration':public,'codeManifest':manifest_name}).encode())
+                versions=copy_versions={r:dict(v) for r,v in q.ROLE_VERSIONS.items()};versions[role][phase]=q.sha(raw)
+                with mock.patch.object(q,'ROLE_VERSIONS',copy_versions),self.reader() as read:
+                    selected,actual=q.selected_code_pins(unit,read);self.assertEqual(selected,phase);self.assertEqual(actual,pins)
+                bad={r:dict(v) for r,v in versions.items()};bad[role][phase]='0'*64
+                with mock.patch.object(q,'ROLE_VERSIONS',bad),self.reader() as read,self.assertRaisesRegex(q.Refused,'ROLE_MANIFEST_VERSION_DRIFT'):q.selected_code_pins(unit,read)
+                required=next(name for name in files if name in {p[len(directory)+1:] for p in pins if p.startswith(directory+'/')});manifest['files'][required]='0'*64
+                corrupt=json.dumps(manifest,sort_keys=True,separators=(',',':')).encode();self.files[manifest_name].write_bytes(corrupt);versions[role][phase]=q.sha(corrupt)
+                with mock.patch.object(q,'ROLE_VERSIONS',versions),self.reader() as read,self.assertRaisesRegex(q.Refused,'ROLE_MANIFEST_CODE_PIN_DRIFT'):q.selected_code_pins(unit,read)
 
 if __name__=='__main__': unittest.main()

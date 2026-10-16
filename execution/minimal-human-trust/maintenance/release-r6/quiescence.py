@@ -52,6 +52,13 @@ ROLE_SELECTORS = {'r16-app.service': ('app', '/etc/r16-cloud/app-host.json', '/e
                   'r16-native.service': ('native', '/etc/r16/native-host.json', '/run/r16-owner/public-config.json')}
 ROLE_VERSIONS = {'app': {'SOURCE': '235a5b919c65ac1d73290732d2b2014c24a338cc4b6795a5064e804803ec1e7a', 'TARGET': '34731b300ccad9a1fbfd45b07422d847e8989d7e9dc052b0dda939cd99adb500'},
                  'native': {'SOURCE': '76319c50acaec649967986c1f12e6923ba4f664ac3230596ed2703fce3470ae6', 'TARGET': '2516e881b0622b3ac2d53c454e6ccf9950441c5cb3c26a53500b45d3b1dbe7b4'}}
+# Public dependency inventories are larger than small manager/selector files.
+# Only these four exact, already phase-pinned paths receive the larger bound;
+# callers cannot supply a size override or turn an arbitrary JSON into one.
+OS_FILE_MAX_BYTES = 256 * 1024
+ROLE_MANIFEST_MAX_BYTES = 8 * 1024 * 1024
+PUBLIC_ROLE_MANIFESTS = frozenset(directory+'/'+role+'-manifest.json'
+    for directory in (SOURCE_RELEASE,TARGET_RELEASE) for role in ROLE_VERSIONS)
 ROLE_CHANGED_FILES = {'app': {'SOURCE': {'app/workspace-host.mjs': '119756c7bb950308a1edb062b93c4848b5280e9ba356c13d6660f96b192915d2'}, 'TARGET': {'app/workspace-host.mjs': 'bfef60223b8fd186f2e96887b770678777bf99ff2a5c84a3c36273d8f172a6ab'}},
                       'native': {'SOURCE': {'host/workspace-dispatcher.mjs': '0d0b74d1f4a7d425c17b553e08cd8b15f16ed8bfcf9c561d796354996bab6480'}, 'TARGET': {'host/workspace-dispatcher.mjs': 'ba4ef78187a8701b97bd03461faed44771c4d71b8541681a6d573e3f35ed079c'}}}
 
@@ -229,20 +236,25 @@ class RealBackend:
         need(ROLE_HOST[unit] == self.host, 'WRONG_ROLE_HOST')
 
     def _read_regular(self, filename):
+        limit = ROLE_MANIFEST_MAX_BYTES if filename in PUBLIC_ROLE_MANIFESTS else OS_FILE_MAX_BYTES
         current = Path('/')
         for part in Path(filename).parts[1:-1]:
             current /= part
             info = current.lstat()
             need(stat.S_ISDIR(info.st_mode) and not stat.S_ISLNK(info.st_mode) and info.st_uid == 0 and not info.st_mode & 0o022, 'OS_PATH_REFUSED')
-        fd = os.open(filename, os.O_RDONLY | os.O_NOFOLLOW)
+        fd = os.open(filename, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         try:
             before = os.fstat(fd)
-            need(stat.S_ISREG(before.st_mode) and before.st_uid == 0 and before.st_nlink == 1 and not before.st_mode & 0o022 and before.st_size <= 262144, 'OS_FILE_REFUSED')
-            raw = os.read(fd, 262145)
+            need(stat.S_ISREG(before.st_mode) and before.st_uid == 0 and before.st_nlink == 1 and not before.st_mode & 0o022 and before.st_size <= limit, 'OS_FILE_REFUSED')
+            chunks = [];count = 0
+            while count <= limit:
+                chunk = os.read(fd, min(65536,limit+1-count))
+                if not chunk: break
+                chunks.append(chunk);count += len(chunk)
             after = os.fstat(fd)
-            fields = lambda s: (s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
-            need(len(raw) == before.st_size and fields(before) == fields(after), 'OS_FILE_DRIFT')
-            return raw
+            fields = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_uid, s.st_gid, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+            need(count == before.st_size and fields(before) == fields(after) == fields(Path(filename).lstat()), 'OS_FILE_DRIFT')
+            return b''.join(chunks)
         finally:
             os.close(fd)
 

@@ -1,4 +1,4 @@
-import copy,importlib.util,json,sys,tempfile,unittest,subprocess
+import ast,copy,importlib.util,json,sys,tempfile,unittest,subprocess,shutil
 from pathlib import Path
 from unittest import mock
 
@@ -117,6 +117,26 @@ class Tests(unittest.TestCase):
 def module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 
+def frozen_r6_fixture_bytes(name):
+    """Reconstruct only the reviewed old reader fragment, then recheck old pin.
+
+    Keeps R6_SOURCE_PINS historical and immutable while engineering source has
+    the repaired reader. This is test-only, never an installer/build override.
+    """
+    raw=(HERE.parent/'release-r6'/name).read_bytes()
+    if name=='quiescence.py' and build.sha(raw)==build.REPAIRED_READER_SHA:
+        patch=json.loads((HERE/'fixtures/R6_PRE_MANIFEST_READER_FIX.json').read_bytes())
+        if patch['oldReaderSha256']!=build.ORIGINAL_READER_SHA or patch['newReaderSha256']!=build.REPAIRED_READER_SHA:raise AssertionError('FROZEN_READER_FIXTURE_DRIFT')
+        text=raw.decode();nodes=ast.parse(text)
+        method=next(n for c in nodes.body if isinstance(c,ast.ClassDef) and c.name=='RealBackend' for n in c.body if isinstance(n,ast.FunctionDef) and n.name=='_read_regular')
+        current=''.join(text.splitlines(keepends=True)[method.lineno-1:method.end_lineno])
+        text=build.replace_once(text,current,patch['oldReadRegularMethod'])
+        text=build.replace_once(text,patch['newConstantBlock'],'');raw=text.encode()
+    elif name=='os_entry.py':
+        text=raw.decode();current='Q_SHA = '+repr(build.REPAIRED_READER_SHA)
+        if current in text:raw=build.replace_once(text,current,'Q_SHA = '+repr(build.ORIGINAL_READER_SHA)).encode()
+    return raw
+
 class BuildTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -128,18 +148,94 @@ class BuildTests(unittest.TestCase):
         try:
             for name,pin in pins['files'].items():
                 if name.startswith('/') or any(x in ('','.','..') for x in name.split('/')):raise AssertionError('FIXTURE_SOURCE_PATH_REFUSED')
-                raw=(HERE.parent/'release-r6'/name).read_bytes()
+                raw=frozen_r6_fixture_bytes(name)
                 if build.sha(raw)!=pin:raise AssertionError('FROZEN_R6_REPOSITORY_SOURCE_DRIFT: '+name)
-                target=cls.SOURCE/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+                target=cls.SOURCE/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw);target.chmod(0o644)
             inert=b'{"schema":"isolated-inert-source-build-fixture","production":false}'
             payload=cls.SOURCE/'package/metadata/ISOLATED.json';payload.parent.mkdir(parents=True);payload.write_bytes(inert)
             freeze={'schema':'r16.native-recovery-source-freeze.v3',**pins,
                     'payloadFiles':{'metadata/ISOLATED.json':build.sha(inert)}}
-            (cls.SOURCE/'SOURCE_FREEZE.json').write_bytes(build.canonical(freeze))
+            (cls.SOURCE/'SOURCE_FREEZE.json').write_bytes(build.canonical(freeze));(cls.SOURCE/'SOURCE_FREEZE.json').chmod(0o644)
         except BaseException:
             cls.source_temp.cleanup();raise
     @classmethod
     def tearDownClass(cls):cls.source_temp.cleanup()
+    def r3_fixture(self,base):
+        source=base/'source';shutil.copytree(self.SOURCE,source)
+        package=source/'package';payload=package/'payload/bin/tool';payload.parent.mkdir(parents=True);payload.write_bytes(b'isolated executable fixture');payload.chmod(0o755)
+        inventory={'bin/tool':{'mode':0o755,'bytes':payload.stat().st_size,'sha256':build.sha(payload.read_bytes())}}
+        inv=package/'metadata/PAYLOAD_INVENTORY.json';inv.write_bytes(build.canonical(inventory));inv.chmod(0o644)
+        freeze=json.loads((source/'SOURCE_FREEZE.json').read_bytes())
+        freeze['payloadFiles']={str(p.relative_to(package)):build.sha(p.read_bytes()) for p in package.rglob('*') if p.is_file()}
+        freeze['planTemplate']['packageInventoryHash']=build.sha(build.canonical({name:row['sha256'] for name,row in inventory.items()}))
+        (source/'SOURCE_FREEZE.json').write_bytes(build.canonical(freeze))
+        for path in source.rglob('*'):
+            if path.is_dir():path.chmod(0o755)
+            elif path!=payload:path.chmod(0o644)
+        source.chmod(0o755)
+        return source,build.sha((source/'SOURCE_FREEZE.json').read_bytes())
+    def test_repaired_r3_explicit_override_builds_all_sources_payload_and_exact_new_paths(self):
+        with tempfile.TemporaryDirectory(prefix='r8-repaired-build-') as tmp:
+            base=Path(tmp);source,pin=self.r3_fixture(base);before={str(p.relative_to(source)):(build.sha(p.read_bytes()),p.stat().st_mode&0o777) for p in source.rglob('*') if p.is_file()}
+            out=base/'new-r3'
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin):result=build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            entry=module('r8_r3_repaired_entry_fixture',out/'os_entry.py');q=module('r8_r3_repaired_reader_fixture',out/'quiescence.py')
+            self.assertEqual(str(entry.SOURCE),build.R3_SOURCE);self.assertEqual(str(entry.CLOUD_SOURCE),build.R3_CLOUD)
+            self.assertEqual(entry.ROOT,h.SUCCESSOR_ROOT);self.assertEqual(entry.STATE,h.SUCCESSOR_STATE)
+            self.assertEqual(entry.Q_SHA,build.sha((out/'quiescence.py').read_bytes()));self.assertEqual(q.ROLE_MANIFEST_MAX_BYTES,8388608)
+            self.assertEqual(q.DROPIN_NAME,'93-r16-maintenance-recovery-r8.conf');self.assertEqual(q.OS_FILE_MAX_BYTES,262144)
+            freeze=json.loads((out/'SOURCE_FREEZE.json').read_bytes());original=json.loads((source/'SOURCE_FREEZE.json').read_bytes())
+            self.assertEqual(freeze['payloadFiles'],original['payloadFiles']);self.assertTrue(result['targetAndTrustTemplateUnchanged'])
+            self.assertTrue(result['newNativeApprovalRequired']);self.assertFalse(result['oldPlanAuthorityExtended'])
+            for name,sha in freeze['files'].items():self.assertEqual(build.sha((out/name).read_bytes()),sha)
+            for name,sha in freeze['payloadFiles'].items():self.assertEqual(build.sha((out/'package'/name).read_bytes()),sha)
+            self.assertEqual((out/'package/payload/bin/tool').stat().st_mode&0o777,0o755)
+            self.assertEqual(before,{str(p.relative_to(source)):(build.sha(p.read_bytes()),p.stat().st_mode&0o777) for p in source.rglob('*') if p.is_file()})
+    def test_repaired_r3_refuses_unpinned_base_or_arbitrary_replacement_before_output(self):
+        with tempfile.TemporaryDirectory(prefix='r8-repaired-refuse-') as tmp:
+            base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'out';reader=HERE.parent/'release-r6/quiescence.py'
+            with self.assertRaisesRegex(ValueError,'ORIGINAL_FROZEN_R6_CAPSULE_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,reader)
+            bad=base/'wrong-reader.py';bad.write_bytes(reader.read_bytes()+b'\n');bad.chmod(0o644)
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EXACT_REPAIRED_READER_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,bad)
+            self.assertFalse(out.exists())
+            freeze=json.loads((source/'SOURCE_FREEZE.json').read_bytes());freeze['files']['quiescence.py']='0'*64;(source/'SOURCE_FREEZE.json').write_bytes(build.canonical(freeze))
+            changed=build.sha((source/'SOURCE_FREEZE.json').read_bytes())
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',changed),self.assertRaisesRegex(ValueError,'ORIGINAL_READER_PIN_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,reader)
+            self.assertFalse(out.exists())
+    def test_repaired_r3_validates_whole_original_source_and_payload_set_modes_and_bytes(self):
+        for drift in ('source','extra','missing','bytes','mode','symlink'):
+            with tempfile.TemporaryDirectory(prefix='r8-repaired-drift-') as tmp:
+                base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'out';payload=source/'package/payload/bin/tool'
+                if drift=='source':(source/'run.mjs').write_bytes(b'corrupt code')
+                elif drift=='extra':(source/'package/metadata/extra').write_bytes(b'extra')
+                elif drift=='missing':payload.unlink()
+                elif drift=='bytes':payload.write_bytes(b'corrupt bytes')
+                elif drift=='mode':payload.chmod(0o644)
+                else:payload.unlink();payload.symlink_to(source/'run.mjs')
+                with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaises(ValueError):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+                self.assertFalse(out.exists())
+    def test_repaired_r3_copy_phase_drift_never_publishes_source_freeze(self):
+        with tempfile.TemporaryDirectory(prefix='r8-repaired-copy-fault-') as tmp:
+            base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'out';original=build._regular_bytes;calls=[]
+            def drift(path,*args,**kwargs):
+                raw=original(path,*args,**kwargs)
+                if path==source/'package/payload/bin/tool':
+                    calls.append(path)
+                    if len(calls)==2:return raw+b'changed during copy'
+                return raw
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),mock.patch.object(build,'_regular_bytes',side_effect=drift),self.assertRaisesRegex(ValueError,'PACKAGE_COPY_INPUT_CHANGED'):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            self.assertFalse((out/'SOURCE_FREEZE.json').exists());self.assertFalse((out/'package/payload/bin/tool').exists())
+    def test_repaired_r3_never_overwrites_nonempty_output_and_default_builder_stays_r2(self):
+        with tempfile.TemporaryDirectory(prefix='r8-repaired-output-') as tmp:
+            base=Path(tmp);source,pin=self.r3_fixture(base);out=base/'occupied';out.mkdir();(out/'audit').write_bytes(b'preserve')
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,out,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            self.assertEqual((out/'audit').read_bytes(),b'preserve')
+            empty=base/'empty';empty.mkdir();link=base/'symlink-output';link.symlink_to(empty,target_is_directory=True)
+            with mock.patch.object(build,'FROZEN_R6_FREEZE_SHA',pin),self.assertRaisesRegex(ValueError,'EMPTY_NEW_OUTPUT_REQUIRED'):build.build_repaired_r3(source,link,'1'*64,HERE.parent/'release-r6/quiescence.py')
+            self.assertEqual(list(empty.iterdir()),[])
+            old=base/'old-default';build.build(self.SOURCE,old,'1'*64)
+            entry=module('r8_default_source_still_r2',old/'os_entry.py')
+            self.assertEqual(str(entry.SOURCE),build.NEW_SOURCE);self.assertEqual(str(entry.CLOUD_SOURCE),build.NEW_CLOUD)
     def test_generated_final_receipt_carries_exact_first_forced_stop_evidence(self):
         with tempfile.TemporaryDirectory(prefix='r8-first-stop-receipt-') as temp:
             out=Path(temp)/'candidate';build.build(self.SOURCE,out,'1'*64)
