@@ -130,3 +130,5 @@ import "./fixtures/release-r6-regression.mjs";
 import "./fixtures/first-stop-r7-regression.mjs";
 
 import "./fixtures/first-stop-r8-regression.mjs";
+
+import "./fixtures/empty-temp-quarantine-r1-regression.mjs";
