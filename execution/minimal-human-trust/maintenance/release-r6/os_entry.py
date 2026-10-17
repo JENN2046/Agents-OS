@@ -380,8 +380,64 @@ def os_action(action):
         need(journal.value['phase'] == 'QUIESCENT' and journal.value['pending'] is None, 'NOT_QUIESCENT')
         return {'status': 'OS_QUIESCENT_FIXED_ROLES_ONLY', 'planHash': h, 'actors': controller.observe(p), 'businessReadinessClaim': False}
     need(action in ('resume', 'activate'), 'OS_ACTION_REFUSED')
-    if action == 'activate': need(journal.value['phase'] in ('QUIESCENT', 'ACTIVATING', 'OS_ACTIVE'), 'ACTIVATE_REQUIRES_QUIESCENCE')
+    if action == 'activate': need(journal.value['phase'] in ('QUIESCENT', 'ACTIVATING', 'RESTORE_PARTIAL', 'OS_ACTIVE'), 'ACTIVATE_REQUIRES_QUIESCENCE')
     return restore_roles(q, backend, journal, plan, h)
+
+
+RESTORE_FAILURE_CODES = frozenset((
+    'RECOVERY_WINDOW_EXPIRED', 'OWNER_NOT_RUNNING_FOR_NATIVE', 'OWNER_PUBLICATION_NOT_CURRENT',
+    'OWNER_PUBLICATION_BINDING_REFUSED', 'TARGET_APP_ACTIVATION_SCOPE_REQUIRED',
+    'ORIGINAL_APP_STOPPED_BASELINE_NOT_RESTORED', 'UNKNOWN_START_NOT_REPLAYED',
+    'RESTORE_PROCESS_UNCERTAIN', 'RESTORE_READY_TIMEOUT', 'RESTORE_IDENTITY_DRIFT',
+    'RESTORE_CODE_DRIFT', 'RESTORE_FOREIGN_FENCE', 'RESTORE_FENCE_REMAINS',
+    'UNSAFE_MANAGER_STOP_POLICY', 'FOREIGN_FENCE_REFUSED', 'FENCE_REMOVAL_UNCONFIRMED',
+    'CODE_PIN_DRIFT', 'REMOTE_CODE_PHASE_DRIFT', 'ROLE_SELECTOR_DRIFT',
+    'ROLE_MANIFEST_VERSION_DRIFT', 'ROLE_MANIFEST_CODE_PIN_DRIFT',
+    'UNIT_IDENTITY_REFUSED', 'REMOTE_IDENTITY_REFUSED', 'UNIT_CGROUP_DRIFT',
+    'PID_IDENTITY_UNAVAILABLE', 'PID_CGROUP_DRIFT', 'MAIN_PID_OUTSIDE_CGROUP',
+    'CONTROL_PID_OUTSIDE_CGROUP', 'PID_REUSED_DURING_INSPECTION',
+    'CGROUP_MEMBERSHIP_DRIFT', 'CGROUP_METADATA_UNAVAILABLE',
+    'MANAGER_POLICY_DRIFT', 'MANAGER_LIFECYCLE_UNSTABLE', 'PENDING_MANAGER_JOB',
+    'OS_EFFECT_WINDOW_EXPIRED', 'START_WHILE_FENCED_OR_JOB_REFUSED',
+))
+
+
+def restore_failure_code(error):
+    code = getattr(error, 'code', None)
+    return code if type(code) is str and code in RESTORE_FAILURE_CODES else 'RESTORE_BACKEND_REFUSED'
+
+
+def restore_row_guard(q, row, unit, h, allow_owned_fence=False):
+    # inspect() must authenticate each complete snapshot. A refusal is never a
+    # readiness sample and must not be hidden by a polling catch/retry loop.
+    need(row.unit == unit and row.host == q.ROLE_HOST[unit], 'RESTORE_IDENTITY_DRIFT')
+    need(row.graceful_only(), 'UNSAFE_MANAGER_STOP_POLICY')
+    need(dict(row.code_hashes) == q.expected_code_pins(unit, row.code_phase), 'RESTORE_CODE_DRIFT')
+    if row.fence_hash:
+        need(row.fence_hash == q.sha(q.fence_bytes(h)), 'RESTORE_FOREIGN_FENCE')
+        need(allow_owned_fence, 'RESTORE_FENCE_REMAINS')
+
+
+def await_restore_ready(q, backend, unit, h, plan, end, running=False):
+    # Pending jobs, activating and NeedDaemonReload are read-only observations:
+    # wait for an authenticated stable row; never reload or start to settle it.
+    while True:
+        need(now_ms() < plan['rollbackDeadline'], 'RECOVERY_WINDOW_EXPIRED')
+        row = backend.inspect(unit, h)
+        restore_row_guard(q, row, unit, h)
+        need(now_ms() < plan['rollbackDeadline'], 'RECOVERY_WINDOW_EXPIRED')
+        need(time.monotonic() < end, 'RESTORE_READY_TIMEOUT')
+        settled = not row.pending_job and not row.daemon_reload_needed and row.active != 'activating'
+        is_running = row.active == 'active' and row.sub == 'running' and row.main_pid > 0 and row.main_start > 0 and row.main_pid in row.members
+        if settled:
+            if not running:
+                need(row.stopped() or is_running, 'RESTORE_PROCESS_UNCERTAIN');return row
+            if is_running: return row
+        need(row.active in ('active', 'activating', 'inactive', 'failed') or row.pending_job,
+             'RESTORE_PROCESS_UNCERTAIN')
+        remaining = min(end-time.monotonic(), (plan['rollbackDeadline']-now_ms())/1000)
+        need(remaining > 0, 'RESTORE_READY_TIMEOUT')
+        time.sleep(min(.05, remaining))
 
 
 def restore_roles(q, backend, journal, plan, h):
@@ -390,7 +446,7 @@ def restore_roles(q, backend, journal, plan, h):
     p = journal.permit(q, plan);p.state = 'ABORT_RESTORING'
     p.expires_at=time.monotonic()+max(0,plan['rollbackDeadline']-now_ms())/1000
     backend._bind_admitted(p)
-    errors, active = [], []
+    errors, active, failure_codes = [], [], {}
     for unit in q.START_ORDER:
         original = snapshot(q, journal.value['originalBaseline'][unit])
         try:
@@ -400,33 +456,42 @@ def restore_roles(q, backend, journal, plan, h):
                 need(owner.active=='active' and owner.sub=='running' and owner.main_pid>0,'OWNER_NOT_RUNNING_FOR_NATIVE')
                 await_owner_publication(plan)
             row = backend.inspect(unit, h)
+            restore_row_guard(q, row, unit, h, allow_owned_fence=True)
             if row.fence_hash: backend.unfence(unit,h)
+            # An automatic manager job may become visible when the owned fence
+            # is removed. Observe a valid snapshot settling before deciding
+            # whether a start is needed; share one bounded budget with its readback.
+            ready_end = time.monotonic()+15
+            row = await_restore_ready(q, backend, unit, h, plan, ready_end)
             target_app_start=bool(unit=='r16-app.service' and original.stopped() and original.code_phase=='SOURCE' and row.code_phase=='TARGET')
             if target_app_start: need(plan.get('activationScope')=='START_REVIEWED_TARGET_APP_IF_SOURCE_ALREADY_STOPPED','TARGET_APP_ACTIVATION_SCOPE_REQUIRED')
             if original.active != 'active' and not target_app_start:
-                row = backend.inspect(unit,h)
                 need(unit=='r16-app.service' and original.stopped() and original.code_phase=='SOURCE' and row.code_phase=='SOURCE' and
                      row.stopped() and not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(),
                      'ORIGINAL_APP_STOPPED_BASELINE_NOT_RESTORED')
                 continue
-            row = backend.inspect(unit,h)
-            need(not row.fence_hash and not row.daemon_reload_needed and not row.pending_job and row.graceful_only(), 'RESTORE_FENCE_OR_POLICY_DRIFT')
             if row.active != 'active' or row.sub != 'running':
                 need(row.stopped(), 'RESTORE_PROCESS_UNCERTAIN')
                 prior = [e for e in journal.value['events'] if e['cycle'] == journal.value['cycle'] and e['unit'] == unit and e['operation']=='start' and e['state']=='INTENT']
                 need(not prior, 'UNKNOWN_START_NOT_REPLAYED')
+                need(now_ms()<plan['rollbackDeadline'], 'RECOVERY_WINDOW_EXPIRED')
+                need(time.monotonic()<ready_end, 'RESTORE_READY_TIMEOUT')
                 backend.start(unit, h)
-                end = time.monotonic()+15
-                while True:
-                    row = backend.inspect(unit, h)
-                    if row.active == 'active' and row.sub == 'running' and row.main_pid and not row.fence_hash and not row.pending_job and not row.daemon_reload_needed: break
-                    need(time.monotonic()<end and now_ms()<plan['rollbackDeadline'], 'RESTORE_UNCONFIRMED');time.sleep(.05)
+                row = await_restore_ready(q, backend, unit, h, plan, ready_end, running=True)
             active.append(unit)
-        except Exception:
-            errors.extend(q.START_ORDER[q.START_ORDER.index(unit):]);break
-    if now_ms()>=plan['rollbackDeadline']: errors.extend(q.START_ORDER)
-    journal.value['phase'] = 'OS_ACTIVE' if not errors else 'RESTORE_PARTIAL';journal.save()
-    return {'status': journal.value['phase'], 'activeUnits':active, 'unconfirmedUnits':sorted(set(errors)), 'businessReadinessClaim':False, 'planHash':h}
+        except Exception as error:
+            # Aggregate a partial restoration once, including transport/OS
+            # failures. This is not the readiness polling loop: no failed
+            # inspection or effect is retried, and exception text is not kept.
+            remaining = q.START_ORDER[q.START_ORDER.index(unit):]
+            errors.extend(remaining);failure_codes[unit] = restore_failure_code(error)
+            for blocked in remaining[1:]: failure_codes[blocked] = 'RESTORE_PREDECESSOR_UNCONFIRMED'
+            break
+    if now_ms()>=plan['rollbackDeadline']:
+        errors.extend(q.START_ORDER)
+        for unit in q.START_ORDER: failure_codes.setdefault(unit, 'RECOVERY_WINDOW_EXPIRED')
+    journal.value.update(phase='OS_ACTIVE' if not errors else 'RESTORE_PARTIAL', failureCodes=failure_codes);journal.save()
+    return {'status': journal.value['phase'], 'activeUnits':active, 'unconfirmedUnits':sorted(set(errors)), 'failureCodes':failure_codes, 'businessReadinessClaim':False, 'planHash':h}
 
 
 def await_owner_publication(plan):

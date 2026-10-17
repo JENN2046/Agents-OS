@@ -10,21 +10,34 @@ def canon(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()
 def sha(v):return hashlib.sha256(v).hexdigest()
 class BuildTests(unittest.TestCase):
  def entry(self):
-  raw=b.transform('os_entry.py',(HERE.parent/'release-r6/os_entry.py').read_bytes());m=types.ModuleType('r10_generated_entry_tested');m.__file__='<isolated-r10-entry>';exec(compile(raw,m.__file__,'exec'),m.__dict__);return m
+  raw=b.transform('os_entry.py',b.reviewed_override_path('os_entry.py').read_bytes());m=types.ModuleType('r10_generated_entry_tested');m.__file__='<isolated-r10-entry>';exec(compile(raw,m.__file__,'exec'),m.__dict__);return m
  def test_namespace_still_same_payload_and_only_fixed_old_package_reads(self):
   q=b.transform('quiescence.py',(HERE.parent/'release-r6/quiescence.py').read_bytes()).decode()
   self.assertIn("DROPIN_NAME = '95-r16-maintenance-recovery-r10.conf'",q);self.assertIn('r16-maintenance-os-r10',q)
   self.assertIn(b.C.TARGET,q);self.assertNotIn('adopt-first-stop',q)
   for name in ('context.mjs','cloud.mjs','local.mjs','publication.mjs','maintenance-release-base.mjs'):
-   source=b.transform(name,(HERE.parent/'release-r6'/name).read_bytes()).decode()
+   source=b.transform(name,b.reviewed_override_path(name).read_bytes()).decode()
    self.assertIn(str(b.C.R9_STATE/'package'),source);self.assertNotIn("STATE+'/package",source);self.assertNotIn("ROOT_JOURNAL+'/package'",source)
   e=self.entry();self.assertEqual(str(e.ROOT),'/usr/lib/r16-maintenance/recovery-r10');self.assertEqual(str(e.STATE),'/var/lib/r16-maintenance/recovery-r10')
   self.assertEqual(str(e.SOURCE),str(b.C.OUT));self.assertEqual(str(e.CLOUD_SOURCE),b.C.CLOUD_SOURCE)
- def test_reviewed_overrides_have_all_four_exact_current_hashes(self):
+ def test_reviewed_overrides_preserve_all_four_exact_historical_hashes(self):
   self.assertEqual(set(b.OVERRIDE_PINS),{'quiescence.py','os_entry.py','run.mjs','io.mjs'})
-  for name,pin in b.OVERRIDE_PINS.items():self.assertEqual(sha((HERE.parent/'release-r6'/name).read_bytes()),pin)
+  for name,pin in b.OVERRIDE_PINS.items():self.assertEqual(sha(b.reviewed_override_path(name).read_bytes()),pin)
+ def test_historical_entry_is_the_exact_git_1697_fixture_not_mutable_release_source(self):
+  expected=HERE/'fixtures/os-entry-at-1697b82.txt'
+  self.assertEqual(b.reviewed_override_path('os_entry.py'),expected)
+  self.assertEqual(sha(expected.read_bytes()),'d6e8f1262910adf60688770bc7794a14aeb56c8075e75020e74f400fe098d41b')
+  for name in ('quiescence.py','run.mjs','io.mjs'):
+   self.assertEqual(b.reviewed_override_path(name),HERE.parent/'release-r6'/name)
+ def test_generated_r10_entry_does_not_read_future_mutable_os_entry(self):
+  mutable=HERE.parent/'release-r6/os_entry.py';original=Path.read_bytes
+  def guarded(path):
+   if path==mutable:raise AssertionError('MUTABLE_FUTURE_ENTRY_READ')
+   return original(path)
+  with patch.object(Path,'read_bytes',guarded):
+   e=self.entry();self.assertEqual(str(e.ROOT),'/usr/lib/r16-maintenance/recovery-r10')
  def test_no_package_ensure_or_old_writer_is_reachable_in_generated_install(self):
-  e=self.entry();tree=ast.parse(b.transform('os_entry.py',(HERE.parent/'release-r6/os_entry.py').read_bytes()))
+  e=self.entry();tree=ast.parse(b.transform('os_entry.py',b.reviewed_override_path('os_entry.py').read_bytes()))
   fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='install_capsule');body=ast.unparse(fn)
   self.assertIn('verify_reused_package(manifest)',body);self.assertNotIn("STATE / 'package'",body);self.assertNotIn('candidate_source()',body)
   self.assertIn("'r16.r10.native-install-pending.v1'",ast.unparse(tree));self.assertIn('EXACT_ASSET_REUSE_NATIVE_TARGET_REQUIRED',ast.unparse(tree))
@@ -59,7 +72,7 @@ class SyntheticPhysicalBuildTests(unittest.TestCase):
   for p in frozen.rglob('*'):
    if p.is_dir():p.chmod(0o755)
   template=json.loads((HERE.parent/'first-stop-r8/fixtures/R6_SOURCE_PINS.json').read_bytes())
-  original={name:(HERE.parent/'release-r6'/name).read_bytes() for name in template['files']}
+  original={name:b.reviewed_override_path(name).read_bytes() for name in template['files']}
   files={str(p.relative_to(frozen/'package')):sha(p.read_bytes()) for p in (frozen/'package').rglob('*') if p.is_file()}
   closure={n:{'sha256':h,'bytes':len((frozen/'package'/n).read_bytes()),'mode':(frozen/'package'/n).stat().st_mode&0o777} for n,h in files.items()}
   template['payloadFiles']=files;template['planTemplate']['packageInventoryHash']=sha(canon({'bin/tool':sha(raw)}))

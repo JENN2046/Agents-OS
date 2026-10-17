@@ -14,6 +14,11 @@ OVERRIDE_PINS={'quiescence.py':'279193bdc2457444d455bf35d48e9bf3f98d0483efddac61
 need=base.need;sha=base.sha;canon=base.canon;read=base.read;replace_once=base.replace_once
 MARKER_SHA=C.TARGET_MARKER_SHA
 MARKER_BYTES=C.TARGET_MARKER_BYTES
+def reviewed_override_path(name):
+ # R10 is a consumed historical recipe. Keep the reviewed entry immutable as
+ # future readiness/recovery engineering advances release-r6/os_entry.py.
+ if name=='os_entry.py':return HERE/'fixtures/os-entry-at-1697b82.txt'
+ return HERE.parent/'release-r6'/name
 PACKAGE_VERIFY=r'''
 def verify_reused_package(manifest):
     # Fixed read-only assets from the completed R9 transaction, never a link or
@@ -147,7 +152,7 @@ def reviewed_inputs():
  for name,pin in f['files'].items():
   raw,_=read(FROZEN/name);need(sha(raw)==pin,'FROZEN_RUNTIME_DRIFT:'+name);original[name]=raw
  for name,pin in OVERRIDE_PINS.items():
-  raw,_=read(HERE.parent/'release-r6'/name);need(sha(raw)==pin,'REVIEWED_OVERRIDE_DRIFT:'+name);original[name]=raw
+  raw,_=read(reviewed_override_path(name));need(sha(raw)==pin,'REVIEWED_OVERRIDE_DRIFT:'+name);original[name]=raw
  return f,original
 
 def build(out=OUT):

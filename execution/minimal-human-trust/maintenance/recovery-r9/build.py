@@ -8,6 +8,10 @@ CLOUD='/home/ubuntu/r16-maintenance-recovered-r9-candidate'
 PRIOR=Path('/home/jenn/Documents/Codex/2026-10-16/G1D-R8-R3-EXPIRED-ABORT-COMPENSATION-R1')
 FROZEN_SHA='0b9b1d2bb83f105c0b2ff514536ea777964d49d97ede3f1d06e83961a6fe82a0'
 OVERRIDE_PINS={'quiescence.py':'279193bdc2457444d455bf35d48e9bf3f98d0483efddac6138fd40dccf417f74','os_entry.py':'d6e8f1262910adf60688770bc7794a14aeb56c8075e75020e74f400fe098d41b'}
+def reviewed_override_path(name):
+ # Historical R9 input, independent of later readiness/recovery source fixes.
+ if name=='os_entry.py':return HERE/'fixtures/os-entry-at-1697b82.txt'
+ return HERE.parent/'release-r6'/name
 def need(v,c):
  if not v:raise ValueError(c)
 def sha(raw):return hashlib.sha256(raw).hexdigest()
@@ -83,7 +87,7 @@ def build(out=OUT):
  for n,pin in f['files'].items():
   b,_=read(FROZEN/n);need(sha(b)==pin,'FROZEN_RUNTIME_DRIFT:'+n);original[n]=b
  for n,pin in OVERRIDE_PINS.items():
-  original[n]=read(HERE.parent/'release-r6'/n)[0];need(sha(original[n])==pin,'REVIEWED_OVERRIDE_DRIFT:'+n)
+  original[n]=read(reviewed_override_path(n))[0];need(sha(original[n])==pin,'REVIEWED_OVERRIDE_DRIFT:'+n)
  result={n:transform(n,b) for n,b in original.items()}
  qsha=sha(result['quiescence.py']);entry,count=re.subn(rb"(?m)^Q_SHA = '[a-f0-9]{64}'$",('Q_SHA = '+repr(qsha)).encode(),result['os_entry.py']);need(count==1,'NEW_Q_PIN_REQUIRED');result['os_entry.py']=entry
  evidence,pins=provenance();result['prior-verifier.py']=read(HERE/'prior-verifier.py')[0]

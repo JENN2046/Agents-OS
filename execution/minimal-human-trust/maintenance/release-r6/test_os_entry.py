@@ -34,7 +34,8 @@ class EntryTests(unittest.TestCase):
         self.state.mkdir();self.code.mkdir();self.source.mkdir()
         self.commands=[];self.effects=[];self.rows={};self.at=1000000;self.crash=None;self.hang=set();self.failed=set()
         for i,(unit,host) in enumerate(q.ROLE_HOST.items()):
-            self.rows[unit]=q.Snapshot(unit,host,'active','running',100+i,0,1000+i,0,(100+i,),0,tuple(q.CODE_PINS[unit].items()),None,False,send_sigkill='no',kill_signal='15',code_phase='SOURCE' if unit in q.ROLE_SELECTORS else 'STATIC')
+            phase='SOURCE' if unit in q.ROLE_SELECTORS else 'STATIC'
+            self.rows[unit]=q.Snapshot(unit,host,'active','running',100+i,0,1000+i,0,(100+i,),0,tuple(q.expected_code_pins(unit,phase).items()),None,False,send_sigkill='no',kill_signal='15',code_phase=phase)
         outer=self
         class FakeReal:
             def __init__(self): self._admitted=None
@@ -479,7 +480,7 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(self.action('activate')['status'],'OS_ACTIVE');self.assertIn(('start',u),self.effects)
         self.assertEqual(self.action('status')['status'],'ACTUAL_FIXED_ROLES_RUNNING')
         with mock.patch.object(e,'cloud_rpc',return_value={'status':'RECOVERY_CYCLE_STARTED'}): self.action('requiesce')
-        self.rows[u]=replace(self.rows[u],code_phase='SOURCE',code_hashes=tuple(q.CODE_PINS[u].items()))
+        self.rows[u]=replace(self.rows[u],code_phase='SOURCE',code_hashes=tuple(q.expected_code_pins(u,'SOURCE').items()))
         self.assertEqual(self.action('resume')['status'],'OS_ACTIVE');self.assertTrue(self.rows[u].stopped())
         self.assertEqual(self.effects.count(('start',u)),1);self.assertEqual(self.action('status')['status'],'ACTUAL_FIXED_ROLES_EXPECTED_STATE')
 
@@ -653,13 +654,15 @@ class EntryTests(unittest.TestCase):
                 def change(backend,u,h):
                     old(backend,u,h)
                     if u=='r16-app.service':outer.rows[u]=replace(outer.rows[u],**drift)
-                with mock.patch.object(self.Fake,'unfence',change):value=self.action('resume')
+                clock=[0.0]
+                with mock.patch.object(self.Fake,'unfence',change),mock.patch.object(e.time,'monotonic',side_effect=lambda:clock[0]),mock.patch.object(e.time,'sleep',side_effect=lambda dt:clock.__setitem__(0,clock[0]+dt)):value=self.action('resume')
                 self.assertEqual(value['status'],'RESTORE_PARTIAL');self.assertIn('r16-app.service',value['unconfirmedUnits'])
                 self.assertNotIn(('start','r16-app.service'),self.effects)
                 # Each subcase is a separate fresh synthetic transaction.
                 (self.state/'os-journal.json').unlink();self.effects.clear()
                 for i,(u,host) in enumerate(q.ROLE_HOST.items()):
-                    self.rows[u]=q.Snapshot(u,host,'active','running',100+i,0,1000+i,0,(100+i,),0,tuple(q.CODE_PINS[u].items()),None,False,send_sigkill='no',kill_signal='15',code_phase='SOURCE' if u in q.ROLE_SELECTORS else 'STATIC')
+                    phase='SOURCE' if u in q.ROLE_SELECTORS else 'STATIC'
+                    self.rows[u]=q.Snapshot(u,host,'active','running',100+i,0,1000+i,0,(100+i,),0,tuple(q.expected_code_pins(u,phase).items()),None,False,send_sigkill='no',kill_signal='15',code_phase=phase)
 
     def test_stop_waits_for_final_job_settlement_without_repeating_stop(self):
         u=q.STOP_ORDER[0];clock=[0.0];controller=q.Controller;outer=self

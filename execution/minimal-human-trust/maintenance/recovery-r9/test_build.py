@@ -8,7 +8,7 @@ def load(name,path):
 b=load('r9_builder_tested',HERE/'build.py');p=load('r9_prior_tested',HERE/'prior-verifier.py')
 class BuildTests(unittest.TestCase):
  def entry(self):
-  raw=b.transform('os_entry.py',(HERE.parent/'release-r6/os_entry.py').read_bytes());m=types.ModuleType('r9_generated_entry_tested');m.__file__='<isolated-r9-entry>';exec(compile(raw,m.__file__,'exec'),m.__dict__);return m
+  raw=b.transform('os_entry.py',b.reviewed_override_path('os_entry.py').read_bytes());m=types.ModuleType('r9_generated_entry_tested');m.__file__='<isolated-r9-entry>';exec(compile(raw,m.__file__,'exec'),m.__dict__);return m
  def test_new_namespace_keeps_original_release_and_no_old_adoption(self):
   q=b.transform('quiescence.py',(HERE.parent/'release-r6/quiescence.py').read_bytes()).decode()
   self.assertIn("REMOTE_HELPER = '/usr/libexec/r16-maintenance-os-r9'",q);self.assertIn("DROPIN_NAME = '94-r16-maintenance-recovery-r9.conf'",q)
@@ -17,7 +17,39 @@ class BuildTests(unittest.TestCase):
  def test_arbitrary_nonruntime_payload_is_byte_preserved(self):
   raw=b'\x00frozen package bytes\xff';self.assertEqual(b.transform('metadata.bin',raw),raw)
  def test_reviewed_source_overrides_exact_hashes(self):
-  for name,pin in b.OVERRIDE_PINS.items():self.assertEqual(hashlib.sha256((HERE.parent/'release-r6'/name).read_bytes()).hexdigest(),pin)
+  for name,pin in b.OVERRIDE_PINS.items():self.assertEqual(hashlib.sha256(b.reviewed_override_path(name).read_bytes()).hexdigest(),pin)
+ def test_r9_historical_entry_matches_exact_git_1697_pin(self):
+  self.assertEqual(b.reviewed_override_path('os_entry.py'),HERE/'fixtures/os-entry-at-1697b82.txt')
+  self.assertEqual(hashlib.sha256(b.reviewed_override_path('os_entry.py').read_bytes()).hexdigest(),'d6e8f1262910adf60688770bc7794a14aeb56c8075e75020e74f400fe098d41b')
+  self.assertEqual(b.reviewed_override_path('quiescence.py'),HERE.parent/'release-r6/quiescence.py')
+ def test_r9_real_build_and_entry_tests_do_not_read_mutable_future_entry(self):
+  # Exercise the production build override selection as well as generated AST.
+  # Abort before output: all frozen material is an inert read-only dictionary.
+  mutable=HERE.parent/'release-r6/os_entry.py';old_read_bytes=Path.read_bytes
+  def guarded(path):
+   if path==mutable:raise AssertionError('MUTABLE_FUTURE_ENTRY_READ')
+   return old_read_bytes(path)
+  with patch.object(Path,'read_bytes',guarded):
+   e=self.entry();self.assertEqual(str(e.ROOT),'/usr/lib/r16-maintenance/recovery-r9')
+  frozen={'files':{},'payloadFiles':{}};seen=[];original_read=b.read
+  class AfterOverrides(BaseException):pass
+  def read(path,*args,**kw):
+   path=Path(path);seen.append(path)
+   if path==b.FROZEN/'SOURCE_FREEZE.json':return b.canon(frozen),0o644
+   if path==mutable:raise AssertionError('MUTABLE_FUTURE_ENTRY_READ')
+   return original_read(path,*args,**kw)
+  frozen['files']={'isolated.mjs':'a'*64};frozen['payloadFiles']={str(i):'b'*64 for i in range(12600)}
+  # Preserve all production cardinality guards: fake 14 source rows resolve
+  # only in the read adapter and matching test hashes, never on production IO.
+  raw=b'isolated source';frozen['files']={str(i)+'.mjs':b.sha(raw) for i in range(14)}
+  def source_read(path,*args,**kw):
+   path=Path(path)
+   if path.parent==b.FROZEN and path.name.endswith('.mjs'):seen.append(path);return raw,0o644
+   return read(path,*args,**kw)
+  with tempfile.TemporaryDirectory() as tmp,patch.object(b,'FROZEN_SHA',b.sha(b.canon(frozen))),patch.object(b,'read',side_effect=source_read),patch.object(b,'transform',side_effect=AfterOverrides):
+   with self.assertRaises(AfterOverrides):b.build(Path(tmp)/'never-emitted')
+   self.assertFalse((Path(tmp)/'never-emitted').exists())
+  self.assertIn(b.reviewed_override_path('os_entry.py'),seen);self.assertNotIn(mutable,seen)
  def test_missing_or_expired_native_window_cannot_even_verify_or_copy(self):
   for accepted,now in ((None,1000),(1000,300999+1),(1001,1000)):
    e=self.entry()
