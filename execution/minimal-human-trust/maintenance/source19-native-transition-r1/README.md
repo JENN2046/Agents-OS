@@ -5,12 +5,29 @@ R17, change Owner/Grant, settle UNKNOWN, or establish a business STOP.
 
 ## Present boundary
 
-The source driver, publication protocol and isolated tests exist. The new code
-is not installed. A real protected foreground admission entry, a complete root
-Native checkpoint/OS backend, and authenticated two-host transport are not
-provided by this directory. The production path therefore remains blocked.
-Passing source tests or supplying a callback with `environment='PRODUCTION'`
-does not constitute native administrator admission or an OS proof.
+The source driver, fixed Linux adapter, protected readonly entry, authenticated
+transport, full Native crash collector and public-signature/revision readers
+exist and have isolated tests. None is installed. The only admitted source
+capsule mode is `READONLY_PREFLIGHT_SOURCE`; foreground maintenance approval,
+mutating RPC, credential-backed service and Node execution all hard-refuse.
+No Native execution candidate or production acceptance is claimed.
+
+`build_entry.py` creates a separate small code-only bundle with exact root
+code paths/content/modes and an independent external capsule pin. It does not
+copy the 149 MB Native payload, install helper/sudoers/unit policy, allocate
+revisions, read production keys or change any service. `verify_entry.py` checks
+the complete tree, every exact Git HEAD source byte, fixed Source19/Native085e
+identities, null revision request and non-execution admission/receipt semantics
+without importing the builder or runtime. Actual root code admission remains a
+separate host administrator decision.
+
+Two concrete conditions still block an execution capsule: actual two-host root
+readonly facts/public historical operations have not been collected, and recovery
+after target activation needs a distinct current-checkpoint contract. The
+original crash checkpoint B is immutable historical evidence. A legitimately
+started new Native can change locks or SQLite bytes; B must not be relabelled
+as its fresh current stopped checkpoint. Existing source signing/receiver gates
+remain strict until that contract is separately implemented and verified.
 
 `stop_transition.py` has no production CLI. Running it directly refuses with
 exit 78. It cannot be used as an unprotected privileged helper. The admitted
@@ -108,6 +125,10 @@ Portable tests run with Node's test runner and Python directly:
 node --test maintenance/source19-native-transition-r1/test_*.mjs
 python3 -I -B maintenance/source19-native-transition-r1/test_stop_transition.py
 python3 -I -B maintenance/source19-native-transition-r1/test_build.py
+python3 -I -B maintenance/source19-native-transition-r1/test_linux_backend.py
+python3 -I -B maintenance/source19-native-transition-r1/test_native_checkpoint.py
+python3 -I -B maintenance/source19-native-transition-r1/entry/test_entry.py
+node --test maintenance/source19-native-transition-r1/entry/test_*.mjs
 ```
 
 `test_real_process.py` is separately opt-in through

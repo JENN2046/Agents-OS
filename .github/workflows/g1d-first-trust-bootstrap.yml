@@ -86,6 +86,11 @@ jobs:
           node --test execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_*.mjs
           python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_stop_transition.py
           python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_build.py
+          node --test execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_*.mjs
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_native_checkpoint.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_linux_backend.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_entry.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_orchestration.py
       - name: Protected publisher unit syntax
         run: |
           # CI Node resides in hostedtoolcache; the real unit remains pinned

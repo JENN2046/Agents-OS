@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/python3 -I -B /usr/lib/r16-maintenance/source19-native-transition-r1/runtime/maintenance/source19-native-transition-r1/entry/bootstrap.py rpc "$@"

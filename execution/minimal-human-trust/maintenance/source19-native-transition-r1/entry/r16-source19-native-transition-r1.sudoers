@@ -1,0 +1,2 @@
+# Template only; not installed by this source task. The helper rejects all effects.
+ubuntu ALL=(root) NOPASSWD: /usr/libexec/r16-source19-native-transition-r1-rpc preflight *

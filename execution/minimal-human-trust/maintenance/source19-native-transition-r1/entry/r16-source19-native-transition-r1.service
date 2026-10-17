@@ -1,0 +1,14 @@
+[Unit]
+Description=Disabled source-only Source19 transition service (no current-C contract)
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I -B /usr/lib/r16-maintenance/source19-native-transition-r1/runtime/maintenance/source19-native-transition-r1/entry/bootstrap.py service
+UMask=0077
+Restart=no
+SendSIGKILL=no
+KillSignal=SIGTERM
+LimitCORE=0
+NoNewPrivileges=yes
+PrivateTmp=yes
