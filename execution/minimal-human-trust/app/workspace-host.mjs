@@ -47,7 +47,7 @@ export function createWorkspaceHost({store,directory,grant,release,versions,sign
  check(Buffer.isBuffer(channelCapability)&&channelCapability.length>=32&&typeof exchange==='function');
  const capabilityHash=createHash('sha256').update(channelCapability).digest();
  const contexts=new WeakMap(),entries=new Map(),rotations=new Map(),authorized=new Map(),inflight=new Map();
- let closed=false,draining=false,timer=null,tickRunning=false,tickPromise=null,closePromise=null,bridgeFreshUntil=0,bridgeRefresh=null,appFreshUntil=0,stoppedCleanups=0,liveLifecycle=0;
+ let closed=false,draining=false,timer=null,tickRunning=false,tickPromise=null,closePromise=null,shutdownPromise=null,bridgeFreshUntil=0,bridgeRefresh=null,appFreshUntil=0,stoppedCleanups=0,liveLifecycle=0;
  const liveWork=new Set();
  async function tracked(work){liveLifecycle++;let running;try{running=Promise.resolve(work());liveWork.add(running);return await running;}finally{if(running)liveWork.delete(running);liveLifecycle--;}}
  const current=()=>{check(!closed&&!draining,'RECOVERY_UNRESOLVED');check(!store.snapshot().revoked&&!store.snapshot().businessStop,'GRANT_REVOKED');verifyRelease(release,releaseKey,{versions,actions:g.actions,now:now()});};
@@ -363,14 +363,40 @@ export function createWorkspaceHost({store,directory,grant,release,versions,sign
   const actual=createHash('sha256').update(value).digest();check(timingSafeEqual(capabilityHash,actual),'AUTHORITY_REJECTED');
   const context=Object.freeze({});contexts.set(context,{channel:g.channel,hash:digest(req.body?.params?.arguments)});return context;
  }
- return Object.freeze({executor,
+ function stopAdmission(){draining=true;authorized.clear();if(timer){clearInterval(timer);timer=null;}}
+ async function drainWork(){
+  // A lifecycle call can create a transport flight after its first await. Keep
+  // draining until all enclosing calls and their nested work have settled.
+  while(true){
+   const pending=[...(tickRunning&&tickPromise?[tickPromise]:[]),...liveWork,...rotations.values(),...[...inflight.values()].map(x=>x.promise)];
+   if(!pending.length)return;
+   await Promise.allSettled(pending);
+  }
+ }
+ function shutdown(){
+  if(shutdownPromise)return shutdownPromise;
+  stopAdmission();
+  shutdownPromise=(async()=>{
+   await Promise.allSettled(closePromise?[closePromise]:[]);
+   await drainWork();
+   if(closed)return;
+   let failure;
+   try{await executor.close();}catch(error){failure=error;}
+   // OS shutdown is not business retirement. Preserve leases, freshness,
+   // UNKNOWN records and signed history; only release lifetime writer locks.
+   for(const e of entries.values())try{e.store.close();}catch(error){failure??=error;}
+   closed=true;try{store.close();}catch(error){failure??=error;}
+   if(failure)throw failure;
+  })();return shutdownPromise;
+ }
+ return Object.freeze({executor,shutdown,
   suspendBusiness({stopEpoch}){return establishBusinessStop(store,stopEpoch);},
   businessStopEvidence({revision,reviewDigest}){
    const participantStates=store.snapshot().projects.map(row=>entry(row.project).participant.snapshot());
    return signRuntimeBusinessStop({store,role:'app',signingKey,grant,release,revision,reviewDigest,
     busy:liveLifecycle+inflight.size+rotations.size+(tickRunning?1:0)+stoppedCleanups+(draining?1:0),participantStates,now:now()});
   },
-  async reconcileStopped(){check(store.snapshot().businessStop,'STOP_NOT_ESTABLISHED');stoppedCleanups++;try{return await Promise.all(store.snapshot().projects.map(row=>reconcile(entry(row.project))));}finally{stoppedCleanups--;}} ,
+  reconcileStopped(){check(!closed&&!draining,'APP_SHUTDOWN');return tracked(async()=>{check(store.snapshot().businessStop,'STOP_NOT_ESTABLISHED');stoppedCleanups++;try{return await Promise.all(store.snapshot().projects.map(row=>reconcile(entry(row.project))));}finally{stoppedCleanups--;}});},
   runtimeDependencies:{projectForgeCrownExecutor:executor,resolveProjectForgeCrownContext,
   projectForgeCrownDiscovery:Object.freeze({logical_name:'ProjectForge',tool:'vcp_project_forge',channel:'crown',capability_status:'not_evaluated',source:'approved_host_manifest'})},
   tick(){if(tickRunning||closed||draining)return Promise.resolve();tickRunning=true;
@@ -395,9 +421,9 @@ export function createWorkspaceHost({store,directory,grant,release,versions,sign
   start(){check(!timer&&!closed&&!draining);timer=setInterval(()=>this.tick().catch(()=>{}),15000);timer.unref();},
   close(){
    if(closePromise)return closePromise;
-   draining=true;if(timer)clearInterval(timer);
+   check(!shutdownPromise&&!closed,'APP_SHUTDOWN');stopAdmission();
    closePromise=(async()=>{
-    await Promise.allSettled([tickPromise].filter(Boolean));
+    await drainWork();
     await Promise.allSettled([...liveWork]);
     await Promise.allSettled([...rotations.values()]);
     await Promise.allSettled([...inflight.values()].map(x=>x.promise));

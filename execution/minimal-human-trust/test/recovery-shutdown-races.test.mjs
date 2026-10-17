@@ -1,3 +1,8 @@
+import './fixtures/recovery-r11-regression.mjs';
+import './fixtures/recovery-r10-regression.mjs';
+import './r15-app-shutdown-backport.test.mjs';
+import './maintenance-transaction-recovery.test.mjs';
+import './maintenance-os-regression.test.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -119,3 +124,17 @@ test('Bridge close waits for entire WorkspaceControl route to archive after remo
   assert.equal(reopened.snapshot().routes.find(r=>r.id===route.body.id).status,'KNOWN');
  }finally{reopened.close();}
 });
+
+import "./app-os-shutdown.test.mjs";
+
+import "./fixtures/release-r6-regression.mjs";
+
+import "./fixtures/first-stop-r7-regression.mjs";
+
+import "./fixtures/first-stop-r8-regression.mjs";
+
+import "./fixtures/empty-temp-quarantine-r1-regression.mjs";
+
+import "./fixtures/recovery-r9-regression.mjs";
+
+import './fixtures/recovery-r12-regression.mjs';

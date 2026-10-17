@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {createRequire} from 'node:module';
+import {spawnSync} from 'node:child_process';
 import {generateKeyPairSync,randomUUID} from 'node:crypto';
 import {ProtectedStore,createIssuer,issuerInitialState,participantInitialState,createParticipant,signed,verified,digest,exportPublicKey,ACTIONS} from '../src/lease-core.mjs';
 import {createWorkspaceDispatcher,dispatcherInitialState} from '../host/workspace-dispatcher.mjs';
@@ -27,8 +28,9 @@ test('real Native/SQLite grant composition preserves result and history, refuses
   const release=signed({schema:'r16.release.v1',id:'release',issuedAt:time,notAfter:time+86400000,formats:['r16.workspace.v1'],versions,actions:ACTIONS.slice(),permissionVersion:1},releaseKey);
   const ds=makeStore('dispatcher',dispatcherInitialState());
   let delayFresh=0,denyFresh=false;const issuerTransport={...issuer,fresh:async args=>{if(denyFresh)throw Error('DISCONNECTED');time+=delayFresh;delayFresh=0;return issuer.fresh(args);}};
-  let loseSignedReadReply=false,nativeReadCalls=0;
+  let loseSignedReadReply=false,nativeReadCalls=0,engineCreations=0;
   const fixtureNative={...native,createWorkspaceCrownPort(options){
+    engineCreations++;
     const port=native.createWorkspaceCrownPort(options);
     return {...port,handleCall:async args=>{
       const payload=JSON.parse(Buffer.from(args.proof.payload_b64,'base64').toString('utf8'));
@@ -113,6 +115,65 @@ test('real Native/SQLite grant composition preserves result and history, refuses
     const nativeProjectFile=path.join(ds.dir,'project-'+project.id,'state.json');
     const nativeBefore=JSON.parse(fs.readFileSync(nativeProjectFile,'utf8')).data;
     assert.equal(nativeBefore.operations.find(x=>x.id===readPayload.request_id).status,'UNKNOWN');
+    // A dropped transport must recover even while Owner still requests normal
+    // connection and a real prior read has no durable result. The replacement
+    // transport is cleanup-only; it must not create or rebind an execution port.
+    const unknownBefore=structuredClone(nativeBefore.operations.find(x=>x.id===readPayload.request_id));
+    const controlsBefore=structuredClone(ds.snapshot().controls);
+    const allocationsBefore=structuredClone(ds.snapshot().pending);
+    const enginesBefore=engineCreations;
+    assert.deepEqual(d.admissionStatus(),{revoked:false,version:1,admissionStopped:false});
+    d.noteOwnerStatus({connectRequested:true,revoked:false,grantVersion:1});
+    d.connectionClosed(2);
+    const reconnectFresh=await d.refresh(true,{allowRevoked:true});
+    assert.equal(reconnectFresh.status,'CLEANUP_ONLY');
+    assert.equal(reconnectFresh.verifiedLiveFresh,true);
+    assert.equal(d.admissionStatus().admissionStopped,true);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(ds.dir,'state.json'),'utf8')).data.recoveryOnly,true);
+    const recoveryRemote={...remote,generation:2,origin:identity.originId};
+    const closedConnection=structuredClone(ds.snapshot().connection);
+    for(const invalid of [
+      {...recoveryRemote,peerId:'foreign-native'},
+      {...recoveryRemote,grantId:'foreign-grant'},
+      {...recoveryRemote,channel:'foreign-channel'},
+      {...recoveryRemote,generation:3},
+    ]){
+      await assert.rejects(d.prepareConnection(invalid),{code:'CONNECTION_STALE'});
+      assert.deepEqual(ds.snapshot().connection,closedConnection);
+    }
+    const recoveryConnection=await d.prepareConnection(recoveryRemote);
+    assert.equal(recoveryConnection.generation,3);
+    assert.equal(recoveryConnection.previousGeneration,2);
+    for(const [invalidIdentity,code] of [
+      [{...identity,logicalName:'OtherTool'},'INVALID_REQUEST'],
+      [{...identity,originKey:'distributed:other:ProjectForge'},'AUTHORITY_REJECTED'],
+    ]){
+      assert.throws(()=>d.connectedIdentity(invalidIdentity,3),{code});
+      assert.equal(ds.snapshot().connection.origin,null);
+      assert.equal(engineCreations,enginesBefore);
+    }
+    // The old process/socket fence still applies in recovery mode.
+    await assert.rejects(d.prepareConnection(recoveryRemote),{code:'RECOVERY_REQUIRED'});
+    const recoveryIdentity={...identity,originId:'fixture-recovered',originKey:'distributed:fixture-recovered:ProjectForge'};
+    assert.deepEqual(d.connectedIdentity(recoveryIdentity,3),{cleanupOnly:true});
+    assert.equal(engineCreations,enginesBefore);
+    assert.deepEqual(ds.snapshot().controls,controlsBefore);
+    assert.deepEqual(ds.snapshot().pending,allocationsBefore);
+    assert.deepEqual(JSON.parse(fs.readFileSync(nativeProjectFile,'utf8')).data.operations.find(x=>x.id===readPayload.request_id),unknownBefore);
+    assert.equal(nativeReadCalls,1);
+    await assert.rejects(call(payload({action:'get_project',project_id:project.id})),{code:'GRANT_REVOKED'});
+    await assert.rejects(control('describe',{identity:recoveryIdentity}),{code:'GRANT_REVOKED'});
+    for(const name of ['prepare','activate','allocate','list_workspaces','list_projects'])
+      await assert.rejects(control(name,{}),{code:'GRANT_REVOKED'});
+    // Fresh Owner status and repeated fresh checks cannot reopen new business
+    // while the old UNKNOWN is unresolved; the exact cleanup route stays live.
+    d.setConnectionRequested(true);
+    assert.equal((await d.refresh(true,{allowRevoked:true})).status,'CLEANUP_ONLY');
+    assert.equal(d.admissionStatus().admissionStopped,true);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(ds.dir,'state.json'),'utf8')).data.recoveryOnly,true);
+    await assert.rejects(call(payload({action:'get_project',project_id:project.id})),{code:'GRANT_REVOKED'});
+    assert.deepEqual(await control('reconcile',{projectId:project.id,operationId:p.request_id}),first);
+    assert.equal(engineCreations,enginesBefore);
     const suspend=d.suspendBusiness();
     assert.deepEqual(suspend,{businessStopped:true});
     assert.deepEqual(d.admissionStatus(),{revoked:false,version:1,admissionStopped:true});
@@ -146,10 +207,90 @@ test('real Native/SQLite grant composition preserves result and history, refuses
     await assert.rejects(call(payload({action:'get_project',project_id:project.id})),{code:'GRANT_REVOKED'});
     assert.deepEqual(await control('reconcile',{projectId:project.id,operationId:p.request_id}),first);
     time+=30001;await assert.rejects(d.refresh(true,{allowRevoked:true}),/DISCONNECTED/);
-    await d.close({retainTransport:true});assert.equal(ds.closed,false);d.connectionClosed(2);assert.equal(ds.snapshot().connection.closed,true);d.releaseStores();assert.equal(ds.closed,true);stopped=true;
+    await d.close({retainTransport:true});assert.equal(ds.closed,false);d.connectionClosed(3);assert.equal(ds.snapshot().connection.closed,true);d.releaseStores();assert.equal(ds.closed,true);stopped=true;
     assert.equal(fs.existsSync(path.join(temp,'one.txt')),false);
   }finally{
     if(!stopped){try{await d.close();}catch{}}
     await native.cleanup();for(const s of stores){try{s.close();}catch{}}fs.rmSync(temp,{recursive:true,force:true});
+  }
+});
+
+test('recovery admission survives an actual process exit without reopening business or losing old evidence',()=>{
+  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'r16-recovery-restart-'));fs.chmodSync(temp,0o700);
+  const workspaceRoot=path.join(temp,'projects');fs.mkdirSync(workspaceRoot,{mode:0o700});
+  const stat=fs.statSync(workspaceRoot),workspace={id:'ws-restart',root:workspaceRoot,dev:stat.dev,ino:stat.ino};
+  const key=()=>generateKeyPairSync('ed25519').privateKey;
+  const issuerKey=key(),releaseKey=key(),peerKeys={app:key(),bridge:key(),native:key()};
+  const peers=Object.fromEntries(Object.entries(peerKeys).map(([role,k])=>[role,{id:'peer-'+role,publicKey:exportPublicKey(k)}]));
+  const time=Date.now(),now=()=>time,versions={app:digest('app'),bridge:digest('bridge'),native:digest('native')};
+  const initial=dispatcherInitialState();
+  initial.version=1;
+  initial.projects=['restart-project'];
+  initial.controls=[{id:'old-control',hash:digest('old-control'),status:'UNKNOWN'}];
+  initial.connection={generation:1,origin:'old-origin',closed:true,pid:1,start:'prior-process'};
+  const dispatcherDirectory=path.join(temp,'dispatcher'),issuerDirectory=path.join(temp,'issuer');
+  let issuerStore,dispatcherStore,participantStore;
+  try{
+    issuerStore=new ProtectedStore({directory:issuerDirectory,create:true,initial:issuerInitialState(),now});
+    const issuer=createIssuer({store:issuerStore,signingKey:issuerKey,releaseKey:exportPublicKey(releaseKey),authorizeOwner:()=>true,resolveProject:(_w,p)=>p});
+    const grant=issuer.createGrant({approval:{fixture:true},grant:{id:'restart-grant',workspace,actions:ACTIONS.slice(),channel:'main',peers}});
+    const release=signed({schema:'r16.release.v1',id:'restart-release',issuedAt:time,notAfter:time+86400000,formats:['r16.workspace.v1'],versions,actions:ACTIONS.slice(),permissionVersion:1},releaseKey);
+    dispatcherStore=new ProtectedStore({directory:dispatcherDirectory,create:true,initial,now});
+    participantStore=new ProtectedStore({directory:path.join(dispatcherDirectory,'project-restart-project'),create:true,initial:participantInitialState('native'),now});
+    const participant=createParticipant({store:participantStore,role:'native',signingKey:peerKeys.native,issuerKey:exportPublicKey(issuerKey),releaseKey:exportPublicKey(releaseKey),resolveProject:(_w,p)=>p});
+    participant.pair({grant});
+    const original={id:'lost-read',hash:digest('original-lost-read'),projectId:'restart-project',generation:1,status:'UNKNOWN',outcome:null,resultHash:null};
+    participantStore.transact(s=>{s.operations.push(original);});
+    participantStore.close();dispatcherStore.close();issuerStore.close();
+    const fixture={temp,time,grant,release,versions,original,
+      issuerPrivate:issuerKey.export({format:'der',type:'pkcs8'}).toString('base64'),
+      nativePrivate:peerKeys.native.export({format:'der',type:'pkcs8'}).toString('base64'),
+      appPrivate:peerKeys.app.export({format:'der',type:'pkcs8'}).toString('base64'),
+      issuerPublic:exportPublicKey(issuerKey),releasePublic:exportPublicKey(releaseKey)};
+    const script=`
+      import assert from 'node:assert/strict';
+      import fs from 'node:fs';
+      import path from 'node:path';
+      import {createPrivateKey} from 'node:crypto';
+      import {createRequire} from 'node:module';
+      import {ProtectedStore,createIssuer,signed} from ${JSON.stringify(new URL('../src/lease-core.mjs',import.meta.url).href)};
+      import {createWorkspaceDispatcher} from ${JSON.stringify(new URL('../host/workspace-dispatcher.mjs',import.meta.url).href)};
+      const f=JSON.parse(fs.readFileSync(0,'utf8')),now=()=>f.time;
+      const key=v=>createPrivateKey({key:Buffer.from(v,'base64'),format:'der',type:'pkcs8'});
+      const issuerStore=new ProtectedStore({directory:path.join(f.temp,'issuer'),create:false,now});
+      const issuer=createIssuer({store:issuerStore,signingKey:key(f.issuerPrivate),releaseKey:f.releasePublic,authorizeOwner:()=>false,resolveProject:(_w,p)=>p});
+      const store=new ProtectedStore({directory:path.join(f.temp,'dispatcher'),create:false,now});
+      const C=createRequire(import.meta.url)('/home/jenn/AGENTS_OS_Workspace/projects/r16-vcpchat-pinned/VCPDistributedServer/Plugin/ProjectForge/crownAuthority.js');
+      let engineCreations=0;
+      const native={createWorkspaceCrownPort(){engineCreations++;throw Error('Recovery cannot create an execution engine');}};
+      const d=createWorkspaceDispatcher({store,directory:store.dir,native,crown:C,grant:f.grant,release:f.release,versions:f.versions,signingKey:key(f.nativePrivate),issuerKey:f.issuerPublic,releaseKey:f.releasePublic,issuer,workspaceAlias:'projects',databasePath:path.join(f.temp,'unused.sqlite'),now});
+      if(f.round===2){assert.equal(store.snapshot().recoveryOnly,true);assert.equal(d.admissionStatus().admissionStopped,true);}
+      d.noteOwnerStatus({connectRequested:true,revoked:false,grantVersion:1});d.setConnectionRequested(true);
+      assert.deepEqual(await d.refresh(true,{allowRevoked:true}),{status:'CLEANUP_ONLY',verifiedLiveFresh:true});
+      const connection=await d.prepareConnection({peerId:f.grant.body.peers.native.id,grantId:f.grant.body.id,channel:'main',generation:f.round,origin:f.round===1?'old-origin':'restart-origin-1'});
+      assert.equal(connection.generation,f.round+1);
+      const identity={logicalName:'ProjectForge',originKind:'distributed',originId:'restart-origin-'+f.round,originKey:'distributed:restart-origin-'+f.round+':ProjectForge'};
+      assert.deepEqual(d.connectedIdentity(identity,connection.generation),{cleanupOnly:true});
+      for(const operation of ['describe','prepare','activate','allocate','list_workspaces','list_projects']){
+        const proof=signed({schema:'r16.workspace-control.v1',id:'denied-'+operation,grantId:f.grant.body.id,channel:'main',operation,data:operation==='describe'?{identity}:{},issuedAt:f.time,expiresAt:f.time+30000},key(f.appPrivate));
+        await assert.rejects(d.handle({command:'WorkspaceControl',proof}),{code:'GRANT_REVOKED'});
+      }
+      assert.equal(engineCreations,0);assert.equal(store.snapshot().recoveryOnly,true);assert.equal(d.admissionStatus().admissionStopped,true);
+      assert.deepEqual(store.snapshot().controls,[{id:'old-control',hash:${JSON.stringify(digest('old-control'))},status:'UNKNOWN'}]);
+      const p=JSON.parse(fs.readFileSync(path.join(store.dir,'project-restart-project','state.json'),'utf8')).data;
+      assert.deepEqual(p.operations,[f.original]);
+      process.stdout.write(JSON.stringify({round:f.round,generation:connection.generation,recoveryOnly:true}));
+      // Exit without close/stop: the next child must recover the genuine dead
+      // process locks while retaining the unfinished connection and UNKNOWN.
+      process.exit(0);
+    `;
+    for(const round of [1,2]){
+      const child=spawnSync(process.execPath,['--input-type=module','-e',script],{input:JSON.stringify({...fixture,round}),encoding:'utf8',timeout:15000,maxBuffer:65536});
+      assert.equal(child.status,0,child.stderr);
+      assert.deepEqual(JSON.parse(child.stdout),{round,generation:round+1,recoveryOnly:true});
+    }
+  }finally{
+    for(const s of [participantStore,dispatcherStore,issuerStore]){try{s?.close();}catch{}}
+    fs.rmSync(temp,{recursive:true,force:true});
   }
 });
