@@ -48,9 +48,11 @@ class PreauthBoundaryTest(unittest.TestCase):
         (root / 'REVISION_INVENTORY.json').write_text(json.dumps({
             'acceptedRevision': 19, 'highestObservedSignedRevision': 19,
             'highestHistoricalReservedRevision': 20}))
-        names = ['app/tool', 'release/stage-installer-reviewed.mjs'] + [
+        names = ['app/tool', 'release/stage-installer-reviewed.mjs', 'authority/code-admission.py',
+                 'authority/identity-admission.py', 'packaging/minimal-human-trust-identity-admission'] + [
             'packaging/' + n for n in ['minimal-human-trust-proposal.service',
-            'minimal-human-trust-publisher.service', 'minimal-human-trust-approval.socket',
+            'minimal-human-trust-publisher.service', 'minimal-human-trust-identity-admission.service',
+            'org.jenn.r16.minimal-human-trust.identity-admission.policy', 'minimal-human-trust-approval.socket',
             'minimal-human-trust-approval@.service', 'minimal-human-trust-approval.desktop',
             'minimal-human-trust-first-cutover.desktop', 'org.jenn.r16.minimal-human-trust.policy']]
         inventory = {}
@@ -67,6 +69,13 @@ class PreauthBoundaryTest(unittest.TestCase):
         (meta / 'REVIEWED_SOURCE_FREEZE.json').write_text(json.dumps({
             'sourceCommit': head, 'files': {'release/stage-installer-reviewed.mjs':
                                           inventory['release/stage-installer-reviewed.mjs']['sha256']}}))
+        identity = {'/usr/lib/minimal-human-trust/authority/identity-admission.py': 'authority/identity-admission.py',
+            '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission': 'packaging/minimal-human-trust-identity-admission',
+            '/etc/systemd/system/minimal-human-trust-identity-admission.service': 'packaging/minimal-human-trust-identity-admission.service',
+            '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy': 'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy'}
+        (meta / 'IDENTITY_ADMISSION_FREEZE.json').write_text(json.dumps({
+            'schema': 'mht.identity-admission-code-freeze.v1', 'sourceCommit': head,
+            'files': {p: inventory[n]['sha256'] for p, n in identity.items()}}))
         for role in ['app', 'bridge', 'native']:
             (meta / (role + '-manifest.json')).write_text('{}')
         return package
@@ -78,6 +87,11 @@ class PreauthBoundaryTest(unittest.TestCase):
             prepared, blocked = m.generate(root, package)
             tool = next(r for r in prepared['targets'] if r['target'].endswith('/app/tool'))
             self.assertEqual(tool['mode'], '0755')
+            wrapper = next(r for r in prepared['targets'] if r['target'] ==
+                           '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission')
+            self.assertEqual(wrapper['mode'], '0755')
+            self.assertTrue(any(r['target'] == '/etc/minimal-human-trust/identity-admission-code.json'
+                                and r['mode'] == '0600' for r in prepared['targets']))
             self.assertFalse(prepared['executable'])
             self.assertFalse(prepared['signable'])
             self.assertIsNone(prepared['timeWindow']['expiresAt'])
@@ -86,6 +100,12 @@ class PreauthBoundaryTest(unittest.TestCase):
             self.assertFalse(blocked['unsignedVersionPlanning']['oldReserved20IsAuthority'])
             self.assertIn('OWNER_SWITCH', prepared['forbiddenEffects'])
             self.assertEqual(list(root.glob('G5*')), [])
+
+    def test_identity_freeze_must_match_actual_exact_source_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); package = self.complete_fixture(root)
+            (package / 'metadata/IDENTITY_ADMISSION_FREEZE.json').write_text('{}')
+            with self.assertRaisesRegex(ValueError, 'IDENTITY_CODE_FREEZE_DRIFT'): m.generate(root, package)
 
     def test_same_public_wrong_delivery_refuses_review_generation(self):
         with tempfile.TemporaryDirectory() as directory:

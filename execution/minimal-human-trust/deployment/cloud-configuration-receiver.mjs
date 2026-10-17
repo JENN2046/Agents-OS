@@ -58,28 +58,31 @@ export function runtimeStatus(run=spawnSync){
  const result=run('/usr/bin/systemctl',['show','r16-tunnel.service','--property=ActiveState','--property=ExecMainStatus'],{encoding:'utf8',timeout:5000,maxBuffer:1024,env:{PATH:'/usr/bin:/bin'},stdio:['ignore','pipe','ignore']});
  if(result.status!==0)return {credentialsInvalid:false};const fields=Object.fromEntries(result.stdout.trim().split('\n').map(x=>x.split('=')));return {credentialsInvalid:['failed','inactive'].includes(fields.ActiveState)&&fields.ExecMainStatus==='77'};
 }
-export function acceptConfiguration(envelope,{read=protectedRuntimeFile,write=atomic,ensureCredentials=ensureChannelCredentials,initializeLedgers=initializeCloudLedgers,reconcile=reconcileServices,status=runtimeStatus,now=Date.now(),openStore=()=>new ProtectedStore({directory:'/var/lib/r16-cloud/authority',create:false})}={}){
+export function acceptConfiguration(envelope,{read=protectedRuntimeFile,write=atomic,ensureCredentials=ensureChannelCredentials,initializeLedgers=initializeCloudLedgers,reconcile=reconcileServices,status=runtimeStatus,now=Date.now(),verify=verifyDelivery,beforeEffect=()=>{},openStore=()=>new ProtectedStore({directory:'/var/lib/r16-cloud/authority',create:false})}={}){
  const pin=JSON.parse(read('/etc/r16-cloud/issuer-pin.json')),store=openStore();
  try{
   const state=store.snapshot();check(state.kind==='r16.cloud-publication.v1','STATE_MISSING');
-  const b=verifyDelivery(envelope,pin,state.accepted,now);
+  // Only trusted in-process adapters may supply a narrower verifier. The fixed
+  // stdin CLI still uses verifyDelivery; no JSON field can select this hook.
+  const b=verify(envelope,pin,state.accepted,now);
   // Registered ledger is never recreated by a publisher. Its exclusive lock also
   // prevents a late older SSH invocation from rolling back a newer revision.
-  store.transact(s=>{s.accepted=envelope;});
+  beforeEffect('accepted');store.transact(s=>{s.accepted=envelope;});
   // A stop/revocation delivery changes public control only. It must not rotate
   // channel credentials or initialize execution ledgers while recovering.
   if(b.control.status==='ACTIVE'&&b.control.connectRequested){
-    initializeLedgers(b.publicConfig.grant.body.id);
-    ensureCredentials();
+    beforeEffect('initialize-ledgers');initializeLedgers(b.publicConfig.grant.body.id);
+    beforeEffect('credentials');ensureCredentials();
   }
-  write('/etc/r16-cloud/public-config.json',b.publicConfig);write('/etc/r16-cloud/authority-control.json',b.control);
+  beforeEffect('public-projection');write('/etc/r16-cloud/public-config.json',b.publicConfig);
+  beforeEffect('control-projection');write('/etc/r16-cloud/authority-control.json',b.control);
   // A persisted accepted envelope is an intent until both projections read
   // back exactly. Retrying that same envelope repairs a crash between writes.
   check(canonical(JSON.parse(read('/etc/r16-cloud/public-config.json')))===canonical(b.publicConfig)&&
     canonical(JSON.parse(read('/etc/r16-cloud/authority-control.json')))===canonical(b.control),
     'CONFIGURATION_READBACK_MISMATCH');
-  store.transact(s=>{s.projectedDigest=digest(envelope);});
-  if(b.control.status==='ACTIVE'&&b.control.connectRequested)reconcile(b);
+  beforeEffect('projected-digest');store.transact(s=>{s.projectedDigest=digest(envelope);});
+  if(b.control.status==='ACTIVE'&&b.control.connectRequested){beforeEffect('reconcile');reconcile(b);}
   return {status:'STORED',revision:b.revision,deliveryDigest:digest(envelope),...status()};
  }finally{store.close();}
 }

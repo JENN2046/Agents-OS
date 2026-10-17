@@ -58,6 +58,10 @@ class RebaseFixture(unittest.TestCase):
             self.overlay[name] = (product / name).read_bytes()
         self.overlay.update({'authority/fixture-importer.mjs': b"import {next} from '../migration/fixture-next.mjs';\n", 'migration/fixture-next.mjs': b"export {baseline as next} from '../authority/source-baseline.mjs';\n", 'authority/source-baseline.mjs': b'export const baseline=19;\n'})
         self.overlay.update({'human/new-helper.mjs': b'export const fixture=1;\n', 'release/publisher-bootstrap.mjs': b"export const REVIEWED_SOURCE_FILES=Object.freeze(['src/shared.mjs','release/publisher-bootstrap.mjs']);\n"})
+        for name in ('authority/identity-admission.py', 'packaging/minimal-human-trust-identity-admission',
+                     'packaging/minimal-human-trust-identity-admission.service',
+                     'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy'):
+            self.overlay[name] = (product / name).read_bytes()
         for name, raw in self.overlay.items():
             self.emit(self.repo / B.PRODUCT / name, raw, 0o755 if name == 'host/helper.py' else 0o644)
         self.emit(self.repo / 'unrelated.txt', b'not a production component\n')
@@ -116,12 +120,18 @@ class RebaseFixture(unittest.TestCase):
         self.assertEqual(self.metadata('ROLE_MANIFESTS.json')['artifacts']['bridge']['entry'], self.originals['bridge']['entry'])
         self.assertFalse((self.base / 'bridge-manifest.json').exists())
         self.assertEqual(self.metadata('PROVENANCE.json')['sourceRoleManifestPaths']['bridge'], str(self.bridge))
-        self.assertEqual(r['metadataFiles'], 13)
+        self.assertEqual(r['metadataFiles'], 14)
         self.assertIsNone(r['plannedConfigurationRevision'])
         self.assertIsNone(r['issuedAt'])
         self.assertFalse(r['reservedRevision20Authorized'])
         self.assertFalse(r['maySign'])
         self.assertEqual((self.output / 'payload/host/helper.py').stat().st_mode & 0o7777, 0o755)
+
+    def test_identity_freeze_independently_reconstructed_not_self_asserted(self):
+        self.build()
+        self.rewrite('IDENTITY_ADMISSION_FREEZE.json', lambda v: v['files'].update({
+            '/usr/lib/minimal-human-trust/authority/identity-admission.py': '0' * 64}))
+        with self.assertRaisesRegex(ValueError, 'IDENTITY_ADMISSION_FREEZE_DRIFT'): self.verify(False)
 
     def test_plan_only_does_not_create_output_and_does_not_open_root_marker(self):
         original = B.read

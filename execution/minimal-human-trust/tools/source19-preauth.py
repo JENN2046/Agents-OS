@@ -82,6 +82,8 @@ def generate(delivery, package):
                       'uid': 0, 'gid': 0, 'mode': mode, 'operation': 'EXCLUSIVE_CREATE_IF_ABSENT'})
 
     fixed = {
+        'minimal-human-trust-identity-admission.service': '/etc/systemd/system/minimal-human-trust-identity-admission.service',
+        'org.jenn.r16.minimal-human-trust.identity-admission.policy': '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy',
         'minimal-human-trust-proposal.service': '/etc/systemd/system/minimal-human-trust-proposal.service',
         'minimal-human-trust-publisher.service': '/etc/systemd/system/minimal-human-trust-publisher.service',
         'minimal-human-trust-approval.socket': '/etc/systemd/system/minimal-human-trust-approval.socket',
@@ -91,6 +93,7 @@ def generate(delivery, package):
         'org.jenn.r16.minimal-human-trust.policy': '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.policy',
     }
     fixed_targets = set(fixed.values()) | {
+        '/etc/minimal-human-trust/identity-admission-code.json',
         '/etc/minimal-human-trust/first-trust-code.json',
         '/etc/minimal-human-trust/stage-installer-reviewed.mjs',
     }
@@ -108,6 +111,23 @@ def generate(delivery, package):
         source = package / 'payload' / name
         demand(file_sha(source) == expected, 'FREEZE_SOURCE_DRIFT')
         bind(source, '/usr/lib/minimal-human-trust/' + name, '0644')
+    for name in ('authority/code-admission.py', 'authority/identity-admission.py',
+                 'packaging/minimal-human-trust-identity-admission'):
+        demand(name not in freeze['files'], 'DUPLICATE_ADMISSION_FREEZE_BINDING')
+        source = package / 'payload' / name
+        demand(file_sha(source) == inv['files'][name]['sha256'], 'ADMISSION_SOURCE_DRIFT')
+        bind(source, '/usr/lib/minimal-human-trust/' + name,
+             '0755' if name.startswith('packaging/') else '0644')
+    identity_paths = {
+        '/usr/lib/minimal-human-trust/authority/identity-admission.py': 'authority/identity-admission.py',
+        '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission': 'packaging/minimal-human-trust-identity-admission',
+        '/etc/systemd/system/minimal-human-trust-identity-admission.service': 'packaging/minimal-human-trust-identity-admission.service',
+        '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy': 'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy',
+    }
+    expected_identity = {'schema': 'mht.identity-admission-code-freeze.v1', 'sourceCommit': head,
+                        'files': {p: inv['files'][n]['sha256'] for p, n in sorted(identity_paths.items())}}
+    demand(read(meta / 'IDENTITY_ADMISSION_FREEZE.json') == expected_identity, 'IDENTITY_CODE_FREEZE_DRIFT')
+    bind(meta / 'IDENTITY_ADMISSION_FREEZE.json', '/etc/minimal-human-trust/identity-admission-code.json', '0600')
     bind(meta / 'REVIEWED_SOURCE_FREEZE.json', '/etc/minimal-human-trust/first-trust-code.json', '0600')
     bind(package / 'payload/release/stage-installer-reviewed.mjs',
          '/etc/minimal-human-trust/stage-installer-reviewed.mjs', '0644')
@@ -119,9 +139,11 @@ def generate(delivery, package):
     preparation = {
         'schema': 'r17.source19.protected-code-preparation-review.v1',
         'status': 'CONTENT_BOUND_UNSIGNED_REVIEW_ONLY_WAIT_REAL_NATIVE_ADMISSION',
-        'task': 'R17_SOURCE19_REBASE_AND_FIRST_TRUST_PREAUTH_R1', 'sourceHead': head,
+        'task': 'FIRST_TRUST_REAL_IDENTITY_ADMISSION_R1', 'sourceHead': head,
         'authority': False, 'signable': False, 'executable': False,
         'trustModel': 'TRUSTED_HOST_ADMIN', 'host': 'jenn-System-Product-Name',
+        'admissionAuthority': 'TRUSTED_HOST_ADMIN_CODE_ONLY', 'humanIdentityConfirmed': False,
+        'callerPhysicalLocationAttested': False,
         'sourceRevision': 19, 'sourcePublicConfigHash': PUBLIC,
         'sourceDeliveryHash': baseline['deliveryHash'],
         'packageInventorySha256': file_sha(meta / 'PAYLOAD_INVENTORY.json'),
@@ -134,7 +156,7 @@ def generate(delivery, package):
                        'requireFreshSourceAndFullInventoryBeforeAcceptance': True,
                        'driftPolicy': 'REFUSE_WITHOUT_RENUMBERING_REHASHING_OR_RENEWAL'},
         'preconditions': ['Independent exact-head candidate acceptance passes',
-                          'Actual foreground local administrator reviews exact complete target list and content root',
+                          'Actual foreground authenticated HostAdmin reviews exact complete target list and content root; this does not confirm Human identity',
                           'All destination files remain absent; conflict refuses without overwrite',
                           'No previous request, approval, publication or cutover use at destination'],
         'rollbackBeforeAnyUse': {'scope': 'Only files exclusively created by the new approved preparation transaction',
@@ -158,6 +180,7 @@ def generate(delivery, package):
         'sourceFreezeHash': preparation['sourceFreezeHash'],
         'protectedPreparationObjectHash': digest(preparation),
         'realKeysNotSubstituted': True, 'missingRealEvidence': [
+            'Fixed protected production 21/22 signer/backend entry and physical selector/recovery integration; protocol tests alone do not close V',
             'Human canonical public SPKI, fingerprint and holder/source/possession admission',
             'Independent Enrollment authority canonical public SPKI and actual root admission',
             'Sealed credential provenance and exact public/private identity match under native key ceremony',

@@ -24,6 +24,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Isolated identity test dependency
+        run: python3 -m pip install cryptography==46.0.5
       - name: Verify source syntax
         run: |
           find execution/minimal-human-trust -type f -name '*.mjs' -print0 |
@@ -58,6 +63,14 @@ jobs:
             execution/minimal-human-trust/test/human-proposal-publication.test.mjs \
             execution/minimal-human-trust/test/human-proposal-wiring.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
+      - name: Source19 admission and delivery boundary tests
+        run: |
+          node --test execution/minimal-human-trust/test/source19-delivery-transaction.test.mjs
+          python3 -I -B execution/minimal-human-trust/test/code-admission.test.py
+          python3 -I -B execution/minimal-human-trust/test/code-admission-launch.test.py
+          python3 -I -B execution/minimal-human-trust/test/identity-admission.test.py
+          python3 -I -B execution/minimal-human-trust/test/source19-preauth.test.py
+          python3 -I -B tools/source19-rebase/test_source19_rebase.py
       - name: Human broker Python regression
         run: |
           python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
@@ -68,7 +81,7 @@ jobs:
           # to the production /usr/bin/node, independently checked on Jenn.
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
-          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service; do
+          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service minimal-human-trust-identity-admission.service; do
             unit="execution/minimal-human-trust/packaging/$name"
             if test -x /usr/bin/node; then
               systemd-analyze verify "$unit"

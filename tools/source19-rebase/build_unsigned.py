@@ -305,6 +305,15 @@ def assemble(repo, base, public_json, head):
     scope = {'status': 'UNSIGNED_ISOLATED_NOT_ACTIVATED', 'sourceHead': head, 'sourcePublicConfigDigest': PUBLIC_DIGEST, 'sourceConfigurationRevision': 19, 'expectedSourceDeliveryHash': SOURCE_DELIVERY_HASH, 'sourceReleaseId': SOURCE_RELEASE, 'targetReleaseId': TARGET_RELEASE, 'targetVersions': versions, 'roleCounts': {r: len(m['files']) for r, m in roles.items()}, 'uniqueFiles': len(final), 'roleBindings': len(bindings), 'issuedAt': None, 'notAfter': None, 'plannedConfigurationRevision': None, 'reservedRevision20Authorized': False, 'maySign': False, 'mayInstall': False, 'mayActivate': False, 'mayChangeOwner': False, 'maySettleUnknown': False}
     provenance = {'schema': 'r17.source19.provenance.v1', 'sourceHead': head, 'sourcePublicConfigDigest': PUBLIC_DIGEST, 'sourceReleaseId': SOURCE_RELEASE, 'sourceVersions': VERSIONS, 'sourceRoleManifestPaths': paths, 'baseDirectory': str(base), 'sourceSignatureAuthority': 'EXACT_PUBLIC_DIGEST_VERIFIED_BY_EXTERNAL_G1', 'independentG1CryptoAndFresh19ReceiptRequired': True, 'liveConfigurationOrBusinessStateRead': False, 'rootMarkerRead': False, 'baseFiles': len(baseline), 'baseBytes': sum(len(v[0]) for v in baseline.values()), 'overlayFiles': {n: sha(v[0]) for n, v in sorted(overlay.items())}, 'sourceFreezeDigest': digest(freeze), 'repairGuards': guards, 'authority': False}
     metadata = {'UNSIGNED_CONTENT.json': {'schema': 'r17.source19.unsigned-content.v1', **scope}, 'ROLE_MANIFESTS.json': {'schema': 'r17.source19.role-manifests.v1', 'sourceHead': head, 'artifacts': roles}, 'SOURCE_ROLE_MANIFESTS.json': original, 'LOCAL_FILE_BINDINGS.json': {'schema': 'r17.source19.local-file-bindings.v1', 'sourceHead': head, 'files': bindings}, 'PROVENANCE.json': provenance, 'PAYLOAD_INVENTORY.json': {'schema': 'r17.source19.payload-inventory.v1', 'sourceHead': head, 'files': inventory, 'uniqueFiles': len(inventory), 'totalBytes': sum(v['bytes'] for v in inventory.values())}, 'REVIEWED_SOURCE_FREEZE.json': freeze, 'REPAIR_GUARDS.json': guards}
+    identity_sources = {
+        '/usr/lib/minimal-human-trust/authority/identity-admission.py': 'authority/identity-admission.py',
+        '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission': 'packaging/minimal-human-trust-identity-admission',
+        '/etc/systemd/system/minimal-human-trust-identity-admission.service': 'packaging/minimal-human-trust-identity-admission.service',
+        '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy': 'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy',
+    }
+    need(all(n in payload for n in identity_sources.values()), 'IDENTITY_ADMISSION_SOURCE_REQUIRED')
+    metadata['IDENTITY_ADMISSION_FREEZE.json'] = {'schema': 'mht.identity-admission-code-freeze.v1',
+        'sourceCommit': head, 'files': {target: sha(payload[n][0]) for target, n in sorted(identity_sources.items())}}
     for role, manifest in roles.items():
         metadata[role + '-manifest.json'] = manifest
     raw_metadata = {n: (canonical(v) + '\n').encode() for n, v in metadata.items()}

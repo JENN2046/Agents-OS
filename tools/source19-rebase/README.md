@@ -85,6 +85,7 @@ remain required; byte preservation does not prove all runtime behavior.
 | `PROVENANCE.json` | `r17.source19.provenance.v1` |
 | `PAYLOAD_INVENTORY.json` | `r17.source19.payload-inventory.v1`; `sourceHead`, `files`, counts/bytes |
 | `REVIEWED_SOURCE_FREEZE.json` | `mht.first-trust-code-freeze.v1`; current publisher's required list |
+| `IDENTITY_ADMISSION_FREEZE.json` | `mht.identity-admission-code-freeze.v1`; exact identity helper/wrapper/unit/policy |
 | `REPAIR_GUARDS.json` | `r17.source19.repair-preservation.v1` |
 | `SOURCE_PUBLIC_CONFIG.json` | Exact supplied public JSON bytes |
 | `SOURCE_ROLE_MANIFESTS.json` | Original App/Bridge/Native manifests |
