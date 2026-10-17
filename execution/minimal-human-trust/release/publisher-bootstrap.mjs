@@ -33,7 +33,7 @@ export const REVIEWED_SOURCE_FILES=Object.freeze([
  'packaging/minimal-human-trust-first-cutover.desktop',
  'packaging/org.jenn.r16.minimal-human-trust.policy',
  'packaging/minimal-human-trust-publisher.service',
- 'authority/stage-authorization.mjs',
+ 'authority/stage-authorization.mjs','authority/source-baseline.mjs',
  'authority/recovery-handoff.mjs',
  'authority/first-cutover-authorization.mjs',
  'release/staged-r17-handoff-admission.mjs',

@@ -2,6 +2,7 @@
 // root-only, single-use publisher. No CLI, no credential loading, no install,
 // no Owner shutdown, no business activation and no production side effects.
 import {createHash} from 'node:crypto';
+import {inspectSourceRelease} from '../authority/source-baseline.mjs';
 import {canonical,digest,publicKey,verified,verifyRelease,
   signed,exportPublicKey,ACTIONS,ROLES} from '../src/lease-core.mjs';
 import {validateRuntimeManifest,runtimeVersion,
@@ -23,8 +24,7 @@ export function deriveExactR17Release({
   sourceRelease,reviewManifest,reviewedManifestHash,now=Date.now(),
   readFile=protectedRuntimeFile
 }){
-  need(sourceRelease?.schema==='r16.release.v1'&&
-    sourceRelease.id==='r16-daily-20261012-r15','FIRST_TRUST_OLD_RELEASE');
+  inspectSourceRelease(sourceRelease);
   const m=reviewManifest;
   need(m?.schema==='r16.reviewed-installation.v1'&&
     m.releaseId==='r16-daily-20261012-r17'&&
@@ -86,8 +86,9 @@ export function deriveExactR17Release({
 export function signFirstTrustRecoveryArtifacts({
   firstTrust,existingR15Evidence,verifyCrownCall,
   releaseSigningKey,enrollmentSigningKey,
-  readFile=protectedRuntimeFile,now=Date.now(),
+  readFile=protectedRuntimeFile,now=Date.now(),guard=()=>{},
 }){
+  need(typeof guard==='function','FIRST_TRUST_SIGN_GUARD_REQUIRED');
   const admission=inspectFirstTrustRecoveryPublication({
     firstTrust,existingR15Evidence,verifyCrownCall});
   need(releaseSigningKey?.type==='private'&&enrollmentSigningKey?.type==='private'&&
@@ -100,6 +101,7 @@ export function signFirstTrustRecoveryArtifacts({
   const body=deriveExactR17Release({sourceRelease:oldRelease,
     reviewManifest:firstTrust.reviewManifest,
     reviewedManifestHash:admission.reviewedManifestHash,now,readFile});
+  guard();
   const release=signed(body,releaseSigningKey);
   verifyRelease(release,firstTrust.trustRoots.releasePublicKey,
     {versions:body.versions,actions:ACTIONS,now});
@@ -110,6 +112,7 @@ export function signFirstTrustRecoveryArtifacts({
     humanPublicKey:admission.humanPublicKey,humanUid:admission.humanUid,
     humanSubject:'local-human:1000',releaseHash:digest(release),releaseId:body.id};
   need(enrollmentBody.expiresAt>enrolledAt,'FIRST_TRUST_ENROLLMENT_EXPIRED');
+  guard();
   const enrollment=signed(enrollmentBody,enrollmentSigningKey);
   verified(enrollment,firstTrust.trustRoots.enrollmentAuthorityPublicKey,
     'mht.human-enrollment.v1');

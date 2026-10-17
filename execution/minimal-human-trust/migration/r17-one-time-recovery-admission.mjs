@@ -5,6 +5,7 @@
 // This file neither signs releases nor installs files nor accepts a user-provided
 // override of the exact two production operation identities.
 import {canonical,digest,publicKey,verified,verifyRelease} from '../src/lease-core.mjs';
+import {SOURCE19_BASELINE,inspectSourcePublicConfiguration,inspectSourceOwnerConfiguration} from '../authority/source-baseline.mjs';
 
 const pin=Object.freeze({
   sourceRelease:'r16-daily-20261012-r15',
@@ -21,6 +22,8 @@ const pin=Object.freeze({
   ])
 });
 export const EXACT_R17_MIGRATION_SCOPE=pin;
+export const EXACT_SOURCE19_R17_MIGRATION_SCOPE=Object.freeze({...pin,
+ sourceRelease:SOURCE19_BASELINE.releaseId,sourceVersions:SOURCE19_BASELINE.versions});
 const chk=(ok,code='R17_MIGRATION_REJECTED')=>{if(!ok)throw Object.assign(Error(code),{code});};
 const eq=(a,b)=>canonical(a)===canonical(b);
 const clone=x=>JSON.parse(canonical(x));
@@ -51,9 +54,10 @@ export function certifiedClosedProject(project,grant,issuerPublicKey){
 // A pure, unprivileged evidence validator. Its output is NEVER an Owner approval,
 // systemd signing capability, or permission to run business operations.
 export function inspectRecoveryMigrationEvidence(evidence,policy,verifyCrownCall) {
+  const selected=policy?.sourceRelease===SOURCE19_BASELINE.releaseId?EXACT_SOURCE19_R17_MIGRATION_SCOPE:pin;
   chk(shape(evidence)&&shape(policy)&&Array.isArray(policy.projects)&&policy.projects.length===2&&
-    eq(policy.projects,pin.projects)&&eq(policy.sourceVersions,pin.sourceVersions)&&
-    policy.sourceRelease===pin.sourceRelease&&policy.targetRelease===pin.targetRelease&&
+    eq(policy.projects,pin.projects)&&eq(policy.sourceVersions,selected.sourceVersions)&&
+    policy.sourceRelease===selected.sourceRelease&&policy.targetRelease===pin.targetRelease&&
     policy.grantId===pin.grantId&&/^[a-f0-9]{64}$/.test(policy.reviewDigest),
     'R17_SCOPE_NOT_PINNED');
   // The trusted runtime must inject its exact, release-manifest-verified Crown
@@ -65,6 +69,7 @@ export function inspectRecoveryMigrationEvidence(evidence,policy,verifyCrownCall
   chk(digest(reviewManifest)===policy.reviewDigest&&reviewManifest.releaseId===policy.targetRelease,'REVIEW_NOT_EXACT');
   const release=verified(publicConfiguration.release,publicConfiguration.releasePublicKey,'r16.release.v1');
   const grant=verified(publicConfiguration.grant,publicConfiguration.issuerPublicKey,'r16.workspace.v1');
+  inspectSourcePublicConfiguration(publicConfiguration);
   // Recovery validates signed R15 at its original issuance time. It does not
   // refresh its expired business authority or run any old operation.
   chk(release.issuedAt<=now,'SOURCE_RELEASE_IN_FUTURE');
@@ -80,6 +85,7 @@ export function inspectRecoveryMigrationEvidence(evidence,policy,verifyCrownCall
     ownerConfiguration.activeGrantId===grant.id&&ownerConfiguration.trust?.releasePublicKey===publicConfiguration.releasePublicKey&&
     ownerConfiguration.replacement===null&&Array.isArray(ownerConfiguration.blockedProjects)&&
     ownerConfiguration.blockedProjects.length===0,'OWNER_STATE_DRIFT');
+  inspectSourceOwnerConfiguration(publicConfiguration,ownerConfiguration,now);
   chk(Array.isArray(issuerGrant.projects)&&Array.isArray(appState?.operations)&&Array.isArray(bridgeState?.calls)&&
     shape(nativeStates)&&shape(appProjectStates)&&shape(bridgeProjectStates)&&
     shape(appArchives)&&shape(nativeResults),'MISSING_EVIDENCE');
@@ -159,5 +165,6 @@ export function inspectRecoveryMigrationEvidence(evidence,policy,verifyCrownCall
 export function inspectReviewedR17MigrationEvidence(evidence,rootPinnedReviewDigest,verifyCrownCall) {
   chk(typeof rootPinnedReviewDigest==='string'&&/^[a-f0-9]{64}$/.test(rootPinnedReviewDigest),
     'REVIEW_NOT_EXACT');
-  return inspectRecoveryMigrationEvidence(evidence,{...pin,reviewDigest:rootPinnedReviewDigest},verifyCrownCall);
+  const selected=evidence?.publicConfiguration?.release?.body?.id===SOURCE19_BASELINE.releaseId?EXACT_SOURCE19_R17_MIGRATION_SCOPE:pin;
+  return inspectRecoveryMigrationEvidence(evidence,{...selected,reviewDigest:rootPinnedReviewDigest},verifyCrownCall);
 }

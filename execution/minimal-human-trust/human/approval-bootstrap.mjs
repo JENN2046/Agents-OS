@@ -11,7 +11,7 @@ export const APPROVAL_REQUIRED_FILES=Object.freeze([
   'human/approval-bootstrap.mjs','human/approval-signer.mjs','human/approval-policy.mjs',
   'human/approval-broker.py','human/approval-window.py','human/first-trust-journal.mjs',
   'human/first-cutover-admission.mjs','authority/first-cutover-authorization.mjs',
-  'authority/runtime-manifest.mjs','authority/stage-authorization.mjs','authority/recovery-handoff.mjs',
+  'authority/runtime-manifest.mjs','authority/stage-authorization.mjs','authority/source-baseline.mjs','authority/recovery-handoff.mjs',
   'src/lease-core.mjs','src/control-clock.mjs','src/minimal-trust-issuer-once.mjs',
   'src/systemd-issuer-credential.mjs','src/minimal-trust-issuer.mjs',
   'src/signed-business-stop.mjs','src/cloud-delivery-projector.mjs',

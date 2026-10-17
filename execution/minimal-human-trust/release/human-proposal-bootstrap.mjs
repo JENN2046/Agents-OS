@@ -22,7 +22,7 @@ export const HUMAN_PROPOSAL_REQUIRED_FILES=Object.freeze([
  'packaging/minimal-human-trust-approval.socket','packaging/minimal-human-trust-approval@.service',
  'packaging/minimal-human-trust-approval.desktop','packaging/minimal-human-trust-first-cutover.desktop',
  'packaging/org.jenn.r16.minimal-human-trust.policy','packaging/minimal-human-trust-publisher.service',
- 'authority/stage-authorization.mjs','authority/recovery-handoff.mjs','authority/first-cutover-authorization.mjs',
+ 'authority/stage-authorization.mjs','authority/source-baseline.mjs','authority/recovery-handoff.mjs','authority/first-cutover-authorization.mjs',
  'release/staged-r17-handoff-admission.mjs','release/single-writer-handoff-preflight.mjs',
  'src/lease-core.mjs','src/control-clock.mjs','src/minimal-trust-issuer-once.mjs',
  'src/systemd-issuer-credential.mjs','src/minimal-trust-issuer.mjs','src/signed-business-stop.mjs',

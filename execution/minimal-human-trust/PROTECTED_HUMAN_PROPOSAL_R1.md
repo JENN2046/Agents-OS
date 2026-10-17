@@ -43,7 +43,7 @@ Crown import; the complete signed prior App manifest is also byte-verified.
 ## Fixed code and single effect
 
 minimal-human-trust-proposal.service has no Install/WantedBy activation. Its fixed
-ExecStart is the stdlib-only human-proposal-bootstrap.mjs. All 44 frozen files
+ExecStart is the stdlib-only human-proposal-bootstrap.mjs. All files in the exact reviewed freeze (45 with the source19 baseline module)
 are checked before signing imports, and rechecked afterwards. The only credential
 is the existing Release key in this service's read-only tmpfs/ramfs systemd mount.
 Unit/root/device/ownership/modes/links/bytes/canonical public identity are checked;

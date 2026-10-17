@@ -1,6 +1,7 @@
 // Pure, closed-form Human authorization for one staged R17 signing attempt.
 // No STOP receipt is invented here; actual handoff keeps every hard gate.
 import {canonical} from '../src/lease-core.mjs';
+import {sourceBaselineId,SOURCE19_BASELINE} from './source-baseline.mjs';
 
 const reject=()=>{throw Object.assign(new Error('STAGE_AUTHORIZATION_REJECTED'),
   {code:'STAGE_AUTHORIZATION_REJECTED'});};
@@ -18,8 +19,10 @@ export function validateStageAuthorization(core,{now=Date.now()}={}){
     'grantVersion','r15PublicConfigDigest','reviewedManifestHash','recoveryEvidenceDigest',
     'sourceFreezeDigest','installerHash','issuerSnapshotHash','trustRootsDigest','stopEpoch','handoffEpoch',
     'issuedAt','expiresAt','constraints']);
+  const source=sourceBaselineId(core.sourceReleaseId);
+  if(source===SOURCE19_BASELINE)need(core.r15PublicConfigDigest===source.publicConfigDigest);
   need(core.schema==='mht.first-trust-stage-authorization.v2'&&core.phase==='STAGE_ONLY'&&
-    core.sourceReleaseId==='r16-daily-20261012-r15'&&
+    core.sourceReleaseId===source.releaseId&&
     core.targetReleaseId==='r16-daily-20261012-r17'&&core.grantId==='r16-projects-daily');
   need(['grantHash','r15PublicConfigDigest','reviewedManifestHash','recoveryEvidenceDigest',
     'sourceFreezeDigest','installerHash','issuerSnapshotHash','trustRootsDigest'].every(name=>hash(core[name])));

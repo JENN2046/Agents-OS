@@ -9,6 +9,7 @@ import {canonical,digest,verified,verifyRelease,ACTIONS,ROLES} from '../src/leas
 import {protectedRuntimeFile,runtimeVersion} from '../authority/runtime-manifest.mjs';
 import {readPublisherPrivateKeys} from './publisher-credential.mjs';
 import {inspectPublisherInputs} from './publisher-inputs.mjs';
+import {inspectSourcePublicConfiguration,inspectSourceOwnerConfiguration,SOURCE19_BASELINE} from '../authority/source-baseline.mjs';
 import {deriveExactR17Release,signFirstTrustRecoveryArtifacts} from './first-trust-release-builder.mjs';
 import {stagePublisherOnce} from './publisher-transaction.mjs';
 
@@ -22,8 +23,9 @@ const PROPOSAL=BASE+'human-pending.json';
 const EVIDENCE=BASE+'first-trust-evidence.json';
 const INSTALLER=BASE+'stage-installer-reviewed.mjs';
 const OLD_ISSUER='/var/lib/r16-owner/issuer/state.json';
+const OWNER_CONFIGURATION='/var/lib/r16-owner/configuration/state.json';
 const TX='/var/lib/minimal-human-trust/first-trust-publication';
-const R15='/opt/r16/releases/r16-daily-20261012-r15';
+
 const CROWN_REL='app/upstream/src/project-forge-crown-transport.mjs';
 const fail=c=>{throw Object.assign(new Error(c),{code:c});};
 const need=(x,c='FIRST_TRUST_PUBLISHER_REJECTED')=>{if(!x)fail(c);};
@@ -34,8 +36,9 @@ const readJson=(file,read=protectedRuntimeFile)=>JSON.parse(read(file).toString(
 export async function verifiedR15CrownVerifier({
  pub,readProtected=protectedRuntimeFile,importModule=url=>import(url)
 }){
+ const source=inspectSourcePublicConfiguration(pub),R15=source.directory;
  const r=verified(pub.release,pub.releasePublicKey,'r16.release.v1');
- need(r.id==='r16-daily-20261012-r15','PUBLISHER_R15_RELEASE');
+ need(r.id===source.releaseId,'PUBLISHER_R15_RELEASE');
  verifyRelease(pub.release,pub.releasePublicKey,{
   versions:pub.versions,actions:ACTIONS,now:r.issuedAt});
  const manifest=readJson(R15+'/app-manifest.json',readProtected);
@@ -52,7 +55,7 @@ export async function verifiedR15CrownVerifier({
 export function validateStagedPublisherResult(result,{pub,roots,admission,reviewManifest,now}){
  need(result?.schema==='mht.first-trust-staged-signatures.v2'&&
    result.status==='SIGNED_STAGED_NOT_INSTALLED'&&
-   result.oldReleaseId==='r16-daily-20261012-r15'&&
+   result.oldReleaseId===inspectSourcePublicConfiguration(pub).releaseId&&
    result.reviewedManifestHash===admission.admission.reviewedManifestHash&&
    result.osApprovalReceiptHash===admission.admission.humanApprovalReceiptHash&&
    result.firstTrustAdmissionDigest===admission.admission.admissionDigest&&
@@ -71,7 +74,7 @@ export function validateStagedPublisherResult(result,{pub,roots,admission,review
    'PUBLISHER_REVIEW_CHANGED');
  const previous=verified(pub.release,roots.releasePublicKey,'r16.release.v1');
  const signedGrant=verified(pub.grant,roots.issuerPublicKey,'r16.workspace.v1');
- need(previous.id==='r16-daily-20261012-r15'&&
+ need(previous.id===inspectSourcePublicConfiguration(pub).releaseId&&
    signedGrant.id==='r16-projects-daily'&&
    digest(pub.grant)===admission.admission.grantHash,
    'PUBLISHER_TRUST_ROOT_DRIFT');
@@ -129,6 +132,13 @@ export async function runPublisherOnce({
  need(digest(frozenManifest)===plan.authorization?.sourceFreezeDigest,'PUBLISHER_SOURCE_FREEZE_CHANGED');
  need(sha(readProtected(INSTALLER))===plan.authorization?.installerHash,'PUBLISHER_INSTALLER_CHANGED');
  const pub=readJson(PUB,readProtected);
+ const currentDelivery=()=>{
+  if(inspectSourcePublicConfiguration(pub)!==SOURCE19_BASELINE)return;
+  const w=readJson(OWNER_CONFIGURATION,readProtected);
+  need(w?.schema===1&&Number.isSafeInteger(w.revision)&&Number.isSafeInteger(w.maxNow),'PUBLISHER_OWNER_CONFIGURATION_WRAPPER');
+  inspectSourceOwnerConfiguration(pub,w.data,now());
+ };
+ currentDelivery();
  const reviewManifest=readJson(REVIEW,readProtected);
  const proposal=readJson(PROPOSAL,readProtected);
  const policy=readJson(POLICY,readProtected);
@@ -138,7 +148,7 @@ export async function runPublisherOnce({
     'existingR15Evidence,schema','PUBLISHER_EVIDENCE_SHAPE');
  const crown=await verifiedR15CrownVerifier({pub,readProtected,importModule});
  const firstTrust={proposal,policy,trustRoots:roots,sourceRelease:pub.release,
-   sourceGrant:pub.grant,reviewManifest,now:t,readProtected};
+   sourceGrant:pub.grant,sourcePublicConfig:pub,reviewManifest,now:t,readProtected};
  const inspected=inspectPublisherInputs({
    plan,roots,publicConfig:pub,evidence,firstTrust,
    verifyCrownCall:crown,now:t});
@@ -152,6 +162,7 @@ export async function runPublisherOnce({
  const stable=()=>{
   need(digest(readJson(PUB,readProtected))===authorized.r15PublicConfigDigest,
     'PUBLISHER_PUBLIC_STATE_DRIFT');
+  currentDelivery();
   const legacy=readJson(OLD_ISSUER,readProtected);
   need(legacy?.schema===1&&digest(legacy.data)===authorized.issuerSnapshotHash,
     'PUBLISHER_ISSUER_STATE_DRIFT');
@@ -177,7 +188,7 @@ export async function runPublisherOnce({
    stopProofs:null,stopRequiredBeforeHandoff:true,
    grantId:inspected.admission.grantId,
    twoReadOperationIds:inspected.admission.operations.map(x=>x.operationId),
-   sourceReleaseId:'r16-daily-20261012-r15',
+   sourceReleaseId:inspectSourcePublicConfiguration(pub).releaseId,
    targetReleaseId:'r16-daily-20261012-r17'};
  const verifyResult=signedResult=>validateStagedPublisherResult(signedResult,{
    pub,roots,admission:inspected,reviewManifest,now:t});
@@ -188,12 +199,13 @@ export async function runPublisherOnce({
     const keys=readKeys({
       expectedReleaseKey:roots.releasePublicKey,
       expectedEnrollmentKey:roots.enrollmentAuthorityPublicKey});
+    stable();
     const result=signFirstTrustRecoveryArtifacts({
       firstTrust,existingR15Evidence:evidence.existingR15Evidence,
       verifyCrownCall:crown,
       releaseSigningKey:keys.releaseSigningKey,
       enrollmentSigningKey:keys.enrollmentSigningKey,
-      readFile:readProtected,now:t});
+      readFile:readProtected,now:t,guard:stable});
     stable();
     return result;
    }});
