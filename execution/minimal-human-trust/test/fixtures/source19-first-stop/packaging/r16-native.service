@@ -1,0 +1,34 @@
+[Unit]
+Description=R16 ProjectForge native workspace host
+After=network-online.target r16-owner.service r16-native-link.service
+Wants=network-online.target
+Requires=r16-owner.service r16-native-link.service
+ConditionPathExists=/etc/r16/native-host.json
+
+[Service]
+Type=simple
+User=jenn
+Group=jenn
+UMask=0077
+ExecCondition=/usr/bin/python3 -I /opt/r16/trust/graphical-session-check.py
+ExecStart=/usr/bin/node /opt/r16/trust/trusted-launcher.mjs /etc/r16/native-host.json
+LoadCredentialEncrypted=native-signing-key:/etc/credstore.encrypted/r16-native/native-signing-key.cred
+Environment=NODE_OPTIONS=
+Environment=NODE_PATH=
+Environment=PATH=/usr/bin:/bin
+Restart=no
+KillSignal=SIGTERM
+SendSIGKILL=no
+TimeoutStopSec=30
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/r16-native
+ReadWritePaths=/home/jenn/AGENTS_OS_Workspace/projects
+ReadWritePaths=/home/jenn/AGENTS_OS_Workspace/runtime/VCPChat/AppData/ProjectForge
+# No WantedBy=multi-user.target: the native host starts from an actual GUI login.

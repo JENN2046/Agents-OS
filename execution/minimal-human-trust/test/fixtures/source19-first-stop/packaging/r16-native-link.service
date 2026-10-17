@@ -1,0 +1,22 @@
+[Unit]
+Description=R16 private loopback Native transport
+After=network-online.target
+Wants=network-online.target
+PartOf=r16-native.service
+StopWhenUnneeded=yes
+
+[Service]
+Type=simple
+User=jenn
+Group=jenn
+ExecStart=/usr/bin/python3 -I /opt/r16/trust/link-runner.py
+Restart=no
+KillSignal=SIGTERM
+SendSIGKILL=no
+TimeoutStopSec=20
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

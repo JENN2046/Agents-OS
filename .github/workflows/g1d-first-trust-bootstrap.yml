@@ -65,7 +65,9 @@ jobs:
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
       - name: Source19 admission and delivery boundary tests
         run: |
-          node --test execution/minimal-human-trust/test/source19-delivery-transaction.test.mjs
+          node --test \
+            execution/minimal-human-trust/test/source19-delivery-transaction.test.mjs \
+            execution/minimal-human-trust/test/source19-first-stop-contract.test.mjs
           python3 -I -B execution/minimal-human-trust/test/code-admission.test.py
           python3 -I -B execution/minimal-human-trust/test/code-admission-launch.test.py
           python3 -I -B execution/minimal-human-trust/test/identity-admission.test.py

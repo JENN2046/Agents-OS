@@ -1,0 +1,27 @@
+[Unit]
+Description=R16 private ProjectForge Bridge
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/r16-cloud/bridge-host.json
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+UMask=0077
+ExecStart=/opt/r16/runtime/node-v24.15.0/bin/node /opt/r16/trust/cloud-trusted-launcher.mjs /etc/r16-cloud/bridge-host.json
+LoadCredentialEncrypted=bridge-signing-key:/etc/credstore.encrypted/r16-bridge/bridge-signing-key.cred
+Environment=PATH=/usr/bin:/bin NODE_OPTIONS= NODE_PATH=
+Restart=no
+KillSignal=SIGTERM
+SendSIGKILL=no
+TimeoutStopSec=120
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+LimitCORE=0
+ReadWritePaths=/var/lib/r16-bridge
+[Install]
+WantedBy=multi-user.target

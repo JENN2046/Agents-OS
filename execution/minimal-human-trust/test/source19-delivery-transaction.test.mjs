@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {spawn} from 'node:child_process';
 import {generateKeyPairSync,createHash} from 'node:crypto';
 import {ProtectedStore,canonical,digest,signed,verified,exportPublicKey,ACTIONS} from '../src/lease-core.mjs';
 import {inspectSourcePublicConfiguration,SOURCE19_BASELINE} from '../authority/source-baseline.mjs';
@@ -24,8 +25,11 @@ async function fixture(t){
  const peers=Object.fromEntries(['app','bridge','native'].map(role=>[role,{id:'peer-'+role,publicKey:exportPublicKey(key())}]));
  const manifest=n=>({schema:'r16.runtime-code.v1',role:'native',entry:'host/native-runner.mjs',files:{'host/native-runner.mjs':sha(Buffer.from('export const fixture='+n+';'))}});
  const sourceManifest=manifest(1),targetManifest=manifest(2);
- const versions={app:digest('old-app'),bridge:digest('bridge'),native:digest(sourceManifest)};
- const targetVersions={app:digest('new-app'),bridge:versions.bridge,native:digest(targetManifest)};
+ const otherManifest=(role,n)=>({schema:'r16.runtime-code.v1',role,entry:role+'/entry.mjs',files:{[role+'/entry.mjs']:sha(Buffer.from('export const fixture='+n+';'))}});
+ const sourceManifests={app:otherManifest('app',1),bridge:otherManifest('bridge',1),native:sourceManifest};
+ const targetManifests={app:otherManifest('app',2),bridge:otherManifest('bridge',1),native:targetManifest};
+ const versions=Object.fromEntries(Object.entries(sourceManifests).map(([r,m])=>[r,digest(m)]));
+ const targetVersions=Object.fromEntries(Object.entries(targetManifests).map(([r,m])=>[r,digest(m)]));
  const grant=signed({schema:'r16.workspace.v1',id:'r16-projects-daily',version:1,createdAt:clock-10000,workspace:{id:'ws_8c7dd971e518',root:'/home/jenn/AGENTS_OS_Workspace/projects',dev:1,ino:2},actions:ACTIONS,channel:'main',peers},issuer);
  const release=(id,v)=>signed({schema:'r16.release.v1',id,issuedAt:clock-10000,notAfter:clock+86400000,formats:['r16.workspace.v1'],versions:v,actions:ACTIONS,permissionVersion:1},releaseKey);
  const old=release(SOURCE19_BASELINE.releaseId,versions),target=release('r17-source19-ephemeral-fixture',targetVersions);
@@ -39,8 +43,33 @@ async function fixture(t){
  let code=fs.readFileSync(new URL('release/source19-delivery-transaction.mjs',root),'utf8');
  code=code.replace("'../authority/source-baseline.mjs'",JSON.stringify(url(baseline)));
  const m=await import(url(absolutize(code,new URL('release/source19-delivery-transaction.mjs',root))));
- const plan={schema:'mht.source19-fixed-delivery-plan.v1',nonce:digest('unique-'+dir),mode:'recovery_only',sourceRevision:19,sourceDeliveryHash:digest(source),sourcePublicHash:digest(pub),forwardRevision:21,recoveryRevision:22,targetReleaseHash:digest(target),targetVersions,grantHash:digest(grant),stopEpoch:digest('epoch'),handoffHash:digest('completed-handoff'),preservedStateHash:digest('original-2-UNKNOWN-and-old-leases'),approvedAt:clock,expiresAt:clock+300000,recoveryDeadline:clock+1800000,connectRequested:false,allowForwardRecovery22:true};
+ const plan={schema:'mht.source19-fixed-delivery-plan.v1',nonce:digest('unique-'+dir),mode:'recovery_only',sourceRevision:19,sourceDeliveryHash:digest(source),sourcePublicHash:digest(pub),forwardRevision:21,recoveryRevision:22,targetReleaseHash:digest(target),targetVersions,grantHash:digest(grant),stopEpoch:'11111111-2222-4333-8444-555555555555',handoffHash:digest('completed-handoff'),preservedStateHash:digest('original-2-UNKNOWN-and-old-leases'),approvedAt:clock,expiresAt:clock+300000,recoveryDeadline:clock+1800000,connectRequested:false,allowForwardRecovery22:true};
+ const bindings={};
+ const physical=logical=>path.join(dir,'physical',logical.slice(1));
+ const readFile=logical=>fs.readFileSync(physical(logical));
+ const put=(logical,bytes)=>{const file=physical(logical);fs.mkdirSync(path.dirname(file),{recursive:true,mode:0o755});fs.writeFileSync(file,bytes,{mode:0o644});};
+ for(const role of ['app','bridge','native']){
+  const sourceDir=role==='bridge'?'/opt/r16/releases/r16-daily-20261012-r15':spec.directory;
+  const targetDir='/opt/r16/releases/'+target.body.id;
+  const selectorFile=role==='native'?'/etc/r16/native-host.json':role==='app'?'/etc/r16-cloud/app-host.json':'/etc/r16-cloud/bridge-host.json';
+  bindings[role]={host:role==='native'?'local':'cloud',selectorFile};
+  for(const [phase,directory,manifests,n] of [['source',sourceDir,sourceManifests,1],['target',targetDir,targetManifests,role==='bridge'?1:2]]){
+   const manifestFile=directory+'/'+role+'-manifest.json';
+   const bytes=Buffer.from(canonical({schema:'r16.'+role+'-host.v1',codeManifest:manifestFile,publicConfiguration:role==='native'?'/run/r16-owner/public-config.json':'/etc/r16-cloud/public-config.json'}));
+   bindings[role][phase]={manifestFile,bytes:bytes.toString('base64')};
+   put(manifestFile,canonical(manifests[role]));put(directory+'/'+manifests[role].entry,'export const fixture='+n+';');
+   if(phase==='source')put(selectorFile,bytes);
+  }
+ }
+ plan.selectorBindingsHash=digest(bindings);
  const inputs={plan,sourceDelivery:source,targetRelease:target};
+ // Explicit filesystem namespace seam only: all IO below operates on real
+ // disposable files/inodes/fsync/rename; selector commit results are not mocked.
+ const io=new Proxy(fs,{get:(target,name)=>{
+  if(['openSync','lstatSync','readFileSync'].includes(name))return (file,...args)=>target[name](typeof file==='string'?physical(file):file,...args);
+  if(name==='renameSync')return (a,b)=>target[name](physical(a),physical(b));
+  return target[name];
+ }});
  const opened=[];
  const make=(name,initial)=>{const d=path.join(dir,name),s=new ProtectedStore({directory:d,create:true,initial,now});s.close();return()=>new ProtectedStore({directory:d,now});};
  const openCloud=make('cloud',{kind:'r16.cloud-publication.v1',accepted:source,projectedDigest:digest(source)});
@@ -50,7 +79,7 @@ async function fixture(t){
  const journal=new ProtectedStore({directory:path.join(dir,'journal'),create:true,initial:m.deliveryTransactionInitialState(),now});opened.push(journal);
  const get=open=>{const s=open();try{return s.snapshot();}finally{s.close();}};
  const published=new Map([['/etc/r16-cloud/public-config.json',pub],['/etc/r16-cloud/authority-control.json',control]]);let localPublic=pub;
- const calls={sign:[],cloud:[],local:[],forbidden:0,requirements:[]};
+ const calls={sign:[],cloud:[],local:[],selectors:[],forbidden:0,requirements:[]};
  const backend={
   require:r=>{calls.requirements.push(r);},
   fresh:()=>({planHash:digest(plan),stopEpoch:plan.stopEpoch,handoffHash:plan.handoffHash,singleWriter:'HANDOFF_ACCEPTED_OWNER_FENCED',preservedStateHash:plan.preservedStateHash}),
@@ -64,9 +93,17 @@ async function fixture(t){
  const local=m.createFencedLocalReceiver({inputs,backend,now,openStore:openLocal,readPublic:()=>localPublic,writePublic:v=>{localPublic=v;}});
  backend.commitCloud=e=>{calls.cloud.push(e.body.revision);return cloud(e);};
  backend.commitLocal=e=>{calls.local.push(e.body.revision);return local(e);};
+ const makeSelectorReceiver=(host,overrides={})=>m.createSelectorHostReceiver({inputs,bindings,host,backend,openStore:host==='cloud'?openCloud:openLocal,readProjection:()=>host==='cloud'?{publicConfig:published.get('/etc/r16-cloud/public-config.json'),control:published.get('/etc/r16-cloud/authority-control.json')}:{publicConfig:localPublic,control:localPublic===pub?control:{...control,connectRequested:false}},readFile,io,now,...overrides});
+ const selectorReceivers=Object.fromEntries(['cloud','local'].map(host=>[host,makeSelectorReceiver(host)]));
+ const machine={oldOwner:{state:'STOPPED_FENCED',writerCount:0},issuer:{state:'ABSENT',writerCount:0},preservedStateHash:plan.preservedStateHash,originalUnknownCount:2,currentInflight:0,pendingEffects:0,roles:Object.fromEntries(['app','bridge','native'].map(role=>[role,{state:'STOPPED',mainPid:0,controlPid:0,members:[],pendingJob:false,serviceState:'inactive',stopEpoch:plan.stopEpoch,inflight:0,admissionClosed:true}]))};
+ backend.commitSelectors=(envelope,request)=>{calls.selectors.push(envelope.body.revision);selectorReceivers.cloud.commit(envelope,request);selectorReceivers.local.commit(envelope,request);};
+ backend.readSelectors=(envelope,request)=>{
+  const cloud=selectorReceivers.cloud.inspect(envelope,request),local=selectorReceivers.local.inspect(envelope,request);
+  return {schema:'mht.source19-selector-readback.v1',planHash:digest(plan),revision:envelope.body.revision,bindingsHash:digest(bindings),bindings,roles:{...cloud.roles,...local.roles},hosts:{cloud,local},pendingEffects:0,machine};
+ };
  const run=(options={})=>m.runDeliveryTransaction({journal,backend,...inputs,now,...options});
  t.after(()=>{for(const s of opened)try{s.close();}catch{}fs.rmSync(dir,{recursive:true,force:true});});
- return {m,dir,inputs,plan,pub,source,target,issuer,releaseKey,backend,journal,run,calls,cloud,local,get,openLocal,openCloud,initialLocal,published,cloudOptions,now,advance:n=>clock+=n,sourceManifest,targetManifest};
+ return {m,dir,inputs,plan,pub,source,target,issuer,releaseKey,backend,journal,run,calls,cloud,local,get,openLocal,openCloud,initialLocal,published,cloudOptions,now,advance:n=>clock+=n,sourceManifest,targetManifest,bindings,physical,readFile,put,io,selectorReceivers,machine,makeSelectorReceiver};
 }
 test('real source19 public fixture is immutable and production API has no baseline override',()=>{
  const p=JSON.parse(fs.readFileSync(new URL('fixtures/SOURCE19_PUBLIC_CONFIG.json',import.meta.url)));
@@ -74,9 +111,9 @@ test('real source19 public fixture is immutable and production API has no baseli
  assert.equal(production.DELIVERY_READINESS,'READY_UNINSTALLED');
  assert.deepEqual(production.DELIVERY_REVISIONS,{source:19,forward:21,recovery:22});
 });
-test('21 integrates actual cloud receiver + real protected Owner cache without service or business effects',async t=>{
+test('21 requires actual cloud/local persistence AND all three physical selectors before terminal',async t=>{
  const f=await fixture(t),before=f.get(f.openLocal),r=f.run();
- assert.equal(r.status,'FORWARD_21_STORED_RECOVERY_ONLY');assert.equal(r.readiness,'READY_UNINSTALLED');assert.equal(r.entryImplementation,'ENTRY_UNIMPLEMENTED');assert.equal(r.productionAcceptance,'NOT_PROVEN');
+ assert.equal(r.status,'FORWARD_TERMINAL');assert.equal(r.readiness,'READY_UNINSTALLED');assert.equal(r.productionAcceptance,'NOT_PROVEN');
  assert.deepEqual(f.calls.sign,[21]);assert.deepEqual(f.calls.cloud,[21]);assert.deepEqual(f.calls.local,[21]);assert.equal(f.calls.forbidden,0);
  const after=f.get(f.openLocal),oldInvariant={...before},newInvariant={...after};delete oldInvariant.delivery;delete newInvariant.delivery;
  assert.equal(canonical(oldInvariant),canonical(newInvariant));
@@ -138,7 +175,7 @@ test('old receiver default remains strict and cannot accept false-connect newrel
 test('cloud/local22 monotonic readback refuses delayed21 and same-revision different signatures/body',async t=>{
  const f=await fixture(t),a=signed(f.m.deliveryBody(f.inputs,'forward'),f.issuer),b=signed(f.m.deliveryBody(f.inputs,'recovery'),f.issuer);
  f.cloud(a);f.local(a);f.cloud(b);f.local(b);
- assert.throws(()=>f.cloud(a),/CONFIGURATION_ROLLBACK/);assert.throws(()=>f.local(a),/CONFIGURATION_ROLLBACK/);
+ assert.throws(()=>f.cloud(a),/SELECTOR_SUPERSEDED/);assert.throws(()=>f.local(a),/SELECTOR_SUPERSEDED/);
  const changed=signed({...b.body,issuedAt:b.body.issuedAt+1},f.issuer);assert.throws(()=>f.cloud(changed),/DELIVERY_PLAN_CONFLICT/);
 });
 test('ACK missing exact deliveryDigest is rejected, then approved recovery22 is delivered',async t=>{
@@ -229,4 +266,178 @@ test('known target signature may expire and still recover to historical source22
  f.inputs.targetRelease=short;f.plan.targetReleaseHash=digest(short);
  const sign=f.backend.sign;f.backend.sign=b=>{const e=sign(b);if(b.revision===21)f.advance(2);return e;};
  const r=f.run({targetRelease:short});assert.equal(r.revision,22);assert.deepEqual(f.calls.sign,[21,22]);assert.equal(f.backend.readCloud().accepted.body.publicConfig.release.body.id,f.pub.release.body.id);
+});
+
+const physicalSelectors=(f,phase)=>{
+ for(const role of ['app','bridge','native'])assert.equal(f.readFile(f.bindings[role].selectorFile).toString('base64'),f.bindings[role][phase].bytes,role);
+};
+test('canonical FirstCutover UUID is preserved verbatim; old64hex epoch cannot be silently substituted',async t=>{
+ const f=await fixture(t);assert.equal(f.m.inspectDeliveryPlan({...f.inputs,now:f.now()}).planHash,digest(f.plan));
+ assert.throws(()=>f.run({plan:{...f.plan,stopEpoch:digest('wrong-epoch-format')}}),{code:'DELIVERY_STOP_EPOCH'});assert.deepEqual(f.calls.sign,[]);
+});
+test('configuration21 double acceptance is not a terminal before selector intent/effect/result',async t=>{
+ const f=await fixture(t),commit=f.backend.commitSelectors;
+ f.backend.commitSelectors=(e,r)=>{
+  assert.equal(f.backend.readCloud().accepted.body.revision,21);assert.equal(f.backend.readLocal().accepted.body.revision,21);
+  assert.equal(f.journal.snapshot().terminal,null);assert.equal(f.journal.snapshot().steps['forward-selector'].status,'INTENT');
+  physicalSelectors(f,'source');return commit(e,r);
+ };
+ const receipt=f.run();assert.equal(receipt.status,'FORWARD_TERMINAL');assert.equal(f.journal.snapshot().steps['forward-selector'].status,'RESULT');physicalSelectors(f,'target');
+});
+test('partial physical Native selection failure recovers22 and Source19 selectors in same real transaction',async t=>{
+ const f=await fixture(t);let refused=false;
+ const io=new Proxy(f.io,{get:(base,name)=>name==='renameSync'?(a,b)=>{
+  if(b===f.bindings.native.selectorFile&&!refused){refused=true;throw Object.assign(Error('FIXTURE_NATIVE_RENAME_REFUSED'),{code:'FIXTURE_NATIVE_RENAME_REFUSED'});}return base.renameSync(a,b);
+ }:base[name]});
+ f.selectorReceivers.local=f.makeSelectorReceiver('local',{io});
+ const original=canonical(f.get(f.openLocal).originalUnknown),r=f.run();
+ assert.equal(r.status,'TERMINAL_RECOVERED');assert.equal(r.revision,22);assert.deepEqual(f.calls.sign,[21,22]);physicalSelectors(f,'source');
+ assert.equal(f.journal.snapshot().steps['forward-selector'].status,'INTENT');assert.equal(f.journal.snapshot().steps['recovery-selector'].status,'RESULT');
+ assert.equal(canonical(f.get(f.openLocal).originalUnknown),original);
+});
+test('22 double accepted with Native physically stillR17 cannot become TERMINAL_RECOVERED or replay unknown selector',async t=>{
+ const f=await fixture(t);f.run();
+ const io=new Proxy(f.io,{get:(base,name)=>name==='renameSync'?(a,b)=>{
+  if(b===f.bindings.native.selectorFile)throw Object.assign(Error('RECOVERY_NATIVE_UNKNOWN'),{code:'RECOVERY_NATIVE_UNKNOWN'});return base.renameSync(a,b);
+ }:base[name]});
+ f.selectorReceivers.local=f.makeSelectorReceiver('local',{io});
+ assert.throws(()=>f.run({mode:'RECOVER'}),{code:'RECOVERY_NATIVE_UNKNOWN'});
+ assert.equal(f.backend.readCloud().accepted.body.revision,22);assert.equal(f.backend.readLocal().accepted.body.revision,22);
+ assert.equal(f.readFile(f.bindings.native.selectorFile).toString('base64'),f.bindings.native.target.bytes);assert.equal(f.journal.snapshot().terminal,null);
+ const count=f.calls.selectors.length;assert.throws(()=>f.run({mode:'RECOVER'}));assert.equal(f.calls.selectors.length,count);assert.deepEqual(f.calls.sign,[21,22]);
+});
+test('selector ACK loss after actual rename is readback only and never signs22 or replays',async t=>{
+ const f=await fixture(t),commit=f.backend.commitSelectors;
+ f.backend.commitSelectors=(e,r)=>{commit(e,r);throw Error('LOST_SELECTOR_ACK');};
+ const r=f.run();assert.equal(r.status,'FORWARD_TERMINAL');assert.deepEqual(f.calls.sign,[21]);assert.deepEqual(f.calls.selectors,[21]);
+ assert.deepEqual(f.run(),r);assert.deepEqual(f.calls.selectors,[21]);physicalSelectors(f,'target');
+});
+test('host INTENT-only with complete physical effect reconciles by real readback after result loss',async t=>{
+ const f=await fixture(t);let once=true;
+ f.selectorReceivers.local=f.makeSelectorReceiver('local',{fault:point=>{if(point==='local:native:effect'&&once){once=false;throw Error('HOST_RESULT_LOST');}}});
+ const r=f.run();assert.equal(r.revision,21);assert.deepEqual(f.calls.selectors,[21]);
+ assert.equal(f.get(f.openLocal).delivery.selectorTransaction.phases.forward.status,'RESULT');physicalSelectors(f,'target');
+});
+test('late21 selector is refused at actual same-store stage after22 accepted, even before recovery selectors',async t=>{
+ const f=await fixture(t);f.run();
+ const forward=f.journal.snapshot().steps['forward-sign'].envelope,request=f.m.selectorRequest(f.inputs,'forward',forward);
+ assert.throws(()=>f.run({mode:'RECOVER',fault:point=>{if(point==='recovery-selector:intent')throw Error('RECOVERY_PAUSED');}}),/RECOVERY_PAUSED/);
+ assert.equal(f.backend.readCloud().accepted.body.revision,22);assert.equal(f.journal.snapshot().terminal,null);
+ const before=sha(f.readFile(f.bindings.app.selectorFile));
+ assert.throws(()=>f.selectorReceivers.cloud.commit(forward,request),{code:'SELECTOR_SUPERSEDED'});
+ assert.equal(sha(f.readFile(f.bindings.app.selectorFile)),before);
+});
+test('config22 and physical21 cannot interleave because they hold one actual protected store lock',async t=>{
+ const f=await fixture(t);let raced=0;
+ f.backend.require=request=>{
+  if(request.operation==='cloud-selector-app'){
+   raced++;const recovery=signed(f.m.deliveryBody(f.inputs,'recovery'),f.issuer);
+   assert.throws(()=>f.cloud(recovery),{code:'STATE_BUSY'});
+  }
+ };
+ const r=f.run();assert.equal(r.revision,21);assert.ok(raced>0);assert.equal(f.backend.readCloud().accepted.body.revision,21);
+ assert.equal(Object.hasOwn(f.get(f.openCloud),'maxRevision'),false);assert.equal(Object.hasOwn(f.get(f.openLocal),'maxRevision'),false);
+});
+test('borrowed receiver close keeps actual writer lock until the one owning outer scope closes',async t=>{
+ const f=await fixture(t),store=f.openCloud();
+ const borrowed=f.m.borrowDeliveryStore(store);borrowed.close();assert.equal(borrowed.snapshot().accepted.body.revision,19);
+ assert.throws(()=>f.openCloud(),{code:'STATE_BUSY'});store.close();const reopened=f.openCloud();reopened.close();
+});
+test('failure at final rename authority check writes no target selector and recovers safely without extending window',async t=>{
+ const f=await fixture(t);let once=true;
+ f.backend.require=request=>{if(request.operation==='cloud-selector-app'&&once){once=false;f.advance(300000);throw Object.assign(Error('NATIVE_EXPIRED'),{code:'NATIVE_EXPIRED'});}};
+ const r=f.run();assert.equal(r.status,'TERMINAL_RECOVERED');physicalSelectors(f,'source');assert.equal(f.plan.expiresAt,f.plan.approvedAt+300000);
+});
+test('selector CAS detects a foreign physical change after full manifest validation and never overwrites it',async t=>{
+ const f=await fixture(t);let once=true;
+ f.backend.require=request=>{if(request.operation==='cloud-selector-app'&&once){once=false;f.put(f.bindings.app.selectorFile,'foreign selector bytes');}};
+ assert.throws(()=>f.run(),{code:'SELECTOR_FILE_CAS'});assert.equal(f.journal.snapshot().terminal,null);
+ assert.equal(f.readFile(f.bindings.app.selectorFile).toString(),'foreign selector bytes');assert.equal(f.backend.readCloud().accepted.body.revision,22);
+});
+for(const [label,mutate] of [
+ ['old Owner active',f=>{f.machine.oldOwner={state:'ACTIVE',writerCount:1};}],
+ ['unauthorized Issuer',f=>{f.machine.issuer={state:'ACTIVE',writerCount:1};}],
+ ['new inflight unlike historical UNKNOWN',f=>{f.machine.currentInflight=1;}],
+ ['unknown pending effect',f=>{f.machine.pendingEffects=1;}],
+ ['historical UNKNOWN changed',f=>{f.machine.originalUnknownCount=1;}],
+ ['role admission reopened',f=>{f.machine.roles.bridge.admissionClosed=false;}],
+ ['stopped main with live ControlPID',f=>{f.machine.roles.native.controlPid=4321;}],
+ ['stopped main with populated cgroup',f=>{f.machine.roles.app.members=[4321];}],
+ ['stopped main with pending job',f=>{f.machine.roles.bridge.pendingJob=true;}],
+])test('safe recovery terminal refuses '+label,async t=>{
+ const f=await fixture(t);mutate(f);assert.throws(()=>f.run());assert.equal(f.journal.snapshot().terminal,null);assert.equal(f.backend.readCloud().accepted.body.revision,22);
+});
+test('running roles with explicit same-epoch business fence may be safe; inactivity is not fabricated',async t=>{
+ const f=await fixture(t);for(const role of ['app','bridge','native'])Object.assign(f.machine.roles[role],{state:'BUSINESS_FENCED',mainPid:1234,members:[1234],serviceState:'active',writerAuthorityLimited:true,fenceHash:digest(role+'-actual-fence')});
+ assert.equal(f.run().status,'FORWARD_TERMINAL');assert.equal(f.machine.originalUnknownCount,2);assert.equal(f.machine.currentInflight,0);
+});
+test('explicit same-approved-plan recovery after a complete forward terminal preserves prior receipt and restores physical source',async t=>{
+ const f=await fixture(t),forward=f.run(),recovery=f.run({mode:'RECOVER'});
+ assert.equal(recovery.status,'TERMINAL_RECOVERED');assert.deepEqual(f.journal.snapshot().forwardTerminal,forward);physicalSelectors(f,'source');
+ assert.deepEqual(f.calls.sign,[21,22]);assert.deepEqual(f.run(),recovery);
+});
+test('returning a stale terminal cannot hide subsequent physical selector drift',async t=>{
+ const f=await fixture(t);f.run();f.put(f.bindings.native.selectorFile,Buffer.from(f.bindings.native.source.bytes,'base64'));
+ assert.throws(()=>f.run(),{code:'SELECTOR_PHYSICAL_MISMATCH'});assert.deepEqual(f.calls.sign,[21]);
+});
+test('expiry during full code read refuses before opening any selector pending file',async t=>{
+ const f=await fixture(t);let once=true;
+ f.selectorReceivers.cloud=f.makeSelectorReceiver('cloud',{readFile:file=>{
+  const b=f.readFile(file);if(file.endsWith('/app/entry.mjs')&&once){once=false;f.advance(300000);}return b;
+ }});
+ const r=f.run();assert.equal(r.status,'TERMINAL_RECOVERED');physicalSelectors(f,'source');
+ const path=f.physical(f.bindings.app.selectorFile);
+ assert.equal(fs.readdirSync(path.slice(0,path.lastIndexOf('/'))).some(n=>n.includes('.mht-selector-')),false);
+});
+test('even a hash-bound descriptor must refer to actual fixed role selector and manifest semantics',async t=>{
+ const f=await fixture(t),bad=clone(f.bindings);
+ bad.app.target.bytes=Buffer.from(canonical({schema:'r16.app-host.v1',codeManifest:bad.app.source.manifestFile,publicConfiguration:'/etc/r16-cloud/public-config.json'})).toString('base64');
+ const plan={...f.plan,selectorBindingsHash:digest(bad)};
+ assert.throws(()=>f.m.createSelectorHostReceiver({inputs:{...f.inputs,plan},bindings:bad,host:'cloud',backend:f.backend,openStore:f.openCloud}),{code:'SELECTOR_SEMANTICS'});
+ const pathBinding=clone(f.bindings);pathBinding.native.selectorFile='/etc/another-native.json';
+ assert.throws(()=>f.m.createSelectorHostReceiver({inputs:{...f.inputs,plan:{...f.plan,selectorBindingsHash:digest(pathBinding)}},bindings:pathBinding,host:'local',backend:f.backend,openStore:f.openLocal}),{code:'SELECTOR_BINDING'});
+ physicalSelectors(f,'source');
+});
+
+test('expiry during final selector CAS read refuses the actual rename after the earlier guard passed',async t=>{
+ const f=await fixture(t);let once=true,renames=0;
+ const io=new Proxy(f.io,{get:(base,name)=>{
+  if(name==='readFileSync')return (file,...args)=>{const bytes=base.readFileSync(file,...args);if(file===f.bindings.app.selectorFile&&once){once=false;f.advance(300000);}return bytes;};
+  if(name==='renameSync')return (a,b)=>{if(b===f.bindings.app.selectorFile)renames++;return base.renameSync(a,b);};
+  return base[name];
+ }});
+ f.selectorReceivers.cloud=f.makeSelectorReceiver('cloud',{io});
+ assert.equal(f.run().status,'TERMINAL_RECOVERED');assert.equal(renames,0);physicalSelectors(f,'source');
+});
+test('a real different process holding the original accepted store excludes both delivery and selector effects',async t=>{
+ const f=await fixture(t),module=new URL('../src/lease-core.mjs',import.meta.url).href;
+ const script='import {ProtectedStore} from '+JSON.stringify(module)+'; const s=new ProtectedStore({directory:'+JSON.stringify(path.join(f.dir,'cloud'))+'});process.stdout.write("LOCKED\\n");process.stdin.once("data",()=>{s.close();process.exit(0);});';
+ const child=spawn(process.execPath,['--input-type=module','-e',script],{stdio:['pipe','pipe','pipe']});
+ const exited=new Promise((resolve,reject)=>{child.once('exit',(code,signal)=>code===0?resolve():reject(Error('CHILD_LOCK_EXIT_'+code+'_'+signal)));});
+ try{
+  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('CHILD_LOCK_TIMEOUT')),5000);child.stdout.once('data',b=>{clearTimeout(timer);if(b.toString().trim()!=='LOCKED')reject(Error('CHILD_LOCK_OUTPUT'));else resolve();});child.once('error',reject);});
+  const packet=signed(f.m.deliveryBody(f.inputs,'forward'),f.issuer),request=f.m.selectorRequest(f.inputs,'forward',packet);
+  assert.throws(()=>f.cloud(packet),{code:'STATE_BUSY'});assert.throws(()=>f.selectorReceivers.cloud.commit(packet,request),{code:'STATE_BUSY'});
+  physicalSelectors(f,'source');
+ }finally{child.stdin.end('release');await exited;}
+ assert.equal(f.cloud(signed(f.m.deliveryBody(f.inputs,'forward'),f.issuer)).revision,21);
+});
+
+test('valid Issuer signatures on wrong-plan accepted19/21/22 cannot create selector intent or touch physical files',async t=>{
+ const f=await fixture(t);
+ for(const host of ['cloud','local'])for(const revision of [19,21,22]){
+  const valid=revision===19?f.source.body:f.m.deliveryBody(f.inputs,revision===21?'forward':'recovery');
+  const wrong=signed({...valid,control:{...valid.control,grantVersion:2}},f.issuer);
+  const open=host==='cloud'?f.openCloud:f.openLocal,store=open();
+  store.transact(x=>{
+   if(host==='cloud'){x.accepted=wrong;x.projectedDigest=digest(wrong);}
+   else x.delivery={revision,envelope:wrong,hash:digest({publicConfig:wrong.body.publicConfig,control:wrong.body.control,connectionNonce:x.connectionNonce||0})};
+  });store.close();
+  const requested=revision===19?signed(f.m.deliveryBody(f.inputs,'forward'),f.issuer):wrong;
+  const request=f.m.selectorRequest(f.inputs,revision===22?'recovery':'forward',requested);
+  assert.throws(()=>f.selectorReceivers[host].commit(requested,request),{code:'SELECTOR_ACCEPTED_PLAN_CONFLICT'});
+  assert.throws(()=>f.selectorReceivers[host].inspect(requested,request),{code:'SELECTOR_ACCEPTED_PLAN_CONFLICT'});
+  const after=f.get(open);assert.equal(host==='cloud'?after.selectorTransaction:after.delivery.selectorTransaction,undefined);
+  physicalSelectors(f,'source');assert.equal(f.journal.snapshot().binding,null);
+ }
 });
