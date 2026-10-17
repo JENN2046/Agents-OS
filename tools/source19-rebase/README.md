@@ -55,8 +55,10 @@ from the repaired directory and verified against the three signed role-version
 digests. The complete base file/directory set is checked, but the existing
 root-only `.maintenance-capsule.json` is not opened or changed.
 
-All tracked files in the declared production components are overlaid from the
-clean exact HEAD. Git index executable bits and base payload modes are retained
+All tracked files in the declared production components, including reviewed
+`native/` backend repairs, are overlaid from the clean exact HEAD. The independent
+verifier also reconstructs that Native overlay from Git; an unchanged base backend
+cannot silently replace a tracked lifecycle repair. Git index executable bits and base payload modes are retained
 as integers420/493 (`0644`/`0755`). All candidate directories are `0755` and
 metadata files `0644`, independent of the caller's umask. Symlinks, hardlinks,
 special files, overlaps with different hashes, missing/extra files or

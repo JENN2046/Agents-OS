@@ -27,7 +27,7 @@ BASE_REPAIRS = {'app/workspace-host.mjs': 'bfef60223b8fd186f2e96887b770678777bf9
                 'host/workspace-dispatcher.mjs': 'ba4ef78187a8701b97bd03461faed44771c4d71b8541681a6d573e3f35ed079c'}
 GUARDS = {'app/workspace-host.mjs': (' function stopAdmission(){', ' return Object.freeze(', 'f7f4413c77e591af9ba2c3a570d5ddb2c9ab41772e8b5273ba2312f15cefddba'),
           'host/workspace-dispatcher.mjs': ('  function recoveryFence(', '  function authorizeCall(', '10ab0bce9f12555284ebe570cc8803bb0328bf0d273ea7648ca2b76c40fcd454')}
-COMPONENTS = ('src', 'app', 'bridge', 'host', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration')
+COMPONENTS = ('src', 'app', 'bridge', 'host', 'native', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration')
 PREFIXES = {'app': ('src/', 'app/', 'deployment/', 'authority/', 'r16_settings/', 'packaging/', 'migration/r17-one-time-recovery-admission.mjs'),
             'bridge': ('src/', 'bridge/', 'host/native-gateway.mjs', 'deployment/', 'authority/runtime-manifest.mjs', 'authority/transaction-publish.mjs', 'authority/recovery-handoff.mjs', 'authority/source-baseline.mjs', 'migration/r17-one-time-recovery-admission.mjs', 'app/upstream/node_modules/'),
             'native': ('src/', 'host/', 'native/', 'authority/', 'r16_settings/', 'packaging/', 'human/', 'release/', 'migration/')}
