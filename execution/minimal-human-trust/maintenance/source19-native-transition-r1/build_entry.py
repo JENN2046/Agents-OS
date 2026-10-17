@@ -28,7 +28,10 @@ def read(p,git_source=False):
   need(len(b)==a.st_size and stamp(a)==stamp(z)==stamp(n),'SOURCE_CHANGED');return b
  finally:os.close(fd)
 def emit(p,b,mode=0o644):
- p.parent.mkdir(mode=0o755,parents=True,exist_ok=True);fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
+ pending=[];parent=p.parent
+ while not parent.exists():pending.append(parent);parent=parent.parent
+ for directory in reversed(pending):directory.mkdir(mode=0o755)
+ fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
  try:
   offset=0
   while offset<len(b):
