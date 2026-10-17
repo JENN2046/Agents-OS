@@ -19,11 +19,11 @@ def canonical(v):
  return json.dumps(v,ensure_ascii=False,separators=(',',':'))
 def sha(b):return hashlib.sha256(b).hexdigest()
 def digest(v):return sha(canonical(v).encode())
-def read(p):
+def read(p,git_source=False):
  p=Path(p);need(not any(x.is_symlink()for x in(p,*p.parents)),'SOURCE_LINK')
  fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
  try:
-  a=os.fstat(fd);need(stat.S_ISREG(a.st_mode)and a.st_nlink==1 and not a.st_mode&0o022 and a.st_size<=32*1024*1024,'SOURCE_UNSAFE');b=os.read(fd,a.st_size+1);z=os.fstat(fd);n=p.lstat()
+  a=os.fstat(fd);need(stat.S_ISREG(a.st_mode)and a.st_nlink==1 and a.st_uid==os.getuid()and not a.st_mode&(0o002 if git_source else 0o022)and a.st_size<=32*1024*1024,'SOURCE_UNSAFE');b=os.read(fd,a.st_size+1);z=os.fstat(fd);n=p.lstat()
   stamp=lambda s:(s.st_dev,s.st_ino,s.st_uid,s.st_gid,s.st_mode,s.st_nlink,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
   need(len(b)==a.st_size and stamp(a)==stamp(z)==stamp(n),'SOURCE_CHANGED');return b
  finally:os.close(fd)
@@ -39,7 +39,8 @@ def build(repo,out,package,head):
  need(os.getuid()==os.geteuid()!=0,'ORDINARY_USER_REQUIRED');repo=repo.resolve();out=out.absolute();product=repo/'execution/minimal-human-trust'
  git=lambda *a:subprocess.check_output(['git','-C',str(repo),*a],text=True).strip()
  need(re.fullmatch('[a-f0-9]{40}',head)and git('rev-parse','HEAD')==head,'EXACT_SOURCE_HEAD_REQUIRED');need(not git('status','--porcelain'),'CLEAN_SOURCE_REQUIRED');need(not out.exists(),'NEW_OUTPUT_REQUIRED')
- sources={n:read(product/n)for n in FILES};need(all(git('ls-files','--error-unmatch','execution/minimal-human-trust/'+n)for n in FILES),'TRACKED_SOURCE_REQUIRED')
+ sources={n:read(product/n,git_source=True)for n in FILES}
+ for n,b in sources.items():need(b==subprocess.check_output(['git','-C',str(repo),'show',head+':execution/minimal-human-trust/'+n]),'EXACT_TRACKED_SOURCE_BYTES_REQUIRED')
  # Target identities are tied to the actual isolated physical package metadata.
  inventory=json.loads(read(package/'metadata/PAYLOAD_INVENTORY.json'))['files'];native=json.loads(read(package/'metadata/native-manifest.json'))
  need(digest(native)=='085e578d4c974aa706b6980e1fd20cd9880e694c3a6edfb237924cd6c8525dcb'and len(inventory)==12592 and digest(inventory)=='30cc64a3d3e5684a08d249d5c52bee4f3d8815833cac8399b073c0a7dc61731e','EXACT_UNSIGNED_NATIVE_CANDIDATE_REQUIRED')
@@ -57,7 +58,7 @@ def build(repo,out,package,head):
 
  admission={'schema':'r16.source19-native-transition.code-admission-candidate.v1','sourceHead':head,'capsuleHash':capsule,'scope':'INSTALL_ROOT_OWNED_READONLY_PREFLIGHT_CODE_AND_FIXED_RPC_ONLY','targets':targets,'cloudOnlyTargets':cloudTargets,'directoryMode':0o755,'existingPathPolicy':'ABSENT_OR_EXACT_MATCH_ONLY_NO_OVERWRITE','rootOwned':True,'requiresRealHostAdminReview':True,'authority':False,'readyForNativeConfirmation':False,'productionEffects':0,'serviceUnitInstalled':False,'helperOrSudoersInstalled':False,'packageOrReleaseInstalled':False,'signaturesIssued':0,'ownerIdentityChanged':False,'revisionAllocated':False,'businessAcceptance':False,'blockedExecutionReasons':['TARGET_ACTIVATION_CURRENT_CHECKPOINT_RECOVERY_CONTRACT_NOT_IMPLEMENTED','REAL_TWO_HOST_ROOT_PREFLIGHT_NOT_YET_PERFORMED'],'rollback':'Archive only exact matching newly installed code, pin and cloud readonly RPC policy; leave existing services, business state and prior policy untouched.'}
  emit(out/'CODE_ADMISSION_CANDIDATE.json',canonical(admission).encode())
- need(git('rev-parse','HEAD')==head and not git('status','--porcelain')and all(read(product/n)==b for n,b in sources.items()),'SOURCE_CHANGED_DURING_BUILD')
+ need(git('rev-parse','HEAD')==head and not git('status','--porcelain')and all(read(product/n,git_source=True)==b for n,b in sources.items()),'SOURCE_CHANGED_DURING_BUILD')
  receipt={'schema':'r16.source19-native-transition.code-bundle-build.v1','sourceHead':head,'capsuleHash':capsule,'sourceFiles':len(rows),'sourceBytes':sum(len(b)for b in sources.values()),'authority':False,'readyForNativeConfirmation':False,'productionEffects':0,'packageCopied':False,'revisionAllocated':False,'businessAcceptance':False}
  emit(out/'BUILD_RECEIPT.json',canonical(receipt).encode());return receipt
 if __name__=='__main__':
