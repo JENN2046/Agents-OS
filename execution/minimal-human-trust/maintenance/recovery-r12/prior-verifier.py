@@ -95,12 +95,79 @@ def quiet_native(backend,plan_hash):
   remaining=deadline-time.monotonic();need(remaining>0,'R12_SOURCE_NATIVE_NOT_QUIET');time.sleep(min(.05,remaining))
  raise Refused('R12_SOURCE_NATIVE_NOT_QUIET')
 
+OWNER_WORKER=Path('/usr/lib/r16-owner/authority/authority-worker.mjs')
+OWNER_WORKER_SHA='cfa4ed72229950f169466d357d0ad7e87227219c60b359fd110269b5b51451cd'
+OWNER_NODE=Path('/usr/bin/node')
+OWNER_NODE_SHA='d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505'
+OWNER_CGROUP='0::/system.slice/r16-owner.service'
+def owner_proc_bytes(pid,name,maximum):
+ need(type(pid) is int and pid>0 and name in ('stat','status','cgroup','cmdline'),'R12_OWNER_PROC_SCOPE_REFUSED')
+ fd=os.open(Path('/proc')/str(pid)/name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+ try:
+  raw=b''
+  while len(raw)<=maximum:
+   block=os.read(fd,min(65536,maximum+1-len(raw)))
+   if not block:break
+   raw+=block
+  need(0<len(raw)<=maximum,'R12_OWNER_PROC_METADATA_REFUSED');return raw
+ finally:os.close(fd)
+def owner_proc_identity(pid):
+ raw=owner_proc_bytes(pid,'stat',8192);fields=raw[raw.rfind(b')')+2:].split();need(len(fields)>=20 and fields[0] not in (b'Z',b'X'),'R12_OWNER_PROC_METADATA_REFUSED')
+ try:ppid=int(fields[1]);ticks=int(fields[19]);status=dict(line.split(':',1) for line in owner_proc_bytes(pid,'status',65536).decode().splitlines() if ':' in line);uid=tuple(int(v) for v in status['Uid'].split());gid=tuple(int(v) for v in status['Gid'].split())
+ except (ValueError,KeyError,UnicodeError):raise Refused('R12_OWNER_PROC_METADATA_REFUSED') from None
+ need(uid==gid==(0,0,0,0) and ticks>0 and owner_proc_bytes(pid,'cgroup',8192).decode().splitlines()==[OWNER_CGROUP],'R12_OWNER_PROCESS_IDENTITY_REFUSED')
+ return {'pid':pid,'ppid':ppid,'startTicks':str(ticks)}
+def owner_worker_identity(s):
+ # No unknown child's argv is inspected. This function is called only for an
+ # original, complete Snapshot with exactly the main and one other process.
+ need(len(s.members)==2 and s.main_pid in s.members,'R12_SOURCE_OWNER_WORKER_NOT_SOLE')
+ worker=next(pid for pid in s.members if pid!=s.main_pid)
+ script=protected(OWNER_WORKER,0o644);binary=protected(OWNER_NODE,0o755)
+ need(sha(script)==OWNER_WORKER_SHA and sha(binary)==OWNER_NODE_SHA,'R12_SOURCE_OWNER_WORKER_CODE_DRIFT')
+ binary_meta=OWNER_NODE.lstat();need(stat.S_ISREG(binary_meta.st_mode) and binary_meta.st_uid==binary_meta.st_gid==0,'R12_SOURCE_OWNER_NODE_METADATA_REFUSED')
+ observed=[]
+ for _ in range(2):
+  main=owner_proc_identity(s.main_pid);row=owner_proc_identity(worker)
+  need(main['startTicks']==str(s.main_start) and row['ppid']==s.main_pid,'R12_SOURCE_OWNER_WORKER_LINEAGE_DRIFT')
+  need(owner_proc_bytes(worker,'cmdline',4096)==str(OWNER_NODE).encode()+b'\0'+str(OWNER_WORKER).encode()+b'\0','R12_SOURCE_OWNER_WORKER_ARGV_REFUSED')
+  proc=Path('/proc')/str(worker)/'exe';need(os.readlink(proc)==str(OWNER_NODE),'R12_SOURCE_OWNER_WORKER_EXE_REFUSED');loaded=proc.stat();need((loaded.st_dev,loaded.st_ino)==(binary_meta.st_dev,binary_meta.st_ino),'R12_SOURCE_OWNER_WORKER_EXE_REFUSED')
+  observed.append((main,row))
+ need(observed[0]==observed[1],'R12_SOURCE_OWNER_WORKER_CHANGED_DURING_READ')
+ need(protected(OWNER_WORKER,0o644)==script and protected(OWNER_NODE,0o755)==binary,'R12_SOURCE_OWNER_WORKER_CODE_CHANGED')
+ return {**observed[0][1],'mainStartTicks':str(s.main_start),'nodeSha256':OWNER_NODE_SHA,'scriptSha256':OWNER_WORKER_SHA}
+def quiet_owner(backend,plan_hash):
+ unit='r16-owner.service';deadline=time.monotonic()+1;frame=None
+ for attempt in range(4):
+  s=backend.inspect(unit,plan_hash);role_policy(s,unit)
+  current=(s.unit,s.host,s.active,s.sub,s.main_pid,s.main_start,s.control_pid,s.control_start,s.restarts,s.code_hashes,s.code_phase,s.fence_hash,s.fence_effective,s.daemon_reload_needed,s.send_sigkill,s.kill_signal,s.pending_job)
+  if frame is None:frame=current
+  need(current==frame,'R12_SOURCE_OWNER_CHANGED_WHILE_WAITING');need(time.monotonic()<=deadline,'R12_SOURCE_OWNER_NOT_QUIET')
+  need(len(s.members)>=2,'R12_SOURCE_OWNER_WORKER_UNAVAILABLE')
+  if len(s.members)==2:
+   identity=owner_worker_identity(s);need(time.monotonic()<=deadline,'R12_SOURCE_OWNER_NOT_QUIET');return s,identity
+  need(attempt<3,'R12_SOURCE_OWNER_NOT_QUIET');remaining=deadline-time.monotonic();need(remaining>0,'R12_SOURCE_OWNER_NOT_QUIET');time.sleep(min(.05,remaining))
+ raise Refused('R12_SOURCE_OWNER_NOT_QUIET')
+ROLE_FIELDS={'active':'ACTIVE','sub':'SUB','mainPid':'MAIN_PID','mainStartTicks':'MAIN_START','controlPid':'CONTROL_PID','controlStartTicks':'CONTROL_START','members':'MEMBERS','restarts':'RESTARTS','codePhase':'CODE_PHASE','codeHashes':'CODE_HASHES','fenced':'FENCE','pendingJob':'PENDING_JOB','workerIdentity':'WORKER_IDENTITY'}
+ROLE_NAMES={'r16-owner.service':'OWNER','r16-native.service':'NATIVE','r16-app.service':'APP','r16-bridge.service':'BRIDGE'}
+BUSINESS_FIELDS={'publicConfigHash':'PUBLIC_CONFIG','snapshotHashes':'SELECTORS','issuerDataHash':'ISSUER','configurationInvariantHash':'CONFIGURATION','originalUnknownHash':'ORIGINAL_UNKNOWN','projectBusinessHashes':'PROJECT_BUSINESS','sourceDeliveryHash':'DELIVERY','contextSha256':'CONTEXT','deliveryHash':'DELIVERY','sourceFileHashes':'CLOUD_SOURCE_FILES','sourceAppConfigHash':'APP_SELECTOR'}
+def same_roles(before,after):
+ need(set(before)==set(after) and set(before)<=set(ROLE_NAMES),'R12_SOURCE_ROLE_SET_CHANGED')
+ for unit in sorted(before):
+  need(set(before[unit])==set(after[unit]) and set(before[unit])<=set(ROLE_FIELDS),'R12_SOURCE_ROLE_FIELDS_CHANGED')
+  for field in sorted(before[unit]):need(before[unit][field]==after[unit][field],'R12_SOURCE_'+ROLE_NAMES[unit]+'_'+ROLE_FIELDS[field]+'_CHANGED')
+def same_business(before,after):
+ need(set(before)==set(after) and set(before)<=set(BUSINESS_FIELDS),'R12_SOURCE_BUSINESS_FIELDS_CHANGED')
+ for field in sorted(before):need(before[field]==after[field],'R12_SOURCE_BUSINESS_'+BUSINESS_FIELDS[field]+'_CHANGED')
 def roles(old_sources,host):
  with component('r12_old_source_q',old_sources['quiescence.py']) as q:
   need(sha(old_sources['quiescence.py'])==Q_SHA,'R12_OLD_QUIESCENCE_DRIFT');backend=q.RealBackend();result={}
   for unit in (('r16-owner.service','r16-native.service') if host==LOCAL else ('r16-app.service','r16-bridge.service')):
-   s=quiet_native(backend,PROVENANCE['r10ClosedRollback']['planHash']) if unit=='r16-native.service' else backend.inspect(unit,PROVENANCE['r10ClosedRollback']['planHash']);phase=role_policy(s,unit)
+   worker=None
+   if unit=='r16-owner.service':s,worker=quiet_owner(backend,PROVENANCE['r10ClosedRollback']['planHash'])
+   else:s=quiet_native(backend,PROVENANCE['r10ClosedRollback']['planHash']) if unit=='r16-native.service' else backend.inspect(unit,PROVENANCE['r10ClosedRollback']['planHash'])
+   phase=role_policy(s,unit)
    result[unit]={'active':s.active,'sub':s.sub,'mainPid':s.main_pid,'mainStartTicks':str(s.main_start),'controlPid':s.control_pid,'controlStartTicks':str(s.control_start),'members':sorted(s.members),'restarts':s.restarts,'codePhase':phase,'codeHashes':s.code_hashes,'fenced':False,'pendingJob':False}
+   if worker is not None:result[unit]['workerIdentity']=worker
   return result
 NODE_READONLY=r'''import fs from 'node:fs';import {pathToFileURL}from'node:url';
 const R='/usr/lib/r16-maintenance/recovery-r10',S='/var/lib/r16-maintenance/recovery-r10';
@@ -270,13 +337,13 @@ def host_facts(manifest,sources,host):
   with old_read_locks(asset,host):
    manager_inactive();prepared=r11_prepared_history(asset,host);before=old_records(asset,host);assets=asset.verify_assets(manifest,sources);actors=roles(old_sources,host);business=node_facts(host)
    checkpoint=cloud_checkpoint(asset,before['plan']) if host==CLOUD else None
-   need(roles(old_sources,host)==actors and node_facts(host)==business,'R12_SOURCE_CHANGED_DURING_CAPTURE');need(before==old_records(asset,host),'R12_OLD_RECORDS_CHANGED_DURING_CAPTURE');need(prepared==r11_prepared_history(asset,host),'R12_R11_PREPARATION_CHANGED_DURING_CAPTURE');manager_inactive()
+   same_roles(actors,roles(old_sources,host));same_business(business,node_facts(host));need(before==old_records(asset,host),'R12_OLD_RECORDS_CHANGED_DURING_CAPTURE');need(prepared==r11_prepared_history(asset,host),'R12_R11_PREPARATION_CHANGED_DURING_CAPTURE');manager_inactive()
    need(old_source(asset)==(old_raw,old_meta,freeze,old_sources),'R12_OLD_SOURCE_CHANGED_DURING_CAPTURE')
   return {'schema':'r16.r12.host-source-facts.v1','host':host,'oldR10Hashes':before['hashes'],'r11UnconsumedPreparation':prepared,'assets':assets,'actors':actors,'business':business,'originalCheckpointDigest':checkpoint['checkpointDigest'] if checkpoint else None,'fullAppCheckpoint':checkpoint,'oldCanonicalReceiptLocallyVerified':host==LOCAL,'oldR10AuthorityReused':False,'businessAcceptance':False}
 def cloud_facts(manifest,sources):return host_facts(manifest,sources,CLOUD)
 REMOTE_READER=r'''import hashlib,json,os,stat,sys,types
 from pathlib import Path
-B=Path('/home/ubuntu/r16-maintenance-recovered-r12-candidate')
+B=Path('/home/ubuntu/r16-maintenance-recovered-r12-r2-candidate')
 def need(v):
  if not v:raise ValueError('R12_SEALED_CLOUD_READER_REFUSED')
 def read(p,maxsize=16*1024*1024):
@@ -310,5 +377,8 @@ def fresh_cloud(manifest):
 def verify_prior(manifest,sources):
  validate_inputs(manifest,sources);host=socket.gethostname();facts=host_facts(manifest,sources,host)
  if host==LOCAL:
-  cloud=fresh_cloud(manifest);again=host_facts(manifest,sources,LOCAL);need(again==facts,'R12_LOCAL_CHANGED_DURING_CLOUD_READBACK');facts={'local':facts,'cloud':cloud}
+  cloud=fresh_cloud(manifest);again=host_facts(manifest,sources,LOCAL)
+  if 'actors' in facts and 'actors' in again:same_roles(facts['actors'],again['actors'])
+  if 'business' in facts and 'business' in again:same_business(facts['business'],again['business'])
+  need(again==facts,'R12_LOCAL_CHANGED_DURING_CLOUD_READBACK');facts={'local':facts,'cloud':cloud}
  return {'schema':'r16.r12.source-recovery-readback.v1','host':host,'factsHash':digest(facts),'sourceRecoveryEvidence':PROVENANCE,'sourceAppExpectedState':'STOPPED','businessAcceptance':False}

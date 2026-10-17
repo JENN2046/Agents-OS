@@ -50,3 +50,11 @@ members, suppresses inspect errors or authenticates disappearing children.
 All non-members snapshot fields must stay identical while waiting. Complete
 facts equality and full business, original checkpoint and quiescence checks
 remain in force. This is neither drain proof nor business acceptance.
+
+R12 engineering revision 2 also selects an actual Owner snapshot with only
+its main daemon and one authenticated fixed authority-worker. The worker
+PID/start identity stays in the compared facts. Temporary extra processes
+are never classified or removed from snapshots. R12-R1 unsigned artifacts
+and its refused preflight remain unchanged; no R12 protected transaction
+exists, so this creates a separate ordinary candidate under the same unused
+R12 namespace. Only fresh exact native confirmation can admit installation.

@@ -20,6 +20,7 @@ class BuildTests(unittest.TestCase):
    self.assertIn(str(b.C.R9_STATE/'package'),source);self.assertNotIn("STATE+'/package",source);self.assertNotIn("ROOT_JOURNAL+'/package'",source)
   e=self.entry();self.assertEqual(str(e.ROOT),'/usr/lib/r16-maintenance/recovery-r12');self.assertEqual(str(e.STATE),'/var/lib/r16-maintenance/recovery-r12')
   self.assertEqual(str(e.SOURCE),str(b.C.OUT));self.assertEqual(str(e.CLOUD_SOURCE),b.C.CLOUD_SOURCE)
+  self.assertEqual(b.C.OUT.name,'maintenance-recovered-r12-r2');self.assertEqual(b.C.CLOUD_SOURCE,'/home/ubuntu/r16-maintenance-recovered-r12-r2-candidate')
  def test_reviewed_overrides_preserve_all_four_exact_historical_hashes(self):
   self.assertEqual(set(b.OVERRIDE_PINS),{'quiescence.py','os_entry.py','run.mjs','io.mjs'})
   for name,pin in b.OVERRIDE_PINS.items():self.assertEqual(sha(b.reviewed_override_path(name).read_bytes()),pin)

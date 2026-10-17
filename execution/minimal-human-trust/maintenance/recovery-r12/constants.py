@@ -2,8 +2,8 @@
 from pathlib import Path
 LOCAL='jenn-System-Product-Name';CLOUD='VM-0-12-ubuntu'
 OPS=Path('/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport')
-OUT=OPS/'maintenance-recovered-r12'
-CLOUD_SOURCE='/home/ubuntu/r16-maintenance-recovered-r12-candidate'
+OUT=OPS/'maintenance-recovered-r12-r2'
+CLOUD_SOURCE='/home/ubuntu/r16-maintenance-recovered-r12-r2-candidate'
 R9_ROOT=Path('/usr/lib/r16-maintenance/recovery-r9')
 R9_STATE=Path('/var/lib/r16-maintenance/recovery-r9')
 R9_CAP='831e82dc470f354e7812b775a6d8e7ea7a6d340bea337ef177aa86f9f00d05af'

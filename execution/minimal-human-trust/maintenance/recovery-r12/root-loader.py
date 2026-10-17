@@ -4,8 +4,8 @@ CAPSULE, ENTRY_SHA, PHASE and MODE are bound by the reviewed outer launcher.
 import hashlib,json,math,os,re,resource,secrets,socket,stat,subprocess,sys,time,types
 from pathlib import Path
 LOCAL='jenn-System-Product-Name';CLOUD='VM-0-12-ubuntu'
-LOCAL_SOURCE=Path('/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-recovered-r12')
-CLOUD_SOURCE=Path('/home/ubuntu/r16-maintenance-recovered-r12-candidate')
+LOCAL_SOURCE=Path('/home/jenn/AGENTS_OS_Workspace/ops/g1d-native-recovery-reconnect-20261014-r1/r15-backport/maintenance-recovered-r12-r2')
+CLOUD_SOURCE=Path('/home/ubuntu/r16-maintenance-recovered-r12-r2-candidate')
 TARGET='r16-daily-20261015-r15-app-recovery-r6'
 GUARD_SHA='21ebbb865bbd84d22aa2aa9160353c9e4ad26672edc1fa0b51a37709e8b6a51b'
 REVISION_SCOPE={'sourceDeliveryRevision':18,'sourceDeliveryHash':'6bd634f3cc4e9335acaff00286ed7f885df5f03b97deec0ac33286f759328c51','forwardRevision':19,'rollbackRevision':20}

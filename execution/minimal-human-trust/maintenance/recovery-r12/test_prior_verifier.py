@@ -295,8 +295,85 @@ class QuietSnapshotScheduling(unittest.TestCase):
   with ExitStack() as stack:
    for name,value in [('validate_inputs',None),('manager_inactive',None),('r11_prepared_history',{}),('old_records',{'hashes':{},'plan':{}}),('roles',{}),('cloud_checkpoint',None)]:stack.enter_context(patch.object(p,name,return_value=value))
    stack.enter_context(patch.object(p.socket,'gethostname',return_value=p.CLOUD));stack.enter_context(patch.object(p,'component',return_value=contextlib.nullcontext(asset)));stack.enter_context(patch.object(p,'old_read_locks',return_value=contextlib.nullcontext()));stack.enter_context(patch.object(p,'old_source',return_value=old));asset.verify_assets=lambda *a:{}
-   stack.enter_context(patch.object(p,'node_facts',side_effect=[{'hash':'one'},{'hash':'two'}]))
-   with self.assertRaisesRegex(p.Refused,'SOURCE_CHANGED_DURING_CAPTURE'):p.host_facts({}, {'asset-verifier.py':b'fixture'},p.CLOUD)
+   stack.enter_context(patch.object(p,'node_facts',side_effect=[{'issuerDataHash':'one'},{'issuerDataHash':'two'}]))
+   with self.assertRaisesRegex(p.Refused,'SOURCE_BUSINESS_ISSUER_CHANGED'):p.host_facts({}, {'asset-verifier.py':b'fixture'},p.CLOUD)
+class OwnerQuietScheduling(unittest.TestCase):
+ def row(self,**fields):
+  return QuietSnapshotScheduling.row(self,unit='r16-owner.service',code_phase='STATIC',members=(100,101),**fields)
+ def test_original_extra_snapshot_waits_without_reading_unknown_child_then_returns_exact_steady_snapshot(self):
+  extra=self.row();extra.members=(100,101,999);quiet=self.row();backend=types.SimpleNamespace(inspect=Mock(side_effect=[extra,quiet]));identity={'pid':101,'startTicks':'201'}
+  with patch.object(p,'owner_worker_identity',return_value=identity) as worker,patch.object(p.time,'monotonic',return_value=10),patch.object(p.time,'sleep') as sleep:s,row=p.quiet_owner(backend,'fixture')
+  self.assertIs(s,quiet);self.assertIs(row,identity);worker.assert_called_once_with(quiet);self.assertEqual(extra.members,(100,101,999));sleep.assert_called_once_with(.05)
+ def test_persistent_extras_refuse_after_four_without_inspecting_unknown_arguments(self):
+  row=self.row();row.members=(100,101,999);backend=types.SimpleNamespace(inspect=Mock(return_value=row))
+  with patch.object(p,'owner_worker_identity') as worker,patch.object(p.time,'monotonic',return_value=10),patch.object(p.time,'sleep'),self.assertRaisesRegex(p.Refused,'OWNER_NOT_QUIET'):p.quiet_owner(backend,'fixture')
+  self.assertEqual(backend.inspect.call_count,4);worker.assert_not_called()
+ def test_main_or_steady_frame_change_during_wait_refuses(self):
+  extra=self.row();extra.members=(100,101,999)
+  for field,value in [('main_start',201),('control_start',2),('restarts',1),('code_hashes',(('daemon','changed'),))]:
+   changed=self.row();setattr(changed,field,value);backend=types.SimpleNamespace(inspect=Mock(side_effect=[extra,changed]))
+   with self.subTest(field=field),patch.object(p,'owner_worker_identity') as worker,patch.object(p.time,'monotonic',return_value=10),patch.object(p.time,'sleep'),self.assertRaisesRegex(p.Refused,'OWNER_CHANGED_WHILE_WAITING'):p.quiet_owner(backend,'fixture')
+   worker.assert_not_called();self.assertEqual(backend.inspect.call_count,2)
+ def test_missing_worker_or_unproved_worker_is_not_waited_away(self):
+  missing=self.row();missing.members=(100,)
+  for row,error in [(missing,None),(self.row(),p.Refused('OWNER_WORKER_ARGV_REFUSED'))]:
+   backend=types.SimpleNamespace(inspect=Mock(return_value=row))
+   with self.subTest(members=row.members),patch.object(p,'owner_worker_identity',side_effect=error),patch.object(p.time,'monotonic',return_value=10),patch.object(p.time,'sleep') as sleep,self.assertRaises(p.Refused):p.quiet_owner(backend,'fixture')
+   self.assertEqual(backend.inspect.call_count,1);sleep.assert_not_called()
+ def test_q_error_and_unsafe_policy_are_immediate_without_retry(self):
+  for value in [p.Refused('CGROUP_MEMBERSHIP_DRIFT'),OSError('synthetic-only'),self.row()]:
+   if not isinstance(value,Exception):value.pending_job=True
+   backend=types.SimpleNamespace(inspect=Mock(side_effect=value if isinstance(value,Exception) else None,return_value=value))
+   with self.subTest(value=type(value)),patch.object(p.time,'sleep') as sleep,self.assertRaises(Exception):p.quiet_owner(backend,'fixture')
+   self.assertEqual(backend.inspect.call_count,1);sleep.assert_not_called()
+ def test_worker_verification_time_is_inside_original_one_second_budget(self):
+  backend=types.SimpleNamespace(inspect=Mock(return_value=self.row()))
+  with patch.object(p.time,'monotonic',side_effect=[10,10.1,11.01]),patch.object(p,'owner_worker_identity',return_value={}),self.assertRaisesRegex(p.Refused,'OWNER_NOT_QUIET'):p.quiet_owner(backend,'fixture')
+class ExactOwnerWorkerProof(unittest.TestCase):
+ def setUp(self):
+  self.snapshot=OwnerQuietScheduling.row(self);self.bad=None;self.count={};self.script=b'public synthetic worker';self.node=b'public synthetic executable'
+  self.meta=types.SimpleNamespace(st_dev=10,st_ino=20,st_mode=0o100755,st_uid=0,st_gid=0)
+  def data(pid,name,maximum):
+   if name=='stat':
+    self.count[pid]=self.count.get(pid,0)+1;fields=[b'0']*20;fields[0]=b'S';fields[1]=str(1 if pid==100 else 100).encode();fields[19]=str(200 if pid==100 else 201).encode()
+    if self.bad=='lineage' and pid==101:fields[1]=b'999'
+    if self.bad=='main_ticks' and pid==100:fields[19]=b'999'
+    if self.bad=='reuse' and pid==101 and self.count[pid]>1:fields[19]=b'202'
+    return str(pid).encode()+b' (synthetic) '+b' '.join(fields)
+   if name=='status':return b'Uid:\t0\t0\t0\t0\nGid:\t0\t0\t0\t0\n' if self.bad!='uid' else b'Uid:\t1000 1000 1000 1000\nGid:\t0 0 0 0\n'
+   if name=='cgroup':return (p.OWNER_CGROUP if self.bad!='cgroup' else '0::/system.slice/foreign.service').encode()+b'\n'
+   if name=='cmdline':return str(p.OWNER_NODE).encode()+b'\0'+str(p.OWNER_WORKER).encode()+b'\0'+(b'--different\0' if self.bad=='argv' else b'')
+   raise AssertionError('unexpected proc read')
+  self.stack=ExitStack();self.addCleanup(self.stack.close)
+  for obj,name,value in [(p,'OWNER_WORKER_SHA',p.sha(self.script)),(p,'OWNER_NODE_SHA',p.sha(self.node))]:self.stack.enter_context(patch.object(obj,name,value))
+  self.reader=self.stack.enter_context(patch.object(p,'owner_proc_bytes',side_effect=data));self.stack.enter_context(patch.object(p,'protected',side_effect=lambda path,*a:self.script if path==p.OWNER_WORKER else self.node));self.stack.enter_context(patch.object(Path,'lstat',return_value=self.meta));self.stack.enter_context(patch.object(Path,'stat',return_value=self.meta));self.link=self.stack.enter_context(patch.object(p.os,'readlink',return_value='/usr/bin/node'))
+ def test_real_proc_parser_and_two_round_identity_bind_stable_worker_ticks(self):
+  result=p.owner_worker_identity(self.snapshot);self.assertEqual(result['pid'],101);self.assertEqual(result['startTicks'],'201');self.assertEqual(result['mainStartTicks'],'200');self.assertEqual(self.count,{100:2,101:2});self.assertNotIn('now',result)
+  self.assertEqual({call.args[1] for call in self.reader.call_args_list},{'stat','status','cgroup','cmdline'})
+ def test_exact_argv_parent_root_credentials_cgroup_and_ticks_are_all_required(self):
+  for field in ('argv','lineage','uid','cgroup','main_ticks','reuse'):
+   self.bad=field;self.count={}
+   with self.subTest(field=field),self.assertRaises(p.Refused):p.owner_worker_identity(self.snapshot)
+ def test_wrong_executable_or_loaded_inode_refuses(self):
+  self.link.return_value='/usr/bin/other'
+  with self.assertRaisesRegex(p.Refused,'EXE_REFUSED'):p.owner_worker_identity(self.snapshot)
+  self.link.return_value='/usr/bin/node'
+  with patch.object(Path,'stat',return_value=types.SimpleNamespace(st_dev=10,st_ino=21)),self.assertRaisesRegex(p.Refused,'EXE_REFUSED'):p.owner_worker_identity(self.snapshot)
+ def test_public_worker_or_node_binary_pin_tamper_refuses(self):
+  for name in ('OWNER_WORKER_SHA','OWNER_NODE_SHA'):
+   with self.subTest(name=name),patch.object(p,name,'0'*64),self.assertRaisesRegex(p.Refused,'WORKER_CODE_DRIFT'):p.owner_worker_identity(self.snapshot)
+class FixedFieldDiagnostics(unittest.TestCase):
+ def test_role_drift_reports_only_fixed_unit_and_field(self):
+  for unit,label in p.ROLE_NAMES.items():
+   before={unit:{'members':[1,2],'mainStartTicks':'10'}};after=copy.deepcopy(before);after[unit]['members'].append(3)
+   with self.subTest(unit=unit),self.assertRaisesRegex(p.Refused,'^R12_SOURCE_'+label+'_MEMBERS_CHANGED$'):p.same_roles(before,after)
+ def test_worker_pid_reuse_is_in_facts_equality_and_has_fixed_code(self):
+  before={'r16-owner.service':{'workerIdentity':{'pid':101,'startTicks':'201'}}};after=copy.deepcopy(before);after['r16-owner.service']['workerIdentity']['startTicks']='202'
+  with self.assertRaisesRegex(p.Refused,'^R12_SOURCE_OWNER_WORKER_IDENTITY_CHANGED$'):p.same_roles(before,after)
+ def test_business_changes_never_emit_private_key_names_or_values(self):
+  with self.assertRaisesRegex(p.Refused,'^R12_SOURCE_BUSINESS_ISSUER_CHANGED$'):p.same_business({'issuerDataHash':'private-before'},{'issuerDataHash':'private-after'})
+  with self.assertRaisesRegex(p.Refused,'^R12_SOURCE_BUSINESS_FIELDS_CHANGED$'):p.same_business({'private-key':'private-value'},{'private-key':'other-value'})
+
 class UnconsumedR11Preparation(unittest.TestCase):
  def setUp(self):
   self.v=copy.deepcopy(p.PROVENANCE);v=self.v['r11UnconsumedCloudPreparation'];self.files={f'file-{i}.py':p.sha(b'synthetic-public-source') for i in range(19)}

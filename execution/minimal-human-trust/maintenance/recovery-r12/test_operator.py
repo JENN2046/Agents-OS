@@ -30,6 +30,7 @@ class OperatorTests(unittest.TestCase):
   with patch.object(o.subprocess,'run',side_effect=AssertionError('describe executed external process')),patch('builtins.print'):
    self.assertEqual(o.main(['--describe']),0)
   d=o.description();self.assertEqual(d['newNamespace'],'recovery-r12');self.assertFalse(d['cacheCleanup']);self.assertFalse(d['packageOrTargetCopy']);self.assertFalse(d['oldPlanRenewed'])
+  self.assertEqual(o.SOURCE,r.LOCAL_SOURCE);self.assertEqual(o.SOURCE.name,'maintenance-recovered-r12-r2');self.assertEqual(r.CLOUD_SOURCE,Path('/home/ubuntu/r16-maintenance-recovered-r12-r2-candidate'))
   self.assertEqual((d['sourceDeliveryRevision'],d['forwardRevision'],d['rollbackRevision']),(18,19,20))
  def test_native_seal_rejects_old_or_unbound_revision_chain_before_inspection(self):
   plan={'targetReleaseId':r.TARGET,'activationScope':'START_REVIEWED_TARGET_APP_IF_SOURCE_ALREADY_STOPPED','sourceRecoveryEvidence':{},**r.REVISION_SCOPE}
