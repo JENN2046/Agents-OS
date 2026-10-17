@@ -136,3 +136,5 @@ import "./fixtures/first-stop-r8-regression.mjs";
 import "./fixtures/empty-temp-quarantine-r1-regression.mjs";
 
 import "./fixtures/recovery-r9-regression.mjs";
+
+import './fixtures/recovery-r12-regression.mjs';
