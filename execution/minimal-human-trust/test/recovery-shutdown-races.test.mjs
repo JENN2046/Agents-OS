@@ -1,3 +1,4 @@
+import './fixtures/recovery-r11-regression.mjs';
 import './fixtures/recovery-r10-regression.mjs';
 import './r15-app-shutdown-backport.test.mjs';
 import './maintenance-transaction-recovery.test.mjs';
