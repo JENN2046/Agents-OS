@@ -1,5 +1,6 @@
 // Explicit first-use Human scope. No identity, consent, or authority is created.
 import {canonical,digest,publicKey} from '../src/lease-core.mjs';
+import {sourceBaselineId,SOURCE19_BASELINE} from './source-baseline.mjs';
 
 const need=(ok,code='FIRST_CUTOVER_TARGET_REJECTED')=>{if(!ok)throw Object.assign(new Error(code),{code});};
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -21,9 +22,11 @@ export const FIRST_CUTOVER_TARGET_FIELDS=Object.freeze(['schema','phase',
   'oldRootHash','newRootTemplate','newRootTemplateHash','stopEpoch','handoffEpoch','constraints']);
 export function validateFirstCutoverTarget(target,{roots}={}){
   exact(target,FIRST_CUTOVER_TARGET_FIELDS);
+  const source=sourceBaselineId(target.sourceReleaseId);
+  if(source===SOURCE19_BASELINE)need(target.sourceReleaseHash===source.releaseHash&&target.grantHash===source.grantHash,'FIRST_CUTOVER_SOURCE19_DRIFT');
   need(target.schema==='mht.first-cutover-target.v1'&&
     target.phase==='FIRST_NATIVE_RECOVERY_CUTOVER'&&
-    target.sourceReleaseId==='r16-daily-20261012-r15'&&
+    target.sourceReleaseId===source.releaseId&&
     target.targetReleaseId==='r16-daily-20261012-r17'&&target.grantId==='r16-projects-daily'&&
     Number.isSafeInteger(target.grantVersion)&&target.grantVersion>0&&
     Number.isSafeInteger(target.handoffEpoch)&&target.handoffEpoch>0&&

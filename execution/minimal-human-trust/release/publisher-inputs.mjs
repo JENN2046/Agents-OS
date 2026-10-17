@@ -1,6 +1,7 @@
 // Stage-only is a distinct exact Human target. It grants no installation,
 // business stop, activation or writer handoff. Real STOP stays at handoff.
 import {canonical,digest,verified,verifyRelease} from '../src/lease-core.mjs';
+import {inspectSourcePublicConfiguration} from '../authority/source-baseline.mjs';
 import {validateStageAuthorization} from '../authority/stage-authorization.mjs';
 import {inspectFirstTrustRecoveryPublication} from './first-trust-recovery-admission.mjs';
 const need=(x,c)=>{if(!x)throw Object.assign(new Error(c),{code:c});};
@@ -25,6 +26,7 @@ export function inspectPublisherInputs({
    firstTrust.policy?.proposalHash===plan.humanProposalHash&&
    digest(firstTrust.reviewManifest)===a.reviewedManifestHash,
    'PUBLISHER_SOURCE_DRIFT');
+ inspectSourcePublicConfiguration(publicConfig);
  const source=verified(publicConfig.release,roots.releasePublicKey,'r16.release.v1');
  const g=verified(publicConfig.grant,roots.issuerPublicKey,'r16.workspace.v1');
  need(source.id===a.sourceReleaseId&&g.id===a.grantId&&

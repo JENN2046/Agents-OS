@@ -2,6 +2,7 @@
 // Pure, read-only admission. This module NEVER signs, enrolls, installs a key,
 // releases R17, clears UNKNOWN, or stops the existing Owner writer.
 import fs from 'node:fs';
+import {inspectSourceRelease,inspectSourcePublicConfiguration,SOURCE19_BASELINE} from '../authority/source-baseline.mjs';
 import {canonical,digest,verified,verifyRelease} from '../src/lease-core.mjs';
 import {protectedRuntimeFile} from '../authority/runtime-manifest.mjs';
 import {validateHumanProposal,firstTrustReviewedIntent,PROJECTS_ROOT} from './approval-policy.mjs';
@@ -22,7 +23,7 @@ const readOne=(p,read)=>JSON.parse(read(p).toString());
  * use the EXISTING OS-protected Release signing root for endorsement.
  */
 export function inspectFirstTrustJournal({
-  proposal,policy,trustRoots,sourceRelease,sourceGrant,reviewManifest,
+  proposal,policy,trustRoots,sourceRelease,sourceGrant,sourcePublicConfig=null,reviewManifest,
   now=Date.now(),readProtected=protectedRuntimeFile,
   isInstalled=()=>fs.existsSync(PRESENT),
 }){
@@ -38,7 +39,10 @@ export function inspectFirstTrustJournal({
   // but do NOT treat its expiry as renewed business permission.
   verifyRelease(sourceRelease,trustRoots.releasePublicKey,
     {versions:source.versions,actions:grant.actions,now:source.issuedAt});
-  need(source.id==='r16-daily-20261012-r15'&&
+  const spec=inspectSourceRelease(source);
+  if(spec===SOURCE19_BASELINE)need(sourcePublicConfig&&inspectSourcePublicConfiguration(sourcePublicConfig)===spec&&
+    equals(sourcePublicConfig.release,sourceRelease)&&equals(sourcePublicConfig.grant,sourceGrant),'FIRST_TRUST_SOURCE19_PUBLIC_REQUIRED');
+  need(source.id===spec.releaseId&&
     intent.sourceReleaseId===source.id&&intent.sourceReleaseHash===digest(sourceRelease)&&
     intent.grantId===grant.id&&intent.grantHash===digest(sourceGrant)&&
     intent.grantVersion===grant.version&&grant.id==='r16-projects-daily'&&

@@ -189,9 +189,12 @@ const {signFirstTrustRecoveryArtifacts}=await import(${JSON.stringify(url('../re
 const {validateStagedPublisherResult}=await import(${JSON.stringify(url('../release/publisher-once.mjs'))});
 const {verified}=await import(${JSON.stringify(url('../src/lease-core.mjs'))});
 const inspected=inspectPublisherInputs(args);
+let signGuards=0;
 const result=signFirstTrustRecoveryArtifacts({firstTrust,existingR15Evidence:old,verifyCrownCall:args.verifyCrownCall,
  releaseSigningKey:releaseKey,enrollmentSigningKey:enrollmentKey,now,
+ guard:()=>{signGuards++;},
  readFile:path=>{assert.ok(stagedFiles.has(path));return stagedFiles.get(path);}});
+assert.equal(signGuards,2);
 assert.equal(result.schema,'mht.first-trust-staged-signatures.v2');
 assert.equal(result.status,'SIGNED_STAGED_NOT_INSTALLED');
 assert.equal(result.stageAuthorizationHash,digest(core));
@@ -205,6 +208,17 @@ assert.equal(enrollment.expiresAt,body.target.enrollmentExpiresAt);
 assert.equal(validateStagedPublisherResult(result,{pub:publicConfig,roots,admission:inspected,reviewManifest,now}),true);
 const changed={...result,stageAuthorizationHash:digest('another-human-core')};
 assert.throws(()=>validateStagedPublisherResult(changed,{pub:publicConfig,roots,admission:inspected,reviewManifest,now}),{code:'PUBLISHER_OUTPUT_SCOPE'});
+`);
+scenario('fresh authority refusal immediately before either signature never returns a staged result',`
+const {signFirstTrustRecoveryArtifacts}=await import(${JSON.stringify(url('../release/first-trust-release-builder.mjs'))});
+for(const stopAt of [1,2]){
+ let guards=0,reads=0;
+ const immutableBefore=digest({old,publicConfig,core});
+ assert.throws(()=>signFirstTrustRecoveryArtifacts({firstTrust,existingR15Evidence:old,verifyCrownCall:args.verifyCrownCall,
+  releaseSigningKey:releaseKey,enrollmentSigningKey:enrollmentKey,now,
+  readFile:path=>{reads++;return stagedFiles.get(path);},guard:()=>{if(++guards===stopAt)throw Object.assign(Error('accepted source changed'),{code:'SOURCE19_ACCEPTED_DELIVERY_NOT_PINNED'});}}),{code:'SOURCE19_ACCEPTED_DELIVERY_NOT_PINNED'});
+ assert.equal(guards,stopAt);assert.equal(reads,stagedFiles.size);assert.equal(digest({old,publicConfig,core}),immutableBefore);
+}
 `);
 scenario('synthetic migration seam: wrong signing keys and incomplete final file coverage cannot produce staged signatures',`
 const {signFirstTrustRecoveryArtifacts}=await import(${JSON.stringify(url('../release/first-trust-release-builder.mjs'))});

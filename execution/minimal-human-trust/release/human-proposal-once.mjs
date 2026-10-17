@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {canonical,digest,signed,exportPublicKey} from '../src/lease-core.mjs';
 import {PROJECTS_ROOT} from '../human/approval-policy.mjs';
+import {inspectSourcePublicConfiguration,inspectSourceOwnerConfiguration,SOURCE19_BASELINE} from '../authority/source-baseline.mjs';
 import {verifyInstalledManifest} from '../authority/runtime-manifest.mjs';
 import {readProposalProtectedFile,checkHumanProposalFreeze} from './human-proposal-bootstrap.mjs';
 import {readHumanProposalReleaseKey,HUMAN_PROPOSAL_UNIT} from './human-proposal-credential.mjs';
@@ -16,6 +17,7 @@ import {issueHumanProposalOnce} from './human-proposal-transaction.mjs';
 const BASE='/etc/minimal-human-trust/';
 const FREEZE=BASE+'first-trust-code.json',REQUEST=BASE+'human-proposal-request.json';
 const PUB='/run/r16-owner/public-config.json',OLD='/var/lib/r16-owner/issuer/state.json';
+const OWNER_CONFIGURATION='/var/lib/r16-owner/configuration/state.json';
 const TX='/var/lib/minimal-human-trust/human-proposals/';
 const need=(x,c='HUMAN_PROPOSAL_ENTRY_REFUSED')=>{if(!x)throw Object.assign(Error(c),{code:c});};
 const sha=b=>createHash('sha256').update(b).digest('hex');
@@ -108,8 +110,16 @@ export async function runHumanProposalOnce({frozenManifest,frozenRawDigest,
  const evidence=request.body?.action==='enroll_human'?json(BASE+'first-trust-evidence.json'):null;
  const workspace=readWorkspaceIdentity();
  inspectHumanProposalSource({request,roots,pub,workspaceIdentity:workspace,now:time()});
+ const source=inspectSourcePublicConfiguration(pub);
+ const currentDelivery=()=>{
+   if(source!==SOURCE19_BASELINE)return;
+   const w=json(OWNER_CONFIGURATION);
+   need(w?.schema===1&&Number.isSafeInteger(w.revision)&&Number.isSafeInteger(w.maxNow),'HUMAN_PROPOSAL_OWNER_CONFIGURATION_WRAPPER');
+   inspectSourceOwnerConfiguration(pub,w.data,time());
+ };
+ currentDelivery();
  // Validate the entire signed prior App source tree before the dynamic Crown import.
- const r15='/opt/r16/releases/r16-daily-20261012-r15';
+ const r15=inspectSourcePublicConfiguration(pub).directory;
  const appManifest=json(r15+'/app-manifest.json');
  const version=verifyInstalledManifest(appManifest,r15,{role:'app',readFile:read});
  need(version===pub.release?.body?.versions?.app,'HUMAN_PROPOSAL_R15_CODE_DRIFT');
@@ -122,6 +132,7 @@ export async function runHumanProposalOnce({frozenManifest,frozenRawDigest,
  const guard=()=>{
    const t=time();need(request.body.issuedAt<=t&&t<request.body.expiresAt,'HUMAN_PROPOSAL_EXPIRED');
    for(const [file,hash] of pinned)need(sha(readProtected(file))===hash,'HUMAN_PROPOSAL_PROTECTED_INPUT_DRIFT');
+   currentDelivery();
    need(same(readWorkspaceIdentity(),args.workspaceIdentity),'HUMAN_PROPOSAL_WORKSPACE_DRIFT');
    const end=time();need(request.body.issuedAt<=end&&end<request.body.expiresAt,'HUMAN_PROPOSAL_EXPIRED');
  };

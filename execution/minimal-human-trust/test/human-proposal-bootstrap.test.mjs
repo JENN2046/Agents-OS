@@ -35,9 +35,9 @@ test('full actual source freeze precedes dynamic operation import and is reread 
  }});
  assert.deepEqual(events,['import','run']);assert.equal(result.status,'ISOLATED_TEST_ONLY');
 });
-test('proposal and publisher freeze cover exactly the same complete 44-file boundary',()=>{
- assert.equal(HUMAN_PROPOSAL_REQUIRED_FILES.length,44);
- assert.equal(new Set(HUMAN_PROPOSAL_REQUIRED_FILES).size,44);
+test('proposal and publisher freeze cover exactly the same complete 45-file boundary',()=>{
+ assert.equal(HUMAN_PROPOSAL_REQUIRED_FILES.length,45);
+ assert.equal(new Set(HUMAN_PROPOSAL_REQUIRED_FILES).size,45);
  assert.deepEqual([...HUMAN_PROPOSAL_REQUIRED_FILES].sort(),[...REVIEWED_SOURCE_FILES].sort());
  for(const name of HUMAN_PROPOSAL_REQUIRED_FILES.filter(n=>n.endsWith('.mjs'))){
   const source=fs.readFileSync(path.join(base,name),'utf8');

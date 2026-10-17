@@ -38,7 +38,7 @@ code/input installation and production proposal signing need separate approval.
 - /etc/minimal-human-trust/first-trust-evidence.json: complete original source R15 participant/UNKNOWN evidence. This frozen evidence is not renewed after consent.
 - /run/r16-owner/public-config.json and /var/lib/r16-owner/issuer/state.json: source of truth, read twice for drift.
 
-Crown verification is imported ONLY from the protected and originally signed R15 App manifest: /opt/r16/releases/r16-daily-20261012-r15/app/upstream/src/project-forge-crown-transport.mjs. The exact code hash is checked before dynamic import. The two old FindSymbol UNKNOWN operation identities and hashes are fixed by migration/r17-one-time-recovery-admission.mjs and cannot be substituted.
+Crown verification is imported only from the protected App manifest of the exact supported signed source. For the source19 rebase that is /opt/r16/releases/r16-daily-20261015-r15-app-recovery-r6/app/upstream/src/project-forge-crown-transport.mjs; the historical R15 lane retains its original fixed directory. authority/source-baseline.mjs pins the repaired release identity, public configuration digest and all three versions before source19 is admitted. The manifest and exact code hash are checked before dynamic import. The two old FindSymbol UNKNOWN operation identities and hashes are fixed by migration/r17-one-time-recovery-admission.mjs and cannot be substituted.
 
 The stage signer does not require R17 STOP proofs from installed R15. A separate
 read-only staged handoff inspection requires fresh R17 three-role STOP proofs in

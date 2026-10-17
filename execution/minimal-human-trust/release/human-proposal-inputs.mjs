@@ -1,5 +1,7 @@
 // Pre-Human target inspection only. No fabricated journal, signature or authority.
 import {createHash} from 'node:crypto';
+import {inspectSourcePublicConfiguration} from '../authority/source-baseline.mjs';
+
 import {canonical,digest,publicKey,verified,verifyRelease} from '../src/lease-core.mjs';
 import {inspectUnsignedHumanProposal,validateHumanProposal} from '../human/approval-policy.mjs';
 import {checkReviewedSourceFreeze} from './publisher-bootstrap.mjs';
@@ -22,10 +24,11 @@ export function inspectHumanProposalSource({request,roots,pub,workspaceIdentity,
  for(const k of [roots.releasePublicKey,roots.issuerPublicKey,roots.enrollmentAuthorityPublicKey,policy.humanPublicKey])key(k);
  need(new Set([roots.releasePublicKey,roots.issuerPublicKey,roots.enrollmentAuthorityPublicKey,policy.humanPublicKey]).size===4,
    'HUMAN_PROPOSAL_KEY_SEPARATION');
+ const spec=inspectSourcePublicConfiguration(pub);
  const source=verified(pub.release,roots.releasePublicKey,'r16.release.v1');
  const grant=verified(pub.grant,roots.issuerPublicKey,'r16.workspace.v1');
  verifyRelease(pub.release,roots.releasePublicKey,{versions:pub.versions,actions:grant.actions,now});
- need(source.id==='r16-daily-20261012-r15'&&p.releaseId===source.id&&p.releaseHash===digest(pub.release)&&
+ need(source.id===spec.releaseId&&p.releaseId===source.id&&p.releaseHash===digest(pub.release)&&
    roots.releasePublicKey===pub.releasePublicKey&&roots.issuerPublicKey===pub.issuerPublicKey&&
    roots.releaseHash===digest(pub.release)&&grant.id==='r16-projects-daily'&&grant.id===p.grantId&&
    grant.version===p.expectedVersion&&digest(pub.grant)===p.expectedGrantHash,'HUMAN_PROPOSAL_R15_DRIFT');

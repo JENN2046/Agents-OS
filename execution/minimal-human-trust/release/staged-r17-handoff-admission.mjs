@@ -82,7 +82,7 @@ export function inspectPublishedFirstTrustStage({
  // The current issuer may already be installed; this is not a new enrollment
  // request, a fresh Human authorization, or permission to replay that ceremony.
  const readHistoricalHuman=()=>inspectFirstTrustJournal({proposal,policy,trustRoots:roots,
-   sourceRelease:priorPublicConfig.release,sourceGrant:priorPublicConfig.grant,
+   sourceRelease:priorPublicConfig.release,sourceGrant:priorPublicConfig.grant,sourcePublicConfig:priorPublicConfig,
    reviewManifest,now:intent.approvedAt,readProtected,isInstalled:()=>false});
  const human=readHistoricalHuman();
  need(human.proposalHash===plan.humanProposalHash&&human.stageAuthorizationHash===digest(a)&&
@@ -146,7 +146,7 @@ export function inspectStagedR17HandoffAdmission({
  const {a,grant,prior,human,versions,staged,enrollment,r17,plan,intent,result,proposal,policy}=stage;
  const read=file=>JSON.parse(readProtected(file).toString());
  const readHistoricalHuman=()=>inspectFirstTrustJournal({proposal,policy,trustRoots:roots,
-   sourceRelease:priorPublicConfig.release,sourceGrant:priorPublicConfig.grant,
+   sourceRelease:priorPublicConfig.release,sourceGrant:priorPublicConfig.grant,sourcePublicConfig:priorPublicConfig,
    reviewManifest,now:intent.approvedAt,readProtected,isInstalled:()=>false});
  const stopped=verifySignedBusinessStop({grant:priorPublicConfig.grant,
    issuerPublicKey:roots.issuerPublicKey,release:staged.release,
