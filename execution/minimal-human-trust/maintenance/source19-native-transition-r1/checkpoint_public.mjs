@@ -39,7 +39,12 @@ function checkedOperations(operations,pub,g){
 // Input is already held in trusted root memory, never an arbitrary filesystem path.
 export function collectHistoricalOperations({appHostState,publicConfig:pub,planHash,now=Date.now()}){
  need(hash(planHash),'PLAN_HASH');const g=source(pub,now),s=wrapper(appHostState,'r16.app-workspace.v1');
- need(same(s.grant,pub.grant)&&Array.isArray(s.operations),'APP_GRANT_DRIFT');
+ // The Source19 App persists grant-free appHostInitialState(); startup config,
+ // the fixed public pins and the signed original operations bind its grant.
+ need(['projects','allocations','operations'].every(k=>Array.isArray(s[k])),'APP_HOST_STATE_SHAPE');
+ if(Object.hasOwn(s,'grant'))need(same(s.grant,pub.grant),'APP_GRANT_DRIFT');
+ collections(s);
+ for(const row of s.operations)if(row.status==='UNKNOWN')need(PINS[row.projectId]?.id===row.id,'NEW_UNKNOWN_OPERATION');
  const ops=Object.entries(PINS).map(([projectId,p])=>{const rows=s.operations.filter(r=>r.id===p.id);need(rows.length===1&&rows[0].projectId===projectId&&rows[0].status==='UNKNOWN','APP_ORIGINAL_UNKNOWN_DRIFT');return rows[0].operation;});
  return {schema:'r16.source19-native-transition.public-history.v1',planHash,sourcePublicConfigHash:PUBLIC,historicalOperations:checkedOperations(ops,pub,g)};
 }

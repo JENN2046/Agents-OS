@@ -139,3 +139,23 @@ stop/kill, real SQLite/locks and legal dead-PID lock reclamation. Its four other
 role/fence observations are isolated adapters, and SIGSTOP stands in for a
 cgroup freeze. Generated fixture keys and substituted operation hashes are
 test-only. This is not a root/systemd or two-host production acceptance.
+
+## App host schema compatibility correction
+
+The Source19 App writer's `appHostInitialState()` persists `projects`,
+`allocations`, `operations` and `status`; its startup Grant is not persisted
+on the host state. The public history reader accepts this real schema and
+compares a host `grant` only when that optional field exists. Source19 public
+configuration and Grant pins, Release/Grant verification, exact original
+operation hashes/signatures and Native Issuer lease verification stay required.
+The reader rejects additional App UNKNOWN operations, any operation INFLIGHT,
+unresolved allocations and duplicate collection IDs. Settled history is retained.
+
+Regression fixtures use the real App initializer and actual temporary
+ProtectedStore files through both Node and Python-to-Node readers. They do not
+use production keys or mutate production stores. This source correction does
+not update an admitted capsule, protected code, an installed PIN, a production
+configuration revision or any human authority. An older installed capsule
+remains the older implementation until separately admitted replacement code
+is installed under its exact native approval scope. Do not retry the old
+preflight or installation entry to make this source change take effect.

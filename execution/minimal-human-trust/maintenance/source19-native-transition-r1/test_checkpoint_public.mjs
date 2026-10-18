@@ -7,6 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {generateKeyPairSync} from 'node:crypto';
 import {spawn} from 'node:child_process';
+import {appHostInitialState} from '../../app/workspace-host.mjs';
 import {ProtectedStore,participantInitialState,signed,digest,canonical,exportPublicKey,ROLES,ACTIONS,LEASE_MS,RENEW_BEFORE_MS} from '../../src/lease-core.mjs';
 const code=fs.readFileSync(new URL('./checkpoint_public.mjs',import.meta.url),'utf8');
 const SOURCE='56e1df18a54950ea346a51654e61df60afe33cb9928ae77293b2cf336fd8a5ec',GRANT='00ac437d66143e627132975555d06396d69ff69616f630d19e3622627e15c5e6';
@@ -26,17 +27,24 @@ async function fixture(root){
   files['dispatcher/project-'+projectId+'/state.json']=wrapper(path.join(dispatch,'project-'+projectId),{...participantInitialState('native'),grant,version:1,lastGeneration:generation,active:{lease},closing:lease,operations:[{id,projectId,generation,hash:digest(op),status:'UNKNOWN',outcome:null,resultHash:null}]});
  }
  files['dispatcher/state.json']=wrapper(dispatch,{kind:'r16.native-dispatch.v1',projects:['p2vox','pmog2'],controls:[{id:'old-control',hash:digest('retained-control'),status:'UNKNOWN'}],pending:[],revoked:false,version:1});
- const appDirectory=path.join(root,'app/host');fs.mkdirSync(path.dirname(appDirectory),{mode:0o700});const app=wrapper(appDirectory,{kind:'r16.app-workspace.v1',grant,operations:appRows}),planHash='d'.repeat(64);
+ const appDirectory=path.join(root,'app/host');fs.mkdirSync(path.dirname(appDirectory),{mode:0o700});const app=wrapper(appDirectory,{...appHostInitialState(),operations:appRows}),planHash='d'.repeat(64);
  let fixtureCode=code.replaceAll(SOURCE,digest(pub)).replaceAll(GRANT,digest(grant));for(let i=0;i<2;i++)fixtureCode=fixtureCode.replaceAll(PINS[i],digest(ops[i]));
  const module=await import('data:text/javascript;base64,'+Buffer.from(fixtureCode).toString('base64'));
  const history=module.collectHistoricalOperations({appHostState:app,publicConfig:pub,planHash,now});
- return {now,pub,app,planHash,files,ops,history,module,fixtureCode,dispatch,native,keys};
+ return {now,pub,app,planHash,files,ops,history,module,fixtureCode,dispatch,native,keys,issuer};
 }
 if(process.argv[2]==='--fixture'){
  const f=await fixture(process.argv[3]);process.stdout.write(JSON.stringify({now:f.now,pub:f.pub,app:f.app,planHash:f.planHash,files:f.files,history:f.history,fixtureCode:f.fixtureCode,dispatch:f.dispatch,native:f.native}));
 }else{
  const setup=async t=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'native-public-'));fs.chmodSync(root,0o700);t.after(()=>fs.rmSync(root,{recursive:true,force:true}));return fixture(root);};
  const input=f=>({files:f.files,publicConfig:f.pub,history:f.history,planHash:f.planHash,now:f.now});
+ const collect=f=>f.module.collectHistoricalOperations({appHostState:f.app,publicConfig:f.pub,planHash:f.planHash,now:f.now});
+ test('real App initial state omits grant and survives ProtectedStore public projection unchanged',async t=>{const f=await setup(t),p=path.join(path.dirname(f.native),'app/host/state.json'),before=fs.readFileSync(p);assert.equal(Object.hasOwn(f.app.data,'grant'),false);assert.deepEqual(Object.keys(f.app.data).sort(),Object.keys(appHostInitialState()).sort());assert.deepEqual(collect(f).historicalOperations,f.ops);assert.deepEqual(fs.readFileSync(p),before);});
+ test('an optional persisted grant must match the independently authenticated public grant exactly',async t=>{const f=await setup(t);f.app.data.grant=structuredClone(f.pub.grant);assert.deepEqual(collect(f).historicalOperations,f.ops);for(const grant of [null,{}, {...f.pub.grant,signature:'a'.repeat(86)},signed({...f.pub.grant.body,id:'foreign-grant'},f.issuer)]){f.app.data.grant=grant;assert.throws(()=>collect(f),{code:'APP_GRANT_DRIFT'});}});
+ test('real App arrays and unique operation/allocation identities are required',async t=>{for(const mutate of [s=>delete s.projects,s=>s.allocations=null,s=>s.operations={},s=>s.operations.push({...s.operations[0],status:'KNOWN'}),s=>s.operations.push(null),s=>s.allocations.push({id:'a',status:'KNOWN'},{id:'a',status:'CLOSED'})]){const f=await setup(t);mutate(f.app.data);assert.throws(()=>collect(f));}});
+ test('additional App UNKNOWN and any operation/allocation INFLIGHT or unresolved allocation refuse',async t=>{for(const mutate of [s=>s.operations.push({id:'third',projectId:'third',status:'UNKNOWN'}),s=>s.operations.push({id:'third',status:'INFLIGHT'}),s=>s.operations[0].status='INFLIGHT',s=>s.allocations.push({id:'a',status:'UNKNOWN'}),s=>s.allocations.push({id:'a',status:'INFLIGHT'})]){const f=await setup(t);mutate(f.app.data);assert.throws(()=>collect(f));}});
+ test('settled App history remains retained without appearing as another original UNKNOWN',async t=>{const f=await setup(t);f.app.data.operations.push({id:'settled',status:'KNOWN'});for(const status of ['KNOWN','NOT_EXECUTED','CLOSED'])f.app.data.allocations.push({id:status,status});const before=structuredClone(f.app);assert.deepEqual(collect(f).historicalOperations,f.ops);assert.deepEqual(f.app,before);});
+ test('canonical JSON and original source public pins remain strict with grant absent',async t=>{const f=await setup(t);for(const v of [undefined,1.5,Number.MAX_SAFE_INTEGER+1])assert.throws(()=>f.module.canonical(v),{code:'NONCANONICAL_JSON'});f.pub.grant.signature='a'.repeat(86);assert.throws(()=>collect(f),{code:'SOURCE19_PUBLIC_DRIFT'});});
  test('actual ProtectedStore history exact App signatures and original Issuer leases verify without mutation',async t=>{const f=await setup(t),before=fs.readFileSync(path.join(f.dispatch,'state.json'));const result=f.module.validateNativePublic(input(f));assert.equal(result.originalSignaturesAndLeasesVerified,true);assert.equal(result.controlUnknownCount,1);assert.equal(result.historicalOperations.length,2);assert.deepEqual(before,fs.readFileSync(path.join(f.dispatch,'state.json')));});
  test('missing, changed, duplicate, or invalid App public operation refuses',async t=>{for(const change of [s=>s.operations=[],s=>s.operations[0].status='KNOWN',s=>s.operations[0].operation.signature='invalid',s=>s.operations.push(s.operations[0]),s=>s.operations[0].operation.body.leaseHash='f'.repeat(64)]){const f=await setup(t);change(f.app.data);assert.throws(()=>f.module.collectHistoricalOperations({appHostState:f.app,publicConfig:f.pub,planHash:f.planHash,now:f.now}));}});
  test('source public drift, expired release, foreign plan or old scope refuses',async t=>{for(const change of [i=>i.publicConfig.versions.native='e'.repeat(64),i=>i.now+=3600001,i=>i.history.planHash='e'.repeat(64),i=>i.history.sourcePublicConfigHash='f'.repeat(64)]){const f=await setup(t),i=input(f);change(i);assert.throws(()=>f.module.validateNativePublic(i));}});

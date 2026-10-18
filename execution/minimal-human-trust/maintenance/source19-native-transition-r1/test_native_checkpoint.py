@@ -203,6 +203,14 @@ class AppPublicTests(unittest.TestCase):
   f.cloud=CloudOS();return f
  def test_active_preflight_proves_material_but_never_claims_atomic_stopped_authority(self):
   f=self.fixture();before=(f.app/'state.json').read_bytes();out=n.read_app_history_preflight(f.admission,f.cloud);self.assertFalse(out['authority']);self.assertFalse(out['atomicStoppedCheckpoint']);self.assertEqual(len(out['historicalOperations']),2);self.assertNotIn('planHash',out);self.assertEqual((f.app/'state.json').read_bytes(),before);self.assertEqual(f.cloud.calls,[None,None,None])
+ def test_actual_app_schema_without_grant_passes_python_to_node_without_store_mutation(self):
+  f=self.fixture();before=(f.app/'state.json').read_bytes();state=n.parse(before)['data'];self.assertNotIn('grant',state);self.assertEqual(set(state),{'kind','projects','allocations','operations','status'})
+  with patch.object(n,'read_database',side_effect=AssertionError('NO_APP_DB_IO')):
+   out=n.read_app_history_preflight(f.admission,f.cloud)
+  self.assertEqual(out['historicalOperations'],f.data['history']['historicalOperations']);self.assertFalse(out['authority']);self.assertFalse(out['atomicStoppedCheckpoint']);self.assertEqual((f.app/'state.json').read_bytes(),before)
+ def test_optional_app_grant_is_checked_and_new_unresolved_work_is_not_filtered_out(self):
+  for mutate in [lambda s:s.update(grant=None),lambda s:s.update(grant={}),lambda s:s['operations'].append({'id':'new','projectId':'new','status':'UNKNOWN'}),lambda s:s['operations'].append({'id':'new','status':'INFLIGHT'}),lambda s:s['allocations'].append({'id':'new','status':'UNKNOWN'}),lambda s:s['allocations'].append({'id':'new','status':'INFLIGHT'})]:
+   f=self.fixture();p=f.app/'state.json';value=n.parse(p.read_bytes());mutate(value['data']);p.write_text(n.canonical(value));before=p.read_bytes();self.assertRaises(n.Refused,n.read_app_history_preflight,f.admission,f.cloud);self.assertEqual(p.read_bytes(),before)
  def test_stopped_sameplan_reader_returns_only_public_signed_material(self):
   f=self.fixture();out=n.collect_app_history(f.data['planHash'],f.admission,f.cloud);self.assertEqual(out,f.data['history']);self.assertEqual(set(out),{'schema','planHash','sourcePublicConfigHash','historicalOperations'});self.assertTrue(all(h==f.data['planHash'] for h in f.cloud.calls))
  def test_missing_or_invalid_original_app_operation_blocks_before_stopping(self):
