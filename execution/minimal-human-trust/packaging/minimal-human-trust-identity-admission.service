@@ -1,0 +1,37 @@
+[Unit]
+Description=HOST_ADMIN_CUSTODY one explicitly admitted Human and Enrollment key sealing
+After=local-fs.target
+ConditionPathExists=/etc/minimal-human-trust/identity-admission-code.json
+ConditionPathExists=/var/lib/minimal-human-trust/identity-admission/authority.json
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I -B /usr/lib/minimal-human-trust/authority/identity-admission.py service
+UMask=0077
+Restart=no
+RemainAfterExit=no
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/minimal-human-trust/identity-admission /etc/credstore.encrypted/minimal-human-trust /etc/minimal-human-trust
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_UNIX
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+LimitCORE=0
+MemorySwapMax=0
+MemoryMax=256M
+TasksMax=8
+TimeoutStartSec=150
+TimeoutStopSec=10
+SendSIGKILL=no
+StandardInput=null
+StandardOutput=null
+StandardError=null

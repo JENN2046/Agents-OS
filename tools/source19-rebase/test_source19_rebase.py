@@ -41,12 +41,14 @@ class RebaseFixture(unittest.TestCase):
         # Public tracked source fixtures; none is imported or executed.
         self.content = {n: (product / n).read_bytes() for n in B.BASE_REPAIRS}
         self.content.update({'src/shared.mjs': b'export const shared=1;\n', 'bridge/entry.mjs': b'export const bridge=1;\n', 'host/helper.py': b'# fixture executable, never executed\n'})
+        self.native_overlay = 'native/upstream/native-fixture.cjs'
+        self.content[self.native_overlay] = b'module.exports={generation:1};\n'
         for name, raw in self.content.items():
             self.emit(self.base / name, raw, 0o755 if name == 'host/helper.py' else 0o644)
         self.originals = {
             'app': self.role('app', 'app/app-runner.mjs', ('app/app-runner.mjs', 'app/workspace-host.mjs', 'src/shared.mjs')),
             'bridge': self.role('bridge', 'bridge/entry.mjs', ('bridge/entry.mjs', 'src/shared.mjs')),
-            'native': self.role('native', 'host/workspace-dispatcher.mjs', ('host/workspace-dispatcher.mjs', 'host/helper.py', 'src/shared.mjs'))}
+            'native': self.role('native', 'host/workspace-dispatcher.mjs', ('host/workspace-dispatcher.mjs', 'host/helper.py', 'src/shared.mjs', self.native_overlay))}
         for role, path in [('app', self.base / 'app-manifest.json'), ('native', self.base / 'native-manifest.json'), ('bridge', self.bridge)]:
             self.emit(path, (B.canonical(self.originals[role]) + '\n').encode())
         self.emit(self.base / '.maintenance-capsule.json', b'{"syntheticRootMarker":true}', 0o600)
@@ -54,10 +56,15 @@ class RebaseFixture(unittest.TestCase):
         self.pub = {'versions': self.versions, 'release': {'body': {'id': B.SOURCE_RELEASE, 'versions': self.versions}, 'signature': 'SYNTHETIC_NOT_AUTHORITY'}, 'grant': {'body': {'id': 'r16-projects-daily'}, 'signature': 'SYNTHETIC_NOT_AUTHORITY'}}
         self.emit(self.public, B.canonical(self.pub).encode())
         self.overlay = dict(self.content)
+        self.overlay[self.native_overlay] = b'module.exports={generation:2};\n'
         for name in ('src/systemd-credentials.mjs', 'src/lease-core.mjs', 'src/control-clock.mjs', 'src/runtime-business-stop.mjs'):
             self.overlay[name] = (product / name).read_bytes()
         self.overlay.update({'authority/fixture-importer.mjs': b"import {next} from '../migration/fixture-next.mjs';\n", 'migration/fixture-next.mjs': b"export {baseline as next} from '../authority/source-baseline.mjs';\n", 'authority/source-baseline.mjs': b'export const baseline=19;\n'})
         self.overlay.update({'human/new-helper.mjs': b'export const fixture=1;\n', 'release/publisher-bootstrap.mjs': b"export const REVIEWED_SOURCE_FILES=Object.freeze(['src/shared.mjs','release/publisher-bootstrap.mjs']);\n"})
+        for name in ('authority/identity-admission.py', 'packaging/minimal-human-trust-identity-admission',
+                     'packaging/minimal-human-trust-identity-admission.service',
+                     'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy'):
+            self.overlay[name] = (product / name).read_bytes()
         for name, raw in self.overlay.items():
             self.emit(self.repo / B.PRODUCT / name, raw, 0o755 if name == 'host/helper.py' else 0o644)
         self.emit(self.repo / 'unrelated.txt', b'not a production component\n')
@@ -116,12 +123,29 @@ class RebaseFixture(unittest.TestCase):
         self.assertEqual(self.metadata('ROLE_MANIFESTS.json')['artifacts']['bridge']['entry'], self.originals['bridge']['entry'])
         self.assertFalse((self.base / 'bridge-manifest.json').exists())
         self.assertEqual(self.metadata('PROVENANCE.json')['sourceRoleManifestPaths']['bridge'], str(self.bridge))
-        self.assertEqual(r['metadataFiles'], 13)
+        self.assertEqual(r['metadataFiles'], 14)
         self.assertIsNone(r['plannedConfigurationRevision'])
         self.assertIsNone(r['issuedAt'])
         self.assertFalse(r['reservedRevision20Authorized'])
         self.assertFalse(r['maySign'])
         self.assertEqual((self.output / 'payload/host/helper.py').stat().st_mode & 0o7777, 0o755)
+
+    def test_identity_freeze_independently_reconstructed_not_self_asserted(self):
+        self.build()
+        self.rewrite('IDENTITY_ADMISSION_FREEZE.json', lambda v: v['files'].update({
+            '/usr/lib/minimal-human-trust/authority/identity-admission.py': '0' * 64}))
+        with self.assertRaisesRegex(ValueError, 'IDENTITY_ADMISSION_FREEZE_DRIFT'): self.verify(False)
+
+    def test_tracked_native_backend_replaces_base_and_is_independently_bound(self):
+        self.build()
+        name = self.native_overlay
+        self.assertEqual((self.output / 'payload' / name).read_bytes(), self.overlay[name])
+        self.assertNotEqual(self.overlay[name], self.content[name])
+        inventory = self.metadata('PAYLOAD_INVENTORY.json')['files'][name]
+        self.assertEqual(inventory['sourceKind'], 'EXACT_HEAD_OVERLAY')
+        role = self.metadata('ROLE_MANIFESTS.json')['artifacts']['native']
+        self.assertEqual(role['files'][name], B.sha(self.overlay[name]))
+        self.assertTrue(self.verify()['liveProvenance'])
 
     def test_plan_only_does_not_create_output_and_does_not_open_root_marker(self):
         original = B.read

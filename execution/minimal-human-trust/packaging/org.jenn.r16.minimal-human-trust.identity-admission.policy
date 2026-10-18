@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Jenn AGENTS OS</vendor>
+  <action id="org.jenn.r16.minimal-human-trust.identity-admission">
+    <description>Approve HOST_ADMIN_CUSTODY key admission</description>
+    <message>Authenticate as the active local administrator to review one exact custody key admission.</message>
+    <defaults><allow_any>no</allow_any><allow_inactive>no</allow_inactive><allow_active>auth_self</allow_active></defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+</policyconfig>

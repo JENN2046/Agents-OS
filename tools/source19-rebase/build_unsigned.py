@@ -27,7 +27,7 @@ BASE_REPAIRS = {'app/workspace-host.mjs': 'bfef60223b8fd186f2e96887b770678777bf9
                 'host/workspace-dispatcher.mjs': 'ba4ef78187a8701b97bd03461faed44771c4d71b8541681a6d573e3f35ed079c'}
 GUARDS = {'app/workspace-host.mjs': (' function stopAdmission(){', ' return Object.freeze(', 'f7f4413c77e591af9ba2c3a570d5ddb2c9ab41772e8b5273ba2312f15cefddba'),
           'host/workspace-dispatcher.mjs': ('  function recoveryFence(', '  function authorizeCall(', '10ab0bce9f12555284ebe570cc8803bb0328bf0d273ea7648ca2b76c40fcd454')}
-COMPONENTS = ('src', 'app', 'bridge', 'host', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration')
+COMPONENTS = ('src', 'app', 'bridge', 'host', 'native', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration')
 PREFIXES = {'app': ('src/', 'app/', 'deployment/', 'authority/', 'r16_settings/', 'packaging/', 'migration/r17-one-time-recovery-admission.mjs'),
             'bridge': ('src/', 'bridge/', 'host/native-gateway.mjs', 'deployment/', 'authority/runtime-manifest.mjs', 'authority/transaction-publish.mjs', 'authority/recovery-handoff.mjs', 'authority/source-baseline.mjs', 'migration/r17-one-time-recovery-admission.mjs', 'app/upstream/node_modules/'),
             'native': ('src/', 'host/', 'native/', 'authority/', 'r16_settings/', 'packaging/', 'human/', 'release/', 'migration/')}
@@ -305,6 +305,15 @@ def assemble(repo, base, public_json, head):
     scope = {'status': 'UNSIGNED_ISOLATED_NOT_ACTIVATED', 'sourceHead': head, 'sourcePublicConfigDigest': PUBLIC_DIGEST, 'sourceConfigurationRevision': 19, 'expectedSourceDeliveryHash': SOURCE_DELIVERY_HASH, 'sourceReleaseId': SOURCE_RELEASE, 'targetReleaseId': TARGET_RELEASE, 'targetVersions': versions, 'roleCounts': {r: len(m['files']) for r, m in roles.items()}, 'uniqueFiles': len(final), 'roleBindings': len(bindings), 'issuedAt': None, 'notAfter': None, 'plannedConfigurationRevision': None, 'reservedRevision20Authorized': False, 'maySign': False, 'mayInstall': False, 'mayActivate': False, 'mayChangeOwner': False, 'maySettleUnknown': False}
     provenance = {'schema': 'r17.source19.provenance.v1', 'sourceHead': head, 'sourcePublicConfigDigest': PUBLIC_DIGEST, 'sourceReleaseId': SOURCE_RELEASE, 'sourceVersions': VERSIONS, 'sourceRoleManifestPaths': paths, 'baseDirectory': str(base), 'sourceSignatureAuthority': 'EXACT_PUBLIC_DIGEST_VERIFIED_BY_EXTERNAL_G1', 'independentG1CryptoAndFresh19ReceiptRequired': True, 'liveConfigurationOrBusinessStateRead': False, 'rootMarkerRead': False, 'baseFiles': len(baseline), 'baseBytes': sum(len(v[0]) for v in baseline.values()), 'overlayFiles': {n: sha(v[0]) for n, v in sorted(overlay.items())}, 'sourceFreezeDigest': digest(freeze), 'repairGuards': guards, 'authority': False}
     metadata = {'UNSIGNED_CONTENT.json': {'schema': 'r17.source19.unsigned-content.v1', **scope}, 'ROLE_MANIFESTS.json': {'schema': 'r17.source19.role-manifests.v1', 'sourceHead': head, 'artifacts': roles}, 'SOURCE_ROLE_MANIFESTS.json': original, 'LOCAL_FILE_BINDINGS.json': {'schema': 'r17.source19.local-file-bindings.v1', 'sourceHead': head, 'files': bindings}, 'PROVENANCE.json': provenance, 'PAYLOAD_INVENTORY.json': {'schema': 'r17.source19.payload-inventory.v1', 'sourceHead': head, 'files': inventory, 'uniqueFiles': len(inventory), 'totalBytes': sum(v['bytes'] for v in inventory.values())}, 'REVIEWED_SOURCE_FREEZE.json': freeze, 'REPAIR_GUARDS.json': guards}
+    identity_sources = {
+        '/usr/lib/minimal-human-trust/authority/identity-admission.py': 'authority/identity-admission.py',
+        '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission': 'packaging/minimal-human-trust-identity-admission',
+        '/etc/systemd/system/minimal-human-trust-identity-admission.service': 'packaging/minimal-human-trust-identity-admission.service',
+        '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy': 'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy',
+    }
+    need(all(n in payload for n in identity_sources.values()), 'IDENTITY_ADMISSION_SOURCE_REQUIRED')
+    metadata['IDENTITY_ADMISSION_FREEZE.json'] = {'schema': 'mht.identity-admission-code-freeze.v1',
+        'sourceCommit': head, 'files': {target: sha(payload[n][0]) for target, n in sorted(identity_sources.items())}}
     for role, manifest in roles.items():
         metadata[role + '-manifest.json'] = manifest
     raw_metadata = {n: (canonical(v) + '\n').encode() for n, v in metadata.items()}

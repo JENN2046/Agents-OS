@@ -22,9 +22,9 @@ BRIDGE = Path('/opt/r16/releases/r16-daily-20261012-r15/bridge-manifest.json')
 VERSIONS = {'app': '34731b300ccad9a1fbfd45b07422d847e8989d7e9dc052b0dda939cd99adb500', 'bridge': '9c58c33478388003fd52da0cb15736ec951a9bfc9cf29738e20de5d741921352', 'native': '2516e881b0622b3ac2d53c454e6ccf9950441c5cb3c26a53500b45d3b1dbe7b4'}
 BASE_REPAIRS = {'app/workspace-host.mjs': 'bfef60223b8fd186f2e96887b770678777bf99ff2a5c84a3c36273d8f172a6ab', 'app/app-runner.mjs': 'feaf51d26f5ef56cdfe013b65fe3faef37f91bc26391835810deb655e51f14d7', 'host/workspace-dispatcher.mjs': 'ba4ef78187a8701b97bd03461faed44771c4d71b8541681a6d573e3f35ed079c'}
 GUARDS = {'app/workspace-host.mjs': (' function stopAdmission(){', ' return Object.freeze(', 'f7f4413c77e591af9ba2c3a570d5ddb2c9ab41772e8b5273ba2312f15cefddba'), 'host/workspace-dispatcher.mjs': ('  function recoveryFence(', '  function authorizeCall(', '10ab0bce9f12555284ebe570cc8803bb0328bf0d273ea7648ca2b76c40fcd454')}
-COMPONENTS = {'src', 'app', 'bridge', 'host', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration'}
+COMPONENTS = {'src', 'app', 'bridge', 'host', 'native', 'authority', 'deployment', 'r16_settings', 'packaging', 'human', 'release', 'migration'}
 ROLE_PREFIXES = {'app': ('src/', 'app/', 'deployment/', 'authority/', 'r16_settings/', 'packaging/', 'migration/r17-one-time-recovery-admission.mjs'), 'bridge': ('src/', 'bridge/', 'host/native-gateway.mjs', 'deployment/', 'authority/runtime-manifest.mjs', 'authority/transaction-publish.mjs', 'authority/recovery-handoff.mjs', 'authority/source-baseline.mjs', 'migration/r17-one-time-recovery-admission.mjs', 'app/upstream/node_modules/'), 'native': ('src/', 'host/', 'native/', 'authority/', 'r16_settings/', 'packaging/', 'human/', 'release/', 'migration/')}
-META = {'UNSIGNED_CONTENT.json', 'ROLE_MANIFESTS.json', 'SOURCE_ROLE_MANIFESTS.json', 'LOCAL_FILE_BINDINGS.json', 'PROVENANCE.json', 'PAYLOAD_INVENTORY.json', 'REVIEWED_SOURCE_FREEZE.json', 'REPAIR_GUARDS.json', 'SOURCE_PUBLIC_CONFIG.json', 'SHA256SUMS_PAYLOAD.txt', 'app-manifest.json', 'bridge-manifest.json', 'native-manifest.json'}
+META = {'IDENTITY_ADMISSION_FREEZE.json', 'UNSIGNED_CONTENT.json', 'ROLE_MANIFESTS.json', 'SOURCE_ROLE_MANIFESTS.json', 'LOCAL_FILE_BINDINGS.json', 'PROVENANCE.json', 'PAYLOAD_INVENTORY.json', 'REVIEWED_SOURCE_FREEZE.json', 'REPAIR_GUARDS.json', 'SOURCE_PUBLIC_CONFIG.json', 'SHA256SUMS_PAYLOAD.txt', 'app-manifest.json', 'bridge-manifest.json', 'native-manifest.json'}
 
 
 def require(value, code):
@@ -305,6 +305,16 @@ def verify(package, inventory_hash, head, repo=None, base=None):
     require(names and len(names) == len(set(names)) and all(n in overlays for n in names), 'FREEZE_SCOPE')
     freeze = {'schema': 'mht.first-trust-code-freeze.v1', 'sourceCommit': head, 'files': {n: overlays[n] for n in sorted(names)}}
     require(doc('REVIEWED_SOURCE_FREEZE.json') == freeze and all(target_roles['native']['files'].get(n) == h for n, h in freeze['files'].items()), 'EXACT_NATIVE_FREEZE')
+    identity_sources = {
+        '/usr/lib/minimal-human-trust/authority/identity-admission.py': 'authority/identity-admission.py',
+        '/usr/lib/minimal-human-trust/packaging/minimal-human-trust-identity-admission': 'packaging/minimal-human-trust-identity-admission',
+        '/etc/systemd/system/minimal-human-trust-identity-admission.service': 'packaging/minimal-human-trust-identity-admission.service',
+        '/usr/share/polkit-1/actions/org.jenn.r16.minimal-human-trust.identity-admission.policy': 'packaging/org.jenn.r16.minimal-human-trust.identity-admission.policy',
+    }
+    require(all(n in overlays for n in identity_sources.values()), 'IDENTITY_ADMISSION_EXACT_HEAD_REQUIRED')
+    identity_freeze = {'schema': 'mht.identity-admission-code-freeze.v1', 'sourceCommit': head,
+        'files': {p: overlays[n] for p, n in sorted(identity_sources.items())}}
+    require(doc('IDENTITY_ADMISSION_FREEZE.json') == identity_freeze, 'IDENTITY_ADMISSION_FREEZE_DRIFT')
     provenance = doc('PROVENANCE.json')
     require(provenance['schema'] == 'r17.source19.provenance.v1' and provenance['sourceHead'] == head and provenance['sourcePublicConfigDigest'] == PUBLIC and provenance['sourceReleaseId'] == SOURCE and provenance['sourceVersions'] == VERSIONS and provenance['overlayFiles'] == overlays and provenance['sourceFreezeDigest'] == digest(freeze) and provenance['repairGuards'] == guards and provenance['baseFiles'] == len(base_union) and provenance['independentG1CryptoAndFresh19ReceiptRequired'] is True and provenance['sourceSignatureAuthority'] == 'EXACT_PUBLIC_DIGEST_VERIFIED_BY_EXTERNAL_G1' and provenance['liveConfigurationOrBusinessStateRead'] is False and provenance['rootMarkerRead'] is False and provenance['authority'] is False, 'PROVENANCE_SCOPE')
     require(metadata['SHA256SUMS_PAYLOAD.txt'].decode() == ''.join(rows[n]['sha256'] + '  payload/' + n + '\n' for n in sorted(rows)), 'EXACT_SHA256SUMS')

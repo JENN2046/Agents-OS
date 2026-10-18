@@ -3,7 +3,7 @@ import {controlWindow,waitUntilIssued} from '../src/control-clock.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createPublicKey,randomUUID} from 'node:crypto';
-import {ProtectedStore,createParticipant,participantInitialState,signed,verified,digest,canonical,resolveRegisteredProject,verifyRelease,unavailableReadResult} from '../src/lease-core.mjs';
+import {ProtectedStore,createParticipant,participantInitialState,signed,verified,digest,canonical,resolveRegisteredProject,verifyRelease,unavailableReadResult,LEASE_MS,RENEW_BEFORE_MS} from '../src/lease-core.mjs';
 
 const check=(ok,code='AUTHORITY_REJECTED')=>{if(!ok)throw Object.assign(new Error(code),{code});};
 const same=(a,b)=>canonical(a)===canonical(b);
@@ -11,6 +11,11 @@ const exact=(object,names)=>check(object&&same(Object.keys(object).sort(),names.
 const id=value=>check(typeof value==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(value),'INVALID_REQUEST');
 const publicKey=value=>createPublicKey({key:Buffer.from(value,'base64url'),format:'der',type:'spki'});
 const clone=value=>JSON.parse(canonical(value));
+// Historical signed reads only. These pins never authorize execution or settle a result.
+const HISTORICAL_LOCAL_READS=Object.freeze([
+ {projectId:'p2vox',operationId:'c434da49-055a-43dc-a3e3-695cce137909',generation:30,operationHash:'fd13e74ce69cb8ec30817ca0a48631cf3a6b6b2b08a410cc1b442df41992cc1f'},
+ {projectId:'pmog2',operationId:'d0364f8b-3a68-4ca2-a396-7953b29cee4c',generation:38,operationHash:'38f6af1386e78e5d7ccd0710077d6a3a5e753e81722dd10f11a3a2ff9bd85da1'}]);
+const HISTORICAL_LEASE_VERSIONS=Object.freeze({app:'235a5b919c65ac1d73290732d2b2014c24a338cc4b6795a5064e804803ec1e7a',bridge:'9c58c33478388003fd52da0cb15736ec951a9bfc9cf29738e20de5d741921352',native:'76319c50acaec649967986c1f12e6923ba4f664ac3230596ed2703fce3470ae6'});
 const CLEANUP=new Set(['status','close','drain','stop','reconcile','control_status','fresh']);
 const DISCOVERY=new Set(['list_workspaces','list_projects']);
 const controlNames=new Set(['describe','resolve','allocate','list_workspaces','list_projects','sign_prepare','issuer','prepare','close','drain','stop','activate','status','fresh','reconcile','control_status']);
@@ -28,6 +33,10 @@ function readResult(directory,name) {
   id(name);const fd=fs.openSync(path.join(directory,name+'.json'),fs.constants.O_RDONLY|fs.constants.O_NOFOLLOW);
   try{const st=fs.fstatSync(fd);check(st.isFile()&&st.nlink===1&&(st.mode&0o777)===0o600&&st.uid===process.geteuid()&&st.size<=2*1024*1024,'STATE_UNAVAILABLE');return JSON.parse(fs.readFileSync(fd,'utf8'));}finally{fs.closeSync(fd);}
 }
+export function assertNativeRuntimeStart(store){
+  check(store instanceof ProtectedStore&&store.snapshot().kind==='r16.native-dispatch.v1','STATE_UNAVAILABLE');
+  check(!store.snapshot().physicalStop,'PHYSICAL_STOP_FENCED');
+}
 export const dispatcherInitialState=()=>({kind:'r16.native-dispatch.v1',controls:[],pending:[],projects:[],revoked:false,version:0});
 function processStart(pid){try{const raw=fs.readFileSync('/proc/'+pid+'/stat','utf8');return raw.slice(raw.lastIndexOf(')')+2).split(' ')[19];}catch(error){if(error.code==='ENOENT')return null;throw Object.assign(Error('RECOVERY_REQUIRED'),{code:'RECOVERY_REQUIRED'});}}
 
@@ -35,7 +44,8 @@ function processStart(pid){try{const raw=fs.readFileSync('/proc/'+pid+'/stat','u
 // the exact ProjectForge workspace engine. The issuer client must connect only
 // to the private protected issuer socket; no authorization callback is accepted.
 export function createWorkspaceDispatcher({store,directory,native,crown,grant,release,versions,
-  signingKey,issuerKey,releaseKey,issuer,workspaceAlias,databasePath,now=Date.now}) {
+  signingKey,issuerKey,releaseKey,issuer,workspaceAlias,databasePath,now=Date.now,
+  historicalOperations=[],beforePhysicalClose}) {
   check(store instanceof ProtectedStore&&store.snapshot().kind==='r16.native-dispatch.v1');
   const g=verified(grant,issuerKey,'r16.workspace.v1');
   const appKey=publicKey(g.peers.app.publicKey);
@@ -44,9 +54,13 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
   if(!fs.existsSync(resultDirectory))fs.mkdirSync(resultDirectory,{mode:0o700});
   const resultStat=fs.lstatSync(resultDirectory);
   check(resultStat.isDirectory()&&!resultStat.isSymbolicLink()&&resultStat.uid===process.geteuid()&&(resultStat.mode&0o777)===0o700,'STATE_UNAVAILABLE');
+  assertNativeRuntimeStart(store);
+  check(beforePhysicalClose===undefined||typeof beforePhysicalClose==='function','INVALID_REQUEST');
+  const initialControls=clone(store.snapshot().controls);
   store.transact(s=>{for(const c of s.controls)if(c.status==='INFLIGHT')c.status='UNKNOWN';if(s.businessStop)s.admissionStopped=true;});
   let engine=null,identity=null,transportIdentity=null,fresh=false,closing=false;
-  const participants=new Map(),contexts=new Map(),active=new Set();
+  const participants=new Map(),contexts=new Map(),active=new Set(),physicalStores=new Map(),initialParticipants=new Map(),outerWork=new Set();
+  let localShutdownPromise=null,localResourcesClosed=false,storesReleased=false;
   let controlQueue=Promise.resolve(),pendingWork=0;
   function queueWork(callback){pendingWork++;const work=controlQueue.then(callback);controlQueue=work.catch(()=>{});return work.finally(()=>{pendingWork--;});}
   function validateWorkspace() {
@@ -78,6 +92,7 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     id(projectId);let entry=participants.get(projectId);if(entry)return entry;
     const dir=path.join(directory,'project-'+projectId);
     const pstore=new ProtectedStore({directory:dir,create:!fs.existsSync(dir),initial:participantInitialState('native'),now});
+    initialParticipants.set(projectId,clone(pstore.snapshot()));
     const p=createParticipant({store:pstore,role:'native',signingKey,issuerKey,releaseKey,resolveProject});
     p.pair({grant});entry={participant:p,store:pstore};participants.set(projectId,entry);
     store.transact(s=>{if(!s.projects.includes(projectId))s.projects.push(projectId);});return entry;
@@ -369,6 +384,80 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     })();
     active.add(work);try{return await work;}catch(error){entry.participant.markUnknown(o.id);throw error;}finally{active.delete(work);contexts.delete(p.request_id);}
   }
+  function physicalSnapshot(projectId){
+    const existing=participants.get(projectId);if(existing)return existing.store.snapshot();
+    let ps=physicalStores.get(projectId);
+    if(!ps){ps=new ProtectedStore({directory:path.join(directory,'project-'+projectId),create:false,now});physicalStores.set(projectId,ps);}
+    return ps.snapshot();
+  }
+  function inspectRetainedHistory(){
+    const state=store.snapshot();
+    check(!initialControls.some(c=>['INFLIGHT','UNKNOWN'].includes(c.status))&&
+      !state.controls.some(c=>!['KNOWN','NOT_EXECUTED'].includes(c.status))&&state.pending.every(p=>p.status==='CREATED'),'CURRENT_WORK_UNRESOLVED');
+    const retained=[];
+    for(const projectId of state.projects){
+      const snapshot=physicalSnapshot(projectId),initial=initialParticipants.get(projectId)??snapshot;
+      check(same(snapshot.grant,grant)&&!initial.operations.some(o=>o.status==='INFLIGHT'),'CURRENT_WORK_UNRESOLVED');
+      for(const row of snapshot.operations){
+        if(row.status==='KNOWN')continue;
+        const pin=HISTORICAL_LOCAL_READS.find(p=>p.projectId===projectId&&p.operationId===row.id);
+        check(pin&&row.status==='UNKNOWN'&&row.hash===pin.operationHash&&row.generation===pin.generation&&row.projectId===projectId&&row.outcome===null&&row.resultHash===null,'UNPROVEN_EXECUTION_RISK');
+        let operation=historicalOperations.find(o=>o?.body?.id===row.id);
+        if(!operation){try{operation=readResult(resultDirectory,'operation-'+row.id).operation;}catch(error){if(error.code!=='ENOENT')throw error;}}
+        check(operation&&digest(operation)===pin.operationHash,'HISTORICAL_OPERATION_REQUIRED');
+        const o=verified(operation,appKey,'r16.operation.v1');
+        exact(o,['schema','id','grantId','projectId','generation','leaseHash','channel','action','payloadHash']);
+        const lease=snapshot.active?.lease;
+        check(lease&&!snapshot.pending&&(!snapshot.closing||same(snapshot.closing,lease))&&digest(lease)===o.leaseHash,'HISTORICAL_LEASE_BINDING');
+        const l=verified(lease,issuerKey,'r16.lease.v1');
+        exact(l,['schema','phase','grantId','grantVersion','grantHash','project','channel','versions','actions','generation','previousGeneration','issuedAt','expiresAt','renewAt','requestId','releaseHash']);
+        check(o.id===pin.operationId&&o.projectId===projectId&&o.generation===pin.generation&&o.grantId===g.id&&o.channel===g.channel&&o.action==='find_symbol'&&
+          l.phase==='PREPARED'&&l.grantId===g.id&&l.grantVersion===g.version&&l.grantHash===digest(grant)&&l.project.id===projectId&&l.project.workspaceId===g.workspace.id&&
+          l.generation===pin.generation&&l.previousGeneration===l.generation-1&&l.channel===g.channel&&same(l.versions,HISTORICAL_LEASE_VERSIONS)&&
+          l.actions.includes(o.action)&&l.actions.every(a=>g.actions.includes(a))&&Number.isSafeInteger(l.issuedAt)&&l.expiresAt===l.issuedAt+LEASE_MS&&l.renewAt===l.expiresAt-RENEW_BEFORE_MS,'HISTORICAL_LEASE_BINDING');
+        retained.push({projectId,operationId:row.id,operationHash:row.hash,leaseHash:digest(lease)});
+      }
+    }
+    return retained;
+  }
+  function releaseStores({signal,deadline=Infinity,monotonicDeadline=Infinity}={}){
+    const current=()=>check(!signal?.aborted&&Date.now()<deadline&&performance.now()<monotonicDeadline,'LOCAL_SHUTDOWN_TIMEOUT');current();
+    check(closing&&active.size===0&&pendingWork===0&&outerWork.size===0&&(!localShutdownPromise||localResourcesClosed),'RECOVERY_REQUIRED');
+    if(storesReleased)return;
+    for(const entry of participants.values()){current();entry.store.close();}
+    for(const ps of physicalStores.values()){current();ps.close();}current();store.close();storesReleased=true;
+  }
+  // Explicit LOCAL resource shutdown. Default close()/SIGTERM remain strict.
+  // The callback is trusted composition-time observation, never network input,
+  // and its return value is not evidence or an authority override.
+  function shutdownLocalResources({timeoutMs=15000,signal,deadline=Infinity,monotonicDeadline=Infinity}={}){
+    if(localShutdownPromise)return localShutdownPromise;
+    check(Number.isSafeInteger(timeoutMs)&&timeoutMs>0&&timeoutMs<=15000,'INVALID_REQUEST');
+    check(signal===undefined||signal instanceof AbortSignal,'INVALID_REQUEST');
+    deadline=Math.min(deadline,Date.now()+timeoutMs);monotonicDeadline=Math.min(monotonicDeadline,performance.now()+timeoutMs);
+    const abort=new AbortController(),combined=signal?AbortSignal.any([signal,abort.signal]):abort.signal;
+    const stillCurrent=()=>check(!combined.aborted&&Date.now()<deadline&&performance.now()<monotonicDeadline,'LOCAL_SHUTDOWN_TIMEOUT');stillCurrent();
+    closing=true;
+    let timer;
+    const work=(async()=>{
+      store.transact(s=>{s.physicalStop={schema:'r16.native-local-stop.v1',phase:'ADMISSION_CLOSED',globalExecution:'UNPROVEN'};});
+      await controlQueue;await Promise.allSettled([...outerWork]);await Promise.allSettled([...active]);stillCurrent();
+      check(pendingWork===0&&active.size===0&&contexts.size===0&&outerWork.size===0,'CURRENT_WORK_UNRESOLVED');
+      const retained=inspectRetainedHistory();
+      check(typeof native.quiesceExecution==='function','LOCAL_EXECUTION_UNPROVEN');
+      const local=await native.quiesceExecution({signal:combined,deadline,monotonicDeadline});stillCurrent();
+      check(local?.schema==='r16.native-local-execution.v1'&&local.scope==='PROCESS_AND_OWNED_INDEXERS_ONLY'&&local.admissionClosed===true&&
+        local.workspaceCalls===0&&local.queuedWriters===0&&local.lifecycleCalls===0&&local.indexers.every(i=>i.children.length===0&&!i.starting&&i.requests===0&&i.pending===0&&i.unconfirmed===0),'LOCAL_EXECUTION_UNPROVEN');
+      const observation=Object.freeze({schema:'r16.native-local-quiescence.v1',scope:'LOCAL_ONLY',globalExecution:'UNPROVEN',retainedHistory:clone(retained),local:clone(local)});
+      if(beforePhysicalClose)await beforePhysicalClose(observation);stillCurrent();
+      engine?.close();stillCurrent();await native.cleanup({signal:combined,deadline,monotonicDeadline});stillCurrent();
+      fresh=false;
+      store.transact(s=>{s.admissionStopped=true;s.physicalStop.phase='LOCAL_RESOURCES_CLOSED';});localResourcesClosed=true;
+      return Object.freeze({status:'LOCAL_RESOURCES_CLOSED',scope:'LOCAL_ONLY',globalExecution:'UNPROVEN',firstStopProof:'NOT_PROVEN',retainedHistory:clone(retained)});
+    })();
+    localShutdownPromise=Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>{abort.abort();reject(Object.assign(Error('LOCAL_SHUTDOWN_TIMEOUT'),{code:'LOCAL_SHUTDOWN_TIMEOUT'}));},Math.max(1,Math.min(timeoutMs,deadline-Date.now(),monotonicDeadline-performance.now())));})]).finally(()=>clearTimeout(timer));
+    return localShutdownPromise;
+  }
   return Object.freeze({
     refresh(...args){
       // External reconnect/heartbeat refresh must not replace a participant's
@@ -395,12 +484,14 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
     },
     setConnectionRequested(requested){
       check(typeof requested==='boolean','INVALID_REQUEST');
+      check(!closing&&!store.snapshot().physicalStop,'PHYSICAL_STOP_FENCED');
       store.transact(s=>{s.admissionStopped=!!s.businessStop||!!s.recoveryOnly||!requested||s.revoked;});
       if(!requested||store.snapshot().revoked)drainBusiness();
       return {businessStopped:store.snapshot().admissionStopped};
     },
-    async prepareConnection(remote){
-      check(!closing,'RECOVERY_REQUIRED');await controlQueue;await Promise.allSettled([...active]);
+    prepareConnection(remote){
+      check(!closing,'RECOVERY_REQUIRED');
+      const work=(async()=>{await controlQueue;await Promise.allSettled([...active]);check(!closing,'RECOVERY_REQUIRED');
       const recovering=recoveryFence();
       const cleanup=recovering||store.snapshot().revoked||store.snapshot().admissionStopped;
       if(!cleanup)assertCurrent();
@@ -415,12 +506,15 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
         const generation=Math.max(old?.generation??0,remote.generation)+1;
         s.connection={generation,origin:null,pid:process.pid,start:processStart(process.pid),closed:false,previousDrainHash};
         return {generation,previousGeneration:remote.generation,previousOrigin:remote.origin,oldLocalSocketClosed:true,previousDrainHash};
-      });
+      });})();
+      outerWork.add(work);return work.finally(()=>outerWork.delete(work));
     },
     connectionClosed(generation){
+      check(!storesReleased,'PHYSICAL_STOP_FENCED');
       store.transact(s=>{if(s.connection?.generation===generation){s.connection.closed=true;}});
     },
     connectedIdentity(value,generation){
+      check(!closing&&!store.snapshot().physicalStop,'PHYSICAL_STOP_FENCED');
       crown.identityCheck(value);
       const recovering=recoveryFence();
       const cleanup=recovering||store.snapshot().revoked||store.snapshot().admissionStopped;
@@ -444,19 +538,23 @@ export function createWorkspaceDispatcher({store,directory,native,crown,grant,re
         return queueWork(()=>{check(!closing,'AUTHORITY_REJECTED');return call(args);});
       }
       exact(args,['command','proof']);check(args.command==='WorkspaceControl','AUTHORITY_REJECTED');
-      return queueWork(()=>control(args.proof));
+      return queueWork(()=>{check(!closing,'AUTHORITY_REJECTED');return control(args.proof);});
     },
-    releaseStores(){check(closing&&active.size===0,'RECOVERY_REQUIRED');for(const entry of participants.values())entry.store.close();store.close();},
-    async close({retainTransport=false}={}){
+    shutdownLocalResources,
+    releaseStores,
+    async close({retainTransport=false,signal,deadline=Infinity,monotonicDeadline=Infinity}={}){
+      check(!localShutdownPromise,'PHYSICAL_STOP_FENCED');
+      const boundary={signal,deadline,monotonicDeadline};
+      const current=()=>check(!signal?.aborted&&Date.now()<deadline&&performance.now()<monotonicDeadline,'LOCAL_SHUTDOWN_TIMEOUT');current();
       closing=true;
-      await controlQueue;await Promise.allSettled([...active]);
+      await controlQueue;current();await Promise.allSettled([...active]);current();
       fresh=false;
       for(const entry of participants.values()){
-        const snapshot=entry.participant.snapshot(),lease=snapshot.pending?.lease??snapshot.active?.lease??snapshot.closing;
+        current();const snapshot=entry.participant.snapshot(),lease=snapshot.pending?.lease??snapshot.active?.lease??snapshot.closing;
         if(lease)entry.participant.stop({lease});entry.participant.disconnect();check(entry.participant.status().unresolved.length===0,'RECOVERY_UNRESOLVED');
       }
-      engine?.close();await native.cleanup();
-      for(const entry of participants.values())entry.store.close();if(!retainTransport)store.close();
+      current();engine?.close();current();await native.cleanup(boundary);current();
+      for(const entry of participants.values()){current();entry.store.close();}if(!retainTransport){current();store.close();}
     }
   });
 }

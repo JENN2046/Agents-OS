@@ -1,0 +1,4 @@
+#!/bin/sh
+# Fixed foreground native entry. No caller paths, environment keys or worker mode.
+if [ "$#" -ne 0 ]; then exit 78; fi
+exec /usr/bin/python3 -I -B /usr/lib/minimal-human-trust/authority/identity-admission.py admit

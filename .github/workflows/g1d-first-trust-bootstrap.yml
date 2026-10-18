@@ -24,10 +24,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Isolated identity test dependency
+        run: python3 -m pip install cryptography==46.0.5
       - name: Verify source syntax
         run: |
           find execution/minimal-human-trust -type f -name '*.mjs' -print0 |
             xargs -0 -n1 node --check
+          node --check execution/minimal-human-trust/native/upstream/VCPDistributedServer/Plugin/ProjectForge/ProjectForgeService.js
+          node --check execution/minimal-human-trust/native/upstream/VCPDistributedServer/Plugin/ProjectForge/indexerClient.js
           python3 -B -m py_compile execution/minimal-human-trust/human/approval-broker.py
       - name: First Human trust and issuer tests
         run: |
@@ -58,17 +65,39 @@ jobs:
             execution/minimal-human-trust/test/human-proposal-publication.test.mjs \
             execution/minimal-human-trust/test/human-proposal-wiring.test.mjs \
             execution/minimal-human-trust/test/minimal-trust-issuer.test.mjs
+      - name: Source19 admission and delivery boundary tests
+        run: |
+          node --test \
+            execution/minimal-human-trust/test/source19-delivery-transaction.test.mjs \
+            execution/minimal-human-trust/test/source19-first-stop-contract.test.mjs \
+            execution/minimal-human-trust/test/native-physical-shutdown.test.mjs \
+            execution/minimal-human-trust/test/native-physical-shutdown-backend.test.mjs
+          python3 -I -B execution/minimal-human-trust/test/code-admission.test.py
+          python3 -I -B execution/minimal-human-trust/test/code-admission-launch.test.py
+          python3 -I -B execution/minimal-human-trust/test/identity-admission.test.py
+          python3 -I -B execution/minimal-human-trust/test/source19-preauth.test.py
+          python3 -I -B tools/source19-rebase/test_source19_rebase.py
       - name: Human broker Python regression
         run: |
           python3 -B execution/minimal-human-trust/test/human-approval-broker.test.py
           python3 -B execution/minimal-human-trust/test/human-approval-window.test.py
+      - name: Isolated old Native maintenance transition
+        run: |
+          node --test execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_*.mjs
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_stop_transition.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_build.py
+          node --test execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_*.mjs
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_native_checkpoint.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/test_linux_backend.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_entry.py
+          python3 -I -B execution/minimal-human-trust/maintenance/source19-native-transition-r1/entry/test_orchestration.py
       - name: Protected publisher unit syntax
         run: |
           # CI Node resides in hostedtoolcache; the real unit remains pinned
           # to the production /usr/bin/node, independently checked on Jenn.
           tmp="$(mktemp -d)"
           trap 'rm -rf "$tmp"' EXIT
-          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service; do
+          for name in minimal-human-trust-publisher.service minimal-human-trust-proposal.service minimal-human-trust-identity-admission.service; do
             unit="execution/minimal-human-trust/packaging/$name"
             if test -x /usr/bin/node; then
               systemd-analyze verify "$unit"

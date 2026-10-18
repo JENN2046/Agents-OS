@@ -1,0 +1,30 @@
+[Unit]
+Description=R16 workspace APP
+After=network-online.target r16-bridge.service
+Requires=r16-bridge.service
+ConditionPathExists=/etc/r16-cloud/app-host.json
+ConditionPathExists=/etc/credstore.encrypted/r16-app/legacy-app-settings.cred
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+UMask=0077
+ExecStart=/opt/r16/runtime/node-v24.15.0/bin/node /opt/r16/trust/cloud-trusted-launcher.mjs /etc/r16-cloud/app-host.json
+LoadCredentialEncrypted=app-signing-key:/etc/credstore.encrypted/r16-app/app-signing-key.cred
+LoadCredentialEncrypted=channel-capability:/etc/credstore.encrypted/r16-app/channel-capability.cred
+LoadCredentialEncrypted=legacy-app-settings:/etc/credstore.encrypted/r16-app/legacy-app-settings.cred
+Environment=PATH=/usr/bin:/bin NODE_OPTIONS= NODE_PATH=
+Restart=no
+KillSignal=SIGTERM
+SendSIGKILL=no
+TimeoutStopSec=120
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+LimitCORE=0
+ReadWritePaths=/var/lib/r16-app
+[Install]
+WantedBy=multi-user.target
